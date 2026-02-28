@@ -8,7 +8,7 @@ consolidates:
   - 02-lens-caching.md
   - 02-lens-governance-integration.md
   - 02-lens-company-domain-synthesis.md
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/lens/ + cortex/intelligence/provider.py
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

@@ -2,7 +2,7 @@
 title: Security-First Development — Shift-Left Security Architecture
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/validation/security_vulnerability_orchestrator.py + cortex/orchestrators/git/sanitization_orchestrator.py + cortex-registry/workflows/templates/security/
 order: 20
 ---

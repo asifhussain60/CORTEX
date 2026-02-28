@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated": "2026-02-26",
+    "generated": "2026-02-28",
     "source": "cortex/mcp/mcp_registry.py",
-    "version": "2.0.0",
-    "total_registered": 28,
+    "version": "2.1.0",
+    "total_registered": 29,
     "total_target": 39,
     "transport": "stdio",
     "protocol": "Pylance-style auto-start",
@@ -23,7 +23,7 @@
     { "id": "cortex_health_scan", "name": "cortex_health_scan", "category": "diagnostics", "registered": false, "description": "All wired orchestrator health endpoints — production readiness validation (planned)" },
     { "id": "cortex_intelligence_matrix", "name": "cortex_intelligence_matrix", "category": "intelligence", "registered": false, "description": "Cross-cutting intelligence matrix — correlates LENS, governance, and metrics (planned)" },
     { "id": "cortex_knowledge", "name": "cortex_knowledge", "category": "knowledge", "registered": true, "description": "Knowledge synthesis from governance YAML registries into actionable intelligence" },
-    { "id": "cortex_learning", "name": "cortex_learning", "category": "intelligence", "registered": false, "description": "Unified Reinforcement Signal management — emit, history, decay, promote, quarantine, metrics (planned)" },
+    { "id": "cortex_learning", "name": "cortex_learning", "category": "intelligence", "registered": true, "description": "Unified Reinforcement Signal management — emit, history, decay, promote, quarantine, metrics, RCA (root cause analysis with 4 methodologies)" },
     { "id": "cortex_load", "name": "cortex_load", "category": "governance", "registered": true, "description": "Load CORE governance rules — skull-rules, core-rules, audit checklist, modes, response format" },
     { "id": "cortex_master_plan", "name": "cortex_master_plan", "category": "planning", "registered": false, "description": "Master plan management — cortex-master.yaml operations, phase lifecycle (planned)" },
     { "id": "cortex_metrics", "name": "cortex_metrics", "category": "observability", "registered": true, "description": "Record and report development metrics — TDD cycles, debug sessions, orchestrator invocations" },

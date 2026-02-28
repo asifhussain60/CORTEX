@@ -2,7 +2,7 @@
 title: Enterprise Patterns and Knowledge Architecture
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/patterns/ + cortex-registry/knowledge/ + cortex/intelligence/perception/
 order: 19
 ---

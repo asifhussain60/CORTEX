@@ -7,7 +7,7 @@ consolidates:
   - 04-mcp-integration.md
   - 04-mcp-versioning.md
   - 04-mcp-work-item-integration.md
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/mcp/ + .vscode/settings.json
 audience: [Business Leaders, Product Owners, Software Developers]
 ---
@@ -157,6 +157,7 @@ All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedToo
 | cortex_refactor | Semantic refactoring — extract, rename, organise across Python, C#, TypeScript |
 | cortex_vision | Vision API analysis — UI elements, URLs, issues, structural mappings |
 | cortex_knowledge | Knowledge synthesis from governance YAML registries |
+| cortex_learning | Unified Reinforcement Signal and RCA Memory Engine — emit, history, decay, promote, quarantine, metrics, and root cause analysis |
 
 ### Planning and Audit
 
@@ -211,7 +212,7 @@ All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedToo
 | cortex_batch_transform | Batch data transformation across a collection |
 | cortex_scan | Workspace scan — discovers files, patterns, structures |
 
-*28 tools registered as of 2026-02-26. Source of truth: `cortex/mcp/mcp_registry.py`.*
+*29 tools registered as of 2026-02-28. Source of truth: `cortex/mcp/mcp_registry.py`.*
 
 ---
 

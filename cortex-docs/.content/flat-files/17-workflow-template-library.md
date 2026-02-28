@@ -2,7 +2,7 @@
 title: Workflow Template Library — Reusable YAML Execution Patterns
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/workflows/templates/ + cortex/core/workflow_engine.py
 order: 17
 ---

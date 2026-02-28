@@ -4,7 +4,7 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 order: 1
@@ -24,10 +24,10 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | Parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
 | 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | Wired orchestrators across 4 tiers (core, domain, support, git) |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | CORE rules, CORE-064, CORE-055 |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | CORE rules, CORE-064, CORE-068 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
-**Planned additions:** Orchestrator Engagement Visibility (breadcrumb, timeline, roadmap blocks) and Multi-Stack Debugging (multiple strategies, Vision API, unified intelligence wiring).
+**Phase 85–94 additions (all complete):** Response Template Engine v2 (16 composable blocks), Multi-Stack Debugging (8 strategies, Vision API), RCA Memory Engine (4 methodologies), Unified Reinforcement Signal (closed-loop learning), Operational Workflow Pipeline (79 templates, technology routing), Holistic Intent Wiring (27 intent types fully routed), EngagementRenderer (SSOT breadcrumbs), Universal Convergence Gate (CORE-068, detect→fix→rescan).
 
 ---
 

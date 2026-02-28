@@ -8,7 +8,7 @@ consolidates:
   - 03-orchestration-end-to-end-flow.md
   - 03-orchestration-cross-orchestrator.md
   - 03-orchestration-request-rephrase.md
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---
@@ -93,22 +93,39 @@ For complex pipelines, MasterOrchestrator delegates to stage-specific implementa
 
 Location: `cortex/orchestrators/core/intent_router.py`
 
-IntentRouter classifies every incoming request into one of twelve or more intent types using LENS-based intelligence. Classification takes twenty to forty milliseconds.
+IntentRouter classifies every incoming request into one of twenty-seven intent types using a 4-stage pipeline: InteractionOrchestrator (Stage 1 — LENS per-turn comprehension), IntentRouter (Stage 2 — classification), WorkflowComplexityRouter (Stage 3 — technology-aware template binding), and MasterOrchestrator (Stage 4 — dispatch). Classification takes twenty to forty milliseconds.
 
-| Intent | Target Orchestrator |
-|--------|-------------------|
-| IMPLEMENT | TDDOrchestrator |
-| FIX | TDDOrchestrator |
-| REFACTOR | RefactoringOrchestrator |
-| ANALYZE | LENS Synthesis |
-| PLAN | PlanningOrchestrator |
-| AUDIT | EnforcementOrchestrator |
-| DESIGN | Design coordination |
-| DEBUG | DebuggerOrchestrator |
-| INVESTIGATE | IntelligenceOrchestrator |
-| QUERY | Context-dependent routing |
-| DIGEST | Digest coordination |
-| REPHRASE | RequestRephraseOrchestrator |
+| Intent | Target Orchestrator | Trigger Keywords |
+|--------|-------------------|-----------------|
+| IMPLEMENT | TDDOrchestrator | implement, build, create, add, write |
+| FIX | TDDOrchestrator | fix, repair, resolve, patch, correct |
+| REFACTOR | RefactoringOrchestrator | refactor, restructure, reorganize, clean up |
+| ANALYZE | LENS Synthesis | analyze, examine, review, inspect |
+| PLAN | PlanningOrchestrator | plan, design, architect, propose |
+| AUDIT | EnforcementOrchestrator | audit, validate, check, verify |
+| DESIGN | Design coordination | design, architect, blueprint |
+| DEBUG | DebuggerOrchestrator | debug, trace, diagnose, troubleshoot |
+| INVESTIGATE | IntelligenceOrchestrator | investigate, research, explore |
+| QUERY | Context-dependent routing | query, search, find, look up |
+| DIGEST | BulkDigestOrchestrator | digest, ingest, absorb, summarize |
+| REPHRASE | RequestRephraseOrchestrator | rephrase, clarify, reword |
+| TEST | TDDOrchestrator | test, verify, validate tests |
+| ONBOARD | OnboardingOrchestrator | onboard, setup, initialize |
+| UPGRADE | UpgradeOrchestrator | upgrade, update, migrate |
+| VACUUM | VacuumOrchestrator | vacuum, clean, declutter |
+| HEALTH | HealthOrchestrator | health, status, diagnostics |
+| CHALLENGE | ChallengeEngine | challenge, alternatives, compare |
+| SYNC | SyncOrchestrator | sync, synchronize, mirror |
+| TRAIN | TrainerOrchestrator | train, teach, learn |
+| PUBLISH | GitPublishOrchestrator | publish, release, deploy |
+| ROLLBACK | RollbackOrchestrator | rollback, revert, undo |
+| SECURITY | SecurityVulnerabilityOrchestrator | security, vulnerability, threat |
+| DOCUMENT | DocumentationOrchestrator | document, docs, documentation |
+| DASHBOARD | DashboardOrchestrator | dashboard, visualize, report |
+| DISCOVER | UnifiedDiscoveryOrchestrator | discover, explore, scan |
+| WORKFLOW | WorkflowOrchestrator | workflow, pipeline, template |
+
+As of Phase 93, all twenty-seven intents are fully wired with routing miss detection (Phase 91) — any unrecognised request falls through to a structured rephrase prompt rather than silent failure.
 
 ---
 
@@ -233,8 +250,7 @@ Route: IntentRouter → MasterOrchestrator → TDDOrchestrator → EnforcementOr
 
 `DebuggerOrchestrator` at `cortex/orchestrators/support/debugger_orchestrator.py` is an EventBus-driven coordinator that uses a **Strategy Pattern** to apply language-specific debug injection without modifying the orchestrator core.
 
-**Currently live:** Python strategies (`TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy`)  
-**Planned:** Multi-stack strategies (Frontend/HTML-Vision/API/SQL/DotNet) + Vision API + multi-language `AutoCleanupManager` + unified intelligence wiring
+**Currently live:** Python strategies (`TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy`) and multi-stack strategies (`FrontendConsoleStrategy`, `HtmlVisionMappingStrategy`, `ApiTraceStrategy`, `SqlTraceStrategy`, `DotNetTraceStrategy`) — eight strategies total (Phase 86).  
 
 **Commands:**
 - `/debug {path}` — full cycle: detect stack → inject → capture → analyze → fix-plan
@@ -242,3 +258,33 @@ Route: IntentRouter → MasterOrchestrator → TDDOrchestrator → EnforcementOr
 - `/debug-cleanup` — production-safe removal of all markers
 
 **Intelligence wiring:** OPJMixin (learning persistence), URS signals (reinforcement feedback), IntelligenceMatrix cells, bidirectional EventBus publish, and KnowledgeSynthesisEngine pattern capture.
+
+---
+
+## Universal Convergence Gate (CORE-068)
+
+No code-modifying operation is considered complete in a single pass. CORE-068 mandates a detect→fix→rescan loop that repeats until zero P0/P1 issues remain (maximum three cycles).
+
+| Applies to | Exempt |
+|---|---|
+| IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH | QUERY, DESIGN, PLAN, DIGEST, REPHRASE, SYNC, TRAIN |
+
+Each operation type defines its own convergence predicate — for example, IMPLEMENT requires `test_pass_count >= baseline AND lint_errors == 0`, while AUDIT requires `p0_count == 0 AND p1_count == 0`. The `/audit fix` pipeline uses this in Stages 7–8.
+
+The governance rule lives at `cortex-registry/core/rules/core-068-convergence-gate.yaml`, and the workflow primitive at `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`.
+
+---
+
+## EngagementRenderer — Orchestrator Visibility
+
+`EngagementRenderer` at `cortex/orchestrators/response/engagement_renderer.py` is the SSOT formatter for all engagement signals. Phase 92 introduced it to replace inconsistent per-orchestrator formatting.
+
+It provides fourteen pre-built command chains (e.g., `/audit fix` → `IntentRouter → AuditOrchestrator → EnforcementOrchestrator → HealthOrchestrator → VacuumOrchestrator`) and the `breadcrumb_for_command()` API. Three engagement blocks are rendered per response: BLOCK-ENGAGEMENT-BREADCRUMB (always), BLOCK-ENGAGEMENT-TIMELINE (multi-step), and BLOCK-PHASE-ROADMAP (multi-phase start).
+
+---
+
+## Operational Workflow Pipeline (Phase 89)
+
+Phase 89 wired the complete workflow infrastructure from inert YAML definitions to live, executable pipelines. Seven capability clusters were addressed: technology-aware routing (WorkflowComplexityRouter), PostRefactorLintGate, engagement visibility via EngagementRenderer, SQLite tracing of every workflow step, expanded template wiring (6→20 operation types), WorkflowComposer graph execution, and CORE-068 convergence binding.
+
+The complete template library spans seventy-nine templates across seventeen categories at `cortex-registry/workflows/templates/`.

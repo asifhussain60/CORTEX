@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated": "2026-02-25",
-    "version": "1.2.0",
+    "generated": "2026-02-28",
+    "version": "1.3.0",
     "inventory_source": "cortex-docs/.content/00-getting-started/inventory.md"
   },
   "inventory": {
@@ -27,19 +27,24 @@
     ],
     "summary_metrics": {
       "wired_orchestrators": 51,
-      "active_mcp_tools": 28,
+      "orchestrator_files": 282,
+      "orchestrator_domains": 14,
+      "active_mcp_tools": 29,
       "total_mcp_tools": 39,
       "core_rules": 38,
+      "governance_yamls": 32,
       "lens_analyzers": 17,
-      "knowledge_yaml_files": 35,
-      "workflow_templates": 60,
-      "test_files": 994,
+      "knowledge_yaml_files": 38,
+      "workflow_templates": 79,
+      "test_files": 1051,
       "golden_test_files": 91,
-      "package_directories": 16,
+      "package_directories": 20,
       "knowledge_tech_stacks": 32,
-      "knowledge_domains": 34
+      "knowledge_domains": 34,
+      "phases_completed": 93,
+      "intent_types": 27
     },
-    "last_verified": "2026-02-25"
+    "last_verified": "2026-02-28"
   },
   "categories": [
     {

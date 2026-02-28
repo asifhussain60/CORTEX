@@ -1,15 +1,15 @@
 ---
 title: CORTEX Component Inventory
 description: One-stop reference for every orchestrator, MCP tool, LENS analyzer, knowledge YAML, workflow template, and governance rule in CORTEX.
-generated: "2026-02-25"
-version: "1.2.0"
+generated: "2026-02-28"
+version: "1.3.0"
 source: live-scan
 render_hint: inventory-page
 ---
 
 # CORTEX Component Inventory
 
-> **Generated:** 2026-02-25 · **Source:** Live codebase scan · **Version:** 1.2.0  
+> **Generated:** 2026-02-28 · **Source:** Live codebase scan · **Version:** 1.3.0  
 > One-stop reference for all CORTEX components. Designed to be consumed by HTML renderers in `cortex-docs`.
 
 ---
@@ -78,7 +78,7 @@ All wired orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtoc
 
 ---
 
-## 2. MCP Tools (39 Active)
+## 2. MCP Tools (29 Registered)
 
 Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server: `python3 -m cortex.mcp`.
 
@@ -108,8 +108,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | cortex_vision | `cortex/mcp/tools/intelligence.py` | Vision API analysis — UI elements, URLs, issues, and structural mappings |
 | cortex_knowledge | `cortex/mcp/tools/operations.py` | Knowledge synthesis from governance YAML registries into actionable insights |
 | cortex_total_recall | `cortex/mcp/tools/core.py` | Discover and recall CORTEX features, components, and architecture |
-
-> Not registered (planned): `cortex_brain_query`, `cortex_intelligence_matrix`, `cortex_learning`
+| cortex_learning | `cortex/mcp/tools/cortex_learning.py` | Unified Reinforcement Signal and RCA Memory Engine — emit, history, decay, promote, quarantine, metrics, root cause analysis |
 
 ### 2.4 Planning & Audit
 
@@ -313,7 +312,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 ---
 
-## 5. Knowledge YAML Registry (35+ Files)
+## 5. Knowledge YAML Registry (38 Files)
 
 **Location:** `cortex-registry/knowledge/`  
 **Index:** `cortex-registry/knowledge/INDEX.yaml`
@@ -385,7 +384,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 ---
 
-## 6. Workflow Templates (60+ Templates)
+## 6. Workflow Templates (79 Templates across 17 Categories)
 
 **Location:** `cortex-registry/workflows/templates/`  
 **Consumed by:** `SDLCWorkflowOrchestrator`, `cortex_workflow` (MCP), `cortex_list_workflow_templates` (MCP)
@@ -497,6 +496,44 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | intelligence-injection | `primitives/intelligence/intelligence-injection.yaml` | Inject LENS context into workflow |
 | master-plan-decomposition-check | `primitives/validation/master-plan-decomposition-check.yaml` | THIN INDEX CONTRACT gate |
 | dependency-guard-migration | `primitives/governance/dependency-guard-migration.yaml` | Dependency guard for migrations |
+
+### 6.12 Composites
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| composed-design-*.yaml | `composites/` | Multi-template composite pipelines (7 templates — backend + frontend) |
+
+### 6.13 Debugging
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| multi-stack-debug-pipeline | `debugging/multi-stack-debug-pipeline.yaml` | 8-strategy debug pipeline (Python + multi-stack) |
+
+### 6.14 Intelligence
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| intelligence-matrix-*.yaml | `intelligence/` | Intelligence matrix and RCA workflows (4 templates) |
+
+### 6.15 Internal
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| documentation-refresh-pipeline | `internal/documentation-refresh-pipeline.yaml` | Full documentation refresh cycle |
+| site-validation | `internal/site-validation.yaml` | HTML site validation |
+
+### 6.16 RCA
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| rca-analysis-workflow | `rca/rca-analysis-workflow.yaml` | Root cause analysis workflow |
+
+### 6.17 Testing
+
+| Template | Path | Purpose |
+|----------|------|---------|
+| test-quality-enforcement | `testing/test-quality-enforcement.yaml` | Test quality enforcement |
+| test-tier-manifest | `testing/test-tier-manifest.yaml` | Test tier manifest |
 
 ---
 

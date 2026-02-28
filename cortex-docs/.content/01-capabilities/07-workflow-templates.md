@@ -4,7 +4,7 @@
 title: CORTEX Workflow Templates — Reusable Execution Patterns
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/workflows/templates/ + cortex/core/workflow_engine.py
 order: 7
 ---
@@ -19,10 +19,26 @@ Workflow templates are YAML files stored in `cortex-registry/workflows/templates
 
 ### Two Categories
 
-| Category | Location | Purpose |
-|----------|----------|---------|
-| **lifecycle/** | `cortex-registry/workflows/templates/lifecycle/` | CORTEX-internal workflows (phase execution, master plan) |
-| **production/** | `cortex-registry/workflows/templates/production/` | External production workflows (deployment, rollback) |
+| Category | Location | Purpose | Count |
+|----------|----------|---------|-------|
+| **audit/** | `templates/audit/` | Audit-fix pipeline | 1 |
+| **backend/** | `templates/backend/` | Backend-specific workflows (C# refactor, security) | 2 |
+| **composites/** | `templates/composites/` | Multi-template pipelines | 7 |
+| **debugging/** | `templates/debugging/` | Multi-stack debug pipeline (8 strategies) | 1 |
+| **frontend/** | `templates/frontend/` | Frontend workflows (CSS, HTML, TypeScript) | 4 |
+| **governance/** | `templates/governance/` | Governance lifecycle, golden test promotion | 6 |
+| **intelligence/** | `templates/intelligence/` | Intelligence matrix, RCA workflows | 4 |
+| **internal/** | `templates/internal/` | CORTEX maintenance (docs refresh, site validation) | 2 |
+| **lifecycle/** | `templates/lifecycle/` | Full lifecycle (onboarding, migration, release) | 7 |
+| **maintenance/** | `templates/maintenance/` | Cleanup, deduplication, flat-file sync | 5 |
+| **primitives/** | `templates/primitives/` | Atomic building blocks (LENS scan, edit, validation) | 11 |
+| **quality/** | `templates/quality/` | Code quality, dead-code removal, refactor sweep | 6 |
+| **rca/** | `templates/rca/` | Root cause analysis workflows | 1 |
+| **sdlc/** | `templates/sdlc/` | SDLC lifecycle stages (requirements → release) | 7 |
+| **security/** | `templates/security/` | Security compliance, hardening, threat models | 3 |
+| **tdd/** | `templates/tdd/` | TDD workflows (API, frontend, feature) | 5 |
+| **testing/** | `templates/testing/` | Test quality enforcement, tier manifest | 2 |
+| | **Total** | | **79** |
 
 ---
 

@@ -4,7 +4,7 @@
 title: CORTEX Intelligence — Brain Tiers, LENS Integration, Intelligence Matrix, and RCA Memory Engine
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/intelligence/ + cortex/lens/ + cortex/intelligence/cross_cutting/ + cortex/intelligence/learning/
 consolidates: [00-getting-started-brain-tier-architecture, 00-getting-started-intelligence-matrix, 00-getting-started-cortex-intelligence]
 order: 2

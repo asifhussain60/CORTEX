@@ -5,7 +5,7 @@ consolidates:
   - 01-capabilities-workflow-templates.md
   - 01-capabilities-workflow-template-tiers.md
   - 01-capabilities-response-formatting.md
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py + cortex-registry/workflows/templates/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

@@ -2,7 +2,7 @@
 title: SDLC Workflow Engine — Full Lifecycle Intelligence
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/domain/sdlc_workflow_orchestrator.py + cortex-registry/workflows/templates/sdlc/ + cortex-registry/knowledge/sdlc/
 order: 16
 ---

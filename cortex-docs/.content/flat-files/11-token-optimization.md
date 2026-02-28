@@ -4,7 +4,7 @@
 title: Token Optimization — How CORTEX Maximizes Every Chat Turn
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: .github/copilot-instructions.md + .github/prompts/cortex-architect.prompt.md + .github/agents/AGENT-INDEX.md + cortex/core/prompt_agent_integration.py + cortex/core/intelligence_mixin.py + cortex/core/yaml_loaders.py
 consolidates: [05-infrastructure-token-optimization]
 order: 8

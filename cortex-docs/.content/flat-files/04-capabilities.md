@@ -6,7 +6,7 @@ consolidates:
   - 01-capabilities-ai-intelligence.md
   - 01-capabilities-decisioning.md
   - 01-capabilities-extensibility.md
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/core/ + cortex/mcp/ + cortex/intelligence/ + cortex/lens/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

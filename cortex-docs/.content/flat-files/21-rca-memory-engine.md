@@ -4,7 +4,7 @@
 title: RCA Memory Engine — Root Cause Analysis, Prevention Gate, and Recurrence Detection
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/intelligence/learning/ + cortex/core/orchestrator_protocol_mixin.py + cortex/mcp/tools/cortex_learning.py
 order: 21
 ---
@@ -278,4 +278,4 @@ For organisations with high engineer turnover, this is particularly valuable. Kn
 
 ---
 
-*Planned capability · Zero new orchestrators · Zero new MCP tools*
+*Live capability (Phase 87) · 121 GREEN tests · Zero new orchestrators · Zero new MCP tools*

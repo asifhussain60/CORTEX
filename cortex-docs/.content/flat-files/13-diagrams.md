@@ -4,7 +4,7 @@
 title: CORTEX Architecture Diagrams — Visual Reference
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ directory structure
 consolidates: [07-diagrams-overview, 07-diagrams-high-level-architecture, 07-diagrams-request-flow, 07-diagrams-orchestrator-map, 07-diagrams-lens-pipeline, 07-diagrams-governance-flow, 07-diagrams-mcp-transport, 07-diagrams-testing-pyramid, 07-diagrams-brain-tier-model, 07-diagrams-golden-test-taxonomy, 07-diagrams-golden-test-lifecycle, 07-diagrams-sdlc-pipeline, 07-diagrams-workflow-template-engine, 07-diagrams-rgr-cycle, 07-diagrams-sts-transformation, 07-diagrams-security-first, 07-diagrams-knowledge-hydration]
 order: 12

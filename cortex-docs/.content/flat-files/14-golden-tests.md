@@ -2,7 +2,7 @@
 title: Golden Tests — Quality Contract and Scoring Engine
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: tests/golden/ + cortex/testing/quality_gate.py + cortex-registry/core/test-quality-gate.yaml
 order: 14
 ---

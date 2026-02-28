@@ -2,7 +2,7 @@
 title: Red-Green-Refactor (RGR) — The Looped Quality Cycle
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/core/tdd_orchestrator.py + cortex/orchestrators/support/sweep_catalogue_orchestrator.py + cortex-registry/workflows/templates/tdd/
 order: 18
 ---
