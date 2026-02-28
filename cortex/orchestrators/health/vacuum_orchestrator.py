@@ -146,6 +146,10 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
             result = self._execute_op(op, dry_run=dry_run)
             report.operations.append(result)
 
+        # Digested chat-* file cleanup
+        for result in self.run_digest_cleanup(dry_run=dry_run):
+            report.operations.append(result)
+
         report.recount()
         # AC_COMPLETE: {_ac_id} ✅
         return report
@@ -344,6 +348,52 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
                         results.append(self.delete_directory(subdir))
             except OSError:
                 pass
+
+        return results
+
+    def run_digest_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Delete stale digested ``chat-*`` files across the workspace.
+
+        Recursively finds all files whose name starts with ``chat-`` and
+        deletes them, **except** files inside protected directories
+        (``_workspaces``, ``.github``, ``cortex-docs``, ``cortex-registry``,
+        etc.) which are preserved.
+
+        Targets:
+        - ``cortex/intelligence/state/state/digests/chat-*.json``
+        - Any ``chat-*`` files at the workspace root or elsewhere in the tree
+
+        Preserved (never touched):
+        - ``_workspaces/**/chat-*`` — user workspace chat sessions
+        - ``.github/**/chat-*`` — legitimate templates (e.g. ``chat-vs-terminal-guide.md``)
+        - Any ``chat-*`` inside other PROTECTED_DIRS
+
+        Args:
+            dry_run: When ``True``, plan operations but do not execute them.
+
+        Returns:
+            List of :class:`OperationResult` describing each planned or executed action.
+        """
+        results: List[OperationResult] = []
+
+        for chat_file in sorted(self.workspace_root.rglob("chat-*")):
+            if not chat_file.is_file():
+                continue
+
+            # Skip files inside protected directories
+            try:
+                rel = chat_file.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                    continue
+            except ValueError:
+                continue
+
+            if dry_run:
+                results.append(OperationResult(
+                    op_type="delete", source=chat_file, success=True, dry_run=True,
+                ))
+            else:
+                results.append(self.delete_file(chat_file))
 
         return results
 
