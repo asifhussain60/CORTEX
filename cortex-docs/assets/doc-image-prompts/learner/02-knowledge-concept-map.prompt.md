@@ -13,9 +13,9 @@ CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimu
 The concept map should show:
 - A central hub node labeled "CORTEX" with a bright cyan (#00d4ff) glow
 - 6 satellite nodes arranged around it, connected by glowing lines:
-  1. "Orchestrators" (282 files, emerald green) — top
+  1. "Orchestrators" (259 files · 9 domains, emerald green) — top
   2. "MCP Tools" (29 tools, purple #7b61ff) — top-right
-  3. "Governance" (38 CORE rules, amber) — right
+  3. "Governance" (32 CORE rules, amber) — right
   4. "LENS Intelligence" (4-stage pipeline, cyan) — bottom-right
   5. "TDD Workflow" (RED→GREEN→REFACTOR, red→green→blue) — bottom-left
   6. "Learning" (3 tracks, warm orange) — left

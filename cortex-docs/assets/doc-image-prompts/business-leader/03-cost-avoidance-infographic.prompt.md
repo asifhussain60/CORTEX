@@ -15,6 +15,7 @@ The infographic should show:
 - Right side labeled "WITH CORTEX" with green-tinted glass cards showing: "$0 — caught at commit", "0 hrs — automated", "0 rework — DoR enforced", "$0 — LENS pre-scan"
 - A central dividing line with a gradient from red (#fb7185) to green (#34d399)
 - Total annual savings displayed prominently at the bottom: "~$250K+ Annual Savings"
+- A small footnote badge: "32 CORE Rules · Enforced at Every Commit"
 - Clean typography, no text smaller than readable at 600px
 - Professional executive presentation quality
 - Glassmorphism glass cards with colored borders

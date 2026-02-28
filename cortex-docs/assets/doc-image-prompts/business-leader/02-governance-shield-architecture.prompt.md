@@ -11,7 +11,7 @@ Create a professional architectural diagram showing an AI governance pipeline fo
 CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
 
 The diagram should show:
-- A central glowing shield icon at the top center, inside the safe zone, representing "38 CORE Governance Rules"
+- A central glowing shield icon at the top center, inside the safe zone, representing "32 CORE Governance Rules"
 - Seven horizontal stages flowing left to right entirely within the safe zone: Code Change → Stage 0 Audit → TDD Gate → Rules Enforcement → LENS Scan → AC Audit Log → Shipped ✅
 - Each stage as a glassmorphism card with subtle colored borders (cyan, purple, emerald, amber), all fully inset from the canvas edges
 - Connecting arrows between stages with gradient glow effects

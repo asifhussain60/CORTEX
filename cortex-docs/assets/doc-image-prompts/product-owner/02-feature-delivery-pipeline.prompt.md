@@ -19,7 +19,7 @@ The pipeline should show:
   5. "Governance Gate" (amber glow) — compliance validated
   6. "Shipped ✅" (bright emerald glow)
 - Animated-looking flow arrows with gradient trails between nodes
-- Small annotation cards below key stages showing: "Automated DoR check", "38 CORE rules validated", "AC audit logged"
+- Small annotation cards below key stages showing: "Automated DoR check", "32 CORE rules validated", "AC audit logged"
 - A subtle rejected path branching downward from the Governance Gate in red for non-compliant features
 - Clean, modern, easy to follow at a glance
 - No photographic elements

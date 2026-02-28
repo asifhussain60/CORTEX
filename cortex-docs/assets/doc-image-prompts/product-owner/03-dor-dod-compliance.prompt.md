@@ -16,7 +16,7 @@ The visualization should show:
   - 6 checklist items with green checkmarks: "Acceptance Criteria Defined", "LENS Analysis Complete", "TDD Scaffold Generated", "Dependencies Mapped", "Effort Estimated", "Governance Pre-scan Passed"
   - A "100% Compliant" badge with glow
 - RIGHT PANEL "Definition of Done" with cyan border (#00d4ff):
-  - 6 checklist items with green checkmarks: "All Tests GREEN", "Code Coverage ≥90%", "CORE Rules Validated", "AC Markers Complete", "Docs Updated", "Peer Review Approved"
+  - 6 checklist items with green checkmarks: "All Tests GREEN", "Code Coverage ≥90%", "32 CORE Rules Validated", "AC Markers Complete", "Docs Updated", "Peer Review Approved"
   - A "100% Compliant" badge with glow
 - Central connecting arrow showing the sprint lifecycle flow from DoR → DoD
 - Clean typography, professional, suitable for sprint planning meetings
