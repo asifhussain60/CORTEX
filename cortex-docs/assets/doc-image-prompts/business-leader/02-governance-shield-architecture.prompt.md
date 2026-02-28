@@ -8,15 +8,18 @@
 
 Create a professional architectural diagram showing an AI governance pipeline for an enterprise platform called CORTEX. Dark navy background (#0a0e27).
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The diagram should show:
-- A central glowing shield icon representing "38 CORE Governance Rules"
-- Seven horizontal stages flowing left to right: Code Change → Stage 0 Audit → TDD Gate → Rules Enforcement → LENS Scan → AC Audit Log → Shipped ✅
-- Each stage as a glassmorphism card with subtle colored borders (cyan, purple, emerald, amber)
+- A central glowing shield icon at the top center, inside the safe zone, representing "38 CORE Governance Rules"
+- Seven horizontal stages flowing left to right entirely within the safe zone: Code Change → Stage 0 Audit → TDD Gate → Rules Enforcement → LENS Scan → AC Audit Log → Shipped ✅
+- Each stage as a glassmorphism card with subtle colored borders (cyan, purple, emerald, amber), all fully inset from the canvas edges
 - Connecting arrows between stages with gradient glow effects
 - A "BLOCKED" indicator in red showing non-compliant code being rejected at the enforcement gate
-- Clean, minimal aesthetic with generous whitespace
+- Clean, minimal aesthetic with generous internal whitespace between cards
 - Enterprise-grade professional look suitable for board presentations
 - No photographic elements — pure architectural diagram aesthetic
-- Subtle radial glow behind the central shield
+- Subtle radial glow behind the central shield; glow must not reach canvas edges
+- CORTEX logo or wordmark in the top-left corner, inside the safe zone
 
-Style: Isometric-lite with glassmorphism panels. Dark mode. Clean lines. Cyber-security visual language.
+Style: Isometric-lite with glassmorphism panels. Dark mode. Clean lines. Cyber-security visual language. Wide internal padding between all elements.

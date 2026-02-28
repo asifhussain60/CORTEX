@@ -12,6 +12,8 @@
 
 Create a professional hero banner image for the Software Engineer section of an AI engineering platform called CORTEX. Dark navy background (#0a0e27) with glassmorphism aesthetic. This is a decorative hero image, NOT a replacement for interactive technical diagrams.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The image should show:
 - An abstract visualization of 282 orchestrator files arranged as a constellation network
 - 9 colored cluster groups representing domains: core (cyan), domain (purple), support (emerald), git (amber), health (teal), intelligence (magenta), persona (orange), validation (lime), workflow (indigo)
@@ -22,4 +24,4 @@ The image should show:
 - Professional, technical, inspiring for engineers
 - No photographic elements — pure data visualization / network graph aesthetic
 
-Style: Network constellation diagram. Dark glassmorphism. Technical beauty. Hero banner quality for an engineering portal.
+Style: Network constellation diagram. Dark glassmorphism. Technical beauty. Hero banner quality for an engineering portal. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

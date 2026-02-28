@@ -8,6 +8,8 @@
 
 Create a professional learning journey map for an AI engineering platform called CORTEX. Dark navy background (#0a0e27) with glassmorphism aesthetic, designed to feel inviting and motivational for learners.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The map should show:
 - A winding path (like a game board or trail map) flowing from bottom-left to top-right
 - THREE milestone zones along the path:
@@ -21,4 +23,4 @@ The map should show:
 - Warm, inviting feeling despite dark theme — use soft glows and rounded shapes
 - No photographic elements
 
-Style: Gamified learning path. Dark glassmorphism. Adventure/exploration aesthetic. Inspiring for new learners.
+Style: Gamified learning path. Dark glassmorphism. Adventure/exploration aesthetic. Inspiring for new learners. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

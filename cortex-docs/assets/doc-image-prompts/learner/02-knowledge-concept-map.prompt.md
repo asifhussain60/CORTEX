@@ -8,6 +8,8 @@
 
 Create a professional knowledge concept map showing how CORTEX AI engineering platform components interconnect. Dark navy background (#0a0e27) with glassmorphism aesthetic.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The concept map should show:
 - A central hub node labeled "CORTEX" with a bright cyan (#00d4ff) glow
 - 6 satellite nodes arranged around it, connected by glowing lines:
@@ -23,4 +25,4 @@ The concept map should show:
 - Clean, educational, easy to navigate visually
 - Suitable as a study reference or orientation guide
 
-Style: Mind map / concept map. Dark glassmorphism. Radial layout. Educational clarity.
+Style: Mind map / concept map. Dark glassmorphism. Radial layout. Educational clarity. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

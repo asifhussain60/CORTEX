@@ -8,6 +8,8 @@
 
 Create a professional executive dashboard visualization for an AI engineering platform called CORTEX. Dark navy background (#0a0e27) with glassmorphism glass panels.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The dashboard should show:
 - A large hero KPI panel showing "40% Cost Reduction" with a downward trend arrow in cyan (#00d4ff)
 - Four glass cards in a row: "4× Faster Resolution" (emerald green), "60% Token Savings" (purple #7b61ff), "0 Production Violations" (amber), "87 Phases Shipped" (cyan)
@@ -19,4 +21,4 @@ The dashboard should show:
 - Subtle cyan and purple glow effects behind panels
 - No photographic elements — pure data visualization aesthetic
 
-Style: Flat design with depth from glassmorphism blur. Dark mode. Tech-forward. Suitable for a CTO presentation.
+Style: Flat design with depth from glassmorphism blur. Dark mode. Tech-forward. Suitable for a CTO presentation. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

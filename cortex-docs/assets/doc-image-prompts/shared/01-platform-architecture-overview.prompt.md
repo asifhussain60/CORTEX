@@ -8,6 +8,8 @@
 
 Create a professional platform architecture overview diagram for an AI engineering framework called CORTEX. Dark navy background (#0a0e27) with glassmorphism aesthetic.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The architecture should show:
 - FOUR horizontal tiers stacked vertically with glassmorphism panels:
   1. TOP — "Interaction Layer" (cyan border): MCP Tools, CLI, VS Code Copilot Chat — user touch points
@@ -21,4 +23,4 @@ The architecture should show:
 - No photographic elements — pure architectural diagram
 - Generous spacing, readable at 600px width
 
-Style: Tiered architecture diagram. Dark glassmorphism. Clean horizontal layers. Enterprise reference quality.
+Style: Tiered architecture diagram. Dark glassmorphism. Clean horizontal layers. Enterprise reference quality. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

@@ -8,6 +8,8 @@
 
 Create a professional infographic comparing engineering costs with and without an AI governance platform called CORTEX. Dark navy background (#0a0e27) with glassmorphism aesthetic.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The infographic should show:
 - Left side labeled "WITHOUT CORTEX" with red-tinted glass cards showing: "$4,700/bug in production", "40 hrs/quarter manual audit", "2.5 sprints/year rework", "$15K+ security remediation"
 - Right side labeled "WITH CORTEX" with green-tinted glass cards showing: "$0 — caught at commit", "0 hrs — automated", "0 rework — DoR enforced", "$0 — LENS pre-scan"
@@ -18,4 +20,4 @@ The infographic should show:
 - Glassmorphism glass cards with colored borders
 - Subtle particle or connection line effects in background
 
-Style: Data visualization infographic. Dark mode. Enterprise boardroom quality. Minimalist with impact.
+Style: Data visualization infographic. Dark mode. Enterprise boardroom quality. Minimalist with impact. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

@@ -8,6 +8,8 @@
 
 Create a professional Definition of Ready (DoR) and Definition of Done (DoD) compliance visualization for an AI engineering platform. Dark navy background (#0a0e27) with glassmorphism aesthetic.
 
+CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
+
 The visualization should show:
 - Two large glassmorphism panels side by side
 - LEFT PANEL "Definition of Ready" with emerald border (#10b981):
@@ -19,4 +21,4 @@ The visualization should show:
 - Central connecting arrow showing the sprint lifecycle flow from DoR → DoD
 - Clean typography, professional, suitable for sprint planning meetings
 
-Style: Compliance checklist visualization. Dark glassmorphism. Dual-panel layout. Enterprise quality.
+Style: Compliance checklist visualization. Dark glassmorphism. Dual-panel layout. Enterprise quality. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.
