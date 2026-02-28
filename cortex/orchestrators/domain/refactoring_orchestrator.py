@@ -29,7 +29,7 @@ from typing import Any, Dict, List, Optional, Union
 from cortex.core.result import Err, Ok, Result
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90b + Phase 98
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 # Backward-compat aliases (no-op now that both paths are identical)
@@ -1189,6 +1189,7 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         """
         return self._inject_knowledge_context(domain="refactoring")
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,

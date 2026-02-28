@@ -28,7 +28,7 @@ from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90b + Phase 98
 # Phase 86 — GAP-86-11: OPJMixin for learning persistence
 from cortex.intelligence.learning.opj_mixin import OPJMixin
 from cortex.intelligence.learning.reinforcement_signal import SignalType
@@ -458,6 +458,7 @@ class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, W
             }
         })
     
+    @enforce_gateway
     def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
         """Execute operation with audit logging."""
         # Phase 58 — cross-cutting hooks

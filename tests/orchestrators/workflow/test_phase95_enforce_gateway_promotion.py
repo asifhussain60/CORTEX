@@ -178,9 +178,9 @@ class TestTrainerOrchestratorPhase95:
         assert issubclass(TrainerOrchestrator, WorkflowEnforcementMixin)
 
     def test_gateway_enabled_is_false_category_b(self) -> None:
-        """Flag must be False — receives training op names ("scan", "propose", "execute")."""
+        """Phase 97 promoted TrainerOrchestrator to True — receives TRAIN mode via gateway."""
         from cortex.orchestrators.intelligence.trainer_orchestrator import TrainerOrchestrator
-        assert TrainerOrchestrator.PHASE90_GATEWAY_ENABLED is False
+        assert TrainerOrchestrator.PHASE90_GATEWAY_ENABLED is True
 
     def test_execute_operation_has_enforce_gateway_decorator(self) -> None:
         from cortex.orchestrators.intelligence.trainer_orchestrator import TrainerOrchestrator

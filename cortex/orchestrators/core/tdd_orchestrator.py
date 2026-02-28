@@ -64,7 +64,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G2 Fix: wire mixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90b + Phase 98
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
@@ -509,6 +509,7 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMi
         """
         return self._inject_knowledge_context(context="tdd")
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,
