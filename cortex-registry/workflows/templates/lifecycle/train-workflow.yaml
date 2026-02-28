@@ -1,0 +1,103 @@
+# ============================================================================
+# MODE WORKFLOW: TRAIN — Gap-Driven Template Evolution from Repos
+# ============================================================================
+# Authority: cortex-trainer.md
+# Trigger: "/train {path}", "learn from this repo", "evolve templates"
+# Orchestrator: TrainerOrchestrator
+# Agent: cortex-trainer.md
+#
+# Replaces: Inline training protocol in cortex-trainer.md
+# ============================================================================
+
+workflow:
+  id: 'lifecycle/train-workflow'
+  name: 'TRAIN — Gap-Driven Template Evolution'
+  version: '1.0.0'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['TRAIN']
+    trigger_keywords: ['train', 'learn from repo', 'evolve templates', 'gap-driven training']
+    orchestrators_used:
+      - TrainerOrchestrator
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'TRAIN', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Step 1: LENS Analysis of target repo
+    - id: lens_analysis
+      name: 'LENS Analysis — scan target repo'
+      depends_on: ['ac_start']
+      action: 'lens_analysis'
+      params:
+        scope: '{{target_repo_path}}'
+        analysis_types: ['language', 'examination', 'navigation', 'synthesis']
+      outputs: ['repo_profile']
+
+    # Step 2: Gap Detection — compare repo patterns against CORTEX templates
+    - id: gap_detection
+      name: 'Gap Detection — identify missing template coverage'
+      depends_on: ['lens_analysis']
+      orchestrator: 'TrainerOrchestrator'
+      action: 'detect_gaps'
+      params:
+        repo_profile: '{{lens_analysis.repo_profile}}'
+        existing_templates: 'cortex-registry/workflows/templates/'
+        existing_knowledge: 'cortex-registry/knowledge/'
+      outputs: ['gap_catalogue']
+
+    # Step 3: Pattern Extraction — extract reusable patterns from repo
+    - id: pattern_extraction
+      name: 'Pattern Extraction — extract reusable patterns'
+      depends_on: ['gap_detection']
+      orchestrator: 'TrainerOrchestrator'
+      action: 'extract_patterns'
+      params:
+        target_gaps: '{{gap_detection.gap_catalogue}}'
+        source_repo: '{{target_repo_path}}'
+      outputs: ['proposed_patterns']
+
+    # Step 4: Template Proposal — generate template change proposals
+    - id: template_proposal
+      name: 'Template Proposal — propose CORTEX template changes'
+      depends_on: ['pattern_extraction']
+      orchestrator: 'TrainerOrchestrator'
+      action: 'generate_proposals'
+      params:
+        patterns: '{{pattern_extraction.proposed_patterns}}'
+        gap_catalogue: '{{gap_detection.gap_catalogue}}'
+      outputs: ['template_proposals']
+
+    # Step 5: User Review — present proposals for approval
+    - id: user_review
+      name: 'Review proposals — user approval required'
+      depends_on: ['template_proposal']
+      action: 'user_approval'
+      display:
+        proposals: '{{template_proposal.template_proposals}}'
+        gap_coverage: '{{gap_detection.gap_catalogue}}'
+
+    # Step 6: Apply — write approved templates to registry
+    - id: apply_templates
+      name: 'Apply approved templates to registry'
+      depends_on: ['user_review']
+      orchestrator: 'TrainerOrchestrator'
+      action: 'apply_proposals'
+      params:
+        approved: '{{user_review.approved_proposals}}'
+        target_dirs:
+          workflows: 'cortex-registry/workflows/templates/'
+          knowledge: 'cortex-registry/knowledge/'
+          patterns: 'cortex-registry/patterns/'
+
+    - id: ac_complete
+      depends_on: ['apply_templates']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'TRAIN', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

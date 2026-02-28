@@ -58,8 +58,10 @@ DebuggerOrchestrator gained CORTEX cross-cutting intelligence wiring — followi
 
 ### Workflow Template
 
-**Pipeline:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` *(Phase 86 PLANNED)*  
+**Pipeline:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
 **9-stage pipeline:** detect-stack → select-strategies → inject-markers → capture → analyze → vision-map → fix-plan → convergence-gate → cleanup → verify
+
+All debug phases (INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP) are defined in the workflow template with conditional gates and convergence loops. This agent follows the template step sequence — no inline procedural override.
 
 ### Convergence Gate (CORE-068)
 

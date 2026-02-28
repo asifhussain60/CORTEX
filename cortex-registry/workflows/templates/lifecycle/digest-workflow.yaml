@@ -1,0 +1,134 @@
+# ============================================================================
+# MODE WORKFLOW: DIGEST — Intelligent Content Ingestion (3-Pipeline)
+# ============================================================================
+# Authority: cortex-digest.md (3-pipeline architecture)
+# Trigger: "summarize", "digest", "ingest", "learn from", "/digest {path}"
+# Orchestrator: DigestCoordinator
+# Agent: cortex-digest.md
+#
+# Replaces: Inline 3-pipeline logic in cortex-architect.prompt.md § DIGEST MODE
+#           Inline pipeline architecture in cortex-digest.md
+# ============================================================================
+
+workflow:
+  id: 'lifecycle/digest-workflow'
+  name: 'DIGEST — Intelligent Content Ingestion'
+  version: '1.0.0'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['DIGEST']
+    trigger_keywords: ['summarize', 'digest', 'ingest', 'learn from']
+    orchestrators_used:
+      - DigestCoordinator
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'DIGEST', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Step 1: Score source content for pipeline selection
+    - id: marker_scoring
+      name: 'Score source content — pipeline auto-selection'
+      depends_on: ['ac_start']
+      orchestrator: 'DigestCoordinator'
+      action: 'score_content'
+      params:
+        markers:
+          - { marker: 'User/Assistant turns', points: 2 }
+          - { marker: 'AC code (AC-*)', points: 2 }
+          - { marker: 'CORTEX headers/badges', points: 1 }
+          - { marker: 'Phase reference', points: 1 }
+          - { marker: 'Test count (X/Y format)', points: 1 }
+          - { marker: 'Progress bar', points: 1 }
+          - { marker: 'Tool call markers', points: 1 }
+          - { marker: 'Git hash', points: 1 }
+        thresholds:
+          pipeline_1_chat: 5   # score >= 5 → Chat Session pipeline
+          pipeline_ambiguous: [3, 4]  # score 3-4 → ask user
+          pipeline_2_or_3: 2   # score < 3 → Repo Content or External
+      outputs: ['score', 'pipeline_selection']
+
+    # Step 2: Route to appropriate pipeline
+    - id: pipeline_router
+      name: 'Route to pipeline based on score'
+      depends_on: ['marker_scoring']
+      action: 'conditional'
+      conditions:
+        - condition: '{{marker_scoring.score}} >= 5'
+          action: 'execute_step'
+          target: 'pipeline_1_chat'
+        - condition: '{{marker_scoring.score}} >= 3 AND {{marker_scoring.score}} <= 4'
+          action: 'user_approval'
+          message: 'Content scores {{marker_scoring.score}} — Chat Session or Repo Content pipeline?'
+        - condition: '{{marker_scoring.score}} < 3'
+          action: 'conditional'
+          sub_conditions:
+            - condition: 'has_file_extension AND has_repo_paths'
+              target: 'pipeline_2_repo'
+            - condition: 'else'
+              target: 'pipeline_3_external'
+
+    # Pipeline 1: Chat Session
+    - id: pipeline_1_chat
+      name: 'Pipeline 1 — Chat Session Ingestion'
+      depends_on: ['pipeline_router']
+      condition: '{{pipeline_selection}} == "chat"'
+      orchestrator: 'DigestCoordinator'
+      action: 'ingest_chat_session'
+      params:
+        lens: false
+        output_types: ['drifts', 'patterns', 'tool_usage', 'enhancement_proposals']
+      outputs: ['digest_artifacts']
+
+    # Pipeline 2: Repo Content
+    - id: pipeline_2_repo
+      name: 'Pipeline 2 — Repo Content Ingestion'
+      depends_on: ['pipeline_router']
+      condition: '{{pipeline_selection}} == "repo"'
+      orchestrator: 'DigestCoordinator'
+      action: 'ingest_repo_content'
+      params:
+        lens: true
+        output_types: ['domain_knowledge', 'best_practices', 'anti_patterns']
+      outputs: ['digest_artifacts']
+
+    # Pipeline 3: External Knowledge
+    - id: pipeline_3_external
+      name: 'Pipeline 3 — External Knowledge Ingestion'
+      depends_on: ['pipeline_router']
+      condition: '{{pipeline_selection}} == "external"'
+      orchestrator: 'DigestCoordinator'
+      action: 'ingest_external_knowledge'
+      params:
+        lens: false
+        output_format: 'yaml'
+      outputs: ['digest_artifacts']
+
+    # Step 3: Persist to registry
+    - id: persist_to_registry
+      name: 'Persist extracted knowledge to registry'
+      depends_on: ['pipeline_1_chat', 'pipeline_2_repo', 'pipeline_3_external']
+      dependency_mode: 'any_one'  # only one pipeline runs
+      orchestrator: 'DigestCoordinator'
+      action: 'persist_artifacts'
+      params:
+        target_base: 'cortex-registry/knowledge/'
+        domain_routing:
+          architecture: 'architecture/'
+          backend: 'backend-python/'
+          security: 'security/'
+          testing: 'testing-validation/'
+          devops: 'devops-infrastructure/'
+          performance: 'performance-optimization/'
+        enhancement_routing: 'cortex-registry/plans/pending/'
+
+    - id: ac_complete
+      depends_on: ['persist_to_registry']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'DIGEST', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

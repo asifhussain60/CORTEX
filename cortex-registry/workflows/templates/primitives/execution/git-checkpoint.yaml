@@ -1,0 +1,104 @@
+# ============================================================================
+# PRIMITIVE: Git Checkpoint — Safe rollback point before code changes
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  execution
+# Authority: CORE-008 (TDD), git safety
+#
+# Purpose:
+#   Creates a git checkpoint (stash or branch) before any code-modifying
+#   workflow. Records baseline SHA for rollback on convergence failure.
+#   Replaces inline git checkpoint logic in sdlc/implementation-execution.yaml
+#   and inline descriptions in prompts/agents.
+#
+# Reused by:
+#   - sdlc/implement-workflow.yaml
+#   - sdlc/fix-workflow.yaml
+#   - quality/refactor-workflow.yaml
+#   - lifecycle/totalrecall-workflow.yaml
+#   - Any workflow that modifies source files
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/git-checkpoint'
+name: 'Git Checkpoint'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Creates a safe rollback point before code changes.
+    Stashes uncommitted changes, records baseline SHA, and optionally
+    creates a feature branch. On workflow failure, rollback_action
+    restores to this checkpoint.
+  tags:
+    - execution
+    - git
+    - checkpoint
+    - rollback
+    - safety
+    - primitive
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+
+parameters:
+  required:
+    - name: 'operation_label'
+      type: 'str'
+      description: 'Label for the checkpoint (e.g., "implement-user-auth")'
+  optional:
+    - name: 'create_branch'
+      type: 'bool'
+      description: 'Create a feature branch from current HEAD'
+      default: false
+    - name: 'branch_prefix'
+      type: 'str'
+      description: 'Prefix for feature branch name'
+      default: 'cortex/'
+
+steps:
+  - id: verify_clean
+    name: 'Verify working tree state'
+    action: 'command'
+    command: 'git status --porcelain'
+    on_dirty:
+      action: 'command'
+      command: 'git stash push -m "CORTEX checkpoint: {{operation_label}}"'
+      outputs:
+        - name: 'stash_ref'
+          description: 'Git stash reference for recovery'
+
+  - id: record_baseline
+    name: 'Record baseline commit SHA'
+    depends_on: ['verify_clean']
+    action: 'command'
+    command: 'git rev-parse HEAD'
+    outputs:
+      - name: 'baseline_sha'
+        description: 'Commit SHA to rollback to on failure'
+
+  - id: create_feature_branch
+    name: 'Create feature branch (optional)'
+    depends_on: ['record_baseline']
+    action: 'conditional'
+    condition: '{{create_branch}} == true'
+    on_true:
+      action: 'command'
+      command: 'git checkout -b {{branch_prefix}}{{operation_label}}'
+      outputs:
+        - name: 'branch_name'
+          description: 'Feature branch name'
+    on_false:
+      action: 'skip'
+
+rollback_action:
+  description: 'Restore to checkpoint on workflow failure'
+  steps:
+    - action: 'command'
+      command: 'git checkout {{baseline_sha}} -- .'
+    - action: 'conditional'
+      condition: '{{stash_ref}} is not null'
+      on_true:
+        action: 'command'
+        command: 'git stash pop'

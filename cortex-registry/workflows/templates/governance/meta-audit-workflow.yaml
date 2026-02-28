@@ -1,0 +1,89 @@
+# ============================================================================
+# MODE WORKFLOW: META-AUDIT — Prompt/Agent Coherence Validation
+# ============================================================================
+# Authority: cortex-meta-auditor.md (25 checks)
+# Trigger: Governance coherence requests, /audit fix Stage 6
+# Orchestrator: EnforcementOrchestrator (meta-audit)
+# Agent: cortex-meta-auditor.md
+#
+# Replaces: Inline 25-check table in cortex-meta-auditor.md
+# ============================================================================
+
+workflow:
+  id: 'governance/meta-audit-workflow'
+  name: 'META-AUDIT — Prompt/Agent Coherence Validation'
+  version: '1.0.0'
+  category: 'governance'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['META-AUDIT', 'AUDIT']
+    orchestrators_used:
+      - EnforcementOrchestrator
+    scope: '.github/agents/, .github/prompts/, .github/templates/, cortex-registry/'
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'p0_count == 0 AND p1_count == 0'
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'META-AUDIT', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # ── COHERENCE CHECKS (25 total) ────────────────────────────────
+    - id: run_meta_checks
+      name: 'Run 25-point meta-audit checks'
+      depends_on: ['ac_start']
+      action: 'check_battery'
+      checks:
+        - { id: 1, name: 'Orchestrator count', detect: 'grep orchestrator counts in .github/', predicate: 'all match refresh_prompt_suite.py --counts-only' }
+        - { id: 2, name: 'MCP tool count', detect: 'grep MCP tool counts in .github/', predicate: 'all match mcp_registry.py' }
+        - { id: 3, name: 'CORE rules count', detect: 'grep CORE rule counts', predicate: 'all match skull-rules.yaml' }
+        - { id: 4, name: 'Package name', detect: 'grep cortex_intelligence|cortex_lens|cortex.brain', predicate: 'zero matches' }
+        - { id: 5, name: 'Deleted paths', detect: 'grep cortex/brain/|cortex_intelligence/|cortex_lens/|_archive/', predicate: 'zero matches' }
+        - { id: 6, name: 'Stale MCP tools', detect: 'grep cortex_process_request|cortex_lens_analyze|cortex_manage_todo', predicate: 'zero matches' }
+        - { id: 7, name: 'Stale phase refs', detect: 'grep Phase 49|CCL|CrystallizedContext', predicate: 'zero matches' }
+        - { id: 8, name: 'Agent existence', detect: 'compare AGENT-INDEX.md entries vs actual files', predicate: 'all entries exist' }
+        - { id: 9, name: 'Template SSOT', detect: 'cortex-response-templates.md is sole source', predicate: 'no duplicated templates' }
+        - { id: 10, name: 'CORE rule IDs', detect: 'rules cited in agents exist in cortex-registry/core/', predicate: 'all cited rules exist' }
+        - { id: 11, name: 'Response header — CORTEX.prompt.md', detect: 'grep Author.*Asif CORTEX.prompt.md', predicate: 'match found' }
+        - { id: 12, name: 'Response header — cortex-architect.prompt.md', detect: 'grep Author.*Asif cortex-architect.prompt.md', predicate: 'match found' }
+        - { id: 13, name: 'MCP tool name alignment', detect: 'grep old tool names in .github/', predicate: 'zero stale names' }
+        - { id: 14, name: 'Governance rule count alignment', detect: 'skull-rules.yaml count', predicate: '38 CORE + 2 AC' }
+        - { id: 15, name: 'Knowledge YAML wiring', detect: 'verify cortex-registry/knowledge/ loadable', predicate: 'all loadable' }
+        - { id: 16, name: 'LENS synthesis health', detect: 'python3 -c "from cortex.lens import *"', predicate: 'import success' }
+        - { id: 17, name: 'Success/failure pattern learning', detect: 'query orchestrator-traces.db', predicate: 'AC markers captured' }
+        - { id: 18, name: 'Upgrade manifest health', detect: 'check upgrade-manifest.json', predicate: 'last entry pass' }
+        - { id: 19, name: 'DoR paragraph enforcement', detect: 'grep table patterns in DoR sections', predicate: 'zero table violations' }
+        - { id: 20, name: 'Windows compatibility gate', detect: 'check hardcoded paths', predicate: 'pathlib/os.path used' }
+        - { id: 21, name: 'Cross-platform runtime safety', detect: 'check POSIX assumptions', predicate: 'no Unix-only code' }
+        - { id: 22, name: 'Requirements file integrity', detect: 'check requirements.txt duplicates', predicate: 'no duplicates' }
+        - { id: 23, name: 'SQLite activity log health', detect: 'PRAGMA integrity_check', predicate: 'ok + no orphans' }
+        - { id: 24, name: 'Test fixture singleton DB isolation', detect: 'check CORTEX_TRACE_DB fixtures', predicate: 'class attrs restored' }
+        - { id: 25, name: 'Production trace DB sentinel rows', detect: 'check TEST_ACTION rows', predicate: 'zero sentinel rows' }
+      outputs: ['check_results', 'p0_count', 'p1_count']
+
+    # ── CONVERGENCE — fix and rescan ────────────────────────────────
+    - id: convergence_gate
+      depends_on: ['run_meta_checks']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'rerun_check_battery'
+          checks: '{{run_meta_checks.checks}}'
+        fix_step:
+          action: 'auto_fix_meta_violations'
+          description: 'Update inline values to match live architecture'
+        success_predicate: 'p0_count == 0 AND p1_count == 0'
+        max_cycles: 3
+
+    - id: ac_complete
+      depends_on: ['convergence_gate']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'META-AUDIT', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

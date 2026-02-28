@@ -1,0 +1,101 @@
+# ============================================================================
+# PRIMITIVE: AC Marker Emission — Cross-Cutting Intelligence
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  execution
+# Authority: CORE-027 (Audit trail), Check #19 (SQLite activity log health)
+#
+# Purpose:
+#   Emits AC_START and AC_COMPLETE markers for every orchestrator invocation.
+#   Persists to .cortex-runtime/traces/orchestrator-traces.db. Replaces
+#   inline AC marker logic previously duplicated across all agents and prompts.
+#
+# Reused by:
+#   - Every mode workflow (injected as first + last step)
+#   - audit/audit-fix-pipeline.yaml (per-stage AC markers)
+#   - primitives/validation/detect-fix-rescan-loop.yaml (per-cycle AC markers)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/ac-marker-emit'
+name: 'AC Marker Emission'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Emits AC_START at workflow entry and AC_COMPLETE at workflow exit.
+    AC_COMPLETE includes ✅ (success) or ❌ (failure) with timing in ms.
+    Orphaned AC_START without AC_COMPLETE is a P0 governance violation.
+  governance_rules:
+    - 'CORE-027: Missing AC markers = advisory warning'
+    - 'Check #19: SQLite activity log health'
+  persistence: '.cortex-runtime/traces/orchestrator-traces.db'
+  tags:
+    - execution
+    - ac-markers
+    - audit-trail
+    - sqlite
+    - primitive
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+
+parameters:
+  required:
+    - name: 'domain'
+      type: 'str'
+      description: 'Orchestrator domain (e.g., AUDIT, TDD, REFACTOR, DEBUG)'
+    - name: 'session_id'
+      type: 'str'
+      description: 'Unique session identifier (UUID or timestamp)'
+  optional:
+    - name: 'parent_session_id'
+      type: 'str'
+      description: 'Parent session ID for nested workflows'
+      default: null
+
+steps:
+  - id: ac_start
+    name: 'Emit AC_START marker'
+    action: 'emit_marker'
+    marker: 'AC_START: AC-{{domain}}-{{session_id}}'
+    persist_to: '{{persistence}}'
+    table: 'audit_sessions'
+    columns:
+      session_id: '{{session_id}}'
+      domain: '{{domain}}'
+      parent_session_id: '{{parent_session_id}}'
+      started_at: '{{now_iso}}'
+      status: 'running'
+
+  # --- Caller workflow steps execute here (injected between ac_start and ac_complete) ---
+
+  - id: ac_complete_success
+    name: 'Emit AC_COMPLETE marker (success)'
+    action: 'emit_marker'
+    condition: 'workflow_succeeded'
+    marker: 'AC_COMPLETE: AC-{{domain}}-{{session_id}} ✅ ({{duration_ms}}ms)'
+    persist_to: '{{persistence}}'
+    table: 'audit_sessions'
+    update:
+      session_id: '{{session_id}}'
+      completed_at: '{{now_iso}}'
+      duration_ms: '{{duration_ms}}'
+      status: 'complete'
+      exit_status: 'clean'
+
+  - id: ac_complete_failure
+    name: 'Emit AC_COMPLETE marker (failure)'
+    action: 'emit_marker'
+    condition: 'workflow_failed'
+    marker: 'AC_COMPLETE: AC-{{domain}}-{{session_id}} ❌ ({{duration_ms}}ms) — {{error_class}}'
+    persist_to: '{{persistence}}'
+    table: 'audit_sessions'
+    update:
+      session_id: '{{session_id}}'
+      completed_at: '{{now_iso}}'
+      duration_ms: '{{duration_ms}}'
+      status: 'failed'
+      exit_status: '{{error_class}}'
+      error_message: '{{error_message}}'

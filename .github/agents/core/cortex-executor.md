@@ -27,23 +27,11 @@ If DoR fails → escalate to `cortex-holistic-validator.md` before proceeding.
 
 ## Execution Flow
 
-```
-DoR Check
-    ↓ PASS
-RED Phase → write failing test (CORE-008)
-    ↓
-GREEN Phase → minimum implementation to pass test
-    ↓
-REFACTOR Phase → clean up, type hints (CORE-011), docstrings (CORE-012)
-    ↓
-Validate → pytest tests/ -n auto --dist loadscope
-    ↓
-Sweep Gate → CORE-064: SweepCatalogueOrchestrator scans for same issue class — fix ALL N instances
-    ↓
-Convergence Gate → CORE-068: rescan for regressions + violations; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
-    ↓
-Completion Report (inline — CORE-002)
-```
+**Workflow Templates:**
+- IMPLEMENT → `cortex-registry/workflows/templates/sdlc/implement-workflow.yaml`
+- FIX → `cortex-registry/workflows/templates/sdlc/fix-workflow.yaml`
+
+All procedural steps (DoR → RED → GREEN → REFACTOR → Validate → Sweep Gate → Convergence Gate → Completion) are defined in the workflow templates. The executor agent follows the template step sequence — no inline procedural override.
 
 ---
 

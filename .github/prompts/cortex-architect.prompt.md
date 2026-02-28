@@ -3,7 +3,14 @@
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
-- **Response Templates:** `.github/templates/cortex-response-templates.md`
+- **Response Templates:** `.github/templates/cortex-respon## 🔬 INVESTIGATE MODE — Deep Analysis
+
+**Trigger:** "investigate", "analyze", "root cause", "why is", "what causes"
+**Non-code-touching** — no workflow template required (WC-005: non-code intents exempt).
+
+**Approach:** Scope → Evidence (git history, test results, LENS, grep) → Hypothesize (≥2, ranked by likelihood) → Verify → Report (findings table with evidence links, confidence scores).
+
+**Investigation Checks:** Execution path tracing, brittleness detection, dependency chain analysis, performance profiling.
 - **Governance Rules:** `cortex-registry/core/`
 - **Refactor Plan:** `cortex-registry/planning/cortex-refactor-master.yaml`
 - **Master Plan Index:** `cortex-registry/cortex-master.yaml` *(thin index — ≤500L)*
@@ -128,40 +135,16 @@ Work is **NEVER** considered complete in one pass. The detect→fix→rescan loo
 ## 🚦 STAGE 0 — SYNCHRONOUS GOVERNANCE AUDIT (Pre-Flight)
 
 **Trigger:** Every user request, automatically, before intent routing.
-**Implemented in:** `RequestRephraseOrchestrator._run_stage_0_audit()`
+**Workflow Template:** `cortex-registry/workflows/templates/governance/stage0-preflight-workflow.yaml`
 **Spec authority:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
-
-### Inflight Upgrade Protocol (runs before Stage 0)
-At session start, check `git rev-list --count HEAD..origin/main`. If > 0: fetch → merge `origin/main` (non-FF) → run `/audit fix` → continue. If merge fails: abort → surface conflicts inline → request user guidance. Upgrade manifest: `.cortex-runtime/traces/upgrade-manifest.json`. Silent unless upgrade detected (CORE-049). Guarded by `CORTEX_AUTO_UPGRADE=true` (default). Callable via `UpgradeOrchestrator.check_upstream_and_merge()`.
+**Implemented in:** `RequestRephraseOrchestrator._run_stage_0_audit()`
 
 ### Pipeline Position
 ```
 [Inflight Upgrade Check] → [STAGE 0: Governance Audit] → IntentRouter → MasterOrchestrator → Execution
 ```
 
-### Stage 0 Checks
-
-| Check | Rule | Violation Pattern | Action |
-|---|---|---|---|
-| MD file scope | CORE-002 | `create/write *.md` outside `.github/` or `README.md` | Inject violation inline |
-| TDD bypass | CORE-008 | "skip test", "ignore test", "--ignore", "bypass test" | Flag before execution |
-| Audit trail | CORE-027 | Missing `AC_START`/`AC_COMPLETE` markers | Advisory warning (non-blocking) |
-
-### Stage 0 Output Format
-```
-## 🎯 CORTEX REPHRASE
----
-{SINGLE_PARAGRAPH with CORTEX context + governance violations inline}
-```
-- ✅ Single paragraph only — no tables, code blocks, bullet lists
-- ✅ Violations injected inline (e.g., "note: CORE-008 requires TDD")
-- ❌ Challenge protocol NOT appended here — it runs separately in CORE-048
-
-### MCP Tool Chain
-```
-cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
-    → IntentRouter.route() → Orchestrator execution
-```
+The workflow template handles: inflight upgrade protocol, 3 governance checks (MD file scope, TDD bypass, audit trail), and output formatting. See `stage0-preflight-workflow.yaml` for the complete step sequence, conditional gates, and violation injection rules.
 
 ---
 
@@ -191,6 +174,7 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 ### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 ✅ complete)
 
 **Trigger:** "debug", "trace", "diagnose", `/debug`, `/debug-inject`, `/debug-cleanup`
+**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
 
 **Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing Python + 5 multi-stack:
 - **TestFailureStrategy**, **RefactorRegressionStrategy**, **GovernanceViolationStrategy** — Python strategies ✅
@@ -222,6 +206,7 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 ### 🔁 TOTALRECALL MODE — Holistic Production Readiness
 
 **Trigger:** `/totalrecall`, "total recall", "holistic refactor", "everything is broken"
+**Workflow Template:** `cortex-registry/workflows/templates/lifecycle/totalrecall-workflow.yaml`
 
 **7-Phase Protocol:** INVENTORY → CONTRADICTION → ARCHITECTURE → RECOMMENDATION → IMPLEMENTATION → REGRESSION PROOF → VERIFICATION
 **Authority:** `cortex-totalrecall.prompt.md` (self-contained, loads alone — ~4,500 tokens)
@@ -230,6 +215,7 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 ### 🔄 SYNC MODE — Privacy-Safe Cross-Repo Sync
 
 **Trigger:** `/sync target={path}`, "sync to company folder", "push to work repo"
+**Workflow Template:** `cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml`
 
 **4-Gate Pipeline:** PULL → DIFF → SANITIZE → MERGE (strips CORTEX-internal metadata)
 **Authority:** `cortex-sync.prompt.md` + `cortex-sync-agent.md`
@@ -238,6 +224,7 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 ### 🎓 TRAIN MODE — Template Evolution from Repos
 
 **Trigger:** `/train {path}`, "learn from this repo", "evolve templates", "gap-driven training"
+**Workflow Template:** `cortex-registry/workflows/templates/lifecycle/train-workflow.yaml`
 
 **Purpose:** Analyze external codebases, detect pattern gaps, propose template changes.
 **Authority:** `cortex-trainer.md`
@@ -251,26 +238,15 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 ### `/audit fix` — Single Production-Readiness Command (Canonical)
 
 **Use this.** Not `/audit` alone. `/audit fix` is the complete integrated pipeline.
+**Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
+**Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
-```
-Stage -1: Environment Readiness              (UpgradeOrchestrator.validate_requirements() — preflight)
-Stage 0:  Inflight Upgrade + Pre-Flight      (git fetch origin/main check + STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 1:  Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
-Stage 2:  19-Point Production Scan           (Checks #1–#19, see table below)
-Stage 3:  Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
-Stage 4:  Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
-Stage 5:  Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
-Stage 6:  Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 23 checks)
-Stage 7–8: Auto-Fix Convergence Loop         (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py preflight → SQLite cleanup)
-```
+The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 19-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
-**Workflow template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
-**Test tier manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
-**Loop primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 
 ### 19-Point Production Readiness Audit
 
@@ -318,98 +294,57 @@ Validate on every AUDIT and pre-IMPLEMENT:
 
 ### Health Check Protocol (Stage 4 — Active ✅)
 
-**Current:** `HealthOrchestrator` and `VacuumOrchestrator` in `cortex/orchestrators/health/` — both expose `health_check()` (L1 wiring compliance complete as of commit 2a624b0).
+**Workflow Template:** `cortex-registry/workflows/templates/maintenance/health-check-workflow.yaml`
+**Current:** `HealthOrchestrator` and `VacuumOrchestrator` in `cortex/orchestrators/health/` — both expose `health_check()`.
 **Per-orchestrator endpoint:** `orchestrator.health_check()` returns `{status, orchestrator, uptime_requests, success_count, last_success}`.
 
-```
-For each orchestrator in wiring contract (22 total):
-  → Call health_check()
-  → Assert status in ["healthy", "degraded"]  (not "unavailable")
-  → Assert latency_p99 within domain envelope:
-      core: <200ms | domain: <500ms | support: <1s
-  → Circuit breaker: 3 consecutive failures → mark degraded → activate fallback
-```
+The workflow template defines the full health scan with latency envelopes (core:<200ms, domain:<500ms, support:<1s) and circuit breaker (3 consecutive failures → mark degraded → activate fallback).
 
 ---
 
 ## ⚡ IMPLEMENT MODE — TDD-First Development
 
 **Trigger:** "build", "create", "add", "implement"
+**Workflow Template:** `cortex-registry/workflows/templates/sdlc/implement-workflow.yaml`
 
-**Mandatory Sequence:**
-1. **Holistic Validation Gate** (CORE-048) — registry check, dependency analysis, risk scoring (see §HOLISTIC VALIDATION)
-2. **Challenge Gate** — present alternatives if risk >0.4 or scope >3 files
-3. **RED** — write failing tests FIRST (CORE-008, no exceptions)
-4. **GREEN** — implement minimum code to pass tests
-5. **REFACTOR** — clean up with all tests passing
-6. **Validate** — `python3 scripts/run_tests.py smoke` + `cortex_validate` op=`compliance`
-7. **Convergence Gate** (CORE-068) — rescan for test failures + compliance violations introduced by changes; loop back to step 4 if issues found (max 3 cycles, detect→fix→rescan primitive)
-8. **Commit** — conventional commit message
+All procedural steps (holistic validation → challenge gate → RED → GREEN → REFACTOR → validate → convergence gate → commit) are defined in the workflow template. The template injects these primitives automatically:
+- `primitives/governance/holistic-validation-gate.yaml` (CORE-048)
+- `primitives/governance/challenge-gate.yaml` (risk >0.4 or scope >3 files)
+- `primitives/governance/sweep-catalogue-open.yaml` / `sweep-catalogue-close.yaml` (CORE-064)
+- `primitives/validation/detect-fix-rescan-loop.yaml` (CORE-068, max 3 cycles)
+- `primitives/execution/ac-marker-emit.yaml` + `primitives/execution/git-checkpoint.yaml`
 
-**Challenge Gate Format:**
-```
-### ⚠️ MANDATORY CHALLENGE
-**Request:** {summary} | **Risk:** {score} | **Impact:** {radius}
-
-| Approach | Pros | Cons | ROI |
-|----------|------|------|-----|
-| Your approach | ... | ... | ... |
-| Alternative A | ... | ... | ... |
-
-**Decision:** Type "proceed" or "use A"
-```
+**Convergence predicate:** `test_pass_count >= baseline AND lint_errors == 0`
 
 ---
 
 ## 🔧 FIX MODE — Bug Resolution via TDD
 
 **Trigger:** "fix", "bug", "broken", "error", "failing"
+**Workflow Template:** `cortex-registry/workflows/templates/sdlc/fix-workflow.yaml`
 
+All procedural steps (reproduce → root cause → RED → GREEN → REFACTOR → regression → sweep gate → convergence gate) are defined in the workflow template. Key additions over IMPLEMENT:
+- **REPRODUCE** step — identify/create failing test demonstrating the bug
+- **ROOT CAUSE** — LENS analysis on affected files (AST + git history)
+- **SWEEP GATE** (CORE-064) — scan for same pattern across codebase; fix all N instances, not just the reported one
 
-**Sequence:**
-1. **Reproduce** — identify failing test or create one that demonstrates the bug
-2. **Root cause** — LENS analysis on affected files (AST + git history)
-3. **RED** — write/confirm failing test capturing the bug
-4. **GREEN** — fix with minimum change to pass
-5. **REFACTOR** — clean up without changing behavior
-6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
-7. **Sweep gate** — CORE-064: verify all related issues in the same category are addressed (no partial fixes)
-8. **Convergence Gate** (CORE-068) — rescan for regressions + new violations after fix; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
-
-**Sweep Completeness (CORE-064):**
-When fixing a bug, scan for the same pattern across the codebase. If the same issue class appears in N files, fix all N — not just the reported one. The `SweepCatalogueOrchestrator` tracks the full issue catalogue per FIX session and blocks `AC_COMPLETE` until the catalogue is exhausted.
+**Convergence predicate:** `regression_count == 0 AND original_bug_fixed`
 
 ---
 
 ## ♻️ REFACTOR MODE — Safe Code Improvement
 
 **Trigger:** "refactor", "improve", "optimize", "consolidate", "clean up"
+**Workflow Template:** `cortex-registry/workflows/templates/quality/refactor-workflow.yaml`
 
-**Sequence:**
-0. **Functional baseline** — enumerate all public endpoints/functions in source; store list for completeness gate
-1. **Baseline** — `python3 scripts/run_tests.py smoke`, record passing count
-2. **LENS scan** — complexity, duplication, architecture drift
-3. **Plan** — present refactoring strategy with risk assessment
-4. **Execute** — incremental changes, run tests after each step
-5. **Security hardening gate** — verify: BCrypt/Argon2 (not SHA256) for passwords; rate limiting on login/payment endpoints; JWT config → middleware complete; no P0 security gaps
-6. **Traceability** — call `orchestrator.write_refactor_session_trace(AC_COMPLETE, ...)` to persist session record to `.cortex-runtime/traces/orchestrator-traces.db`
-7. **Convergence Gate** (CORE-068) — rescan for regressions + compliance drift after refactoring; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
-8. **Scorecard + Verify** — call `orchestrator.generate_scorecard(scores)` → display inline weighted table; assert test count ≥ baseline, zero new failures
+All procedural steps (functional baseline → test baseline → LENS scan → plan → execute → security hardening → traceability → convergence gate → scorecard) are defined in the workflow template. Key features:
+- **Functional baseline** at step 0 → completeness gate at final step (no endpoints lost)
+- **Security hardening gate** — BCrypt/Argon2, rate limiting, JWT middleware
+- **Weighted scorecard** auto-generated at completion
 
-**Functional Completeness Gate (Step 0 → Step 8):**
-After Execute, call `orchestrator.check_functional_completeness(source_items, target_items)`.
-If `complete=False`: surface gaps inline and require either implementation or ADR justification before AC_COMPLETE.
+**Convergence predicate:** `test_pass_count >= baseline AND no_new_lint_errors`
 
-**Refactoring Checks:**
-- Dead code elimination (unreachable functions, unused imports)
-- Duplicate consolidation (CORE-035)
-- Complexity reduction (functions >50 lines, classes >500 lines)
-- Import cleanup (circular dependencies, stale references)
-- DI lifetime consistency (Scoped preferred; no Singleton capturing Scoped)
-- Test class coverage (every service class → matching XxxTests class)
-- Frontend test runner present if service layer exists
-
-**Scorecard Weights (auto-applied in Step 7):**
+**Scorecard Weights (defined in workflow template):**
 
 | Category | Weight |
 |---|---|
@@ -420,23 +355,30 @@ If `complete=False`: surface gaps inline and require either implementation or AD
 | Frontend | 10% |
 | Traceability | 5% |
 
+**Refactoring Checks (enforced by workflow):**
+- Dead code elimination (unreachable functions, unused imports)
+- Duplicate consolidation (CORE-035)
+- Complexity reduction (functions >50 lines, classes >500 lines)
+- Import cleanup (circular dependencies, stale references)
+- DI lifetime consistency (Scoped preferred; no Singleton capturing Scoped)
+- Test class coverage (every service class → matching XxxTests class)
+- Frontend test runner present if service layer exists
+
 ---
 
 ## 🎨 DESIGN MODE — Challenge-First Architecture
 
 **Trigger:** "architect", "design", "structure", "pattern"
+**Non-code-touching** — no workflow template required (WC-005: non-code intents exempt).
 
-**Sequence:**
-1. **Understand** — LENS analysis of current architecture
-2. **Challenge** — present ≥2 alternative approaches with trade-offs
-3. **Evaluate** — compare against CORTEX design pillars:
-   - Extensibility (can new domains be added without changing core?)
-   - Scalability (does it handle 10x growth?)
-   - Accuracy (are there single sources of truth?)
-   - Collaboration (can multiple contributors work in parallel?)
-   - Maintainability (can a new team member understand it in <1 hour?)
-4. **Recommend** — single best approach with implementation roadmap
-5. **Approval** — user confirms before any code changes
+**Approach:** Understand (LENS) → Challenge (≥2 alternatives) → Evaluate (5 design pillars) → Recommend → Approval gate.
+
+**Design Pillars:**
+- Extensibility (can new domains be added without changing core?)
+- Scalability (does it handle 10x growth?)
+- Accuracy (are there single sources of truth?)
+- Collaboration (can multiple contributors work in parallel?)
+- Maintainability (can a new team member understand it in <1 hour?)
 
 ---
 
@@ -662,16 +604,9 @@ Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → 
 
 **Triggered by:** `cortex-holistic-validator.md` via `EnforcementOrchestrator`
 **Mandatory before:** Any IMPLEMENT / FIX / REFACTOR operation
+**Workflow Primitive:** `cortex-registry/workflows/templates/primitives/governance/holistic-validation-gate.yaml`
 
-### Validation Sequence
-
-```
-1. Registry Check       → cortex_load op=rules (38 rules, 0 violations required)
-2. Dependency Drift     → cortex_check op=dependencies (0 drift items)
-3. Regression Risk      → pytest --cov on target module (≥80% coverage floor)
-4. Governance Drift     → cortex_governance op=query (0 P0 violations = proceed)
-5. Challenge Gate       → Present risk assessment if score > 0.6 (explicit approval required)
-```
+The primitive defines 5 validation steps (registry check → dependency drift → regression risk → governance drift → challenge gate) with PASS/BLOCK verdict. Risk threshold: ≤0.6 = PASS, >0.6 = BLOCK.
 
 ### Verdict Formats
 
@@ -688,18 +623,6 @@ Registry: 38 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Gover
 Blocker: [specific issue] | Action: [remediation step]
 → Do NOT proceed until BLOCK resolved
 ```
-
-### Validation Checks
-
-| Check | Tool | Threshold |
-|---|---|---|
-| CORE rules loaded | `cortex_load` op=`rules` | 38 rules present |
-| Dependency drift | `cortex_check` op=`dependencies` | 0 drift items |
-| Test coverage | `pytest --cov` | ≥80% on target module |
-| P0 violations | `cortex_governance` op=`query` | 0 P0 violations |
-| File naming | scan `cortex/` | snake_case (CORE-028) |
-| Canonical duplicates | wiring contract diff | 0 duplicates (CORE-035) |
-| Type hints | static analysis | 100% public APIs (CORE-011) |
 
 ---
 
@@ -796,17 +719,12 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ## 🌐 CROSS-CUTTING INTELLIGENCE (Universal — All Orchestrators)
 
-**Every orchestrator invocation must emit AC markers.** This is CORE enforcement, not optional.
+**Every orchestrator invocation must emit AC markers** — handled by the `primitives/execution/ac-marker-emit.yaml` workflow primitive.
 
-```python
-# AC_START: AC-{DOMAIN}-{TIMESTAMP}  ← open session
-# ... orchestrator logic ...
-# AC_COMPLETE: AC-{DOMAIN}-{TIMESTAMP} ✅  ← close session (with ms timing)
-```
-
-**Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
+**Primitive:** `cortex-registry/workflows/templates/primitives/execution/ac-marker-emit.yaml`
+**Persistence:** `.cortex-runtime/traces/orchestrator-traces.db`
 **Enforced by:** `EnforcementOrchestrator` pre-commit + `cortex_validate` op=`compliance` (Check #7)
-**Audited by:** Check #19 in the 19-Point Production Readiness Audit
+**Audited by:** Check #19 + Meta-Audit Check #23
 
 **AC Marker Rules:**
 - `AC_START` at entry point of every public orchestrator method
@@ -815,7 +733,7 @@ Progress bar + stage bullet list. See templates SSOT.
 - Orphaned `AC_START` without matching `AC_COMPLETE` = P0 governance violation
 - Audit session markers: `AC_STAGE_{N}_COMPLETE` per stage in `/audit fix`
 
-**Pattern Learning:** MasterOrchestrator queries previous audit sessions from `.cortex-runtime/traces/orchestrator-traces.db` to detect recurring failure patterns. Same P0 appearing across multiple audits = systemic issue requiring architectural fix, not point remediation. The `capabilities-manifest.yaml` in `cortex-registry/core/` is version-stamped after each successful `/audit fix` run to track capability evolution.
+**Pattern Learning:** MasterOrchestrator queries previous audit sessions from `.cortex-runtime/traces/orchestrator-traces.db` to detect recurring failure patterns. Same P0 across multiple audits = systemic issue requiring architectural fix, not point remediation.
 
 ---
 
@@ -841,22 +759,11 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ### `/audit fix` — 9-Stage Pipeline Detail
 
-```
-Stage -1: Environment Readiness              (UpgradeOrchestrator.validate_requirements() — preflight)
-Stage 0:  Inflight Upgrade + Pre-Flight      (git fetch origin/main check + STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 1:  Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
-Stage 2:  19-Point Production Scan           (cortex-auditor.md Checks #1–#19)
-Stage 3:  Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
-Stage 4:  Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
-Stage 5:  Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6:  Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 23 checks)
-Stage 7–8: Auto-Fix Convergence Loop         (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py preflight → SQLite cleanup)
-```
-
+**Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
+**Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 **Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (AC markers per stage).
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064).
-**Test tier manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
 ---
 

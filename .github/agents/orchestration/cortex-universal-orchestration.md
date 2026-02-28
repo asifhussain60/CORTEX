@@ -98,11 +98,11 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ### TDD Workflow (IMPLEMENT/FIX)
 
-1. **RED** — Write failing tests (CORE-008)
-2. **GREEN** — Implement minimum code to pass
-3. **REFACTOR** — Clean up, all tests still passing
-4. **Validate** — EnforcementOrchestrator + CoherenceValidator
-5. **Commit** — Conventional commit message
+**Workflow Templates:**
+- IMPLEMENT → `cortex-registry/workflows/templates/sdlc/implement-workflow.yaml`
+- FIX → `cortex-registry/workflows/templates/sdlc/fix-workflow.yaml`
+
+All TDD steps (RED → GREEN → REFACTOR → Validate → Commit) plus convergence gates are defined in the workflow templates.
 
 ### Governance Integration
 

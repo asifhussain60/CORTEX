@@ -1,0 +1,194 @@
+# ============================================================================
+# MODE WORKFLOW: IMPLEMENT — TDD-First Development
+# ============================================================================
+# Authority: CORE-008 (TDD), CORE-048 (Holistic validation), CORE-064 (Sweep)
+# Trigger: "build", "create", "add", "implement"
+# Orchestrator: TDDOrchestrator
+# Agent: cortex-executor.md
+#
+# Replaces: Inline 8-step sequence in cortex-architect.prompt.md § IMPLEMENT MODE
+#           Inline execution flow in cortex-executor.md
+#
+# Composes primitives:
+#   - primitives/governance/dor-display.yaml
+#   - primitives/governance/holistic-validation-gate.yaml
+#   - primitives/governance/challenge-gate.yaml
+#   - primitives/execution/git-checkpoint.yaml
+#   - primitives/execution/ac-marker-emit.yaml
+#   - primitives/governance/sweep-catalogue-open.yaml
+#   - tdd/tdd-feature-implementation.yaml (RED → GREEN → REFACTOR)
+#   - primitives/validation/detect-fix-rescan-loop.yaml
+#   - primitives/governance/sweep-catalogue-close.yaml
+# ============================================================================
+
+workflow:
+  id: 'sdlc/implement-workflow'
+  name: 'IMPLEMENT — TDD-First Development'
+  version: '1.0.0'
+  category: 'sdlc'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['IMPLEMENT']
+    trigger_keywords: ['build', 'create', 'add', 'implement']
+    orchestrators_used:
+      - TDDOrchestrator
+      - EnforcementOrchestrator
+      - SweepCatalogueOrchestrator
+    core_rules: ['CORE-008', 'CORE-011', 'CORE-012', 'CORE-028', 'CORE-035', 'CORE-048', 'CORE-064', 'CORE-068']
+
+  # ── CONVERGENCE GATE (workflow-level) ─────────────────────────────
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'test_pass_count >= baseline AND lint_errors == 0'
+    backoff_strategy: 'none'
+
+  # ── STEPS ─────────────────────────────────────────────────────────
+  steps:
+    # Step 0: AC_START
+    - id: ac_start
+      name: 'Emit AC_START marker'
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'IMPLEMENT'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_start'
+
+    # Step 1: DoR Display
+    - id: dor_display
+      name: 'Definition of Ready — Intent Reflection'
+      depends_on: ['ac_start']
+      template_ref: 'primitives/governance/dor-display'
+      inputs:
+        intent: 'IMPLEMENT'
+        request_summary: '{{request_summary}}'
+        confidence: '{{intent_confidence}}'
+        scope_items: '{{scope_items}}'
+      gates_execution: true
+
+    # Step 2: Holistic Validation Gate (CORE-048)
+    - id: holistic_validation
+      name: 'Holistic Validation Gate'
+      depends_on: ['dor_display']
+      template_ref: 'primitives/governance/holistic-validation-gate'
+      inputs:
+        target_module: '{{target_module}}'
+        operation_type: 'IMPLEMENT'
+      on_block: 'abort'
+
+    # Step 3: Git Checkpoint
+    - id: git_checkpoint
+      name: 'Git Checkpoint — safe rollback point'
+      depends_on: ['holistic_validation']
+      template_ref: 'primitives/execution/git-checkpoint'
+      inputs:
+        operation_label: 'implement-{{feature_slug}}'
+
+    # Step 4: Sweep Catalogue Open (CORE-064)
+    - id: sweep_open
+      name: 'Open Sweep Catalogue'
+      depends_on: ['git_checkpoint']
+      template_ref: 'primitives/governance/sweep-catalogue-open'
+      inputs:
+        intent: 'IMPLEMENT'
+        scope_files: '{{scope_files}}'
+      outputs: ['sweep_id']
+
+    # Step 5: RED Phase — Write failing tests FIRST (CORE-008)
+    - id: tdd_red
+      name: 'RED — Write failing tests'
+      depends_on: ['sweep_open']
+      orchestrator: 'TDDOrchestrator'
+      action: 'tdd_phase'
+      params:
+        phase: 'RED'
+        test_framework: 'pytest'
+      gate:
+        command: 'python3 scripts/run_tests.py file {{test_file}}'
+        predicate: 'test_count > 0 and all_failing'
+      blocker: 'Implementation code FORBIDDEN until RED gate passes'
+
+    # Step 6: GREEN Phase — Minimum implementation to pass
+    - id: tdd_green
+      name: 'GREEN — Minimum implementation'
+      depends_on: ['tdd_red']
+      orchestrator: 'TDDOrchestrator'
+      action: 'tdd_phase'
+      params:
+        phase: 'GREEN'
+      gate:
+        command: 'python3 scripts/run_tests.py file {{test_file}}'
+        predicate: 'all_tests_pass'
+      blocker: 'REFACTOR forbidden until GREEN gate passes'
+
+    # Step 7: REFACTOR Phase — Clean up
+    - id: tdd_refactor
+      name: 'REFACTOR — Type hints, docstrings, deduplication'
+      depends_on: ['tdd_green']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'refactor_phase'
+      params:
+        operations: ['type_hints', 'docstrings', 'deduplication']
+        rules: ['CORE-011', 'CORE-012', 'CORE-035']
+      gate:
+        command: 'python3 scripts/run_tests.py smoke'
+        predicate: 'all_tests_pass and zero_regressions'
+
+    # Step 8: Validate — Run smoke tests
+    - id: validate
+      name: 'Validate — smoke tests + compliance'
+      depends_on: ['tdd_refactor']
+      action: 'parallel'
+      sub_steps:
+        - action: 'command'
+          command: 'python3 scripts/run_tests.py smoke'
+        - action: 'mcp_call'
+          tool: 'cortex_validate'
+          args:
+            op: 'compliance'
+
+    # Step 9: Convergence Gate (CORE-068) — detect→fix→rescan loop
+    - id: convergence_gate
+      name: 'Convergence Gate — rescan for regressions'
+      depends_on: ['validate']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'command'
+          command: 'python3 scripts/run_tests.py smoke'
+          issue_extractor: 'pytest_failure_parser'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'TDDOrchestrator'
+          method: 'fix_failures'
+        success_predicate: 'test_pass_count >= baseline AND lint_errors == 0'
+        max_cycles: 3
+
+    # Step 10: Sweep Catalogue Close (CORE-064)
+    - id: sweep_close
+      name: 'Close Sweep Catalogue — verify exhausted'
+      depends_on: ['convergence_gate']
+      template_ref: 'primitives/governance/sweep-catalogue-close'
+      inputs:
+        sweep_id: '{{sweep_open.sweep_id}}'
+      on_incomplete: 'abort'
+
+    # Step 11: Commit
+    - id: commit
+      name: 'Conventional commit'
+      depends_on: ['sweep_close']
+      action: 'command'
+      command: 'git add -A && git commit -m "feat({{feature_slug}}): {{commit_message}}"'
+
+    # Step 12: AC_COMPLETE
+    - id: ac_complete
+      name: 'Emit AC_COMPLETE marker'
+      depends_on: ['commit']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'IMPLEMENT'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_complete_success'

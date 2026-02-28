@@ -1,0 +1,101 @@
+# ============================================================================
+# MODE WORKFLOW: STAGE 0 — Synchronous Governance Pre-Flight
+# ============================================================================
+# Authority: STAGE-0-GOVERNANCE-AUDIT-SPEC.md, CORE-002, CORE-008
+# Trigger: Automatic — runs before every user request
+# Orchestrator: RequestRephraseOrchestrator
+#
+# Replaces: Inline Stage 0 logic in cortex-architect.prompt.md § STAGE 0
+#           Inline logic in STAGE-0-GOVERNANCE-AUDIT-SPEC.md
+# ============================================================================
+
+workflow:
+  id: 'governance/stage0-preflight-workflow'
+  name: 'STAGE 0 — Synchronous Governance Pre-Flight'
+  version: '1.0.0'
+  category: 'governance'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['ALL']
+    trigger: 'automatic — every user request'
+    orchestrators_used:
+      - RequestRephraseOrchestrator
+      - UpgradeOrchestrator
+    position: '[Inflight Upgrade Check] → [THIS: Stage 0] → IntentRouter → Execution'
+
+  steps:
+    # Step 1: Inflight Upgrade Check
+    - id: inflight_upgrade
+      name: 'Inflight Upgrade Check'
+      action: 'conditional'
+      condition:
+        command: 'git rev-list --count HEAD..origin/main'
+        predicate: 'count > 0'
+      on_true:
+        sequence:
+          - action: 'command'
+            command: 'git fetch origin main'
+          - action: 'command'
+            command: 'git merge origin/main --no-ff'
+            on_failure:
+              action: 'abort'
+              message: 'Merge conflict — resolve manually before proceeding'
+          - action: 'workflow_ref'
+            ref: 'audit/audit-fix-pipeline'
+            description: 'Run /audit fix after merge'
+      on_false:
+        action: 'skip'
+      guard:
+        env_var: 'CORTEX_AUTO_UPGRADE'
+        default: true
+
+    # Step 2: Stage 0 Governance Checks
+    - id: governance_checks
+      name: 'Stage 0 Governance Checks'
+      depends_on: ['inflight_upgrade']
+      checks:
+        - id: md_scope
+          name: 'MD file scope (CORE-002)'
+          rule: 'CORE-002'
+          detect:
+            pattern: 'create/write *.md outside .github/ or README.md'
+          violation_action: 'inject_inline_warning'
+          severity: 'P0'
+
+        - id: tdd_bypass
+          name: 'TDD bypass detection (CORE-008)'
+          rule: 'CORE-008'
+          detect:
+            patterns: ['skip test', 'ignore test', '--ignore', 'bypass test']
+          violation_action: 'flag_before_execution'
+          severity: 'P0'
+
+        - id: audit_trail
+          name: 'Audit trail markers (CORE-027)'
+          rule: 'CORE-027'
+          detect:
+            pattern: 'missing AC_START/AC_COMPLETE markers'
+          violation_action: 'advisory_warning'
+          severity: 'P2'
+          blocking: false
+
+    # Step 3: Rephrase Output (single paragraph, inline)
+    - id: rephrase_output
+      name: 'Generate CORTEX REPHRASE output'
+      depends_on: ['governance_checks']
+      orchestrator: 'RequestRephraseOrchestrator'
+      action: 'generate_rephrase'
+      params:
+        format: 'single_paragraph'
+        violations_inline: true
+        rules:
+          - 'Single paragraph only — no tables, code blocks, bullet lists'
+          - 'Violations injected inline (e.g., "note: CORE-008 requires TDD")'
+          - 'Challenge protocol NOT appended here — runs separately in CORE-048'
+      output_format: |
+        ## 🎯 CORTEX REPHRASE
+        ---
+        {SINGLE_PARAGRAPH with CORTEX context + governance violations inline}

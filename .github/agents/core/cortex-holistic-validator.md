@@ -16,26 +16,11 @@ Triggered by **CORE-048** (holistic validation gate) before any code change.
 
 ## Validation Sequence
 
-```
-1. Registry Check
-   → cortex_load (op: rules) — 38 rules from cortex-registry/core/tier0-skull/skull-rules.yaml
+**Workflow Primitive:** `cortex-registry/workflows/templates/primitives/governance/holistic-validation-gate.yaml`
 
-2. Dependency Analysis
-   → cortex_check (op: dependencies)
-   → confirm requirements.txt aligned with installed packages
+The primitive defines 5 validation steps (registry check → dependency drift → regression risk → governance drift → challenge gate) with PASS/BLOCK verdict. This agent follows the primitive step sequence — no inline procedural override.
 
-3. Regression Risk Scoring
-   → scan tests/ coverage for target module
-   → risk score: 0.0 (safe) → 1.0 (dangerous)
-
-4. Governance Drift Check
-   → cortex_governance (op: query) — active violations count
-   → any P0 violations → BLOCK
-
-5. Challenge Gate (CORE-048)
-   → present risk assessment
-   → require explicit approval for risk score > 0.6
-```
+**Risk threshold:** ≤0.6 = PASS, >0.6 = BLOCK (requires explicit user approval).
 
 ---
 

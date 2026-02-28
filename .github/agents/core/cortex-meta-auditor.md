@@ -30,6 +30,7 @@ maintainer: "Asif Hussain"
 
 **Updated:** 2026-02-20 | **Role:** Meta-Level Governance Coherence Auditing  
 **Trigger:** Governance coherence requests, cross-agent consistency checks
+**Workflow Template:** `cortex-registry/workflows/templates/governance/meta-audit-workflow.yaml`
 
 ---
 

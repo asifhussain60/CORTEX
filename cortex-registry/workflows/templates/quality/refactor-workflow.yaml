@@ -1,0 +1,218 @@
+# ============================================================================
+# MODE WORKFLOW: REFACTOR — Safe Code Improvement
+# ============================================================================
+# Authority: CORE-008 (TDD), CORE-035 (no duplicates), CORE-068 (Convergence)
+# Trigger: "refactor", "improve", "optimize", "consolidate", "clean up"
+# Orchestrator: RefactoringOrchestrator
+# Agent: cortex-executor.md
+#
+# Replaces: Inline 8-step sequence in cortex-architect.prompt.md § REFACTOR MODE
+#
+# Key features:
+#   - Functional baseline (enumerate all public endpoints BEFORE changes)
+#   - Security hardening gate
+#   - Functional completeness gate (compare before/after)
+#   - Weighted scorecard (Architecture 25%, Security 25%, Testing 20%, etc.)
+# ============================================================================
+
+workflow:
+  id: 'quality/refactor-workflow'
+  name: 'REFACTOR — Safe Code Improvement'
+  version: '1.0.0'
+  category: 'quality'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['REFACTOR']
+    trigger_keywords: ['refactor', 'improve', 'optimize', 'consolidate', 'clean up']
+    orchestrators_used:
+      - RefactoringOrchestrator
+      - EnforcementOrchestrator
+      - TDDOrchestrator
+    core_rules: ['CORE-008', 'CORE-011', 'CORE-012', 'CORE-035', 'CORE-048', 'CORE-064', 'CORE-068']
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'test_pass_count >= baseline AND no_new_lint_errors'
+
+  # Scorecard weights (auto-applied in final verification)
+  scorecard:
+    architecture: 0.25
+    security: 0.25
+    testing: 0.20
+    documentation: 0.15
+    frontend: 0.10
+    traceability: 0.05
+
+  steps:
+    # Step 0: AC_START
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'REFACTOR', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Step 1: DoR Display
+    - id: dor_display
+      depends_on: ['ac_start']
+      template_ref: 'primitives/governance/dor-display'
+      inputs: { intent: 'REFACTOR', request_summary: '{{request_summary}}' }
+
+    # Step 2: Holistic Validation (CORE-048)
+    - id: holistic_validation
+      depends_on: ['dor_display']
+      template_ref: 'primitives/governance/holistic-validation-gate'
+      inputs: { target_module: '{{target_module}}', operation_type: 'REFACTOR' }
+      on_block: 'abort'
+
+    # Step 3: Functional Baseline — enumerate all public endpoints BEFORE changes
+    - id: functional_baseline
+      name: 'Functional Baseline — enumerate public endpoints'
+      depends_on: ['holistic_validation']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'enumerate_public_api'
+      params:
+        scope: '{{target_module}}'
+      outputs: ['baseline_endpoints', 'baseline_test_count']
+      description: |
+        Record all public functions, classes, methods in target module.
+        This list is compared after refactoring to detect dropped functionality.
+
+    # Step 4: Git Checkpoint
+    - id: git_checkpoint
+      depends_on: ['functional_baseline']
+      template_ref: 'primitives/execution/git-checkpoint'
+      inputs: { operation_label: 'refactor-{{refactor_slug}}' }
+
+    # Step 5: Test Baseline — record passing test count
+    - id: test_baseline
+      name: 'Test Baseline — record passing count'
+      depends_on: ['git_checkpoint']
+      action: 'command'
+      command: 'python3 scripts/run_tests.py smoke'
+      outputs: ['baseline_pass_count']
+
+    # Step 6: LENS Scan — complexity, duplication, drift
+    - id: lens_scan
+      name: 'LENS Scan — complexity, duplication, architecture drift'
+      depends_on: ['test_baseline']
+      action: 'lens_analysis'
+      params:
+        scope: '{{target_module}}'
+        analysis_types: ['complexity', 'duplication', 'architecture_drift', 'dead_code']
+      outputs: ['refactoring_plan']
+
+    # Step 7: Plan Presentation — risk assessment
+    - id: plan_presentation
+      name: 'Present refactoring strategy with risk assessment'
+      depends_on: ['lens_scan']
+      action: 'display'
+      content:
+        plan: '{{lens_scan.refactoring_plan}}'
+        risk: '{{holistic_validation.risk_score}}'
+      user_approval: true
+
+    # Step 8: Execute — incremental changes with tests after each step
+    - id: execute_refactoring
+      name: 'Execute — incremental refactoring steps'
+      depends_on: ['plan_presentation']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'execute_plan'
+      params:
+        plan: '{{lens_scan.refactoring_plan}}'
+        checks:
+          - 'Dead code elimination (unreachable functions, unused imports)'
+          - 'Duplicate consolidation (CORE-035)'
+          - 'Complexity reduction (functions >50 lines, classes >500 lines)'
+          - 'Import cleanup (circular dependencies, stale references)'
+          - 'DI lifetime consistency (Scoped preferred; no Singleton capturing Scoped)'
+          - 'Test class coverage (every service class → matching XxxTests class)'
+      loop:
+        primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+        detect_step:
+          action: 'command'
+          command: 'python3 scripts/run_tests.py smoke'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'RefactoringOrchestrator'
+          method: 'fix_regressions'
+        success_predicate: 'all_tests_pass after each incremental change'
+        max_cycles: 5
+
+    # Step 9: Security Hardening Gate
+    - id: security_gate
+      name: 'Security Hardening Gate'
+      depends_on: ['execute_refactoring']
+      action: 'security_check'
+      checks:
+        - 'BCrypt/Argon2 for passwords (not SHA256)'
+        - 'Rate limiting on login/payment endpoints'
+        - 'JWT config → middleware complete'
+        - 'No P0 security gaps'
+      gate:
+        predicate: 'all_security_checks_pass'
+
+    # Step 10: Functional Completeness Gate
+    - id: functional_completeness
+      name: 'Functional Completeness Gate — compare before/after'
+      depends_on: ['security_gate']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'check_functional_completeness'
+      inputs:
+        source_items: '{{functional_baseline.baseline_endpoints}}'
+        target_scope: '{{target_module}}'
+      gate:
+        predicate: 'complete == true'
+      on_incomplete:
+        action: 'display'
+        message: 'Functional gaps detected — implement or provide ADR justification'
+        blocks_ac_complete: true
+
+    # Step 11: Convergence Gate (CORE-068)
+    - id: convergence_gate
+      depends_on: ['functional_completeness']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'command'
+          command: 'python3 scripts/run_tests.py smoke'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'RefactoringOrchestrator'
+        success_predicate: 'test_pass_count >= {{test_baseline.baseline_pass_count}} AND no_new_lint_errors'
+        max_cycles: 3
+
+    # Step 12: Traceability — persist session trace
+    - id: traceability
+      name: 'Traceability — persist refactor session trace'
+      depends_on: ['convergence_gate']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'write_refactor_session_trace'
+      params:
+        status: 'AC_COMPLETE'
+        persist_to: '.cortex-runtime/traces/orchestrator-traces.db'
+
+    # Step 13: Scorecard — weighted verification
+    - id: scorecard
+      name: 'Scorecard — weighted verification display'
+      depends_on: ['traceability']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'generate_scorecard'
+      params:
+        weights: '{{scorecard}}'
+      gate:
+        predicate: 'test_count >= {{test_baseline.baseline_pass_count}} AND zero_new_failures'
+
+    # Step 14: Commit + AC_COMPLETE
+    - id: commit
+      depends_on: ['scorecard']
+      action: 'command'
+      command: 'git add -A && git commit -m "refactor({{refactor_slug}}): {{commit_message}}"'
+
+    - id: ac_complete
+      depends_on: ['commit']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'REFACTOR', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

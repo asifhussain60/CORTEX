@@ -1,0 +1,148 @@
+# ============================================================================
+# PRIMITIVE: Holistic Validation Gate (CORE-048)
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  governance
+# Authority: CORE-048 (Holistic validation gate before IMPLEMENT/FIX/REFACTOR)
+#
+# Purpose:
+#   Pre-execution validation gate that issues PASS or BLOCK verdicts.
+#   Replaces inline validation sequences previously hardcoded in
+#   cortex-holistic-validator.md and cortex-architect.prompt.md.
+#
+# Reused by:
+#   - sdlc/implement-workflow.yaml (Step 1)
+#   - sdlc/fix-workflow.yaml (Step 1)
+#   - quality/refactor-workflow.yaml (Step 1)
+#   - governance/request-execution-plan-gate.yaml
+#
+# CORE Rules enforced:
+#   CORE-048: Holistic validation gate before IMPLEMENT/FIX/REFACTOR
+#   CORE-050: MCP tiered blocking
+#   CORE-011: Type hints on all functions
+#   CORE-012: Docstrings on all public APIs
+#   CORE-028: File naming: snake_case only
+#   CORE-035: Single canonical implementation
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/governance/holistic-validation-gate'
+name: 'Holistic Validation Gate'
+tier: 'primitive'
+category: 'governance'
+status: 'active'
+
+metadata:
+  description: |
+    5-check validation gate that must PASS before any code-modifying operation.
+    Issues PASS (risk ≤ 0.6) or BLOCK (risk > 0.6 or P0 violation).
+    Replaces inline logic previously duplicated across prompts and agents.
+  governance_rules:
+    - 'CORE-048: Holistic validation gate'
+    - 'CORE-050: MCP tiered blocking'
+  tags:
+    - governance
+    - validation-gate
+    - core-048
+    - primitive
+    - pre-execution
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_module'
+      type: 'str'
+      description: 'Module or file path being modified'
+    - name: 'operation_type'
+      type: 'str'
+      description: 'IMPLEMENT | FIX | REFACTOR'
+      enum: ['IMPLEMENT', 'FIX', 'REFACTOR']
+  optional:
+    - name: 'risk_threshold'
+      type: 'float'
+      description: 'Risk score threshold for BLOCK verdict'
+      default: 0.6
+    - name: 'coverage_floor'
+      type: 'float'
+      description: 'Minimum test coverage percentage'
+      default: 80.0
+
+# ============================================================================
+# VALIDATION STEPS (sequential — each gates the next)
+# ============================================================================
+steps:
+  - id: registry_check
+    name: 'Registry Check — Load CORE rules'
+    action: 'mcp_call'
+    tool: 'cortex_load'
+    args:
+      op: 'rules'
+    success_predicate: 'rule_count >= 38 and violation_count == 0'
+    on_failure: 'BLOCK'
+    severity: 'P0'
+
+  - id: dependency_drift
+    name: 'Dependency Analysis — requirements.txt alignment'
+    depends_on: ['registry_check']
+    action: 'mcp_call'
+    tool: 'cortex_check'
+    args:
+      op: 'dependencies'
+    success_predicate: 'drift_count == 0'
+    on_failure: 'BLOCK'
+    severity: 'P0'
+
+  - id: regression_risk
+    name: 'Regression Risk Scoring — coverage on target module'
+    depends_on: ['dependency_drift']
+    action: 'command'
+    command: 'pytest --cov={{target_module}} --cov-report=term-missing -q'
+    success_predicate: 'coverage_percent >= {{coverage_floor}}'
+    on_failure: 'WARN'
+    severity: 'P1'
+    outputs:
+      - name: 'risk_score'
+        description: 'Regression risk score 0.0 (safe) to 1.0 (dangerous)'
+
+  - id: governance_drift
+    name: 'Governance Drift Check — active violations'
+    depends_on: ['regression_risk']
+    action: 'mcp_call'
+    tool: 'cortex_governance'
+    args:
+      op: 'query'
+    success_predicate: 'p0_count == 0'
+    on_failure: 'BLOCK'
+    severity: 'P0'
+
+  - id: challenge_gate
+    name: 'Challenge Gate — risk assessment + alternatives'
+    depends_on: ['governance_drift']
+    action: 'conditional'
+    condition: '{{regression_risk.risk_score}} > {{risk_threshold}}'
+    on_true:
+      action: 'user_approval'
+      message: |
+        ⚠️ MANDATORY CHALLENGE
+        Risk: {{regression_risk.risk_score}} | Module: {{target_module}}
+        Alternatives will be presented. Type "proceed" to continue.
+      blocks_execution: true
+    on_false:
+      action: 'pass'
+      message: '✅ Holistic Validation: PASS | Risk: {{regression_risk.risk_score}} (LOW)'
+
+# ============================================================================
+# VERDICT
+# ============================================================================
+verdict:
+  pass:
+    predicate: 'all_steps_passed or (all_p0_passed and user_approved_challenges)'
+    message: '✅ Holistic Validation: PASS — proceed to execution'
+  block:
+    predicate: 'any_p0_failed'
+    message: '⛔ Holistic Validation: BLOCK — resolve P0 before execution'
+    blocks_execution: true

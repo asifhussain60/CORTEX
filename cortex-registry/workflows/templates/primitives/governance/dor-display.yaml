@@ -1,0 +1,90 @@
+# ============================================================================
+# PRIMITIVE: Definition of Ready (DoR) Display — BLOCK-INTENT-REFLECTION
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  governance
+# Authority: SSOT: .github/templates/cortex-response-templates.md
+#
+# Purpose:
+#   Renders the BLOCK-INTENT-REFLECTION display before any code-modifying
+#   operation. First-person, business language, 3-6 numbered items,
+#   confidence signal, proceed gate. Replaces inline DoR logic previously
+#   duplicated across copilot-instructions.md, cortex-architect.prompt.md,
+#   CORTEX.prompt.md, and cortex-executor.md.
+#
+# Reused by:
+#   - sdlc/implement-workflow.yaml (Step 0)
+#   - sdlc/fix-workflow.yaml (Step 0)
+#   - quality/refactor-workflow.yaml (Step 0)
+#   - audit/audit-fix-pipeline.yaml (Stage 0)
+#   - Any mode workflow requiring user intent confirmation
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/governance/dor-display'
+name: 'Definition of Ready (DoR) Display'
+tier: 'primitive'
+category: 'governance'
+status: 'active'
+
+metadata:
+  description: |
+    Renders BLOCK-INTENT-REFLECTION before execution. No code changes
+    until DoR is displayed and user confirms. Format is first-person
+    business language — no tables, no internal field names.
+  governance_rules:
+    - 'CORE-049: Silent autonomous after approval'
+  ssot: '.github/templates/cortex-response-templates.md § BLOCK-INTENT-REFLECTION'
+  tags:
+    - governance
+    - dor
+    - intent-reflection
+    - user-approval
+    - primitive
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+
+parameters:
+  required:
+    - name: 'intent'
+      type: 'str'
+      description: 'Classified intent (IMPLEMENT, FIX, REFACTOR, AUDIT, etc.)'
+    - name: 'request_summary'
+      type: 'str'
+      description: 'User request summarised in business language'
+  optional:
+    - name: 'confidence'
+      type: 'float'
+      description: 'Intent classification confidence (0.0-1.0)'
+      default: 0.85
+    - name: 'scope_items'
+      type: 'list[str]'
+      description: '3-6 specific items that will be addressed'
+
+steps:
+  - id: render_reflection
+    name: 'Render BLOCK-INTENT-REFLECTION'
+    action: 'display'
+    template: 'BLOCK-INTENT-REFLECTION'
+    template_source: '.github/templates/cortex-response-templates.md'
+    content:
+      style: 'first-person-business-language'
+      numbered_items: '{{scope_items}}'
+      confidence_signal: '{{confidence}}'
+      proceed_gate: true
+    rules:
+      - 'No inline tables'
+      - 'No internal field names exposed'
+      - '3-6 numbered items only'
+      - 'Confidence signal mandatory'
+      - 'Proceed gate mandatory'
+
+  - id: await_approval
+    name: 'Await user approval'
+    depends_on: ['render_reflection']
+    action: 'user_approval'
+    trigger_words: ['proceed', 'yes', 'do it', 'continue', 'implement']
+    blocks_execution: true
+    on_approval:
+      action: 'set_silent_mode'
+      description: 'Enable CORE-049 silent autonomous execution'

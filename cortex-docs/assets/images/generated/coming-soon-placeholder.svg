@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e27"/>
+      <stop offset="100%" stop-color="#1a1f3a"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7b61ff" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7b61ff"/>
+    </linearGradient>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="40"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bg)" rx="16"/>
+  <!-- Glass border -->
+  <rect x="1" y="1" width="798" height="448" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" rx="16"/>
+  <!-- Glow orbs -->
+  <circle cx="200" cy="150" r="120" fill="#00d4ff" opacity="0.06" filter="url(#blur)"/>
+  <circle cx="600" cy="300" r="100" fill="#7b61ff" opacity="0.06" filter="url(#blur)"/>
+  <!-- Glass panel -->
+  <rect x="150" y="100" width="500" height="250" rx="20" fill="url(#glow)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Icon -->
+  <text x="400" y="190" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="48" fill="url(#textGrad)" opacity="0.8">🖼️</text>
+  <!-- Title -->
+  <text x="400" y="245" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="url(#textGrad)">COMING SOON</text>
+  <!-- Subtitle -->
+  <text x="400" y="280" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" fill="#78809a" font-weight="500">AI-Generated Diagram — DALL·E Image Prompt Ready</text>
+  <!-- Bottom badge -->
+  <rect x="310" y="305" width="180" height="28" rx="14" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+  <text x="400" y="324" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#00d4ff" font-weight="600" letter-spacing="0.05em">CORTEX DOCUMENTATION</text>
+</svg>

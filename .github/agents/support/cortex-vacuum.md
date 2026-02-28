@@ -58,17 +58,9 @@
 
 ### Safe Archival Protocol
 
-```yaml
-Steps:
-  1. Scan: Identify markdown files outside cortex-docs/.github
-  2. Classify: Categorize by type (phase, report, summary, test)
-  3. Review: Check last modified date (>30 days = archive candidate)
-  4. Archive: Move to appropriate cortex-docs/archive/ subdirectory
-  5. Verify: Confirm no broken links in remaining docs
-  6. Convergence Gate (CORE-068): Rescan for new sprawl introduced by archival; loop until 0 new issues (max 3 cycles)
-  7. Report: Generate cleanup summary
-  8. Validate cortex-docs/: Ensure only HTML/CSS/JS/config files (no transient .md)
-```
+**Workflow Template:** `cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml`
+
+All cleanup steps (scan → classify → review → execute → link validation → convergence gate → cortex-docs validation) are defined in the workflow template. This agent follows the template step sequence with exempt_paths and retention policies declared in the template.
 
 ### Archive Directory Structure
 
@@ -96,21 +88,9 @@ cortex-docs/archive/
 
 ## 📋 Execution Flow
 
-```
-User: "clean up markdown sprawl"
-      ↓
-1. Scan Repository (grep/file_search)
-      ↓
-2. Generate Cleanup Plan (table format)
-      ↓
-3. Display Plan + Await Approval
-      ↓
-4. Execute Archival (move files)
-      ↓
-5. Verify Links (grep for references)
-      ↓
-6. Generate Report
-```
+**Workflow Template:** `cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml`
+
+The vacuum agent delegates all execution to the workflow template. User says "clean up markdown sprawl" → the template's step sequence is followed: scan → classify → display plan → await approval → execute → verify → report.
 
 ---
 

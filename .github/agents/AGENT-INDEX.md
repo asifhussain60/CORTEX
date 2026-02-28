@@ -81,8 +81,8 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
 | **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
 | **cortex-storyteller.md** | Documentation generation | Creating narratives |
-| **cortex-documentation-architect.md** | Doc architecture + site builder | Documentation structure |
-| **cortex-gitpages-builder.md** | GitHub Pages deployment | Site publishing |
+| **cortex-documentation-architect.md** | Doc architecture + content extraction | Documentation structure |
+| **cortex-gitpages-builder.md** | GitHub Pages site generation | Site publishing (delegates to `frontend/html-view-lifecycle.yaml`) |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
 | **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
 | **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup ✅ Phase 86 complete | `/debug`, "trace", "diagnose" |
@@ -232,19 +232,16 @@ are resolved or explicitly approved as WONT-FIX.
 
 ## Validation Flow (IMPLEMENT/FIX/REFACTOR)
 
+**Workflow Primitive:** `cortex-registry/workflows/templates/primitives/governance/holistic-validation-gate.yaml`
+
 ```
 User Request
     ↓
 Load: cortex-holistic-validator.md
     ↓
-Validation Sequence:
-  1. Registry check
-  2. Dependency analysis
-  3. Regression risk scoring
-  4. Architecture drift detection
-  5. Challenge gate (if risk > 0.4)
+Execute holistic-validation-gate.yaml primitive (5 steps)
     ↓
-IF PASS → Load executor → Proceed
+IF PASS → Load executor → Proceed via mode workflow template
 IF BLOCK → Show remediation, require override
 ```
 

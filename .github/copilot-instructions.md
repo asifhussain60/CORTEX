@@ -96,13 +96,49 @@ enforcing routing in production (where context is always supplied).
 
 ---
 
-## Workflow
+## Workflow Composer Architecture
 
-1. **Write the test first** (CORE-008 — RED phase)
-2. **Implement minimum code** to pass tests (GREEN phase)
-3. **Refactor** with all tests passing (REFACTOR phase)
-4. **EnforcementOrchestrator** validates CORE rules pre-commit
-5. **Commit** with conventional commit message
+**All code-touching operations flow through declarative workflow templates** — no inline procedural logic in prompts or agents.
+
+**Specification:** `cortex-registry/workflows/workflow-composer-spec.yaml`
+
+### 3-Tier Hierarchy
+
+| Tier | Purpose | Location |
+|------|---------|----------|
+| **Tier 1: Primitives** | Atomic, reusable steps (gates, loops, markers) | `cortex-registry/workflows/templates/primitives/` |
+| **Tier 2: Mode Workflows** | One per execution mode (IMPLEMENT, FIX, REFACTOR, etc.) | `cortex-registry/workflows/templates/{category}/` |
+| **Tier 3: Composite Pipelines** | Multi-mode compositions (audit-fix, totalrecall) | `cortex-registry/workflows/templates/composites/` |
+
+### Intent → Workflow Routing (SSOT: `workflow-composer-spec.yaml` § intent_routing)
+
+| Intent | Workflow Template | Pre-Gate |
+|--------|------------------|----------|
+| IMPLEMENT | `sdlc/implement-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| FIX | `sdlc/fix-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| REFACTOR | `quality/refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| AUDIT | `audit/audit-fix-pipeline.yaml` | — |
+| VACUUM | `maintenance/vacuum-workflow.yaml` | — |
+| HEALTH | `maintenance/health-check-workflow.yaml` | — |
+| DEBUG | `debugging/multi-stack-debug-pipeline.yaml` | — |
+| DIGEST | `lifecycle/digest-workflow.yaml` | — |
+| TOTALRECALL | `lifecycle/totalrecall-workflow.yaml` | — |
+| SYNC | `lifecycle/sync-workflow.yaml` | — |
+| TRAIN | `lifecycle/train-workflow.yaml` | — |
+| META-AUDIT | `governance/meta-audit-workflow.yaml` | — |
+
+### Universal Primitives (injected into every code-modifying workflow)
+
+| Primitive | Purpose |
+|-----------|---------|
+| `primitives/execution/ac-marker-emit.yaml` | AC_START / AC_COMPLETE markers |
+| `primitives/execution/git-checkpoint.yaml` | Safe rollback point before changes |
+| `primitives/governance/dor-display.yaml` | Definition of Ready display |
+| `primitives/governance/holistic-validation-gate.yaml` | CORE-048 pre-execution gate |
+| `primitives/governance/challenge-gate.yaml` | Risk-based alternative presentation |
+| `primitives/governance/sweep-catalogue-open.yaml` | CORE-064 sweep tracking open |
+| `primitives/governance/sweep-catalogue-close.yaml` | CORE-064 sweep tracking close |
+| `primitives/validation/detect-fix-rescan-loop.yaml` | CORE-068 convergence gate |
 
 ---
 
@@ -146,23 +182,18 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 
 ## Cross-Cutting Intelligence (Universal — All Orchestrators)
 
-**Every orchestrator invocation must emit AC markers** — this is a CORE requirement, not optional:
+**Every orchestrator invocation must emit AC markers** — handled by the `primitives/execution/ac-marker-emit.yaml` workflow primitive.
 
-```python
-# AC_START: AC-{DOMAIN}-{TIMESTAMP}  ← open session
-# ... orchestrator logic ...
-# AC_COMPLETE: AC-{DOMAIN}-{TIMESTAMP} ✅  ← close session
-```
-
-**Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
+**Primitive:** `cortex-registry/workflows/templates/primitives/execution/ac-marker-emit.yaml`
+**Persistence:** `.cortex-runtime/traces/orchestrator-traces.db`
 **Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate` (op: `compliance`)
-**Audited by:** Check #19 (SQLite activity log health) in the 19-Point Production Readiness Audit (`/audit fix`)
+**Audited by:** Check #19 (SQLite activity log health) + Meta-Audit Check #23
 
 **AC Marker Rules:**
 - `AC_START` at entry point of every public orchestrator method
 - `AC_COMPLETE` on success with ✅ + timing (ms)
 - `AC_COMPLETE` on failure with ❌ + error classification
-- No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation — Check #19 and Meta-Audit Check #23)
+- No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation)
 
 **SQLite Activity Logging:** 9 databases in `.cortex-runtime/`:
 
@@ -214,27 +245,13 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 - Category → methodology auto-selection: TECHNOLOGY→Five-Whys, PROCESS/PEOPLE→Fishbone, DATA→Causal-Chain
 - Each completed RCA generates a `PreventionRule` (ADVISORY by default)
 
-### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
+### `/audit fix` — 9-Stage Pipeline
 
-```
-Stage -1: Environment Readiness          (UpgradeOrchestrator.validate_requirements() — preflight)
-Stage 0:  Inflight Upgrade + Pre-Flight  (git fetch origin/main check + STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 1:  Stage 0 Governance Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
-Stage 2:  19-Point Production Scan       (cortex-auditor.md Checks #1–#19, includes SQLite health)
-Stage 3:  Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
-Stage 4:  Orchestrator Health (all 22)   (HealthOrchestrator.run_health_check())
-Stage 5:  Vacuum Cleanup                 (VacuumOrchestrator + cortex_vacuum)
-Stage 6:  Prompt/Agent Meta-Audit        (cortex-meta-auditor.md, 23 checks)
-Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop primitive — loops until 0 P0/P1)
-Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight → SQLite cleanup)
-```
-
+**Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 **Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
-**Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
-**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (full schema: `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`).
+**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
-**Workflow template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
-**Loop primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 
 ---
 

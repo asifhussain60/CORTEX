@@ -1,0 +1,98 @@
+# ============================================================================
+# MODE WORKFLOW: SYNC — Privacy-Safe Cross-Repo Sync
+# ============================================================================
+# Authority: cortex-sync.prompt.md, cortex-sync-agent.md
+# Trigger: "/sync target={path}", "sync to company folder"
+# Orchestrator: GitOrchestrator + WorkflowOrchestrator
+# Agent: cortex-sync-agent.md
+#
+# Replaces: Inline 4-gate pipeline in cortex-sync.prompt.md
+# ============================================================================
+
+workflow:
+  id: 'lifecycle/sync-workflow'
+  name: 'SYNC — Privacy-Safe Cross-Repo Sync'
+  version: '1.0.0'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['SYNC']
+    trigger_keywords: ['sync', 'sync to company', 'privacy-safe copy', 'push to work repo']
+    orchestrators_used:
+      - GitOrchestrator
+      - WorkflowOrchestrator
+    direction: 'one-way: CORTEX → company folder'
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'SYNC', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Gate 1: PULL — Ensure CORTEX repo is up-to-date
+    - id: gate_pull
+      name: 'Gate 1: PULL — ensure CORTEX is up-to-date'
+      depends_on: ['ac_start']
+      action: 'command'
+      command: 'git pull origin main --ff-only'
+      on_failure:
+        action: 'abort'
+        message: 'Cannot sync — CORTEX repo has unpulled changes or conflicts'
+
+    # Gate 2: DIFF — Identify changes to sync
+    - id: gate_diff
+      name: 'Gate 2: DIFF — identify syncable changes'
+      depends_on: ['gate_pull']
+      orchestrator: 'GitOrchestrator'
+      action: 'diff_analysis'
+      params:
+        source: '{{workspace_root}}'
+        target: '{{target_path}}'
+        exclude_patterns:
+          - '.cortex-runtime/**'
+          - '.github/prompts/**'
+          - '.github/agents/**'
+          - 'cortex-registry/**'
+          - '_workspaces/**'
+          - '*.db'
+          - '*.log'
+      outputs: ['diff_manifest', 'file_list']
+
+    # Gate 3: SANITIZE — Strip CORTEX-internal metadata
+    - id: gate_sanitize
+      name: 'Gate 3: SANITIZE — strip internal metadata'
+      depends_on: ['gate_diff']
+      orchestrator: 'WorkflowOrchestrator'
+      action: 'sanitize'
+      params:
+        file_list: '{{gate_diff.file_list}}'
+        strip_patterns:
+          - 'AC_START: AC-*'
+          - 'AC_COMPLETE: AC-*'
+          - 'CORTEX_DEBUG_*'
+          - '# Phase \\d+ —'
+          - 'sweep_id: SWEEP-*'
+      outputs: ['sanitized_files']
+
+    # Gate 4: MERGE — Copy to target
+    - id: gate_merge
+      name: 'Gate 4: MERGE — copy sanitized files to target'
+      depends_on: ['gate_sanitize']
+      action: 'user_approval'
+      display:
+        summary: 'Syncing {{gate_diff.file_list|length}} files to {{target_path}}'
+        files: '{{gate_diff.file_list}}'
+      on_approval:
+        action: 'file_copy'
+        source_files: '{{gate_sanitize.sanitized_files}}'
+        target_base: '{{target_path}}'
+        preserve_structure: true
+
+    - id: ac_complete
+      depends_on: ['gate_merge']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'SYNC', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

@@ -1,0 +1,122 @@
+# ============================================================================
+# MODE WORKFLOW: TOTALRECALL — Holistic Production Readiness (7-Phase)
+# ============================================================================
+# Authority: cortex-totalrecall.prompt.md
+# Trigger: "/totalrecall", "total recall", "holistic refactor"
+# Orchestrator: MasterOrchestrator (7-phase protocol)
+# Agent: cortex-totalrecall.prompt.md (self-contained)
+#
+# Replaces: Inline 7-phase protocol in cortex-totalrecall.prompt.md
+# ============================================================================
+
+workflow:
+  id: 'lifecycle/totalrecall-workflow'
+  name: 'TOTALRECALL — Holistic Production Readiness'
+  version: '1.0.0'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['TOTALRECALL']
+    trigger_keywords: ['totalrecall', 'total recall', 'holistic refactor', 'everything is broken']
+    orchestrators_used:
+      - MasterOrchestrator
+      - AuditCoordinator
+      - EnforcementOrchestrator
+      - RefactoringOrchestrator
+      - TDDOrchestrator
+      - HealthOrchestrator
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 5
+    success_predicate: 'all_7_phases_complete AND zero_p0 AND zero_p1'
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'TOTALRECALL', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Phase 1: INVENTORY — Catalogue everything
+    - id: phase_inventory
+      name: 'Phase 1: INVENTORY — Catalogue all components'
+      depends_on: ['ac_start']
+      action: 'lens_analysis'
+      params:
+        scope: 'full_workspace'
+        analysis_types: ['modules', 'orchestrators', 'mcp_tools', 'tests', 'governance']
+      outputs: ['inventory']
+
+    # Phase 2: CONTRADICTION — Detect numeric drift and version conflicts
+    - id: phase_contradiction
+      name: 'Phase 2: CONTRADICTION — Detect drift and conflicts'
+      depends_on: ['phase_inventory']
+      action: 'check_battery'
+      checks:
+        - 'Numeric values in docs vs file system (python3 scripts/refresh_prompt_suite.py --counts-only)'
+        - 'Version drift (no version > 1.0 in CORTEX-authored files)'
+        - 'Stale references to deleted paths'
+        - 'Duplicate implementations (CORE-035)'
+      outputs: ['contradictions']
+
+    # Phase 3: ARCHITECTURE — Validate structural integrity
+    - id: phase_architecture
+      name: 'Phase 3: ARCHITECTURE — Structural integrity'
+      depends_on: ['phase_contradiction']
+      action: 'workflow_ref'
+      ref: 'governance/meta-audit-workflow'
+      description: 'Run full meta-audit (25 checks)'
+      outputs: ['architecture_report']
+
+    # Phase 4: RECOMMENDATION — Prioritised fix plan
+    - id: phase_recommendation
+      name: 'Phase 4: RECOMMENDATION — Prioritised fix plan'
+      depends_on: ['phase_architecture']
+      action: 'generate_plan'
+      inputs:
+        contradictions: '{{phase_contradiction.contradictions}}'
+        architecture: '{{phase_architecture.architecture_report}}'
+      params:
+        sort_by: 'severity_desc'
+        group_by: 'domain'
+      outputs: ['fix_plan']
+
+    # Phase 5: IMPLEMENTATION — Execute fixes via TDD
+    - id: phase_implementation
+      name: 'Phase 5: IMPLEMENTATION — Execute fixes'
+      depends_on: ['phase_recommendation']
+      action: 'for_each'
+      source: '{{phase_recommendation.fix_plan}}'
+      template_ref: 'sdlc/fix-workflow'
+      loop:
+        primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+        max_cycles: 10
+        success_predicate: 'all_fixes_applied AND zero_regressions'
+
+    # Phase 6: REGRESSION PROOF — Full test suite
+    - id: phase_regression
+      name: 'Phase 6: REGRESSION PROOF — Full test suite'
+      depends_on: ['phase_implementation']
+      action: 'command'
+      command: 'python3 scripts/run_tests.py smoke'
+      gate:
+        predicate: 'all_tests_pass AND test_count >= baseline'
+
+    # Phase 7: VERIFICATION — Final production readiness scan
+    - id: phase_verification
+      name: 'Phase 7: VERIFICATION — Final scan'
+      depends_on: ['phase_regression']
+      action: 'workflow_ref'
+      ref: 'audit/audit-fix-pipeline'
+      description: 'Run full /audit fix as final verification'
+      gate:
+        predicate: 'p0_count == 0 AND p1_count == 0'
+
+    - id: ac_complete
+      depends_on: ['phase_verification']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'TOTALRECALL', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

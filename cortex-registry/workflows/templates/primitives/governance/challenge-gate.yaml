@@ -1,0 +1,103 @@
+# ============================================================================
+# PRIMITIVE: Challenge Gate — CORE-048 Alternative Presentation
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  governance
+# Authority: CORE-048 (Holistic validation gate)
+#
+# Purpose:
+#   Presents ≥2 alternative approaches with trade-offs when risk > threshold.
+#   Requires explicit user approval before proceeding. Replaces inline
+#   challenge logic previously duplicated in cortex-architect.prompt.md
+#   and cortex-holistic-validator.md.
+#
+# Reused by:
+#   - primitives/governance/holistic-validation-gate.yaml (Step 5)
+#   - sdlc/implement-workflow.yaml (pre-execution)
+#   - quality/refactor-workflow.yaml (pre-execution)
+#   - lifecycle/design-workflow.yaml (always-on for DESIGN mode)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/governance/challenge-gate'
+name: 'Challenge Gate'
+tier: 'primitive'
+category: 'governance'
+status: 'active'
+
+metadata:
+  description: |
+    When risk score exceeds threshold OR scope impacts >3 files, present
+    ≥2 alternative approaches in a comparison table. User must type
+    "proceed" or select an alternative. No code changes until approved.
+  governance_rules:
+    - 'CORE-048: Holistic validation gate'
+  tags:
+    - governance
+    - challenge-gate
+    - core-048
+    - user-approval
+    - primitive
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+
+parameters:
+  required:
+    - name: 'request_summary'
+      type: 'str'
+      description: 'One-line summary of user request'
+    - name: 'risk_score'
+      type: 'float'
+      description: 'Risk score from holistic validation'
+    - name: 'impact_radius'
+      type: 'int'
+      description: 'Number of files affected'
+  optional:
+    - name: 'risk_threshold'
+      type: 'float'
+      default: 0.4
+    - name: 'file_threshold'
+      type: 'int'
+      default: 3
+
+steps:
+  - id: evaluate_trigger
+    name: 'Evaluate whether challenge is needed'
+    action: 'conditional'
+    condition: '{{risk_score}} > {{risk_threshold}} or {{impact_radius}} > {{file_threshold}}'
+    on_true:
+      action: 'proceed_to_challenge'
+    on_false:
+      action: 'skip'
+      message: 'Challenge gate not triggered — risk within acceptable bounds'
+
+  - id: generate_alternatives
+    name: 'Generate ≥2 alternative approaches'
+    depends_on: ['evaluate_trigger']
+    action: 'llm_call'
+    prompt: |
+      Given request "{{request_summary}}" with risk {{risk_score}} and {{impact_radius}} files affected:
+      Generate ≥2 alternative approaches. For each provide: approach name, pros, cons, ROI estimate.
+    outputs:
+      - name: 'alternatives'
+        type: 'list[Alternative]'
+
+  - id: present_challenge
+    name: 'Present challenge to user'
+    depends_on: ['generate_alternatives']
+    action: 'user_approval'
+    display_format: |
+      ### ⚠️ MANDATORY CHALLENGE
+      **Request:** {{request_summary}} | **Risk:** {{risk_score}} | **Impact:** {{impact_radius}} files
+
+      | Approach | Pros | Cons | ROI |
+      |----------|------|------|-----|
+      {{#alternatives}}
+      | {{name}} | {{pros}} | {{cons}} | {{roi}} |
+      {{/alternatives}}
+
+      **Decision:** Type "proceed" or "use {alternative_name}"
+    blocks_execution: true
+    outputs:
+      - name: 'user_decision'
+        type: 'str'

@@ -194,67 +194,19 @@ Jinja2 Variables:
 
 ### Multi-Column Card Grid Pattern
 
-**CSS Foundation:**
-```css
-/* Applied to all content areas */
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem;
-}
+**CSS Files:** See `cortex-docs/assets/css/glassmorphism.css` and `cortex-docs/assets/css/glass-design-tokens.css`.
 
-.glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 1.5rem;
-    min-height: 200px; /* Prevent empty space */
-    display: flex;
-    flex-direction: column;
-}
+**Grid pattern:** `repeat(auto-fit, minmax(300px, 1fr))` with responsive breakpoints at 768px (1 col) and 1281px (3 col).
 
-/* Responsive breakpoints */
-@media (max-width: 768px) {
-    .content-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1280px) {
-    .content-grid {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on tablet */
-    }
-}
-
-@media (min-width: 1281px) {
-    .content-grid {
-        grid-template-columns: repeat(3, 1fr); /* Three columns on desktop */
-    }
-}
-```
-
-**Card Content Structure:**
+**Card DOM pattern:**
 ```html
 <div class="glass-card">
     <div class="card-header">
         <h3>{{ card.title }}</h3>
         <span class="truth-badge {{ card.status }}">{{ card.status_label }}</span>
     </div>
-    <div class="card-body">
-        <p>{{ card.description }}</p>
-        {% if card.metrics %}
-        <ul class="metrics-list">
-            {% for metric in card.metrics %}
-            <li>{{ metric.label }}: {{ metric.value }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
-    <div class="card-footer">
-        <a href="{{ card.learn_more_url }}" class="btn-link">Learn More →</a>
-    </div>
+    <div class="card-body">{{ card.description }}</div>
+    <div class="card-footer"><a href="{{ card.learn_more_url }}">Learn More →</a></div>
 </div>
 ```
 
@@ -264,55 +216,148 @@ Jinja2 Variables:
 
 ### Glassmorphism v4.0 Color Palette
 
+**CSS file:** `cortex-docs/assets/css/glass-design-tokens.css`
+
+| Token | Value | Purpose |
+|-------|-------|---------|
+| `--bg-primary` | `#0a0e27` | Dark base |
+| `--bg-secondary` | `#1a1f3a` | Card backgrounds |
+| `--accent-business` | `#7b61ff` | Purple — Business Leaders |
+| `--accent-product` | `#00d4ff` | Cyan — Product Owners |
+| `--accent-engineering` | `#10b981` | Emerald — Software Engineers |
+| `--status-implemented` | `#00ff88` | Green truth badge |
+| `--status-partial` | `#ffa500` | Orange truth badge |
+| `--status-aspirational` | `#7b61ff` | Purple truth badge |
+
+**Truth badge styles:** See `cortex-docs/assets/css/glassmorphism.css` `.truth-badge` class.
+
+---
+
+## ⛔ CSS Enforcement Standards (P0 — Zero Tolerance)
+
+**All CSS must live in `.css` files. No inline styles. No `<style>` blocks. No exceptions.**
+
+### Enforcement Rules
+
+| Rule | Check Command | Severity |
+|------|--------------|----------|
+| Zero `style=` attributes | `grep -rn 'style=' cortex-docs/roles/**/*.html` | P0 |
+| Zero `<style>` blocks | `grep -rn '<style' cortex-docs/roles/**/*.html` | P0 |
+| External CSS only | All styles via `<link rel="stylesheet">` | P0 |
+| Design token usage | CSS custom properties from `glass-design-tokens.css` | P1 |
+
+### CSS File Mapping
+
+| HTML View | CSS Layout File |
+|-----------|----------------|
+| `roles/business-leader.html` | `assets/css/layouts/business-leader.css` |
+| `roles/product-owner.html` | `assets/css/layouts/product-owner.css` |
+| `roles/software-engineer.html` | `assets/css/layouts/software-engineer.css` |
+| `roles/learner.html` | `assets/css/layouts/learning-path.css` |
+| `index.html` | `assets/css/index-multipanel.css` |
+
+### Remediation Protocol
+
+When `<style>` blocks or inline `style=` attributes are found:
+1. Identify the target CSS layout file from the mapping above
+2. Extract the CSS rules preserving specificity
+3. Add the extracted rules to the layout CSS file
+4. Replace inline styles with CSS utility classes or layout rules
+5. Validate: `grep -rn 'style=\|<style' cortex-docs/roles/**/*.html` → 0 matches
+
+---
+
+## 📐 D3.js & Mermaid Sizing Standards
+
+**All diagrams must be large, centered, and visually prominent within their containers.**
+
+### Mandatory CSS Classes
+
 ```css
-:root {
-    /* Base colors */
-    --bg-primary: #0a0e27;
-    --bg-secondary: #1a1f3a;
-    --glass-bg: rgba(26, 31, 58, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    
-    /* Role-specific accents */
-    --accent-business: #7b61ff;      /* Purple - Business Leaders */
-    --accent-product: #00d4ff;       /* Cyan - Product Owners */
-    --accent-engineering: #10b981;   /* Emerald - Software Engineers */
-    
-    /* Status colors */
-    --status-implemented: #00ff88;
-    --status-partial: #ffa500;
-    --status-aspirational: #7b61ff;
+/* Applied to all D3.js chart containers */
+.diagram-panel {
+    min-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.diagram-panel svg {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 350px;
+}
+
+/* Full-width hero diagrams */
+.diagram-hero {
+    min-height: 500px;
+    width: 100%;
+    grid-column: 1 / -1; /* span full grid */
 }
 ```
 
-### Truth Badge Styles
+### Role-Specific Diagram Strategy
+
+| Role | D3.js Interactive | Mermaid Static | DALL-E Images |
+|------|------------------|----------------|---------------|
+| **Software Engineer** | ✅ REQUIRED | ✅ REQUIRED | 🎨 Hero/banner only |
+| **Business Leader** | ⚡ Can be replaced | ⚡ Can be replaced | ✅ PREFERRED |
+| **Product Owner** | ⚡ Can be replaced | ⚡ Can be replaced | ✅ PREFERRED |
+| **Learner** | ⚡ Can be replaced | ⚡ Can be replaced | ✅ PREFERRED |
+
+**Critical:** Software Engineer views MUST retain D3.js and Mermaid for technical accuracy and interactivity. Other roles prioritize visual impact via generated images.
+
+---
+
+## 🖼️ Generated Image Embedding
+
+### Image Integration Pattern
+
+```html
+<!-- Generated image with production-named placeholder -->
+<div class="generated-image-panel">
+    <img src="assets/images/generated/{role}/{image-name}.png"
+         alt="{Descriptive alt text for accessibility}"
+         class="generated-diagram"
+         loading="lazy">
+    <p class="image-caption">{Caption}</p>
+</div>
+```
+
+### Production-Named Placeholder System
+
+- **Master placeholders:** `assets/images/generated/coming-soon-placeholder.svg` + `.png` (root reference only)
+- **Role placeholders:** `assets/images/generated/{role}/{nn}-{name}.png` — production-named copies of the master PNG
+- **1:1 parity rule:** Each `.prompt.md` in `doc-image-prompts/{role}/` has a matching `.png` in `images/generated/{role}/`
+- **Drop-in replacement:** Generate DALL-E image → save/overwrite the `.png` at the same path → zero HTML/CSS/JS changes
+- **No `onerror` needed:** The production-named PNG already exists at the `src` path (it IS the placeholder until replaced)
+
+### CSS for Generated Images
 
 ```css
-.truth-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 0.7rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.generated-image-panel {
+    width: 100%;
+    margin: 2rem 0;
+    text-align: center;
 }
 
-.implemented {
-    color: var(--status-implemented);
-    border-color: var(--status-implemented);
+.generated-diagram {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 300px;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
 }
 
-.partial {
-    color: var(--status-partial);
-    border-color: var(--status-partial);
-}
-
-.aspirational {
-    color: var(--status-aspirational);
-    border-color: var(--status-aspirational);
+.image-caption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-style: italic;
 }
 ```
 
@@ -362,135 +407,21 @@ Jinja2 Variables:
 
 ### Stage 2: Template Rendering
 
-**Jinja2 Rendering Loop:**
-```python
-from jinja2 import Environment, FileSystemLoader
+**Workflow template:** `frontend/html-view-lifecycle.yaml` → `build` operation
 
-env = Environment(loader=FileSystemLoader('_workspaces/gitpages-docs/templates/'))
-
-# Render role landing pages
-for role_key, role_data in content['roles'].items():
-    template = env.get_template('role-landing.html.j2')
-    output = template.render(
-        role_name=role_data['landing']['title'],
-        role_icon=ROLE_ICONS[role_key],
-        role_color=ROLE_COLORS[role_key],
-        navigation_items=build_nav(role_data['child_pages']),
-        content_cards=role_data['landing']['cards'],
-        role_guidance=role_data['landing']['guidance']
-    )
-    
-    output_path = f"docs/{role_key.replace('_', '-')}/index.html"
-    write_file(output_path, output)
-
-# Render child pages
-for child in role_data['child_pages']:
-    template = env.get_template('child-page.html.j2')
-    output = template.render(
-        breadcrumbs=build_breadcrumbs(role_key, child['slug']),
-        page_title=child['title'],
-        content_sections=child['content_sections'],
-        d3_visualizations=child.get('visualizations', []),
-        related_pages=child.get('related', [])
-    )
-    
-    output_path = f"docs/{role_key.replace('_', '-')}/{child['slug']}.html"
-    write_file(output_path, output)
-```
+Jinja2 rendering loop processes `content.json` → 3 role landings + child pages. Uses `role-landing.html.j2` and `child-page.html.j2` templates.
 
 ### Stage 3: Asset Optimization
 
-**CSS Minification:**
-```bash
-# Minify all CSS files
-for css_file in assets/css/*.css; do
-    npx cssnano $css_file -o ${css_file%.css}.min.css
-done
-
-# Update HTML references to .min.css
-sed -i 's/\.css"/.min.css"/g' docs/**/*.html
-```
-
-**JS Bundling:**
-```bash
-# Bundle and minify JS
-npx esbuild assets/js/*.js --bundle --minify --outdir=docs/assets/js/
-```
+CSS minification via `cssnano`, JS bundling via `esbuild`. Handled by `frontend/html-view-lifecycle.yaml` → `build` operation (step: `css_compliance`).
 
 ### Stage 4: D3.js Integration
 
-**Embed D3.js Visualizations:**
-```javascript
-// Diagram embedding from cortex-docs/assets/diagrams/
-// Supports tier-based organization and progressive disclosure
-function embedArchitectureDiagram(containerId, dataUrl) {
-    d3.json(dataUrl).then(data => {
-        const svg = d3.select(`#${containerId}`)
-            .append('svg')
-            .attr('width', '100%')
-            .attr('height', 400);
-        
-        // Render force-directed graph
-        const simulation = d3.forceSimulation(data.nodes)
-            .force('link', d3.forceLink(data.links))
-            .force('charge', d3.forceManyBody().strength(-200))
-            .force('center', d3.forceCenter(width / 2, height / 2));
-        
-        // Nodes as glassmorphism circles
-        const nodes = svg.selectAll('circle')
-            .data(data.nodes)
-            .enter()
-            .append('circle')
-            .attr('r', 20)
-            .style('fill', d => `var(--accent-${d.category})`)
-            .style('filter', 'blur(2px) brightness(1.2)');
-        
-        // Update positions on tick
-        simulation.on('tick', () => {
-            nodes.attr('cx', d => d.x).attr('cy', d => d.y);
-        });
-    });
-}
-```
+D3.js visualizations embedded from `cortex-docs/assets/diagrams/d3/`. Diagram strategy defined in `frontend/html-view-lifecycle.yaml` → `diagram_strategy` section.
 
 ### Stage 5: Validation
 
-**Link Checker:**
-```python
-from bs4 import BeautifulSoup
-from pathlib import Path
-
-def validate_links(docs_dir: Path):
-    broken_links = []
-    
-    for html_file in docs_dir.rglob("*.html"):
-        soup = BeautifulSoup(html_file.read_text(), 'html.parser')
-        
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            
-            # Skip external links
-            if href.startswith('http'):
-                continue
-            
-            # Resolve relative path
-            target = (html_file.parent / href).resolve()
-            
-            if not target.exists():
-                broken_links.append({
-                    'file': html_file,
-                    'href': href,
-                    'target': target
-                })
-    
-    return broken_links
-```
-
-**Accessibility Check:**
-```bash
-# Run pa11y-ci on all pages
-npx pa11y-ci docs/**/*.html --threshold 0
-```
+Link checking, accessibility audit (WCAG 2.1 AA), responsive breakpoints. Handled by `frontend/html-view-lifecycle.yaml` → `validate` operation.
 
 ---
 
@@ -498,63 +429,16 @@ npx pa11y-ci docs/**/*.html --threshold 0
 
 ### Local Preview
 
-**Command:**
 ```bash
-cd _workspaces/gitpages-docs
-./serve-docs.bat
+cd cortex-docs && python3 -m http.server 8080
 # Opens http://localhost:8080
 ```
 
 ### GitHub Pages Deployment
 
-**GitHub Actions Workflow:** `.github/workflows/deploy-docs.yml`
+**Workflow:** `.github/workflows/deploy-docs.yml` — auto-deploys on push to `CORTEX` branch when `cortex-docs/**` changes.
 
-```yaml
-name: Deploy GitPages Documentation
-
-on:
-  push:
-    branches: [CORTEX]
-    paths:
-      - 'cortex-docs/**'
-      - '_workspaces/gitpages-docs/**'
-      - 'docs/**'
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install jinja2 cssmin jsmin beautifulsoup4
-      
-      - name: Generate content JSON
-        run: |
-          python scripts/generate_content_json.py
-      
-      - name: Build HTML site
-        run: |
-          python scripts/build_gitpages_site.py
-      
-      - name: Validate site
-        run: |
-          python scripts/validate_site.py
-      
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          publish_branch: gh-pages
-```
+**Pipeline:** checkout → setup Python → generate content.json → build HTML → validate → deploy to `gh-pages` branch.
 
 ---
 
@@ -656,100 +540,37 @@ User: "build gitpages site"
 
 ---
 
-## 🔧 MCP Tool Specifications
+## 🔧 MCP Tools
 
-### cortex_build_gitpages
+| Tool | Purpose |
+|------|---------|
+| `cortex_build_gitpages` | Full site build (content → render → optimize → validate) |
+| `cortex_generate_role_page` | Single role landing page generation |
+| `cortex_validate_site` | Comprehensive validation (links, a11y, responsive, truth badges) |
 
-**Purpose:** Main build orchestrator for complete site generation
-
-**Signature:**
+**All operations delegated via WorkflowComposer:**
 ```python
-def cortex_build_gitpages(
-    content_source: str = "_workspaces/gitpages-docs/content.json",
-    output_dir: str = "docs/",
-    validate: bool = True,
-    optimize: bool = True
-) -> BuildResult
+from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
+
+composer = WorkflowComposer(
+    template_path=Path("cortex-registry/workflows/templates/frontend/html-view-lifecycle.yaml")
+)
+result = composer.execute(operation="build")
 ```
-
-**Returns:**
-```python
-@dataclass
-class BuildResult:
-    success: bool
-    pages_generated: int
-    assets_optimized: int
-    broken_links: List[str]
-    warnings: List[str]
-    build_time_ms: int
-```
-
-### cortex_generate_role_page
-
-**Purpose:** Generate single role landing page
-
-**Signature:**
-```python
-def cortex_generate_role_page(
-    role: Literal["business_leaders", "product_owners", "software_engineers"],
-    content_data: Dict[str, Any],
-    output_path: str
-) -> PageResult
-```
-
-### cortex_validate_site
-
-**Purpose:** Comprehensive site validation
-
-**Signature:**
-```python
-def cortex_validate_site(
-    site_dir: str = "docs/"
-) -> ValidationResult
-```
-
-**Checks:**
-- Broken links
-- Accessibility (WCAG 2.1 AA)
-- Responsive breakpoints
-- Truth badge consistency
-- D3.js data integrity
 
 ---
 
-## 📝 Example Usage
-
-### Build Complete Site
-
-```python
-# Invoke from Copilot Chat or script
-from cortex.mcp.cortex_tools import cortex_build_gitpages
-
-result = cortex_build_gitpages(
-    content_source="_workspaces/gitpages-docs/content.json",
-    output_dir="docs/",
-    validate=True,
-    optimize=True
-)
-
-if result.success:
-    print(f"✅ Build complete: {result.pages_generated} pages")
-    print(f"⚡ Assets optimized: {result.assets_optimized} files")
-    print(f"🕐 Build time: {result.build_time_ms}ms")
-else:
-    print(f"❌ Build failed: {result.warnings}")
-```
-
-### Preview Locally
+## � Quick Reference
 
 ```bash
-# Navigate to workspace
-cd _workspaces/gitpages-docs
+# Build complete site
+/build-gitpages
 
-# Start HTTP server
-./serve-docs.bat
+# Validate only
+/validate-gitpages
 
-# Opens http://localhost:8080 in browser
+# Local preview
+cd cortex-docs && python3 -m http.server 8080
 ```
 
 ---
@@ -758,27 +579,14 @@ cd _workspaces/gitpages-docs
 
 ### Updating Templates
 
-**When to update:**
-- Design system evolution (new glassmorphism version)
-- Layout improvements (new card patterns)
-- Navigation enhancements (breadcrumb changes)
-- Accessibility fixes (WCAG compliance updates)
-
-**Process:**
-1. Edit template in `_workspaces/gitpages-docs/templates/`
-2. Test with sample content: `python scripts/test_template.py`
-3. Rebuild site: `cortex_build_gitpages()`
-4. Validate: `cortex_validate_site()`
-5. Commit: `git commit -m "feat: Update role landing template"`
+Edit templates in `_workspaces/gitpages-docs/templates/`, then run the `build` operation via `frontend/html-view-lifecycle.yaml`. The workflow handles rebuild + validation + commit.
 
 ### Adding New Roles
 
-**If expanding beyond 3 roles:**
 1. Update `content.json` schema with new role
-2. Add role color to CSS variables
-3. Create navigation entry in sidebar
-4. Generate landing page: `cortex_generate_role_page(role="new_role")`
-5. Update sitemap.xml
+2. Add role color to `glass-design-tokens.css`
+3. Generate landing page via `cortex_generate_role_page`
+4. Run `validate` operation to verify
 
 ---
 

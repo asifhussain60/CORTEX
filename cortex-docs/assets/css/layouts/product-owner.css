@@ -623,3 +623,64 @@ main.container .hero-robot-container {
     .role-cta-row        { flex-wrap: wrap; }
     .role-cta            { flex: 1 1 45%; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   EXTRACTED FROM <style> BLOCK (product-owner.html)
+   Per CSS Enforcement Standards — P0: Zero <style> blocks
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Section panels — visual spacing + border ── */
+.po-section-panel {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 2.5rem;
+}
+.po-section-panel > .role-section-title {
+    margin-top: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GENERATED IMAGE + DIAGRAM PANEL SUPPORT
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Generated Image Panels (DALL-E coming-soon + final) ── */
+.generated-image-panel {
+    width: 100%;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.generated-diagram {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 300px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.image-caption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #78809a;
+    font-style: italic;
+}
+
+/* ── D3.js Diagram Panels — large + centered ── */
+.diagram-panel {
+    min-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.diagram-panel svg {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 350px;
+}

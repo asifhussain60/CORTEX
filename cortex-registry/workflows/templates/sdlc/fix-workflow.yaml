@@ -1,0 +1,216 @@
+# ============================================================================
+# MODE WORKFLOW: FIX — Bug Resolution via TDD
+# ============================================================================
+# Authority: CORE-008 (TDD), CORE-064 (Sweep Completeness), CORE-068 (Convergence)
+# Trigger: "fix", "bug", "broken", "error", "failing"
+# Orchestrator: TDDOrchestrator
+# Agent: cortex-executor.md
+#
+# Replaces: Inline 8-step sequence in cortex-architect.prompt.md § FIX MODE
+#
+# Key difference from IMPLEMENT:
+#   - Starts with REPRODUCE (identify/create failing test for the bug)
+#   - ROOT CAUSE via LENS analysis
+#   - SWEEP GATE scans for same issue class across codebase (CORE-064)
+# ============================================================================
+
+workflow:
+  id: 'sdlc/fix-workflow'
+  name: 'FIX — Bug Resolution via TDD'
+  version: '1.0.0'
+  category: 'sdlc'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['FIX']
+    trigger_keywords: ['fix', 'bug', 'broken', 'error', 'failing']
+    orchestrators_used:
+      - TDDOrchestrator
+      - EnforcementOrchestrator
+      - SweepCatalogueOrchestrator
+    core_rules: ['CORE-008', 'CORE-048', 'CORE-064', 'CORE-068']
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'regression_count == 0 AND original_bug_fixed'
+
+  steps:
+    # Step 0: AC_START
+    - id: ac_start
+      name: 'Emit AC_START marker'
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'FIX'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_start'
+
+    # Step 1: DoR Display
+    - id: dor_display
+      name: 'Definition of Ready — Intent Reflection'
+      depends_on: ['ac_start']
+      template_ref: 'primitives/governance/dor-display'
+      inputs:
+        intent: 'FIX'
+        request_summary: '{{request_summary}}'
+
+    # Step 2: Holistic Validation Gate (CORE-048)
+    - id: holistic_validation
+      name: 'Holistic Validation Gate'
+      depends_on: ['dor_display']
+      template_ref: 'primitives/governance/holistic-validation-gate'
+      inputs:
+        target_module: '{{target_module}}'
+        operation_type: 'FIX'
+      on_block: 'abort'
+
+    # Step 3: Git Checkpoint
+    - id: git_checkpoint
+      name: 'Git Checkpoint'
+      depends_on: ['holistic_validation']
+      template_ref: 'primitives/execution/git-checkpoint'
+      inputs:
+        operation_label: 'fix-{{bug_slug}}'
+
+    # Step 4: Sweep Catalogue Open (CORE-064)
+    - id: sweep_open
+      name: 'Open Sweep Catalogue — track all instances of this bug class'
+      depends_on: ['git_checkpoint']
+      template_ref: 'primitives/governance/sweep-catalogue-open'
+      inputs:
+        intent: 'FIX'
+        scope_files: '{{scope_files}}'
+      outputs: ['sweep_id']
+
+    # Step 5: REPRODUCE — Identify or create failing test for the bug
+    - id: reproduce
+      name: 'REPRODUCE — identify/create failing test'
+      depends_on: ['sweep_open']
+      orchestrator: 'TDDOrchestrator'
+      action: 'reproduce_bug'
+      params:
+        bug_description: '{{bug_description}}'
+        error_trace: '{{error_trace}}'
+      gate:
+        predicate: 'failing_test_exists'
+      blocker: 'Cannot proceed without a failing test that demonstrates the bug'
+
+    # Step 6: ROOT CAUSE — LENS analysis on affected files
+    - id: root_cause
+      name: 'ROOT CAUSE — LENS analysis'
+      depends_on: ['reproduce']
+      action: 'lens_analysis'
+      params:
+        scope: '{{affected_files}}'
+        analysis_types: ['ast', 'git_history', 'dependency_graph']
+      outputs: ['root_cause_report', 'same_class_instances']
+
+    # Step 7: RED — Confirm failing test captures the bug
+    - id: tdd_red
+      name: 'RED — Confirm/write failing test'
+      depends_on: ['root_cause']
+      orchestrator: 'TDDOrchestrator'
+      action: 'tdd_phase'
+      params:
+        phase: 'RED'
+      gate:
+        command: 'python3 scripts/run_tests.py file {{test_file}}'
+        predicate: 'test_count > 0 and target_test_failing'
+
+    # Step 8: GREEN — Fix with minimum change
+    - id: tdd_green
+      name: 'GREEN — Minimum fix to pass'
+      depends_on: ['tdd_red']
+      orchestrator: 'TDDOrchestrator'
+      action: 'tdd_phase'
+      params:
+        phase: 'GREEN'
+      gate:
+        command: 'python3 scripts/run_tests.py file {{test_file}}'
+        predicate: 'all_tests_pass'
+
+    # Step 9: REFACTOR — Clean up without changing behaviour
+    - id: tdd_refactor
+      name: 'REFACTOR — Clean up'
+      depends_on: ['tdd_green']
+      orchestrator: 'RefactoringOrchestrator'
+      action: 'refactor_phase'
+      gate:
+        command: 'python3 scripts/run_tests.py smoke'
+        predicate: 'all_tests_pass and zero_regressions'
+
+    # Step 10: SWEEP GATE — Fix ALL instances of same issue class (CORE-064)
+    - id: sweep_gate
+      name: 'SWEEP GATE — fix all N instances of same issue class'
+      depends_on: ['tdd_refactor']
+      action: 'sweep_scan'
+      description: |
+        Scan codebase for same bug pattern. If same issue class appears
+        in N files, fix ALL N — not just the reported one.
+      inputs:
+        issue_class: '{{root_cause.root_cause_report.issue_class}}'
+        same_class_instances: '{{root_cause.same_class_instances}}'
+      loop:
+        primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+        detect_step:
+          action: 'grep_scan'
+          pattern: '{{issue_pattern}}'
+          scope: 'cortex/ tests/'
+        fix_step:
+          action: 'apply_same_fix'
+          fix_template: '{{tdd_green.fix_applied}}'
+        success_predicate: 'instance_count == 0'
+        max_cycles: 5
+
+    # Step 11: Regression Check — smoke tests
+    - id: regression_check
+      name: 'Regression Check — confirm no side effects'
+      depends_on: ['sweep_gate']
+      action: 'command'
+      command: 'python3 scripts/run_tests.py smoke'
+      gate:
+        predicate: 'all_tests_pass'
+
+    # Step 12: Convergence Gate (CORE-068)
+    - id: convergence_gate
+      name: 'Convergence Gate — rescan for regressions after fix'
+      depends_on: ['regression_check']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'command'
+          command: 'python3 scripts/run_tests.py smoke'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'TDDOrchestrator'
+          method: 'fix_failures'
+        success_predicate: 'regression_count == 0 AND original_bug_fixed'
+        max_cycles: 3
+
+    # Step 13: Sweep Catalogue Close (CORE-064)
+    - id: sweep_close
+      name: 'Close Sweep Catalogue'
+      depends_on: ['convergence_gate']
+      template_ref: 'primitives/governance/sweep-catalogue-close'
+      inputs:
+        sweep_id: '{{sweep_open.sweep_id}}'
+      on_incomplete: 'abort'
+
+    # Step 14: Commit
+    - id: commit
+      name: 'Conventional commit'
+      depends_on: ['sweep_close']
+      action: 'command'
+      command: 'git add -A && git commit -m "fix({{bug_slug}}): {{commit_message}}"'
+
+    # Step 15: AC_COMPLETE
+    - id: ac_complete
+      name: 'Emit AC_COMPLETE marker'
+      depends_on: ['commit']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'FIX'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_complete_success'

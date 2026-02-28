@@ -1,0 +1,236 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# HTML View Lifecycle — Build, Enhance, Refactor & Validate
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Single workflow for all HTML view operations in cortex-docs/roles/.
+#          Replaces inline code in prompts/agents with WorkflowComposer steps.
+# Authority: cortex-doc.prompt.md | cortex-gitpages-builder.md | CORE-002 | CORE-049
+# Composer: cortex/orchestrators/workflow/workflow_composer.py
+# Related:
+#   - frontend/html-refactor-validation.yaml (DOM validation gates)
+#   - frontend/css-zero-inline-workflow.yaml (CSS extraction)
+#   - internal/documentation-refresh-pipeline.yaml (DOC-REFRESH-001)
+#   - internal/cortex-site-validation.yaml (Vision API TDD)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/html-view-lifecycle
+name: HTML View Lifecycle — Build, Enhance, Refactor & Validate
+category: frontend
+version: 1.0.0
+priority: P0
+
+metadata:
+  author: CORTEX
+  created: "2026-02-28"
+  updated: "2026-02-28"
+  technologies: [html, css, javascript, d3js]
+  rollback_on_failure: true
+  vision_api_integration: true
+
+# ── SCOPE ───────────────────────────────────────────────────────────────────────
+scope:
+  target_files:
+    - cortex-docs/roles/business-leader.html
+    - cortex-docs/roles/product-owner.html
+    - cortex-docs/roles/software-engineer.html
+    - cortex-docs/roles/learner.html
+    - cortex-docs/index.html
+  css_directory: cortex-docs/assets/css/
+  js_directory: cortex-docs/assets/js/
+  data_directory: cortex-docs/data/
+  images_directory: cortex-docs/assets/images/generated/
+  content_source: cortex-docs/.content/
+
+# ── CSS FILE MAPPING ────────────────────────────────────────────────────────────
+css_mapping:
+  roles/business-leader.html: assets/css/layouts/business-leader.css
+  roles/product-owner.html: assets/css/layouts/product-owner.css
+  roles/software-engineer.html: assets/css/layouts/software-engineer.css
+  roles/learner.html: assets/css/layouts/learning-path.css
+  index.html: assets/css/index-multipanel.css
+
+# ── DESIGN SYSTEM ───────────────────────────────────────────────────────────────
+design_system:
+  theme: glassmorphism-v4.0
+  tokens_file: assets/css/glass-design-tokens.css
+  palette:
+    bg_primary: "#0a0e27"
+    bg_secondary: "#1a1f3a"
+    accent_business: "#7b61ff"
+    accent_product: "#00d4ff"
+    accent_engineering: "#10b981"
+  d3_version: "7.9.0"
+  d3_cdn: "https://d3js.org/d3.v7.min.js"
+
+# ── DIAGRAM STRATEGY (per role) ────────────────────────────────────────────────
+diagram_strategy:
+  software-engineer:
+    d3js: REQUIRED
+    mermaid: REQUIRED
+    dalle_images: hero_banner_only
+  business-leader:
+    d3js: optional_replaceable
+    mermaid: optional_replaceable
+    dalle_images: PREFERRED
+  product-owner:
+    d3js: optional_replaceable
+    mermaid: optional_replaceable
+    dalle_images: PREFERRED
+  learner:
+    d3js: optional_replaceable
+    mermaid: optional_replaceable
+    dalle_images: PREFERRED
+
+# ── IMAGE PLACEHOLDER SYSTEM ───────────────────────────────────────────────────
+image_placeholders:
+  strategy: production-named
+  master_placeholder: assets/images/generated/coming-soon-placeholder.png
+  parity_rule: "count(images/generated/{role}/*.png) == count(doc-image-prompts/{role}/*.prompt.md)"
+  replacement: "Generate DALL-E image → overwrite .png at same path → zero HTML changes"
+
+# ── GATES (enforced at every step) ─────────────────────────────────────────────
+gates:
+  css_zero_inline:
+    description: "Zero style= attributes in any HTML file"
+    command: "grep -rn 'style=' cortex-docs/roles/**/*.html"
+    expect: 0
+    severity: P0
+    blocking: true
+
+  css_zero_blocks:
+    description: "Zero <style> blocks in any HTML file"
+    command: "grep -rn '<style' cortex-docs/roles/**/*.html"
+    expect: 0
+    severity: P0
+    blocking: true
+
+  image_parity:
+    description: "1:1 prompt-to-placeholder match per role"
+    severity: P0
+    blocking: true
+
+  dom_wellformed:
+    description: "HTML parses without errors"
+    severity: P0
+    blocking: true
+
+  visual_regression:
+    description: "Layout shift <10% vs baseline screenshot"
+    severity: P1
+    blocking: false
+
+  link_integrity:
+    description: "Zero broken internal links"
+    severity: P1
+    blocking: true
+
+# ── WORKFLOW ────────────────────────────────────────────────────────────────────
+workflow:
+  name: HTML View Lifecycle
+  description: |
+    Unified workflow for building, enhancing, refactoring, or modifying
+    cortex-docs HTML views. Invoked via WorkflowComposer.
+  steps:
+    # ── Phase 1: Pre-Flight ──────────────────────────────────────────────────
+    - step_id: preflight_governance
+      orchestrator_name: EnforcementOrchestrator
+      description: "Validate CSS compliance, design token usage, image parity"
+      parameters:
+        checks:
+          - css_zero_inline
+          - css_zero_blocks
+          - image_parity
+          - dom_wellformed
+
+    # ── Phase 2: Baseline Capture ────────────────────────────────────────────
+    - step_id: baseline_vision
+      orchestrator_name: LENSOrchestrator
+      description: "Capture pre-edit screenshots for visual regression"
+      parameters:
+        action: vision_analyze
+        depth: STANDARD
+        target_files: "{{scope.target_files}}"
+
+    # ── Phase 3: Content Loading ─────────────────────────────────────────────
+    - step_id: content_extraction
+      orchestrator_name: DocumentationOrchestrator
+      description: "Extract .content/ → data/content.json via pipeline/extract-json.py"
+      parameters:
+        pipeline: cortex-docs/pipeline/extract-json.py
+        input: cortex-docs/.content/
+        output: cortex-docs/data/content.json
+
+    # ── Phase 4: HTML Modification ───────────────────────────────────────────
+    - step_id: html_modification
+      orchestrator_name: RefactoringOrchestrator
+      description: "Apply HTML changes (build/enhance/refactor) using DOM-aware editing"
+      parameters:
+        delegate_to: frontend/html-refactor-validation.yaml
+        validation_gates:
+          - dom_wellformed
+          - no_duplicate_ids
+          - no_duplicate_sections
+
+    # ── Phase 5: CSS Compliance ──────────────────────────────────────────────
+    - step_id: css_compliance
+      orchestrator_name: EnforcementOrchestrator
+      description: "Enforce zero inline styles — extract to layout CSS files"
+      parameters:
+        delegate_to: frontend/css-zero-inline-workflow.yaml
+        css_mapping: "{{css_mapping}}"
+
+    # ── Phase 6: Asset Validation ────────────────────────────────────────────
+    - step_id: asset_validation
+      orchestrator_name: EnforcementOrchestrator
+      description: "Validate D3.js sizing, image refs, link integrity"
+      parameters:
+        checks:
+          - d3_min_height_400
+          - image_refs_resolve
+          - internal_links_valid
+
+    # ── Phase 7: Visual Regression ───────────────────────────────────────────
+    - step_id: visual_regression
+      orchestrator_name: LENSOrchestrator
+      description: "Compare post-edit screenshots against baseline"
+      parameters:
+        action: vision_compare
+        threshold_percentage: 10
+
+    # ── Phase 8: Convergence Gate ────────────────────────────────────────────
+    - step_id: convergence_gate
+      orchestrator_name: EnforcementOrchestrator
+      description: "Rescan all gates — loop until 0 P0/P1 violations (CORE-068)"
+      parameters:
+        delegate_to: primitives/validation/detect-fix-rescan-loop.yaml
+        convergence_predicate: "p0_count == 0 AND p1_count == 0"
+        max_cycles: 3
+
+# ── OPERATIONS (entry points) ──────────────────────────────────────────────────
+operations:
+  build:
+    description: "Generate HTML view from content.json + templates"
+    steps: [preflight_governance, content_extraction, html_modification, css_compliance, asset_validation, convergence_gate]
+
+  enhance:
+    description: "Add features to existing HTML view (images, diagrams, sections)"
+    steps: [preflight_governance, baseline_vision, html_modification, css_compliance, asset_validation, visual_regression, convergence_gate]
+
+  refactor:
+    description: "Restructure HTML without changing visual output"
+    steps: [preflight_governance, baseline_vision, html_modification, css_compliance, asset_validation, visual_regression, convergence_gate]
+
+  validate:
+    description: "Run all gates without modifications"
+    steps: [preflight_governance, asset_validation]
+
+# ── INVOCATION ──────────────────────────────────────────────────────────────────
+invocation:
+  composer: "cortex/orchestrators/workflow/workflow_composer.py"
+  example: |
+    from pathlib import Path
+    from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
+
+    composer = WorkflowComposer(
+        template_path=Path("cortex-registry/workflows/templates/frontend/html-view-lifecycle.yaml")
+    )
+    result = composer.execute()

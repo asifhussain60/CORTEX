@@ -1,0 +1,96 @@
+# ============================================================================
+# MODE WORKFLOW: HEALTH — Orchestrator Health Check
+# ============================================================================
+# Authority: Check #11 (Orchestrator health), CORE-068 (Convergence)
+# Trigger: "/health", "health check", "orchestrator status"
+# Orchestrator: HealthOrchestrator
+# Agent: cortex-auditor.md (Check #11)
+#
+# Replaces: Inline health check protocol in cortex-architect.prompt.md
+# ============================================================================
+
+workflow:
+  id: 'maintenance/health-check-workflow'
+  name: 'HEALTH — Orchestrator Health Check'
+  version: '1.0.0'
+  category: 'maintenance'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['HEALTH']
+    trigger_keywords: ['health', 'health check', 'orchestrator status']
+    orchestrators_used:
+      - HealthOrchestrator
+    core_rules: ['CORE-068']
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'all_endpoints_healthy'
+
+  # Latency envelopes by orchestrator domain
+  latency_envelopes:
+    core: 200    # ms
+    domain: 500
+    support: 1000
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'HEALTH', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Step 1: Call health_check() on all 22 wired orchestrators
+    - id: health_scan
+      name: 'Health Scan — call health_check() on all orchestrators'
+      depends_on: ['ac_start']
+      orchestrator: 'HealthOrchestrator'
+      action: 'run_health_check'
+      params:
+        check_all: true
+      loop:
+        for_each: 'orchestrator in wiring_contract'
+        action: 'call'
+        method: 'health_check'
+        assertions:
+          - 'status in ["healthy", "degraded"]'
+          - 'latency_p99 <= {{latency_envelopes[orchestrator.domain]}}'
+        circuit_breaker:
+          consecutive_failures: 3
+          on_trigger: 'mark_degraded'
+          fallback: 'activate_fallback_orchestrator'
+      outputs: ['health_report']
+
+    # Step 2: Convergence Gate — retry unhealthy orchestrators
+    - id: convergence_gate
+      depends_on: ['health_scan']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'filter'
+          predicate: 'status == "unavailable" or status == "degraded"'
+          source: '{{health_scan.health_report}}'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'HealthOrchestrator'
+          method: 'activate_fallback'
+        success_predicate: 'all_endpoints_healthy'
+        max_cycles: 3
+
+    # Step 3: Display Results (inline only — CORE-002)
+    - id: display_results
+      name: 'Display health report inline'
+      depends_on: ['convergence_gate']
+      action: 'display'
+      format: 'inline_table'
+      content: '{{health_scan.health_report}}'
+      rules:
+        - 'CORE-002: inline only — no report files'
+
+    - id: ac_complete
+      depends_on: ['display_results']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'HEALTH', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

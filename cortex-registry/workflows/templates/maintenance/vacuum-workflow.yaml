@@ -1,0 +1,145 @@
+# ============================================================================
+# MODE WORKFLOW: VACUUM — Markdown Sprawl + Root Clutter Cleanup
+# ============================================================================
+# Authority: CORE-002 (no report files), CORE-068 (Convergence)
+# Trigger: "/vacuum", "clean up", "markdown sprawl"
+# Orchestrator: VacuumOrchestrator
+# Agent: cortex-vacuum.md
+#
+# Replaces: Inline cleanup protocol in cortex-vacuum.md
+#           Inline VACUUM section in cortex-architect.prompt.md
+# ============================================================================
+
+workflow:
+  id: 'maintenance/vacuum-workflow'
+  name: 'VACUUM — Markdown Sprawl + Root Clutter Cleanup'
+  version: '1.0.0'
+  category: 'maintenance'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    modes_served: ['VACUUM']
+    trigger_keywords: ['vacuum', 'clean up', 'markdown sprawl']
+    orchestrators_used:
+      - VacuumOrchestrator
+    core_rules: ['CORE-002', 'CORE-068']
+
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'no_new_sprawl AND link_check_passed'
+
+  # ── EXEMPT PATHS — never clean these ──────────────────────────────
+  exempt_paths:
+    - 'README.md'
+    - '.github/**/*.md'
+    - '_workspaces/**'
+    - 'cortex-docs/archive/**'
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'VACUUM', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Step 1: Scan — identify markdown files outside canonical locations
+    - id: scan_sprawl
+      name: 'Scan for markdown sprawl'
+      depends_on: ['ac_start']
+      orchestrator: 'VacuumOrchestrator'
+      action: 'scan'
+      params:
+        patterns:
+          markdown_sprawl:
+            locations: ['root', 'tests/', 'cortex/']
+            patterns: ['PHASE-*.md', '*-SUMMARY.md', '*-REPORT.md', '*-PROGRESS.md']
+            exempt: '{{exempt_paths}}'
+          root_artifacts:
+            patterns: ['*.log', '*.tmp', '*.bak', '*_v2.*', '*_v3.*', '.DS_Store']
+          cortex_docs_violations:
+            location: 'cortex-docs/'
+            forbidden: ['*.md']
+            allowed: ['*.html', '*.css', '*.js', '*.ico', '*.json', '.nojekyll', 'robots.txt']
+      outputs: ['cleanup_candidates']
+
+    # Step 2: Classify — categorize by type and age
+    - id: classify
+      name: 'Classify cleanup candidates'
+      depends_on: ['scan_sprawl']
+      orchestrator: 'VacuumOrchestrator'
+      action: 'classify'
+      params:
+        candidates: '{{scan_sprawl.cleanup_candidates}}'
+        age_threshold_days: 30
+        categories:
+          - { type: 'phase', archive_to: 'cortex-docs/archive/phases/' }
+          - { type: 'report', archive_to: 'cortex-docs/archive/reports/' }
+          - { type: 'test_doc', archive_to: 'cortex-docs/archive/testing/' }
+          - { type: 'transient', action: 'delete' }
+      outputs: ['cleanup_plan']
+
+    # Step 3: Review — present plan for approval (safety)
+    - id: review
+      name: 'Review cleanup plan — present for approval'
+      depends_on: ['classify']
+      action: 'user_approval'
+      display: '{{classify.cleanup_plan}}'
+      rules:
+        - 'No direct deletion — always archive first (recovery possible)'
+        - '30-day threshold — only archive files >30 days old'
+        - 'Git-tracked only — process files tracked by git'
+
+    # Step 4: Execute Cleanup
+    - id: execute_cleanup
+      name: 'Execute cleanup — archive or delete'
+      depends_on: ['review']
+      orchestrator: 'VacuumOrchestrator'
+      action: 'execute_cleanup'
+      params:
+        plan: '{{classify.cleanup_plan}}'
+        safety_rules:
+          no_direct_deletion: true
+          age_threshold_days: 30
+          git_tracked_only: true
+
+    # Step 5: Link Validation — check for broken links
+    - id: link_validation
+      name: 'Link Validation — verify no broken links after cleanup'
+      depends_on: ['execute_cleanup']
+      orchestrator: 'VacuumOrchestrator'
+      action: 'validate_links'
+      gate:
+        predicate: 'broken_link_count == 0'
+
+    # Step 6: Convergence Gate (CORE-068)
+    - id: convergence_gate
+      depends_on: ['link_validation']
+      template_ref: 'primitives/validation/detect-fix-rescan-loop'
+      inputs:
+        detect_step:
+          action: 'orchestrator_call'
+          orchestrator: 'VacuumOrchestrator'
+          method: 'scan'
+        fix_step:
+          action: 'orchestrator_call'
+          orchestrator: 'VacuumOrchestrator'
+          method: 'execute_cleanup'
+        success_predicate: 'no_new_sprawl AND link_check_passed'
+        max_cycles: 3
+
+    # Step 7: cortex-docs/ validation
+    - id: cortex_docs_validation
+      name: 'Validate cortex-docs/ — only HTML/CSS/JS/config'
+      depends_on: ['convergence_gate']
+      action: 'command'
+      command: 'find cortex-docs/ -name "*.md" -not -name "ARCHITECTURE-RECOMMENDATION.md" -not -name "security.md" | wc -l'
+      gate:
+        predicate: 'md_file_count == 0'
+
+    - id: ac_complete
+      depends_on: ['cortex_docs_validation']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'VACUUM', session_id: '{{session_id}}' }
+      step_filter: 'ac_complete_success'

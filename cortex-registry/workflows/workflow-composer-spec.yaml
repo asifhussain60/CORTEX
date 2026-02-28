@@ -1,0 +1,369 @@
+# ============================================================================
+# CORTEX WORKFLOW COMPOSER SPECIFICATION
+# ============================================================================
+# Authority: Phase 90 — Workflow Composer Architecture
+# Version: 1.0.0
+# Created: 2026-02-28
+#
+# Purpose:
+#   Defines the Workflow Composer pattern — the single mechanism through which
+#   ALL code-touching operations flow. No prompt, agent, or orchestrator may
+#   contain inline procedural logic for code modifications. All such logic
+#   MUST be declared as workflow templates and composed via this specification.
+#
+# Architecture:
+#   3-Tier Hierarchy:
+#     TIER 1: Primitives (atomic, reusable, parameterised steps)
+#     TIER 2: Mode Workflows (one per execution mode)
+#     TIER 3: Composite Pipelines (multi-mode compositions)
+#
+# Governance:
+#   - CORE-008: TDD mandatory — every workflow that modifies code must include TDD steps
+#   - CORE-048: Holistic validation — every code-modifying workflow starts with validation gate
+#   - CORE-064: Sweep completeness — every FIX/REFACTOR/AUDIT workflow opens+closes sweep catalogue
+#   - CORE-068: Convergence gate — every code-modifying workflow ends with detect→fix→rescan loop
+#   - CORE-002: All output inline — workflows never create .md/.txt files
+#   - CORE-049: Silent autonomous — workflows display progress bars only (after approval)
+# ============================================================================
+
+id: 'workflow-composer-spec'
+title: 'CORTEX Workflow Composer Specification'
+version: '1.0.0'
+created: '2026-02-28'
+status: 'active'
+
+# ============================================================================
+# ARCHITECTURAL PRINCIPLES
+# ============================================================================
+principles:
+  - id: 'WC-001'
+    name: 'No Inline Procedural Logic'
+    description: |
+      Prompts and agents MUST NOT contain step-by-step code-modification sequences.
+      They declare WHAT (intent, identity, routing) — workflow templates declare HOW.
+    enforcement: 'P0 — meta-audit check'
+
+  - id: 'WC-002'
+    name: 'Composition Over Duplication'
+    description: |
+      Mode workflows compose primitives via template_ref — never duplicate
+      primitive logic inline. A TDD cycle appears ONCE in tdd-cycle.yaml
+      and is referenced by implement-workflow, fix-workflow, etc.
+    enforcement: 'P0 — duplicate detection primitive'
+
+  - id: 'WC-003'
+    name: 'Conditional Loops Are Declarative'
+    description: |
+      All loops, conditions, and gates are declared in YAML — not prose.
+      Convergence gates use detect-fix-rescan-loop primitive.
+      Conditions use conditional action with predicate expressions.
+    enforcement: 'P1 — template validation'
+
+  - id: 'WC-004'
+    name: 'Every Step Has a Gate'
+    description: |
+      Every step that modifies code must declare a gate (success predicate).
+      Steps without gates cannot block subsequent steps and cannot guarantee quality.
+    enforcement: 'P1 — template validation'
+
+  - id: 'WC-005'
+    name: 'AC Markers Are Infrastructure'
+    description: |
+      AC_START and AC_COMPLETE are injected by the ac-marker-emit primitive —
+      not manually written in each workflow. Workflows reference the primitive.
+    enforcement: 'P0 — governance check'
+
+  - id: 'WC-006'
+    name: 'Prompts Are Routing Documents'
+    description: |
+      After Workflow Composer refactoring, prompts contain:
+        - Identity (who am I, what modes do I serve)
+        - Intent Mapping (keyword → mode → workflow_ref)
+        - Governance Rules (CORE rules table — reference only)
+        - Response Format (reference to SSOT template)
+      They do NOT contain:
+        - Step-by-step execution sequences
+        - Inline validation logic
+        - Hardcoded convergence loops
+        - Test commands (beyond reference to test tier manifest)
+    enforcement: 'P0 — meta-audit check'
+
+# ============================================================================
+# 3-TIER WORKFLOW HIERARCHY
+# ============================================================================
+tiers:
+  tier_1_primitives:
+    description: 'Atomic, reusable, parameterised steps'
+    location: 'cortex-registry/workflows/templates/primitives/'
+    naming: '{category}/{action-name}.yaml'
+    characteristics:
+      - 'Single responsibility'
+      - 'Fully parameterised (no hardcoded values)'
+      - 'Independently testable'
+      - 'No dependencies on other primitives'
+    catalogue:
+      governance:
+        - holistic-validation-gate.yaml
+        - challenge-gate.yaml
+        - dor-display.yaml
+        - sweep-catalogue-open.yaml
+        - sweep-catalogue-close.yaml
+        - dependency-guard-migration.yaml
+      validation:
+        - detect-fix-rescan-loop.yaml
+        - regression-test.yaml
+        - duplicate-detection.yaml
+        - master-plan-decomposition-check.yaml
+        - css-zero-inline.yaml
+        - dom-validation.yaml
+      execution:
+        - ac-marker-emit.yaml
+        - git-checkpoint.yaml
+        - semantic-edit.yaml
+        - file-extraction.yaml
+        - audit-trace.yaml
+      analysis:
+        - lens-ast-scan.yaml
+        - lens-vision-scan.yaml
+      intelligence:
+        - intelligence-injection.yaml
+
+  tier_2_mode_workflows:
+    description: 'One per execution mode — compose primitives'
+    location: 'cortex-registry/workflows/templates/{category}/'
+    naming: '{mode}-workflow.yaml'
+    characteristics:
+      - 'One per CORTEX execution mode'
+      - 'Compose primitives via template_ref'
+      - 'Declare convergence gates'
+      - 'Contain conditional logic (YAML-declared, not prose)'
+    catalogue:
+      sdlc:
+        - implement-workflow.yaml    # IMPLEMENT mode
+        - fix-workflow.yaml          # FIX mode
+        - implementation-execution.yaml
+      quality:
+        - refactor-workflow.yaml     # REFACTOR mode
+        - refactor-holistic-sweep.yaml
+      audit:
+        - audit-fix-pipeline.yaml    # AUDIT mode
+      maintenance:
+        - vacuum-workflow.yaml       # VACUUM mode
+        - health-check-workflow.yaml # HEALTH mode
+        - health-vacuum-unified-pipeline.yaml
+      governance:
+        - stage0-preflight-workflow.yaml    # STAGE 0 (pre-flight)
+        - meta-audit-workflow.yaml          # META-AUDIT mode
+        - holistic-file-review-gate.yaml
+        - request-execution-plan-gate.yaml
+      debugging:
+        - multi-stack-debug-pipeline.yaml   # DEBUG mode
+      rca:
+        - rca-analysis-workflow.yaml        # RCA mode
+      lifecycle:
+        - digest-workflow.yaml              # DIGEST mode
+        - totalrecall-workflow.yaml         # TOTALRECALL mode
+        - sync-workflow.yaml                # SYNC mode
+        - train-workflow.yaml               # TRAIN mode
+      tdd:
+        - tdd-feature-implementation.yaml
+        - tdd-api-service.yaml
+
+  tier_3_composite_pipelines:
+    description: 'Multi-mode compositions — pipeline of pipelines'
+    location: 'cortex-registry/workflows/templates/{category}/'
+    naming: 'composite-{name}.yaml or {name}-pipeline.yaml'
+    characteristics:
+      - 'Compose multiple mode workflows in sequence'
+      - 'Global convergence gate across all composed workflows'
+      - 'Knowledge context cascades to all referenced templates'
+    catalogue:
+      lifecycle:
+        - composite-execution-pipeline.yaml
+        - master-plan-execution.yaml
+      composites:
+        - composed-feature-*.yaml  # auto-generated by TemplateComposer
+
+# ============================================================================
+# WORKFLOW TEMPLATE SCHEMA
+# ============================================================================
+template_schema:
+  required_fields:
+    - 'id'             # unique template identifier
+    - 'name'           # human-readable name
+    - 'version'        # semver
+    - 'category'       # sdlc|quality|audit|maintenance|governance|debugging|rca|lifecycle|tdd
+    - 'status'         # active|deprecated|planned
+    - 'metadata'       # author, created, modes_served, core_rules
+    - 'steps'          # ordered list of step definitions
+
+  optional_fields:
+    - 'convergence_gate'  # workflow-level convergence loop
+    - 'knowledge_context' # injected domain knowledge
+    - 'scorecard'         # weighted verification scores
+
+  step_schema:
+    required:
+      - 'id'           # unique step identifier within workflow
+    optional:
+      - 'name'         # human-readable step name
+      - 'depends_on'   # list of step IDs that must complete first
+      - 'template_ref' # reference to another template (composition)
+      - 'orchestrator'  # orchestrator class to invoke
+      - 'action'       # action type (mcp_call, command, lens_analysis, conditional, etc.)
+      - 'params'       # parameters passed to the action
+      - 'inputs'       # inputs from previous step outputs
+      - 'outputs'      # named outputs for downstream steps
+      - 'gate'         # success predicate that must pass
+      - 'condition'    # conditional execution (when to skip/run)
+      - 'loop'         # loop configuration (for_each, convergence)
+      - 'on_failure'   # failure handling (abort, warn, retry)
+
+  action_types:
+    - 'mcp_call'           # invoke an MCP tool
+    - 'command'            # run a shell command
+    - 'orchestrator_call'  # invoke an orchestrator method
+    - 'lens_analysis'      # run LENS analysis
+    - 'conditional'        # if/then/else branching
+    - 'user_approval'      # pause for user input
+    - 'display'            # render output (inline only — CORE-002)
+    - 'workflow_ref'       # invoke another workflow template
+    - 'for_each'           # loop over a collection
+    - 'parallel'           # execute sub-steps in parallel
+    - 'check_battery'      # run a batch of checks
+    - 'emit_marker'        # emit AC marker
+    - 'skip'               # no-op (conditional skip)
+    - 'abort'              # halt execution
+
+# ============================================================================
+# INTENT → WORKFLOW ROUTING MAP
+# ============================================================================
+# This is the SSOT for which workflow template handles which intent.
+# Prompts and agents reference this map instead of containing inline logic.
+# ============================================================================
+intent_routing:
+  IMPLEMENT:
+    workflow_ref: 'sdlc/implement-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+
+  FIX:
+    workflow_ref: 'sdlc/fix-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+
+  REFACTOR:
+    workflow_ref: 'quality/refactor-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+
+  AUDIT:
+    workflow_ref: 'audit/audit-fix-pipeline'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-auditor.md'
+
+  VACUUM:
+    workflow_ref: 'maintenance/vacuum-workflow'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-vacuum.md'
+
+  HEALTH:
+    workflow_ref: 'maintenance/health-check-workflow'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-auditor.md'
+
+  DEBUG:
+    workflow_ref: 'debugging/multi-stack-debug-pipeline'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-debugger.md'
+
+  RCA:
+    workflow_ref: 'rca/rca-analysis-workflow'
+    agent: 'cortex-architect.md'
+
+  DIGEST:
+    workflow_ref: 'lifecycle/digest-workflow'
+    agent: 'cortex-digest.md'
+
+  TOTALRECALL:
+    workflow_ref: 'lifecycle/totalrecall-workflow'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-totalrecall.prompt.md'
+
+  SYNC:
+    workflow_ref: 'lifecycle/sync-workflow'
+    agent: 'cortex-sync-agent.md'
+
+  TRAIN:
+    workflow_ref: 'lifecycle/train-workflow'
+    agent: 'cortex-trainer.md'
+
+  DESIGN:
+    workflow_ref: null   # DESIGN does not touch code — no workflow needed
+    pre_gate: 'primitives/governance/challenge-gate'
+    agent: 'cortex-architect.md'
+
+  PLAN:
+    workflow_ref: null   # PLAN does not touch code — no workflow needed
+    agent: 'cortex-phase-resolver.md'
+
+  QUERY:
+    workflow_ref: null   # QUERY does not touch code — no workflow needed
+    agent: 'cortex-interactive.md'
+
+  INVESTIGATE:
+    workflow_ref: null   # INVESTIGATE is read-only analysis
+    agent: 'cortex-architect.md'
+
+  REPHRASE:
+    workflow_ref: null   # REPHRASE is text-only
+    pre_gate: 'governance/stage0-preflight-workflow'
+    agent: null
+
+  GOLDEN_TEST:
+    workflow_ref: 'sdlc/implement-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    agent: 'cortex-executor.md'
+
+  META_AUDIT:
+    workflow_ref: 'governance/meta-audit-workflow'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-meta-auditor.md'
+
+# ============================================================================
+# VALIDATION RULES FOR WORKFLOW TEMPLATES
+# ============================================================================
+validation_rules:
+  - id: 'WC-VAL-001'
+    name: 'Every code-modifying workflow must reference ac-marker-emit'
+    check: 'grep ac-marker-emit in workflow steps'
+    severity: 'P0'
+
+  - id: 'WC-VAL-002'
+    name: 'Every code-modifying workflow must have convergence_gate'
+    check: 'convergence_gate field present'
+    severity: 'P0'
+
+  - id: 'WC-VAL-003'
+    name: 'Every step with code changes must have a gate'
+    check: 'gate field present on all code-modifying steps'
+    severity: 'P1'
+
+  - id: 'WC-VAL-004'
+    name: 'No circular template_ref dependencies'
+    check: 'DAG validation on template_ref graph'
+    severity: 'P0'
+
+  - id: 'WC-VAL-005'
+    name: 'All template_ref targets must exist'
+    check: 'file existence check for all template_ref values'
+    severity: 'P0'
+
+  - id: 'WC-VAL-006'
+    name: 'Prompts must not contain inline step sequences'
+    check: 'No "Step 1:", "Phase 1:", numbered procedural sequences in .github/prompts/'
+    severity: 'P1'
+    description: 'Prompts reference workflow_ref — they do not contain step logic'
