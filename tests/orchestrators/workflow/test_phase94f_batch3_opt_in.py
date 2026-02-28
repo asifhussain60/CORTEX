@@ -196,9 +196,9 @@ class TestTrainerOrchestratorGateway:
         from cortex.orchestrators.intelligence.trainer_orchestrator import TrainerOrchestrator
         assert issubclass(TrainerOrchestrator, WorkflowEnforcementMixin)
 
-    def test_gateway_enabled_is_false(self):
+    def test_gateway_enabled_is_true(self):
         from cortex.orchestrators.intelligence.trainer_orchestrator import TrainerOrchestrator
-        assert TrainerOrchestrator.PHASE90_GATEWAY_ENABLED is False
+        assert TrainerOrchestrator.PHASE90_GATEWAY_ENABLED is True
 
 
 # ---------------------------------------------------------------------------
@@ -404,10 +404,10 @@ class TestSupportVacuumOrchestratorGateway:
         from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
         assert issubclass(VacuumOrchestrator, WorkflowEnforcementMixin)
 
-    def test_gateway_enabled_is_false(self):
+    def test_gateway_enabled_is_true(self):
         from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
-        # support/ adapter — advisory False; health/ VacuumOrchestrator is True
-        assert VacuumOrchestrator.PHASE90_GATEWAY_ENABLED is False
+        # support/ adapter — promoted to True (gateway-enabled)
+        assert VacuumOrchestrator.PHASE90_GATEWAY_ENABLED is True
 
 
 # ---------------------------------------------------------------------------
