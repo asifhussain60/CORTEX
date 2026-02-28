@@ -139,7 +139,7 @@ class WorkflowOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94e — advisory: 5-stage pipeline coordinator; routes before template
     # assignment — self-gating is circular. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, workspace_root: Path) -> None:
         """

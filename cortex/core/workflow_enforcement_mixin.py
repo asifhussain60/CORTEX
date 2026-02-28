@@ -144,6 +144,13 @@ class WorkflowEnforcementMixin:
     # ── Class-level opt-in flag ───────────────────────────────────────────
     PHASE90_GATEWAY_ENABLED: bool = False
 
+    # ── Class-level exempt flag (Phase 96) ────────────────────────────────
+    # Set to True on orchestrators that are permanently exempt from gateway
+    # routing (dispatchers, validators, session managers, git ops, etc.).
+    # When True, the orchestrator does NOT need PHASE90_GATEWAY_ENABLED at all.
+    # This replaces dead PHASE90_GATEWAY_ENABLED = False scaffolding.
+    PHASE90_GATEWAY_EXEMPT: bool = False
+
     # Injected for testing; lazily initialized otherwise
     _gateway: Optional[Any] = None
 

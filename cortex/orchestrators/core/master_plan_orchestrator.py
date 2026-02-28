@@ -145,7 +145,7 @@ class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
 
     # Phase 94e — advisory: plan-management orchestrator; not a primary code-execution
     # entry point. Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, registry_root: Optional[Path] = None) -> None:
         """Initialise the orchestrator and validate the registry structure.

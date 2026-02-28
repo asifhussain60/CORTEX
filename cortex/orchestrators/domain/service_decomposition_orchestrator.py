@@ -38,7 +38,7 @@ class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
 
     # Phase 94e — advisory: analysis tool invoked by planning pipeline; not a
     # primary code-execution entry point. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     #: MCP routing — intents that route to this orchestrator.
     supported_intents: tuple[str, ...] = _SUPPORTED_INTENTS

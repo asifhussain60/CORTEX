@@ -93,7 +93,7 @@ class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
     # Phase 95 — advisory: SDLC dispatcher has its own intent→template resolution
     # (_SDLC_INTENT_MAP). execute_operation receives SDLC-domain intent strings
     # ("ANALYZE", "DESIGN"), not top-level gateway mode strings. Flag stays False.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialise the SDLCWorkflowOrchestrator."""

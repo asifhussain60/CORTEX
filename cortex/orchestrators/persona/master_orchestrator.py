@@ -55,7 +55,7 @@ class MasterOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     # Phase 94f — advisory: persona pipeline coordinator (distinct from core
     # MasterOrchestrator). Formats responses; not a code-execution entry point.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     # Natural language depth triggers
     NL_DEPTH_TRIGGERS = {

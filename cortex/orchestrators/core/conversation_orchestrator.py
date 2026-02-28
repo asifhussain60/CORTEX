@@ -22,7 +22,7 @@ class ConversationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
 
     # Phase 94f — advisory: session state management, not a code-execution entry point.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, timeout_seconds: float = 300.0) -> None:
         """Initialize the conversation orchestrator."""

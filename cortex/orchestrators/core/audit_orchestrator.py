@@ -50,7 +50,7 @@ class AuditOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 90c — must remain False: AuditOrchestrator is invoked BY the
     # audit-fix-pipeline.yaml template; it does not route through the gateway.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize audit orchestrator.

@@ -165,7 +165,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
     # (e.g. "IMPLEMENT"). MasterOrchestrator IS the initiator that resolves mode → gateway;
     # self-gating at execute_operation would break the raw-request entry point.
     # @enforce_gateway intentionally NOT applied here.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize MasterOrchestrator.

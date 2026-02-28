@@ -40,7 +40,7 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """
     # Phase 94f — advisory: SOLID analysis tool; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
     
     def __init__(self, audit_db_path: Optional[Path] = None) -> None:
         """Initialize SOLID orchestrator.

@@ -275,7 +275,7 @@ class DomainOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94e — advisory: domain dispatcher; runs before template resolution.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize orchestrator."""

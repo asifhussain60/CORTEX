@@ -1285,7 +1285,7 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnfor
 
     # Phase 90c — must remain False: EnforcementOrchestrator IS the governance gate.
     # Self-gating would create a circular dependency where the gate gates itself.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, governance_registry: Optional[GovernanceRegistry] = None) -> None:
         """

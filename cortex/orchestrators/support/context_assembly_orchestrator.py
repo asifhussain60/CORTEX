@@ -20,7 +20,7 @@ class ContextAssemblyOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
 
     # Phase 94f — advisory: context assembly utility, not a code-execution entry point.
     # Invoked by intelligence pipeline. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialise ContextAssemblyOrchestrator."""

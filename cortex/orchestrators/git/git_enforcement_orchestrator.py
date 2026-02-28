@@ -297,7 +297,7 @@ class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
 
     # Phase 94e — advisory: IS the pre-commit gate; self-gating is circular.
     # Invoked by GitOrchestrator as Stage 1. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, strict: bool = True) -> None:
         """Initialize EnforcementOrchestrator.

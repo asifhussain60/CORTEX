@@ -94,7 +94,7 @@ class GitPublishOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
 
     # Phase 94f — advisory: downstream git publish step inside git pipeline.
     # Invoked by GitOrchestrator as Stage 3. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(
         self,

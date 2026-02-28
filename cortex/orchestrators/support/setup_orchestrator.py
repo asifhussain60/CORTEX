@@ -84,7 +84,7 @@ class SetupOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
 
     # Phase 94f — advisory: setup utility; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize setup orchestrator."""

@@ -26,7 +26,7 @@ class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
 
     # Phase 94d — advisory: onboarding is invoked via audit-fix-pipeline;
     # gateway must remain False to avoid circular routing.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
         """Scan repository structure and detect tech stack."""

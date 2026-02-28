@@ -21,7 +21,7 @@ class InquiryOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94f — advisory: query/knowledge-base lookup, non-code-touching intent.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialise InquiryOrchestrator."""

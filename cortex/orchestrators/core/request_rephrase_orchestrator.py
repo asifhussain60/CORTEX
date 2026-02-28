@@ -451,7 +451,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
 
     # Phase 94e — advisory: non-code-touching intent (REPHRASE is exempt in
     # _MODE_TEMPLATE_MAP). Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     @staticmethod
     def analyze(request: str) -> RephraseContext:

@@ -109,7 +109,7 @@ class GitOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94d — advisory: git ops run inside the audit-fix-pipeline as a
     # downstream step; self-gating creates a re-entry loop through WorkflowGateway.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(
         self,

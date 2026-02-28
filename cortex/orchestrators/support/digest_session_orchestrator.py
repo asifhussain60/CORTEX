@@ -49,7 +49,7 @@ class DigestSessionOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnf
 
     # Phase 94e — advisory: digest processing, invoked by audit pipeline.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def digest_session(self, file_path: str) -> DigestResult:
         """

@@ -110,7 +110,7 @@ class StateOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94f — advisory: state management layer, not a primary code-execution
     # entry point. Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
     
     def __init__(
         self,

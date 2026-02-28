@@ -111,7 +111,7 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
 
     # Phase 94f — advisory: docs build pipeline, invoked by DIGEST/SYNC intents.
     # Not a primary code-execution entry point. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
     
     def __init__(
         self,

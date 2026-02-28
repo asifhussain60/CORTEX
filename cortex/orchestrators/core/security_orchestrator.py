@@ -259,7 +259,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
 
     # Phase 95 — advisory: execute_operation receives domain-specific names ("scan"),
     # not top-level gateway mode strings. @enforce_gateway applied but flag stays False.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize SecurityOrchestrator."""

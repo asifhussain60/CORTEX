@@ -39,7 +39,7 @@ class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
     _orch_name: str = "PlanRegistrySyncOrchestrator"
     _orch_version: str = "1.0.0"
     # Phase 94f — advisory: registry sync utility; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def sync(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Synchronize the plan registry after phase completion.
@@ -70,7 +70,7 @@ class PhaseCompletionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
     """Orchestrates post-phase-completion sync operations."""
 
     # Phase 94f — advisory: phase completion utility; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def complete_phase(
         self,

@@ -39,7 +39,7 @@ class PhaseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94f — advisory: phase execution sequencer, invoked by MasterPlanOrchestrator.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, cortex_root: Path) -> None:
         """

@@ -80,7 +80,7 @@ class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementM
 
     # Phase 94f — advisory: MCP self-healing/diagnostic; not a code-execution entry
     # point. Invoked by health pipeline. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
     
     def __init__(self) -> None:
         """Initialize orchestrator."""

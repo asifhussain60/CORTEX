@@ -43,7 +43,7 @@ class VacuumOrchestrator(_HealthVacuumOrchestrator):
 
     # Phase 94f — advisory: support/ adapter wraps health/ VacuumOrchestrator (True).
     # Override to False — this adapter is not a primary entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, workspace_root: Path | None = None) -> None:
         """Initialise the VacuumOrchestrator.

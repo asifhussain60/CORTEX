@@ -27,7 +27,7 @@ class BrainHealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
     # Phase 94f — advisory: health monitor, invoked by HealthOrchestrator pipeline.
     # Not a primary code-execution entry point. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize brain health orchestrator.

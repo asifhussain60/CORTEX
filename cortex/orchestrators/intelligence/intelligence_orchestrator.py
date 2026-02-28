@@ -34,7 +34,7 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
 
     # Phase 94e — advisory: intelligence layer, not a primary entry point.
     # Invoked by domain orchestrators. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
     
     def __init__(
         self,

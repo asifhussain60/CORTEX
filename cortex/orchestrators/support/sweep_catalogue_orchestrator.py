@@ -144,7 +144,7 @@ class SweepCatalogueOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementM
 
     # Phase 94e — advisory: catalogue management, invoked by governance pipeline.
     # Self-gating is circular. Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     # Support tier priority (CORE-035 + wiring spec)
     PRIORITY: int = 155

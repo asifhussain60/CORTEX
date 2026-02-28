@@ -580,7 +580,7 @@ class SanitizationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
 
     # Phase 94e — advisory: downstream step inside git pipeline; not a primary
     # code-execution entry point. Gateway routing deferred.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(
         self,

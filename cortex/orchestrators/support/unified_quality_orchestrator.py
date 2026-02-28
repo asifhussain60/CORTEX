@@ -57,7 +57,7 @@ class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin, WorkflowEnf
 
     # Phase 94e — advisory: QA gate; self-gating is circular.
     # Gateway routing deferred until MasterOrchestrator milestone.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize orchestrator with rejection history and gate registry."""

@@ -27,7 +27,7 @@ class LENSVisualizationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforceme
     orchestrator_name = "LENSVisualizationOrchestrator"
     domain = "support"
     # Phase 94f — advisory: visualisation support; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialise LENSVisualizationOrchestrator."""

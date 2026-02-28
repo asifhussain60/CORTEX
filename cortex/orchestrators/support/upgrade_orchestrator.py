@@ -116,7 +116,7 @@ class UpgradeOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
     # Phase 94d — advisory: upgrade operations run inside audit/fix pipelines;
     # self-gating here would create a re-entry loop through WorkflowGateway.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(self) -> None:
         """Initialize UpgradeOrchestrator."""

@@ -134,7 +134,7 @@ class TestClassifierOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementM
     _orch_name = "TestClassifierOrchestrator"
     _orch_version = "1.0.0"
     # Phase 94f — advisory: test classification utility; not a primary code-touching entry point.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def classify(self, module_path: str) -> TestDecision:
         """Classify a module path and return a full TestDecision.

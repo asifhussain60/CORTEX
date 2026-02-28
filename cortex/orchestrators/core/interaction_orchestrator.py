@@ -57,7 +57,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
     # Phase 95 — advisory: Stage 1 execute_operation receives domain-specific operation
     # names ("comprehend"), not top-level gateway mode strings ("IMPLEMENT").
     # @enforce_gateway applied for decorator coverage but flag stays False.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __init__(
         self,
