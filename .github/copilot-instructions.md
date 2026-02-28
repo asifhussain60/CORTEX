@@ -126,6 +126,7 @@ enforcing routing in production (where context is always supplied).
 | SYNC | `lifecycle/sync-workflow.yaml` | — |
 | TRAIN | `lifecycle/train-workflow.yaml` | — |
 | META-AUDIT | `governance/meta-audit-workflow.yaml` | — |
+| **FRONTEND** | **`frontend/html-view-lifecycle.yaml`** | **`primitives/governance/holistic-validation-gate.yaml`** |
 
 ### Universal Primitives (injected into every code-modifying workflow)
 

@@ -493,6 +493,33 @@ def main() -> None:
     if not convergence_drift_files:
         print("   ✅ All code-modifying prompts/agents reference CORE-068")
 
+    # Step 2c: Workflow template routing-coverage check (WC-GAP-001)
+    # Every .yaml under cortex-registry/workflows/templates/ must have at least
+    # one inbound route in workflow-composer-spec.yaml § intent_routing.
+    # Root cause of Phase 89 FRONTEND gap: this check did not exist.
+    print("\n🔗 Step 2c: Workflow template routing-coverage check (WC-GAP-001)...")
+    spec_path = ROOT / "cortex-registry" / "workflows" / "workflow-composer-spec.yaml"
+    templates_root = ROOT / "cortex-registry" / "workflows" / "templates"
+    routing_gaps: list = []
+    if spec_path.exists() and templates_root.exists():
+        spec_text = spec_path.read_text(errors="replace")
+        # Collect all non-primitive, non-composite workflow templates (Tier 2 only)
+        tier2_dirs = [
+            d for d in templates_root.iterdir()
+            if d.is_dir() and d.name not in ("primitives", "composites", "testing", "internal")
+        ]
+        for dir_path in sorted(tier2_dirs):
+            for tmpl in sorted(dir_path.glob("*.yaml")):
+                # Build the workflow_ref key: e.g. "frontend/html-view-lifecycle"
+                ref_key = f"{dir_path.name}/{tmpl.stem}"
+                if ref_key not in spec_text:
+                    routing_gaps.append(ref_key)
+                    print(f"   ⚠️  P1: '{ref_key}' has no inbound intent_routing entry in workflow-composer-spec.yaml")
+    if not routing_gaps:
+        print("   ✅ All Tier 2 workflow templates have inbound intent_routing coverage")
+    else:
+        print(f"   ❌ {len(routing_gaps)} orphaned template(s) — add intent_routing entries to fix")
+
     # Step 3 & 4: Generate files
     if args.dry_run:
         print("\n📝 Step 3/4: [DRY-RUN] Would regenerate copilot-instructions.md")

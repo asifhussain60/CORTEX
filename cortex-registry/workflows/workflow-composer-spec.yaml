@@ -336,6 +336,20 @@ intent_routing:
     convergence: 'primitives/validation/detect-fix-rescan-loop'
     agent: 'cortex-meta-auditor.md'
 
+  # ── FRONTEND intent: covers all HTML/CSS/JS work in cortex-docs/ ─────────
+  # Triggers: "enhance", "redesign", "style", "layout", "card", "html", "css",
+  #           "visual", "page", "section", "glassmorphism", "vision api"
+  # Root cause of Phase 89 gap: this entry was missing, causing all HTML work
+  # to bypass Workflow Composer entirely (detected 2026-02-28, RCA: Five-Whys)
+  FRONTEND:
+    workflow_ref: 'frontend/html-view-lifecycle'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-doc.prompt.md'
+    scope: 'cortex-docs/**'
+    css_rule: 'zero style= attributes (P0); all CSS in external files'
+    vision_api: true   # use lens-vision-scan primitive for screenshot analysis
+
 # ============================================================================
 # VALIDATION RULES FOR WORKFLOW TEMPLATES
 # ============================================================================
