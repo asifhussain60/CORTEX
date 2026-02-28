@@ -219,11 +219,20 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 | **htmlhint** | System | HTML validation (PostRefactorLintGate) |
 | **stylelint** | System | CSS validation (PostRefactorLintGate) |
 | **TemplateComposer** | `cortex/orchestrators/workflow/template_composer.py` | Dynamic primitive composition |
-| **ConvergenceLoopExecutor** | Workflow primitives | CORE-068 detect→fix→rescan loop |
+| **WorkflowGateway** | `cortex/orchestrators/workflow/workflow_gateway.py` | Mandatory pre-execution gate, mode→template, SQLite tracing |
+| **Convergence Loop** | `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml` | CORE-068 detect→fix→rescan (declarative YAML, not code) |
 
-**Routing chain:** `IntentRouter.detect_intent() → WORKFLOW_COMPOSE → WorkflowComplexityRouter → WorkflowComposer.execute_from_template() → ConvergenceLoopExecutor → ToolchainExecutor`
+**Routing chain:** `IntentRouter.detect_intent() → WORKFLOW_COMPOSE → WorkflowGateway.execute_gated() → WorkflowComposer.execute_from_template() → TemplateComposer`
 
 **Convergence mode:** WorkflowComposer supports `convergence_mode=True` which activates the detect→fix→rescan loop (CORE-068) — the composed template runs iteratively until the convergence predicate is satisfied or max cycles (3) are exhausted.
+
+**Live workflow modules (6 after Phase 98 cleanup):**
+- `workflow_gateway.py` — Mandatory pre-execution gate, mode→template resolution, SQLite tracing
+- `workflow_composer.py` — Template execution engine, convergence_mode support
+- `template_composer.py` — Dynamic primitive composition from YAML
+- `template_registry.py` — Template discovery, validation, fallback composition
+- `autonomous_workflow_executor.py` — Autonomous execution support
+- `exec_gateway_impl.py` — Gateway implementation bridge
 
 **Persistence:** `RCAStore` → `.cortex-runtime/traces/rca.db` (SQLite)
 **Output:** Completed `RCAAnalysis` + auto-generated `PreventionRule` (ADVISORY default)
@@ -297,7 +306,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
 | 18 | **Ghost directory detection** — filesystem artifacts with dots in name (`cortex.intelligence/`, `cortex.brain/`) outside canonical structure | `find cortex/ -maxdepth 1 -name "*.*" -type d` | ✅ Delete |
 | 19 | **SQLite activity log health** — `.cortex-runtime/traces/orchestrator-traces.db` schema valid, no orphaned `AC_START` without `AC_COMPLETE`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
-| 20 | **Workflow Composer pipeline health** — WorkflowComposer importable, TemplateComposer functional, ConvergenceLoopExecutor wired, ToolchainExecutor maps ≥8 extensions, template auto-discovery ≥50% coverage (currently 9/96 = 9% — P1 gap), Roslyn CLI compiled (if C# targets present), tree-sitter grammar versions aligned with requirements.txt | `python3 -c "from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer"` + template registry count + toolchain extension map verification | 🟡 Report + remediation plan |
+| 20 | **Workflow Composer pipeline health** — WorkflowGateway importable, WorkflowComposer functional, TemplateComposer wired, all 16 code-touching modes resolve to YAML on disk via `resolve_template(mode, {}, strict=True)`, SQLite `workflow_runs` schema valid | `python3 -c "from cortex.orchestrators.workflow import WorkflowGateway; gw = WorkflowGateway(); gw.resolve_template('IMPLEMENT', {}, strict=True)"` + template count + schema check | 🟡 Report + remediation plan |
 
 ### Wiring Contract Validation (Stage 3)
 
