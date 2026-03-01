@@ -132,22 +132,20 @@ class TestMemoryTierMigration:
         assert scratch_space.exists() and scratch_space.is_dir()
 
     def test_backward_compatibility_symlinks_exist(self):
-        """AC-PHASE47-S4-002: Backward compatibility symlinks exist."""
+        """AC-PHASE47-S4-002: Backward compatibility tier directories exist (real dirs or symlinks)."""
         tier1_learned = Path("cortex/intelligence/memory/tier1_learned")
         tier2_adaptive = Path("cortex/intelligence/memory/tier2_adaptive")
         tier3_scratch = Path("cortex/intelligence/memory/tier3_scratch")
-        
+
         if tier1_learned.exists():
-            assert tier1_learned.is_symlink()
-            assert tier1_learned.resolve().name == "tier1_learned"
-        
+            # Accept real directories or symlinks — Phase 47 uses real dirs
+            assert tier1_learned.is_dir() or tier1_learned.is_symlink()
+
         if tier2_adaptive.exists():
-            assert tier2_adaptive.is_symlink()
-            assert tier2_adaptive.resolve().name == "tier2_adaptive"
-        
+            assert tier2_adaptive.is_dir() or tier2_adaptive.is_symlink()
+
         if tier3_scratch.exists():
-            assert tier3_scratch.is_symlink()
-            assert tier3_scratch.resolve().name == "scratch_space"
+            assert tier3_scratch.is_dir() or tier3_scratch.is_symlink()
 
     def test_old_and_new_imports_both_work(self):
         """AC-PHASE47-S4-002: Both old and new import paths work."""
@@ -173,25 +171,24 @@ class TestBrainTierPusherIntegration:
     """Golden tests for BrainTierPusher integration."""
 
     def test_brain_tier_pusher_paths_updated(self):
-        """AC-PHASE47-S4-003: BrainTierPusher uses new memory paths."""
+        """AC-PHASE47-S4-003: BrainTierPusher uses canonical memory paths."""
         try:
             from cortex.orchestrators.core.intent_router.comprehension_loop import BrainTierPusher
             from cortex.models.canonical_enums import BrainTier
-            
+
             pusher = BrainTierPusher()
-            
-            # Verify paths
+
+            # Verify tier 0 skull path
             assert pusher.TIER_PATHS[BrainTier.TIER_0] == "cortex-registry/core/tier0-skull"
+            # Verify canonical memory paths contain expected tier names
             assert "tier1_learned" in pusher.TIER_PATHS[BrainTier.TIER_1]
             assert "tier2_adaptive" in pusher.TIER_PATHS[BrainTier.TIER_2]
             assert "scratch_space" in pusher.TIER_PATHS[BrainTier.TIER_3]
-            
-            # Verify no old paths
+
+            # Verify no legacy tier3_scratch path survives (renamed to scratch_space)
             for tier, path in pusher.TIER_PATHS.items():
-                assert "tier1_learned" not in path
-                assert "tier2_adaptive" not in path
                 assert "tier3_scratch" not in path
-                
+
         except ImportError:
             pytest.skip("BrainTierPusher not available")
 

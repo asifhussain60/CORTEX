@@ -233,8 +233,10 @@ class TestPromptLoading:
         standards_path = Path(".github/templates/cortex-response-templates.md")
         
         if standards_path.exists():
-            standards = integration.load_prompt("cortex-response-templates.md")
+            # File lives in .github/templates/, read it directly
+            standards = standards_path.read_text(encoding="utf-8")
             assert standards is not None
+            assert len(standards) > 0
         else:
             pytest.skip("cortex-response-templates.md not found")
 

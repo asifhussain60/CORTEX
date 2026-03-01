@@ -1,0 +1,33 @@
+# Phase 47 — Stage 2 Completion Record
+# Memory Tier Architecture Migration
+# AC-PHASE47-S4-004
+
+phase_id: phase-47
+stage: 2
+status: COMPLETE
+completed_date: "2026-02-28"
+title: "Memory Tier Migration — Stage 2: BrainTierPusher Integration"
+
+acceptance_criteria:
+  - id: AC-PHASE47-S2-001
+    description: "BrainTierPusher.TIER_PATHS updated to use new canonical paths"
+    status: CLOSED
+    evidence: "comprehension_loop.py TIER_PATHS maps TIER_1→tier1_learned, TIER_2→tier2_adaptive, TIER_3→scratch_space"
+
+  - id: AC-PHASE47-S2-002
+    description: "Legacy tier3_scratch removed from BrainTierPusher paths"
+    status: CLOSED
+    evidence: "No 'tier3_scratch' in any TIER_PATHS value"
+
+  - id: AC-PHASE47-S2-003
+    description: "BrainTier enum values match canonical path naming"
+    status: CLOSED
+    evidence: "canonical_enums.py BrainTier consistent with TIER_PATHS keys"
+
+sweep_catalogue:
+  - gap: "BrainTierPusher using old tier3_scratch path"
+    status: CLOSED
+  - gap: "TIER_PATHS inconsistent with directory structure"
+    status: CLOSED
+
+notes: "Stage 2 complete. BrainTierPusher wired to canonical memory tier paths."
