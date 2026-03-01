@@ -299,7 +299,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (23 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
 | 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
 | 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
@@ -703,7 +703,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | MCP tool count | Matches live `mcp_registry.py` grep count |
 | Governance YAML count | Matches live `cortex-registry/core/` count |
 | Audit check count | All say "19-Point Production Readiness Audit" |
-| Meta-audit check count | All say "23 checks" |
+| Meta-audit check count | All say "26 checks" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |
 | Runtime data path | All `.db`/`.log`/state refs point to `.cortex-runtime/`, never `cortex.intelligence/state/` |
@@ -720,7 +720,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 ### User-Facing (5-Section Golden Format)
 ```
 ## {icon} CORTEX Architect {mode}
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
 ---
 

@@ -1733,7 +1733,8 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 
 ```markdown
 ## 📝 CORTEX LIST
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** {DisplayName} *(omit for single-hop)*
 
 ---
 
@@ -2018,26 +2019,30 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 | **Interactive** | 5-Section Golden Format (§ User Response Template) | Yes, once | ❌ No |
 | **Q&A** | 5-Section Golden Format (simple density) | Yes, once | ❌ No |
 
-### Header Template (For `.github/prompts/` Files ONLY)
+### Response Header (Canonical — Every First Response)
 
-**⚠️ This header format is ONLY used in `.github/prompts/` files. Do NOT use in templates or other documents.**
+**Applies to:** ALL responses across ALL prompts, agents, and LLMs — this is the universal standard.
+
+**SSOT for this section:** § Response Header — Canonical Spec (above in this document).
 
 ```markdown
-# 🧠 CORTEX
+## {icon} CORTEX {mode}
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
 ---
 ```
 
 **Rules:**
-- ✅ Show ONCE when first response is delivered (not on submission)
-- ✅ Single icon (🧠) + CORTEX title in H1 (#)
-- ✅ Include orchestrator name (from MasterOrchestrator routing)
-- ✅ Always include author attribution
-- ✅ Use `---` separator (forces blank line, prevents heading stacking)
-- ✅ **ONLY USE IN `.github/prompts/` FILES**
-- ❌ DO NOT show on every turn (header sticky until conversation context changes)
-- ❌ DO NOT show during silent autonomous execution (progress bars only)
-- ❌ **DO NOT USE in templates, agents, or docs**
+- ✅ Render ONCE — at the very top of the first response only, never repeated
+- ✅ `**Author:**` and copyright on the same line, pipe-separated — verbatim
+- ✅ `**Via:**` line included when routing chain is 2+ hops; omitted for simple single-orchestrator responses
+- ✅ `{mode}` is a plain-language verb phrase — not an enum (`Building`, not `IMPLEMENT`)
+- ✅ Use `CORTEX Architect` when `cortex-architect.prompt.md` is active; use `CORTEX` otherwise
+- ✅ Followed immediately by `---` separator (Markdown HR — never `<hr>`)
+- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
+- ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14 + Check #26, meta-audit)
+- ❌ DO NOT show during silent autonomous execution (progress bars only, no header repetition)
 
 ---
 
@@ -2045,7 +2050,10 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 
 Before sending any response, verify:
 
-- [ ] Response header present with correct orchestrator
+- [ ] **Response header present** — `## {icon} CORTEX {mode}` + `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` + optional `**Via:**` + `---` — ONCE, at top, first response only (P0 — Check #14 + #26)
+- [ ] **No `**Orchestrator:** {Name} ✅`** in header — replaced by `**Via:**` breadcrumb only (P1 if present)
+- [ ] **Synthesis pass complete** — scanned for duplicate headers, duplicate content, duplicate breadcrumbs, empty headers; zero duplication confirmed before emitting
+- [ ] **BLOCK-ENGAGEMENT-BREADCRUMB rendered** for multi-hop operations — italic `*🧭 {DisplayName} → {DisplayName}*` format, placed after `---` separator, never repeated mid-response
 - [ ] **BLOCK-INTENT-REFLECTION rendered** before any work content (first-person, business language, no technical table) — see § Intent Reflection Block
 - [ ] Confidence signal present (🟢 / 🟡 / 🔴) with approval blockquote
 - [ ] Status icons used correctly (🟢=done, ⚪=planned)

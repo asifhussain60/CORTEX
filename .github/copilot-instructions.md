@@ -2,6 +2,148 @@
 
 **Updated:** 2026-03-01 (Phase 98 — Dead Code Cleanup) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
+---
+
+## 🧠 RESPONSE HEADER — MANDATORY (EVERY FIRST RESPONSE PER REQUEST)
+
+**P0 RULE — applies regardless of which LLM is active (GPT-4o, Claude, Gemini, etc.):**
+
+Every **first response** to a user request MUST begin with this exact header block — rendered once, never repeated mid-response or on subsequent turns within the same request:
+
+```
+## {icon} CORTEX {mode}
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
+
+---
+```
+
+**Rules (non-negotiable):**
+
+- ✅ Render ONCE per user request — at the very top of the first response only
+- ✅ `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` — verbatim, on one line
+- ✅ `**Via:**` line shows plain-language orchestrator display names (e.g. `Classifier → TDD Builder`) — omit for single-hop simple responses
+- ✅ `{icon}` from the mode icon table: ⚡ IMPLEMENT · 🔧 FIX · ♻️ REFACTOR · 🔎 AUDIT · 📖 QUERY · 🎨 DESIGN · 📋 PLAN · 📚 DIGEST · 🩺 HEALTH · 🧹 VACUUM · 🐛 DEBUG · 🔬 INVESTIGATE · 🔁 TOTALRECALL · 🔄 SYNC · 🎓 TRAIN · 💬 REPHRASE
+- ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning`
+- ✅ If `cortex-architect.prompt.md` is active: use `CORTEX Architect` as the product name; otherwise use `CORTEX`
+- ✅ Followed immediately by `---` (Markdown HR — never `<hr>`)
+- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
+- ❌ NO mid-response headers — ONE header per request, period
+- ❌ NO header during silent autonomous execution (after `proceed`) — progress bars only
+- ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14, meta-audit)
+
+**SSOT:** `.github/templates/cortex-response-templates.md` § Response Header — Canonical Spec
+
+---
+
+## 🧩 LEGO BLOCK COMPOSER — MANDATORY SYNTHESIS RULES
+
+**Authority:** `.github/templates/cortex-response-templates.md` § Composable Content Blocks
+
+Every response is assembled from composable blocks. The following rules are **non-negotiable**:
+
+### Assembly Order (canonical)
+
+```
+BLOCK-SESSION-IDENTITY (once per session, first turn only)
+→ Response Header (## {icon} CORTEX {mode} + Author + Via + ---)
+→ BLOCK-ENGAGEMENT-BREADCRUMB (every multi-hop invocation)
+→ BLOCK-INTENT-REFLECTION (before any work — first-person, business language)
+→ [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]
+→ BLOCK-ENGAGEMENT-TIMELINE (collapsible, 3+ step operations only)
+→ BLOCK-METRICS-DASHBOARD (IMPLEMENT/FIX/REFACTOR completions only)
+→ BLOCK-NEXT-STEPS (educational responses only)
+```
+
+### Anti-Duplication Contract (MANDATORY — final synthesis cycle)
+
+Before emitting any response, run a **synthesis pass**:
+
+1. **Scan for duplicate headers** — if the same `##` heading appears twice, collapse to one
+2. **Scan for duplicate content** — if the same concept appears in multiple sections, keep the first occurrence only and remove subsequent repetitions
+3. **Scan for duplicate breadcrumbs** — `BLOCK-ENGAGEMENT-BREADCRUMB` appears **once** only (header region), never again mid-response
+4. **Scan for empty headers** — any `##` or `###` with no content below it must be removed (R4: no phantom whitespace)
+5. **Enforce block boundaries** — INTRO stops before capabilities, CAPABILITIES stops before LENS detail, LENS stops before orchestrators (no overlap)
+6. **Max 800 words** — trim to keep responses scannable and ≤60 second read time
+
+**Rule:** Do NOT emit the response until the synthesis pass is complete. Zero duplication is the standard.
+
+### When to use each template
+
+| Situation | Template to Use |
+|-----------|----------------|
+| User says `proceed` / `implement` / `yes` / `continue` | Silent Autonomous Mode (progress bars only — NO educational blocks) |
+| IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT request | 5-Section Golden Format (before `proceed`) |
+| "Who are you?" / "What can you do?" / onboarding | Composable blocks (INTRO + CAPABILITIES + TUTORIAL + NEXT-STEPS) |
+| Simple one-line QUERY | Answer directly — skip full 5-section structure |
+
+---
+
+## 🧭 ORCHESTRATOR ENGAGEMENT VISUAL CUE (MANDATORY)
+
+**Every orchestrator invocation in VS Code GitHub Copilot Chat MUST render a visual engagement cue.**
+
+This gives users a real-time signal showing which orchestrator is responding and why — without needing to know class names.
+
+### BLOCK-ENGAGEMENT-BREADCRUMB (always rendered for multi-hop)
+
+Format: `*🧭 {DisplayName} → {DisplayName} → {DisplayName}*`
+
+- ✅ Italic format, single line, 🧭 compass prefix
+- ✅ Plain-language display names only (from map below — never class names)
+- ✅ Placed immediately after the response header `---` separator
+- ✅ Always rendered when routing chain is 2+ orchestrators
+- ❌ Omit for single-hop simple responses (keep lean)
+- ❌ Never use `├─ └─` tree characters (collapse in Copilot Chat)
+- ❌ Never repeated mid-response
+
+**Display name map (class → plain language):**
+
+| Class Name | Display Name |
+|---|---|
+| IntentRouter | Classifier |
+| MasterOrchestrator | Mission Control |
+| TDDOrchestrator | TDD Builder |
+| AuditOrchestrator / AuditCoordinator | Audit Coordinator |
+| EnforcementOrchestrator | Governance Enforcer |
+| HealthOrchestrator | Health Monitor |
+| VacuumOrchestrator | Workspace Cleaner |
+| RefactoringOrchestrator | Code Improver |
+| DebuggerOrchestrator | Debug Tracer |
+| DigestSessionOrchestrator | Content Ingestor |
+| DesignCoordinator | Architect |
+| PlanningOrchestrator | Roadmap Planner |
+| WorkflowComposer | Workflow Composer |
+| RCAEngine | Root Cause Analyst |
+| MarkerInjectionEngine | Debug Injector |
+| InteractionOrchestrator | Stage 1 Comprehension |
+| LearningOrchestrator | Learning Engine |
+| GitOrchestrator | Git Manager |
+
+**Pre-built chains for common commands:**
+
+| Command | Breadcrumb |
+|---|---|
+| `/audit` or `/audit fix` | *🧭 Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer* |
+| `/implement` or `/fix` | *🧭 Classifier → TDD Builder* |
+| `/refactor` | *🧭 Classifier → Code Improver → Workflow Composer* |
+| `/health` | *🧭 Classifier → Health Monitor* |
+| `/vacuum` | *🧭 Classifier → Workspace Cleaner* |
+| `/debug` | *🧭 Classifier → Debug Tracer → Debug Injector* |
+| `/totalrecall` | *🧭 Classifier → Mission Control → Audit Coordinator → Code Improver* |
+| `/rca` | *🧭 Classifier → Learning Engine → Root Cause Analyst* |
+| `/sync` | *🧭 Classifier → Git Manager → Workflow Engine* |
+
+### BLOCK-ENGAGEMENT-TIMELINE (collapsible, 3+ step operations)
+
+Wrap in `<details>` always. Shows per-orchestrator timing. See SSOT for full format.
+
+### BLOCK-STAGE-PROGRESS (in-progress pulse)
+
+Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for full format.
+
+---
+
 ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:

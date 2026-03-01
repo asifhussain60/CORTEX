@@ -136,7 +136,7 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 | 10 | **Test-source mirror** — `tests/` diverges from `cortex/` structure | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (23 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
 | 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or wrong product name | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` | ✅ Restore canonical header |
 | 15 | **MCP tool name registry alignment** — tool refs must match `mcp_registry.py`; detect old names surviving after consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 16 | **Knowledge synthesis wiring** — `cortex-registry/knowledge/` YAMLs loadable, no dead `source:` refs | Path resolution on all YAML `source:` fields | ✅ Update paths |

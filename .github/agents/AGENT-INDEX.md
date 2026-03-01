@@ -194,7 +194,7 @@ are resolved or explicitly approved as WONT-FIX.
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
   Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum
-  Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (23 checks)
+  Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (26 checks)
   Stage 7: Auto-Fix confidence >90%           → autonomous remediation
   Stage 8: Re-validate → zero-violation gate  → 0 P0, 0 P1 required
   Stage 9: Tests + AC_COMPLETE                → python3 scripts/run_tests.py preflight
