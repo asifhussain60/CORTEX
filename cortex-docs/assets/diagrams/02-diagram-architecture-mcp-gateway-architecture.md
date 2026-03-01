@@ -1,13 +1,15 @@
 ---
 id: architecture-mcp-gateway
-title: MCP gateway architecture (stdio)
-purpose: Explain how IDE clients invoke CORTEX tools via MCP over stdio.
+title: MCP gateway architecture (stdio + HTTP transport)
+purpose: Explain how IDE clients invoke CORTEX tools via MCP over stdio, and how authenticated HTTP transport (Phase 99) enables secure programmatic access.
 audience:
   - Business Leaders
   - Product Owners
   - Software Developers
 source_of_truth:
   - cortex/mcp/
+  - cortex/mcp/http_transport.py
+  - cortex/secrets/
   - .vscode/settings.json
   - .github/templates/cortex-response-templates.md
 last_verified: 2026-03-01
@@ -45,7 +47,7 @@ response_header_enhancement:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│                            IDE INTEGRATION                                       │
+│                            IDE INTEGRATION (stdio)                               │
 │                                                                                  │
 │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐               │
 │  │    VS Code      │    │     Cursor      │    │ Claude Desktop  │               │
@@ -78,4 +80,22 @@ response_header_enhancement:
 │  │  stdin → JSON parse → tool lookup → validate → orchestrate → stdout        │  │
 │  └─────────────────────────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│          HTTP TRANSPORT — Phase 99 (Secure Programmatic Access)                  │
+│                                                                                  │
+│  External Client ──── HTTPS ───► FastAPI App (cortex/mcp/http_transport.py)     │
+│                        + API Key (X-API-Key header, constant-time validation)    │
+│                              │                                                   │
+│  Public endpoints:           ├── /health          ← no auth required            │
+│                              └── /health/ready    ← no auth required            │
+│                                                                                  │
+│  Authenticated endpoints:    ├── POST /tools/list ← ApiKeyAuthMiddleware         │
+│                              └── POST /tools/call ← ApiKeyAuthMiddleware         │
+│                                              │                                   │
+│                              SecretsManager (cortex/secrets/)                    │
+│                              generate_api_key() · validate_api_key()             │
+│                              revoke_api_key()   · list_api_keys()                │
+└──────────────────────────────────────────────────────────────────────────────────┘
 ```
+

@@ -8,7 +8,7 @@ last_verified: 2026-03-01
 order: 6
 ---
 
-> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 29 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching.
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 29 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
 
 ---
 
@@ -45,8 +45,8 @@ These tools handle intent classification and request lifecycle management — th
 
 | Tool | What It Does |
 |---|---|
-| **cortex_classify** | Classifies a request into one of 28 intent types and returns the routing decision |
-| **cortex_orchestrator** | Routes a request directly to any of the 186 wired orchestrators across all 9 domains |
+| **cortex_classify** | Classifies a request into one of 29 intent types and returns the routing decision |
+| **cortex_orchestrator** | Routes a request directly to any of the 259 wired orchestrators across all 9 domains |
 | **cortex_request_lifecycle** | Executes the complete request lifecycle — classify, plan, execute, validate — with full audit trail |
 | **cortex_challenge** | Generates two or more alternative approaches for a proposed change, with trade-off analysis |
 | **cortex_ask** | Answers educational questions about CORTEX architecture with verification against live code |

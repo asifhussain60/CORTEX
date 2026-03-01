@@ -22,13 +22,13 @@ render: ascii
  │  REPO ROOT                                                                  │
  │                                                                             │
  │  cortex/                          ← Single canonical Python package         │
- │  ├── orchestrators/               ← 186 files across 14 domains            │
+ │  ├── orchestrators/               ← 259 files across 9 domains            │
  │  │   ├── core/                       MasterOrch, IntentRouter, TDD, Enforce │
  │  │   ├── domain/                     Onboarding, Planning, Design           │
  │  │   ├── support/                    Debug, Sweep, Refactoring              │
  │  │   ├── health/                     Health, Vacuum                         │
  │  │   ├── workflow/                   WorkflowComposer, TemplateComposer     │
- │  │   └── ... (14 domains total)                                             │
+ │  │   └── ... (9 domains total)                                              │
  │  ├── mcp/                         ← MCP stdio server + 29 registered tools  │
  │  │   └── tools/                      35 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │

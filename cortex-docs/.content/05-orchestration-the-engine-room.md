@@ -1,14 +1,14 @@
 # Orchestration — The Engine Room
 
 ---
-title: Orchestration — How CORTEX Coordinates 186+ Specialised Engines
+title: Orchestration — How CORTEX Coordinates 259+ Specialised Engines
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
 last_verified: 2026-03-01
 order: 5
 ---
 
-> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 186 specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds.
+> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 259 specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds.
 
 ---
 
@@ -30,7 +30,7 @@ The governance step runs before execution on every orchestrator, every time. The
 
 ## The Architecture — Four Tiers
 
-186 orchestrators are organised into four tiers based on their role in the system.
+259 orchestrators are organised into four tiers based on their role in the system.
 
 ### Core — The Command Layer
 
@@ -39,7 +39,7 @@ The core tier contains 17 orchestrators responsible for coordination, routing, e
 | Orchestrator | What It Does |
 |---|---|
 | **Central Coordinator** | Receives every request, routes to the appropriate specialist, monitors execution, records the complete audit trail |
-| **Request Classifier** | Classifies every incoming request into one of 28 intent types in under 40 milliseconds |
+| **Request Classifier** | Classifies every incoming request into one of 29 intent types in under 40 milliseconds |
 | **Interaction Handler** | Understands the request in context of the current codebase before routing |
 | **Development Engine** | Enforces the three-phase test-driven cycle on every build and fix |
 | **Governance Enforcer** | Coordinates ten specialised agents that check different categories of rules |
@@ -73,9 +73,9 @@ Four dedicated orchestrators handle all interactions with version control: stand
 
 ---
 
-## The 28 Intent Types — Speaking CORTEX's Language
+## The 29 Intent Types — Speaking CORTEX's Language
 
-Every request to CORTEX is classified into one of 28 intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated.
+Every request to CORTEX is classified into one of 29 intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated.
 
 | Category | Intents |
 |---|---|

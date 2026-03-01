@@ -43,7 +43,7 @@ render: ascii
 │  │(intent map) │   │ RED→GRN→RF │   │ (agents)      │   │ Refactor/Plan/... │          │
 │  └─────────────┘   └────────────┘   └───────────────┘   └───────────────────┘          │
 │                                                                                         │
-│  Wired orchestrators: core · domain · support · git                                     │
+│  Wired orchestrators: 259 files · core · domain · support · health · git                                     │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐

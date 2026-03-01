@@ -88,6 +88,8 @@ Beyond application security, CORTEX implements security-oriented resilience patt
 
 **Secret Redaction** — all logging infrastructure runs through a secret redactor that strips credentials and sensitive values before they are written to any log. Sensitive data cannot accidentally appear in debug output.
 
+**MCP API Key Authentication** — the HTTP transport layer for CORTEX's MCP gateway enforces API key authentication on all tool-invocation endpoints. Keys are generated, validated, and revoked through a dedicated secrets management system (`cortex/secrets/`). Validation uses constant-time comparison to prevent timing attacks. Public endpoints (health checks) require no key; all tool calls require a valid key.
+
 ---
 
 ## For Business Leaders

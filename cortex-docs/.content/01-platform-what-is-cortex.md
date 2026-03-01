@@ -40,11 +40,11 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **186+ orchestration engines** | Specialised processing engines across 9 domains — each an expert at one category of engineering work |
+| **259+ orchestration engines** | Specialised processing engines across 9 domains — each an expert at one category of engineering work |
 | **29 IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
 | **32 governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
-| **28 intent types** | CORTEX understands and routes 28 distinct categories of engineering request |
+| **29 intent types** | CORTEX understands and routes 29 distinct categories of engineering request |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated from live analysis |
