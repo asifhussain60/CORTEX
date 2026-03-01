@@ -55,6 +55,5 @@ ENV PYTHONUNBUFFERED=1 \
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python3 -c "import cortex; print(cortex.__version__)" || exit 1
 
-# Expose MCP stdio transport (no port — stdio only)
-# For HTTP gateway, override CMD with cortex.mcp.gateway
+# MCP stdio transport (no port — stdin/stdout for VS Code Copilot)
 CMD ["python3", "-m", "cortex.mcp"]

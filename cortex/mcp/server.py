@@ -3,7 +3,7 @@ MCP Server: Consolidated, Production-Ready Implementation.
 
 This is the SINGLE entry point for ALL CORTEX functionality.
 Implements JSON-RPC 2.0 compliant MCP protocol with:
-- 24 production tools (WAVE-100 consolidation)
+- 43 production tools (39 class-based + 4 function-based)
 - Cross-platform support (macOS, Windows, Linux)
 - Extensible architecture
 - Comprehensive error handling

@@ -3,10 +3,11 @@ Tests for MCP schema generation fix.
 
 Verifies that tool schemas include all required metadata including category.
 
-Tool count updated: Phase 65 added CortexIntelligenceMatrix (intelligence).
-Toolkit Phase 63 added cortex_scan, cortex_batch_transform, cortex_enrich,
-cortex_workflow, cortex_scaffold_files (operations).
-Current live count: 28 registered tools (class-based + function wrappers may vary).
+WAVE-101 consolidation:
+- Removed from PRODUCTION_TOOLS: cortex_check (→ cortex_verify), cortex_total_recall (→ cortex_tools_catalog)
+- Added to PRODUCTION_TOOLS: cortex_scaffold_files, cortex_master_plan, cortex_brain_query
+- cortex_brain_query + cortex_learning now appear in intelligence category
+- Net change: 28 → 30 registered tools
 """
 
 import pytest
@@ -16,15 +17,15 @@ from cortex.mcp.mcp_tool_base import ToolCategory
 
 # Live tool count — updated each time tools are added.
 # Run: python3 -c "from cortex.mcp.mcp_registry import get_registry; print(len(get_registry().to_mcp_schema()))"
-_EXPECTED_TOOL_COUNT = 28
+_EXPECTED_TOOL_COUNT = 30  # WAVE-101: was 28; +3 new (scaffold_files, master_plan, brain_query) -2 removed (check, total_recall) → net +2 → 30
 
-# Expected category distribution (Phase 65 actuals)
+# Expected category distribution — WAVE-101 actuals
 _EXPECTED_DISTRIBUTION = {
     "core": 3,
-    "intelligence": 3,   # cortex_generate_tests, cortex_git, cortex_knowledge
+    "intelligence": 5,   # knowledge, git, generate_tests, brain_query, learning
     "governance": 4,
-    "operations": 9,
-    "utilities": 9,
+    "operations": 11,    # +scaffold_files, +master_plan
+    "utilities": 7,      # -check (merged into verify), -total_recall (merged into tools_catalog)
 }
 
 

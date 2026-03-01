@@ -5,7 +5,10 @@ Provides command-line entry point for running CORTEX MCP server.
 This module enables running the MCP server via: python -m cortex.mcp
 
 Usage:
-    python -m cortex.mcp [--host HOST] [--port PORT]
+    python -m cortex.mcp
+
+Runs the MCP server with stdio transport for VS Code / Visual Studio
+Copilot integration (JSON-RPC 2.0 over stdin/stdout).
 
 CORE-011: All functions have type hints.
 CORE-012: All public APIs have Google-style docstrings.
@@ -36,23 +39,16 @@ def main() -> int:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
-        # WAVE-100: Consolidated MCP server (24 tools)
         from cortex.mcp import MCPServer
 
         logger.info("Initializing CORTEX MCP Server with stdio transport...")
-        logger.info("Using 24 production tools (WAVE-100 consolidation)")
-        
-        # Create server
+
         server = MCPServer()
-        
-        # List available tools
         tools = server.list_tools()
         logger.info(f"MCP Server initialized with {len(tools)} tools")
-        
         logger.info("Starting stdio JSON-RPC transport...")
         logger.info("CORTEX MCP Server ready for Copilot integration")
 
-        # Run stdio server (blocks until terminated)
         server.run_stdio()
         return 0
 

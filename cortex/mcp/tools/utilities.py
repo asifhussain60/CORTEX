@@ -34,32 +34,42 @@ from cortex.mcp.mcp_tool_base import (
 
 class CortexVerify(ConsolidatedTool):
     """
-    Environment and claim verification.
-    
-    Operations:
-    - environment: Verify development environment
-    - claim: Verify claims against implementation
-    - mcp: Verify MCP configuration
+    Unified verification and health-check tool.
+
+    Consolidates cortex_verify (verification) + cortex_check (system checks)
+    into a single tool with a unified operation surface.
+
+    Operations (verification):
+    - environment: Verify development environment setup
+    - claim: Verify a claim against the live implementation
+    - mcp: Verify MCP configuration status
+
+    Operations (health / checks — formerly cortex_check):
+    - dependencies: Detect drift between requirements.txt and installed packages
+    - status: Get status of an ongoing async operation
+    - health: System component health summary
+    - orchestrator_health: Per-orchestrator or all-orchestrator health check
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_verify"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
         return (
-            "Verify CORTEX development environment, claims against implementation, "
-            "and MCP configuration status."
+            "Unified verification and health checks. Verify environment, claims, "
+            "MCP config, dependency drift, operation status, system health, "
+            "and orchestrator health."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -67,47 +77,85 @@ class CortexVerify(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Verify operation: environment, claim, mcp",
+                description=(
+                    "Operation: environment | claim | mcp | "
+                    "dependencies | status | health | orchestrator_health"
+                ),
                 required=True,
-                enum=["environment", "claim", "mcp"],
+                enum=[
+                    "environment", "claim", "mcp",
+                    "dependencies", "status", "health", "orchestrator_health",
+                ],
             ),
             ToolParameter(
                 name="target",
                 type="string",
-                description="Target for verification (claim text, config path)",
+                description="Claim text (for claim op) or config path (for mcp op)",
                 required=False,
             ),
             ToolParameter(
                 name="auto_fix",
                 type="boolean",
-                description="Attempt auto-fix for issues",
+                description="Attempt auto-fix for environment issues",
+                required=False,
+            ),
+            ToolParameter(
+                name="operation_id",
+                type="string",
+                description="Operation ID for status check",
+                required=False,
+            ),
+            ToolParameter(
+                name="orchestrator",
+                type="string",
+                description="Specific orchestrator name for orchestrator_health",
+                required=False,
+            ),
+            ToolParameter(
+                name="parallel",
+                type="boolean",
+                description="Check all orchestrators in parallel (default: true)",
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
-        return ["environment", "claim", "mcp"]
-    
+        return [
+            "environment", "claim", "mcp",
+            "dependencies", "status", "health", "orchestrator_health",
+        ]
+
     async def execute(self, **params) -> ToolResult:
-        """Execute verify operation."""
+        """Execute verify/check operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "environment")
         target = params.get("target")
         auto_fix = params.get("auto_fix", False)
-        
+        operation_id = params.get("operation_id")
+        orchestrator_name = params.get("orchestrator")
+        parallel = params.get("parallel", True)
+
         if operation == "environment":
             return await self._verify_environment(auto_fix)
         elif operation == "claim":
             return await self._verify_claim(target)
         elif operation == "mcp":
             return await self._verify_mcp()
-        
+        elif operation == "dependencies":
+            return await self._check_dependencies()
+        elif operation == "status":
+            return await self._check_status(operation_id)
+        elif operation == "health":
+            return await self._check_health()
+        elif operation == "orchestrator_health":
+            return await self._check_orchestrator_health(orchestrator_name, parallel)
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
     
     async def _verify_environment(self, auto_fix: bool) -> ToolResult:
@@ -174,6 +222,95 @@ class CortexVerify(ConsolidatedTool):
                 "server_version": "1.0",
             },
             metadata={"operation": "mcp"},
+        )
+
+    # ------------------------------------------------------------------
+    # Check operations (absorbed from cortex_check — WAVE-101)
+    # ------------------------------------------------------------------
+
+    async def _check_dependencies(self) -> ToolResult:
+        """Detect drift between requirements.txt and installed packages."""
+        return ToolResult(
+            success=True,
+            data={
+                "requirements_file": "requirements.txt",
+                "drift_detected": False,
+                "missing": [],
+                "outdated": [],
+            },
+            metadata={"operation": "dependencies"},
+        )
+
+    async def _check_status(self, operation_id: Optional[str]) -> ToolResult:
+        """Get status of an ongoing async operation."""
+        return ToolResult(
+            success=True,
+            data={
+                "operation_id": operation_id or "unknown",
+                "status": "completed",
+                "progress": 100,
+            },
+            metadata={"operation": "status"},
+        )
+
+    async def _check_health(self) -> ToolResult:
+        """System component health summary."""
+        return ToolResult(
+            success=True,
+            data={
+                "status": "healthy",
+                "components": {
+                    "mcp_server": "up",
+                    "registry": "up",
+                    "tools": "up",
+                },
+                "uptime": "unknown",
+            },
+            metadata={"operation": "health"},
+        )
+
+    async def _check_orchestrator_health(
+        self, orchestrator_name: Optional[str], parallel: bool
+    ) -> ToolResult:
+        """Check health of one or all orchestrators."""
+        try:
+            from cortex.core.wiring.health_check import HealthCheckExecutor, HealthStatus  # noqa: F401
+        except ImportError:
+            return ToolResult(
+                success=False,
+                error="Health check infrastructure not available (Phase 9+ required)",
+            )
+
+        if orchestrator_name:
+            return ToolResult(
+                success=True,
+                data={
+                    "orchestrator": orchestrator_name,
+                    "status": "healthy",
+                    "checks_performed": ["method_existence", "health_check_execution"],
+                    "last_check": "2026-02-22T00:00:00Z",
+                },
+                metadata={"operation": "orchestrator_health", "target": orchestrator_name},
+            )
+
+        return ToolResult(
+            success=True,
+            data={
+                "total_orchestrators": 22,
+                "healthy": 22,
+                "degraded": 0,
+                "unhealthy": 0,
+                "parallel_mode": parallel,
+                "checks": [
+                    {"name": "MasterOrchestrator", "status": "healthy"},
+                    {"name": "IntentRouter", "status": "healthy"},
+                    {"name": "TDDOrchestrator", "status": "healthy"},
+                    {"name": "EnforcementOrchestrator", "status": "healthy"},
+                    {"name": "RefactoringOrchestrator", "status": "healthy"},
+                    {"name": "PlanningOrchestrator", "status": "healthy"},
+                ],
+            },
+            metadata={"operation": "orchestrator_health", "mode": "all"},
         )
 
 
@@ -373,33 +510,40 @@ class CortexVacuum(ConsolidatedTool):
 
 class CortexToolsCatalog(ConsolidatedTool):
     """
-    Tool discovery and catalog.
-    
-    Operations:
-    - list: List all available tools
+    Tool discovery, catalog, and feature recall.
+
+    Consolidates cortex_tools_catalog (tool discovery) + cortex_total_recall
+    (feature/component discovery) into one tool.
+
+    Operations (catalog):
+    - list: List all registered MCP tools
     - search: Search tools by keyword
     - describe: Get detailed tool description
     - categories: List tool categories
+
+    Operations (recall — formerly cortex_total_recall):
+    - discover: Discover CORTEX features and components
+    - recall: Recall a specific named feature
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_tools_catalog"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
         return (
-            "Discover all MCP tools registered in CORTEX. "
-            "List, search, and get detailed descriptions."
+            "Discover all MCP tools and CORTEX features. List, search, describe tools; "
+            "discover and recall features and components."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -407,14 +551,14 @@ class CortexToolsCatalog(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Catalog operation: list, search, describe, categories",
+                description="Operation: list | search | describe | categories | discover | recall",
                 required=True,
-                enum=["list", "search", "describe", "categories"],
+                enum=["list", "search", "describe", "categories", "discover", "recall"],
             ),
             ToolParameter(
                 name="query",
                 type="string",
-                description="Search query or tool name",
+                description="Search query, tool name, or feature name",
                 required=False,
             ),
             ToolParameter(
@@ -424,27 +568,27 @@ class CortexToolsCatalog(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
-        return ["list", "search", "describe", "categories"]
-    
+        return ["list", "search", "describe", "categories", "discover", "recall"]
+
     async def execute(self, **params) -> ToolResult:
-        """Execute catalog operation."""
+        """Execute catalog or recall operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "list")
         query = params.get("query")
         category = params.get("category")
-        
+
         # Import registry for actual tool data
         from cortex.mcp.mcp_registry import get_registry
         registry = get_registry()
-        
+
         if operation == "list":
             all_metadata = registry.list_all()
             tools = [{"name": m.id, "description": m.description, "category": m.category.value} for m in all_metadata]
@@ -459,7 +603,7 @@ class CortexToolsCatalog(ConsolidatedTool):
                 },
                 metadata={"operation": "list"},
             )
-        
+
         elif operation == "search":
             if not query:
                 return ToolResult(success=False, error="query required for search")
@@ -479,7 +623,7 @@ class CortexToolsCatalog(ConsolidatedTool):
                 },
                 metadata={"operation": "search"},
             )
-        
+
         elif operation == "describe":
             if not query:
                 return ToolResult(success=False, error="tool name required for describe")
@@ -497,106 +641,28 @@ class CortexToolsCatalog(ConsolidatedTool):
                     metadata={"operation": "describe"},
                 )
             return ToolResult(success=False, error=f"Tool not found: {query}")
-        
+
         elif operation == "categories":
             return ToolResult(
                 success=True,
                 data={
                     "categories": [
                         {"name": "CORE", "count": 4},
-                        {"name": "INTELLIGENCE", "count": 3},
+                        {"name": "INTELLIGENCE", "count": 4},
                         {"name": "GOVERNANCE", "count": 3},
-                        {"name": "OPERATIONS", "count": 5},
-                        {"name": "UTILITIES", "count": 9},
+                        {"name": "OPERATIONS", "count": 7},
+                        {"name": "UTILITIES", "count": 7},
                     ],
-                    "total": 24,
+                    "total": 25,
                 },
                 metadata={"operation": "categories"},
             )
-        
-        return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
-
-class CortexTotalRecall(ConsolidatedTool):
-    """
-    Feature discovery and recall.
-    
-    Operations:
-    - discover: Discover CORTEX features
-    - recall: Recall specific feature
-    - search: Search features
-    """
-    
-    @property
-    def name(self) -> str:
-        """Return the name."""
-        return "cortex_total_recall"
-    
-    @property
-    def description(self) -> str:
-        """Return the description."""
-        return (
-            "Discover and recall CORTEX features and components. "
-            "Navigate the full capability surface."
-        )
-    
-    @property
-    def category(self) -> ToolCategory:
-        """Return the category."""
-        return ToolCategory.UTILITIES
-    
-    @property
-    def parameters(self) -> List[ToolParameter]:
-        """Return the parameters."""
-        return [
-            ToolParameter(
-                name="operation",
-                type="string",
-                description="Recall operation: discover, recall, search",
-                required=True,
-                enum=["discover", "recall", "search"],
-            ),
-            ToolParameter(
-                name="feature",
-                type="string",
-                description="Feature name or search query",
-                required=False,
-            ),
-            ToolParameter(
-                name="category",
-                type="string",
-                description="Feature category filter",
-                required=False,
-            ),
-        ]
-    
-    @property
-    def supported_operations(self) -> List[str]:
-        """Return the supported operations."""
-        return ["discover", "recall", "search"]
-    
-    async def execute(self, **params) -> ToolResult:
-        """Execute total recall operation."""
-        # ENFORCEMENT: Validate orchestrator routing
-        _oc = params.get("orchestrator_context")
-        if _oc is not None:
-            validate_orchestrator_context(_oc)
-        
-        operation = params.get("operation", "discover")
-        feature = params.get("feature")
-        category = params.get("category")
-        
-        features = [
-            {"name": "MCP Server", "category": "infrastructure", "status": "active"},
-            {"name": "TDD Orchestrator", "category": "orchestration", "status": "active"},
-            {"name": "LENS Analysis", "category": "intelligence", "status": "active"},
-            {"name": "Governance Engine", "category": "enforcement", "status": "active"},
-            {"name": "Challenge Engine", "category": "validation", "status": "active"},
-        ]
-        
-        if operation == "discover":
-            if category:
-                features = [f for f in features if f["category"] == category]
+        # ------------------------------------------------------------------
+        # Recall operations (absorbed from cortex_total_recall — WAVE-101)
+        # ------------------------------------------------------------------
+        elif operation == "discover":
+            features = self._get_features(category)
             return ToolResult(
                 success=True,
                 data={
@@ -606,38 +672,98 @@ class CortexTotalRecall(ConsolidatedTool):
                 },
                 metadata={"operation": "discover"},
             )
-        
+
         elif operation == "recall":
-            if not feature:
-                return ToolResult(success=False, error="feature name required")
-            matching = [f for f in features if feature.lower() in f["name"].lower()]
+            if not query:
+                return ToolResult(success=False, error="feature name required for recall")
+            matching = [f for f in self._get_features() if query.lower() in f["name"].lower()]
             return ToolResult(
                 success=True,
                 data={
-                    "feature": feature,
+                    "feature": query,
                     "matches": matching,
                 },
                 metadata={"operation": "recall"},
             )
-        
-        elif operation == "search":
-            query = feature or ""
-            matching = [
-                f for f in features
-                if query.lower() in f["name"].lower()
-                or query.lower() in f["category"].lower()
-            ]
-            return ToolResult(
-                success=True,
-                data={
-                    "query": query,
-                    "results": matching,
-                    "total": len(matching),
-                },
-                metadata={"operation": "search"},
-            )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
+
+    @staticmethod
+    def _get_features(category: Optional[str] = None) -> list:
+        """Return known CORTEX features, optionally filtered by category."""
+        features = [
+            {"name": "MCP Server", "category": "infrastructure", "status": "active"},
+            {"name": "TDD Orchestrator", "category": "orchestration", "status": "active"},
+            {"name": "LENS Analysis", "category": "intelligence", "status": "active"},
+            {"name": "Governance Engine", "category": "enforcement", "status": "active"},
+            {"name": "Challenge Engine", "category": "validation", "status": "active"},
+            {"name": "RCA Memory Engine", "category": "intelligence", "status": "active"},
+            {"name": "Debug Pipeline", "category": "operations", "status": "active"},
+            {"name": "Vacuum Orchestrator", "category": "maintenance", "status": "active"},
+        ]
+        if category:
+            features = [f for f in features if f["category"] == category]
+        return features
+
+
+class CortexTotalRecall(ConsolidatedTool):
+    """
+    DEPRECATED — delegated to CortexToolsCatalog (WAVE-101 consolidation).
+
+    cortex_total_recall ops (discover, recall, search) are now served by
+    cortex_tools_catalog.  This class is retained so that existing tests and
+    callers that reference CortexTotalRecall directly continue to work without
+    modification.  The MCP registry no longer exposes a separate
+    cortex_total_recall entry.
+    """
+
+    @property
+    def name(self) -> str:
+        """Return the name."""
+        return "cortex_total_recall"  # legacy alias — registry entry removed
+
+    @property
+    def description(self) -> str:
+        """Return the description."""
+        return "Deprecated alias — use cortex_tools_catalog with discover|recall ops."
+
+    @property
+    def category(self) -> ToolCategory:
+        """Return the category."""
+        return ToolCategory.UTILITIES
+
+    @property
+    def parameters(self) -> List[ToolParameter]:
+        """Return the parameters."""
+        return [
+            ToolParameter(
+                name="operation", type="string", required=True,
+                description="Recall operation: discover, recall, search",
+                enum=["discover", "recall", "search"],
+            ),
+            ToolParameter(name="feature", type="string", required=False,
+                          description="Feature name or search query"),
+            ToolParameter(name="category", type="string", required=False,
+                          description="Feature category filter"),
+        ]
+
+    @property
+    def supported_operations(self) -> List[str]:
+        """Return the supported operations."""
+        return ["discover", "recall", "search"]
+
+    async def execute(self, **params) -> ToolResult:
+        """Delegate to CortexToolsCatalog."""
+        # Map cortex_total_recall params → cortex_tools_catalog params
+        op = params.get("operation", "discover")
+        # "search" op in total_recall uses "feature" as query
+        if op == "search" and "feature" in params and "query" not in params:
+            params = dict(params, query=params["feature"])
+        elif op == "recall" and "feature" in params and "query" not in params:
+            params = dict(params, query=params["feature"])
+        return await CortexToolsCatalog().execute(**params)
+
+
 
 
 class CortexMetrics(ConsolidatedTool):
@@ -761,32 +887,30 @@ class CortexMetrics(ConsolidatedTool):
 
 class CortexCheck(ConsolidatedTool):
     """
-    Dependency and status checks.
-    
-    Operations:
-    - dependencies: Check dependency drift
-    - status: Check operation status
-    - health: Health check
+    DEPRECATED — delegated to CortexVerify (WAVE-101 consolidation).
+
+    cortex_check ops (dependencies, status, health, orchestrator_health) are
+    now served by cortex_verify.  This class is retained purely so that any
+    code that instantiates CortexCheck directly (tests, older callers) still
+    works.  The MCP registry no longer exposes a separate cortex_check entry;
+    all calls route through cortex_verify.
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
-        return "cortex_check"
-    
+        return "cortex_check"  # legacy alias — registry entry removed
+
     @property
     def description(self) -> str:
         """Return the description."""
-        return (
-            "Check dependencies, operation status, and system health. "
-            "Detect drift between requirements and installed packages."
-        )
-    
+        return "Deprecated alias — use cortex_verify with dependencies|status|health|orchestrator_health."
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -798,137 +922,23 @@ class CortexCheck(ConsolidatedTool):
                 required=True,
                 enum=["dependencies", "status", "health", "orchestrator_health"],
             ),
-            ToolParameter(
-                name="operation_id",
-                type="string",
-                description="Operation ID for status check",
-                required=False,
-            ),
-            ToolParameter(
-                name="orchestrator",
-                type="string",
-                description="Specific orchestrator name for health check",
-                required=False,
-            ),
-            ToolParameter(
-                name="parallel",
-                type="boolean",
-                description="Check all orchestrators in parallel (default: true)",
-                required=False,
-            ),
+            ToolParameter(name="operation_id", type="string", required=False,
+                          description="Operation ID for status check"),
+            ToolParameter(name="orchestrator", type="string", required=False,
+                          description="Specific orchestrator name for health check"),
+            ToolParameter(name="parallel", type="boolean", required=False,
+                          description="Check all orchestrators in parallel"),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["dependencies", "status", "health", "orchestrator_health"]
-    
+
     async def execute(self, **params) -> ToolResult:
-        """Execute check operation."""
-        # ENFORCEMENT: Validate orchestrator routing
-        _oc = params.get("orchestrator_context")
-        if _oc is not None:
-            validate_orchestrator_context(_oc)
-        
-        operation = params.get("operation", "health")
-        operation_id = params.get("operation_id")
-        orchestrator_name = params.get("orchestrator")
-        parallel = params.get("parallel", True)
-        
-        if operation == "dependencies":
-            return ToolResult(
-                success=True,
-                data={
-                    "requirements_file": "requirements.txt",
-                    "drift_detected": False,
-                    "missing": [],
-                    "outdated": [],
-                },
-                metadata={"operation": "dependencies"},
-            )
-        
-        elif operation == "status":
-            return ToolResult(
-                success=True,
-                data={
-                    "operation_id": operation_id or "unknown",
-                    "status": "completed",
-                    "progress": 100,
-                },
-                metadata={"operation": "status"},
-            )
-        
-        elif operation == "health":
-            return ToolResult(
-                success=True,
-                data={
-                    "status": "healthy",
-                    "components": {
-                        "mcp_server": "up",
-                        "registry": "up",
-                        "tools": "up",
-                    },
-                    "uptime": "unknown",
-                },
-                metadata={"operation": "health"},
-            )
-        
-        elif operation == "orchestrator_health":
-            return await self._check_orchestrator_health(orchestrator_name, parallel)
-        
-        return ToolResult(success=False, error=f"Unknown operation: {operation}")
-    
-    async def _check_orchestrator_health(
-        self, orchestrator_name: Optional[str], parallel: bool
-    ) -> ToolResult:
-        """
-        Check health of orchestrators.
-        
-        If orchestrator_name is specified, check that one.
-        Otherwise, check all registered orchestrators.
-        """
-        # Import health check infrastructure
-        try:
-            from cortex.core.wiring.health_check import HealthCheckExecutor, HealthStatus
-        except ImportError:
-            return ToolResult(
-                success=False,
-                error="Health check infrastructure not available (Phase 9+ required)",
-            )
-        
-        if orchestrator_name:
-            # Check specific orchestrator
-            return ToolResult(
-                success=True,
-                data={
-                    "orchestrator": orchestrator_name,
-                    "status": "healthy",
-                    "checks_performed": ["method_existence", "health_check_execution"],
-                    "last_check": "2026-02-22T00:00:00Z",
-                },
-                metadata={"operation": "orchestrator_health", "target": orchestrator_name},
-            )
-        
-        # Check all orchestrators
-        return ToolResult(
-            success=True,
-            data={
-                "total_orchestrators": 22,
-                "healthy": 22,
-                "degraded": 0,
-                "unhealthy": 0,
-                "parallel_mode": parallel,
-                "checks": [
-                    {"name": "MasterOrchestrator", "status": "healthy"},
-                    {"name": "IntentRouter", "status": "healthy"},
-                    {"name": "TDDOrchestrator", "status": "healthy"},
-                    {"name": "EnforcementOrchestrator", "status": "healthy"},
-                    {"name": "RefactoringOrchestrator", "status": "healthy"},
-                    {"name": "PlanningOrchestrator", "status": "healthy"},
-                ],
-            },
-            metadata={"operation": "orchestrator_health", "mode": "all"},
-        )
+        """Delegate to CortexVerify."""
+        return await CortexVerify().execute(**params)
+
 
 
 class CortexVision(ConsolidatedTool):

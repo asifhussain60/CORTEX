@@ -1,16 +1,21 @@
 from typing import Any
 """
-CORTEX MCP v2 - Tool Implementations
+CORTEX MCP v3 — Tool Implementations (WAVE-101 consolidation)
 
-36 production tools organized by category:
-- Core (4): process_request, challenge, classify, request_lifecycle
-- Intelligence (4): lens, knowledge, git, generate_tests
-- Governance (4): governance, validate, load, validate_request (Phase 48)
-- Operations (7): debug, refactor, plan, onboard, dashboard, master_plan (Phase 50), scaffold_files (PB-STS-001)
-- Utilities (11): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator,
-                  health_orchestrate, vacuum_orchestrate (Phase 48)
-- Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze (Phase 90)
-- OPJ (1): cortex_query_opj (Phase 52) — Operational Pattern Journal
+30 production tools organized by category:
+- Core (3): challenge, classify, request_lifecycle
+  (CortexProcessRequest deprecated — not registered)
+- Intelligence (5): lens, knowledge, git, generate_tests, brain_query
+  (CortexIntelligenceMatrix removed — abstract method failure)
+- Governance (4): governance, validate, load, validate_request
+- Operations (7): debug, refactor, plan, onboard, dashboard, workflow, scaffold_files
+- Utilities (9): verify (+check ops), ask, vacuum, tools_catalog (+recall ops),
+                 total_recall (alias), metrics, check (alias), vision, orchestrator
+- Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze
+- MasterPlan (1): master_plan
+- GitOrchestrator (1): git_push
+- TestQualityGate (1): score_tests
+- Learning (1): learning
 
 AC_START: AC-WAVE100-S2-006
 AC_START: AC-P90-S7-001
@@ -18,6 +23,7 @@ AC_START: AC-P48-MCP-001
 AC_START: AC-P50-MCP-001
 AC_START: PB-STS-001-RUN-2-SCAFFOLD-TOOL
 AC_START: AC-OPJ-PHASE52-MCP
+AC_START: AC-WAVE101-CONSOLIDATION
 """
 
 # Core tools
@@ -117,25 +123,26 @@ from cortex.mcp.tools.learning_tool import CortexLearning
 
 
 # All tool classes for registration
+# WAVE-101 consolidation: CortexProcessRequest (deprecated) and
+# CortexIntelligenceMatrix (abstract method failure) removed from ALL_TOOLS.
+# Their imports are kept for backward-compat; they are NOT registered.
 ALL_TOOLS = [
-    # Core (4)
-    CortexProcessRequest,
+    # Core (3) — CortexProcessRequest removed (deprecated)
     CortexChallenge,
     CortexClassify,
     CortexRequestLifecycle,
-    # Intelligence (6)
+    # Intelligence (5) — CortexIntelligenceMatrix removed (abstract method failure)
     CortexLens,
     CortexKnowledge,
     CortexGit,
     CortexGenerateTests,  # WAVE-2 Stage 6
-    CortexIntelligenceMatrix,  # Phase 65 — ENH-MATRIX-001
     CortexBrainQuery,  # Phase 66-A — GAP-66-002
     # Governance (4)
     CortexGovernance,
     CortexValidate,
     CortexLoad,
     CortexValidateRequest,  # Phase 48
-    # Operations (6)
+    # Operations (7)
     CortexDebug,
     CortexRefactor,
     CortexPlan,
@@ -143,14 +150,14 @@ ALL_TOOLS = [
     CortexDashboard,
     CortexWorkflow,  # Phase 100 Stage 2
     CortexScaffoldFiles,  # PB-STS-001 Run 2 — GAP-007 resolution
-    # Utilities (9)
+    # Utilities (9) — CortexCheck and CortexTotalRecall kept as delegation aliases
     CortexVerify,
     CortexAsk,
     CortexVacuum,
     CortexToolsCatalog,
-    CortexTotalRecall,
+    CortexTotalRecall,  # delegation alias → CortexToolsCatalog
     CortexMetrics,
-    CortexCheck,
+    CortexCheck,        # delegation alias → CortexVerify
     CortexVision,
     CortexOrchestrator,
     # Toolkit (5) - Phase 90
@@ -301,3 +308,4 @@ __all__ = [
 # AC_COMPLETE: AC-P48-MCP-001 ✅ 2 health-vacuum MCP tools registered
 # AC_COMPLETE: AC-P50-MCP-001 ✅ CortexMasterPlanTool registered
 # AC_COMPLETE: AC-OPJ-PHASE52-MCP ✅ cortex_query_opj registered (MCP tool #26)
+# AC_COMPLETE: AC-WAVE101-CONSOLIDATION ✅ cortex_check→cortex_verify, cortex_total_recall→cortex_tools_catalog

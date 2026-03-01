@@ -215,6 +215,202 @@ rule_mappings:
     business_audience: ["Engineering Leadership", "Product"]
     alignment: "Prevents costly rework through upfront scrutiny"
 
+  CORE-013:
+    business_term: "orchestrator_lifecycle_pattern"
+    principle: "Explicit Error Handling"
+    business_statement: "Every orchestrator follows a consistent lifecycle: setup → govern → execute → teardown. Errors are handled explicitly, never silently swallowed."
+    business_audience: ["Engineering"]
+    alignment: "Ensures predictable system behavior under failure"
+
+  CORE-017:
+    business_term: "strict_governance"
+    principle: "Strict Governance"
+    business_statement: "Governance rules are mandatory, not advisory. Systems enforce compliance automatically rather than relying on manual checks."
+    business_audience: ["Compliance", "Engineering Leadership"]
+    alignment: "Eliminates human error in compliance enforcement"
+
+  CORE-018:
+    business_term: "yaml_first_design"
+    principle: "YAML-First Design"
+    business_statement: "Configuration and rules live in declarative YAML, not scattered in code. Enables non-developer audit and modification."
+    business_audience: ["Architecture", "DevOps"]
+    alignment: "Separates policy from implementation"
+
+  CORE-019:
+    business_term: "route_through_tdd"
+    principle: "Route Through TDD-Master"
+    business_statement: "All code changes flow through TDD orchestration. No ad-hoc code modifications bypass the test-first pipeline."
+    business_audience: ["Engineering", "QA"]
+    alignment: "Guarantees test coverage for every change"
+
+  CORE-020:
+    business_term: "no_markdown_in_brain"
+    principle: "No Markdown in Brain"
+    business_statement: "Intelligence modules produce structured data, not formatted text. Separation of data and presentation."
+    business_audience: ["Architecture", "Engineering"]
+    alignment: "Enables programmatic consumption of intelligence outputs"
+
+  CORE-024:
+    business_term: "mcp_tool_decorator_required"
+    principle: "@mcp_tool Required"
+    business_statement: "All tool interfaces must be formally decorated and registered. No shadow tools or undocumented capabilities."
+    business_audience: ["Architecture", "Security"]
+    alignment: "Complete audit trail of available capabilities"
+
+  CORE-025:
+    business_term: "result_pattern_required"
+    principle: "Result[T] Pattern Required"
+    business_statement: "All operations return typed results with success/failure states. No untyped returns or silent failures."
+    business_audience: ["Engineering"]
+    alignment: "Predictable error handling across all operations"
+
+  CORE-026:
+    business_term: "git_checkpoint_required"
+    principle: "Git Checkpoint Required"
+    business_statement: "Before any code-modifying operation, create a git checkpoint. Enables safe rollback if changes introduce issues."
+    business_audience: ["Engineering", "DevOps"]
+    alignment: "Zero-risk experimentation with guaranteed rollback"
+
+  CORE-029:
+    business_term: "documentation_drift_prevention"
+    principle: "Documentation Drift Prevention"
+    business_statement: "Documentation must stay in sync with code. Automated checks detect drift between docs and implementation."
+    business_audience: ["Engineering", "Technical Writing"]
+    alignment: "Reduces confusion from stale documentation"
+
+  CORE-030:
+    business_term: "implementation_truth_enforcement"
+    principle: "Implementation Truth Enforcement"
+    business_statement: "Code must match its stated purpose. Stubs, dead code, and hollow implementations are detected and flagged."
+    business_audience: ["Engineering", "Architecture"]
+    alignment: "Eliminates false confidence from non-functional code"
+
+  CORE-032:
+    business_term: "mandatory_intent_classification"
+    principle: "Mandatory Intent Classification"
+    business_statement: "Every user request must be classified into an intent type before processing. No unclassified requests proceed."
+    business_audience: ["Product", "Engineering"]
+    alignment: "Ensures appropriate handling for every request type"
+
+  CORE-034:
+    business_term: "mandatory_audit_logging"
+    principle: "Mandatory Audit Logging (Observability)"
+    business_statement: "Every significant operation produces an audit trail entry. Observability is mandatory, not optional."
+    business_audience: ["Compliance", "Security", "DevOps"]
+    alignment: "Complete operational visibility for compliance and debugging"
+
+  CORE-038:
+    business_term: "file_placement_policy"
+    principle: "File Placement Policy"
+    business_statement: "Every file has a designated canonical location. Files found outside their expected location are violations."
+    business_audience: ["Engineering", "Architecture"]
+    alignment: "Predictable project structure for all team members"
+
+  CORE-039:
+    business_term: "md_file_generation_prohibition"
+    principle: "MD File Generation Prohibition"
+    business_statement: "Agents must not generate markdown report files. All output is inline in the conversation. Prevents sprawl."
+    business_audience: ["Engineering"]
+    alignment: "Reduces workspace clutter and eliminates stale artifacts"
+
+  CORE-040:
+    business_term: "documentation_lifecycle_management"
+    principle: "Documentation Lifecycle Management"
+    business_statement: "Documentation has a lifecycle: created → maintained → deprecated → archived. Stale docs are actively removed."
+    business_audience: ["Engineering", "Technical Writing"]
+    alignment: "Keeps knowledge base current and trustworthy"
+
+  CORE-041:
+    business_term: "event_idempotency_required"
+    principle: "Event Idempotency Required"
+    business_statement: "All event handlers must be idempotent. Processing the same event twice produces the same result."
+    business_audience: ["Engineering", "Architecture"]
+    alignment: "Prevents data corruption from retry/replay scenarios"
+
+  CORE-042:
+    business_term: "hierarchical_terminology_standard"
+    principle: "Hierarchical Terminology Standard"
+    business_statement: "Consistent vocabulary across all documentation and code. Terms have defined meanings in a hierarchy."
+    business_audience: ["All Teams"]
+    alignment: "Reduces miscommunication across teams"
+
+  CORE-052:
+    business_term: "holistic_validation_gate_mandatory"
+    principle: "Holistic Validation Gate Mandatory"
+    business_statement: "Before any major operation, conduct a holistic validation across all affected components. No isolated changes."
+    business_audience: ["Engineering Leadership"]
+    alignment: "Prevents cascading failures from narrow-scope changes"
+
+  CORE-053:
+    business_term: "context_crystallization_timeout"
+    principle: "Context Crystallization Layer Timeout Policy"
+    business_statement: "Intelligence operations have timeouts. If analysis exceeds time budget, fallback to cached or degraded results."
+    business_audience: ["Engineering", "Product"]
+    alignment: "Ensures responsiveness even under heavy analysis loads"
+
+  CORE-054:
+    business_term: "mcp_tool_wiring_validation"
+    principle: "MCP Tool Wiring Validation"
+    business_statement: "Every MCP tool must be validated for correct wiring to its backing implementation at startup."
+    business_audience: ["Architecture", "Engineering"]
+    alignment: "Prevents runtime failures from broken tool registration"
+
+  CORE-055:
+    business_term: "golden_test_tier_contract"
+    principle: "Golden Test Tier Contract"
+    business_statement: "Golden tests define acceptance criteria. They must pass before any release. Tier: truth > workflow > response."
+    business_audience: ["QA", "Engineering"]
+    alignment: "Immutable quality bar for releases"
+
+  CORE-064:
+    business_term: "sweep_completeness_contract"
+    principle: "Sweep Completeness Contract"
+    business_statement: "When fixing issues, fix ALL instances across the codebase. No partial fixes that leave the same problem elsewhere."
+    business_audience: ["Engineering", "QA"]
+    alignment: "Eliminates recurring issues from incomplete remediation"
+
+  CORE-065:
+    business_term: "holistic_file_review_contract"
+    principle: "Holistic File Review"
+    business_statement: "Review the full file context when making changes, not just the changed lines. Prevents blind-spot regressions."
+    business_audience: ["Engineering"]
+    alignment: "Reduces regressions from narrow-scope reviews"
+
+  CORE-066:
+    business_term: "response_template_binding"
+    principle: "Response Template Binding"
+    business_statement: "All system responses use composable template blocks from a single source of truth. Consistent user experience."
+    business_audience: ["Product", "Engineering"]
+    alignment: "Unified, predictable response quality"
+
+  CORE-067:
+    business_term: "template_knowledge_genericness"
+    principle: "Template & Knowledge Genericness"
+    business_statement: "Templates and knowledge files are reusable across projects. No hardcoded project-specific details in shared resources."
+    business_audience: ["Architecture", "Product"]
+    alignment: "Enables CORTEX to work across multiple repositories"
+
+  CORE-068:
+    business_term: "universal_convergence_gate"
+    principle: "Universal Convergence Gate"
+    business_statement: "Every code-modifying operation must iterate: detect issues → fix → rescan until clean. No single-pass assumptions."
+    business_audience: ["Engineering", "QA"]
+    alignment: "Guarantees production-ready output through iterative verification"
+
+  AC-PERMANENT-FIX-006:
+    business_term: "challenge_system_wiring"
+    principle: "Challenge System Permanent Wiring"
+    business_statement: "The challenge system is permanently wired into the governance pipeline. Cannot be bypassed or disabled."
+    business_audience: ["Engineering Leadership", "Compliance"]
+    alignment: "Ensures critical review step is always active"
+
+  AC-PERMANENT-FIX-007:
+    business_term: "ac_marker_completeness"
+    principle: "AC Marker Completeness"
+    business_statement: "Every operation start marker must have a matching completion marker. Orphaned markers indicate incomplete operations."
+    business_audience: ["DevOps", "Compliance"]
+    alignment: "Complete audit trail with no missing records"
+
 # ==============================================================================
 # CONVERGENCE PRINCIPLES
 # ==============================================================================

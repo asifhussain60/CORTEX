@@ -1,12 +1,15 @@
 """
 MCP Tool Registry: Production Tool Definitions.
 
-This module defines the COMPLETE set of production tools (28 tools).
+This module defines the COMPLETE set of production tools (30 tools).
 No more, no fewer. Every tool serves a specific business capability.
 
 Tool Count Strategy:
-    - 98 tools (legacy) → 28 tools (v3)
+    - 98 tools (legacy) → 30 tools (v3, WAVE-101 consolidation)
     - Removed deprecated tools: cortex_process_request, cortex_lens
+    - Removed cortex_check (ops absorbed into cortex_verify)
+    - Removed cortex_total_recall (ops absorbed into cortex_tools_catalog)
+    - Added cortex_scaffold_files, cortex_master_plan, cortex_brain_query (formerly orphans)
     - Consolidation by business capability
     - Operation parameters instead of separate tools
     - Removal of dev-only tools
@@ -21,8 +24,11 @@ from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolPar
 
 
 # ============================================================================
-# PRODUCTION TOOL DEFINITIONS (28 Tools)
+# PRODUCTION TOOL DEFINITIONS (30 Tools — WAVE-101 consolidation)
 # Removed: cortex_process_request (deprecated), cortex_lens (deleted per architect spec)
+#          cortex_check (ops merged into cortex_verify)
+#          cortex_total_recall (ops merged into cortex_tools_catalog)
+# Added:   cortex_scaffold_files, cortex_master_plan, cortex_brain_query
 # ============================================================================
 
 PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
@@ -247,17 +253,34 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     },
     
     # =========================================================================
-    # TIER 5: UTILITIES (9 tools - kept separate for clarity)
+    # TIER 5: UTILITIES (8 tools — WAVE-101 consolidation)
+    # Removed: cortex_check (ops absorbed into cortex_verify)
+    #          cortex_total_recall (ops absorbed into cortex_tools_catalog)
+    # Added:   cortex_scaffold_files, cortex_master_plan, cortex_brain_query
     # =========================================================================
     "cortex_verify": {
-        "description": "Verification operations: environment check, claim verification, MCP config.",
+        "description": (
+            "Verification and system checks (consolidated). "
+            "Ops: environment, claim, mcp — plus — dependencies, status, health, orchestrator_health "
+            "(formerly cortex_check)."
+        ),
         "category": ToolCategory.UTILITIES,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["environment", "claim", "mcp"], "description": "Verification type"},
-            {"name": "target", "type": "string", "required": False, "description": "Target for verification (claim text, config path)"},
-            {"name": "auto_fix", "type": "boolean", "required": False, "description": "Attempt auto-fix for issues"},
+            {"name": "operation", "type": "string", "required": True,
+             "enum": ["environment", "claim", "mcp", "dependencies", "status", "health", "orchestrator_health"],
+             "description": "Verification / check operation"},
+            {"name": "target", "type": "string", "required": False,
+             "description": "Target for verification (claim text, config path)"},
+            {"name": "auto_fix", "type": "boolean", "required": False,
+             "description": "Attempt auto-fix for environment issues"},
+            {"name": "operation_id", "type": "string", "required": False,
+             "description": "Operation ID for status check"},
+            {"name": "orchestrator", "type": "string", "required": False,
+             "description": "Specific orchestrator name for health check"},
+            {"name": "parallel", "type": "boolean", "required": False,
+             "description": "Check all orchestrators in parallel (default: true)"},
         ],
-        "operations": ["environment", "claim", "mcp"],
+        "operations": ["environment", "claim", "mcp", "dependencies", "status", "health", "orchestrator_health"],
     },
     "cortex_ask": {
         "description": "Educational queries about CORTEX architecture with truth-based verification.",
@@ -279,24 +302,22 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         "operations": ["scan", "clean", "archive", "verify"],
     },
     "cortex_tools_catalog": {
-        "description": "Discover all available MCP tools with descriptions and parameters.",
+        "description": (
+            "Discover MCP tools and recall CORTEX features (consolidated). "
+            "Catalog ops: list, search, describe, categories. "
+            "Feature recall ops: discover, recall (formerly cortex_total_recall)."
+        ),
         "category": ToolCategory.UTILITIES,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["list", "search", "describe", "categories"], "description": "Catalog operation"},
-            {"name": "query", "type": "string", "required": False, "description": "Search query or tool name"},
-            {"name": "category", "type": "string", "required": False, "enum": ["core", "intelligence", "governance", "operations", "utilities"], "description": "Filter by category"},
+            {"name": "operation", "type": "string", "required": True,
+             "enum": ["list", "search", "describe", "categories", "discover", "recall"],
+             "description": "Catalog or recall operation"},
+            {"name": "query", "type": "string", "required": False,
+             "description": "Search query, tool name, or feature name"},
+            {"name": "category", "type": "string", "required": False,
+             "description": "Filter by category"},
         ],
-        "operations": ["list", "search", "describe", "categories"],
-    },
-    "cortex_total_recall": {
-        "description": "Discover and recall CORTEX features, components, and capabilities.",
-        "category": ToolCategory.UTILITIES,
-        "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["discover", "recall", "search"], "description": "Recall operation"},
-            {"name": "feature", "type": "string", "required": False, "description": "Feature name or search query"},
-            {"name": "category", "type": "string", "required": False, "description": "Feature category filter"},
-        ],
-        "operations": ["discover", "recall", "search"],
+        "operations": ["list", "search", "describe", "categories", "discover", "recall"],
     },
     "cortex_metrics": {
         "description": "Capture and report development metrics.",
@@ -308,16 +329,42 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["capture", "report"],
     },
-    "cortex_check": {
-        "description": "System checks: dependency drift, status check, health check, orchestrator health monitoring.",
-        "category": ToolCategory.UTILITIES,
+    "cortex_scaffold_files": {
+        "description": "File scaffolding operations: write new files from templates, check existence, list scaffolded artefacts.",
+        "category": ToolCategory.OPERATIONS,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["dependencies", "status", "health", "orchestrator_health"], "description": "Check type"},
-            {"name": "operation_id", "type": "string", "required": False, "description": "Operation ID for status check"},
-            {"name": "orchestrator", "type": "string", "required": False, "description": "Specific orchestrator name for health check"},
-            {"name": "parallel", "type": "boolean", "required": False, "description": "Check all orchestrators in parallel (default: true)"},
+            {"name": "operation", "type": "string", "required": True,
+             "enum": ["write", "check", "list"],
+             "description": "Scaffold operation"},
+            {"name": "path", "type": "string", "required": False, "description": "Target file path"},
+            {"name": "content", "type": "string", "required": False, "description": "File content to write"},
+            {"name": "template", "type": "string", "required": False, "description": "Template name to use"},
         ],
-        "operations": ["dependencies", "status", "health", "orchestrator_health"],
+        "operations": ["write", "check", "list"],
+    },
+    "cortex_master_plan": {
+        "description": "Master plan operations: create, query, update, and sync phase planning documents.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "operation", "type": "string", "required": True,
+             "enum": ["create", "query", "update", "sync"],
+             "description": "Plan operation"},
+            {"name": "phase_id", "type": "string", "required": False, "description": "Phase ID to query or update"},
+            {"name": "data", "type": "object", "required": False, "description": "Phase data for create/update"},
+        ],
+        "operations": ["create", "query", "update", "sync"],
+    },
+    "cortex_brain_query": {
+        "description": "CORTEX brain / reinforcement signal operations: query, history, decay, promote.",
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "operation", "type": "string", "required": True,
+             "enum": ["query", "history", "decay", "promote"],
+             "description": "Brain operation"},
+            {"name": "signal_id", "type": "string", "required": False, "description": "Signal or pattern ID"},
+            {"name": "data", "type": "object", "required": False, "description": "Signal payload"},
+        ],
+        "operations": ["query", "history", "decay", "promote"],
     },
     "cortex_vision": {
         "description": "Vision API for UI analysis, URL extraction, and structural mapping.",

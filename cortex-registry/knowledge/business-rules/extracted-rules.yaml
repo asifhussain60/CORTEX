@@ -1,0 +1,53 @@
+# ==============================================================================
+# EXTRACTED BUSINESS RULES — Knowledge Domain
+# ==============================================================================
+# Purpose: Stores business rules extracted by LENS RuleExtractor from
+#          analyzed repositories. Used by business-rules intelligence pipeline.
+# Authority: Phase 84 (GAP-84-05) — Business Rules Pipeline
+# Consumer: cortex/intelligence/lens/ → RuleExtractor
+# ==============================================================================
+
+schema_version: '1.0'
+domain: business-rules
+status: active
+created: '2026-02-28'
+updated: '2026-03-01'
+
+description: |
+  Business rules extracted from analyzed codebases by the LENS RuleExtractor.
+  Each rule captures: the constraint, its source location, confidence score,
+  and categorization (billing, compliance, validation, etc.).
+  
+  Rules are populated automatically during LENS analysis via the
+  cortex/intelligence/lens/ pipeline and persist here for cross-session
+  knowledge synthesis.
+
+# Template for extracted rules — populated by RuleExtractor
+rules: []
+
+# Categories supported by the extraction pipeline
+categories:
+  - billing
+  - invoice
+  - payment
+  - pricing
+  - finance
+  - compliance
+  - constraint
+  - validation
+  - authorization
+  - data-integrity
+
+# Schema for each extracted rule entry
+rule_schema:
+  id: "string — unique rule identifier (auto-generated)"
+  source_file: "string — file path where rule was extracted"
+  source_repo: "string — repository identifier"
+  category: "string — one of the supported categories"
+  description: "string — human-readable rule description"
+  constraint: "string — the actual business constraint"
+  confidence: "float — extraction confidence (0.0–1.0)"
+  extracted_at: "datetime — ISO 8601 timestamp"
+  evidence:
+    code_snippet: "string — relevant code fragment"
+    line_range: "string — line range in source file"

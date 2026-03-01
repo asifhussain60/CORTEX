@@ -24,12 +24,13 @@ phase: 2
 # ==============================================================================
 
 summary:
-  total_core_rules: 39  # 33 existing + 6 new
-  total_governance_rules: 41  # Including AC (After-Care) rules
-  tier_0_skull_rules: 15
-  tier_1_rules: 13
+  total_core_rules: 48  # 41 skull + 7 new (Phase 99+)
+  total_governance_rules: 50  # Including AC (After-Care) rules
+  tier_0_skull_rules: 17
+  tier_1_rules: 14
   tier_2_rules: 11
-  active_rules: 41
+  new_rules_phase_99: 8  # CORE-054..068 + AC-PERMANENT-FIX-006/007
+  active_rules: 50
   deprecated_rules: 0
   compliance_status: "ALIGNED"
 
@@ -144,10 +145,59 @@ tier_0_skull_rules:
     severity: "BLOCKED"
     status: "active"
 
+  - rule_id: "CORE-064"
+    name: "Sweep Completeness Contract"
+    principle: "No partial sweeps — every FIX/REFACTOR/AUDIT exhausts its full issue catalogue"
+    enforcement_orchestrator: "SweepCatalogueOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "CORE-065"
+    name: "Holistic File Review Contract"
+    principle: "Review the full file context, not just the changed lines"
+    enforcement_orchestrator: "EnforcementOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "CORE-066"
+    name: "Response Template Binding"
+    principle: "All responses use composable blocks from SSOT templates"
+    enforcement_orchestrator: "ResponseFormatterOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "CORE-067"
+    name: "Template & Knowledge Genericness Contract"
+    principle: "Templates and knowledge files must be generic, not CORTEX-specific"
+    enforcement_orchestrator: "EnforcementOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "CORE-068"
+    name: "Universal Convergence Gate"
+    principle: "detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles)"
+    enforcement_orchestrator: "WorkflowGateway"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "AC-PERMANENT-FIX-006"
+    name: "Challenge System Permanent Wiring"
+    principle: "Challenge system wired permanently into governance pipeline"
+    enforcement_orchestrator: "ChallengeOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
+  - rule_id: "AC-PERMANENT-FIX-007"
+    name: "AC Marker Completeness"
+    principle: "No orphaned AC_START without matching AC_COMPLETE"
+    enforcement_orchestrator: "EnforcementOrchestrator"
+    severity: "BLOCKED"
+    status: "active"
+
 # ==============================================================================
 # TIER 1 - DOMAIN ENHANCEMENT RULES
 # ==============================================================================
-# These 13 rules extend Tier 0 with domain-specific enhancements.
+# These 14 rules extend Tier 0 with domain-specific enhancements.
 # Inherits all Tier 0 requirements; cannot override Tier 0.
 
 tier_1_rules:
@@ -240,6 +290,20 @@ tier_1_rules:
     category: "portability"
     enforcement_orchestrator: "CCLIntegrationOrchestrator"
     inheritance_from: "CORE-025"
+    status: "active"
+
+  - rule_id: "CORE-054"
+    name: "MCP Tool Wiring Validation"
+    category: "architecture_integrity"
+    enforcement_orchestrator: "MCPAuditingOrchestrator"
+    inheritance_from: "CORE-035, CORE-051"
+    status: "active"
+
+  - rule_id: "CORE-055"
+    name: "Golden Test Tier Contract"
+    category: "quality_gates"
+    enforcement_orchestrator: "TDDOrchestrator"
+    inheritance_from: "CORE-008"
     status: "active"
 
 # ==============================================================================

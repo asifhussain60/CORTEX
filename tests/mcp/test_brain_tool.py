@@ -82,10 +82,12 @@ class TestCortexBrainQueryExists:
             "CortexBrainQuery must be in ALL_TOOLS — update _EXPECTED_TOOL_COUNT in "
             "tests/mcp/test_mcp_schema_fix.py to match."
         )
-        # After adding CortexBrainQuery, tool count must be 38 (was 37)
-        assert len(ALL_TOOLS) == 38, (
-            f"ALL_TOOLS must have 38 tools after CortexBrainQuery addition, got {len(ALL_TOOLS)}. "
-            "Add CortexBrainQuery to ALL_TOOLS in cortex/mcp/tools/__init__.py"
+        # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
+        # CortexIntelligenceMatrix (abstract method failure) removed from ALL_TOOLS.
+        # Net count: 39 → 37.
+        assert len(ALL_TOOLS) == 37, (
+            f"ALL_TOOLS must have 37 tools after WAVE-101 consolidation, got {len(ALL_TOOLS)}. "
+            "Update this count if further tools are added/removed."
         )
 
 
