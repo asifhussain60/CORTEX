@@ -40,7 +40,7 @@ from .file_context import FileContext
 from .models import IssueFile, IssueSeverity, OperationResult, ScanResult, VacuumReport
 from .naming import classify_naming_violation, is_screaming, to_kebab_case, to_snake_case
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 # GAP-57-08: Wire tier1_learned cleaners (Phase 57-f)
@@ -121,6 +121,12 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
     # ─────────────────────────────────────────────────────────────────────
     # STANDALONE PUBLIC API
     # ─────────────────────────────────────────────────────────────────────
+
+    @enforce_gateway
+    def execute_operation(self, operation_name: str, parameters: dict) -> Any:
+        """Gateway entry point — routes VACUUM mode through WorkflowGateway (Phase 90b)."""
+        dry_run: bool = parameters.get("dry_run", False)
+        return self.run(dry_run=dry_run)
 
     def run(self, *, dry_run: bool = False) -> VacuumReport:
         """Standalone mode — quick-scan + execute all cleanup ops.

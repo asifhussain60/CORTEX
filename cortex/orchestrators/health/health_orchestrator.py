@@ -47,7 +47,7 @@ from .naming import (
 )
 from .reports.health_report import HealthReport
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 logger = logging.getLogger(__name__)
@@ -146,6 +146,12 @@ class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
     def list_agents(self) -> List[str]:
         """Return names of all registered agents."""
         return [a.name for a in self.agents]
+
+    @enforce_gateway
+    def execute_operation(self, operation_name: str, parameters: dict) -> Any:
+        """Gateway entry point — routes HEALTH mode through WorkflowGateway (Phase 90b)."""
+        agent_names: Optional[List[str]] = parameters.get("agent_names")
+        return self.run_health_check(agent_names=agent_names)
 
     def run_health_check(
         self,

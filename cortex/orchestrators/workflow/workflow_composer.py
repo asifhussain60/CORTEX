@@ -357,8 +357,8 @@ class WorkflowComposer:
         if self._orchestrator_registry is not None:
             return self._orchestrator_registry(orchestrator_name)
 
-        # Default: attempt to import from cortex.orchestrators
-        # In GREEN phase, this is simplified — full registry integration in REFACTOR
+        # No registry injected — steps using this orchestrator will be skipped.
+        # To wire a registry, pass orchestrator_registry= to WorkflowComposer.__init__().
         return None
 
     def _emit_event(self, event_name: str, data: Dict[str, Any]) -> None:
@@ -368,9 +368,7 @@ class WorkflowComposer:
             event_name: Event name (WORKFLOW_COMPOSED, WORKFLOW_COMPLETE, etc.).
             data: Event payload.
         """
-        # GREEN phase: Simplified implementation
-        # Full EventBus integration in REFACTOR phase
-        logger.info(f"Phase 84 Event: {event_name} - {data}")
+        logger.info(f"Event: {event_name} - {data}")
 
     def register_epilogue(self, hook: Callable[[], Any]) -> None:
         """Register a post-workflow epilogue hook.
