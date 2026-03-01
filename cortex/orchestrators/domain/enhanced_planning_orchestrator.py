@@ -70,6 +70,7 @@ class EnhancedPlanningOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
     PHASE90_GATEWAY_EXEMPT: bool = True
 
     def __new__(cls) -> "EnhancedPlanningOrchestrator":
+        """Enforce singleton pattern — return existing instance if already created."""
         with cls._lock:
             if cls._instance is None:
                 obj = object.__new__(cls)

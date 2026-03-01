@@ -1,8 +1,8 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
+**Updated:** 2026-03-01 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 17 completed, 2 planned | **Tests:** ~17,564 | **Intent Types:** 28
+**Phases:** 21 completed, 2 planned | **Tests:** ~17,735 | **Intent Types:** 28
 
 ---
 
@@ -38,12 +38,12 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrator files | **259** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:6`) |
-| MCP Tools | **29 registered** in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
+| Orchestrator files | **186** across 9 domains (`core:78 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) |
+| MCP Tools | **29 registered** in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **32** in `cortex-registry/core/` |
 | Package | `cortex` (single) |
-| Tests | **~17,564** collected |
-| Intent Types | **27** (see `cortex/models/canonical_enums.py`) |
+| Tests | **~17,735** collected |
+| Intent Types | **28** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
 | RCA Engine | 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |

@@ -44,7 +44,8 @@ class DiagnosticResult:
     fix_successful: bool = False
     fix_log: List[str] = None
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Ensure fix_log is always a list (mutable default guard)."""
         if self.fix_log is None:
             self.fix_log = []
 

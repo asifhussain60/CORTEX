@@ -39,6 +39,7 @@ except ImportError:
     class GovernanceRuleLoader:  # type: ignore[no-redef]
         """Minimal fallback when cortex_intelligence_integration is unavailable."""
         def __init__(self, governance_dir: Optional[Any] = None) -> None:
+            """Initialise the fallback loader with an empty rules cache."""
             self._rules_cache: Dict[str, Dict[str, Any]] = {}
         def get_rule(self, rule_id: str) -> Optional[Dict[str, Any]]:
                 """Return the cached governance rule dict for rule_id, or None if not cached."""

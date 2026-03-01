@@ -36,7 +36,8 @@ class DepthConfig:
     show_code: Union[bool, str]
     metrics: str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Normalise show_code to string form on initialisation."""
         if isinstance(self.show_code, str):
             self.show_code = self.show_code
         else:
@@ -78,7 +79,7 @@ class SessionContext:
         """Check if depth override is still active"""
         return self.depth_override_ttl > 0
 
-    def decrement_override_ttl(self):
+    def decrement_override_ttl(self) -> None:
         """Decrement override TTL (called each turn)"""
         if self.depth_override_ttl > 0:
             self.depth_override_ttl -= 1

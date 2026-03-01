@@ -45,6 +45,7 @@ class CompletionContext:
     metadata: Dict[str, Any] = field(default_factory=dict)
     
     def __str__(self) -> str:
+        """Return a human-readable event string as ``event_type:entity_id``."""
         return f"{self.event_type.value}:{self.entity_id}"
 
 

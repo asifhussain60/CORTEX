@@ -44,6 +44,7 @@ class ExhaustedResult:
     remaining: List[Dict[str, Any]] = field(default_factory=list)
 
     def __repr__(self) -> str:  # pragma: no cover
+        """Return a concise debug string showing ok status and remaining count."""
         if self.ok:
             return "ExhaustedResult(ok=True)"
         return f"ExhaustedResult(ok=False, remaining={len(self.remaining)} items)"

@@ -38,6 +38,7 @@ class MasterOrchestratorInitialiser:
     """
 
     def __init__(self, host: "MasterOrchestrator") -> None:
+        """Bind the initialiser to its host MasterOrchestrator instance."""
         self._h = host
 
     # ------------------------------------------------------------------

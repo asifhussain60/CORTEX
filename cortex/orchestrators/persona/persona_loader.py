@@ -191,7 +191,7 @@ class PersonaLoader:
         """
         return depth_id in self.get_all_depths()
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """
         Clear internal caches (useful for testing or config reloads).
         """

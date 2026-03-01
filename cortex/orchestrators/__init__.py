@@ -38,7 +38,8 @@ class OrchestratorConfig:
     dependencies: List[str] = None
     capabilities: List[str] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Initialise mutable default fields to avoid shared-list bugs."""
         if self.dependencies is None:
             self.dependencies = []
         if self.capabilities is None:

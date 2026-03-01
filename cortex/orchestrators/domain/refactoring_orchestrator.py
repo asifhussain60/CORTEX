@@ -72,6 +72,7 @@ class _AuditEntry:
     current_hash: str = field(default="")
 
     def __post_init__(self) -> None:
+        """Compute the SHA-256 hash chain entry if not already set."""
         if not self.current_hash:
             self.current_hash = hashlib.sha256(
                 f"{self.operation}:{self.msg}:{self.previous_hash}".encode()

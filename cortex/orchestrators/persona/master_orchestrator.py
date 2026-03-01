@@ -30,7 +30,8 @@ class PersonaResult:
     formatted_response: str = ""
     format_rules_applied: List[str] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Ensure format_rules_applied is always a list (mutable default guard)."""
         if self.format_rules_applied is None:
             self.format_rules_applied = []
 
