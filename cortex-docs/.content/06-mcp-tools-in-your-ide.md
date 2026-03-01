@@ -1,0 +1,153 @@
+# Tools in Your IDE — The MCP Gateway
+
+---
+title: MCP Gateway — 29 CORTEX Capabilities Accessible Directly in Your Coding Assistant
+type: explanation
+audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
+last_verified: 2026-03-01
+order: 6
+---
+
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 29 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching.
+
+---
+
+## What the MCP Gateway Is
+
+The Model Context Protocol is a standardised communication layer that connects AI coding assistants to external tools and services. CORTEX implements this protocol as a lightweight process that starts automatically when you open the workspace — the same way language analysis tools start automatically in modern IDEs, requiring no manual intervention.
+
+Once active, every CORTEX capability is available directly in your coding assistant's chat interface. A developer in GitHub Copilot Chat can trigger a full codebase analysis, a governance compliance check, a debugging session, or a repository onboarding — all without leaving the editor or switching to a terminal.
+
+---
+
+## How It Starts — Zero Configuration
+
+CORTEX uses a stdio-based transport, which means the MCP server runs as a process connected to the IDE over standard input and output streams. The IDE spawns the process, communicates through it, and manages its lifecycle — all automatically.
+
+The key properties of this approach:
+
+- **No manual startup** — the server starts when the workspace opens
+- **No exposed network ports** — communication is in-process, not over a network socket
+- **No Docker required** — the development experience requires only Python and the CORTEX repository
+- **Instant availability** — tools are registered and ready within seconds of workspace open
+
+To verify CORTEX is running, a developer simply types `cortex_verify` in Copilot Chat. If CORTEX responds, the gateway is active.
+
+---
+
+## The 29 Registered Tools — Organised by Purpose
+
+All tools are registered in a central tool registry and discovered automatically by the IDE. Calling `cortex_tools_catalog` from your coding assistant returns a live list of all registered tools with descriptions.
+
+### Understanding and Routing
+
+These tools handle intent classification and request lifecycle management — the entry points into CORTEX's orchestration layer.
+
+| Tool | What It Does |
+|---|---|
+| **cortex_classify** | Classifies a request into one of 28 intent types and returns the routing decision |
+| **cortex_orchestrator** | Routes a request directly to any of the 186 wired orchestrators across all 9 domains |
+| **cortex_request_lifecycle** | Executes the complete request lifecycle — classify, plan, execute, validate — with full audit trail |
+| **cortex_challenge** | Generates two or more alternative approaches for a proposed change, with trade-off analysis |
+| **cortex_ask** | Answers educational questions about CORTEX architecture with verification against live code |
+| **cortex_total_recall** | Produces a comprehensive recall of all CORTEX features, components, and architecture |
+| **cortex_tools_catalog** | Lists all registered tools with their categories and descriptions |
+
+### Governance and Compliance
+
+These tools expose the governance layer — rule checking, compliance validation, and dependency management.
+
+| Tool | What It Does |
+|---|---|
+| **cortex_governance** | Executes governance actions — enforcement, blocking, remediation — with audit logging |
+| **cortex_load** | Loads governance rules, audit checklists, execution modes, and response format standards |
+| **cortex_validate** | Checks code or a proposed operation against active governance rules |
+| **cortex_validate_request** | Runs a governance gate check on a request before execution begins |
+| **cortex_check** | Detects drift between declared dependencies and installed packages |
+
+### Intelligence and Code Analysis
+
+These tools expose the intelligence layer — code analysis, semantic operations, and knowledge synthesis.
+
+| Tool | What It Does |
+|---|---|
+| **cortex_refactor** | Performs semantic refactoring across Python, C#, and TypeScript — extract, rename, reorganise |
+| **cortex_vision** | Analyses screenshots using Vision API — identifies UI elements, maps structure, surfaces issues |
+| **cortex_knowledge** | Synthesises knowledge from governance registries and applies it to a specific context |
+| **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis |
+
+### Planning and Audit
+
+These tools connect CORTEX to project planning and repository assessment workflows.
+
+| Tool | What It Does |
+|---|---|
+| **cortex_plan** | Creates structured remediation and project plans from audit findings |
+| **cortex_onboard** | Runs a complete repository analysis — security assessment, architecture mapping, dashboard generation |
+
+### Test Generation
+
+| Tool | What It Does |
+|---|---|
+| **cortex_generate_tests** | Generates failing tests from a feature specification, ready for the implementation phase |
+
+### Diagnostics and Health
+
+| Tool | What It Does |
+|---|---|
+| **cortex_verify** | Verifies MCP gateway health, tool registry, environment, and architectural claims |
+| **cortex_debug** | Captures debug logs, analyses errors, and generates a structured fix plan |
+| **cortex_metrics** | Records and reports development metrics — build cycles, debug sessions, invocations |
+
+### Workflow and Automation
+
+| Tool | What It Does |
+|---|---|
+| **cortex_workflow** | Lists, loads, and executes YAML workflow templates from the template registry |
+| **cortex_enrich** | Adds metadata and context to structured data for downstream processing |
+
+### Maintenance
+
+| Tool | What It Does |
+|---|---|
+| **cortex_vacuum** | Archives stale documentation, removes accumulated sprawl, and cleans root-level clutter |
+
+### Version Control
+
+| Tool | What It Does |
+|---|---|
+| **cortex_git** | Executes git operations — branching, committing, conflict resolution — through the governance-aware git layer |
+
+---
+
+## Extending with Custom Tools
+
+The MCP tool architecture is designed for extension. Adding a new tool requires creating a single file in the tools directory, implementing the tool function using the standard base class, adding type annotations and documentation, and writing a test first. The MCP gateway discovers the new tool automatically on next startup — no registry edits, no configuration changes, no core code modifications.
+
+This means teams can expose their own domain-specific operations as CORTEX tools, making them accessible through the same IDE interface as all built-in capabilities. A custom tool for querying an internal API, running a domain-specific validation, or interacting with a proprietary system can be added in the same way and integrated into workflow templates.
+
+---
+
+## Connecting to Multiple IDEs
+
+CORTEX's MCP gateway is compatible with any tool that supports the Model Context Protocol with stdio transport.
+
+**Visual Studio Code with GitHub Copilot Chat** is the primary integration, with automatic startup configured in the workspace settings file. No additional setup is required once the repository is cloned.
+
+**Cursor** requires a single configuration file in the `.cursor` directory pointing to the CORTEX package. The same auto-start behaviour applies.
+
+**Claude Desktop** requires a similar configuration file in the Claude Desktop configuration directory.
+
+**Custom integrations** are possible for any application that can spawn a subprocess and communicate over standard input and output using JSON-RPC 2.0.
+
+---
+
+## Work Item Integration — Connecting Code to Delivery
+
+CORTEX includes integration with work item management systems through a provider-agnostic protocol. The default integration targets Azure DevOps, but the same interface supports any work item system. Sprint context pulled from work items enriches the intelligence layer's full analysis tier — meaning CORTEX can understand not just what the code does, but what the team is currently working on and why.
+
+When work item integration is active, implementation plans include references to specific work items, evidence of completion is linked to the appropriate tracking items, and delivery metrics flow into reporting dashboards automatically.
+
+---
+
+*Tool catalog verified against live MCP registry · Integration patterns verified against live configuration*
