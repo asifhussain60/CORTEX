@@ -2078,6 +2078,148 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 
 **RCA mode** — add under Analysis:
 - `### Cause Chain` — methodology used (Five-Whys/Fishbone/Fault-Tree/Causal-Chain) + chain table
+
+---
+
+## 🤝 INTERACTION ORCHESTRATOR — PER-MODE RESPONSE TEMPLATES
+
+> **Authority:** InteractionOrchestrator Stage 1 (LENS per-turn comprehension)
+> **Scope:** Templates for the 4 interaction modes produced by InteractionOrchestrator
+> **SSOT:** `cortex/orchestrators/core/interaction_orchestrator.py`
+> **Governance:** CORE-048 (challenge gate mandatory for code-touching requests)
+
+These templates are rendered **inline in VS Code Copilot Chat** — never as files.
+All follow the Copilot Chat rendering rules (§ Copilot Chat Rendering Rules).
+
+---
+
+### BLOCK-INTERACTION-COMPREHENSION
+
+**Trigger:** Every Stage 1 turn with `type == "comprehension"` (non-challenge, LENS complete)
+
+**When to render:** After LENS analysis completes and no challenge was raised.
+Shown before intent classification proceeds to Stage 2+.
+
+```
+**🔬 Stage 1 — LENS Comprehension**
+
+- **Intent detected:** `{intent_type}` (confidence: {confidence}%)
+- **Workspace context:** {lens_status} — {files_analyzed} files scanned
+- **Role context:** {user_role}
+- **Challenge gate:** ✅ Passed — no governance concerns detected
+
+*Routing to Stage 2 → Intent Classification...*
+```
+
+**Rules:**
+- ✅ Rendered as live Markdown (not in a code block)
+- ✅ `intent_type` from `output["intent_type"]` — IMPLEMENT / FIX / REFACTOR / ANALYZE / UNKNOWN
+- ✅ `lens_status` from `output["lens_context"]["status"]` — ok / degraded / lens_unavailable
+- ✅ `user_role` from `output["user_role"]` — developer / architect / security_engineer / etc.
+- ✅ `confidence` from `output["confidence"]` — 0–100 integer (multiply float by 100)
+- ❌ Do not render if `type == "challenge"` — use BLOCK-INTERACTION-CHALLENGE instead
+
+---
+
+### BLOCK-INTERACTION-CHALLENGE
+
+**Trigger:** Every Stage 1 turn with `type == "challenge"` (governance concern detected)
+**Mandatory for:** All code-touching requests (IMPLEMENT / FIX / REFACTOR / DEBUG / AUDIT / TDD)
+**Governance:** CORE-048 — holistic validation gate before any code execution
+
+```
+---
+**⚠️ CORTEX Governance Challenge — Code-Touch Gate**
+
+Before I proceed, I detected a concern in your request:
+
+> **{challenge.category}** ({challenge.severity}) — {challenge.description}
+
+**Suggested mitigation:** {challenge.mitigation}
+
+**Your options:**
+
+- **[Proceed anyway]** — I'll continue with full audit trail logged
+- **[Apply mitigation first]** — I'll address the concern before implementation
+- **[Cancel]** — abandon this operation
+
+*Scope: {affected_scope} | CORE-048 compliance gate active | Turn: {turn_number}*
+
+---
+```
+
+**Rules:**
+- ✅ Rendered as live Markdown with `---` dividers (never in a code block)
+- ✅ `challenge.category` — GOVERNANCE_RISK / BREAKING_CHANGE / TEST_GAP / PERFORMANCE_RISK / HISTORICAL_ISSUE
+- ✅ `challenge.severity` icon mapping: CRITICAL → 🔴 / HIGH → 🟠 / MEDIUM → 🟡 / LOW → 🟢
+- ✅ `affected_scope` — comma-joined list from `challenge.affected_scope` (max 3 items)
+- ✅ User must explicitly choose before Stage 2 executes — no auto-proceed
+- ✅ Audit trail entry with `ac_id` logged regardless of user choice
+- ❌ Do not auto-proceed on CRITICAL challenges — always surface to user
+- ❌ Do not render in autonomous mode (after `proceed`) — challenges are pre-approval only
+
+---
+
+### BLOCK-INTERACTION-DOT-READY (DoR Gate)
+
+**Trigger:** Pre-execution gate before IMPLEMENT / FIX / REFACTOR / AUDIT / TDD
+**When:** After challenge passes, before Stage 2 Intent Classification
+
+```
+**📋 Definition of Ready — {intent_type} Gate**
+
+I've validated the following before proceeding:
+
+1. ✅ LENS analysis complete — {files_analyzed} files in scope
+2. ✅ Challenge gate passed — no P0/P1 governance violations
+3. ✅ Workflow template resolved — `{workflow_template_id}`
+4. ✅ Role context set — `{user_role}`
+5. {tdd_status} TDD gate — {tdd_message}
+
+**Confidence:** {confidence}% | **Proceed?** Type `proceed` to execute or `cancel` to abort.
+```
+
+**Rules:**
+- ✅ Items 1–4 always shown; item 5 shown only for IMPLEMENT/FIX/TDD intents
+- ✅ `tdd_status` — ✅ if tests written first, ⚠️ if no test file found yet
+- ✅ `workflow_template_id` from `output["workflow_template"]["template_id"]`
+- ✅ Followed by `---` HR before response body
+- ❌ Do not render for QUERY / ANALYZE / PLAN / DESIGN intents (non-code-touching)
+
+---
+
+### BLOCK-INTERACTION-ROLE-CONTEXT
+
+**Trigger:** First turn of any session, or when `_user_role` changes
+**When:** Prepended to any BLOCK-INTERACTION-COMPREHENSION on first turn
+
+```
+**👤 Role Context — {user_role}**
+
+I've calibrated LENS intelligence for your role:
+
+| Dimension | {user_role} Focus |
+|-----------|------------------|
+| LENS depth | {lens_depth} |
+| Challenge sensitivity | {challenge_level} |
+| Governance emphasis | {governance_focus} |
+| Workflow template | {preferred_template} |
+```
+
+**Role → Calibration map:**
+
+| Role | LENS Depth | Challenge Level | Governance Focus |
+|------|-----------|----------------|-----------------|
+| `developer` | File-level AST + git | HIGH (test gaps, bare except) | CORE-008, CORE-013 |
+| `architect` | Cross-repo dependency graph | MEDIUM (breaking changes, APIs) | CORE-035, CORE-048 |
+| `security_engineer` | Import chains + eval/exec scan | CRITICAL (all patterns) | CORE-013 + security rules |
+| `tech_lead` | Full LENS + team impact | HIGH (coverage + API breaks) | All CORE rules |
+| `devops` | Config + Dockerfile + CI | MEDIUM (infra-specific) | CORE-002, CORE-028 |
+
+**Rules:**
+- ✅ Render once per session on first turn only (not on every turn — SSOT: Anti-Duplication Contract)
+- ✅ Role inferred from `output["user_role"]`; can be overridden via `_user_role` attribute
+- ❌ Do not re-render on subsequent turns — role is sticky for the session
 - `### Prevention Rule` — auto-generated ADVISORY rule from RCA conclusion
 
 ### LIST/SUMMARY Mode (Concise Response Template)

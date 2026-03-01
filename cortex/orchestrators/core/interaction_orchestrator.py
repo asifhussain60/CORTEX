@@ -63,6 +63,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         self,
         conversation_protocol: Any,
         enable_challenges: bool = False,
+        trace_db_path: Optional[str] = None,
     ) -> None:
         """
         Initialize InteractionOrchestrator.
@@ -70,6 +71,8 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         Args:
             conversation_protocol: ConversationProtocol instance for turn management.
             enable_challenges: Enable challenge generation (AC-PERMANENT-FIX-006).
+            trace_db_path: Override path to SQLite trace DB (for testing; defaults to
+                CORTEX_TRACE_DB env var or .cortex-runtime/traces/orchestrator-traces.db).
         """
         self.orchestrator_id = "interaction"  # For trace logging
         self.conversation_protocol = conversation_protocol
@@ -78,6 +81,21 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         self._audit_trail: List[Dict[str, Any]] = []
         self.logger = EnhancedAuditLogger.instance()
         self._plan_store: Any = None  # Phase 00 D10 — injectable InteractionPlanStore
+        self._user_role: str = "developer"  # G7: role-aware LENS context (default: developer)
+
+        # P2-D: Resolve trace DB path (injectable for testing)
+        _default_db = os.getenv("CORTEX_TRACE_DB", ".cortex-runtime/traces/orchestrator-traces.db")
+        self._trace_db_path: str = trace_db_path if trace_db_path is not None else _default_db
+
+        # G1: Wire ChallengeGenerator for mandatory code-touch governance gate (CORE-048)
+        try:
+            from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
+            self._challenge_gen = ChallengeGenerator()
+        except Exception:
+            self._challenge_gen = None  # graceful degradation
+
+        # P2-D: Ensure challenge_decisions table exists in trace DB
+        self._ensure_challenge_decisions_table()
 
         # Initialize LENSOrchestrator for per-turn analysis
         self.lens_orchestrator = self._init_lens_orchestrator()
@@ -89,6 +107,109 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             plan_store: InteractionPlanStore instance to use for plan lifecycle.
         """
         self._plan_store = plan_store
+
+    # -------------------------------------------------------------------------
+    # P2-D: SQLite challenge_decisions persistence
+    # -------------------------------------------------------------------------
+
+    def _ensure_challenge_decisions_table(self) -> None:
+        """Create challenge_decisions table in trace DB if it does not exist.
+
+        Called once during __init__() so the table is always ready before any
+        turn executes.  Uses CREATE TABLE IF NOT EXISTS — idempotent and safe
+        across singleton / test re-instantiations.
+        """
+        try:
+            db_dir = Path(self._trace_db_path).parent
+            db_dir.mkdir(parents=True, exist_ok=True)
+            with sqlite3.connect(self._trace_db_path, timeout=10.0) as conn:
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS challenge_decisions (
+                        decision_id        TEXT PRIMARY KEY,
+                        timestamp          TEXT NOT NULL,
+                        turn_number        INTEGER NOT NULL,
+                        user_request_hint  TEXT NOT NULL,
+                        challenge_category TEXT,
+                        challenge_severity TEXT,
+                        decision           TEXT NOT NULL,
+                        challenge_description TEXT,
+                        mitigation         TEXT,
+                        session_id         TEXT
+                    )
+                    """
+                )
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_cd_timestamp "
+                    "ON challenge_decisions(timestamp DESC)"
+                )
+                conn.commit()
+        except Exception as e:
+            # Non-fatal — in-memory audit trail is the fallback
+            try:
+                self.logger.log_operation_complete(
+                    ac_id="AC-P2D-TABLE-INIT",
+                    operation="challenge_decisions_table_init",
+                    success=False,
+                    details={"error": str(e)},
+                )
+            except Exception:
+                pass
+
+    def _log_challenge_decision(
+        self,
+        challenge: Dict[str, Any],
+        session_id: str,
+    ) -> None:
+        """Persist a challenge decision to the challenge_decisions SQLite table.
+
+        Args:
+            challenge: The challenge dict returned by _evaluate_challenge()
+                       (keys: category, severity, description, mitigation, …).
+            session_id: Session identifier from the round context.
+        """
+        try:
+            import uuid as _uuid
+
+            decision_id = str(_uuid.uuid4())
+            user_hint = str(challenge.get("user_request", ""))[:100]
+            if not user_hint:
+                user_hint = str(challenge.get("description", ""))[:100]
+
+            with sqlite3.connect(self._trace_db_path, timeout=10.0) as conn:
+                conn.execute(
+                    """
+                    INSERT INTO challenge_decisions
+                        (decision_id, timestamp, turn_number, user_request_hint,
+                         challenge_category, challenge_severity, decision,
+                         challenge_description, mitigation, session_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        decision_id,
+                        datetime.now().isoformat(),
+                        self.turn_number,
+                        user_hint,
+                        str(challenge.get("category", "")),
+                        str(challenge.get("severity", "")),
+                        "surfaced",   # default decision — user has not yet chosen proceed/mitigate/cancel
+                        str(challenge.get("description", ""))[:500],
+                        str(challenge.get("mitigation", ""))[:500],
+                        session_id,
+                    ),
+                )
+                conn.commit()
+        except Exception as e:
+            # Non-fatal — never block a turn on logging failure
+            try:
+                self.logger.log_operation_complete(
+                    ac_id="AC-P2D-LOG-DECISION",
+                    operation="log_challenge_decision",
+                    success=False,
+                    details={"error": str(e)},
+                )
+            except Exception:
+                pass
 
     def _init_lens_orchestrator(self) -> Any:
         """
@@ -236,6 +357,12 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
         Returns:
             Ok with list of audit entries from trace DB.
+
+        Note — P2-C (SQLite flush guarantee):
+            The @trace_orchestrator_action decorator on execute_turn_with_challenge()
+            calls PerOrchestrationTraceWriter.write_trace() which issues conn.commit()
+            after every insert — so every Stage 1 turn is flushed to SQLite immediately.
+            No deferred flush is required here.
         """
         try:
             audit_entries = []
@@ -350,6 +477,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 "turn_number": self.turn_number,
                 "timestamp": datetime.now().isoformat(),
                 "challenge_evaluated": False,
+                "user_role": getattr(self, "_user_role", "developer"),  # G7: role-aware context
             }
 
             # Step 3: Optional challenge evaluation
@@ -361,6 +489,11 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 if challenge_result is not None:
                     output["type"] = "challenge"
                     output["challenge"] = challenge_result
+                    # P2-D: Persist challenge decision to SQLite (CORE-064 completeness)
+                    _session = getattr(round_context, "session_id", "unknown")
+                    _loggable = dict(challenge_result)
+                    _loggable["user_request"] = user_request
+                    self._log_challenge_decision(_loggable, session_id=str(_session))
 
             # Step 3b: Render engagement (Phase 92 — three-tier routing gate)
             try:
@@ -372,6 +505,31 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             except Exception:
                 output["breadcrumb"] = ""
                 output["engagement"] = {"breadcrumb": "", "stage_pulse": None, "timeline": None}
+
+            # Step 3c: G3 — WorkflowGateway delegation for code-touching intents (Phase 90)
+            # Every IMPLEMENT/FIX/REFACTOR turn must pass through the mandatory template gate.
+            _code_intents = {"IMPLEMENT", "FIX", "REFACTOR", "DEBUG", "AUDIT", "TDD"}
+            _detected_intent = self._classify_intent(user_request).upper()
+            if _detected_intent in _code_intents and output.get("type") != "challenge":
+                try:
+                    from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+                    _wf_gateway = WorkflowGateway()
+                    _wf_result = _wf_gateway.execute_gated(
+                        orchestrator_name="InteractionOrchestrator",
+                        mode=_detected_intent,
+                        context={
+                            "user_request": user_request,
+                            "lens_context": lens_context,
+                            "user_role": getattr(self, "_user_role", "developer"),
+                        },
+                    )
+                    output["workflow_template"] = _wf_result
+                except Exception as _wf_err:
+                    # Graceful degradation — never block Stage 1 on gateway failure
+                    output["workflow_template"] = {
+                        "status": "degraded",
+                        "error": str(_wf_err),
+                    }
 
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
@@ -615,23 +773,75 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         pattern_id: Optional[str],
     ) -> Optional[Dict[str, Any]]:
         """
-        Evaluate whether to generate a challenge for the user's request.
+        Evaluate whether to generate a governance challenge for the user's request.
 
-        Checks for disagreement patterns and design concerns that
-        should be surfaced before implementation proceeds.
+        G1+G2: Mandatory governance gate for every code-touching request (CORE-048).
+        Uses ChallengeGenerator to scan code snippets from LENS context for:
+        - CORE-013 violations (bare except)
+        - Dangerous patterns (eval, exec)
+        - Missing docstrings on public APIs
+        - Breaking change risks
+
+        Only code-touching requests are challenged. Non-code requests (explain,
+        what is, show me) are exempt to avoid governance noise.
 
         Args:
-            user_request: User's request.
-            lens_context: LENS analysis context.
+            user_request: User's natural language request.
+            lens_context: LENS analysis context (may contain code_snippet).
             pattern_id: Specific pattern to check, or None for auto-detect.
 
         Returns:
-            Challenge dict if challenge warranted, None otherwise.
+            Challenge dict (with category/severity/description/mitigation) if a
+            governance concern is found, or None if the request is clean/exempt.
         """
-        # Challenge generation is a future enhancement
-        # For now, return None (no challenge) to unblock the pipeline
-        # ChallengeEngine will be wired here when available
-        return None
+        # G2: Only challenge code-touching requests — governance performance rule
+        _CODE_TOUCH_KEYWORDS = {
+            "implement", "fix", "refactor", "create", "build",
+            "add", "modify", "delete", "edit", "update", "change",
+            "rewrite", "migrate", "rename", "remove", "replace",
+        }
+        request_lower = user_request.lower()
+        touches_code = any(kw in request_lower for kw in _CODE_TOUCH_KEYWORDS)
+        if not touches_code:
+            return None  # Non-code request — exempt from challenge gate
+
+        # G1: Use wired ChallengeGenerator (graceful degradation if unavailable)
+        if self._challenge_gen is None:
+            return None
+
+        # Extract code snippet from LENS context for analysis
+        code_snippet = lens_context.get("code_snippet", "")
+        if not code_snippet:
+            # No code to analyse — challenge based on request text only
+            code_snippet = f"# Request: {user_request}\n"
+
+        try:
+            # Run governance analysis (mandatory for all code-touching turns)
+            governance_challenges = self._challenge_gen.analyze_governance(code_snippet)
+
+            # Run coverage analysis if test context available
+            existing_tests = lens_context.get("test_files", [])
+            coverage_challenges = self._challenge_gen.analyze_coverage(
+                code_snippet,
+                context={"existing_tests": existing_tests},
+            )
+
+            all_challenges = governance_challenges + coverage_challenges
+
+            if not all_challenges:
+                return None
+
+            # Return the highest-severity challenge (P0 first)
+            _severity_order = {"CRITICAL": 4, "HIGH": 3, "MEDIUM": 2, "LOW": 1}
+            top_challenge = max(
+                all_challenges,
+                key=lambda c: _severity_order.get(str(c.severity), 0),
+            )
+            return top_challenge.to_dict()
+
+        except Exception:
+            # Graceful degradation — never block Stage 1 on challenge failure
+            return None
 
     # =========================================================================
     # ENH-090: Semantic Block Assembly Integration

@@ -169,6 +169,14 @@ class MasterOrchestratorInitialiser:
             / ".cortex-runtime"
             / "governance.db"
         )
+        # P2-B NOTE: This governance.db is at .cortex-runtime/governance.db (root level),
+        # used exclusively by DatabaseTransactionManager for scaffolder audit logging.
+        # It is DISTINCT from:
+        #   - .cortex-runtime/traces/governance.db  (SharedAuditTrail — cross-repo events)
+        #   - .cortex-runtime/state/cortex_brain/state/governance.db  (LEGACY — dissolved
+        #     cortex/brain/ package; this path is written to by ConversationProtocol/AuditMixin
+        #     but receives 0 rows if cortex_brain is not instantiated. Safe to ignore; it is
+        #     VACUUM'd by refresh_prompt_suite.py --db-cleanup after 30-day retention.)
         h.transaction_manager = DatabaseTransactionManager(str(db_path))
 
         h.standards_resolver = StandardsResolver()

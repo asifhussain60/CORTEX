@@ -1250,13 +1250,20 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
 
             # AC-PERMANENT-FIX-006: Stage 1 - Challenge-driven comprehension
             if not self.interaction_orchestrator:
-                # Fallback: skip challenge system if not initialized
-                self.logger.log_operation_start(
+                # G6: P1 alert — Stage 1 skip is never silent (CORE-048 gate bypassed)
+                self.logger.log_operation_complete(
                     ac_id="AC-PERMANENT-FIX-006-FALLBACK",
-                    operation="SKIP_CHALLENGE_SYSTEM",
-                    details={"reason": "interaction_orchestrator_not_initialized"}
+                    operation="STAGE_1_SKIPPED_P1_ALERT",
+                    success=False,
+                    details={
+                        "reason": "interaction_orchestrator_not_initialized",
+                        "severity": "P1",
+                        "impact": "CORE-048 challenge gate bypassed — code-touching requests unchallenged",
+                        "remediation": "Check ConversationProtocol import in wire_stages(); "
+                                       "run python3 scripts/refresh_prompt_suite.py to validate",
+                    },
                 )
-                # Process directly via execute_operation
+                # Process directly via execute_operation (degraded path)
                 return self.execute_operation(
                     operation_name="process_request",
                     parameters={"request": user_request, "context": context or {}}
