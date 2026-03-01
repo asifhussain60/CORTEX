@@ -63,8 +63,18 @@ BLOCK-SESSION-IDENTITY (once per session, first turn only)
 → [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]
 → BLOCK-ENGAGEMENT-TIMELINE (collapsible, 3+ step operations only)
 → BLOCK-METRICS-DASHBOARD (IMPLEMENT/FIX/REFACTOR completions only)
-→ BLOCK-NEXT-STEPS (educational responses only)
+→ BLOCK-NEXT-STEPS (educational responses only — Immediate + Later bullets, NO proceed content)
+→ BLOCK-PROCEED-GATE  ← work pending: "### ⚡ If you say proceed, I will:" — ALWAYS LAST
+→ BLOCK-COMPLETION-STATE  ← work done: "✅ All work is complete." — ALWAYS LAST
 ```
+
+**CORE-RESP-001 (P0 — non-negotiable):** Every response MUST end with exactly ONE of:
+- `BLOCK-PROCEED-GATE` — when work is pending user confirmation (`### ⚡ If you say \`proceed\`, I will:` + numbered list)
+- `BLOCK-COMPLETION-STATE` — when all work is done (`✅ **All work is complete.**` + confirmation sentence)
+
+Never both. Never neither (for any actionable or completed response). Always the absolute last rendered block. Proceed bullets MUST NOT appear inside `## 🎯 Next Steps` — that section ends at "Later:" bullets. The proceed gate lives exclusively in `BLOCK-PROCEED-GATE`.
+
+**SSOT for both blocks:** `.github/templates/cortex-response-templates.md` § BLOCK-PROCEED-GATE and BLOCK-COMPLETION-STATE
 
 ### Anti-Duplication Contract (MANDATORY — final synthesis cycle)
 

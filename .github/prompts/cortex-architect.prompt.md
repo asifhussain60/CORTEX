@@ -734,12 +734,19 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 ## 🔍 Analysis — {findings, trade-offs, tables}
 ## 💡 Recommendation — {ONE primary, numbered steps}
 ## ⚖️ Benefits & Risks — {comparison table, skip for simple requests}
-## 🎯 Next Steps — {immediate numbered + later bullets}
+## 🎯 Next Steps — {Immediate (numbered) + Later (bullets) ONLY — no proceed content here}
 
-### ⚡ If you type `proceed`, CORTEX will:
-- {Specific action — name exact file/function}
-- {Specific action — test written or command run}
+---
+
+### ⚡ If you say `proceed`, I will:
+1. {Specific action — name exact file/function}
+2. {Specific action — test written or command run}
+3. {Specific action — validation step or commit made}
+
+> Correct anything above before confirming, or type `proceed` to execute.
 ```
+
+> **CORE-RESP-001 (P0):** `### ⚡ If you say proceed, I will:` is ALWAYS the last section — never inside `## 🎯 Next Steps`. When all work is complete instead, replace with `BLOCK-COMPLETION-STATE` (`✅ **All work is complete.**`). Exactly one. Never both. SSOT: `cortex-response-templates.md` § BLOCK-PROCEED-GATE + BLOCK-COMPLETION-STATE.
 
 **Quote selection:** Pick from `BLOCK-QUOTE-LIBRARY` in `cortex-response-templates.md` — match quote `themes` to the user's active intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, etc.). Full theme→intent mapping in the library.
 
@@ -752,7 +759,8 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
-- ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
+- ✅ **CORE-RESP-001 (P0):** Every response ends with exactly ONE closure block — `BLOCK-PROCEED-GATE` (work pending) OR `BLOCK-COMPLETION-STATE` (work done) — always the absolute last element. Never both. Never neither.
+- ✅ `## 🎯 Next Steps` contains only Immediate (numbered) + Later (bullets) — proceed content lives exclusively in `BLOCK-PROCEED-GATE` after `---`, never inside Next Steps
 - ✅ **Templates are composable blocks** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
 - ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
@@ -761,6 +769,7 @@ Progress bar + stage bullet list. See templates SSOT.
 - ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
 - ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the response body — the H2 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
+- ❌ NO proceed bullets inside `## 🎯 Next Steps` — that section ends at "Later:" bullets; proceed gate is always a separate final block
 
 
 ---

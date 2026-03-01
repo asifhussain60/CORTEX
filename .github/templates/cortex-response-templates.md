@@ -285,17 +285,19 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 - {Deferred optimization}
 - {Future enhancement}
 
-### ⚡ If you type `proceed`, CORTEX will:
+---
 
-- {Action 1 — specific file, function, or system being changed}
-- {Action 2 — test written or command run}
-- {Action 3 — validation step or commit made}
-- {Action 4 — any follow-on orchestrator invoked, if applicable}
+### ⚡ If you say `proceed`, I will:
 
-> Type `proceed` to execute this plan, or correct anything above before confirming.
+1. {Specific action — exact file, function, or command being touched}
+2. {Specific action — test written or gate run}
+3. {Specific action — validation step or commit made}
+4. {Specific action — any follow-on orchestrator invoked, if applicable}
 
-> **Confidence:** {High · Medium · Low} · Based on {evidence summary}
+> Correct anything above before confirming, or type `proceed` to execute.
 ```
+
+> **Rule (CORE-RESP-001 — P0):** The `### ⚡ If you say proceed, I will:` block MUST appear at the very end of every non-autonomous response where work is pending. When work is fully complete, replace it with `BLOCK-COMPLETION-STATE` instead. NEVER both. NEVER neither. NEVER mid-response. See `BLOCK-PROCEED-GATE` and `BLOCK-COMPLETION-STATE` definitions below.
 
 ### Section Rules
 
@@ -305,7 +307,8 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 | **Analysis** | ✅ Always | 200 words | Tables for findings + alternatives |
 | **Recommendation** | ✅ Always | 150 words | ONE primary recommendation, numbered steps |
 | **Benefits & Risks** | 🟡 Medium+ | 1 table | 4-column comparison — skip for simple requests |
-| **Next Steps** | ✅ Always | 150 words | Immediate (numbered) + Later (bullets) + `proceed` execution plan (≤5 bullets) |
+| **Next Steps** | ✅ Always | 150 words | Immediate (numbered) + Later (bullets) only — no proceed bullets here |
+| **BLOCK-PROCEED-GATE** *or* **BLOCK-COMPLETION-STATE** | ✅ Always — exactly one | ≤5 numbered items | LAST block in every response — never mid-response, never both, never neither |
 
 ### H3 Sub-Sections (Optional Depth)
 
@@ -356,43 +359,126 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 | ❌ Repeated information across sections | Cognitive overload | Each section adds NEW info only |
 | ❌ Generic stage names | No strategic meaning | Meaningful names always |
 | ❌ Log dumps or inventories | Not executive-ready | Themed findings, highest-impact per theme |
-| ❌ Ending with open questions | Leaves user uncertain | End with closure + proceed option |
+| ❌ Ending with open questions | Leaves user uncertain | End with `BLOCK-PROCEED-GATE` or `BLOCK-COMPLETION-STATE` |
 | ❌ `├─ └─` box-drawing tree characters | Collapse into one line in Copilot Chat | Use `- ✅` / `- 🔵` / `- ⚪` / `- 🔴` Markdown bullet lists |
-| ❌ Vague `proceed` bullets ("make changes") | User can't spot mistakes | Name exact file/function/orchestrator per bullet |
-| ❌ Omitting `proceed` plan for actionable requests | User executes blind | Always show execution plan before asking for `proceed` |
+| ❌ Vague proceed bullets ("make changes") | User can't spot mistakes | Name exact file/function/orchestrator per bullet |
+| ❌ Omitting closure block for actionable requests | User executes blind | Always end with `BLOCK-PROCEED-GATE` (pending) or `BLOCK-COMPLETION-STATE` (done) |
+| ❌ Proceed bullets inside `## 🎯 Next Steps` | Duplication — Next Steps and the proceed gate are separate sections | Move proceed bullets to `BLOCK-PROCEED-GATE` as the final block |
+| ❌ Both `BLOCK-PROCEED-GATE` and `BLOCK-COMPLETION-STATE` in same response | Binary state — work is either pending or done | Use exactly one |
 
-### ⚡ Execution Plan Spec (Next Steps → `proceed` block)
+### BLOCK-PROCEED-GATE and BLOCK-COMPLETION-STATE — Canonical Definitions (CORE-RESP-001 — P0)
 
-The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in every Next Steps block where autonomous execution is possible.
+**Authority:** CORE-RESP-001 (Response Closure Contract)
+**Rule:** Every response MUST end with exactly ONE of these two blocks — the absolute last rendered element. No exceptions.
+
+#### State selection (binary — no middle ground)
+
+| State | Block to Use | When |
+|-------|-------------|------|
+| Work is pending user confirmation | `BLOCK-PROCEED-GATE` | Plan presented, user has not yet said `proceed` |
+| All work is fully complete | `BLOCK-COMPLETION-STATE` | Autonomous execution finished, nothing more to do |
+
+#### BLOCK-PROCEED-GATE — Work Pending (canonical template)
+
+```markdown
+---
+
+### ⚡ If you say `proceed`, I will:
+
+1. {Specific action — exact file, function, or command being touched}
+2. {Specific action — test written or gate run}
+3. {Specific action — validation step or commit made}
+4. {Specific action — any follow-on orchestrator invoked, if applicable}
+
+> Correct anything above before confirming, or type `proceed` to execute.
+```
 
 **Rules:**
-- ✅ 2–5 bullets — one concrete action per bullet
-- ✅ Each bullet names the **specific file, function, orchestrator, or system** being touched
-- ✅ Ordered to match actual execution sequence
-- ✅ Written so the user can spot a mistake before confirming
-- ✅ Ends with: `> Type \`proceed\` to execute this plan, or correct anything above before confirming.`
-- ❌ NO vague bullets ("work on the feature", "make changes")
-- ❌ NO more than 5 bullets — collapse multi-step groups into one line if needed
-- ❌ NO list if the response is informational only (query, audit, digest) — omit block entirely
+- ✅ 2–5 numbered items — one concrete action per item
+- ✅ Each item names the **specific file, function, orchestrator, or system** being touched
+- ✅ Ordered to match actual execution sequence — user can spot a mistake before confirming
+- ✅ Title is always `### ⚡ If you say \`proceed\`, I will:` — verbatim, no variation
+- ✅ Ends with the blockquote confirmation line — verbatim
+- ✅ Preceded by `---` (HR) to visually separate from `## 🎯 Next Steps`
+- ✅ This block is ALWAYS the last thing in the response — nothing after the blockquote
+- ❌ NO vague items ("work on the feature", "make changes", "update things")
+- ❌ NO more than 5 items — collapse multi-step groups into one line if needed
+- ❌ NO inline proceed bullets inside `## 🎯 Next Steps` — that section ends at "Later:" bullets
+- ❌ Omit entirely for informational-only responses (pure QUERY, DIGEST, REPHRASE) — use `BLOCK-COMPLETION-STATE` instead if work was done
 
 **Example — correct:**
 ```markdown
-### ⚡ If you type `proceed`, CORTEX will:
-- Write `tests/unit/auth/test_jwt_validator.py` (TDD first — CORE-008)
-- Implement `cortex/auth/jwt_validator.py` with `validate_token()` + `decode_claims()`
-- Run `pytest tests/unit/auth/` and verify ≥80% coverage
-- Commit: `feat(auth): add JWT validator with TDD coverage`
+---
+
+### ⚡ If you say `proceed`, I will:
+
+1. Add `BLOCK-PROCEED-GATE` and `BLOCK-COMPLETION-STATE` definitions to `cortex-response-templates.md` (after line 395)
+2. Update `copilot-instructions.md` § LEGO BLOCK COMPOSER — add both blocks to Assembly Order and `CORE-RESP-001` rule
+3. Update `cortex-architect.prompt.md` § RESPONSE FORMAT Rules table with `CORE-RESP-001` enforcement
+4. Run grep scan to confirm no existing pattern leaves a response in ambiguous state
+
+> Correct anything above before confirming, or type `proceed` to execute.
 ```
 
-**Example — wrong:**
+**Example — wrong (multiple violations):**
 ```markdown
 ### ⚡ If you type `proceed`, CORTEX will:
 - Implement the feature
 - Run tests
 - Update things
 ```
+*(Wrong: title phrasing, vague bullets, missing numbered format, missing HR separator)*
 
+#### BLOCK-COMPLETION-STATE — Work Done (canonical template)
+
+```markdown
 ---
+
+✅ **All work is complete.**
+
+{1–2 sentences confirming what was done and the files/systems touched.}
+
+> No further action required — type `/audit fix` to validate or `/health` to confirm orchestrator status.
+```
+
+**Rules:**
+- ✅ Always rendered after silent autonomous execution completes — no exceptions
+- ✅ Names the specific files, systems, or modules that were changed
+- ✅ Ends with the standard blockquote suggesting a validation command
+- ✅ This block is ALWAYS the last thing in the response — nothing after the blockquote
+- ✅ Preceded by `---` (HR) to visually separate from any preceding content
+- ❌ NOT used when there is still pending work — use `BLOCK-PROCEED-GATE` instead
+- ❌ NO ambiguous language ("mostly done", "almost complete", "you may want to")
+- ❌ NO open questions — work is done, state it clearly
+
+**Example — correct:**
+```markdown
+---
+
+✅ **All work is complete.**
+
+`cortex-response-templates.md`, `copilot-instructions.md`, and `cortex-architect.prompt.md` have been updated with `BLOCK-PROCEED-GATE`, `BLOCK-COMPLETION-STATE`, and the `CORE-RESP-001` P0 governance rule. Both blocks are now the enforced last section of every response.
+
+> No further action required — type `/audit fix` to validate or `/health` to confirm orchestrator status.
+```
+
+**Example — wrong:**
+```markdown
+That's everything! Let me know if you need anything else.
+```
+*(Wrong: ambiguous, not a named block, no confirmation of what was done)*
+
+#### Anti-duplication contract for closure blocks
+
+| Anti-Pattern | Violation | Remedy |
+|---|---|---|
+| Proceed bullets inside `## 🎯 Next Steps` AND a `BLOCK-PROCEED-GATE` | Duplication — same content twice | Remove bullets from Next Steps; keep only `BLOCK-PROCEED-GATE` |
+| Both `BLOCK-PROCEED-GATE` and `BLOCK-COMPLETION-STATE` in same response | Binary state violated | Remove `BLOCK-PROCEED-GATE` if work is done; remove `BLOCK-COMPLETION-STATE` if user hasn't said proceed |
+| Neither block present | CORE-RESP-001 P0 violation | Add the appropriate block as the final element |
+| `BLOCK-PROCEED-GATE` mid-response (not last) | Placement violation | Move to end — always the absolute last rendered element |
+| Proceed gate omitted because response "seems complete" | Silent CORE-RESP-001 violation | Always explicit — never assume user knows |
+
+
 
 ### Response Header — Canonical Spec
 
@@ -666,6 +752,8 @@ Reusable content sections that compose into situation-specific responses without
 | **BLOCK-ENGAGEMENT-BREADCRUMB** | Real-time routing chain + current orchestrator | inline | Every orchestrator invocation (always rendered) |
 | **BLOCK-ENGAGEMENT-TIMELINE** | Collapsible per-orchestrator timing log | collapsible | Completion of any 3+ step operation |
 | **BLOCK-INTRODUCTION** | Interactive role-based introduction + capability showcase | 400 words | "introduce yourself", "who are you", "hello", "get started" |
+| **BLOCK-PROCEED-GATE** | Work-pending closure — "If you say proceed, I will…" numbered plan | ≤5 numbered items | Last block of every response where work awaits user confirmation |
+| **BLOCK-COMPLETION-STATE** | Work-done closure — "✅ All work is complete." statement | 2 sentences + blockquote | Last block of every response after autonomous execution completes |
 
 ### Assembly Rules
 
@@ -740,10 +828,11 @@ BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → B
 → BLOCK-ERROR-RECOVERY → BLOCK-PHASE-ROADMAP → BLOCK-STAGE-PROGRESS
 → BLOCK-ENGAGEMENT-TIMELINE → BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD
 → BLOCK-NEXT-STEPS → BLOCK-RESUME-BANNER
+→ BLOCK-PROCEED-GATE  ← work pending (always last — CORE-RESP-001)
+→ BLOCK-COMPLETION-STATE  ← work done (always last — CORE-RESP-001)
 ```
 
-**Rule:** Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
-This sequence ensures signal-heavy content (errors, routing) appears early; summary content appears last.
+**Rule (CORE-RESP-001 — P0):** `BLOCK-PROCEED-GATE` or `BLOCK-COMPLETION-STATE` is ALWAYS the absolute last element in any response. Exactly one. Never both. Never neither for any actionable or completed response. Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
 
 ### When NOT to Use Blocks
 
