@@ -239,7 +239,7 @@ nn-{foldername}-{descriptive-name}.md
 | Wired Orchestrators | **51** (17 core, 7 domain, 23 support, 4 git) | `cortex-registry/core/specifications/*-wiring.yaml` |
 | Active MCP Tools | **29 registered** (39 target) | `cortex/mcp/mcp_registry.py` |
 | CORE Governance Rules | **38** (+ 2 AC rules) | `cortex-registry/core/tier0-skull/skull-rules.yaml` |
-| Tests | **~17,407** collected | `python3 -m pytest --co -q` |
+| Tests | **~17,564** collected | `python3 -m pytest --co -q` |
 | Package | `cortex` (single canonical) | `cortex/__init__.py` |
 
 **Orchestrator:** `DocumentationOrchestrator` — path TBD by wiring contract (check `cortex-registry/core/specifications/` before referencing a specific path; `cortex/orchestrators/internal/` is not a canonical wired tier).

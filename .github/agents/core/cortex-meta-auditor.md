@@ -133,7 +133,7 @@ All `.github/` documentation MUST use these values:
 | **Top-level Dirs** | 20 dirs | `ls -d cortex/*/ \| grep -v __pycache__ \| wc -l` |
 | **Orchestrator Subdirs** | 14 subdirs | `ls -d cortex/orchestrators/*/ \| grep -v __pycache__ \| wc -l` |
 | **Package Name** | `cortex` (single) | No alternatives allowed |
-| **Test Count** | ~17,407 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
+| **Test Count** | ~17,564 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
 
 **Numeric Drift Detection Protocol:**
 1. Extract all numeric claims from docs: `grep -rn '{pattern}' .github/ --include="*.md"`
@@ -223,7 +223,7 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 | MCP Tools | **29 registered** (39 target) |
 | CORE Rules | **38 active** (+ 2 AC rules = 40 total) |
 | Package | **`cortex`** (single) |
-| Tests | **~17,407 collected** (run `python3 -m pytest --collect-only -q` for current count) |
+| Tests | **~17,564 collected** (run `python3 -m pytest --collect-only -q` for current count) |
 | Audit Checks | **22-Point** production readiness (Checks #1–#22) |
 | Meta-Audit Checks | **25 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |

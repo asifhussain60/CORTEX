@@ -137,6 +137,18 @@ class WorkflowComplexityRouter:
         return min(score, 1.0)
     
     def route(self, intent: Intent) -> RoutingDecision:
+        """Route an intent to the appropriate orchestrator based on complexity scoring.
+
+        Evaluates file impact, operation type, dependency footprint, and risk level
+        to produce a ``RoutingDecision`` with the selected ``RoutingStrategy``.
+
+        Args:
+            intent: The ``Intent`` object to route.
+
+        Returns:
+            A ``RoutingDecision`` describing the chosen strategy, orchestrator,
+            complexity score, rationale, and whether confirmation is required.
+        """
         complexity = self.score_task_complexity(intent)
         
         if complexity < self.TRIVIAL_THRESHOLD:

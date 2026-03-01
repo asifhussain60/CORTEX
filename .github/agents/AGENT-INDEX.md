@@ -2,7 +2,7 @@
 
 **Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 17 completed, 2 planned | **Tests:** ~17,407 | **Intent Types:** 28
+**Phases:** 17 completed, 2 planned | **Tests:** ~17,564 | **Intent Types:** 28
 
 ---
 
@@ -42,7 +42,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | MCP Tools | **29 registered** in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **32** in `cortex-registry/core/` |
 | Package | `cortex` (single) |
-| Tests | **~17,407** collected |
+| Tests | **~17,564** collected |
 | Intent Types | **27** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
