@@ -94,14 +94,21 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(digest|summarize|summarise|recap|tl;?dr)\b", re.I), IntentType.DIGEST, 0.88),
     (re.compile(r"\b(analyze|analyse|deep analysis|deep dive|inspect)\b", re.I), IntentType.ANALYZE, 0.85),
     (re.compile(r"\b(audit|production readiness|repo health|scan for issues)\b", re.I), IntentType.AUDIT, 0.88),
-    (re.compile(r"\b(refactor|restructure|reorganize|simplify|modernize|rewrite|redesign)\b", re.I), IntentType.REFACTOR, 0.85),
+    # REFACTOR — extended with quality-cleanup aliases (tidy, consolidate, decouple, extract, rename, etc.)
+    (re.compile(r"\b(refactor|restructure|reorganize|simplify|modernize|rewrite|redesign|tidy|consolidate|decouple|extract|rename|inline|deduplicate|untangle)\b", re.I), IntentType.REFACTOR, 0.85),
     (re.compile(r"\b(design|architect|blueprint|system design|design pattern)\b", re.I), IntentType.DESIGN, 0.85),
     (re.compile(r"\b(plan|phase|roadmap|schedule|planning)\b", re.I), IntentType.PLAN, 0.82),
-    (re.compile(r"\b(fix|bug|broken|patch|resolve|repair|crash|error|fail(?:ure|ing)?)\b", re.I), IntentType.FIX, 0.82),
-    (re.compile(r"\b(implement|create|build|add|develop|construct|introduce)\b", re.I), IntentType.IMPLEMENT, 0.75),
+    # FIX — extended with remediation aliases (remediate, squash, address, unblock, restore, recover)
+    (re.compile(r"\b(fix|bug|broken|patch|resolve|repair|crash|error|fail(?:ure|ing)?|remediate|squash|address|unblock|restore|recover|hotfix)\b", re.I), IntentType.FIX, 0.82),
+    # IMPLEMENT — extended with rebuild/scaffold/spin-up/generate aliases
+    (re.compile(r"\b(implement|create|build|add|develop|construct|introduce|rebuild|rework|scaffold|assemble|generate|fabricate)\b", re.I), IntentType.IMPLEMENT, 0.75),
+    # IMPLEMENT — multi-word phrasal verbs (must use lookahead-friendly pattern)
+    (re.compile(r"\b(spin\s+up|stand\s+up|wire\s+up)\b", re.I), IntentType.IMPLEMENT, 0.78),
     (re.compile(r"\b(document|docs|documentation)\b", re.I), IntentType.DOCUMENT, 0.80),
     (re.compile(r"\b(onboard|onboarding|bootstrap|initialize|register)\b", re.I), IntentType.ONBOARD, 0.85),
     (re.compile(r"\b(rephrase|reword|token optim|compact this)\b", re.I), IntentType.REPHRASE, 0.88),
+    # VACUUM — extended with housekeeping/declutter/sweep aliases
+    (re.compile(r"\b(housekeeping|declutter|sweep|spring\s+clean|tidy\s+workspace)\b", re.I), IntentType.VACUUM, 0.82),
 ]
 
 # ---------------------------------------------------------------------------
@@ -113,14 +120,25 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
     IntentType.IMPLEMENT: [
         "create", "add", "new", "implement", "develop", "build", "construct",
         "establish", "introduce", "feature", "enhancement",
+        # Aliases: rebuild / scaffold / spin-up family
+        "rebuild", "rework", "stand up", "wire up", "scaffold",
+        "spin up", "generate", "produce", "assemble", "fabricate",
+        "make", "port", "clone", "replicate",
     ],
     IntentType.FIX: [
         "fix", "bug", "issue", "error", "problem", "crash", "fail", "broken",
         "resolve", "correct", "repair", "patch", "race condition",
+        # Aliases: remediation family
+        "address", "remediate", "mitigate", "squash", "root out",
+        "restore", "recover", "unblock", "hotfix", "incident",
     ],
     IntentType.REFACTOR: [
         "refactor", "improve", "restructure", "simplify", "optimize",
         "modernize", "reorganize", "rewrite", "redesign", "performance",
+        # Aliases: quality-cleanup / "Fix = Refactor" family
+        "tidy", "consolidate", "decouple", "extract", "rename",
+        "inline", "split", "merge", "deduplicate", "untangle",
+        "clean up code", "eliminate duplication",
     ],
     IntentType.DOCUMENT: [
         "document", "docs", "documentation", "write", "report", "generate", "export",
@@ -209,6 +227,8 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "vacuum", "/vacuum", "cortex vacuum", "cleanup", "clean up",
         "markdown sprawl", "root clutter", "prune", "purge", "archive",
         "compact", "vacuum cleanup",
+        # Aliases: housekeeping / declutter / sweep family
+        "housekeeping", "declutter", "sweep", "spring clean", "tidy workspace",
     ],
 }
 

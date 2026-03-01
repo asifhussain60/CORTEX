@@ -295,18 +295,32 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
     # Operation type detection keywords
     IMPLEMENT_KEYWORDS: List[str] = [
+        # Core verbs
         "create", "add", "new", "implement", "develop", "build", "construct",
-        "establish", "introduce", "feature", "enhancement"
+        "establish", "introduce", "feature", "enhancement",
+        # Natural-language aliases (user-facing synonyms)
+        "rebuild", "rework", "stand up", "wire up", "scaffold",
+        "spin up", "generate", "produce", "assemble", "fabricate",
+        "make", "write", "port", "clone", "replicate",
     ]
 
     FIX_KEYWORDS: List[str] = [
+        # Core verbs
         "fix", "bug", "issue", "error", "problem", "crash", "fail", "broken",
-        "resolve", "correct", "repair", "patch", "race condition"
+        "resolve", "correct", "repair", "patch", "race condition",
+        # Natural-language aliases
+        "address", "remediate", "mitigate", "squash", "root out",
+        "restore", "recover", "unblock", "hotfix", "incident",
     ]
 
     REFACTOR_KEYWORDS: List[str] = [
+        # Core verbs
         "refactor", "improve", "cleanup", "restructure", "simplify", "optimize",
-        "clean", "modernize", "reorganize", "rewrite", "redesign", "performance"
+        "clean", "modernize", "reorganize", "rewrite", "redesign", "performance",
+        # Natural-language aliases (Fix = Refactor quality operations)
+        "tidy", "consolidate", "decouple", "extract", "rename",
+        "inline", "move", "split", "merge", "eliminate duplication",
+        "clean up code", "deduplicate", "untangle",
     ]
 
     DOCUMENT_KEYWORDS: List[str] = [
@@ -342,7 +356,9 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         "efficient cleanup", "cortex vacuum", "vacuum repo", "remove artifacts",
         "delete cache", "clear logs", "compact", "defragment", "garbage collection",
         "purge", "archive", "organize", "tidyup", "remove old", "remove legacy",
-        "remove broken", "remove unused", "remove temp", "remove temporary"
+        "remove broken", "remove unused", "remove temp", "remove temporary",
+        # Natural-language aliases
+        "housekeeping", "declutter", "sweep", "spring clean", "tidy workspace",
     ]
 
     # GAP-005: Missing CORTEX execution modes — phase-11 remediation
