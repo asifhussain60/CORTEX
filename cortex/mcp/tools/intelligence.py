@@ -854,6 +854,11 @@ class CortexIntelligenceMatrix(ConsolidatedTool):
             ),
         ]
 
+    @property
+    def supported_operations(self) -> List[str]:
+        """Return the list of supported operation names."""
+        return ["build", "persist", "gaps"]
+
     def execute(self, **kwargs: Any) -> ToolResult:
         """
         Execute the intelligence matrix operation.

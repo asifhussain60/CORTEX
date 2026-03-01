@@ -131,12 +131,13 @@ ALL_TOOLS = [
     CortexChallenge,
     CortexClassify,
     CortexRequestLifecycle,
-    # Intelligence (5) — CortexIntelligenceMatrix removed (abstract method failure)
+    # Intelligence (5) — CortexIntelligenceMatrix restored (supported_operations now implemented)
     CortexLens,
     CortexKnowledge,
     CortexGit,
     CortexGenerateTests,  # WAVE-2 Stage 6
     CortexBrainQuery,  # Phase 66-A — GAP-66-002
+    CortexIntelligenceMatrix,  # Phase 65 — ENH-MATRIX-001 (restored)
     # Governance (4)
     CortexGovernance,
     CortexValidate,
@@ -213,23 +214,29 @@ def register_all_tools(registry: Any) -> int:
     
     for tool_name, tool_func in function_tools:
         try:
-            # Create a Tool wrapper for function-based tools
+            from cortex.mcp.mcp_tool_base import ToolResult
+
+            # Create a Tool wrapper for function-based tools.
+            # MUST override both @property definition AND execute() to satisfy Tool ABC.
             class FunctionTool(Tool):
-                def __init__(self, name: str, func: Any):
+                def __init__(self, name: str, func: Any) -> None:
                     self.func = func
-                    super().__init__(
-                        ToolDefinition(
-                            name=name,
-                            description=func.__doc__ or f"Toolkit tool: {name}",
-                            category=ToolCategory.OPERATIONS,
-                            parameters=[],
-                        )
+                    self._definition = ToolDefinition(
+                        name=name,
+                        description=func.__doc__ or f"Toolkit tool: {name}",
+                        category=ToolCategory.OPERATIONS,
+                        parameters=[],
                     )
-                
-                def execute(self, **kwargs: Any) -> Any:
+
+                @property
+                def definition(self) -> ToolDefinition:
+                    """Get tool definition (name, description, parameters)."""
+                    return self._definition
+
+                def execute(self, **kwargs: Any) -> ToolResult:
                     """Execute the wrapped toolkit function with the provided keyword arguments."""
-                    return self.func(**kwargs)
-            
+                    return ToolResult(success=True, data=self.func(**kwargs))
+
             tool = FunctionTool(tool_name, tool_func)
             registry.register(tool)
             count += 1
