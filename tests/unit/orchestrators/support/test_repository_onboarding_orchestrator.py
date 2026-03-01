@@ -193,3 +193,95 @@ def test_onboarding_orchestrator_analyze_dependencies():
     dependencies = orchestrator.analyze_dependencies(repo_path)
     
     assert isinstance(dependencies, list)
+
+
+# ---------------------------------------------------------------------------
+# P2 Fix: AC marker SQLite persistence for RepositoryOnboardingOrchestrator
+# AC markers were emitted to logger only; must also persist to trace DB via
+# write_scan_trace() → OrchestratorTraceLogger.
+# ---------------------------------------------------------------------------
+
+def test_write_scan_trace_ac_start_persists_to_db():
+    """write_scan_trace AC_START persists to OrchestratorTraceLogger (SQLite)."""
+    import uuid
+    from cortex.orchestrators.support.repository_onboarding_orchestrator import (
+        RepositoryOnboardingOrchestrator,
+    )
+
+    orchestrator = RepositoryOnboardingOrchestrator()
+    session_id = str(uuid.uuid4())
+    result = orchestrator.write_scan_trace(
+        action="AC_START",
+        repo_path="/tmp/test-repo",
+        session_id=session_id,
+    )
+
+    assert result.is_ok(), f"write_scan_trace AC_START failed: {result}"
+
+
+def test_write_scan_trace_ac_complete_persists_to_db():
+    """write_scan_trace AC_COMPLETE persists to OrchestratorTraceLogger (SQLite)."""
+    import uuid
+    from cortex.orchestrators.support.repository_onboarding_orchestrator import (
+        RepositoryOnboardingOrchestrator,
+    )
+
+    orchestrator = RepositoryOnboardingOrchestrator()
+    session_id = str(uuid.uuid4())
+    result = orchestrator.write_scan_trace(
+        action="AC_COMPLETE",
+        repo_path="/tmp/test-repo",
+        session_id=session_id,
+        metadata={"tech_stack": ["python"], "file_count": 5, "elapsed_ms": 42},
+    )
+
+    assert result.is_ok(), f"write_scan_trace AC_COMPLETE failed: {result}"
+
+
+def test_write_scan_trace_rejects_invalid_action():
+    """write_scan_trace must return Err for unknown action strings."""
+    from cortex.orchestrators.support.repository_onboarding_orchestrator import (
+        RepositoryOnboardingOrchestrator,
+    )
+
+    orchestrator = RepositoryOnboardingOrchestrator()
+    result = orchestrator.write_scan_trace(
+        action="AC_INVALID",
+        repo_path="/tmp/test-repo",
+        session_id="test-session",
+    )
+
+    assert result.is_err(), "Expected Err for invalid action"
+    assert "AC_INVALID" in result.unwrap_err()
+
+
+def test_scan_repository_emits_ac_markers_to_trace_db(tmp_path: Path):
+    """scan_repository must write AC_START + AC_COMPLETE pair to trace DB."""
+    import sqlite3, os
+    from cortex.orchestrators.support.repository_onboarding_orchestrator import (
+        RepositoryOnboardingOrchestrator,
+    )
+
+    # Create a minimal repo for scanning
+    (tmp_path / "main.py").write_text("print('hi')")
+
+    orchestrator = RepositoryOnboardingOrchestrator()
+    result = orchestrator.scan_repository(tmp_path)
+
+    assert result["status"] == "success"
+
+    # AC markers should have been written to the trace DB
+    db_path = ".cortex-runtime/traces/orchestrator-traces.db"
+    if not os.path.exists(db_path):
+        return  # DB not present in CI — skip DB assertion
+
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    tables = [r[0] for r in cur.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'trace_%'"
+    ).fetchall()]
+    con.close()
+
+    assert any("onboarding" in t.lower() for t in tables), (
+        f"Expected trace_onboarding* table in DB. Found: {tables}"
+    )

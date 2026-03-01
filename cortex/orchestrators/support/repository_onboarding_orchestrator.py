@@ -2,16 +2,22 @@
 RepositoryOnboardingOrchestrator — Scans and onboards external repositories.
 
 Phase 28.2: Repository scanning, profile generation, and domain detection.
+P2 Fix (2026-03-01): AC markers now persist to SQLite trace DB via
+write_scan_trace() → OrchestratorTraceLogger, matching the RefactoringOrchestrator
+pattern (ENH-STS-02).  scan_repository() calls write_scan_trace for both
+AC_START and AC_COMPLETE so every invocation has a matched pair in the DB.
 """
 from __future__ import annotations
 
 import logging
 import time
+import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.result import Err, Ok, Result
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d
 
 logger = logging.getLogger(__name__)
@@ -28,13 +34,23 @@ class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
     # gateway must remain False to avoid circular routing.
     PHASE90_GATEWAY_EXEMPT: bool = True
 
+    # P2 Fix — valid AC marker actions (mirrors RefactoringOrchestrator pattern)
+    _VALID_TRACE_ACTIONS = frozenset({"AC_START", "AC_COMPLETE"})
+
     def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
         """Scan repository structure and detect tech stack."""
         _ts = int(time.time() * 1000)
+        _session_id = str(uuid.uuid4())
         logger.info("AC_START: AC-ONBOARD-%d", _ts)
         _t0 = time.perf_counter()
         # Phase 58 — cross-cutting hooks
         self._activate_cross_cutting_hooks(operation="scan_repository")
+        # P2 Fix — persist AC_START to SQLite trace DB
+        self.write_scan_trace(
+            action="AC_START",
+            repo_path=str(repo_path),
+            session_id=_session_id,
+        )
         try:
             root = Path(repo_path)
             if not root.exists():
@@ -77,10 +93,24 @@ class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
             }
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-ONBOARD-%d ✅ (%dms)", _ts, _elapsed)
+            # P2 Fix — persist AC_COMPLETE to SQLite trace DB
+            self.write_scan_trace(
+                action="AC_COMPLETE",
+                repo_path=str(repo_path),
+                session_id=_session_id,
+                metadata={"tech_stack": tech_stack, "elapsed_ms": _elapsed},
+            )
             return result
         except Exception as exc:
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-ONBOARD-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
+            # P2 Fix — persist failure AC_COMPLETE to SQLite trace DB
+            self.write_scan_trace(
+                action="AC_COMPLETE",
+                repo_path=str(repo_path),
+                session_id=_session_id,
+                metadata={"error": type(exc).__name__, "elapsed_ms": _elapsed},
+            )
             raise
 
     def detect_company_domains(
@@ -97,6 +127,86 @@ class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin, WorkflowEnforc
         # Alternative: top-level directories named like domains
         domains = []
         return False, None, domains
+
+    # ------------------------------------------------------------------
+    # P2 Fix — Session Traceability (mirrors RefactoringOrchestrator ENH-STS-02)
+    # ------------------------------------------------------------------
+
+    def write_scan_trace(
+        self,
+        action: str,
+        repo_path: str,
+        session_id: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Union[Ok[None], Err]:
+        """Write an onboarding scan boundary record to the SQLite trace DB.
+
+        Every scan_repository() call emits AC_START at entry and AC_COMPLETE at
+        conclusion so CORTEX audit logs have a matched pair for every invocation.
+        Mirrors the pattern established by RefactoringOrchestrator.write_refactor_session_trace
+        (ENH-STS-02).
+
+        Args:
+            action: "AC_START" or "AC_COMPLETE".
+            repo_path: Path of the repository being scanned.
+            session_id: UUID shared between the AC_START / AC_COMPLETE pair.
+            metadata: Arbitrary extras (tech_stack, elapsed_ms, error, …).
+
+        Returns:
+            Ok(None) on success, Err with reason on failure.
+        """
+        if action not in self._VALID_TRACE_ACTIONS:
+            return Err(
+                f"Invalid trace action '{action}'. "
+                f"Must be one of {sorted(self._VALID_TRACE_ACTIONS)}."
+            )
+
+        try:
+            from cortex.infrastructure.orchestrator_trace_logger import (
+                OrchestratorTraceLogger,
+                TraceEntry,
+                TraceLevel,
+            )
+
+            entry = TraceEntry(
+                trace_id=str(uuid.uuid4()),
+                timestamp=datetime.utcnow(),
+                orchestrator_id="RepositoryOnboardingOrchestrator",
+                orchestrator_class="RepositoryOnboardingOrchestrator",
+                action=action,
+                level=TraceLevel.ACTION,
+                correlation_id=session_id,
+                request_id=session_id,
+                context={
+                    "repo_path": repo_path,
+                    "session_id": session_id,
+                    **(metadata or {}),
+                },
+                result="OK",
+            )
+
+            trace_logger = OrchestratorTraceLogger()
+            write_result = trace_logger.record_trace(entry)
+
+            if write_result.is_ok():
+                logger.info(
+                    "Onboarding scan trace written: action=%s session=%s",
+                    action,
+                    session_id,
+                )
+            else:
+                logger.warning(
+                    "Onboarding scan trace write failed: %s",
+                    write_result.unwrap_err(),
+                )
+
+            return write_result
+
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(
+                "write_scan_trace raised unexpectedly (non-blocking): %s", exc
+            )
+            return Err(str(exc))
 
     def analyze_tech_stack(self, repo_path: "str | Path") -> Dict[str, Any]:
         """Identify languages, frameworks, and dependencies."""
