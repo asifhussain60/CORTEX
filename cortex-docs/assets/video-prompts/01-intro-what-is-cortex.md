@@ -27,12 +27,14 @@ This video exclusively owns:
 
 No other video in the series restates these. Videos 02–10 build on this foundation.
 
+The **intent-aligned response header quote** (business/engineering principle surfaced on every CORTEX response) is mentioned here at the leadership level — the "face of governance" that business leaders see. Technical detail of the BLOCK-QUOTE-LIBRARY and IntentRouter wiring belongs exclusively to SE-02 (`06-engineer-mcp-tools-and-workflows.md`).
+
 ---
 
 ## Steering Prompt
 *Paste into NotebookLM → Customize → Steering Prompt:*
 
-> "Select the Explainer format to create a 7–10 minute technical documentary for business and engineering leaders. Answer three questions in sequence: What is CORTEX? What delivery problem does it solve? How does it close the loop — and how does it get smarter over time? Tone: a senior project lead speaking to a board room — calm, authoritative, precise. Avoid superlatives. Use only engineering verbs: validate, constrain, enforce, audit, trace, converge, synthesize. CORTEX is not a replacement for Copilot — it gives Copilot a rulebook, verifies the rulebook was followed, and encodes your team's hard-won domain knowledge into that rulebook automatically. Use only the provided sources; do not speculate on any capability not explicitly documented, and ensure all visual generation adheres to a Dark-blue glassmorphism theme with a Cyan #00d4ff accent."
+> "Select the Explainer format to create a 7–10 minute technical documentary for business and engineering leaders. Answer three questions in sequence: What is CORTEX? What delivery problem does it solve? How does it close the loop — and how does it get smarter over time? Tone: a senior project lead speaking to a board room — calm, authoritative, precise. Avoid superlatives. Use only engineering verbs: validate, constrain, enforce, audit, trace, converge, synthesize. CORTEX is not a replacement for Copilot — it gives Copilot a rulebook, verifies the rulebook was followed, and encodes your team's hard-won domain knowledge into that rulebook automatically. Include a brief closing moment showing that every CORTEX response surfaces a business or engineering principle from the same literature that anchors its governance rules — this is not decoration, it is the philosophy of the framework made visible. Use only the provided sources; do not speculate on any capability not explicitly documented, and ensure all visual generation adheres to a Dark-blue glassmorphism theme with a Cyan #00d4ff accent."
 
 ---
 
@@ -117,6 +119,20 @@ Visual: Four outcome stat cards — plain language, no invented numbers, no perc
   `"Team alignment by default"` — shared rules = shared expectations, across every member
 Strategic silence: 1.5 seconds before closing line (VBP-011).
 Narrator: *"CORTEX doesn't make AI smarter. It makes AI-assisted development accountable — at every step, for every team member, in every commit."*
+
+**Closing Beat — "Principles Made Visible" [~9:30–End]**
+Visual: A single CORTEX response header fades in — glassmorphic card on dark navy. Show it full-screen, slowly, as if reading it for the first time:
+```
+## 🔎 CORTEX Auditing
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+> "Don't leave broken windows unfixed. Fix each one as soon as it is discovered."
+> — Andrew Hunt & David Thomas, The Pragmatic Programmer
+
+────────────────────────────────────
+```
+Narrator (quiet, unhurried): *"Every response CORTEX gives begins with a principle — drawn from the same engineering and leadership literature that anchors its governance rules. Not as decoration. As a statement of intent: the framework does not just enforce standards, it knows why they exist."*
+Camera: slow fade from the quote card to the CORTEX logo.
 Final frame: CORTEX logo (full, centered) + `"Governance. Orchestration. Reliability."` in Space Grotesk.
 
 ---

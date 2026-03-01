@@ -9,9 +9,36 @@ audience:
 source_of_truth:
   - cortex/mcp/
   - .vscode/settings.json
+  - .github/templates/cortex-response-templates.md
 last_verified: 2026-03-01
 diagram_type: Architecture
 render: ascii
+response_header_enhancement:
+  feature: Intent-aligned business/engineering quote in every response header
+  library: BLOCK-QUOTE-LIBRARY
+  library_location: .github/templates/cortex-response-templates.md § BLOCK-QUOTE-LIBRARY
+  quote_count: 32
+  themes: [quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal]
+  selection_mechanism: >
+    IntentRouter intent classification drives theme selection at response-emit time.
+    The same routing decision that selects the orchestrator selects the quote theme.
+    TDD/testing → quality · security → security · refactor → improvement ·
+    architecture/design → architecture · audit/governance → discipline ·
+    fix/debug → systems-thinking · plan/roadmap → strategy · team/process → flow ·
+    learn/digest → learning · default → universal
+  format: |
+    ## {icon} CORTEX {mode}
+    **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+    > *"{quote}"*
+    > — {Author}, **{Book}**
+
+    ---
+  governance_anchor: >
+    Quote sources are co-located with governance rule book_reference fields in
+    cortex-registry/core/tier0-skull/skull-rules.yaml and VBP-013 in
+    cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml.
+    No quote may be fabricated outside the BLOCK-QUOTE-LIBRARY.
 ---
 
 # MCP Gateway Architecture

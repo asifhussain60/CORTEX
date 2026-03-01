@@ -724,6 +724,9 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
+> *"{quote}"*
+> — {Author}, **{Book}**
+
 ---
 
 ## 📋 Summary — {1-2 sentences, answer first}
@@ -736,6 +739,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 - {Specific action — name exact file/function}
 - {Specific action — test written or command run}
 ```
+
+**Quote selection:** Pick from `BLOCK-QUOTE-LIBRARY` in `cortex-response-templates.md` — match quote `themes` to the user's active intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, etc.). Full theme→intent mapping in the library.
 
 ### Autonomous (Silent Mode)
 Progress bar + stage bullet list. See templates SSOT.

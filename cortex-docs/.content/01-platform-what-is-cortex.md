@@ -104,6 +104,21 @@ These principles are not aspirational — they are enforced by CORTEX's governan
 
 ---
 
+### Every Response Reflects a Principle
+
+CORTEX does not silently execute. Every response it emits begins with a business or engineering principle drawn from the same literature that anchors its governance rules — books like *Good to Great*, *The Pragmatic Programmer*, *Clean Code*, and *Site Reliability Engineering*.
+
+The principle is not chosen at random. CORTEX reads the intent behind each request — audit, build, fix, design — and selects a quote whose theme matches that intent. A test-driven development request surfaces a quote about quality. A security audit surfaces a quote about defence. A refactoring request surfaces a quote about continuous improvement.
+
+> *"Don't leave broken windows unfixed. Fix each one as soon as it is discovered."*
+> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
+
+This appears as a formatted callout at the top of every CORTEX response. For business leaders, it is the visible expression of the framework's philosophy: CORTEX does not just enforce standards — it understands why they exist, and it makes that understanding part of every interaction.
+
+The full library contains 32 quotes across 9 themes, maintained as a single source of truth in `.github/templates/cortex-response-templates.md`. The same books are referenced in CORTEX's governance rule definitions — connecting the framework's enforcement logic directly to the intellectual tradition it is built on.
+
+---
+
 ## What CORTEX Is Not
 
 CORTEX does not contain embedded AI models. It orchestrates the AI assistant already in your IDE (such as GitHub Copilot) and directs it using structured context, governance rules, and execution plans. CORTEX is the intelligence layer on top of your existing AI tools — giving them discipline, memory, and accountability.

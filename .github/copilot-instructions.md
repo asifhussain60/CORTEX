@@ -15,6 +15,9 @@ Every **first response** to a user request MUST begin with this exact header blo
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
+> *"{quote}"*
+> — {Author}, **{Book}**
+
 ---
 ```
 
@@ -26,13 +29,17 @@ Every **first response** to a user request MUST begin with this exact header blo
 - ✅ `{icon}` from the mode icon table: ⚡ IMPLEMENT · 🔧 FIX · ♻️ REFACTOR · 🔎 AUDIT · 📖 QUERY · 🎨 DESIGN · 📋 PLAN · 📚 DIGEST · 🩺 HEALTH · 🧹 VACUUM · 🐛 DEBUG · 🔬 INVESTIGATE · 🔁 TOTALRECALL · 🔄 SYNC · 🎓 TRAIN · 💬 REPHRASE · 👋 INTRODUCE
 - ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning` · `Introducing`
 - ✅ If `cortex-architect.prompt.md` is active: use `CORTEX Architect` as the product name; otherwise use `CORTEX`
-- ✅ Followed immediately by `---` (Markdown HR — never `<hr>`)
+- ✅ One blank line between the `**Author:**` / `**Via:**` line and the `>` quote blockquote
+- ✅ Quote selected from `BLOCK-QUOTE-LIBRARY` in `cortex-response-templates.md` — match `themes` to user intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, audit/governance → `discipline`, fix/debug → `systems-thinking`, plan/roadmap → `strategy`, team/process → `flow`, learn/digest → `learning`, default → `universal`)
+- ✅ Both quote and attribution inside the same `>` blockquote block — renders as one unified left-accent callout
+- ✅ Followed by `---` (Markdown HR — never `<hr>`) after the blockquote
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
 - ❌ NO mid-response headers — ONE header per request, period
 - ❌ NO header during silent autonomous execution (after `proceed`) — progress bars only
+- ❌ NO fabricated quotes — only quotes from `BLOCK-QUOTE-LIBRARY`
 - ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14, meta-audit)
 
-**SSOT:** `.github/templates/cortex-response-templates.md` § Response Header — Canonical Spec
+**SSOT:** `.github/templates/cortex-response-templates.md` § Response Header — Canonical Spec + § BLOCK-QUOTE-LIBRARY
 
 ---
 
@@ -46,7 +53,7 @@ Every response is assembled from composable blocks. The following rules are **no
 
 ```
 BLOCK-SESSION-IDENTITY (once per session, first turn only)
-→ Response Header (## {icon} CORTEX {mode} + Author + Via + ---)
+→ Response Header (## {icon} CORTEX {mode} + Author + Via + Quote blockquote + ---)
 → BLOCK-ENGAGEMENT-BREADCRUMB (every multi-hop invocation)
 → BLOCK-INTENT-REFLECTION (before any work — first-person, business language)
 → [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]

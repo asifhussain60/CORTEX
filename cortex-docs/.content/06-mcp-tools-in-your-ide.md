@@ -76,6 +76,19 @@ These tools expose the intelligence layer — code analysis, semantic operations
 | **cortex_knowledge** | Synthesises knowledge from governance registries and applies it to a specific context — resolving conflicts between generic and team-specific guidance automatically |
 | **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis with four structured methodologies — building institutional memory that prevents recurring failures |
 
+### Contextually Intelligent Response Headers
+
+Every response CORTEX emits includes a business or engineering principle drawn from the same literature that anchors its governance rules — *Good to Great*, *The Pragmatic Programmer*, *Site Reliability Engineering*, *The Phoenix Project*, and others.
+
+The principle is not selected at random. The same intent classification that routes a tool call to the right orchestrator also selects the quote theme: a testing or TDD request surfaces a quality principle; a security request surfaces a resilience or trust principle; a refactoring request surfaces a lean or improvement principle. The result is a response header that looks like this:
+
+> *"Don't leave broken windows unfixed. Neglect accelerates software rot faster than any single bad decision."*
+> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
+
+This appears on every CORTEX response — not as decoration, but as a visible expression of the governance philosophy being applied. For teams new to structured engineering practices, it creates a learning moment on every interaction. For experienced engineers, it provides a shared vocabulary that connects daily tool use to the principles that shaped the discipline.
+
+The quote library contains 32 entries across 9 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in `.github/templates/cortex-response-templates.md § BLOCK-QUOTE-LIBRARY`.
+
 ### Planning and Audit
 
 These tools connect CORTEX to project planning and repository assessment workflows.

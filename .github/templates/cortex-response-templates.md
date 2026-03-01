@@ -410,6 +410,9 @@ Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice vers
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} *(omit for single-hop responses)*
 
+> *"{quote}"*
+> — {Author}, **{Book}**
+
 ---
 ```
 
@@ -423,7 +426,19 @@ Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice vers
 | `**Author:**` | Always `Asif Hussain` — never omit | `**Author:** Asif Hussain` |
 | `© 2025–2026 CORTEX Framework. All rights reserved.` | Fixed copyright string — verbatim, never paraphrased | — |
 | `**Via:**` | Plain-language orchestrator chain (display names, not class names) — omit on single-hop | `**Via:** Classifier → TDD Builder` |
+| `> *"{quote}"*` | Teachable business/engineering principle — selected by intent theme (see BLOCK-QUOTE-LIBRARY below) | One blank line after author line, before `---` |
+| `> — {Author}, **{Book}**` | Attribution on second blockquote line — same blockquote block as quote | Renders as a unified left-accent callout in Copilot Chat |
 | `---` | Markdown HR (never `<hr>` — Copilot Chat rendering Rule 2) | `---` |
+
+#### Quote selection rules
+
+- ✅ Select from `BLOCK-QUOTE-LIBRARY` (§ below) — match `themes` to the user's active intent
+- ✅ Blank line between the `**Author:**` line and the `>` blockquote — creates visual separation
+- ✅ Both quote and attribution are inside the same `>` blockquote block — renders as one unified callout
+- ✅ Closing `---` appears after the blockquote — not before it
+- ❌ Never fabricate quotes outside the library
+- ❌ Never use a quote with no teachable principle (name-dropping without insight)
+- ❌ Never repeat the same quote in two consecutive responses in a session
 
 #### Mode icons
 
@@ -453,15 +468,155 @@ Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice vers
 - ✅ `**Author:**` and copyright on the same line, pipe-separated
 - ✅ `**Via:**` line included when routing chain is 2+ hops; omitted for simple single-orchestrator responses
 - ✅ `{mode}` is a plain-language verb phrase — not an enum (`Building`, not `IMPLEMENT`)
-- ✅ Followed immediately by `---` separator (Markdown HR — never `<hr>`)
+- ✅ One blank line between the `**Author:**` / `**Via:**` line and the `>` quote blockquote
+- ✅ Quote blockquote (`>`) appears before the closing `---` separator
+- ✅ Followed by `---` separator after the blockquote (Markdown HR — never `<hr>`)
 - ❌ NO `**Via:**` line using class names (`TDDOrchestrator`) — use display names (`TDD Builder`)
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` in the header; orchestrator name appears as plain-language display name
 - ❌ NO `<hr>` tag — Copilot Chat may not render it (Rule 2)
 - ❌ NO mid-response headers of any kind
+- ❌ NO fabricated quotes — only quotes from `BLOCK-QUOTE-LIBRARY`
 
 ---
 
-## 📦 COMPOSABLE CONTENT BLOCKS
+## � BLOCK-QUOTE-LIBRARY — Intent-Aligned Business & Engineering Quotes
+
+**Authority:** VBP-013 (Business Book Anchoring) + `skull-rules.yaml` `book_reference` fields
+**SSOT:** This section is the single source of all approved response header quotes.
+**Selection rule:** Match quote `themes` to the user's active intent keywords. When multiple quotes match, prefer the one not used in the previous response turn. Fall back to `themes: [universal]` if no theme match.
+
+### Theme → Intent Mapping
+
+| User Intent / Keywords | Theme Tag to Match |
+|---|---|
+| TDD, test, testing, red-green, coverage, assertion | `quality` |
+| Refactor, improve, optimize, clean, simplify, dead code | `improvement` |
+| Security, auth, vulnerability, hardening, trust, compliance | `security` |
+| Architecture, design, structure, pattern, boundary, DDD | `architecture` |
+| Audit, governance, standards, rules, discipline, culture | `discipline` |
+| Fix, bug, debug, trace, root cause, failure, crash | `systems-thinking` |
+| Plan, roadmap, phase, OKR, strategy, priority, focus | `strategy` |
+| Team, collaboration, flow, bottleneck, process, DevOps | `flow` |
+| Learn, digest, onboard, knowledge, understand | `learning` |
+| Anything else | `universal` |
+
+### Quote Library (32 quotes — mode-aware, teachable)
+
+#### 🎯 Theme: `quality`
+> *"It is not enough to do your best; you must know what to do, and then do your best."*
+> — W. Edwards Deming, **Out of the Crisis**
+
+> *"Don't leave 'broken windows' unfixed. Neglect accelerates software rot faster than any single bad decision."*
+> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
+
+> *"Make it work, make it right, make it fast — in that order. Skipping 'right' is how technical debt compounds."*
+> — Kent Beck, **Test-Driven Development: By Example**
+
+> *"The only way to go fast is to go well. Cutting quality to meet a deadline creates a debt you pay with interest."*
+> — Robert C. Martin, **Clean Code**
+
+#### ♻️ Theme: `improvement`
+> *"Waste is anything that does not add value to the customer. In software: unused code, redundant processes, and waiting."*
+> — Mary & Tom Poppendieck, **Lean Software Development**
+
+> *"Improving daily work is even more important than doing daily work. Failing to improve is how technical debt becomes system failure."*
+> — Gene Kim, **The Phoenix Project**
+
+> *"Good is the enemy of great. Most teams never become great precisely because most settle for good enough."*
+> — Jim Collins, **Good to Great**
+
+> *"Refactoring is not a luxury — it is the discipline of keeping the design of the system aligned with the needs of the present."*
+> — Martin Fowler, **Refactoring: Improving the Design of Existing Code**
+
+#### 🔒 Theme: `security`
+> *"Hope is not a strategy. In production systems, every assumption you do not verify becomes a vulnerability you did not plan for."*
+> — Betsy Beyer et al., **Site Reliability Engineering**
+
+> *"Design for failure. Plan for recovery. A system that cannot degrade gracefully will eventually fail catastrophically."*
+> — Michael Nygard, **Release It!: Design and Deploy Production-Ready Software**
+
+> *"Transparency and radical open-mindedness are the two most important tools for protecting any system — technical or organizational."*
+> — Ray Dalio, **Principles: Life and Work**
+
+> *"The most dangerous phrase in engineering is 'we've always done it this way.' Security is not a state — it is a discipline."*
+> — Gene Kim, Jez Humble, Patrick Debois & John Willis, **The DevOps Handbook**
+
+#### 🏗️ Theme: `architecture`
+> *"Architecture is the decisions that are hard to change — the earlier you make them, the longer you live with the consequences."*
+> — Martin Fowler, **Building Evolutionary Architectures**
+
+> *"A well-designed model is the heart of the software. Everything else follows from the clarity of its domain boundaries."*
+> — Eric Evans, **Domain-Driven Design**
+
+> *"Services must be independently deployable. If you cannot change one without changing another, you do not have microservices — you have a distributed monolith."*
+> — Sam Newman, **Building Microservices**
+
+> *"The fitness function of a system is its ability to evolve without breaking what it has already proven. Design for change first."*
+> — Neal Ford, Rebecca Parsons & Patrick Kua, **Building Evolutionary Architectures**
+
+#### 🛡️ Theme: `discipline`
+> *"Culture of discipline — when you combine a culture of discipline with an ethic of entrepreneurship, you get great performance."*
+> — Jim Collins, **Good to Great**
+
+> *"Checklists seem lowly and trivial — and yet they save lives. The volume and complexity of what we know has exceeded any one person's ability to hold reliably."*
+> — Atul Gawande, **The Checklist Manifesto**
+
+> *"Begin with the end in mind. Working without a clear definition of done is the single largest source of rework in software teams."*
+> — Stephen R. Covey, **The 7 Habits of Highly Effective People**
+
+> *"What gets measured gets managed — and what gets ignored becomes the next emergency."*
+> — John Doerr, **Measure What Matters**
+
+#### 🔧 Theme: `systems-thinking`
+> *"Every system is perfectly designed to get the results it gets. To change the output, you must change the system."*
+> — W. Edwards Deming, cited in **The Phoenix Project** (Gene Kim)
+
+> *"The constraint determines the throughput of the entire system. Until you identify and manage the bottleneck, all other improvements are illusions."*
+> — Eliyahu M. Goldratt, **The Goal**
+
+> *"In complex systems, local fixes that ignore the whole create new failures faster than they resolve old ones."*
+> — Michael Nygard, **Release It!: Design and Deploy Production-Ready Software**
+
+> *"Technical debt is not just slow code or messy files — it is the gap between your system's current design and the design it needs to do its job well."*
+> — Martin Fowler, **Refactoring: Improving the Design of Existing Code**
+
+#### 📋 Theme: `strategy`
+> *"The Hedgehog Concept: know the one thing you can be best in the world at, be deeply passionate about it, and measure it relentlessly."*
+> — Jim Collins, **Good to Great**
+
+> *"OKRs make it possible for the whole organization to move in the same direction at the same time — if leadership is willing to commit publicly."*
+> — John Doerr, **Measure What Matters**
+
+> *"Put first things first. The urgent will always crowd out the important unless you protect time for work that changes the trajectory."*
+> — Stephen R. Covey, **The 7 Habits of Highly Effective People**
+
+#### 🔄 Theme: `flow`
+> *"The Three Ways: optimize for flow, amplify feedback loops, and foster a culture of experimentation. Everything else is tactics."*
+> — Gene Kim, Jez Humble, Patrick Debois & John Willis, **The DevOps Handbook**
+
+> *"Autonomy, Mastery, Purpose — teams with all three consistently outperform teams managed through carrots and sticks."*
+> — Daniel H. Pink, **Drive: The Surprising Truth About What Motivates Us**
+
+> *"Small batches, fast feedback. The longer work sits unreleased, the more assumptions it contains that reality has already disproved."*
+> — Jez Humble & David Farley, **Continuous Delivery**
+
+#### 📖 Theme: `learning`
+> *"An organization's ability to learn, and translate that learning into action rapidly, is the ultimate competitive advantage."*
+> — Jack Welch, cited in **Measure What Matters** (John Doerr)
+
+> *"The build-measure-learn loop is not optional — it is the only honest way to find out if what you built solves a real problem."*
+> — Eric Ries, **The Lean Startup**
+
+#### 🌐 Theme: `universal`
+> *"Good is the enemy of great. Most teams never become great precisely because they settle for good."*
+> — Jim Collins, **Good to Great**
+
+> *"Don't assume — prove. Every assumption that goes untested in software becomes a defect that arrives at the worst possible moment."*
+> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
+
+---
+
+## �📦 COMPOSABLE CONTENT BLOCKS
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml
 ### Purpose

@@ -14,6 +14,7 @@ This video exclusively owns:
 - Registry architecture: `mcp_registry.py`, stdio transport, tool registration pattern
 - Workflow Composer internals: how the `WorkflowComposer`, `WorkflowGateway`, and `TemplateComposer` assemble mode workflows from YAML primitives at runtime
 - The cross-cutting intelligence pipeline: how every orchestrator operation feeds a learning loop that extracts patterns, scores them with a reinforcement signal, and refines future recommendations — with architecture-level description only (self-adaptation mechanics owned by Video 08)
+- **Intent-aligned response headers:** the `BLOCK-QUOTE-LIBRARY`, how intent classification selects the theme, and how governance philosophy is made visible on every CORTEX interaction
 - Extensibility story: how to add a new MCP tool or workflow template
 
 Does NOT repeat: test-first mechanics (SE-01), business identity (Video 01), architecture overview (Video 03), sprint outcomes (Video 04), self-learning details and root cause analysis mechanics (Video 08), knowledge domain profiles (Video 09).
@@ -35,7 +36,7 @@ Software and Platform Engineers who extend and operate AI-augmented systems face
 ## Steering Prompt
 *Select the **Explainer** format in NotebookLM, then paste into NotebookLM → Customize → Steering Prompt:*
 
-> "Select the Explainer format to create an 11–14 minute technical deep-dive for software and platform engineers. Cover: (1) how CORTEX exposes 29 MCP tools via Pylance-style stdio transport, (2) how tools are registered in mcp_registry.py and discovered by VS Code Copilot Chat, (3) how the Workflow Composer and Workflow Gateway assemble mode workflows from YAML primitives at runtime, (4) how the cross-cutting intelligence pipeline automatically captures patterns from every operation and feeds a reinforcement learning loop — described at architecture level only, not implementation detail, and (5) how engineers extend the system by adding new tools or templates. Tone: senior engineer doing an architecture walkthrough — specific file paths, real module names, no abstractions. Use only the provided sources, and ensure all visual generation uses an 'X-ray / layer-reveal' motif with neon circuit tracing overlaid on a Dark-blue glassmorphism theme."
+> "Select the Explainer format to create an 11–14 minute technical deep-dive for software and platform engineers. Cover: (1) how CORTEX exposes 29 MCP tools via Pylance-style stdio transport, (2) how tools are registered in mcp_registry.py and discovered by VS Code Copilot Chat, (3) how the Workflow Composer and Workflow Gateway assemble mode workflows from YAML primitives at runtime, (4) how the cross-cutting intelligence pipeline automatically captures patterns from every operation and feeds a reinforcement learning loop — described at architecture level only, not implementation detail, (5) how CORTEX's intent-aligned response headers surface a governance-anchored business or engineering principle on every interaction — selected by the same intent classification that routes tool calls (the BLOCK-QUOTE-LIBRARY, 32 quotes across 9 themes), and (6) how engineers extend the system by adding new tools or templates. Tone: senior engineer doing an architecture walkthrough — specific file paths, real module names, no abstractions. Use only the provided sources, and ensure all visual generation uses an 'X-ray / layer-reveal' motif with neon circuit tracing overlaid on a Dark-blue glassmorphism theme."
 
 ---
 
@@ -48,6 +49,7 @@ Software and Platform Engineers who extend and operate AI-augmented systems face
 - WorkflowComposer: `cortex/orchestrators/workflow/workflow_composer.py` — template execution, convergence mode support
 - TemplateComposer: `cortex/orchestrators/workflow/template_composer.py` — dynamic primitive composition at runtime
 - Cross-cutting intelligence pipeline: `cortex/intelligence/learning/universal_learning_loop.py` — every orchestrator operation feeds pattern capture (`PatternType`: TECHNICAL, BUSINESS, GOVERNANCE, INTERACTION, PERFORMANCE); reinforcement signal (`cortex/intelligence/learning/reinforcement_signal.py`) scores each pattern; patterns are promoted into active recommendations or quarantined out of them based on accumulated confidence — scoring thresholds and lifecycle mechanics are owned by Video 08
+- **Intent-aligned response headers:** Every CORTEX response header now emits a contextually selected business or engineering principle — drawn from a curated `BLOCK-QUOTE-LIBRARY` in `.github/templates/cortex-response-templates.md`. The selection is driven by the same intent classification that routes tool calls: a TDD or testing request surfaces a quality principle (Kent Beck, Pragmatic Programmer); a security request surfaces a trust or resilience principle (Nygard, SRE book); a refactoring request surfaces a lean or improvement principle (Poppendieck, Fowler). The quote, author, and book are rendered as a Markdown blockquote inside the response header — making CORTEX's governance philosophy visible and teachable on every interaction, not just when violations are flagged. Library location: `.github/templates/cortex-response-templates.md § BLOCK-QUOTE-LIBRARY`. Theme→intent routing table is co-located in that section.
 - All workflow module names are exact: do not invent module names
 
 ---
@@ -141,7 +143,17 @@ Lower-third: `"Every operation feeds the intelligence pipeline — automatically
 Narrator: *"This is the cross-cutting intelligence pipeline. It does not require manual tuning. Every time an orchestrator completes an operation — whether it's an audit pass, a governance fix, or a test run — the result flows into a learning loop. Successful patterns accumulate confidence and get promoted. Patterns that consistently fail are quarantined. The framework becomes more accurate the longer it runs — not because someone updated a config file, but because the signal is built into the architecture."*
 On-screen callout: `"Signal in. Confidence out. No manual tuning."`
 
-**SCENE 7 — "What This Buys You" [13:30–End]**
+**SCENE 7 — "Governance Made Visible: Intent-Aligned Quotes" [13:30–14:30]**
+Visual: A single CORTEX response header materialises in VS Code Copilot Chat. The header renders: tool name, author line, then — after a brief pause — a blockquote fades in beneath it. The quote is not static: camera cuts to three different response headers side-by-side, each showing a different quote matched to a different intent.
+  Example 1 (TDD request): *"Make it work, make it right, make it fast — in that order."* — Kent Beck, **Test-Driven Development**
+  Example 2 (Refactor request): *"Waste is anything that does not add value to the customer."* — Poppendieck, **Lean Software Development**
+  Example 3 (Security request): *"Design for failure. Plan for recovery."* — Nygard, **Release It!**
+Camera reveals: the same IntentRouter compass rose from Scene 3 — the routing decision that selects the orchestrator also selects the quote theme. `quality` → TDD quotes. `security` → resilience quotes. `improvement` → lean/refactor quotes.
+Lower-third: `"BLOCK-QUOTE-LIBRARY — 32 quotes · 9 themes · matched by intent"`
+Narrator: *"Every response CORTEX emits carries a principle from the engineering literature that anchors the governance rule being applied. This is not decoration — it's the philosophy of the system made visible on every interaction. The quote is selected by the same intent classification that chose the orchestrator."*
+On-screen callout: `"Governance shouldn't be invisible — it should be instructive."`
+
+**SCENE 8 — "What This Buys You" [14:30–End]**
 Visual: All 6 layers fully opaque simultaneously — the complete X-ray stack in 3D perspective, rotating slowly. Each layer glows at its characteristic colour.
 Four outcome cards materialise beside the stack:
   `"Predictable automation"` — same tool call, same governance, every time
