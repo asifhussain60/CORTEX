@@ -63,8 +63,13 @@ class TestInteractionOrchestratorInit:
 
         assert orch.enable_challenges is True
 
-    def test_init_default_enable_challenges_false(self) -> None:
-        """enable_challenges must default to False."""
+    def test_init_default_enable_challenges_true(self) -> None:
+        """enable_challenges MUST default to True — AC-PERMANENT-FIX-006 (skull rule).
+
+        Skull rule mandates challenge-driven interaction is permanently wired.
+        The default must be True so every MasterOrchestrator instantiation
+        automatically enables challenge evaluation without explicit opt-in.
+        """
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
@@ -72,7 +77,10 @@ class TestInteractionOrchestratorInit:
         mock_protocol = MagicMock()
         orch = InteractionOrchestrator(conversation_protocol=mock_protocol)
 
-        assert orch.enable_challenges is False
+        assert orch.enable_challenges is True, (
+            "AC-PERMANENT-FIX-006 violation: enable_challenges must default to True. "
+            "Challenge-driven interaction is permanently wired (skull rule)."
+        )
 
     def test_init_creates_lens_orchestrator(self) -> None:
         """Must initialize a LENSOrchestrator for per-turn analysis."""

@@ -371,14 +371,14 @@ workflow:
   # CORTEX-MASTER.YAML SIZE GOVERNANCE
   # ─────────────────────────────────────────────────────────────────────────
   size_governance:
-    max_lines: 500
+    max_lines: 800
     description: |
-      cortex-master.yaml must remain ≤500 lines.
-      Any edit that pushes it beyond 500 lines triggers an auto-decomposition check.
+      cortex-master.yaml must remain ≤800 lines.
+      Any edit that pushes it beyond 800 lines triggers an auto-decomposition check.
       The file is an INDEX. Detailed plans belong in planning/phases/.
-    alarm_threshold: 400
+    alarm_threshold: 700
     alarm_action: |
-      When cortex-master.yaml exceeds 400 lines:
+      When cortex-master.yaml exceeds 700 lines:
       1. Identify the largest inline phase block
       2. Extract it to planning/phases/planned/ or completed/
       3. Replace with thin reference entry

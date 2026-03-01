@@ -284,7 +284,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 
-### 20-Point Production Readiness Audit
+### 21-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -308,6 +308,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 18 | **Ghost directory detection** — filesystem artifacts with dots in name (`cortex.intelligence/`, `cortex.brain/`) outside canonical structure | `find cortex/ -maxdepth 1 -name "*.*" -type d` | ✅ Delete |
 | 19 | **SQLite activity log health** — `.cortex-runtime/traces/orchestrator-traces.db` schema valid, no orphaned `AC_START` without `AC_COMPLETE`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
 | 20 | **Workflow Composer pipeline health** — WorkflowGateway importable, WorkflowComposer functional, TemplateComposer wired, all 16 code-touching modes resolve to YAML on disk via `resolve_template(mode, {}, strict=True)`, SQLite `workflow_runs` schema valid | `python3 -c "from cortex.orchestrators.workflow import WorkflowGateway; gw = WorkflowGateway(); gw.resolve_template('IMPLEMENT', {}, strict=True)"` + template count + schema check | 🟡 Report + remediation plan |
+| 21 | **Challenge gate drift** — `InteractionOrchestrator.__init__` must have `enable_challenges: bool = True` as default; `ChallengeGenerator` must be imported and wired (skull rule AC-PERMANENT-FIX-006) | AST scan: `grep -n 'enable_challenges.*=.*True' cortex/orchestrators/core/interaction_orchestrator.py` | ✅ Set default to `True`, ensure import present |
 
 ### Wiring Contract Validation (Stage 3)
 

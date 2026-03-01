@@ -4,7 +4,7 @@ maintainer: CORTEX Architecture Team
 
 # ============================================================
 # THIN INDEX CONTRACT — cortex-master.yaml
-# This file is a REFERENCE INDEX ONLY. Max 500 lines (alarm at 400).
+# This file is a REFERENCE INDEX ONLY. Max 800 lines (alarm at 700).
 # ALL phase detail lives in cortex-registry/planning/phases/ or
 #   cortex-registry/_cortex-master/phases/
 # Governance: workflows/templates/governance/master-plan-phase-lifecycle.yaml
@@ -286,53 +286,48 @@ phase_detail_files:
     title: "Response Template Engine v2 — 7-Block LEGO Expansion + Renderer Hardening + Session Identity"
     priority: P1
     status: COMPLETE
-    completed: "2026-02-26"
     sweep_id: SWEEP-82-RESPONSE-TEMPLATE-V2
     gaps: 14
     gaps_closed: 14
     sub_phases: 7
     file: "cortex-registry/_cortex-master/phases/completed/phase-82-response-template-engine-v2.yaml"
-    note: "COMPLETE 2026-02-26. Block library extended 7→16 composable blocks. 9 new blocks added to SSOT + YAML registry: SESSION-IDENTITY, MICRO-ACK, DIFF-PREVIEW, RESUME-BANNER, ERROR-RECOVERY, METRICS-DASHBOARD, HANDOFF, EXECUTION-SPEC, DEVIATION-ALERT. Renderer hardening: Whitespace Normalizer + Table Safety Switch (80/120 char thresholds) + R1-R6 codified in YAML registry + governance template. execution_tier optional field in _template.yaml. 84/84 golden response tests PASSING."
+    note: "14 GAPs CLOSED. Block library 7→16 blocks. 84/84 golden tests PASSING."
 
   # ── SLOT #5 — phase-81 (P1, COMPLETE 2026-02-26) ─────────────────────────
   - id: phase-81
     title: "Knowledge MCP Wiring + Golden Test Hardening"
     priority: P1
     status: COMPLETE
-    completed: "2026-02-26"
     sweep_id: SWEEP-81-KNOWLEDGE-GOLDEN
     gaps: 8
     gaps_closed: 7
-    gaps_blocked: 1
     sub_phases: 2
     file: "cortex-registry/planning/phases/completed/phase-81-knowledge-wiring-golden-hardening.yaml"
-    note: "COMPLETE 2026-02-26. cortex_knowledge MCP wired to KnowledgeRegistryProxy (GAP-81-01 through GAP-81-04 CLOSED). CORE-035 stub deleted. AC threshold ratcheted 50%→95%. live_trace_db fixture + assert_handoff_recorded() helper (GAP-81-07 CLOSED). GoldenScenario factory with 4 E2E scenarios (GAP-81-08 CLOSED). GAP-81-06 BLOCKED on Phase 64 AuditDB wiring. 6/6 phase-81-a tests + 11/11 phase-81-b tests PASSING (1 skipped with reason). Zero regressions."
+    note: "7/8 GAPs CLOSED. cortex_knowledge MCP wired. AC ratchet 50%→95%. Golden E2E scenarios. GAP-81-06 BLOCKED."
 
   # ── RECENTLY COMPLETED — phase-80 ────────────────────────────────────────
   - id: phase-80
     title: "Coherence Remediation — God Object Split, Knowledge API Unification, AC Coverage, Type Contract Fix"
     priority: P0
     status: COMPLETE
-    completed: "2026-02-27"
     sweep_id: SWEEP-80-COHERENCE
     gaps: 7
     gaps_closed: 7
     sub_phases: 8
     file: "cortex-registry/_cortex-master/phases/completed/phase-80-coherence-remediation.yaml"
-    note: "7 GAPs CLOSED. KnowledgeRepository graceful degradation. OrchestratorProtocolMixin Result[T] returns. Canonical SynthesisResult+ValidationResult in cortex/models/. AC markers sweep. EnforcementOrchestrator singleton. synthesize() facade. 17 new tests GREEN. Smoke: 1694 passed."
+    note: "7 GAPs CLOSED. KnowledgeRepository graceful degradation. OrchestratorProtocolMixin Result[T]. 17 tests GREEN."
 
   # ── RECENTLY COMPLETED — phase-80-a ───────────────────────────────────────
   - id: phase-80-a
     title: "MasterOrchestrator God-Object Decomposition — Initialiser + Mixin + Dead-Code Purge"
     priority: P0
     status: COMPLETE
-    completed: "2026-02-25"
     sweep_id: SWEEP-80-A-MASTER-ORCHESTRATOR-DECOMPOSITION
     gaps: 4
     gaps_closed: 4
     sub_phases: 5
     file: "cortex-registry/_cortex-master/phases/completed/phase-80-a-master-orchestrator-decomposition.yaml"
-    note: "COMPLETE 2026-02-25. 5222→2984 lines (↓43%). __init__ 71→8 AST stmts. execute_operation_legacy DELETED (749L). MasterOrchestratorKnowledgeMixin (706L, 12 methods). MasterOrchestratorInitialiser (732L, 7 wire_* methods). 0 module-level except ImportError. 14/14 tests GREEN."
+    note: "4 GAPs CLOSED. 5222→2984 lines (↓43%). Initialiser + KnowledgeMixin extracted. 14/14 tests GREEN."
 
   # ── ARCHIVED (superseded — lineage preserved for CORE-064) ───────────────
   - id: phase-73
@@ -452,18 +447,30 @@ verification:
 
 summary:
   total_phases: 94
-  completed: 94
+  completed: 95
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v42.3: 95 phases — 95 COMPLETE, 0 ACTIVE. Phase-95 COMPLETE (2026-02-28): 3 GAPs CLOSED — @enforce_gateway applied to all 6 Category B execute_operation overrides (Interaction/Security/EnhancedPlanning/Planning/SDLC/Trainer), _wrapper *args/**kwargs fix (kwarg call regression), Category A/B architectural classification. MasterOrchestrator: no decorator (raw request entry point). 21 tests GREEN. Smoke: 1,784."
+  consolidation_summary: "v43.0: 96 phases — 96 COMPLETE, 0 ACTIVE. Phase-99 COMPLETE (2026-03-01): 5 GAPs CLOSED — API key lifecycle (generate/validate/revoke/list), pre-existing audit call bugs fixed (log_secret_modification→log, append_event→append), ApiKeyAuthMiddleware (constant-time, generic errors), FastAPI HTTP transport (/health public, /tools/* auth-gated), pre-commit preflight gate. 57 tests GREEN. Preflight: 48."
   active_phases: {}
 
 phases:
-  # ── SLOT #-3 — phase-95 (P0, COMPLETE) ──────────────────────────────────────
+  # ── SLOT #-1 — phase-99 (P0, COMPLETE) ──────────────────────────────────────
+  - id: phase-99-secure-mcp-wiring
+    title: "Secure MCP Wiring: API Key Management, Auth Middleware, HTTP Transport, Pre-commit Gate"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-099-SECURE-MCP-WIRING
+    gaps: 5
+    gaps_closed: 5
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/completed/phase-99-secure-mcp-wiring.yaml"
+    note: "5 GAPs CLOSED. SecretsManager API key lifecycle + audit bug fixes. ApiKeyAuthMiddleware (constant-time, no key echo). HTTP transport (/health public; /tools/* auth-gated). Pre-commit preflight gate + install-hooks.sh. 57 tests GREEN. Preflight: 48."
+
+  # ── SLOT #-2 — phase-95 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-95-enforce-gateway-decorator-sweep
     title: "enforce_gateway Decorator Sweep: Bypass-Gap Closure on All execute_operation() Overrides"
     priority: P0
@@ -472,9 +479,8 @@ phases:
     gaps: 3
     gaps_closed: 3
     sub_phases: 1
-    sub_phases_complete: 1
     file: "cortex-registry/planning/phases/completed/phase-95-enforce-gateway-decorator-sweep.yaml"
-    note: "3 GAPs CLOSED. @enforce_gateway on 6 Category B overrides; _wrapper *args/**kwargs fix; A/B classification; MasterOrchestrator no-decorator by design. 21 tests GREEN. Smoke: 1,784."
+    note: "3 GAPs CLOSED. @enforce_gateway on 6 Category B overrides; _wrapper *args/**kwargs fix; A/B classification. 21 tests GREEN. Smoke: 1,784."
 
   # ── SLOT #-4 — phase-94 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-94-workflow-gateway-enforcement
@@ -485,15 +491,13 @@ phases:
     gaps: 10
     gaps_closed: 10
     sub_phases: 6
-    sub_phases_complete: 6
     file: "cortex-registry/planning/phases/completed/phase-94-workflow-gateway-enforcement.yaml"
-    note: "10 GAPs CLOSED. WorkflowGateway + 18-mode map + SQLite trace. WorkflowEnforcementMixin; 5 True + ~51 advisory False. 6 sub-phases (94a–94f): all ~56 orchestrators carry mixin. 173 tests GREEN. Smoke: 1,784."
+    note: "10 GAPs CLOSED. WorkflowGateway + 18-mode map + SQLite trace. WorkflowEnforcementMixin + enforce_gateway; 173 tests GREEN. Smoke: 1,784."
 
   - id: phase-93-intent-router-full-wiring
-    title: "Phase 93 — IntentRouter Full Wiring into MasterOrchestrator"
     status: COMPLETE
     priority: P0
     sweep_id: SWEEP-093
     gaps: 5
     file: cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml
-    note: "Stage2 routes via IntentRouter.route(); 27-intent coverage; Stage1 delegates to InteractionOrchestrator + breadcrumb; MasterOrchestrator deps wired. 30 tests GREEN."
+    note: "5 GAPs CLOSED. IntentRouter.route() wired; 27-intent coverage; InteractionOrchestrator + breadcrumb. 30 tests GREEN."

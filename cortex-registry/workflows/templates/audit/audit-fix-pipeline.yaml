@@ -344,11 +344,11 @@ workflow:
         stage_label: 'intelligence-matrix-gate'
 
     # -------------------------------------------------------------------------
-    # Stage 2: 17-Point Production Readiness Scan
+    # Stage 2: 18-Point Production Readiness Scan (Checks #1–#23)
     # -------------------------------------------------------------------------
     - stage_id: 'stage_2'
       stage_num: 2
-      name: 'Stage 2 — 17-Point Production Readiness Scan (Checks #1–#18)'
+      name: 'Stage 2 — 18-Point Production Readiness Scan (Checks #1–#23)'
       orchestrator: 'EnforcementOrchestrator'
       checks:
         - num: 1
@@ -573,6 +573,54 @@ workflow:
                 I/O, or missing timeout in orchestrator.
             Advisory only — does not block AC_COMPLETE.
 
+        - num: 23
+          label: 'Challenge gate drift — AC-PERMANENT-FIX-006 (skull rule)'
+          scope: 'cortex/orchestrators/core/interaction_orchestrator.py'
+          tool: 'grep + AST'
+          severity: 'P0'
+          skull_rule: 'AC-PERMANENT-FIX-006'
+          description: |
+            Verify that InteractionOrchestrator permanently has enable_challenges=True
+            as its default and that ChallengeGenerator is imported and wired.
+            Skull rule AC-PERMANENT-FIX-006 mandates challenge-driven interaction
+            is non-configurable — regressing to False is a blocked P0 violation.
+
+            Detect command:
+              python3 -c "
+                import ast, pathlib
+                src = pathlib.Path(
+                    'cortex/orchestrators/core/interaction_orchestrator.py'
+                ).read_text()
+                tree = ast.parse(src)
+                violations = []
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.FunctionDef) and node.name == '__init__':
+                        for arg, default in zip(
+                            reversed(node.args.args),
+                            reversed(node.args.defaults)
+                        ):
+                            if arg.arg == 'enable_challenges':
+                                if not (isinstance(default, ast.Constant) and default.value is True):
+                                    violations.append('DRIFT: enable_challenges default is not True')
+                if 'ChallengeGenerator' not in src:
+                    violations.append('DRIFT: ChallengeGenerator not imported')
+                if violations:
+                    for v in violations:
+                        print(v)
+                else:
+                    print('AC-PERMANENT-FIX-006: OK')
+              "
+            Pass criteria: output is exactly 'AC-PERMANENT-FIX-006: OK'
+            Auto-fix:
+              1. Set enable_challenges default to True in __init__ signature
+              2. Ensure ChallengeGenerator import block is present
+              3. Run: python3 -m pytest tests/unit/orchestrators/core/test_interaction_orchestrator.py
+                 -p no:xdist -k enable_challenges — must be GREEN
+            Verification:
+              grep -n 'enable_challenges.*=.*True' \
+                cortex/orchestrators/core/interaction_orchestrator.py
+              Expected: line with 'enable_challenges: bool = True'
+
       sqlite_logging:
         table: 'audit_stage_log'
         violations_table: 'audit_violations'
@@ -681,7 +729,7 @@ workflow:
           orchestrator: 'EnforcementOrchestrator'
           action: 'run_full_audit'
           params:
-            checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+            checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23]
             scope: ['cortex/', '.github/', 'cortex-registry/', 'requirements.txt',
                     '.cortex-runtime/traces/orchestrator-traces.db']
         fix_step:

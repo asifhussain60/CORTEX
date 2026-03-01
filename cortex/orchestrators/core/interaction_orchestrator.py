@@ -62,7 +62,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
     def __init__(
         self,
         conversation_protocol: Any,
-        enable_challenges: bool = False,
+        enable_challenges: bool = True,
         trace_db_path: Optional[str] = None,
     ) -> None:
         """
@@ -71,6 +71,9 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         Args:
             conversation_protocol: ConversationProtocol instance for turn management.
             enable_challenges: Enable challenge generation (AC-PERMANENT-FIX-006).
+                MUST remain True (hardcoded default) — skull rule AC-PERMANENT-FIX-006
+                mandates that challenge-driven interaction is permanently wired.
+                Setting False is only permitted in test isolation contexts.
             trace_db_path: Override path to SQLite trace DB (for testing; defaults to
                 CORTEX_TRACE_DB env var or .cortex-runtime/traces/orchestrator-traces.db).
         """
