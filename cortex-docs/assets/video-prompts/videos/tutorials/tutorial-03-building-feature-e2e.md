@@ -1,362 +1,131 @@
-# Tutorial 03 — Building a Feature End-to-End
+# NotebookLM Video Prompt -- Tutorial 03 -- Building a Feature End-to-End
 
-> **Duration:** ~9 minutes · **Audience:** Software Engineers ready to build
-> **Visual Theme:** 🟠 Warm amber/gold glassmorphism (tutorial accent)
-> **Prerequisite:** Tutorials 01–02 complete
-> **Goal:** Viewer builds a complete feature using TDD, governance, and audit — the full CORTEX workflow
-
-## Steering Prompt (paste into NotebookLM → Customize → Steering Prompt)
-"Create a ~9 minute hands-on tutorial for software engineers showing a complete feature cycle using TDD and CORTEX workflow gates: define acceptance criteria, write a failing test, implement minimally, run changed tests, run smoke tests, then interpret results. Narration must explain why each step matters and common gotchas, not read commands. Keep any outputs realistic and plausible. For true VS Code realism, treat real UI moments as screen-capture inserts to stitch later." 
-
-## Visual guidance (NotebookLM-friendly)
-- Prefer clean, readable tutorial cards over deterministic camera choreography.
-- Highlight one step at a time.
-- Use screen capture for real terminal/VS Code moments; stitch after export.
-
-## CORTEX voice (tutorial)
-- Narrator should sound like a **staff engineer** coaching a teammate.
-- No “AI hype.” Keep it grounded in discipline: tests, gates, validation, rescan.
-
-## SDLC templates visual
-- If you show workflow templates or convergence gates, render them as **YAML/JSON config** cards.
-
-## Explicitly define Detect → Fix → Rescan
-- **Detect**: run checks/tests and observe failures.
-- **Fix**: implement the smallest change that satisfies the failing test/rule.
-- **Rescan**: rerun until stable (tests green, critical violations 0).
+**Target length:** ~9 minutes
+**Audience:** Engineers who want to see a complete TDD + governance workflow from first test to passing audit
+**Visual Theme:** Warm amber/gold glassmorphism (tutorial series accent) with ECG callback
+**Prerequisite:** Tutorial 02 complete (command catalogue familiar)
+**Narrator gender:** Female (T03 -- odd)
+**Goal:** Viewer has built one real feature using the full CORTEX TDD + audit workflow
 
 ---
 
-## ⚠️ VISUAL IDENTITY — TUTORIAL THEME
+## ZERO-OVERLAP DECLARATION
+This tutorial exclusively owns:
+- The complete E2E workflow: failing test -> implementation -> governance gate -> audit fix -> AC_COMPLETE
+- Showing a real FastAPI endpoint built under CORTEX governance from first keystroke to green audit
+- The ECG callback: T03's ECG line is a deliberate visual callback to SE-01, acknowledging that the viewer now practices what SE-01 explained
 
-> See tutorials `README.md` for amber/gold palette and tutorial visual rules.
-
-## ⚠️ NARRATION RULE — MANDATORY
-
-> **The narrator never reads the steps or the code.** Every narration line must add something the viewer cannot get from reading the screen: the *why it matters*, the *gotcha to watch for*, the *non-obvious implication*, or the *discipline behind the mechanic*. See tutorials `README.md` §Narration Philosophy for full guidance and examples.
-
----
-
-## Cinematic simulation notes (optional; use as inspiration)
-
-### Visual Physics & Ambience Protocol (Tutorial Amber Theme)
-- **Environment:** Dark-blue vacuum (#0a0e27) with ray-traced reflections on glass floor
-- **Accent neon:** Warm amber (#f5a623) for step borders and progress; RED (#ff4757) / GREEN (#2ecc71) / BLUE (#00d4ff) for TDD phase heartbeat
-- **Code panels:** Frosted glassmorphism with 3px amber left border, JetBrains Mono at readable size; active line highlighted with amber glow
-- **ECG heartbeat:** Thin neon line across bottom of frame — pulses RED during failing tests, GREEN during passing, BLUE during refactor (callbacks to Video 04 concept)
-- **Lighting:** Volumetric fog, ray-traced caustics from TDD phase colors, bioluminescent test particles
-- **Feedback cues:** RED flash = test failure (expected in TDD), GREEN flash = test pass, holographic glitch = governance violation, Lidar sweep = LENS scan
-- **Temporal evolution:** Environment evolves through TDD phases: dim red (RED phase) → warm green (GREEN phase) → cool blue (REFACTOR) → amber (governance) → full amber luminosity (commit)
-
-**SCENE 1 — "The Awakening" (0:00–0:04)**
-Camera: Static center-frame, locked on ray-traced glassmorphism floor.
-Environment: Absolute dark-blue vacuum (#0a0e27) with volumetric amber fog at ground level.
-CORTEX logo fades in as hero image with amber electric-aura. Hold 3s. Logo shrinks to
-bottom-right watermark with amber "TUTORIAL" label. ECG heartbeat line ignites across
-bottom of frame — flat amber line, waiting for TDD to begin.
-
-**SCENE 2 — "The Scenario" (0:04–0:30)**
-Camera: Slow dolly-in toward a glassmorphic brief card assembling with time-lapse
-mechanical construction. Feature description materializes with particle condensation:
-"Add input validation to a user registration endpoint." Stack badges (Python, FastAPI)
-glow with amber neon. Workflow preview appears as a faint holographic roadmap beneath:
-TEST → IMPLEMENT → REFACTOR → GOVERN → LENS → AUDIT → COMMIT — seven stations,
-all dim, waiting to illuminate.
-
-**SCENE 3 — "RED Phase: Write the Test First" (0:30–2:00)**
-Camera: Slow dolly-in to code panel. ECG heartbeat shifts to RED neon (#ff4757) —
-pulsing rhythm. Volumetric red fog rises at floor level.
-Code panel materializes with time-lapse assembly — amber left border, JetBrains Mono.
-Test code types character by character with bioluminescent red cursor trail. Each line
-of assertion code gains a subtle red neon underline.
-`make test-changed` executes — RED ❌ failure output with holographic glitch effect.
-The failure message floats as a holographic card with ray-traced red glass surface.
-ECG heartbeat flatlines briefly, then resumes red pulse — the test is real.
-Workflow roadmap: "TEST" station illuminates red.
-
-**SCENE 4 — "GREEN Phase: Implement the Minimum" (2:00–3:30)**
-Camera: Tracking shot, code panel scrolls. ECG heartbeat transitions RED → GREEN
-(#2ecc71) with a color-shift wave along the neon line.
-Implementation code types with green cursor trail. Pydantic model assembles —
-`EmailStr` highlights with green neon emphasis (this is the key validation).
-`make test-changed` executes — GREEN ✅. Bioluminescent green particle celebration:
-sparks rise from the test output and fade. ECG heartbeat pulses steady green.
-Ray-traced green caustics ripple across the glass floor.
-Workflow roadmap: "IMPLEMENT" station illuminates green.
-
-**SCENE 5 — "REFACTOR Phase: Improve with Confidence" (3:30–4:30)**
-Camera: Slow dolly-out with parallax shift. ECG heartbeat transitions to BLUE (#00d4ff).
-Volumetric blue fog replaces green.
-Code refactors: `InputValidator` class materializes — code blocks rearrange with
-smooth glassmorphic slide animations (panels detach, reconfigure, and re-seal).
-New test methods appear with blue cursor trail. `make test-changed` — all GREEN ✅.
-ECG heartbeat pulses blue — stable, confident rhythm.
-Workflow roadmap: "REFACTOR" station illuminates blue.
-
-**SCENE 6 — "Governance Validation" (4:30–5:30)**
-Camera: Pull-back to workspace view. ECG returns to amber (tutorial accent).
-`/audit` runs — governance check results materialize as glassmorphic cards:
-✅ checks appear with green flash, ⚠️ warning appears with holographic glitch
-(missing edge case test). The warning card pulses amber — not red (it's a catch,
-not a failure).
-Fix: additional test types with amber cursor trail. Re-run governance: all GREEN ✅.
-Holographic glitch clears — steady amber glow replaces it.
-Workflow roadmap: "GOVERN" station illuminates amber.
-
-**SCENE 7 — "LENS Intelligence" (5:30–6:15)**
-Camera: Macro zoom on LENS scan output panel.
-LENS beam sweeps across the codebase (Lidar scan animation — amber laser line sweeps
-left to right). Pattern detection cards materialize with particle condensation:
-"Validator pattern (0.87)" floats as holographic confidence badge with ray-traced
-glass surface. Dependency check and coverage estimate appear as smaller holographic cards.
-Bioluminescent knowledge particles flow from LENS scan into the pattern card,
-brightening it — particle evolution from dim amber to rich gold.
-Workflow roadmap: "LENS" station illuminates gold.
-
-**SCENE 8 — "Full Audit Fix" (6:15–7:30)**
-Camera: Slow orbital drift around the workspace.
-`/audit fix` runs — 9-stage pipeline materializes as vertical track (amber neon,
-tutorial identity). Each stage illuminates sequentially with amber pulse → green
-completion flash. Ray-traced caustics cascade from each stage to the next.
-Convergence counter: holographic "1 iteration → 0 violations" with green flash.
-AC_COMPLETE badge materializes with holographic shimmer and amber glow.
-Workflow roadmap: "AUDIT" station illuminates green.
-
-**SCENE 9 — "The Commit" (7:30–8:15)**
-Camera: Dolly-in to terminal panel.
-`git commit` command with conventional message types — commit message is visible
-through frosted glass with amber neon emphasis on the `feat(auth):` prefix.
-Pre-commit hook fires: governance rules flash green in rapid sequence (Lidar sweep).
-Commit accepted — green flash with bioluminescent celebration particles.
-Git timeline materializes as a glassmorphic horizontal track — the new commit glows
-amber at the head, previous commits dim behind it with parallax depth.
-Workflow roadmap: "COMMIT" station illuminates green — all 7 stations now lit.
-
-**SCENE 10 — "The Complete Workflow" (8:15–9:00)**
-Camera: 360-degree orbital pan at 30° downward angle with parallax depth.
-Full workflow roadmap now fully illuminated: TEST (red→green) → IMPLEMENT (green) →
-REFACTOR (blue) → GOVERN (amber) → LENS (gold) → AUDIT (green) → COMMIT (green).
-ECG heartbeat pulses steady green — healthy, complete. All glassmorphic panels and
-code panels visible in the background with ray-traced reflections creating depth.
-Glassmorphic completion card assembles — workflow steps listed with checkmarks.
-Amber arrow with particle trail: "Tutorial 4 →"
-Fade to black with ECG flatline (gentle, not dramatic) and ray-traced reflections dimming.
+Does NOT repeat: installation (T01), command catalogue (T02), multi-repo onboarding (T04), VS Code navigation (T05), chat workflow intro (T06), result interpretation (T07).
 
 ---
 
-## PROMPT
+## Steering Prompt
+Paste into NotebookLM Customize - Steering Prompt:
 
-Create a ~9-minute tutorial video titled **"Building a Feature End-to-End"** using the amber/gold tutorial theme. Walk through implementing a real feature from request to commit using CORTEX's full engineering discipline.
-
-### Intro — The Scenario (0:00 – 0:30)
-
-**Glassmorphic brief card:**
-
-> **Feature:** Add input validation to a user registration endpoint
-> **Stack:** Python (FastAPI)
-> **What we'll use:** TDD (RED-GREEN-REFACTOR), governance validation, LENS scan, audit fix, conventional commit
-
-**Narration:** "Notice the scenario: not 'hello world.' A real feature, a real stack, real governance requirements. Everything you're about to see applies directly to production work."
-
-### Step 1 — Start with the Test (0:30 – 2:00)
-
-**CORE-008 in action.** Code panel with amber border.
-
-**Write the test FIRST:**
-```python
-def test_registration_rejects_invalid_email():
-    """Registration endpoint should reject malformed email addresses."""
-    response = client.post("/register", json={
-        "email": "not-an-email",
-        "username": "validuser",
-        "password": "SecureP@ss123"
-    })
-    assert response.status_code == 422
-    assert "email" in response.json()["detail"][0]["loc"]
-```
-
-**Run the test:**
-```bash
-make test-changed
-```
-
-**Result:** RED ❌ — test fails because the validation doesn't exist yet.
-
-**ECG heartbeat pulses red.**
-
-**Dark pill:** *"The test defines the behavior we WANT. It fails because the code doesn't exist yet. This is the discipline — tests first, then code."*
-
-**Narration:** "That red failure is a good sign. It means the test is real — it will actually tell you something when the implementation exists. A test that passes before you've written anything is not a test."
-
-### Step 2 — Implement the Minimum (2:00 – 3:30)
-
-**Write just enough code to pass:**
-
-```python
-from pydantic import BaseModel, EmailStr
-
-class RegistrationRequest(BaseModel):
-    email: EmailStr  # Pydantic validates email format
-    username: str
-    password: str
-
-@app.post("/register")
-async def register(request: RegistrationRequest):
-    # ... registration logic
-    return {"status": "registered"}
-```
-
-**Run the test again:**
-```bash
-make test-changed
-```
-
-**Result:** GREEN ✅ — test passes.
-
-**ECG heartbeat pulses green.**
-
-**Narration:** "Resist the urge to write more. The test is the contract — it defines exactly what 'done' means. Writing beyond the test means writing beyond your proof of correctness."
-
-### Step 3 — Refactor with Confidence (3:30 – 4:30)
-
-**Now improve the code** knowing the test protects you:
-
-- Extract validation into a separate validator class
-- Add password strength validation
-- Add username format validation
-- Add type hints and docstrings (governance requirements)
-
-```python
-class InputValidator:
-    """Validates registration input against business rules."""
-
-    @staticmethod
-    def validate_password(password: str) -> list[str]:
-        """Check password meets security requirements."""
-        errors: list[str] = []
-        if len(password) < 12:
-            errors.append("Password must be at least 12 characters")
-        # ... additional checks
-        return errors
-```
-
-**Add more tests for the new validations. Run:**
-```bash
-make test-changed
-```
-
-**Result:** All GREEN ✅. ECG pulses blue (refactor phase).
-
-**Narration:** "This is the refactor phase's secret: you're not adding features. You're improving the code for the next person who reads it — which might be you in three months."
-
-### Step 4 — Governance Validation (4:30 – 5:30)
-
-**Run the governance check:**
-```bash
-/audit
-```
-
-**Show what governance checks:**
-- ✅ Type hints on all functions (CORE-011)
-- ✅ Docstrings on public APIs (CORE-012)
-- ✅ File naming: snake_case (CORE-028)
-- ⚠️ Missing test for password validation edge case (detected by LENS)
-
-**Fix the warning** — add the missing edge case test:
-
-```python
-def test_registration_rejects_weak_password():
-    """Registration should reject passwords under 12 characters."""
-    response = client.post("/register", json={
-        "email": "user@example.com",
-        "username": "validuser",
-        "password": "short"
-    })
-    assert response.status_code == 422
-```
-
-**Re-run governance:** All GREEN ✅.
-
-**Narration:** "The governance warning wasn't a failure. It was CORTEX catching an edge case you hadn't thought of yet. That's the system working correctly — not a disruption to your workflow."
-
-### Step 5 — LENS Intelligence (5:30 – 6:15)
-
-**LENS scan runs as part of the audit.** Show the findings:
-
-- **Pattern detected:** Validator pattern (0.87 confidence) — matches enterprise pattern library
-- **Suggestion:** Consider Strategy pattern for extensible validation rules
-- **Dependency check:** `pydantic` version is current, no known CVEs
-- **Coverage estimate:** New code is 94% covered by tests
-
-**Dark pill:** *"LENS doesn't just check syntax. It understands architecture patterns and suggests improvements based on your codebase's history."*
-
-**Narration:** "A confidence score of 0.87 on a pattern means LENS has seen enough evidence to be certain this pattern is present — not just that a few signatures matched. That's what makes the suggestion trustworthy rather than speculative."
-
-### Step 6 — Full Audit Fix (6:15 – 7:30)
-
-**Run the complete pipeline:**
-```
-/audit fix
-```
-
-**Show each stage progressing** (amber progress bar):
-- Environment ready ✅
-- Governance pre-flight ✅
-- Production scan ✅ — 0 violations
-- Wiring validation ✅
-- Health checks ✅
-- Vacuum ✅ (nothing to clean)
-- Meta-audit ✅
-- Convergence: 1 iteration, 0 violations → exit
-- Tests: all passing ✅
-
-**AC markers visible:** `AC_START` → `AC_COMPLETE ✅ (2,847ms)`
-
-**Narration:** "Zero violations. That's not luck — it's the result of running governance checks throughout the workflow rather than saving them for the end."
-
-### Step 7 — Commit (7:30 – 8:15)
-
-**Conventional commit message:**
-```bash
-git add .
-git commit -m "feat(auth): add input validation to registration endpoint
-
-- Email format validation via Pydantic EmailStr
-- Password strength enforcement (12+ chars, complexity)
-- Username format validation
-- Full test coverage with edge cases
-- LENS pattern: Validator (0.87 confidence)"
-```
-
-**Pre-commit hook fires** — governance rules validate one final time. Green. Commit accepted.
-
-**Show the commit in the git timeline** — clean, descriptive, traceable.
-
-**Narration:** "The commit message isn't documentation overhead. It's the audit trail entry that tells the next engineer — or the next you — exactly what changed and why the LENS pattern score was relevant."
-
-### Step 8 — Recap: The Complete Workflow (8:15 – 9:00)
-
-**Glassmorphic workflow summary:**
-
-```
-1. Write test (RED)        → Defines expected behavior
-2. Implement (GREEN)       → Minimum code to pass
-3. Refactor (BLUE)         → Improve with test safety net
-4. Governance check        → Standards enforced automatically
-5. LENS analysis           → Pattern detection + suggestions
-6. Audit fix               → Full production readiness scan
-7. Commit                  → Pre-commit hook + conventional message
-```
-
-**Narration:** "Seven steps. One feature. Production-ready. This workflow doesn't feel slow once it's muscle memory — it feels like the only way you'd want to build."
-
-**Next:** "Tutorial 4 — Onboarding & Customization" (amber arrow)
+"Create a ~9 minute hands-on tutorial showing a complete CORTEX feature build end-to-end. Use a simple FastAPI endpoint as the example feature. Follow the exact TDD sequence: write the failing test first, run make test-changed, implement, run smoke test, then run /audit fix. Show convergence: what happens when the audit finds a violation, and how the loop closes. Narration must explain the discipline behind each step -- not read the code. Use only provided sources."
 
 ---
 
-## Notes
-- This tutorial uses a REALISTIC feature (input validation) that every developer understands
-- The code is intentionally simple — the focus is on the WORKFLOW, not the implementation complexity
-- Every command is shown with real output
-- The governance warning in Step 4 is deliberately included — it shows that CORTEX catches things you miss, which is the point
-- ECG heartbeat visual from concept Video 4 makes a brief cameo — connecting the tutorial to the concept video
+## NARRATION RULE -- MANDATORY
+The narrator never reads code. Every line explains the discipline, the principle, or the consequence.
+
+---
+
+## Cinematic treatment -- "ECG Feature Build"
+
+**Unique opening (ECG callback -- deliberate reference to SE-01 concept video):**
+The environment is fully amber-lit. A thin neon line appears across the bottom of the frame -- amber coloured (tutorial palette, not SE-01's red/green/blue).
+On-screen label: "If you've seen the TDD deep dive, you know this line."
+A small SE-01 thumbnail appears briefly beside the ECG label -- a deliberate cross-reference.
+The amber ECG line pulses once. On-screen: "Now we build."
+This callback is intentional -- T03 is the practice video for the concepts in SE-01. Viewers who watched SE-01 will recognise the motif immediately.
+
+The ECG line persists throughout T03:
+- AMBER pulse (steady): planning phase
+- RED pulse (sharp spike): test written and failing (correct)
+- GREEN pulse (smooth wave): implementation passing
+- BLUE flat then smooth: refactor complete
+- WHITE long pulse: /audit fix passes, AC_COMPLETE logged
+
+### Visual Physics
+- Background: #0a0e27
+- Accent: #f5a623 amber (tutorial) + ECG phase colours as above
+- Code panels: frosted glassmorphism, amber border
+- ECG line: 4px neon line, colour-shifts with phase, always visible
+
+---
+
+## Scene-by-scene breakdown
+
+**SCENE 1 -- "The Feature Spec" [0:00-0:45]**
+Amber ECG steady pulse. A single glassmorphic requirement card:
+"Add a GET /status endpoint that returns the service version and uptime."
+Narrator: "The spec is not the code. Before you write a single line, the test defines what done looks like. This is where TDD discipline begins -- and where most shortcuts happen."
+
+**SCENE 2 -- "Write the Failing Test First" [0:45-2:30]**
+ECG line shifts to RED (sharp spike). Code panel materialises:
+```python
+# tests/api/test_status_endpoint.py
+def test_status_returns_version_and_uptime():
+    response = client.get("/status")
+    assert response.status_code == 200
+    assert "version" in response.json()
+    assert "uptime_seconds" in response.json()
+```
+Terminal: `make test-changed` -- test collected, FAILED. Red flash.
+Narrator: "A failing test is not a problem. It is evidence that the test is real. If you run your test and it passes before you write any implementation, the test is not testing anything. The red state is the proof of work."
+Lower-third: "CORE-008: tests before implementation, no exceptions."
+
+**SCENE 3 -- "Implement to Green" [2:30-4:00]**
+ECG shifts to GREEN (smooth wave). Implementation panel appears beside test panel:
+```python
+# cortex/api/status_endpoint.py
+import time
+START_TIME = time.time()
+
+@router.get("/status")
+async def get_status():
+    return {
+        "version": settings.VERSION,
+        "uptime_seconds": int(time.time() - START_TIME)
+    }
+```
+Terminal: `make test-changed` -- PASSED. Green flash.
+Narrator: "Write the minimum implementation that makes the test pass. Nothing more. The refactor phase is where you improve it -- not now. Premature optimisation in the green phase breaks the discipline."
+
+**SCENE 4 -- "Refactor" [4:00-5:00]**
+ECG shifts to BLUE (flat then smooth). Code panel shows type hints and docstring added.
+Terminal: `make test-changed` -- still PASSED.
+Narrator: "Refactor with the test as your safety net. The test still passes -- that's the proof that refactoring didn't break the contract. This is what the green state is for: safe improvement."
+
+**SCENE 5 -- "Smoke Gate" [5:00-5:45]**
+`make test-smoke` -- progress bar fills amber. PASSED. ECG: white long pulse.
+Narrator: "Before you run the full audit, run smoke. Smoke catches broad integration breaks faster than a full audit. If smoke fails, fix it before paying for the full 9-stage pipeline."
+
+**SCENE 6 -- "/audit fix and Convergence" [5:45-8:00]**
+`/audit fix` fires. 9-stage pipeline graphic. Stage 3 (governance): amber violation card appears:
+"Missing type hint on get_status return annotation."
+CORTEX fix applied. Rescan runs. Green cascade. Stage 9: AC_COMPLETE logged.
+ECG: white steady line. Single long green pulse.
+Narrator: "The audit found a violation. CORTEX fixed it, then rescanned. That is the convergence loop: detect, fix, rescan, repeat until zero P0/P1 violations remain. You don't manually fix and re-run -- the loop is automatic. Your job is to review the fix, not execute the loop."
+Lower-third: "CORE-068: detect -> fix -> rescan until 0 P0/P1. Max 3 cycles."
+
+**SCENE 7 -- "The Completed Feature" [8:00-End]**
+All panels visible: test (green), implementation, audit (green), AC trace card.
+ECG: stable white heartbeat.
+Narrator: "One feature. One test. One audit. Every step traceable. That is a CORTEX workflow -- not perfect, but repeatable. Repeatable is what scales."
+Outro card: "Next: Tutorial 04 -- Onboarding and Customisation"
+
+---
+
+## Audio direction
+- ECG opening: soft amber pulse sounds, then the familiar sharp tick from SE-01 concept video (deliberate audio callback)
+- RED phase: sharp spike sound
+- GREEN phase: smooth ascending tone
+- AC_COMPLETE: white long pulse + a clean, final bell tone (distinct from the amber chimes in T01)
+- No cold start -- environment already lit
+
+---
+
+## Production note
+The ECG callback is the most important creative choice in this tutorial. Do not replace it with a generic animation. Viewers who watched SE-01 will feel the connection immediately -- this is intentional cross-video continuity. The FastAPI code is minimal and plausible; do not add framework-specific boilerplate beyond what is shown.
