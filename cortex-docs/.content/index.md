@@ -100,7 +100,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | ADO / work item integration | `04-mcp/06-work-item-integration.md` |
 | Infrastructure & deployment | `05-infrastructure/01-overview.md` |
 | Token optimization | `05-infrastructure/08-token-optimization.md` |
-| Architecture diagrams | `07-diagrams/01-overview.md` |
+| Architecture diagrams | `flat-files/13-diagrams.md` |
 | Golden tests & quality | `flat-files/14-golden-tests.md` |
 | Sharpen The Saw (STS) | `flat-files/15-sharpen-the-saw.md` |
 | SDLC workflow engine | `flat-files/16-sdlc-workflow-engine.md` |
@@ -109,6 +109,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Enterprise patterns & knowledge | `flat-files/19-enterprise-patterns-knowledge.md` |
 | Security-first development | `flat-files/20-security-first.md` |
 | Glossary | `glossary.md` |
+| Architecture diagrams | `flat-files/13-diagrams.md` |
 
 ---
 

@@ -71,4 +71,4 @@ Workflow template E2E coverage is enforced by:
 - `tests/golden/governance/test_workflow_template_governance.py` — CORE-035 compliance
 - Holistic scenario `workflow_template_ref` field in S21, S22, S23
 
-See also: `07-diagrams/10-golden-test-taxonomy.md`
+See also: `../assets/diagrams/10-workflow-template-engine.md`

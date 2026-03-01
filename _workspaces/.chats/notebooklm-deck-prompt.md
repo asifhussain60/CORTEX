@@ -1,184 +1,76 @@
-# NotebookLM Deck Prompt — CORTEX Technical Presentation
-**Audience:** Tech Leads & Software Engineers  
-**Slides:** ≤ 10 | **Format:** High-value visuals, minimal prose  
-**Created:** 2026-02-26
+A Few Suggested Refinements
+While this is excellent, here are three small tweaks to ensure the "Business-friendly" tone stays on track:
 
----
+Define the "CORTEX Voice": In your Audio guidance, you might add: "The narrator should sound like a senior project lead—knowledgeable and calm, not a salesperson." This helps the AI avoid "marketing-speak."
 
-## 🎯 PROMPT FOR NotebookLM
+Clarify the "SDLC Template" visual: Since you mentioned SDLC workflow templates, specify that if a "template" is shown, it should look like a structured config file (YAML/JSON) to reinforce the "Governance" theme.
 
----
+The "Audit → Fix → Rescan" Loop: Ensure your uploaded notes explicitly define what happens in each of these three steps. If NotebookLM doesn't find the "Rescan" logic in the sources, it might gloss over the most important part of the reliability story.
 
-> **Paste the following into NotebookLM as your Studio prompt:**
+Visual Reference for your Diagrams
+Since you are focusing on architecture layers, ensure your uploaded image for 01-architecture-system-architecture-layers.md follows a clear top-down flow similar to this structure:
 
----
+This is the Master Production Prompt for NotebookLM. It is designed to be split into two parts: the Steering Prompt (the "Boss" instructions) and the Technical Narrative Source (the "Brain" instructions).
 
-### PROMPT START
+To get the best result, upload your architecture diagrams as images first, then create a "New Note" in NotebookLM and paste the Technical Narrative Source below into it. Finally, use the Steering Prompt in the "Customize" box.
 
-You are creating a **high-impact technical slide deck** for an audience of **tech leads and software engineers**.
+Part 1: The Steering Prompt
+Copy/Paste this into the NotebookLM → Customize → Steering Prompt box:
 
-**Subject:** CORTEX — a production-grade AI Engineering Framework built on a unified Python package (`cortex.*`), 51 wired orchestrators, 39 MCP tools, and 38 CORE governance rules.
+"Create a 5–8 minute professional technical documentary for business and engineering leaders. The tone is calm, authoritative, and honest—avoiding 'AI hype.' Explain CORTEX as a production-grade orchestration and governance framework, not an IDE replacement. Structure the video around the 'Audit → Fix → Rescan' loop. Use a senior architect’s voice. Emphasize reliability, team alignment, and the 30+ governance YAML rules. Use only the provided sources for technical facts; do not speculate on features not mentioned in the documentation. Direct the pacing to be steady with light ambient synth audio."
 
-**Constraints:**
-- Maximum **10 slides**
-- Every slide must contain **one dominant visual element** (architecture diagram, flow chart, table, code snippet, or metric callout) — no bullet-heavy walls of text
-- Lead with **what the system does**, not how it was built
-- Each slide must answer one engineer's question in ≤ 30 words of prose
+Part 2: The Technical Narrative Source
+Paste this into a New Note inside your Notebook named "CORTEX_Video_Script_Source":
 
-**Slide plan — produce exactly these 10 slides:**
+Video Mission & Core Truths
+Identity: CORTEX is a framework for AI Engineering Discipline. It is a layer of governance that sits between the developer and the LLM.
 
----
+Scale Stats: 250+ Python-based orchestrators, 25+ MCP tools (Model Context Protocol), and 30+ Governance YAML rules.
 
-**SLIDE 1 — The Problem (1 visual: tension diagram)**
-Title: *"Why does AI-assisted development break at scale?"*
-Visual: A split diagram showing LEFT side (fragmented tools: Copilot, shell scripts, ad-hoc pytest, manual governance) vs RIGHT side (unified CORTEX pipeline). Label each pain point on the left: no audit trail, drift between tools, no TDD gate, no cross-team consistency.
-Prose (≤ 20 words): "Scattered AI tools create invisible debt. CORTEX is the engineering framework that enforces discipline."
+The Problem: LLMs are fast but inconsistent. CORTEX makes them repeatable and auditable.
 
----
+The "Audit → Fix → Rescan" Loop (The Core Demo)
+This is the heart of the video. The narration must follow this logical flow:
 
-**SLIDE 2 — What CORTEX Is (1 visual: layered architecture box)**
-Title: *"One Package. Four Tiers. Zero Ambiguity."*
-Visual: Vertical stack diagram with 4 labeled tiers:
-  - Tier 1 — CORE Orchestrators (Master, IntentRouter, TDD, Enforcement)
-  - Tier 2 — DOMAIN Orchestrators (Refactoring, Planning, Investigation)
-  - Tier 3 — SUPPORT Orchestrators (Digest, Sweep, Bulk, Vacuum)
-  - Tier 4 — GIT Orchestrators
-Below the stack: "51 orchestrators | 39 MCP tools | 38 governance rules | 1 package: cortex.*"
-Prose (≤ 20 words): "Every operation routes through MasterOrchestrator → IntentRouter → domain specialist. No side doors."
+The Audit (The Intent): * User issues a /audit command.
 
----
+The LENS Protocol (Intent Router) identifies the request.
 
-**SLIDE 3 — The MCP Architecture (1 visual: flow diagram)**
-Title: *"Pylance-style MCP — Zero Setup, Always On"*
-Visual: Sequence flow diagram:
-  VS Code opens workspace → MCP stdio server auto-starts (python3 -m cortex.mcp) → GitHub Copilot Chat detects 39 tools → Engineer types natural language → IntentRouter classifies → Orchestrator executes
-Callout box: "Transport: stdio | Config: .vscode/settings.json | Detection: cortex_verify(op='mcp')"
-Prose (≤ 20 words): "No ports, no manual startup. MCP activates like Pylance — the moment VS Code opens."
+The EnforcementOrchestrator triggers the cortex_validate tool.
 
----
+It checks the code against YAML rules (e.g., CORE-001 for Error Handling).
 
-**SLIDE 4 — The 4-Stage Pipeline (1 visual: pipeline rail diagram)**
-Title: *"Every Request Follows One Path"*
-Visual: Horizontal pipeline rail with 4 stations:
-  [1. INTERACTION] → [2. INTENT] → [3. INTELLIGENCE (LENS)] → [4. EXECUTION]
-Below each station, one sub-label:
-  Comprehend + DoR | IntentRouter.route() | Language→Examine→Navigate→Synthesize | Delegate to Orchestrator
-Colour-code: Stage 0 governance audit fires before Stage 1 (shown as a red guard gate).
-Prose (≤ 20 words): "LENS analysis ensures every execution is workspace-aware, not just prompt-aware."
+Visual: Show a list of violations appearing in a terminal-like view.
 
----
+The Fix (The Action): * User issues a /fix command.
 
-**SLIDE 5 — CORE Governance Rules (1 visual: rule card grid)**
-Title: *"38 Rules. Zero Exceptions."*
-Visual: 3×3 card grid showing the 9 most engineer-critical rules:
-  | CORE-002 | No .md/.txt report files — all output inline |
-  | CORE-008 | TDD mandatory — RED → GREEN → REFACTOR, always |
-  | CORE-011 | Type hints on every function |
-  | CORE-012 | Docstrings on all public APIs |
-  | CORE-028 | snake_case file naming only |
-  | CORE-035 | One canonical implementation — no duplicates |
-  | CORE-048 | Holistic validation gate before any IMPLEMENT/FIX |
-  | CORE-049 | Silent autonomous execution — no narration |
-  | CORE-064 | Sweep completeness — fix the entire class, not one instance |
-Footer: "Enforced at: pre-commit hook → CI → runtime (EnforcementOrchestrator)"
-Prose (≤ 20 words): "Rules are not suggestions. EnforcementOrchestrator blocks commits that violate any P0 rule."
+CORTEX doesn't just "ask an AI"; it applies the SDLC Workflow Templates as constraints.
 
----
+The Host LLM (Copilot Chat) generates code that must satisfy the specific YAML governance rule.
 
-**SLIDE 6 — TDD-First Development Loop (1 visual: TDD cycle diagram)**
-Title: *"No Code Ships Without a Failing Test First"*
-Visual: Classic RED → GREEN → REFACTOR circle, but annotated with CORTEX specifics:
-  - RED: TDDOrchestrator writes the failing test (CORE-008)
-  - GREEN: Implement minimum code to pass
-  - REFACTOR: RefactoringOrchestrator cleans; scorecard auto-generated
-  - GATE: python3 scripts/run_tests.py smoke → AC_COMPLETE emitted
-Outside ring callout: "16,259 tests | pytest-xdist -n auto | <60s smoke gate"
-Prose (≤ 20 words): "CORTEX enforces TDD structurally — the framework won't proceed without a RED phase."
+Visual: Code being updated in a VS Code-style environment.
 
----
+The Rescan (The Validation): * CORTEX automatically re-runs the cortex_validate tool.
 
-**SLIDE 7 — /audit fix Pipeline (1 visual: numbered stage ladder)**
-Title: *"One Command. Production-Ready in 9 Stages."*
-Visual: Vertical numbered ladder (Stage -1 → Stage 9) with short labels:
-  -1: Environment preflight
-   0: Inflight upgrade check
-   1: Stage 0 governance pre-flight
-   2: 19-point production scan
-   3: Wiring contract validation
-   4: Orchestrator health (51 checked)
-   5: Vacuum / markdown cleanup
-   6: Prompt/agent meta-audit (23 checks)
-   7–8: Auto-fix convergence loop (loops until 0 P0/P1)
-   9: Tests + AC_COMPLETE → SQLite cleanup
-Callout: "Convergence guarantee: Stages 7–8 loop until p0_count == 0 AND p1_count == 0 (CORE-064)"
-Prose (≤ 20 words): "Not a single pass. CORTEX loops until the codebase is genuinely clean."
+The loop only closes when the violation count is Zero.
 
----
+Visual: A "Green" success checkmark or "Audit Passed" status.
 
-**SLIDE 8 — Observability & Audit Trail (1 visual: data flow into SQLite)**
-Title: *"Every Action Is Traced. Nothing Is Silent."*
-Visual: Fan-in diagram: multiple orchestrators (boxes labelled with names) each emitting AC_START / AC_COMPLETE markers → single arrow into .cortex-runtime/traces/orchestrator-traces.db → four output query paths: audit_sessions | audit_violations | workflow_cycles | workflow_runs
-Code snippet (small, monospaced):
-  # AC_START: AC-TDD-20260226T143200
-  # ... execution ...
-  # AC_COMPLETE: AC-TDD-20260226T143200 ✅ 142ms
-Prose (≤ 20 words): "Orphaned AC_START without AC_COMPLETE = P0 violation. The DB is your governance ledger."
+Scene/Slide Breakdown Guidance
+Scene 1: The Hook (0:00-1:00): Focus on the gap between "Fast Code" and "Production Code."
 
----
+Scene 2: Architecture (1:00-2:30): Use Diagram 01 (Layers). Explain how CORTEX orchestrates the LLM rather than replacing it.
 
-**SLIDE 9 — Test Execution Strategy (1 visual: 3-layer pyramid)**
-Title: *"Smart Testing — Run Only What Matters"*
-Visual: Inverted 3-layer pyramid (fastest at top, slowest at bottom):
-  Top (fastest, TDD inner loop): `make test-changed` — pytest-testmon, changed files only, <5s
-  Middle (smoke gate, pre-commit): `make test-smoke` — preflight + core, <60s
-  Bottom (full suite, CI): `make test-parallel` — pytest-xdist -n auto, 16,259 tests
-Callout boxes on the side:
-  "CORTEX_WORKERS=4 caps parallelism for CI"
-  "CORTEX_DISABLE_TESTMON=true for clean runs after large refactors"
-Prose (≤ 20 words): "Testmon means you only wait for tests that touch your change. Local TDD stays fast."
+Scene 3: The Loop (2:30-5:30): Detailed walkthrough of Audit/Fix/Rescan. This is the technical meat.
 
----
+Scene 4: Business Value (5:30-End): Focus on "Fewer Regressions" and "Clear Delivery Discipline."
 
-**SLIDE 10 — How to Adopt CORTEX (1 visual: 3-step onboarding ladder)**
-Title: *"From Zero to Governed in 3 Steps"*
-Visual: Rising staircase with 3 steps:
-  Step 1 — Install & Connect
-    python3 scripts/setup-mcp.py
-    VS Code auto-detects MCP (Pylance-style)
-  Step 2 — Run First Audit
-    /audit fix  →  9-stage pipeline executes
-    Inline violations table surfaced in Chat
-  Step 3 — Develop with CORTEX Discipline
-    Write test → implement → /audit fix → commit
-    EnforcementOrchestrator guards every commit
-Footer callout: "Docs: cortex-docs/ | Rules: cortex-registry/core/ | MCP: cortex/mcp/tools/"
-Prose (≤ 20 words): "CORTEX is not a plugin. It is the engineering discipline layer your team was missing."
+Visual & Audio Style
+Visuals: Dark blue glassmorphism theme. UI elements should look like a clean, generic VS Code. Diagrams should be shown one layer at a time.
 
----
+Camera: Slow dolly and gentle parallax. No aggressive zooming.
 
-### PROMPT END
+Audio: Calm professional narrator. Background is a subtle ambient synth bed with light keyboard foley during the demo segments.
 
----
-
-## 📎 Source Material to Upload to NotebookLM
-
-Upload the following files as sources before generating the deck:
-
-| Priority | File | Why |
-|---|---|---|
-| P0 | `.github/copilot-instructions.md` | Architecture numbers (51/39/38), canonical structure |
-| P0 | `.github/prompts/cortex-architect.prompt.md` | Full pipeline, CORE rules, orchestrator domains |
-| P1 | `cortex-registry/cortex-master.yaml` | Phase history, roadmap, current state |
-| P1 | `cortex-docs/ARCHITECTURE-RECOMMENDATION.md` | Design rationale |
-| P2 | `cortex-registry/core/tier0-skull/*.yaml` | CORE rule definitions |
-| P2 | `scripts/run_tests.py` (first 80 lines) | Test tier evidence |
-
----
-
-## 🎨 Design Guidance for NotebookLM
-
-- **Colour palette:** Dark background (#0D1117), accent blue (#58A6FF), accent green (#3FB950), alert red (#F85149) — matches GitHub Dark + CORTEX terminal aesthetic
-- **Font:** Monospaced (JetBrains Mono or Fira Code) for all code snippets and metric callouts; sans-serif (Inter or SF Pro) for prose
-- **Icon system:** Use filled circles for pipeline stages (●), shields for governance rules (🛡️), and lightning bolts for performance claims (⚡)
-- **No stock photos** — all visuals are diagrams, code, or metrics
-- **Every slide has a single dominant element** that communicates without the prose label
+Final Pro-Tip for your Workflow:
+Once NotebookLM generates the first draft of the video, it might provide a "Deep Dive" audio or a script. If it feels too "marketing-heavy," you can refine the Steering Prompt by adding: "Remove all superlative adjectives like 'revolutionary' or 'game-changing'—stick to engineering verbs."

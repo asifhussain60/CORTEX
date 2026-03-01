@@ -39,4 +39,4 @@ The `SDLCWorkflowOrchestrator` maps user intents to lifecycle phases:
 ---
 
 **Full documentation:** `flat-files/16-sdlc-workflow-engine.md`
-**Diagram:** `07-diagrams/12-sdlc-pipeline.md`
+**Diagram:** `../assets/diagrams/03-workflow-sdlc-pipeline.md`

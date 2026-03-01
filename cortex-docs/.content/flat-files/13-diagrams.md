@@ -27,15 +27,15 @@ order: 12
 | 7 | Testing Pyramid and Execution | [Testing Pyramid](#7-testing-pyramid) |
 | 8 | Brain Tier Intelligence Model | [Brain Tiers](#8-brain-tiers) |
 | 9 | Golden Test Taxonomy | [Golden Tests](#9-golden-test-taxonomy) |
-| 10 | Golden Test Lifecycle | `diagrams/diagram-16-golden-test-lifecycle.md` |
-| 11 | SDLC 7-Phase Pipeline | `diagrams/diagram-17-sdlc-pipeline.md` |
-| 12 | Workflow Template Engine | `diagrams/diagram-18-workflow-template-engine.md` |
-| 13 | RGR Two-Level Quality Cycle | `diagrams/diagram-19-rgr-cycle.md` |
-| 14 | STS Before/After Transformation | `diagrams/diagram-20-sts-before-after.md` |
-| 15 | Security-First 5-Layer Architecture | `diagrams/diagram-21-security-first.md` |
-| 16 | Knowledge Hydration Pipeline | `diagrams/diagram-22-knowledge-hydration.md` |
-| 17 | Sweep Completeness Lifecycle | `diagrams/diagram-23-sweep-completeness.md` |
-| 18 | RCA Prevention Flow | `diagrams/diagram-24-rca-prevention-flow.md` |
+| 10 | Golden Test Lifecycle | `../assets/diagrams/07-testing-testing-strategy-pyramid.md` |
+| 11 | SDLC 7-Phase Pipeline | `../assets/diagrams/03-workflow-sdlc-pipeline.md` |
+| 12 | Workflow Template Engine | `../assets/diagrams/10-workflow-template-engine.md` |
+| 13 | RGR Two-Level Quality Cycle | `../assets/diagrams/05-workflow-tdd-cycle-and-fsm.md` |
+| 14 | STS Before/After Transformation | `../assets/diagrams/01-architecture-system-architecture-layers.md` |
+| 15 | Security-First 5-Layer Architecture | `../assets/diagrams/01-architecture-system-architecture-layers.md` |
+| 16 | Knowledge Hydration Pipeline | `../assets/diagrams/08-architecture-package-and-directory-map.md` |
+| 17 | Sweep Completeness Lifecycle | `../assets/diagrams/06-governance-sweep-completeness-core-064.md` |
+| 18 | RCA Prevention Flow | `../assets/diagrams/04-audit-audit-fix-pipeline.md` |
 
 ### Notation Guide
 

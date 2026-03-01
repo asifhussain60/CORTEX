@@ -63,4 +63,4 @@ The `GoldenScenario` dataclass in `cortex/testing/_golden_factory.py` parametriz
 ---
 
 **Full documentation:** `flat-files/14-golden-tests.md`
-**Diagram:** `07-diagrams/11-golden-test-lifecycle.md`
+**Diagram:** `../assets/diagrams/07-testing-testing-strategy-pyramid.md`

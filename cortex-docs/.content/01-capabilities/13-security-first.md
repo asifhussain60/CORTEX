@@ -39,4 +39,4 @@ Security checks run at every SDLC phase transition, not just before deployment:
 ---
 
 **Full documentation:** `flat-files/20-security-first.md`
-**Diagram:** `07-diagrams/16-security-first.md`
+**Diagram:** `../assets/diagrams/01-architecture-system-architecture-layers.md`

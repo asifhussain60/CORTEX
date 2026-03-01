@@ -47,4 +47,4 @@ Level 1 runs inside Level 2. Every individual fix follows TDD, and the sweep ens
 ---
 
 **Full documentation:** `flat-files/18-rgr-quality-cycle.md`
-**Diagram:** `07-diagrams/14-rgr-cycle.md`
+**Diagram:** `../assets/diagrams/09-orchestration-request-sequence.md`
