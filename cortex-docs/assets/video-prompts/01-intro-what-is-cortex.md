@@ -50,8 +50,8 @@ No other video in the series restates these. Videos 02–10 build on this founda
 
 ## Visual ingredients
 Upload these as PNG/JPG into your NotebookLM Notebook before generating:
-1. `cortex-docs/assets/diagrams/01-architecture-system-architecture-layers.md` (hero diagram — Scene 2)
-2. `cortex-docs/assets/diagrams/03-workflow-sdlc-pipeline.md` (loop diagram — Scene 4)
+1. `cortex-docs/assets/diagrams/01-diagram-architecture-system-architecture-layers.md` (hero diagram — Scene 2)
+2. `cortex-docs/assets/diagrams/03-diagram-workflow-sdlc-pipeline.md` (loop diagram — Scene 4)
 3. `cortex-docs/assets/image-prompts/business-leader/01-roi-executive-dashboard.prompt.md` (outcomes — Scene 5)
 
 **Glassmorphism treatment (mandatory for all frames):**

@@ -61,8 +61,8 @@ Does NOT repeat: what CORTEX is (Video 01), architecture internals (Video 03), e
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/03-workflow-sdlc-pipeline.md` — SDLC pipeline (Scene 2)
-2. `cortex-docs/assets/diagrams/07-testing-testing-strategy-pyramid.md` — test pyramid (Scene 3)
+1. `cortex-docs/assets/diagrams/03-diagram-workflow-sdlc-pipeline.md` — SDLC pipeline (Scene 2)
+2. `cortex-docs/assets/diagrams/07-diagram-testing-testing-strategy-pyramid.md` — test pyramid (Scene 3)
 3. `cortex-docs/assets/image-prompts/product-owner/01-sprint-intelligence-dashboard.prompt.md` — sprint view (Scene 4)
 4. `cortex-docs/assets/image-prompts/product-owner/03-dor-dod-compliance.prompt.md` — DoD compliance (Scene 5)
 

@@ -56,8 +56,8 @@ Does NOT repeat: what CORTEX is (Video 01), lane comparison (Video 02), MCP tool
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/05-workflow-tdd-cycle-and-fsm.md` — TDD FSM (Scenes 2–4)
-2. `cortex-docs/assets/diagrams/04-audit-audit-fix-pipeline.md` — convergence pipeline (Scene 5)
+1. `cortex-docs/assets/diagrams/05-diagram-workflow-tdd-cycle-and-fsm.md` — TDD FSM (Scenes 2–4)
+2. `cortex-docs/assets/diagrams/04-diagram-audit-audit-fix-pipeline.md` — convergence pipeline (Scene 5)
 3. `cortex-docs/assets/image-prompts/software-engineer/01-orchestrator-ecosystem-hero.prompt.md` — ecosystem map (Scene 1)
 
 **Cinematic treatment — ECG heartbeat motif:**

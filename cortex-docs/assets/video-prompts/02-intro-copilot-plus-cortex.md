@@ -46,8 +46,8 @@ Does NOT repeat: CORTEX identity (Video 01), architecture internals (Video 03), 
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/04-audit-audit-fix-pipeline.md` — the 9-stage pipeline (Lane 2 centre)
-2. `cortex-docs/assets/diagrams/06-governance-sweep-completeness-core-064.md` — sweep completeness (Lane 2 close)
+1. `cortex-docs/assets/diagrams/04-diagram-audit-audit-fix-pipeline.md` — the 9-stage pipeline (Lane 2 centre)
+2. `cortex-docs/assets/diagrams/06-diagram-governance-sweep-completeness-core-064.md` — sweep completeness (Lane 2 close)
 3. `cortex-docs/assets/image-prompts/shared/01-platform-architecture-overview.prompt.md` — architecture overview (Scene 2)
 
 **Cinematic treatment — Split-screen identity:**

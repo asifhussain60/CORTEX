@@ -58,10 +58,11 @@ Does NOT repeat: business identity (Video 01), lane comparison (Video 02), TDD l
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/02-architecture-mcp-gateway-architecture.md` — MCP transport (Scene 1)
-2. `cortex-docs/assets/diagrams/08-architecture-package-and-directory-map.md` — package map (Scene 2)
-3. `cortex-docs/assets/diagrams/09-orchestration-request-sequence.md` — request sequence (Scene 3)
-4. `cortex-docs/assets/diagrams/10-workflow-template-engine.md` — template engine (Scene 4)
+1. `cortex-docs/assets/diagrams/02-diagram-architecture-mcp-gateway-architecture.md` — MCP transport (Scene 1)
+2. `cortex-docs/assets/diagrams/08-diagram-architecture-package-and-directory-map.md` — package map (Scene 2)
+3. `cortex-docs/assets/diagrams/09-diagram-orchestration-request-sequence.md` — request sequence (Scene 3)
+4. `cortex-docs/assets/diagrams/10-diagram-workflow-template-engine.md` — template engine (Scene 4)
+5. `cortex-docs/assets/diagrams/13-diagram-orchestration-intent-classification-routing.md` — 28 intent types and confidence routing (Scene 2)
 
 **Cinematic treatment — "Request journey" camera:**
 The camera IS the request. It travels with the data from VS Code → MCP gateway → IntentRouter → LENS → orchestrator → output. Each architectural node the request enters becomes the focal point, with surrounding nodes dimming (VBP-009 signaling). This is the defining visual motif of this video — not used in any other video.

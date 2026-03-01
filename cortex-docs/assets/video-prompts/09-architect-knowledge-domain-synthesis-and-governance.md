@@ -66,8 +66,10 @@ Does NOT repeat: self-learning mechanics (Video 08), workflow template compositi
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/image-prompts/shared/02-lens-intelligence-pipeline.prompt.md` — intelligence pipeline (Scene 3)
-2. `cortex-docs/assets/image-prompts/learner/02-knowledge-concept-map.prompt.md` — knowledge concept relationships (Scene 2)
+1. `cortex-docs/assets/diagrams/15-diagram-governance-rule-enforcement-tiers.md` — governance rule tiers (Scene 5)
+2. `cortex-docs/assets/diagrams/11-diagram-intelligence-lens-analysis-pipeline.md` — LENS analysis pipeline (Scene 3)
+3. `cortex-docs/assets/image-prompts/shared/02-lens-intelligence-pipeline.prompt.md` — intelligence pipeline (Scene 3)
+4. `cortex-docs/assets/image-prompts/learner/02-knowledge-concept-map.prompt.md` — knowledge concept relationships (Scene 2)
 
 **Cinematic treatment — Knowledge lattice:**
 The persistent visual is a branching knowledge tree — the root is CORTEX's knowledge registry. Branches extend to domain profile nodes (gold), governance rule nodes (amber), architecture pattern nodes (cyan), and company repository nodes (white). As each scene progresses, the relevant branch illuminates fully while others dim to 30% opacity (VBP-009 signaling). When domain synthesis occurs, gold threads from multiple branches converge into a single synthesis capsule (cyan) — the precision governance context assembled for that operation.
@@ -172,7 +174,7 @@ Final lower-third: `"Your domain. Your rules. Enforced on every commit."`
 ---
 
 ## Production note
-Use NotebookLM for narrative + knowledge-tree slide generation. The knowledge tree can be rendered as a progressive branching diagram with gold/amber/cyan/white nodes — NotebookLM handles layered progressive reveal well. For the YAML rule card in Scene 2, use actual content from `cortex-registry/knowledge-base/profiles/finops-v1.0.yaml` (lines 27–50 are suitable). For the custom rules in Scene 4, use plausible domain-specific rules consistent with an event-sourcing architecture. For the 32-rule grid in Scene 5, render as a card catalogue — do not attempt to show all 32 rules in detail; show structure and counts.
+Use NotebookLM for narrative + knowledge-tree slide generation. The knowledge tree can be rendered as a progressive branching diagram with gold/amber/cyan/white nodes — NotebookLM handles layered progressive reveal well. For Scene 3 (domain synthesis), use the LENS analysis pipeline diagram (`11-diagram-intelligence-lens-analysis-pipeline.md`) as the base visual before synthesis threads converge. For Scene 5 (governance rules), use the rule enforcement tiers diagram (`15-diagram-governance-rule-enforcement-tiers.md`) — it shows the 3-checkpoint, 4-tier hierarchy that underlies the 32-rule grid. For the YAML rule card in Scene 2, use actual content from `cortex-registry/knowledge-base/profiles/finops-v1.0.yaml` (lines 27–50 are suitable). For the custom rules in Scene 4, use plausible domain-specific rules consistent with an event-sourcing architecture. For the 32-rule grid in Scene 5, render as a card catalogue — do not attempt to show all 32 rules in detail; show structure and counts.
 
 ---
 
@@ -182,7 +184,7 @@ Use NotebookLM for narrative + knowledge-tree slide generation. The knowledge tr
 |------|--------|--------|
 | 1 | **Select format** | Choose **Explainer** in NotebookLM format picker |
 | 2 | **Set narrator** | Female voice — Video 09 is odd-position in series (VBP-017) |
-| 3 | **Upload sources** | Upload both visual ingredients listed above as PNG/JPG |
+| 3 | **Upload sources** | Upload all 4 visual ingredients listed above as PNG/JPG |
 | 4 | **Paste steering prompt** | Copy the full steering prompt above verbatim into Customize → Steering Prompt |
 | 5 | **Set length target** | 10–13 minutes |
 | 6 | **Verify visual theme** | Confirm knowledge lattice / branching tree motif — gold domain nodes, cyan synthesis, amber governance, dark-blue background |

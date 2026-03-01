@@ -1,11 +1,4 @@
-# NotebookLM Video Prompt — CU-01 — What ## Ground-truth constraints
-- This video teaches *habits*: test-first development, workflow thinking, testing pyramid, validation discipline
-- CORTEX is the scaffold that makes these habits automatic — not a replacement for understanding them
-- Every technical concept gets one analogy before the technical explanation (VBP-010 — one per concept, max)
-- Do not imply CORTEX teaches everything automatically — it provides structure and guardrails; the developer still decides
-- Safe, honest framing: CORTEX helps you learn faster by giving you a framework to practice within
-- Never use: "revolutionary", "game-changing", "magical", "automatic fix"
-- Never use acronyms in narration: say "test-first development" not "TDD", "detect, fix, and rescan" not "detect→fix→rescan loop"gineering Habits Feel Like (Curious Users)
+# NotebookLM Video Prompt — CU-01 — What Good Engineering Habits Feel Like (Curious Users)
 
 **Target length:** 8–11 minutes
 **Audience:** Curious learners, early-career developers, bootcamp grads — people who write code but want to understand professional-grade engineering habits
@@ -58,8 +51,8 @@ This video frames CORTEX as a **learning scaffold** — a structured practice en
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/07-testing-testing-strategy-pyramid.md` — test pyramid (Scene 3)
-2. `cortex-docs/assets/diagrams/05-workflow-tdd-cycle-and-fsm.md` — TDD cycle simplified (Scene 4)
+1. `cortex-docs/assets/diagrams/07-diagram-testing-testing-strategy-pyramid.md` — test pyramid (Scene 3)
+2. `cortex-docs/assets/diagrams/05-diagram-workflow-tdd-cycle-and-fsm.md` — TDD cycle simplified (Scene 4)
 3. `cortex-docs/assets/image-prompts/learner/01-learning-journey-map.prompt.md` — learning map (Scene 2)
 4. `cortex-docs/assets/image-prompts/learner/02-knowledge-concept-map.prompt.md` — concept relationships (Scene 5)
 
@@ -123,12 +116,15 @@ Three habit cards materialise as glassmorphic panels:
 Narrator close: *"That's what professional engineering habits feel like. Not perfection — repeatability. Not 'I hope this works' — 'I can show you why it works.'"*
 Final lamp on path fully illuminates. Path is complete.
 
-**SCENE 6 — "Where to Start" [9:30–End]**
-Visual: A simple three-step card — warm, not overwhelming:
-  Step 1: `make test-smoke` — run this after every commit. Takes 60 seconds.
-  Step 2: Write one failing test before your next feature. Run `make test-changed`.
-  Step 3: When you're ready — run `/audit fix` and read the output. It will tell you what to learn next.
-Narrator: *"You don't have to understand CORTEX fully to benefit from it. Run the smoke test. Write the failing test. The framework will show you where the gaps are. That's the learning."*
+**SCENE 6 — "Your First Engineering Habit" [9:30–End]**
+Visual: A single lamp — the first on the path — illuminated on its own. Warm, close focus.
+Narrator: *"You don't have to understand all of this to start. The first habit is the simplest one: write the test before you write the code."*
+A code editor appears. A failing test at the top. A blinking cursor below it.
+Narrator: *"Notice what that feels like. You've defined what 'done' means before you've written a single line of the answer. That's different. That's the habit."*
+The test passes. The lamp stays lit — not because the code ran, but because you proved it.
+Narrator: *"Everything else — the smoke tests, the governance checks, the convergence gate — those are what that first habit grows into. You don't need to understand them all today. Start with the lamp you can reach. The path will show you the next one."*
+Final on-screen text: `"One habit. One test. One lamp."`
+Note: The adoption path — from smoke tests to full audit runs — is covered for product and team audiences in the Product Owner video. This video stops at the first habit, deliberately.
 
 ---
 

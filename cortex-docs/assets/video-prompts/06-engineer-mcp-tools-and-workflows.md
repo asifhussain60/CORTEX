@@ -1,16 +1,7 @@
 # NotebookLM Video Prompt — SE-02 — MCP Tools and Workflow Templates: Architecture in Action
 
 **Target length:** 13–16 minutes
-**Audience:** S**SCENE 7 — "What This Buys You" [13:30–End]**
-Visual: All 6 layers fully opaque simultaneously — the complete X-ray stack in 3D perspective, rotating slowly. Each layer glows at its characteristic colour. The intelligence layer beneath pulses gently.
-Five outcome cards materialise beside the stack:
-  `"Predictable automation"` — same tool call, same governance, every time
-  `"Codebase-scale consistency"` — 29 tools apply the same rules to every file
-  `"Observable by design"` — every call traced, every template logged
-  `"Extensible without forking"` — add tools and templates; core stays stable
-  `"Self-improving signal"` — the intelligence pipeline accumulates confidence from real operations, no manual tuning
-Narrator: *"This is what it means to build a governed AI workflow — not a script, not a plugin, but a system with contracts at every layer. Inspectable. Versionable. Auditable. And better informed every time it runs."*
-Final lower-third: `"29 tools. YAML primitives. Observable by design."`ngineers, Platform Engineers — people who extend and operate the system
+**Audience:** Software Engineers, Platform Engineers — people who extend and operate the system
 **Narrator gender:** Male (SE-02 — even position in series, per VBP-017)
 **Visual theme:** Dark-blue glassmorphism · X-ray / layer-reveal motif · Neon circuit tracing
 **Series position:** Engineer depth-2 — the only video covering MCP tool catalogue, registry architecture, and template composition
@@ -56,16 +47,17 @@ Software and Platform Engineers who extend and operate AI-augmented systems face
 - WorkflowGateway: `cortex/orchestrators/workflow/workflow_gateway.py` — mandatory pre-execution gate
 - WorkflowComposer: `cortex/orchestrators/workflow/workflow_composer.py` — template execution, convergence mode support
 - TemplateComposer: `cortex/orchestrators/workflow/template_composer.py` — dynamic primitive composition at runtime
-- Cross-cutting intelligence pipeline: `cortex/intelligence/learning/universal_learning_loop.py` — every orchestrator operation feeds pattern capture (`PatternType`: TECHNICAL, BUSINESS, GOVERNANCE, INTERACTION, PERFORMANCE); reinforcement signal (`cortex/intelligence/learning/reinforcement_signal.py`) scores each pattern (strong reward +1.0 through strong punishment -1.0); patterns promoted at ≥0.9 confidence with 3+ rewards; quarantined at ≤0.3 confidence with 2+ punishments
+- Cross-cutting intelligence pipeline: `cortex/intelligence/learning/universal_learning_loop.py` — every orchestrator operation feeds pattern capture (`PatternType`: TECHNICAL, BUSINESS, GOVERNANCE, INTERACTION, PERFORMANCE); reinforcement signal (`cortex/intelligence/learning/reinforcement_signal.py`) scores each pattern; patterns are promoted into active recommendations or quarantined out of them based on accumulated confidence — scoring thresholds and lifecycle mechanics are owned by Video 08
 - All workflow module names are exact: do not invent module names
 
 ---
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/02-architecture-mcp-gateway-architecture.md` — MCP gateway (Scene 1)
-2. `cortex-docs/assets/diagrams/10-workflow-template-engine.md` — template engine (Scenes 3–4)
-3. `cortex-docs/assets/image-prompts/shared/02-lens-intelligence-pipeline.prompt.md` — intelligence pipeline (Scene 2)
+1. `cortex-docs/assets/diagrams/02-diagram-architecture-mcp-gateway-architecture.md` — MCP gateway (Scene 1)
+2. `cortex-docs/assets/diagrams/10-diagram-workflow-template-engine.md` — template engine (Scenes 3–4)
+3. `cortex-docs/assets/diagrams/14-diagram-debugging-multi-stack-pipeline.md` — 8 debug strategies as an example of the extensibility pattern (Scene 5)
+4. `cortex-docs/assets/image-prompts/shared/02-lens-intelligence-pipeline.prompt.md` — intelligence pipeline (Scene 6)
 
 **Cinematic treatment — X-ray layer reveal:**
 Each architectural layer is rendered as a translucent glassmorphic plane stacked in 3D perspective. The camera slowly rotates around the stack, then "X-rays" through each layer sequentially — making the layer being discussed fully opaque while others become wireframe outlines. This is the defining visual motif of SE-02, not used elsewhere.
@@ -143,8 +135,8 @@ Narrator: *"Extension is additive. You add a tool to the registry. You add a pri
 Visual: A thin neon thread runs from the Workflow Template layer (Scene 4) downward to a new layer beneath all others — the intelligence layer. It pulses gently, always active.
 Camera X-rays to this layer. Three sub-panels materialise side by side:
   Panel 1 — Pattern Capture: `UniversalLearningLoop` — every orchestrator operation is captured automatically. Pattern types visible as labelled capsules: `Technical`, `Business`, `Governance`, `Interaction`, `Performance`. Each capsule fills with data as operations complete.
-  Panel 2 — Reinforcement Signal: A scoring dial materialises — range from -1.0 (strong punishment: governance violation) to +1.0 (strong reward: test pass, compliance confirmed). The dial moves as each operation resolves.
-  Panel 3 — Promote / Quarantine: A pattern at confidence 0.93 with 4 rewards lights green and moves to a "Promoted" tier. A pattern at confidence 0.24 with 3 punishments turns amber and moves to "Quarantined".
+  Panel 2 — Reinforcement Signal: A scoring dial materialises. The dial moves as each operation resolves — toward reward when governance passes, toward punishment when violations are detected. No numeric scale shown — scoring mechanics are owned by Video 08.
+  Panel 3 — Promote / Quarantine: A pattern with sufficient accumulated confidence lights green and moves to a "Promoted" tier. A pattern with accumulated negative signal turns amber and moves to "Quarantined". No scoring numbers shown — this layer shows the outcome, not the thresholds.
 Lower-third: `"Every operation feeds the intelligence pipeline — automatically, without configuration"`
 Narrator: *"This is the cross-cutting intelligence pipeline. It does not require manual tuning. Every time an orchestrator completes an operation — whether it's an audit pass, a governance fix, or a test run — the result flows into a learning loop. Successful patterns accumulate confidence and get promoted. Patterns that consistently fail are quarantined. The framework becomes more accurate the longer it runs — not because someone updated a config file, but because the signal is built into the architecture."*
 On-screen callout: `"Signal in. Confidence out. No manual tuning."`
@@ -182,7 +174,7 @@ Follow these steps in order before generating video content:
 |------|--------|--------|
 | 1 | **Select format** | Choose **Explainer** (not Overview or FAQ) in NotebookLM format picker |
 | 2 | **Set narrator** | Male voice — SE-02 is even-position in series (VBP-017) |
-| 3 | **Upload sources** | Upload all 3 visual ingredients listed above as PNG/JPG |
+| 3 | **Upload sources** | Upload all 4 visual ingredients listed above as PNG/JPG |
 | 4 | **Paste steering prompt** | Copy the full steering prompt above verbatim into Customize → Steering Prompt |
 | 5 | **Set length target** | 13–16 minutes |
 | 6 | **Verify visual theme** | Confirm X-ray / layer-reveal motif is active — dark-blue glassmorphism background, cyan neon circuit traces |

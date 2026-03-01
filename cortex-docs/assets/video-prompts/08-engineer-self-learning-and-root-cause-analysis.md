@@ -62,8 +62,9 @@ Does NOT repeat: what CORTEX is (Video 01), architecture pipeline overview (Vide
 
 ## Visual ingredients
 Upload as PNG/JPG:
-1. `cortex-docs/assets/diagrams/08-architecture-package-and-directory-map.md` — intelligence layer location (Scene 1)
-2. `cortex-docs/assets/image-prompts/software-engineer/01-orchestrator-ecosystem-hero.prompt.md` — orchestrator ecosystem (Scene 2)
+1. `cortex-docs/assets/diagrams/08-diagram-architecture-package-and-directory-map.md` — intelligence layer location (Scene 1)
+2. `cortex-docs/assets/diagrams/12-diagram-governance-convergence-gate-core-068.md` — detect→fix→rescan loop that feeds the learning signal (Scene 2)
+3. `cortex-docs/assets/image-prompts/software-engineer/01-orchestrator-ecosystem-hero.prompt.md` — orchestrator ecosystem (Scene 2)
 
 **Cinematic treatment — Neural network lattice:**
 The persistent visual motif is a neural network lattice — nodes connected by thin neon lines. Nodes represent learned patterns. Their colour reflects confidence state:
@@ -161,7 +162,7 @@ Use NotebookLM for narrative + lattice slide generation. The lattice can be rend
 |------|--------|--------|
 | 1 | **Select format** | Choose **Explainer** in NotebookLM format picker |
 | 2 | **Set narrator** | Male voice — Video 08 is even-position in series (VBP-017) |
-| 3 | **Upload sources** | Upload both visual ingredients listed above as PNG/JPG |
+| 3 | **Upload sources** | Upload all 3 visual ingredients listed above as PNG/JPG |
 | 4 | **Paste steering prompt** | Copy the full steering prompt above verbatim into Customize → Steering Prompt |
 | 5 | **Set length target** | 11–14 minutes |
 | 6 | **Verify visual theme** | Confirm neural network lattice motif is active — amber for signals, green for promoted, red for quarantined, dark-blue glassmorphism background |
