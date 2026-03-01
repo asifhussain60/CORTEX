@@ -96,11 +96,18 @@ def enforce_gateway(method: F) -> F:
         if getattr(self, "PHASE90_GATEWAY_ENABLED", False):
             gateway = self._get_gateway()
             orchestrator_name = getattr(self, "_orch_name", None) or type(self).__name__
-            return gateway.execute_gated(
+            gateway_result = gateway.execute_gated(
                 orchestrator_name=orchestrator_name,
                 mode=mode_or_operation,
                 context=parameters,
             )
+            # Exempt modes (template_id=None) bypass template routing but still
+            # execute the orchestrator's own method body (WC-005 fall-through).
+            if isinstance(gateway_result, dict) and gateway_result.get("status") == "exempt":
+                if kwargs:
+                    return method(self, mode_or_operation, parameters, **kwargs)
+                return method(self, mode_or_operation, parameters)
+            return gateway_result
         # Gateway disabled — fall through to original method (zero behaviour change)
         # Pass remaining kwargs through for methods with extended signatures.
         if kwargs:

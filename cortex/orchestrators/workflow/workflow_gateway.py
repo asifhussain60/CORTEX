@@ -63,6 +63,10 @@ _MODE_TEMPLATE_MAP: Dict[str, Optional[str]] = {
     "REPHRASE": None,
     "GOLDEN_TEST": "tdd/tdd-workflow",
     "WORKFLOW_COMPOSE": "tdd/tdd-workflow",  # meta — composes dynamically
+    # TrainerOrchestrator internal ops — exempt (non-code-touching, routed by TRAIN template)
+    "SCAN":    None,
+    "PROPOSE": None,
+    "EXECUTE": None,
 }
 
 _SQLITE_DB = Path(".cortex-runtime") / "traces" / "orchestrator-traces.db"
