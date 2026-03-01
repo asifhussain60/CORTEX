@@ -288,3 +288,68 @@ class TestDifferentiation:
         assert len(intents) >= 4, (
             f"5 different requests produced only {len(intents)} distinct intents: {intents}"
         )
+
+
+# ---------------------------------------------------------------------------
+# INTRODUCE intent — interactive onboarding (Phase 99)
+# ---------------------------------------------------------------------------
+
+
+class TestIntroduceIntent:
+    """INTRODUCE intent must be detected for all greeting and onboarding phrases."""
+
+    @pytest.fixture
+    def clf(self) -> IntentClassifier:
+        """Return classifier with LLM disabled."""
+        return IntentClassifier(enable_llm=False)
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "who are you",
+            "what is cortex",
+            "what can you do",
+            "hello",
+            "hi",
+            "hey",
+            "get started",
+            "getting started",
+            "new here",
+            "walk me through",
+            "show me around",
+            "tell me about yourself",
+            "introduce yourself",
+            "meet cortex",
+            "about cortex",
+            "how can you help",
+            "how do i use",
+        ],
+    )
+    def test_introduce_trigger_phrases(self, clf: IntentClassifier, text: str) -> None:
+        """All INTRODUCE trigger phrases must classify to IntentType.INTRODUCE."""
+        result = clf.classify(text, operation="")
+        assert result.intent_type == IntentType.INTRODUCE, (
+            f"'{text}' → expected INTRODUCE, got {result.intent_type.value} "
+            f"(tier={result.tier_used}, confidence={result.confidence:.2f})"
+        )
+
+    def test_introduce_does_not_steal_implement(self, clf: IntentClassifier) -> None:
+        """'implement a new feature' must NOT be classified as INTRODUCE."""
+        result = clf.classify("implement a new feature", operation="")
+        assert result.intent_type == IntentType.IMPLEMENT, (
+            f"'implement a new feature' should be IMPLEMENT, got {result.intent_type.value}"
+        )
+
+    def test_introduce_does_not_steal_fix(self, clf: IntentClassifier) -> None:
+        """'fix the bug' must NOT be classified as INTRODUCE."""
+        result = clf.classify("fix the bug", operation="")
+        assert result.intent_type == IntentType.FIX, (
+            f"'fix the bug' should be FIX, got {result.intent_type.value}"
+        )
+
+    def test_exact_operation_introduce(self, clf: IntentClassifier) -> None:
+        """Explicit operation='introduce' must map via tier 0."""
+        result = clf.classify("some text", operation="introduce")
+        assert result.intent_type == IntentType.INTRODUCE
+        assert result.tier_used == 0
+        assert result.confidence == 1.0

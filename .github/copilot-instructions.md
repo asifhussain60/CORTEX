@@ -23,8 +23,8 @@ Every **first response** to a user request MUST begin with this exact header blo
 - ✅ Render ONCE per user request — at the very top of the first response only
 - ✅ `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` — verbatim, on one line
 - ✅ `**Via:**` line shows plain-language orchestrator display names (e.g. `Classifier → TDD Builder`) — omit for single-hop simple responses
-- ✅ `{icon}` from the mode icon table: ⚡ IMPLEMENT · 🔧 FIX · ♻️ REFACTOR · 🔎 AUDIT · 📖 QUERY · 🎨 DESIGN · 📋 PLAN · 📚 DIGEST · 🩺 HEALTH · 🧹 VACUUM · 🐛 DEBUG · 🔬 INVESTIGATE · 🔁 TOTALRECALL · 🔄 SYNC · 🎓 TRAIN · 💬 REPHRASE
-- ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning`
+- ✅ `{icon}` from the mode icon table: ⚡ IMPLEMENT · 🔧 FIX · ♻️ REFACTOR · 🔎 AUDIT · 📖 QUERY · 🎨 DESIGN · 📋 PLAN · 📚 DIGEST · 🩺 HEALTH · 🧹 VACUUM · 🐛 DEBUG · 🔬 INVESTIGATE · 🔁 TOTALRECALL · 🔄 SYNC · 🎓 TRAIN · 💬 REPHRASE · 👋 INTRODUCE
+- ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning` · `Introducing`
 - ✅ If `cortex-architect.prompt.md` is active: use `CORTEX Architect` as the product name; otherwise use `CORTEX`
 - ✅ Followed immediately by `---` (Markdown HR — never `<hr>`)
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
@@ -158,7 +158,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 - **RCA Memory Engine** — 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; `cortex/intelligence/learning/rca_engine.py`
 - **Multi-Stack Debug Pipeline** — 8 injection strategies (3 Python + 5 multi-stack: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, auto-cleanup
 - **Self-Healing Prompt Suite** — `scripts/refresh_prompt_suite.py` introspects live architecture + SQLite audit logs to regenerate all prompts/agents with zero drift
-- **28 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`)
+- **28 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`) — plus INTRODUCE for interactive onboarding
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 - **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models
 

@@ -297,7 +297,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
     IMPLEMENT_KEYWORDS: List[str] = [
         # Core verbs
         "create", "add", "new", "implement", "develop", "build", "construct",
-        "establish", "introduce", "feature", "enhancement",
+        "establish", "feature", "enhancement",
         # Natural-language aliases (user-facing synonyms)
         "rebuild", "rework", "stand up", "wire up", "scaffold",
         "spin up", "generate", "produce", "assemble", "fabricate",
@@ -495,6 +495,17 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         "user response template", "inline feedback template"
     ]
 
+    # INTRODUCE keywords — interactive onboarding + role-based introduction
+    INTRODUCE_KEYWORDS: List[str] = [
+        "introduce yourself", "introduce", "who are you", "what are you",
+        "what is cortex", "what's cortex", "hello", "hi", "hey",
+        "get started", "getting started", "help me", "how can you help",
+        "what can you do", "capabilities", "how do i use",
+        "tell me about yourself", "about cortex", "meet cortex",
+        "new here", "first time", "onboard me", "walk me through",
+        "show me around", "tour", "welcome",
+    ]
+
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -551,6 +562,8 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             IntentType.QUERY: self.QUERY_KEYWORDS,
             IntentType.VALIDATE: self.VALIDATE_KEYWORDS,
             IntentType.MIGRATE: self.MIGRATE_KEYWORDS,
+            # INTRODUCE: Interactive onboarding + role-based introduction
+            IntentType.INTRODUCE: self.INTRODUCE_KEYWORDS,
         }
 
         # GAP-90-07: vacuum_keywords kept for backward-compat references but VACUUM
@@ -921,6 +934,9 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
             # WORKFLOW_COMPOSE routing (GAP-89-COMPOSE: convergence loops + full toolchain)
             (IntentType.WORKFLOW_COMPOSE, None): "WorkflowComposer",
+
+            # INTRODUCE routing (interactive onboarding via InteractionOrchestrator)
+            (IntentType.INTRODUCE, None): "InteractionOrchestrator",
         }
 
     # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====

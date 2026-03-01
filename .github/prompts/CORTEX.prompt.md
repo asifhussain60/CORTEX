@@ -43,28 +43,31 @@ User Request → MasterOrchestrator.coordinate_operation()
 
 ## 📋 INTERACTION PROTOCOL
 
-### Intent Classification
+### Intent Routing
 
-| Intent | Orchestrator | Trigger |
-|--------|-------------|---------|
-| IMPLEMENT | TDDOrchestrator | "build", "create", "add" |
-| FIX | TDDOrchestrator | "fix", "bug", "broken" |
-| REFACTOR | RefactoringOrchestrator | "refactor", "improve" |
-| AUDIT | AuditCoordinator | `/audit`, "scan", "check" |
-| QUERY | QueryCoordinator | "explain", "how", "what" |
-| DESIGN | DesignCoordinator | "architect", "design" |
-| PLAN | PlanningCoordinator | "plan", "phase" |
-| DIGEST | DigestCoordinator | "summarize", "digest", "ingest" |
-| INVESTIGATE | InvestigationOrchestrator | "investigate", "analyze" |
-| REPHRASE | RequestRephraseOrchestrator | "rephrase" |
-| VACUUM | VacuumOrchestrator | `/vacuum`, "clean up", "markdown sprawl" |
-| DEBUG | DebuggerOrchestrator | `/debug`, "debug", "trace", "diagnose" |
-| HEALTH | HealthOrchestrator | `/health`, "health check", "orchestrator status" |
-| SYNC | GitOrchestrator + WorkflowOrchestrator | `/sync`, "sync to company", "privacy-safe copy" |
-| TRAIN | TrainerOrchestrator | `/train`, "learn from repo", "evolve templates" |
-| TOTALRECALL | MasterOrchestrator (7-phase) | `/totalrecall`, "total recall", "holistic refactor" |
-| RCA | InvestigationOrchestrator + RCAEngine | "root cause", "why did it fail", "five whys", "rca" |
-| GOLDEN_TEST | TDDOrchestrator | "golden test", "workflow template", "acceptance criteria" |
+Requests are classified by `IntentRouter` and routed to domain orchestrators. The full intent-to-orchestrator mapping, keyword lists, and mode-specific arguments are defined exclusively in `cortex-architect.prompt.md` and its agents (CORE-035: single canonical source).
+
+**This prompt provides the routing pipeline only — not mode details.**
+
+### Default Handler: InteractionOrchestrator (Stage 1)
+
+The `InteractionOrchestrator` is the **default Stage 1 handler** for all requests. It:
+- Comprehends user intent via LENS per-turn analysis
+- Renders the BLOCK-INTENT-REFLECTION (DoR gate) for code-modifying operations
+- Handles **INTRODUCE** intent directly — interactive onboarding, role-based tailoring, and capability showcase using `BLOCK-INTRODUCTION` template
+- Routes to domain orchestrators via `MasterOrchestrator` Stage 2+
+
+### INTRODUCE Intent (InteractionOrchestrator)
+
+**Trigger:** "introduce yourself", "who are you", "what can you do", "hello", "hi", "hey", "get started", "help me", "what is cortex"
+
+When a user greets or asks for an introduction, CORTEX responds with the **BLOCK-INTRODUCTION** interactive template (defined in `cortex-response-templates.md`). This template:
+1. Welcomes the user with CORTEX's identity and mission
+2. Asks the user's **role** to tailor the experience
+3. Showcases capabilities relevant to that role
+4. Provides immediate actionable next steps
+
+**No DoR gate** — introductions are non-code-modifying and begin immediately.
 
 ### DoR Display (Mandatory before execution)
 
@@ -98,70 +101,29 @@ EnforcementOrchestrator validates CORE rules before every operation:
 
 ---
 
-## 🔎 AUDIT MODE — Production Readiness Scanner
+## 🔎 AUDIT MODE
 
 **Trigger:** `/audit`, `/audit fix`, "scan for issues", "check repo health"
 
-### `/audit fix` — 9-Stage Pipeline (Canonical)
+The full 9-stage pipeline, 19-point production readiness audit table, and auto-fix details are defined in `cortex-architect.prompt.md` § AUDIT MODE (CORE-035: single canonical source). This prompt provides the routing entry point only.
 
-```
-Stage -1: Environment Readiness          (UpgradeOrchestrator.validate_requirements() — preflight)
-Stage 0:  Inflight Upgrade + Pre-Flight  (git fetch origin/main check + STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 1:  Stage 0 Governance Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
-Stage 2:  19-Point Production Scan       (Checks #1–#19, see table below)
-Stage 3:  Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
-Stage 4:  Orchestrator Health (all 22)   (HealthOrchestrator.run_health_check())
-Stage 5:  Vacuum Cleanup                 (VacuumOrchestrator via cortex_vacuum)
-Stage 6:  Prompt/Agent Meta-Audit        (cortex-meta-auditor.md, 23 checks)
-Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight → SQLite cleanup)
-```
-
-**Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` — not a single pass.
-**Activity log:** Every stage → `.cortex-runtime/traces/orchestrator-traces.db`
-
-### 19-Point Production Readiness Audit
-
-| # | Check | Tool/Method | Auto-Fix |
-|---|-------|-------------|----------|
-| 1 | **Stale imports** — deleted packages (`cortex_intelligence`, `cortex_lens`, `cortex.brain`) | `grep -rn` + AST verify | ✅ Rewrite imports |
-| 2 | **Empty stubs** — `pass`/`...` only, no real logic | AST scan for stub bodies | ✅ Delete or implement |
-| 3 | **Duplicate orchestrators** — >85% similarity (CORE-035) | `cortex_detect_duplicates` / diff | ✅ Merge canonical |
-| 4 | **Low-value tests** — assert `True`, mock everything, test nothing | TestQualityGate score <4 | ✅ Delete |
-| 5 | **Broken file references** — YAML/docs → moved/deleted files | Path resolution check | ✅ Update paths |
-| 6 | **Root-level clutter** — outside canonical dirs | `find . -maxdepth 1` scan | ✅ Move or delete |
-| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case, AC markers | `cortex_validate` op=`compliance` | ✅ Add missing |
-| 8 | **Scattered .db/.log files** — outside `.cortex-runtime/` | `find -name "*.db"` | ✅ Consolidate |
-| 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
-| 10 | **Test-source mirror** — `tests/` diverges from `cortex/` structure | Dir comparison | 🟡 Report |
-| 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
-| 12 | **Markdown sprawl** — `.md` outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
-| 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or wrong product name | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` | ✅ Restore canonical header |
-| 15 | **MCP tool name registry alignment** — tool refs must match `mcp_registry.py`; detect old names surviving after consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
-| 16 | **Knowledge synthesis wiring** — `cortex-registry/knowledge/` YAMLs loadable, no dead `source:` refs | Path resolution on all YAML `source:` fields | ✅ Update paths |
-| 17 | **LENS pipeline health** — 8 analyzers importable; golden tests green | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
-| 18 | **Ghost directory detection** — filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) | `find cortex/ -maxdepth 1 -name "*.*" -type d` | ✅ Delete |
-| 19 | **SQLite activity log health** — schema valid, no orphaned `AC_START`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
+**Key facts:**
+- `/audit fix` runs a 9-stage pipeline with convergence guarantee (loops until 0 P0/P1)
+- Activity logged to `.cortex-runtime/traces/orchestrator-traces.db`
+- Stages 7–8 loop until `p0_count == 0 and p1_count == 0` — not a single pass
 
 ---
 
-## 🔧 FIX MODE — Bug Resolution via TDD
+## 🔧 FIX MODE
 
 **Trigger:** "fix", "bug", "broken", "error", "failing"
 
-**Sequence:**
-1. **Reproduce** — identify failing test or create one that demonstrates the bug
-2. **Root cause** — LENS analysis on affected files (AST + git history)
-3. **RED** — write/confirm failing test capturing the bug (CORE-008)
-4. **GREEN** — fix with minimum change to pass
-5. **REFACTOR** — clean up without changing behavior
-6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
-7. **Sweep gate** — CORE-064: scan for same issue class across codebase; fix all N instances, not just the reported one
-8. **Convergence Gate** (CORE-068) — rescan for regressions + new violations; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
+The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract (CORE-064), and convergence gate (CORE-068) details are defined in `cortex-architect.prompt.md` § FIX MODE (CORE-035: single canonical source). This prompt provides the routing entry point only.
 
-**Sweep Completeness (CORE-064):**
-`SweepCatalogueOrchestrator` tracks the full issue catalogue per FIX session and blocks `AC_COMPLETE` until the catalogue is exhausted. Same issue class in N files = fix all N.
+**Key facts:**
+- TDD mandatory — write/confirm failing test before fixing (CORE-008)
+- Sweep completeness — same issue class in N files = fix all N (CORE-064)
+- Convergence gate — detect→fix→rescan until 0 P0/P1, max 3 cycles (CORE-068)
 
 ---
 
@@ -206,6 +168,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 
 | Command | Action |
 |---------|--------|
+| `/introduce` | Interactive role-based onboarding and capability showcase |
 | `/audit` | 19-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate (9 stages, convergence loop) |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix |
@@ -215,7 +178,6 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | `/challenge {req}` | Generate alternatives |
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
-| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder |
 
 Every operation:

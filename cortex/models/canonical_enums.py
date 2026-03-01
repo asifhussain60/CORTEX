@@ -237,6 +237,7 @@ class IntentType(Enum):
     TRAIN = "train"                # Learning/reinforcement operations
     TOTALRECALL = "totalrecall"    # Holistic production readiness refactor (7-phase)
     RCA = "rca"                    # Root cause analysis (4 methodologies)
+    INTRODUCE = "introduce"        # Interactive onboarding + role-based introduction
     UNKNOWN = "unknown"
 
 

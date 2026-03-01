@@ -100,8 +100,13 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(plan|phase|roadmap|schedule|planning)\b", re.I), IntentType.PLAN, 0.82),
     # FIX — extended with remediation aliases (remediate, squash, address, unblock, restore, recover)
     (re.compile(r"\b(fix|bug|broken|patch|resolve|repair|crash|error|fail(?:ure|ing)?|remediate|squash|address|unblock|restore|recover|hotfix)\b", re.I), IntentType.FIX, 0.82),
+    # INTRODUCE — interactive onboarding + greeting (must precede IMPLEMENT to capture "introduce yourself" correctly)
+    (re.compile(r"\b(introduce yourself|who are you|what are you|what is cortex|what'?s cortex|meet cortex|about cortex|tell me about yourself)\b", re.I), IntentType.INTRODUCE, 0.97),
+    (re.compile(r"^(hello|hi|hey|howdy|greetings)\b", re.I), IntentType.INTRODUCE, 0.90),
+    (re.compile(r"\b(get(?:ting)? started|new here|first time|walk me through|show me around|tour|how can you help|what can you do|how do i use)\b", re.I), IntentType.INTRODUCE, 0.92),
     # IMPLEMENT — extended with rebuild/scaffold/spin-up/generate aliases
-    (re.compile(r"\b(implement|create|build|add|develop|construct|introduce|rebuild|rework|scaffold|assemble|generate|fabricate)\b", re.I), IntentType.IMPLEMENT, 0.75),
+    # Note: "introduce" removed — now routed to INTRODUCE intent; use "introduce feature" → IMPLEMENT via Tier 2 context
+    (re.compile(r"\b(implement|create|build|add|develop|construct|rebuild|rework|scaffold|assemble|generate|fabricate)\b", re.I), IntentType.IMPLEMENT, 0.75),
     # IMPLEMENT — multi-word phrasal verbs (must use lookahead-friendly pattern)
     (re.compile(r"\b(spin\s+up|stand\s+up|wire\s+up)\b", re.I), IntentType.IMPLEMENT, 0.78),
     (re.compile(r"\b(document|docs|documentation)\b", re.I), IntentType.DOCUMENT, 0.80),
@@ -119,7 +124,7 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
 _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
     IntentType.IMPLEMENT: [
         "create", "add", "new", "implement", "develop", "build", "construct",
-        "establish", "introduce", "feature", "enhancement",
+        "establish", "feature", "enhancement",
         # Aliases: rebuild / scaffold / spin-up family
         "rebuild", "rework", "stand up", "wire up", "scaffold",
         "spin up", "generate", "produce", "assemble", "fabricate",
@@ -230,6 +235,14 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         # Aliases: housekeeping / declutter / sweep family
         "housekeeping", "declutter", "sweep", "spring clean", "tidy workspace",
     ],
+    IntentType.INTRODUCE: [
+        "introduce yourself", "who are you", "what are you", "what is cortex",
+        "what's cortex", "hello", "hi", "hey", "get started", "getting started",
+        "help me", "how can you help", "what can you do", "capabilities",
+        "how do i use", "tell me about yourself", "about cortex", "meet cortex",
+        "new here", "first time", "walk me through", "show me around", "tour",
+        "welcome", "onboard me",
+    ],
 }
 
 # ---------------------------------------------------------------------------
@@ -239,7 +252,7 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
 _LLM_SYSTEM_PROMPT = """\
 You are an intent classifier for a software engineering AI assistant.
 Classify the user request into exactly ONE of these intent labels:
-IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, WORKFLOW_COMPOSE, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM
+IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, WORKFLOW_COMPOSE, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM, INTRODUCE
 
 Reply with ONLY the label — no punctuation, no explanation.\
 """
@@ -474,6 +487,8 @@ class IntentClassifier:
             "total_recall": IntentType.TOTALRECALL,
             "rca": IntentType.RCA,
             "vacuum": IntentType.VACUUM,
+            # INTRODUCE: interactive onboarding
+            "introduce": IntentType.INTRODUCE,
         }
         return _EXACT.get(operation.strip().lower())
 
