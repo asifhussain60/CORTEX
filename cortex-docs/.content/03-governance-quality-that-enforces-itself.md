@@ -114,6 +114,18 @@ The audit trail records orchestrator decisions, governance gate outcomes, test e
 
 ---
 
+## The Challenge-First Protocol — Better Decisions Through Structured Alternatives
+
+Before high-impact operations begin, CORTEX applies a challenge-first protocol that generates at least two alternative approaches with explicit trade-off analysis. This is not a delay mechanism — it is a quality mechanism that ensures the chosen approach is the best one, not just the first one that came to mind.
+
+When a developer proposes a significant architectural change, a complex refactoring, or a security-sensitive operation, CORTEX analyses the request and presents alternatives. Each alternative includes estimated effort, risk assessment, long-term maintainability implications, and the governance constraints it would satisfy or violate.
+
+For business leaders, the challenge protocol provides confidence that engineering decisions are deliberate and considered. For product owners, it surfaces options they may not have known existed — a feature that could be delivered faster with a different approach, or a technical debt item that could be addressed alongside the requested change. For engineers, it provides the structured second opinion that prevents costly architectural mistakes.
+
+The developer retains full authority over which approach to proceed with. The challenge protocol informs the decision — it does not make it.
+
+---
+
 ## The Nine-Stage Production Audit
 
 CORTEX includes a comprehensive production readiness audit that can be triggered on demand. It runs through nine sequential stages covering environment readiness, governance validation, a 19-point production scan, architecture integrity checks, orchestrator health, cleanup, meta-audit, auto-fix convergence, and final test verification.

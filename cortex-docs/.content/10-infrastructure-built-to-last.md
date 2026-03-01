@@ -3,7 +3,7 @@
 ---
 title: Infrastructure — Observability, Resilience, Deployment, and the Audit Database
 type: explanation
-audience: [Business Leaders, Product Owners, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
 last_verified: 2026-03-01
 order: 10
 ---
@@ -89,6 +89,8 @@ CORTEX implements nine production-grade resilience patterns in its own infrastru
 In development, CORTEX runs entirely locally with zero external infrastructure. The MCP server starts automatically when the workspace opens. All storage uses local SQLite files. All communication uses local stdio streams. No network ports are opened. No Docker containers are required. The only prerequisites are Python 3.9 and the CORTEX repository.
 
 This zero-infrastructure development model means any developer can start using CORTEX within minutes of cloning the repository.
+
+For curious learners, the development deployment model demonstrates a principle that applies to any project: the fewer dependencies required to start contributing, the faster new team members become productive. CORTEX proves that a sophisticated platform with dozens of capabilities can have a five-minute setup process — a valuable reference for designing the developer experience of any system.
 
 ### Production — Full Containerised Stack
 

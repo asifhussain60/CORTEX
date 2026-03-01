@@ -3,7 +3,7 @@
 ---
 title: AI Efficiency — Context Management and Token Optimization
 type: explanation
-audience: [Product Owners, Business Leaders, Software Developers]
+audience: [Product Owners, Business Leaders, Software Developers, Curious Learners]
 last_verified: 2026-03-01
 order: 12
 ---
@@ -105,6 +105,14 @@ For business leaders: session longevity translates directly to developer product
 Context efficiency could theoretically be achieved by loading less knowledge — but loading insufficient knowledge produces responses that miss domain context, ignore established conventions, and contradict architectural decisions already made. This false economy trades token savings for quality degradation.
 
 CORTEX's efficiency strategies are designed to deliver the knowledge required for high-quality responses at minimum token cost. The three-tier model is not a trade-off — it is a more precise approach to the same problem: delivering the right knowledge at the right moment rather than loading everything upfront.
+
+---
+
+## For Curious Learners
+
+Context management is one of the most important — and least discussed — aspects of working with AI tools effectively. Understanding how context windows work, why they have limits, and how to use them efficiently is a skill that applies to every AI-assisted development tool, not just CORTEX.
+
+The three-tier loading model demonstrates a universal principle: lazy evaluation. Load what you need, when you need it, and release it when you're done. This principle appears throughout computer science — in memory management, database query optimisation, network resource allocation, and now in AI context management. Studying how CORTEX applies this principle gives you a framework for thinking about efficiency in any system with bounded resources.
 
 ---
 

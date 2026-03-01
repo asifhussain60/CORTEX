@@ -123,14 +123,66 @@ CORTEX includes a comprehensive production readiness audit that can be triggered
 
 ## Debugging — Structured Diagnosis Across All Stacks
 
-When something goes wrong, CORTEX's debugging pipeline provides structured diagnosis across multiple technology stacks. Eight debugging strategies cover the full range of modern development contexts.
+When something goes wrong, CORTEX's debugging pipeline provides structured diagnosis across multiple technology stacks. Eight debugging strategies cover the full range of modern development contexts, each following a consistent five-phase methodology.
 
-For Python applications, strategies target test failures, refactoring regressions, and governance violations — each injecting targeted diagnostic markers, capturing output, and generating a structured fix plan.
+### The Five-Phase Debug Lifecycle
 
-For multi-stack environments, dedicated strategies cover frontend JavaScript/TypeScript/React/Angular/Vue failures, HTML structure analysis using visual inspection, REST/GraphQL/gRPC API trace analysis, SQL query and transaction analysis, and C#/.NET application debugging.
+Every debugging session follows the same disciplined process, regardless of the technology stack involved:
 
-The debugging pipeline follows a five-step process: inject diagnostic markers, capture execution output, analyse the captured data using relevant intelligence, generate a prioritised fix plan, and clean up all diagnostic markers when the session ends. Diagnostic markers are always removed — debugging infrastructure never ships to production.
+**Inject** — CORTEX places precisely targeted diagnostic markers into the relevant code. These markers capture execution state, variable values, timing information, and control flow — without modifying application behaviour. Each technology stack has a dedicated injection strategy that understands the conventions of that ecosystem.
+
+**Capture** — The application runs with markers active, and CORTEX collects the diagnostic output. For frontend applications, this includes console traces and DOM event flows. For APIs, it includes request/response pairs with headers and timing. For databases, it includes query execution plans and parameter values.
+
+**Analyse** — The captured data flows through CORTEX's intelligence layer, which correlates the diagnostic output with the code structure, the change history, and any relevant root cause analyses from previous sessions. The analysis identifies not just what went wrong, but why — and whether this failure pattern has been seen before.
+
+**Fix Plan** — CORTEX generates a prioritised remediation plan with specific steps, each with a defined test to verify the fix. High-confidence fixes can be applied automatically; lower-confidence fixes are presented for developer review.
+
+**Cleanup** — All diagnostic markers are removed automatically when the session ends. This is not optional — the cleanup manager verifies that zero diagnostic artifacts remain in the codebase. Debugging infrastructure never ships to production.
+
+### Eight Technology-Specific Strategies
+
+For **Python applications**, three strategies cover the most common failure categories: test failures (why did this specific test break?), refactoring regressions (what changed during the refactor that introduced a failure?), and governance violations (why is this code failing a governance gate?).
+
+For **frontend applications** (JavaScript, TypeScript, React, Angular, Vue), a dedicated strategy injects console tracing and DOM event monitoring. The strategy understands framework-specific patterns — component lifecycle in React, change detection in Angular, reactivity in Vue — and targets diagnostic markers accordingly.
+
+For **visual layout issues**, a screenshot analysis strategy uses Vision API to capture the rendered page, map visual elements to CSS selectors and HTML structure, and identify discrepancies between expected and actual layout. This bridges the gap between what a developer sees in the browser and what exists in the code.
+
+For **API integrations** (REST, GraphQL, gRPC), a trace strategy captures complete request/response cycles including headers, payload structure, timing, and error codes. This surfaces authentication failures, serialisation mismatches, timeout issues, and contract violations that are invisible from either the client or server alone.
+
+For **database operations** (SQL Server, Oracle, PostgreSQL), a query trace strategy captures execution plans, parameter bindings, transaction boundaries, and locking behaviour. This reveals performance bottlenecks, missing indexes, and concurrency issues that only manifest under load.
+
+For **C# and .NET applications**, a dedicated strategy traces method entry and exit, dependency injection resolution, middleware pipeline execution, and async/await continuation paths. This covers the full .NET request lifecycle from HTTP arrival through controller execution to database access.
 
 ---
 
-*Lifecycle phases verified against template registry · Planning and debugging capabilities verified against live implementation*
+## Repository Onboarding — Bringing a New Codebase Under Governance
+
+When a team adopts CORTEX for an existing codebase, the onboarding process produces a complete intelligence profile within minutes — no manual configuration of rules, patterns, or governance settings required.
+
+The onboarding engine runs the full code intelligence analysis against the new repository, identifying the technology stack, the architectural patterns in use, the security posture, the test coverage baseline, and the domain context. The results feed into a structured onboarding report that includes a prioritised list of governance gaps, a recommended remediation sequence, and a generated interactive dashboard showing the current state of the codebase.
+
+For business leaders, onboarding provides an immediate, data-driven assessment of a codebase's quality and risk profile — valuable for acquisition due diligence, vendor code assessment, or baseline measurement before a modernisation initiative. For product owners, it surfaces the technical debt and governance gaps that affect delivery velocity. For engineers, it provides the complete architectural map they need to contribute effectively from their first day on the project.
+
+---
+
+## Dashboard Generation — Visual Reporting on Demand
+
+CORTEX generates interactive HTML dashboards that visualise codebase health, quality trends, architecture maps, and governance compliance. Dashboards are produced from live analysis — not manually assembled slides or spreadsheets.
+
+A single command produces a complete dashboard suite: a landing page that summarises the portfolio view across all repositories, plus detailed per-repository dashboards with quality scores, dependency maps, pattern detection results, and trend analysis over time. Dashboards are static HTML files that can be hosted anywhere, shared with stakeholders, or embedded in internal portals — no runtime server required.
+
+For business leaders, dashboards provide the engineering health visibility that is typically invisible: which codebases are improving, which are accumulating technical debt, and where governance compliance is strongest or weakest. For product owners, dashboards connect code quality to delivery confidence — a repository with rising quality scores and declining violation trends is a repository that will deliver features predictably.
+
+---
+
+## Privacy-Safe Synchronisation — Sharing Code Without Sharing Secrets
+
+For organisations that maintain both private development repositories and shared or public-facing repositories, CORTEX provides a structured synchronisation pipeline that ensures sensitive metadata never crosses the boundary.
+
+The synchronisation follows a four-gate process: pull the latest state from both repositories, compute the differences, sanitise the outgoing changes by stripping CORTEX-internal metadata, governance traces, runtime databases, and any detected secrets or personally identifiable information, then merge the sanitised changes into the target repository.
+
+This is particularly valuable for organisations that contribute to open source from private codebases, share code between internal teams with different security clearance levels, or maintain separate development and deployment repositories. The sanitisation is automated and verified — there is no reliance on developers remembering to remove sensitive content before pushing.
+
+---
+
+*Lifecycle phases verified against template registry · Planning, debugging, onboarding, dashboard, and sync capabilities verified against live implementation*

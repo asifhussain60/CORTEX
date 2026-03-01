@@ -114,6 +114,14 @@ The compounding value of CORTEX's learning infrastructure becomes most visible a
 
 Senior engineers who leave take their knowledge with them. CORTEX retains it. New team members have access from day one to the hard-won lessons of every team that has used CORTEX before them. The onboarding time reduction this enables is measurable and consistent.
 
+### Cross-Team Knowledge Amplification
+
+In organisations with multiple engineering teams, CORTEX's learning infrastructure creates a network effect that traditional knowledge management cannot replicate. When Team A discovers a root cause for a production issue, the prevention rule is available to Teams B, C, and D immediately — without anyone writing a post-mortem document, scheduling a knowledge-sharing meeting, or updating a wiki page.
+
+The learning signal crosses project boundaries. A pattern that consistently produces successful outcomes in one team's microservices architecture is recommended in another team's similar project. A debugging strategy that resolved a difficult issue in one codebase is suggested when a similar symptom appears in another. This cross-pollination of engineering knowledge transforms individual team learning into organisational learning — the kind of capability advantage that compounds over quarters and years.
+
+For organisations evaluating CORTEX at the enterprise level, this shared learning infrastructure is the capability that produces the largest return on investment over time. The first team to adopt benefits from CORTEX's built-in knowledge. The tenth team to adopt benefits from the accumulated knowledge of all nine teams before them.
+
 ---
 
 *RCA engine verified against live implementation · Knowledge base verified against registry contents*

@@ -3,7 +3,7 @@
 ---
 title: Enterprise Patterns and Knowledge Architecture
 type: explanation
-audience: [Software Developers, Business Leaders, Product Owners]
+audience: [Software Developers, Business Leaders, Product Owners, Curious Learners]
 last_verified: 2026-03-01
 order: 11
 ---
@@ -118,6 +118,14 @@ A recommendation to **separate a data access concern** comes with the Repository
 As your codebase evolves, the company domain knowledge base evolves with it. New conventions observed consistently across the codebase are incorporated. Deprecated patterns are flagged. Architecture decisions documented in code are extracted and formalised.
 
 This continuous knowledge update means that CORTEX's recommendations remain relevant as your team makes decisions, as your architecture matures, and as your codebase grows. Knowledge drift — where a documentation system falls behind the actual state of the codebase — is detected and surfaced for remediation.
+
+---
+
+## For Curious Learners
+
+The patterns and knowledge architecture in CORTEX demonstrates a principle that distinguishes senior engineers from junior ones: the ability to recognise structural patterns in unfamiliar code. When an experienced architect reviews a codebase, they don't read every line — they recognise the shapes. "This is a Repository pattern. This is a Strategy pattern. This mediator is incomplete."
+
+CORTEX codifies that pattern recognition capability. Studying how CORTEX detects, scores, and recommends patterns teaches you to see architecture the way experienced architects see it — not as isolated classes and functions, but as structural signatures that predict quality, maintainability, and extensibility.
 
 ---
 

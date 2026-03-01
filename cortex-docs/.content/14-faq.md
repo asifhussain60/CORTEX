@@ -150,4 +150,26 @@ The tamper-evident audit trail supports compliance reporting. Every governance d
 
 ---
 
+## Advanced Capabilities
+
+**Can CORTEX generate visual dashboards?**
+Yes. CORTEX generates interactive HTML dashboards from live code analysis — codebase health, quality trends, architecture maps, and governance compliance visualised in a portfolio view. Dashboards are static HTML files that can be shared with stakeholders or hosted anywhere without a runtime server.
+
+**How does repository onboarding work?**
+When a new codebase is brought under CORTEX governance, the onboarding engine runs the full intelligence analysis automatically — identifying the technology stack, architectural patterns, security posture, test coverage, and domain context. The result is a complete intelligence profile and a prioritised remediation plan, typically produced within minutes.
+
+**What is the challenge-first protocol?**
+Before high-impact operations, CORTEX generates at least two alternative approaches with trade-off analysis — estimated effort, risk, maintainability, and governance impact. The developer chooses the best option. This ensures engineering decisions are considered, not reactive.
+
+**Can CORTEX analyse screenshots and visual layout?**
+Yes. The Vision API tool captures screenshots and maps visual elements to CSS selectors and HTML structure. This is particularly valuable for diagnosing frontend layout issues where the gap between what the developer sees and what the code produces is difficult to bridge through code analysis alone.
+
+**How does privacy-safe synchronisation work?**
+For organisations with both private and shared repositories, CORTEX provides a four-gate synchronisation pipeline: pull, diff, sanitise (strip secrets, metadata, PII), and merge. Sensitive content is removed automatically before code crosses the repository boundary.
+
+**Can CORTEX debug applications in languages other than Python?**
+Yes. Eight debugging strategies cover Python, JavaScript/TypeScript (including React, Angular, Vue), C#/.NET, REST/GraphQL/gRPC APIs, SQL databases (SQL Server, Oracle, PostgreSQL), and HTML visual layout analysis. Each strategy understands the conventions of its ecosystem and injects diagnostic markers accordingly.
+
+---
+
 *Answers verified against live CORTEX implementation and architecture documentation*

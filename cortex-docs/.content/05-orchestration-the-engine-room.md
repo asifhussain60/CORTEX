@@ -122,6 +122,22 @@ Many operations in CORTEX follow structured templates stored as configuration fi
 
 Templates are composed from atomic building blocks — reusable single-responsibility steps that handle specific tasks like running an analysis scan, applying a governance check, opening a sweep catalogue, or recording an audit trace. Complex workflows are assembled from these building blocks, ensuring consistency across all operations while keeping each step independently testable.
 
+### The Three-Tier Template Hierarchy
+
+Workflow templates are organised into three tiers that mirror the granularity of operations.
+
+**Primitives** are atomic, reusable steps — the smallest units of work. A primitive might check a single governance rule, record an audit trace, create a rollback checkpoint, or emit a completion signal. Primitives are never modified for specific use cases; they are used as-is across all workflows.
+
+**Mode Workflows** compose primitives into complete sequences for a specific operation type. The implementation workflow, the refactoring workflow, the audit workflow — each is a distinct template that assembles the right primitives in the right order with the right governance gates between steps.
+
+**Composite Pipelines** coordinate multiple mode workflows into complex, multi-phase operations. The full production audit, for example, sequences nine distinct phases — each its own workflow — into a single coordinated pipeline with convergence guarantees.
+
+### Dynamic Composition — Templates Built on the Fly
+
+For operations that don't match any pre-existing template, CORTEX includes a workflow composer that assembles templates dynamically from validated primitives. The composer selects the appropriate building blocks based on the request intent, the technology stack, and the governance constraints, then produces a purpose-built workflow that follows the same structural guarantees as any pre-defined template.
+
+This means teams are not limited to the workflows that ship with CORTEX. New workflow patterns emerge naturally as the composer discovers effective primitive combinations — and successful compositions can be promoted to permanent templates for future reuse.
+
 ---
 
 ## Real-Time Visibility — Breadcrumbs and Timelines

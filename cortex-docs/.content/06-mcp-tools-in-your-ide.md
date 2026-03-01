@@ -67,14 +67,14 @@ These tools expose the governance layer — rule checking, compliance validation
 
 ### Intelligence and Code Analysis
 
-These tools expose the intelligence layer — code analysis, semantic operations, and knowledge synthesis.
+These tools expose the intelligence layer — code analysis, semantic operations, visual analysis, and knowledge synthesis.
 
 | Tool | What It Does |
 |---|---|
-| **cortex_refactor** | Performs semantic refactoring across Python, C#, and TypeScript — extract, rename, reorganise |
-| **cortex_vision** | Analyses screenshots using Vision API — identifies UI elements, maps structure, surfaces issues |
-| **cortex_knowledge** | Synthesises knowledge from governance registries and applies it to a specific context |
-| **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis |
+| **cortex_refactor** | Performs semantic refactoring across Python, C#, and TypeScript — extract methods, rename symbols, reorganise modules, resolve duplication — with full before-and-after analysis and governance validation |
+| **cortex_vision** | Analyses screenshots using Vision API — identifies UI elements, maps visual structure to CSS selectors and HTML elements, surfaces layout discrepancies, and bridges the gap between what developers see in the browser and what exists in the code |
+| **cortex_knowledge** | Synthesises knowledge from governance registries and applies it to a specific context — resolving conflicts between generic and team-specific guidance automatically |
+| **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis with four structured methodologies — building institutional memory that prevents recurring failures |
 
 ### Planning and Audit
 
@@ -144,9 +144,13 @@ CORTEX's MCP gateway is compatible with any tool that supports the Model Context
 
 ## Work Item Integration — Connecting Code to Delivery
 
-CORTEX includes integration with work item management systems through a provider-agnostic protocol. The default integration targets Azure DevOps, but the same interface supports any work item system. Sprint context pulled from work items enriches the intelligence layer's full analysis tier — meaning CORTEX can understand not just what the code does, but what the team is currently working on and why.
+CORTEX includes integration with work item management systems through a provider-agnostic protocol. The default integration targets Azure DevOps, but the same interface supports any work item system — Jira, GitHub Issues, or custom internal trackers. Sprint context pulled from work items enriches the intelligence layer's full analysis tier — meaning CORTEX can understand not just what the code does, but what the team is currently working on and why.
 
 When work item integration is active, implementation plans include references to specific work items, evidence of completion is linked to the appropriate tracking items, and delivery metrics flow into reporting dashboards automatically.
+
+For product owners, this integration closes the loop between the planning board and the codebase. A feature requested in the backlog can be tracked through intent classification, test generation, implementation, governance validation, and delivery — with every step linked back to the original work item. Sprint velocity becomes observable from the code itself, not just from status updates in the tracking tool.
+
+For business leaders, work item integration means delivery metrics are grounded in engineering reality. A work item marked "done" has been tested, governance-validated, and audit-trailed — not just code-reviewed and merged.
 
 ---
 
