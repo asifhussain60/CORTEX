@@ -157,8 +157,8 @@ You've asked CORTEX to {one-line summary of the overall request}:
 ### Full Rendered Example
 
 ```markdown
-## 🎨 CORTEX Design
-**Author:** Asif Hussain | **Orchestrator:** DesignCoordinator ✅
+## 🎨 CORTEX Architect Design
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 
@@ -217,7 +217,7 @@ Every non-autonomous response MUST follow this H2 structure:
 
 ```markdown
 ## {icon} CORTEX {mode}
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 
@@ -390,26 +390,73 @@ The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in 
 
 ---
 
-### Response Header (Simplified)
+### Response Header — Canonical Spec
 
-**ONE header block, ONE time, top of every response:**
+**ONE header block, ONE time, top of every response. Never repeated mid-response.**
+
+#### Persona binding (P0 — IMMUTABLE)
+
+| Prompt file active | H2 title format | Example |
+|---|---|---|
+| `CORTEX.prompt.md` | `## {icon} CORTEX {mode}` | `## ⚡ CORTEX Building` |
+| `cortex-architect.prompt.md` | `## {icon} CORTEX Architect {mode}` | `## 🎨 CORTEX Architect Design` |
+
+Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice versa — is a **P1 governance violation** (Check #14, meta-audit).
+
+#### Full canonical template
 
 ```markdown
 ## {icon} CORTEX {mode}
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
-**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}` *(optional — include for 2+ hop routing)*
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** {DisplayName} *(omit for single-hop responses)*
 
 ---
 ```
 
-**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT | 📝 LIST
+#### Field reference
 
-**Rules:**
-- ✅ Appears ONCE at the very top (never repeated)
-- ✅ Author + Orchestrator line immediately below the H2 header
-- ✅ **Route:** line included whenever routing chain is 2+ hops (complex requests, multi-orchestrator flows)
-- ✅ Followed by `---` separator
-- ❌ NO mid-response headers
+| Field | Rule | Example |
+|---|---|---|
+| `{icon}` | Mode icon from the table below | `⚡` |
+| `CORTEX` or `CORTEX Architect` | Bound to active prompt file — never mix | `CORTEX Architect` |
+| `{mode}` | Plain-language verb phrase, not an enum name | `Building`, `Auditing`, `Fixing` |
+| `**Author:**` | Always `Asif Hussain` — never omit | `**Author:** Asif Hussain` |
+| `© 2025–2026 CORTEX Framework. All rights reserved.` | Fixed copyright string — verbatim, never paraphrased | — |
+| `**Via:**` | Plain-language orchestrator chain (display names, not class names) — omit on single-hop | `**Via:** Classifier → TDD Builder` |
+| `---` | Markdown HR (never `<hr>` — Copilot Chat rendering Rule 2) | `---` |
+
+#### Mode icons
+
+| Icon | Mode | Verb phrase |
+|---|---|---|
+| ⚡ | IMPLEMENT | Building |
+| 🔧 | FIX | Fixing |
+| ♻️ | REFACTOR | Improving |
+| 🔎 | AUDIT | Auditing |
+| 📖 | QUERY | Answering |
+| 🎨 | DESIGN | Designing |
+| 📋 | PLAN | Planning |
+| 📚 | DIGEST | Ingesting |
+| 🩺 | HEALTH | Health Check |
+| 🧹 | VACUUM | Cleaning |
+| 🐛 | DEBUG | Debugging |
+| 🔬 | INVESTIGATE / RCA | Investigating |
+| 🔁 | TOTALRECALL | Total Recall |
+| 🔄 | SYNC | Syncing |
+| 🎓 | TRAIN | Training |
+| 💬 | REPHRASE | Rephrasing |
+
+#### Rules
+
+- ✅ Appears ONCE — at the very top of the response, never repeated
+- ✅ `**Author:**` and copyright on the same line, pipe-separated
+- ✅ `**Via:**` line included when routing chain is 2+ hops; omitted for simple single-orchestrator responses
+- ✅ `{mode}` is a plain-language verb phrase — not an enum (`Building`, not `IMPLEMENT`)
+- ✅ Followed immediately by `---` separator (Markdown HR — never `<hr>`)
+- ❌ NO `**Via:**` line using class names (`TDDOrchestrator`) — use display names (`TDD Builder`)
+- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` in the header; orchestrator name appears as plain-language display name
+- ❌ NO `<hr>` tag — Copilot Chat may not render it (Rule 2)
+- ❌ NO mid-response headers of any kind
 
 ---
 
@@ -828,13 +875,12 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ```markdown
 ## 🧠 CORTEX — Cognitive Real-Time Execution System
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅ | **Session:** {session_id}
-**Framework:** 51 orchestrators · 39 MCP tools · 38 CORE rules · 1 package
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 ```
 
-**Note:** Render ONCE per session — omit on all subsequent turns in the same session.
+**Note:** Render ONCE per session — omit on all subsequent turns in the same session. Orchestrator engagement is surfaced contextually via `BLOCK-ENGAGEMENT-BREADCRUMB` as operations are routed — never in the header.
 
 ---
 
@@ -1005,24 +1051,35 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 
 ### BLOCK-ENGAGEMENT-BREADCRUMB: Routing Chain + Current Orchestrator
 
-**Trigger:** Every orchestrator invocation — always rendered in header region.
+**Trigger:** Every orchestrator invocation — rendered for any multi-hop routing chain (2+ hops). Omitted for single-hop simple responses.
 
-**Purpose:** Show the full routing chain so users understand which orchestrator is responding and why.
+**Purpose:** Show the full routing chain in plain-language display names so users understand which orchestrator is responding and why — without needing to know class names.
 
-**Format:**
+**Format (Sample A — canonical):**
 
 ```markdown
-**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}`
+*🧭 Classifier → TDD Builder*
+```
+
+**Workflow Composer variant (backtick parenthetical signals active toolchain):**
+
+```markdown
+*🧭 Classifier → Code Improver → Workflow Composer `(stitching refactor-workflow.yaml · ruff · Roslyn · detect→fix→rescan ×3)`*
 ```
 
 **Rules:**
-- ✅ Always rendered on first response of any multi-hop routing chain
-- ✅ Uses backtick code spans for readability in Copilot Chat
-- ✅ Show current node in **bold** or with 🔵 pulse: `` `IntentRouter → **MasterOrchestrator** → TDDOrchestrator` ``
-- ❌ Single-hop simple responses: omit (keep response lean)
+- ✅ Always rendered for multi-hop chains (2+ orchestrators in routing path)
+- ✅ Italic format (`*...*`) — single line, plain-language display names only
+- ✅ 🧭 compass icon prefix — marks the routing breadcrumb visually
+- ✅ Display names from `ORCHESTRATOR_DISPLAY_NAMES` map (never class names)
+- ✅ WorkflowComposer ops include backtick parenthetical showing active template + tools
+- ❌ Single-hop responses: omit entirely (keep response lean)
+- ❌ Never use `**Route:**` prefix — replaced by italic format
+- ❌ Never wrap chain in backtick code spans — use italic only
 - ❌ Never duplicated — appears in header region only (not inline mid-response)
+- ❌ Never use tree characters (├─ └─ │) — Copilot Chat rendering rule
 
-**Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (timing detail), Response Header Route line
+**Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (Sample C timing detail), BLOCK-STAGE-PROGRESS (Sample B pulse)
 
 ---
 

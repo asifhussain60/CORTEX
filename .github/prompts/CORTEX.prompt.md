@@ -175,12 +175,13 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
-- ✅ ONE header per response, never repeated — `## {icon} CORTEX {mode}` then `**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅` then `---`
-- ✅ Author line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
+- ✅ ONE header per response, never repeated — `## {icon} CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
-- ❌ NO `**Orchestrator:** {Name} ✅` without the `**Author:** Asif Hussain |` prefix — partial header is a P1 violation
+- ✅ Orchestrator engagement surfaced via `BLOCK-ENGAGEMENT-BREADCRUMB` contextually — never in the header
+- ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
 - ❌ NO narration ("I'll now search...", "Let me check...")
 
 ---

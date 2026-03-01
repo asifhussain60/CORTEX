@@ -110,9 +110,9 @@ class TestEngagementBlocks:
         # Search in the dedicated block definition (### section)
         idx = content.find("### BLOCK-ENGAGEMENT-BREADCRUMB")
         assert idx >= 0, "BLOCK-ENGAGEMENT-BREADCRUMB block definition (###) not found"
-        snippet = content[idx: idx + 800]
-        assert "Route" in snippet or "route" in snippet, (
-            "BLOCK-ENGAGEMENT-BREADCRUMB must show Route: format"
+        snippet = content[idx: idx + 1200]
+        assert "Via" in snippet or "via" in snippet or "🧭" in snippet or "italic" in snippet.lower(), (
+            "BLOCK-ENGAGEMENT-BREADCRUMB must document Via/italic format"
         )
 
     def test_block_engagement_timeline_defined(self) -> None:
@@ -130,8 +130,8 @@ class TestEngagementBlocks:
 
     def test_response_header_route_line_spec(self) -> None:
         content = _ssot()
-        assert "Route:" in content or "**Route:**" in content, (
-            "Response Header spec must include optional Route line"
+        assert "Via:" in content or "**Via:**" in content, (
+            "Response Header spec must include optional Via line (not Route:)"
         )
 
     def test_assembly_order_includes_engagement_blocks(self) -> None:

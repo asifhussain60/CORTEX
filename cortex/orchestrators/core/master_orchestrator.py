@@ -1594,11 +1594,42 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 "EnforcementOrchestrator",
             }
 
+            # ── Engagement rendering (Phase 92) ───────────────────────────────
+            # Build the routing chain from orchestrators_engaged + execution target.
+            # Use render_engagement() — the canonical three-tier routing gate.
+            _pipeline_engagement: dict = {}
+            try:
+                from cortex.orchestrators.response.engagement_renderer import (
+                    EngagementRenderer,
+                )
+
+                _exec_meta = stage_context.metadata.get("execution", {})
+                _target = _exec_meta.get("orchestrator", "")
+                _template_id = _exec_meta.get("template_id")
+
+                # Canonical chain: IntentRouter is always first; MasterOrchestrator
+                # is the hub; resolved target orchestrator is the leaf.
+                _pipeline_chain = ["IntentRouter", "MasterOrchestrator"]
+                if _target and _target not in _pipeline_chain:
+                    _pipeline_chain.append(_target)
+
+                _pipeline_engagement = EngagementRenderer().render_engagement(
+                    chain=_pipeline_chain,
+                    template_id=_template_id,
+                )
+            except Exception:
+                _pipeline_engagement = {
+                    "breadcrumb": "",
+                    "stage_pulse": None,
+                    "timeline": None,
+                }
+
             pipeline_result_data = {
                 "status": "completed",
                 "stages": 4,
                 "stage_metadata": stage_metadata,
                 "orchestrators_engaged": list(orchestrators_engaged),
+                "engagement": _pipeline_engagement,
             }
 
             # Merge with stage4 result data if it's a dict
@@ -1606,9 +1637,11 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 inner = stage_context.result.unwrap()
                 if isinstance(inner, dict):
                     pipeline_result_data.update(inner)
-                    # Restore pipeline keys (stage_metadata + orchestrators_engaged take precedence)
+                    # Restore pipeline keys (stage_metadata + orchestrators_engaged +
+                    # engagement take precedence over stage4 partial output)
                     pipeline_result_data["stage_metadata"] = stage_metadata
                     pipeline_result_data["orchestrators_engaged"] = list(orchestrators_engaged)
+                    pipeline_result_data["engagement"] = _pipeline_engagement
 
             final_result = Ok(pipeline_result_data)
             

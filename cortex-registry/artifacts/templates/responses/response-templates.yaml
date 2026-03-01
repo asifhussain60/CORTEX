@@ -315,21 +315,23 @@ templates:
 
   engagement_breadcrumb:
     intent: ["*"]
-    trigger: "Every orchestrator invocation with 2+ hop routing — always rendered in header region"
-    format: "**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}` (backtick code span)"
+    trigger: "Every orchestrator invocation with 2+ hop routing — rendered in header region"
+    format: "*🧭 {DisplayName} → {DisplayName}* (italic, plain-language display names, 🧭 prefix)"
     required_fields: ["routing_chain"]
     placement: "header region, immediately after Response Header"
     always_rendered: true
+    render_tier: "A"
     distinct_from: "BLOCK-HANDOFF (routing chain for complex educational responses)"
     ssot_block: "BLOCK-ENGAGEMENT-BREADCRUMB"
 
   engagement_timeline:
     intent: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT"]
-    trigger: "Completion of any 3+ step operation"
-    format: "<details><summary>⏱️ Orchestrator Timeline</summary> table of Orchestrator | Duration | Status with Total row </details>"
+    trigger: "Completion of any operation with 5+ hops OR WorkflowComposer in chain"
+    format: "<details><summary>⏱️ {N} hops · {duration} — ...</summary> table of Stage | Tool | Duration | Status with Total row </details>"
     required_fields: ["orchestrators", "durations"]
     placement: "after BLOCK-METRICS-DASHBOARD, before BLOCK-NEXT-STEPS"
     always_collapsible: true
+    render_tier: "C"
     distinct_from: "BLOCK-METRICS-DASHBOARD (test/coverage metrics vs orchestrator timing)"
     ssot_block: "BLOCK-ENGAGEMENT-TIMELINE"
 

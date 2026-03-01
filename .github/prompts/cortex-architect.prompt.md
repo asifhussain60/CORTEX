@@ -708,8 +708,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |
 | Runtime data path | All `.db`/`.log`/state refs point to `.cortex-runtime/`, never `cortex.intelligence/state/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
-| Response header — CORTEX.prompt.md | Header reads `## {icon} CORTEX {mode}` + `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` |
-| Response header — cortex-architect.prompt.md | Header reads `## {icon} CORTEX Architect {mode}` + `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` |
+| Response header — CORTEX.prompt.md | Header reads `## {icon} CORTEX {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — no `Orchestrator` field in header |
+| Response header — cortex-architect.prompt.md | Header reads `## {icon} CORTEX Architect {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — no `Orchestrator` field in header |
 
 ---
 
@@ -739,16 +739,17 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 Progress bar + stage bullet list. See templates SSOT.
 
 ### Rules
-- ✅ ONE header per response, never repeated — `## {icon} CORTEX Architect {mode}` then `**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅` then `---`
-- ✅ Author line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
+- ✅ ONE header per response, never repeated — `## {icon} CORTEX Architect {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
 - ✅ **Templates are composable blocks** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
 - ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
+- ✅ Orchestrator engagement surfaced via `BLOCK-ENGAGEMENT-BREADCRUMB` contextually — never in the header
+- ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
 - ❌ NO narration ("I'll now search...", "Let me check...")
-- ❌ NO `**Orchestrator:** {Name} ✅` without the `**Author:** Asif Hussain |` prefix — partial header is a P1 violation
 
 
 ---

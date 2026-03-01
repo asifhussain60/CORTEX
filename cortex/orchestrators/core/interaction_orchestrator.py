@@ -362,14 +362,16 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     output["type"] = "challenge"
                     output["challenge"] = challenge_result
 
-            # Step 3b: Render engagement breadcrumb (Phase 92 — BLOCK-ENGAGEMENT-BREADCRUMB)
+            # Step 3b: Render engagement (Phase 92 — three-tier routing gate)
             try:
                 from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
-                output["breadcrumb"] = EngagementRenderer().render_breadcrumb(
-                    ["IntentRouter", "InteractionOrchestrator"]
-                )
+                _chain = ["IntentRouter", "InteractionOrchestrator"]
+                _engagement = EngagementRenderer().render_engagement(chain=_chain)
+                output["breadcrumb"] = _engagement["breadcrumb"]
+                output["engagement"] = _engagement
             except Exception:
                 output["breadcrumb"] = ""
+                output["engagement"] = {"breadcrumb": "", "stage_pulse": None, "timeline": None}
 
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
@@ -467,14 +469,16 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 "timestamp": datetime.now().isoformat(),
             }
 
-            # Phase 92: Render engagement breadcrumb (BLOCK-ENGAGEMENT-BREADCRUMB)
+            # Phase 92: Render engagement — three-tier routing gate
             try:
                 from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
-                output["breadcrumb"] = EngagementRenderer().render_breadcrumb(
-                    ["IntentRouter", "InteractionOrchestrator"]
-                )
+                _chain = ["IntentRouter", "InteractionOrchestrator"]
+                _engagement = EngagementRenderer().render_engagement(chain=_chain)
+                output["breadcrumb"] = _engagement["breadcrumb"]
+                output["engagement"] = _engagement
             except Exception:
                 output["breadcrumb"] = ""
+                output["engagement"] = {"breadcrumb": "", "stage_pulse": None, "timeline": None}
             
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:

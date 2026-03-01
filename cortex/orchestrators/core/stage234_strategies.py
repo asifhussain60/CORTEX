@@ -325,6 +325,25 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                     duration_ms = int(
                         (datetime.now() - start_time).total_seconds() * 1000
                     )
+                    # Engagement rendering for workflow-template path
+                    _tmpl_engagement: dict[str, Any] = {}
+                    try:
+                        from cortex.orchestrators.response.engagement_renderer import (
+                            EngagementRenderer,
+                        )
+
+                        _tmpl_chain = ["IntentRouter", "WorkflowComposer"]
+                        _tmpl_engagement = EngagementRenderer().render_engagement(
+                            chain=_tmpl_chain,
+                            template_id=template_id,
+                        )
+                    except Exception:
+                        _tmpl_engagement = {
+                            "breadcrumb": "",
+                            "stage_pulse": None,
+                            "timeline": None,
+                        }
+
                     context.metadata["execution"] = {
                         "orchestrator": f"WorkflowTemplate:{template_id}",
                         "status": "template_executed",
@@ -333,6 +352,7 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                         "complexity_score": template_override.get("complexity_score"),
                         "duration_ms": duration_ms,
                         "template_result": template_result,
+                        "engagement": _tmpl_engagement,
                         "timestamp": datetime.now().isoformat(),
                     }
                     context.metadata["stage4_status"] = "complete"
@@ -354,11 +374,30 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                 (datetime.now() - start_time).total_seconds() * 1000
             )
 
+            # ── Engagement rendering (Phase 92) ───────────────────────────────
+            # Build the routing chain: IntentRouter → routing_target.
+            # template_id comes from workflow gate (if active).
+            _engagement: dict[str, Any] = {}
+            try:
+                from cortex.orchestrators.response.engagement_renderer import (
+                    EngagementRenderer,
+                )
+
+                _chain = ["IntentRouter", routing_target]
+                _template_id = context.metadata.get("execution", {}).get("template_id")
+                _engagement = EngagementRenderer().render_engagement(
+                    chain=_chain,
+                    template_id=_template_id,
+                )
+            except Exception:
+                _engagement = {"breadcrumb": "", "stage_pulse": None, "timeline": None}
+
             context.metadata["execution"] = {
                 "orchestrator": routing_target,
                 "status": "complete",
                 "duration_ms": duration_ms,
                 "result_summary": execution_result,
+                "engagement": _engagement,
                 "timestamp": datetime.now().isoformat(),
             }
             context.metadata["stage4_status"] = "complete"
