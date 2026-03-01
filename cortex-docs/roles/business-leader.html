@@ -27,6 +27,12 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 
+<!-- D3.js v7 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" crossorigin="anonymous"></script>
+
+<!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
 <!-- Design System -->
 <link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
 <link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
@@ -81,7 +87,7 @@
         </p>
         <div class="hero-stats">
             <span class="stat-pill">4× Faster Root Cause Resolution</span>
-            <span class="stat-pill">60% Token Cost Reduction</span>
+            <span class="stat-pill">Precision LLM Token Use</span>
             <span class="stat-pill">Zero Governance Violations in Production</span>
         </div>
     </section>
@@ -97,24 +103,196 @@
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <div class="bl-bottom-line">
-                <h3 class="bl-bottom-line-heading">CORTEX enforces quality at the source — shifting defect detection left, eliminating manual governance overhead, and making engineering output consistently measurable.</h3>
+                <h3 class="bl-bottom-line-heading">Every engineering defect found in production costs 10–100× more to fix than one caught at commit. CORTEX makes catching it at commit the default — automatically, on every change, without slowing your team down.</h3>
                 <p class="bl-bottom-line-body">
-                    By enforcing TDD-first development, autonomous governance, and precision LLM token management at every commit,
-                    CORTEX converts rework hours into shipped features.
+                    CORTEX is a production-grade AI Engineering Framework that enforces quality governance at the source.
                     <strong>99 consecutive delivery phases.</strong>
-                    <strong>32 governance rules</strong> enforced — automatically, without manual review gates.
+                    <strong>32 governance rules</strong> enforced automatically across 8 pipeline stages — no manual review gates, no spreadsheet compliance.
                     The result: predictable velocity, observable quality, and audit-ready compliance from day one.
+                    This page builds your understanding systematically: <strong>Problem → Solution → Proof → Strategic Value</strong>.
                 </p>
             </div>
         </div><!-- /.bl-section-panel: Bottom Line -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 2 — QUANTIFIED IMPACT (ROI Grid + Image 01)
+             SECTION 2 — THE PROBLEM: Cost of Unmanaged AI
+             D3 bar chart comparing defect discovery costs
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-chart-line"></i> Quantified Business Impact</h2>
+            <h2 class="role-section-title"><i class="fas fa-exclamation-triangle"></i> The Problem: Defects Get Exponentially More Expensive</h2>
 
-            <!-- ROI metric grid -->
+            <p class="bl-tab-desc">Every stage a defect travels through your pipeline multiplies the cost to fix it. AI tooling without governance accelerates defect <em>velocity</em>, not just feature velocity. The chart below shows why catching issues earlier is a financial imperative, not a quality preference.</p>
+
+            <!-- D3.js: Cost-of-defect bar chart -->
+            <div class="bl-d3-panel" id="defect-cost-chart" role="img" aria-label="Bar chart showing relative cost of defect discovery by stage">
+                <div class="bl-d3-title">Relative Cost of Defect Discovery by Stage</div>
+                <div class="bl-d3-subtitle">Index: 1× = caught at commit · Higher = more expensive to fix · Reference: NIST, IBM Systems Sciences Institute</div>
+                <div class="bl-d3-canvas" id="defect-cost-canvas"></div>
+                <div class="bl-d3-legend">
+                    <span class="bl-d3-legend-item bl-d3-legend--green"><span class="bl-d3-legend-dot"></span>CORTEX blocks here (pre-commit)</span>
+                    <span class="bl-d3-legend-item bl-d3-legend--amber"><span class="bl-d3-legend-dot"></span>Internal discovery</span>
+                    <span class="bl-d3-legend-item bl-d3-legend--red"><span class="bl-d3-legend-dot"></span>Production exposure</span>
+                </div>
+            </div>
+
+            <div class="bl-insight-row">
+                <div class="bl-insight-card bl-insight-card--green">
+                    <div class="bl-insight-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="bl-insight-text"><strong>CORTEX blocks defects at commit</strong> — before they enter the review cycle. The enforcement gate runs in &lt;10 seconds on every change, coordinated by 10 specialised agents.</div>
+                </div>
+                <div class="bl-insight-card bl-insight-card--red">
+                    <div class="bl-insight-icon"><i class="fas fa-fire"></i></div>
+                    <div class="bl-insight-text"><strong>Without governance</strong>, AI-generated code compounds the problem — higher feature velocity into a higher defect rate at the same late-stage discovery cost.</div>
+                </div>
+            </div>
+        </div><!-- /.bl-section-panel: The Problem -->
+
+        <!-- ════════════════════════════════════════════════
+             SECTION 3 — THE SOLUTION: How CORTEX Works
+             Mermaid: request flow pipeline
+             ════════════════════════════════════════════════ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-cogs"></i> How CORTEX Works: The 8-Stage Pipeline</h2>
+
+            <p class="bl-tab-desc">Every engineering action — from a code change to a debug request — flows through 8 automated stages. No human gates required. Governance is infrastructure, not process.</p>
+
+            <!-- Mermaid: pipeline flow -->
+            <div class="bl-mermaid-panel" aria-label="CORTEX 8-stage governance pipeline diagram">
+                <div class="bl-mermaid-title"><i class="fas fa-project-diagram"></i> Request → Quality-Assured Output</div>
+                <div class="bl-mermaid-canvas">
+                    <pre class="mermaid">
+flowchart LR
+    A["🔧 Code Change\nor AI Request"] --> B["⚡ Request\nEnrichment\nStage -1"]
+    B --> C["🌐 MCP\nGateway\nStage 0"]
+    C --> D["🎯 Intent\nClassifier\n28 Types"]
+    D --> E["🔬 LENS\nAnalysis\n300-800ms"]
+    E --> F["🧠 Brain\nIntelligence\n50-200ms"]
+    F --> G{"🛡️ Governance\nGate\n10 Agents"}
+    G -->|"✅ PASS"| H["⚙️ TDD\nExecution\nRED→GREEN"]
+    G -->|"🚫 BLOCKED"| I["❌ Rejected\nNo tokens\nspent"]
+    H --> J["📊 SQLite\nAudit Trail\nAC markers"]
+
+    classDef stage fill:#0d1b3e,stroke:#00d4ff,stroke-width:1.5px,color:#e2e8f0
+    classDef gate fill:#0d2b1e,stroke:#34d399,stroke-width:2px,color:#34d399
+    classDef block fill:#2d0f0f,stroke:#fb7185,stroke-width:1.5px,color:#fb7185
+    classDef audit fill:#1a0d3d,stroke:#7b61ff,stroke-width:1.5px,color:#a78bfa
+    classDef input fill:#1a1a2e,stroke:#a0a6c0,stroke-width:1.5px,color:#e2e8f0
+
+    class A input
+    class B,C,D,E,F stage
+    class G gate
+    class H stage
+    class I block
+    class J audit
+                    </pre>
+                </div>
+                <p class="bl-mermaid-caption">Every change is enriched, classified, analysed, and governance-gated before execution. Blocked requests consume zero engineering time and zero LLM tokens.</p>
+            </div>
+
+            <!-- Pipeline detail cards -->
+            <div class="bl-section-divider">
+                <div class="bl-section-divider-line"></div>
+                <span class="bl-section-divider-label">8-Stage Detail</span>
+                <div class="bl-section-divider-line"></div>
+            </div>
+            <div class="bl-pipeline-grid">
+
+                <div class="bl-pipeline-card bl-pipeline-card--cyan">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">−1</span>
+                        <i class="fas fa-filter bl-pipeline-icon bl-pipeline-icon--cyan"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Request Enrichment</div>
+                    <div class="bl-pipeline-card-desc">Silent pre-processing adds governance context, breaking-risk assessment, and design pillar considerations before the request reaches any orchestrator.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--cyan">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">0</span>
+                        <i class="fas fa-network-wired bl-pipeline-icon bl-pipeline-icon--cyan"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">MCP Gateway</div>
+                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 29 registered tools, and enforces rate limiting.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--violet">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">1</span>
+                        <i class="fas fa-crosshairs bl-pipeline-icon bl-pipeline-icon--violet"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Intent Classification</div>
+                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 28 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--violet">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">2</span>
+                        <i class="fas fa-microscope bl-pipeline-icon bl-pipeline-icon--violet"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">LENS Analysis</div>
+                    <div class="bl-pipeline-card-desc">Parallel analyzers scan AST structure, Git history, security vulnerabilities, architecture patterns, and complexity metrics simultaneously — sub-second.</div>
+                    <div class="bl-pipeline-card-timing">300–800 ms</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--emerald">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">3</span>
+                        <i class="fas fa-brain bl-pipeline-icon bl-pipeline-icon--emerald"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Brain Intelligence</div>
+                    <div class="bl-pipeline-card-desc">Perception recognises patterns, Reasoning selects strategies by historical success rate, Action builds a TDD-gated execution plan with rollback points.</div>
+                    <div class="bl-pipeline-card-timing">50–200 ms</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--emerald">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">4</span>
+                        <i class="fas fa-shield-alt bl-pipeline-icon bl-pipeline-icon--emerald"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Governance Gate</div>
+                    <div class="bl-pipeline-card-desc">EnforcementOrchestrator coordinates 10 specialised agents — GovernanceAgent, SecurityAgent, ComplianceAgent, FileNamingAgent, ArchitectureIntegrityAgent, and 5 more.</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">PASS</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--warn">WARNING</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--block">BLOCKED</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--amber">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--amber">5</span>
+                        <i class="fas fa-vial bl-pipeline-icon bl-pipeline-icon--amber"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">TDD Execution</div>
+                    <div class="bl-pipeline-card-desc">TDDOrchestrator writes failing tests first, then minimum implementation, then improves quality — all tests must stay green. CORE-008 is architecturally mandated.</div>
+                    <div class="bl-pipeline-card-tdd">
+                        <span class="bl-tdd-badge bl-tdd-red">RED</span>
+                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
+                        <span class="bl-tdd-badge bl-tdd-green">GREEN</span>
+                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
+                        <span class="bl-tdd-badge bl-tdd-blue">REFACTOR</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--rose">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--rose">6</span>
+                        <i class="fas fa-database bl-pipeline-icon bl-pipeline-icon--rose"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Audit Trail — SQLite WAL</div>
+                    <div class="bl-pipeline-card-desc">Every action logs AC_START and AC_COMPLETE timestamps to CortexAuditDB with hash-chain integrity. Auditors get queryable evidence — not spreadsheet archaeology.</div>
+                </div>
+
+            </div>
+        </div><!-- /.bl-section-panel: How CORTEX Works -->
+
+        <!-- ════════════════════════════════════════════════
+             SECTION 4 — QUANTIFIED IMPACT (ROI Grid)
+             ════════════════════════════════════════════════ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-chart-line"></i> Proof: Quantified Business Impact</h2>
+
+            <p class="bl-tab-desc">These outcomes are observable in this codebase today — not projections. Every metric is backed by 99 consecutive delivery phases with a full queryable audit trail.</p>
             <div class="roi-grid">
                 <div class="roi-card">
                     <div class="roi-icon">🧪</div>
@@ -150,13 +328,13 @@
                 </div>
                 <div class="roi-card">
                     <div class="roi-icon">🧪</div>
-                    <div class="roi-value">7,581</div>
+                    <div class="roi-value">17,735</div>
                     <div class="roi-label">Automated Tests</div>
                     <div class="roi-detail">Regression protection that grows with every feature</div>
                 </div>
                 <div class="roi-card roi-card--emerald">
                     <div class="roi-icon">🤖</div>
-                    <div class="roi-value">259</div>
+                    <div class="roi-value">186</div>
                     <div class="roi-label">Orchestrator Files</div>
                     <div class="roi-detail">Autonomous workflow execution across 9 domains</div>
                 </div>
@@ -168,28 +346,17 @@
                 </div>
             </div>
 
-            <!-- Image 01: ROI Executive Dashboard -->
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/business-leader/01-roi-executive-dashboard.png"
-                     alt="Executive ROI dashboard showing 40% cost reduction, 4× faster resolution, 60% token savings, and 99 phases shipped"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">Executive ROI Dashboard — Four headline outcomes, all measurable from day one</p>
-            </div>
-            <div class="bl-image-context">
-                <div class="bl-context-stat">
-                    <span class="bl-context-stat-value">99</span>
-                    <span class="bl-context-stat-label">consecutive phases · zero governance regressions</span>
-                </div>
-                <p class="bl-context-narrative">
-                    The four outcomes above are observable in this codebase today — not projections. <strong>Defect detection shifts left</strong>: the EnforcementOrchestrator coordinates 10 specialised agents at pre-commit, blocking non-compliant code before it reaches a reviewer. <strong>Root cause analysis runs in minutes</strong>: the RCA Memory Engine selects from Four-Whys, Fishbone, Fault-Tree, or Causal-Chain methodologies automatically, then writes a prevention rule so the same failure cannot recur. <strong>LLM token consumption is actively managed</strong>: LENS caches codebase analysis across turns, intent routing loads only the relevant orchestrator context, and governance pre-filtering stops invalid requests before any model call is made. <strong>Zero production violations</strong> is a verifiable fact — 99 consecutive delivery phases, each one governed, tested, and logged to SQLite with hash-chain integrity.
-                </p>
+            <!-- D3.js: Engineering time allocation before vs after -->
+            <div class="bl-d3-panel" id="value-flow-chart" role="img" aria-label="Engineering time allocation before and after CORTEX">
+                <div class="bl-d3-title">Engineering Time Allocation: Before vs. After CORTEX</div>
+                <div class="bl-d3-subtitle">Illustrative — actual results scale with your team's baseline defect rate and sprint cost</div>
+                <div class="bl-d3-canvas" id="value-flow-canvas"></div>
             </div>
 
         </div><!-- /.bl-section-panel: Quantified Impact -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 3 — ENGINEERING EFFICIENCY (Tabbed)
+             SECTION 5 — ENGINEERING EFFICIENCY (Tabbed)
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-sliders-h"></i> Engineering Efficiency — How CORTEX Changes the Work</h2>
@@ -265,139 +432,39 @@
         </div><!-- /.bl-section-panel: Engineering Efficiency -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 4 — GOVERNANCE IN ACTION (Image 02)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-shield-alt"></i> Governance in Action</h2>
-
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/business-leader/02-governance-shield-architecture.png"
-                     alt="Governance pipeline showing 7 enforcement stages from code change to deployment, guarded by 32 CORE rules"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">Governance Shield — 32 CORE rules enforced across 7 automated stages, pre-commit through runtime</p>
-            </div>
-
-            <div class="bl-image-context--emerald bl-image-context">
-                <div class="bl-context-stat">
-                    <span class="bl-context-stat-value bl-context-stat-value--emerald">32</span>
-                    <span class="bl-context-stat-label">CORE rules · zero manual gates</span>
-                </div>
-                <p class="bl-context-narrative">
-                    The shield architecture above maps every code change through a <strong>7-stage enforcement pipeline</strong>: Request Enrichment → MCP Gateway → Intent Classification → LENS Analysis → Governance Gate → Execution → Audit Trail. At Stage 4, the <strong>EnforcementOrchestrator coordinates 10 specialised agents</strong> — covering TDD compliance (CORE-008), security scanning, naming conventions (CORE-028), architecture integrity, and markdown suppression (CORE-002). A gate result is <strong>PASS, WARNING, or BLOCKED</strong>. BLOCKED operations halt immediately: no files are changed, no LLM tokens are spent. This is not a suggestion engine — it is hard infrastructure enforced at every commit, every CI run, and every runtime operation. The 32 CORE rules live as YAML in the Git registry, meaning every rule change is version-controlled, peer-reviewable, and auditable.
-                </p>
-            </div>
-
-            <!-- 7-stage pipeline detail — card grid -->
-            <div class="bl-section-divider">
-                <div class="bl-section-divider-line"></div>
-                <span class="bl-section-divider-label">8-Stage Pipeline</span>
-                <div class="bl-section-divider-line"></div>
-            </div>
-            <div class="bl-pipeline-grid">
-
-                <div class="bl-pipeline-card bl-pipeline-card--cyan">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">−1</span>
-                        <i class="fas fa-filter bl-pipeline-icon bl-pipeline-icon--cyan"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Request Enrichment</div>
-                    <div class="bl-pipeline-card-desc">Silent pre-processing adds governance context, breaking-risk assessment, and design pillar considerations before the request reaches any orchestrator.</div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--cyan">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">0</span>
-                        <i class="fas fa-network-wired bl-pipeline-icon bl-pipeline-icon--cyan"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">MCP Gateway</div>
-                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 29 registered tools, and enforces rate limiting.</div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--violet">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">1</span>
-                        <i class="fas fa-crosshairs bl-pipeline-icon bl-pipeline-icon--violet"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Intent Classification</div>
-                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 28 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--violet">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">2</span>
-                        <i class="fas fa-microscope bl-pipeline-icon bl-pipeline-icon--violet"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">LENS Analysis</div>
-                    <div class="bl-pipeline-card-desc">Parallel analyzers scan AST structure, Git history, security vulnerabilities, architecture patterns, and complexity metrics simultaneously — sub-second.</div>
-                    <div class="bl-pipeline-card-timing">300–800 ms</div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--emerald">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">3</span>
-                        <i class="fas fa-brain bl-pipeline-icon bl-pipeline-icon--emerald"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Brain Intelligence</div>
-                    <div class="bl-pipeline-card-desc">Perception recognises patterns, Reasoning selects strategies by historical success rate, Action builds a TDD-gated execution plan with rollback points.</div>
-                    <div class="bl-pipeline-card-timing">50–200 ms</div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--emerald">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">4</span>
-                        <i class="fas fa-shield-alt bl-pipeline-icon bl-pipeline-icon--emerald"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Governance Gate</div>
-                    <div class="bl-pipeline-card-desc">EnforcementOrchestrator coordinates 10 specialised agents — GovernanceAgent, SecurityAgent, ComplianceAgent, FileNamingAgent, ArchitectureIntegrityAgent, and 5 more.</div>
-                    <div class="bl-pipeline-card-result">
-                        <span class="bl-pipeline-result bl-pipeline-result--pass">PASS</span>
-                        <span class="bl-pipeline-result bl-pipeline-result--warn">WARNING</span>
-                        <span class="bl-pipeline-result bl-pipeline-result--block">BLOCKED</span>
-                    </div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--amber">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--amber">5</span>
-                        <i class="fas fa-vial bl-pipeline-icon bl-pipeline-icon--amber"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Execution</div>
-                    <div class="bl-pipeline-card-desc">TDDOrchestrator writes failing tests first, then minimum implementation, then improves quality — all tests must stay green. CORE-008 is architecturally mandated.</div>
-                    <div class="bl-pipeline-card-tdd">
-                        <span class="bl-tdd-badge bl-tdd-red">RED</span>
-                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
-                        <span class="bl-tdd-badge bl-tdd-green">GREEN</span>
-                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
-                        <span class="bl-tdd-badge bl-tdd-blue">REFACTOR</span>
-                    </div>
-                </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--rose">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--rose">6</span>
-                        <i class="fas fa-database bl-pipeline-icon bl-pipeline-icon--rose"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Audit Trail — SQLite WAL</div>
-                    <div class="bl-pipeline-card-desc">Every action logs AC_START and AC_COMPLETE timestamps to CortexAuditDB with hash-chain integrity. Auditors get queryable evidence — not spreadsheet archaeology.</div>
-                </div>
-
-            </div>
-        </div><!-- /.bl-section-panel: Governance in Action -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 5 — WHERE REWORK IS ELIMINATED (Image 03)
+             SECTION 6 — WHERE REWORK IS ELIMINATED
+             Mermaid: rework avoidance mindmap
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-hand-holding-usd"></i> Where Rework Is Eliminated</h2>
 
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/business-leader/03-cost-avoidance-infographic.png"
-                     alt="Comparison showing CORTEX enforcing quality at source versus discovering defects post-production"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">Enforcing quality at source — the architectural case for shifting defect detection left</p>
+            <!-- Mermaid: rework categories -->
+            <div class="bl-mermaid-panel" aria-label="Five categories of rework eliminated by CORTEX governance">
+                <div class="bl-mermaid-title"><i class="fas fa-sitemap"></i> Five Structural Rework Eliminations — Enforced Architecturally, Not by Process</div>
+                <div class="bl-mermaid-canvas">
+                    <pre class="mermaid">
+mindmap
+  root(("🛡️ CORTEX\nRework\nElimination"))
+    ("🧪 Non-Compliant Code")
+      ["Blocked at commit by 10 enforcement agents"]
+      ["Never reaches a human reviewer"]
+    ("📋 Vague Acceptance Criteria")
+      ["DoR enforcement requires testable definition first"]
+      ["Work starts only when criteria are executable"]
+    ("🔐 Security Issues Post-Ship")
+      ["LENS scans CVEs and PHI/PII at planning stage"]
+      ["Security classified at story level, not after incident"]
+    ("🔄 Recurring Failures")
+      ["RCA prevention rules written to governance registry"]
+      ["Same root cause cannot silently recur"]
+    ("📊 Audit Overhead")
+      ["32 CORE rules enforced automatically at every commit"]
+      ["SQLite audit trail — queryable, not spreadsheet"]
+                    </pre>
+                </div>
+                <p class="bl-mermaid-caption">Each elimination is structural — enforced by CORTEX infrastructure, not dependent on individual engineer discipline.</p>
             </div>
+
             <div class="bl-image-context bl-image-context--amber bl-context-inline">
                 <div class="bl-context-stat bl-context-stat--block">
                     <span class="bl-context-stat-value bl-context-stat-value--amber">5</span>
@@ -407,10 +474,66 @@
                     <strong>Defects from non-compliant code</strong> — blocked at commit by 10 enforcement agents before they reach a reviewer. <strong>Rework from vague acceptance criteria</strong> — DoR enforcement requires a testable definition before any work begins. <strong>Security issues discovered post-ship</strong> — LENS scans for CVEs, insecure patterns, and PHI/PII exposure during planning, not after deployment. <strong>Recurring failures</strong> — RCA prevention rules written to the governance registry mean the same root cause cannot silently recur. <strong>Governance audit overhead</strong> — 32 CORE rules enforced automatically at pre-commit and CI, with a queryable SQLite audit trail, eliminating manual compliance reviews. The magnitude of savings depends on your team's baseline defect rate, sprint cost, and audit cadence — CORTEX provides the mechanisms; the return scales with your context.
                 </p>
             </div>
-        </div><!-- /.bl-section-panel: Where Rework Is Eliminated -->
+        </div><!-- /.bl-section-panel: Rework Elimination -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 6 — STRATEGIC VALUE (Tabbed Pillars)
+             SECTION 7 — GOVERNANCE DEEP DIVE
+             D3 donut + governance rule list
+             ════════════════════════════════════════════════ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-shield-alt"></i> Governance in Depth: 32 Rules, 5 Domains</h2>
+
+            <div class="bl-arch-grid">
+                <!-- D3 donut governance chart -->
+                <div class="bl-d3-panel bl-d3-panel--half" id="governance-chart" role="img" aria-label="Donut chart showing CORTEX governance rule distribution">
+                    <div class="bl-d3-title">Governance Rule Distribution</div>
+                    <div class="bl-d3-subtitle">Hover a segment to see domain count</div>
+                    <div class="bl-d3-canvas" id="governance-canvas"></div>
+                </div>
+
+                <!-- Governance narrative + rule list -->
+                <div class="bl-governance-narrative">
+                    <div class="bl-image-context--emerald bl-image-context">
+                        <div class="bl-context-stat">
+                            <span class="bl-context-stat-value bl-context-stat-value--emerald">32</span>
+                            <span class="bl-context-stat-label">CORE rules · zero manual gates</span>
+                        </div>
+                        <p class="bl-context-narrative">
+                            Every CORE rule is a <strong>YAML file in Git</strong> — version-controlled, peer-reviewable, and auditable. At Stage 4, the <strong>EnforcementOrchestrator coordinates 10 specialised agents</strong>. A gate result is <strong>PASS, WARNING, or BLOCKED</strong>. BLOCKED operations halt immediately: no files changed, no LLM tokens spent.
+                        </p>
+                    </div>
+                    <div class="bl-governance-rule-list">
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-002</span>
+                            <span class="bl-gov-rule-desc">All output inline — never create .md/.txt report files in production</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-008</span>
+                            <span class="bl-gov-rule-desc">TDD mandatory — write failing test first, then implement. No exceptions.</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-028</span>
+                            <span class="bl-gov-rule-desc">File naming: snake_case only — enforced on every new file created</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-048</span>
+                            <span class="bl-gov-rule-desc">Holistic validation gate before IMPLEMENT/FIX/REFACTOR — no skipping</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-064</span>
+                            <span class="bl-gov-rule-desc">Sweep Completeness — every audit exhausts its full issue catalogue</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-068</span>
+                            <span class="bl-gov-rule-desc">Universal Convergence Gate — detect→fix→rescan until zero P0/P1 violations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.bl-section-panel: Governance Depth -->
+
+        <!-- ════════════════════════════════════════════════
+             SECTION 8 — STRATEGIC VALUE (Tabbed Pillars)
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-star"></i> Strategic Value Proposition</h2>
@@ -529,7 +652,7 @@
         </div><!-- /.bl-section-panel: Strategic Value -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 7 — PLATFORM CAPABILITIES
+             SECTION 9 — PLATFORM CAPABILITIES
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-check-double"></i> Platform Capabilities</h2>
@@ -540,7 +663,7 @@
                 <span class="bl-badge bl-badge--emerald"><i class="fas fa-brain"></i> RCA Memory Engine</span>
                 <span class="bl-badge bl-badge--emerald"><i class="fas fa-database"></i> SQLite Audit Trail</span>
                 <span class="bl-badge bl-badge--violet"><i class="fas fa-plug"></i> 29 MCP Tools</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> 259 Orchestrators · 9 Domains</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> 186 Orchestrators · 9 Domains</span>
                 <span class="bl-badge bl-badge--violet"><i class="fas fa-bug"></i> Multi-Stack Debug (8 Strategies)</span>
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-heartbeat"></i> Health Monitoring</span>
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-chart-bar"></i> Prometheus Metrics</span>
@@ -550,7 +673,7 @@
         </div><!-- /.bl-section-panel: Capabilities -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 8 — EXPLORE FURTHER (CTAs)
+             SECTION 10 — EXPLORE FURTHER (CTAs)
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-compass"></i> Explore Further</h2>
@@ -581,8 +704,11 @@
     </div><!-- /.role-content-wrapper -->
 </main>
 
-<!-- Tab switching -->
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS: Tab switching + Mermaid init + D3.js charts
+     ══════════════════════════════════════════════════════════ -->
 <script>
+/* ── Tab switching ── */
 (function () {
     'use strict';
     document.querySelectorAll('.bl-tab').forEach(function (tab) {
@@ -607,6 +733,300 @@
             if (target) target.classList.add('active');
         });
     });
+})();
+</script>
+
+<script>
+/* ── Mermaid init — dark glassmorphism theme ── */
+if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            background: '#0a0e27',
+            primaryColor: '#0d1b3e',
+            primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#00d4ff',
+            lineColor: '#3a4060',
+            secondaryColor: '#1a1f44',
+            tertiaryColor: '#12162e',
+            edgeLabelBackground: '#0a0e27',
+            fontSize: '14px',
+            nodeBorder: '#00d4ff',
+            clusterBkg: '#0d1120',
+            titleColor: '#e2e8f0'
+        },
+        flowchart: { curve: 'basis', htmlLabels: true },
+        mindmap: { padding: 20 }
+    });
+}
+</script>
+
+<script>
+/* ── D3.js Chart 1: Defect Cost Bar Chart ── */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('defect-cost-canvas');
+    if (!container) return;
+
+    var stages = [
+        { label: 'Commit\n(CORTEX Gate)', cost: 1,   color: '#34d399' },
+        { label: 'Code Review',           cost: 4,   color: '#38bdf8' },
+        { label: 'QA / Testing',          cost: 15,  color: '#f59e0b' },
+        { label: 'UAT / Staging',         cost: 40,  color: '#fb923c' },
+        { label: 'Production',            cost: 100, color: '#fb7185' }
+    ];
+
+    var margin = { top: 24, right: 40, bottom: 68, left: 64 };
+    var totalW = Math.max(container.offsetWidth || 0, 480);
+    var totalH = 420; /* d3_min_height_400 gate — html-view-lifecycle.yaml § asset_validation */
+    var w = totalW - margin.left - margin.right;
+    var h = totalH - margin.top - margin.bottom;
+
+    var svg = d3.select(container)
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', totalH)
+        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var x = d3.scaleBand().domain(stages.map(function(d){ return d.label; })).range([0, w]).padding(0.38);
+    var y = d3.scaleLinear().domain([0, 115]).range([h, 0]);
+
+    /* Grid */
+    g.append('g')
+        .attr('class', 'bl-d3-grid-lines')
+        .call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
+        .call(function(s){ s.select('.domain').remove(); s.selectAll('line').attr('stroke', 'rgba(255,255,255,0.05)'); });
+
+    /* Bars with gradient fill per colour */
+    var defs = svg.append('defs');
+    stages.forEach(function(d, i) {
+        var grad = defs.append('linearGradient').attr('id', 'bar-grad-' + i).attr('x1','0').attr('y1','0').attr('x2','0').attr('y2','1');
+        grad.append('stop').attr('offset','0%').attr('stop-color', d.color).attr('stop-opacity', 0.95);
+        grad.append('stop').attr('offset','100%').attr('stop-color', d.color).attr('stop-opacity', 0.55);
+    });
+
+    var bars = g.selectAll('.bar').data(stages).enter().append('g');
+
+    bars.append('rect')
+        .attr('x', function(d){ return x(d.label); })
+        .attr('y', function(d){ return y(d.cost); })
+        .attr('width', x.bandwidth())
+        .attr('height', function(d){ return h - y(d.cost); })
+        .attr('fill', function(d, i){ return 'url(#bar-grad-' + i + ')'; })
+        .attr('rx', 6)
+        .attr('stroke', function(d){ return d.color; })
+        .attr('stroke-width', 1)
+        .attr('stroke-opacity', 0.4);
+
+    /* Value labels */
+    bars.append('text')
+        .attr('x', function(d){ return x(d.label) + x.bandwidth() / 2; })
+        .attr('y', function(d){ return y(d.cost) - 7; })
+        .attr('text-anchor', 'middle')
+        .attr('fill', function(d){ return d.color; })
+        .attr('font-size', '13px')
+        .attr('font-weight', '800')
+        .attr('font-family', 'Inter, sans-serif')
+        .text(function(d){ return d.cost + 'x'; });
+
+    /* X axis */
+    var xAxis = g.append('g')
+        .attr('transform', 'translate(0,' + h + ')')
+        .call(d3.axisBottom(x).tickSize(0));
+    xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.08)');
+    xAxis.selectAll('text')
+        .attr('fill', '#a0a6c0')
+        .attr('font-size', '11px')
+        .attr('font-family', 'Inter, sans-serif')
+        .each(function(d) {
+            var el = d3.select(this);
+            var parts = d.split('\n');
+            el.text('');
+            parts.forEach(function(p, i) {
+                el.append('tspan').attr('x', 0).attr('dy', i === 0 ? '1.1em' : '1.2em').text(p);
+            });
+        });
+
+    /* Y axis */
+    var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function(d){ return d + 'x'; }));
+    yAxis.select('.domain').remove();
+    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
+    yAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
+
+    /* CORTEX annotation */
+    g.append('text')
+        .attr('x', x(stages[0].label) + x.bandwidth() / 2)
+        .attr('y', h + 55)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#34d399')
+        .attr('font-size', '10px')
+        .attr('font-weight', '700')
+        .attr('font-family', 'Inter, sans-serif')
+        .text('🛡️ CORTEX blocks here');
+})();
+</script>
+
+<script>
+/* ── D3.js Chart 2: Engineering Time Allocation Before vs After ── */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('value-flow-canvas');
+    if (!container) return;
+
+    var categories = [
+        { label: 'Feature Development', before: 35, after: 60, color: '#00d4ff' },
+        { label: 'Bug Fixing & Rework',  before: 30, after: 10, color: '#fb7185' },
+        { label: 'Code Review',          before: 15, after: 10, color: '#f59e0b' },
+        { label: 'Compliance & Audit',   before: 12, after: 5,  color: '#a78bfa' },
+        { label: 'Incident Response',    before: 8,  after: 15, color: '#34d399' }
+    ];
+
+    var margin = { top: 40, right: 100, bottom: 24, left: 175 };
+    var totalW = Math.max(container.offsetWidth || 0, 540);
+    var barH = 22;
+    var gap = 8;
+    var groupH = barH * 2 + gap;
+    var totalH = margin.top + margin.bottom + categories.length * (groupH + 14) + 10;
+    var w = totalW - margin.left - margin.right;
+
+    var svg = d3.select(container)
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', totalH)
+        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    /* Legend */
+    var lg = svg.append('g').attr('transform', 'translate(' + margin.left + ',12)');
+    lg.append('rect').attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', 'rgba(160,166,192,0.25)').attr('stroke', 'rgba(255,255,255,0.15)').attr('stroke-width', 1);
+    lg.append('text').attr('x', 19).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text('Before CORTEX');
+    lg.append('rect').attr('x', 130).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', '#00d4ff').attr('opacity', 0.75);
+    lg.append('text').attr('x', 148).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text('After CORTEX');
+
+    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+
+    categories.forEach(function(d, i) {
+        var yBase = i * (groupH + 14);
+
+        /* Label */
+        g.append('text')
+            .attr('x', -10).attr('y', yBase + barH - 3)
+            .attr('text-anchor', 'end')
+            .attr('fill', '#e2e8f0').attr('font-size', '12px').attr('font-weight', '600')
+            .attr('font-family', 'Inter, sans-serif').text(d.label);
+
+        /* Before bar */
+        g.append('rect')
+            .attr('x', 0).attr('y', yBase)
+            .attr('width', x(d.before)).attr('height', barH)
+            .attr('rx', 5)
+            .attr('fill', 'rgba(160,166,192,0.18)')
+            .attr('stroke', 'rgba(255,255,255,0.1)').attr('stroke-width', 1);
+        g.append('text')
+            .attr('x', x(d.before) + 6).attr('y', yBase + barH / 2 + 4)
+            .attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+            .text(d.before + '%');
+
+        /* After bar */
+        g.append('rect')
+            .attr('x', 0).attr('y', yBase + barH + gap)
+            .attr('width', x(d.after)).attr('height', barH)
+            .attr('rx', 5)
+            .attr('fill', d.color).attr('opacity', 0.75);
+        g.append('text')
+            .attr('x', x(d.after) + 6).attr('y', yBase + barH + gap + barH / 2 + 4)
+            .attr('fill', d.color).attr('font-size', '11px').attr('font-weight', '700')
+            .attr('font-family', 'Inter, sans-serif').text(d.after + '%');
+    });
+})();
+</script>
+
+<script>
+/* ── D3.js Chart 3: Governance Rule Donut Chart ── */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('governance-canvas');
+    if (!container) return;
+
+    var domains = [
+        { label: 'Core / General',   count: 14, color: '#00d4ff' },
+        { label: 'TDD / Quality',    count: 6,  color: '#34d399' },
+        { label: 'Security',         count: 4,  color: '#fb7185' },
+        { label: 'Architecture',     count: 4,  color: '#a78bfa' },
+        { label: 'Naming / Docs',    count: 4,  color: '#f59e0b' }
+    ];
+
+    var size = Math.min(Math.max(container.offsetWidth || 0, 280), 340);
+    var radius = size / 2 - 22;
+    var innerR = radius * 0.56;
+
+    var svg = d3.select(container)
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', size)
+        .attr('viewBox', '0 0 ' + size + ' ' + size)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    var g = svg.append('g').attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')');
+
+    var pie = d3.pie().value(function(d){ return d.count; }).sort(null).padAngle(0.03);
+    var arc = d3.arc().innerRadius(innerR).outerRadius(radius).cornerRadius(4);
+    var arcHover = d3.arc().innerRadius(innerR).outerRadius(radius + 10).cornerRadius(4);
+
+    /* Glow filter */
+    var defs = svg.append('defs');
+    var filter = defs.append('filter').attr('id', 'donut-glow').attr('x', '-30%').attr('y', '-30%').attr('width', '160%').attr('height', '160%');
+    filter.append('feGaussianBlur').attr('in', 'SourceGraphic').attr('stdDeviation', '4').attr('result', 'blur');
+    var feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'blur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    var arcs = g.selectAll('.arc').data(pie(domains)).enter().append('g');
+
+    arcs.append('path')
+        .attr('d', arc)
+        .attr('fill', function(d){ return d.data.color; })
+        .attr('opacity', 0.82)
+        .attr('filter', 'url(#donut-glow)')
+        .on('mouseenter', function(event, d) {
+            d3.select(this).transition().duration(160).attr('d', arcHover).attr('opacity', 1);
+            cLabel.text(d.data.count);
+            cSub.text(d.data.label);
+        })
+        .on('mouseleave', function() {
+            d3.select(this).transition().duration(160).attr('d', arc).attr('opacity', 0.82);
+            cLabel.text('32');
+            cSub.text('CORE Rules');
+        });
+
+    var cLabel = g.append('text')
+        .attr('text-anchor', 'middle').attr('dy', '0.25em')
+        .attr('fill', '#ffffff').attr('font-size', '2rem').attr('font-weight', '800')
+        .attr('font-family', 'Inter, sans-serif').text('32');
+
+    var cSub = g.append('text')
+        .attr('text-anchor', 'middle').attr('dy', '1.9em')
+        .attr('fill', '#a0a6c0').attr('font-size', '0.68rem').attr('font-weight', '600')
+        .attr('letter-spacing', '0.06em').attr('font-family', 'Inter, sans-serif').text('CORE Rules');
+
+    /* Legend below donut */
+    var legendY = size / 2 + radius + 18;
+    if (legendY + domains.length * 20 <= size) {
+        var legendG = svg.append('g').attr('transform', 'translate(16,' + legendY + ')');
+        domains.forEach(function(d, i) {
+            var row = legendG.append('g').attr('transform', 'translate(0,' + (i * 20) + ')');
+            row.append('rect').attr('width', 11).attr('height', 11).attr('rx', 3).attr('fill', d.color).attr('opacity', 0.85);
+            row.append('text').attr('x', 16).attr('y', 9).attr('fill', '#a0a6c0').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif').text(d.label + ' (' + d.count + ')');
+        });
+    }
 })();
 </script>
 
