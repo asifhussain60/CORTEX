@@ -1,215 +1,873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CORTEX — Curious Learner View | Beginner · Intermediate · Advanced Learning Paths</title>
-    <meta name="description" content="Learn software development with structured learning paths powered by CORTEX knowledge base. Beginner, Intermediate, and Advanced tracks — real-world best practices, not textbook theory."/>
-    <meta name="keywords" content="CORTEX, learning paths, software development, TDD, architecture, Python, beginner, intermediate, advanced"/>
-    <meta name="author" content="Asif Hussain"/>
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="CORTEX — Curious Learner View"/>
-    <meta property="og:description" content="Structured learning tracks from CORTEX's knowledge base — beginner to advanced, built on real governance rules."/>
-    <meta property="og:image" content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png"/>
-    <meta property="og:type" content="website"/>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          rel="stylesheet"
-          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"/>
-
-    <link rel="icon" href="../assets/images/CORTEX-logo-64.png" type="image/png"/>
-    <link rel="stylesheet" href="../assets/css/cortex-grid-system.css"/>
-    <link rel="stylesheet" href="../assets/css/glassmorphism.css"/>
-    <link rel="stylesheet" href="../assets/css/glass-ui-components.css"/>
-    <link rel="stylesheet" href="../assets/css/layouts/role-landing.css"/>
-    <link rel="stylesheet" href="../assets/css/layouts/learning-path.css"/>
-    <script src="../assets/js/content-loader.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX for Curious Learners — structured learning tracks from Beginner to Advanced, powered by real AI governance rules, TDD practices, and production-grade engineering standards." name="description"/>
+<meta content="CORTEX, learning paths, software development, TDD, architecture, Python, beginner, intermediate, advanced, AI governance, engineering standards" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>CORTEX &mdash; Curious Learner View | Beginner &middot; Intermediate &middot; Advanced</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<meta content="CORTEX &mdash; Curious Learner View" property="og:title"/>
+<meta content="Structured learning tracks from Beginner to Advanced, built on real governance rules and production-grade engineering standards." property="og:description"/>
+<meta content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png" property="og:image"/>
+<meta content="website" property="og:type"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
+<link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/glass-ui-components.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/index-multipanel.css" rel="stylesheet"/>
+<link href="../assets/css/generated-classes.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<link href="../assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/role-landing.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/business-leader.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/learning-path.css" rel="stylesheet"/>
 </head>
-<body class="role-page">
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+<body>
 
-    <!-- Sticky back bar -->
-    <nav class="role-back-bar" aria-label="Site navigation">
-        <a class="back-link" href="../index.html">
-            <i class="fas fa-arrow-left"></i> Back to CORTEX
-        </a>
-        <span class="role-badge">🎓 Curious Learner View</span>
-    </nav>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <main id="main-content" role="main">
-    <div id="content-area">
-        <div class="role-hero-header">
-            <h1>🎓 Curious Learner</h1>
-            <div class="subtitle">Beginner · Intermediate · Advanced Learning Paths</div>
-            <a href="../index.html" class="btn-primary">← Back to CORTEX</a>
+<nav class="role-back-bar" aria-label="Site navigation">
+    <a class="back-link" href="../index.html"><i class="fas fa-arrow-left"></i> Back to CORTEX</a>
+    <span class="role-badge">&#127891; Curious Learner View</span>
+</nav>
+
+<main class="container" id="main-content" role="main">
+
+    <!-- ── Hero ── -->
+    <div class="hero-section-wrapper">
+        <div class="hero-robot-container">
+            <a href="../index.html" title="Back to CORTEX Home">
+                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high" src="../assets/images/CORTEX-logo-200.png"/>
+            </a>
         </div>
-
-        <!-- Learning Track Selector -->
-        <section id="main-content" class="learning-tracks cortex-container" aria-label="Learning Tracks">
-            <h2 class="section-title text-center mb-4 font-display">Choose Your Learning Path</h2>
-            <p class="section-subtitle text-center font-body">Structured tracks from CORTEX's knowledge base — real-world best practices, not textbook theory</p>
-            
-            <div class="cortex-grid">
-                <!-- Beginner Track -->
-                <a href="../learning/beginner/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--beginner">
-                    <div class="track-card-accent track-accent-emerald"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🌱</span>
-                        <h3 class="track-title font-display">Beginner</h3>
-                        <p class="track-tagline font-body">Foundations First</p>
-                        <p class="track-description font-body">
-                            Python basics, test-driven development fundamentals, clean code principles, 
-                            and Git workflows. Start here if you're new to professional software development.
-                        </p>
-                        <div class="track-meta font-mono">
-                            <span class="track-duration">📅 8 weeks</span>
-                            <span class="track-modules">📚 12 modules</span>
-                        </div>
-                        <div class="track-topics font-body">
-                            <span class="topic-tag">Python</span>
-                            <span class="topic-tag">TDD</span>
-                            <span class="topic-tag">Clean Code</span>
-                            <span class="topic-tag">Git</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Intermediate Track -->
-                <a href="../learning/intermediate/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--intermediate">
-                    <div class="track-card-accent track-accent-domain"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🔧</span>
-                        <h3 class="track-title font-display">Intermediate</h3>
-                        <p class="track-tagline font-body">Build With Confidence</p>
-                        <p class="track-description font-body">
-                            Architecture patterns, security fundamentals (OWASP Top 10), 
-                            design patterns, and microservices. Level up from individual contributor to system thinker.
-                        </p>
-                        <div class="track-meta font-mono">
-                            <span class="track-duration">📅 10 weeks</span>
-                            <span class="track-modules">📚 15 modules</span>
-                        </div>
-                        <div class="track-topics font-body">
-                            <span class="topic-tag">Architecture</span>
-                            <span class="topic-tag">Security</span>
-                            <span class="topic-tag">SOLID</span>
-                            <span class="topic-tag">APIs</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Advanced Track -->
-                <a href="../learning/advanced/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--advanced">
-                    <div class="track-card-accent track-accent-core"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🚀</span>
-                        <h3 class="track-title font-display">Advanced</h3>
-                        <p class="track-tagline font-body">Lead & Scale</p>
-                        <p class="track-description font-body">
-                            Distributed systems, observability at scale, CI/CD hardening, 
-                            and engineering leadership. For experienced developers ready to architect at scale.
-                        </p>
-                        <div class="track-meta font-mono">
-                            <span class="track-duration">📅 12 weeks</span>
-                            <span class="track-modules">📚 18 modules</span>
-                        </div>
-                        <div class="track-topics font-body">
-                            <span class="topic-tag">Distributed Systems</span>
-                            <span class="topic-tag">Observability</span>
-                            <span class="topic-tag">CI/CD</span>
-                            <span class="topic-tag">Leadership</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Knowledge Base Preview -->
-        <section class="knowledge-preview cortex-container mt-16" aria-label="Knowledge Base Preview">
-            <h2 class="section-title text-center font-display">Powered by CORTEX Knowledge Base</h2>
-            <p class="section-subtitle text-center font-body mb-8">Every lesson is backed by real governance rules and industry standards</p>
-            
-            <div class="cortex-grid mb-16">
-                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
-                    <span class="stat-value font-display text-4xl stat-color-core">35</span>
-                    <span class="stat-label font-body text-sm mt-2">CORE Governance Rules</span>
-                </div>
-                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
-                    <span class="stat-value font-display text-4xl stat-color-domain">45+</span>
-                    <span class="stat-label font-body text-sm mt-2">Knowledge YAMLs</span>
-                </div>
-                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
-                    <span class="stat-value font-display text-4xl stat-color-support">27</span>
-                    <span class="stat-label font-body text-sm mt-2">AI Orchestrators</span>
-                </div>
-                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
-                    <span class="stat-value font-display text-4xl stat-color-emerald">38</span>
-                    <span class="stat-label font-body text-sm mt-2">MCP Tools</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- CORTEX Documentation Content (loaded dynamically) -->
-        <section id="doc-content" aria-label="Documentation Content">
-            <div id="main-content-docs"></div>
-        </section>
-
-        <!-- ── Learning Visual Assets (DALL-E Generated) ── -->
-        <section class="glass-card-display" aria-label="Learning Visual Guides">
-            <h2 class="card-header-centered">Your Learning Journey — Visual Guides</h2>
-
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/learner/01-learning-journey-map.png"
-                     alt="CORTEX learning journey map showing Beginner, Intermediate, and Advanced tracks as connected milestone zones"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">Your CORTEX Journey — From Foundations to Architect</p>
-            </div>
-
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/learner/02-knowledge-concept-map.png"
-                     alt="CORTEX knowledge concept map showing interconnections between Orchestrators, MCP Tools, Governance, LENS, TDD, and Learning"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">CORTEX Concept Map — How everything connects</p>
-            </div>
-
-            <div class="generated-image-panel">
-                <img src="../assets/images/generated/shared/01-platform-architecture-overview.png"
-                     alt="CORTEX four-tier platform architecture overview"
-                     class="generated-diagram"
-                     loading="lazy"/>
-                <p class="image-caption">Platform Architecture — The big picture</p>
-            </div>
-        </section>
+        <div class="hero-divider-line"></div>
     </div>
 
-    <script>
-        async function loadContent() {
-            try {
-                window.cortexLoader = new ContentLoader('../data/content.json');
-                await window.cortexLoader.init();
-                window.cortexLoader.renderContent('curious-learner', '#main-content-docs');
-                
-                const categoryCount = window.cortexLoader.getCategoryCount('curious-learner');
-                const docCount = window.cortexLoader.getDocumentCount('curious-learner');
-                console.log(`📊 Showing ${docCount} documents across ${categoryCount} categories`);
-            } catch (error) {
-                console.warn('Content loader not available for learner role:', error.message);
-            }
-        }
+    <section class="glass-card-display hero-introduction" id="hero-section">
+        <div class="card-header-centered">
+            <h2>CORTEX &mdash; Curious Learner View</h2>
+        </div>
+        <p class="hero-description">
+            Great engineers aren&rsquo;t born knowing how to write governance-enforced, TDD-first code.
+            They learn it from systems that make the right approach <em>the only available approach</em>.
+            CORTEX exposes that system &mdash; its rules, its reasoning, and its architecture &mdash;
+            as structured learning tracks built on production-grade, real-world standards.
+            Not textbook theory. The actual framework, open to explore.
+        </p>
+        <div class="hero-stats">
+            <span class="stat-pill">3 Structured Learning Tracks</span>
+            <span class="stat-pill">35 Modules &middot; 30 Weeks</span>
+            <span class="stat-pill">Built on 32 CORE Governance Rules</span>
+        </div>
+    </section>
 
-        loadContent();
-    </script>
-    </main>
+    <div class="role-content-wrapper">
+
+        <!-- ═══ SECTION 1 — BLUF ═══ -->
+        <div class="bl-section-panel">
+            <div class="bl-bottom-line">
+                <h3 class="bl-bottom-line-heading">Most learning resources teach you how to write code that works. CORTEX teaches you how to write code that works, is tested, is governed, and is auditable &mdash; the standard real engineering teams operate at.</h3>
+                <p class="bl-bottom-line-body">
+                    CORTEX is a production-grade AI Engineering Framework with <strong>186 orchestrator files</strong>,
+                    <strong>32 governance rules</strong>, <strong>17,735 automated tests</strong>, and
+                    <strong>99 consecutive delivery phases</strong> &mdash; all open for you to study.
+                    The Curious Learner track lets you explore the framework at your own pace:
+                    <strong>Beginner &rarr; Intermediate &rarr; Advanced</strong>.
+                    Each level builds on the last. Every concept is backed by real code you can inspect.
+                </p>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 2 — THE LEARNING JOURNEY (D3 progression chart) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-route"></i> Your Learning Journey: Three Tracks, One Framework</h2>
+            <p class="bl-tab-desc">Each track builds systematically on the previous. Beginner establishes professional foundations. Intermediate adds system thinking and security. Advanced teaches you to architect and scale. All three use CORTEX as the live reference implementation.</p>
+
+            <div class="bl-d3-panel" id="learning-journey-chart" role="img" aria-label="Horizontal progression chart showing Beginner, Intermediate, and Advanced learning track milestones">
+                <div class="bl-d3-title">Learning Track Progression &mdash; Skills Built at Each Level</div>
+                <div class="bl-d3-subtitle">Each bar shows the cumulative skill depth gained per track &middot; All tracks use CORTEX as the live reference codebase</div>
+                <div class="bl-d3-canvas" id="learning-journey-canvas"></div>
+                <div class="bl-d3-legend">
+                    <span class="bl-d3-legend-item bl-d3-legend--green"><span class="bl-d3-legend-dot"></span>Beginner (8 wks &middot; 12 modules)</span>
+                    <span class="bl-d3-legend-item bl-d3-legend--amber"><span class="bl-d3-legend-dot"></span>Intermediate (10 wks &middot; 15 modules)</span>
+                    <span class="bl-d3-legend-item bl-d3-legend--red"><span class="bl-d3-legend-dot" style="background:#a78bfa"></span>Advanced (12 wks &middot; 18 modules)</span>
+                </div>
+            </div>
+
+            <div class="bl-insight-row">
+                <div class="bl-insight-card bl-insight-card--green">
+                    <div class="bl-insight-icon"><i class="fas fa-seedling"></i></div>
+                    <div class="bl-insight-text"><strong>Start anywhere that fits your level.</strong> Already comfortable with Python and Git? Skip to Intermediate. Experienced with architecture? Jump to Advanced. Each track is self-contained.</div>
+                </div>
+                <div class="bl-insight-card bl-insight-card--red">
+                    <div class="bl-insight-icon"><i class="fas fa-code"></i></div>
+                    <div class="bl-insight-text"><strong>Every concept links to real CORTEX code.</strong> CORE rules, orchestrators, governance YAMLs &mdash; you don&rsquo;t just read about them, you can inspect the implementation that enforces them.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 3 — THREE LEARNING TRACKS ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-layer-group"></i> Three Tracks &mdash; One Progression</h2>
+            <p class="bl-tab-desc">Each track is a complete, self-contained curriculum. They share a common backbone: every lesson is grounded in CORTEX&rsquo;s production governance rules and real codebase patterns &mdash; not invented examples.</p>
+
+            <div class="bl-section-divider">
+                <div class="bl-section-divider-line"></div>
+                <span class="bl-section-divider-label">Track Overview</span>
+                <div class="bl-section-divider-line"></div>
+            </div>
+
+            <div class="bl-pipeline-grid">
+                <div class="bl-pipeline-card bl-pipeline-card--emerald">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">&#127807;</span>
+                        <i class="fas fa-seedling bl-pipeline-icon bl-pipeline-icon--emerald"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Beginner &mdash; Foundations First</div>
+                    <div class="bl-pipeline-card-desc">Python basics, test-driven development fundamentals, clean code principles, and Git workflows. Learn why CORE-008 mandates TDD &mdash; and see the 17,735 tests that prove it works.</div>
+                    <div class="bl-pipeline-card-timing">8 weeks &middot; 12 modules</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">Python</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">TDD</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">Git</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--cyan">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">&#128296;</span>
+                        <i class="fas fa-tools bl-pipeline-icon bl-pipeline-icon--cyan"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Intermediate &mdash; Build With Confidence</div>
+                    <div class="bl-pipeline-card-desc">Architecture patterns, security fundamentals (OWASP Top 10), design patterns, and microservices. Understand LENS analysis, the CORTEX governance pipeline, and why architecture has 9 domains.</div>
+                    <div class="bl-pipeline-card-timing">10 weeks &middot; 15 modules</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--warn">Architecture</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--warn">Security</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--warn">APIs</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--violet">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">&#128640;</span>
+                        <i class="fas fa-rocket bl-pipeline-icon bl-pipeline-icon--violet"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Advanced &mdash; Lead &amp; Scale</div>
+                    <div class="bl-pipeline-card-desc">Distributed systems, observability at scale, CI/CD hardening, and engineering leadership. Deep-dive into CORTEX&rsquo;s 186 orchestrators, RCA Engine, Workflow Composer, and convergence loops.</div>
+                    <div class="bl-pipeline-card-timing">12 weeks &middot; 18 modules</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--block">Distributed</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--block">Observability</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--block">Leadership</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--amber">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--amber">&#128218;</span>
+                        <i class="fas fa-book bl-pipeline-icon bl-pipeline-icon--amber"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Knowledge Base &mdash; Always Accessible</div>
+                    <div class="bl-pipeline-card-desc">32 CORE governance rules, 45+ knowledge YAMLs, and the full CORTEX architecture documentation are available as reference at every track level. Learning is non-linear &mdash; explore as you go.</div>
+                    <div class="bl-pipeline-card-timing">Self-paced &middot; Reference</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">Rules</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">Patterns</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">Reference</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 4 — HOW CORTEX TEACHES: The Learning Pipeline (Mermaid) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-graduation-cap"></i> How CORTEX Teaches: Learning by Real Systems</h2>
+            <p class="bl-tab-desc">Traditional courses teach concepts in isolation. CORTEX teaches them in context &mdash; every principle is illustrated by the actual framework rule that enforces it, and the real code that implements it. The learning pipeline mirrors the production pipeline.</p>
+
+            <div class="bl-mermaid-panel" aria-label="CORTEX learning approach pipeline diagram">
+                <div class="bl-mermaid-title"><i class="fas fa-project-diagram"></i> Concept &rarr; Rule &rarr; Implementation &rarr; Practice</div>
+                <div class="bl-mermaid-canvas">
+                    <pre class="mermaid">
+flowchart LR
+    A["&#128218; Concept\nIntroduced"] --> B["&#128736; CORE Rule\nThat Enforces It\ne.g. CORE-008"]
+    B --> C["&#128269; Live Code\nInspection\nReal Orchestrator"]
+    C --> D["&#129516; Test\nEvidence\n17,735 tests"]
+    D --> E{"&#127919; Practice\nExercise"}
+    E -->|"&#9989; Passes"| F["&#128202; Next\nConcept"]
+    E -->|"&#128260; Needs work"| G["&#128214; Reference\nKnowledge Base\nYAML"]
+    G --> E
+    F --> H["&#127891; Track\nComplete\nBadge"]
+
+    classDef concept fill:#0d1b3e,stroke:#00d4ff,stroke-width:1.5px,color:#e2e8f0
+    classDef rule fill:#0d2b1e,stroke:#34d399,stroke-width:2px,color:#34d399
+    classDef code fill:#1a0d3d,stroke:#a78bfa,stroke-width:1.5px,color:#a78bfa
+    classDef practice fill:#2b1d09,stroke:#f59e0b,stroke-width:1.5px,color:#f59e0b
+    classDef complete fill:#0d2b1e,stroke:#34d399,stroke-width:2px,color:#34d399
+    classDef ref fill:#1a1a2e,stroke:#a0a6c0,stroke-width:1px,color:#a0a6c0
+
+    class A concept
+    class B rule
+    class C,D code
+    class E practice
+    class F concept
+    class G ref
+    class H complete
+                    </pre>
+                </div>
+                <p class="bl-mermaid-caption">Every learning concept is anchored to a real CORTEX governance rule, a live implementation file you can read, and an automated test suite that proves the principle. Practice exercises use the same pattern &mdash; learn it, then apply it.</p>
+            </div>
+
+            <div class="bl-arch-grid">
+                <div class="bl-governance-narrative">
+                    <div class="bl-image-context bl-image-context--emerald">
+                        <div class="bl-context-stat">
+                            <span class="bl-context-stat-value bl-context-stat-value--emerald">32</span>
+                            <span class="bl-context-stat-label">CORE rules &middot; each is a lesson</span>
+                        </div>
+                        <p class="bl-context-narrative">
+                            <strong>CORE-008</strong> (TDD mandatory) &mdash; you don&rsquo;t just read about test-driven development, you see the 17,735 tests that CORTEX has accumulated by following it for 99 phases.
+                            <strong>CORE-048</strong> (holistic validation gate) &mdash; you understand why validation gates exist because you can see what happens architecturally when they&rsquo;re missing.
+                            Every rule is a lesson. Every lesson is verifiable in the codebase.
+                        </p>
+                    </div>
+                    <div class="bl-governance-rule-list">
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-008</span>
+                            <span class="bl-gov-rule-desc">TDD &mdash; write the failing test first. Lesson: why tests before code prevents 80% of rework</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-011</span>
+                            <span class="bl-gov-rule-desc">Type hints required &mdash; Lesson: how static typing catches errors before runtime</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-028</span>
+                            <span class="bl-gov-rule-desc">snake_case naming &mdash; Lesson: why conventions matter in collaborative codebases</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-035</span>
+                            <span class="bl-gov-rule-desc">Single canonical implementation &mdash; Lesson: how duplication compounds technical debt</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-064</span>
+                            <span class="bl-gov-rule-desc">Sweep completeness &mdash; Lesson: why partial fixes create follow-on bugs across sprints</span>
+                        </div>
+                        <div class="bl-gov-rule">
+                            <span class="bl-gov-rule-code">CORE-068</span>
+                            <span class="bl-gov-rule-desc">Convergence gate &mdash; Lesson: iterative detect&rarr;fix&rarr;verify as the standard fix loop</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bl-d3-panel bl-d3-panel--half" id="track-depth-chart" role="img" aria-label="Donut chart showing skill domain coverage across three learning tracks">
+                    <div class="bl-d3-title">Skill Domain Coverage by Track</div>
+                    <div class="bl-d3-subtitle">Hover a segment to see domain and track</div>
+                    <div class="bl-d3-canvas" id="track-depth-canvas"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 5 — WHAT YOU LEARN (Tabbed by Track) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-list-check"></i> What You Learn &mdash; Track by Track</h2>
+
+            <div class="bl-tab-layout">
+                <div class="bl-tabs" role="tablist" aria-label="Learning track detail tabs">
+                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-beginner"><i class="fas fa-seedling"></i>Beginner</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-intermediate"><i class="fas fa-tools"></i>Intermediate</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-advanced"><i class="fas fa-rocket"></i>Advanced</button>
+                </div>
+                <div class="bl-tab-content">
+
+                    <div class="bl-tab-panel active" id="tab-beginner" role="tabpanel">
+                        <p class="bl-tab-desc">8 weeks, 12 modules. The Beginner track builds professional software development habits from the ground up &mdash; grounded in CORTEX&rsquo;s actual governance rules so you learn the standard that production teams use, not a simplified version.</p>
+                        <table class="cost-table">
+                            <thead>
+                                <tr><th>Module</th><th>What You Learn</th><th>CORTEX Rule</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Python Foundations</td><td>Functions, types, modules &mdash; professional Python, not scripts</td><td class="highlight">CORE-011: type hints required</td></tr>
+                                <tr><td>Test-Driven Development</td><td>RED &rarr; GREEN &rarr; REFACTOR cycle with pytest &mdash; the CORTEX way</td><td class="highlight">CORE-008: tests before code</td></tr>
+                                <tr><td>Clean Code Principles</td><td>Naming, functions under 50 lines, docstrings on all public APIs</td><td class="highlight">CORE-012: docstrings required</td></tr>
+                                <tr><td>Git Workflows</td><td>Branching, conventional commits, pre-commit hooks</td><td class="highlight">CORE-028: snake_case naming</td></tr>
+                                <tr><td>Project Structure</td><td>Package layout, imports, canonical single implementation</td><td class="highlight">CORE-035: no duplicates</td></tr>
+                                <tr><td>Governance Introduction</td><td>What governance rules are, why they exist, how CORTEX enforces them</td><td class="highlight">All CORE rules &mdash; overview</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-intermediate" role="tabpanel">
+                        <p class="bl-tab-desc">10 weeks, 15 modules. The Intermediate track shifts from writing correct code to designing correct systems. You&rsquo;ll understand why CORTEX has 9 orchestrator domains, how LENS analysis works, and how security is classified at the story level.</p>
+                        <table class="cost-table">
+                            <thead>
+                                <tr><th>Module</th><th>What You Learn</th><th>CORTEX Reference</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Architecture Patterns</td><td>Orchestrator pattern, domain separation, single responsibility</td><td class="highlight">186 orchestrators, 9 domains</td></tr>
+                                <tr><td>Security Fundamentals</td><td>OWASP Top 10, PHI/PII handling, CVE scanning, secure defaults</td><td class="highlight">LENS security analyzer</td></tr>
+                                <tr><td>Design Patterns</td><td>Strategy, Factory, Protocol/Mixin &mdash; how CORTEX uses each</td><td class="highlight">OrchestratorProtocolMixin</td></tr>
+                                <tr><td>LENS Analysis</td><td>AST scanning, dependency analysis, architecture drift detection</td><td class="highlight">cortex/lens/ &mdash; 8 analyzers</td></tr>
+                                <tr><td>MCP &amp; APIs</td><td>JSON-RPC 2.0, tool registration, stdio transport, 29 MCP tools</td><td class="highlight">cortex/mcp/ &mdash; live tools</td></tr>
+                                <tr><td>Governance Pipeline</td><td>The 8-stage pipeline: enrichment &rarr; gateway &rarr; intent &rarr; LENS &rarr; brain &rarr; gate &rarr; TDD &rarr; audit</td><td class="highlight">Full pipeline, live code</td></tr>
+                                <tr><td>Quality Gates</td><td>Pre-commit hooks, CI gates, EnforcementOrchestrator, 10 agents</td><td class="highlight">CORE-048: holistic validation</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-advanced" role="tabpanel">
+                        <p class="bl-tab-desc">12 weeks, 18 modules. The Advanced track is for engineers who want to architect at scale. You&rsquo;ll study CORTEX&rsquo;s most sophisticated components &mdash; the Workflow Composer, RCA Engine, convergence loops, observability stack, and the self-healing prompt suite.</p>
+                        <table class="cost-table">
+                            <thead>
+                                <tr><th>Module</th><th>What You Learn</th><th>CORTEX Component</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Workflow Composer</td><td>Declarative pipeline composition, 3-tier hierarchy, convergence loops</td><td class="highlight">cortex/orchestrators/workflow/</td></tr>
+                                <tr><td>RCA Engine</td><td>4 root cause methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain</td><td class="highlight">cortex/intelligence/learning/rca_engine.py</td></tr>
+                                <tr><td>Distributed Systems</td><td>SQLite WAL, Prometheus metrics, parallel testing with pytest-xdist</td><td class="highlight">9 SQLite databases, 10-core parallel</td></tr>
+                                <tr><td>Observability</td><td>AC markers, audit trails, health orchestrator endpoints, Grafana dashboards</td><td class="highlight">.cortex-runtime/ &mdash; live traces</td></tr>
+                                <tr><td>Convergence Loops</td><td>CORE-068 detect&rarr;fix&rarr;rescan, sweep completeness, holistic validation</td><td class="highlight">detect-fix-rescan-loop.yaml</td></tr>
+                                <tr><td>Self-Healing Systems</td><td>Prompt refresh pipeline, architecture drift detection, autonomous remediation</td><td class="highlight">scripts/refresh_prompt_suite.py</td></tr>
+                                <tr><td>Engineering Leadership</td><td>Phase planning, thin index contracts, sweep catalogues, CORE-064</td><td class="highlight">cortex-registry/planning/</td></tr>
+                                <tr><td>Multi-Stack Debug</td><td>8 debug strategies: Python, JS/TS, C#, SQL, HTML, API tracing</td><td class="highlight">MarkerInjectionEngine &mdash; live</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 6 — CORTEX AS A LEARNING SYSTEM (Mermaid mindmap) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-sitemap"></i> CORTEX as a Living Textbook</h2>
+            <p class="bl-tab-desc">Every component of CORTEX is a learning opportunity. The knowledge is not separate from the code &mdash; it <em>is</em> the code. Study how a production-grade AI engineering framework makes decisions, enforces rules, and learns from failures.</p>
+
+            <div class="bl-mermaid-panel" aria-label="CORTEX as a living learning system mindmap">
+                <div class="bl-mermaid-title"><i class="fas fa-brain"></i> CORTEX &mdash; What Each Component Teaches You</div>
+                <div class="bl-mermaid-canvas">
+                    <pre class="mermaid">
+mindmap
+  root(("&#127891;\nCORTEX\nLiving\nTextbook"))
+    ("&#128736; Governance (CORE Rules)")
+      ["Why quality must be enforced, not requested"]
+      ["32 rules &mdash; each solves a real failure mode"]
+      ["Pre-commit hooks as the first defence layer"]
+    ("&#129516; Testing (17,735 Tests)")
+      ["RED&#8594;GREEN&#8594;REFACTOR as a workflow, not a theory"]
+      ["Parallel test execution with pytest-xdist"]
+      ["TDD-first means fewer production surprises"]
+    ("&#128302; Workflow Composer")
+      ["Declarative pipelines over procedural code"]
+      ["3-tier: Primitives, Modes, Composites"]
+      ["Convergence loops: detect&#8594;fix&#8594;rescan"]
+    ("&#128269; LENS Analysis")
+      ["8 parallel analyzers: AST, security, architecture"]
+      ["Why codebase context matters before every change"]
+      ["Shift-left: risks found at planning, not post-ship"]
+    ("&#128202; Observability")
+      ["AC markers as structured audit trail"]
+      ["9 SQLite databases for queryable history"]
+      ["Prometheus metrics for engineering throughput"]
+    ("&#129504; RCA Engine")
+      ["4 methodologies matched to failure categories"]
+      ["Prevention rules: the same mistake cannot recur"]
+      ["Institutional memory as queryable data"]
+                    </pre>
+                </div>
+                <p class="bl-mermaid-caption">CORTEX is not just a tool to use &mdash; it is a system to study. Every orchestrator, every governance rule, every test, and every workflow template teaches a real engineering principle. The framework is the curriculum.</p>
+            </div>
+
+            <div class="bl-image-context bl-image-context--amber bl-context-inline">
+                <div class="bl-context-stat bl-context-stat--block">
+                    <span class="bl-context-stat-value bl-context-stat-value--amber">186</span>
+                    <span class="bl-context-stat-label">orchestrator files &middot; each is a case study</span>
+                </div>
+                <p class="bl-context-narrative">
+                    <strong>186 orchestrator files across 9 domains</strong> &mdash; each one demonstrates a real architectural decision: how to separate concerns, how to implement a protocol, how to handle failures gracefully.
+                    <strong>29 MCP tools</strong> &mdash; each shows how to expose capabilities as machine-callable APIs with proper registration, typing, and error handling.
+                    <strong>32 governance YAMLs</strong> &mdash; each one is a documented engineering standard with a rationale you can read and a test suite that proves it is being enforced.
+                    <strong>99 delivery phases</strong> &mdash; the git history is a complete record of how a production system evolves with discipline over time.
+                </p>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 7 — PROOF: Knowledge Base Stats ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-chart-line"></i> The Knowledge Base Behind Every Lesson</h2>
+            <p class="bl-tab-desc">Every track is backed by a real, production-grade codebase. These are not invented examples &mdash; they are observable facts from 99 consecutive delivery phases with a full audit trail.</p>
+
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <div class="roi-icon">&#129516;</div>
+                    <div class="roi-value">17,735</div>
+                    <div class="roi-label">Automated Tests</div>
+                    <div class="roi-detail">Every test is a teachable example of TDD in practice &mdash; collected in under 7 seconds</div>
+                </div>
+                <div class="roi-card roi-card--emerald">
+                    <div class="roi-icon">&#128272;</div>
+                    <div class="roi-value">32</div>
+                    <div class="roi-label">CORE Governance Rules</div>
+                    <div class="roi-detail">Each rule solves a specific real-world failure mode &mdash; read the YAML, understand the why</div>
+                </div>
+                <div class="roi-card roi-card--emerald">
+                    <div class="roi-icon">&#129302;</div>
+                    <div class="roi-value">186</div>
+                    <div class="roi-label">Orchestrator Files</div>
+                    <div class="roi-detail">9 domains of orchestrators &mdash; each one a case study in separation of concerns</div>
+                </div>
+                <div class="roi-card roi-card--amber">
+                    <div class="roi-icon">&#128302;</div>
+                    <div class="roi-value">20+</div>
+                    <div class="roi-label">Workflow Templates</div>
+                    <div class="roi-detail">Declarative YAML pipelines that show how production workflows are composed, not coded</div>
+                </div>
+            </div>
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <div class="roi-icon">&#128640;</div>
+                    <div class="roi-value">99</div>
+                    <div class="roi-label">Delivery Phases in Git</div>
+                    <div class="roi-detail">A complete history of engineering discipline &mdash; study how a codebase evolves with governance</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-icon">&#128270;</div>
+                    <div class="roi-value">45+</div>
+                    <div class="roi-label">Knowledge YAMLs</div>
+                    <div class="roi-detail">Technology stack, security patterns, architecture decisions &mdash; all queryable and readable</div>
+                </div>
+                <div class="roi-card roi-card--emerald">
+                    <div class="roi-icon">&#128241;</div>
+                    <div class="roi-value">29</div>
+                    <div class="roi-label">MCP Tools</div>
+                    <div class="roi-detail">Machine-callable APIs &mdash; see how capabilities are registered, typed, and exposed</div>
+                </div>
+                <div class="roi-card roi-card--amber">
+                    <div class="roi-icon">&#9881;</div>
+                    <div class="roi-value">9</div>
+                    <div class="roi-label">SQLite Audit Databases</div>
+                    <div class="roi-detail">Live observability data &mdash; query the audit trail to understand how the system behaves in production</div>
+                </div>
+            </div>
+
+            <!-- D3: Module count progression across tracks -->
+            <div class="bl-d3-panel" id="modules-chart" role="img" aria-label="Grouped bar chart showing module count and skill depth per learning track">
+                <div class="bl-d3-title">Module Count &amp; Skill Depth Per Track</div>
+                <div class="bl-d3-subtitle">Module count (left axis) &middot; Skill depth index relative to Beginner baseline (right label)</div>
+                <div class="bl-d3-canvas" id="modules-canvas"></div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 8 — STRATEGIC VALUE (Tabbed Pillars) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-star"></i> Why Learn With CORTEX</h2>
+
+            <div class="bl-tab-layout">
+                <div class="bl-tabs" role="tablist" aria-label="Why CORTEX tabs">
+                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-cl-real"><i class="fas fa-code"></i>Real Standards</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-system"><i class="fas fa-brain"></i>System Thinking</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-career"><i class="fas fa-chart-line"></i>Career Depth</button>
+                </div>
+                <div class="bl-tab-content">
+
+                    <div class="bl-tab-panel active" id="tab-cl-real" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128736;</div>
+                                <div>
+                                    <div class="pillar-title">Learn the Standards Real Teams Use</div>
+                                    <div class="pillar-text">CORTEX&rsquo;s 32 CORE rules are not invented for a course &mdash; they are the actual governance rules enforced on every commit in a production codebase. Learning them means learning what engineering teams actually require, not a simplified subset.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129516;</div>
+                                <div>
+                                    <div class="pillar-title">TDD Is Not Optional Here</div>
+                                    <div class="pillar-text">CORE-008 is architecturally mandated. Every lesson that involves code has a test. The 17,735 tests in the codebase are the best tutorial on what TDD looks like at scale &mdash; you can read every one of them.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128274;</div>
+                                <div>
+                                    <div class="pillar-title">Security Is a First-Class Concept</div>
+                                    <div class="pillar-text">LENS scans for CVEs, PHI/PII, and insecure patterns on every analysis. You don&rsquo;t learn security as a separate module &mdash; you learn it as the standard approach to every change, which is how production teams treat it.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128202;</div>
+                                <div>
+                                    <div class="pillar-title">Observability as a Habit</div>
+                                    <div class="pillar-text">Every orchestrator emits AC markers. Every run is logged to SQLite. You learn observability not as a topic in a module but as the default way a well-engineered system is built &mdash; because you see it applied everywhere in the codebase.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-cl-system" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129504;</div>
+                                <div>
+                                    <div class="pillar-title">See How a 186-File System Is Organised</div>
+                                    <div class="pillar-text">CORTEX has 186 orchestrator files across 9 domains &mdash; core, domain, git, health, intelligence, persona, support, validation, workflow. Understanding how to organise a system this size is the skill that separates senior engineers from junior ones.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128302;</div>
+                                <div>
+                                    <div class="pillar-title">Declarative vs Procedural Thinking</div>
+                                    <div class="pillar-text">The Workflow Composer teaches you to think in declarative pipelines &mdash; YAML templates that describe <em>what</em> should happen, composed into sequences. This is how modern infrastructure (Kubernetes, GitHub Actions, CI/CD) is designed. You learn the pattern at code level first.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128737;</div>
+                                <div>
+                                    <div class="pillar-title">Governance as Architecture, Not Process</div>
+                                    <div class="pillar-text">CORTEX doesn&rsquo;t ask developers to follow standards &mdash; it enforces them architecturally. You learn the difference between a quality standard that depends on human discipline (fragile) and one that is enforced by infrastructure (durable).</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128260;</div>
+                                <div>
+                                    <div class="pillar-title">Feedback Loops and Convergence</div>
+                                    <div class="pillar-text">CORE-068 convergence gate (detect&rarr;fix&rarr;rescan) is a formal feedback loop. The RCA Engine closes the loop on failures. You learn system design by studying a system that has designed its own feedback loops consciously and durably.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-cl-career" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#127775;</div>
+                                <div>
+                                    <div class="pillar-title">Portfolio-Ready: Real Code, Real Standards</div>
+                                    <div class="pillar-text">Completing a CORTEX learning track means you can demonstrate understanding of production governance, TDD at scale, multi-stack debugging, and architectural patterns &mdash; all backed by a real open-source codebase you can reference in interviews.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128295;</div>
+                                <div>
+                                    <div class="pillar-title">Multi-Stack Fluency</div>
+                                    <div class="pillar-text">CORTEX&rsquo;s debug pipeline covers Python, JavaScript/TypeScript, C#/.NET, SQL, HTML/CSS, and REST/GraphQL APIs. You see all stacks governed by the same principles &mdash; which builds the transferable skill of recognising patterns across languages and frameworks.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128218;</div>
+                                <div>
+                                    <div class="pillar-title">Learn at Your Own Pace, Forever</div>
+                                    <div class="pillar-text">The CORTEX codebase is always evolving. Every phase adds new orchestrators, new rules, new patterns. Returning to the Advanced track in 6 months means encountering new material &mdash; the living textbook grows with the framework.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129504;</div>
+                                <div>
+                                    <div class="pillar-title">Institutional Knowledge You Can Articulate</div>
+                                    <div class="pillar-text">CORTEX captures engineering decisions as queryable data &mdash; RCA prevention rules, governance YAMLs, LENS analysis history. You learn not just how to make good decisions but how to <em>document and enforce</em> them so they outlast any individual engineer.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 9 — PLATFORM CAPABILITIES ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-check-double"></i> What You Have Access To</h2>
+            <div class="bl-badge-row">
+                <span class="bl-badge"><i class="fas fa-seedling"></i> Beginner Track (8 wks &middot; 12 modules)</span>
+                <span class="bl-badge"><i class="fas fa-tools"></i> Intermediate Track (10 wks &middot; 15 modules)</span>
+                <span class="bl-badge bl-badge--emerald"><i class="fas fa-rocket"></i> Advanced Track (12 wks &middot; 18 modules)</span>
+                <span class="bl-badge bl-badge--emerald"><i class="fas fa-balance-scale"></i> 32 CORE Governance Rules</span>
+                <span class="bl-badge bl-badge--emerald"><i class="fas fa-vial"></i> 17,735 Test Examples</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-search"></i> LENS Code Intelligence (8 Analyzers)</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> Workflow Composer (20+ Templates)</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-brain"></i> RCA Engine (4 Methodologies)</span>
+                <span class="bl-badge bl-badge--amber"><i class="fas fa-database"></i> 9 Live SQLite Audit Databases</span>
+                <span class="bl-badge bl-badge--amber"><i class="fas fa-plug"></i> 29 MCP Tools &mdash; Source Readable</span>
+                <span class="bl-badge bl-badge--amber"><i class="fas fa-history"></i> 99 Phases of Git History</span>
+                <span class="bl-badge bl-badge--amber"><i class="fas fa-book"></i> 45+ Knowledge YAMLs</span>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 10 — START HERE (CTAs) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-compass"></i> Start Learning</h2>
+            <div class="role-cta-row">
+                <a class="role-cta role-cta--primary" href="../learning/beginner/index.html">
+                    <i class="fas fa-seedling"></i><span>Beginner Track</span>
+                </a>
+                <a class="role-cta role-cta--primary" href="../learning/intermediate/index.html">
+                    <i class="fas fa-tools"></i><span>Intermediate Track</span>
+                </a>
+                <a class="role-cta role-cta--secondary" href="../learning/advanced/index.html">
+                    <i class="fas fa-rocket"></i><span>Advanced Track</span>
+                </a>
+                <a class="role-cta role-cta--secondary" href="business-leader.html">
+                    <i class="fas fa-briefcase"></i><span>Business Leader View</span>
+                </a>
+                <a class="role-cta role-cta--ghost" href="../index.html">
+                    <i class="fas fa-home"></i><span>Platform Overview</span>
+                </a>
+            </div>
+        </div>
+
+    </div><!-- /.role-content-wrapper -->
+</main>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+(function () {
+    'use strict';
+    document.querySelectorAll('.bl-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            var layout = this.closest('.bl-tab-layout');
+            layout.querySelectorAll('.bl-tab').forEach(function (t) {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            layout.querySelectorAll('.bl-tab-panel').forEach(function (p) {
+                p.classList.remove('active');
+            });
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            var target = document.getElementById(this.dataset.target);
+            if (target) target.classList.add('active');
+        });
+    });
+})();
+</script>
+
+<script>
+if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            background: '#0a0e27',
+            primaryColor: '#0d1b3e',
+            primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#00d4ff',
+            lineColor: '#3a4060',
+            secondaryColor: '#1a1f44',
+            tertiaryColor: '#12162e',
+            edgeLabelBackground: '#0a0e27',
+            fontSize: '14px',
+            nodeBorder: '#00d4ff',
+            clusterBkg: '#0d1120',
+            titleColor: '#e2e8f0'
+        },
+        flowchart: { curve: 'basis', htmlLabels: true },
+        mindmap: { padding: 20 }
+    });
+}
+</script>
+
+<script>
+/* D3 Chart 1: Learning Journey Progression — Horizontal grouped bar */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('learning-journey-canvas');
+    if (!container) return;
+
+    var skills = [
+        { skill: 'Code Quality',       beginner: 60, intermediate: 80, advanced: 95 },
+        { skill: 'Testing (TDD)',       beginner: 70, intermediate: 85, advanced: 95 },
+        { skill: 'Architecture',        beginner: 20, intermediate: 65, advanced: 90 },
+        { skill: 'Security',           beginner: 25, intermediate: 70, advanced: 92 },
+        { skill: 'Observability',      beginner: 15, intermediate: 55, advanced: 90 },
+        { skill: 'System Design',      beginner: 10, intermediate: 60, advanced: 95 },
+        { skill: 'Governance',         beginner: 40, intermediate: 72, advanced: 95 }
+    ];
+
+    var tracks = ['beginner', 'intermediate', 'advanced'];
+    var colors = { beginner: '#34d399', intermediate: '#00d4ff', advanced: '#a78bfa' };
+
+    var margin = { top: 40, right: 120, bottom: 30, left: 130 };
+    var totalW = Math.max((container.offsetWidth || 0), 540);
+    var rowH = 22; var gap = 4; var groupH = rowH * 3 + gap * 2;
+    var totalH = margin.top + margin.bottom + skills.length * (groupH + 12) + 10;
+    var w = totalW - margin.left - margin.right;
+
+    var svg = d3.select(container).append('svg')
+        .attr('width', '100%').attr('height', totalH)
+        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    /* Legend */
+    var lg = svg.append('g').attr('transform', 'translate(' + margin.left + ',10)');
+    tracks.forEach(function(t, i) {
+        var lx = i * 140;
+        lg.append('rect').attr('x', lx).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', colors[t]).attr('opacity', 0.85);
+        var label = t.charAt(0).toUpperCase() + t.slice(1);
+        lg.append('text').attr('x', lx + 18).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text(label);
+    });
+
+    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var x = d3.scaleLinear().domain([0, 100]).range([0, w]);
+
+    skills.forEach(function(d, i) {
+        var yBase = i * (groupH + 12);
+        g.append('text').attr('x', -10).attr('y', yBase + rowH * 1.5 - 2).attr('text-anchor', 'end')
+            .attr('fill', '#e2e8f0').attr('font-size', '12px').attr('font-weight', '600')
+            .attr('font-family', 'Inter, sans-serif').text(d.skill);
+
+        tracks.forEach(function(t, ti) {
+            var val = d[t];
+            var yOff = yBase + ti * (rowH + gap);
+            g.append('rect').attr('x', 0).attr('y', yOff).attr('width', x(val)).attr('height', rowH)
+                .attr('rx', 5).attr('fill', colors[t]).attr('opacity', 0.72);
+            g.append('text').attr('x', x(val) + 5).attr('y', yOff + rowH / 2 + 4)
+                .attr('fill', colors[t]).attr('font-size', '10px').attr('font-weight', '700')
+                .attr('font-family', 'Inter, sans-serif').text(val + '%');
+        });
+    });
+})();
+</script>
+
+<script>
+/* D3 Chart 2: Skill Domain Donut */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('track-depth-canvas');
+    if (!container) return;
+
+    var domains = [
+        { label: 'Testing / TDD',      count: 8,  color: '#34d399' },
+        { label: 'Architecture',       count: 7,  color: '#00d4ff' },
+        { label: 'Security',          count: 5,  color: '#fb7185' },
+        { label: 'Governance',        count: 6,  color: '#a78bfa' },
+        { label: 'Observability',     count: 5,  color: '#f59e0b' },
+        { label: 'System Design',     count: 4,  color: '#38bdf8' }
+    ];
+
+    var size = Math.min(Math.max((container.offsetWidth || 0), 280), 340);
+    var radius = size / 2 - 22; var innerR = radius * 0.56;
+    var svg = d3.select(container).append('svg')
+        .attr('width', '100%').attr('height', size)
+        .attr('viewBox', '0 0 ' + size + ' ' + size)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+    var g = svg.append('g').attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')');
+    var pie = d3.pie().value(function(d){ return d.count; }).sort(null).padAngle(0.03);
+    var arc = d3.arc().innerRadius(innerR).outerRadius(radius).cornerRadius(4);
+    var arcHover = d3.arc().innerRadius(innerR).outerRadius(radius + 10).cornerRadius(4);
+    var defs = svg.append('defs');
+    var f = defs.append('filter').attr('id', 'cl-glow').attr('x','-30%').attr('y','-30%').attr('width','160%').attr('height','160%');
+    f.append('feGaussianBlur').attr('in','SourceGraphic').attr('stdDeviation','4').attr('result','blur');
+    var fm = f.append('feMerge');
+    fm.append('feMergeNode').attr('in','blur');
+    fm.append('feMergeNode').attr('in','SourceGraphic');
+    var cLabel = g.append('text').attr('text-anchor','middle').attr('dy','0.25em')
+        .attr('fill','#ffffff').attr('font-size','2rem').attr('font-weight','800')
+        .attr('font-family','Inter, sans-serif').text('35');
+    var cSub = g.append('text').attr('text-anchor','middle').attr('dy','1.9em')
+        .attr('fill','#a0a6c0').attr('font-size','0.68rem').attr('font-weight','600')
+        .attr('letter-spacing','0.06em').attr('font-family','Inter, sans-serif').text('Modules Total');
+    g.selectAll('.arc').data(pie(domains)).enter().append('path')
+        .attr('d', arc).attr('fill', function(d){ return d.data.color; })
+        .attr('opacity', 0.82).attr('filter', 'url(#cl-glow)')
+        .on('mouseenter', function(event, d) {
+            d3.select(this).transition().duration(160).attr('d', arcHover).attr('opacity', 1);
+            cLabel.text(d.data.count); cSub.text(d.data.label);
+        })
+        .on('mouseleave', function() {
+            d3.select(this).transition().duration(160).attr('d', arc).attr('opacity', 0.82);
+            cLabel.text('35'); cSub.text('Modules Total');
+        });
+})();
+</script>
+
+<script>
+/* D3 Chart 3: Module Count Grouped Bar */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('modules-canvas');
+    if (!container) return;
+
+    var tracks = [
+        { label: 'Beginner\n8 weeks',      modules: 12, depth: 42, color: '#34d399' },
+        { label: 'Intermediate\n10 weeks', modules: 15, depth: 68, color: '#00d4ff' },
+        { label: 'Advanced\n12 weeks',     modules: 18, depth: 95, color: '#a78bfa' }
+    ];
+
+    var margin = { top: 24, right: 60, bottom: 80, left: 56 };
+    var totalW = Math.max((container.offsetWidth || 0), 480);
+    var totalH = 420;
+    var w = totalW - margin.left - margin.right;
+    var h = totalH - margin.top - margin.bottom;
+
+    var svg = d3.select(container).append('svg')
+        .attr('width', '100%').attr('height', totalH)
+        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var x0 = d3.scaleBand().domain(tracks.map(function(d){ return d.label; })).range([0, w]).padding(0.3);
+    var x1 = d3.scaleBand().domain(['modules','depth']).range([0, x0.bandwidth()]).padding(0.08);
+    var y = d3.scaleLinear().domain([0, 100]).range([h, 0]);
+
+    g.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
+        .call(function(s){ s.select('.domain').remove(); s.selectAll('line').attr('stroke','rgba(255,255,255,0.05)'); });
+
+    var defs = svg.append('defs');
+    tracks.forEach(function(d, i) {
+        ['a','b'].forEach(function(s, j) {
+            var grad = defs.append('linearGradient').attr('id','cl-bar-' + i + s).attr('x1','0').attr('y1','0').attr('x2','0').attr('y2','1');
+            grad.append('stop').attr('offset','0%').attr('stop-color', d.color).attr('stop-opacity', j === 0 ? 0.9 : 0.55);
+            grad.append('stop').attr('offset','100%').attr('stop-color', d.color).attr('stop-opacity', j === 0 ? 0.5 : 0.25);
+        });
+    });
+
+    tracks.forEach(function(d, i) {
+        var xG = x0(d.label);
+        /* Modules bar */
+        var mVal = (d.modules / 18) * 85;
+        g.append('rect').attr('x', xG + x1('modules')).attr('y', y(mVal))
+            .attr('width', x1.bandwidth()).attr('height', h - y(mVal))
+            .attr('rx', 5).attr('fill', 'url(#cl-bar-' + i + 'a)').attr('stroke', d.color).attr('stroke-width', 1).attr('stroke-opacity', 0.4);
+        g.append('text').attr('x', xG + x1('modules') + x1.bandwidth() / 2).attr('y', y(mVal) - 6)
+            .attr('text-anchor','middle').attr('fill', d.color).attr('font-size','12px').attr('font-weight','800')
+            .attr('font-family','Inter, sans-serif').text(d.modules + ' mod');
+        /* Depth bar */
+        g.append('rect').attr('x', xG + x1('depth')).attr('y', y(d.depth))
+            .attr('width', x1.bandwidth()).attr('height', h - y(d.depth))
+            .attr('rx', 5).attr('fill', 'url(#cl-bar-' + i + 'b)').attr('stroke', d.color).attr('stroke-width', 1).attr('stroke-opacity', 0.25);
+        g.append('text').attr('x', xG + x1('depth') + x1.bandwidth() / 2).attr('y', y(d.depth) - 6)
+            .attr('text-anchor','middle').attr('fill', d.color).attr('font-size','11px').attr('font-weight','600')
+            .attr('font-family','Inter, sans-serif').text(d.depth + '%');
+    });
+
+    var xAxis = g.append('g').attr('transform','translate(0,' + h + ')').call(d3.axisBottom(x0).tickSize(0));
+    xAxis.select('.domain').attr('stroke','rgba(255,255,255,0.08)');
+    xAxis.selectAll('text').attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif')
+        .each(function(d) {
+            var el = d3.select(this); var parts = d.split('\n'); el.text('');
+            parts.forEach(function(p, i) { el.append('tspan').attr('x', 0).attr('dy', i === 0 ? '1.2em' : '1.2em').text(p); });
+        });
+    var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function(d){ return d + '%'; }));
+    yAxis.select('.domain').remove();
+    yAxis.selectAll('text').attr('fill','#78809a').attr('font-size','11px').attr('font-family','Inter, sans-serif');
+    yAxis.selectAll('line').attr('stroke','rgba(255,255,255,0.04)');
+
+    /* Legend */
+    var lgY = h + 62;
+    g.append('rect').attr('x', w/2 - 120).attr('y', lgY).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill','rgba(255,255,255,0.25)');
+    g.append('text').attr('x', w/2 - 104).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif').text('Modules (count)');
+    g.append('rect').attr('x', w/2 + 10).attr('y', lgY).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill','rgba(255,255,255,0.12)').attr('stroke','rgba(255,255,255,0.3)').attr('stroke-width',1);
+    g.append('text').attr('x', w/2 + 26).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif').text('Skill depth index');
+})();
+</script>
+
 </body>
 </html>
