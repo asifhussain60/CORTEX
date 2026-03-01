@@ -95,6 +95,10 @@ tiers:
   tier_1_primitives:
     description: 'Atomic, reusable, parameterised steps'
     location: 'cortex-registry/workflows/templates/primitives/'
+    # NOTE: {category} in naming is a DOCUMENTATION CONVENTION, not a runtime-resolved path.
+    # It represents the subdirectory name (e.g. governance, validation, execution, analysis, intelligence).
+    # Actual files are enumerated per-category in the catalogue below.
+    # Runtime path resolution uses TemplateComposer, which resolves {category} from the catalogue keys.
     naming: '{category}/{action-name}.yaml'
     characteristics:
       - 'Single responsibility'
@@ -131,6 +135,10 @@ tiers:
 
   tier_2_mode_workflows:
     description: 'One per execution mode — compose primitives'
+    # NOTE: {category} in location is a DOCUMENTATION CONVENTION, not a runtime-resolved path.
+    # It represents the actual subdirectory (sdlc, quality, audit, maintenance, governance, debugging,
+    # rca, lifecycle, frontend, backend, security, tdd). Actual files are enumerated per-category
+    # in the catalogue below. Runtime resolution uses WorkflowGateway.resolve_template(mode).
     location: 'cortex-registry/workflows/templates/{category}/'
     naming: '{mode}-workflow.yaml'
     characteristics:
@@ -204,6 +212,9 @@ tiers:
 
   tier_3_composite_pipelines:
     description: 'Multi-mode compositions — pipeline of pipelines'
+    # NOTE: {category} in location is a DOCUMENTATION CONVENTION, not a runtime-resolved path.
+    # It represents the actual subdirectory (lifecycle, composites). See catalogue below for
+    # actual files. Runtime resolution uses WorkflowGateway.resolve_template(mode).
     location: 'cortex-registry/workflows/templates/{category}/'
     naming: 'composite-{name}.yaml or {name}-pipeline.yaml'
     characteristics:
