@@ -1,4 +1,4 @@
-# CORTEX GitHub Copilot Instructions
+# CORTEX GitHub Copilot Instru- ✅ **Product icon is fixed**: 🧠 for `CORTEX.prompt.md` · 🛠️ for `cortex-architect.prompt.md` — never swapped for a mode-specific icontions
 
 **Updated:** 2026-03-01 (Phase 98 — Dead Code Cleanup) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
@@ -11,7 +11,7 @@
 Every **first response** to a user request MUST begin with this exact header block — rendered once, never repeated mid-response or on subsequent turns within the same request:
 
 ```
-## {icon} CORTEX {mode}
+## 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
@@ -21,20 +21,24 @@ Every **first response** to a user request MUST begin with this exact header blo
 ---
 ```
 
+*When `cortex-architect.prompt.md` is active, replace `🧠 CORTEX` with `🛠️ CORTEX Architect`. All other fields are identical.*
+
 **Rules (non-negotiable):**
 
 - ✅ Render ONCE per user request — at the very top of the first response only
 - ✅ `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` — verbatim, on one line
 - ✅ `**Via:**` line shows plain-language orchestrator display names (e.g. `Classifier → TDD Builder`) — omit for single-hop simple responses
-- ✅ `{icon}` from the mode icon table: ⚡ IMPLEMENT · 🔧 FIX · ♻️ REFACTOR · 🔎 AUDIT · 📖 QUERY · 🎨 DESIGN · 📋 PLAN · 📚 DIGEST · 🩺 HEALTH · 🧹 VACUUM · 🐛 DEBUG · 🔬 INVESTIGATE · 🔁 TOTALRECALL · 🔄 SYNC · 🎓 TRAIN · 💬 REPHRASE · 👋 INTRODUCE
+- ✅ **Product icon is fixed**: 🧠 for `CORTEX.prompt.md` · 🛠️ for `cortex-architect.prompt.md` — never swapped for a mode-specific icon
 - ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning` · `Introducing`
-- ✅ If `cortex-architect.prompt.md` is active: use `CORTEX Architect` as the product name; otherwise use `CORTEX`
+- ✅ If `cortex-architect.prompt.md` is active: use `🛠️ CORTEX Architect` as the product title; otherwise use `🧠 CORTEX`
 - ✅ One blank line between the `**Author:**` / `**Via:**` line and the `>` quote blockquote
 - ✅ Quote selected from `BLOCK-QUOTE-LIBRARY` in `cortex-response-templates.md` — match `themes` to user intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, audit/governance → `discipline`, fix/debug → `systems-thinking`, plan/roadmap → `strategy`, team/process → `flow`, learn/digest → `learning`, default → `universal`)
 - ✅ Both quote and attribution inside the same `>` blockquote block — renders as one unified left-accent callout
 - ✅ Followed by `---` (Markdown HR — never `<hr>`) after the blockquote
+- ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H2 heading — 🧠 / 🛠️ are the only valid leading icons
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
 - ❌ NO mid-response headers — ONE header per request, period
+- ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the response body — the H2 is the only title
 - ❌ NO header during silent autonomous execution (after `proceed`) — progress bars only
 - ❌ NO fabricated quotes — only quotes from `BLOCK-QUOTE-LIBRARY`
 - ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14, meta-audit)
@@ -53,7 +57,7 @@ Every response is assembled from composable blocks. The following rules are **no
 
 ```
 BLOCK-SESSION-IDENTITY (once per session, first turn only)
-→ Response Header (## {icon} CORTEX {mode} + Author + Via + Quote blockquote + ---)
+→ Response Header (## 🧠 CORTEX {mode} + Author + Via + Quote blockquote + ---)
 → BLOCK-ENGAGEMENT-BREADCRUMB (every multi-hop invocation)
 → BLOCK-INTENT-REFLECTION (before any work — first-person, business language)
 → [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]

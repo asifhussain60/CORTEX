@@ -301,7 +301,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
 | 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
-| 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
+| 14 | **Response header drift** — prompts using wrong product icon (`{icon}` variable instead of fixed 🧠/🛠️), wrong product name (`CORTEX` vs `CORTEX Architect`), or containing forbidden `**Orchestrator:**` field | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header; check for fixed icons: 🧠 in `CORTEX.prompt.md`, 🛠️ in `cortex-architect.prompt.md` | ✅ Restore canonical header in prompt |
 | 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
 | 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
@@ -709,8 +709,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |
 | Runtime data path | All `.db`/`.log`/state refs point to `.cortex-runtime/`, never `cortex.intelligence/state/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
-| Response header — CORTEX.prompt.md | Header reads `## {icon} CORTEX {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — no `Orchestrator` field in header |
-| Response header — cortex-architect.prompt.md | Header reads `## {icon} CORTEX Architect {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — no `Orchestrator` field in header |
+| Response header — CORTEX.prompt.md | Header reads `## 🧠 CORTEX {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — product icon is fixed (🧠), no mode-specific icon, no `Orchestrator` field in header |
+| Response header — cortex-architect.prompt.md | Header reads `## 🛠️ CORTEX Architect {mode}` + `**Author:** Asif Hussain \| © 2025–2026 CORTEX Framework. All rights reserved.` — product icon is fixed (🛠️), no mode-specific icon, no `Orchestrator` field in header |
 
 ---
 
@@ -720,7 +720,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 
 ### User-Facing (5-Section Golden Format)
 ```
-## {icon} CORTEX Architect {mode}
+## 🛠️ CORTEX Architect {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
@@ -746,7 +746,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 Progress bar + stage bullet list. See templates SSOT.
 
 ### Rules
-- ✅ ONE header per response, never repeated — `## {icon} CORTEX Architect {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ ONE header per response, never repeated — `## 🛠️ CORTEX Architect {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ **Product icon is fixed**: 🛠️ — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
@@ -755,7 +756,9 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
 - ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
 - ✅ Orchestrator engagement surfaced via `BLOCK-ENGAGEMENT-BREADCRUMB` contextually — never in the header
+- ❌ NO mode-specific icon in the H2 heading — 🛠️ is the only valid icon for this prompt
 - ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
+- ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the response body — the H2 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 
 

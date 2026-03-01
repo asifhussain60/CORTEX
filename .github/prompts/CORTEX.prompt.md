@@ -137,13 +137,16 @@ The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract 
 The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
-- ✅ ONE header per response, never repeated — `## {icon} CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ ONE header per response, never repeated — `## 🧠 CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ **Product icon is fixed**: 🧠 — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
 - ✅ Orchestrator engagement surfaced via `BLOCK-ENGAGEMENT-BREADCRUMB` contextually — never in the header
+- ❌ NO mode-specific icon in the H2 heading — 🧠 is the only valid icon for this prompt
 - ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
+- ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the response body — the H2 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 
 ---
@@ -169,13 +172,14 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | Command | Action |
 |---------|--------|
 | `/introduce` | Interactive role-based onboarding and capability showcase |
-| `/audit` | 19-point production readiness scan |
-| `/audit fix` | Scan + auto-remediate (9 stages, convergence loop) |
-| `/upgrade` | Check origin/main, merge if ahead, run audit fix |
-| `/vacuum` | Clean dead files |
+| `/implement {feature}` | TDD-first feature delivery |
+| `/fix {issue}` | Sweep-complete bug fixing |
+| `/refactor` | Semantic code improvement |
+| `/debug {path}` | Multi-stack debug pipeline |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) |
 | `/onboard {repo}` | LENS analysis + dashboard |
-| `/challenge {req}` | Generate alternatives |
+| `/plan` | Roadmap planning with governed phases |
+| `/rca` | Root cause analysis (4 methodologies) |
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder |
