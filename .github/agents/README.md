@@ -19,12 +19,19 @@ agents/
 │   ├── cortex-environment-setup.md # Environment validation
 │   ├── cortex-meta-auditor.md     # Meta governance auditing
 │   ├── cortex-master-plan-auditor.md # Plan integrity
-│   ├── cortex-documentation-architect.md # Doc architecture
-│   ├── cortex-storyteller.md      # Narrative generation
 │   ├── cortex-phase-resolver.md   # Phase management
-│   ├── cortex-gitpages-builder.md # GitHub Pages deployment
 │   ├── request-rephrase-orchestrator.md # Request optimization
 │   └── architecture-integrity-agent.md # Wiring enforcement
+├── docs/                           # Documentation Governance Agents (Phase 108)
+│   ├── README.md                  # Agent registry + pipeline overview
+│   ├── git-discovery-agent.md     # Git history inspection + change classification
+│   ├── drift-detection-agent.md   # Implementation vs documentation cross-reference
+│   ├── doc-sync-agent.md          # Content + glossary + media synchronization
+│   ├── diagram-regeneration-agent.md # Mermaid/D3.js diagram regeneration
+│   ├── media-prompt-agent.md      # DALL-E image + video prompt maintenance
+│   ├── narrative-continuity-agent.md # Awakening of CORTEX story arc governance
+│   ├── coverage-audit-agent.md    # Completeness validation + certification
+│   └── release-notes-agent.md     # Changelog generation from Git diffs
 ├── certification/                  # Total Recall — Production Certification
 │   ├── cortex-certification-coordinator.md # Pipeline orchestrator
 │   ├── cortex-audit-agent.md      # Delta analysis + drift detection (P1-2)

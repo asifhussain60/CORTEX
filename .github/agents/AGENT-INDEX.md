@@ -80,9 +80,22 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
 | **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
-| **cortex-storyteller.md** | Documentation generation | Creating narratives |
-| **cortex-documentation-architect.md** | Doc architecture + content extraction | Documentation structure |
-| **cortex-gitpages-builder.md** | GitHub Pages site generation | Site publishing (delegates to `frontend/html-view-lifecycle.yaml`) |
+### Documentation Agents
+
+**Directory:** `.github/agents/docs/`
+**Prompt:** `.github/prompts/cortex-doc.prompt.md`
+**Trigger:** `/doc`, `/doc-discover`, `/doc-drift`, `/doc-sync`, `/doc-narrative`, `/doc-audit`, `/doc-release`, `/doc-diagrams`, `/doc-media`
+
+| Agent | Role | Pipeline Phase |
+|-------|------|----------------|
+| **git-discovery-agent.md** | Git history inspection, change classification | 1 — Discovery |
+| **drift-detection-agent.md** | Implementation vs documentation cross-reference | 2 — Drift Detection |
+| **doc-sync-agent.md** | Update `.content/`, glossary, media prompts | 3 — Synchronization |
+| **diagram-regeneration-agent.md** | Regenerate Mermaid/D3.js diagrams | 3 — Synchronization |
+| **media-prompt-agent.md** | Maintain DALL-E image + video script prompts | 3 — Synchronization |
+| **narrative-continuity-agent.md** | Guard Awakening of CORTEX story arc | 4 — Narrative Update |
+| **coverage-audit-agent.md** | Validate completeness, produce certification | 5 — Certification |
+| **release-notes-agent.md** | Generate changelogs from Git diffs | 5 — Certification |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
 | **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
 | **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup ✅ Phase 86 complete | `/debug`, "trace", "diagnose" |
@@ -255,12 +268,12 @@ IF BLOCK → Show remediation, require override
 
 | User Intent | Load These Agents | Token Cost |
 |-------------|-------------------|-----------|
-| **DOCUMENT (STS)** | cortex-documentation-architect.md | ~4,500 |
-| **DOCUMENT (CORTEX)** | cortex-documentation-architect.md + cortex-gitpages-builder.md | ~8,000 |
+| **DOCUMENT (STS)** | doc-sync-agent.md | ~4,500 |
+| **DOCUMENT (CORTEX)** | cortex-doc.prompt.md → 8 docs agents (git-discovery, drift-detection, doc-sync, diagram-regeneration, media-prompt, narrative-continuity, coverage-audit, release-notes) | ~8,000 |
 
 **STS Trigger Phrases:** "document STS", "review STS", "STS sample app docs", "account-modernized README", "payment-processor README", "fix mmd diagrams", "STS architecture diagram"
 
-**STS Documentation Authority:** `cortex-doc.prompt.md` (Section: 🏗️ STS Sample Application Documentation) + `cortex-documentation-architect.md` (Section: 🏗️ STS Sample App Documentation Scope)
+**STS Documentation Authority:** `cortex-doc.prompt.md` + `doc-sync-agent.md` (Section: Documentation Sync)
 
 **STS `.mmd` Quality Gate (run before marking complete):**
 - `participant` keyword only in sequenceDiagram (never `user`)
