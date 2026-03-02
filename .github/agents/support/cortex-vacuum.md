@@ -1,5 +1,5 @@
 # CORTEX Vacuum Agent
-**Created:** 2026-02-03 | **Purpose:** Markdown Cleanup & Archive Management
+**Created:** 2026-02-03 | **Updated:** 2026-03-02 (Phase 104) | **Purpose:** Workspace Cleanup — Markdown, OS Artifacts, Build Artifacts, Root Clutter
 
 ---
 
@@ -9,6 +9,8 @@
 - Detecting markdown sprawl (files outside cortex-docs/.github)
 - Safe archival of old reports, summaries, completion documents
 - Root folder cleanup (removing transient artifacts)
+- **OS artifact elimination** — `.DS_Store`, `Thumbs.db`, `.ds-store`, `desktop.ini` (Phase 104)
+- **Build artifact purge** — `.NET bin/obj`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `.ruff_cache` (Phase 104)
 - Maintaining CORE-002 compliance (no markdown generation outside cortex-docs/)
 
 ---
@@ -55,6 +57,29 @@
 ---
 
 ## 🔧 Cleanup Operations
+
+### VacuumOrchestrator Pipeline (`/vacuum` invocation order)
+
+```
+run() pipeline:
+  1. _plan_naming_fixes()         → snake_case enforcement
+  2. _plan_root_cleanup()         → root-level clutter relocation
+  3. _plan_empty_cleanup()        → empty file removal
+  4. _plan_orphan_cleanup()       → orphaned directory removal
+  5. _plan_markdown_archive()     → markdown sprawl archival
+  6. run_digest_cleanup()         → stale chat-* digest files
+  7. run_build_artifact_cleanup() → bin/, obj/, __pycache__, .pytest_cache, .mypy_cache, .ruff_cache
+  8. run_os_artifact_cleanup()    → .DS_Store, .ds-store, Thumbs.db, desktop.ini  ← Phase 104
+```
+
+**`run_build_artifact_cleanup()`** — deletes `.NET bin/obj` artifacts and Python cache directories.
+- Targets: `bin/`, `obj/`, `__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`
+- Protected: `.git/`, `.github/`, `.venv/`, `_workspaces/`, `.cortex-runtime/`, `cortex-docs/`, `cortex-registry/`, `node_modules/`
+
+**`run_os_artifact_cleanup()`** — deletes macOS/Windows OS-generated junk files.
+- Targets: `.DS_Store`, `.ds-store`, `Thumbs.db`, `desktop.ini`
+- Protected: `.git/`, `.venv/` (never touched)
+- Audit check: Check #24 in 24-Point Production Readiness Audit
 
 ### Safe Archival Protocol
 

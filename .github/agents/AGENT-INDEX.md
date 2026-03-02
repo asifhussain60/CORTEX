@@ -190,7 +190,7 @@ are resolved or explicitly approved as WONT-FIX.
 ```
 /audit fix
   Stage 1: Stage 0 Governance Pre-Flight      → STAGE-0-GOVERNANCE-AUDIT-SPEC.md
-  Stage 2: 19-Point Production Scan           → cortex-auditor.md (Checks #1–#19)
+  Stage 2: 24-Point Production Scan           → cortex-auditor.md (Checks #1–#24)
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
   Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum

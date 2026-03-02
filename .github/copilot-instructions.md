@@ -342,7 +342,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | HealthOrchestrator | `cortex/orchestrators/health/health_orchestrator.py` |
-| VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` |
+| VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` — 8-stage pipeline: naming → root → empty → orphan → markdown → digest → build artifacts → OS artifacts |
 | DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` |
 | MarkerInjectionEngine | `cortex/orchestrators/support/debugging/marker_injection_engine.py` |
 | AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` |
@@ -392,7 +392,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 |---------|-------------|--------|
 | **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages (see below) |
 | `/audit` | Scan only, no auto-fix | Stages 1–6 |
-| `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
+| `/vacuum` | Markdown sprawl + root clutter + OS artifacts + build artifacts cleanup | Stage 5 only |
 | `/health` | All 22 orchestrator health endpoints | Stage 4 only |
 | `/healthcheck` | Full test suite (all tiers, parallel) | On-demand |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |

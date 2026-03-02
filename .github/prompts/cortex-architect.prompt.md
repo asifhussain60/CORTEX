@@ -278,13 +278,13 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 **Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 **Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
-The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 19-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
+The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 24-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 
-### 21-Point Production Readiness Audit
+### 24-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -297,7 +297,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 7 | **CORE rule violations** — missing type hints, docstrings, snake_case + missing AC markers | `cortex_validate` op=`compliance` | ✅ Add missing |
 | 8 | **Scattered .db/.log files** — outside `.cortex-runtime/` | `find -name "*.db"` | ✅ Consolidate |
 | 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
-| 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
+| 10 | **Test-source mirror** — `tests/` dirs without matching `cortex/` source and vice versa; stale test dirs referencing deleted packages (e.g. `tests/cortex_brain/` without `cortex/brain/`) | `diff <(ls -d cortex/*/) <(ls -d tests/*/)`; also check `cortex_brain/` vs `cortex/orchestrators/core/phase_executors/` | ✅ Create mirror `__init__.py`; rename stale dir |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
 | 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
@@ -309,6 +309,9 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 19 | **SQLite activity log health** — `.cortex-runtime/traces/orchestrator-traces.db` schema valid, no orphaned `AC_START` without `AC_COMPLETE`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
 | 20 | **Workflow Composer pipeline health** — WorkflowGateway importable, WorkflowComposer functional, TemplateComposer wired, all 16 code-touching modes resolve to YAML on disk via `resolve_template(mode, {}, strict=True)`, SQLite `workflow_runs` schema valid | `python3 -c "from cortex.orchestrators.workflow import WorkflowGateway; gw = WorkflowGateway(); gw.resolve_template('IMPLEMENT', {}, strict=True)"` + template count + schema check | 🟡 Report + remediation plan |
 | 21 | **Challenge gate drift** — `InteractionOrchestrator.__init__` must have `enable_challenges: bool = True` as default; `ChallengeGenerator` must be imported and wired (skull rule AC-PERMANENT-FIX-006) | AST scan: `grep -n 'enable_challenges.*=.*True' cortex/orchestrators/core/interaction_orchestrator.py` | ✅ Set default to `True`, ensure import present |
+| 22 | **Duplicate method definitions (F811)** — Python silently uses the last definition; earlier defs are dead code invisible to runtime but harmful to readability and reasoning | `python3 -m ruff check cortex/ --select=F811 --output-format=concise` — must return `All checks passed!`; if violations found, remove the first (dead) definition and retain the second (active) one | ✅ Auto-remove dead first definition via ruff `--fix` or manual deletion |
+| 23 | **Unused import sweep (F401)** — non-`__init__.py` files with unused imports that are not mock-dependent or try-except guarded | `python3 -m ruff check cortex/ --select=F401 --output-format=json \| python3 -c "import json,sys; v=json.load(sys.stdin); non_init=[x for x in v if '__init__' not in x['filename']]; print(len(non_init))"` — target: 0 non-intentional; run `ruff check cortex/ --select=F401 --fix` to auto-remove | ✅ `ruff --fix` (auto-safe); manually verify any remaining as intentional |
+| 24 | **OS artifact contamination** — `.DS_Store`, `.ds-store`, `Thumbs.db`, `desktop.ini` files accumulating in workspace (macOS/Windows Finder junk); also checks for `.NET bin/obj` artifacts under `cortex/` | `find . -name ".DS_Store" -o -name "Thumbs.db" \| wc -l`; `find cortex/ -type d \( -name "bin" -o -name "obj" \) \| wc -l` — both must return 0 | ✅ `VacuumOrchestrator.run_os_artifact_cleanup()` + `run_build_artifact_cleanup()` — invoked automatically in `/vacuum` pipeline |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -704,7 +707,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Orchestrator count | Matches `refresh_prompt_suite.py --counts-only` output |
 | MCP tool count | Matches live `mcp_registry.py` grep count |
 | Governance YAML count | Matches live `cortex-registry/core/` count |
-| Audit check count | All say "19-Point Production Readiness Audit" |
+| Audit check count | All say "24-Point Production Readiness Audit" |
 | Meta-audit check count | All say "26 checks" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |

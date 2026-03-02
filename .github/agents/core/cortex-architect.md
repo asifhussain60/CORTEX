@@ -133,22 +133,20 @@ Results Inline (CORE-002)
 
 ---
 
-## Production Readiness (19-Point Audit)
+## Production Readiness (24-Point Audit)
 
 Execute on `/audit`:
 
+**SSOT:** Full 24-Point checklist in `.github/prompts/cortex-architect.prompt.md` § 24-Point Production Readiness Audit. Key checks:
+
 | # | Check | Pass Criteria |
 |---|-------|---------------|
-| 1 | Empty `__init__.py` exports | No stale `__all__` entries |
-| 2 | Orphan files | No unreferenced modules |
-| 3 | Stub implementations | 0 `NotImplementedError` in production |
-| 4 | Duplicate orchestrators | 0 duplicates (>85% similarity) |
-| 5 | Low-value tests | 0 `assert True` stubs |
-| 6 | Circular imports | 0 circular dependencies |
-| 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 29 registered tools functional |
-| 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
-| 10 | CORE rule violations | 0 P0/P1 violations |
+| 1–9 | Imports, stubs, duplicates, tests, refs, clutter, CORE rules, .db files, deprecated names | See SSOT |
+| 10 | Test-source mirror | `tests/` dirs match `cortex/` dirs; no stale dirs like `cortex_brain/` referencing deleted packages |
+| 11–21 | Health, markdown, prompts, MCP alignment, LENS, SQLite, Workflow Composer, challenge gate | See SSOT |
+| 22 | F811 duplicate method defs | `ruff check cortex/ --select=F811` → `All checks passed!` |
+| 23 | F401 unused imports | `ruff check cortex/ --select=F401 --fix` → 0 non-intentional |
+| 24 | OS artifact contamination | `find . -name ".DS_Store" \| wc -l` → 0; `find cortex/ -type d -name "bin" \| wc -l` → 0 |
 
 ---
 
