@@ -11,9 +11,8 @@ AC-ID: IR-002-02 - Challenge Generation System
 import ast
 import re
 from dataclasses import dataclass, field
-from enum import Enum
 from functools import total_ordering
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import ChallengeCategory
 

@@ -36,7 +36,7 @@ CORE-011 (type hints), CORE-012 (docstrings)
 import functools
 import logging
 import threading
-from typing import Any, Callable, Dict, List, Optional, TypeVar
+from typing import Any, Callable, Dict, Optional, TypeVar
 
 from cortex.core.result import Ok, Result
 

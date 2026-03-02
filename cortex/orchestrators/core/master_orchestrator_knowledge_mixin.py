@@ -13,10 +13,9 @@ AC: GAP-80-A-03 — knowledge/intelligence method extraction
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
-from cortex.mcp.decorators import mcp_tool
 
 
 class MasterOrchestratorKnowledgeMixin:

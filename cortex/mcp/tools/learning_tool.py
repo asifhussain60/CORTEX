@@ -345,7 +345,6 @@ class CortexLearning(Tool):
                 RCACategory, RCATemplate, GateLevel,
             )
             from cortex.intelligence.learning.rca_store import RCAStore
-            from cortex.intelligence.learning.prevention_gate import PreventionGate
 
             store = RCAStore()
             store.initialize()

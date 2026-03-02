@@ -12,11 +12,8 @@ Classes:
     ProfilingTools: Main profiling coordinator.
 """
 
-import io
-import sys
 import threading
 import time
-from contextlib import redirect_stdout
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional

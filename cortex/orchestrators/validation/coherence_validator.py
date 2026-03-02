@@ -13,19 +13,17 @@ Purpose:
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
-from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner, ScanResult
+from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
 from cortex.orchestrators.validation.coherence_models import (
     CoherenceReport,
     CoherenceStatus,
     FileStructure,
     PreEditContext,
-    Section,
     ValidationResult,
-    VersionMarker,
 )
 from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
 

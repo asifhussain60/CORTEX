@@ -6,11 +6,9 @@ Also implements inflight upgrade detection via check_upstream_and_merge()
 and requirements preflight validation via validate_requirements().
 """
 
-import importlib
 import json
 import logging
 import os
-import platform
 import subprocess
 import sys
 from dataclasses import dataclass, field

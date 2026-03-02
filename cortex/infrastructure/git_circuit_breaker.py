@@ -15,7 +15,7 @@ Solution: Wrap all git subprocess calls with circuit breaker protection
 
 import logging
 import subprocess
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from cortex.infrastructure.circuit_breaker import (
     CircuitBreaker,

@@ -7,7 +7,7 @@ Compliance: CORE-011 (Type hints), CORE-012 (Docstrings), SOLID (Factory Pattern
 """
 
 import os
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from cortex.intelligence.llm.anthropic_provider import ANTHROPIC_AVAILABLE, AnthropicProvider
 from cortex.intelligence.llm.i_llm_provider import ILLMProvider

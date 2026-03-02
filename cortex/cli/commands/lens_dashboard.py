@@ -14,7 +14,7 @@ AC-ID: LENS-DASH-015
 
 import time
 import webbrowser
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -68,7 +68,6 @@ def serve(repo_name: Optional[str], port: int, no_browser: bool, host: str) -> N
 
     # Add static file serving for templates
     from fastapi.responses import FileResponse
-    from fastapi.staticfiles import StaticFiles
 
     templates_dir = Path(__file__).parent.parent.parent / "visualization" / "templates"
 

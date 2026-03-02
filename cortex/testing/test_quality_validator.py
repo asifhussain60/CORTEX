@@ -16,11 +16,11 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Tuple, Optional, Set
+from typing import List, Dict, Optional
 import logging
 
 # Import dependencies from earlier layers
-from cortex.testing.test_demand_generator import TestDemand, DemandCategory
+from cortex.testing.test_demand_generator import TestDemand
 from cortex.testing.test_composer import ComposedTest
 
 logger = logging.getLogger(__name__)

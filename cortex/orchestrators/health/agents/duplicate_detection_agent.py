@@ -14,7 +14,7 @@ import hashlib
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Tuple
 
 from .base_agent import (
     BaseHealthAgent,

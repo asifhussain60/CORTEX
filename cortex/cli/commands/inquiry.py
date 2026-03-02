@@ -213,7 +213,6 @@ def main() -> int:
         Exit code (0 for success, 1 for error)
     """
     import argparse
-    import sys
 
     parser = argparse.ArgumentParser(
         description="Ask questions about your codebase",

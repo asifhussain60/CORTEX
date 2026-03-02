@@ -18,17 +18,13 @@ AC-UX-VISIBILITY-001: Orchestrator badge visibility integration
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
-from cortex.core.response_header_config import HeaderConfigurationManager
-from cortex.core.response_header_injector import ResponseHeaderInjector
 from cortex.core.state_manager import (
     OperationState,
     StateManager,
@@ -43,7 +39,6 @@ from cortex.intelligence.knowledge.unified_intelligence_context import (
 )
 
 # Phase 27: Import StandardsResolver for company domain integration
-from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
 from cortex.orchestrators.core.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
@@ -68,7 +63,6 @@ from cortex.mcp.decorators import mcp_tool
 
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.core.orchestrator_context_injector import inject_orchestrator_context
-from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import BehavioralBoundaryRules
 
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
@@ -133,7 +127,7 @@ from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 # _extract_lens_context, _consume_unified_context, and _governance_gate to MasterOrchestrator.
 # Required by holistic golden tests (S21-S25) and CORE-048 compliance.
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90c / 95
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90c / 95
 
 # Phase 71-B: OPJMixin wires operational pattern journal for MasterOrchestrator
 from cortex.intelligence.learning.opj_mixin import OPJMixin
@@ -566,7 +560,6 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             error: Error description on failure (empty on success).
         """
         try:
-            from cortex.intelligence.learning.opj_mixin import OPJMixin
             from cortex.intelligence.learning.opj_writer import OPJWriter
             writer = OPJWriter()
             operation = f"dispatch:{domain}"
@@ -746,7 +739,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             try:
                 from cortex.core.wiring import wiring_bootstrap_cortex, is_wired
                 if not is_wired():
-                    registry = bootstrap_cortex()
+                    registry = wiring_bootstrap_cortex()
                     self.logger.info(f"✅ Bootstrapped {len(registry.list_orchestrators())} orchestrators")
             except Exception as e:
                 error_msg = f"Bootstrap failed: {str(e)}"

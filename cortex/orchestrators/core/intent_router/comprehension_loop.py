@@ -30,12 +30,10 @@ approval mechanism before any code execution.
 
 from __future__ import annotations
 
-import json
 import shutil
 import uuid
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -50,9 +48,7 @@ from cortex.orchestrators.core.intent_router.comprehension_yaml import (
     RecommendationSection,
 )
 from cortex.core.knowledge.knowledge_graph import (
-    EdgeType,
     KnowledgeGraph,
-    NodeType,
 )
 from cortex.models.canonical_enums import ApprovalStatus, BrainTier
 

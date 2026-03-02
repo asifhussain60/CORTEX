@@ -9,7 +9,7 @@ Description: RegistryValidator for consistency enforcement
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 

@@ -6,7 +6,6 @@ with fallback mechanisms for non-blocking KG operations.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 

@@ -8,12 +8,11 @@ Provides comprehensive health verification for orchestrators:
 - Recovery recommendations
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Coroutine, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

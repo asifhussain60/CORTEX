@@ -10,7 +10,7 @@ Phase: Phase 66 S3
 import logging
 import re
 import ast
-from typing import List, Dict, Set, Any, Optional, Tuple
+from typing import List, Dict, Set, Any, Optional
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)

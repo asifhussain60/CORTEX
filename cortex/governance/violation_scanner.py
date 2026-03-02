@@ -16,10 +16,9 @@ Date: 2026-02-07
 
 import ast
 import re
-from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 
 import yaml
 

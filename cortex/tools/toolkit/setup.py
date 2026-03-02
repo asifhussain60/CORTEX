@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import sys
 import platform
-import subprocess
 
 
 class SetupCheck(str, Enum):
@@ -125,7 +124,6 @@ class SetupVerifier:
             Setup result for MCP configuration check
         """
         try:
-            from cortex.mcp.server import MCPServer
             
             return SetupResult(
                 check=SetupCheck.MCP_CONFIG,

@@ -1,7 +1,7 @@
 """Intent Classifier for multi-dimensional intent categorization."""
 
 from enum import Enum
-from typing import Any, Callable, Dict, List
+from typing import Any, Dict, List
 
 
 class IntentCategory(Enum):

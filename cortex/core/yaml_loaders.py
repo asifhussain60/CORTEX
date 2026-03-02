@@ -8,7 +8,7 @@ Provides lazy-loading YAML parsers with caching and validation.
 import time
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, Optional, TypeVar, Union
+from typing import Any, Dict, Optional, TypeVar
 
 import yaml
 

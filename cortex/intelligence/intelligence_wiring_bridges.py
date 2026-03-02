@@ -14,8 +14,7 @@ AC_START: AC-66-B-WIRING-BRIDGES-20260224T000000Z
 """
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # ──────────────────────────────────────────────────────────────────────────────
 # GAP-66-006: LENS → BatchProcessor semantic index pipe

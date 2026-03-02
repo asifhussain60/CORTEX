@@ -325,6 +325,8 @@ INTENT_TRIGGER_MAP = [
     (IntentType.RCA, "perform root cause analysis on the deployment failure"),
     # GAP-89-COMPOSE: Workflow Composer — convergence loops + full CORTEX toolchain
     (IntentType.WORKFLOW_COMPOSE, "compose a workflow template for C# refactoring using LENS"),
+    # GAP-INTRODUCE: Interactive onboarding + role-based introduction
+    (IntentType.INTRODUCE, "introduce yourself and explain what CORTEX can do"),
 ]
 
 # Intents reliably routed by EnhancedIntentRouter (empirically verified)

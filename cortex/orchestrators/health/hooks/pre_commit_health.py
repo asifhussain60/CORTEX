@@ -15,8 +15,6 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
-from cortex.orchestrators.health.agents.version_cleanup_agent import VersionCleanupAgent
-from cortex.orchestrators.health.agents.registry_consistency_agent import RegistryConsistencyAgent
 
 
 def check_staged_files() -> Tuple[bool, List[str]]:

@@ -5,7 +5,7 @@ Authority: Phase 37 S5
 Implements /persona and /detail command handlers
 """
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 
 from cortex.orchestrators.core.persona_store import PersonaStore
 from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator

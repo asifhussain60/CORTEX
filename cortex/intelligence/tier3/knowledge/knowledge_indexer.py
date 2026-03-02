@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import datetime
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 
 _KNOWLEDGE_DIR = (

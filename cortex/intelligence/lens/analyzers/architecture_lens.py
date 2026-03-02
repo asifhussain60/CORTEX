@@ -9,7 +9,7 @@ AC_START: AC-PHASE66-S1-003
 
 import ast
 from pathlib import Path
-from typing import List, Dict, Any, Set, Optional, Tuple
+from typing import List, Dict, Any, Set, Optional
 from collections import defaultdict
 from datetime import datetime
 import logging

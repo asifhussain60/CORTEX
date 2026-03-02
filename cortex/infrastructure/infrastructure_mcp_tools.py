@@ -5,7 +5,7 @@ MCP tools for infrastructure discovery and GitHub integration.
              - cortex_github_discover: GitHub ecosystem queries (packages, actions, etc.)
 """
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.infrastructure.cache_manager import CacheManager
 from cortex.infrastructure.capability_detector import CapabilityDetector

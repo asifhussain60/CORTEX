@@ -6,12 +6,11 @@ Authority: CORE-029 (Response Header Enforcement) + CORE-020 (Multi-repo Governa
 """
 
 import asyncio
-import logging
 import sys
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import pytest
 
@@ -25,7 +24,6 @@ from cortex.mcp.server import MCPServer
 from cortex.mcp.tool_discovery import ToolDiscoveryEngine
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.tools.todo_manager import TodoManager
 
 
 class InitializationPhase(Enum):

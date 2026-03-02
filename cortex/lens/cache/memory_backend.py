@@ -3,7 +3,7 @@
 import fnmatch
 import sys
 from collections import OrderedDict
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 from cortex.lens.cache.lens_cache import CacheEntry, LENSCache

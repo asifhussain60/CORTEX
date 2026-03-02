@@ -12,7 +12,7 @@ Created: 2026-02-07
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import List, Union
 
 from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter

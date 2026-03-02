@@ -4,13 +4,11 @@ Converts Domain Brain entities and relationships into Knowledge Graph nodes
 and edges for ingestion into the KG system.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.core.knowledge.graph.interface import (
-    EntityNode,
     GraphQueryError,
     IGraphAdapter,
-    Relationship,
 )
 
 

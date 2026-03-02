@@ -11,7 +11,7 @@ CORTEX COMPLIANCE: CORE-011 (type hints), CORE-012 (docstrings)
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 
 

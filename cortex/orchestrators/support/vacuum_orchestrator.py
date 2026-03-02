@@ -19,8 +19,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
-from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.result import Ok, Result
+from cortex.core.result import Ok
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # noqa: F401 — transitive via _HealthVacuumOrchestrator
 from cortex.orchestrators.health.vacuum_orchestrator import (
     VacuumOrchestrator as _HealthVacuumOrchestrator,
 )

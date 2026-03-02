@@ -14,7 +14,7 @@ CORE Rules: CORE-035 (canonical implementation), CORE-047 (no hardcoded paths)
 import ast
 import time
 from pathlib import Path
-from typing import List, Optional, Set
+from typing import List, Optional
 
 from .base_agent import (
     BaseHealthAgent,

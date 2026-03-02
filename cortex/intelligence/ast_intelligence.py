@@ -11,7 +11,6 @@ AC-ID: E3-AST-INTELLIGENCE-ENGINE
 """
 
 import ast
-import hashlib
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path

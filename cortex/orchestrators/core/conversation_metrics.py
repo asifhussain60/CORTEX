@@ -7,8 +7,7 @@ Metrics, tracing, and structured logging for multi-turn conversations.
 import logging
 import time
 from dataclasses import dataclass
-from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 
 @dataclass

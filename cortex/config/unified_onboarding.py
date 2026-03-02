@@ -13,13 +13,12 @@ Author: CORTEX Framework
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from cortex.core.common.core_progress_reporter import (
     ProgressReporter,
     ProgressStyle,
     get_time_estimator,
-    track_environment_setup,
 )
 
 # ================================================================================

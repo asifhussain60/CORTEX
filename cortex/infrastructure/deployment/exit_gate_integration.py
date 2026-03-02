@@ -10,10 +10,8 @@ Description: EXIT GATE deployment validator integration
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 from cortex.infrastructure.deployment.deployment_validator import (

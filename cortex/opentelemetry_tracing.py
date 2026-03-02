@@ -27,7 +27,6 @@ import urllib.request
 import urllib.error
 from datetime import datetime
 from functools import wraps
-from contextlib import contextmanager
 
 _logger = logging.getLogger(__name__)
 

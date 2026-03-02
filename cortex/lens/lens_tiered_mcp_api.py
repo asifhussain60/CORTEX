@@ -7,14 +7,11 @@ cortex.lens_stream (Tier 3) with backward compatibility for cortex.lens_analyze 
 AC_START: AC-PHASE63-001
 """
 
-import asyncio
-import json
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 
 class LensTier(Enum):

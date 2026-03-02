@@ -15,7 +15,6 @@ Authority: AC-EDUCATIONAL-INTERACTION-001, PHASE-22-ASK-MODE-SYSTEM.yaml
 Rules: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Set

@@ -5,11 +5,10 @@ Purpose: Glassmorphism plan-viewer.html SPA data layer (Stage 4)
 Authority: phase-45-enhanced-planning-system.yaml § Stage 4
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 

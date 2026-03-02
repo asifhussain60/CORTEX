@@ -13,7 +13,7 @@ AC-PHASE55-S2: MSBuild resolver builds project dependency graph
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set
 from xml.etree import ElementTree as ET
 
 logger = logging.getLogger(__name__)

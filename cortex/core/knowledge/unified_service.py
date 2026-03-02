@@ -9,7 +9,7 @@ Author: CORTEX Framework
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok
 
 
 @dataclass

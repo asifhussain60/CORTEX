@@ -9,7 +9,6 @@ AC-ID: AC-PHASE76-S3-003
 
 import logging
 import os
-import socket
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse

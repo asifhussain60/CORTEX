@@ -24,12 +24,11 @@ Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 import json
 import logging
 import threading
-import time
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 # ============================================================================
 # CONTEXT VARIABLES (Thread-Safe Request Context)

@@ -1,7 +1,7 @@
 """AICurator — AI-assisted knowledge curation (KN-002-01)."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 

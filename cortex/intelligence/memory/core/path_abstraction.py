@@ -25,10 +25,9 @@ Design Patterns:
 - Builder Pattern: Fluent API for path operations
 """
 
-from pathlib import Path, PureWindowsPath, PurePosixPath, PurePath
-from typing import Optional, List, Union, Tuple, Any
+from pathlib import Path, PureWindowsPath, PurePosixPath
+from typing import List, Union, Tuple, Any
 from abc import ABC, abstractmethod
-import os
 import sys
 from threading import RLock
 import logging

@@ -11,7 +11,7 @@ AC-ID: AC-PHASE76-S3-005
 import logging
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 

@@ -8,7 +8,7 @@ Author: CORTEX Framework
 
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List
 import shutil
 
 # Import from base module using relative import

@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Optional
 
 import click
-import uvicorn
 
 from cortex.orchestrators.support.lens_visualization_orchestrator import (
     LENSVisualizationOrchestrator,
@@ -126,66 +125,6 @@ def generate(
         if verbose:
             import traceback
             click.echo(traceback.format_exc(), err=True)
-        raise click.Abort()
-
-
-@dashboard.command()
-@click.option(
-    "--host",
-    "-h",
-    default="127.0.0.1",
-    help="Host to bind server to",
-)
-@click.option(
-    "--port",
-    "-p",
-    default=8080,
-    type=int,
-    help="Port to bind server to",
-)
-@click.option(
-    "--reload",
-    is_flag=True,
-    help="Enable auto-reload (development mode)",
-)
-def serve(host: str, port: int, reload: bool) -> None:
-    """
-    Serve LENS dashboard via HTTP server.
-
-    Starts a local HTTP server to view dashboards in the browser.
-
-    Example:
-        cortex lens dashboard serve
-        cortex lens dashboard serve --port 9000
-        cortex lens dashboard serve --host 0.0.0.0 --port 8080
-    """
-    click.echo("🧠 CORTEX LENS Dashboard Server")
-    click.echo(f"Host: {host}")
-    click.echo(f"Port: {port}")
-    click.echo("\n🚀 Starting server...")
-    click.echo(f"📊 Dashboard URL: http://{host}:{port}/api/lens/dashboard/list")
-    click.echo("\n⏹️  Press CTRL+C to stop\n")
-
-    try:
-        from cortex.dashboards.api.dashboard_routes import app
-
-        uvicorn.run(
-            app,
-            host=host,
-            port=port,
-            reload=reload,
-            log_level="info",
-        )
-    except KeyboardInterrupt:
-        click.echo("\n\n⏹️  Server stopped")
-    except Exception as e:
-        click.echo(
-            click.style(
-                f"❌ Error: Server failed to start: {str(e)}",
-                fg="red",
-            ),
-            err=True,
-        )
         raise click.Abort()
 
 

@@ -5,7 +5,6 @@ Data models for phase detail pages with LLM-generated content, diagrams, and nar
 Authority: PHASE-STORY-SYSTEM-COMPREHENSIVE.yaml (ENH-032)
 """
 
-from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 

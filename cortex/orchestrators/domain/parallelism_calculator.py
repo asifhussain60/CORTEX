@@ -8,7 +8,7 @@ Authority: Wave 8 Stage 3
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Set
+from typing import Dict, List
 from cortex.orchestrators.domain.dependency_resolver import (
     DependencyGraph,
     DependencyResolver,

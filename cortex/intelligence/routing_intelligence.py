@@ -11,8 +11,7 @@ AC-INT-RT-003-03: Detect misrouting patterns
 import sqlite3
 import uuid
 from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 
@@ -33,7 +32,7 @@ class RoutingAnalyzer:
             db_path: Path to SQLite database (uses default if None)
         """
         if db_path is None:
-            from cortex.core.path_resolver import get_project_root, resolve_path
+            from cortex.core.path_resolver import resolve_path
             db_path = str(resolve_path("cortex/intelligence/state/governance.db"))
 
         self.db_path = db_path

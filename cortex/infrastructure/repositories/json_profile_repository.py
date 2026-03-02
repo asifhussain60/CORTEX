@@ -164,9 +164,9 @@ class JSONProfileRepository:
         except Exception as e:
             return Err(f"Failed to update profile: {str(e)}")
 
-    def delete(self, profile_id: str) -> Result[None]:
+    def delete_by_id(self, profile_id: str) -> Result[None]:
         """
-        Delete profile by ID.
+        Delete profile by ID (Result-based API).
 
         Args:
             profile_id: Profile ID to delete
@@ -193,7 +193,7 @@ class JSONProfileRepository:
         except Exception as e:
             return Err(f"Failed to delete profile: {str(e)}")
 
-    def list_all(self) -> Result[List[RepositoryProfile]]:
+    def list_all_as_result(self) -> Result[List[RepositoryProfile]]:
         """
         List all profiles.
 

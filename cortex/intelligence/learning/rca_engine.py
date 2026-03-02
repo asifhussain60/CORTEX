@@ -13,8 +13,7 @@ CORE-035: Single canonical implementation
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from cortex.intelligence.learning.rca_models import (
     GateLevel,

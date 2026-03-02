@@ -5,9 +5,8 @@ Schema definitions and validation for template structures.
 
 """
 
-from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, NamedTuple, Optional
+from typing import Any, Dict, List, NamedTuple
 
 
 class ValidationResult(NamedTuple):

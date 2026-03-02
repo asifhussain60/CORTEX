@@ -7,10 +7,8 @@ Manages domain templates, content sources, and template metadata.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional, Set
 
-import yaml
 
 
 class ValidationResult(NamedTuple):

@@ -11,12 +11,12 @@ Three response formats with progressive disclosure:
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
-from cortex.models.canonical_enums import ComplexityLevel, ResponseFormat, RiskLevel
+from cortex.models.canonical_enums import ResponseFormat, RiskLevel
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 

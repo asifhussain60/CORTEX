@@ -7,7 +7,7 @@ Replaces scattered diagnostic scripts: verify-mcp-setup.py, diagnose-mcp.py, ver
 AC_START: AC-P90-S2-T1
 """
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -75,7 +75,6 @@ class MCPDiagnostics:
         # actual MCP server health endpoint
         try:
             # Try to import MCP server module
-            from cortex.mcp.server import MCPServer
             
             return DiagnosticResult(
                 check_name="mcp_server_running",

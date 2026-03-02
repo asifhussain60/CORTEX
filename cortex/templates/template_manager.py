@@ -6,7 +6,6 @@ Template management, rendering, and content retrieval.
 """
 
 import re
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from cortex.templates.content_strategy import ContentPopulationStrategy

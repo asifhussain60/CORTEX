@@ -13,7 +13,7 @@ AC_START: PB-STS-001-RUN-2-SCAFFOLD-TOOL
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,

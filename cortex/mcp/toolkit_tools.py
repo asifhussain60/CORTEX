@@ -17,7 +17,6 @@ Exposes toolkit functionality through MCP interface.
 # Description: MCP tool exposure for toolkit modules
 
 from pathlib import Path
-from typing import Optional
 import os
 
 from cortex.tools.toolkit.diagnostics import MCPDiagnostics, DiagnosticLevel

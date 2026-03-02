@@ -16,7 +16,6 @@ Authority:
 AC-ID: AC-WAVE-R-S2-004
 """
 
-import traceback
 from typing import List
 from pathlib import Path
 

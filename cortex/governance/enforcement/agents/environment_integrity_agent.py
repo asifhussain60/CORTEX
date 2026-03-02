@@ -25,7 +25,7 @@ import socket
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from cortex.models.canonical_enums import IntentType
 from cortex.orchestrators.support.auto_healing_mcp_orchestrator import (

@@ -24,7 +24,6 @@ AC-ID: AC-TEST-PARALLEL-001
 from __future__ import annotations
 
 import os
-import sys
 import time
 from typing import Optional
 

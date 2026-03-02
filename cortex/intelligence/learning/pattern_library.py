@@ -16,7 +16,6 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from enum import Enum
 
 from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
 

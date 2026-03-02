@@ -23,10 +23,8 @@ AC_START: AC-PHASE100-S2-006
 Author: Asif Hussain
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from cortex.mcp.tools._shared import validate_orchestrator_context
-from pathlib import Path
-import asyncio
 
 from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,

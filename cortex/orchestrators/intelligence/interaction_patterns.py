@@ -8,7 +8,6 @@ Created: 2026-02-12
 AC-ID: AC-WAVE-L-002
 """
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Protocol
 from enum import Enum

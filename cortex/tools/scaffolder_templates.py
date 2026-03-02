@@ -12,11 +12,10 @@ These templates are used by OrchestratorScaffolder.
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum, auto
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from cortex.tools.naming_utils import yaml_type_to_python
 

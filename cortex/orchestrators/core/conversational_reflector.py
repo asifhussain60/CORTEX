@@ -17,7 +17,7 @@ AC_COMPLETE: AC-CIG-S2-005 ✅
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 
 @dataclass

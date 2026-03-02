@@ -17,9 +17,8 @@ Detects and updates references in:
 from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 import re
-import subprocess
 from datetime import datetime
 from enum import Enum
 

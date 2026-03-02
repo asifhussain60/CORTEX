@@ -5,7 +5,7 @@ AC-PHASE50-S1-001: IKnowledgeProvider defines all storage operations
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import List
 
 
 class IKnowledgeProvider(ABC):

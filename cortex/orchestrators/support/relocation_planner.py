@@ -6,7 +6,7 @@ AC-PHASE44-S2: Classify files and generate ordered relocation plans.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 # Rules: which destination should files go to

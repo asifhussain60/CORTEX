@@ -24,7 +24,7 @@ import logging
 import shutil
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import yaml
 
@@ -34,11 +34,10 @@ from .constants import (
     LEGACY_ROOT_FOLDERS_RELOCATION,
     PROTECTED_DIRS,
     PROTECTED_FILES,
-    PYTHON_EXTENSIONS,
 )
 from .file_context import FileContext
-from .models import IssueFile, IssueSeverity, OperationResult, ScanResult, VacuumReport
-from .naming import classify_naming_violation, is_screaming, to_kebab_case, to_snake_case
+from .models import OperationResult, ScanResult, VacuumReport
+from .naming import classify_naming_violation, to_kebab_case
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
@@ -172,6 +171,14 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
         # Digested chat-* file cleanup
         for result in self.run_digest_cleanup(dry_run=dry_run):
+            report.operations.append(result)
+
+        # Build artifact cleanup (bin/, obj/, __pycache__, etc.)
+        for result in self.run_build_artifact_cleanup(dry_run=dry_run):
+            report.operations.append(result)
+
+        # OS artifact cleanup (.DS_Store, Thumbs.db, etc.)
+        for result in self.run_os_artifact_cleanup(dry_run=dry_run):
             report.operations.append(result)
 
         report.recount()
@@ -372,6 +379,124 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                         results.append(self.delete_directory(subdir))
             except OSError:
                 pass
+
+        return results
+
+    def run_build_artifact_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Delete .NET build artifacts (bin/, obj/) and other regenerable build directories.
+
+        Scans the workspace for well-known build artifact directories (bin/, obj/,
+        __pycache__/, .pytest_cache/, .mypy_cache/, .ruff_cache/) and deletes them.
+        Protected directories (.git, .venv, _workspaces) are never touched.
+
+        Args:
+            dry_run: When ``True``, plan operations but do not execute them.
+
+        Returns:
+            List of :class:`OperationResult` describing each planned or executed action.
+        """
+        # Build directory names that are safe to delete entirely
+        _BUILD_DIR_NAMES: frozenset = frozenset({
+            "bin", "obj", "__pycache__", ".pytest_cache",
+            ".mypy_cache", ".ruff_cache",
+        })
+
+        # Directories that must NEVER be touched
+        _PROTECTED_ROOTS: frozenset = frozenset({
+            ".git", ".github", ".venv", "venv", "env",
+            "_workspaces", ".cortex-runtime", "cortex-docs",
+            "cortex-registry", "node_modules",
+        })
+
+        results: List[OperationResult] = []
+        import os
+
+        for root, dirs, files in os.walk(self.workspace_root):
+            root_path = Path(root)
+
+            # Skip protected roots
+            try:
+                rel = root_path.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in _PROTECTED_ROOTS:
+                    dirs.clear()
+                    continue
+            except ValueError:
+                continue
+
+            # Check if current directory is a build artifact directory
+            dir_name = root_path.name
+            if dir_name in _BUILD_DIR_NAMES:
+                if dry_run:
+                    results.append(OperationResult(
+                        op_type="rmtree", source=root_path,
+                        success=True, dry_run=True,
+                    ))
+                else:
+                    results.append(self.delete_directory_tree(root_path))
+                dirs.clear()  # Don't descend into deleted directory
+
+        return results
+
+    def run_os_artifact_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Delete OS-generated junk files (.DS_Store, Thumbs.db, desktop.ini).
+
+        These files are created by macOS Finder, Windows Explorer, etc. They are
+        never source-controlled (gitignored) but accumulate silently, cluttering
+        IDE indexing and audit scans.
+
+        Targets:
+            - ``.DS_Store`` — macOS Finder metadata
+            - ``.ds-store`` — case variant (Windows-shared volumes)
+            - ``Thumbs.db`` — Windows Explorer thumbnail cache
+            - ``desktop.ini`` — Windows folder customisation
+
+        Protected: never touches ``.git/`` or ``.venv/``.
+
+        Args:
+            dry_run: When ``True``, plan operations but do not execute them.
+
+        Returns:
+            List of :class:`OperationResult` describing each planned or executed action.
+        """
+        _OS_JUNK_NAMES: frozenset = frozenset({
+            ".DS_Store", ".ds-store", "Thumbs.db", "desktop.ini",
+        })
+        _PROTECTED_ROOTS: frozenset = frozenset({".git", ".venv", "venv", "env"})
+
+        results: List[OperationResult] = []
+        import os as _os
+
+        for root, dirs, files in _os.walk(self.workspace_root):
+            root_path = Path(root)
+            try:
+                rel = root_path.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in _PROTECTED_ROOTS:
+                    dirs.clear()
+                    continue
+            except ValueError:
+                continue
+
+            for filename in files:
+                if filename in _OS_JUNK_NAMES:
+                    junk_path = root_path / filename
+                    if dry_run:
+                        results.append(OperationResult(
+                            op_type="delete", source=junk_path,
+                            success=True, dry_run=True,
+                        ))
+                    else:
+                        try:
+                            junk_path.unlink()
+                            results.append(OperationResult(
+                                op_type="delete", source=junk_path,
+                                success=True, dry_run=False,
+                            ))
+                        except OSError as exc:
+                            results.append(OperationResult(
+                                op_type="delete", source=junk_path,
+                                success=False, dry_run=False,
+                                error=str(exc),
+                            ))
 
         return results
 

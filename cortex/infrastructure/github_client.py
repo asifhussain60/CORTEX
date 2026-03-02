@@ -5,7 +5,6 @@ GitHub GraphQL/REST API client with rate limiting and caching.
              Includes rate limit handling, caching, response normalization, and
              secure token management (environment variables only).
 """
-import json
 import os
 import time
 from dataclasses import asdict, dataclass

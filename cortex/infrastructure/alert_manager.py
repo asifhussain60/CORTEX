@@ -9,7 +9,6 @@ AC-NFR-004-03: Alerts triggered on threshold breach
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 
 from cortex.models.canonical_enums import AlertSeverity, AlertState

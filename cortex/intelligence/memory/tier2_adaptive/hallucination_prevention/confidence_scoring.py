@@ -9,7 +9,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, Optional
 import uuid
-from typing import Any, Dict, Optional
 
 
 @dataclass

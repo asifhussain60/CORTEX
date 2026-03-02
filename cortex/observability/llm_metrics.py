@@ -6,7 +6,6 @@ Prometheus metrics for LLM usage tracking and cost monitoring.
 Compliance: CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from typing import Optional
 
 try:
     from prometheus_client import Counter, Gauge, Histogram

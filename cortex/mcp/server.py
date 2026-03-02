@@ -17,15 +17,14 @@ import time
 import asyncio
 import inspect
 import threading
-import collections
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 import os
 
-from cortex.mcp.mcp_tool_base import Tool, ToolResult, ToolCategory
+from cortex.mcp.mcp_tool_base import ToolResult, ToolCategory
 from cortex.mcp.mcp_registry import ToolRegistry, get_registry
-from cortex.mcp.tenant_context_middleware import TenantContextMiddleware, WorkspaceContext
+from cortex.mcp.tenant_context_middleware import TenantContextMiddleware
 
 
 # ============================================================================

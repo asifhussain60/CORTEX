@@ -27,7 +27,7 @@ import os
 import re
 import unicodedata
 from pathlib import Path
-from typing import Optional, Dict, Set, List, Tuple
+from typing import Optional, Dict, Set, List
 from threading import RLock
 
 

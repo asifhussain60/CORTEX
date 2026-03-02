@@ -9,11 +9,9 @@ Phase: impl-arch-005-hardening (HARD-PROD-001-08)
 Compliance: CORE-011 (100% typed), CORE-012 (Google docstrings), CORE-013 (no bare except)
 """
 
-import json
 import os
-import subprocess
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 
 class CrossRepoEnforcer:

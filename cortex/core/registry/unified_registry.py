@@ -36,7 +36,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, Dict, List, Optional, Callable
 from threading import RLock
-from dataclasses import dataclass
 from datetime import datetime
 
 # Type variable for generic registry

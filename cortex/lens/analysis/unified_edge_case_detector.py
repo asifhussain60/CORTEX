@@ -20,7 +20,7 @@ Created: 2026-01-30
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 

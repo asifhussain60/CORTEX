@@ -9,7 +9,6 @@ Issue: ISSUE-003
 Governance: CORE-024 (Response Standards)
 """
 
-import json
 from datetime import datetime
 from typing import Any, Dict, Optional
 

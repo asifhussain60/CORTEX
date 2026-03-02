@@ -15,7 +15,7 @@ CORE-035: Single canonical implementation
 from __future__ import annotations
 
 import re
-from typing import List, Optional, Set
+from typing import List, Set
 
 from cortex.intelligence.learning.rca_models import (
     GateLevel,

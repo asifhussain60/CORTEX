@@ -4,7 +4,7 @@ import time
 from typing import Any, List, Optional
 
 from cortex.infrastructure.storage.storage_config import StorageConfig
-from cortex.infrastructure.storage.errors import NetworkError, StorageError
+from cortex.infrastructure.storage.errors import NetworkError
 from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 

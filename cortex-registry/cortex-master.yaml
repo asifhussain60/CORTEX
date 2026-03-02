@@ -53,12 +53,12 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   version: '1.0'
-  last_updated: '2026-02-28T18:00:00Z'
-  total_phases: 94
+  last_updated: '2026-03-02T10:00:00Z'
+  total_phases: 99
   active: 0
   completed: 76
   in_progress: 0
-  planned: 0
+  planned: 5
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -446,18 +446,89 @@ verification:
   last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 94
+  total_phases: 99
   completed: 95
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 5
   archived: 4
   playbooks: 1
-  completion_percentage: 100
-  consolidation_summary: "v43.0: 96 phases — 96 COMPLETE, 0 ACTIVE. Phase-99 COMPLETE (2026-03-01): 5 GAPs CLOSED — API key lifecycle (generate/validate/revoke/list), pre-existing audit call bugs fixed (log_secret_modification→log, append_event→append), ApiKeyAuthMiddleware (constant-time, generic errors), FastAPI HTTP transport (/health public, /tools/* auth-gated), pre-commit preflight gate. 57 tests GREEN. Preflight: 48."
-  active_phases: {}
+  completion_percentage: 96
+  consolidation_summary: "v45.0: 100 phases — 96 COMPLETE, 4 PLANNED (101-105: Architectural Audit Cleanup). Phase 100 COMPLETE 2026-03-02."
+  active_phases:
+    phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
+    phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
+    phase-102: "PLANNED — Subsystem Boundaries (P1)"
+    phase-103: "PLANNED — God Object Decomposition (P1)"
+    phase-104: "PLANNED — Build Artifacts and Test Mirror (P1)"
+    phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
 
 phases:
+  # ── ARCHITECTURAL AUDIT CLEANUP ROADMAP (2026-03-02) ─────────────────────────
+  # 5 phases identified by comprehensive codebase audit.
+  # Execution order: 100 → 101 → 102 → [103, 104, 105] (103-105 parallelizable after 102).
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - id: phase-100
+    title: "Dead Code, Empty Stubs, and Unreachable Logic Cleanup"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-100-DEAD-CODE-STUBS
+    gaps: 10
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/planned/phase-100-dead-code-and-stubs.yaml"
+    note: "969 F401 fixed (92.5%), 3 orphans deleted, 1 runtime bug fixed, 6 F811 duplicate methods resolved, 6 duplicate imports fixed. 1,950 tests green."
+
+  - id: phase-101
+    title: "Duplicate File Consolidation — CORE-035 Single Canonical Implementation"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-101-DUPLICATE-CONSOLIDATION
+    gaps: 8
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/planned/phase-101-duplicate-consolidation.yaml"
+    note: "28 duplicate file names (3x orchestrator_lookup, 2x intent_classifier, etc). Depends on phase-100."
+
+  - id: phase-102
+    title: "Subsystem Boundary Cleanup — Duplicate Domains and Orphaned Packages"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-102-SUBSYSTEM-BOUNDARIES
+    gaps: 8
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/planned/phase-102-subsystem-boundaries.yaml"
+    note: "6x governance namespace, 4x knowledge, 2x lens, 7 brain-named files, 3 orphan packages. Depends on phase-101."
+
+  - id: phase-103
+    title: "God Object Decomposition — Large File SRP Violations"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-103-GOD-OBJECT-DECOMPOSITION
+    gaps: 8
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-103-god-object-decomposition.yaml"
+    note: "12 files >1000 lines (max 3,126). 4 files >2000 lines. 4 coupling hotspots (5-6 subsystem imports). Depends on phase-101."
+
+  - id: phase-104
+    title: "Build Artifact Purge + Test-Source Mirror Alignment"
+    priority: P1
+    status: IN_PROGRESS
+    sweep_id: SWEEP-104-ARTIFACTS-AND-MIRRORS
+    gaps: 6
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-104-artifacts-and-mirrors.yaml"
+    note: "4/6 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired with BuildArtifactCleaner, .ds-store untracked. 2 GAPs remaining: test mirror dirs."
+
+  - id: phase-105
+    title: "Stale Import References + Legacy Naming Remediation"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-105-STALE-IMPORTS-NAMING
+    gaps: 4
+    sub_phases: 2
+    file: "cortex-registry/planning/phases/planned/phase-105-stale-imports-naming.yaml"
+    note: "References to dissolved underscore-packages and legacy brain path in 8+ files. Depends on phase-102."
+
   # ── SLOT #-1 — phase-99 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-99-secure-mcp-wiring
     title: "Secure MCP Wiring: API Key Management, Auth Middleware, HTTP Transport, Pre-commit Gate"

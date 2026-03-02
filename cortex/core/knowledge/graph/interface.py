@@ -13,7 +13,6 @@ Design Principles:
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.infrastructure.api.health_endpoints import HealthStatus

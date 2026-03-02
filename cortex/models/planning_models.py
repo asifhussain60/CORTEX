@@ -16,7 +16,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 # ============================================================================
 # ENUMS

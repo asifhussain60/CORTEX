@@ -9,7 +9,7 @@ Created: 2026-02-17
 """
 
 from pathlib import Path
-from typing import List, Set
+from typing import List
 
 from .base_agent import BaseHealthAgent, HealthCheckResult, HealthIssue, HealthIssueSeverity, HealthIssueCategory
 

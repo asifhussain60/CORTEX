@@ -6,10 +6,9 @@ AC-PHASE38.0-005: Phase 38 Readiness Validation
 """
 
 import json
-import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class Phase38ReadinessValidator:

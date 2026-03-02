@@ -9,7 +9,7 @@ AC-PHASE38-020: MCP tool registry auto-generation
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class MCPExposureAuditor:

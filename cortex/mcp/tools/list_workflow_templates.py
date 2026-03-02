@@ -11,7 +11,7 @@ CORE: CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

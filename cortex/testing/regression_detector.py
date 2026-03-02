@@ -8,7 +8,7 @@ Authority: Phase 38.0 Stage 3 - Remediation & Baseline Restoration
 """
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 from cortex.testing.baseline_metrics_collector import PerformanceMetrics
 

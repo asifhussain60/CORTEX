@@ -12,12 +12,11 @@ Created: 2026-02-10
 Status: GREEN (implementation)
 """
 
-import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Protocol
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, field_validator
 

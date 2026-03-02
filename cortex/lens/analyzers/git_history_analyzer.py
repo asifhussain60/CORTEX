@@ -16,16 +16,9 @@ import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from cortex.lens.analysis.remote_git_adapter import (
-    RemoteBlame as RemoteBlameModel,
-)
-from cortex.lens.analysis.remote_git_adapter import (
-    RemoteCommit as RemoteCommitModel,
-)
-from cortex.lens.analysis.remote_git_adapter import (
-    RemoteFile,
     RemoteGitAdapter,
 )
 from cortex.infrastructure.git_circuit_breaker import run_git_command_safe

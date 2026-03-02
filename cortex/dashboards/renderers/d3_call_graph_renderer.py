@@ -12,7 +12,6 @@ Phase: 14 - LENS Dashboard Implementation
 AC-ID: LENS-DASH-003
 """
 
-import json
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 

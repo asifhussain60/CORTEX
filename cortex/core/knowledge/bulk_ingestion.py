@@ -25,9 +25,8 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-from cortex.toolkit.batch import BatchProcessor  # Canonical batch processor (CORE-035)
 
 logger = logging.getLogger(__name__)
 

@@ -13,7 +13,7 @@ AC-IDs: AC-P15-001, AC-P15-002, AC-P15-009
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Protocol, runtime_checkable
 
 

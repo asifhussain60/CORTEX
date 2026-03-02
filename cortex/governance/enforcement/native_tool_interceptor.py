@@ -10,7 +10,7 @@ Phase: WAVE-2 MCP Enforcement
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Any, Optional, Callable
+from typing import Optional
 import os
 
 

@@ -16,9 +16,7 @@ for ALL functionality with proper consolidation.
 import json
 import pytest
 import sys
-from datetime import datetime
-from typing import Any, Dict
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from cortex.mcp.mcp_tool_base import (
     Tool,
@@ -31,10 +29,8 @@ from cortex.mcp.mcp_tool_base import (
 from cortex.mcp.mcp_registry import (
     ToolRegistry,
     PRODUCTION_TOOLS,
-    ToolMetadata,
-    get_registry,
 )
-from cortex.mcp.server import MCPServer, MCPRequest, MCPResponse
+from cortex.mcp.server import MCPServer, MCPRequest
 
 
 # ============================================================================

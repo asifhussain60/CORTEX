@@ -14,9 +14,9 @@ Works with ParsedTemplate from template_parser.
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum, auto
+from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Pattern, Set, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 
 class ValidationLevel(Enum):

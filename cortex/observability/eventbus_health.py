@@ -8,7 +8,7 @@ Authority: WAVE-3 Stage 2 - ENH-089 EventBus Debugger
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, List
 from datetime import datetime, timedelta
 from pathlib import Path
 import json

@@ -11,7 +11,6 @@ Focuses on audit trail validation, not mutation enforcement.
 
 import sqlite3
 from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Tuple
 

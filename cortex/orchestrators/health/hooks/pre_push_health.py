@@ -14,7 +14,6 @@ CORE Rules: CORE-008 (TDD)
 
 import sys
 from pathlib import Path
-from typing import List
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.orchestrators.health.agents.duplicate_detection_agent import DuplicateDetectionAgent

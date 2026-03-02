@@ -16,10 +16,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional
 
 from cortex.tools.naming_utils import to_class_name, to_module_name, yaml_type_to_python
-from cortex.tools.template_parser import ParsedTemplate, TemplateSection
+from cortex.tools.template_parser import ParsedTemplate
 
 
 class ToolType(Enum):

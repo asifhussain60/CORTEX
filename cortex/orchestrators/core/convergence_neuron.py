@@ -11,7 +11,7 @@ Description: GREEN phase — ConvergenceNeuron + ConvergenceSignal
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Callable, List, Optional
 import logging
 

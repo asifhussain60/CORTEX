@@ -6,12 +6,11 @@ health monitoring, and observability metrics for Knowledge Graph implementation.
 
 import logging
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set
 
 from cortex.core.knowledge.graph.interface import (
     EntityNode,
-    HealthStatus,
     IGraphAdapter,
 )
 

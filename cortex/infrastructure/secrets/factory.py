@@ -1,8 +1,6 @@
 """SecretsProviderFactory — instantiate the right provider from config."""
 from __future__ import annotations
 
-import os
-from typing import Optional
 
 from cortex.infrastructure.secrets.config import SecretsConfig
 from cortex.infrastructure.secrets.errors import ConfigError

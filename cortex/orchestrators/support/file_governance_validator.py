@@ -6,7 +6,7 @@ AC-PHASE38-033: Folder structure compliance validation
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # Files allowed in root directory
 _ROOT_ALLOWED_PY = {

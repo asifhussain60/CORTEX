@@ -31,7 +31,6 @@ from cortex.orchestrators.git.sanitization_orchestrator import (
 )
 from cortex.orchestrators.git.git_enforcement_orchestrator import (
     EnforcementOrchestrator,
-    EnforcementReport,
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d

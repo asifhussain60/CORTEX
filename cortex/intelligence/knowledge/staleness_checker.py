@@ -16,7 +16,7 @@ Example:
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from cortex.intelligence.knowledge.tech_stack_mapper import TechStackMapper
 

@@ -1,9 +1,6 @@
 """Aggregation engine for telemetry insights and GitHub issue auto-generation (AC-UNIFIED-DEPLOY-001-03)."""
 
-import hashlib
-import json
 import logging
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple

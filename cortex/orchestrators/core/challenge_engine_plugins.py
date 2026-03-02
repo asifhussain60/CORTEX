@@ -11,7 +11,7 @@ Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.models.canonical_enums import DisagreementType
 

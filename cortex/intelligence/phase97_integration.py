@@ -9,12 +9,11 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.lens.facade import LENSIntelligenceFacade, WorkflowType
 from cortex.lens.lens_registry import (
     AnalyzerCapability,
-    AnalyzerRegistry,
     LanguageSupport,
     get_analyzer_registry,
 )

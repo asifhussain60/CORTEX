@@ -9,11 +9,10 @@ This module provides:
 2. PatternEmbedder: Feature normalization and embedding generation
 3. EmbeddingModel: Neural network-based embedding model
 """
-import json
 import pickle
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional
 
 import numpy as np
 

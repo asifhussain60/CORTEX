@@ -24,7 +24,7 @@ import threading
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import CheckpointStatus

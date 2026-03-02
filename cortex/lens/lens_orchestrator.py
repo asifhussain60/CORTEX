@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.lens.analysis.branch_comparator import BranchComparator
 from cortex.lens.analysis.remote_git_adapter import RemoteGitAdapter
-from cortex.lens.analysis.vision_analyzer import VisionAnalysisResult, VisionAnalyzer
+from cortex.lens.analysis.vision_analyzer import VisionAnalyzer
 
 # Phase 56: Intelligence layer integration (NEW)
 from cortex.intelligence.base import AnalysisContext
@@ -35,8 +35,7 @@ from cortex.lens.analyzers.config_analyzer import get_config_analyzer
 from cortex.lens.analyzers.database_analyzer import get_database_analyzer
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer  # Phase 90
-from cortex.lens.cache import LENSCache, get_lens_cache
-from cortex.orchestrators.core.security_advisor_mixin import SecurityAdvisorMixin
+from cortex.lens.cache import get_lens_cache
 
 # Phase 84-a: Business rules extraction wiring (GAP-84-01)
 try:

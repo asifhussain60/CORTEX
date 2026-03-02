@@ -17,7 +17,7 @@ Created: 2026-02-07
 import json
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class RegressionSafetyOrchestrator:

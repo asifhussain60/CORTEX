@@ -14,12 +14,11 @@ Key principle: Compose tests that simulate real-world scenarios, not placeholder
 import textwrap
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import List
 
 from cortex.testing.test_demand_generator import (
     DemandCategory,
     TestDemand,
-    ValidationType,
 )
 
 

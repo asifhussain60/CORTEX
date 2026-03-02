@@ -15,9 +15,8 @@ Part of CORTEX LENS context intelligence system.
 
 from __future__ import annotations
 
-import ast
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
     from cortex.intelligence.ast_intelligence import ClassInfo, ParseResult

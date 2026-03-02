@@ -28,7 +28,7 @@ import sys
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import List
 
 # Configure Python path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))

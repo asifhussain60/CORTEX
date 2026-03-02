@@ -5,7 +5,6 @@ Authority: Phase 37 S4
 Handles YAML-based storage and retrieval of user persona preferences across sessions
 """
 
-import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional

@@ -7,7 +7,7 @@ Resolves phase dependencies using topological sort (Kahn's algorithm).
 Authority: Wave 8 Stage 3
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Set, Optional, Any
 from enum import Enum
 from pathlib import Path

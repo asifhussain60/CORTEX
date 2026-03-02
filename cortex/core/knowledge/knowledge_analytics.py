@@ -1,6 +1,6 @@
 """Knowledge analytics service for tracking and analyzing query performance."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from statistics import mean, stdev
 from typing import Any, Dict, List, Optional
 

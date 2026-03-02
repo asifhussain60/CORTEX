@@ -23,14 +23,12 @@ Dependencies:
 
 import os
 import json
-import time
-import hashlib
 import secrets as secure_random
 import threading
 import gzip
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
-from datetime import datetime, timedelta
+from datetime import datetime
 from dataclasses import dataclass, asdict
 
 try:
@@ -480,7 +478,7 @@ def check_rotation_status(key: str, vault_path: Optional[Path] = None) -> Dict[s
 
 
 def send_notification(message: str) -> None:
-    """Send notification (placeholder implementation)"""
+    """Send notification (placeholder - log to console)."""
     # Store in module-level list for testing
     if not hasattr(send_notification, "calls"):
         send_notification.calls = []
@@ -599,11 +597,6 @@ def get_rotation_metrics(vault_path: Optional[Path] = None) -> Dict[str, Any]:
     
     with open(metrics_path, "r") as f:
         return json.load(f)
-
-
-def send_notification(message: str) -> None:
-    """Send notification (placeholder - log to console)"""
-    print(f"[NOTIFICATION] {message}")
 
 
 # ============================================================================

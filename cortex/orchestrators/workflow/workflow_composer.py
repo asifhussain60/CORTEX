@@ -10,7 +10,7 @@ Description: GREEN phase — WorkflowComposer implementation
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 import logging
@@ -201,7 +201,6 @@ class WorkflowComposer:
         Returns:
             WorkflowExecutionResult with completion status and metrics.
         """
-        import time
 
         # Phase 100: Route to convergence execution if enabled
         if convergence_mode:

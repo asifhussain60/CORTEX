@@ -9,7 +9,7 @@ PHASE 3: Integrated with Prometheus metrics for observability.
 
 import os
 import time
-from typing import Any, Dict, Optional
+from typing import Optional
 
 try:
     from openai import APIError, APITimeoutError, OpenAI, RateLimitError

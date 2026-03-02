@@ -26,7 +26,7 @@ from typing import Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 import yaml
 
-from cortex.lens.models.tech_stack import TechStack, TechCategory
+from cortex.lens.models.tech_stack import TechStack
 
 logger = logging.getLogger(__name__)
 

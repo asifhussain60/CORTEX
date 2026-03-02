@@ -14,7 +14,6 @@ ARCH-007: MCP-first architecture enforcement
 
 import base64
 import json
-import re
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -24,7 +23,6 @@ from typing import Any, Dict, List, Optional, Union
 from cortex.lens.analysis.analysis_models import (
     BoundingBox,
     ColorInfo,
-    FontInfo,
     PixelGrid,
     TextSegment,
 )

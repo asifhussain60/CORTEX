@@ -27,7 +27,6 @@ Architecture:
 Author: Asif Hussain
 """
 
-import hashlib
 import json
 import logging
 import os
@@ -35,7 +34,7 @@ import sqlite3
 import threading
 import uuid
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path

@@ -9,7 +9,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class ReviewStatus(str, Enum):

@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90c
-from cortex.core.result import Ok, Result
+from cortex.core.result import Ok
 
 # Phase 58-C: DomainBrain wiring (decision-making orchestrator)
 try:

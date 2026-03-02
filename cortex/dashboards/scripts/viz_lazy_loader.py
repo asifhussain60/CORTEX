@@ -15,7 +15,7 @@ Task: 019 - Lazy Module Loader
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Set
 
 
 class ModuleType(Enum):

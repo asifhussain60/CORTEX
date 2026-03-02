@@ -18,15 +18,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
-from fastapi.responses import JSONResponse
 
 from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
-from cortex.lens.analyzers.comment_extractor import CommentExtractor
 
 # Phase 7.1 LENS Intelligence
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 from cortex.dashboards.business_language_generator import BusinessLanguageGenerator
-from cortex.dashboards.dashboard_configuration import DashboardConfiguration
 from cortex.dashboards.renderers.author_network_renderer import AuthorNetworkRenderer
 
 # Phase 14 Backend Renderers

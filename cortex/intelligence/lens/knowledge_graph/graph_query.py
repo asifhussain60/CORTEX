@@ -10,10 +10,9 @@ Phase: Phase 66 S2
 import json
 import logging
 from typing import List, Dict, Set, Optional, Tuple, Any
-from pathlib import Path
 
 from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
-from cortex.intelligence.lens.knowledge_graph.graph_schema import Node, Edge, NodeType, EdgeType
+from cortex.intelligence.lens.knowledge_graph.graph_schema import Node, Edge
 
 logger = logging.getLogger(__name__)
 

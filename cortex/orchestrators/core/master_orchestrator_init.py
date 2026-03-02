@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Tuple
 
 if TYPE_CHECKING:
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
@@ -519,7 +519,6 @@ class MasterOrchestratorInitialiser:
         h.tdd_orchestrator = None
         try:
             from cortex.orchestrators.core.tdd_orchestrator import (
-                TDDOrchestrator,
                 get_tdd_orchestrator,
             )
             h.tdd_orchestrator = get_tdd_orchestrator()

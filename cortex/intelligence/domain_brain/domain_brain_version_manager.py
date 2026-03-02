@@ -4,7 +4,7 @@ Author: CORTEX Framework
 Implements: AC-DB-E06 (Version Tracking & Safe Deletion)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set

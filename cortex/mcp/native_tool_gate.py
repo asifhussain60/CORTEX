@@ -29,14 +29,11 @@ Example:
         return HALT_EXECUTION
 """
 
-import os
-import re
 import logging
-from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Tuple, Set
+from typing import Optional, Tuple
 import yaml
 
 

@@ -14,15 +14,13 @@ AC-ID: AC-LENS-V2-CONFIG-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-import json
 import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

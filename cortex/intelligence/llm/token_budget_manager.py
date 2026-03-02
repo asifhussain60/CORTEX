@@ -8,7 +8,7 @@ Compliance: CORE-011 (Type hints), CORE-012 (Docstrings), CORE-013 (Specific exc
 
 import os
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 

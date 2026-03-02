@@ -31,12 +31,10 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from .agents.base_agent import BaseHealthAgent, HealthCheckResult
+from .agents.base_agent import BaseHealthAgent
 from .constants import (
     ALLOWED_MARKDOWN_PREFIXES,
-    EXCLUDED_DIRS,
     PROTECTED_FILES,
-    PYTHON_EXTENSIONS,
 )
 from .file_context import FileContext
 from .models import IssueFile, IssueSeverity, ScanResult

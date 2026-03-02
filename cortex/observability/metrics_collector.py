@@ -15,7 +15,7 @@ import random
 from collections import defaultdict
 from datetime import datetime, timedelta
 from threading import Lock
-from typing import Any, Callable, Optional, Protocol, Union
+from typing import Any, Optional, Protocol, Union
 
 from cortex.observability.metrics_schema import (
     CodeGenMetric,

@@ -15,12 +15,11 @@ import logging
 import re
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Set, Tuple
 
 from cortex.orchestrators.validation.coherence_models import (
     DuplicateMatch,
     Section,
-    SectionType,
 )
 
 logger = logging.getLogger(__name__)

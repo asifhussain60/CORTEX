@@ -21,7 +21,7 @@ AC-IDs: AC-P15-006, AC-P15-007, AC-P15-008
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.tools._shared import validate_orchestrator_context
 from cortex.repositories.provider_factory import get_work_item_provider

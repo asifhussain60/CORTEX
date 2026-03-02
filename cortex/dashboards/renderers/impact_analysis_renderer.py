@@ -14,12 +14,10 @@ Task: 008 - Impact Analysis Renderer
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
-from cortex.models.canonical_enums import RiskLevel
 
 
 @dataclass

@@ -14,7 +14,7 @@ Author: CORTEX Architect
 Date: 2026-02-15
 """
 
-from typing import Dict, Type, Any, List, Union
+from typing import Dict, List
 from .base import CleanerInterface
 
 

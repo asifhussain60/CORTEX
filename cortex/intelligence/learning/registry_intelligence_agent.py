@@ -26,16 +26,13 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 
 import ast
-import importlib.util
-import inspect
 import logging
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 
-from cortex.core.result import Err, Ok, Result
 from cortex.intelligence.learning.universal_learning_loop import get_learning_loop
 
 logger = logging.getLogger(__name__)
@@ -558,13 +555,13 @@ class RegistryIntelligenceAgent:
         else:
             return "low"
 
-    def universal_auto_fix(
+    def universal_auto_fix_from_report(
         self,
         validation_report: Optional[Dict[str, Any]] = None,
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """
-        Automatically fix ALL orchestrator wiring issues.
+        Automatically fix ALL orchestrator wiring issues from a validation report.
 
         UNIVERSAL AUTO-FIX CAPABILITIES:
         1. Register unregistered orchestrators

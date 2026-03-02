@@ -5,7 +5,6 @@ Phase 24.4: Layer 4 Architecture Evolution Tracking
 """
 from __future__ import annotations
 
-import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional

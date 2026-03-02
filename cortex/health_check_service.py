@@ -23,13 +23,10 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Any, Optional
 from datetime import datetime
-import asyncio
 
 # Production IntentRouter imports
-from cortex.orchestrators.core.intent_router import IntentRouter, RoutingDecision
+from cortex.orchestrators.core.intent_router import IntentRouter
 # Compatibility layer for old IntentRoutingRequest type
-from dataclasses import dataclass
-from typing import Optional, Dict, Any
 
 @dataclass
 class IntentRoutingRequest:

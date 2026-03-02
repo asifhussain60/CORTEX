@@ -6,8 +6,8 @@ Authority: Phase 53 Stage 3 + MCP-FIRST architecture
 
 import json
 import logging
-from abc import ABC, abstractmethod
-from dataclasses import asdict, dataclass
+from abc import ABC
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional

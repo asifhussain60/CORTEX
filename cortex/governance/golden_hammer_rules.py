@@ -8,7 +8,7 @@ Authority: WORKFLOW-COMPLEXITY-GATE-001 / GOLDEN-HAMMER-001/002/003
 Date: 2026-02-17
 """
 
-from typing import List, Optional
+from typing import Optional
 from dataclasses import dataclass
 
 from cortex.orchestrators.core.intent_router.workflow_gate import RoutingDecision, RoutingStrategy

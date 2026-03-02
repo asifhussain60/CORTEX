@@ -8,8 +8,8 @@ Authority: Wave 8 Execution Activation
 Coverage Target: ≥96%
 """
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 

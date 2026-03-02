@@ -9,7 +9,6 @@ Version: 1.0
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
-import math
 
 class IntentType(Enum):
     """User intent types."""

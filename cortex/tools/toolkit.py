@@ -20,13 +20,12 @@ Commands:
 Author: Asif Hussain
 """
 
-import argparse
 import sys
 import threading
-from typing import Any, Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 from cortex.core.path_resolver import get_project_root
-from cortex.core.result import Err, Ok, Result
+from cortex.core.result import Ok, Result
 
 # REM-CRIT-004: Thread-safe tool registry with lock
 _TOOLS: Dict[str, Callable] = {}

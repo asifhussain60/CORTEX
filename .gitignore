@@ -23,6 +23,7 @@
 
 # Local CORTEX dev artifacts (ephemeral, per-developer — never source-controlled)
 .cortex-runtime/
+.cortex/
 
 # VS Code personal preferences
 .favorites.json
@@ -36,6 +37,7 @@ cortex/core/state/*.db
 # These are OS-generated and should never be committed
 .!*
 .DS_Store
+.ds-store
 
 # Python
 __pycache__/
@@ -109,10 +111,15 @@ htmlcov/
 # .NET Build Artifacts
 bin/
 obj/
+*.dll
+*.pdb
 *.csproj.user
 *.csproj.VisualStudio.user
 *.vs/
 .vs/
+
+# Benchmark artifacts (ephemeral)
+.benchmarks/
 
 # Security: Prevent test fixtures with secret patterns from being committed
 # This file is used only for local testing of secret detection patterns

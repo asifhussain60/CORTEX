@@ -4,7 +4,6 @@ Core infrastructure discovery logic for APIs, tooling, and services.
              Performs environment-specific capability detection and merges with
              cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
-import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional

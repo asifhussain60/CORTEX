@@ -11,14 +11,12 @@ Rule: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
 import ast
-import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 

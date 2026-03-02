@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.domain_brain.domain_brain_models import Entity, EntityType
+from cortex.intelligence.domain_brain.domain_brain_models import Entity
 
 logger = logging.getLogger(__name__)
 
@@ -200,7 +200,6 @@ class CommentsAdapter:
             file_path: Path to the Python file to parse.
         """
         import ast as _ast
-        import re as _re
         p = Path(file_path)
         if not p.exists() or not p.suffix == ".py":
             return

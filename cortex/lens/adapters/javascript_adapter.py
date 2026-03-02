@@ -15,10 +15,10 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 3
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 import tree_sitter_javascript as ts_javascript
-from tree_sitter import Language, Node, Parser
+from tree_sitter import Node, Parser
 
 from cortex.lens.adapters.language_adapter import LanguageAdapter
 from cortex.lens.models.polyglot_ast_result import (

@@ -17,7 +17,7 @@ Task: 018 - Dependency Bundling
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.error import HTTPError, URLError

@@ -8,7 +8,7 @@ Template validation and consistency checking.
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List
 
 from cortex.templates.content_strategy import ContentPopulationStrategy
 from cortex.templates.knowledge_schema import KnowledgeBaseSchema, ValidationResult

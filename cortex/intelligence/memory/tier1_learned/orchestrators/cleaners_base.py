@@ -6,7 +6,7 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List, Callable
+from typing import Any, Dict, Callable
 from enum import Enum
 
 

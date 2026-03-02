@@ -7,8 +7,7 @@ Template quality assurance and testing framework.
 
 import json
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.templates.content_strategy import ContentPopulationStrategy
 from cortex.templates.template_manager import TemplateManager

@@ -11,7 +11,7 @@ AC_START: AC-VSCODE-CONF-001
 import json
 import platform
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 

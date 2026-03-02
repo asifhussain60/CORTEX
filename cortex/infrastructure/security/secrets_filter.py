@@ -11,8 +11,7 @@ Compliance: CORE-011 (100% typed), CORE-012 (Google docstrings), CORE-013 (no ba
 
 import logging
 import re
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Pattern
+from typing import Any, Dict, List, Pattern
 
 
 class SecretsFilter(logging.Filter):

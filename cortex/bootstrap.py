@@ -13,7 +13,6 @@ returns the GitBackedRegistry with all 23 orchestrators.
 """
 
 import logging
-import sys
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +38,6 @@ def run_startup_validation_hook() -> bool:
 
         # Import validator (this also triggers auto-validation)
         from cortex.infrastructure.startup_validator import (
-            get_startup_validator,
             run_startup_validation,
         )
 

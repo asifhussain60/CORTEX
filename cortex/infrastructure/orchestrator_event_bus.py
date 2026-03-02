@@ -15,7 +15,6 @@ Features:
 """
 
 import asyncio
-import inspect
 import logging
 from collections import deque
 from datetime import datetime

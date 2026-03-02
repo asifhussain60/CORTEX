@@ -26,7 +26,7 @@ AC-ID: AC-PHASE48-S1-IMPL-003
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 import logging
 import re
 

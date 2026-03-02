@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Err, Ok, Result
+from cortex.core.result import Err
 from cortex.orchestrators.documentation import (
     get_documentation_orchestrator,
 )

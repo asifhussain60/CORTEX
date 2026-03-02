@@ -9,7 +9,6 @@ import json
 import logging
 import re
 from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import ValidationSeverity

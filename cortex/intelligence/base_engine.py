@@ -5,7 +5,7 @@ All intelligence engines inherit from this base class.
 """
 
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, Optional, Union
 
 from cortex.core.result import Err, Ok

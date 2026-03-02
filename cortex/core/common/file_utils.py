@@ -14,7 +14,7 @@ import shutil
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any, Generator, List, Optional, Union
 
 import yaml
 

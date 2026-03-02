@@ -8,7 +8,7 @@ Module: cortex/intent_router/collaboration_coordinator.py
 Authority: Phase 81 S3 - IntentRouter Capability-Based Routing
 Version: 1.0
 """
-from typing import List, Dict, Optional, Tuple, Any
+from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 import logging

@@ -1,6 +1,6 @@
 """AWS S3 storage provider."""
 
-from typing import Any, Dict, List, Optional
+from typing import List
 
 from cortex.infrastructure.storage.storage_config import StorageConfig
 from cortex.infrastructure.storage.errors import (

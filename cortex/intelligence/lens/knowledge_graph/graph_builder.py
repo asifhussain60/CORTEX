@@ -8,10 +8,9 @@ AC_START: AC-PHASE66-S2-BUILDER-001
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
-from cortex.intelligence.lens.knowledge_graph.graph_schema import Node, Edge
 
 logger = logging.getLogger(__name__)
 

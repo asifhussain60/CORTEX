@@ -10,7 +10,7 @@ Provides typed validation for personas.yaml schema including:
 AC_START: AC-PHASE37.1-003
 """
 
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field, validator
 

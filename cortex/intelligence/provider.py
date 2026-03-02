@@ -26,9 +26,7 @@ from typing import Any, Dict, List, Optional
 from cortex.intelligence.knowledge.company_domain_loader import get_company_domain_loader
 from cortex.intelligence.knowledge.unified_intelligence_context import (
     CompanyKnowledge,
-    CORTEXKnowledge,
     LENSIntelligence,
-    SynthesisResult,
     UnifiedIntelligenceContext,
 )
 from cortex.repositories.provider_factory import get_work_item_provider

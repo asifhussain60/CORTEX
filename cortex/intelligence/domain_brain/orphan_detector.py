@@ -4,7 +4,7 @@ Author: CORTEX Framework
 Implements: AC-DB-E04 (Orphan Reference Detection)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set
 

@@ -15,7 +15,7 @@ from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Set
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 

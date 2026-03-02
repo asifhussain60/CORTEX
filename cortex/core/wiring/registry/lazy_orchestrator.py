@@ -7,7 +7,7 @@ Rule: CORE-035 (Single Canonical Implementation)
 
 import importlib
 import logging
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

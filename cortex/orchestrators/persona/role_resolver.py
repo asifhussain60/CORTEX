@@ -10,7 +10,6 @@ Detects user roles based on:
 """
 
 import re
-from enum import Enum
 from typing import Any, Dict, Optional, Tuple
 
 from cortex.orchestrators.persona.models import PersonaId

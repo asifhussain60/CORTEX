@@ -14,7 +14,6 @@ Consolidates setup verification logic from multiple scripts.
 """
 
 import json
-import os
 import platform
 import subprocess
 import sys

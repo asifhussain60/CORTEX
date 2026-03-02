@@ -21,7 +21,7 @@ Usage:
     prometheus_text = metrics.export_prometheus()
 """
 
-from typing import Any, Dict
+from typing import Dict
 
 from prometheus_client import CollectorRegistry, Gauge, generate_latest
 

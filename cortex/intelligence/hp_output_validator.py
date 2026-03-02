@@ -9,7 +9,6 @@ Author: CORTEX Framework
 
 import json
 import re
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import ValidationLevel

@@ -23,10 +23,9 @@ AC-IDs: AC-P15-003, AC-P15-010
 from __future__ import annotations
 
 import logging
-import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from cortex.repositories.work_item_provider import WorkItem, WorkItemProvider
+from cortex.repositories.work_item_provider import WorkItem
 
 logger = logging.getLogger(__name__)
 

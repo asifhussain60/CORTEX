@@ -2,7 +2,7 @@
 
 from typing import Any, Dict
 
-from jinja2 import BaseLoader, Environment, TemplateNotFound, TemplateSyntaxError
+from jinja2 import BaseLoader, Environment, TemplateSyntaxError
 
 
 class TemplateRenderer:

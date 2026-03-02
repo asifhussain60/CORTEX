@@ -5,7 +5,7 @@ based on service capabilities, topology, latency, and resource constraints.
 """
 
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from cortex.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter

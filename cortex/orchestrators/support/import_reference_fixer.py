@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class ImportReferenceFixer:
@@ -35,31 +35,6 @@ class ImportReferenceFixer:
                 new_prefix,
                 content,
             )
-        if content == original:
-            return False
-        src_path.write_text(content)
-        return True
-
-    def fix_relative_imports(
-        self,
-        file_path: str,
-        depth_delta: int,
-    ) -> bool:
-        """Adjust relative import depth by *depth_delta* (+ve = deeper, -ve = shallower)."""
-        src_path = Path(file_path)
-        if not src_path.exists():
-            return False
-        content = src_path.read_text()
-        original = content
-
-        def _adjust(m: re.Match) -> str:
-            """Adjust."""
-            dots = m.group(1)
-            rest = m.group(2)
-            new_count = max(1, len(dots) + depth_delta)
-            return "from " + "." * new_count + rest
-
-        content = re.sub(r'from (\.+)(.*? import)', _adjust, content)
         if content == original:
             return False
         src_path.write_text(content)

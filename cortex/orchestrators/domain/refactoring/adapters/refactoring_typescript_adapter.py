@@ -24,12 +24,10 @@ TypeScript Language Service reference: https://github.com/microsoft/TypeScript/w
 """
 from __future__ import annotations
 
-import json
 import logging
 import subprocess
-import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter

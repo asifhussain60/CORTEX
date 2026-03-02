@@ -15,8 +15,7 @@ Author: CORTEX Architect
 Date: 2026-02-15
 """
 
-from typing import Dict, Any, List
-from pathlib import Path
+from typing import Dict, Any
 from .base import (
     CleanerInterface,
     Analysis,

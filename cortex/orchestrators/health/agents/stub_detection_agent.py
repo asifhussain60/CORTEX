@@ -15,7 +15,7 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 import ast
 import time
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
 try:
     from radon.complexity import cc_visit

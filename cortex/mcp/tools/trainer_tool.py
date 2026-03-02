@@ -18,8 +18,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 
 import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

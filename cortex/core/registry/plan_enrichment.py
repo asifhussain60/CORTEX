@@ -8,7 +8,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-0
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.models.plan_models import PlanSpec
 

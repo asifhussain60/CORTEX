@@ -18,7 +18,7 @@ Date: 2026-02-05
 from pathlib import Path
 from typing import Optional
 
-from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from cortex.models.phase_detail_schema import PhaseDetail
 

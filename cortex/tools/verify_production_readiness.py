@@ -4,7 +4,6 @@ CORTEX Production Readiness Verification Script
 Authority: cortex-total-recall.prompt.md v3.0
 """
 import subprocess
-import sys
 from datetime import datetime
 
 

@@ -4,8 +4,7 @@ Validation framework for domain operations and contexts.
 """
 
 from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List
 
 from cortex.models.canonical_enums import ValidationSeverity
 

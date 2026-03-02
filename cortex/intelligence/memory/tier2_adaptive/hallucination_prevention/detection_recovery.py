@@ -8,8 +8,6 @@ Author: CORTEX Framework
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from enum import Enum
-import hashlib
-import json
 
 
 class HallucinationPattern(Enum):

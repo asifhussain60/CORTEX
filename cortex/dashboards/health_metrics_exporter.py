@@ -12,7 +12,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Union
 
-from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.orchestrators.health.reports.health_report import HealthReport
 
 

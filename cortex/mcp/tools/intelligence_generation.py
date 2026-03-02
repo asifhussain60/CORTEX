@@ -9,7 +9,7 @@ Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 AC_START: AC-WAVE-2-S6-002
 """
 
-from typing import Any, Dict, List, Optional
+from typing import List
 from cortex.mcp.tools._shared import validate_orchestrator_context
 from pathlib import Path
 

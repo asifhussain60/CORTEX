@@ -5,7 +5,6 @@ Authority: Phase 3 Wave 4 S2 | Export
 Purpose: Export knowledge graph to JSON, GraphML, Cytoscape formats
 """
 import json
-from typing import Dict, Any
 from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraph
 
 

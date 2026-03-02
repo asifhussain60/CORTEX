@@ -11,13 +11,12 @@ Provides:
 """
 import warnings
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import Optional
 
 import numpy as np
-from scipy.cluster.hierarchy import dendrogram, fcluster, linkage
-from scipy.spatial.distance import pdist, squareform
+from scipy.cluster.hierarchy import fcluster, linkage
 from sklearn.cluster import DBSCAN, KMeans
-from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.metrics import silhouette_score
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 

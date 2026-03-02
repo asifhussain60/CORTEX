@@ -22,7 +22,7 @@ import time
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum, auto
+from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Set, Union
 
 
@@ -810,7 +810,6 @@ def create_validation_test(
     """
     def setup() -> None:
         """Setup."""
-        from cortex.models.canonical_enums import TestStatus
         from cortex.tools.template_validator import TemplateValidator
         v = validator or TemplateValidator()
         return v.validate(template)

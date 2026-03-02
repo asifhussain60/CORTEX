@@ -14,7 +14,6 @@ import shutil
 # Import base classes from parent cleaners.py module
 # Avoid importing from cleaners package to prevent circular imports
 import sys
-import os
 
 # Add parent directory to path to import cleaners.py
 parent_dir = Path(__file__).parent.parent

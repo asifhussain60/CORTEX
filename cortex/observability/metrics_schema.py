@@ -14,7 +14,6 @@ Provides type-safe metric schemas for:
 
 from datetime import datetime
 from typing import Any, Literal, Optional
-from uuid import uuid4
 
 from pydantic import BaseModel, Field, field_validator
 

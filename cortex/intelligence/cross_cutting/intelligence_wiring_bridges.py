@@ -12,7 +12,7 @@ Author: Asif Hussain
 AC-ID: AC-INTELLIGENCE-WIRING-001
 """
 
-from typing import List, Optional
+from typing import Optional
 
 from cortex.intelligence.cross_cutting.intelligence_matrix_builder import (
     IntelligenceMatrix,

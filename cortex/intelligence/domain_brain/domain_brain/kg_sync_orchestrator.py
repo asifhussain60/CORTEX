@@ -5,11 +5,10 @@ knowledge graph, including deduplication, ingestion, and error handling.
 """
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter
 from cortex.intelligence.domain_brain.domain_brain.kg_deduplicator import (
-    DeduplicationResult,
     EntityDeduplicator,
 )
 from cortex.intelligence.domain_brain.domain_brain.kg_ingest_adapter import EntityIngestAdapter

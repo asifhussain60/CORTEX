@@ -2112,7 +2112,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **DIGEST** | `📚 CORTEX DIGEST` | All 5 sections | Medium |
 | **DESIGN/PLAN** | `🎨 CORTEX DESIGN` / `📋 CORTEX PLAN` | All 5 sections + H3 alternatives | Full |
 | **QUERY** | `🔍 CORTEX QUERY` | All 5 sections (simple density) | Simple-Medium |
-| **AUDIT** | `🔍 CORTEX AUDIT` | All 5 sections + findings table | Full |
+| **AUDIT** | `🔎 CORTEX AUDIT` | All 5 sections + findings table | Full |
 | **IMPLEMENT** (pre-approval) | `⚡ CORTEX IMPLEMENT` | All 5 sections (challenge gate) | Medium |
 | **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ Silent Autonomous Mode) | Progress bars only |
 | **COMPLETION** | Inline summary | Summary + deliverables + metrics | Simple |

@@ -15,7 +15,7 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 # Description: Token optimization health agent implementation
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from .base_agent import (
     BaseHealthAgent,

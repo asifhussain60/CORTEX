@@ -55,21 +55,15 @@ if TYPE_CHECKING:
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.knowledge_guidance_engine import (
     KnowledgeGuidanceEngine,
-    ModuleGuidance,
 )
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
-from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G2 Fix: wire mixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90b + Phase 98
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
-from cortex.orchestrators.domain.refactoring.refactoring_models import (
-    RefactoringLanguage,
-    RefactoringRequest,
-)
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 from cortex.intelligence.learning.reinforcement_signal import SignalType  # Phase 83-d: URS
 
@@ -1570,7 +1564,6 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
         """
         from cortex.orchestrators.core.convergence_neuron import (
             ConvergenceNeuron,
-            ConvergenceSignal,
         )
 
         logger.info(f"Phase 83: Starting convergence loop (max_cycles={max_cycles})")
@@ -1887,11 +1880,10 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
         AC-ID: AC-BATCH-TEST-RUNNER-001
         """
         import subprocess
-        import json
         import math
         from pathlib import Path as _Path
         from cortex.testing.framework.progress_reporter import BatchProgressReporter
-        from cortex.testing.framework.parallel_runner import ParallelRunner, EXECUTION_PROFILES
+        from cortex.testing.framework.parallel_runner import EXECUTION_PROFILES
 
         # ── 1. Discover test files ─────────────────────────────────────
         root = _Path(path)

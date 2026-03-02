@@ -11,8 +11,7 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 import json
 import yaml
 from pathlib import Path
-from typing import Any, Dict, List, Literal
-from datetime import datetime
+from typing import Any, Dict, Literal
 
 from .health_report import HealthReport
 

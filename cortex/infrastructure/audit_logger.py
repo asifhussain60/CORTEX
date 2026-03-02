@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.interfaces import IAuditLogger
-from cortex.core.path_resolver import audit_logs_path, get_project_root
+from cortex.core.path_resolver import audit_logs_path
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
@@ -71,13 +71,11 @@ class CrossPlatformFileLock:
     def _detect_platform(self) -> str:
         """Detect platform and available locking mechanism."""
         try:
-            import msvcrt
             return "windows"
         except ImportError:
             pass
 
         try:
-            import fcntl
             return "unix"
         except ImportError:
             pass

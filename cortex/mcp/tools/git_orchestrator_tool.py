@@ -18,7 +18,7 @@ Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
 import asyncio
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.mcp_tool_base import (
     Tool,
@@ -151,7 +151,6 @@ class CortexGitPush(Tool):
         try:
             from cortex.orchestrators.git.git_orchestrator import (
                 GitOrchestrator,
-                GitOrchestratorError,
             )
 
             orchestrator = GitOrchestrator(

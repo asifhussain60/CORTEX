@@ -11,7 +11,6 @@ Rule: CORE-035 (Single Implementation)
 """
 
 import re
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 try:

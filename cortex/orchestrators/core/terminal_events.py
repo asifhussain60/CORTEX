@@ -18,10 +18,9 @@ Features:
 Author: Asif Hussain
 """
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Callable, List, Optional
+from typing import Callable, List, Optional
 
 
 @dataclass

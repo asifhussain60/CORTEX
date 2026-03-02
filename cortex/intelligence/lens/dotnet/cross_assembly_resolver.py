@@ -11,8 +11,7 @@ AC_START: AC-PHASE67-S1-CROSS-ASSEMBLY-001
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Set, Optional, Any
+from typing import Dict, List, Set, Any
 
 logger = logging.getLogger(__name__)
 

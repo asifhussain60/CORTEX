@@ -10,9 +10,9 @@ Authority: Phase 36 Stage 2 specification
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 try:
     import numpy as np

@@ -10,10 +10,7 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 from dataclasses import dataclass
 from enum import Enum
-from functools import wraps
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
-import inspect
+from typing import Callable, Dict, List, Optional, Set
 
 
 class AnalyzerCapability(Enum):

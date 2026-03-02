@@ -17,19 +17,15 @@ Authority: ENH-017 Phase 2 (Multi-Language AST Parsing)
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.lens.adapters.csharp_adapter import CSharpAdapter
 from cortex.lens.adapters.java_adapter import JavaAdapter
 from cortex.lens.adapters.javascript_adapter import JavaScriptAdapter
 from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
 from cortex.lens.analyzers.ast_analyzer import (
-    ASTAnalysisResult,
     ASTAnalyzer,
-    ClassInfo,
-    FunctionInfo,
 )
-from cortex.lens.models.polyglot_ast_result import LanguageType, PolyglotASTResult
 
 logger = logging.getLogger(__name__)
 

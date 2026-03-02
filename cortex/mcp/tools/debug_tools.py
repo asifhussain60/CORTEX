@@ -21,7 +21,7 @@ Only MasterOrchestrator can invoke directly (via cortex_process_request entry po
 AC-ID: AC-WAVE-R-007
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 from cortex.mcp.tools._shared import validate_orchestrator_context
 import logging
 from datetime import datetime
@@ -345,7 +345,6 @@ def register_debug_tools(event_bus: EventBus, orchestrator: DebuggerOrchestrator
     Returns:
         Tool registry dict for MCP server
     """
-    from datetime import datetime
     tools = DebugMCPTools(event_bus, orchestrator)
     
     return {

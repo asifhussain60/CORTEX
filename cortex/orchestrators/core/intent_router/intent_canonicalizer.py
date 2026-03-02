@@ -4,8 +4,7 @@ Author: CORTEX Framework
 """
 
 import re
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import IntentType

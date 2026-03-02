@@ -12,10 +12,9 @@ Authority:
 AC-ID: AC-WAVE-R-005
 """
 
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Set
 from pathlib import Path
 import logging
-import os
 
 logger = logging.getLogger(__name__)
 

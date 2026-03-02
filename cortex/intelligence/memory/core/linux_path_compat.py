@@ -20,8 +20,6 @@ Thread-Safe: All methods use appropriate locking for concurrent access.
 
 import os
 import re
-import threading
-from pathlib import Path
 from typing import Optional, Dict, List, Set
 from threading import RLock
 

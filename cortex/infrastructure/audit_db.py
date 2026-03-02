@@ -10,7 +10,6 @@ import sqlite3
 import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Union
-from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 import logging

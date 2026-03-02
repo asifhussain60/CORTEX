@@ -11,7 +11,7 @@ Authority: CORTEX-SELF-IMPROVEMENT-SDLC.yaml Phase 0
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import List, Optional

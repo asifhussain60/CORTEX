@@ -15,7 +15,7 @@ Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
 import asyncio
 import logging
 import subprocess
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin

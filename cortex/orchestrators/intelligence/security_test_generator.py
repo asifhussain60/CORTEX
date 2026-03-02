@@ -11,7 +11,7 @@ Part of WAVE-2 Stage 4: Intelligent Test Generation.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any, List
 
 
 class SecurityTestType(Enum):

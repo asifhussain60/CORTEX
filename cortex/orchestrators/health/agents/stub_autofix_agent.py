@@ -12,7 +12,7 @@ CORE Rules: CORE-008 (TDD), CORE-035 (Single Source of Truth)
 import ast
 import re
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Optional
 
 from .base_agent import (
     BaseHealthAgent,

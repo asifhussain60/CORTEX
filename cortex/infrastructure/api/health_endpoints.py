@@ -16,8 +16,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, Optional
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
 from cortex.models.canonical_enums import HealthStatus

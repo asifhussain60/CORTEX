@@ -22,7 +22,6 @@ from typing import Any, Dict, Optional
 from cortex.models.interaction_plan import (
     InteractionPlan,
     InteractionPlanStep,
-    requires_plan_gate,
 )
 
 logger = logging.getLogger(__name__)

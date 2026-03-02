@@ -13,11 +13,9 @@ Enables cache invalidation on:
 """
 
 import hashlib
-import os
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Tuple
 
 
 @dataclass

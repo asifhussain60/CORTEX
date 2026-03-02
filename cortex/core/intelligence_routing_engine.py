@@ -9,15 +9,13 @@ Authority: Phase 49 | CORE-047 (No File Paths in Instructions) | CORE-035 (Singl
 """
 
 import hashlib
-import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-import yaml
 
 logger = logging.getLogger(__name__)
 

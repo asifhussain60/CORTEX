@@ -9,7 +9,7 @@ Coverage Target: ≥98%
 """
 
 from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import logging
 
 from cortex.orchestrators.domain.strategy_base import (

@@ -5,7 +5,7 @@ Implements: AC-DB-E02 (Archival and Performance)
 """
 
 import time as time_module
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 

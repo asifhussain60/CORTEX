@@ -1,8 +1,7 @@
 """Audit Navigator for querying audit trails."""
 
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import List
 
 
 # Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)

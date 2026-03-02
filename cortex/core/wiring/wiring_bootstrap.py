@@ -8,7 +8,6 @@ Entry point for CORTEX system initialization.
 """
 
 import logging
-from typing import Optional
 
 from cortex.core.wiring.registry import GitBackedRegistry, get_registry
 

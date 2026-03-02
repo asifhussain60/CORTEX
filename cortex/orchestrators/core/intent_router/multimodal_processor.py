@@ -6,7 +6,6 @@ and domain-specific schemas. Converts all to text for classification.
 Author: CORTEX Framework
 """
 
-import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Union

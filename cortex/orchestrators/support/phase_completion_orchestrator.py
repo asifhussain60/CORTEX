@@ -5,12 +5,10 @@ Phase 24.3: Layer 3 — auto-updates YAML, dashboard, registry, and history.
 """
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
-from unittest.mock import MagicMock
 
 import yaml
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin

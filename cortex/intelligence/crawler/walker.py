@@ -1,9 +1,8 @@
 
-import asyncio
 import fnmatch
 import time
 from pathlib import Path
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 
 from cortex.intelligence.crawler.crawler_base import (
     AsyncRepositoryCrawler,

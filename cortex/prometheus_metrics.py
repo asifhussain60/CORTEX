@@ -18,7 +18,6 @@ Governance: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings)
 from typing import Dict, Any, Callable
 from functools import wraps
 import time
-from contextlib import contextmanager
 
 class PrometheusMetrics:
     """Prometheus metrics collector for IntentRouter."""

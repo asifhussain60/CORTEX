@@ -13,7 +13,6 @@ Author: Asif Hussain
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import ContinuationReason

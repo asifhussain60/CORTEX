@@ -10,7 +10,6 @@ Compliance: CORE-011 (100% typed), CORE-012 (Google docstrings), CORE-013 (no ba
 """
 
 import binascii
-import hashlib
 import os
 from typing import Optional, Tuple
 

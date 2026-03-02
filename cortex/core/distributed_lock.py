@@ -13,7 +13,6 @@ Features:
 Author: Asif Hussain
 """
 
-import sqlite3
 import threading
 import time
 from contextlib import contextmanager

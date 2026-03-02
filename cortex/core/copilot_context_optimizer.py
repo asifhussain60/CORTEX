@@ -16,7 +16,7 @@ Author: CORTEX AI | TDD: RED→GREEN→REFACTOR
 import json
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # EXCEPTION CLASSES

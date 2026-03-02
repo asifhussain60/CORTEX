@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from cortex.intelligence.domain_brain.domain_brain.db_intent_classifier import IntentClassifier
-from cortex.intelligence.domain_brain.domain_brain.intent_parser import NLPIntentParser, ParsedIntent
+from cortex.intelligence.domain_brain.domain_brain.intent_parser import NLPIntentParser
 from cortex.intelligence.domain_brain.domain_brain.intent_router_interface import IIntentRouter
 
 

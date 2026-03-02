@@ -1,7 +1,7 @@
 """NLP Intent Parser for semantic intent recognition."""
 
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import List
 
 
 @dataclass

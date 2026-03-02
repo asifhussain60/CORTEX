@@ -18,9 +18,7 @@ from typing import Any, Dict, Optional
 from cortex.mcp.tools._shared import validate_orchestrator_context
 
 from cortex.orchestrators.validation import (
-    ChangeCoherenceEngine,
     CoherenceReport,
-    CoherenceStatus,
     PreEditContext,
 )
 
@@ -150,7 +148,6 @@ async def cortex_validate_coherence(
             # Just check the content directly (no before/after comparison)
             from cortex.orchestrators.validation import (
                 CoherenceValidator,
-                FileStructure,
                 ValidationConfig,
             )
             from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer

@@ -20,11 +20,10 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
 from cortex.intelligence.learning.universal_learning_loop import get_learning_loop
-from cortex.testing.test_value_scorer import ScoreTier, get_test_value_scorer
+from cortex.testing.test_value_scorer import get_test_value_scorer
 
 logger = logging.getLogger(__name__)
 

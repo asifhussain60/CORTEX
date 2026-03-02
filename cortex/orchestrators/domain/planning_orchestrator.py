@@ -11,12 +11,11 @@ AC-PHASE57-D-001: AC markers added (GAP-57-06)
 import logging
 import time
 from dataclasses import dataclass
-from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
-from cortex.models.canonical_enums import PhaseStatus, IntentType
+from cortex.models.canonical_enums import PhaseStatus
 # Phase 59-b: Use canonical IOrchestrator/OperationMode path (GAP-59-04)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin

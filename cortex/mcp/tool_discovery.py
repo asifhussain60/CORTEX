@@ -1,6 +1,5 @@
 """tool_discovery.py — MCP Tool Discovery."""
 from __future__ import annotations
-from typing import Any
 
 
 class ToolDiscovery:

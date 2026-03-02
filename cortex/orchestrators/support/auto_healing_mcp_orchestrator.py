@@ -18,15 +18,11 @@ Authority: Phase 89 + DIGEST chat01.md + CORE-050 enhancement
 AC-ID: AC-PHASE89-AUTOHEALING-001
 """
 
-import json
-import os
 import platform
-import re
 import subprocess
-import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import IntentType
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin

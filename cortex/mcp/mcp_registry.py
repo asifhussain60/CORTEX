@@ -16,11 +16,11 @@ Tool Count Strategy:
     - Elimination of duplicates
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 import logging
 
-from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolParameter
+from cortex.mcp.mcp_tool_base import Tool, ToolCategory, ToolParameter
 
 
 # ============================================================================

@@ -11,9 +11,8 @@ Authority: ENH-089 | Production-ready block assembly with personality enforcemen
 
 import yaml
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
-from enum import Enum
 
 
 class BlockAssemblyError(Exception):

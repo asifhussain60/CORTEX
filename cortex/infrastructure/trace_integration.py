@@ -15,13 +15,11 @@ Author: Asif Hussain
 
 import functools
 import os
-import time
 import uuid
 from datetime import datetime
 from typing import Any, Callable, Dict, Optional, TypeVar
 
 from cortex.infrastructure.orchestrator_trace_logger import (
-    OrchestratorTraceLogger,
     TraceEntry,
     TraceLevel,
     get_trace_logger,

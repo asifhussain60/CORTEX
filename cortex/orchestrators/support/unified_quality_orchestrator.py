@@ -17,7 +17,7 @@ CORE-013 (specific exceptions), CORE-027 (audit trail with AC markers)
 """
 
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional
 import uuid
 
 from cortex.orchestrators.support.quality_models import (

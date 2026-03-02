@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 
-from cortex.intelligence.lens.knowledge_graph.graph_schema import Node, Edge, SCHEMA_SQL
+from cortex.intelligence.lens.knowledge_graph.graph_schema import SCHEMA_SQL
 
 logger = logging.getLogger(__name__)
 

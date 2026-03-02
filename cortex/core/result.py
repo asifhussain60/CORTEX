@@ -6,7 +6,7 @@ exceptions. Supports both Ok(value) and Err(error) cases.
 Author: CORTEX Framework
 """
 
-from typing import TYPE_CHECKING, Any, Callable, Generic, Optional, TypeVar, Union
+from typing import Any, Callable, Generic, TypeVar, Union
 
 T = TypeVar("T")
 E = TypeVar("E")

@@ -14,10 +14,8 @@ CORE-011: All functions have type hints.
 CORE-012: All public APIs have Google-style docstrings.
 """
 
-import json
 import logging
 import sys
-from typing import Optional
 
 # Configure logging
 logging.basicConfig(

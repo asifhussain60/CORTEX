@@ -4,7 +4,7 @@ import hashlib
 import json
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List
 
 from cortex.infrastructure.storage.storage_config import StorageConfig
 from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider

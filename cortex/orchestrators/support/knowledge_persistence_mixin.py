@@ -17,7 +17,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from cortex.intelligence.learning.universal_learning_loop import UniversalLearningLoop
 from cortex.intelligence.learning.knowledge_synthesizer import KnowledgeSynthesizer

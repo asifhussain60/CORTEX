@@ -30,12 +30,10 @@ from cortex.core.tier_validator import TierAccessValidator
 from cortex.orchestrators.core.terminal_events import (
     ErrorOccurredEvent,
     EventRegistry,
-    GovernanceViolationEvent,
     MaxTurnsReachedEvent,
     PhaseCompletedEvent,
     TokenLimitEvent,
     UserApprovalRejectedEvent,
-    UserCancelledEvent,
 )
 from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import (

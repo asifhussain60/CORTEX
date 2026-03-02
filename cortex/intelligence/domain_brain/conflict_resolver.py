@@ -4,7 +4,7 @@ Author: CORTEX Framework
 Implements: AC-DB-E03 (Conflict Escalation Workflow)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional

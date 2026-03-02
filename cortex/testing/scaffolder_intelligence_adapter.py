@@ -31,10 +31,9 @@ Flow:
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from cortex.testing.test_demand_generator import (
-    DemandAnalyzer,
     DemandCategory,
     DemandRegistry,
     TestDemand,
@@ -46,7 +45,6 @@ from cortex.testing.test_composer import (
 )
 from cortex.testing.test_intelligence.quality_validator import (
     QualityValidator,
-    QualityScore,
 )
 
 logger = logging.getLogger(__name__)

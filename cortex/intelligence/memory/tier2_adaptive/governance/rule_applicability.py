@@ -4,7 +4,7 @@ Rule Applicability Engine for Governance Rules
 AC-GOV-CTX-002: Rule applicability determination
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 
 class RuleApplicabilityEngine:

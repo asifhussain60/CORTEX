@@ -30,7 +30,6 @@ CORE Rules:
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Set
-from functools import lru_cache
 import hashlib
 
 from cortex.lens.models.tech_stack import (

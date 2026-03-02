@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
@@ -558,7 +558,6 @@ class RopeAdapter(RefactoringToolAdapter):
         """
         try:
             import ast
-            import re
 
             # Read current file
             content = request.file_path.read_text()
@@ -657,7 +656,6 @@ class RopeAdapter(RefactoringToolAdapter):
             RefactoringResult with type hints added
         """
         try:
-            import ast
             import re
 
             # Read current file

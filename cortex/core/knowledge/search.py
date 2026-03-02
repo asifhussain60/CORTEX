@@ -1,9 +1,7 @@
 """Knowledge search service with multi-backend support and semantic ranking."""
 
-import hashlib
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 
 @dataclass

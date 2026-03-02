@@ -5,7 +5,6 @@ AC-PHASE38-030: File relocation with reference updates
 """
 from __future__ import annotations
 
-import re
 import shutil
 from pathlib import Path
 from typing import Any, Dict, List, Optional

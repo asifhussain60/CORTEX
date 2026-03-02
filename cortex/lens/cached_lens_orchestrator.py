@@ -17,7 +17,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.lens.cache import (
-    CacheKeyConfig,
     LENSCache,
     build_cache_key,
     get_lens_cache,

@@ -4,7 +4,7 @@ Authority: Phase 50 Stage 1 - Storage Backend Abstraction
 AC-PHASE50-S1-001: StorageConfig dataclass for all backends
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
 

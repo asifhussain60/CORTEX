@@ -1,8 +1,6 @@
 """Module: api.py."""
 
 from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.intelligence.domain_brain.domain_brain_models import EntityType

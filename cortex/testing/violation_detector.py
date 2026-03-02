@@ -5,10 +5,8 @@ Pre-commit hook for detecting CORE governance violations
 
 import ast
 import logging
-import re
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

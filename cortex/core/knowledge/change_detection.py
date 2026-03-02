@@ -20,7 +20,6 @@ Detection Window: 24 hours (86,400 seconds)
 Learning Mode: 7 days (604,800 seconds)
 """
 
-import json
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

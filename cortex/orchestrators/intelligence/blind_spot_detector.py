@@ -10,11 +10,10 @@ Part of WAVE-2 Stage 2: Intelligent Test Generation.
 """
 
 import ast
-import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import List, Set, Optional
+from typing import List, Set
 
 
 class BlindSpotType(Enum):

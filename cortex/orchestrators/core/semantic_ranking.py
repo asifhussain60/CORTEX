@@ -8,7 +8,6 @@ if numpy/sklearn is present.
 Authority: CORE-011 (type hints), CORE-012 (docstrings)
 """
 from __future__ import annotations
-from typing import Any
 
 
 class SemanticRanking:

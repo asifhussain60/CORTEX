@@ -11,9 +11,9 @@ AC-ID: NAMING-001
 
 import enum
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 
 class ViolationType(enum.Enum):
