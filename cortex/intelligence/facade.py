@@ -130,6 +130,8 @@ class IntelligenceFacade:
         """Synthesize knowledge from CORTEX + Company sources.
 
         Delegates to the UnifiedIntelligenceProvider's synthesis pipeline.
+        Maps the facade ``query`` param to the provider's ``intent`` param to
+        bridge the API difference introduced in Phase 107 consolidation.
 
         Args:
             query: The query or topic to synthesize knowledge for.
@@ -141,9 +143,27 @@ class IntelligenceFacade:
         try:
             provider = self._get_provider()
             if hasattr(provider, "synthesize"):
-                result = provider.synthesize(query=query, **kwargs)
+                import inspect as _inspect
+                _sig = _inspect.signature(provider.synthesize)
+                _params = set(_sig.parameters.keys())
+                if "intent" in _params:
+                    # UnifiedIntelligenceProvider.synthesize(intent, ...) — map query → intent
+                    _call_kwargs = {k: v for k, v in kwargs.items() if k in _params}
+                    result = provider.synthesize(intent=query or "QUERY", **_call_kwargs)
+                elif "query" in _params:
+                    result = provider.synthesize(query=query, **kwargs)
+                else:
+                    result = provider.synthesize(**kwargs)
                 if isinstance(result, dict):
                     return result
+                # UnifiedIntelligenceContext returned — convert to dict
+                if hasattr(result, "__dict__"):
+                    return {
+                        "status": "ok",
+                        "query": query,
+                        "source": "intelligence_facade",
+                        "synthesis": vars(result),
+                    }
             return {
                 "status": "ok",
                 "query": query,

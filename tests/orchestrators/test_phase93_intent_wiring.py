@@ -358,6 +358,9 @@ class TestInteractionOrchestratorAlwaysActive:
         assert "breadcrumb" in output, (
             f"execute_turn_with_challenge output missing 'breadcrumb'. Keys: {list(output.keys())}"
         )
-        assert output["breadcrumb"].startswith("**Route:**"), (
-            f"Breadcrumb must use SSOT format '**Route:** `...`', got: {output['breadcrumb']}"
+        # SSOT: cortex-response-templates.md §BLOCK-ENGAGEMENT-BREADCRUMB (line 1521)
+        # ❌ Never use **Route:** prefix — canonical format is italic *🧭 ... * (compass icon)
+        bc = output["breadcrumb"]
+        assert bc.startswith("*🧭") or bc == "", (
+            f"Breadcrumb must use SSOT italic format '*🧭 ...', got: {bc!r}"
         )
