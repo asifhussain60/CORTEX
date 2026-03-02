@@ -278,13 +278,13 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 **Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 **Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
-The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 24-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
+The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 28-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 
-### 24-Point Production Readiness Audit
+### 28-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -312,6 +312,10 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 22 | **Duplicate method definitions (F811)** — Python silently uses the last definition; earlier defs are dead code invisible to runtime but harmful to readability and reasoning | `python3 -m ruff check cortex/ --select=F811 --output-format=concise` — must return `All checks passed!`; if violations found, remove the first (dead) definition and retain the second (active) one | ✅ Auto-remove dead first definition via ruff `--fix` or manual deletion |
 | 23 | **Unused import sweep (F401)** — non-`__init__.py` files with unused imports that are not mock-dependent or try-except guarded | `python3 -m ruff check cortex/ --select=F401 --output-format=json \| python3 -c "import json,sys; v=json.load(sys.stdin); non_init=[x for x in v if '__init__' not in x['filename']]; print(len(non_init))"` — target: 0 non-intentional; run `ruff check cortex/ --select=F401 --fix` to auto-remove | ✅ `ruff --fix` (auto-safe); manually verify any remaining as intentional |
 | 24 | **OS artifact contamination** — `.DS_Store`, `.ds-store`, `Thumbs.db`, `desktop.ini` files accumulating in workspace (macOS/Windows Finder junk); also checks for `.NET bin/obj` artifacts under `cortex/` | `find . -name ".DS_Store" -o -name "Thumbs.db" \| wc -l`; `find cortex/ -type d \( -name "bin" -o -name "obj" \) \| wc -l` — both must return 0 | ✅ `VacuumOrchestrator.run_os_artifact_cleanup()` + `run_build_artifact_cleanup()` — invoked automatically in `/vacuum` pipeline |
+| 25 | **`cortex-master.yaml` THIN INDEX CONTRACT** — line count must be ≤ 500 (alarm at 400); no prohibited inline keys (`gap_catalogue`, `tdd_sequence`, `new_files`, `implementation`, `code_snippets`); YAML must be syntactically valid | `wc -l cortex-registry/cortex-master.yaml` — must be ≤ 500; `python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"` — must not raise; `grep -n 'gap_catalogue:\|tdd_sequence:\|new_files:' cortex-registry/cortex-master.yaml` — must return 0 lines | ✅ Extract inline phase detail to dedicated `cortex-registry/planning/phases/planned/{phase-id}.yaml` files; replace inline blocks with thin `file:` pointer entries |
+| 26 | **Duplicate class implementations (CORE-035)** — same class name defined in more than one non-test `cortex/` file; Python silently uses the last import, making earlier definitions dead code | `python3 -c "import ast,pathlib,collections; locs=collections.defaultdict(list); [locs[n.name].append(str(f)) for f in pathlib.Path('cortex').rglob('*.py') if '__pycache__' not in str(f) for n in ast.walk(ast.parse(f.read_text())) if isinstance(n,ast.ClassDef)]; dups={k:v for k,v in locs.items() if len(v)>1}; print(f'DUPLICATES={len(dups)}'); [print(k,v) for k,v in dups.items()]"` — must return `DUPLICATES=0` | ✅ Identify canonical file for each pair; merge or delete the shadow copy; update all imports; run `make test-smoke` |
+| 27 | **Stale test directory mirror** — `tests/` dirs whose corresponding `cortex/` source was dissolved (e.g. `tests/cortex_brain/` with no `cortex/brain/`); test-source mirror integrity | `python3 -c "import pathlib; td={d.name for d in pathlib.Path('tests').iterdir() if d.is_dir()}; sd={d.name for d in pathlib.Path('cortex').iterdir() if d.is_dir()}; stale=[t for t in td if t not in sd and 'cortex_'+t not in sd]; print('STALE='+str(len(stale))); [print('  tests/'+s) for s in stale]"` — must return `STALE=0` after accounting for known exceptions | ✅ `git mv tests/{stale_dir}/ tests/{correct_mirror_path}/`; update conftest.py references |
+| 28 | **AC marker persistence gap** — `trace_master.action` column must receive `AC_START` / `AC_COMPLETE` entries whenever orchestrators run; symptom: `workflow_runs` has rows but `AC_START_COUNT == 0` means emission is silently broken | `python3 -c "import sqlite3; conn=sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); n=conn.execute(\"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\").fetchone()[0]; wf=conn.execute('SELECT COUNT(*) FROM workflow_runs').fetchone()[0]; print('AC_START='+str(n)+' WF_RUNS='+str(wf)); print('GAP' if wf>0 and n==0 else 'OK')"` — must print `OK` | 🟡 Trace `OrchestratorProtocolMixin.emit_ac_marker()` routing; ensure `OrchestratorTraceLogger._write_to_db()` inserts into `trace_master` with `action='AC_START'`/`'AC_COMPLETE'`; run `make test-smoke` to confirm |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -707,7 +711,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Orchestrator count | Matches `refresh_prompt_suite.py --counts-only` output |
 | MCP tool count | Matches live `mcp_registry.py` grep count |
 | Governance YAML count | Matches live `cortex-registry/core/` count |
-| Audit check count | All say "24-Point Production Readiness Audit" |
+| Audit check count | All say "28-Point Production Readiness Audit" |
 | Meta-audit check count | All say "26 checks" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |

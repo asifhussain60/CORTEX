@@ -11,44 +11,8 @@ maintainer: CORTEX Architecture Team
 # Prohibited inline: phases, gap_catalogue, tdd_sequence, rewrites,
 #   new_files, files_to_edit, implementation, code_snippets
 # ============================================================
-#
-# ============================================================
-# SEQUENTIAL EXECUTION CONTRACT — ALL PHASES (WHOLE-PHASE-FIRST)
-# Each phase is ATOMIC — runs end-to-end in one sweep, never decomposed.
-#   phase_atomic: true | decomposition_allowed: false | gate_on_failure: HALT
-# Every phase file declares sequential_execution_contract block.
-# Every sub-phase has: depends_on, tdd_cycle (red/green/refactor), completion_gate.
-# Every phase ends with phase-{N}-final (smoke gate + CORE-064 close).
-# Partial completion = P0 violation (CORE-064 + WHOLE-PHASE-FIRST principle).
 # Standards: .github/agents/core/phase-creation-standards.md
 # Template:  cortex-registry/planning/phases/_template.yaml
-# ============================================================
-
-# ============================================================
-# CONSOLIDATED EXECUTION PLAN — v30.0
-# 7 pending phases → 6 active (3 P0 + 3 P1)
-#
-# RESTRUCTURING (2026-02-25 — chat01 holistic digest):
-#   KEEP:     phase-77 (P0, cleanup, 6 GAPs)         — precedes all build phases
-#   EXTRACT:  phase-73 (31 GAPs) → phase-78 (12 GAPs, matrix wiring only)
-#   ABSORB:   phase-74 (stack builder) → phase-79-E (SDLC sub-phase)
-#   CREATE:   phase-79 (SDLC Intelligence Engine, 22 GAPs) — chat01 core vision
-#   KEEP:     phase-75 (IN_PROGRESS, 3 GAPs)
-#   KEEP:     phase-76 (P1, defer last)
-#   ARCHIVED: phase-73, phase-74 → planned/_archived/
-#
-# ADDITIONS (2026-02-27):
-#   CREATE:   phase-86 (P1, multi-stack debug pipeline + unified intelligence, 15 GAPs)
-#   CREATE:   phase-87 (P1, RCA Memory Engine + prevention gate + cortex-docs sync, 21 GAPs)
-#
-#  Slot │ Phase   │ P    │ Track            │ Status       │ GAPs
-#  #0   │ ph-87   │ P1   │ RCA Memory Eng   │ COMPLETE     │ 21
-#  #1   │ ph-86   │ P1   │ Debug Pipeline   │ COMPLETE     │ 16
-#  #2   │ ph-77/78│ P0   │ Cleanup+Wiring   │ COMPLETE     │ 18
-#  #3   │ ph-79   │ P1   │ SDLC Engine      │ COMPLETE     │ 22
-#  #4/5 │ ph-75/76│ P1   │ Cap Reg + UI     │ COMPLETE     │ 5
-#
-# Gate: smoke ≥1,443 at every sub-phase boundary.
 # ============================================================
 
 metadata:
@@ -64,52 +28,11 @@ metadata:
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 1211
+    smoke: 1950
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed:
-    - id: digest-recommend-20260226
-      title: "Independent Review Remediation Verification (Phase 64)"
-      type: "digest"
-      status: COMPLETE
-      completed: "2026-02-26"
-      file: ".cortex-runtime/digests/recommend-digest-20260226.yaml"
-      note: "Digested _workspaces/recommend/ (5 consolidated review documents). Verified 10 of 12 gaps resolved. Health score 8.2/10 (+0.9 improvement). 2 gaps deferred to Phase 65 (MCP auth P0, ImportError sweep P1). Source archived to workspaces archive (recommend-20260226)."
-    - id: phase-80-a
-      title: "MasterOrchestrator God-Object Decomposition"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-80-A-MASTER-ORCHESTRATOR-DECOMPOSITION
-      gaps: 4
-      gaps_closed: 4
-      sub_phases: 5
-      completed: "2026-02-25"
-      file: "cortex-registry/_cortex-master/phases/completed/phase-80-a-master-orchestrator-decomposition.yaml"
-      note: "5222→2984 lines (↓43%). Mixin+Initialiser extraction. 14/14 tests GREEN."
-    - id: phase-68
-      title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
-      priority: P1
-      status: COMPLETE
-      sweep_id: SWEEP-68-CORE-FLATTEN
-      gaps: 9
-      sub_phases: 4
-      file: "cortex-registry/_cortex-master/phases/completed/phase-68-core-flatten-sweep.yaml"
-      note: "All 9 gaps CLOSED. 19 tests GREEN."
-    - id: phase-67
-      title: "WorkflowEngine Runtime Wiring"
-      priority: P1
-      status: COMPLETE
-      sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
-      gaps: 6
-      file: "cortex-registry/_cortex-master/phases/completed/phase-67-workflow-engine-runtime-wiring.yaml"
-    - id: phase-66
-      title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-66-INTELLIGENCE-MATRIX
-      gaps: 19
-      file: "cortex-registry/_cortex-master/phases/completed/phase-66-intelligence-matrix-neural-wiring.yaml"
+  recent_completed: "phase-100 (Dead Code), phase-99 (Secure MCP), phase-95 (enforce_gateway), phase-94 (WorkflowGateway), phase-93 (IntentRouter). Detail in phase_detail_files below."
 
 # ── PHASE DETAIL FILES ───────────────────────────────────────────────────────
 # Ordered by execution slot. 6 pending phases consolidated to 4.

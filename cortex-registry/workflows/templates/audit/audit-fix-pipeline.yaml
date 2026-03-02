@@ -23,7 +23,7 @@
 
 workflow:
   id: 'audit/audit-fix-pipeline'
-  name: '/audit fix — 9-Stage Production Readiness Pipeline'
+  name: '/audit fix — 9-Stage Production Readiness Pipeline (28-Point Audit)'
   version: '1.0.0'
   category: 'audit'
   status: 'active'
@@ -134,7 +134,7 @@ workflow:
               id              INTEGER PRIMARY KEY AUTOINCREMENT,
               session_id      TEXT NOT NULL REFERENCES audit_sessions(session_id),
               stage_num       INTEGER NOT NULL,
-              check_num       INTEGER,             -- 1–22 from extended 22-point audit
+              check_num       INTEGER,             -- 1–28 from extended 28-point audit
               severity        TEXT NOT NULL,       -- "P0" | "P1" | "P2"
               rule_id         TEXT,                -- e.g. "CORE-035"
               file_path       TEXT,
@@ -344,11 +344,11 @@ workflow:
         stage_label: 'intelligence-matrix-gate'
 
     # -------------------------------------------------------------------------
-    # Stage 2: 18-Point Production Readiness Scan (Checks #1–#23)
+    # Stage 2: 28-Point Production Readiness Scan (Checks #1–#28)
     # -------------------------------------------------------------------------
     - stage_id: 'stage_2'
       stage_num: 2
-      name: 'Stage 2 — 18-Point Production Readiness Scan (Checks #1–#23)'
+      name: 'Stage 2 — 28-Point Production Readiness Scan (Checks #1–#28)'
       orchestrator: 'EnforcementOrchestrator'
       checks:
         - num: 1
@@ -621,6 +621,345 @@ workflow:
                 cortex/orchestrators/core/interaction_orchestrator.py
               Expected: line with 'enable_challenges: bool = True'
 
+        # -------------------------------------------------------------------
+        # Check #24 — cortex-master.yaml THIN INDEX CONTRACT
+        # -------------------------------------------------------------------
+        - num: 24
+          label: 'cortex-master.yaml THIN INDEX CONTRACT — line count ≤ 800 (alarm at 700)'
+          scope: 'cortex-registry/cortex-master.yaml'
+          tool: 'wc -l + yaml.safe_load'
+          severity: 'P0'
+          description: |
+            Verify cortex-master.yaml is within the THIN INDEX CONTRACT:
+              (a) Line count ≤ 800 (alarm at 700, hard limit 800 — P0)
+                  SSOT: file header lines 7-8 ("Max 800 lines — alarm at 700")
+              (b) YAML is syntactically valid (parse without error)
+              (c) No prohibited inline keys present:
+                  phases, gap_catalogue, tdd_sequence, rewrites, new_files,
+                  files_to_edit, implementation, code_snippets
+              Rationale: cortex-master.yaml grew to 3,007 lines historically
+              when inline phase detail was written directly to it, causing
+              40+ YAML syntax errors, un-reviewable diffs, and context
+              exhaustion. The THIN INDEX CONTRACT prevents recurrence.
+          detect_command: |
+            python3 -c "
+            import yaml, pathlib, sys
+            path = pathlib.Path('cortex-registry/cortex-master.yaml')
+            text = path.read_text()
+            lines = text.splitlines()
+            violations = []
+            # (a) line count — SSOT: file header (Max 800, alarm at 700)
+            if len(lines) > 800:
+                violations.append(f'LINE_COUNT={len(lines)} (limit=800, over by {len(lines)-800})')
+            elif len(lines) > 700:
+                violations.append(f'LINE_COUNT_WARN={len(lines)} (alarm threshold=700)')
+            # (b) YAML validity
+            try:
+                data = yaml.safe_load(text)
+            except yaml.YAMLError as e:
+                violations.append(f'YAML_INVALID: {e}')
+                data = None
+            # (c) prohibited inline keys
+            PROHIBITED = ['gap_catalogue','tdd_sequence','rewrites',
+                          'new_files','files_to_edit','implementation','code_snippets']
+            for key in PROHIBITED:
+                if key + ':' in text:
+                    violations.append(f'PROHIBITED_KEY: {key}')
+            if violations:
+                for v in violations: print(v)
+            else:
+                print('THIN_INDEX_OK=' + str(len(lines)) + ' lines')
+            "
+          pass_criteria: 'THIN_INDEX_OK in output and no LINE_COUNT= in output'
+          auto_fix: |
+            If LINE_COUNT > 800:
+              Identify phase entries with inline detail (gap_catalogue, tdd_sequence,
+              new_files blocks). For each such entry:
+                1. Create dedicated file at:
+                   cortex-registry/planning/phases/planned/{phase-id}.yaml
+                   using cortex-registry/planning/phases/_template.yaml as scaffold
+                2. Move ALL detail from cortex-master.yaml into the dedicated file
+                3. Replace the cortex-master.yaml entry with a thin reference:
+                   - id, title, priority, status, sweep_id, gaps, sub_phases,
+                     file (pointer to dedicated file), note (one sentence)
+              Repeat until wc -l cortex-registry/cortex-master.yaml ≤ 500.
+          verify_command: |
+            wc -l cortex-registry/cortex-master.yaml
+            python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml')); print('YAML valid')"
+
+        # -------------------------------------------------------------------
+        # Check #25 — Duplicate class implementations (CORE-035)
+        # -------------------------------------------------------------------
+        - num: 25
+          label: 'Duplicate class implementations — CORE-035 shadow pairs'
+          scope: 'cortex/'
+          tool: 'AST class name scan + similarity diff'
+          severity: 'P1'
+          description: |
+            Detect Python classes whose names appear in more than one non-test
+            file under cortex/ (shadow implementations — CORE-035 violation).
+            These are dangerous: Python silently uses whichever is imported last;
+            the earlier definition becomes dead code invisible to runtime.
+
+            Known pairs (detected 2026-03-02):
+              - ApprovalDecision: cortex/orchestrators/core/approval_gate.py
+                                  cortex/orchestrators/core/dor_approval_gate.py
+              - IntentClassifier:  cortex/orchestrators/core/intent_classifier.py
+                                   cortex/orchestrators/core/intent_router/classifier.py
+              - MasterOrchestrator: cortex/orchestrators/core/master_orchestrator.py
+                                    cortex/orchestrators/persona/master_orchestrator.py
+              - ToolMetadata:      cortex/mcp/mcp_registry.py
+                                   cortex/mcp/tool_registry.py
+              - MCPRequest:        cortex/mcp/server.py
+                                   cortex/mcp/types.py
+              - MCPResponse:       cortex/mcp/server.py
+                                   cortex/mcp/types.py
+
+          detect_command: |
+            python3 -c "
+            import ast, pathlib, collections
+
+            # Excluded base classes — pure structural types are not CORE-035 violations:
+            # Protocol/ABC (interfaces), Enum variants (value enums), Exception subclasses
+            # (error hierarchy), OrchestratorBase/Mixin (framework bases).
+            EXCLUDE_BASES = {
+                'Protocol', 'ABC', 'TypedDict', 'BaseModel',
+                'Enum', 'IntEnum', 'StrEnum', 'ABCMeta',
+                'Exception', 'ValueError', 'RuntimeError', 'IOError',
+                'OrchestratorBase', 'OrchestratorProtocolMixin',
+            }
+
+            def is_structural_only(node):
+                '''True when every statement is pass/docstring/annotation — pure type stub.'''
+                for stmt in node.body:
+                    if isinstance(stmt, ast.Pass): continue
+                    if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Constant): continue
+                    if isinstance(stmt, (ast.AnnAssign, ast.Assign)): continue
+                    return False
+                return True
+
+            class_locations = collections.defaultdict(list)
+            for f in pathlib.Path('cortex').rglob('*.py'):
+                if '__pycache__' in str(f): continue
+                if f.name == '__init__.py': continue   # skip re-export wrappers
+                try:
+                    tree = ast.parse(f.read_text())
+                except Exception:
+                    continue
+                for node in ast.walk(tree):
+                    if not isinstance(node, ast.ClassDef): continue
+                    base_names = set()
+                    for b in node.bases:
+                        if isinstance(b, ast.Name): base_names.add(b.id)
+                        elif isinstance(b, ast.Attribute): base_names.add(b.attr)
+                    # Skip pure structural base types
+                    if base_names and base_names.issubset(EXCLUDE_BASES): continue
+                    # Skip structural-only bodies (dataclass shells / pure stubs)
+                    if is_structural_only(node): continue
+                    class_locations[node.name].append(str(f))
+
+            duplicates = {k: v for k, v in class_locations.items() if len(v) > 1}
+            if duplicates:
+                print(f'DUPLICATE_CLASS_COUNT={len(duplicates)}')
+                for name, paths in sorted(duplicates.items()):
+                    print(f'  {name}:')
+                    for p in paths: print(f'    {p}')
+            else:
+                print('DUPLICATE_CLASS_COUNT=0')
+            "
+          pass_criteria: 'DUPLICATE_CLASS_COUNT == 0'
+          auto_fix: |
+            For each duplicate pair:
+              1. Identify the CANONICAL file (the one in the primary domain path,
+                 e.g. cortex/orchestrators/core/ over cortex/orchestrators/persona/)
+              2. Diff the two class bodies — if identical or shadow: delete the
+                 non-canonical copy and update all imports pointing to it
+              3. If they diverge meaningfully: merge into the canonical file,
+                 preserving all methods, then delete the shadow file
+              4. Run: python3 -m ruff check cortex/ --select=F811 --fix
+              5. Verify: python3 scripts/run_tests.py smoke — zero new failures
+          verify_command: |
+            python3 -m pytest tests/ -k "test_no_duplicate_implementations" -p no:xdist -q
+
+        # -------------------------------------------------------------------
+        # Check #26 — Stale test directory mirror (dissolved cortex/brain/)
+        # -------------------------------------------------------------------
+        - num: 26
+          label: 'Stale test dir mirror — tests/ dirs without matching cortex/ source'
+          scope: ['tests/', 'cortex/']
+          tool: 'Dir name comparison'
+          severity: 'P1'
+          description: |
+            Detect test directories that reference dissolved or renamed source
+            packages. The most common pattern: tests/cortex_brain/ exists but
+            cortex/brain/ was dissolved in Phase 54 (migrated to
+            cortex/orchestrators/core/phase_executors/).
+            Any tests/X/ dir where cortex/X/ does not exist is a stale mirror.
+          detect_command: |
+            python3 -c "
+            import pathlib
+            # Known exceptions: test-only dirs with no source mirror by design.
+            # These are organisational test dirs, not mirrored source packages.
+            known_exceptions = {
+                'fixtures',       # shared test fixtures — no source mirror needed
+                'golden',         # golden acceptance tests — no source mirror needed
+                'regression',     # regression tests — no source mirror needed
+                'chaos',          # chaos tests — no source mirror needed
+                'manual',         # manual tests — no source mirror needed
+                'api',            # API integration tests — no source mirror needed
+                'cli',            # CLI tests — mirrors cortex/cli/ via 'cli' match
+                'integration',    # integration tests — no source mirror needed
+                'preflight',      # preflight wiring tests — no source mirror needed
+                'domain_orchestrators',  # integration group — no source mirror needed
+                'cortex_docs',    # tests for cortex-docs HTML — no source mirror needed
+                'config',         # matches cortex/config/ — valid
+                'models',         # matches cortex/models/ — valid
+                'unit',           # organisational grouping — no source mirror needed
+                'visualization',  # dashboard/viz tests — no source mirror needed
+                '.pytest_cache',  # pytest internal — never a source mirror
+            }
+            test_dirs = {d.name for d in pathlib.Path('tests').iterdir()
+                         if d.is_dir() and not d.name.startswith('__')}
+            stale = []
+            for td in sorted(test_dirs):
+                if td in known_exceptions: continue
+                if td.startswith('.'): continue   # skip all hidden dirs
+                candidate1 = pathlib.Path('cortex') / td
+                candidate2 = pathlib.Path('cortex') / td.replace('cortex_', '')
+                if not candidate1.exists() and not candidate2.exists():
+                    stale.append(td)
+            if stale:
+                print(f'STALE_TEST_DIRS={len(stale)}')
+                for s in stale: print(f'  tests/{s}/')
+            else:
+                print('STALE_TEST_DIRS=0')
+            "
+          pass_criteria: 'STALE_TEST_DIRS == 0'
+          auto_fix: |
+            For each stale tests/{dir}/:
+              1. Identify the correct mirror path for the dissolved source
+                 (e.g. tests/cortex_brain/ → tests/orchestrators/core/phase_executors/)
+              2. git mv tests/{stale_dir}/ tests/{correct_mirror}/
+              3. Update any conftest.py or pytest.ini references to the old path
+              4. Run: python3 scripts/run_tests.py preflight — zero new failures
+          verify_command: |
+            python3 scripts/run_tests.py preflight
+
+        # -------------------------------------------------------------------
+        # Check #27 — AC marker persistence gap
+        # -------------------------------------------------------------------
+        - num: 27
+          label: 'AC marker persistence — trace_master.action column receives AC events'
+          scope: '.cortex-runtime/traces/orchestrator-traces.db'
+          tool: 'sqlite3 action column scan'
+          severity: 'P1'
+          description: |
+            Verify that orchestrator AC markers are actually being persisted to
+            the trace_master table. Symptom: workflow_runs has rows (pipeline is
+            running) but trace_master has 0 AC_START / 0 AC_COMPLETE entries —
+            meaning the AC emission path is wired but not routing to the action
+            column in trace_master, breaking audit-trail observability.
+
+            Expected: every orchestrator invocation persists at least one
+            AC_START row and one AC_COMPLETE row into trace_master.action
+            per session.
+
+          detect_command: |
+            python3 -c "
+            import sqlite3, pathlib
+            db_path = '.cortex-runtime/traces/orchestrator-traces.db'
+            if not pathlib.Path(db_path).exists():
+                print('DB_MISSING: no orchestrator-traces.db')
+            else:
+                conn = sqlite3.connect(db_path)
+                wf_runs = conn.execute('SELECT COUNT(*) FROM workflow_runs').fetchone()[0]
+                ac_start = conn.execute(
+                    \"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\"
+                ).fetchone()[0]
+                ac_complete = conn.execute(
+                    \"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_COMPLETE%'\"
+                ).fetchone()[0]
+                conn.close()
+                print(f'WORKFLOW_RUNS={wf_runs}')
+                print(f'AC_START_COUNT={ac_start}')
+                print(f'AC_COMPLETE_COUNT={ac_complete}')
+                if wf_runs > 0 and ac_start == 0:
+                    print('AC_PERSISTENCE_GAP: workflow_runs>0 but no AC_START in trace_master')
+                elif ac_start == 0:
+                    print('AC_PERSISTENCE_GAP: no AC markers persisted (pipeline may be idle)')
+                else:
+                    print('AC_PERSISTENCE_OK')
+            "
+          pass_criteria: 'AC_PERSISTENCE_OK in output or (AC_START_COUNT > 0 and AC_COMPLETE_COUNT > 0)'
+          auto_fix: |
+            Trace the emission path in OrchestratorProtocolMixin:
+              1. Open cortex/core/orchestrator_protocol_mixin.py
+              2. Locate emit_ac_marker() — verify it calls
+                 OrchestratorTraceLogger.log() with action='AC_START' / 'AC_COMPLETE'
+              3. Verify OrchestratorTraceLogger routes to trace_master (not only
+                 to a domain-specific table like trace_interaction)
+              4. If routing gap found: add trace_master INSERT in the logger's
+                 _write_to_db() or equivalent persistence method
+              5. Run: python3 scripts/run_tests.py smoke — verify AC_START_COUNT > 0
+          verify_command: |
+            python3 -c "
+            import sqlite3
+            conn = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+            n = conn.execute(\"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\").fetchone()[0]
+            print('AC_START_COUNT=' + str(n))
+            conn.close()
+            "
+
+        # -------------------------------------------------------------------
+        # Check #28 — OS artifact contamination at repo root (.ds-store etc.)
+        # -------------------------------------------------------------------
+        - num: 28
+          label: 'OS artifact at repo root — .ds-store / .DS_Store / Thumbs.db'
+          scope: '.'
+          tool: 'find -maxdepth 2'
+          severity: 'P2'
+          description: |
+            Detect OS-generated junk files at the repo root and top-level dirs.
+            Check #24 in the 24-point audit covers workspace-wide .DS_Store.
+            This check specifically targets the repo root (maxdepth 2) for any
+            hidden OS artifacts that circumvent .gitignore and contaminate the
+            workspace, including the known .ds-store (lowercase macOS variant).
+          detect_command: |
+            python3 -c "
+            import pathlib
+            patterns = ['.DS_Store', '.ds-store', '.ds_store', 'Thumbs.db',
+                        'desktop.ini', '.Spotlight-V100', '.Trashes', '.fseventsd']
+            found = []
+            for p in patterns:
+                for match in pathlib.Path('.').glob('**/' + p):
+                    if '.venv' in str(match) or '__pycache__' in str(match): continue
+                    found.append(str(match))
+            if found:
+                print(f'OS_ARTIFACT_COUNT={len(found)}')
+                for f in found: print(f'  {f}')
+            else:
+                print('OS_ARTIFACT_COUNT=0')
+            "
+          pass_criteria: 'OS_ARTIFACT_COUNT == 0'
+          auto_fix: |
+            python3 -c "
+            import pathlib, os
+            patterns = ['.DS_Store', '.ds-store', '.ds_store', 'Thumbs.db',
+                        'desktop.ini', '.Spotlight-V100', '.Trashes', '.fseventsd']
+            removed = 0
+            for p in patterns:
+                for match in pathlib.Path('.').glob('**/' + p):
+                    if '.venv' in str(match) or '__pycache__' in str(match): continue
+                    match.unlink(missing_ok=True)
+                    removed += 1
+            print(f'Removed {removed} OS artifact(s)')
+            "
+            Then add to .gitignore if not already present:
+              .DS_Store
+              .ds-store
+              Thumbs.db
+              desktop.ini
+
       sqlite_logging:
         table: 'audit_stage_log'
         violations_table: 'audit_violations'
@@ -729,7 +1068,7 @@ workflow:
           orchestrator: 'EnforcementOrchestrator'
           action: 'run_full_audit'
           params:
-            checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23]
+            checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 24, 25, 26, 27, 28]
             scope: ['cortex/', '.github/', 'cortex-registry/', 'requirements.txt',
                     '.cortex-runtime/traces/orchestrator-traces.db']
         fix_step:

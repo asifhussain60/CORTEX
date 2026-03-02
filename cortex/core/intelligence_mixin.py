@@ -87,6 +87,25 @@ class IntelligenceMixin:
         if metadata:
             entry["metadata"] = metadata
         self._ac_log.append(entry)
+
+        # --- SQLite persistence (Check #28 fix) ---
+        # Non-fatal: in-memory _ac_log is the source of truth.
+        try:
+            from cortex.infrastructure.orchestrator_trace_logger import (
+                OrchestratorTraceLogger,
+            )
+
+            OrchestratorTraceLogger().write_ac_marker(
+                marker=marker,
+                operation=operation,
+                orchestrator_class=entry["orchestrator"],
+                entry_id=eid,
+                duration_ms=float(metadata.get("duration_ms", 0)) if metadata else None,
+                metadata=metadata,
+            )
+        except Exception:  # pragma: no cover — non-fatal persistence guard
+            pass
+
         return eid
 
     # -------------------------------------------------------------------------

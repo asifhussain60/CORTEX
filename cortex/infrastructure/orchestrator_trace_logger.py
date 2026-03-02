@@ -247,6 +247,84 @@ class OrchestratorTraceLogger:
             logger.error(f"Error recording trace: {str(e)}")
             return Err(str(e))
 
+    def write_ac_marker(
+        self,
+        marker: str,
+        operation: str,
+        orchestrator_class: str,
+        *,
+        entry_id: Optional[str] = None,
+        correlation_id: Optional[str] = None,
+        duration_ms: Optional[float] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Result[str]:
+        """Persist an AC_START or AC_COMPLETE marker to trace_master.
+
+        Called by ``_emit_ac_marker()`` in ``IntelligenceMixin`` to bridge the
+        in-memory ``_ac_log`` into durable SQLite storage.  Every public
+        orchestrator method should produce at least one ``AC_START`` row and
+        one ``AC_COMPLETE`` (or ``AC_FAILURE``) row in ``trace_master``.
+
+        Args:
+            marker: ``AC_START``, ``AC_COMPLETE``, or ``AC_FAILURE``.
+            operation: Short operation label (e.g. ``LENS_CONTEXT``).
+            orchestrator_class: Class name of the emitting orchestrator.
+            entry_id: Correlation ID; generated if absent.
+            correlation_id: Optional request-level correlation ID.
+            duration_ms: Duration in ms (for AC_COMPLETE / AC_FAILURE).
+            metadata: Extra key/value pairs stored as JSON.
+
+        Returns:
+            ``Ok(entry_id)`` on success; ``Err(reason)`` on failure.
+        """
+        if not self._trace_enabled:
+            return Ok(entry_id or str(uuid.uuid4())[:8])
+
+        eid = entry_id or str(uuid.uuid4())[:8]
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS trace_master (
+                        trace_id        TEXT PRIMARY KEY,
+                        timestamp       TEXT NOT NULL,
+                        action          TEXT NOT NULL,
+                        level           TEXT NOT NULL,
+                        correlation_id  TEXT,
+                        request_id      TEXT,
+                        context         TEXT,
+                        result          TEXT,
+                        violation_type  TEXT,
+                        duration_ms     REAL,
+                        metadata        TEXT
+                    )
+                    """
+                )
+                conn.execute(
+                    """
+                    INSERT OR IGNORE INTO trace_master
+                        (trace_id, timestamp, action, level, correlation_id,
+                         context, duration_ms, metadata)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        eid,
+                        datetime.utcnow().isoformat(),
+                        marker,                             # e.g. "AC_START"
+                        TraceLevel.ACTION.value,
+                        correlation_id,
+                        json.dumps({"operation": operation,
+                                    "orchestrator": orchestrator_class}),
+                        duration_ms,
+                        json.dumps(metadata or {}),
+                    ),
+                )
+                conn.commit()
+            return Ok(eid)
+        except Exception as exc:
+            logger.warning(f"write_ac_marker failed ({marker}/{operation}): {exc}")
+            return Err(str(exc))
+
     def flush_traces(self, reason: TraceFlushReason = TraceFlushReason.MANUAL) -> Result[TraceFlushEvent]:
         """Execute manual trace flush."""
         if not self._trace_enabled:

@@ -230,7 +230,7 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 | CORE Rules | **38 active** (+ 2 AC rules = 40 total) |
 | Package | **`cortex`** (single) |
 | Tests | **~17,735 collected** (run `python3 -m pytest --collect-only -q` for current count) |
-| Audit Checks | **22-Point** production readiness (Checks #1–#22) |
+| Audit Checks | **28-Point** production readiness (Checks #1–#28) |
 | Meta-Audit Checks | **25 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |
 | SQLite DB | `.cortex-runtime/traces/orchestrator-traces.db` |
