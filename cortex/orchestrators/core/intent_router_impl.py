@@ -2202,9 +2202,9 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             Dict with 'primary_orchestrator', 'chain', 'confidence_boost' keys.
         """
         try:
-            from cortex.intelligence.provider import get_intelligence_provider
-            provider = get_intelligence_provider()
-            bp = provider.get_best_practices(f"routing:{intent.lower()}")
+            from cortex.intelligence.facade import IntelligenceFacade
+            facade = IntelligenceFacade()
+            bp = facade.synthesize(query=f"routing:{intent.lower()}")
             return {
                 "primary_orchestrator": bp.get("recommended_orchestrator", ""),
                 "chain": bp.get("orchestrator_chain", []),

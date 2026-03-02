@@ -18,11 +18,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-02T10:00:00Z'
-  total_phases: 102
+  total_phases: 103
   active: 0
   completed: 76
   in_progress: 0
-  planned: 8
+  planned: 9
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -52,7 +52,18 @@ phase_detail_files:
     file: "cortex-registry/planning/phases/completed/phase-107-intelligence-layer-consolidation.yaml"
     note: "COMPLETE. Consolidates 4 packages (intelligence/lens/knowledge/governance) into Layered Diamond. 5→1 synthesis engines, 3→1 facades, 2→1 base classes. All 20 GAPs CLOSED. New: 29-Point audit, VacuumOrchestrator 3 migration stages, dynamic wiring YAML alignment gate (190 preflight tests). Smoke: 2113 passed."
 
-  # ── SLOT #NEXT-1 — phase-106 (P1, PLANNED) ───────────────────────────────────
+  # ── SLOT #NEXT-1 — phase-109 (P0, PLANNED) ────────────────────────────────────
+  - id: phase-109
+    title: "Diamond Intelligence Completion — Facade Wiring, Intelligence Flatten, Workflow Integration, Legacy Trace Cleanup"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-109-DIAMOND-INTELLIGENCE-COMPLETION
+    gaps: 20
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-109-diamond-intelligence-completion.yaml"
+    note: "Completes Phase 107 Diamond Architecture. (A) Wire IntelligenceFacade into 8 orchestrators replacing get_intelligence_provider(). (B) Update intelligence-injection.yaml primitive + WorkflowGateway context. (C) Flatten intelligence/ 25→6 subdirs into diamond layers. (D) Delete dead code, rewire MCP tools, thin cortex/lens/ to compat shim. (E) Post-completion holistic audit: zero legacy traces (excl. cortex-docs/), prompt refresh. Depends on phase-107."
+
+  # ── SLOT #NEXT-2 — phase-106 (P1, PLANNED) ───────────────────────────────────
   - id: phase-106
     title: "Root-Cause Guard Loop + Certification Gate — Audit-Fix Closed-Loop Intelligence"
     priority: P1
@@ -396,11 +407,11 @@ summary:
   completed: 95
   active: 0
   in_progress: 0
-  planned: 6
+  planned: 7
   archived: 4
   playbooks: 1
   completion_percentage: 95
-  consolidation_summary: "v47.0: 106 phases — 98 COMPLETE, 4 PLANNED (101-103, 105, 108: Architectural Audit Cleanup + Registry Consolidation). Phase 100+104 COMPLETE 2026-03-02. Phase 108 added: cortex-registry consolidation."
+  consolidation_summary: "v48.0: 107 phases — 98 COMPLETE, 5 PLANNED (101-103, 105, 108, 109: Architectural Audit Cleanup + Registry Consolidation + Diamond Intelligence Completion). Phase 100+104 COMPLETE 2026-03-02. Phase 109 added: Diamond Intelligence Completion."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
@@ -409,6 +420,7 @@ summary:
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
     phase-108: "PLANNED — cortex-registry Consolidation (P1)"
+    phase-109: "PLANNED — Diamond Intelligence Completion (P0)"
 
 phases:
   # ── ARCHITECTURAL AUDIT CLEANUP ROADMAP (2026-03-02) ─────────────────────────

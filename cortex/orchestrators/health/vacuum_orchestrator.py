@@ -1315,9 +1315,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             Dict with anti-pattern definitions and detection heuristics.
         """
         try:
-            from cortex.intelligence.provider import get_intelligence_provider
-            provider = get_intelligence_provider()
-            return provider.get_best_practices("anti_patterns:engineering")
+            from cortex.intelligence.facade import IntelligenceFacade
+            facade = IntelligenceFacade()
+            return facade.synthesize(query="anti_patterns:engineering")
         except Exception:
             return {}
 

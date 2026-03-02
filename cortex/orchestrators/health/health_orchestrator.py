@@ -203,9 +203,9 @@ class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             Dict with SLO thresholds (response_time_ms, error_rate_pct, etc.).
         """
         try:
-            from cortex.intelligence.provider import get_intelligence_provider
-            provider = get_intelligence_provider()
-            return provider.get_best_practices("performance:slo_thresholds")
+            from cortex.intelligence.facade import IntelligenceFacade
+            facade = IntelligenceFacade()
+            return facade.synthesize(query="performance:slo_thresholds")
         except Exception:
             return {}
 

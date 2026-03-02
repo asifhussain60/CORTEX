@@ -279,37 +279,26 @@ class MasterOrchestratorInitialiser:
 
         h = self._h
 
-        # Phase 62-H: Unified Knowledge Registry Proxy
-        h._knowledge_proxy = None
-        try:
-            from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
-            h._knowledge_proxy = KnowledgeRegistryProxy()
-            h.logger.log_operation_complete(
-                ac_id="AC-PHASE62-H-001",
-                operation="UNIFIED_KNOWLEDGE_PROXY_INIT",
-                success=True,
-                details={
-                    "entry_count": h._knowledge_proxy.entry_count(),
-                    "domains": h._knowledge_proxy.domains(),
-                    "sources": h._knowledge_proxy.sources(),
-                },
-            )
-        except Exception as exc:
-            h.logger.log_operation_complete(
-                ac_id="AC-PHASE62-H-001",
-                operation="UNIFIED_KNOWLEDGE_PROXY_INIT",
-                success=False,
-                details={"error": str(exc)},
-            )
+        # Phase 109: IntelligenceFacade replaces direct KnowledgeRegistryProxy
+        # and direct provider init — single canonical entry point.
+        from cortex.intelligence.facade import IntelligenceFacade
+        h._intelligence_facade = IntelligenceFacade()
 
-        # Phase 65 S4: UnifiedIntelligenceProvider (unconditional — CORE-035)
-        from cortex.intelligence.provider import get_intelligence_provider
-        h._intelligence_provider = get_intelligence_provider()
+        # Expose underlying delegates for backward compatibility:
+        # - _knowledge_proxy: used by knowledge synthesis engine wiring below
+        # - _intelligence_provider: used by _get_intelligence_context() tier calls
+        h._knowledge_proxy = h._intelligence_facade._get_registry()
+        h._intelligence_provider = h._intelligence_facade._get_provider()
+
         h.logger.log_operation_complete(
-            ac_id="AC-PHASE65-S4-001",
-            operation="UNIFIED_INTELLIGENCE_PROVIDER_INIT",
+            ac_id="AC-PHASE109-A-001",
+            operation="INTELLIGENCE_FACADE_INIT",
             success=True,
-            details={"provider": "UnifiedIntelligenceProvider singleton initialized (CORE-035)"},
+            details={
+                "facade": "IntelligenceFacade (Phase 109 — diamond entry point)",
+                "provider_type": type(h._intelligence_provider).__name__,
+                "registry_type": type(h._knowledge_proxy).__name__,
+            },
         )
 
         # AC-KN-002-01: KnowledgeRepository

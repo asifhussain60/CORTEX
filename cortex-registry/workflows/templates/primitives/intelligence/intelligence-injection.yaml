@@ -4,14 +4,15 @@
 # Tier:      1 (Primitive — atomic, reusable, parameterised)
 # Category:  intelligence
 # Authority: Phase 57 — Intelligence Propagation Plan
+#            Phase 109 Sub-Phase B — Diamond Intelligence Completion (facade update)
 # Governance: CORE-035 (single canonical) · CORE-049 (silent execution)
 #             CORE-011 (type hints) · CORE-012 (docstrings)
 #
 # Purpose:
 #   Injects LENS analysis and UnifiedIntelligenceContext into the execution
-#   scope of any orchestrator that inherits IntelligenceMixin. This primitive
-#   is the standard wiring point so every composed REFACTOR / FIX / AUDIT
-#   workflow receives intelligence context automatically — by convention, not
+#   scope of any orchestrator via IntelligenceFacade (Phase 109 canonical entry).
+#   This primitive is the standard wiring point so every composed REFACTOR / FIX /
+#   AUDIT workflow receives intelligence context automatically — by convention, not
 #   by per-orchestrator manual wiring.
 #
 # Design:
@@ -45,10 +46,13 @@ degradation_policy: 'warn_and_continue'
 metadata:
   description: |
     Atomic primitive that injects LENS analysis and unified knowledge synthesis
-    context into any orchestrator inheriting IntelligenceMixin before the main
-    execution body runs. Provides every composed workflow with AST complexity
+    context into any orchestrator via IntelligenceFacade (Phase 109 — single
+    canonical entry point). Provides every composed workflow with AST complexity
     findings, git-history dependency insights, and knowledge best-practices —
     turning static rule enforcement into dynamic advisory guidance.
+
+    Replaces prior IntelligenceMixin pattern (Phase 57) — orchestrators no longer
+    need to inherit IntelligenceMixin; IntelligenceFacade is injected directly.
 
     Degradation: if LENS or KnowledgeSynthesisEngine is unavailable, the
     primitive emits a P2 warning and continues (never blocks execution).
@@ -84,11 +88,13 @@ metadata:
 # REQUIRED CORTEX TOOLING
 # ==============================================================================
 cortex_tooling:
-  mixin:
-    name: 'IntelligenceMixin'
-    module: 'cortex.core.intelligence_mixin'
-    purpose: 'Provides get_lens_context, inject_unified_context, query_knowledge'
+  facade:
+    name: 'IntelligenceFacade'
+    module: 'cortex.intelligence.facade'
+    purpose: 'Single canonical entry point — analyze(), synthesize(), query()'
     required: true
+    phase: 109
+    replaces: 'IntelligenceMixin (Phase 57) — deprecated'
 
   orchestrators:
     - name: 'LENSOrchestrator'
@@ -153,10 +159,11 @@ execution:
     - step_id: 'LENS_SCAN'
       name: 'LENS AST & git analysis'
       action: |
-        1. Call IntelligenceMixin.get_lens_context(target_files, depth=lens_depth)
-        2. Store result in scope as lens_context
-        3. If degraded: emit P2 warning, set lens_context = {"degraded": true}
-        4. Emit AC_START:INTEL_INJECT + AC_COMPLETE:LENS_SCAN to _ac_log
+        1. Instantiate IntelligenceFacade()
+        2. Call facade.analyze(file_path=target_files[0], intent=operation_type)
+        3. Store result in scope as lens_context
+        4. If degraded: emit P2 warning, set lens_context = {"degraded": true}
+        5. Emit AC_START:INTEL_INJECT + AC_COMPLETE:LENS_SCAN to _ac_log
       outputs:
         - 'lens_context'
       on_failure: 'degrade_and_continue'
@@ -165,9 +172,10 @@ execution:
       name: 'Knowledge synthesis for active domains'
       action: |
         For each domain in knowledge_domains:
-          1. Call IntelligenceMixin.query_knowledge(domain, query=operation_type)
-          2. Collect artifacts into knowledge_artifacts list
-          3. If degraded: emit P2 warning, continue with empty artifacts
+          1. Instantiate IntelligenceFacade()
+          2. Call facade.query(domain=domain, query=operation_type)
+          3. Collect artifacts into knowledge_artifacts list
+          4. If degraded: emit P2 warning, continue with empty artifacts
         Emit AC_COMPLETE:KNOWLEDGE_QUERY
       outputs:
         - 'knowledge_artifacts'
@@ -184,7 +192,7 @@ execution:
              "synthesis_id": "SYN-{timestamp}",
              "degraded": lens_context.get("degraded", False)
            }
-        2. If inject_into_orchestrator: call orchestrator.inject_unified_context(unified_context)
+        2. If inject_into_orchestrator: pass unified_context via IntelligenceFacade.synthesize()
         3. Store unified_context in workflow scope for downstream steps
       outputs:
         - 'unified_context'
@@ -227,8 +235,9 @@ outputs:
 success_criteria:
   - 'unified_context dict is populated with at minimum {"intent": ..., "synthesis_id": ...}'
   - 'No unhandled exceptions raised (degraded mode is a valid success state)'
-  - 'AC_START and AC_COMPLETE markers present in IntelligenceMixin._ac_log'
+  - 'AC_START and AC_COMPLETE markers present in audit log'
   - 'No AC_START without matching AC_COMPLETE (orphan detection — Check #19)'
+  - 'IntelligenceFacade imported from cortex.intelligence.facade (Phase 109 canonical)'
 
 # ==============================================================================
 # DEGRADATION MATRIX

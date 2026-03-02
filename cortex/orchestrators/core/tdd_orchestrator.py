@@ -487,9 +487,9 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMi
             Dict with test_strategy_matrix and related TDD guidance.
         """
         try:
-            from cortex.intelligence.provider import get_intelligence_provider
-            provider = get_intelligence_provider()
-            return provider.get_best_practices(f"tdd:{context}")
+            from cortex.intelligence.facade import IntelligenceFacade
+            facade = IntelligenceFacade()
+            return facade.synthesize(query=f"tdd:{context}")
         except Exception:
             return {}
 
