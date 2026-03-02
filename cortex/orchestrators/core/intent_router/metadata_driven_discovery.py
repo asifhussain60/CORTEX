@@ -11,7 +11,6 @@ Version: 1.0
 from typing import Optional, Dict, List, Set, Any
 from dataclasses import dataclass, field
 import logging
-from pathlib import Path
 
 from cortex.orchestrators.intelligence.metadata_parser import AgentMetadataParser, AgentMetadata
 from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor

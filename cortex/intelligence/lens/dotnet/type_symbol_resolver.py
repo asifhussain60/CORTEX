@@ -11,7 +11,6 @@ AC_START: AC-PHASE67-S1-TYPE-RESOLVER-001
 """
 
 import logging
-from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)

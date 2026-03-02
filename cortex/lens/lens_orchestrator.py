@@ -15,11 +15,17 @@ Provides:
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings), LENS-003
 """
 
+import logging
 import time
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from cortex.lens.analyzers.polyglot_analyzer import PolyglotAnalyzer
 
 from cortex.lens.analysis.branch_comparator import BranchComparator
 from cortex.lens.analysis.remote_git_adapter import RemoteGitAdapter

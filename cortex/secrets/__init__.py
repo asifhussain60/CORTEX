@@ -3,4 +3,4 @@
 Re-exports the full API from cortex.infrastructure.secrets.
 """
 from cortex.infrastructure.secrets import *  # noqa: F401, F403
-from cortex.infrastructure.secrets import __all__
+from cortex.infrastructure.secrets import __all__  # noqa: F401

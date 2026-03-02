@@ -26,7 +26,6 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Err, Ok, Result
 from cortex.intelligence.learning.universal_learning_loop import get_learning_loop
 from cortex.testing.test_value_scorer import TestMetrics, get_test_value_scorer
 

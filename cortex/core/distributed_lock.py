@@ -18,7 +18,6 @@ import time
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any, Optional
 
 from cortex.core.result import Err, Ok, Result

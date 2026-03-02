@@ -27,7 +27,6 @@ Updated: 2026-02-06 (v1.0 - Initial Implementation)
 import logging
 import time
 from dataclasses import dataclass, replace
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 from cortex.core.context_synthesizer import ContextSynthesizer

@@ -240,8 +240,8 @@ class TokenOptimizationAgent(BaseHealthAgent):
         """Check Prometheus metrics are registered."""
         try:
             from cortex.orchestrators.core.context_metrics_collector import (
-                token_budget_violations,
-                token_budget_usage,
+                token_budget_violations,  # noqa: F401
+                token_budget_usage,  # noqa: F401
             )
             
             # If we can import without error, metrics are registered

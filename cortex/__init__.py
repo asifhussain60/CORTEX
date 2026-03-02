@@ -27,7 +27,7 @@ from cortex.core.wiring import (
 
 # Phase 68-C: cortex.core.bootstrap dir removed — import _bootstrap_success directly
 try:
-    from cortex.bootstrap import _bootstrap_success
+    from cortex.bootstrap import _bootstrap_success  # noqa: F401
 except ImportError:
     import logging as _bootstrap_logger
     _bootstrap_logger.getLogger(__name__).warning(

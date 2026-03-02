@@ -16,7 +16,7 @@ See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Dict, List
 
 
 class OrchestratorCategory(Enum):

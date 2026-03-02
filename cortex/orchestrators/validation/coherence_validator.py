@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 from typing import List, Optional
 
 from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner

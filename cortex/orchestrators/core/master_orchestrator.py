@@ -19,20 +19,17 @@ AC-UX-VISIBILITY-001: Orchestrator badge visibility integration
 from __future__ import annotations
 
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
+
+if TYPE_CHECKING:
+    from cortex.orchestrators.core.bluf_system import AdaptiveRouter
+    from cortex.intelligence.provider import ExecutionTier
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.state_manager import (
     OperationState,
-    StateManager,
-    get_state_manager,
-)
-from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
-    KnowledgeSynthesisEngine,
-    get_synthesis_engine,
 )
 from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
@@ -42,19 +39,13 @@ from cortex.intelligence.knowledge.unified_intelligence_context import (
 from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
 from cortex.orchestrators.core.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
-from cortex.intelligence.domain_brain.business_knowledge_repository import (
-    BusinessKnowledgeRepository,
-)
 from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
-from cortex.infrastructure.database_transaction_manager import (
-    DatabaseTransactionManager,
-)
+from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager  # noqa: F401 — patched by test harness
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 # AC-PHASE-2-5-WIRE-001: Import ComponentHealthTracker for health monitoring
 from cortex.orchestrators.core.component_health import (
     ComponentHealthTracker,
-    ComponentType,
 )
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
@@ -67,7 +58,6 @@ from cortex.orchestrators.core.orchestrator_context_injector import inject_orche
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
 # ENH-046 Phase 4 & 5: Import Context Synthesis Gateway (EXIT GATE)
-from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
 
 # Phase 33: Import response verbosity policies for chat response compression
 ChatResponsePolicyValidator = None  # type: ignore[assignment]

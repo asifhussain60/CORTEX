@@ -278,7 +278,6 @@ class MasterOrchestratorInitialiser:
         """
         from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
             KnowledgeSynthesisEngine,
-            get_synthesis_engine,
         )
 
         h = self._h

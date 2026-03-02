@@ -16,7 +16,6 @@ AC_CONTINUE: AC-MASTERORCH-ROUTING-001
 
 from typing import Any, Dict, List, Optional
 from cortex.mcp.tools._shared import validate_orchestrator_context
-from pathlib import Path
 
 from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,

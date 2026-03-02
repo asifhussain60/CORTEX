@@ -7,7 +7,6 @@ Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 """
 
 from abc import ABC
-from pathlib import Path
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from datetime import datetime

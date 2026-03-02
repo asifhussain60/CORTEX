@@ -18,7 +18,7 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.core.challenge_engine_plugins import (

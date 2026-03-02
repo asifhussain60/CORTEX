@@ -17,7 +17,6 @@ from .governance_validator import (
 
 # Import consolidated validation from Phase 90
 try:
-    import sys
     from pathlib import Path
     
     # Import from sibling validation.py file

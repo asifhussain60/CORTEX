@@ -6,7 +6,6 @@ and security event handling.
 Author: CORTEX Framework
 """
 
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 from enum import Enum
 from datetime import datetime

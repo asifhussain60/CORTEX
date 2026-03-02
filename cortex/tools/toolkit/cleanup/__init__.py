@@ -18,7 +18,6 @@ except ImportError:
 
 # Import consolidated cleanup from Phase 90
 try:
-    import sys
     from pathlib import Path
     
     # Import from sibling cleanup.py file

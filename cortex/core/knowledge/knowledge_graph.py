@@ -746,7 +746,6 @@ class KnowledgeGraphBuilder:
         """
         import logging
         import subprocess
-        from pathlib import Path
 
         logger = logging.getLogger(__name__)
         workspace = getattr(self, "workspace_root", None)

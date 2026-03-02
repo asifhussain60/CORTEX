@@ -9,12 +9,15 @@ This replaces imperative "while True" loops with declarative, testable execution
 
 import hashlib
 import json
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import yaml
+
+logger = logging.getLogger(__name__)
 
 from cortex.core.governance_pregate import PreGateDecision, get_governance_pregate
 from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine

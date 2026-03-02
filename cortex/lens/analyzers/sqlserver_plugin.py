@@ -14,7 +14,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 try:
-    import pyodbc
+    import pyodbc  # noqa: F401
     PYODBC_AVAILABLE = True
 except ImportError:
     PYODBC_AVAILABLE = False

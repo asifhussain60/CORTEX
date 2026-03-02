@@ -15,7 +15,6 @@ from cortex.tools.toolkit.setup.verifier import SetupVerifier
 
 # Import consolidated setup from Phase 90
 try:
-    import sys
     from pathlib import Path
     
     # Import from sibling setup.py file

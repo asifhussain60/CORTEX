@@ -1847,6 +1847,11 @@ def get_enforcement_orchestrator() -> EnforcementOrchestrator:
     return _enforcement_orchestrator_instance
 
 
+try:
+    from cortex.governance.business_rule_enforcement_agent import BusinessRuleEnforcementAgent  # noqa: F401
+except ImportError:
+    BusinessRuleEnforcementAgent = None  # type: ignore[assignment,misc]
+
 __all__ = [
     "EnforcementOrchestrator",
     "EnforcementResult",

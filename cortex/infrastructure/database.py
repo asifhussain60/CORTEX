@@ -10,7 +10,6 @@ See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)

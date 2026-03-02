@@ -25,7 +25,6 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Generic, TypeVar
 from datetime import datetime
 from threading import RLock
 import logging
-from pathlib import Path
 
 # Configure logging
 logger = logging.getLogger(__name__)

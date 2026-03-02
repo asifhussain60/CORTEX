@@ -168,8 +168,6 @@ class CoreRulesLoader(BaseYAMLLoader):
             "enforcement_levels": enforcement_levels,
         }
 
-        return self._data
-
     def get_rule_by_id(self, rule_id: str) -> Optional[Any]:
         """Get specific rule by ID.
 

@@ -239,7 +239,7 @@ class OrchestratorScaffolder:
         try:
             from cortex.tools.scaffolder_audit_logger import (
                 ScaffolderAuditLogger,
-                RegistryQueryResult,
+                RegistryQueryResult,  # noqa: F401
             )
             audit_logger = ScaffolderAuditLogger()
         except ImportError:

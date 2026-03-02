@@ -9,7 +9,6 @@ Implements the same interface as Neo4j adapter, enabling transparent fallback.
 
 import json
 import sqlite3
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.knowledge.graph.interface import (

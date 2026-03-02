@@ -8,7 +8,6 @@ Authority: Phase 13 Sub-Phase C (AC-P13-003)
 """
 
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.infrastructure.audit_db import AuditEntry, CortexAuditDB, EventType, get_audit_db

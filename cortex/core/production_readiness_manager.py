@@ -169,9 +169,9 @@ class ProductionReadinessManager:
         """Verify all required dependencies are available."""
         # Verify core modules loaded
         try:
-            import cortex.core
-            import cortex.infrastructure
-            import cortex.orchestrators.core
+            import cortex.core  # noqa: F401
+            import cortex.infrastructure  # noqa: F401
+            import cortex.orchestrators.core  # noqa: F401
             return True
         except ImportError as e:
             self.logger.error(f"Dependency verification failed: {e}")

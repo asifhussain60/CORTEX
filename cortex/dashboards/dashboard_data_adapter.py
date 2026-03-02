@@ -7,7 +7,6 @@ Authority: CORE-008, CORE-035 (Single implementation, adapter pattern)
 """
 
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 

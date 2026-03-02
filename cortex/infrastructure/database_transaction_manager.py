@@ -17,6 +17,7 @@ CORE-008 COMPLIANCE:
 - All transaction boundaries explicit
 """
 
+import logging
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import dataclass

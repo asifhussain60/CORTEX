@@ -1,7 +1,12 @@
 """Intent Router interface definition."""
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
+
+if TYPE_CHECKING:
+    from cortex.intelligence.domain_brain.domain_brain.nlp_handler_router import IntentResult
 
 
 class IIntentRouter(ABC):

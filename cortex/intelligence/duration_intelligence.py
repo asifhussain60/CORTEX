@@ -13,7 +13,6 @@ import sqlite3
 import statistics
 import uuid
 from datetime import datetime, timedelta
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result

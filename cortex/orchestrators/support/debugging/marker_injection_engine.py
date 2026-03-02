@@ -64,6 +64,28 @@ def _load_phase86_strategies() -> Dict[str, AbstractInjectionStrategy]:
         pass
     return result
 
+# Module-level re-exports for __all__ (Phase 86) — graceful fallback
+try:
+    from cortex.orchestrators.support.debugging.strategies.frontend_console_strategy import FrontendConsoleStrategy
+except ImportError:
+    FrontendConsoleStrategy = None  # type: ignore[assignment,misc]
+try:
+    from cortex.orchestrators.support.debugging.strategies.html_vision_mapping_strategy import HtmlVisionMappingStrategy
+except ImportError:
+    HtmlVisionMappingStrategy = None  # type: ignore[assignment,misc]
+try:
+    from cortex.orchestrators.support.debugging.strategies.api_trace_strategy import ApiTraceStrategy
+except ImportError:
+    ApiTraceStrategy = None  # type: ignore[assignment,misc]
+try:
+    from cortex.orchestrators.support.debugging.strategies.sql_trace_strategy import SqlTraceStrategy
+except ImportError:
+    SqlTraceStrategy = None  # type: ignore[assignment,misc]
+try:
+    from cortex.orchestrators.support.debugging.strategies.dotnet_trace_strategy import DotNetTraceStrategy
+except ImportError:
+    DotNetTraceStrategy = None  # type: ignore[assignment,misc]
+
 __all__ = [
     "MarkerInjectionEngine",
     "AbstractInjectionStrategy",

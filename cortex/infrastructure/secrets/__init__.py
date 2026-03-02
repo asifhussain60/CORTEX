@@ -10,7 +10,6 @@ AC-ID: AC-PHASE51-API-001
 from __future__ import annotations
 
 import base64
-import fcntl
 import json
 import logging
 import os
@@ -27,7 +26,7 @@ _logger = logging.getLogger(__name__)
 from cortex.infrastructure.secrets.encryption import (
     EncryptionManager,
     derive_key,
-    encrypt_value,
+    encrypt_value,  # noqa: F401 — re-exported for downstream consumers
     decrypt_value,
 )
 
@@ -293,7 +292,6 @@ def get_secret(
 
     if enforce_rotation:
         from datetime import timedelta as _td
-        import math as _math
         rotation_days = entry.get("rotation_days", 90)
         grace_days = entry.get("grace_days", 0)
         created_str = entry.get("created_at", datetime.now(timezone.utc).isoformat())
@@ -537,7 +535,6 @@ def get_rotation_metrics(*, vault_path: Optional[Path] = None) -> Dict[str, Any]
     if vault_path is None:
         vault_path = Path.home() / ".cortex" / "vault.json"
     vault = _read_vault(vault_path)
-    from datetime import timedelta
     now = datetime.now(timezone.utc)
     due = overdue = 0
     rotations_total = 0

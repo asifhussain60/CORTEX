@@ -7,8 +7,6 @@ AC_START: AC-PHASE67-S1-INIT-001
 """
 
 from pathlib import Path
-from typing import Optional
-import os
 
 __stage__ = "S1"
 

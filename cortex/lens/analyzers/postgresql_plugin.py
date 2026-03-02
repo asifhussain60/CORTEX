@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 try:
-    import psycopg2
+    import psycopg2  # noqa: F401
     PSYCOPG2_AVAILABLE = True
 except ImportError:
     PSYCOPG2_AVAILABLE = False

@@ -16,7 +16,6 @@ from cortex.tools.toolkit.diagnostics.mcp_health import MCPHealthChecker
 
 # Import consolidated diagnostics from Phase 90
 try:
-    import sys
     from pathlib import Path
     
     # Import from sibling diagnostics.py file

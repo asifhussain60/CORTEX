@@ -18,9 +18,14 @@ Features:
 Author: Asif Hussain
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Callable, List, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional
+
+if TYPE_CHECKING:
+    from cortex.orchestrators.core.continuation_decision import ContinuationReason
 
 
 @dataclass

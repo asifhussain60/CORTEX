@@ -10,7 +10,6 @@ Provides pattern-based remediation for:
 - Secrets (Veracode, Bandit)
 """
 
-from pathlib import Path
 from typing import Dict, List, Optional
 
 from cortex.infrastructure.security.vulnerability_models import (

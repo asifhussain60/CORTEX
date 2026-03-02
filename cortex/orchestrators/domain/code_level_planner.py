@@ -11,7 +11,6 @@ AC-ID: AC-SDLC-PHASE3-001
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 

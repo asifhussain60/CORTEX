@@ -21,7 +21,6 @@ Version: 1.0.0
 import json
 import os
 import re
-import subprocess
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime

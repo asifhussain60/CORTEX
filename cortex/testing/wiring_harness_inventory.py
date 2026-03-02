@@ -16,7 +16,6 @@ Authority: cortex-impl-map.yaml v3.9 + cortex-total-recall.prompt.md
 
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 

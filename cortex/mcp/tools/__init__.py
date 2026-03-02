@@ -203,7 +203,7 @@ def register_all_tools(registry: Any) -> int:
             logging.getLogger(__name__).warning(f"Failed to register {tool_class.__name__}: {e}")
     
     # Register function-based toolkit tools (Phase 63)
-    from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolParameter
+    from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory
     
     function_tools = [
         ("cortex_scan", cortex_scan),

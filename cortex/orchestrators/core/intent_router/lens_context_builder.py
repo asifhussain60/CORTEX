@@ -542,9 +542,6 @@ class LENSContextBuilder:
                 }
 
         return self
-        filtered_context.relationship_findings = context.relationship_findings
-
-        return filtered_context
 
     def prioritize_context(
         self,

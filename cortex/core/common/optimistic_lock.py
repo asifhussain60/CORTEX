@@ -12,7 +12,6 @@ import sqlite3
 import time
 from dataclasses import dataclass
 from enum import Enum
-from pathlib import Path
 from typing import Any, Callable, Dict
 
 
@@ -400,6 +399,5 @@ __all__ = [
     "OptimisticLockMetrics",
     "OptimisticLockManager",
     "OptimisticLock",  # Alias for production compatibility
-    "enable_versioning",
 ]
 
