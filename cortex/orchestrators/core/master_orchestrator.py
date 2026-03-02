@@ -771,7 +771,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 total_wired = len(wired_orchestrators)
 
                 self.logger.log_operation_complete(
-                    ac_id="DOCKER-FIRST-WIRING",
+                    ac_id="MCP-FIRST-WIRING",
                     operation="YAML_BACKED_ORCHESTRATOR_WIRING",
                     success=True,
                     details={"orchestrators_wired": total_wired, "source": "wiring.yaml"}
@@ -779,7 +779,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
 
             except Exception as e:
                 self.logger.log_operation_complete(
-                    ac_id="DOCKER-FIRST-WIRING",
+                    ac_id="MCP-FIRST-WIRING",
                     operation="YAML_BACKED_ORCHESTRATOR_WIRING",
                     success=False,
                     details={"error": str(e)}
@@ -789,7 +789,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             # Wiring validation - check we have expected count
             if total_wired < 20:  # Allow for minor variations
                 self.logger.log_operation_complete(
-                    ac_id="DOCKER-FIRST-WIRING-VALIDATION",
+                    ac_id="MCP-FIRST-WIRING-VALIDATION",
                     operation="ORCHESTRATOR_COUNT_VALIDATION",
                     success=False,
                     details={"total_wired": total_wired, "expected": 23}
@@ -807,7 +807,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             )
 
             self.logger.log_operation_complete(
-                ac_id="DOCKER-FIRST-ARCHITECTURE",
+                ac_id="MCP-FIRST-ARCHITECTURE",
                 operation="MASTER_ORCHESTRATOR_INITIALIZATION",
                 success=True,
                 details={
@@ -821,7 +821,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             return Ok(success_msg)
         except Exception as e:
             self.logger.log_operation_complete(
-                ac_id="DOCKER-FIRST-ARCHITECTURE",
+                ac_id="MCP-FIRST-ARCHITECTURE",
                 operation="MASTER_ORCHESTRATOR_INITIALIZATION",
                 success=False,
                 details={"error": str(e)}

@@ -23,7 +23,6 @@
 
 # Local CORTEX dev artifacts (ephemeral, per-developer — never source-controlled)
 .cortex-runtime/
-.cortex/
 
 # VS Code personal preferences
 .favorites.json

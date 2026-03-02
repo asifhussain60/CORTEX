@@ -5,7 +5,7 @@ Mandatory pre-execution validation that runs on first import.
 Ensures clean bill of health before any orchestrator execution.
 
 MCP-first architecture: Uses YAML-backed wiring configuration.
-CORTEX is delivered via MCP (stdio transport) or SaaS — no Docker runtime required.
+CORTEX is delivered via MCP (stdio transport) — VSCode Copilot Chat integration only.
 
 Key features:
 - One-time initialization check (cached after first run)
@@ -60,7 +60,7 @@ class StartupValidator:
     """Comprehensive startup validation with auto-remediation.
 
     MCP-first architecture: Uses YAML-backed wiring configuration.
-    CORTEX is delivered via MCP (stdio) or SaaS — no Docker runtime required.
+    CORTEX is delivered via MCP (stdio) — VSCode Copilot Chat integration only.
     """
 
     # Cache file location (persists across sessions)

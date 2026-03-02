@@ -6,7 +6,7 @@ health checks, protocol compliance, load testing coordination, and
 scaling validation across MCP and SaaS deployment targets.
 
 CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
-No Docker runtime is required or validated here.
+CORTEX runs as VSCode MCP stdio server only.
 
 AC_START: AC-PHASE38-S9-002
 Phase: 38 | Stage: 9 | Priority: P0
@@ -379,10 +379,10 @@ class DeploymentValidator:
             )
 
     async def validate_service_health(self) -> HealthCheckResult:
-        """Validate MCP/SaaS service health via HTTP health endpoint.
+        """Validate MCP service health via HTTP health endpoint.
 
-        CORTEX is deployed via MCP (stdio) or SaaS — no Docker runtime
-        is required. This method validates the HTTP health endpoint instead.
+        CORTEX is deployed via MCP stdio transport (VSCode Copilot Chat).
+        This method validates the HTTP health endpoint.
 
         Returns:
             HealthCheckResult with service health status
@@ -605,7 +605,7 @@ class DeploymentValidator:
 
 # ---------------------------------------------------------------------------
 # Backward-compatibility aliases (Docker/K8s names removed — CORTEX is
-# delivered via MCP stdio or SaaS, not Docker containers).
+# delivered via MCP stdio — VSCode Copilot Chat integration only).
 # Import the new names going forward.
 # ---------------------------------------------------------------------------
 DockerDeploymentResult = HealthCheckResult          # deprecated alias

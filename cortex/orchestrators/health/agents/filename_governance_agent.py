@@ -46,7 +46,6 @@ class FilenameGovernanceAgent(BaseHealthAgent):
             "README.md",
             "LICENSE",
             "Makefile",
-            "Dockerfile",
         }
 
         # Excluded directories

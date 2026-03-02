@@ -25,12 +25,12 @@ class TestMCPSetupValidation:
         assert "Pylance" in content, "Must document Pylance-style architecture"
 
     def test_setup_script_exists(self):
-        """Test setup-mcp.py script exists in multiple locations."""
+        """Test setup-mcp.py script exists in canonical location."""
         root = Path(__file__).parent.parent.parent
         
         script_paths = [
-            root / ".cortex" / "setup-mcp.py",
             root / "scripts" / "setup-mcp.py",
+            root / ".cortex-runtime" / "setup-mcp.py",
         ]
         
         found = False
@@ -39,15 +39,15 @@ class TestMCPSetupValidation:
                 found = True
                 break
         
-        assert found, "setup-mcp.py must exist in .cortex-runtime/ or scripts/"
+        assert found, "setup-mcp.py must exist in scripts/ or .cortex-runtime/"
 
     def test_setup_script_cross_platform(self):
         """Test setup script supports cross-platform execution."""
         root = Path(__file__).parent.parent.parent
-        script_path = root / ".cortex" / "setup-mcp.py"
+        script_path = root / "scripts" / "setup-mcp.py"
         
         if not script_path.exists():
-            script_path = root / "scripts" / "setup-mcp.py"
+            script_path = root / ".cortex-runtime" / "setup-mcp.py"
         
         assert script_path.exists(), "setup-mcp.py must exist"
         
@@ -97,14 +97,14 @@ class TestMCPSetupValidation:
             "Must clarify no manual server startup needed"
 
     def test_setup_log_creation(self):
-        """Test setup script creates .cortex-runtime/setup.log."""
+        """Test setup script creates .cortex-runtime/logs/setup.log."""
         root = Path(__file__).parent.parent.parent
         
         # Check if setup.log exists (if setup was run)
-        log_path = root / ".cortex" / "setup.log"
+        log_path = root / ".cortex-runtime" / "logs" / "setup.log"
         
         # Log may not exist yet, but path should be creatable
-        assert log_path.parent.exists(), ".cortex directory must exist"
+        assert log_path.parent.parent.exists(), ".cortex-runtime directory must exist"
         
         # If log exists, verify format
         if log_path.exists():
@@ -157,10 +157,10 @@ class TestENH066Verification:
     def test_enh066_setup_script_validation(self):
         """Test ENH-066 setup script is functional."""
         root = Path(__file__).parent.parent.parent
-        script_path = root / ".cortex" / "setup-mcp.py"
+        script_path = root / "scripts" / "setup-mcp.py"
         
         if not script_path.exists():
-            script_path = root / "scripts" / "setup-mcp.py"
+            script_path = root / ".cortex-runtime" / "setup-mcp.py"
         
         assert script_path.exists(), "setup-mcp.py must exist"
         

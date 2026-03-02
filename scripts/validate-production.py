@@ -263,9 +263,8 @@ class CORTEXProductionValidator:
     def _validate_mcp_deployment(self) -> None:
         """Validate MCP deployment configuration.
 
-        CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
-        No Docker runtime is required. This validates the MCP server config
-        and VS Code settings instead.
+        CORTEX is delivered via MCP (stdio transport, Pylance-style).
+        Validates the MCP server config and VS Code settings.
         """
         logger.info("🔌 Validating MCP Deployment Configuration...")
 
@@ -329,20 +328,21 @@ class CORTEXProductionValidator:
             )
         
         # Environment variables (secrets management)
-        if os.getenv("CORTEX_ENV"):
+        api_key = os.getenv("CORTEX_API_KEY") or os.getenv("GITHUB_TOKEN")
+        if api_key:
             self._add_check(
                 "Environment Configuration",
                 True,
                 Severity.INFO,
-                f"Environment configured: {os.getenv('CORTEX_ENV')}"
+                "API credentials configured via environment variable"
             )
         else:
             self._add_check(
                 "Environment Configuration",
                 False,
                 Severity.MEDIUM,
-                "CORTEX_ENV environment variable not set",
-                remediation="Set CORTEX_ENV=production for production deployment"
+                "No API credentials found in environment",
+                remediation="Set CORTEX_API_KEY or GITHUB_TOKEN for authenticated requests"
             )
     
     def _validate_monitoring(self) -> None:

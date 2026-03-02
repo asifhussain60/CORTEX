@@ -103,7 +103,7 @@ class MCPSelfHealing:
         # Telemetry
         self.telemetry_enabled = self.registry.get("telemetry", {}).get("enabled", True)
         self.log_path = self.registry.get("telemetry", {}).get(
-            "log_path", ".cortex-runtime/mcp-self-healing.log"
+            "log_path", ".cortex-runtime/logs/mcp-self-healing.log"
         )
 
     def detect_mcp_availability(self) -> Tuple[bool, str]:

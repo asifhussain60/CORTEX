@@ -236,10 +236,10 @@ class TestEnvironmentIntegrity:
             "No read permission on project root"
         
         # Test write permissions (critical for logs, cache)
-        test_dir = PROJECT_ROOT / ".cortex"
+        test_dir = PROJECT_ROOT / ".cortex-runtime"
         if test_dir.exists():
             assert os.access(test_dir, os.W_OK), \
-                "No write permission on .cortex directory"
+                "No write permission on .cortex-runtime directory"
     
     def test_end_to_end_bootstrap_workflow(self) -> None:
         """Test complete bootstrap workflow from scratch."""

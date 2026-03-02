@@ -138,7 +138,7 @@ DIGEST classifies every file into one of three pipelines based on content analys
 | Configuration | `.yaml`, `.json`, `.toml` | Schema validation, best practice extraction |
 | Documentation | `.md` (non-chat) | Knowledge extraction, architecture patterns |
 | Test files | `test_*.py` | Coverage patterns, testing strategies |
-| Infrastructure | `Dockerfile`, `*.yml` | DevOps patterns, deployment strategies |
+| Infrastructure | `*.yml`, `nginx.conf` | Observability patterns, deployment strategies |
 
 **Extraction outputs:**
 - Domain knowledge -> `cortex-registry/knowledge/` (architecture, backend-python, security, etc.)

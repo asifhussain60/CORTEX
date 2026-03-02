@@ -9,7 +9,7 @@ MCP-First Architecture (Phase 2+ Migration):
 WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
 - No database registries
 - No SQLite wiring state
-- CORTEX delivered via MCP (stdio transport) or SaaS — no Docker runtime required
+- CORTEX delivered via MCP (stdio transport) — VSCode Copilot Chat integration only
 
 See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 """

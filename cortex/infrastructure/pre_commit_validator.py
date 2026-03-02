@@ -6,7 +6,7 @@ Implements two-stage validation:
 - Stage 2: Full validation (triggered if Stage 1 fails) - validates all 23 orchestrators
 
 MCP-first architecture: Uses YAML configuration instead of SQLite database.
-CORTEX is delivered via MCP (stdio transport) or SaaS — no Docker runtime required.
+CORTEX is delivered via MCP (stdio transport) — VSCode Copilot Chat integration only.
 
 CORE-002: No markdown report/summary file generation (NEW - v6.2)
 CORE-026: Git checkpoint before major changes
@@ -291,7 +291,7 @@ class PreCommitValidator:
     Hybrid smart gate validator for pre-commit checks.
 
     MCP-first architecture: Uses YAML-backed wiring configuration.
-    CORTEX is delivered via MCP (stdio) or SaaS — no Docker runtime required.
+    CORTEX is delivered via MCP (stdio) — VSCode Copilot Chat integration only.
 
     Two-stage validation:
     1. Stage 1: Quick health check (<200ms)

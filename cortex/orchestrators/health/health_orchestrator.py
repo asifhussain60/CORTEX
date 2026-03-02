@@ -467,8 +467,8 @@ class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
     ) -> None:
         """H-008: Detect non-snake_case Python and non-kebab-case non-Python."""
         exempt_names = {"__init__.py", "__main__.py", "conftest.py", "Makefile",
-                        "Dockerfile", "Pipfile", "Pipfile.lock", ".gitignore",
-                        ".gitattributes", ".editorconfig", ".dockerignore",
+                        "Pipfile", "Pipfile.lock", ".gitignore",
+                        ".gitattributes", ".editorconfig",
                         ".pre-commit-config.yaml"}
         for f in ctx.all_files:
             if f.name in exempt_names:

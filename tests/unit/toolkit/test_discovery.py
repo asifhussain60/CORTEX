@@ -23,7 +23,7 @@ class TestToolkitDiscovery:
     def test_discover_cortex_directory(self) -> None:
         """Test discovery scans .cortex-runtime/ directory."""
         discovery = ToolkitDiscovery()
-        tools = discovery.discover_tools(Path(".cortex"))
+        tools = discovery.discover_tools(Path(".cortex-runtime"))
         
         assert len(tools) >= 10, "Should find at least 10 tools in .cortex-runtime/"
         assert all(isinstance(t, ToolMetadata) for t in tools)

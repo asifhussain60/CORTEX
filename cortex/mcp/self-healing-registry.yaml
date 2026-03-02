@@ -167,7 +167,7 @@ fix_strategies:
 # Telemetry Configuration
 telemetry:
   enabled: true
-  log_path: ".cortex-runtime/mcp-self-healing.log"
+  log_path: ".cortex-runtime/logs/mcp-self-healing.log"
   max_log_size_mb: 10
   rotation_count: 5
   metrics:

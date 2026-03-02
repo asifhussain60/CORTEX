@@ -153,7 +153,7 @@ def main() -> int:
         int: Exit code (0 = success, 1 = error).
     """
     workspace_root = Path(__file__).parent.parent.resolve()
-    log_dir = workspace_root / ".cortex"
+    log_dir = workspace_root / ".cortex-runtime" / "logs"
 
     logger = _setup_logging(log_dir)
     logger.info(f"CORTEX MCP Setup — platform={platform.system()}, python={sys.version}")

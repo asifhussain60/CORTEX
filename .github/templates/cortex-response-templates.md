@@ -2303,7 +2303,7 @@ I've calibrated LENS intelligence for your role:
 | `architect` | Cross-repo dependency graph | MEDIUM (breaking changes, APIs) | CORE-035, CORE-048 |
 | `security_engineer` | Import chains + eval/exec scan | CRITICAL (all patterns) | CORE-013 + security rules |
 | `tech_lead` | Full LENS + team impact | HIGH (coverage + API breaks) | All CORE rules |
-| `devops` | Config + Dockerfile + CI | MEDIUM (infra-specific) | CORE-002, CORE-028 |
+| `devops` | Config + Prometheus + CI | MEDIUM (infra-specific) | CORE-002, CORE-028 |
 
 **Rules:**
 - ✅ Render once per session on first turn only (not on every turn — SSOT: Anti-Duplication Contract)

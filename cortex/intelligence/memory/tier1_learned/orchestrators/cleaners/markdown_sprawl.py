@@ -97,7 +97,7 @@ class MarkdownSprawlCleaner(CleanerInterface):
 
         # Directories to exclude unconditionally (no nuance needed)
         excluded_dirs = {
-            ".cortex",
+            ".cortex-runtime",
             "cortex-registry",
             "deployment",
             "docs",

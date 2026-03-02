@@ -377,13 +377,13 @@ summary:
   archived: 4
   playbooks: 1
   completion_percentage: 96
-  consolidation_summary: "v45.0: 100 phases — 96 COMPLETE, 4 PLANNED (101-105: Architectural Audit Cleanup). Phase 100 COMPLETE 2026-03-02."
+  consolidation_summary: "v46.0: 105 phases — 98 COMPLETE, 3 PLANNED (101-103, 105: Architectural Audit Cleanup). Phase 100+104 COMPLETE 2026-03-02."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
     phase-102: "PLANNED — Subsystem Boundaries (P1)"
     phase-103: "PLANNED — God Object Decomposition (P1)"
-    phase-104: "PLANNED — Build Artifacts and Test Mirror (P1)"
+    phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
 
 phases:
@@ -399,7 +399,7 @@ phases:
     sweep_id: SWEEP-100-DEAD-CODE-STUBS
     gaps: 10
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-100-dead-code-and-stubs.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-100-dead-code-and-stubs.yaml"
     note: "969 F401 fixed (92.5%), 3 orphans deleted, 1 runtime bug fixed, 6 F811 duplicate methods resolved, 6 duplicate imports fixed. 1,950 tests green."
 
   - id: phase-101
@@ -435,12 +435,12 @@ phases:
   - id: phase-104
     title: "Build Artifact Purge + Test-Source Mirror Alignment + DB Consolidation"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-104-ARTIFACTS-AND-MIRRORS
-    gaps: 6
+    gaps: 7
     sub_phases: 3
-    file: "cortex-registry/planning/phases/planned/phase-104-artifacts-and-mirrors.yaml"
-    note: "4/6 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired with BuildArtifactCleaner, .ds-store untracked. DB consolidation: 9→7 databases (deleted 2 empty ghost DBs, dropped hardcoded session table). SharedAuditTrail redirected to audit.db. 2 GAPs remaining: test mirror dirs."
+    file: "cortex-registry/planning/phases/completed/phase-104-artifacts-and-mirrors.yaml"
+    note: "7/7 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired (build+OS artifact cleanup), .ds-store untracked, DB consolidation 9→7, test mirror dirs created. 1,950+ tests green."
 
   - id: phase-105
     title: "Stale Import References + Legacy Naming Remediation"

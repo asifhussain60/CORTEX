@@ -115,7 +115,7 @@ temp_files:
               token = auth.authenticate(username, password)
               # Token generation happens 5 times
 
-  - path: ".cortex/test_execution.json"
+  - path: ".cortex-runtime/test_execution.json"
     content: |
       {
         "test_runs": [

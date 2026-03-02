@@ -374,7 +374,7 @@ class TestProductionDeployment:
         """
         Verify MCP deployment configuration exists.
 
-        CORTEX is delivered via MCP (stdio) or SaaS — no Docker required.
+        CORTEX is delivered via MCP (stdio) or VSCode MCP stdio transport only.
         """
         vscode_settings = Path(__file__).parent.parent.parent / ".vscode" / "settings.json"
         mcp_config = Path(__file__).parent.parent.parent / "cortex" / "mcp" / "server.py"

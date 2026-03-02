@@ -504,9 +504,9 @@ class TestValidationHealthChecks:
         assert "C:\\" not in content or "${workspaceFolder}" in content
     
     def test_setup_log_creation(self, tmp_path):
-        """Test .cortex-runtime/setup.log created with details."""
-        log_file = tmp_path / ".cortex" / "setup.log"
-        log_file.parent.mkdir(exist_ok=True)
+        """Test .cortex-runtime/logs/setup.log created with details."""
+        log_file = tmp_path / ".cortex-runtime" / "logs" / "setup.log"
+        log_file.parent.mkdir(parents=True, exist_ok=True)
         log_file.write_text("[2026-02-12 10:30:00] INFO: Setup started\n")
         
         assert log_file.exists()

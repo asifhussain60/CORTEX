@@ -278,7 +278,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         """Delete stale files and empty directories inside ``.cortex-runtime/``.
 
         Targets:
-        - ``*.log`` files at ``.cortex-runtime/`` root (``setup.log``, ``mcp-self-healing.log``)
+        - ``*.log`` files at ``.cortex-runtime/`` root (legacy log files)
         - ``reports/*.json`` — stale readiness snapshots
         - ``sessions/*.md`` — stale session markdown (CORE-002)
         - ``archived-docs/**`` — all files (already processed artefacts)
@@ -383,11 +383,12 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         return results
 
     def run_build_artifact_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
-        """Delete .NET build artifacts (bin/, obj/) and other regenerable build directories.
+        """Delete regenerable build/test artifact directories and files.
 
         Scans the workspace for well-known build artifact directories (bin/, obj/,
-        __pycache__/, .pytest_cache/, .mypy_cache/, .ruff_cache/) and deletes them.
-        Protected directories (.git, .venv, _workspaces) are never touched.
+        __pycache__/, .pytest_cache/, .mypy_cache/, .ruff_cache/, htmlcov/, .tox/,
+        .nox/, .benchmarks/, *.egg-info/, build/, dist/) and ephemeral test files
+        (.testmondata, .coverage). Protected directories are never touched.
 
         Args:
             dry_run: When ``True``, plan operations but do not execute them.
@@ -398,8 +399,23 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         # Build directory names that are safe to delete entirely
         _BUILD_DIR_NAMES: frozenset = frozenset({
             "bin", "obj", "__pycache__", ".pytest_cache",
-            ".mypy_cache", ".ruff_cache",
+            ".mypy_cache", ".ruff_cache", "htmlcov",
+            ".tox", ".nox", ".benchmarks",
         })
+
+        # Directories matching these suffixes are also artifacts
+        _BUILD_DIR_SUFFIXES: tuple = (".egg-info",)
+
+        # Root-level directories that are build outputs (only delete at workspace root)
+        _ROOT_BUILD_DIRS: frozenset = frozenset({"build", "dist"})
+
+        # Ephemeral files at workspace root that are safe to delete
+        _EPHEMERAL_FILES: frozenset = frozenset({
+            ".testmondata", ".coverage",
+        })
+
+        # Legacy directories superseded by .cortex-runtime/
+        _LEGACY_DIRS: frozenset = frozenset({".cortex"})
 
         # Directories that must NEVER be touched
         _PROTECTED_ROOTS: frozenset = frozenset({
@@ -410,6 +426,53 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
         results: List[OperationResult] = []
         import os
+
+        # Delete ephemeral files at workspace root
+        for fname in _EPHEMERAL_FILES:
+            fpath = self.workspace_root / fname
+            if fpath.exists() and fpath.is_file():
+                if dry_run:
+                    results.append(OperationResult(
+                        op_type="delete", source=fpath,
+                        success=True, dry_run=True,
+                    ))
+                else:
+                    try:
+                        fpath.unlink()
+                        results.append(OperationResult(
+                            op_type="delete", source=fpath,
+                            success=True, dry_run=False,
+                        ))
+                    except OSError as exc:
+                        results.append(OperationResult(
+                            op_type="delete", source=fpath,
+                            success=False, dry_run=False,
+                            error=str(exc),
+                        ))
+
+        # Delete legacy directories superseded by .cortex-runtime/
+        for dname in _LEGACY_DIRS:
+            dpath = self.workspace_root / dname
+            if dpath.exists() and dpath.is_dir():
+                if dry_run:
+                    results.append(OperationResult(
+                        op_type="rmtree", source=dpath,
+                        success=True, dry_run=True,
+                    ))
+                else:
+                    results.append(self.delete_directory_tree(dpath))
+
+        # Delete root-level build output directories
+        for dname in _ROOT_BUILD_DIRS:
+            dpath = self.workspace_root / dname
+            if dpath.exists() and dpath.is_dir():
+                if dry_run:
+                    results.append(OperationResult(
+                        op_type="rmtree", source=dpath,
+                        success=True, dry_run=True,
+                    ))
+                else:
+                    results.append(self.delete_directory_tree(dpath))
 
         for root, dirs, files in os.walk(self.workspace_root):
             root_path = Path(root)
@@ -425,7 +488,10 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
             # Check if current directory is a build artifact directory
             dir_name = root_path.name
-            if dir_name in _BUILD_DIR_NAMES:
+            is_artifact = dir_name in _BUILD_DIR_NAMES or any(
+                dir_name.endswith(suffix) for suffix in _BUILD_DIR_SUFFIXES
+            )
+            if is_artifact:
                 if dry_run:
                     results.append(OperationResult(
                         op_type="rmtree", source=root_path,
@@ -905,8 +971,8 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         """
         ops: List[Dict[str, Any]] = []
         exempt = {"__init__.py", "__main__.py", "conftest.py", "Makefile",
-                  "Dockerfile", "Pipfile", ".gitignore", ".gitattributes",
-                  ".editorconfig", ".dockerignore", ".pre-commit-config.yaml"}
+                  "Pipfile", ".gitignore", ".gitattributes",
+                  ".editorconfig", ".pre-commit-config.yaml"}
         for f in ctx.all_files:
             if f.name in exempt:
                 continue

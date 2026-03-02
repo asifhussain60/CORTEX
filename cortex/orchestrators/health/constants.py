@@ -63,11 +63,6 @@ PROTECTED_FILES: FrozenSet[str] = frozenset({
     # Editor / CI
     ".editorconfig",
     ".pre-commit-config.yaml",
-    # Docker
-    "Dockerfile",
-    "docker-compose.yml",
-    "docker-compose.yaml",
-    ".dockerignore",
 })
 """Files that MUST stay in the project root — never relocated by Vacuum."""
 
@@ -118,7 +113,7 @@ Includes:
                          • ``.chats/``                     — chat session logs
                          • ``cortex-sts/`` — STS demo material (relocated from root)
 - ``scripts``        — cross-platform runner scripts
-- ``deployment``     — Docker/K8s/Prometheus/Nginx configs
+- ``deployment``     — Prometheus/Grafana/health-check configs
 - ``tests``          — test mirror tree
 - ``docs``           — generic docs directories
 """

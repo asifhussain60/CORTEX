@@ -10,7 +10,7 @@ Author: Asif Hussain
 Date: 2026-01-27
 
 CORE-030: MCP-first architecture - uses file-based locks (process-safe).
-Lock files are stored in .cortex-runtime/locks/ (local) or /app/.cortex-runtime/locks/ (hosted SaaS).
+Lock files are stored in .cortex-runtime/locks/.
 """
 
 from __future__ import annotations
@@ -71,20 +71,13 @@ def _get_lock_directory() -> Path:
     """
     Get the lock directory path.
 
-    Uses /app/.cortex-runtime/locks/ in hosted SaaS environments,
-    or .cortex-runtime/locks/ for local MCP (stdio) usage.
+    Uses .cortex-runtime/locks/ for local MCP (stdio) usage.
     Creates the directory if it doesn't exist.
 
     Returns:
         Path to lock directory
     """
-    # Check for hosted SaaS environment (mounted /app volume)
-    if os.path.exists("/app"):
-        lock_dir = Path("/app/.cortex-runtime/locks")
-    else:
-        # Local MCP (stdio) development
-        lock_dir = Path(".cortex-runtime/locks")
-
+    lock_dir = Path(".cortex-runtime/locks")
     lock_dir.mkdir(parents=True, exist_ok=True)
     return lock_dir
 

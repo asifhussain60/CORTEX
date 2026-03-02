@@ -414,7 +414,7 @@ class TestScalingValidation:
 class TestHealthEndpoints:
     """Test suite for MCP/SaaS health endpoint validation.
 
-    CORTEX is deployed via MCP (stdio) or SaaS — no Docker runtime.
+    CORTEX is deployed via MCP (stdio) — VSCode Copilot Chat integration only.
     These tests validate HTTP health probes used by both delivery modes.
     """
 
@@ -476,7 +476,7 @@ class TestServiceDiscovery:
     """Test suite for MCP/SaaS service discovery and endpoint probing.
 
     Validates endpoint reachability for both MCP and SaaS delivery modes.
-    No kubectl or Docker runtime required.
+    No external runtime required — VSCode MCP stdio only.
     """
 
     @pytest.mark.asyncio

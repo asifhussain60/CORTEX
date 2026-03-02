@@ -330,9 +330,8 @@ class GovernanceValidator:
     def _validate_mcp_configuration(self) -> None:
         """Validate MCP deployment configuration.
 
-        CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
-        No Docker runtime is required. Validates MCP server module and
-        VS Code settings configuration instead.
+        CORTEX is delivered via MCP (stdio transport, Pylance-style).
+        Validates MCP server module and VS Code settings configuration.
         """
         logger.info("� Validating MCP Configuration...")
 
