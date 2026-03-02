@@ -169,8 +169,8 @@ Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for 
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **185 Orchestrator files** across 9 domains (`core:77 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) — all satisfy IOrchestrator protocol
-- **30 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 28 tool files in `cortex/mcp/tools/`
+- **258 Orchestrator files** across 9 domains (`core:101 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:6`) — all satisfy IOrchestrator protocol
+- **30 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 35 tool files in `cortex/mcp/tools/`
 - **32 Governance YAMLs** in `cortex-registry/core/` enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -191,11 +191,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrator files | 185 across 9 domains in `cortex/orchestrators/` |
-| MCP Tools | 30 registered in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
+| Orchestrator files | 258 across 9 domains in `cortex/orchestrators/` |
+| MCP Tools | 30 registered in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance YAMLs | 32 in `cortex-registry/core/` |
-| Test Suite | ~18,085 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
+| Test Suite | ~18,116 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 | Phases | 25 completed, 9 planned |
 | Master YAML | 543/800 lines (THIN INDEX CONTRACT) |
@@ -319,8 +319,8 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (20 dirs)
-  orchestrators/     ← 185 orchestrator files across 9 domains (core:77 domain:17 support:34 git:4 health:8 +more)
-  mcp/tools/         ← 30 registered MCP tools (28 tool files)
+  orchestrators/     ← 258 orchestrator files across 9 domains (core:101 domain:28 support:51 git:4 health:27 +more)
+  mcp/tools/         ← 30 registered MCP tools (35 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

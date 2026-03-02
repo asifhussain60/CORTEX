@@ -3,7 +3,7 @@
 # Purpose: Codified best practices for tutorial & explainer video production
 # Sources: NNGroup, HubSpot, Wyzowl, industry-standard cognitive load research
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
-# Updated: 2026-03-02 — Counts verified against live architecture (258 orchestrators, 30 MCP tools)
+# Updated: 2026-03-02 — Counts verified against live architecture (258 orchestrators, 35 MCP tool files, 30 registered)
 
 domain: content-production
 type: best-practice
@@ -336,7 +336,7 @@ architecture_facts:
   verified: "2026-03-02"
   orchestrator_files: 258          # find cortex/orchestrators -name "*.py" -not -name "__init__.py" | wc -l
   mcp_tools_registered: 30        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict (WAVE-101)
-  mcp_tool_files: 31              # ls cortex/mcp/tools/*.py | wc -l
+  mcp_tool_files: 35              # find cortex/mcp/tools -name "*.py" ! -name "__init__.py" | wc -l
   intent_types: 29                 # cortex/models/canonical_enums.py IntentType enum
   governance_yamls: 32             # find cortex-registry/core -name "*.yaml" | wc -l
   intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry

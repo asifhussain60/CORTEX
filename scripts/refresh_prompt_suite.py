@@ -61,27 +61,35 @@ RETENTION_DAYS_CONVERSATIONS = 90
 
 
 def count_orchestrator_files() -> Dict[str, int]:
-    """Count orchestrator .py files per tier (excluding __init__.py, __pycache__)."""
+    """Count orchestrator .py files per tier (excluding __init__.py, __pycache__).
+
+    Uses rglob to recursively count all .py files in each domain subdirectory,
+    capturing nested modules (e.g., core/strategies/, support/debugging/).
+    Also counts top-level .py files directly in cortex/orchestrators/.
+    """
     tiers = {}
     orch_dir = ROOT / "cortex" / "orchestrators"
-    for tier_name in ["core", "domain", "support", "git", "health"]:
-        tier_path = orch_dir / tier_name
-        if tier_path.is_dir():
+    # Count top-level .py files (not in any subdomain)
+    top_level = [
+        f for f in orch_dir.glob("*.py")
+        if f.name != "__init__.py"
+    ]
+    if top_level:
+        tiers["_top_level"] = len(top_level)
+    # All known domains — use rglob for all to capture nested subdirectories
+    all_domains = [
+        "core", "domain", "support", "git", "health",
+        "intelligence", "persona", "registry", "response",
+        "strategies", "synthesis", "tools", "validation", "workflow",
+    ]
+    for domain_name in all_domains:
+        domain_path = orch_dir / domain_name
+        if domain_path.is_dir():
             py_files = [
-                f for f in tier_path.glob("*.py")
+                f for f in domain_path.rglob("*.py")
                 if f.name != "__init__.py"
             ]
-            tiers[tier_name] = len(py_files)
-    # Also count additional dirs
-    for extra in ["intelligence", "persona", "registry", "response",
-                  "strategies", "synthesis", "tools", "validation", "workflow"]:
-        extra_path = orch_dir / extra
-        if extra_path.is_dir():
-            py_files = [
-                f for f in extra_path.rglob("*.py")
-                if f.name != "__init__.py"
-            ]
-            tiers[extra] = len(py_files)
+            tiers[domain_name] = len(py_files)
     return tiers
 
 
@@ -95,12 +103,12 @@ def count_mcp_tools_registered() -> int:
 
 
 def count_mcp_tool_files() -> int:
-    """Count MCP tool files in cortex/mcp/tools/."""
+    """Count MCP tool files in cortex/mcp/tools/ (recursive, including toolkit/)."""
     tools_dir = ROOT / "cortex" / "mcp" / "tools"
     if not tools_dir.is_dir():
         return 0
     return len([
-        f for f in tools_dir.glob("*.py")
+        f for f in tools_dir.rglob("*.py")
         if f.name not in ("__init__.py", "_shared.py", "tool_helpers.py")
     ])
 

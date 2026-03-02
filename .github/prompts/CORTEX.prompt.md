@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-03-02 | **Architecture:** 51 wired Orchestrators · 29 MCP Tools · 38 CORE Rules · 1 Package
+**Updated:** 2026-03-02 | **Architecture:** 258 Orchestrator files · 30 MCP Tools · 32 CORE Rules · 1 Package
 
 ---
 
@@ -8,8 +8,8 @@
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
-**Orchestrators:** 51 wired across 4 tiers in `cortex/orchestrators/`  
-**MCP Tools:** 29 registered (39 target) in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
+**Orchestrators:** 258 files across 9 domains in `cortex/orchestrators/`  
+**MCP Tools:** 30 registered in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
 
@@ -155,8 +155,8 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 
 | Type | Location |
 |------|----------|
-| Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
+| Orchestrators (258 files) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (30 registered) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

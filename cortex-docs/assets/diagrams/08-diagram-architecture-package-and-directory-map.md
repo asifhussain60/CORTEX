@@ -30,7 +30,7 @@ render: ascii
  │  │   ├── workflow/                   WorkflowComposer, TemplateComposer     │
  │  │   └── ... (9 domains total)                                              │
  │  ├── mcp/                         ← MCP stdio server + 30 registered tools  │
- │  │   └── tools/                      31 tool files                          │
+ │  │   └── tools/                      35 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │
  │  ├── intelligence/                ← Reasoning, learning, RCA engine         │
  │  │   ├── facade.py               ← IntelligenceFacade — canonical entry (Phase 107) │
