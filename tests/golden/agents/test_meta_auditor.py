@@ -11,24 +11,59 @@ from cortex.orchestrators.intelligence.meta_auditor_agent import MetaAuditorAgen
 
 class TestMetaAuditorValidation:
     """Golden test: Meta-auditor validates audit results."""
-    
+
     def test_detect_false_positive_in_audit(self, tmp_path: Path) -> None:
-        """Golden: Detect false positive in audit results."""
+        """Golden: Detect false positive in audit results.
+
+        Setup: A production file with a corresponding test file present → CORE-008
+        violation is a false positive (test file exists).
+        """
         agent = MetaAuditorAgent()
-        
-        # Simulate audit result claiming CORE-008 violation (but code has tests)
+
+        # Create a fake production file and its corresponding test file so
+        # the real filesystem check inside _check_tdd_compliance finds it.
+        prod_file = tmp_path / "cortex" / "example.py"
+        prod_file.parent.mkdir(parents=True, exist_ok=True)
+        prod_file.write_text("# example module\n")
+
+        test_file = tmp_path / "tests" / "test_example.py"
+        test_file.parent.mkdir(parents=True, exist_ok=True)
+        test_file.write_text("# test for example\ndef test_placeholder(): pass\n")
+
+        # Simulate audit result claiming CORE-008 violation (but test file exists)
         audit_result = {
             "violations": [
                 {"rule": "CORE-008", "file": "cortex/example.py", "message": "No tests found"}
             ]
         }
-        
-        # Meta-auditor validates (finds tests exist)
+
+        # Meta-auditor validates (finds tests exist → false positive)
         validation = agent.validate_audit_result(audit_result, workspace=tmp_path)
-        
+
         assert validation.has_false_positives is True
         assert "CORE-008" in validation.false_positive_rules
-    
+
+    def test_genuine_tdd_violation_not_false_positive(self, tmp_path: Path) -> None:
+        """Golden: CORE-008 violation is genuine when no test file exists."""
+        agent = MetaAuditorAgent()
+
+        # Only create the production file — no test file
+        prod_file = tmp_path / "cortex" / "orphan.py"
+        prod_file.parent.mkdir(parents=True, exist_ok=True)
+        prod_file.write_text("# orphan module with no tests\n")
+
+        audit_result = {
+            "violations": [
+                {"rule": "CORE-008", "file": "cortex/orphan.py", "message": "No tests found"}
+            ]
+        }
+
+        validation = agent.validate_audit_result(audit_result, workspace=tmp_path)
+
+        # No test file exists → violation is genuine → no false positive
+        assert validation.has_false_positives is False
+        assert validation.approved is False or "CORE-008" not in validation.false_positive_rules
+
     def test_approve_valid_audit_result(self) -> None:
         """Golden: Approve audit with no false positives."""
         agent = MetaAuditorAgent()

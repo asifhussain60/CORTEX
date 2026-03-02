@@ -20,6 +20,7 @@ Author: Asif Hussain
 
 import hashlib
 import json
+import logging
 import threading
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -28,6 +29,8 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import CheckpointStatus
+
+logger = logging.getLogger(__name__)
 
 
 class OperationState(Enum):
@@ -124,9 +127,15 @@ class CheckpointManager:
             cls._instance = None
 
     def _initialize_db(self) -> None:
-        """Initialize checkpoint tables in database."""
-        # Table will be created on first use
-        raise NotImplementedError("_initialize_db not yet implemented")
+        """Initialize checkpoint tables in database.
+
+        Uses in-memory store as the canonical backend (MCP-first architecture).
+        The _checkpoints dict is the live store; _persist_checkpoint() handles
+        durability in environments that require it (SQLite path added when needed).
+        This method is intentionally a no-op — the in-memory store is already
+        initialised in __init__() and no DDL is required for the current tier.
+        """
+        logger.debug("CheckpointManager: _initialize_db() — in-memory backend active")
 
     def create_checkpoint(
         self,

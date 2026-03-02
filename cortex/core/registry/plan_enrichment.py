@@ -5,9 +5,13 @@ Purpose: Multi-source enrichment pipeline for plans (Stage 3)
 Authority: phase-45-enhanced-planning-system.yaml § Stage 3
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-041 (event-driven)
 """
+import ast
 import logging
+import os
+import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
 from cortex.models.plan_models import PlanSpec
@@ -147,22 +151,109 @@ class GitLensEnricher:
             return GitEnrichment()
 
     def _get_git_context(self, plan: PlanSpec) -> Dict[str, Any]:
-        """Get git context for plan.
+        """Get git context for plan using subprocess git log.
 
         Args:
             plan: Plan specification
 
         Returns:
-            Dictionary with git context data
+            Dictionary with real git context data from git log.
         """
-        # Placeholder for actual git analysis
-        # In production, would call gitpython or subprocess git commands
-        return {
-            "recent_files": [],
-            "recent_authors": [],
-            "change_velocity": "low",
-            "commits_30_days": 0,
-        }
+        repo_root = self._find_repo_root()
+        if repo_root is None:
+            return {
+                "recent_files": [],
+                "recent_authors": [],
+                "change_velocity": "low",
+                "commits_30_days": 0,
+            }
+
+        try:
+            # Count commits in last 30 days
+            result_count = subprocess.run(
+                ["git", "log", "--oneline", "--since=30 days ago"],
+                cwd=str(repo_root),
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            commits_30_days = len(result_count.stdout.strip().splitlines()) if result_count.returncode == 0 else 0
+
+            # Derive change velocity
+            if commits_30_days >= 200:
+                change_velocity = "high"
+            elif commits_30_days >= 30:
+                change_velocity = "medium"
+            else:
+                change_velocity = "low"
+
+            # Get recent authors (last 30 days)
+            result_authors = subprocess.run(
+                ["git", "log", "--since=30 days ago", "--format=%an"],
+                cwd=str(repo_root),
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            recent_authors: List[str] = []
+            if result_authors.returncode == 0:
+                seen = set()
+                for author in result_authors.stdout.strip().splitlines():
+                    author = author.strip()
+                    if author and author not in seen:
+                        seen.add(author)
+                        recent_authors.append(author)
+
+            # Get recently modified files (last 30 days, top 20)
+            result_files = subprocess.run(
+                ["git", "log", "--since=30 days ago", "--name-only", "--format="],
+                cwd=str(repo_root),
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            recent_files: List[str] = []
+            if result_files.returncode == 0:
+                seen_files: set = set()
+                for line in result_files.stdout.strip().splitlines():
+                    f = line.strip()
+                    if f and f not in seen_files and len(recent_files) < 20:
+                        seen_files.add(f)
+                        recent_files.append(f)
+
+            return {
+                "recent_files": recent_files,
+                "recent_authors": recent_authors,
+                "change_velocity": change_velocity,
+                "commits_30_days": commits_30_days,
+            }
+        except Exception as exc:
+            self.logger.warning("git enrichment subprocess failed: %s", exc)
+            return {
+                "recent_files": [],
+                "recent_authors": [],
+                "change_velocity": "low",
+                "commits_30_days": 0,
+            }
+
+    def _find_repo_root(self) -> "Path | None":
+        """Locate the git repository root starting from cwd.
+
+        Returns:
+            Path to repo root, or None if not inside a git repository.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            if result.returncode == 0:
+                return Path(result.stdout.strip())
+        except Exception:
+            pass
+        return None
 
 class CodeLensEnricher:
     """Enriches plans with code analysis context.
@@ -194,20 +285,86 @@ class CodeLensEnricher:
             return CodeEnrichment()
 
     def _analyze_code(self, plan: PlanSpec) -> Dict[str, Any]:
-        """Analyze code for plan scope.
+        """Analyze code for plan scope using AST parsing.
+
+        Scans the cortex/ package for Python files, computes a
+        complexity proxy (function + class count per file), and
+        builds a top-level import dependency map.
 
         Args:
             plan: Plan specification
 
         Returns:
-            Dictionary with code analysis data
+            Dictionary with real code analysis data.
         """
-        # Placeholder for actual code analysis
-        # In production, would use cortex.lens_analyze
+        complexity_scores: Dict[str, float] = {}
+        dependency_map: Dict[str, List[str]] = {}
+        risk_areas: List[str] = []
+
+        # Resolve scan root: cortex/ package relative to repo root
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"],
+                capture_output=True, text=True, timeout=5,
+            )
+            repo_root = Path(result.stdout.strip()) if result.returncode == 0 else Path(os.getcwd())
+        except Exception:
+            repo_root = Path(os.getcwd())
+
+        cortex_dir = repo_root / "cortex"
+        if not cortex_dir.exists():
+            return {
+                "complexity_scores": {},
+                "dependency_map": {},
+                "risk_areas": [],
+            }
+
+        # Walk cortex/ — cap at 200 files to bound execution time
+        scanned = 0
+        for py_file in cortex_dir.rglob("*.py"):
+            if "__pycache__" in py_file.parts:
+                continue
+            if scanned >= 200:
+                break
+            scanned += 1
+            rel = str(py_file.relative_to(repo_root))
+            try:
+                src = py_file.read_text(errors="ignore")
+                tree = ast.parse(src)
+
+                # Complexity proxy: (functions + classes) / 10 — capped at 1.0
+                func_count = sum(
+                    1 for n in ast.walk(tree)
+                    if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+                )
+                class_count = sum(1 for n in ast.walk(tree) if isinstance(n, ast.ClassDef))
+                score = min(1.0, round((func_count + class_count * 2) / 40.0, 3))
+                complexity_scores[rel] = score
+
+                # Flag high-complexity files as risk areas (score > 0.7)
+                if score > 0.7:
+                    risk_areas.append(rel)
+
+                # Dependency map: cortex-internal imports only
+                imports: List[str] = []
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Import):
+                        for alias in node.names:
+                            if alias.name.startswith("cortex"):
+                                imports.append(alias.name)
+                    elif isinstance(node, ast.ImportFrom):
+                        mod = node.module or ""
+                        if mod.startswith("cortex"):
+                            imports.append(mod)
+                if imports:
+                    dependency_map[rel] = sorted(set(imports))
+            except Exception:
+                continue
+
         return {
-            "complexity_scores": {},
-            "dependency_map": {},
-            "risk_areas": [],
+            "complexity_scores": complexity_scores,
+            "dependency_map": dependency_map,
+            "risk_areas": risk_areas[:20],  # cap risk areas list
         }
 
 class PolicyEnricher:

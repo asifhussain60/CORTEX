@@ -96,18 +96,86 @@ class MetaAuditorAgent:
         }
 
     def _check_tdd_compliance(self, file_path: str, workspace: Path = None) -> bool:
-        """Check if CORE-008 violation is false positive."""
-        # If audit claims no tests, but file IS a test file → false positive
-        if "test_" not in file_path and "_test.py" not in file_path:
-            # Production file claimed to have no tests
-            # In real implementation: check for corresponding test file
-            return True  # Assume false positive for golden test
+        """Check if CORE-008 violation is a false positive.
+
+        A violation is a false positive when a corresponding test file exists
+        for the production file being reported.
+
+        Args:
+            file_path: Production file path claimed to lack tests.
+            workspace: Repository root (resolved from CWD if None).
+
+        Returns:
+            True if the violation is a false positive (test file found),
+            False if the violation is genuine (no test file exists).
+        """
+        # If the reported file is itself a test file → always false positive
+        basename = Path(file_path).name
+        if basename.startswith("test_") or basename.endswith("_test.py"):
+            return True
+
+        # Resolve workspace
+        root = workspace if workspace else Path.cwd()
+
+        # Derive expected test-file candidates from the production module name
+        stem = Path(file_path).stem  # e.g. "intent_router_impl"
+        candidates = [
+            root / "tests" / f"test_{stem}.py",
+            root / "tests" / "unit" / f"test_{stem}.py",
+        ]
+        # Also walk up the relative path hierarchy
+        rel = Path(file_path)
+        for part in rel.parts[:-1]:
+            candidates.append(root / "tests" / "unit" / part / f"test_{stem}.py")
+
+        for candidate in candidates:
+            if candidate.exists():
+                return True  # Test file found → false positive
+
+        # No test file located → genuine CORE-008 violation
         return False
 
     def _check_type_hints(self, file_path: str, workspace: Path = None) -> bool:
-        """Check if CORE-011 violation is false positive."""
-        # Simulate: Check if file has type hints
-        return False  # Simplified for golden test
+        """Check if CORE-011 violation is a false positive via AST inspection.
+
+        Inspects the actual source file to determine whether *all* public
+        function arguments carry type annotations.  If they do, the audit
+        result claiming a violation is a false positive.
+
+        Args:
+            file_path: Path to the Python file under audit.
+            workspace: Repository root (resolved from CWD if None).
+
+        Returns:
+            True if the file is fully annotated (violation is false positive),
+            False if at least one public function is missing annotations.
+        """
+        import ast as _ast
+
+        root = workspace if workspace else Path.cwd()
+        source_path = root / file_path if not Path(file_path).is_absolute() else Path(file_path)
+
+        if not source_path.exists():
+            # Cannot verify → conservatively treat as not a false positive
+            return False
+
+        try:
+            tree = _ast.parse(source_path.read_text(encoding="utf-8", errors="ignore"))
+        except SyntaxError:
+            return False
+
+        for node in _ast.walk(tree):
+            if isinstance(node, (_ast.FunctionDef, _ast.AsyncFunctionDef)):
+                if node.name.startswith("_"):
+                    continue  # Private — not subject to CORE-011
+                for arg in node.args.args:
+                    if arg.arg == "self":
+                        continue
+                    if arg.annotation is None:
+                        return False  # Missing annotation → genuine violation
+
+        # Every inspected public argument is annotated → false positive
+        return True
 
     def _check_file_naming(self, file_path: str, workspace: Path = None) -> bool:
         """Check if CORE-028 violation is false positive."""

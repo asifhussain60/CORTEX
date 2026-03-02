@@ -419,13 +419,56 @@ class PreImplementationChecklist:
         )
 
     def check_scalability(self, context: Dict[str, Any]) -> CheckResult:
-        """Check horizontal scaling feasibility."""
-        # Simplified: Always pass for now
+        """Check horizontal scaling feasibility via static heuristics.
+
+        Detects common anti-patterns that block horizontal scaling:
+        - Global mutable state (module-level lists/dicts mutated at runtime)
+        - Singleton patterns without thread-safety guards
+        - In-process caching without external cache consideration
+        - Hardcoded localhost references
+        """
+        existing_code = context.get("existing_code", "")
+        request = context.get("request", "")
+        combined = existing_code + "\n" + request
+
+        issues: List[str] = []
+        recommendations: List[str] = []
+
+        # Anti-pattern: global mutable state
+        if "global " in combined and ("= []" in combined or "= {}" in combined):
+            issues.append("Global mutable state detected — not safe for horizontal scaling")
+            recommendations.append(
+                "Move shared state to an external store (Redis, DB) or use thread-local storage"
+            )
+
+        # Anti-pattern: hardcoded localhost
+        if "localhost" in combined or "127.0.0.1" in combined:
+            issues.append("Hardcoded localhost reference — breaks in multi-node deployments")
+            recommendations.append(
+                "Replace localhost with configurable host resolved from environment variables"
+            )
+
+        # Anti-pattern: in-process caching without TTL
+        if "_cache" in combined and "ttl" not in combined.lower() and "expire" not in combined.lower():
+            issues.append("In-process cache without TTL detected — stale data risk across replicas")
+            recommendations.append(
+                "Add TTL to cache entries or migrate to a distributed cache (Redis)"
+            )
+
+        # Anti-pattern: blocking I/O in async context
+        if "async def" in combined and (
+            "time.sleep(" in combined or "open(" in combined
+        ):
+            issues.append("Blocking I/O detected inside async function — prevents scaling under load")
+            recommendations.append(
+                "Replace blocking calls with async equivalents (asyncio.sleep, aiofiles)"
+            )
+
         return CheckResult(
             category="scalability",
-            passed=True,
-            issues=[],
-            recommendations=[]
+            passed=len(issues) == 0,
+            issues=issues,
+            recommendations=recommendations,
         )
 
     def check_backward_compatibility(self, context: Dict[str, Any]) -> CheckResult:

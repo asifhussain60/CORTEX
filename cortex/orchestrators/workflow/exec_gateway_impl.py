@@ -70,7 +70,8 @@ class MasterGateway:
         self,
         spec_registry: Optional[Any] = None,
         validator: Optional[Any] = None,
-        enforcer: Optional[Any] = None
+        enforcer: Optional[Any] = None,
+        master_orchestrator: Optional[Any] = None,
     ) -> None:
         """
         Initialize MasterGateway.
@@ -79,15 +80,32 @@ class MasterGateway:
             spec_registry: SpecRegistry instance (lazy-loaded if None)
             validator: GatewayValidator instance (created if None)
             enforcer: GatewayEnforcer instance (optional)
-
-        Note:
-            In Phase 1, dependencies are optional. Phase 2 will make them
-            mandatory once infrastructure is ready.
+            master_orchestrator: MasterOrchestrator instance for delegation.
+                When provided, execute() delegates via
+                master_orchestrator.execute_operation(). When None, a lazy
+                import of MasterOrchestrator.instance() is attempted at
+                execution time.
         """
         self.spec_registry = spec_registry
         self.validator = validator
         self.enforcer = enforcer
-        logger.info("MasterGateway initialized (Phase 1 - Optional Mode)")
+        self._master_orchestrator = master_orchestrator
+        logger.info("MasterGateway initialized")
+
+    def _get_master_orchestrator(self) -> Optional[Any]:
+        """Resolve MasterOrchestrator, injected or lazily imported.
+
+        Returns:
+            MasterOrchestrator instance or None if unavailable.
+        """
+        if self._master_orchestrator is not None:
+            return self._master_orchestrator
+        try:
+            from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+            return MasterOrchestrator.instance()
+        except Exception as exc:  # pragma: no cover
+            logger.warning("MasterOrchestrator unavailable for gateway delegation: %s", exc)
+            return None
 
     def execute(
         self,
@@ -123,28 +141,72 @@ class MasterGateway:
         operation_name = operation_spec.get("operation", "unknown")
 
         try:
-            # Phase 1: Spec validation (optional)
+            # Spec validation (optional enforcer)
             if self.validator:
                 self._validate_spec(operation_spec)
 
-            # Phase 1: Governance check (optional)
+            # Governance check (optional enforcer)
             if self.enforcer:
                 self._check_governance(operation_spec)
 
-            # Phase 1: Placeholder for actual execution
-            # (Will delegate to MasterOrchestrator in Phase 2)
-            logger.debug(f"Gateway processing operation: {operation_name}")
+            # Delegate to MasterOrchestrator
+            orchestrator = self._get_master_orchestrator()
+            elapsed_ms = int((datetime.now() - start_time).total_seconds() * 1000)
+
+            if orchestrator is None:
+                logger.error(
+                    "MasterGateway: no MasterOrchestrator available for operation '%s'",
+                    operation_name,
+                )
+                return GatewayResult(
+                    success=False,
+                    operation=operation_name,
+                    execution_time_ms=elapsed_ms,
+                    error_code="OrchestratorUnavailable",
+                    error_message=(
+                        "MasterOrchestrator is not available. "
+                        "Ensure MasterOrchestrator.instance() is initialised before "
+                        "calling MasterGateway.execute()."
+                    ),
+                )
+
+            parameters: Dict[str, Any] = dict(operation_spec)
+            parameters.setdefault("intent", operation_spec.get("intent", "IMPLEMENT"))
+            if context:
+                parameters.update(context)
+
+            logger.debug("Gateway delegating '%s' to MasterOrchestrator", operation_name)
+            mo_result = orchestrator.execute_operation(
+                operation_name=operation_name,
+                parameters=parameters,
+            )
 
             elapsed_ms = int((datetime.now() - start_time).total_seconds() * 1000)
 
-            return GatewayResult(
-                success=True,
-                operation=operation_name,
-                handler="MasterGateway",  # Phase 1 placeholder
-                execution_time_ms=elapsed_ms,
-                violations=[],
-                output={"status": "Phase 1 - Gateway initialized"}
-            )
+            if mo_result.is_ok():
+                output = mo_result.unwrap()
+                handler = (
+                    output.get("handler", orchestrator.__class__.__name__)
+                    if isinstance(output, dict)
+                    else orchestrator.__class__.__name__
+                )
+                return GatewayResult(
+                    success=True,
+                    operation=operation_name,
+                    handler=handler,
+                    execution_time_ms=elapsed_ms,
+                    violations=[],
+                    output=output if isinstance(output, dict) else {"result": output},
+                )
+            else:
+                return GatewayResult(
+                    success=False,
+                    operation=operation_name,
+                    handler=orchestrator.__class__.__name__,
+                    execution_time_ms=elapsed_ms,
+                    error_code="OrchestratorError",
+                    error_message=str(getattr(mo_result, "error", "unknown error")),
+                )
 
         except (SpecValidationError, GovernanceViolationError) as e:
             elapsed_ms = int((datetime.now() - start_time).total_seconds() * 1000)
@@ -186,8 +248,11 @@ class MasterGateway:
         Raises:
             GovernanceViolationError: If governance check fails
         """
-        # Phase 1: Placeholder
-        logger.debug("Governance check passed (Phase 1)")
+        if callable(self.enforcer):
+            self.enforcer(spec)
+        elif hasattr(self.enforcer, "check"):
+            self.enforcer.check(spec)
+        logger.debug("Governance check passed")
 
     def execute_with_intent(
         self,

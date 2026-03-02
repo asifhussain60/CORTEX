@@ -1350,23 +1350,17 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
         for cycle in range(1, max_cycles + 1):
             logger.info(f"ENH-088: Cycle {cycle}/{max_cycles} starting")
 
-            # Execute standard TDD cycle - simplified for GREEN phase
-            # Full integration with execute_with_protocol comes in Stage 3
-            cycle_result = {
-                "tests_passed": 16 + cycle,  # Simplified mock for GREEN phase
-                "tests_failed": 0,
-                "coverage": 0.75 + (cycle * 0.05),
-                "latency_ms": 200 - (cycle * 10)
-            }
+            # Execute real test suite and collect metrics
+            cycle_result = self._run_test_suite(test_suite)
 
-            # Extract metrics from result (with defaults for mock testing)
+            # Extract metrics from result (with defaults for robustness)
             metrics = CycleMetrics(
                 cycle_number=cycle,
                 tests_passed=cycle_result.get("tests_passed", 0),
                 tests_failed=cycle_result.get("tests_failed", 0),
                 coverage_percent=cycle_result.get("coverage", 0.0),
                 avg_latency_ms=cycle_result.get("latency_ms", 0.0),
-                extensibility_score=0.0  # Placeholder for extensibility analysis
+                extensibility_score=cycle_result.get("extensibility_score", 0.0),
             )
 
             # Track metrics
@@ -1425,6 +1419,68 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
             "final_metrics": self._cycle_metrics_history[-1] if self._cycle_metrics_history else None,
             "gate_result": gate_result
         }
+
+    def _run_test_suite(self, test_suite: str) -> Dict[str, Any]:
+        """Run the pytest test suite and return real metrics.
+
+        Args:
+            test_suite: Path to test file or directory passed to pytest.
+
+        Returns:
+            Dict with keys: tests_passed, tests_failed, coverage, latency_ms,
+            extensibility_score.
+        """
+        import subprocess
+        import time
+
+        start = time.monotonic()
+        try:
+            result = subprocess.run(
+                [
+                    "python3", "-m", "pytest", test_suite,
+                    "-q", "--tb=no", "--no-header",
+                    "--timeout=60",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+            elapsed_ms = (time.monotonic() - start) * 1000
+
+            # Parse pytest summary line: "X passed, Y failed in Z.Zs"
+            passed = 0
+            failed = 0
+            for line in reversed(result.stdout.splitlines()):
+                import re
+                m = re.search(r"(\d+) passed", line)
+                if m:
+                    passed = int(m.group(1))
+                m2 = re.search(r"(\d+) failed", line)
+                if m2:
+                    failed = int(m2.group(1))
+                if passed or failed:
+                    break
+
+            total = passed + failed
+            coverage = (passed / total) if total else 0.0
+
+            return {
+                "tests_passed": passed,
+                "tests_failed": failed,
+                "coverage": coverage,
+                "latency_ms": round(elapsed_ms, 1),
+                "extensibility_score": 0.0,
+            }
+        except subprocess.TimeoutExpired:
+            elapsed_ms = (time.monotonic() - start) * 1000
+            logger.warning("ENH-088: Test suite timed out after %.0fms", elapsed_ms)
+            return {"tests_passed": 0, "tests_failed": 0, "coverage": 0.0,
+                    "latency_ms": elapsed_ms, "extensibility_score": 0.0}
+        except Exception as exc:
+            elapsed_ms = (time.monotonic() - start) * 1000
+            logger.error("ENH-088: _run_test_suite failed: %s", exc)
+            return {"tests_passed": 0, "tests_failed": 0, "coverage": 0.0,
+                    "latency_ms": elapsed_ms, "extensibility_score": 0.0}
 
     def track_cycle_metrics(self, cycle: int, metrics: CycleMetrics) -> None:
         """

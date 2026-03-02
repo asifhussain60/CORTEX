@@ -377,12 +377,68 @@ def get_overlay_data(
                 "complexity_hotspots": []
             }
     elif overlay_type == 'compliance':
-        # Placeholder for CORE rules compliance
-        return {
-            "core_rules": [],
-            "compliance_percentage": 100,
-            "violations": []
-        }
+        # Real CORE rules compliance check via AST scan
+        try:
+            import ast as _ast
+            repo = Path(repo_path)
+            python_files = list(repo.rglob("*.py"))
+            violations = []
+            total_functions = 0
+            compliant_functions = 0
+
+            for py_file in python_files[:50]:  # cap for API response latency
+                try:
+                    source = py_file.read_text(encoding="utf-8", errors="ignore")
+                    tree = _ast.parse(source)
+                    for node in _ast.walk(tree):
+                        if isinstance(node, (_ast.FunctionDef, _ast.AsyncFunctionDef)):
+                            total_functions += 1
+                            func_violations = []
+                            # CORE-011: type hints required
+                            missing_hints = [
+                                a.arg for a in node.args.args
+                                if a.annotation is None and a.arg != "self"
+                            ]
+                            if missing_hints:
+                                func_violations.append(
+                                    f"CORE-011: missing type hints on args {missing_hints}"
+                                )
+                            # CORE-012: docstring required on public methods
+                            if not node.name.startswith("_"):
+                                if not (node.body and isinstance(node.body[0], _ast.Expr)
+                                        and isinstance(node.body[0].value, _ast.Constant)):
+                                    func_violations.append("CORE-012: missing docstring")
+                            if func_violations:
+                                violations.append({
+                                    "file": str(py_file.relative_to(repo)),
+                                    "function": node.name,
+                                    "line": node.lineno,
+                                    "issues": func_violations,
+                                })
+                            else:
+                                compliant_functions += 1
+                except Exception:
+                    continue
+
+            compliance_pct = (
+                round(compliant_functions / total_functions * 100, 1)
+                if total_functions else 100.0
+            )
+            return {
+                "core_rules": ["CORE-011", "CORE-012"],
+                "compliance_percentage": compliance_pct,
+                "violations": violations[:20],  # top 20 for display
+                "total_functions_checked": total_functions,
+            }
+        except Exception as exc:
+            import logging as _logging
+            _logging.getLogger(__name__).warning("Compliance overlay error: %s", exc)
+            return {
+                "core_rules": [],
+                "compliance_percentage": 0.0,
+                "violations": [],
+                "error": str(exc),
+            }
 
     return {}
 
@@ -420,8 +476,12 @@ def invalidate_cache(repo_path: str) -> None:
     Args:
         repo_path: Absolute path to the repository
     """
-    # Caching disabled for MVP
-    raise NotImplementedError("invalidate_cache not yet implemented")
+    # Cache is disabled for MVP — all requests are computed live.
+    # When caching is enabled, this will call the LENSCache backend.
+    import logging as _logging
+    _logging.getLogger(__name__).debug(
+        "invalidate_cache: no-op (caching disabled for MVP) — repo_path=%s", repo_path
+    )
 
 
 # Tab Data Generators

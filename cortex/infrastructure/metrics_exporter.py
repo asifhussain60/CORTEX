@@ -101,8 +101,8 @@ class ConsoleMetricsExporter(MetricsExporter):
             return False
 
     def shutdown(self) -> None:
-        """No-op for console exporter."""
-        raise NotImplementedError("shutdown not yet implemented")
+        """No-op shutdown for console exporter — nothing to flush."""
+        logger.debug("ConsoleMetricsExporter: shutdown called (no-op)")
 
 
 class MemoryMetricsExporter(MetricsExporter):
