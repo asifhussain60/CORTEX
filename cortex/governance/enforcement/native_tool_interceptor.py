@@ -49,25 +49,25 @@ class InterceptionResult:
 class MCPDetector:
     """
     Multi-method MCP availability detector.
-    
+
     Uses 3-method cascade for robust detection:
     1. Tool Query (check if cortex_* tools exist)
     2. Environment Variables (CORTEX_MCP_ENABLED)
     3. Configuration File (.vscode/settings.json)
     """
-    
+
     @staticmethod
     def is_mcp_available() -> bool:
         """
         Check if MCP is available using 3-method cascade.
-        
+
         Returns:
             bool: True if MCP is available, False otherwise
         """
         # Method 1: Environment variable (fastest)
         if os.getenv("CORTEX_MCP_ENABLED") == "true":
             return True
-        
+
         # Method 2: Check .vscode/settings.json
         settings_path = ".vscode/settings.json"
         if os.path.exists(settings_path):
@@ -80,7 +80,7 @@ class MCPDetector:
                             return True
             except Exception:
                 pass
-        
+
         # Method 3: Assume unavailable (safe default)
         return False
 
@@ -88,12 +88,12 @@ class MCPDetector:
 class NativeToolInterceptor:
     """
     Intercepts native tool calls and enforces MCP-FIRST for code-modifying intents.
-    
+
     Rules (CORE-050 Tiered Blocking):
     - IMPLEMENT/FIX/REFACTOR: HARD BLOCK if MCP unavailable
     - AUDIT/ANALYZE/PLAN: HARD BLOCK if MCP unavailable
     - DIAGNOSE/QUERY/SETUP/LIST: EXEMPT (always allow)
-    
+
     Example:
         >>> interceptor = NativeToolInterceptor()
         >>> result = interceptor.check("create_file", Intent.IMPLEMENT, "src/main.py")
@@ -101,7 +101,7 @@ class NativeToolInterceptor:
         ...     print(f"Blocked: {result.reason}")
         ...     print(f"Use: {result.mcp_tool}")
     """
-    
+
     # Intent-based tool restriction matrix
     BLOCKED_INTENTS = {
         Intent.IMPLEMENT,
@@ -111,14 +111,14 @@ class NativeToolInterceptor:
         Intent.ANALYZE,
         Intent.PLAN,
     }
-    
+
     EXEMPT_INTENTS = {
         Intent.DIAGNOSE,
         Intent.QUERY,
         Intent.SETUP,
         Intent.LIST,
     }
-    
+
     # Tool categorization
     TOOL_CATEGORIES = {
         "create_file": ToolCategory.FILE_MODIFICATION,
@@ -134,11 +134,11 @@ class NativeToolInterceptor:
         "cortex_process_request": ToolCategory.MCP_TOOL,
         "cortex.lens_analyze": ToolCategory.MCP_TOOL,
     }
-    
+
     def __init__(self) -> None:
         """Initialize interceptor with MCP detector."""
         self.detector = MCPDetector()
-    
+
     def check(
         self,
         tool_name: str,
@@ -148,13 +148,13 @@ class NativeToolInterceptor:
     ) -> InterceptionResult:
         """
         Check if native tool invocation is allowed for given intent.
-        
+
         Args:
             tool_name: Name of native tool being invoked
             intent: Classified user intent
             target_file: Target file path (optional)
             **kwargs: Additional context
-            
+
         Returns:
             InterceptionResult with allowed flag and reasoning
         """
@@ -164,7 +164,7 @@ class NativeToolInterceptor:
                 allowed=True,
                 reason=f"Intent {intent.value} exempt from MCP requirements"
             )
-        
+
         # Get tool category
         category = self.TOOL_CATEGORIES.get(tool_name)
         if category is None:
@@ -173,26 +173,26 @@ class NativeToolInterceptor:
                 allowed=True,
                 reason=f"Unknown tool {tool_name}, allowing"
             )
-        
+
         # MCP tools always allowed
         if category == ToolCategory.MCP_TOOL:
             return InterceptionResult(
                 allowed=True,
                 reason="MCP tool invocation"
             )
-        
+
         # Read/discovery tools allowed for all intents
         if category in (ToolCategory.FILE_READ, ToolCategory.DISCOVERY):
             return InterceptionResult(
                 allowed=True,
                 reason=f"Read-only operation for {intent.value}"
             )
-        
+
         # File modification tools: Check MCP availability
         if category == ToolCategory.FILE_MODIFICATION:
             if intent in self.BLOCKED_INTENTS:
                 mcp_available = self.detector.is_mcp_available()
-                
+
                 if not mcp_available:
                     return InterceptionResult(
                         allowed=False,
@@ -200,7 +200,7 @@ class NativeToolInterceptor:
                         alternative="Run: python .cortex-runtime/setup-mcp.py → Reload VS Code",
                         mcp_tool="cortex_process_request"
                     )
-                
+
                 # MCP available: Still block direct file ops for production code
                 if target_file and self._is_production_code(target_file):
                     return InterceptionResult(
@@ -208,7 +208,7 @@ class NativeToolInterceptor:
                         reason=f"Production code modification requires MCP (CORE-049)",
                         mcp_tool="cortex_process_request"
                     )
-        
+
         # Execution tools: Restrict file operations
         if category == ToolCategory.EXECUTION:
             command = kwargs.get("command", "")
@@ -219,26 +219,26 @@ class NativeToolInterceptor:
                         reason=f"File operations via terminal blocked for {intent.value}",
                         mcp_tool="cortex_process_request"
                     )
-        
+
         # Default: Allow
         return InterceptionResult(
             allowed=True,
             reason="Tool allowed for intent"
         )
-    
+
     @staticmethod
     def _is_production_code(file_path: str) -> bool:
         """Check if file is production code (not docs/tests/config)."""
         if not file_path:
             return False
-        
+
         # Extensions for production code
         code_extensions = {".py", ".ts", ".js", ".tsx", ".jsx", ".cs", ".java"}
         ext = os.path.splitext(file_path)[1].lower()
-        
+
         if ext not in code_extensions:
             return False
-        
+
         # Exclude non-production paths
         excluded_paths = {
             "tests/",
@@ -249,13 +249,13 @@ class NativeToolInterceptor:
             "scripts/",
             "examples/",
         }
-        
+
         for excluded in excluded_paths:
             if excluded in file_path:
                 return False
-        
+
         return True
-    
+
     @staticmethod
     def _is_file_operation(command: str) -> bool:
         """Check if terminal command performs file operations."""
@@ -271,7 +271,7 @@ class NativeToolInterceptor:
             "awk",
             "perl -i",
         }
-        
+
         return any(op in command for op in file_ops)
 
 
@@ -287,9 +287,9 @@ def check_tool_allowed(
 ) -> InterceptionResult:
     """
     Global function to check if tool invocation is allowed.
-    
+
     Use this before invoking any native tool.
-    
+
     Example:
         >>> result = check_tool_allowed("create_file", Intent.IMPLEMENT, "src/main.py")
         >>> if not result.allowed:

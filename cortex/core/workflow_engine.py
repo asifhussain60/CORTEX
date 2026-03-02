@@ -35,7 +35,7 @@ class StepError(Exception):
 @dataclass
 class ExecutionStage:
     """Represents a workflow execution stage."""
-    
+
     id: str
     name: str
     description: str
@@ -48,7 +48,7 @@ class ExecutionStage:
 @dataclass
 class ExecutionContext:
     """Context for workflow execution."""
-    
+
     workflow_id: str
     template_path: Path
     stages: Dict[str, ExecutionStage] = field(default_factory=dict)
@@ -60,10 +60,10 @@ class ExecutionContext:
 
 class WorkflowEngine:
     """YAML-based workflow template execution engine."""
-    
+
     def __init__(self, template_dir: Optional[Path] = None) -> None:
         """Initialize WorkflowEngine.
-        
+
         Args:
             template_dir: Directory containing workflow templates.
         """
@@ -247,54 +247,54 @@ class WorkflowEngine:
 
     def load_workflow(self, template_path: Path) -> ExecutionContext:
         """Load a workflow template from YAML file.
-        
+
         Args:
             template_path: Path to workflow YAML file.
-            
+
         Returns:
             ExecutionContext: Loaded workflow context.
-            
+
         Raises:
             FileNotFoundError: If template file doesn't exist.
             yaml.YAMLError: If YAML parsing fails.
         """
         if not template_path.exists():
             raise FileNotFoundError(f"Workflow template not found: {template_path}")
-        
+
         with open(template_path, 'r') as f:
             template = yaml.safe_load(f)
-        
+
         if not template:
             raise ValueError(f"Empty workflow template: {template_path}")
-        
+
         # Create execution context
         metadata = template.get('metadata', {})
         workflow_id = metadata.get('id', 'unnamed-workflow')
-        
+
         context = ExecutionContext(
             workflow_id=workflow_id,
             template_path=template_path,
         )
-        
+
         # Parse stages
         stages_config = template.get('stages', [])
         for stage_config in stages_config:
             stage = self._parse_stage(stage_config)
             context.stages[stage.id] = stage
-        
+
         # Store variables
         context.variables = template.get('variables', {})
-        
+
         self.workflows[workflow_id] = context
         return context
-    
+
     @staticmethod
     def _parse_stage(stage_config: Dict[str, Any]) -> ExecutionStage:
         """Parse a stage definition from workflow YAML.
-        
+
         Args:
             stage_config: Stage configuration dictionary.
-            
+
         Returns:
             ExecutionStage: Parsed stage object.
         """
@@ -305,35 +305,35 @@ class WorkflowEngine:
             steps=stage_config.get('steps', []),
             depends_on=stage_config.get('depends_on', []),
         )
-    
+
     def execute_workflow(self, workflow_id: str) -> ExecutionContext:
         """Execute a loaded workflow.
-        
+
         Args:
             workflow_id: ID of workflow to execute.
-            
+
         Returns:
             ExecutionContext: Updated context after execution.
-            
+
         Raises:
             ValueError: If workflow not found.
         """
         if workflow_id not in self.workflows:
             raise ValueError(f"Workflow not found: {workflow_id}")
-        
+
         context = self.workflows[workflow_id]
         context.status = "running"
         context.started_at = datetime.now()
-        
+
         # Execute stages in order
         for stage_id, stage in context.stages.items():
             stage.status = "running"
-            
+
             try:
                 # Execute stage steps
                 for step in stage.steps:
                     self._execute_step(step, context)
-                
+
                 stage.status = "completed"
             except StepError:
                 # Phase 67-E: StepError is a configuration error — re-raise so
@@ -347,13 +347,13 @@ class WorkflowEngine:
                 stage.error = str(e)
                 context.status = "failed"
                 break
-        
+
         context.completed_at = datetime.now()
         if context.status != "failed":
             context.status = "completed"
-        
+
         return context
-    
+
     def _execute_step(self, step: Dict[str, Any], context: "ExecutionContext") -> None:
         """Execute a single workflow step via the StepHandlerRegistry.
 
@@ -397,33 +397,33 @@ class WorkflowEngine:
 
     def get_execution_context(self, workflow_id: str) -> Optional[ExecutionContext]:
         """Get the execution context for a workflow.
-        
+
         Args:
             workflow_id: ID of workflow.
-            
+
         Returns:
             ExecutionContext if found, None otherwise.
         """
         return self.workflows.get(workflow_id)
-    
+
     def get_stage_status(self, workflow_id: str, stage_id: str) -> Optional[str]:
         """Get the status of a specific stage.
-        
+
         Args:
             workflow_id: ID of workflow.
             stage_id: ID of stage.
-            
+
         Returns:
             Stage status if found, None otherwise.
         """
         context = self.workflows.get(workflow_id)
         if not context:
             return None
-        
+
         stage = context.stages.get(stage_id)
         if not stage:
             return None
-        
+
         return stage.status
 
 
@@ -433,10 +433,10 @@ _engine_instance: Optional[WorkflowEngine] = None
 
 def get_workflow_engine(template_dir: Optional[Path] = None) -> WorkflowEngine:
     """Get or create the singleton WorkflowEngine instance.
-    
+
     Args:
         template_dir: Optional directory for templates.
-        
+
     Returns:
         WorkflowEngine: The singleton instance.
     """

@@ -24,7 +24,7 @@ import subprocess
 
 class FileCategory(Enum):
     """Semantic file categories with destination hints."""
-    
+
     SYSTEM_CODE = "cortex/"              # .py files implementing CORTEX core
     SYSTEM_CONFIG = ".cortex-runtime/"           # CORTEX metadata, manifests
     COMPANY_DATA = "company/"            # Domain-specific outputs, dashboards
@@ -38,7 +38,7 @@ class FileCategory(Enum):
     ARCHIVE = "docs/archive/"            # Cleanup: files to move here
     DELETE = "delete"                    # Files to remove entirely
     UNKNOWN = "unknown"                  # Cannot classify
-    
+
     @property
     def destination(self) -> Optional[str]:
         """Get default destination directory for category."""
@@ -55,13 +55,13 @@ class FileCategory(Enum):
 @dataclass
 class ClassificationSignals:
     """Multi-signal classification analysis."""
-    
+
     extension_signal: Tuple[FileCategory, float] = field(default=(FileCategory.UNKNOWN, 0.0))
     content_signal: Tuple[FileCategory, float] = field(default=(FileCategory.UNKNOWN, 0.0))
     reference_signal: Tuple[FileCategory, float] = field(default=(FileCategory.UNKNOWN, 0.0))
     naming_signal: Tuple[FileCategory, float] = field(default=(FileCategory.UNKNOWN, 0.0))
     git_signal: Tuple[FileCategory, float] = field(default=(FileCategory.UNKNOWN, 0.0))
-    
+
     @property
     def winning_category(self) -> FileCategory:
         """Get highest-confidence category from all signals."""
@@ -72,18 +72,18 @@ class ClassificationSignals:
             self.naming_signal,
             self.git_signal,
         ]
-        
+
         # Remove UNKNOWN signals
         valid = [s for s in signals if s[0] != FileCategory.UNKNOWN]
-        
+
         if not valid:
             return FileCategory.UNKNOWN
-        
+
         # Sort by confidence (descending) then by category priority
         valid.sort(key=lambda x: (-x[1], self._category_priority(x[0])))
-        
+
         return valid[0][0]
-    
+
     @property
     def confidence(self) -> float:
         """Get confidence score (0.0-1.0) for final classification."""
@@ -95,10 +95,10 @@ class ClassificationSignals:
             self.naming_signal,
             self.git_signal,
         ]
-        
+
         matching_scores = [s[1] for s in signals if s[0] == winning]
         return sum(matching_scores) / len(matching_scores) if matching_scores else 0.0
-    
+
     @staticmethod
     def _category_priority(category: FileCategory) -> int:
         """Priority ordering for tiebreaking."""
@@ -122,7 +122,7 @@ class ClassificationSignals:
 
 class FileClassifier:
     """Intelligent file classifier using multiple signals."""
-    
+
     # Extension patterns
     EXTENSION_PATTERNS = {
         FileCategory.SYSTEM_CODE: {
@@ -164,7 +164,7 @@ class FileClassifier:
             "confidence": 1.0,
         },
     }
-    
+
     # Content-based detection patterns (scan first 50 lines)
     CONTENT_PATTERNS = {
         FileCategory.TESTING: {
@@ -184,7 +184,7 @@ class FileClassifier:
             "confidence": 0.6,
         },
     }
-    
+
     # Naming convention patterns
     NAMING_PATTERNS = {
         FileCategory.TESTING: {
@@ -200,50 +200,50 @@ class FileClassifier:
             "confidence": 0.9,
         },
     }
-    
+
     def __init__(self, repo_root: Path = Path(".")) -> None:
         """Initialize classifier.
-        
+
         Args:
             repo_root: Repository root path
         """
         self.repo_root = Path(repo_root)
-    
+
     def classify(self, file_path: Path) -> Tuple[FileCategory, ClassificationSignals]:
         """Classify file using multi-signal analysis.
-        
+
         Args:
             file_path: Path to file to classify
-            
+
         Returns:
             Tuple of (category, signals) for full classification details
         """
         # Normalize path
         file_path = Path(file_path)
         rel_path = str(file_path.relative_to(self.repo_root)) if file_path.is_absolute() else str(file_path)
-        
+
         signals = ClassificationSignals()
-        
+
         # Signal 1: Extension-based (fastest, primary)
         signals.extension_signal = self._classify_by_extension(rel_path)
-        
+
         # Signal 2: Naming conventions
         signals.naming_signal = self._classify_by_name(rel_path)
-        
+
         # Signal 3: Content-based (if file is readable)
         if file_path.is_file() and file_path.stat().st_size < 100_000:  # Skip large files
             signals.content_signal = self._classify_by_content(file_path)
-        
+
         # Signal 4: Reference analysis (check if imported/referenced)
         signals.reference_signal = self._classify_by_references(rel_path)
-        
+
         # Signal 5: Git history (if in git repo)
         if (self.repo_root / ".git").exists():
             signals.git_signal = self._classify_by_git(rel_path)
-        
+
         category = signals.winning_category
         return category, signals
-    
+
     def _classify_by_extension(self, rel_path: str) -> Tuple[FileCategory, float]:
         """Classify by file extension."""
         for category, rules in self.EXTENSION_PATTERNS.items():
@@ -258,51 +258,51 @@ class FileClassifier:
                             continue
                     else:
                         return category, rules["confidence"]
-        
+
         return FileCategory.UNKNOWN, 0.0
-    
+
     def _classify_by_name(self, rel_path: str) -> Tuple[FileCategory, float]:
         """Classify by naming conventions."""
         file_name = Path(rel_path).name
-        
+
         for category, rules in self.NAMING_PATTERNS.items():
             for pattern in rules["patterns"]:
                 if re.search(pattern, file_name, re.IGNORECASE):
                     return category, rules["confidence"]
-        
+
         return FileCategory.UNKNOWN, 0.0
-    
+
     def _classify_by_content(self, file_path: Path) -> Tuple[FileCategory, float]:
         """Classify by content scanning (first 50 lines)."""
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = "".join([f.readline() for _ in range(50)])
-            
+
             for category, rules in self.CONTENT_PATTERNS.items():
                 for pattern in rules["patterns"]:
                     if re.search(pattern, content, re.MULTILINE):
                         return category, rules["confidence"]
         except Exception:
             pass
-        
+
         return FileCategory.UNKNOWN, 0.0
-    
+
     def _classify_by_references(self, rel_path: str) -> Tuple[FileCategory, float]:
         """Classify by checking if file is referenced in codebase."""
         # Simple heuristic: if file is in company/, likely company data
         if "company/" in rel_path:
             return FileCategory.COMPANY_DATA, 0.7
-        
+
         # If in scripts/, likely scripts_utils
         if "scripts/" in rel_path:
             return FileCategory.SCRIPTS_UTILS, 0.8
-        
+
         # If in deployment/, likely deployment
         if "deployment/" in rel_path:
             return FileCategory.DEPLOYMENT, 0.9
-        
+
         return FileCategory.UNKNOWN, 0.0
-    
+
     def _classify_by_git(self, rel_path: str) -> Tuple[FileCategory, float]:
         """Classify using git history (age, author, etc)."""
         try:
@@ -314,7 +314,7 @@ class FileClassifier:
                 text=True,
                 timeout=5,
             )
-            
+
             if result.returncode == 0 and result.stdout:
                 lines = result.stdout.strip().split("\n")
                 if lines:
@@ -322,7 +322,7 @@ class FileClassifier:
                     return FileCategory.UNKNOWN, 0.3  # Low confidence, use as tiebreaker
         except Exception:
             pass
-        
+
         return FileCategory.UNKNOWN, 0.0
 
 

@@ -21,27 +21,27 @@ logger = logging.getLogger(__name__)
 class GraphStorage:
     """
     SQLite-based storage for knowledge graph.
-    
+
     Implements property graph model with nodes and directed edges.
     Optimized for fast queries (<100ms for 2-hop traversals).
-    
+
     Example:
         >>> storage = GraphStorage(Path("graph.db"))
         >>> storage.initialize_schema()
         >>> node_id = storage.insert_node("File", "test.py", {"lines": 50})
         >>> neighbors = storage.query_neighbors(node_id, "imports", depth=1)
     """
-    
+
     def __init__(self, db_path: Path) -> None:
         """
         Initialize graph storage.
-        
+
         Args:
             db_path: Path to SQLite database file
         """
         self.db_path = db_path
         self.conn: Optional[sqlite3.Connection] = None
-    
+
     def _get_connection(self) -> sqlite3.Connection:
         """Get database connection (lazy initialization)."""
         if self.conn is None:
@@ -50,18 +50,18 @@ class GraphStorage:
             # Enable foreign keys
             self.conn.execute("PRAGMA foreign_keys = ON")
         return self.conn
-    
+
     def initialize_schema(self) -> None:
         """
         Create database schema if not exists.
-        
+
         Creates nodes and edges tables with indexes.
         """
         conn = self._get_connection()
         conn.executescript(SCHEMA_SQL)
         conn.commit()
         logger.info(f"Initialized knowledge graph schema at {self.db_path}")
-    
+
     def insert_node(
         self,
         node_type: str,
@@ -70,20 +70,20 @@ class GraphStorage:
     ) -> int:
         """
         Insert a new node into the graph.
-        
+
         Args:
             node_type: Type of node (File, Class, Function, etc.)
             name: Node name
             properties: Additional metadata (JSON-serializable)
-        
+
         Returns:
             Node ID
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         properties_json = json.dumps(properties)
-        
+
         cursor.execute(
             """
             INSERT INTO nodes (node_type, name, properties)
@@ -91,16 +91,16 @@ class GraphStorage:
             """,
             (node_type, name, properties_json)
         )
-        
+
         conn.commit()
         node_id = cursor.lastrowid
-        
+
         if node_id is None:
             raise RuntimeError("Failed to get node ID after insertion")
-        
+
         logger.debug(f"Inserted node: id={node_id}, type={node_type}, name={name}")
         return node_id
-    
+
     def insert_edge(
         self,
         source_id: int,
@@ -110,21 +110,21 @@ class GraphStorage:
     ) -> int:
         """
         Insert a new edge between nodes.
-        
+
         Args:
             source_id: Source node ID
             target_id: Target node ID
             edge_type: Type of relationship (imports, calls, etc.)
             properties: Additional metadata (JSON-serializable)
-        
+
         Returns:
             Edge ID
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         properties_json = json.dumps(properties)
-        
+
         cursor.execute(
             """
             INSERT INTO edges (source_id, target_id, edge_type, properties)
@@ -132,29 +132,29 @@ class GraphStorage:
             """,
             (source_id, target_id, edge_type, properties_json)
         )
-        
+
         conn.commit()
         edge_id = cursor.lastrowid
-        
+
         if edge_id is None:
             raise RuntimeError("Failed to get edge ID after insertion")
-        
+
         logger.debug(f"Inserted edge: id={edge_id}, {source_id} → {target_id} ({edge_type})")
         return edge_id
-    
+
     def get_node(self, node_id: int) -> Optional[Dict[str, Any]]:
         """
         Retrieve node by ID.
-        
+
         Args:
             node_id: Node ID to retrieve
-        
+
         Returns:
             Node dictionary or None if not found
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             SELECT id, node_type, name, properties
@@ -163,31 +163,31 @@ class GraphStorage:
             """,
             (node_id,)
         )
-        
+
         row = cursor.fetchone()
         if row is None:
             return None
-        
+
         return {
             "id": row[0],
             "node_type": row[1],
             "name": row[2],
             "properties": json.loads(row[3]) if row[3] else {}
         }
-    
+
     def find_node_by_name(self, name: str) -> Optional[Dict[str, Any]]:
         """
         Find node by exact name match.
-        
+
         Args:
             name: Node name to search for
-        
+
         Returns:
             Node dictionary or None if not found
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             SELECT id, node_type, name, properties
@@ -197,31 +197,31 @@ class GraphStorage:
             """,
             (name,)
         )
-        
+
         row = cursor.fetchone()
         if row is None:
             return None
-        
+
         return {
             "id": row[0],
             "node_type": row[1],
             "name": row[2],
             "properties": json.loads(row[3]) if row[3] else {}
         }
-    
+
     def get_edge(self, edge_id: int) -> Optional[Dict[str, Any]]:
         """
         Retrieve edge by ID.
-        
+
         Args:
             edge_id: Edge ID to retrieve
-        
+
         Returns:
             Edge dictionary or None if not found
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             SELECT id, source_id, target_id, edge_type, properties
@@ -230,11 +230,11 @@ class GraphStorage:
             """,
             (edge_id,)
         )
-        
+
         row = cursor.fetchone()
         if row is None:
             return None
-        
+
         return {
             "id": row[0],
             "source_id": row[1],
@@ -242,23 +242,23 @@ class GraphStorage:
             "edge_type": row[3],
             "properties": json.loads(row[4]) if row[4] else {}
         }
-    
+
     def update_node(self, node_id: int, properties: Dict[str, Any]) -> bool:
         """
         Update node properties.
-        
+
         Args:
             node_id: Node ID to update
             properties: New properties (replaces existing)
-        
+
         Returns:
             True if updated, False if node not found
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         properties_json = json.dumps(properties)
-        
+
         cursor.execute(
             """
             UPDATE nodes
@@ -267,67 +267,67 @@ class GraphStorage:
             """,
             (properties_json, node_id)
         )
-        
+
         conn.commit()
         updated = cursor.rowcount > 0
-        
+
         if updated:
             logger.debug(f"Updated node: id={node_id}")
-        
+
         return updated
-    
+
     def delete_node(self, node_id: int) -> bool:
         """
         Delete node (cascades to edges).
-        
+
         Args:
             node_id: Node ID to delete
-        
+
         Returns:
             True if deleted, False if node not found
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute("DELETE FROM nodes WHERE id = ?", (node_id,))
-        
+
         conn.commit()
         deleted = cursor.rowcount > 0
-        
+
         if deleted:
             logger.debug(f"Deleted node: id={node_id}")
-        
+
         return deleted
-    
+
     def delete_edges_for_node(self, node_id: int) -> int:
         """
         Delete all edges connected to a node (both incoming and outgoing).
-        
+
         Args:
             node_id: Node ID
-        
+
         Returns:
             Number of edges deleted
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
-            DELETE FROM edges 
+            DELETE FROM edges
             WHERE source_id = ? OR target_id = ?
             """,
             (node_id, node_id)
         )
-        
+
         conn.commit()
         deleted_count = cursor.rowcount
-        
+
         if deleted_count > 0:
             logger.debug(f"Deleted {deleted_count} edges for node: id={node_id}")
-        
+
         return deleted_count
-    
+
     def query_neighbors(
         self,
         node_id: int,
@@ -336,30 +336,30 @@ class GraphStorage:
     ) -> List[Dict[str, Any]]:
         """
         Query neighbors of a node up to specified depth.
-        
+
         Args:
             node_id: Starting node ID
             edge_type: Filter by edge type (None = all types)
             depth: Maximum traversal depth (1 = direct neighbors)
-        
+
         Returns:
             List of neighbor nodes (includes transitive neighbors up to depth)
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         visited = set()
         neighbors = []
         current_level = [node_id]
-        
+
         for _ in range(depth):
             next_level = []
-            
+
             for current_id in current_level:
                 if current_id in visited:
                     continue
                 visited.add(current_id)
-                
+
                 # Query outgoing edges
                 if edge_type:
                     cursor.execute(
@@ -381,7 +381,7 @@ class GraphStorage:
                         """,
                         (current_id,)
                     )
-                
+
                 for row in cursor.fetchall():
                     neighbor_id = row[0]
                     if neighbor_id not in visited and neighbor_id != node_id:
@@ -392,26 +392,26 @@ class GraphStorage:
                             "properties": json.loads(row[3]) if row[3] else {}
                         })
                         next_level.append(neighbor_id)
-            
+
             current_level = next_level
             if not current_level:
                 break
-        
+
         return neighbors
-    
+
     def query_nodes_by_type(self, node_type: str) -> List[Dict[str, Any]]:
         """
         Query all nodes of a specific type.
-        
+
         Args:
             node_type: Node type to filter by
-        
+
         Returns:
             List of nodes matching type
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             SELECT id, node_type, name, properties
@@ -420,7 +420,7 @@ class GraphStorage:
             """,
             (node_type,)
         )
-        
+
         nodes = []
         for row in cursor.fetchall():
             nodes.append({
@@ -429,31 +429,31 @@ class GraphStorage:
                 "name": row[2],
                 "properties": json.loads(row[3]) if row[3] else {}
             })
-        
+
         return nodes
-    
+
     def bulk_insert_nodes(
         self,
         nodes_data: List[Tuple[str, str, Dict[str, Any]]]
     ) -> List[int]:
         """
         Bulk insert multiple nodes efficiently.
-        
+
         Args:
             nodes_data: List of (node_type, name, properties) tuples
-        
+
         Returns:
             List of inserted node IDs
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         # Prepare data with JSON-serialized properties
         prepared_data = [
             (node_type, name, json.dumps(properties))
             for node_type, name, properties in nodes_data
         ]
-        
+
         cursor.executemany(
             """
             INSERT INTO nodes (node_type, name, properties)
@@ -461,16 +461,16 @@ class GraphStorage:
             """,
             prepared_data
         )
-        
+
         conn.commit()
-        
+
         # Get IDs of inserted nodes
         # SQLite's lastrowid only works reliably for single inserts, not executemany
         # Query to get the node IDs we just inserted
         cursor.execute(
             """
-            SELECT id FROM nodes 
-            WHERE node_type IN ({}) 
+            SELECT id FROM nodes
+            WHERE node_type IN ({})
             AND name IN ({})
             ORDER BY id DESC
             LIMIT ?
@@ -480,23 +480,23 @@ class GraphStorage:
             ),
             list(set(nt for nt, _, _ in nodes_data)) + [name for _, name, _ in nodes_data] + [len(nodes_data)]
         )
-        
+
         rows = cursor.fetchall()
         node_ids = [row[0] for row in reversed(rows)]  # Reverse to maintain insertion order
-        
+
         logger.debug(f"Bulk inserted {len(nodes_data)} nodes")
         return node_ids
-    
+
     def export_to_json(self) -> str:
         """
         Export entire graph to JSON string.
-        
+
         Returns:
             JSON string with nodes and edges
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         # Get all nodes
         cursor.execute("SELECT id, node_type, name, properties FROM nodes")
         nodes = []
@@ -507,7 +507,7 @@ class GraphStorage:
                 "name": row[2],
                 "properties": json.loads(row[3]) if row[3] else {}
             })
-        
+
         # Get all edges
         cursor.execute("SELECT id, source_id, target_id, edge_type, properties FROM edges")
         edges = []
@@ -519,22 +519,22 @@ class GraphStorage:
                 "edge_type": row[3],
                 "properties": json.loads(row[4]) if row[4] else {}
             })
-        
+
         graph = {
             "nodes": nodes,
             "edges": edges,
             "exported_at": datetime.utcnow().isoformat()
         }
-        
+
         return json.dumps(graph, indent=2)
-    
+
     def get_statistics(self) -> Dict[str, Any]:
         """
         Get graph statistics.
-        
+
         Returns:
             Dictionary with node/edge counts and type breakdown
-        
+
         Example:
             >>> storage.get_statistics()
             {
@@ -546,15 +546,15 @@ class GraphStorage:
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         # Count total nodes
         cursor.execute("SELECT COUNT(*) as count FROM nodes")
         total_nodes = cursor.fetchone()["count"]
-        
+
         # Count total edges
         cursor.execute("SELECT COUNT(*) as count FROM edges")
         total_edges = cursor.fetchone()["count"]
-        
+
         # Count nodes by type
         cursor.execute("""
             SELECT node_type, COUNT(*) as count
@@ -562,7 +562,7 @@ class GraphStorage:
             GROUP BY node_type
         """)
         nodes_by_type = {row["node_type"]: row["count"] for row in cursor.fetchall()}
-        
+
         # Count edges by type
         cursor.execute("""
             SELECT edge_type, COUNT(*) as count
@@ -570,27 +570,27 @@ class GraphStorage:
             GROUP BY edge_type
         """)
         edges_by_type = {row["edge_type"]: row["count"] for row in cursor.fetchall()}
-        
+
         logger.debug(f"Statistics: {total_nodes} nodes, {total_edges} edges")
-        
+
         return {
             "total_nodes": total_nodes,
             "total_edges": total_edges,
             "nodes_by_type": nodes_by_type,
             "edges_by_type": edges_by_type
         }
-    
+
     def close(self) -> None:
         """Close database connection."""
         if self.conn:
             self.conn.close()
             self.conn = None
             logger.debug("Closed database connection")
-    
+
     def __enter__(self):
         """Context manager entry."""
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
         self.close()

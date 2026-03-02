@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class OptimizationConfig:
     """Configuration for cross-layer optimization.
-    
+
     Attributes:
         latency_target_ms: Target latency in milliseconds (default 100ms)
         timeout_ms: Operation timeout in milliseconds
@@ -40,7 +40,7 @@ class OptimizationConfig:
 @dataclass
 class CoordinationResult:
     """Result of orchestrator coordination.
-    
+
     Attributes:
         success: Whether coordination succeeded
         coordination_plan: List of orchestrators in execution order
@@ -61,7 +61,7 @@ class CoordinationResult:
 @dataclass
 class LatencyMeasurement:
     """Result of latency measurement.
-    
+
     Attributes:
         success: Whether measurement succeeded
         latency_ms: Measured latency in milliseconds
@@ -78,7 +78,7 @@ class LatencyMeasurement:
 @dataclass
 class ResourcePool:
     """Resource pool for reusable resources.
-    
+
     Attributes:
         resource_type: Type of resources in pool
         size: Current pool size
@@ -95,7 +95,7 @@ class ResourcePool:
         "total_releases": 0,
         "current_usage": 0,
     })
-    
+
     def acquire(self, block: bool = True) -> Optional[Any]:
         """Acquire a resource from the pool."""
         if not self.available:
@@ -103,41 +103,41 @@ class ResourcePool:
                 return None
             # In real impl, would wait for resource
             return None
-        
+
         resource = self.available.pop()
         self.in_use.add(resource)
         self.metrics["total_acquires"] += 1
         self.metrics["current_usage"] = len(self.in_use)
         return resource
-    
+
     def release(self, resource: Any) -> bool:
         """Release a resource back to the pool."""
         if resource not in self.in_use:
             return False
-        
+
         self.in_use.remove(resource)
         self.available.append(resource)
         self.metrics["total_releases"] += 1
         self.metrics["current_usage"] = len(self.in_use)
         return True
-    
+
     def get_metrics(self) -> Dict[str, int]:
         """Get pool metrics."""
         return self.metrics.copy()
-    
+
     def cleanup(self) -> None:
         """Cleanup all pool resources."""
         self.available.clear()
         self.in_use.clear()
         self.size = 0
-    
+
     def health_check(self) -> Dict[str, int]:
         """Check pool health."""
         return {
             "healthy_count": len(self.available) + len(self.in_use),
             "unhealthy_count": 0,
         }
-    
+
     def resize(self, new_size: int) -> None:
         """Resize the pool."""
         if new_size > self.size:
@@ -148,14 +148,14 @@ class ResourcePool:
 
 class CrossLayerOptimizer:
     """Cross-layer optimizer for orchestrator coordination and performance.
-    
+
     Features:
         - Cross-orchestrator coordination
         - Latency measurement and optimization
         - Resource pooling
         - Caching strategies
         - Parallel execution
-    
+
     Example:
         >>> optimizer = CrossLayerOptimizer()
         >>> result = optimizer.coordinate(
@@ -182,13 +182,13 @@ class CrossLayerOptimizer:
         allow_parallel: bool = False,
     ) -> CoordinationResult:
         """Coordinate multiple orchestrators.
-        
+
         Args:
             orchestrators: List of orchestrator names
             operation: Operation being performed
             dependencies: Dict mapping orchestrator -> list of dependencies
             allow_parallel: Whether to allow parallel execution
-        
+
         Returns:
             CoordinationResult with coordination plan
         """
@@ -198,7 +198,7 @@ class CrossLayerOptimizer:
             cached = self._coordination_cache[cache_key]
             cached.from_cache = True
             return cached
-        
+
         # Validate inputs
         if not orchestrators:
             return CoordinationResult(
@@ -206,14 +206,14 @@ class CrossLayerOptimizer:
                 coordination_plan=[],
                 error_message="No orchestrators provided",
             )
-        
+
         # Check for non-existent orchestrators (basic validation)
         known_orchestrators = {
             "TDDOrchestrator", "IntentRouter", "RefactoringOrchestrator",
             "MasterOrchestrator", "LENSSynthesis", "SecurityOrchestrator",
             "OrchestratorA", "OrchestratorB"  # Test orchestrators
         }
-        
+
         unknown = [o for o in orchestrators if o not in known_orchestrators]
         if unknown:
             return CoordinationResult(
@@ -221,7 +221,7 @@ class CrossLayerOptimizer:
                 coordination_plan=[],
                 error_message=f"Unknown orchestrators: {', '.join(unknown)}",
             )
-        
+
         # Check for cyclic dependencies
         if dependencies and self._has_cycle(orchestrators, dependencies):
             return CoordinationResult(
@@ -229,15 +229,15 @@ class CrossLayerOptimizer:
                 coordination_plan=[],
                 error_message="Cyclic dependencies detected",
             )
-        
+
         # Build coordination plan
         coordination_plan = self._build_plan(orchestrators, dependencies)
-        
+
         # Identify parallel groups
         parallel_groups = None
         if allow_parallel:
             parallel_groups = self._identify_parallel_groups(orchestrators, dependencies)
-        
+
         start_time = time.time()
         result = CoordinationResult(
             success=True,
@@ -250,10 +250,10 @@ class CrossLayerOptimizer:
                 }
             },
         )
-        
+
         # Cache result
         self._coordination_cache[cache_key] = result
-        
+
         return result
 
     def _has_cycle(
@@ -264,22 +264,22 @@ class CrossLayerOptimizer:
         """Detect cyclic dependencies."""
         visited = set()
         rec_stack = set()
-        
+
         def visit(node: str) -> bool:
             """Check if visiting this node creates a cycle in the dependency graph."""
             visited.add(node)
             rec_stack.add(node)
-            
+
             for dep in dependencies.get(node, []):
                 if dep not in visited:
                     if visit(dep):
                         return True
                 elif dep in rec_stack:
                     return True
-            
+
             rec_stack.remove(node)
             return False
-        
+
         for orch in orchestrators:
             if orch not in visited:
                 if visit(orch):
@@ -294,26 +294,26 @@ class CrossLayerOptimizer:
         """Build execution plan respecting dependencies."""
         if not dependencies:
             return orchestrators.copy()
-        
+
         # Topological sort
         visited = set()
         plan = []
-        
+
         def visit(node: str) -> None:
             """Visit a node and its dependencies in topological order."""
             if node in visited:
                 return
             visited.add(node)
-            
+
             for dep in dependencies.get(node, []):
                 if dep in orchestrators:
                     visit(dep)
-            
+
             plan.append(node)
-        
+
         for orch in orchestrators:
             visit(orch)
-        
+
         return plan
 
     def _identify_parallel_groups(
@@ -325,14 +325,14 @@ class CrossLayerOptimizer:
         if not dependencies:
             # All can run in parallel if no dependencies
             return [orchestrators]
-        
+
         # Simple heuristic: orchestrators with no inter-dependencies
         independent = []
         for orch in orchestrators:
             deps = set(dependencies.get(orch, []))
             if not deps.intersection(set(orchestrators)):
                 independent.append(orch)
-        
+
         if len(independent) > 1:
             return [independent]
         return []
@@ -344,39 +344,39 @@ class CrossLayerOptimizer:
         enable_monitoring: bool = False,
     ) -> LatencyMeasurement:
         """Measure operation latency.
-        
+
         Args:
             operation_name: Name of operation
             operation_fn: Function to measure
             enable_monitoring: Whether to enable monitoring integration
-        
+
         Returns:
             LatencyMeasurement with timing data
         """
         start_time = time.time()
-        
+
         try:
             operation_fn()
             latency_ms = (time.time() - start_time) * 1000
-            
+
             # Store measurement
             if operation_name not in self._latency_measurements:
                 self._latency_measurements[operation_name] = []
             self._latency_measurements[operation_name].append(latency_ms)
-            
+
             # Check against target
             meets_target = latency_ms < self.config.latency_target_ms
-            
+
             # Check against baseline
             vs_baseline = None
             if operation_name in self._baselines:
                 baseline = self._baselines[operation_name]
                 vs_baseline = ((latency_ms - baseline) / baseline) * 100
-            
+
             metadata = {}
             if enable_monitoring:
                 metadata["monitoring_id"] = f"mon_{operation_name}_{int(time.time() * 1000)}"
-            
+
             return LatencyMeasurement(
                 success=True,
                 latency_ms=latency_ms,
@@ -399,42 +399,42 @@ class CrossLayerOptimizer:
         enable_cache: bool = False,
     ) -> Any:
         """Optimize operation latency through caching.
-        
+
         Args:
             operation_name: Name of operation
             operation_fn: Function to optimize
             enable_cache: Whether to enable caching
-        
+
         Returns:
             Operation result
         """
         # Check cache
         if enable_cache and operation_name in self._operation_cache:
             return self._operation_cache[operation_name]
-        
+
         # Execute operation with timeout handling
         try:
             import signal
-            
+
             def timeout_handler(signum: int, frame: object) -> None:
                 """Handle SIGALRM by raising TimeoutError."""
                 raise TimeoutError("Operation timed out")
-            
+
             # Set timeout if configured
             if self.config.timeout_ms < 5000:
                 signal.signal(signal.SIGALRM, timeout_handler)
                 signal.setitimer(signal.ITIMER_REAL, self.config.timeout_ms / 1000)
-            
+
             try:
                 result = operation_fn()
             finally:
                 if self.config.timeout_ms < 5000:
                     signal.alarm(0)  # Cancel alarm
-            
+
             # Cache result
             if enable_cache:
                 self._operation_cache[operation_name] = result
-            
+
             return result
         except TimeoutError:
             logger.warning(f"Operation {operation_name} timed out")
@@ -448,10 +448,10 @@ class CrossLayerOptimizer:
         operations: List[Callable]
     ) -> List[Any]:
         """Execute operations in parallel for better latency.
-        
+
         Args:
             operations: List of operations to execute
-        
+
         Returns:
             List of results
         """
@@ -477,7 +477,7 @@ class CrossLayerOptimizer:
         measurements = self._latency_measurements.get(operation_name, [])
         if not measurements:
             return {}
-        
+
         sorted_measurements = sorted(measurements)
         return {
             "mean": statistics.mean(measurements),
@@ -493,22 +493,22 @@ class CrossLayerOptimizer:
         threshold_pct: float = 20.0,
     ) -> bool:
         """Detect latency regression.
-        
+
         Args:
             operation_name: Name of operation
             new_latency_ms: New latency measurement
             threshold_pct: Regression threshold percentage
-        
+
         Returns:
             True if regression detected
         """
         measurements = self._latency_measurements.get(operation_name, [])
         if not measurements:
             return False
-        
+
         baseline = statistics.mean(measurements)
         regression_pct = ((new_latency_ms - baseline) / baseline) * 100
-        
+
         return regression_pct > threshold_pct
 
     def get_optimization_recommendations(
@@ -519,15 +519,15 @@ class CrossLayerOptimizer:
         measurements = self._latency_measurements.get(operation_name, [])
         if not measurements:
             return []
-        
+
         recommendations = []
         avg_latency = statistics.mean(measurements)
-        
+
         if avg_latency > self.config.latency_target_ms:
             recommendations.append("Enable result caching to reduce computation time")
             recommendations.append("Consider parallel execution for independent subtasks")
             recommendations.append("Review algorithm complexity for optimization opportunities")
-        
+
         return recommendations
 
     def set_baseline(self, operation_name: str, baseline_ms: float) -> None:
@@ -541,24 +541,24 @@ class CrossLayerOptimizer:
         allow_dynamic: bool = False,
     ) -> ResourcePool:
         """Create a resource pool.
-        
+
         Args:
             resource_type: Type of resources
             pool_size: Initial pool size
             allow_dynamic: Whether to allow dynamic resizing
-        
+
         Returns:
             ResourcePool instance
         """
         # Create initial resources
         resources = [f"resource_{i}" for i in range(pool_size)]
-        
+
         pool = ResourcePool(
             resource_type=resource_type,
             size=pool_size,
             available=resources,
         )
-        
+
         self._resource_pools[resource_type] = pool
         return pool
 

@@ -369,7 +369,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         """
         try:
             audit_entries = []
-            
+
             # Try reading from trace database first
             trace_db_path = Path(os.getenv("CORTEX_TRACE_DB", ".cortex-runtime/traces/orchestrator-traces.db"))
             if trace_db_path.exists():
@@ -388,11 +388,11 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                             "result": row[3],
                             "metadata": row[4]
                         })
-            
+
             # Fallback to in-memory if DB empty
             if not audit_entries:
                 audit_entries = self._audit_trail[-limit:]
-            
+
             return Ok(audit_entries)
         except Exception as e:
             # Fallback to in-memory on any error
@@ -537,16 +537,16 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
                 from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
-                
+
                 gateway = get_gateway()
                 session_id = getattr(round_context, 'session_id', 'default_session')
-                
+
                 synthesized = gateway.synthesize(
                     context=output,
                     session_id=session_id,
                     orchestrator_name="InteractionOrchestrator"
                 )
-                
+
                 # Log budget violations but don't block
                 if not synthesized.budget_compliant:
                     self.logger.log_operation_complete(
@@ -560,7 +560,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                             "overflow": synthesized.token_count - gateway.token_budget
                         }
                     )
-                
+
                 # Merge synthesis metadata — preserve canonical keys
                 # (challenge_evaluated, lens_context, type required downstream)
                 synthesis_meta = synthesized.context or {}
@@ -575,7 +575,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     success=False,
                     details={"error": str(gateway_err)}
                 )
-            
+
             # Step 5: Audit trail
             self._audit_trail.append({
                 "ac_id": "AC-PERMANENT-FIX-006",
@@ -640,14 +640,14 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             except Exception:
                 output["breadcrumb"] = ""
                 output["engagement"] = {"breadcrumb": "", "stage_pulse": None, "timeline": None}
-            
+
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:
                 from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
-                
+
                 gateway = get_gateway()
                 session_id = context.get('session_id', 'default_session')
-                
+
                 synthesized = gateway.synthesize(
                     context=output,
                     session_id=session_id,

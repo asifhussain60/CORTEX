@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RoleConfig:
     """Role-specific configuration."""
-    
+
     title: str
     accent_color: str
     icon: str
@@ -39,7 +39,7 @@ class RoleConfig:
 @dataclass
 class BreadcrumbItem:
     """Breadcrumb navigation item."""
-    
+
     title: str
     url: str
 
@@ -47,7 +47,7 @@ class BreadcrumbItem:
 @dataclass
 class NavigationItem:
     """Navigation menu item."""
-    
+
     title: str
     url: str
     icon: str = ""
@@ -57,15 +57,15 @@ class NavigationItem:
 class DocsTemplateRenderer:
     """
     Renders CORTEX documentation site from templates.
-    
+
     Uses Jinja2 to transform content.json into glassmorphism-themed HTML
     with role-based navigation and responsive design.
-    
+
     Attributes:
         template_dir: Jinja2 templates directory
         output_dir: Generated HTML output directory
     """
-    
+
     ROLE_CONFIGS = {
         "business": RoleConfig(
             title="Business Leaders",
@@ -86,7 +86,7 @@ class DocsTemplateRenderer:
             slug="engineering",
         ),
     }
-    
+
     def __init__(
         self,
         template_dir: Path = Path("cortex-docs/templates"),
@@ -94,14 +94,14 @@ class DocsTemplateRenderer:
     ) -> None:
         """
         Initialize template renderer.
-        
+
         Args:
             template_dir: Jinja2 templates directory
             output_dir: Generated HTML output directory
         """
         self.template_dir = template_dir
         self.output_dir = output_dir
-        
+
         if JINJA2_AVAILABLE:
             self.env = Environment(
                 loader=FileSystemLoader(str(template_dir)),
@@ -110,22 +110,22 @@ class DocsTemplateRenderer:
         else:
             self.env = None
             logger.warning("Jinja2 not available, using mock renderer")
-    
+
     def get_role_config(self, role: str) -> RoleConfig:
         """
         Get configuration for a role.
-        
+
         Args:
             role: Role slug (business/product/engineering)
-            
+
         Returns:
             Role configuration
-            
+
         Raises:
             KeyError: If role not found
         """
         return self.ROLE_CONFIGS[role]
-    
+
     def build_breadcrumbs(
         self,
         role: str,
@@ -133,11 +133,11 @@ class DocsTemplateRenderer:
     ) -> List[BreadcrumbItem]:
         """
         Build breadcrumb navigation.
-        
+
         Args:
             role: Role slug
             page_slug: Optional child page slug
-            
+
         Returns:
             List of breadcrumb items
         """
@@ -149,7 +149,7 @@ class DocsTemplateRenderer:
                 url=f"/{role}/index.html"
             ),
         ]
-        
+
         if page_slug:
             # Convert slug to title with special handling for acronyms
             # e.g., "roi-governance" → "ROI & Governance"
@@ -161,16 +161,16 @@ class DocsTemplateRenderer:
                 else:
                     title_parts.append(part.capitalize())
             title = " & ".join(title_parts) if len(title_parts) == 2 else " ".join(title_parts)
-            
+
             breadcrumbs.append(
                 BreadcrumbItem(
                     title=title,
                     url=f"/{role}/{page_slug}.html"
                 )
             )
-        
+
         return breadcrumbs
-    
+
     def build_navigation(
         self,
         content_data: Dict[str, Any],
@@ -179,20 +179,20 @@ class DocsTemplateRenderer:
     ) -> List[NavigationItem]:
         """
         Build navigation menu for a role.
-        
+
         Args:
             content_data: Content.json data
             role: Role slug
             active_page: Currently active page slug
-            
+
         Returns:
             List of navigation items
         """
         nav_items = []
-        
+
         role_data = content_data.get("roles", {}).get(role, {})
         pages = role_data.get("pages", [])
-        
+
         for page in pages:
             nav_items.append(
                 NavigationItem(
@@ -202,9 +202,9 @@ class DocsTemplateRenderer:
                     active=page.get("slug") == active_page,
                 )
             )
-        
+
         return nav_items
-    
+
     def render_role_landing(
         self,
         role: str,
@@ -212,23 +212,23 @@ class DocsTemplateRenderer:
     ) -> str:
         """
         Render role landing page.
-        
+
         Args:
             role: Role slug
             content_data: Content.json data
-            
+
         Returns:
             Rendered HTML
-            
+
         Raises:
             FileNotFoundError: If template not found
         """
         if not self.env:
             return f"<html><body>Mock render: {role} landing</body></html>"
-        
+
         template = self.env.get_template("role-landing.html.j2")
         config = self.get_role_config(role)
-        
+
         return template.render(
             role=role,
             role_config=config,
@@ -236,7 +236,7 @@ class DocsTemplateRenderer:
             navigation=self.build_navigation(content_data, role),
             content=content_data.get("roles", {}).get(role, {}),
         )
-    
+
     def render_child_page(
         self,
         role: str,
@@ -246,25 +246,25 @@ class DocsTemplateRenderer:
     ) -> str:
         """
         Render child page.
-        
+
         Args:
             role: Role slug
             page_slug: Page slug
             page_data: Page-specific data
             content_data: Full content.json (for navigation)
-            
+
         Returns:
             Rendered HTML
-            
+
         Raises:
             FileNotFoundError: If template not found
         """
         if not self.env:
             return f"<html><body>Mock render: {role}/{page_slug}</body></html>"
-        
+
         template = self.env.get_template("child-page.html.j2")
         config = self.get_role_config(role)
-        
+
         return template.render(
             role=role,
             role_config=config,
@@ -272,7 +272,7 @@ class DocsTemplateRenderer:
             navigation=self.build_navigation(content_data or {}, role, page_slug),
             page=page_data,
         )
-    
+
     def save_page(
         self,
         role: str,
@@ -281,36 +281,36 @@ class DocsTemplateRenderer:
     ) -> Path:
         """
         Save rendered HTML to file.
-        
+
         Args:
             role: Role slug
             page_slug: Page slug
             html_content: Rendered HTML
-            
+
         Returns:
             Path to saved file
         """
         role_dir = self.output_dir / role
         role_dir.mkdir(parents=True, exist_ok=True)
-        
+
         output_file = role_dir / f"{page_slug}.html"
         output_file.write_text(html_content)
-        
+
         logger.info(f"Saved: {output_file}")
         return output_file
-    
+
     def render(self, content_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Render all pages from content.json.
-        
+
         Args:
             content_data: Content.json data
-            
+
         Returns:
             Rendering results
         """
         pages_rendered = []
-        
+
         for role in self.ROLE_CONFIGS.keys():
             # Render role landing page
             try:
@@ -319,7 +319,7 @@ class DocsTemplateRenderer:
                 pages_rendered.append(str(output_file))
             except FileNotFoundError:
                 logger.warning(f"Template not found for role: {role}")
-        
+
         return {
             "status": "success",
             "pages": pages_rendered,

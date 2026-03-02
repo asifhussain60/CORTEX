@@ -41,10 +41,10 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     # Phase 94f — advisory: SOLID analysis tool; not a primary code-touching entry point.
     PHASE90_GATEWAY_EXEMPT: bool = True
-    
+
     def __init__(self, audit_db_path: Optional[Path] = None) -> None:
         """Initialize SOLID orchestrator.
-        
+
         Args:
             audit_db_path: Optional SQLite audit DB path
         """
@@ -53,9 +53,9 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         self.isp_analyzer = ISPAnalyzer()
         self.dip_analyzer = DIPAnalyzer()
         self.dry_analyzer = DRYAnalyzer()
-        
+
         self._violations: List[SolidViolation] = []
-        
+
         # SQLite audit logging (store in subdirectory to avoid root pollution)
         if audit_db_path:
             self.audit_db_path = audit_db_path
@@ -64,7 +64,7 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "solid_audit.db"
         self._init_audit_db()
-    
+
     def _init_audit_db(self) -> None:
         """Initialize SQLite audit database."""
         conn = sqlite3.connect(self.audit_db_path)
@@ -80,7 +80,7 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         """)
         conn.commit()
         conn.close()
-    
+
     def _audit_log(
         self,
         operation: str,
@@ -101,70 +101,70 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         )
         conn.commit()
         conn.close()
-    
+
     def analyze_srp(self, file_path: Path) -> List[SolidViolation]:
         """Analyze Single Responsibility Principle violations.
-        
+
         Args:
             file_path: Path to Python file
-            
+
         Returns:
             List of SRP violations
         """
         result = self.srp_analyzer.analyze(file_path)
         violations = result.unwrap() if result.is_ok() else []
-        
+
         self._violations.extend(violations)
         self._audit_log("ANALYZE_SRP", str(file_path), {"violations": len(violations)})
-        
+
         return violations
-    
+
     def analyze_ocp(self, file_path: Path) -> List[SolidViolation]:
         """Analyze Open/Closed Principle violations."""
         result = self.ocp_analyzer.analyze(file_path)
         violations = result.unwrap() if result.is_ok() else []
-        
+
         self._violations.extend(violations)
         self._audit_log("ANALYZE_OCP", str(file_path), {"violations": len(violations)})
-        
+
         return violations
-    
+
     def analyze_isp(self, file_path: Path) -> List[SolidViolation]:
         """Analyze Interface Segregation Principle violations."""
         result = self.isp_analyzer.analyze(file_path)
         violations = result.unwrap() if result.is_ok() else []
-        
+
         self._violations.extend(violations)
         self._audit_log("ANALYZE_ISP", str(file_path), {"violations": len(violations)})
-        
+
         return violations
-    
+
     def analyze_dip(self, file_path: Path) -> List[SolidViolation]:
         """Analyze Dependency Inversion Principle violations."""
         result = self.dip_analyzer.analyze(file_path)
         violations = result.unwrap() if result.is_ok() else []
-        
+
         self._violations.extend(violations)
         self._audit_log("ANALYZE_DIP", str(file_path), {"violations": len(violations)})
-        
+
         return violations
-    
+
     def analyze_dry(self, file_paths: List[Path]) -> List[SolidViolation]:
         """Analyze Don't Repeat Yourself violations across files."""
         result = self.dry_analyzer.analyze(file_paths)
         violations = result.unwrap() if result.is_ok() else []
-        
+
         self._violations.extend(violations)
         self._audit_log("ANALYZE_DRY", f"{len(file_paths)} files", {"violations": len(violations)})
-        
+
         return violations
-    
+
     def analyze_all(self, file_path: Path) -> Dict[str, List[SolidViolation]]:
         """Analyze all SOLID principles for a file.
-        
+
         Args:
             file_path: Path to Python file
-            
+
         Returns:
             Dictionary mapping principle to violations
         """
@@ -177,10 +177,10 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
             "dip": self.analyze_dip(file_path),
             "dry": self.analyze_dry([file_path])
         }
-    
+
     def get_summary(self) -> Dict[str, Any]:
         """Get summary of all violations.
-        
+
         Returns:
             Summary dictionary with counts by type
         """
@@ -188,18 +188,18 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         for violation in self._violations:
             vtype = violation.violation_type.value
             by_type[vtype] = by_type.get(vtype, 0) + 1
-        
+
         return {
             "total_violations": len(self._violations),
             "by_type": by_type,
             "violations": self._violations
         }
-    
+
     def clear_violations(self) -> None:
         """Clear violation history."""
         self._violations.clear()
         self._audit_log("CLEAR", "all", {})
-    
+
     def query_audit_log(
         self,
         operation: Optional[str] = None,
@@ -208,7 +208,7 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         """Query audit log."""
         conn = sqlite3.connect(self.audit_db_path)
         cursor = conn.cursor()
-        
+
         if operation:
             cursor.execute(
                 "SELECT * FROM solid_audit WHERE operation = ? ORDER BY timestamp DESC LIMIT ?",
@@ -219,10 +219,10 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
                 "SELECT * FROM solid_audit ORDER BY timestamp DESC LIMIT ?",
                 (limit,)
             )
-        
+
         rows = cursor.fetchall()
         conn.close()
-        
+
         return [
             {
                 "id": r[0],

@@ -44,16 +44,16 @@ from cortex.models.canonical_enums import IntentType
 class ExecutionContext:
     """
     Single canonical execution context for all CORTEX operations.
-    
+
     This class provides the execution state and metadata for any CORTEX operation,
     from MCP tool invocation to orchestrator execution to governance validation.
-    
+
     All CORTEX components MUST use this canonical ExecutionContext to ensure:
     - Consistent state management
     - Audit trail continuity
     - Type safety across layers
     - CORE-035 compliance (single implementation)
-    
+
     Attributes:
         orchestrator_id: Unique identifier for orchestrator handling request
         operation_id: Unique identifier for this specific operation
@@ -63,7 +63,7 @@ class ExecutionContext:
         audit_trail: Chronological log of events during execution
         created_at: When context was created
         updated_at: Last update timestamp
-        
+
     Example:
         >>> from cortex.models.execution_context import ExecutionContext, IntentType
         >>> ctx = ExecutionContext(
@@ -74,28 +74,28 @@ class ExecutionContext:
         >>> ctx.add_audit_event("Started TDD cycle")
         >>> ctx.add_audit_event("RED phase complete")
     """
-    
+
     # Required fields (immutable after creation)
     orchestrator_id: str
     operation_id: str
     intent: IntentType
-    
+
     # Optional fields (mutable)
     parameters: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
     audit_trail: List[str] = field(default_factory=list)
-    
+
     # Timestamps (auto-managed)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: Optional[datetime] = None
-    
+
     def add_audit_event(self, event: str) -> None:
         """
         Add audit event to trail with timestamp.
-        
+
         Args:
             event: Description of event
-            
+
         Example:
             >>> ctx.add_audit_event("TDD RED phase: Test written")
             >>> ctx.add_audit_event("TDD GREEN phase: Implementation complete")
@@ -103,45 +103,45 @@ class ExecutionContext:
         timestamp = datetime.now()
         self.audit_trail.append(f"[{timestamp.isoformat()}] {event}")
         self.updated_at = timestamp
-    
+
     def add_metadata(self, key: str, value: Any) -> None:
         """
         Add metadata to context.
-        
+
         Args:
             key: Metadata key
             value: Metadata value
-            
+
         Example:
             >>> ctx.add_metadata("user", "asif.hussain")
             >>> ctx.add_metadata("session_id", "sess-abc123")
         """
         self.metadata[key] = value
         self.updated_at = datetime.now()
-    
+
     def get_metadata(self, key: str, default: Any = None) -> Any:
         """
         Get metadata value.
-        
+
         Args:
             key: Metadata key
             default: Default value if key not found
-            
+
         Returns:
             Metadata value or default
-            
+
         Example:
             >>> user = ctx.get_metadata("user", "unknown")
         """
         return self.metadata.get(key, default)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert context to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation of context
-            
+
         Example:
             >>> context_dict = ctx.to_dict()
             >>> import json
@@ -157,18 +157,18 @@ class ExecutionContext:
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
-    
+
     @classmethod
     def from_dict(cls: object, data: Dict[str, Any]) -> ExecutionContext:
         """
         Create ExecutionContext from dictionary.
-        
+
         Args:
             data: Dictionary with context data
-            
+
         Returns:
             ExecutionContext instance
-            
+
         Example:
             >>> data = {"orchestrator_id": "TDD", "operation_id": "op-1", ...}
             >>> ctx = ExecutionContext.from_dict(data)
@@ -181,7 +181,7 @@ class ExecutionContext:
             metadata=data.get("metadata", {}),
             audit_trail=data.get("audit_trail", []),
         )
-    
+
     def __repr__(self) -> str:
         """String representation of context."""
         return (

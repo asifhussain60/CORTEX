@@ -13,14 +13,14 @@ from typing import Any, Callable, Dict
 
 class OrchestratorMetadataRegistry:
     """Registry for orchestrator metadata (stub)."""
-    
+
     _registry: Dict[str, Dict[str, Any]] = {}
-    
+
     @classmethod
     def register(cls: object, orchestrator_id: str, metadata: Dict[str, Any]) -> None:
         """Register orchestrator metadata."""
         cls._registry[orchestrator_id] = metadata
-    
+
     @classmethod
     def get(cls: object, orchestrator_id: str) -> Dict[str, Any]:
         """Get orchestrator metadata."""
@@ -30,10 +30,10 @@ class OrchestratorMetadataRegistry:
 def extract_orchestrator_metadata_from_wiring(orchestrator_name: str) -> Dict[str, Any]:
     """
     Extract metadata from wiring specs (stub).
-    
+
     Args:
         orchestrator_name: Name of the orchestrator
-        
+
     Returns:
         Empty metadata dictionary (stub implementation)
     """
@@ -44,13 +44,13 @@ def extract_orchestrator_metadata_from_wiring(orchestrator_name: str) -> Dict[st
 def inject_orchestrator_context(func: Callable) -> Callable:
     """
     Decorator to inject orchestrator context into responses (stub).
-    
+
     This is a no-op stub that simply passes through the function.
     Full implementation deferred to Phase 20.2 completion.
-    
+
     Args:
         func: The function to decorate
-        
+
     Returns:
         The wrapped function (currently unchanged)
     """
@@ -59,5 +59,5 @@ def inject_orchestrator_context(func: Callable) -> Callable:
         """Invoke the original function with injected orchestrator context."""
         # Stub - just call the original function
         return func(*args, **kwargs)
-    
+
     return wrapper

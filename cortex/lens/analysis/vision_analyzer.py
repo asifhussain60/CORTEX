@@ -78,7 +78,7 @@ class DetectedIssue:
 class VisionAnalysisResult:
     """
     Complete vision analysis result.
-    
+
     Phase 99: Enhanced with atomic-level decomposition fields.
     """
     status: str
@@ -141,7 +141,7 @@ class VisionAnalysisResult:
                 "token_usage": self.token_usage,
             },
         }
-        
+
         # Phase 99: Add atomic analysis data if present
         if self.bounding_boxes:
             result["bounding_boxes"] = [
@@ -156,7 +156,7 @@ class VisionAnalysisResult:
                 }
                 for b in self.bounding_boxes
             ]
-        
+
         if self.text_segments:
             result["text_segments"] = [
                 {
@@ -175,7 +175,7 @@ class VisionAnalysisResult:
                 }
                 for t in self.text_segments
             ]
-        
+
         if self.color_palette:
             result["color_palette"] = [
                 {
@@ -186,14 +186,14 @@ class VisionAnalysisResult:
                 }
                 for c in self.color_palette
             ]
-        
+
         if self.pixel_grid:
             result["pixel_grid"] = {
                 "width": self.pixel_grid.width,
                 "height": self.pixel_grid.height,
                 "data": self.pixel_grid.data,
             }
-        
+
         return result
 
 

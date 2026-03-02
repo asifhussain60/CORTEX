@@ -265,28 +265,28 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
         """Initialize SecurityOrchestrator."""
         # Lazy load security components
         _load_security_components()
-        
+
         # Initialize auditor if available
         if SecurityAuditor is not None:
             self.auditor = SecurityAuditor()
         else:
             self.auditor = None
-            
+
         # Initialize enforcer if available
         if CrossRepoEnforcer is not None:
             self.enforcer = CrossRepoEnforcer()
         else:
             self.enforcer = None
-            
+
         self.audit_trail: List[Dict[str, Any]] = []
         self.knowledge_base: Dict[str, Any] = {}
-        
+
         # Load default patterns (will be overridden by knowledge base)
         self._secret_patterns = DEFAULT_SECRET_PATTERNS
         self._injection_patterns = DEFAULT_INJECTION_PATTERNS
         self._workflow_patterns = DEFAULT_WORKFLOW_PATTERNS
         self._config_checks = DEFAULT_CONFIG_CHECKS
-        
+
         # Try to load knowledge base
         self._load_knowledge_base()
 
@@ -875,16 +875,16 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
             Path.cwd(),  # Current working directory
             Path.cwd().parent,  # Parent of cwd
         ]
-        
+
         kb_relative = Path("cortex-registry/knowledge-base/security")
         kb_found = False
-        
+
         for candidate in project_root_candidates:
             kb_dir = candidate / kb_relative
             if kb_dir.exists():
                 kb_paths = [
                     kb_dir / "owasp-top10.yaml",
-                    kb_dir / "secrets-patterns.yaml", 
+                    kb_dir / "secrets-patterns.yaml",
                     kb_dir / "cicd-hardening.yaml",
                 ]
                 for kb_path in kb_paths:
@@ -898,7 +898,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
                         except Exception as err:
                             logger.warning(f"Failed to load {kb_path}: {err}")
                 break
-        
+
         if not kb_found:
             logger.warning("Knowledge base files not found - using defaults")
 
@@ -1057,7 +1057,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
             List of recommendations
         """
         recommendations: List[str] = []
-        
+
         types_found = set(f.get("type", "") for f in findings)
 
         if any(t in types_found for t in ["hardcoded_secret", "api_key", "password"]):
@@ -1094,7 +1094,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
         for finding in findings:
             category = finding.get("owasp_category", "Unknown")
             finding_id = finding.get("finding_id", "")
-            
+
             if category not in mapping:
                 mapping[category] = []
             mapping[category].append(finding_id)

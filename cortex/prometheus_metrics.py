@@ -23,7 +23,7 @@ class PrometheusMetrics:
     """Prometheus metrics collector for IntentRouter."""
     def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize metrics collector.
-        
+
         Args:
             service_name: Service name for metric labels
         """
@@ -71,7 +71,7 @@ class PrometheusMetrics:
 
     def record_routing_latency(self, duration_seconds: float, mode: str) -> None:
         """Record routing latency.
-        
+
         Args:
             duration_seconds: Routing duration in seconds
             mode: Intent mode (IMPLEMENT, ANALYZE, etc.)
@@ -91,7 +91,7 @@ class PrometheusMetrics:
 
     def record_routing_error(self, mode: str, error_type: str) -> None:
         """Record routing error.
-        
+
         Args:
             mode: Intent mode
             error_type: Type of error
@@ -104,7 +104,7 @@ class PrometheusMetrics:
 
     def record_collaboration_latency(self, duration_seconds: float, pattern: str) -> None:
         """Record agent collaboration latency.
-        
+
         Args:
             duration_seconds: Collaboration duration
             pattern: Collaboration pattern (sequential, parallel, etc.)
@@ -119,7 +119,7 @@ class PrometheusMetrics:
         self, duration_seconds: float, tool_name: str, success: bool
     ) -> None:
         """Record MCP tool execution.
-        
+
         Args:
             duration_seconds: Tool execution duration
             tool_name: Name of MCP tool
@@ -133,7 +133,7 @@ class PrometheusMetrics:
 
     def set_cache_hit_ratio(self, ratio: float) -> None:
         """Set cache hit ratio gauge.
-        
+
         Args:
             ratio: Cache hit ratio (0.0-1.0)
         """
@@ -143,7 +143,7 @@ class PrometheusMetrics:
 
     def get_prometheus_format(self) -> str:
         """Generate Prometheus text format output.
-        
+
         Returns:
             Prometheus format metrics string
         """
@@ -210,7 +210,7 @@ class PrometheusMetrics:
 
     def get_metrics_dict(self) -> Dict[str, Any]:
         """Get metrics as dictionary.
-        
+
         Returns:
             Dictionary representation of metrics
         """
@@ -229,11 +229,11 @@ class PrometheusMetrics:
 
     def timing_context(self, metric_name: str, mode: str) -> 'TimingContext':
         """Create context manager for timing operations.
-        
+
         Args:
             metric_name: Name of metric to record
             mode: Mode/context name
-            
+
         Returns:
             TimingContext context manager
         """
@@ -241,10 +241,10 @@ class PrometheusMetrics:
 
     def timing_decorator(self, metric_name: str) -> Callable:
         """Create decorator for timing functions.
-        
+
         Args:
             metric_name: Name of metric to record
-            
+
         Returns:
             Decorator function
         """
@@ -273,7 +273,7 @@ class TimingContext:
     """Context manager for timing operations."""
     def __init__(self, metrics: PrometheusMetrics, metric_name: str, mode: str) -> None:
         """Initialize timing context.
-        
+
         Args:
             metrics: PrometheusMetrics instance
             metric_name: Name of metric
@@ -326,10 +326,10 @@ def metrics_endpoint():
 @app.route('/route', methods=['POST'])
 def route_request(request_data):
     mode = request_data.get('mode', 'IMPLEMENT')
-    
+
     with metrics.timing_context('routing', mode):
         result = router.route(request_data)
-    
+
     if result:
         return result
     else:

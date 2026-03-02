@@ -266,7 +266,7 @@ class ConflictResolution:
 @dataclass
 class ValidationResult:
     """Domain validation result.
-    
+
     Attributes:
         is_valid: Whether domain is valid.
         errors: List of validation errors.

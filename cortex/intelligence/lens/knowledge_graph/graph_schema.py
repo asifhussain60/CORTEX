@@ -37,16 +37,16 @@ class EdgeType(Enum):
 class Node:
     """
     Node in the knowledge graph.
-    
+
     Represents code elements (files, classes, functions, etc.)
     with properties stored as JSON.
-    
+
     Attributes:
         id: Unique node identifier (auto-generated)
         node_type: Type of node (File, Class, Function, etc.)
         name: Human-readable name
         properties: Additional metadata (JSON-serializable dict)
-    
+
     Example:
         >>> node = Node(
         ...     id=1,
@@ -55,12 +55,12 @@ class Node:
         ...     properties={"path": "/controllers/user_controller.py", "lines": 50}
         ... )
     """
-    
+
     id: Optional[int]
     node_type: str
     name: str
     properties: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -75,17 +75,17 @@ class Node:
 class Edge:
     """
     Edge (relationship) in the knowledge graph.
-    
+
     Represents relationships between code elements with
     directional semantics and optional properties.
-    
+
     Attributes:
         id: Unique edge identifier (auto-generated)
         source_id: ID of source node
         target_id: ID of target node
         edge_type: Type of relationship (calls, imports, etc.)
         properties: Additional metadata (JSON-serializable dict)
-    
+
     Example:
         >>> edge = Edge(
         ...     id=1,
@@ -95,13 +95,13 @@ class Edge:
         ...     properties={"line_number": 5}
         ... )
     """
-    
+
     id: Optional[int]
     source_id: int
     target_id: int
     edge_type: str
     properties: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -117,17 +117,17 @@ class Edge:
 class GraphQuery:
     """
     Query specification for graph traversal.
-    
+
     Defines parameters for querying the knowledge graph,
     including starting point, relationship types, and depth.
-    
+
     Attributes:
         start_node_id: Starting node for traversal
         edge_types: List of edge types to follow (empty = all types)
         depth: Maximum traversal depth (1 = direct neighbors)
         limit: Maximum number of results to return
     """
-    
+
     start_node_id: int
     edge_types: List[str] = field(default_factory=list)
     depth: int = 1

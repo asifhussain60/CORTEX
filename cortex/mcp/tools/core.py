@@ -58,12 +58,12 @@ class CortexProcessRequest(ConsolidatedTool):
     - ANALYZE → LENSSynthesis
     - TEST → TDDOrchestrator
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_process_request"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -74,12 +74,12 @@ class CortexProcessRequest(ConsolidatedTool):
             "governance validation, LENS context synthesis, and complete audit trail. "
             "Direct tool calls bypass orchestration and are rejected."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.CORE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -146,12 +146,12 @@ class CortexProcessRequest(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return [op.value for op in ProcessRequestOperations]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute the process request operation."""
         operation = params.get("operation", "").lower()
@@ -163,7 +163,7 @@ class CortexProcessRequest(ConsolidatedTool):
         batch_size = params.get("batch_size", 500)
         profile = params.get("profile", "auto")
         fix_on_fail = params.get("fix_on_fail", True)
-        
+
         # Route to appropriate handler
         if operation in ["implement", "fix", "test"]:
             return await self._execute_tdd(
@@ -182,7 +182,7 @@ class CortexProcessRequest(ConsolidatedTool):
                 error=f"Unknown operation: {operation}",
                 metadata={"valid_operations": self.supported_operations},
             )
-    
+
     async def _execute_tdd(
         self,
         operation: str,
@@ -205,7 +205,7 @@ class CortexProcessRequest(ConsolidatedTool):
             # Import orchestrator lazily to avoid circular imports
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.tdd_orchestrator
             from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator
-            
+
             orchestrator = TDDOrchestrator()
 
             # ── Batch test-runner path ─────────────────────────────────────────
@@ -241,13 +241,13 @@ class CortexProcessRequest(ConsolidatedTool):
                     "context": context,
                 },
             )
-            
+
             # Unwrap Result type
             if hasattr(result, 'is_ok') and result.is_ok():
                 data = result.unwrap()
             else:
                 data = result
-            
+
             return ToolResult(
                 success=True,
                 data=data,
@@ -265,7 +265,7 @@ class CortexProcessRequest(ConsolidatedTool):
                 error=str(e),
                 metadata={"operation": operation},
             )
-    
+
     async def _execute_refactor(
         self,
         request: str,
@@ -280,9 +280,9 @@ class CortexProcessRequest(ConsolidatedTool):
                 RefactoringLanguage,
                 RefactoringRequest,
             )
-            
+
             orchestrator = RefactoringOrchestrator()
-            
+
             # Build a RefactoringRequest from the params
             from pathlib import Path
             req = RefactoringRequest(
@@ -292,7 +292,7 @@ class CortexProcessRequest(ConsolidatedTool):
                 parameters=context,
             )
             result = orchestrator.execute_refactoring(req)
-            
+
             # Unwrap Result type
             if hasattr(result, 'is_ok') and result.is_ok():
                 data = result.unwrap()
@@ -300,7 +300,7 @@ class CortexProcessRequest(ConsolidatedTool):
                     data = data.__dict__
             else:
                 data = {"request": request, "target": target}
-            
+
             return ToolResult(
                 success=True,
                 data=data,
@@ -313,7 +313,7 @@ class CortexProcessRequest(ConsolidatedTool):
                 error=str(e),
                 metadata={"operation": "refactor"},
             )
-    
+
     async def _execute_analyze(
         self,
         request: str,
@@ -325,14 +325,14 @@ class CortexProcessRequest(ConsolidatedTool):
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.lens_synthesis
             from cortex.lens.lens_orchestrator import LENSOrchestrator
             from pathlib import Path
-            
+
             repo_path = Path(target) if target else Path(".")
             # Navigate to repo root if target is a file
             if repo_path.is_file():
                 repo_path = repo_path.parent
-            
+
             orchestrator = LENSOrchestrator(repo_path=repo_path)
-            
+
             if target and Path(target).is_file():
                 result = orchestrator.analyze_file(Path(target))
             else:
@@ -342,7 +342,7 @@ class CortexProcessRequest(ConsolidatedTool):
                     "status": "analyzed",
                     "orchestrator": "LENSOrchestrator",
                 }
-            
+
             return ToolResult(
                 success=True,
                 data=result,
@@ -360,19 +360,19 @@ class CortexProcessRequest(ConsolidatedTool):
 class CortexChallenge(ConsolidatedTool):
     """
     AI-driven challenge generation using LENS analysis.
-    
+
     Generates challenges to user requests to ensure:
     - Requirements are complete
     - Edge cases are considered
     - Security implications reviewed
     - Best practices applied
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_challenge"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -380,12 +380,12 @@ class CortexChallenge(ConsolidatedTool):
             "Generate AI-driven challenges to user requests using LENS analysis. "
             "Ensures requirements completeness, edge case coverage, and security review."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.CORE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -417,25 +417,25 @@ class CortexChallenge(ConsolidatedTool):
                 enum=["shallow", "standard", "deep"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["generate", "review", "validate"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute challenge generation."""
         operation = params.get("operation", "generate")
         request = params.get("request", "")
         context = params.get("context", {})
         depth = params.get("depth", "standard")
-        
+
         try:
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.challenge_engine
             from cortex.orchestrators.validation.challenge_engine import ChallengeEngine
-            
+
             engine = ChallengeEngine()
-            
+
             if operation == "generate":
                 result = engine.generate_challenges(request, context.get("intent", "IMPLEMENT"))
                 # Convert Challenge dataclass to dict if needed
@@ -451,7 +451,7 @@ class CortexChallenge(ConsolidatedTool):
                     success=False,
                     error=f"Unknown operation: {operation}",
                 )
-            
+
             return ToolResult(
                 success=True,
                 data=data,
@@ -468,21 +468,21 @@ class CortexChallenge(ConsolidatedTool):
 class CortexClassify(ConsolidatedTool):
     """
     Intent classification using LENS methodology.
-    
+
     LENS = Language → Examination → Navigation → Synthesis
-    
+
     Classifies user requests into:
     - Intent type (IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.)
     - Confidence score
     - Required orchestrators
     - Suggested approach
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_classify"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -490,12 +490,12 @@ class CortexClassify(ConsolidatedTool):
             "Classify user intent using LENS methodology. Returns intent type, "
             "confidence score, required orchestrators, and suggested approach."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.CORE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -527,15 +527,15 @@ class CortexClassify(ConsolidatedTool):
                 enum=["table", "conversational"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["intent", "scope", "complexity"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute intent classification.
-        
+
         AC_START: AC-CIG-S3-001
         AC_START: AC-CIG-S3-002
         AC_START: AC-CIG-S3-003
@@ -546,19 +546,19 @@ class CortexClassify(ConsolidatedTool):
         request = params.get("request", "")
         context = params.get("context", {})
         format_type = params.get("format", "table")  # AC-CIG-S3-02: Default 'table'
-        
+
         try:
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.core.intent_router.intent_router_enhanced
             from cortex.orchestrators.core.intent_router import IntentRouter
             from cortex.orchestrators.core.request_transformer import RequestTransformer
             from cortex.orchestrators.core.conversational_reflector import ConversationalReflector
-            
+
             router = IntentRouter()
-            
+
             # AC-CIG-S3-03: Transform request first (optimization)
             transformer = RequestTransformer()
             transformed = transformer.transform(request)
-            
+
             if operation == "intent":
                 result = router.execute_operation(
                     "classify", {"request": request, "context": context}
@@ -567,13 +567,13 @@ class CortexClassify(ConsolidatedTool):
                     data = result.unwrap()
                 else:
                     data = self._classify_keywords(request, operation)
-                
+
                 # AC-CIG-S3-01: Format-based response
                 if format_type == "conversational":
                     # REPHRASE MODE: Clean refined prompt output
                     # Authority: cortex-architect.prompt.md § REPHRASE MODE
                     # AC-ID: AC-REPHRASE-REFINEMENT-001
-                    
+
                     # Generate refined prompt with CORTEX technical context
                     refined_prompt = self._generate_refined_prompt(
                         original_text=request,
@@ -583,7 +583,7 @@ class CortexClassify(ConsolidatedTool):
                         scope=transformed.structured_context.get("scope", "unclear"),
                         impact=transformed.structured_context.get("impact", "medium"),
                     )
-                    
+
                     # Auto-append challenge protocol (unless already present)
                     challenge_protocol = (
                         "Analyze my request using CORTEX's challenge-first protocol: "
@@ -595,15 +595,15 @@ class CortexClassify(ConsolidatedTool):
                         "Present findings in executive-ready format: ≤60 seconds read time, comparison tables, "
                         "clear sections with visual hierarchy optimized for VS Code Copilot Chat rendering."
                     )
-                    
+
                     # Check if challenge protocol already present
                     if "challenge-first protocol" not in refined_prompt.lower():
                         # Append challenge protocol with proper spacing
                         refined_prompt = f"{refined_prompt}\n\n{challenge_protocol}"
-                    
+
                     # Set rephrased_prompt as primary output for REPHRASE mode
                     data["rephrased_prompt"] = refined_prompt
-                    
+
                     # Keep transformation metadata for debugging/audit
                     data["transformed_request"] = {
                         "original_text": transformed.original_text,
@@ -625,7 +625,7 @@ class CortexClassify(ConsolidatedTool):
                         "user_text": transformed.distilled_summary,
                     }
                     reflection = reflector.reflect(dor_data)
-                    
+
                     # AC-CIG-S3-04: Store validation data for approval session
                     data["conversational_summary"] = reflection.summary
                     data["conversational_context"] = reflection.context
@@ -642,7 +642,7 @@ class CortexClassify(ConsolidatedTool):
                 data = self._classify_keywords(request, operation)
             else:
                 return ToolResult(success=False, error=f"Unknown operation: {operation}")
-            
+
             return ToolResult(
                 success=True,
                 data=data,
@@ -656,7 +656,7 @@ class CortexClassify(ConsolidatedTool):
         except Exception as e:
             # Fallback to keyword-based classification (production-safe)
             classification = self._classify_keywords(request, operation)
-            
+
             # For conversational format, still generate rephrased_prompt
             if format_type == "conversational" and request:
                 # Generate minimal refined prompt from classification
@@ -664,7 +664,7 @@ class CortexClassify(ConsolidatedTool):
                     original_text=request,
                     intent_type=classification.get("intent", "UNKNOWN"),
                 )
-                
+
                 # Auto-append challenge protocol
                 challenge_protocol = (
                     "Analyze my request using CORTEX's challenge-first protocol: "
@@ -676,12 +676,12 @@ class CortexClassify(ConsolidatedTool):
                     "Present findings in executive-ready format: ≤60 seconds read time, comparison tables, "
                     "clear sections with visual hierarchy optimized for VS Code Copilot Chat rendering."
                 )
-                
+
                 if "challenge-first protocol" not in refined_prompt.lower():
                     refined_prompt = f"{refined_prompt}\n\n{challenge_protocol}"
-                
+
                 classification["rephrased_prompt"] = refined_prompt
-            
+
             return ToolResult(
                 success=True,
                 data=classification,
@@ -693,23 +693,23 @@ class CortexClassify(ConsolidatedTool):
                     "format": format_type,  # AC-CIG-S3-05: Audit log
                 },
             )
-    
+
     def _classify_keywords(self, request: str, operation: str) -> Dict[str, Any]:
         """Keyword-based intent classification (production fallback).
-        
+
         Uses keyword matching as a deterministic fallback when the full
         IntentRouter is unavailable. This is NOT a mock — it provides
         real classification using a simple but correct algorithm.
-        
+
         Args:
             request: User request text.
             operation: Classification operation type.
-            
+
         Returns:
             Classification result dict.
         """
         request_lower = request.lower()
-        
+
         if any(kw in request_lower for kw in ["implement", "create", "add", "build"]):
             intent = "IMPLEMENT"
         elif any(kw in request_lower for kw in ["fix", "bug", "error", "issue"]):
@@ -722,7 +722,7 @@ class CortexClassify(ConsolidatedTool):
             intent = "PLAN"
         else:
             intent = "QUERY"
-        
+
         if operation == "intent":
             return {
                 "intent": intent,
@@ -741,7 +741,7 @@ class CortexClassify(ConsolidatedTool):
                 "estimated_time": "1-2 hours",
                 "risk_level": "low",
             }
-    
+
     def _generate_refined_prompt(
         self,
         original_text: str,
@@ -752,10 +752,10 @@ class CortexClassify(ConsolidatedTool):
         impact: str,
     ) -> str:
         """Generate refined prompt with CORTEX technical context.
-        
+
         Transforms user's verbose request into concise CORTEX-optimized language
         suitable for MasterOrchestrator processing.
-        
+
         Args:
             original_text: Original user request
             distilled_summary: Token-optimized summary
@@ -763,13 +763,13 @@ class CortexClassify(ConsolidatedTool):
             canonical_keywords: Extracted keywords
             scope: Operation scope (module/file/system)
             impact: Estimated impact level
-            
+
         Returns:
             Refined prompt with CORTEX technical details
         """
         # Use distilled summary as base (token-optimized)
         refined = distilled_summary
-        
+
         # Clean up filler words for further compression
         filler_words = [
             "I think", "probably", "some kind of", "because", "right now",
@@ -778,38 +778,38 @@ class CortexClassify(ConsolidatedTool):
         ]
         for filler in filler_words:
             refined = refined.replace(filler, "")
-        
+
         # Collapse multiple spaces
         refined = " ".join(refined.split())
-        
+
         # Add CORTEX technical context based on intent
         technical_context = self._get_technical_context_for_intent(
             intent_type, scope, impact
         )
-        
+
         if technical_context:
             # Inject technical terms naturally
             refined = f"{refined} {technical_context}"
-        
+
         # Clean up redundant phrases
         refined = refined.strip()
-        
+
         return refined
-    
+
     def _generate_fallback_refined_prompt(
         self,
         original_text: str,
         intent_type: str,
     ) -> str:
         """Generate refined prompt from original text (fallback mode).
-        
+
         Used when RequestTransformer unavailable. Provides basic
         compression and technical context injection.
-        
+
         Args:
             original_text: Original user request
             intent_type: Classified intent
-            
+
         Returns:
             Refined prompt string
         """
@@ -822,10 +822,10 @@ class CortexClassify(ConsolidatedTool):
         ]
         for filler in filler_words:
             refined = refined.replace(filler, "")
-        
+
         # Collapse multiple spaces
         refined = " ".join(refined.split())
-        
+
         # Add basic technical context
         context_suffix = {
             "IMPLEMENT": " via TDDOrchestrator.",
@@ -836,11 +836,11 @@ class CortexClassify(ConsolidatedTool):
             "AUDIT": " via EnforcementOrchestrator.",
             "QUERY": "",
         }.get(intent_type, "")
-        
+
         refined = f"{refined.strip()}{context_suffix}"
-        
+
         return refined
-    
+
     def _get_technical_context_for_intent(
         self,
         intent_type: str,
@@ -848,12 +848,12 @@ class CortexClassify(ConsolidatedTool):
         impact: str,
     ) -> str:
         """Get CORTEX technical context for intent type.
-        
+
         Args:
             intent_type: Classified intent
             scope: Operation scope
             impact: Impact level
-            
+
         Returns:
             Technical context string to append
         """
@@ -865,14 +865,14 @@ class CortexClassify(ConsolidatedTool):
             "PLAN": f"using PlanOrchestrator for {scope} phase breakdown.",
             "AUDIT": f"via EnforcementOrchestrator with P0-P3 checks at {scope} scope.",
         }
-        
+
         return context_map.get(intent_type, "")
 
 
 class CortexRequestLifecycle(ConsolidatedTool):
     """
     Full request lifecycle management.
-    
+
     Tracks requests from inception to completion:
     - Create: Initialize new request
     - Update: Modify request state
@@ -880,12 +880,12 @@ class CortexRequestLifecycle(ConsolidatedTool):
     - Query: Get request status
     - History: Get request history
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_request_lifecycle"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -893,12 +893,12 @@ class CortexRequestLifecycle(ConsolidatedTool):
             "Manage full request lifecycle from creation to completion. "
             "Track status, updates, and history for audit trail."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.CORE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -923,25 +923,25 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["create", "update", "complete", "query", "history"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute lifecycle operation with in-memory request tracking."""
         operation = params.get("operation", "query")
         request_id = params.get("request_id")
         data = params.get("data", {})
-        
+
         # In-memory request store (class-level singleton)
         if not hasattr(CortexRequestLifecycle, '_requests'):
             CortexRequestLifecycle._requests: Dict[str, Dict[str, Any]] = {}
-        
+
         from datetime import datetime, timezone
         now = datetime.now(timezone.utc).isoformat()
-        
+
         if operation == "create":
             import uuid
             new_id = str(uuid.uuid4())[:8]
@@ -958,7 +958,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 data={"request_id": new_id, "status": "created", "created_at": now},
                 metadata={"operation": "create"},
             )
-        
+
         elif operation == "update":
             if not request_id:
                 return ToolResult(success=False, error="request_id required for update")
@@ -974,7 +974,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 data={"request_id": request_id, "status": request["status"], "updated_at": now},
                 metadata={"operation": "update"},
             )
-        
+
         elif operation == "complete":
             if not request_id:
                 return ToolResult(success=False, error="request_id required for complete")
@@ -990,7 +990,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 data={"request_id": request_id, "status": "completed", "completed_at": now},
                 metadata={"operation": "complete"},
             )
-        
+
         elif operation == "query":
             if not request_id:
                 return ToolResult(success=False, error="request_id required for query")
@@ -1007,7 +1007,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 },
                 metadata={"operation": "query"},
             )
-        
+
         elif operation == "history":
             requests = CortexRequestLifecycle._requests
             completed = sum(1 for r in requests.values() if r["status"] == "completed")
@@ -1025,7 +1025,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
                 },
                 metadata={"operation": "history"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 

@@ -23,7 +23,7 @@ class IntentResult:
 
 class NLPIntentRouter(IIntentRouter):
     """Routes natural language intents to appropriate handlers.
-    
+
     Note: This is distinct from cortex.orchestrators.core.IntentRouter,
     which handles orchestration routing. This class handles NLP semantic routing.
     """

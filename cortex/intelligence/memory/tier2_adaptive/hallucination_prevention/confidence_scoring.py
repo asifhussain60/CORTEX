@@ -55,7 +55,7 @@ class ConfidenceScorer:
 
     def __init__(self, db_path: Optional[str] = None) -> None:
         """Initialize scorer.
-        
+
         Args:
             db_path: Optional path to database for persistence.
         """
@@ -159,36 +159,36 @@ class ConfidenceScorer:
         evidence: Dict = None,
     ) -> "ConfidenceAssessment":
         """Calculate confidence for an action.
-        
+
         Args:
             action: Action being assessed.
             action_type: Type of action.
             context: Context information.
             evidence: Evidence factors.
-            
+
         Returns:
             ConfidenceAssessment.
         """
         if evidence is None:
             evidence = {}
-        
+
         # Calculate weighted confidence from evidence
         score = sum(evidence.values()) / len(evidence) if evidence else 0.5
-        
+
         assessment = ConfidenceAssessment(
             confidence_score=score,
             factors=evidence,
             is_reliable=score >= 0.5,
         )
-        
+
         # Auto-persist
         self.store_assessment(assessment.assessment_id, assessment)
-        
+
         return assessment
 
     def set_review_threshold(self, threshold: float) -> None:
         """Set review threshold for confidence.
-        
+
         Args:
             threshold: Confidence threshold (0-1).
         """
@@ -196,36 +196,36 @@ class ConfidenceScorer:
 
     def check_review_triggers(self, assessment: "ConfidenceAssessment") -> list:
         """Check if assessment triggers review.
-        
+
         Args:
             assessment: Confidence assessment.
-            
+
         Returns:
             List of review triggers.
         """
         triggers = []
         threshold = getattr(self, "review_threshold", 0.3)
-        
+
         if assessment.confidence_score < threshold:
             reason = self.get_review_reason(assessment)
             action = self.get_review_action(assessment)
             trigger = ReviewTrigger("low_confidence", reason, action)
             triggers.append(trigger)
-        
+
         # Check for high uncertainty in factors
         if assessment.factors:
             high_uncertainty = sum(1 for f in assessment.factors.values() if f < 0.3)
             if high_uncertainty > 1:  # Multiple low-confidence factors
                 triggers.append(ReviewTrigger("high_uncertainty", "Multiple factors below 0.3", "ESCALATE_TO_HUMAN"))
-        
+
         return triggers
 
     def get_review_reason(self, assessment: "ConfidenceAssessment") -> str:
         """Get reason for review trigger.
-        
+
         Args:
             assessment: Confidence assessment.
-            
+
         Returns:
             Review reason.
         """
@@ -237,10 +237,10 @@ class ConfidenceScorer:
 
     def get_review_action(self, assessment: "ConfidenceAssessment") -> str:
         """Get recommended action for review.
-        
+
         Args:
             assessment: Confidence assessment.
-            
+
         Returns:
             Review action.
         """
@@ -252,7 +252,7 @@ class ConfidenceScorer:
 
     def get_model_documentation(self) -> Dict:
         """Get documentation for the confidence scoring model.
-        
+
         Returns:
             Model documentation.
         """
@@ -290,10 +290,10 @@ class ConfidenceScorer:
 
     def get_assessment(self, assessment_id: str) -> Optional["ConfidenceAssessment"]:
         """Get a stored assessment by ID.
-        
+
         Args:
             assessment_id: Assessment identifier.
-            
+
         Returns:
             Stored assessment or None.
         """
@@ -301,7 +301,7 @@ class ConfidenceScorer:
 
     def store_assessment(self, assessment_id: str, assessment: "ConfidenceAssessment") -> None:
         """Store an assessment for later retrieval.
-        
+
         Args:
             assessment_id: Assessment identifier.
             assessment: Assessment to store.
@@ -310,7 +310,7 @@ class ConfidenceScorer:
             self._assessments = {}
             self._action_assessments = {}
         self._assessments[assessment_id] = assessment
-        
+
         # Also track by action
         # Try to get action from evidence/context if available
         # For now, use a generic key
@@ -322,10 +322,10 @@ class ConfidenceScorer:
 
     def get_assessment_history(self, action: str = None) -> list:
         """Get history of all stored assessments.
-        
+
         Args:
             action: Optional action filter.
-            
+
         Returns:
             List of assessments.
         """
@@ -334,19 +334,19 @@ class ConfidenceScorer:
 
     def compare_assessments(self, assessments: list) -> Dict:
         """Compare multiple assessments.
-        
+
         Args:
             assessments: List of assessments to compare.
-            
+
         Returns:
             Comparison results.
         """
         if len(assessments) < 2:
             return {}
-        
+
         assessment1 = assessments[0]
         assessment2 = assessments[1]
-        
+
         return {
             "score_diff": assessment2.confidence_score - assessment1.confidence_score,
             "score_improvement": assessment2.confidence_score > assessment1.confidence_score,
@@ -357,7 +357,7 @@ class ConfidenceScorer:
         }
 
 
-@dataclass  
+@dataclass
 class ConfidenceAssessment:
     """Assessment of confidence in a result."""
     confidence_score: float
@@ -385,10 +385,10 @@ class ScoringModel(Enum):
 
 class ReviewTrigger:
     """Triggers for review based on confidence."""
-    
+
     def __init__(self, trigger_type: str, reason: str = "", recommended_action: str = "") -> None:
         """Initialize review trigger.
-        
+
         Args:
             trigger_type: Type of trigger (low_confidence, high_risk, etc).
             reason: Reason for the trigger.
@@ -397,7 +397,7 @@ class ReviewTrigger:
         self.trigger_type = trigger_type
         self.reason = reason
         self.recommended_action = recommended_action
-    
+
     def __repr__(self):
         return f"ReviewTrigger(type={self.trigger_type}, reason={self.reason})"
 

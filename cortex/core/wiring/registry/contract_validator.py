@@ -107,7 +107,7 @@ class ContractValidator:
     ) -> None:
         """Log validation to audit database."""
         conn = sqlite3.connect(str(self.audit_db))
-        
+
         # Serialize violations properly (handle enum)
         violations_json = None
         if violations:
@@ -124,7 +124,7 @@ class ContractValidator:
                 }
                 violations_data.append(v_dict)
             violations_json = json.dumps(violations_data)
-        
+
         conn.execute(
             """
             INSERT INTO validation_audit (timestamp, orchestrator, method, validation_type, result, violations, metadata)
@@ -410,7 +410,7 @@ class ContractValidator:
         conn = sqlite3.connect(str(self.audit_db))
         cursor = conn.execute(
             """
-            SELECT 
+            SELECT
                 COUNT(*) as total,
                 SUM(CASE WHEN result = 'PASS' THEN 1 ELSE 0 END) as passed,
                 SUM(CASE WHEN result = 'FAIL' THEN 1 ELSE 0 END) as failed
@@ -474,7 +474,7 @@ class ContractValidator:
         )
         conn.commit()
         conn.close()
-        
+
         # Also log to main audit table
         self._audit_log(
             orchestrator=orchestrator,
@@ -482,5 +482,5 @@ class ContractValidator:
             result="TRACKED",
             metadata={"version": version}
         )
-        
+
         return ValidationResult(is_valid=True, violations=[])

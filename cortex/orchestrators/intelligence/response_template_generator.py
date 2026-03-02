@@ -44,7 +44,7 @@ Usage Examples:
   # Auto-detect status from title
   header = ResponseTemplate.create_header("Refactoring Complete")
   # → "## ✅ Refactoring Complete"
-  
+
   # Create box-framed section with 40-char border
   box = ResponseTemplate.create_box_section("Summary", "Implementation done")
   # → ────────────────────────────────────────
@@ -67,46 +67,46 @@ BOX_WIDTH = 40
 class SectionStatus(Enum):
     """
     Section status types with semantic emoji mappings.
-    
+
     Format: (emoji, color, keywords)
-    
+
     Status Types:
       COMPLETE (✅):
         • Visual: Green checkmark
         • Usage: Finished operations, passed tests, ready states
         • Keywords: complete, completed, success, passed, ready, done
         • Example: "## ✅ Testing Complete"
-        
+
       IN_PROGRESS (🔵):
         • Visual: Blue circle
         • Usage: Current work, pending operations, next steps
         • Keywords: in progress, pending, next, todo, working
         • Example: "## 🔵 Implementation In Progress"
-        
+
       BLOCKED (🔴):
         • Visual: Red circle
         • Usage: Critical failures, blocked operations
         • Keywords: blocked, failed, error, critical
         • Example: "## 🔴 Test Execution Blocked"
-        
+
       PLANNED (➡️):
         • Visual: Right arrow (orange)
         • Usage: Upcoming work, future steps, planning
         • Keywords: planned, upcoming, next steps
         • Example: "## ➡️ Planned Refactoring"
-        
+
       DESIGN (🎨):
         • Visual: Artist palette (blue)
         • Usage: Analysis, design docs, informational content
         • Keywords: design, analysis, information, overview
         • Example: "## 🎨 Architecture Analysis"
-        
+
       WARNING (⚠️):
         • Visual: Warning triangle (yellow)
         • Usage: Caution needed, attention required
         • Keywords: warning, caution, attention
         • Example: "## ⚠️ Deprecation Warning"
-        
+
       CRITICAL (🚨):
         • Visual: Siren/emergency (red)
         • Usage: Emergency situations, critical blockers

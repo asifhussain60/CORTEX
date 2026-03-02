@@ -25,7 +25,7 @@ Usage:
         ArchivedPhaseExecutorCleaner,
         BuildArtifactCleaner,
     )
-    
+
     registry = CleanerRegistry()
     cleaner = RootDatabaseCleaner(config)
     registry.register(cleaner)

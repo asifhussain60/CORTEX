@@ -816,7 +816,7 @@ def create_validation_test(
 
     def check_valid(result: object) -> None:
         """Check valid.
-        
+
         Args:
             result: Parameter for result.
         """

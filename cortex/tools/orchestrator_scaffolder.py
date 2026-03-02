@@ -63,7 +63,7 @@ class ScaffoldConfig:
     # File options
     overwrite: bool = False
     dry_run: bool = False
-    
+
     # WAVE-2: Intelligence adapter integration
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -251,7 +251,7 @@ class OrchestratorScaffolder:
             try:
                 # Query wiring registry for existing implementations
                 query_result = self._check_registry_for_duplicates(template.name)
-                
+
                 if query_result.found:
                     # Log duplicate detection
                     ac_marker = audit_logger.log_pre_scaffolding_check(
@@ -301,7 +301,7 @@ class OrchestratorScaffolder:
                 from cortex.testing.test_demand_generator import InteractionOrchestratorAnalyzer, DemandRegistry
                 from cortex.testing.test_composer import TestCodeComposer
                 from cortex.testing.test_quality_validator import InteractionOrchestratorQualityAnalyzer
-                
+
                 # Generate demands from template
                 analyzer = InteractionOrchestratorAnalyzer()
                 orchestrator_spec = {
@@ -311,7 +311,7 @@ class OrchestratorScaffolder:
                     'stages': self._get_stages(template),
                 }
                 demands_result = analyzer.analyze(orchestrator_spec)
-                
+
                 # WAVE-2: Log demand generation stage
                 if audit_logger:
                     audit_logger.log_intelligent_test_generation(
@@ -324,20 +324,20 @@ class OrchestratorScaffolder:
                             "demand_yaml_generated": True,
                         },
                     )
-                
+
                 # Register demands to YAML
                 registry = DemandRegistry()
                 registry.register(demands_result.demands)
-                
+
                 # Compose intelligent tests from demands
                 composer = TestCodeComposer()
                 quality_analyzer = InteractionOrchestratorQualityAnalyzer()
-                
+
                 composed_tests = []
                 for demand in demands_result.demands:
                     composed = composer.compose(demand)
                     report = quality_analyzer.analyze_test(composed, demand)
-                    
+
                     # WAVE-2: Log quality validation per test
                     if audit_logger:
                         from cortex.tools.scaffolder_audit_logger import QualityScoreBreakdown
@@ -357,10 +357,10 @@ class OrchestratorScaffolder:
                             demand_analysis={},
                             quality_validation=quality_scores,
                         )
-                    
+
                     if report.passes_quality_gate:
                         composed_tests.append(composed)
-                
+
                 # WAVE-2: Log composition stage
                 if audit_logger:
                     audit_logger.log_intelligent_test_generation(
@@ -375,7 +375,7 @@ class OrchestratorScaffolder:
                             "mocks_minimized": True,
                         },
                     )
-                
+
                 # Store composed tests in result for later use
                 result.metadata['intelligent_tests_generated'] = len(composed_tests)
                 result.metadata['composed_tests'] = [
@@ -386,13 +386,13 @@ class OrchestratorScaffolder:
                     }
                     for t in composed_tests
                 ]
-                
+
             except ImportError:
                 # Intelligence layer not available, fall back to legacy test scaffolding
                 result.add_warning("Intelligence layer not available, using legacy test scaffolding")
             except Exception as e:
                 result.add_warning(f"Intelligent test generation failed ({str(e)}), falling back to legacy tests")
-            
+
             self._scaffold_tests(template, config, result)
 
         if config.scaffold_type in (ScaffoldType.CONFIG, ScaffoldType.FULL) and config.include_config:
@@ -444,7 +444,7 @@ class OrchestratorScaffolder:
         result: ScaffoldResult,
     ) -> None:
         """Generate test file.
-        
+
         WAVE-2 Enhancement: Optionally use ScaffolderIntelligenceAdapter
         for intelligent test generation instead of template-based generation.
         """
@@ -454,10 +454,10 @@ class OrchestratorScaffolder:
 
         params = self._get_parameters(template)
         stages = self._get_stages(template)
-        
+
         # WAVE-2: Check if intelligence adapter is available
         use_intelligence = config.metadata.get('use_intelligence_adapter', False)
-        
+
         if use_intelligence:
             code = self._render_tests_via_intelligence(
                 class_name=class_name,
@@ -1317,31 +1317,31 @@ class {class_name}:
     def _check_registry_for_duplicates(self, orchestrator_name: str) -> None:
         """
         Check wiring registry for existing orchestrator implementations.
-        
+
         WAVE-2 Stage 1A: Pre-scaffolding duplicate detection
-        
+
         Args:
             orchestrator_name: Name of orchestrator to check
-            
+
         Returns:
             RegistryQueryResult with duplicate detection details
         """
         from cortex.tools.scaffolder_audit_logger import RegistryQueryResult
-        
+
         try:
             from cortex.core.wiring.registry_backed_orchestrator_registry import (
                 GitBackedOrchestratorRegistry,
             )
-            
+
             registry = GitBackedOrchestratorRegistry()
-            
+
             # Search for orchestrator by name
             class_name = self._to_class_name(orchestrator_name)
-            
+
             # Check if orchestrator exists in registry
             # This is a simplified check - in production would query actual registry
             existing_orchestrators = []
-            
+
             # For now, return not found
             # TODO: Implement actual registry query when GitBackedOrchestratorRegistry has search API
             return RegistryQueryResult(
@@ -1350,7 +1350,7 @@ class {class_name}:
                 capability_overlap=0.0,
                 name_collision=False,
             )
-            
+
         except Exception as e:
             logger.warning(f"Registry query failed: {e}")
             return RegistryQueryResult(
@@ -1367,15 +1367,15 @@ class {class_name}:
         config: ScaffoldConfig,
     ) -> str:
         """Render tests using ScaffolderIntelligenceAdapter (WAVE-2).
-        
+
         AC_START: AC-WAVE2-S3-001
         Description: Intelligent test generation integration
-        
+
         Args:
             class_name: Name of orchestrator class
             template: Parsed template with orchestrator spec
             config: Scaffold configuration
-            
+
         Returns:
             Generated test code as string
         """
@@ -1384,11 +1384,11 @@ class {class_name}:
                 ScaffolderIntelligenceAdapter,
                 OrchestratorSpec,
             )
-            
+
             # Build OrchestratorSpec from template
             capabilities_section = template.get_section('capabilities')
             capabilities = capabilities_section.content.get('capabilities', []) if capabilities_section else []
-            
+
             spec = OrchestratorSpec(
                 name=class_name,
                 domain=config.domain,
@@ -1399,11 +1399,11 @@ class {class_name}:
                 integrations=list(self._get_integrations(template).keys()),
                 mcp_tools=[],
             )
-            
+
             # Generate tests via adapter
             adapter = ScaffolderIntelligenceAdapter()
             suite = adapter.generate_test_suite(spec, target_count=10)
-            
+
             # Format into test file
             module_name = self._to_module_name(template.name)
             test_code = []
@@ -1431,16 +1431,16 @@ class {class_name}:
             test_code.append('        self.state_dir = Path("/tmp/cortex_test")')
             test_code.append('        self.state_dir.mkdir(exist_ok=True)')
             test_code.append('')
-            
+
             # Add generated tests
             for test in suite.tests:
                 # Indent test code
                 for line in test.test_code.split('\n'):
                     test_code.append('    ' + line if line.strip() else '')
                 test_code.append('')
-            
+
             return '\n'.join(test_code)
-            
+
         except ImportError as e:
             # Fallback to template-based generation
             logger.warning(f"Intelligence adapter not available: {e}, using template generation")

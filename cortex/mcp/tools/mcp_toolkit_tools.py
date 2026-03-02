@@ -27,56 +27,56 @@ def cortex_scan(
     orchestrator_context: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Scan filesystem hierarchy with optional organization detection.
-    
+
     MCP tool for hierarchical file scanning. Supports custom file extensions
     and pluggable organization detection adapters.
-    
+
     Args:
         root_path: Root directory to scan
         extensions: Optional list of file extensions (e.g., [".py", ".yaml"])
         organization_adapter: Optional adapter type ("media", "code", "docs")
         orchestrator_context: MasterOrchestrator routing context
-        
+
     Returns:
         Dict with:
             - files: List of scanned file dictionaries
             - total_count: Total files found
             - organizations: Unique organizations detected
             - hierarchy_depth: Maximum depth discovered
-            
+
     Example:
         >>> result = cortex_scan("/workspace/cortex", extensions=[".py"])
         >>> print(f"Found {result['total_count']} Python files")
     """
     # AC_START: AC-TOOLKIT-SCAN-001
-    
+
     # Validate orchestrator_context routing if provided
     from cortex.mcp.tools.tool_helpers import validate_orchestrator_context
     if orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     try:
         scanner = HierarchicalScanner(root_path=Path(root_path))
-        
+
         # Set extensions if provided
         if extensions:
             scanner.extensions = set(extensions)
-        
+
         # Wire adapter if specified
         adapter: Optional[OrganizationAdapter] = None
         if organization_adapter == "media":
             adapter = MediaAdapter()
         # Future: add code_adapter, docs_adapter
-        
+
         # Execute scan
         scanned_files = scanner.scan(adapter=adapter)
-        
+
         # Extract organizations
         organizations = sorted({f.organization for f in scanned_files if f.organization})
-        
+
         # Calculate max depth
         max_depth = max((f.hierarchy_depth for f in scanned_files), default=0)
-        
+
         result = {
             "files": [
                 {
@@ -94,10 +94,10 @@ def cortex_scan(
             "hierarchy_depth": max_depth,
             "status": "success",
         }
-        
+
         # AC_COMPLETE: AC-TOOLKIT-SCAN-001 ✅
         return result
-        
+
     except Exception as e:
         # AC_COMPLETE: AC-TOOLKIT-SCAN-001 ❌
         return {
@@ -118,47 +118,47 @@ def cortex_batch_transform(
     orchestrator_context: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Batch process items with configurable trigger conditions.
-    
+
     MCP tool for batch processing operations. Supports size-based and
     timeout-based triggers with pluggable transformation functions.
-    
+
     Args:
         items: List of items to batch process
         batch_size: Trigger batch flush after N items
         timeout_ms: Trigger batch flush after N milliseconds
         operation: Transformation operation ("identity", "uppercase", "sanitize")
         orchestrator_context: MasterOrchestrator routing context
-        
+
     Returns:
         Dict with:
             - batches: List of BatchResult dictionaries
             - total_items: Total items processed
             - total_batches: Number of batches flushed
             - triggers: Trigger breakdown (SIZE vs TIMEOUT)
-            
+
     Example:
         >>> items = ["file1.txt", "file2.txt", "file3.txt"]
         >>> result = cortex_batch_transform(items, batch_size=2)
         >>> print(f"Processed {result['total_batches']} batches")
     """
     # AC_START: AC-TOOLKIT-BATCH-001
-    
+
     # Validate orchestrator_context routing if provided
     from cortex.mcp.tools.tool_helpers import validate_orchestrator_context
     if orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     try:
         processor = BatchProcessor(batch_size=batch_size, timeout_ms=timeout_ms)
         batches: List[BatchResult] = []
-        
+
         # Define transformation function
         transform_fn = {
             "identity": lambda x: x,
             "uppercase": lambda x: x.upper() if isinstance(x, str) else str(x).upper(),
             "sanitize": lambda x: x.replace(" ", "_").lower() if isinstance(x, str) else str(x),
         }.get(operation, lambda x: x)
-        
+
         # Process items
         for item in items:
             trigger = processor.add(item)
@@ -173,7 +173,7 @@ def cortex_batch_transform(
                         processing_time_ms=0,  # MCP tools don't track timing
                     )
                 )
-        
+
         # Flush remaining items
         remaining = processor.flush()
         if remaining:
@@ -186,14 +186,14 @@ def cortex_batch_transform(
                     processing_time_ms=0,
                 )
             )
-        
+
         # Calculate trigger breakdown
         triggers = {
             "SIZE": sum(1 for b in batches if b.trigger == BatchTrigger.SIZE),
             "TIMEOUT": sum(1 for b in batches if b.trigger == BatchTrigger.TIMEOUT),
             "NONE": sum(1 for b in batches if b.trigger == BatchTrigger.NONE),
         }
-        
+
         result = {
             "batches": [
                 {
@@ -209,10 +209,10 @@ def cortex_batch_transform(
             "triggers": triggers,
             "status": "success",
         }
-        
+
         # AC_COMPLETE: AC-TOOLKIT-BATCH-001 ✅
         return result
-        
+
     except Exception as e:
         # AC_COMPLETE: AC-TOOLKIT-BATCH-001 ❌
         return {
@@ -232,16 +232,16 @@ def cortex_enrich(
     orchestrator_context: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Enrich content using domain-specific adapters.
-    
+
     MCP tool for content enrichment. Applies morph rules, organization detection,
     and external enrichment source integration via domain adapters.
-    
+
     Args:
         content: Content string to enrich (filename, text, etc.)
         domain: Domain adapter type ("media", "code", "docs")
         enrichment_sources: Optional list of sources to query (e.g., ["iafd", "tmdb"])
         orchestrator_context: MasterOrchestrator routing context
-        
+
     Returns:
         Dict with:
             - original: Original content
@@ -249,18 +249,18 @@ def cortex_enrich(
             - organization: Detected organization (if any)
             - sources: Available enrichment sources
             - morph_rules_applied: Count of rules applied
-            
+
     Example:
         >>> result = cortex_enrich("SexArt - Scene Title.mp4", domain="media")
         >>> print(f"Organization: {result['organization']}")
     """
     # AC_START: AC-TOOLKIT-ENRICH-001
-    
+
     # Validate orchestrator_context routing if provided
     from cortex.mcp.tools.tool_helpers import validate_orchestrator_context
     if orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     try:
         # Select adapter
         adapter: DomainAdapter
@@ -277,10 +277,10 @@ def cortex_enrich(
                 "status": "error",
                 "error": f"Unknown domain: {domain}",
             }
-        
+
         # Detect organization
         organization = adapter.detect_organization(Path(content), content)
-        
+
         # Apply morph rules
         enriched = content
         morph_rules = adapter.get_morph_rules()
@@ -289,10 +289,10 @@ def cortex_enrich(
             if rule.pattern.search(enriched):
                 enriched = rule.pattern.sub(rule.replacement, enriched)
                 rules_applied += 1
-        
+
         # Get enrichment sources
         sources = adapter.get_enrichment_sources()
-        
+
         result = {
             "original": content,
             "enriched": enriched,
@@ -309,10 +309,10 @@ def cortex_enrich(
             "morph_rules_applied": rules_applied,
             "status": "success",
         }
-        
+
         # AC_COMPLETE: AC-TOOLKIT-ENRICH-001 ✅
         return result
-        
+
     except Exception as e:
         # AC_COMPLETE: AC-TOOLKIT-ENRICH-001 ❌
         return {
@@ -334,38 +334,38 @@ def cortex_workflow(
     orchestrator_context: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Execute generic workflow combining toolkit operations.
-    
+
     MCP tool for workflow orchestration. Chains toolkit components
     (scan → batch → enrich) into reusable pipelines.
-    
+
     Args:
         workflow_type: Workflow template ("scan_batch_enrich", "batch_transform")
         root_path: Root path for scan operation
         batch_size: Batch size for processing
         domain: Domain adapter for enrichment
         orchestrator_context: MasterOrchestrator routing context
-        
+
     Returns:
         Dict with:
             - workflow: Workflow type executed
             - steps: List of step results
             - total_duration_ms: Approximate total time (if tracked)
             - summary: High-level summary statistics
-            
+
     Example:
         >>> result = cortex_workflow("scan_batch_enrich", root_path="/workspace")
         >>> print(f"Processed {result['summary']['total_files']} files")
     """
     # AC_START: AC-TOOLKIT-WORKFLOW-001
-    
+
     # Validate orchestrator_context routing if provided
     from cortex.mcp.tools.tool_helpers import validate_orchestrator_context
     if orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     try:
         steps = []
-        
+
         if workflow_type == "scan_batch_enrich":
             if not root_path:
                 return {
@@ -376,11 +376,11 @@ def cortex_workflow(
                     "status": "error",
                     "error": "root_path required for scan_batch_enrich workflow",
                 }
-            
+
             # Step 1: Scan
             scan_result = cortex_scan(root_path, organization_adapter=domain)
             steps.append({"step": "scan", "result": scan_result})
-            
+
             # Step 2: Batch
             if scan_result["status"] == "success":
                 file_paths = [f["path"] for f in scan_result["files"]]
@@ -388,21 +388,21 @@ def cortex_workflow(
                     file_paths, batch_size=batch_size, operation="identity"
                 )
                 steps.append({"step": "batch", "result": batch_result})
-                
+
                 # Step 3: Enrich (sample first 5 files)
                 enriched_samples = []
                 for file_path in file_paths[:5]:
                     enrich_result = cortex_enrich(file_path, domain=domain)
                     enriched_samples.append(enrich_result)
                 steps.append({"step": "enrich_sample", "result": enriched_samples})
-            
+
             summary = {
                 "total_files": scan_result.get("total_count", 0),
                 "organizations": scan_result.get("organizations", []),
                 "batches_created": batch_result.get("total_batches", 0) if scan_result["status"] == "success" else 0,
                 "enriched_samples": len(enriched_samples) if scan_result["status"] == "success" else 0,
             }
-        
+
         else:
             return {
                 "workflow": workflow_type,
@@ -412,7 +412,7 @@ def cortex_workflow(
                 "status": "error",
                 "error": f"Unknown workflow_type: {workflow_type}",
             }
-        
+
         result = {
             "workflow": workflow_type,
             "steps": steps,
@@ -420,10 +420,10 @@ def cortex_workflow(
             "summary": summary,
             "status": "success",
         }
-        
+
         # AC_COMPLETE: AC-TOOLKIT-WORKFLOW-001 ✅
         return result
-        
+
     except Exception as e:
         # AC_COMPLETE: AC-TOOLKIT-WORKFLOW-001 ❌
         return {

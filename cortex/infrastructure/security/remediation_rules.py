@@ -5,7 +5,7 @@ AC-ID: AC-SECURITY-REMEDIATION-RULES-001
 
 Provides pattern-based remediation for:
 - GitHub Actions unpacking (Arnica)
-- Python dependencies (Safety, Pip-audit)  
+- Python dependencies (Safety, Pip-audit)
 - Expression injection (GitHub Actions)
 - Secrets (Veracode, Bandit)
 """

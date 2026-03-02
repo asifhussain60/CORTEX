@@ -19,26 +19,26 @@ logger = logging.getLogger(__name__)
 class MethodSignatureAnalyzer:
     """
     Analyze method signatures from Roslyn semantic model.
-    
+
     Provides detailed method signature extraction including
     parameters, return types, and modifiers.
-    
+
     Example:
         >>> analyzer = MethodSignatureAnalyzer()
         >>> sig = analyzer.extract_signature(method_info)
         >>> print(sig["return_type"])  # "string"
     """
-    
+
     def extract_signature(self, method_info: Dict[str, Any]) -> Dict[str, Any]:
         """
         Extract detailed signature from method info.
-        
+
         Args:
             method_info: Method info dict from Roslyn CLI
-        
+
         Returns:
             Dict with structured signature data
-        
+
         Example:
             >>> sig = analyzer.extract_signature(method_info)
             >>> print(sig)
@@ -60,17 +60,17 @@ class MethodSignatureAnalyzer:
             "is_virtual": method_info.get("IsVirtual", False),
             "parameter_count": len(method_info.get("Parameters", []))
         }
-    
+
     def resolve_parameter_types(self, parameters: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Resolve parameter types from parameter info list.
-        
+
         Args:
             parameters: List of parameter info dicts
-        
+
         Returns:
             List of resolved parameter dicts
-        
+
         Example:
             >>> params = analyzer.resolve_parameter_types([
             ...     {"Name": "id", "Type": "int"},
@@ -79,7 +79,7 @@ class MethodSignatureAnalyzer:
             >>> print(params[0])  # {"name": "id", "type": "int"}
         """
         resolved = []
-        
+
         for param in parameters:
             resolved.append({
                 "name": param.get("Name"),
@@ -87,39 +87,39 @@ class MethodSignatureAnalyzer:
                 "is_nullable": "?" in param.get("Type", ""),
                 "is_params": False  # FIXME: Detect params keyword [TRACKED: Phase-67-Enhancement]
             })
-        
+
         return resolved
-    
+
     def extract_return_type(self, method_info: Dict[str, Any]) -> str:
         """
         Extract return type from method info.
-        
+
         Args:
             method_info: Method info dict
-        
+
         Returns:
             Return type string
         """
         return method_info.get("ReturnType", "void")
-    
+
     def find_methods_by_name(
-        self, 
-        type_info: Dict[str, Any], 
+        self,
+        type_info: Dict[str, Any],
         method_name: str
     ) -> List[Dict[str, Any]]:
         """
         Find all methods with the given name (includes overloads).
-        
+
         Args:
             type_info: Type info dict
             method_name: Method name to search for
-        
+
         Returns:
             List of method info dicts matching name
         """
         methods = type_info.get("Methods", [])
         return [m for m in methods if m.get("Name") == method_name]
-    
+
     def find_methods_by_signature(
         self,
         type_info: Dict[str, Any],
@@ -128,24 +128,24 @@ class MethodSignatureAnalyzer:
     ) -> Optional[Dict[str, Any]]:
         """
         Find method by exact signature (name + parameter types).
-        
+
         Args:
             type_info: Type info dict
             method_name: Method name
             parameter_types: List of parameter type names
-        
+
         Returns:
             Method info dict or None if not found
         """
         methods = self.find_methods_by_name(type_info, method_name)
-        
+
         for method in methods:
             params = method.get("Parameters", [])
-            
+
             # Check parameter count matches
             if len(params) != len(parameter_types):
                 continue
-            
+
             # Check each parameter type matches
             match = True
             for param, expected_type in zip(params, parameter_types):
@@ -153,32 +153,32 @@ class MethodSignatureAnalyzer:
                 if expected_type not in param_type:
                     match = False
                     break
-            
+
             if match:
                 return method
-        
+
         return None
-    
+
     def get_all_public_methods(self, type_info: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Get all public methods from type.
-        
+
         Args:
             type_info: Type info dict
-        
+
         Returns:
             List of public method info dicts
         """
         methods = type_info.get("Methods", [])
         return [m for m in methods if m.get("IsPublic", False)]
-    
+
     def get_static_methods(self, type_info: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Get all static methods from type.
-        
+
         Args:
             type_info: Type info dict
-        
+
         Returns:
             List of static method info dicts
         """

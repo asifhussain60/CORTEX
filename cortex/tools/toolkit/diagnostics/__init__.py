@@ -17,7 +17,7 @@ from cortex.tools.toolkit.diagnostics.mcp_health import MCPHealthChecker
 # Import consolidated diagnostics from Phase 90
 try:
     from pathlib import Path
-    
+
     # Import from sibling diagnostics.py file
     diagnostics_file = Path(__file__).parent.parent / "diagnostics.py"
     if diagnostics_file.exists():

@@ -15,21 +15,21 @@ from typing import Any, Dict
 class RenderDashboardJSONUseCase:
     """
     Render dashboard JSON from repository analysis.
-    
+
     Transforms repository analysis into standardized dashboard JSON format.
     """
-    
+
     def __init__(self) -> None:
         """Initialize dashboard renderer."""
         self._initialized = True
-    
+
     def execute(self, repo_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute dashboard JSON rendering.
-        
+
         Args:
             repo_data: Repository analysis data
-        
+
         Returns:
             Dashboard JSON structure
         """
@@ -50,7 +50,7 @@ class RenderDashboardJSONUseCase:
                 "duration_seconds": repo_data.get("analysis_duration", 0)
             }
         }
-    
+
     def to_json_string(self, dashboard_data: Dict[str, Any]) -> str:
         """Convert dashboard data to JSON string."""
         return json.dumps(dashboard_data, indent=2)

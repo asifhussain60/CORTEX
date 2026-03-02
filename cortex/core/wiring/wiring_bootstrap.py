@@ -16,24 +16,24 @@ logger = logging.getLogger(__name__)
 
 def _ensure_trace_database_initialized() -> None:
     """Ensure trace database exists with current schema (idempotent).
-    
+
     Authority: CORE-051 (Database Migration Safety)
     Pattern: Auto-repair missing databases on startup
     """
     try:
         from cortex.infrastructure.orchestrator_trace_logger import OrchestratorTraceLogger
-        
+
         # Trigger singleton initialization (creates .db if missing)
         logger_instance = OrchestratorTraceLogger.get_instance()
-        
+
         # Verify database exists
         db_path = logger_instance._db_path
         if not db_path.exists():
             logger.info(f"📦 Creating trace database: {db_path}")
             logger_instance._init_db()
-        
+
         logger.debug(f"✅ Trace database ready: {db_path}")
-        
+
     except Exception as e:
         # Non-fatal: tracing is observability, not core functionality
         logger.warning(f"⚠️ Trace database initialization skipped: {e}")
@@ -75,10 +75,10 @@ def bootstrap_cortex() -> GitBackedRegistry:
             raise ValueError(f"Invalid wiring specification: {errors}")
 
         logger.info(f"✅ CORTEX wired successfully: {registry.orchestrator_count} orchestrators")
-        
+
         # Initialize trace database (after orchestrator wiring)
         _ensure_trace_database_initialized()
-        
+
         return registry
 
     except Exception as e:

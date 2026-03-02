@@ -26,16 +26,16 @@ class RepoMetadata:
 class LoadRepoOverviewUseCase:
     """
     Load repository overview metadata.
-    
+
     Extracts basic repository information:
     - Name, description, owner
     - Primary language
     - File/directory structure
     """
-    
+
     def __init__(self, repository: Any = None) -> None:
         """Initialize overview loader.
-        
+
         Args:
             repository: Optional repository interface for persistence.
                         Defaults to JSONProfileRepository when not provided.
@@ -50,14 +50,14 @@ class LoadRepoOverviewUseCase:
             except Exception:
                 pass
         self.repository = repository
-    
+
     def execute(self, repo_data: Any) -> RepoMetadata:
         """
         Execute overview loading.
-        
+
         Args:
             repo_data: Repository data (dict or path string)
-        
+
         Returns:
             RepoMetadata object
         """
@@ -71,20 +71,20 @@ class LoadRepoOverviewUseCase:
                 forks=repo_data.get("forks", 0),
                 last_updated=repo_data.get("last_updated", "")
             )
-        
+
         # Handle string path
         path = Path(repo_data)
-        
+
         # Extract basic info
         name = path.name
         primary_language = self._detect_primary_language(path)
-        
+
         return RepoMetadata(
             name=name,
             url="",
             language=primary_language
         )
-    
+
     def _detect_primary_language(self, path: Path) -> str:
         """Detect primary programming language."""
         # Simple detection based on file extensions
@@ -95,24 +95,24 @@ class LoadRepoOverviewUseCase:
             ".java": "Java",
             ".cs": "C#"
         }
-        
+
         if path.exists():
             for file_path in path.rglob("*"):
                 if file_path.is_file():
                     ext = file_path.suffix
                     if ext in extensions:
                         return extensions[ext]
-        
+
         return "Unknown"
-    
+
     def _count_files(self, path: Path) -> int:
         """Count total files in repository."""
         if not path.exists():
             return 0
-        
+
         count = 0
         for file_path in path.rglob("*"):
             if file_path.is_file():
                 count += 1
-        
+
         return count

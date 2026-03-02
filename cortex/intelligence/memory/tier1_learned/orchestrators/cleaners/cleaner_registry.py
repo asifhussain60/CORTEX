@@ -21,7 +21,7 @@ from .base import CleanerInterface
 class CleanerRegistry:
     """
     Registry for vacuum cleaner plugins.
-    
+
     Manages registration, retrieval, and listing of cleaner plugins.
     """
 
@@ -35,10 +35,10 @@ class CleanerRegistry:
     ) -> None:
         """
         Register cleaner plugin instance.
-        
+
         Args:
             cleaner: Cleaner instance (must be CleanerInterface)
-        
+
         Raises:
             TypeError: If cleaner doesn't inherit from CleanerInterface
         """
@@ -46,35 +46,35 @@ class CleanerRegistry:
             raise TypeError(
                 f"{type(cleaner).__name__} must be an instance of CleanerInterface"
             )
-        
+
         domain = cleaner.domain
         self._cleaners[domain] = cleaner
 
     def get(self, domain: str) -> CleanerInterface:
         """
         Get cleaner instance by domain.
-        
+
         Args:
             domain: Cleaner domain identifier
-        
+
         Returns:
             Cleaner instance
-        
+
         Raises:
             KeyError: If domain not registered
         """
         if domain not in self._cleaners:
             raise KeyError(f"Cleaner '{domain}' not registered")
-        
+
         return self._cleaners[domain]
 
     def has(self, domain: str) -> bool:
         """
         Check if cleaner is registered.
-        
+
         Args:
             domain: Cleaner domain identifier
-        
+
         Returns:
             True if registered, False otherwise
         """
@@ -83,7 +83,7 @@ class CleanerRegistry:
     def list_domains(self) -> List[str]:
         """
         List all registered cleaner domains.
-        
+
         Returns:
             List of domain identifiers
         """

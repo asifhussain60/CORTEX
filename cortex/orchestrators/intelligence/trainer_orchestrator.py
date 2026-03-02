@@ -101,7 +101,7 @@ class TrainerOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
                     workflow = content.get("workflow", content)
                     template_id = workflow.get("id", yaml_file.stem)
                     category = yaml_file.parent.name
-                    
+
                     # Extract what patterns this template covers
                     covers: List[str] = []
                     if "gates" in workflow:
@@ -504,7 +504,7 @@ class TrainerOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     ) -> None:
         """Execute CREATE action."""
         target = Path(action.get("target", ""))
-        
+
         # Use provided content or generate minimal template
         content = action.get("content")
         if not content:

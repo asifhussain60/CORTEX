@@ -16,7 +16,7 @@ Example Usage:
         def __init__(self):
             self.name = "MyOrchestrator"
             self._initialize_learning()
-        
+
         def execute(self, request):
             result = self._do_work(request)
             self._capture_learning(
@@ -43,7 +43,7 @@ from cortex.intelligence.learning.universal_learning_loop import (
 class LearningContext:
     """
     Context for learning capture.
-    
+
     Attributes:
         orchestrator: Name of orchestrator
         operation: Operation being performed
@@ -63,15 +63,15 @@ class LearningContext:
 class OrchestratorLearningMixin:
     """
     Mixin to add learning capabilities to orchestrators.
-    
+
     Orchestrators should:
     1. Call self._initialize_learning() in __init__
     2. Call self._capture_learning() after operations
     3. Set self.name attribute for identification
-    
+
     Thread-safe. Minimal overhead (<50ms per capture).
     """
-    
+
     def _initialize_learning(
         self,
         workspace_root: Optional[Path] = None,
@@ -79,13 +79,13 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Initialize learning loop for orchestrator.
-        
+
         Args:
             workspace_root: Root of CORTEX workspace
             enable_learning: Enable/disable learning (for testing)
         """
         self._learning_enabled = enable_learning
-        
+
         if enable_learning:
             self._learning_loop = UniversalLearningLoop(
                 workspace_root=workspace_root,
@@ -93,7 +93,7 @@ class OrchestratorLearningMixin:
             )
         else:
             self._learning_loop = None
-    
+
     def _create_learning_context(
         self,
         operation: str,
@@ -103,18 +103,18 @@ class OrchestratorLearningMixin:
     ) -> LearningContext:
         """
         Create learning context for operation.
-        
+
         Args:
             operation: Operation name
             input_data: Input data to operation
             repository: Optional repository context
             **metadata: Additional context metadata
-            
+
         Returns:
             LearningContext instance
         """
         orchestrator_name = getattr(self, "name", self.__class__.__name__)
-        
+
         return LearningContext(
             orchestrator=orchestrator_name,
             operation=operation,
@@ -122,7 +122,7 @@ class OrchestratorLearningMixin:
             repository=repository,
             metadata=metadata
         )
-    
+
     def _capture_learning(
         self,
         operation: str,
@@ -134,7 +134,7 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Capture learning from operation result.
-        
+
         Args:
             operation: Operation name
             result: Operation result
@@ -145,12 +145,12 @@ class OrchestratorLearningMixin:
         """
         if not self._learning_enabled or not self._learning_loop:
             return
-        
+
         orchestrator_name = getattr(self, "name", self.__class__.__name__)
-        
+
         # Extract pattern data from result
         pattern_data = self._extract_pattern_data(result)
-        
+
         # Create learning capture
         capture = LearningCapture(
             orchestrator=orchestrator_name,
@@ -161,19 +161,19 @@ class OrchestratorLearningMixin:
             confidence=confidence,
             context=context_data
         )
-        
+
         # Submit to learning loop
         self._learning_loop.capture_pattern(capture)
-    
+
     def _extract_pattern_data(self, result: Any) -> Dict[str, Any]:
         """
         Extract structured pattern data from result.
-        
+
         Override in subclasses for domain-specific extraction.
-        
+
         Args:
             result: Operation result
-            
+
         Returns:
             Structured pattern data
         """
@@ -183,7 +183,7 @@ class OrchestratorLearningMixin:
             return result.to_dict()
         else:
             return {"result": str(result)}
-    
+
     def _capture_tdd_learning(
         self,
         test_result: Any,
@@ -192,7 +192,7 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Capture TDD-specific learning.
-        
+
         Args:
             test_result: Test execution result
             code_changes: Code changes made
@@ -208,7 +208,7 @@ class OrchestratorLearningMixin:
             pattern_description="TDD cycle pattern",
             confidence=confidence
         )
-    
+
     def _capture_refactoring_learning(
         self,
         refactoring_type: str,
@@ -218,7 +218,7 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Capture refactoring-specific learning.
-        
+
         Args:
             refactoring_type: Type of refactoring performed
             before_metrics: Code metrics before refactoring
@@ -237,7 +237,7 @@ class OrchestratorLearningMixin:
             pattern_description=f"{refactoring_type} refactoring pattern",
             confidence=confidence
         )
-    
+
     def _calculate_improvement(
         self,
         before: Dict[str, Any],
@@ -245,27 +245,27 @@ class OrchestratorLearningMixin:
     ) -> Dict[str, float]:
         """
         Calculate improvement metrics.
-        
+
         Args:
             before: Before metrics
             after: After metrics
-            
+
         Returns:
             Improvement percentages
         """
         improvements = {}
-        
+
         for key in before.keys():
             if key in after and isinstance(before[key], (int, float)):
                 before_val = float(before[key])
                 after_val = float(after[key])
-                
+
                 if before_val > 0:
                     pct_change = ((after_val - before_val) / before_val) * 100
                     improvements[key] = pct_change
-        
+
         return improvements
-    
+
     def _capture_analysis_learning(
         self,
         analysis_type: str,
@@ -274,7 +274,7 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Capture analysis-specific learning.
-        
+
         Args:
             analysis_type: Type of analysis performed
             findings: Analysis findings

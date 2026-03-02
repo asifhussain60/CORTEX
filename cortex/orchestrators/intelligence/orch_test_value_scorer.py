@@ -32,18 +32,18 @@ class ScenarioLikelihood(Enum):
 @dataclass
 class TestCandidate:
     """A potential test to be generated."""
-    
+
     name: str
     description: str
     issue_type: str  # "blind_spot" | "edge_case" | "security_risk"
     target_function: str
     target_file: str
-    
+
     # Scoring factors
     severity: IssueSeverity
     likelihood: ScenarioLikelihood
     coverage_gap: float  # 0-100 (percentage of uncovered code)
-    
+
     # Metadata
     category: Optional[str] = None
     owasp_category: Optional[str] = None
@@ -52,19 +52,19 @@ class TestCandidate:
 @dataclass
 class TestValueScore:
     """Calculated test value score with breakdown."""
-    
+
     total: float  # 0-100
     severity_score: float  # 0-40
     likelihood_score: float  # 0-30
     coverage_gap_score: float  # 0-30
-    
+
     candidate: TestCandidate
-    
+
     @property
     def should_generate(self) -> bool:
         """Whether this test exceeds generation threshold."""
         return self.total >= 70.0  # Default threshold
-    
+
     @property
     def priority(self) -> str:
         """Priority tier based on score."""
@@ -81,14 +81,14 @@ class TestValueScore:
 class TestValueScorer:
     """
     Calculate test value scores for test candidates.
-    
+
     Uses multi-factor formula to prioritize high-value tests:
     - Severity: How bad if this bug reaches production? (0-100)
     - Likelihood: How likely is this scenario to occur? (0-100)
     - Coverage Gap: Is this code path currently untested? (0-100)
-    
+
     Formula: (Severity × 0.4) + (Likelihood × 0.3) + (Gap × 0.3)
-    
+
     Example:
         >>> scorer = TestValueScorer()
         >>> candidate = TestCandidate(
@@ -107,7 +107,7 @@ class TestValueScorer:
         >>> score.should_generate
         True
     """
-    
+
     def __init__(
         self,
         severity_weight: float = 0.4,
@@ -116,12 +116,12 @@ class TestValueScorer:
     ) -> None:
         """
         Initialize scorer with custom weights.
-        
+
         Args:
             severity_weight: Weight for severity factor (default: 0.4)
             likelihood_weight: Weight for likelihood factor (default: 0.3)
             coverage_gap_weight: Weight for coverage gap factor (default: 0.3)
-        
+
         Raises:
             ValueError: If weights don't sum to 1.0
         """
@@ -133,21 +133,21 @@ class TestValueScorer:
                 f"likelihood={likelihood_weight}, "
                 f"coverage_gap={coverage_gap_weight}"
             )
-        
+
         self.severity_weight = severity_weight
         self.likelihood_weight = likelihood_weight
         self.coverage_gap_weight = coverage_gap_weight
-    
+
     def calculate_score(self, candidate: TestCandidate) -> TestValueScore:
         """
         Calculate test value score for a candidate.
-        
+
         Args:
             candidate: Test candidate to score
-        
+
         Returns:
             TestValueScore with total and breakdown
-        
+
         Example:
             >>> candidate = TestCandidate(
             ...     name="test_empty_list",
@@ -167,10 +167,10 @@ class TestValueScorer:
         severity_score = candidate.severity.value * self.severity_weight
         likelihood_score = candidate.likelihood.value * self.likelihood_weight
         coverage_gap_score = candidate.coverage_gap * self.coverage_gap_weight
-        
+
         # Total score (0-100)
         total = severity_score + likelihood_score + coverage_gap_score
-        
+
         return TestValueScore(
             total=round(total, 2),
             severity_score=round(severity_score, 2),
@@ -178,17 +178,17 @@ class TestValueScorer:
             coverage_gap_score=round(coverage_gap_score, 2),
             candidate=candidate,
         )
-    
+
     def get_severity_score(self, issue_type: str) -> IssueSeverity:
         """
         Get default severity for issue type.
-        
+
         Args:
             issue_type: Type of issue ("blind_spot", "edge_case", "security_risk")
-        
+
         Returns:
             IssueSeverity enum value
-        
+
         Example:
             >>> scorer.get_severity_score("security_risk")
             IssueSeverity.CRITICAL
@@ -202,17 +202,17 @@ class TestValueScorer:
             "golden_path": IssueSeverity.LOW,
         }
         return severity_map.get(issue_type, IssueSeverity.MEDIUM)
-    
+
     def get_likelihood_score(self, scenario: str) -> ScenarioLikelihood:
         """
         Get default likelihood for scenario type.
-        
+
         Args:
             scenario: Scenario type (e.g., "empty_input", "null_value")
-        
+
         Returns:
             ScenarioLikelihood enum value
-        
+
         Example:
             >>> scorer.get_likelihood_score("sql_injection")
             ScenarioLikelihood.HIGH
@@ -224,29 +224,29 @@ class TestValueScorer:
             "sql_injection": ScenarioLikelihood.HIGH,
             "xss_attack": ScenarioLikelihood.HIGH,
             "auth_bypass": ScenarioLikelihood.MEDIUM,
-            
+
             # Medium likelihood scenarios
             "overflow": ScenarioLikelihood.MEDIUM,
             "underflow": ScenarioLikelihood.MEDIUM,
             "race_condition": ScenarioLikelihood.LOW,
-            
+
             # Low likelihood scenarios
             "unicode_edge_case": ScenarioLikelihood.LOW,
             "max_int": ScenarioLikelihood.LOW,
         }
         return likelihood_map.get(scenario, ScenarioLikelihood.MEDIUM)
-    
+
     def get_coverage_gap_score(self, code_path: str, coverage_data: Optional[Dict] = None) -> float:
         """
         Calculate coverage gap score for code path.
-        
+
         Args:
             code_path: Path to code being tested
             coverage_data: Optional coverage data from pytest-cov
-        
+
         Returns:
             Coverage gap percentage (0-100)
-        
+
         Example:
             >>> scorer.get_coverage_gap_score("error_handler_branch")
             100.0  # Uncovered path
@@ -254,12 +254,12 @@ class TestValueScorer:
         if coverage_data is None:
             # Default: assume uncovered if no data
             return 100.0
-        
+
         # Check if code path is covered
         is_covered = coverage_data.get(code_path, {}).get("covered", False)
         if not is_covered:
             return 100.0  # Completely uncovered
-        
+
         # Check execution count
         execution_count = coverage_data.get(code_path, {}).get("count", 0)
         if execution_count == 0:

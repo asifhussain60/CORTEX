@@ -50,7 +50,7 @@ except ImportError:
 class CortexLens(ConsolidatedTool):
     """
     Unified code intelligence via LENS methodology.
-    
+
     Operations:
     - analyze: Full LENS analysis (Language, Examination, Navigation, Synthesis)
     - search: Semantic code search
@@ -58,7 +58,7 @@ class CortexLens(ConsolidatedTool):
     - duplicates: Duplicate code detection (CORE-035)
     - ast: AST-level analysis
     """
-    
+
     def __init__(self) -> None:
         """Initialize CortexLens with IntelligenceOrchestrator."""
         super().__init__()
@@ -75,12 +75,12 @@ class CortexLens(ConsolidatedTool):
                     "Reason: %s",
                     exc,
                 )
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex.lens"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -88,12 +88,12 @@ class CortexLens(ConsolidatedTool):
             "Unified code intelligence via LENS methodology. Supports analysis, "
             "semantic search, dependency graphs, duplicate detection, and AST analysis."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.INTELLIGENCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -125,24 +125,24 @@ class CortexLens(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["analyze", "search", "graph", "duplicates", "ast"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute LENS operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "analyze")
         target = params.get("target", "")
         depth = params.get("depth", "standard")
         options = params.get("options", {})
-        
+
         handlers = {
             "analyze": self._analyze,
             "search": self._search,
@@ -150,7 +150,7 @@ class CortexLens(ConsolidatedTool):
             "duplicates": self._duplicates,
             "ast": self._ast,
         }
-        
+
         handler = handlers.get(operation)
         if not handler:
             return ToolResult(
@@ -158,15 +158,15 @@ class CortexLens(ConsolidatedTool):
                 error=f"Unknown operation: {operation}",
                 metadata={"valid_operations": self.supported_operations},
             )
-        
+
         return await handler(target, depth, options)
-    
+
     async def _analyze(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
         """
         Full LENS analysis with IntelligenceOrchestrator integration.
-        
+
         AC-INTELLIGENCE-INTEGRATION-001: Real intelligence instead of stub.
         """
         # Check if target exists
@@ -176,17 +176,17 @@ class CortexLens(ConsolidatedTool):
                 success=False,
                 error=f"Target not found: {target}",
             )
-        
+
         # Use IntelligenceOrchestrator if available
         if self._intelligence_orchestrator and target_path.suffix == ".py":
             try:
                 # Parse Python file for real analysis
                 parse_result = self._intelligence_orchestrator.parse_python_file(target_path)
-                
+
                 if not parse_result.success:
                     # Fall back to stub on error
                     return self._analyze_stub(target, depth)
-                
+
                 # Extract real metrics
                 analysis = {
                     "target": target,
@@ -214,7 +214,7 @@ class CortexLens(ConsolidatedTool):
                         },
                     },
                 }
-                
+
                 return ToolResult(
                     success=True,
                     data=analysis,
@@ -227,10 +227,10 @@ class CortexLens(ConsolidatedTool):
             except Exception as e:
                 # Fall back to stub on error
                 return self._analyze_stub(target, depth)
-        
+
         # Fall back to stub if orchestrator unavailable or non-Python file
         return self._analyze_stub(target, depth)
-    
+
     def _analyze_stub(self, target: str, depth: str) -> ToolResult:
         """Stub implementation for graceful degradation."""
         analysis = {
@@ -259,13 +259,13 @@ class CortexLens(ConsolidatedTool):
                 },
             },
         }
-        
+
         return ToolResult(
             success=True,
             data=analysis,
             metadata={"operation": "analyze", "depth": depth, "stub": True},
         )
-    
+
     async def _search(
         self, query: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
@@ -280,7 +280,7 @@ class CortexLens(ConsolidatedTool):
             },
             metadata={"operation": "search"},
         )
-    
+
     async def _graph(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
@@ -296,7 +296,7 @@ class CortexLens(ConsolidatedTool):
             },
             metadata={"operation": "graph"},
         )
-    
+
     async def _duplicates(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
@@ -311,13 +311,13 @@ class CortexLens(ConsolidatedTool):
             },
             metadata={"operation": "duplicates", "rule": "CORE-035"},
         )
-    
+
     async def _ast(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
         """
         AST-level analysis with IntelligenceOrchestrator integration.
-        
+
         AC-INTELLIGENCE-INTEGRATION-001: Real AST parsing instead of stub.
         """
         target_path = Path(target)
@@ -326,19 +326,19 @@ class CortexLens(ConsolidatedTool):
                 success=False,
                 error=f"Target not found: {target}",
             )
-        
+
         # Use IntelligenceOrchestrator if available
         if self._intelligence_orchestrator and target_path.suffix == ".py":
             try:
                 # Parse Python file for AST
                 parse_result = self._intelligence_orchestrator.parse_python_file(target_path)
-                
+
                 if not parse_result.success:
                     return ToolResult(
                         success=False,
                         error=f"AST parse failed: {parse_result.error}",
                     )
-                
+
                 # Build real AST data
                 ast_data = {
                     "target": target,
@@ -372,7 +372,7 @@ class CortexLens(ConsolidatedTool):
                         "imports": len(parse_result.imports),
                     },
                 }
-                
+
                 return ToolResult(
                     success=True,
                     data=ast_data,
@@ -386,7 +386,7 @@ class CortexLens(ConsolidatedTool):
                     success=False,
                     error=f"AST analysis error: {str(e)}",
                 )
-        
+
         # Stub fallback
         return ToolResult(
             success=True,
@@ -409,16 +409,16 @@ class CortexLens(ConsolidatedTool):
 class CortexKnowledge(ConsolidatedTool):
     """
     Knowledge base operations via KnowledgeRegistryProxy.
-    
+
     Phase 81-a: Wired to cortex.knowledge.registry_proxy.KnowledgeRegistryProxy
-    
+
     Operations:
     - search: Search knowledge base by substring in key
     - domain: Get domain-specific knowledge
     - best_practices: Get best practices for a topic (hybrid: static + proxy)
     - gaps: Identify knowledge gaps via domain coverage analysis
     """
-    
+
     def __init__(self) -> None:
         """Initialize CortexKnowledge with KnowledgeRegistryProxy."""
         super().__init__()
@@ -433,12 +433,12 @@ class CortexKnowledge(ConsolidatedTool):
                 "Reason: %s",
                 exc,
             )
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_knowledge"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -447,12 +447,12 @@ class CortexKnowledge(ConsolidatedTool):
             "Search for domain knowledge, best practices, and identify knowledge gaps. "
             "Wired to cortex-registry/knowledge/ and cortex-registry/knowledge-base/ (30 YAMLs, 11 domains)."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.INTELLIGENCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -483,31 +483,31 @@ class CortexKnowledge(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["search", "domain", "best_practices", "gaps"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute knowledge operation via KnowledgeRegistryProxy.
-        
+
         Phase 81-a: All operations now delegate to real proxy instead of returning
         hardcoded empty stubs. Supports 4 operations with full YAML registry access.
-        
+
         Args:
             operation (str): One of 'search', 'domain', 'best_practices', 'gaps'
             query (str): Search query or topic/domain name
             domain (Optional[str]): Filter results by domain (e.g., 'testing-validation')
             limit (Optional[int]): Maximum results to return (default: 10)
             orchestrator_context (Optional[Any]): MCP routing context (enforced if present)
-        
+
         Returns:
             ToolResult: Success result with formatted data, or error if proxy unavailable
-        
+
         Raises:
             Implicit: Exceptions are caught and returned as ToolResult.success=False
-        
+
         Knowledge sources:
             - cortex-registry/knowledge/ (11 domains, best practices guides)
             - cortex-registry/knowledge-base/ (19 runtime knowledge files)
@@ -517,12 +517,12 @@ class CortexKnowledge(ConsolidatedTool):
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "search")
         query = params.get("query", "")
         domain = params.get("domain")
         limit = params.get("limit", 10)
-        
+
         if operation == "search":
             # Phase 81-a: Wire to proxy.query(key_contains=query)
             if not self._proxy:
@@ -530,7 +530,7 @@ class CortexKnowledge(ConsolidatedTool):
                     success=False,
                     error="KnowledgeRegistryProxy not available"
                 )
-            
+
             results = self._proxy.query(key_contains=query, domain=domain)
             # Format results for MCP response
             formatted_results = [
@@ -542,7 +542,7 @@ class CortexKnowledge(ConsolidatedTool):
                 }
                 for r in results[:limit]
             ]
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -553,7 +553,7 @@ class CortexKnowledge(ConsolidatedTool):
                 },
                 metadata={"operation": "search"},
             )
-        
+
         elif operation == "domain":
             # Phase 81-a: Wire to proxy.query(domain=domain or query)
             if not self._proxy:
@@ -561,7 +561,7 @@ class CortexKnowledge(ConsolidatedTool):
                     success=False,
                     error="KnowledgeRegistryProxy not available"
                 )
-            
+
             target_domain = domain or query
             knowledge_items = self._proxy.query(domain=target_domain)
             # Format results for MCP response
@@ -573,7 +573,7 @@ class CortexKnowledge(ConsolidatedTool):
                 }
                 for item in knowledge_items[:limit]
             ]
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -583,13 +583,13 @@ class CortexKnowledge(ConsolidatedTool):
                 },
                 metadata={"operation": "domain"},
             )
-        
+
         elif operation == "best_practices":
             # Hybrid: Static content + proxy
             results = []
             if self._proxy:
                 results = self._proxy.query(key_contains=query)
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -604,7 +604,7 @@ class CortexKnowledge(ConsolidatedTool):
                 },
                 metadata={"operation": "best_practices"},
             )
-        
+
         elif operation == "gaps":
             # Phase 81-a: Compute real coverage from proxy.domains()
             if not self._proxy:
@@ -612,17 +612,17 @@ class CortexKnowledge(ConsolidatedTool):
                     success=False,
                     error="KnowledgeRegistryProxy not available"
                 )
-            
+
             # Expected domains for CORTEX (from analysis)
             expected_domains = {
                 "backend-python", "security", "governance", "testing-validation",
                 "devops-infrastructure", "performance-optimization", "architecture",
                 "frontend-typescript", "api-design", "data-engineering", "cloud-platforms"
             }
-            
+
             actual_domains = set(self._proxy.domains())
             coverage = len(actual_domains & expected_domains) / len(expected_domains)
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -634,14 +634,14 @@ class CortexKnowledge(ConsolidatedTool):
                 },
                 metadata={"operation": "gaps"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
 class CortexGit(ConsolidatedTool):
     """
     Git history and context operations.
-    
+
     Operations:
     - history: Get recent commit history
     - blame: Get file blame information
@@ -649,12 +649,12 @@ class CortexGit(ConsolidatedTool):
     - context: Get 24-hour git context
     - changes: Get changed files
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_git"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -662,12 +662,12 @@ class CortexGit(ConsolidatedTool):
             "Git history and context operations. Get commit history, blame, "
             "diffs, and 24-hour context for informed development."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.INTELLIGENCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -698,24 +698,24 @@ class CortexGit(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["history", "blame", "diff", "context", "changes"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute git operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "history")
         target = params.get("target")
         limit = params.get("limit", 10)
         since = params.get("since", "24h")
-        
+
         if operation == "history":
             return ToolResult(
                 success=True,
@@ -727,7 +727,7 @@ class CortexGit(ConsolidatedTool):
                 },
                 metadata={"operation": "history"},
             )
-        
+
         elif operation == "blame":
             if not target:
                 return ToolResult(success=False, error="target required for blame")
@@ -740,7 +740,7 @@ class CortexGit(ConsolidatedTool):
                 },
                 metadata={"operation": "blame"},
             )
-        
+
         elif operation == "diff":
             return ToolResult(
                 success=True,
@@ -752,7 +752,7 @@ class CortexGit(ConsolidatedTool):
                 },
                 metadata={"operation": "diff"},
             )
-        
+
         elif operation == "context":
             return ToolResult(
                 success=True,
@@ -765,7 +765,7 @@ class CortexGit(ConsolidatedTool):
                 },
                 metadata={"operation": "context"},
             )
-        
+
         elif operation == "changes":
             return ToolResult(
                 success=True,
@@ -777,7 +777,7 @@ class CortexGit(ConsolidatedTool):
                 },
                 metadata={"operation": "changes"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 

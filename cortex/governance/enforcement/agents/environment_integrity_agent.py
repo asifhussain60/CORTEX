@@ -138,7 +138,7 @@ class EnvironmentIntegrityAgent:
         if not mcp_status.available:
             # Phase 89: Attempt auto-healing instead of immediately blocking
             healing_result = self.self_heal_environment(intent)
-            
+
             if healing_result.success and healing_result.mcp_now_available:
                 # Auto-healing succeeded, proceed with operation
                 return ValidationResult(
@@ -175,16 +175,16 @@ class EnvironmentIntegrityAgent:
     def self_heal_environment(self, intent: IntentType) -> HealingResult:
         """
         Attempt to self-heal environment when MCP unavailable.
-        
+
         Phase 89 enhancement: Instead of blocking, try to fix the issue.
         Learnings from chat01.md (2026-02-16):
         - Missing dependencies (yaml/PyYAML) in venv
         - Invalid requirements.txt (markdown fence)
         - Platform-specific path issues
-        
+
         Args:
             intent: User intent that triggered MCP check
-        
+
         Returns:
             HealingResult with success status and diagnostics
         """

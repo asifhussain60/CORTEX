@@ -671,7 +671,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             orchestrator_name="IntentRouter",
             enable=False  # TODO: Enable after Wave H-S4 validation
         )
-        
+
         # WORKFLOW-COMPLEXITY-GATE-001: Initialize complexity router
         self.complexity_router = WorkflowComplexityRouter()
         self.golden_hammer_rules = GoldenHammerRules()
@@ -2048,7 +2048,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 IntentType.WORKFLOW_COMPOSE: "workflow_compose",
             }
             operation_type = _intent_to_op.get(clf_result.intent_type, "implement")
-            
+
             # Extract target files (look for file paths in context)
             target_files = context.get("target_files", [])
             if not target_files:
@@ -2058,10 +2058,10 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 file_pattern = r'\b[\w/.-]+\.(py|ts|js|yaml|yml|json|md|txt)\b'
                 matches = re.findall(file_pattern, combined_text)
                 target_files = [m[0] if isinstance(m, tuple) else m for m in matches]
-            
+
             # Extract dependencies
             dependencies = context.get("dependencies", [])
-            
+
             # Extract risk level
             risk_level = context.get("risk_level", "MEDIUM").upper()
             if "critical" in combined_text or "production" in combined_text:
@@ -2070,7 +2070,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 risk_level = "HIGH"
             elif "low" in combined_text or "simple" in combined_text or "trivial" in combined_text:
                 risk_level = "LOW"
-            
+
             # Build complexity intent
             complexity_intent = ComplexityIntent(
                 operation_type=operation_type,
@@ -2079,17 +2079,17 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 risk_level=risk_level,
                 metadata=context
             )
-            
+
             # Get routing decision from complexity router
             from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy as ComplexityRoutingStrategy
             complexity_routing = self.complexity_router.route(complexity_intent)
-            
+
             # Validate with golden hammer rules
             self.golden_hammer_rules.validate_routing_decision(
                 complexity_routing,
                 override_rationale=context.get("override_rationale")
             )
-            
+
             # Log complexity decision
             self.logger.log_operation_complete(
                 ac_id="WORKFLOW-COMPLEXITY-GATE-001",
@@ -2103,7 +2103,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                     "orchestrator": complexity_routing.orchestrator
                 }
             )
-            
+
             # Convert to IntentRouter RoutingDecision format
             # Extract keywords for downstream use
             explicit_kw = [k.lower() for k in context.get("keywords", []) if isinstance(k, str)]
@@ -2149,10 +2149,10 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                         "domain": context.get("domain"),
                     }
                 )
-            
+
             # Fallback to standard routing
             return None
-            
+
         except Exception as e:
             # Log error but don't block routing
             self.logger.log_operation_complete(
@@ -2162,7 +2162,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 details={"error": str(e)}
             )
             return None
-    
+
     def _map_operation_to_intent(self, operation_type: str) -> IntentType:
         """Map operation type to IntentType enum."""
         mapping = {
@@ -2582,49 +2582,49 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
     def _format_routing_message_with_books(self, rule_id: str) -> str:
         """
         Format routing message with book reference for inline display.
-        
+
         AC-PHASE-06-S2-002: IntentRouter book reference enrichment
-        
+
         Uses BusinessWisdomFormatter to enrich routing messages with
         authoritative book citations, enhancing user education during
         intent classification.
-        
+
         Args:
             rule_id: CORE rule ID (e.g., "CORE-008")
-        
+
         Returns:
             Formatted string with book reference. Falls back to rule_id if formatting fails.
-        
+
         Example:
             >>> router._format_routing_message_with_books("CORE-008")
             '**Red-Green-Refactor Discipline** → CORE-008 (TDD by Kent Beck)'
-        
+
         Authority:
             - business-wisdom-wiring.md (Stage 2)
             - phase-06-business-wisdom-display-enhancement.yaml
-        
+
         AC-ID: AC-PHASE-06-S2-002
         """
         try:
             from cortex.orchestrators.core.business_wisdom_formatter import BusinessWisdomFormatter
-            
+
             formatter = BusinessWisdomFormatter()
             markdown = formatter.format_governance_with_books(
                 rule_ids=[rule_id],
                 max_display=1,
                 include_icon=False
             )
-            
+
             if markdown:
                 # Strip list marker for inline display
                 lines = markdown.split("\n")
                 for line in lines:
                     if line.startswith("- "):
                         return line[2:].strip()  # Remove "- " prefix
-            
+
             # Fallback to rule ID only
             return rule_id
-            
+
         except Exception as e:
             # Graceful degradation on any error
             return rule_id
@@ -2632,12 +2632,12 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
     def _init_response_engine(self, intent_type: IntentType, orchestrator_name: str, enable: bool = False) -> None:
         """
         Stub for response engine initialization (Wave H-S4 feature).
-        
+
         AC-ENH082-W2-S4-004: ResponseEngine initialization
-        
+
         This is a placeholder for future response engine integration.
         Currently disabled for safety until Wave H-S4 validation complete.
-        
+
         Args:
             intent_type: Intent type for response formatting
             orchestrator_name: Name of orchestrator

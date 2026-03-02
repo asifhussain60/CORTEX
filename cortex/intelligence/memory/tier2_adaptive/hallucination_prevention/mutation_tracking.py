@@ -63,7 +63,7 @@ class Mutation:
 @dataclass
 class MutationSnapshotRecord:
     """Record of a mutation snapshot.
-    
+
     Attributes:
         snapshot_id: Unique snapshot identifier.
         mutation_id: ID of mutation this is a snapshot of.
@@ -173,10 +173,10 @@ class MutationTracker:
 
 class VisionMutationTracker(MutationTracker):
     """Track mutations in vision/goals with persistence."""
-    
+
     def __init__(self, db_path: Optional[str] = None) -> None:
         """Initialize vision mutation tracker.
-        
+
         Args:
             db_path: Optional path to database for persistence.
         """
@@ -184,7 +184,7 @@ class VisionMutationTracker(MutationTracker):
         self.db_path = db_path
         self._mutation_counter = 0
         self._snapshots: Dict[str, "MutationSnapshotRecord"] = {}
-    
+
     def track_mutation(
         self,
         mutation_type: Union[str, MutationType] = None,
@@ -196,7 +196,7 @@ class VisionMutationTracker(MutationTracker):
         **kwargs
     ) -> Mutation:
         """Track a mutation with full metadata.
-        
+
         Args:
             mutation_type: Type of mutation.
             source: Source of mutation.
@@ -206,7 +206,7 @@ class VisionMutationTracker(MutationTracker):
             context: Context metadata.
             parent_mutation_id: ID of parent mutation.
             **kwargs: Additional mutation fields.
-            
+
         Returns:
             Mutation record.
         """
@@ -225,13 +225,13 @@ class VisionMutationTracker(MutationTracker):
         )
         self.mutations.append(mutation)
         return mutation
-    
+
     def get_mutation(self, mutation_id: str) -> Optional[Mutation]:
         """Get a mutation by ID.
-        
+
         Args:
             mutation_id: ID of mutation to retrieve.
-            
+
         Returns:
             Mutation if found, None otherwise.
         """
@@ -239,14 +239,14 @@ class VisionMutationTracker(MutationTracker):
             if mutation.mutation_id == mutation_id:
                 return mutation
         return None
-    
+
     def track_vision_change(self, old_vision: str, new_vision: str) -> Mutation:
         """Track vision mutation.
-        
+
         Args:
             old_vision: Previous vision.
             new_vision: New vision.
-            
+
         Returns:
             Mutation record.
         """
@@ -256,37 +256,37 @@ class VisionMutationTracker(MutationTracker):
             description="Vision change",
             data={"old_value": old_vision, "new_value": new_vision},
         )
-    
+
     def get_mutations_by_type(self, mutation_type: MutationType) -> List[Mutation]:
         """Get mutations filtered by type.
-        
+
         Args:
             mutation_type: Type to filter by.
-            
+
         Returns:
             List of matching mutations.
         """
         return [m for m in self.mutations if m.mutation_type == mutation_type]
-    
+
     def get_mutation_history(self, as_dict: bool = True) -> List[Union[Mutation, Dict[str, Any]]]:
         """Get full mutation history.
-        
+
         Args:
             as_dict: If True, return mutations as dictionaries.
-        
+
         Returns:
             List of all mutations in chronological order.
         """
         if as_dict:
             return [self._mutation_to_dict(m) for m in self.mutations]
         return self.mutations.copy()
-    
+
     def _mutation_to_dict(self, mutation: Mutation) -> Dict[str, Any]:
         """Convert Mutation to dictionary.
-        
+
         Args:
             mutation: Mutation to convert.
-            
+
         Returns:
             Dictionary representation.
         """
@@ -300,13 +300,13 @@ class VisionMutationTracker(MutationTracker):
             "data": mutation.data,
             "context": mutation.context,
         }
-    
+
     def get_mutations_for_entity(self, entity: str) -> List[Dict[str, Any]]:
         """Get mutations for a specific entity.
-        
+
         Args:
             entity: Entity to filter by.
-            
+
         Returns:
             List of mutations affecting the entity.
         """
@@ -315,18 +315,18 @@ class VisionMutationTracker(MutationTracker):
             for m in self.mutations
             if m.affected_entity == entity
         ]
-    
+
     def get_mutations_in_time_range(
         self,
         start_time: datetime,
         end_time: datetime
     ) -> List[Dict[str, Any]]:
         """Get mutations within a time range.
-        
+
         Args:
             start_time: Start of time range.
             end_time: End of time range.
-            
+
         Returns:
             List of mutations in the time range.
         """
@@ -336,16 +336,16 @@ class VisionMutationTracker(MutationTracker):
             if dt.tzinfo is not None:
                 return dt.replace(tzinfo=None)
             return dt
-        
+
         start_naive = to_naive(start_time)
         end_naive = to_naive(end_time)
-        
+
         return [
             self._mutation_to_dict(m)
             for m in self.mutations
             if start_naive <= to_naive(m.timestamp) <= end_naive
         ]
-    
+
     # Alias for backward compatibility
     def get_mutations_in_range(
         self,
@@ -354,13 +354,13 @@ class VisionMutationTracker(MutationTracker):
     ) -> List[Dict[str, Any]]:
         """Alias for get_mutations_in_time_range."""
         return self.get_mutations_in_time_range(start_time, end_time)
-    
+
     def search_mutations(self, query: str) -> List[Dict[str, Any]]:
         """Search mutations by description or entity.
-        
+
         Args:
             query: Search query string.
-            
+
         Returns:
             List of matching mutations.
         """
@@ -372,13 +372,13 @@ class VisionMutationTracker(MutationTracker):
             or query_lower in m.affected_entity.lower()
             or query_lower in m.source.lower()
         ]
-    
+
     def rollback_to_mutation(self, mutation_id: str) -> Optional[Mutation]:
         """Rollback to a specific mutation state.
-        
+
         Args:
             mutation_id: ID of mutation to rollback to.
-            
+
         Returns:
             Rollback mutation if successful, None otherwise.
         """
@@ -388,10 +388,10 @@ class VisionMutationTracker(MutationTracker):
             if mutation.mutation_id == mutation_id:
                 target_idx = idx
                 break
-        
+
         if target_idx is None:
             return None
-        
+
         # Track the rollback as a new mutation
         rollback_mutation = self.track_mutation(
             mutation_type=MutationType.ROLLBACK,
@@ -399,20 +399,20 @@ class VisionMutationTracker(MutationTracker):
             description=f"Rollback to {mutation_id}",
             data={"rollback_to": mutation_id, "rolled_back_count": len(self.mutations) - target_idx - 2},
         )
-        
+
         return rollback_mutation
-    
+
     def create_mutation_snapshot(self, mutation_id: str) -> "MutationSnapshotRecord":
         """Create a snapshot of mutation state.
-        
+
         Args:
             mutation_id: ID of mutation to snapshot.
-            
+
         Returns:
             Snapshot record.
         """
         import uuid
-        
+
         snapshot = MutationSnapshotRecord(
             snapshot_id=str(uuid.uuid4()),
             mutation_id=mutation_id,

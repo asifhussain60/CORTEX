@@ -18,7 +18,7 @@ from .governance_validator import (
 # Import consolidated validation from Phase 90
 try:
     from pathlib import Path
-    
+
     # Import from sibling validation.py file
     validation_file = Path(__file__).parent.parent / "validation.py"
     if validation_file.exists():

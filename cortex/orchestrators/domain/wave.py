@@ -35,7 +35,7 @@ class WaveOrchestrationConfig:
 class WaveOrchestrationStrategy(ExecutionStrategy):
     """
     Wave-level orchestration strategy.
-    
+
     Handles:
     - Multi-phase coordination
     - Parallel phase execution
@@ -43,29 +43,29 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
     - Rollback on failure
     - State persistence
     - Event emission
-    
+
     Coordinates multiple phases within a wave, respecting dependencies
     and parallelization constraints.
     """
-    
+
     def __init__(self, config: Optional[WaveOrchestrationConfig] = None) -> None:
         """
         Initialize wave orchestration strategy.
-        
+
         Args:
             config: Wave orchestration configuration
         """
         self.config = config or WaveOrchestrationConfig()
         self.wave_state: Dict[str, Any] = {}
         self.emitted_events: List[Dict[str, Any]] = []
-    
+
     def execute(self, context: ExecutionContext) -> ExecutionResult:
         """
         Execute wave orchestration.
-        
+
         Args:
             context: Execution context containing wave data
-        
+
         Returns:
             ExecutionResult with success/failure and output data
         """
@@ -79,26 +79,26 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                 status=ExecutionStatus.FAILURE,
                 error=f"Validation failed: {', '.join(validation.errors)}",
             )
-        
+
         try:
             # Initialize wave state
             wave_id = context.wave_id or context.metadata.get("wave_id", context.phase_id)
             phases = context.data.get("phases", context.metadata.get("phases", []))
-            
+
             if self.config.state_persistence:
                 self.wave_state[wave_id] = {
                     "status": "in_progress",
                     "phases": phases,
                     "started": True,
                 }
-            
+
             # Execute phases (respecting parallelization)
             phase_results = []
             for phase_id in phases:
                 # Placeholder: Real implementation would execute actual phases
                 phase_result = self._execute_phase(phase_id, wave_id)
                 phase_results.append(phase_result)
-                
+
                 if not phase_result.get("success") and self.config.rollback_on_failure:
                     # Rollback on failure
                     self._rollback_wave(wave_id, phase_results)
@@ -108,7 +108,7 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                         error=f"Phase {phase_id} failed, wave rolled back",
                         output={"phase_results": phase_results},
                     )
-            
+
             # Emit completion event
             if self.config.event_emission:
                 self._emit_event({
@@ -116,11 +116,11 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                     "wave_id": wave_id,
                     "phases_count": len(phases),
                 })
-            
+
             # Update state
             if self.config.state_persistence:
                 self.wave_state[wave_id]["status"] = "completed"
-            
+
             return ExecutionResult(
                 success=True,
                 status=ExecutionStatus.SUCCESS,
@@ -134,7 +134,7 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                     "phases_successful": sum(1 for p in phase_results if p.get("success")),
                 },
             )
-        
+
         except Exception as e:
             logger.error(f"Wave orchestration failed: {str(e)}")
             return ExecutionResult(
@@ -142,50 +142,50 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                 status=ExecutionStatus.FAILURE,
                 error=str(e),
             )
-    
+
     def validate(self, context: ExecutionContext) -> ValidationResult:
         """
         Validate wave orchestration preconditions.
-        
+
         Args:
             context: Execution context to validate
-        
+
         Returns:
             ValidationResult with any errors/warnings
         """
         errors = []
         warnings = []
-        
+
         # Check required metadata
         if "wave_id" not in context.metadata and not context.wave_id:
             warnings.append("wave_id not in metadata or context, using phase_id")
-        
+
         # Check for phases in either data or metadata
         phases = context.data.get("phases", context.metadata.get("phases", []))
         if not phases:
             errors.append("phases list required in data or metadata")
-        
+
         # Check parallelization constraints
         if len(phases) > self.config.max_parallel_phases:
             warnings.append(
                 f"Phase count ({len(phases)}) exceeds max parallel "
                 f"({self.config.max_parallel_phases})"
             )
-        
+
         return ValidationResult(
             passed=len(errors) == 0,
             errors=errors,
             warnings=warnings,
         )
-    
+
     def _execute_phase(self, phase_id: str, wave_id: str) -> Dict[str, Any]:
         """
         Execute a single phase within the wave.
-        
+
         Args:
             phase_id: Phase identifier
             wave_id: Wave identifier
-        
+
         Returns:
             Phase execution result
         """
@@ -196,11 +196,11 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
             "success": True,
             "status": "completed",
         }
-    
+
     def _rollback_wave(self, wave_id: str, phase_results: List[Dict[str, Any]]) -> None:
         """
         Rollback wave on failure.
-        
+
         Args:
             wave_id: Wave identifier
             phase_results: Results from executed phases
@@ -211,11 +211,11 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
                 "status": "rolled_back",
                 "reason": "phase_failure",
             }
-    
+
     def _emit_event(self, event: Dict[str, Any]) -> None:
         """
         Emit orchestration event.
-        
+
         Args:
             event: Event data
         """

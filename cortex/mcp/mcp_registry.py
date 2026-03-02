@@ -66,7 +66,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["create", "approve", "reject", "modify", "query"],
     },
-    
+
     # =========================================================================
     # TIER 2: CODE INTELLIGENCE (3 tools)
     # Note: cortex_lens removed — deleted tool per architect prompt; use cortex/lens/ module directly
@@ -103,7 +103,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": [],
     },
-    
+
     # =========================================================================
     # TIER 3: GOVERNANCE & COMPLIANCE (4 tools)
     # =========================================================================
@@ -149,7 +149,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["validate", "quick", "challenges"],
     },
-    
+
     # =========================================================================
     # TIER 4: OPERATIONS (5 tools)
     # =========================================================================
@@ -205,7 +205,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["generate", "update", "query", "landing", "full_cycle"],
     },
-    
+
     # =========================================================================
     # TIER 5: TOOLKIT OPERATIONS (4 tools) — NEW
     # =========================================================================
@@ -251,7 +251,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["scan_batch_enrich", "batch_transform"],
     },
-    
+
     # =========================================================================
     # TIER 5: UTILITIES (8 tools — WAVE-101 consolidation)
     # Removed: cortex_check (ops absorbed into cortex_verify)
@@ -418,22 +418,22 @@ class ToolMetadata:
 class ToolRegistry:
     """
     Central registry for all MCP tools.
-    
+
     Provides:
     - Tool registration and lookup
     - Category-based filtering
     - Schema generation for MCP protocol
     """
-    
+
     def __init__(self) -> None:
         """Initialize instance."""
         self.logger = logging.getLogger(__name__)
         self._tools: Dict[str, ToolMetadata] = {}
         self._implementations: Dict[str, Tool] = {}
-        
+
         # Auto-register production tools
         self._register_production_tools()
-    
+
     def _register_production_tools(self) -> None:
         """Register all production tools from PRODUCTION_TOOLS."""
         # Step 1: Register metadata for all tools
@@ -448,7 +448,7 @@ class ToolRegistry:
                 )
                 for p in spec.get("parameters", [])
             ]
-            
+
             metadata = ToolMetadata(
                 id=tool_id,
                 description=spec["description"],
@@ -457,12 +457,12 @@ class ToolRegistry:
                 operations=spec.get("operations", []),
             )
             self._tools[tool_id] = metadata
-        
+
         self.logger.info(f"Registered {len(self._tools)} production tool metadata")
-        
+
         # Step 2: Register tool implementations
         self._register_implementations()
-    
+
     def _register_implementations(self) -> None:
         """Register all tool implementations."""
         try:
@@ -473,51 +473,51 @@ class ToolRegistry:
             self.logger.warning(f"Could not import tool implementations: {e}")
         except Exception as e:
             self.logger.error(f"Failed to register implementations: {e}")
-    
+
     def register(self, tool: Tool) -> None:
         """
         Register a tool implementation.
-        
+
         Args:
             tool: Tool instance to register
         """
         definition = tool.definition
         self._implementations[definition.name] = tool
-        
+
         # Update metadata with implementation
         if definition.name in self._tools:
             self._tools[definition.name].implementation = type(tool)
-        
+
         self.logger.debug(f"Registered implementation: {definition.name}")
-    
+
     def get(self, tool_id: str) -> Optional[Tool]:
         """
         Get tool implementation by ID.
-        
+
         Args:
             tool_id: Tool identifier
-            
+
         Returns:
             Tool instance or None if not found
         """
         return self._implementations.get(tool_id)
-    
+
     def get_metadata(self, tool_id: str) -> Optional[ToolMetadata]:
         """Get tool metadata by ID."""
         return self._tools.get(tool_id)
-    
+
     def list_all(self) -> List[ToolMetadata]:
         """List all registered tool metadata."""
         return list(self._tools.values())
-    
+
     def list_by_category(self, category: ToolCategory) -> List[ToolMetadata]:
         """List tools in a specific category."""
         return [t for t in self._tools.values() if t.category == category]
-    
+
     def to_mcp_schema(self) -> List[Dict[str, Any]]:
         """
         Generate MCP protocol schema for all tools.
-        
+
         Returns:
             List of tool definitions in MCP format with category and operations
         """
@@ -525,12 +525,12 @@ class ToolRegistry:
         for metadata in self._tools.values():
             properties = {}
             required = []
-            
+
             for param in metadata.parameters:
                 properties[param.name] = param.to_schema()
                 if param.required:
                     required.append(param.name)
-            
+
             schema = {
                 "name": metadata.id,
                 "description": metadata.description,
@@ -541,15 +541,15 @@ class ToolRegistry:
                     "required": required,
                 },
             }
-            
+
             # Include operations for consolidated tools
             if metadata.operations:
                 schema["operations"] = metadata.operations
-            
+
             schemas.append(schema)
-        
+
         return schemas
-    
+
     @property
     def tool_count(self) -> int:
         """Get total number of registered tools."""

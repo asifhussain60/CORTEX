@@ -27,14 +27,14 @@ from .base import Analysis, CleanerInterface, Report, RollbackResult
 
 class BuildArtifactCleaner(CleanerInterface):
     """Cleaner for build artifacts and generated files."""
-    
+
     # Target directories to scan for build artifacts
     TARGET_DIRS: List[str] = [
         "cortex",
         "cortex.intelligence",
         "cortex.lens",
     ]
-    
+
     # Build directories that can be entirely removed
     BUILD_DIR_NAMES: Set[str] = {
         "obj",
@@ -49,7 +49,7 @@ class BuildArtifactCleaner(CleanerInterface):
         ".tox",
         "*.egg-info",
     }
-    
+
     # File extensions that are build artifacts
     BUILD_FILE_EXTENSIONS: Set[str] = {
         ".pyc",
@@ -64,7 +64,7 @@ class BuildArtifactCleaner(CleanerInterface):
         ".dylib",
         ".cache",
     }
-    
+
     # Directories that should NEVER be deleted
     PROTECTED_DIRS: Set[str] = {
         ".git",
@@ -75,69 +75,69 @@ class BuildArtifactCleaner(CleanerInterface):
         "env",
         "_workspaces",  # all subfolders: approved-orchestrator-view/, recommend/, prompts/, .chats/
     }
-    
+
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize build artifact cleaner.
-        
+
         Args:
             config: Configuration with repo_root
         """
         super().__init__(config)
         self.repo_root = Path(config.get("repo_root", "."))
         self.dry_run = config.get("dry_run", False)
-    
+
     @property
     def name(self) -> str:
         """Get cleaner name."""
         return "BuildArtifactCleaner"
-    
+
     @property
     def version(self) -> str:
         """Get cleaner version."""
         return "1.0.0"
-    
+
     @property
     def domain(self) -> str:
         """Get cleaner domain."""
         return "build_artifacts"
-    
+
     def _is_build_directory(self, dir_name: str) -> bool:
         """Check if directory name indicates a build directory.
-        
+
         Args:
             dir_name: Name of the directory
-            
+
         Returns:
             True if directory is a build directory
         """
         # Direct match
         if dir_name in self.BUILD_DIR_NAMES:
             return True
-        
+
         # Pattern match (e.g., *.egg-info)
         if dir_name.endswith(".egg-info"):
             return True
-        
+
         return False
-    
+
     def _is_protected_path(self, path: Path) -> bool:
         """Check if path is protected from cleanup.
-        
+
         Args:
             path: Path to check
-            
+
         Returns:
             True if path is protected
         """
         parts = path.parts
         return any(part in self.PROTECTED_DIRS for part in parts)
-    
+
     def _get_dir_size(self, dir_path: Path) -> int:
         """Get total size of directory in bytes.
-        
+
         Args:
             dir_path: Path to directory
-            
+
         Returns:
             Total size in bytes
         """
@@ -152,13 +152,13 @@ class BuildArtifactCleaner(CleanerInterface):
         except (OSError, IOError):
             pass
         return total_size
-    
+
     def _format_size(self, size_bytes: int) -> str:
         """Format size in human-readable format.
-        
+
         Args:
             size_bytes: Size in bytes
-            
+
         Returns:
             Human-readable size string
         """
@@ -167,10 +167,10 @@ class BuildArtifactCleaner(CleanerInterface):
                 return f"{size_bytes:.1f} {unit}"
             size_bytes /= 1024
         return f"{size_bytes:.1f} TB"
-    
+
     def analyze(self) -> Analysis:
         """Analyze target directories for build artifacts.
-        
+
         Returns:
             Analysis with cleanup plan
         """
@@ -178,26 +178,26 @@ class BuildArtifactCleaner(CleanerInterface):
         files_scanned = 0
         cleanup_candidates: List[Dict[str, Any]] = []
         total_size = 0
-        
+
         for target_dir in self.TARGET_DIRS:
             dir_path = self.repo_root / target_dir
-            
+
             if not dir_path.exists():
                 logs.append(f"Directory not found: {target_dir}")
                 continue
-            
+
             logs.append(f"Scanning: {target_dir}")
-            
+
             # Walk through directory tree
             for root, dirs, files in os.walk(dir_path):
                 root_path = Path(root)
-                
+
                 # Skip protected paths
                 if self._is_protected_path(root_path):
                     continue
-                
+
                 files_scanned += len(files)
-                
+
                 # Check if current directory is a build directory
                 dir_name = root_path.name
                 if self._is_build_directory(dir_name):
@@ -205,7 +205,7 @@ class BuildArtifactCleaner(CleanerInterface):
                     if not self._is_build_directory(root_path.parent.name):
                         dir_size = self._get_dir_size(root_path)
                         total_size += dir_size
-                        
+
                         rel_path = root_path.relative_to(self.repo_root)
                         cleanup_candidates.append({
                             "path": str(root_path),
@@ -217,12 +217,12 @@ class BuildArtifactCleaner(CleanerInterface):
                             "reason": f"Build directory ({self._format_size(dir_size)})",
                         })
                         logs.append(f"  ✓ Build dir: {rel_path} ({self._format_size(dir_size)})")
-                        
+
                         # Don't descend into this directory
                         dirs.clear()
-        
+
         logs.append(f"Total reclaimable: {self._format_size(total_size)}")
-        
+
         return Analysis(
             cleaner_id=self.name,
             timestamp=datetime.now().isoformat(),
@@ -235,13 +235,13 @@ class BuildArtifactCleaner(CleanerInterface):
             },
             logs=logs,
         )
-    
+
     def execute(self, plan: Any) -> Report:
         """Execute cleanup of build artifacts.
-        
+
         Args:
             plan: Analysis object or plan dict from analyze()
-            
+
         Returns:
             Report of actions taken
         """
@@ -252,23 +252,23 @@ class BuildArtifactCleaner(CleanerInterface):
             issues = plan.get("issues", [])
         else:
             issues = []
-        
+
         logs: List[str] = []
         errors: List[str] = []
         deleted_count = 0
         total_freed = 0
-        
+
         for issue in issues:
             path = Path(issue["path"])
             name = issue.get("name", path.name)
             size = issue.get("size", 0)
-            
+
             if self.dry_run:
                 logs.append(f"[DRY RUN] Would delete: {name}")
                 deleted_count += 1
                 total_freed += size
                 continue
-            
+
             try:
                 if path.is_dir():
                     shutil.rmtree(path)
@@ -283,12 +283,12 @@ class BuildArtifactCleaner(CleanerInterface):
                 else:
                     # Path doesn't exist
                     errors.append(f"Path not found: {name}")
-                
+
             except OSError as e:
                 errors.append(f"Failed to delete {name}: {e}")
-        
+
         status = "SUCCESS" if not errors else ("PARTIAL" if deleted_count > 0 else "FAILED")
-        
+
         return Report(
             cleaner_id=self.name,
             timestamp=datetime.now().isoformat(),
@@ -301,15 +301,15 @@ class BuildArtifactCleaner(CleanerInterface):
             errors=errors,
             logs=logs,
         )
-    
+
     def rollback(self, report: Report) -> RollbackResult:
         """Rollback is not needed for build artifacts.
-        
+
         Build artifacts can be regenerated by running build commands.
-        
+
         Args:
             report: Report from previous execution
-            
+
         Returns:
             RollbackResult indicating regeneration instructions
         """

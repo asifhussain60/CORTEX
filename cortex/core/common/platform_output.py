@@ -35,16 +35,16 @@ class OutputLevel(Enum):
 class PlatformOutputFormatter:
     """
     Platform-aware output formatter with emoji/ASCII fallback.
-    
+
     Automatically detects Windows CP1252 and uses ASCII-only output.
     On macOS/Linux with UTF-8, uses emoji for better readability.
-    
+
     Usage:
         formatter = PlatformOutputFormatter()
         print(formatter.success("Operation completed"))
         print(formatter.error("Failed to process"))
     """
-    
+
     # Emoji mappings for UTF-8 environments
     _EMOJI_MAP: Dict[OutputLevel, str] = {
         OutputLevel.SUCCESS: "✅",
@@ -56,7 +56,7 @@ class PlatformOutputFormatter:
         OutputLevel.START: "🚀",
         OutputLevel.COMPLETE: "🎯",
     }
-    
+
     # ASCII fallbacks for CP1252/restricted environments
     _ASCII_MAP: Dict[OutputLevel, str] = {
         OutputLevel.SUCCESS: "[OK]",
@@ -68,11 +68,11 @@ class PlatformOutputFormatter:
         OutputLevel.START: "[START]",
         OutputLevel.COMPLETE: "[DONE]",
     }
-    
+
     def __init__(self, force_ascii: Optional[bool] = None) -> None:
         """
         Initialize formatter with platform detection.
-        
+
         Args:
             force_ascii: If True, always use ASCII. If False, always use emoji.
                         If None (default), auto-detect based on platform.
@@ -81,13 +81,13 @@ class PlatformOutputFormatter:
             self.use_ascii = self._should_use_ascii()
         else:
             self.use_ascii = force_ascii
-        
+
         self.logger = logging.getLogger(__name__)
-    
+
     def _should_use_ascii(self) -> bool:
         """
         Detect if ASCII-only output should be used.
-        
+
         Returns:
             True if ASCII required (Windows CP1252), False otherwise
         """
@@ -105,18 +105,18 @@ class PlatformOutputFormatter:
             except (AttributeError, TypeError):
                 # If encoding detection fails on Windows, assume CP1252
                 return True
-        
+
         # macOS/Linux with UTF-8 support emoji
         return False
-    
+
     def _format_with_icon(self, level: OutputLevel, message: str) -> str:
         """
         Format message with appropriate icon.
-        
+
         Args:
             level: Output severity level
             message: Message text
-            
+
         Returns:
             Formatted message with icon prefix
         """
@@ -124,45 +124,45 @@ class PlatformOutputFormatter:
             icon = self._ASCII_MAP[level]
         else:
             icon = self._EMOJI_MAP[level]
-        
+
         return f"{icon} {message}"
-    
+
     def success(self, message: str) -> str:
         """Format success message"""
         return self._format_with_icon(OutputLevel.SUCCESS, message)
-    
+
     def error(self, message: str) -> str:
         """Format error message"""
         return self._format_with_icon(OutputLevel.ERROR, message)
-    
+
     def warning(self, message: str) -> str:
         """Format warning message"""
         return self._format_with_icon(OutputLevel.WARNING, message)
-    
+
     def info(self, message: str) -> str:
         """Format info message"""
         return self._format_with_icon(OutputLevel.INFO, message)
-    
+
     def critical(self, message: str) -> str:
         """Format critical message"""
         return self._format_with_icon(OutputLevel.CRITICAL, message)
-    
+
     def fix(self, message: str) -> str:
         """Format fix/action message"""
         return self._format_with_icon(OutputLevel.FIX, message)
-    
+
     def start(self, message: str) -> str:
         """Format start/launch message"""
         return self._format_with_icon(OutputLevel.START, message)
-    
+
     def complete(self, message: str) -> str:
         """Format completion message"""
         return self._format_with_icon(OutputLevel.COMPLETE, message)
-    
+
     def get_encoding_info(self) -> Dict[str, str]:
         """
         Get current encoding information for debugging.
-        
+
         Returns:
             Dict with platform, encoding, and mode details
         """

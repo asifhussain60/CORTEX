@@ -32,7 +32,7 @@ class ResolutionStatus(Enum):
 class Resolution:
     """
     Resolution result for a contradiction
-    
+
     Attributes:
         resolution_id: Unique resolution identifier
         report: Original contradiction report
@@ -56,33 +56,33 @@ class Resolution:
 class ContradictionResolver:
     """
     Automated contradiction resolution system
-    
+
     Features:
     - Multiple resolution strategies
     - Confidence-based decision making
     - Resolution history tracking
     - Rollback capability
     """
-    
+
     def __init__(self) -> None:
         """Initialize resolver with empty history"""
         self._history: List[Resolution] = []
         self._confidence_threshold = 0.7  # Threshold for auto-resolution
-    
+
     def resolve(
-        self, 
+        self,
         report: ContradictionReport,
         strategy: ResolutionStrategy = ResolutionStrategy.AUTOMATIC,
         manual_changes: Optional[Dict[str, Any]] = None
     ) -> Resolution:
         """
         Resolve a contradiction using specified strategy
-        
+
         Args:
             report: Contradiction report to resolve
             strategy: Resolution strategy to use
             manual_changes: Manual changes (for MANUAL_OVERRIDE)
-        
+
         Returns:
             Resolution result
         """
@@ -91,7 +91,7 @@ class ContradictionResolver:
             resolution_type=strategy,
             confidence=report.confidence
         )
-        
+
         if strategy == ResolutionStrategy.MANUAL_OVERRIDE:
             # Manual override - apply provided changes
             if manual_changes:
@@ -100,7 +100,7 @@ class ContradictionResolver:
                 resolution.rollback_data = {"original_changes": manual_changes.copy()}
             else:
                 resolution.status = ResolutionStatus.MANUAL_REVIEW_REQUIRED
-        
+
         elif strategy == ResolutionStrategy.AUTOMATIC:
             # Automatic resolution based on contradiction type
             if report.confidence < self._confidence_threshold:
@@ -109,31 +109,31 @@ class ContradictionResolver:
             else:
                 # High confidence - attempt auto-resolution
                 resolution = self._auto_resolve(report, resolution)
-        
+
         elif strategy == ResolutionStrategy.CONFIDENCE_BASED:
             # Confidence-based resolution
             if report.confidence >= self._confidence_threshold:
                 resolution = self._auto_resolve(report, resolution)
             else:
                 resolution.status = ResolutionStatus.MANUAL_REVIEW_REQUIRED
-        
+
         # Track in history
         self._history.append(resolution)
-        
+
         return resolution
-    
+
     def _auto_resolve(
-        self, 
-        report: ContradictionReport, 
+        self,
+        report: ContradictionReport,
         resolution: Resolution
     ) -> Resolution:
         """
         Automatic resolution logic based on contradiction type
-        
+
         Args:
             report: Contradiction report
             resolution: Resolution object to populate
-        
+
         Returns:
             Updated resolution
         """
@@ -144,7 +144,7 @@ class ContradictionResolver:
             }
             resolution.status = ResolutionStatus.RESOLVED
             resolution.rollback_data = {"field": "last_updated", "operation": "update"}
-        
+
         elif report.contradiction_type == ContradictionType.METRIC:
             # Metric contradictions: More complex, may need manual review
             if "tests_passing" in report.details and "tests_total" in report.details:
@@ -154,7 +154,7 @@ class ContradictionResolver:
                 resolution.rollback_data = {"field": "tests_total", "operation": "recalculate"}
             else:
                 resolution.status = ResolutionStatus.MANUAL_REVIEW_REQUIRED
-        
+
         elif report.contradiction_type == ContradictionType.STATUS:
             # Status contradictions: Add missing completion_date
             if "no completion_date" in report.details.lower():
@@ -165,21 +165,21 @@ class ContradictionResolver:
                 resolution.rollback_data = {"field": "completion_date", "operation": "add"}
             else:
                 resolution.status = ResolutionStatus.MANUAL_REVIEW_REQUIRED
-        
+
         elif report.contradiction_type == ContradictionType.DEPENDENCY:
             # Dependency contradictions: Complex, require manual review
             resolution.status = ResolutionStatus.MANUAL_REVIEW_REQUIRED
-        
+
         return resolution
-    
+
     def _extract_date_from_details(self, details: str, field_name: str) -> str:
         """
         Extract date value from contradiction details
-        
+
         Args:
             details: Contradiction details string
             field_name: Field name to extract
-        
+
         Returns:
             Extracted date string
         """
@@ -190,39 +190,39 @@ class ContradictionResolver:
         if match:
             return match.group(1)
         return datetime.now().strftime("%Y-%m-%d")
-    
+
     def get_history(
-        self, 
+        self,
         file_path: Optional[Path] = None,
         contradiction_type: Optional[ContradictionType] = None
     ) -> List[Resolution]:
         """
         Get resolution history with optional filtering
-        
+
         Args:
             file_path: Filter by file path
             contradiction_type: Filter by contradiction type
-        
+
         Returns:
             List of resolutions matching filters
         """
         filtered = self._history
-        
+
         if file_path:
             filtered = [r for r in filtered if r.report.file_path == file_path]
-        
+
         if contradiction_type:
             filtered = [r for r in filtered if r.report.contradiction_type == contradiction_type]
-        
+
         return filtered
-    
+
     def rollback(self, resolution_id: str) -> bool:
         """
         Rollback a resolution by ID
-        
+
         Args:
             resolution_id: Resolution ID to rollback
-        
+
         Returns:
             True if rollback succeeded, False otherwise
         """
@@ -232,12 +232,12 @@ class ContradictionResolver:
             if r.resolution_id == resolution_id:
                 resolution = r
                 break
-        
+
         if not resolution:
             return False
-        
+
         # Mark as rolled back
         resolution.status = ResolutionStatus.ROLLED_BACK
         resolution.timestamp = datetime.now()
-        
+
         return True

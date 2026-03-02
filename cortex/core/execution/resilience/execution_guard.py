@@ -16,18 +16,18 @@ Features:
 
 Example:
     guard = SilentExecutionGuard()
-    
+
     def update_files():
         # Risky operations
         file.write_text(new_content)
         return "success"
-    
+
     result = guard.execute_with_checkpoint(
         operation=update_files,
         stage_id="S1",
         files=["path/to/file.py"]
     )
-    
+
     if result.success:
         print("Operation succeeded, changes preserved")
     else:
@@ -63,36 +63,36 @@ class ExecutionResult:
 class SilentExecutionGuard:
     """
     Guard for silent autonomous execution with checkpoint-based resilience.
-    
+
     Prevents chat01-style failures where:
     - Template corruption broke multiple stages
     - Manual intervention required
     - Lost progress
-    
+
     Pattern:
         1. Create checkpoint (backup all files)
         2. Execute operation
         3. Verify (syntax, imports)
         4. On failure: Rollback to checkpoint
         5. On success: Keep changes, cleanup checkpoint
-    
+
     Features:
         - Automatic recovery (no manual intervention)
         - Always recoverable (checkpoint preserved on failure)
         - Clear error messages
         - Progress tracking per stage
     """
-    
+
     def __init__(self, checkpoint_dir: Optional[Path] = None) -> None:
         """
         Initialize SilentExecutionGuard.
-        
+
         Args:
             checkpoint_dir: Directory for checkpoints (default: temp dir)
         """
         self.checkpoint_dir = checkpoint_dir or Path(tempfile.gettempdir()) / "cortex_checkpoints"
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
-    
+
     def execute_with_checkpoint(
         self,
         operation: Callable,
@@ -104,7 +104,7 @@ class SilentExecutionGuard:
     ) -> ExecutionResult:
         """
         Execute operation with checkpoint protection.
-        
+
         Args:
             operation: Function to execute
             stage_id: Stage identifier (e.g., "S1", "S2-TemplateUpdate")
@@ -112,46 +112,46 @@ class SilentExecutionGuard:
             verify_syntax: Check Python syntax after execution
             verify_imports: Check imports after execution (slower)
             read_only: Skip checkpoint for read-only operations
-        
+
         Returns:
             ExecutionResult with success status and details
         """
         checkpoint_path = None
-        
+
         try:
             # Step 1: Create checkpoint (unless read-only)
             if not read_only and files:
                 checkpoint_path = self._create_checkpoint(files, stage_id)
-            
+
             # Step 2: Execute operation
             operation()
-            
+
             # Step 3: Verify changes
             if not read_only:
                 for file_path in files:
                     if verify_syntax and file_path.endswith('.py'):
                         self._check_syntax(Path(file_path))
-                    
+
                     if verify_imports and file_path.endswith('.py'):
                         if not self._verify_imports(Path(file_path)):
                             raise ImportError(f"Import check failed for {file_path}")
-            
+
             # Step 4: Success - cleanup checkpoint
             if checkpoint_path and checkpoint_path.exists():
                 shutil.rmtree(checkpoint_path)
-            
+
             return ExecutionResult(
                 success=True,
                 stage_id=stage_id,
                 checkpoint_created=checkpoint_path is not None,
                 checkpoint_path=checkpoint_path
             )
-        
+
         except Exception as e:
             # Step 5: Failure - rollback to checkpoint
             error_type = type(e).__name__
             error_msg = str(e)
-            
+
             rolled_back = False
             if checkpoint_path and checkpoint_path.exists():
                 try:
@@ -160,7 +160,7 @@ class SilentExecutionGuard:
                 except Exception as rollback_error:
                     error_msg += f" | Rollback failed: {rollback_error}"
                     raise RollbackError(error_msg)
-            
+
             return ExecutionResult(
                 success=False,
                 stage_id=stage_id,
@@ -170,18 +170,18 @@ class SilentExecutionGuard:
                 error=error_msg,
                 error_type=error_type
             )
-    
+
     def _create_checkpoint(self, files: List[str], stage_id: str) -> Path:
         """
         Create checkpoint of files.
-        
+
         Args:
             files: List of file paths to backup
             stage_id: Stage identifier for checkpoint naming
-        
+
         Returns:
             Path to checkpoint directory
-        
+
         Raises:
             CheckpointFailedError: If checkpoint creation fails
         """
@@ -189,7 +189,7 @@ class SilentExecutionGuard:
             # Create checkpoint directory
             checkpoint_path = self.checkpoint_dir / f"checkpoint_{stage_id}"
             checkpoint_path.mkdir(parents=True, exist_ok=True)
-            
+
             # Backup each file
             for file_path in files:
                 file_path_obj = Path(file_path)
@@ -198,16 +198,16 @@ class SilentExecutionGuard:
                     rel_path = file_path_obj.name
                     backup_file = checkpoint_path / rel_path
                     shutil.copy2(file_path_obj, backup_file)
-            
+
             return checkpoint_path
-        
+
         except Exception as e:
             raise CheckpointFailedError(f"Failed to create checkpoint: {e}")
-    
+
     def _rollback(self, checkpoint_path: Path, files: List[str]) -> None:
         """
         Rollback files from checkpoint.
-        
+
         Args:
             checkpoint_path: Path to checkpoint directory
             files: List of original file paths
@@ -216,30 +216,30 @@ class SilentExecutionGuard:
             file_path_obj = Path(file_path)
             rel_path = file_path_obj.name
             backup_file = checkpoint_path / rel_path
-            
+
             if backup_file.exists():
                 shutil.copy2(backup_file, file_path_obj)
-    
+
     def _check_syntax(self, file_path: Path) -> None:
         """
         Check Python syntax of file.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Raises:
             SyntaxError: If syntax invalid
         """
         content = file_path.read_text()
         ast.parse(content)
-    
+
     def _verify_imports(self, file_path: Path) -> bool:
         """
         Verify file can be imported.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             True if imports work, False otherwise
         """
@@ -254,7 +254,7 @@ class SilentExecutionGuard:
                 return True
         except Exception:
             return False
-        
+
         return False
 
 # AC_COMPLETE: AC-DIGEST-CHAT01-003 ✅

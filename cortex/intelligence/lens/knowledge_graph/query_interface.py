@@ -11,29 +11,29 @@ from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowle
 class QueryInterface:
     """
     Execute Cypher-like queries over knowledge graph.
-    
+
     Example:
         qi = QueryInterface(graph)
         results = qi.execute("MATCH (n) WHERE n.type = 'function' RETURN n")
     """
-    
+
     def __init__(self, graph: ASTKnowledgeGraph) -> None:
         """Initialize query interface with graph."""
         self.graph = graph
-    
+
     def execute(self, query: str) -> List[Dict[str, Any]]:
         """
         Execute Cypher-like query.
-        
+
         Args:
             query: Cypher-style query string
-            
+
         Returns:
             List of result dictionaries
         """
         # Simple query parser (production would use full Cypher parser)
         results = []
-        
+
         if "WHERE n.type = 'function'" in query:
             # Return all functions
             for name, node in self.graph.nodes.items():
@@ -44,7 +44,7 @@ class QueryInterface:
                         'file_path': node.file_path,
                         'line_number': node.line_number
                     })
-        
+
         elif "MATCH (c)-[r:CONTAINS]->(m)" in query:
             # Return class-method relationships
             for rel in self.graph.relationships:
@@ -62,7 +62,7 @@ class QueryInterface:
                                 'type': target_node.type
                             }
                         })
-        
+
         elif "MATCH (a)-[r:IMPORTS]->(b)" in query:
             # Return import relationships
             for rel in self.graph.relationships:
@@ -71,5 +71,5 @@ class QueryInterface:
                         'a': rel.source,
                         'b': rel.target
                     })
-        
+
         return results

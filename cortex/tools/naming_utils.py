@@ -7,13 +7,13 @@ import re
 def to_class_name(name: str) -> str:
     """
     Convert name to PascalCase class name.
-    
+
     Args:
         name: Input name (can be kebab-case, snake_case, or mixed)
-        
+
     Returns:
         PascalCase class name
-        
+
     Examples:
         >>> to_class_name("my-tool")
         'MyTool'
@@ -28,13 +28,13 @@ def to_class_name(name: str) -> str:
 def to_module_name(name: str) -> str:
     """
     Convert name to snake_case module name.
-    
+
     Args:
         name: Input name (can be kebab-case, PascalCase, or mixed)
-        
+
     Returns:
         snake_case module name
-        
+
     Examples:
         >>> to_module_name("MyTool")
         'my_tool'
@@ -52,13 +52,13 @@ def to_module_name(name: str) -> str:
 def yaml_type_to_python(type_str: str) -> str:
     """
     Convert YAML type specification to Python type.
-    
+
     Args:
         type_str: YAML type string (e.g., 'string', 'int', 'array')
-        
+
     Returns:
         Python type string (e.g., 'str', 'int', 'List[Any]')
-        
+
     Examples:
         >>> yaml_type_to_python("string")
         'str'

@@ -25,21 +25,21 @@ from cortex.toolkit.adapters.domain_adapter import (
 
 class MediaAdapter(DomainAdapter):
     """Domain adapter for video library organization.
-    
+
     Specializes toolkit components for media-specific workflows:
       - Studio detection from folder structure
       - Content sanitization (obscenity morphing)
       - External metadata enrichment (IAFD, TMDB)
-    
+
     Examples:
         >>> from cortex.toolkit.filesystem import HierarchicalScanner
         >>> from cortex.toolkit.adapters import MediaAdapter
-        >>> 
+        >>>
         >>> adapter = MediaAdapter()
         >>> scanner = HierarchicalScanner(Path("/media"), adapter=adapter)
         >>> files = scanner.scan()
     """
-    
+
     # Studio patterns (priority-sorted)
     STUDIO_PATTERNS: Dict[str, Pattern[str]] = {
         "SexArt": re.compile(r"(?i)(?:^|\s)SexArt(?:\s|-|_|$)"),
@@ -50,45 +50,45 @@ class MediaAdapter(DomainAdapter):
         "Wicked": re.compile(r"(?i)(?:^|\s)Wicked(?:\s|$)"),
         "Sweet Sinner": re.compile(r"(?i)(?:^|\s)Sweet\s+Sinner(?:\s|$)"),
     }
-    
+
     def __init__(self) -> None:
         """Initialize media adapter with default configurations."""
         self._morph_rules: List[MorphRule] = self._build_morph_rules()
         self._enrichment_sources: List[EnrichmentSource] = self._build_enrichment_sources()
-    
+
     def get_organization_rules(self) -> Dict[str, Pattern[str]]:
         """Return studio detection patterns.
-        
+
         Returns:
             Dict of studio_name → compiled regex pattern.
         """
         return self.STUDIO_PATTERNS
-    
+
     def get_morph_rules(self) -> List[MorphRule]:
         """Return content sanitization rules.
-        
+
         Transforms obscene/explicit language → euphemisms for filename safety.
-        
+
         Returns:
             List of MorphRule instances (priority-sorted).
         """
         return self._morph_rules
-    
+
     def get_enrichment_sources(self) -> List[EnrichmentSource]:
         """Return external metadata sources.
-        
+
         Returns:
             List of EnrichmentSource configurations (IAFD, TMDB).
         """
         return self._enrichment_sources
-    
+
     def detect_organization(self, path: Path, folder_name: str) -> Optional[str]:
         """Detect studio from file path and folder context.
-        
+
         Args:
             path:        File path.
             folder_name: Parent folder name.
-        
+
         Returns:
             Studio name if detected, folder_name otherwise.
         """
@@ -97,18 +97,18 @@ class MediaAdapter(DomainAdapter):
         for studio, pattern in self.STUDIO_PATTERNS.items():
             if pattern.search(filename):
                 return studio
-        
+
         # Fallback to folder name
         for studio, pattern in self.STUDIO_PATTERNS.items():
             if pattern.search(folder_name):
                 return studio
-        
+
         # Default passthrough
         return folder_name if folder_name else None
-    
+
     def _build_morph_rules(self) -> List[MorphRule]:
         """Build sanitization morph rules.
-        
+
         Returns:
             List of MorphRule instances.
         """
@@ -127,10 +127,10 @@ class MediaAdapter(DomainAdapter):
             # Add more rules as needed
         ]
         return sorted(rules, key=lambda r: r.priority, reverse=True)
-    
+
     def _build_enrichment_sources(self) -> List[EnrichmentSource]:
         """Build external enrichment source configurations.
-        
+
         Returns:
             List of EnrichmentSource instances.
         """

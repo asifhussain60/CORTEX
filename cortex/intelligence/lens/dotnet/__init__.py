@@ -23,7 +23,7 @@ DEFAULT_ROSLYN_CLI_PATH: Path = _get_default_roslyn_cli_path()
 def configure_roslyn_cli(cli_path: Path) -> None:
     """
     Configure path to Roslyn CLI analyzer tool.
-    
+
     Args:
         cli_path: Path to RoslynAnalyzerCLI.exe or dotnet DLL
     """

@@ -49,7 +49,7 @@ class LogLevel(str, Enum):
 @dataclass
 class LogContext:
     """Structured log context fields.
-    
+
     Attributes:
         trace_id: Distributed tracing ID
         span_id: Current span ID
@@ -74,7 +74,7 @@ class LogContext:
 @dataclass
 class StructuredLogRecord:
     """JSON-serializable log record.
-    
+
     Attributes:
         timestamp: ISO 8601 timestamp
         level: Log severity level
@@ -102,7 +102,7 @@ class StructuredLogRecord:
 
 class StructuredLogger:
     """JSON structured logger with context propagation.
-    
+
     Example:
         >>> logger = StructuredLogger("cortex.mcp")
         >>> with logger.context(trace_id="abc123"):
@@ -118,7 +118,7 @@ class StructuredLogger:
         file_path: Optional[str] = None,
     ) -> None:
         """Initialize structured logger.
-        
+
         Args:
             name: Logger name (module path)
             min_level: Minimum log level
@@ -155,13 +155,13 @@ class StructuredLogger:
         exception: Optional[Exception] = None,
     ) -> StructuredLogRecord:
         """Create structured log record.
-        
+
         Args:
             level: Log level
             message: Log message
             metadata: Additional metadata
             exception: Exception (if any)
-            
+
         Returns:
             Structured log record
         """
@@ -204,7 +204,7 @@ class StructuredLogger:
 
     def _emit(self, record: StructuredLogRecord) -> None:
         """Emit log record as JSON.
-        
+
         Args:
             record: Structured log record
         """
@@ -215,7 +215,7 @@ class StructuredLogger:
 
     def debug(self, message: str, **metadata: Any) -> None:
         """Log DEBUG message.
-        
+
         Args:
             message: Log message
             **metadata: Additional structured data
@@ -226,7 +226,7 @@ class StructuredLogger:
 
     def info(self, message: str, **metadata: Any) -> None:
         """Log INFO message.
-        
+
         Args:
             message: Log message
             **metadata: Additional structured data
@@ -237,7 +237,7 @@ class StructuredLogger:
 
     def warning(self, message: str, **metadata: Any) -> None:
         """Log WARNING message.
-        
+
         Args:
             message: Log message
             **metadata: Additional structured data
@@ -249,7 +249,7 @@ class StructuredLogger:
         self, message: str, exception: Optional[Exception] = None, **metadata: Any
     ) -> None:
         """Log ERROR message.
-        
+
         Args:
             message: Log message
             exception: Exception (if any)
@@ -262,7 +262,7 @@ class StructuredLogger:
         self, message: str, exception: Optional[Exception] = None, **metadata: Any
     ) -> None:
         """Log CRITICAL message.
-        
+
         Args:
             message: Log message
             exception: Exception (if any)
@@ -274,7 +274,7 @@ class StructuredLogger:
     @staticmethod
     def set_context(**context: Any) -> None:
         """Set request context for structured logging.
-        
+
         Args:
             **context: Context key-value pairs
         """
@@ -290,7 +290,7 @@ class StructuredLogger:
     @staticmethod
     def get_context() -> Dict[str, Any]:
         """Get current request context.
-        
+
         Returns:
             Context dictionary
         """
@@ -304,14 +304,14 @@ def get_logger(
     file_path: Optional[str] = None,
 ) -> StructuredLogger:
     """Get or create structured logger instance.
-    
+
     Args:
         name: Logger name
         min_level: Minimum log level
         enable_console: Enable console output
         enable_file: Enable file output
         file_path: Log file path
-        
+
     Returns:
         StructuredLogger instance
     """

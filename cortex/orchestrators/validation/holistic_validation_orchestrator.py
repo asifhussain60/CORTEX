@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ValidationResult:
     """Result of holistic validation with gating decision.
-    
+
     Attributes:
         passed: True if validation passed (confidence >= 0.7)
         confidence_score: Overall confidence score (0.0-1.0)
@@ -51,7 +51,7 @@ class ValidationResult:
     challenges: List[Dict[str, Any]]
     explanation: str
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    
+
     def __post_init__(self):
         """Validate score range."""
         if not 0.0 <= self.confidence_score <= 1.0:
@@ -99,7 +99,7 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         confidence_threshold: float = 0.7
     ) -> None:
         """Initialize validation orchestrator.
-        
+
         Args:
             challenge_engine: ChallengeEngine instance (optional, will create if None)
             confidence_scorer: ConfidenceScorer instance (optional, will create if None)
@@ -108,17 +108,17 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         """
         # Lazy imports to avoid circular dependencies
         from cortex.orchestrators.validation.pre_implementation_checklist import PreImplementationChecklist
-        
+
         self.challenge_engine = challenge_engine
         self.confidence_scorer = confidence_scorer
         self.checklist = checklist or PreImplementationChecklist()
         self.confidence_threshold = confidence_threshold
-        
+
         logger.info(
             f"HolisticValidationOrchestrator initialized "
             f"(threshold={confidence_threshold})"
         )
-    
+
     def validate(
         self,
         request: str,
@@ -126,21 +126,21 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         context: Dict[str, Any]
     ) -> ValidationResult:
         """Execute holistic validation for request.
-        
+
         Stages:
         1. Run pre-implementation checklist (12 categories)
         2. Generate 3 alternative approaches (if challenge_engine available)
         3. Calculate confidence score (if confidence_scorer available)
         4. Determine pass/fail based on threshold
-        
+
         Args:
             request: User's implementation request
             intent: Intent type (IMPLEMENT, FIX, REFACTOR)
             context: Request context (existing_code, dependencies, etc.)
-        
+
         Returns:
             ValidationResult with pass/fail decision and explanation
-        
+
         Raises:
             ValueError: If intent not in [IMPLEMENT, FIX, REFACTOR]
         """
@@ -156,29 +156,29 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         )
 
         logger.info(f"Starting validation for {intent} request: {request[:50]}...")
-        
+
         # Stage 1: Run checklist
         checklist_result = self.run_checklist(context)
         logger.debug(f"Checklist complete: {len(checklist_result)} categories checked")
-        
+
         # Stage 2: Generate challenges
         challenges = self.generate_challenges(request) if self.challenge_engine else []
         logger.debug(f"Generated {len(challenges)} alternative approaches")
-        
+
         # Stage 3: Calculate confidence score
         confidence_score = self.score_confidence(
             request, challenges, checklist_result
         ) if self.confidence_scorer else self._default_confidence_score(checklist_result)
         logger.debug(f"Confidence score: {confidence_score:.2f}")
-        
+
         # Stage 4: Determine pass/fail
         passed = confidence_score >= self.confidence_threshold
-        
+
         # Stage 5: Generate explanation
         explanation = self._generate_explanation(
             passed, confidence_score, checklist_result, challenges
         )
-        
+
         result = ValidationResult(
             passed=passed,
             confidence_score=confidence_score,
@@ -186,39 +186,39 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
             challenges=challenges,
             explanation=explanation
         )
-        
+
         logger.info(
             f"Validation {'PASSED' if passed else 'BLOCKED'} "
             f"(confidence={confidence_score:.2f}, threshold={self.confidence_threshold})"
         )
-        
+
         return result
-    
+
     def run_checklist(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Run pre-implementation checklist.
-        
+
         Args:
             context: Request context with code, dependencies, etc.
-        
+
         Returns:
             Dict mapping category name to CheckResult
         """
         return self.checklist.run_all_checks(context)
-    
+
     def generate_challenges(self, request: str) -> List[Dict[str, Any]]:
         """Generate 3 alternative approaches.
-        
+
         Args:
             request: User's implementation request
-        
+
         Returns:
             List of 3 alternatives with pros, cons, effort, risk
         """
         if not self.challenge_engine:
             return []
-        
+
         return self.challenge_engine.generate_alternatives(request, {})
-    
+
     def score_confidence(
         self,
         request: str,
@@ -226,39 +226,39 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         checklist_result: Dict[str, Any]
     ) -> float:
         """Calculate confidence score.
-        
+
         Args:
             request: User's implementation request
             alternatives: Generated alternative approaches
             checklist_result: Checklist validation results
-        
+
         Returns:
             Confidence score between 0.0 and 1.0
         """
         if not self.confidence_scorer:
             return self._default_confidence_score(checklist_result)
-        
+
         return self.confidence_scorer.score(request, alternatives, checklist_result)
-    
+
     def _default_confidence_score(self, checklist_result: Dict[str, Any]) -> float:
         """Calculate default confidence from checklist results.
-        
+
         Simple heuristic: 1.0 if all pass, 0.5 if any fail, 0.3 if multiple fail.
-        
+
         Args:
             checklist_result: Dict of category -> CheckResult
-        
+
         Returns:
             Confidence score between 0.0 and 1.0
         """
         if not checklist_result:
             return 0.5  # No data, medium confidence
-        
+
         failed_categories = [
             cat for cat, result in checklist_result.items()
             if hasattr(result, 'passed') and not result.passed
         ]
-        
+
         if len(failed_categories) == 0:
             return 1.0  # All pass
         elif len(failed_categories) == 1:
@@ -267,7 +267,7 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
             return 0.50  # Multiple failures (below threshold)
         else:
             return 0.30  # Many failures (well below threshold)
-    
+
     def _generate_explanation(
         self,
         passed: bool,
@@ -276,32 +276,32 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         challenges: List[Dict[str, Any]]
     ) -> str:
         """Generate human-readable explanation.
-        
+
         Args:
             passed: Validation passed or failed
             confidence_score: Calculated confidence score
             checklist_result: Checklist validation results
             challenges: Generated alternative approaches
-        
+
         Returns:
             Multi-line explanation string
         """
         lines = []
-        
+
         # Header
         if passed:
             lines.append(f"✅ Validation PASSED (confidence: {confidence_score:.2f})")
         else:
             lines.append(f"❌ Validation BLOCKED (confidence: {confidence_score:.2f} < {self.confidence_threshold})")
-        
+
         lines.append("")
-        
+
         # Checklist summary
         failed_categories = [
             cat for cat, result in checklist_result.items()
             if hasattr(result, 'passed') and not result.passed
         ]
-        
+
         if failed_categories:
             lines.append("⚠️ Checklist Issues:")
             for cat in failed_categories[:3]:  # Show first 3
@@ -314,7 +314,7 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
         else:
             lines.append("✅ All checklist categories passed")
             lines.append("")
-        
+
         # Challenges summary
         if challenges:
             lines.append(f"💡 {len(challenges)} Alternative Approaches:")
@@ -323,22 +323,22 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcem
                 risk = challenge.get("risk", "UNKNOWN")
                 lines.append(f"  {i}. {approach} (Risk: {risk})")
             lines.append("")
-        
+
         # Recommendation
         if not passed:
             lines.append("📋 Recommendations:")
             lines.append("  1. Address checklist issues before proceeding")
             lines.append("  2. Review alternative approaches")
             lines.append("  3. Revise request to improve confidence score")
-        
+
         return "\n".join(lines)
-    
+
     def format_result(self, result: ValidationResult) -> str:
         """Format validation result for display.
-        
+
         Args:
             result: ValidationResult to format
-        
+
         Returns:
             Formatted string for Copilot Chat display
         """

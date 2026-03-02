@@ -112,13 +112,13 @@ class TDDDisciplineRule:
 class SuccessCriteria:
     """
     Success criteria for multi-cycle TDD (ENH-088).
-    
+
     Defines when multi-cycle execution can exit:
     - min_coverage: Minimum test coverage (0.0-1.0)
     - max_latency_ms: Maximum average latency in milliseconds
     - extensibility_required: Whether extensibility validation needed
     - custom_checks: Optional custom validation functions
-    
+
     Example:
         >>> criteria = SuccessCriteria(
         ...     min_coverage=0.85,
@@ -137,7 +137,7 @@ class SuccessCriteria:
 class CycleMetrics:
     """
     Metrics captured for a single TDD cycle (ENH-088).
-    
+
     Tracks quality indicators per cycle:
     - cycle_number: 1-indexed cycle number
     - tests_passed: Number of passing tests
@@ -145,7 +145,7 @@ class CycleMetrics:
     - coverage_percent: Test coverage (0.0-1.0)
     - avg_latency_ms: Average latency in milliseconds
     - extensibility_score: Extensibility rating (0.0-1.0)
-    
+
     Example:
         >>> metrics = CycleMetrics(
         ...     cycle_number=2,
@@ -168,12 +168,12 @@ class CycleMetrics:
 class GateResult:
     """
     Result from holistic_refactor_gate validation (ENH-088).
-    
+
     Contains:
     - passed: Whether quality gate passed
     - gaps: List of identified quality gaps
     - recommendations: Actionable improvement suggestions
-    
+
     Example:
         >>> result = GateResult(
         ...     passed=False,
@@ -338,7 +338,7 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMi
         # AC-PHASE24-007: Initialize PhaseCompletionOrchestrator for post-completion hooks
         # Wave 7: PhaseCompletionOrchestrator consolidated, skip
         self._phase_completion_orchestrator = None
-        
+
         # ENH-088: Multi-cycle tracking
         self._cycle_metrics_history: List[CycleMetrics] = []
 
@@ -556,7 +556,7 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMi
                 # Multi-cycle TDD (ENH-088)
                 test_suite = parameters.get("test_suite", "")
                 success_criteria_dict = parameters.get("success_criteria", {})
-                
+
                 # Convert dict to SuccessCriteria
                 success_criteria = SuccessCriteria(
                     min_coverage=success_criteria_dict.get("min_coverage", 0.8),
@@ -564,7 +564,7 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMi
                     all_tests_pass=success_criteria_dict.get("all_tests_pass", True),
                     max_complexity=success_criteria_dict.get("max_complexity", 10)
                 )
-                
+
                 result_dict = self.execute_multi_cycle(
                     test_suite=test_suite,
                     success_criteria=success_criteria,
@@ -1322,15 +1322,15 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> Dict[str, Any]:
         """
         Execute TDD cycles iteratively until success criteria met (ENH-088).
-        
+
         Args:
             test_suite: Path to test suite to execute
             success_criteria: Exit conditions for multi-cycle execution
             max_cycles: Maximum number of cycles (default: 5)
-        
+
         Returns:
             Dictionary with execution results and metrics history
-        
+
         Example:
             >>> criteria = SuccessCriteria(
             ...     min_coverage=0.85,
@@ -1344,12 +1344,12 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
             ... )
         """
         logger.info(f"ENH-088: Starting multi-cycle TDD (max_cycles={max_cycles})")
-        
+
         gate_result = None  # Initialize for scope
-        
+
         for cycle in range(1, max_cycles + 1):
             logger.info(f"ENH-088: Cycle {cycle}/{max_cycles} starting")
-            
+
             # Execute standard TDD cycle - simplified for GREEN phase
             # Full integration with execute_with_protocol comes in Stage 3
             cycle_result = {
@@ -1358,7 +1358,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                 "coverage": 0.75 + (cycle * 0.05),
                 "latency_ms": 200 - (cycle * 10)
             }
-            
+
             # Extract metrics from result (with defaults for mock testing)
             metrics = CycleMetrics(
                 cycle_number=cycle,
@@ -1368,16 +1368,16 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                 avg_latency_ms=cycle_result.get("latency_ms", 0.0),
                 extensibility_score=0.0  # Placeholder for extensibility analysis
             )
-            
+
             # Track metrics
             self.track_cycle_metrics(cycle=cycle, metrics=metrics)
-            
+
             # Validate against quality gate
             gate_result = self.holistic_refactor_gate(
                 criteria=success_criteria,
                 metrics=metrics
             )
-            
+
             # ENH-088 Stage 2: Emit cycle complete event
             self._emit_event("CYCLE_COMPLETE", {
                 "cycle": cycle,
@@ -1387,11 +1387,11 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                     "latency_ms": metrics.avg_latency_ms
                 }
             })
-            
+
             # Exit if criteria met
             if gate_result.passed:
                 logger.info(f"ENH-088: Success criteria met in cycle {cycle}")
-                
+
                 # ENH-088 Stage 2: Emit criteria met event
                 self._emit_event("CRITERIA_MET", {
                     "cycle": cycle,
@@ -1400,7 +1400,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                         "latency_ms": metrics.avg_latency_ms
                     }
                 })
-                
+
                 return {
                     "cycles_executed": cycle,
                     "success": True,
@@ -1408,16 +1408,16 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                     "final_metrics": metrics,
                     "gate_result": gate_result
                 }
-        
+
         # Max cycles reached without meeting criteria
         logger.warning(f"ENH-088: Max cycles ({max_cycles}) reached without success")
-        
+
         # ENH-088 Stage 2: Emit max cycles reached event
         self._emit_event("MAX_CYCLES_REACHED", {
             "max_cycles": max_cycles,
             "final_coverage": self._cycle_metrics_history[-1].coverage_percent if self._cycle_metrics_history else 0.0
         })
-        
+
         return {
             "cycles_executed": max_cycles,
             "success": False,
@@ -1429,7 +1429,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     def track_cycle_metrics(self, cycle: int, metrics: CycleMetrics) -> None:
         """
         Track metrics for a TDD cycle (ENH-088).
-        
+
         Args:
             cycle: Cycle number (1-indexed)
             metrics: Metrics captured for this cycle
@@ -1440,7 +1440,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     def get_cycle_metrics(self) -> List[CycleMetrics]:
         """
         Retrieve all tracked cycle metrics (ENH-088).
-        
+
         Returns:
             List of CycleMetrics in chronological order
         """
@@ -1453,14 +1453,14 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> GateResult:
         """
         Validate cycle metrics against success criteria (ENH-088).
-        
+
         Args:
             criteria: Success criteria thresholds
             metrics: Metrics from current cycle
-        
+
         Returns:
             GateResult with pass/fail status, gaps, and recommendations
-        
+
         Example:
             >>> criteria = SuccessCriteria(min_coverage=0.85, max_latency_ms=200, extensibility_required=False)
             >>> metrics = CycleMetrics(cycle_number=1, tests_passed=16, tests_failed=0, coverage_percent=0.78, avg_latency_ms=180.0, extensibility_score=0.0)
@@ -1469,24 +1469,24 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
         """
         gaps: List[str] = []
         recommendations: List[str] = []
-        
+
         # Check coverage
         if metrics.coverage_percent < criteria.min_coverage:
             gap = f"Coverage {metrics.coverage_percent:.1%} below threshold {criteria.min_coverage:.1%}"
             gaps.append(gap)
             recommendations.append("Add more unit tests to increase coverage")
-        
+
         # Check latency
         if metrics.avg_latency_ms > criteria.max_latency_ms:
             gap = f"Latency {metrics.avg_latency_ms:.1f}ms exceeds threshold {criteria.max_latency_ms}ms"
             gaps.append(gap)
             recommendations.append("Optimize hot paths or reduce test execution time")
-        
+
         # Check extensibility (if required)
         if criteria.extensibility_required and metrics.extensibility_score < 0.7:
             gaps.append("Extensibility validation not met")
             recommendations.append("Add plugin pattern or extension points tests")
-        
+
         # Run custom checks (if any)
         for custom_check in criteria.custom_checks:
             try:
@@ -1507,7 +1507,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
                 gaps.append(f"Goal predicate raised exception: {e}")
 
         passed = len(gaps) == 0
-        
+
         return GateResult(
             passed=passed,
             gaps=gaps,
@@ -1686,11 +1686,11 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> Dict[str, Any]:
         """
         Validate test coverage using pytest-cov (ENH-088 Stage 2).
-        
+
         Args:
             test_suite: Path to test suite
             min_coverage: Minimum coverage threshold (0.0-1.0)
-        
+
         Returns:
             Dictionary with coverage metrics
         """
@@ -1710,11 +1710,11 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> Dict[str, Any]:
         """
         Validate test execution latency (ENH-088 Stage 2).
-        
+
         Args:
             test_suite: Path to test suite
             max_latency_ms: Maximum average latency threshold
-        
+
         Returns:
             Dictionary with latency metrics
         """
@@ -1734,17 +1734,17 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> Dict[str, Any]:
         """
         Validate extensibility patterns (ENH-088 Stage 2).
-        
+
         Args:
             module_path: Path to module to analyze
-        
+
         Returns:
             Dictionary with extensibility metrics
         """
         # GREEN phase: Simplified implementation
         # Check for ABC or Protocol usage
         has_abc = "ABC" in str(module_path) or "Protocol" in str(module_path)
-        
+
         return {
             "has_plugin_pattern": has_abc,
             "extensibility_score": 0.9 if has_abc else 0.5,
@@ -1755,7 +1755,7 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     def _emit_event(self, event_name: str, data: Dict[str, Any]) -> None:
         """
         Emit EventBus event (ENH-088 Stage 2).
-        
+
         Args:
             event_name: Event name (CYCLE_COMPLETE, CRITERIA_MET, MAX_CYCLES_REACHED)
             data: Event payload
@@ -1773,40 +1773,40 @@ class TestStub{gap_id.replace("-", "").replace("_", "")}:
     ) -> GateResult:
         """
         Enhanced holistic gate with integrated quality validations (ENH-088 Stage 2).
-        
+
         Args:
             criteria: Success criteria
             metrics: Cycle metrics
             test_suite: Test suite path
             module_path: Module path for extensibility validation
-        
+
         Returns:
             GateResult with integrated validation results
         """
         gaps: List[str] = []
         recommendations: List[str] = []
-        
+
         # Validate coverage
         coverage_result = self.validate_coverage(test_suite, criteria.min_coverage)
         if not coverage_result["passes_threshold"]:
             gaps.append(f"Coverage {coverage_result['coverage_percent']:.1%} below threshold")
             recommendations.append("Add more unit tests")
-        
+
         # Validate latency
         latency_result = self.validate_latency(test_suite, criteria.max_latency_ms)
         if latency_result["avg_latency_ms"] > criteria.max_latency_ms:
             gaps.append(f"Latency {latency_result['avg_latency_ms']:.1f}ms exceeds threshold")
             recommendations.append("Optimize hot paths")
-        
+
         # Validate extensibility (if required)
         if criteria.extensibility_required:
             ext_result = self.validate_extensibility(module_path)
             if ext_result["extensibility_score"] < 0.7:
                 gaps.append("Extensibility validation not met")
                 recommendations.append("Add plugin pattern or ABC")
-        
+
         passed = len(gaps) == 0
-        
+
         return GateResult(
             passed=passed,
             gaps=gaps,

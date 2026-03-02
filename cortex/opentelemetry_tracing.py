@@ -115,7 +115,7 @@ class SpanContext:
 
     def to_headers(self) -> Dict[str, str]:
         """Convert context to W3C trace context headers.
-        
+
         Returns:
             Dictionary of headers for propagation
         """
@@ -126,10 +126,10 @@ class SpanContext:
     @staticmethod
     def from_headers(headers: Dict[str, str]) -> 'SpanContext':
         """Extract context from W3C trace context headers.
-        
+
         Args:
             headers: HTTP headers
-            
+
         Returns:
             SpanContext instance
         """
@@ -161,7 +161,7 @@ class Span:
 
     def set_attribute(self, key: str, value: Any) -> None:
         """Set span attribute.
-        
+
         Args:
             key: Attribute key
             value: Attribute value
@@ -170,7 +170,7 @@ class Span:
 
     def add_event(self, name: str, attributes: Optional[Dict[str, Any]] = None) -> None:
         """Add event to span.
-        
+
         Args:
             name: Event name
             attributes: Event attributes
@@ -188,7 +188,7 @@ class Span:
 
     def duration_ms(self) -> float:
         """Get span duration in milliseconds.
-        
+
         Returns:
             Duration in milliseconds
         """
@@ -197,7 +197,7 @@ class Span:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert span to dictionary representation.
-        
+
         Returns:
             Dictionary representation
         """
@@ -220,7 +220,7 @@ class TracerProvider:
     """Manages tracer instances and span collection."""
     def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize tracer provider.
-        
+
         Args:
             service_name: Service name for traces
         """
@@ -231,10 +231,10 @@ class TracerProvider:
 
     def get_tracer(self, name: str = "default") -> 'Tracer':
         """Get a tracer instance.
-        
+
         Args:
             name: Tracer name
-            
+
         Returns:
             Tracer instance
         """
@@ -247,12 +247,12 @@ class TracerProvider:
         context: Optional[SpanContext] = None,
     ) -> Span:
         """Start a new span.
-        
+
         Args:
             name: Span name
             kind: Span kind
             context: Parent trace context
-            
+
         Returns:
             Span instance
         """
@@ -282,7 +282,7 @@ class TracerProvider:
 
     def end_span(self, span: Span) -> None:
         """End a span.
-        
+
         Args:
             span: Span to end
         """
@@ -294,10 +294,10 @@ class TracerProvider:
 
     def get_trace(self, trace_id: str) -> list:
         """Get all spans in a trace.
-        
+
         Args:
             trace_id: Trace ID
-            
+
         Returns:
             List of spans
         """
@@ -328,7 +328,7 @@ class Tracer:
     """Tracer for creating and managing spans."""
     def __init__(self, provider: TracerProvider, name: str) -> None:
         """Initialize tracer.
-        
+
         Args:
             provider: TracerProvider instance
             name: Tracer name
@@ -343,12 +343,12 @@ class Tracer:
         context: Optional[SpanContext] = None,
     ) -> Span:
         """Start a span.
-        
+
         Args:
             name: Span name
             kind: Span kind
             context: Trace context
-            
+
         Returns:
             Span instance
         """
@@ -361,12 +361,12 @@ class Tracer:
         context: Optional[SpanContext] = None,
     ) -> 'SpanContextManager':
         """Create context manager for span.
-        
+
         Args:
             name: Span name
             kind: Span kind
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -374,11 +374,11 @@ class Tracer:
 
     def span_decorator(self, name: str, kind: SpanKind = SpanKind.INTERNAL) -> Callable:
         """Create decorator for automatic span wrapping.
-        
+
         Args:
             name: Span name
             kind: Span kind
-            
+
         Returns:
             Decorator function
         """
@@ -404,7 +404,7 @@ class SpanContextManager:
         context: Optional[SpanContext],
     ) -> None:
         """Initialize span context manager.
-        
+
         Args:
             tracer: Tracer instance
             name: Span name
@@ -439,7 +439,7 @@ class IntentRouterTracer:
     """Specialized tracer for IntentRouter with domain-specific spans."""
     def __init__(self, provider: TracerProvider) -> None:
         """Initialize router tracer.
-        
+
         Args:
             provider: TracerProvider instance
         """
@@ -448,10 +448,10 @@ class IntentRouterTracer:
 
     def trace_routing_request(self, context: Optional[SpanContext] = None) -> SpanContextManager:
         """Create span for routing request.
-        
+
         Args:
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -459,10 +459,10 @@ class IntentRouterTracer:
 
     def trace_capability_matching(self, context: Optional[SpanContext] = None) -> SpanContextManager:
         """Create span for capability matching.
-        
+
         Args:
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -472,11 +472,11 @@ class IntentRouterTracer:
         self, pattern: str, context: Optional[SpanContext] = None
     ) -> SpanContextManager:
         """Create span for agent collaboration.
-        
+
         Args:
             pattern: Collaboration pattern
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -486,11 +486,11 @@ class IntentRouterTracer:
         self, tool_name: str, context: Optional[SpanContext] = None
     ) -> SpanContextManager:
         """Create span for MCP tool execution.
-        
+
         Args:
             tool_name: Tool name
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -500,11 +500,11 @@ class IntentRouterTracer:
         self, operation: str, context: Optional[SpanContext] = None
     ) -> SpanContextManager:
         """Create span for cache operation.
-        
+
         Args:
             operation: Cache operation (get/set/invalidate)
             context: Trace context
-            
+
         Returns:
             SpanContextManager
         """
@@ -523,17 +523,17 @@ context = SpanContext.from_headers(request.headers)
 with router_tracer.trace_routing_request(context) as span:
     span.set_attribute("intent_mode", "IMPLEMENT")
     span.set_attribute("request_id", request.id)
-    
+
     # Sub-span: capability matching
     with router_tracer.trace_capability_matching() as matching_span:
         matching_span.set_attribute("intent_modes_checked", 5)
         # ... capability matching logic ...
-    
+
     # Sub-span: agent collaboration
     with router_tracer.trace_agent_collaboration("sequential") as collab_span:
         collab_span.set_attribute("agent_count", 3)
         # ... collaboration logic ...
-    
+
     # Sub-span: MCP tool execution
     with router_tracer.trace_mcp_tool_execution("cortex_request_lifecycle") as tool_span:
         tool_span.set_attribute("tool_status", "success")

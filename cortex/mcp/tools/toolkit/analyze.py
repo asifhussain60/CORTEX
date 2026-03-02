@@ -21,25 +21,25 @@ from cortex.mcp.mcp_tool_base import (
 class ToolkitAnalyzeTool(ConsolidatedTool):
     """
     MCP tool for trace analysis and performance monitoring.
-    
+
     Consolidates functionality from scripts/audit_traces.py.
     """
-    
+
     @property
     def name(self) -> str:
         """The unique tool name identifier."""
         return "toolkit_analyze"
-    
+
     @property
     def description(self) -> str:
         """Human-readable description of the tool."""
         return "Analyze audit traces, performance metrics, and system health"
-    
+
     @property
     def category(self) -> ToolCategory:
         """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> list:
         """List of parameters accepted by the tool."""
@@ -60,26 +60,26 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
                 default=None
             )
         ]
-    
+
     @property
     def supported_operations(self) -> list:
         """List of operation types this tool supports."""
         return ["traces", "performance", "usage", "health"]
-    
+
     def execute(self, analysis_type: str = "traces", path: str = None, **kwargs) -> ToolResult:
         """
         Execute analysis.
-        
+
         Args:
             analysis_type: Type of analysis (traces, performance, usage, health)
             path: Path to analyze (defaults to workspace root)
-        
+
         Returns:
             ToolResult with analysis results
         """
         try:
             workspace_root = Path(path) if path else Path.cwd()
-            
+
             if analysis_type == "traces":
                 result = self._analyze_audit_traces(workspace_root)
             elif analysis_type == "performance":
@@ -95,13 +95,13 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
                     error=f"Unknown analysis_type: {analysis_type}",
                     metadata={"available_types": self.supported_operations}
                 )
-            
+
             return ToolResult(
                 success=True,
                 data=result,
                 metadata={"analysis_type": analysis_type, "path": str(workspace_root)}
             )
-        
+
         except Exception as e:
             return ToolResult(
                 success=False,
@@ -109,14 +109,14 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
                 error=f"Analysis failed: {str(e)}",
                 metadata={"analysis_type": analysis_type}
             )
-    
+
     def _analyze_audit_traces(self, workspace_root: Path) -> Dict[str, Any]:
         """
         Analyze AC_START/AC_COMPLETE audit markers.
-        
+
         Args:
             workspace_root: Root path to analyze
-        
+
         Returns:
             Dict with audit trace findings
         """
@@ -125,34 +125,34 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
             "completed": [],
             "incomplete": []
         }
-        
+
         # Search for AC markers in Python files
         for py_file in workspace_root.rglob("*.py"):
             try:
                 content = py_file.read_text()
-                
+
                 # Find AC_START markers
                 starts = re.findall(r'AC_START:\s+(\S+)', content)
                 for marker in starts:
                     traces["started"].append({"file": str(py_file), "marker": marker})
-                
+
                 # Find AC_COMPLETE markers
                 completes = re.findall(r'AC_COMPLETE:\s+(\S+)', content)
                 for marker in completes:
                     traces["completed"].append({"file": str(py_file), "marker": marker})
-            
+
             except Exception:
                 continue
-        
+
         # Find incomplete traces (started but not completed)
         started_markers = {t["marker"] for t in traces["started"]}
         completed_markers = {t["marker"] for t in traces["completed"]}
         incomplete_markers = started_markers - completed_markers
-        
+
         for marker in incomplete_markers:
             matching_start = next(t for t in traces["started"] if t["marker"] == marker)
             traces["incomplete"].append(matching_start)
-        
+
         return {
             "total_started": len(traces["started"]),
             "total_completed": len(traces["completed"]),
@@ -160,14 +160,14 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
             "incomplete_traces": traces["incomplete"][:10],  # Limit to 10
             "completion_rate": (len(traces["completed"]) / len(traces["started"]) * 100) if traces["started"] else 0.0
         }
-    
+
     def _analyze_performance(self, workspace_root: Path) -> Dict[str, Any]:
         """
         Analyze performance metrics.
-        
+
         Args:
             workspace_root: Root path to analyze
-        
+
         Returns:
             Dict with performance findings
         """
@@ -176,14 +176,14 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
             "status": "not_implemented",
             "message": "Performance analysis will be implemented in future phase"
         }
-    
+
     def _analyze_usage(self, workspace_root: Path) -> Dict[str, Any]:
         """
         Analyze tool usage patterns.
-        
+
         Args:
             workspace_root: Root path to analyze
-        
+
         Returns:
             Dict with usage findings
         """
@@ -192,14 +192,14 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
             "status": "not_implemented",
             "message": "Usage analysis will be implemented in future phase"
         }
-    
+
     def _analyze_health(self, workspace_root: Path) -> Dict[str, Any]:
         """
         Analyze system health.
-        
+
         Args:
             workspace_root: Root path to analyze
-        
+
         Returns:
             Dict with health findings
         """
@@ -210,8 +210,8 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
             "tests_exist": (workspace_root / "tests").exists(),
             "registry_exists": (workspace_root / "cortex-registry").exists()
         }
-        
+
         health["healthy"] = all(health.values())
         health["score"] = sum(health.values()) / len(health) * 100
-        
+
         return health

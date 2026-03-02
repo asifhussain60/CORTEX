@@ -33,33 +33,33 @@ class DependencyGraph:
 class BuildDependencyGraphUseCase:
     """
     Build dependency graph from repository data.
-    
+
     Constructs graph structure showing package dependencies
     and transitive relationships.
     """
-    
+
     def __init__(self) -> None:
         """Initialize dependency graph builder."""
         self._initialized = True
-    
+
     def execute(self, repo_data: Dict[str, Any]) -> DependencyGraph:
         """
         Execute dependency graph building.
-        
+
         Args:
             repo_data: Repository analysis data with dependencies
-        
+
         Returns:
             DependencyGraph object
         """
         # Extract direct dependencies
         direct_deps = repo_data.get("direct_dependencies", [])
         transitive_deps = repo_data.get("transitive_dependencies", [])
-        
+
         # Build root packages (direct dependencies)
         root_packages = []
         all_packages = set()
-        
+
         for dep in direct_deps:
             if isinstance(dep, dict):
                 name = dep.get("name", "")
@@ -73,7 +73,7 @@ class BuildDependencyGraphUseCase:
                 )
                 root_packages.append(pkg)
                 all_packages.add(name)
-        
+
         # Add transitive dependencies
         for dep in transitive_deps:
             if isinstance(dep, dict):
@@ -90,7 +90,7 @@ class BuildDependencyGraphUseCase:
                 )
                 root_packages.append(pkg)
                 all_packages.add(name)
-        
+
         # Also process direct dependencies for advisories
         for i, pkg in enumerate(root_packages):
             if pkg.transitive_depth == 0:  # Direct dependency
@@ -107,9 +107,9 @@ class BuildDependencyGraphUseCase:
                                 transitive_depth=pkg.transitive_depth,
                                 security_advisories=advisories if isinstance(advisories, list) else []
                             )
-        
+
         max_depth = max((p.transitive_depth for p in root_packages), default=0)
-        
+
         return DependencyGraph(
             root_packages=root_packages,
             all_packages=all_packages,

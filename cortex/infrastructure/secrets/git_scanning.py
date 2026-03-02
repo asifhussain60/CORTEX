@@ -20,10 +20,10 @@ class SecretsScanner:
 
     def scan_text(self, text: str) -> List[Dict[str, Any]]:
         """Scan text.
-        
+
         Args:
             text: Parameter for text.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -36,10 +36,10 @@ class SecretsScanner:
 
     def scan_file(self, file_path: str) -> List[Dict[str, Any]]:
         """Scan file.
-        
+
         Args:
             file_path: Parameter for file path.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -62,10 +62,10 @@ class GitHistoryScanner(SecretsScanner):
 
     def scan_commits(self, max_commits: int = 100) -> List[Dict[str, Any]]:
         """Scan commits.
-        
+
         Args:
             max_commits: Parameter for max commits.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -80,7 +80,7 @@ class GitHistoryScanner(SecretsScanner):
 
     def scan_all_history(self) -> List[Dict[str, Any]]:
         """Scan all history.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -92,10 +92,10 @@ class GitHubActionsScanner(SecretsScanner):
 
     def scan_workflows(self, repo_path: str = ".") -> List[Dict[str, Any]]:
         """Scan workflows.
-        
+
         Args:
             repo_path: Parameter for repo path.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -116,7 +116,7 @@ class PreCommitHookScanner(SecretsScanner):
 
     def install_hook(self) -> bool:
         """Install hook.
-        
+
         Returns:
             bool result.
         """
@@ -131,7 +131,7 @@ class PreCommitHookScanner(SecretsScanner):
 
     def is_installed(self) -> bool:
         """Is installed.
-        
+
         Returns:
             bool result.
         """
@@ -144,11 +144,11 @@ class SecretsRemediator:
 
     def redact_file(self, file_path: str, findings: List[Dict[str, Any]]) -> bool:
         """Redact file.
-        
+
         Args:
             file_path: Parameter for file path.
             findings: Parameter for findings.
-        
+
         Returns:
             bool result.
         """
@@ -165,10 +165,10 @@ class SecretsRemediator:
 
     def generate_remediation_plan(self, findings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Generate remediation plan.
-        
+
         Args:
             findings: Parameter for findings.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """

@@ -17,27 +17,27 @@ from cortex.orchestrators.health.reports.health_report import HealthReport
 
 class HealthMetricsExporter:
     """Exports health metrics to dashboard database.
-    
+
     Attributes:
         db_path: Path to SQLite database
         conn: Database connection
     """
-    
+
     def __init__(self, db_path: Union[Path, str]) -> None:
         """Initialize exporter.
-        
+
         Args:
             db_path: Path to dashboard SQLite database
         """
         self.db_path = Path(db_path)
         self.conn: sqlite3.Connection | None = None
         self._init_tables()
-    
+
     def _init_tables(self) -> None:
         """Create health metrics tables if they don't exist."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         # Health scores over time
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS health_scores (
@@ -53,7 +53,7 @@ class HealthMetricsExporter:
                 duration_seconds REAL NOT NULL
             )
         """)
-        
+
         # Agent performance
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS agent_performance (
@@ -65,7 +65,7 @@ class HealthMetricsExporter:
                 duration_seconds REAL NOT NULL
             )
         """)
-        
+
         # Issue trends
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS issue_trends (
@@ -76,21 +76,21 @@ class HealthMetricsExporter:
                 count INTEGER NOT NULL
             )
         """)
-        
+
         conn.commit()
         conn.close()
-    
+
     def export_report(self, report: HealthReport) -> None:
         """Export health report to database.
-        
+
         Args:
             report: HealthReport to export
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         timestamp = datetime.now().isoformat()
-        
+
         # Export overall health score
         cursor.execute("""
             INSERT INTO health_scores (
@@ -109,7 +109,7 @@ class HealthMetricsExporter:
             report.metrics.files_scanned,
             report.metrics.duration_seconds,
         ))
-        
+
         # Export agent performance
         for result in report.agent_results:
             cursor.execute("""
@@ -124,45 +124,45 @@ class HealthMetricsExporter:
                 result.files_scanned,
                 result.duration_seconds,
             ))
-        
+
         # Export issue trends by category and severity
         issue_counts: Dict[tuple[str, str], int] = {}
         for issue in report.all_issues:
             key = (issue.category.value, issue.severity.value)
             issue_counts[key] = issue_counts.get(key, 0) + 1
-        
+
         for (category, severity), count in issue_counts.items():
             cursor.execute("""
                 INSERT INTO issue_trends (
                     timestamp, category, severity, count
                 ) VALUES (?, ?, ?, ?)
             """, (timestamp, category, severity, count))
-        
+
         conn.commit()
         conn.close()
-    
+
     def get_health_history(self, days: int = 30) -> list[Dict[str, Any]]:
         """Get health score history.
-        
+
         Args:
             days: Number of days to retrieve
-        
+
         Returns:
             List of health score records
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         cursor.execute("""
             SELECT timestamp, health_score, total_issues
             FROM health_scores
             WHERE timestamp >= date('now', ? || ' days')
             ORDER BY timestamp DESC
         """, (-days,))
-        
+
         rows = cursor.fetchall()
         conn.close()
-        
+
         return [
             {
                 "timestamp": row[0],
@@ -171,16 +171,16 @@ class HealthMetricsExporter:
             }
             for row in rows
         ]
-    
+
     def get_trend_summary(self) -> Dict[str, Any]:
         """Get trending summary of health metrics.
-        
+
         Returns:
             Dict with trend data
         """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        
+
         # Get current vs 7 days ago
         cursor.execute("""
             SELECT health_score
@@ -189,7 +189,7 @@ class HealthMetricsExporter:
             LIMIT 1
         """)
         current = cursor.fetchone()
-        
+
         cursor.execute("""
             SELECT health_score
             FROM health_scores
@@ -198,9 +198,9 @@ class HealthMetricsExporter:
             LIMIT 1
         """)
         week_ago = cursor.fetchone()
-        
+
         conn.close()
-        
+
         if current and week_ago:
             trend = current[0] - week_ago[0]
             return {
@@ -209,7 +209,7 @@ class HealthMetricsExporter:
                 "trend": trend,
                 "improving": trend > 0,
             }
-        
+
         return {
             "current_score": current[0] if current else 0.0,
             "trend": 0.0,

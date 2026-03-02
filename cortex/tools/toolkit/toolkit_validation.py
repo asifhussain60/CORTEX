@@ -59,14 +59,14 @@ class ValidationResult:
 class ValidationManager:
     """
     Manages validation operations for CORTEX workspace.
-    
+
     Consolidates:
     - Governance alignment validation (CORE rules)
     - Production readiness checks
     - Test coverage validation
     - Security issue detection
     - MCP tools registration verification
-    
+
     Attributes:
         workspace_root: Root directory of CORTEX workspace
         strict_mode: If True, treat warnings as errors
@@ -100,7 +100,7 @@ class ValidationManager:
     ) -> None:
         """
         Initialize ValidationManager.
-        
+
         Args:
             workspace_root: Root directory of workspace
             strict_mode: If True, warnings are treated as errors
@@ -111,103 +111,103 @@ class ValidationManager:
     def validate_governance_alignment(self) -> List[ValidationResult]:
         """
         Validate workspace governance alignment.
-        
+
         Checks:
         - TDD compliance (tests before code)
         - Type hints present
         - Docstrings present
         - No bare except clauses
-        
+
         Returns:
             List of ValidationResult objects
         """
         results = []
-        
+
         # Check TDD compliance
         results.append(self.check_tdd_compliance())
-        
+
         # Check Python files for governance violations
         for file_path in self.workspace_root.rglob("*.py"):
             # Skip excluded directories
             if any(exclude in file_path.parts for exclude in self.EXCLUDE_DIRS):
                 continue
-            
+
             # Skip test files for type hint/docstring checks
             if "test_" in file_path.name:
                 continue
-            
+
             results.append(self.check_type_hints(file_path))
             results.append(self.check_docstrings(file_path))
-        
+
         return results
 
     def validate_production_readiness(self) -> List[ValidationResult]:
         """
         Validate production readiness.
-        
+
         Checks:
         - Dependencies locked (pinned versions)
         - No security issues
         - MCP tools registered
         - Git hooks installed
-        
+
         Returns:
             List of ValidationResult objects
         """
         results = []
-        
+
         results.append(self.check_dependencies_locked())
         results.append(self.check_mcp_tools_registered())
         results.append(self.check_git_hooks())
-        
+
         # Check Python files for security issues
         for file_path in self.workspace_root.rglob("*.py"):
             if any(exclude in file_path.parts for exclude in self.EXCLUDE_DIRS):
                 continue
-            
+
             result = self.check_security_issues(file_path)
             if result.level != ValidationLevel.OK:
                 results.append(result)
-        
+
         return results
 
     def validate_test_coverage(self) -> ValidationResult:
         """
         Validate test coverage.
-        
+
         Returns:
             ValidationResult for coverage check
         """
         cortex_dir = self.workspace_root / "cortex"
         tests_dir = self.workspace_root / "tests"
-        
+
         if not cortex_dir.exists():
             return ValidationResult(
                 check=ValidationCheck.TEST_COVERAGE,
                 level=ValidationLevel.INFO,
                 message="No cortex directory found"
             )
-        
+
         if not tests_dir.exists():
             return ValidationResult(
                 check=ValidationCheck.TEST_COVERAGE,
                 level=ValidationLevel.ERROR,
                 message="No tests directory found"
             )
-        
+
         # Count Python files
         py_files = len(list(cortex_dir.rglob("*.py")))
         test_files = len(list(tests_dir.rglob("test_*.py")))
-        
+
         coverage_ratio = test_files / py_files if py_files > 0 else 0
-        
+
         if coverage_ratio < 0.5:
             level = ValidationLevel.WARNING
             message = f"Low test coverage: {test_files} test files for {py_files} modules ({coverage_ratio:.1%})"
         else:
             level = ValidationLevel.OK
             message = f"Test coverage: {test_files} test files for {py_files} modules ({coverage_ratio:.1%})"
-        
+
         return ValidationResult(
             check=ValidationCheck.TEST_COVERAGE,
             level=level,
@@ -218,33 +218,33 @@ class ValidationManager:
     def check_tdd_compliance(self) -> ValidationResult:
         """
         Check TDD compliance.
-        
+
         Returns:
             ValidationResult for TDD check
         """
         # Look for modules without corresponding tests
         cortex_dir = self.workspace_root / "cortex"
         tests_dir = self.workspace_root / "tests"
-        
+
         if not cortex_dir.exists():
             return ValidationResult(
                 check=ValidationCheck.TDD_COMPLIANCE,
                 level=ValidationLevel.INFO,
                 message="No cortex directory to validate"
             )
-        
+
         missing_tests = []
         for py_file in cortex_dir.rglob("*.py"):
             if py_file.name == "__init__.py":
                 continue
-            
+
             # Derive expected test file path
             relative_path = py_file.relative_to(cortex_dir)
             test_file = tests_dir / "unit" / relative_path.parent / f"test_{py_file.name}"
-            
+
             if not test_file.exists():
                 missing_tests.append(str(relative_path))
-        
+
         if missing_tests:
             return ValidationResult(
                 check=ValidationCheck.TDD_COMPLIANCE,
@@ -252,7 +252,7 @@ class ValidationManager:
                 message=f"{len(missing_tests)} modules without tests",
                 details={"missing_tests": missing_tests[:5]}  # First 5
             )
-        
+
         return ValidationResult(
             check=ValidationCheck.TDD_COMPLIANCE,
             level=ValidationLevel.OK,
@@ -262,39 +262,39 @@ class ValidationManager:
     def check_type_hints(self, file_path: Path) -> ValidationResult:
         """
         Check for type hints in Python file.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             ValidationResult for type hints check
         """
         try:
             content = file_path.read_text()
             tree = ast.parse(content)
-            
+
             functions = [
                 node for node in ast.walk(tree)
                 if isinstance(node, ast.FunctionDef)
             ]
-            
+
             missing_hints = []
             for func in functions:
                 # Skip private functions and test functions
                 if func.name.startswith("_") or func.name.startswith("test_"):
                     continue
-                
+
                 # Check if return type is annotated
                 if func.returns is None and func.name != "__init__":
                     missing_hints.append(f"{func.name} (return)")
-                
+
                 # Check if parameters are annotated
                 for arg in func.args.args:
                     if arg.arg == "self" or arg.arg == "cls":
                         continue
                     if arg.annotation is None:
                         missing_hints.append(f"{func.name}({arg.arg})")
-            
+
             if missing_hints:
                 return ValidationResult(
                     check=ValidationCheck.TYPE_HINTS,
@@ -303,7 +303,7 @@ class ValidationManager:
                     file_path=file_path,
                     details={"missing": missing_hints[:3]}
                 )
-            
+
             return ValidationResult(
                 check=ValidationCheck.TYPE_HINTS,
                 level=ValidationLevel.OK,
@@ -321,32 +321,32 @@ class ValidationManager:
     def check_docstrings(self, file_path: Path) -> ValidationResult:
         """
         Check for docstrings in Python file.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             ValidationResult for docstrings check
         """
         try:
             content = file_path.read_text()
             tree = ast.parse(content)
-            
+
             functions = [
                 node for node in ast.walk(tree)
                 if isinstance(node, ast.FunctionDef)
             ]
-            
+
             missing_docs = []
             for func in functions:
                 # Skip private functions
                 if func.name.startswith("_") and func.name != "__init__":
                     continue
-                
+
                 docstring = ast.get_docstring(func)
                 if not docstring:
                     missing_docs.append(func.name)
-            
+
             if missing_docs:
                 return ValidationResult(
                     check=ValidationCheck.DOCSTRINGS,
@@ -355,7 +355,7 @@ class ValidationManager:
                     file_path=file_path,
                     details={"missing": missing_docs[:3]}
                 )
-            
+
             return ValidationResult(
                 check=ValidationCheck.DOCSTRINGS,
                 level=ValidationLevel.OK,
@@ -373,27 +373,27 @@ class ValidationManager:
     def check_dependencies_locked(self) -> ValidationResult:
         """
         Check if dependencies are locked (pinned versions).
-        
+
         Returns:
             ValidationResult for dependencies check
         """
         req_file = self.workspace_root / "requirements.txt"
-        
+
         if not req_file.exists():
             return ValidationResult(
                 check=ValidationCheck.DEPENDENCIES,
                 level=ValidationLevel.WARNING,
                 message="No requirements.txt found"
             )
-        
+
         content = req_file.read_text()
         lines = [line.strip() for line in content.split('\n') if line.strip() and not line.startswith('#')]
-        
+
         unpinned = []
         for line in lines:
             if '>=' in line or '~=' in line or '>' in line:
                 unpinned.append(line)
-        
+
         if unpinned:
             return ValidationResult(
                 check=ValidationCheck.DEPENDENCIES,
@@ -401,7 +401,7 @@ class ValidationManager:
                 message=f"{len(unpinned)} unpinned dependencies",
                 details={"unpinned": unpinned[:3]}
             )
-        
+
         return ValidationResult(
             check=ValidationCheck.DEPENDENCIES,
             level=ValidationLevel.OK,
@@ -411,10 +411,10 @@ class ValidationManager:
     def check_security_issues(self, file_path: Path) -> ValidationResult:
         """
         Check for security issues in Python file.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             ValidationResult for security check
         """
@@ -432,13 +432,13 @@ class ValidationManager:
 
         try:
             content = file_path.read_text(encoding="utf-8", errors="replace")
-            
+
             issues = []
             for issue_type, pattern in self.SECURITY_PATTERNS.items():
                 matches = pattern.findall(content)
                 if matches:
                     issues.append(f"{issue_type}: {len(matches)} occurrence(s)")
-            
+
             if issues:
                 return ValidationResult(
                     check=ValidationCheck.SECURITY,
@@ -446,7 +446,7 @@ class ValidationManager:
                     message=f"Security issues detected: {', '.join(issues)}",
                     file_path=file_path
                 )
-            
+
             return ValidationResult(
                 check=ValidationCheck.SECURITY,
                 level=ValidationLevel.OK,
@@ -464,19 +464,19 @@ class ValidationManager:
     def check_mcp_tools_registered(self) -> ValidationResult:
         """
         Check if MCP tools are registered.
-        
+
         Returns:
             ValidationResult for MCP tools check
         """
         mcp_server = self.workspace_root / "cortex" / "mcp" / "server.py"
-        
+
         if not mcp_server.exists():
             return ValidationResult(
                 check=ValidationCheck.MCP_TOOLS_REGISTERED,
                 level=ValidationLevel.WARNING,
                 message="MCP server not found"
             )
-        
+
         return ValidationResult(
             check=ValidationCheck.MCP_TOOLS_REGISTERED,
             level=ValidationLevel.OK,
@@ -486,20 +486,20 @@ class ValidationManager:
     def check_git_hooks(self) -> ValidationResult:
         """
         Check if git hooks are installed.
-        
+
         Returns:
             ValidationResult for git hooks check
         """
         hooks_dir = self.workspace_root / ".githooks"
         git_config = self.workspace_root / ".git" / "config"
-        
+
         if not hooks_dir.exists():
             return ValidationResult(
                 check=ValidationCheck.GIT_HOOKS,
                 level=ValidationLevel.WARNING,
                 message="Git hooks directory not found"
             )
-        
+
         if git_config.exists():
             config_content = git_config.read_text()
             if "hooksPath" in config_content:
@@ -508,7 +508,7 @@ class ValidationManager:
                     level=ValidationLevel.OK,
                     message="Git hooks configured"
                 )
-        
+
         return ValidationResult(
             check=ValidationCheck.GIT_HOOKS,
             level=ValidationLevel.WARNING,
@@ -518,10 +518,10 @@ class ValidationManager:
     def has_failures(self, results: List[ValidationResult]) -> bool:
         """
         Check if validation has failures.
-        
+
         Args:
             results: List of validation results
-        
+
         Returns:
             True if any failures (or warnings in strict mode)
         """
@@ -530,25 +530,25 @@ class ValidationManager:
                 return True
             if self.strict_mode and result.level == ValidationLevel.WARNING:
                 return True
-        
+
         return False
 
     def generate_report(self, results: List[ValidationResult]) -> str:
         """
         Generate validation summary report.
-        
+
         Args:
             results: List of ValidationResult objects
-        
+
         Returns:
             Formatted report string
         """
         total = len(results)
         by_level = {level: 0 for level in ValidationLevel}
-        
+
         for result in results:
             by_level[result.level] += 1
-        
+
         report_lines = [
             "Validation Summary",
             "=" * 50,
@@ -560,11 +560,11 @@ class ValidationManager:
             f"Critical: {by_level[ValidationLevel.CRITICAL]}",
             "",
         ]
-        
+
         if self.strict_mode:
             report_lines.append("Mode: STRICT (warnings treated as errors)")
             report_lines.append("")
-        
+
         # Group by check type
         by_check = {}
         for result in results:
@@ -572,12 +572,12 @@ class ValidationManager:
             if check not in by_check:
                 by_check[check] = []
             by_check[check].append(result)
-        
+
         report_lines.append("By Check:")
         for check, check_results in by_check.items():
             levels = [r.level.value for r in check_results]
             report_lines.append(f"  {check}: {', '.join(set(levels))}")
-        
+
         # Show critical/error issues
         critical = [r for r in results if r.level in [ValidationLevel.CRITICAL, ValidationLevel.ERROR]]
         if critical:
@@ -586,7 +586,7 @@ class ValidationManager:
             for result in critical:
                 file_info = f" ({result.file_path.name})" if result.file_path else ""
                 report_lines.append(f"  - {result.check.value}: {result.message}{file_info}")
-        
+
         return "\n".join(report_lines)
 
 # AC_COMPLETE: AC-P90-005 ✅ Validation module with governance + production checks

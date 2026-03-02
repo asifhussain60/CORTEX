@@ -26,7 +26,7 @@ class ViolationType(str, Enum):
 
 class BoundaryViolation(Exception):
     """Exception raised for boundary violations.
-    
+
     Attributes:
         violation_type: Type of violation
         message: Violation message
@@ -162,33 +162,33 @@ class BehavioralBoundaryRules:
     def clear_violations(self) -> None:
         """Clear violation history."""
         self.violations.clear()
-    
+
     def check_ac_deletion(self, context: Dict[str, Any]) -> bool:
         """Check if AC deletion is allowed with proper approval.
-        
+
         Args:
             context: Context dict with ac_id, action, approval, ac_status, etc.
-            
+
         Returns:
             True if allowed
-            
+
         Raises:
             BoundaryViolation: If AC deletion attempted without proper approval
         """
         if not context:
             return True
-        
+
         from datetime import datetime
-        
+
         action = context.get("action", "")
         # Check if this is a deletion action (exact "DELETE" or contains "DELETE")
         if not (action == "DELETE" or "DELETE" in action):
             return True  # Not a deletion action
-        
+
         ac_id = context.get("ac_id", "UNKNOWN")
         approval = context.get("approval")
         ac_status = context.get("ac_status", "PENDING")
-        
+
         # Check if approval exists and is valid
         if not approval or not approval.get("approved"):
             raise BoundaryViolation(
@@ -197,7 +197,7 @@ class BehavioralBoundaryRules:
                 severity="CRITICAL",
                 context=context
             )
-        
+
         # Check expiration if present
         if "expires_at" in approval:
             expires_at = datetime.fromisoformat(approval["expires_at"].replace("Z", "+00:00"))
@@ -208,7 +208,7 @@ class BehavioralBoundaryRules:
                     severity="CRITICAL",
                     context=context
                 )
-        
+
         # Check reason field
         if "reason" not in approval:
             raise BoundaryViolation(
@@ -217,7 +217,7 @@ class BehavioralBoundaryRules:
                 severity="CRITICAL",
                 context=context
             )
-        
+
         # For completed ACs, check approval authority level
         if ac_status == "COMPLETED":
             approved_by = approval.get("approved_by", "")
@@ -228,33 +228,33 @@ class BehavioralBoundaryRules:
                     severity="CRITICAL",
                     context=context
                 )
-        
+
         return True
-    
+
     def check_governance_compliance(self, context: Dict[str, Any]) -> bool:
         """Check if governance compliance rules are being followed.
-        
+
         Args:
             context: Context dict with operation_type, target, etc.
-            
+
         Returns:
             True if allowed
-            
+
         Raises:
             BoundaryViolation: If governance bypass detected
         """
         if not context:
             return True
-        
+
         import re
-        
+
         operation_type = context.get("operation_type")
-        
+
         # Detect phase modification by unauthorized users
         if operation_type == "PHASE_MODIFICATION":
             tier = context.get("tier")
             action = context.get("action")
-            
+
             # Only TIER0/TIER1 users can modify phase locks
             if action == "MODIFY_LOCK_STATUS" and tier and tier.startswith("TIER") and int(tier[4:]) > 1:
                 violation = BoundaryViolation(
@@ -271,7 +271,7 @@ class BehavioralBoundaryRules:
                     "timestamp": datetime.now().isoformat(),
                 })
                 raise violation
-        
+
         # Detect SQL injection patterns
         if operation_type == "QUERY_EXECUTION":
             query = context.get("query", "").upper()
@@ -282,7 +282,7 @@ class BehavioralBoundaryRules:
                 r"TRUNCATE",
                 r"ALTER\s+TABLE",
             ]
-            
+
             for pattern in dangerous_patterns:
                 if re.search(pattern, query):
                     violation = BoundaryViolation(
@@ -299,7 +299,7 @@ class BehavioralBoundaryRules:
                         "timestamp": datetime.now().isoformat(),
                     })
                     raise violation
-        
+
         # Detect API bypass attempts
         if operation_type == "API_CALL":
             if context.get("bypass_lock"):
@@ -317,11 +317,11 @@ class BehavioralBoundaryRules:
                     "timestamp": datetime.now().isoformat(),
                 })
                 raise violation
-        
+
         # Detect direct database modifications that bypass governance
         if operation_type in ("DIRECT_DB_WRITE", "RAW_SQL", "ORM_BYPASS"):
             target = context.get("target", "")
-            
+
             # Governance-critical tables cannot be directly modified
             critical_tables = [
                 "governance.db",
@@ -329,7 +329,7 @@ class BehavioralBoundaryRules:
                 "audit_trail",
                 "approval_records",
             ]
-            
+
             for critical_table in critical_tables:
                 if critical_table in target or critical_table in str(context.get("table", "")):
                     violation = BoundaryViolation(
@@ -346,7 +346,7 @@ class BehavioralBoundaryRules:
                         "timestamp": datetime.now().isoformat(),
                     })
                     raise violation
-        
+
         # Detect unauthorized user bypass attempts
         if context.get("user_role") == "unauthorized":
             violation = BoundaryViolation(
@@ -363,54 +363,54 @@ class BehavioralBoundaryRules:
                 "timestamp": datetime.now().isoformat(),
             })
             raise violation
-        
+
         return True
-    
+
     def get_recent_violations(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get recent violations from cache.
-        
+
         Args:
             limit: Maximum number of violations to return
-            
+
         Returns:
             List of violation records
         """
         return self.violations[-limit:] if self.violations else []
-    
+
     def get_violation_chain(self, correlation_id: Optional[str] = None, limit: int = 10) -> List[Dict[str, Any]]:
         """Get violations in a chain (by correlation ID).
-        
+
         Args:
             correlation_id: Optional correlation ID to filter by
             limit: Maximum number to return
-            
+
         Returns:
             List of violation records in the chain
         """
         if not correlation_id:
             return self.get_recent_violations(limit)
-        
+
         chain = [v for v in self.violations if v.get("correlation_id") == correlation_id]
         return chain[-limit:] if chain else []
-    
+
     def check_phase_lock(self, context: Dict[str, Any]) -> bool:
         """Check if phase modification is allowed.
-        
+
         Args:
             context: Context dict with phase_id, phase_locked, action, etc.
-            
+
         Returns:
             True if allowed
-            
+
         Raises:
             BoundaryViolation: If locked phase modification attempted
         """
         if not context:
             raise ValueError("Context cannot be None for phase lock check")
-        
+
         phase_locked = context.get("phase_locked", False)
         action = context.get("action", "READ")
-        
+
         if phase_locked and action in ("MODIFY", "DELETE"):
             phase_id = context.get("phase_id", "UNKNOWN")
             violation = BoundaryViolation(
@@ -432,46 +432,46 @@ class BehavioralBoundaryRules:
                 "correlation_id": context.get("correlation_id"),
             })
             raise violation
-        
+
         return True
-    
+
     def check_combined_boundaries(self, context: Dict[str, Any]) -> bool:
         """Check multiple boundary rules together.
-        
+
         Applies all applicable boundary checks and reports the most critical violation.
-        
+
         Args:
             context: Context dict with all boundary check parameters
-            
+
         Returns:
             True if all checks pass
-            
+
         Raises:
             BoundaryViolation: For most critical violation detected
         """
         if not context:
             return True
-        
+
         violations_found: List[BoundaryViolation] = []
-        
+
         # Try AC deletion check
         try:
             self.check_ac_deletion(context)
         except BoundaryViolation as e:
             violations_found.append(e)
-        
+
         # Try governance compliance check
         try:
             self.check_governance_compliance(context)
         except BoundaryViolation as e:
             violations_found.append(e)
-        
+
         # Try phase lock check
         try:
             self.check_phase_lock(context)
         except BoundaryViolation as e:
             violations_found.append(e)
-        
+
         # If violations found, raise the most critical one
         if violations_found:
             # Sort by severity level
@@ -481,7 +481,7 @@ class BehavioralBoundaryRules:
                 key=lambda v: severity_order.get(v.severity, 0)
             )
             raise most_critical
-        
+
         return True
 
 

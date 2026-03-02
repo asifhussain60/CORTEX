@@ -30,7 +30,7 @@ class DecisionOutcome(Enum):
 class DecisionLog:
     """
     Log entry for a decision
-    
+
     Attributes:
         decision_id: Unique decision identifier
         decision_type: Type of decision
@@ -54,18 +54,18 @@ class DecisionLog:
 class DecisionTraceabilityLogger:
     """
     Decision Traceability Logger
-    
+
     Features:
     - Decision logging with context
     - History retrieval with filtering
     - Audit trail generation
     - Decision outcome tracking
     """
-    
+
     def __init__(self) -> None:
         """Initialize decision logger"""
         self._history: List[DecisionLog] = []
-    
+
     def log_decision(
         self,
         decision_type: DecisionType,
@@ -77,7 +77,7 @@ class DecisionTraceabilityLogger:
     ) -> DecisionLog:
         """
         Log a decision
-        
+
         Args:
             decision_type: Type of decision
             context: Decision context data
@@ -85,7 +85,7 @@ class DecisionTraceabilityLogger:
             rationale: Human-readable rationale
             confidence: Confidence score
             metadata: Additional metadata
-        
+
         Returns:
             Decision log entry
         """
@@ -97,11 +97,11 @@ class DecisionTraceabilityLogger:
             confidence=confidence,
             metadata=metadata or {}
         )
-        
+
         self._history.append(decision)
-        
+
         return decision
-    
+
     def get_history(
         self,
         decision_type: Optional[DecisionType] = None,
@@ -110,65 +110,65 @@ class DecisionTraceabilityLogger:
     ) -> List[DecisionLog]:
         """
         Retrieve decision history with optional filtering
-        
+
         Args:
             decision_type: Filter by decision type
             outcome: Filter by outcome
             since: Filter decisions since timestamp
-        
+
         Returns:
             Filtered decision history
         """
         filtered = self._history
-        
+
         if decision_type:
             filtered = [d for d in filtered if d.decision_type == decision_type]
-        
+
         if outcome:
             filtered = [d for d in filtered if d.outcome == outcome]
-        
+
         if since:
             filtered = [d for d in filtered if d.timestamp >= since]
-        
+
         return filtered
-    
+
     def generate_audit_trail(
         self,
         decision_type: Optional[DecisionType] = None
     ) -> str:
         """
         Generate human-readable audit trail
-        
+
         Args:
             decision_type: Filter by decision type
-        
+
         Returns:
             Formatted audit trail string
         """
         decisions = self.get_history(decision_type=decision_type)
-        
+
         if not decisions:
             return "No decisions logged"
-        
+
         lines = ["=" * 60, "Decision Audit Trail", "=" * 60, ""]
-        
+
         for decision in decisions:
             lines.append(f"Decision ID: {decision.decision_id}")
             lines.append(f"Type: {decision.decision_type.value.upper()}")
             lines.append(f"Outcome: {decision.outcome.value.upper()}")
             lines.append(f"Timestamp: {decision.timestamp.isoformat()}")
             lines.append(f"Confidence: {decision.confidence:.2%}")
-            
+
             if decision.rationale:
                 lines.append(f"Rationale: {decision.rationale}")
-            
+
             if decision.context:
                 lines.append("Context:")
                 for key, value in decision.context.items():
                     lines.append(f"  - {key}: {value}")
-            
+
             lines.append("-" * 60)
-        
+
         lines.append(f"\nTotal Decisions: {len(decisions)}")
-        
+
         return "\n".join(lines)

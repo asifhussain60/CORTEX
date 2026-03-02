@@ -22,7 +22,7 @@ class HallucinationPattern(Enum):
 
 class CorruptionType(Enum):
     """Types of corruption detected."""
-    
+
     STATE_MISMATCH = "state_mismatch"
     CHECKSUM_MISMATCH = "checksum_mismatch"
     TEMPORAL_ANOMALY = "temporal_anomaly"
@@ -32,7 +32,7 @@ class CorruptionType(Enum):
 
 class RecoveryStrategy(Enum):
     """Recovery strategies."""
-    
+
     RESTORE_FROM_SSOT = "restore_from_ssot"
     ROLLBACK_TO_CHECKPOINT = "rollback_to_checkpoint"
     MANUAL_INTERVENTION = "manual_intervention"
@@ -45,7 +45,7 @@ class RecoveryStrategy(Enum):
 @dataclass
 class RecoveryResult:
     """Result of a recovery operation.
-    
+
     Attributes:
         recovery_status: Status of recovery (INITIATED, COMPLETED, FAILED).
         strategy: Recovery strategy used.
@@ -63,7 +63,7 @@ class RecoveryResult:
 @dataclass
 class Incident:
     """Corruption incident for logging and analysis.
-    
+
     Attributes:
         incident_id: Unique incident identifier.
         corruption_type: Type of corruption detected.
@@ -85,7 +85,7 @@ class Incident:
 @dataclass
 class CorruptionDetectionResult:
     """Result of corruption detection.
-    
+
     Attributes:
         corruption_detected: Whether corruption was found.
         corruption_type: Type of corruption.
@@ -101,7 +101,7 @@ class CorruptionDetectionResult:
 @dataclass
 class IncidentReport:
     """Incident report for corruption events.
-    
+
     Attributes:
         incident_id: Unique incident identifier.
         timestamp: When incident was detected.
@@ -215,13 +215,13 @@ class HallucinationDetector:
         check_type: str = "all",
     ) -> CorruptionDetectionResult:
         """Detect corruption between authoritative and current state.
-        
+
         Args:
             authoritative_state: The trusted source of truth state.
             current_state: The state to validate.
             state: Alternative single state to check (legacy).
             check_type: Type of check to perform.
-            
+
         Returns:
             CorruptionDetectionResult with detection details.
         """
@@ -229,17 +229,17 @@ class HallucinationDetector:
         if state is not None and authoritative_state is None:
             authoritative_state = state
             current_state = state
-        
+
         # Validate inputs - raise if authoritative_state is None but current_state provided
         if authoritative_state is None and current_state is not None:
             raise ValueError("authoritative_state cannot be None when current_state is provided")
-        
+
         if authoritative_state is None or current_state is None:
             return CorruptionDetectionResult(corruption_detected=False)
-        
+
         mismatches = []
         corruption_type = None
-        
+
         # Compare states field by field
         for key in authoritative_state:
             if key == "checksum":
@@ -251,7 +251,7 @@ class HallucinationDetector:
                         "expected": authoritative_state[key],
                         "actual": current_state[key],
                     })
-        
+
         # Check for checksum mismatch
         auth_checksum = authoritative_state.get("checksum")
         curr_checksum = current_state.get("checksum")
@@ -262,7 +262,7 @@ class HallucinationDetector:
                 mismatches=mismatches,
                 details={"auth_checksum": auth_checksum, "curr_checksum": curr_checksum},
             )
-        
+
         # Check for temporal anomalies
         auth_updates = authoritative_state.get("ac_updates", [])
         curr_updates = current_state.get("ac_updates", [])
@@ -276,7 +276,7 @@ class HallucinationDetector:
                             mismatches=mismatches,
                             details={"index": i},
                         )
-        
+
         # Check for referential integrity
         auth_ac_ids = set(authoritative_state.get("ac_ids", []))
         curr_ac_ids = set(current_state.get("ac_ids", []))
@@ -289,7 +289,7 @@ class HallucinationDetector:
                     mismatches=mismatches,
                     details={"missing_dependency": dep_id},
                 )
-        
+
         # Check for state mismatch
         if mismatches:
             return CorruptionDetectionResult(
@@ -297,21 +297,21 @@ class HallucinationDetector:
                 corruption_type=CorruptionType.STATE_MISMATCH,
                 mismatches=mismatches,
             )
-        
+
         return CorruptionDetectionResult(corruption_detected=False)
 
     def calculate_checksum(self, state: Dict[str, Any]) -> str:
         """Calculate checksum for state data.
-        
+
         Args:
             state: State data.
-            
+
         Returns:
             SHA256 checksum string.
         """
         import hashlib
         import json
-        
+
         # Exclude checksum field from calculation
         state_copy = {k: v for k, v in state.items() if k != "checksum"}
         state_json = json.dumps(state_copy, sort_keys=True)
@@ -325,23 +325,23 @@ class HallucinationDetector:
         field: str = None,
     ) -> Optional[CorruptionDetectionResult]:
         """Detect consensus violations across multiple states/replicas.
-        
+
         Args:
             authoritative_state: The trusted source of truth state.
             replicas: List of replica states to check.
             states: Alternative list of states (legacy).
             field: Field to check for consensus (legacy).
-            
+
         Returns:
             CorruptionDetectionResult if violation found, None otherwise.
         """
         # Handle legacy API
         if states is not None and replicas is None:
             replicas = states
-        
+
         if not replicas:
             return None
-        
+
         if authoritative_state:
             # Compare each replica against authoritative
             disagreements = []
@@ -352,14 +352,14 @@ class HallucinationDetector:
                         mismatches.append({"field": key, "expected": authoritative_state[key], "actual": replica[key]})
                 if mismatches:
                     disagreements.append({"replica_index": i, "mismatches": mismatches})
-            
+
             if disagreements:
                 return CorruptionDetectionResult(
                     corruption_detected=True,
                     corruption_type=CorruptionType.CONSENSUS_VIOLATION,
                     mismatches=disagreements,
                 )
-        
+
         # Field-based consensus check (legacy)
         if field:
             values = [s.get(field) for s in replicas]
@@ -370,7 +370,7 @@ class HallucinationDetector:
                     corruption_type=CorruptionType.CONSENSUS_VIOLATION,
                     details={"field": field, "values": values},
                 )
-        
+
         return None
 
     def trigger_recovery(
@@ -380,12 +380,12 @@ class HallucinationDetector:
         checkpoint: Dict[str, Any] = None,
     ) -> RecoveryResult:
         """Trigger recovery based on detection result.
-        
+
         Args:
             detection: The corruption detection result.
             authoritative_state: The authoritative state to restore to.
             checkpoint: Checkpoint to rollback to (for temporal anomalies).
-            
+
         Returns:
             RecoveryResult with recovery status and strategy.
         """
@@ -394,14 +394,14 @@ class HallucinationDetector:
                 recovery_status="SKIPPED",
                 detection_result=detection,
             )
-        
+
         # Select strategy based on corruption type
         strategy = self._select_strategy(detection.corruption_type)
-        
+
         # Attempt recovery
         try:
             recovered_state = None
-            
+
             if strategy == RecoveryStrategy.ROLLBACK_TO_CHECKPOINT:
                 if checkpoint:
                     recovered_state = checkpoint.copy()
@@ -438,14 +438,14 @@ class HallucinationDetector:
                         detection_result=detection,
                         recovered_state=recovered_state,
                     )
-            
+
             # No authoritative state or checkpoint provided
             return RecoveryResult(
                 recovery_status="INITIATED",
                 strategy=strategy,
                 detection_result=detection,
             )
-            
+
         except Exception as e:
             return RecoveryResult(
                 recovery_status="FAILED",
@@ -453,19 +453,19 @@ class HallucinationDetector:
                 detection_result=detection,
                 error=str(e),
             )
-    
+
     def _select_strategy(self, corruption_type: Optional[CorruptionType]) -> RecoveryStrategy:
         """Select recovery strategy based on corruption type.
-        
+
         Args:
             corruption_type: The type of corruption detected.
-            
+
         Returns:
             Appropriate RecoveryStrategy.
         """
         if corruption_type is None:
             return RecoveryStrategy.FULL_REBUILD
-            
+
         strategy_map = {
             CorruptionType.STATE_MISMATCH: RecoveryStrategy.FULL_REBUILD,
             CorruptionType.CHECKSUM_MISMATCH: RecoveryStrategy.FULL_REBUILD,
@@ -473,7 +473,7 @@ class HallucinationDetector:
             CorruptionType.REFERENTIAL_INTEGRITY: RecoveryStrategy.REBUILD_RELATIONSHIPS,
             CorruptionType.CONSENSUS_VIOLATION: RecoveryStrategy.CONSENSUS_RESOLUTION,
         }
-        
+
         return strategy_map.get(corruption_type, RecoveryStrategy.FULL_REBUILD)
 
     def create_incident(
@@ -482,19 +482,19 @@ class HallucinationDetector:
         recovery: Optional[RecoveryResult] = None,
     ) -> Incident:
         """Create an incident record from detection result.
-        
+
         Args:
             detection: The corruption detection result.
             recovery: Optional recovery result to include.
-            
+
         Returns:
             Incident record for logging.
         """
         import uuid
         from datetime import datetime
-        
+
         timestamp = datetime.utcnow().isoformat()
-        
+
         incident = Incident(
             incident_id=str(uuid.uuid4()),
             corruption_type=detection.corruption_type,
@@ -504,12 +504,12 @@ class HallucinationDetector:
             recovery_status=recovery.recovery_status if recovery else None,
             details=detection.details,
         )
-        
+
         return incident
 
     def store_incident(self, incident: Incident) -> None:
         """Store an incident in the incident store.
-        
+
         Args:
             incident: Incident to store.
         """
@@ -519,10 +519,10 @@ class HallucinationDetector:
 
     def get_incident(self, incident_id: str) -> Optional[Incident]:
         """Retrieve an incident by ID.
-        
+
         Args:
             incident_id: The incident ID to retrieve.
-            
+
         Returns:
             Incident if found, None otherwise.
         """
@@ -536,22 +536,22 @@ class HallucinationDetector:
         limit: int = 100,
     ) -> List[Incident]:
         """Query incidents with optional filtering.
-        
+
         Args:
             corruption_type: Filter by corruption type.
             limit: Maximum number of results.
-            
+
         Returns:
             List of matching incidents.
         """
         if not hasattr(self, '_incidents'):
             return []
-        
+
         incidents = list(self._incidents.values())
-        
+
         if corruption_type:
             incidents = [i for i in incidents if i.corruption_type == corruption_type]
-        
+
         return incidents[:limit]
 
 
@@ -636,7 +636,7 @@ class CorruptionIndicator(Enum):
 
 
 # Note: CorruptionType is defined at top of file with values:
-# STATE_MISMATCH, CHECKSUM_MISMATCH, TEMPORAL_ANOMALY, 
+# STATE_MISMATCH, CHECKSUM_MISMATCH, TEMPORAL_ANOMALY,
 # REFERENTIAL_INTEGRITY, CONSENSUS_VIOLATION
 
 

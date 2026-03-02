@@ -17,7 +17,7 @@ import logging
 
 class EventType(Enum):
     """Types of audit events."""
-    
+
     ORCHESTRATOR_START = "orchestrator_start"
     ORCHESTRATOR_END = "orchestrator_end"
     GOVERNANCE_CHECK = "governance_check"
@@ -31,10 +31,10 @@ from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 class CortexAuditDB:
     """SQLite WAL-mode unified audit database."""
-    
+
     def __init__(self, db_path: Union[str, Path] = Path(".cortex-runtime/audit.db")) -> None:
         """Initialize audit database.
-        
+
         Args:
             db_path: Path to SQLite database file (str or Path).
         """
@@ -42,18 +42,18 @@ class CortexAuditDB:
         self.logger = logging.getLogger("cortex.audit")
         self._connection: Optional[sqlite3.Connection] = None
         self._initialize_db()
-    
+
     def _initialize_db(self) -> None:
         """Initialize database with WAL mode and schema."""
         # Create parent directory if needed
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         # Enable WAL mode for concurrent writes
         cursor.execute("PRAGMA journal_mode=WAL")
-        
+
         # Create audit_events table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS audit_events (
@@ -68,7 +68,7 @@ class CortexAuditDB:
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        
+
         # Create orchestrator_traces table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS orchestrator_traces (
@@ -82,7 +82,7 @@ class CortexAuditDB:
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        
+
         # Create governance_checks table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS governance_checks (
@@ -95,7 +95,7 @@ class CortexAuditDB:
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        
+
         # Create phase_progress table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS phase_progress (
@@ -109,26 +109,26 @@ class CortexAuditDB:
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        
+
         # Create indexes for common queries
         cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_audit_timestamp 
+            CREATE INDEX IF NOT EXISTS idx_audit_timestamp
             ON audit_events(timestamp)
         """)
         cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_audit_orchestrator 
+            CREATE INDEX IF NOT EXISTS idx_audit_orchestrator
             ON audit_events(orchestrator_id)
         """)
         cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_trace_orchestrator 
+            CREATE INDEX IF NOT EXISTS idx_trace_orchestrator
             ON orchestrator_traces(orchestrator_id)
         """)
-        
+
         conn.commit()
-    
+
     def _get_connection(self) -> sqlite3.Connection:
         """Get or create database connection.
-        
+
         Returns:
             sqlite3.Connection: Active database connection.
         """
@@ -141,23 +141,23 @@ class CortexAuditDB:
             # Enable foreign keys
             self._connection.execute("PRAGMA foreign_keys = ON")
         return self._connection
-    
+
     def log_event(self, entry: AuditEntry) -> int:
         """Log an audit event.
-        
+
         Args:
             entry: AuditEntry to log.
-            
+
         Returns:
             Row ID of inserted event.
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         metadata_json = json.dumps(entry.metadata) if entry.metadata else None
-        
+
         cursor.execute("""
-            INSERT INTO audit_events 
+            INSERT INTO audit_events
             (timestamp, event_type, orchestrator_id, status, duration_ms, error_message, metadata)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
@@ -169,10 +169,10 @@ class CortexAuditDB:
             entry.error_message,
             metadata_json,
         ))
-        
+
         conn.commit()
         return cursor.lastrowid
-    
+
     def query_events(
         self,
         orchestrator_id: Optional[str] = None,
@@ -180,35 +180,35 @@ class CortexAuditDB:
         limit: int = 100,
     ) -> List[AuditEntry]:
         """Query audit events.
-        
+
         Args:
             orchestrator_id: Filter by orchestrator ID.
             event_type: Filter by event type.
             limit: Maximum number of results.
-            
+
         Returns:
             List of matching AuditEntry objects.
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         query = "SELECT * FROM audit_events WHERE 1=1"
         params = []
-        
+
         if orchestrator_id:
             query += " AND orchestrator_id = ?"
             params.append(orchestrator_id)
-        
+
         if event_type:
             query += " AND event_type = ?"
             params.append(event_type)
-        
+
         query += " ORDER BY timestamp DESC LIMIT ?"
         params.append(limit)
-        
+
         cursor.execute(query, params)
         results = cursor.fetchall()
-        
+
         entries = []
         for row in results:
             entry = AuditEntry(
@@ -222,28 +222,28 @@ class CortexAuditDB:
                 details=json.loads(row[7]) if row[7] else {},  # metadata → details
             )
             entries.append(entry)
-        
+
         return entries
-    
+
     def get_orchestrator_trace(self, orchestrator_id: str) -> List[Dict[str, Any]]:
         """Get execution trace for an orchestrator.
-        
+
         Args:
             orchestrator_id: ID of orchestrator.
-            
+
         Returns:
             List of trace entries.
         """
         conn = self._get_connection()
         cursor = conn.cursor()
-        
+
         cursor.execute("""
             SELECT orchestrator_id, phase_id, start_time, end_time, status, result_summary
             FROM orchestrator_traces
             WHERE orchestrator_id = ?
             ORDER BY start_time DESC
         """, (orchestrator_id,))
-        
+
         results = cursor.fetchall()
         traces = []
         for row in results:
@@ -255,15 +255,15 @@ class CortexAuditDB:
                 'status': row[4],
                 'result_summary': row[5],
             })
-        
+
         return traces
-    
+
     def close(self) -> None:
         """Close database connection."""
         if self._connection:
             self._connection.close()
             self._connection = None
-    
+
     def __del__(self) -> None:
         """Cleanup on deletion."""
         self.close()
@@ -275,10 +275,10 @@ _audit_db_instance: Optional[CortexAuditDB] = None
 
 def get_audit_db(db_path: Optional[Path] = None) -> CortexAuditDB:
     """Get or create the singleton CortexAuditDB instance.
-    
+
     Args:
         db_path: Optional path to database file.
-        
+
     Returns:
         CortexAuditDB: The singleton instance.
     """

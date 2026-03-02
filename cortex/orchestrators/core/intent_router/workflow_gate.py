@@ -64,22 +64,22 @@ class RoutingDecision:
 class WorkflowComplexityRouter:
     """
     Routes tasks to workflow templates or direct orchestrators based on complexity.
-    
+
     Scoring dimensions (aligned with CONF-GATE-001):
     - File count (30%): min(files/10, 1.0)
     - Operation type (40%): Predefined scores
     - Dependencies (20%): min(deps/5, 1.0)
     - Risk level (10%): {LOW:0.2, MEDIUM:0.5, HIGH:0.8, CRITICAL:1.0}
-    
+
     Authority: WORKFLOW-COMPLEXITY-GATE-001
     """
-    
+
     # Thresholds aligned with CONF-GATE rules (CORE-046)
     TRIVIAL_THRESHOLD = ComplexityThreshold.TRIVIAL.value
     SIMPLE_THRESHOLD = ComplexityThreshold.SIMPLE.value
     MODERATE_THRESHOLD = ComplexityThreshold.MODERATE.value
     COMPLEX_THRESHOLD = ComplexityThreshold.COMPLEX.value
-    
+
     # Operation type complexity scores (40% weight)
     OPERATION_SCORES = {
         "create": 0.4,
@@ -93,7 +93,7 @@ class WorkflowComplexityRouter:
         "delete": 0.4,
         "deploy": 0.7,
     }
-    
+
     # Risk level scores (10% weight)
     RISK_SCORES = {
         "LOW": 0.2,
@@ -101,40 +101,40 @@ class WorkflowComplexityRouter:
         "HIGH": 0.8,
         "CRITICAL": 1.0,
     }
-    
+
     def score_task_complexity(self, intent: Intent) -> float:
         """
         Score task complexity (0.0-1.0) based on dimensions.
-        
+
         Args:
             intent: Parsed user intent with task details
-        
+
         Returns:
             Complexity score (0.0 = trivial, 1.0 = highly complex)
         """
         score = 0.0
-        
+
         # Dimension 1: File count (30% weight)
         file_count = len(intent.target_files)
         file_score = min(file_count / 10, 1.0) * 0.30
-        
+
         # Dimension 2: Operation type (40% weight)
         operation_score = self.OPERATION_SCORES.get(
             intent.operation_type.lower(), 0.5
         ) * 0.40
-        
+
         # Dimension 3: Dependency depth (20% weight)
         dep_count = len(intent.dependencies)
         dep_score = min(dep_count / 5, 1.0) * 0.20
-        
+
         # Dimension 4: Risk level (10% weight)
         risk_score = self.RISK_SCORES.get(intent.risk_level.upper(), 0.5) * 0.10
-        
+
         # Total score
         score = file_score + operation_score + dep_score + risk_score
-        
+
         return min(score, 1.0)
-    
+
     def route(self, intent: Intent) -> RoutingDecision:
         """Route an intent to the appropriate orchestrator based on complexity scoring.
 
@@ -149,7 +149,7 @@ class WorkflowComplexityRouter:
             complexity score, rationale, and whether confirmation is required.
         """
         complexity = self.score_task_complexity(intent)
-        
+
         if complexity < self.TRIVIAL_THRESHOLD:
             return RoutingDecision(
                 route=RoutingStrategy.DIRECT_ORCHESTRATOR,
@@ -158,7 +158,7 @@ class WorkflowComplexityRouter:
                 orchestrator=self._select_orchestrator(intent),
                 requires_confirmation=False
             )
-        
+
         elif complexity < self.SIMPLE_THRESHOLD:
             return RoutingDecision(
                 route=RoutingStrategy.DIRECT_ORCHESTRATOR,
@@ -167,7 +167,7 @@ class WorkflowComplexityRouter:
                 orchestrator=self._select_orchestrator(intent),
                 requires_confirmation=False
             )
-        
+
         elif complexity < self.MODERATE_THRESHOLD:
             return RoutingDecision(
                 route=RoutingStrategy.WORKFLOW_TEMPLATE,
@@ -176,7 +176,7 @@ class WorkflowComplexityRouter:
                 template_id=self._select_template(intent),
                 requires_confirmation=True
             )
-        
+
         else:  # >= COMPLEX_THRESHOLD
             return RoutingDecision(
                 route=RoutingStrategy.WORKFLOW_TEMPLATE,
@@ -228,7 +228,7 @@ class WorkflowComplexityRouter:
             Orchestrator class name string.
         """
         operation_type = intent.operation_type.lower()
-        
+
         orchestrator_map = {
             # Core operational (IMPLEMENT, FIX, REFACTOR)
             "fix": "RefactoringOrchestrator",
@@ -266,9 +266,9 @@ class WorkflowComplexityRouter:
             # GAP-89-COMPOSE: Workflow Composer — convergence loops + full toolchain
             "workflow_compose": "WorkflowComposer",
         }
-        
+
         return orchestrator_map.get(operation_type, "InteractionOrchestrator")
-    
+
     # Technology-qualified template map — (operation, technology) → template_id
     # Phase 89-a: Routes to existing YAML templates in cortex-registry/workflows/templates/
     TECHNOLOGY_TEMPLATE_MAP: Dict[tuple, str] = {
@@ -378,7 +378,7 @@ class WorkflowComplexityRouter:
             # via TemplateComposer — uses convergence loops + full CORTEX toolchain
             "workflow_compose": "composites/dynamic-workflow-composition",
         }
-        
+
         # Static match — fast path
         if operation_type in template_map:
             return template_map[operation_type]

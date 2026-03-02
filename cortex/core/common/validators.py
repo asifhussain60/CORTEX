@@ -43,23 +43,23 @@ class ValidationError(Exception):
 class ValidationResult:
     """
     Canonical ValidationResult - Single Source of Truth (SSOT).
-    
+
     AC-ID: AC-CORE-035-VALIDATION-001
     Purpose: Eliminate 7 duplicate ValidationResult definitions across codebase.
-    
+
     This is the ONLY place ValidationResult should be defined.
     All other files MUST import from this module.
-    
+
     Attributes:
         is_valid: Whether validation passed (default: True)
         errors: Dict of field_name -> error_message
-        warnings: Dict of field_name -> warning_message  
+        warnings: Dict of field_name -> warning_message
         metadata: Additional validation metadata (file_path, context, etc.)
-        
+
     Compatibility Properties:
         passed: Alias for is_valid (environment_integrity_agent compatibility)
         failures: Alias for errors (environment_integrity_agent compatibility)
-    
+
     Governance: CORE-035 (Single Canonical Implementation)
     """
     is_valid: bool = True

@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class AlternativeApproach:
     """A single alternative approach with analysis.
-    
+
     Attributes:
         title: Short title (e.g., "OAuth 2.0 with PKCE")
         description: Detailed description of the approach
@@ -51,7 +51,7 @@ class AlternativeApproach:
 @dataclass
 class Challenge:
     """Challenge with multiple alternative approaches.
-    
+
     Attributes:
         original_request: User's original request
         intent: IMPLEMENT/FIX/REFACTOR
@@ -70,7 +70,7 @@ class Challenge:
 
 class ChallengeEngine(OrchestratorProtocolMixin):
     """Generates alternative approaches for implementation requests.
-    
+
     Flow:
     1. Analyze request and intent
     2. Generate 3 diverse alternatives
@@ -78,7 +78,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
     4. Estimate effort
     5. Calculate feasibility scores
     6. Rank and recommend
-    
+
     Example:
         >>> engine = ChallengeEngine()
         >>> challenge = engine.generate_challenges(
@@ -88,7 +88,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
         >>> print(challenge.alternatives[0].title)
         "JWT Token-Based Authentication"
     """
-    
+
     def __init__(self) -> None:
         """Initialize challenge engine."""
         self.intent_strategies = {
@@ -96,14 +96,14 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             "FIX": self._generate_fix_alternatives,
             "REFACTOR": self._generate_refactor_alternatives,
         }
-    
+
     def generate_challenges(self, request: str, intent: str) -> Challenge:
         """Generate 3 alternative approaches for the request.
-        
+
         Args:
             request: User's implementation request
             intent: IMPLEMENT/FIX/REFACTOR
-        
+
         Returns:
             Challenge with 3 ranked alternatives and recommendation
         """
@@ -114,39 +114,39 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             intent,
             self._generate_default_alternatives
         )
-        
+
         # Generate alternatives
         alternatives = generator(request)
-        
+
         # Calculate feasibility scores
         for alt in alternatives:
             alt.feasibility_score = self._calculate_feasibility(alt)
-        
+
         # Sort by feasibility (descending)
         alternatives.sort(key=lambda a: a.feasibility_score, reverse=True)
-        
+
         # Generate recommendation explanation
         explanation = self._generate_recommendation_explanation(
             alternatives[0],
             request,
             intent
         )
-        
+
         return Challenge(
             original_request=request,
             intent=intent,
             alternatives=alternatives,
             recommendation_explanation=explanation
         )
-    
+
     # ========================================================================
     # INTENT-SPECIFIC GENERATORS
     # ========================================================================
-    
+
     def _generate_implement_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate alternatives for IMPLEMENT intent."""
         request_lower = request.lower()
-        
+
         # Pattern detection for common implementation requests
         if "auth" in request_lower or "login" in request_lower:
             return self._generate_auth_alternatives()
@@ -160,11 +160,11 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             return self._generate_payment_alternatives()
         else:
             return self._generate_generic_implement_alternatives(request)
-    
+
     def _generate_fix_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate alternatives for FIX intent."""
         request_lower = request.lower()
-        
+
         if "sql injection" in request_lower or "injection" in request_lower:
             return self._generate_injection_fix_alternatives()
         elif "memory leak" in request_lower or "leak" in request_lower:
@@ -173,22 +173,22 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             return self._generate_performance_fix_alternatives()
         else:
             return self._generate_generic_fix_alternatives(request)
-    
+
     def _generate_refactor_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate alternatives for REFACTOR intent."""
         request_lower = request.lower()
-        
+
         if "monolith" in request_lower or "microservice" in request_lower:
             return self._generate_architecture_refactor_alternatives()
         elif "legacy" in request_lower:
             return self._generate_legacy_refactor_alternatives()
         else:
             return self._generate_generic_refactor_alternatives(request)
-    
+
     # ========================================================================
     # DOMAIN-SPECIFIC ALTERNATIVE GENERATORS
     # ========================================================================
-    
+
     def _generate_auth_alternatives(self) -> List[AlternativeApproach]:
         """Generate authentication alternatives."""
         return [
@@ -249,7 +249,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 implementation_notes="Use httpOnly, secure, sameSite cookies"
             )
         ]
-    
+
     def _generate_caching_alternatives(self) -> List[AlternativeApproach]:
         """Generate caching alternatives."""
         return [
@@ -306,7 +306,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_notification_alternatives(self) -> List[AlternativeApproach]:
         """Generate notification alternatives."""
         return [
@@ -363,7 +363,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_search_alternatives(self) -> List[AlternativeApproach]:
         """Generate search implementation alternatives."""
         return [
@@ -421,7 +421,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_payment_alternatives(self) -> List[AlternativeApproach]:
         """Generate payment processing alternatives."""
         return [
@@ -477,7 +477,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_injection_fix_alternatives(self) -> List[AlternativeApproach]:
         """Generate SQL injection fix alternatives."""
         return [
@@ -537,7 +537,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 implementation_notes="NOT RECOMMENDED - use parameterized queries instead"
             )
         ]
-    
+
     def _generate_memory_leak_fix_alternatives(self) -> List[AlternativeApproach]:
         """Generate memory leak fix alternatives."""
         return [
@@ -593,7 +593,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 implementation_notes="TEMPORARY WORKAROUND ONLY"
             )
         ]
-    
+
     def _generate_performance_fix_alternatives(self) -> List[AlternativeApproach]:
         """Generate performance fix alternatives."""
         return [
@@ -646,7 +646,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_architecture_refactor_alternatives(self) -> List[AlternativeApproach]:
         """Generate architecture refactoring alternatives."""
         return [
@@ -703,7 +703,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 implementation_notes="NOT RECOMMENDED - high failure rate"
             )
         ]
-    
+
     def _generate_legacy_refactor_alternatives(self) -> List[AlternativeApproach]:
         """Generate legacy code refactoring alternatives."""
         return [
@@ -758,11 +758,11 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     # ========================================================================
     # GENERIC GENERATORS
     # ========================================================================
-    
+
     def _generate_generic_implement_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate generic implementation alternatives."""
         return [
@@ -815,7 +815,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_generic_fix_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate generic fix alternatives."""
         return [
@@ -868,7 +868,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_generic_refactor_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Generate generic refactoring alternatives."""
         return [
@@ -922,54 +922,54 @@ class ChallengeEngine(OrchestratorProtocolMixin):
                 feasibility_score=0.0
             )
         ]
-    
+
     def _generate_default_alternatives(self, request: str) -> List[AlternativeApproach]:
         """Default alternatives for unknown intents."""
         return self._generate_generic_implement_alternatives(request)
-    
+
     # ========================================================================
     # FEASIBILITY CALCULATION
     # ========================================================================
-    
+
     def _calculate_feasibility(self, alternative: AlternativeApproach) -> float:
         """Calculate feasibility score (0.0-1.0) for an alternative.
-        
+
         Factors:
         - Effort (lower is better)
         - Pros/cons ratio
         - Implementation risk
-        
+
         Args:
             alternative: The alternative to score
-        
+
         Returns:
             Feasibility score from 0.0 (low) to 1.0 (high)
         """
         # Factor 1: Effort score (0.0-0.4)
         effort_score = self._score_effort(alternative.estimated_effort)
-        
+
         # Factor 2: Pros/cons ratio (0.0-0.4)
         pros_count = len(alternative.pros)
         cons_count = len(alternative.cons)
         pros_cons_score = min(pros_count / (pros_count + cons_count), 1.0) * 0.4
-        
+
         # Factor 3: Risk penalty (0.0-0.2 deduction)
         risk_penalty = self._calculate_risk_penalty(alternative)
-        
+
         total = effort_score + pros_cons_score - risk_penalty
         return max(0.0, min(1.0, total))  # Clamp to [0.0, 1.0]
-    
+
     def _score_effort(self, estimated_effort: str) -> float:
         """Convert effort estimate to score (0.0-0.4).
-        
+
         Args:
             estimated_effort: Time estimate string (e.g., "2 days", "1 week")
-        
+
         Returns:
             Score from 0.0 (high effort) to 0.4 (low effort)
         """
         effort_lower = estimated_effort.lower()
-        
+
         # Score based on time units
         if "hour" in effort_lower:
             return 0.4  # Hours = very low effort
@@ -994,37 +994,37 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             return 0.0  # Months = very high effort
         else:
             return 0.2  # Unknown, assume moderate
-    
+
     def _calculate_risk_penalty(self, alternative: AlternativeApproach) -> float:
         """Calculate risk penalty based on cons and implementation notes.
-        
+
         Args:
             alternative: The alternative to assess
-        
+
         Returns:
             Risk penalty from 0.0 (low risk) to 0.2 (high risk)
         """
         penalty = 0.0
-        
+
         # Check for high-risk indicators in cons
         high_risk_keywords = [
             "not recommended", "high risk", "high failure rate",
             "extremely", "significant rework", "masks the problem"
         ]
-        
+
         all_text = " ".join(alternative.cons + [alternative.implementation_notes]).lower()
-        
+
         for keyword in high_risk_keywords:
             if keyword in all_text:
                 penalty += 0.05
-        
+
         # Cap at 0.2
         return min(0.2, penalty)
-    
+
     # ========================================================================
     # RECOMMENDATION EXPLANATION
     # ========================================================================
-    
+
     def _generate_recommendation_explanation(
         self,
         recommended: AlternativeApproach,
@@ -1032,34 +1032,34 @@ class ChallengeEngine(OrchestratorProtocolMixin):
         intent: str
     ) -> str:
         """Generate explanation for why an alternative is recommended.
-        
+
         Args:
             recommended: The recommended alternative (highest feasibility)
             request: Original request
             intent: IMPLEMENT/FIX/REFACTOR
-        
+
         Returns:
             Human-readable recommendation explanation
         """
         score = recommended.feasibility_score
-        
+
         explanation = f"We recommend '{recommended.title}' (feasibility: {score:.2f}) because:\n\n"
-        
+
         # Highlight top 3 pros
         top_pros = recommended.pros[:3]
         explanation += "**Key Advantages:**\n"
         for i, pro in enumerate(top_pros, 1):
             explanation += f"{i}. {pro}\n"
-        
+
         # Mention effort
         explanation += f"\n**Estimated Effort:** {recommended.estimated_effort}\n"
-        
+
         # Address cons
         if recommended.cons:
             explanation += f"\n**Trade-offs to Consider:**\n"
             for con in recommended.cons[:2]:
                 explanation += f"- {con}\n"
-        
+
         # Intent-specific guidance
         if intent == "IMPLEMENT":
             explanation += "\nThis approach balances speed to market with long-term maintainability."
@@ -1067,5 +1067,5 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             explanation += "\nThis fix addresses the root cause while minimizing risk."
         elif intent == "REFACTOR":
             explanation += "\nThis refactoring strategy maximizes quality improvement with acceptable risk."
-        
+
         return explanation

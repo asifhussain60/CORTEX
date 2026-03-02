@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field, field_validator
 
 class TechStack(BaseModel):
     """Technology stack information for a repository."""
-    
+
     primary_language: Optional[str] = None
     languages: List[str] = Field(default_factory=list)
     frameworks: List[str] = Field(default_factory=list)
@@ -30,7 +30,7 @@ class TechStack(BaseModel):
 
 class RepositoryStructure(BaseModel):
     """Repository structure metadata."""
-    
+
     has_company_domains: bool = False
     company_domains_path: Optional[str] = None
     domains_detected: List[str] = Field(default_factory=list)
@@ -43,7 +43,7 @@ class RepositoryStructure(BaseModel):
 
 class Standards(BaseModel):
     """Repository coding and operational standards."""
-    
+
     coding_style: Optional[str] = None
     security_baseline: Optional[str] = None
     test_patterns: Optional[str] = None
@@ -52,7 +52,7 @@ class Standards(BaseModel):
 
 class SecurityMetadata(BaseModel):
     """Security configuration and scan results."""
-    
+
     secrets_management: Optional[str] = None
     auth_pattern: Optional[str] = None
     vulnerabilities_detected: int = 0
@@ -61,7 +61,7 @@ class SecurityMetadata(BaseModel):
 
 class LooseCoupling(BaseModel):
     """Loose coupling metadata for deletion safety."""
-    
+
     referenced_by_cortex: bool = True
     deletion_safe: bool = True
     fallback_strategy: str = "use_cached_profile"
@@ -70,11 +70,11 @@ class LooseCoupling(BaseModel):
 class RepositoryProfile(BaseModel):
     """
     Complete profile for an onboarded external repository.
-    
+
     This profile enables CORTEX to interact with external repositories
     in a loosely-coupled manner, ensuring that repository deletion does
     not break CORTEX operations.
-    
+
     Attributes:
         name: Repository name (unique identifier)
         path: Absolute path to repository
@@ -87,7 +87,7 @@ class RepositoryProfile(BaseModel):
         security: Security configuration and scan results
         loose_coupling: Loose coupling metadata
     """
-    
+
     name: str = Field(..., description="Repository name (unique identifier)")
     path: str = Field(..., description="Absolute path to repository")
     onboarded_at: datetime = Field(..., description="Initial onboarding timestamp")
@@ -99,13 +99,13 @@ class RepositoryProfile(BaseModel):
         default=True,
         description="Whether repository currently exists"
     )
-    
+
     tech_stack: TechStack = Field(default_factory=TechStack)
     structure: RepositoryStructure = Field(default_factory=RepositoryStructure)
     standards: Standards = Field(default_factory=Standards)
     security: SecurityMetadata = Field(default_factory=SecurityMetadata)
     loose_coupling: LooseCoupling = Field(default_factory=LooseCoupling)
-    
+
     @field_validator('path')
     @classmethod
     def validate_path_format(cls: object, v: str) -> str:
@@ -113,16 +113,16 @@ class RepositoryProfile(BaseModel):
         if not Path(v).is_absolute():
             raise ValueError(f"Path must be absolute, got: {v}")
         return v
-    
+
     def to_yaml(self) -> str:
         """
         Serialize profile to YAML string.
-        
+
         Returns:
             YAML string representation of profile
         """
         data = self.model_dump(mode='json', exclude_none=False)
-        
+
         # Convert datetime objects to ISO format strings
         if 'onboarded_at' in data and data['onboarded_at']:
             data['onboarded_at'] = self.onboarded_at.isoformat()
@@ -130,22 +130,22 @@ class RepositoryProfile(BaseModel):
             data['last_validated'] = self.last_validated.isoformat()
         if 'security' in data and data['security'].get('last_scan') and self.security.last_scan:
             data['security']['last_scan'] = self.security.last_scan.isoformat()
-        
+
         return yaml.dump(data, default_flow_style=False, sort_keys=False)
-    
+
     @classmethod
     def from_yaml(cls: object, yaml_content: str) -> RepositoryProfile:
         """
         Deserialize profile from YAML string.
-        
+
         Args:
             yaml_content: YAML string representation
-            
+
         Returns:
             RepositoryProfile instance
         """
         data = yaml.safe_load(yaml_content)
-        
+
         # Convert ISO format strings back to datetime objects
         if 'onboarded_at' in data and isinstance(data['onboarded_at'], str):
             data['onboarded_at'] = datetime.fromisoformat(data['onboarded_at'])
@@ -155,13 +155,13 @@ class RepositoryProfile(BaseModel):
             data['security']['last_scan'] = datetime.fromisoformat(
                 data['security']['last_scan']
             )
-        
+
         return cls(**data)
-    
+
     def validate_exists(self) -> bool:
         """
         Check if repository path currently exists.
-        
+
         Returns:
             True if path exists, False otherwise
         """

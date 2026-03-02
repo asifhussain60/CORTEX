@@ -16,7 +16,7 @@ import re
 
 class ToolCategory(str, Enum):
     """Tool categorization."""
-    
+
     DIAGNOSTICS = "diagnostics"
     SETUP = "setup"
     CLEANUP = "cleanup"
@@ -27,13 +27,13 @@ class ToolCategory(str, Enum):
 @dataclass
 class ToolMetadata:
     """Metadata for a discovered tool."""
-    
+
     name: str
     path: Path
     category: ToolCategory
     description: str = ""
     functions: List[str] = None
-    
+
     def __post_init__(self) -> None:
         """Initialize mutable defaults."""
         if self.functions is None:
@@ -43,11 +43,11 @@ class ToolMetadata:
 class ToolkitDiscovery:
     """
     Discovery engine for scattered toolkit utilities.
-    
+
     Scans .cortex-runtime/ and scripts/ directories, categorizes tools,
     and identifies duplicate functionality.
     """
-    
+
     # Categorization patterns
     CATEGORY_PATTERNS = {
         ToolCategory.DIAGNOSTICS: [
@@ -87,39 +87,39 @@ class ToolkitDiscovery:
             r"fix.*duplicate",
         ],
     }
-    
+
     def __init__(self, workspace_root: Path = Path.cwd()) -> None:
         """
         Initialize discovery.
-        
+
         Args:
             workspace_root: CORTEX workspace root directory
         """
         self.workspace_root = workspace_root
-    
+
     def discover_tools(self, directory: Path) -> List[ToolMetadata]:
         """
         Discover tools in a directory.
-        
+
         Args:
             directory: Directory to scan (relative to workspace_root)
-            
+
         Returns:
             List of discovered tool metadata
         """
         full_path = self.workspace_root / directory
         if not full_path.exists():
             return []
-        
+
         tools = []
         for py_file in full_path.glob("*.py"):
             # Skip __init__.py and hidden files
             if py_file.name.startswith("__") or py_file.name.startswith("."):
                 continue
-            
+
             category = self.categorize_tool(py_file.name)
             description = self._extract_description(py_file)
-            
+
             tool = ToolMetadata(
                 name=py_file.stem,
                 path=py_file,
@@ -127,65 +127,65 @@ class ToolkitDiscovery:
                 description=description,
             )
             tools.append(tool)
-        
+
         return tools
-    
+
     def discover_all(self) -> List[ToolMetadata]:
         """
         Discover all tools in .cortex-runtime/ and scripts/.
-        
+
         Returns:
             Combined list of all discovered tools
         """
         cortex_tools = self.discover_tools(Path(".cortex-runtime"))
         scripts_tools = self.discover_tools(Path("scripts"))
-        
+
         return cortex_tools + scripts_tools
-    
+
     def categorize_tool(self, filename: str) -> ToolCategory:
         """
         Categorize a tool by filename pattern.
-        
+
         Args:
             filename: Tool filename
-            
+
         Returns:
             Categorized tool category
         """
         filename_lower = filename.lower()
-        
+
         for category, patterns in self.CATEGORY_PATTERNS.items():
             for pattern in patterns:
                 if re.search(pattern, filename_lower):
                     return category
-        
+
         # Default to automation if no match
         return ToolCategory.AUTOMATION
-    
+
     def find_duplicates(self, tools: List[ToolMetadata]) -> List[str]:
         """
         Identify duplicate functionality across tools.
-        
+
         Args:
             tools: List of tools to analyze
-            
+
         Returns:
             List of duplicate function groups
         """
         duplicates = []
-        
+
         # Group by category
         by_category: Dict[ToolCategory, List[ToolMetadata]] = {}
         for tool in tools:
             if tool.category not in by_category:
                 by_category[tool.category] = []
             by_category[tool.category].append(tool)
-        
+
         # Find duplicates within each category
         for category, category_tools in by_category.items():
             if len(category_tools) <= 1:
                 continue
-            
+
             # Extract common keywords from tool names
             keywords: Dict[str, List[str]] = {}
             for tool in category_tools:
@@ -196,43 +196,43 @@ class ToolkitDiscovery:
                         if part not in keywords:
                             keywords[part] = []
                         keywords[part].append(tool.name)
-            
+
             # Report groups with 2+ tools sharing keyword
             for keyword, tool_names in keywords.items():
                 if len(tool_names) >= 2:
                     duplicates.append(f"{keyword}: {', '.join(tool_names)}")
-        
+
         return duplicates
-    
+
     def generate_matrix(
         self,
         tools: List[ToolMetadata]
     ) -> Dict[ToolCategory, List[ToolMetadata]]:
         """
         Generate categorization matrix.
-        
+
         Args:
             tools: List of tools to categorize
-            
+
         Returns:
             Matrix mapping categories to tools
         """
         matrix: Dict[ToolCategory, List[ToolMetadata]] = {
             category: [] for category in ToolCategory
         }
-        
+
         for tool in tools:
             matrix[tool.category].append(tool)
-        
+
         return matrix
-    
+
     def _extract_description(self, file_path: Path) -> str:
         """
         Extract description from tool docstring.
-        
+
         Args:
             file_path: Path to Python file
-            
+
         Returns:
             First line of module docstring, or empty string
         """
@@ -249,7 +249,7 @@ class ToolkitDiscovery:
                         return stripped
         except Exception:
             pass
-        
+
         return ""
 
 

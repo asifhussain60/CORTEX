@@ -20,7 +20,7 @@ from datetime import datetime
 
 class CleanupAction(Enum):
     """Actions that can be applied to matching files."""
-    
+
     MOVE = "move"           # Move to destination directory
     DELETE = "delete"       # Remove from repository
     ARCHIVE = "archive"     # Move to docs/archive
@@ -32,7 +32,7 @@ class CleanupAction(Enum):
 @dataclass
 class CleanupRule:
     """Declarative cleanup rule specification."""
-    
+
     name: str                      # Rule name for logging
     pattern: str                   # File glob pattern to match
     action: CleanupAction         # Action to take
@@ -43,7 +43,7 @@ class CleanupRule:
     post_action: Optional[Dict[str, Any]] = None # Hook after action
     description: str = ""         # Human-readable description
     enabled: bool = True          # Can disable rules
-    
+
     @classmethod
     def from_dict(cls: object, data: Dict[str, Any]) -> CleanupRule:
         """Create rule from dictionary (e.g., loaded from YAML)."""
@@ -64,7 +64,7 @@ class CleanupRule:
 @dataclass
 class CleanupItem:
     """Single file marked for cleanup by a rule."""
-    
+
     file_path: str
     action: CleanupAction
     rule_name: str
@@ -77,33 +77,33 @@ class CleanupItem:
 @dataclass
 class CleanupPlan:
     """Complete cleanup plan generated from rules."""
-    
+
     items: List[CleanupItem] = field(default_factory=list)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     rules_applied: int = 0
     files_matched: int = 0
     total_priority_score: int = 0
-    
+
     @property
     def files_to_move(self) -> List[CleanupItem]:
         """Get files marked for moving."""
         return [i for i in self.items if i.action == CleanupAction.MOVE]
-    
+
     @property
     def files_to_delete(self) -> List[CleanupItem]:
         """Get files marked for deletion."""
         return [i for i in self.items if i.action == CleanupAction.DELETE]
-    
+
     @property
     def files_to_archive(self) -> List[CleanupItem]:
         """Get files marked for archival."""
         return [i for i in self.items if i.action == CleanupAction.ARCHIVE]
-    
+
     @property
     def files_for_review(self) -> List[CleanupItem]:
         """Get files flagged for manual review."""
         return [i for i in self.items if i.action == CleanupAction.REVIEW]
-    
+
     def sort_by_priority(self) -> None:
         """Sort items by priority (lower number = higher priority)."""
         self.items.sort(key=lambda x: (x.priority, x.file_path))
@@ -111,12 +111,12 @@ class CleanupPlan:
 
 class RuleBasedPlanner:
     """Generate cleanup plans from declarative YAML rules."""
-    
+
     DEFAULT_RULES_FILE = Path(".cortex-runtime/vacuum-rules.yaml")
-    
+
     def __init__(self, repo_root: Path = Path("."), rules_file: Optional[Path] = None) -> None:
         """Initialize planner.
-        
+
         Args:
             repo_root: Repository root path
             rules_file: Path to rules YAML file (default: .cortex-runtime/vacuum-rules.yaml)
@@ -124,54 +124,54 @@ class RuleBasedPlanner:
         self.repo_root = Path(repo_root)
         self.rules_file = rules_file or self.repo_root / self.DEFAULT_RULES_FILE
         self.rules: List[CleanupRule] = []
-        
+
         # Load rules if file exists
         if self.rules_file.exists():
             self.load_rules()
-    
+
     def load_rules(self) -> bool:
         """Load rules from YAML file.
-        
+
         Returns:
             True if rules loaded successfully
         """
         try:
             with open(self.rules_file, "r") as f:
                 data = yaml.safe_load(f) or {}
-            
+
             self.rules = []
             for rule_dict in data.get("rules", []):
                 rule = CleanupRule.from_dict(rule_dict)
                 if rule.enabled:
                     self.rules.append(rule)
-            
+
             # Sort by priority
             self.rules.sort(key=lambda r: r.priority)
-            
+
             return True
         except Exception as e:
             print(f"Warning: Failed to load rules from {self.rules_file}: {e}")
             return False
-    
+
     def generate_plan(self, root_path: Optional[Path] = None) -> CleanupPlan:
         """Generate cleanup plan by applying rules to repository.
-        
+
         Args:
             root_path: Path to scan (default: repo_root)
-            
+
         Returns:
             CleanupPlan with all matched files
         """
         root_path = root_path or self.repo_root
         plan = CleanupPlan()
-        
+
         # Collect all files
         all_files = list(root_path.rglob("*"))
-        
+
         # Apply each rule
         for rule in self.rules:
             matched_files = self._match_files(all_files, rule.pattern)
-            
+
             for file_path in matched_files:
                 # Skip if already matched by higher-priority rule
                 if any(
@@ -179,7 +179,7 @@ class RuleBasedPlanner:
                     for item in plan.items
                 ):
                     continue
-                
+
                 # Create cleanup item
                 item = CleanupItem(
                     file_path=str(file_path.relative_to(root_path)),
@@ -189,29 +189,29 @@ class RuleBasedPlanner:
                     priority=rule.priority,
                     reason=rule.description,
                 )
-                
+
                 plan.items.append(item)
                 plan.rules_applied += 1
-            
+
             plan.files_matched += len(matched_files)
-        
+
         # Sort by priority
         plan.sort_by_priority()
-        
+
         return plan
-    
+
     def _match_files(self, files: List[Path], pattern: str) -> List[Path]:
         """Match files against glob pattern.
-        
+
         Args:
             files: List of all files to check
             pattern: Glob pattern to match
-            
+
         Returns:
             List of matching file paths
         """
         from fnmatch import fnmatch
-        
+
         matched = []
         for file_path in files:
             if file_path.is_file():
@@ -219,21 +219,21 @@ class RuleBasedPlanner:
                 rel_path = str(file_path.relative_to(self.repo_root))
                 if fnmatch(rel_path, pattern) or fnmatch(file_path.name, pattern):
                     matched.append(file_path)
-        
+
         return matched
-    
+
     def save_default_rules(self) -> bool:
         """Create default rules file if it doesn't exist.
-        
+
         Returns:
             True if file created or already exists
         """
         if self.rules_file.exists():
             return True
-        
+
         try:
             self.rules_file.parent.mkdir(parents=True, exist_ok=True)
-            
+
             default_rules = {
                 "rules": [
                     {
@@ -267,10 +267,10 @@ class RuleBasedPlanner:
                     },
                 ]
             }
-            
+
             with open(self.rules_file, "w") as f:
                 yaml.dump(default_rules, f, default_flow_style=False)
-            
+
             return True
         except Exception as e:
             print(f"Warning: Failed to create default rules: {e}")

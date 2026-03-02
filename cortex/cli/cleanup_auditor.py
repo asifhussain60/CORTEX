@@ -30,7 +30,7 @@ class FileArtifact:
     phase_id: Optional[str]
     size_bytes: int
     recommendation: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for reporting."""
         return {
@@ -56,7 +56,7 @@ class AuditResult:
     deprecated_files: List[FileArtifact] = field(default_factory=list)
     cleanup_savings_kb: int = 0
     phases_to_migrate: List[str] = field(default_factory=list)
-    
+
     def summary(self) -> Dict[str, Any]:
         """Generate summary statistics."""
         return {
@@ -75,7 +75,7 @@ class AuditResult:
 
 class CleanupAuditor:
     """Performs systematic audit of completed phases and artifacts."""
-    
+
     def __init__(self, workspace_root: Path) -> None:
         """Initialize auditor with workspace root."""
         self.workspace_root = workspace_root
@@ -84,23 +84,23 @@ class CleanupAuditor:
         self.registry_dir = workspace_root / "cortex-registry" / "_cortex-master"
         self.active_phases_dir = self.registry_dir / "phases" / "active"
         self.completed_phases_dir = self.registry_dir / "phases" / "completed"
-        
+
         # Import graph cache
         self._import_graph: Dict[str, Set[str]] = defaultdict(set)
         self._inbound_references: Dict[str, int] = defaultdict(int)
-        
+
     def audit_completed_phases(self) -> List[str]:
         """Scan active phases folder for completed phases."""
         completed = []
-        
+
         if not self.active_phases_dir.exists():
             return completed
-        
+
         for yaml_file in self.active_phases_dir.glob("*.yaml"):
             try:
                 with open(yaml_file) as f:
                     spec = yaml.safe_load(f)
-                
+
                 status = spec.get("status", "").lower()
                 if status in ["complete", "completed", "done"]:
                     phase_id = spec.get("enhancement_id") or spec.get("phase_id") or yaml_file.stem
@@ -108,21 +108,21 @@ class CleanupAuditor:
             except Exception:
                 # Skip invalid YAML files
                 continue
-        
+
         return completed
-    
+
     def build_import_graph(self) -> None:
         """Build import graph for all Python files in cortex/."""
         click.echo("Building import graph...")
-        
+
         for py_file in self.cortex_dir.rglob("*.py"):
             if "__pycache__" in str(py_file):
                 continue
-            
+
             try:
                 with open(py_file) as f:
                     tree = ast.parse(f.read())
-                
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.Import):
                         for alias in node.names:
@@ -135,7 +135,7 @@ class CleanupAuditor:
             except Exception:
                 # Skip files with parse errors
                 continue
-    
+
     def get_file_last_commit(self, file_path: Path) -> Optional[datetime]:
         """Get last git commit date for file."""
         try:
@@ -146,15 +146,15 @@ class CleanupAuditor:
                 text=True,
                 timeout=5
             )
-            
+
             if result.returncode == 0 and result.stdout.strip():
                 timestamp = int(result.stdout.strip())
                 return datetime.fromtimestamp(timestamp)
         except Exception:
             pass
-        
+
         return None
-    
+
     def classify_file(self, file_path: Path, completed_phases: List[str]) -> FileArtifact:
         """Classify a file based on audit rules."""
         # Get file metadata
@@ -162,46 +162,46 @@ class CleanupAuditor:
         last_modified = datetime.fromtimestamp(stats.st_mtime)
         last_commit = self.get_file_last_commit(file_path)
         size_bytes = stats.st_size
-        
+
         # Check import count
         module_name = str(file_path.relative_to(self.workspace_root)).replace("/", ".").replace(".py", "")
         import_count = self._inbound_references.get(module_name, 0)
-        
+
         # Attempt to extract phase ID from file
         phase_id = None
         for phase in completed_phases:
             if phase.lower() in str(file_path).lower():
                 phase_id = phase
                 break
-        
+
         # Classification logic
         age_days = (datetime.now() - last_modified).days
         commit_age_days = (datetime.now() - last_commit).days if last_commit else 999
-        
+
         # Rule 1: Essential (core infrastructure)
         if import_count >= 5 or "core" in str(file_path) or "orchestrators" in str(file_path):
             classification = "essential"
             recommendation = "Keep - core infrastructure"
-        
+
         # Rule 2: Orphaned (0 imports + old)
         elif import_count == 0 and age_days > 180:
             classification = "orphaned"
             recommendation = "Archive to __cleanup-archive/"
-        
+
         # Rule 3: Stale (completed phase not migrated)
         elif phase_id and phase_id in completed_phases:
             classification = "stale"
             recommendation = f"Migrate {phase_id} to completed/"
-        
+
         # Rule 4: Deprecated (no recent commits)
         elif commit_age_days > 180 and import_count < 2:
             classification = "deprecated"
             recommendation = "Verify 0 imports then delete"
-        
+
         else:
             classification = "essential"
             recommendation = "Keep - still in use"
-        
+
         return FileArtifact(
             path=file_path,
             classification=classification,
@@ -212,38 +212,38 @@ class CleanupAuditor:
             size_bytes=size_bytes,
             recommendation=recommendation,
         )
-    
+
     def audit_workspace(self) -> AuditResult:
         """Perform comprehensive workspace audit."""
         result = AuditResult()
-        
+
         # Step 1: Discover completed phases
         click.echo("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         click.echo("🔍 WAVE-J: Cleanup Audit")
         click.echo("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         click.echo()
-        
+
         completed_phases = self.audit_completed_phases()
         result.completed_phases_found = len(completed_phases)
         result.phases_to_migrate = completed_phases
-        
+
         click.echo(f"✅ Discovered {len(completed_phases)} completed phases")
-        
+
         # Step 2: Build import graph
         self.build_import_graph()
         click.echo(f"✅ Built import graph ({len(self._import_graph)} files)")
-        
+
         # Step 3: Scan cortex/ directory
         click.echo()
         click.echo("Scanning cortex/ directory...")
-        
+
         for py_file in self.cortex_dir.rglob("*.py"):
             if "__pycache__" in str(py_file) or "__init__.py" == py_file.name:
                 continue
-            
+
             result.total_files_scanned += 1
             artifact = self.classify_file(py_file, completed_phases)
-            
+
             # Add to appropriate list
             if artifact.classification == "essential":
                 result.essential_files.append(artifact)
@@ -256,18 +256,18 @@ class CleanupAuditor:
             elif artifact.classification == "deprecated":
                 result.deprecated_files.append(artifact)
                 result.cleanup_savings_kb += artifact.size_bytes // 1024
-        
+
         # Step 4: Scan cortex/intelligence/ directory (if exists)
         if self.intelligence_dir.exists():
             click.echo("Scanning cortex/intelligence/ directory...")
-            
+
             for py_file in self.intelligence_dir.rglob("*.py"):
                 if "__pycache__" in str(py_file) or "__init__.py" == py_file.name:
                     continue
-                
+
                 result.total_files_scanned += 1
                 artifact = self.classify_file(py_file, completed_phases)
-                
+
                 if artifact.classification == "essential":
                     result.essential_files.append(artifact)
                 elif artifact.classification == "stale":
@@ -279,25 +279,25 @@ class CleanupAuditor:
                 elif artifact.classification == "deprecated":
                     result.deprecated_files.append(artifact)
                     result.cleanup_savings_kb += artifact.size_bytes // 1024
-        
+
         return result
-    
+
     def generate_report(self, result: AuditResult, output_format: str = "text") -> str:
         """Generate audit report in specified format."""
         if output_format == "yaml":
             return self._generate_yaml_report(result)
         else:
             return self._generate_text_report(result)
-    
+
     def _generate_text_report(self, result: AuditResult) -> str:
         """Generate human-readable text report."""
         lines = []
-        
+
         lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         lines.append("📊 WAVE-J CLEANUP AUDIT REPORT")
         lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         lines.append("")
-        
+
         # Summary
         summary = result.summary()
         lines.append("## Summary")
@@ -305,17 +305,17 @@ class CleanupAuditor:
         lines.append(f"Total Files Scanned: {summary['total_scanned']}")
         lines.append(f"Completed Phases: {summary['completed_phases']}")
         lines.append("")
-        
+
         lines.append("### Classification Breakdown")
         lines.append("")
         for category, count in summary['classification'].items():
             lines.append(f"  {category.capitalize()}: {count}")
         lines.append("")
-        
+
         lines.append(f"Cleanup Potential: {summary['cleanup_potential_mb']:.2f} MB")
         lines.append(f"Phases to Migrate: {summary['phases_to_migrate']}")
         lines.append("")
-        
+
         # Detailed listings
         if result.stale_files:
             lines.append("## 🟡 Stale Files (Completed Phases Not Migrated)")
@@ -325,7 +325,7 @@ class CleanupAuditor:
                 lines.append(f"    Phase: {artifact.phase_id}")
                 lines.append(f"    Recommendation: {artifact.recommendation}")
                 lines.append("")
-        
+
         if result.orphaned_files:
             lines.append("## 🔴 Orphaned Files (0 Imports + Old)")
             lines.append("")
@@ -334,7 +334,7 @@ class CleanupAuditor:
                 lines.append(f"    Age: {(datetime.now() - artifact.last_modified).days} days")
                 lines.append(f"    Recommendation: {artifact.recommendation}")
                 lines.append("")
-        
+
         if result.deprecated_files:
             lines.append("## ⚪ Deprecated Files (No Recent Commits)")
             lines.append("")
@@ -343,7 +343,7 @@ class CleanupAuditor:
                 lines.append(f"    Last Commit: {artifact.last_commit_date.date() if artifact.last_commit_date else 'Unknown'}")
                 lines.append(f"    Recommendation: {artifact.recommendation}")
                 lines.append("")
-        
+
         lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         lines.append("")
         lines.append("📋 Next Actions:")
@@ -353,9 +353,9 @@ class CleanupAuditor:
         lines.append("3. Review deprecated files → Verify 0 imports then delete")
         lines.append("4. Run cleanup script: cortex-cleanup-execute")
         lines.append("")
-        
+
         return "\n".join(lines)
-    
+
     def _generate_yaml_report(self, result: AuditResult) -> str:
         """Generate YAML report for programmatic processing."""
         report_data = {
@@ -366,7 +366,7 @@ class CleanupAuditor:
             "deprecated_files": [a.to_dict() for a in result.deprecated_files],
             "phases_to_migrate": result.phases_to_migrate,
         }
-        
+
         return yaml.dump(report_data, default_flow_style=False, sort_keys=False)
 
 
@@ -383,19 +383,19 @@ def cli() -> None:
 def audit(workspace: str, format: str, output: Optional[str]) -> None:
     """
     Audit workspace for completed phases and orphaned components.
-    
+
     Example:
         cortex-cleanup-audit --format yaml --output audit-report.yaml
     """
     workspace_path = Path(workspace).resolve()
     auditor = CleanupAuditor(workspace_path)
-    
+
     # Perform audit
     result = auditor.audit_workspace()
-    
+
     # Generate report
     report = auditor.generate_report(result, output_format=format)
-    
+
     # Display or save
     if output:
         with open(output, "w") as f:
@@ -411,38 +411,38 @@ def audit(workspace: str, format: str, output: Optional[str]) -> None:
 def migrate(workspace: str, dry_run: bool) -> None:
     """
     Migrate completed phases from active/ to completed/ folder.
-    
+
     Example:
         cortex-cleanup-migrate --dry-run
         cortex-cleanup-migrate  # Execute
     """
     workspace_path = Path(workspace).resolve()
     auditor = CleanupAuditor(workspace_path)
-    
+
     # Discover completed phases
     completed_phases = auditor.audit_completed_phases()
-    
+
     click.echo(f"Found {len(completed_phases)} completed phases to migrate")
-    
+
     if not completed_phases:
         click.echo("✅ No phases to migrate")
         return
-    
+
     # Ensure completed/ directory exists
     if not dry_run:
         auditor.completed_phases_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Migrate each phase
     for phase_id in completed_phases:
         yaml_file = auditor.active_phases_dir / f"{phase_id.lower()}.yaml"
-        
+
         if not yaml_file.exists():
             # Try without lowercase
             yaml_file = auditor.active_phases_dir / f"{phase_id}.yaml"
-        
+
         if yaml_file.exists():
             target_file = auditor.completed_phases_dir / yaml_file.name
-            
+
             if dry_run:
                 click.echo(f"Would migrate: {yaml_file.name} → completed/")
             else:

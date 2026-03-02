@@ -25,33 +25,33 @@ class GoldenHammerViolation(Exception):
 class GoldenHammerRules:
     """
     Validates routing decisions against golden hammer anti-patterns.
-    
+
     Rules:
     - GOLDEN-HAMMER-001: TRIVIAL operations MUST NOT use templates
     - GOLDEN-HAMMER-002: HIGH complexity operations MUST use templates
     - GOLDEN-HAMMER-003: MODERATE operations MAY override with rationale
     """
-    
+
     TRIVIAL_THRESHOLD = 0.15
     COMPLEX_THRESHOLD = 0.75
-    
+
     def validate_routing_decision(
-        self, 
+        self,
         decision: RoutingDecision,
         override_rationale: Optional[str] = None
     ) -> None:
         """
         Enforce golden hammer prevention rules.
-        
+
         Args:
             decision: Routing decision to validate
             override_rationale: Optional rationale for moderate override
-        
+
         Raises:
             GoldenHammerViolation: If rule violated
         """
         # Rule 1: TRIVIAL operations MUST NOT use templates
-        if (decision.complexity < self.TRIVIAL_THRESHOLD and 
+        if (decision.complexity < self.TRIVIAL_THRESHOLD and
             decision.route == RoutingStrategy.WORKFLOW_TEMPLATE):
             raise GoldenHammerViolation(
                 rule="GOLDEN-HAMMER-001",
@@ -61,9 +61,9 @@ class GoldenHammerRules:
                 ),
                 decision=decision
             )
-        
+
         # Rule 2: HIGH complexity operations MUST use templates
-        if (decision.complexity >= self.COMPLEX_THRESHOLD and 
+        if (decision.complexity >= self.COMPLEX_THRESHOLD and
             decision.route == RoutingStrategy.DIRECT_ORCHESTRATOR):
             raise GoldenHammerViolation(
                 rule="GOLDEN-HAMMER-002",
@@ -73,7 +73,7 @@ class GoldenHammerRules:
                 ),
                 decision=decision
             )
-        
+
         # Rule 3: MODERATE operations MAY override with rationale
         if (self.TRIVIAL_THRESHOLD <= decision.complexity < self.COMPLEX_THRESHOLD):
             if decision.route != self._default_route_for_moderate(decision.complexity):
@@ -86,7 +86,7 @@ class GoldenHammerRules:
                         ),
                         decision=decision
                     )
-    
+
     def _default_route_for_moderate(self, complexity: float) -> RoutingStrategy:
         """Determine default route for moderate complexity (0.15-0.75)."""
         # Default routing thresholds:

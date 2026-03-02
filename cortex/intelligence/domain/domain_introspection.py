@@ -17,7 +17,7 @@ class DomainIntrospection:
             "operations": ["planning", "scheduling", "optimization"],
             "hr": ["recruitment", "onboarding", "performance_management"],
         }
-        
+
         self.constraints_map: Dict[str, List[str]] = {
             "sales": ["max_pipeline_size", "forecast_accuracy_limit"],
             "support": ["sla_compliance", "escalation_time"],
@@ -25,7 +25,7 @@ class DomainIntrospection:
             "operations": ["capacity_limit", "resource_availability"],
             "hr": ["headcount_approval", "budget_constraints"],
         }
-        
+
         self.requirements_map: Dict[str, List[str]] = {
             "sales": ["crm_integration", "real_time_updates"],
             "support": ["ticket_system", "knowledge_base"],
@@ -37,10 +37,10 @@ class DomainIntrospection:
     def get_capabilities(self, domain_id: str) -> List[str]:
         """
         Get domain capabilities.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             List of capabilities.
         """
@@ -49,10 +49,10 @@ class DomainIntrospection:
     def get_constraints(self, domain_id: str) -> List[str]:
         """
         Get domain constraints.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             List of constraints.
         """
@@ -61,10 +61,10 @@ class DomainIntrospection:
     def get_requirements(self, domain_id: str) -> List[str]:
         """
         Get domain requirements.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             List of requirements.
         """
@@ -73,10 +73,10 @@ class DomainIntrospection:
     def validate_domain(self, domain_id: str) -> bool:
         """
         Validate a domain exists and is properly configured.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             True if valid.
         """

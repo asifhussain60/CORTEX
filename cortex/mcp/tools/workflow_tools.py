@@ -38,11 +38,11 @@ from cortex.mcp.mcp_tool_base import (
 class CortexWorkflow(ConsolidatedTool):
     """
     Convergence-gated workflow template execution with knowledge injection.
-    
+
     Routes through MasterOrchestrator Stage 3 for knowledge synthesis,
     then delegates to AutonomousWorkflowExecutor for execution with
     convergence gates and zero user prompts (CORE-049).
-    
+
     Operations:
     - execute: Runs template with knowledge-resolved context + convergence gates
     - list: Returns all 10 templates with category info
@@ -51,12 +51,12 @@ class CortexWorkflow(ConsolidatedTool):
     - preview: Show resolved template WITHOUT executing
     - monitor: Real-time step state (FSM state + cycle count + convergence signal)
     """
-    
+
     @property
     def name(self) -> str:
         """The unique tool name identifier."""
         return "cortex_workflow"
-    
+
     @property
     def description(self) -> str:
         """Human-readable description of the tool."""
@@ -65,12 +65,12 @@ class CortexWorkflow(ConsolidatedTool):
             "Templates resolve differently for ARCHITECT vs PRODUCTION mode. "
             "Steps loop until success criteria met or max_cycles exceeded."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """List of parameters accepted by the tool."""
@@ -113,16 +113,16 @@ class CortexWorkflow(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return list of supported operations."""
         return ["execute", "list", "search", "validate", "preview", "monitor"]
-    
+
     async def execute(self, **kwargs: Any) -> ToolResult:
         """
         Execute workflow tool operation.
-        
+
         Args:
             operation: Workflow operation (execute, list, search, validate, preview, monitor)
             template_id: Template ID for execute/preview/validate
@@ -130,7 +130,7 @@ class CortexWorkflow(ConsolidatedTool):
             query: Search query for template discovery
             workflow_id: Workflow execution ID for monitor
             orchestrator_context: Orchestrator routing context
-            
+
         Returns:
             ToolResult with operation-specific output
         """
@@ -138,9 +138,9 @@ class CortexWorkflow(ConsolidatedTool):
         orchestrator_context = kwargs.get("orchestrator_context")
         if orchestrator_context is not None:
             validate_orchestrator_context(orchestrator_context)
-        
+
         operation = kwargs.get("operation")
-        
+
         if operation == "execute":
             return await self._execute_workflow(**kwargs)
         elif operation == "list":
@@ -161,11 +161,11 @@ class CortexWorkflow(ConsolidatedTool):
                 content=f"Unknown operation: {operation}",
                 metadata={"error": "invalid_operation"},
             )
-    
+
     async def _execute_workflow(self, **kwargs: Any) -> ToolResult:
         """
         Execute workflow template with knowledge injection + convergence gates.
-        
+
         AC-PHASE100-S2-002: Resolves knowledge + runs with convergence gates
         AC-PHASE100-S2-004: Audit trail includes knowledge source attribution
         AC-PHASE100-S2-005: User sees domain-correct output (not generic boilerplate)
@@ -173,14 +173,14 @@ class CortexWorkflow(ConsolidatedTool):
         """
         template_id = kwargs.get("template_id")
         user_context = kwargs.get("user_context", {})
-        
+
         if not template_id:
             return ToolResult(
                 success=False,
                 content="Missing template_id for execute operation",
                 metadata={"error": "missing_template_id"},
             )
-        
+
         try:
             # Import dependencies (lazy loading)
             from cortex.orchestrators.workflow.template_registry import (
@@ -192,35 +192,35 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
                 KnowledgeSynthesisEngine,
             )
-            
+
             # Initialize components
             registry = WorkflowTemplateRegistry()
             executor = AutonomousWorkflowExecutor()
             knowledge_engine = KnowledgeSynthesisEngine()
-            
+
             # Detect mode (ARCHITECT vs PRODUCTION)
             mode = registry.detect_mode()
-            
+
             # Get template
             template = registry.get_template(template_id)
-            
+
             # Synthesize knowledge context (MasterOrchestrator Stage 3 integration)
             knowledge_context = await knowledge_engine.synthesize_unified_context(
                 intent_type="IMPLEMENT",
                 user_context=user_context,
                 mode=mode,
             )
-            
+
             # Resolve placeholders with knowledge
             resolved_workflow = registry.resolve_placeholders(template, mode)
-            
+
             # Execute workflow autonomously with convergence gates
             result = await executor.execute_workflow_autonomously(
                 workflow=resolved_workflow,
                 knowledge_context=knowledge_context,
                 mode=mode,
             )
-            
+
             return ToolResult(
                 success=result["status"] == "COMPLETED",
                 content=(
@@ -241,14 +241,14 @@ class CortexWorkflow(ConsolidatedTool):
                     "audit_trail": result.get("audit_trail", {}),
                 },
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,
                 content=f"Workflow execution failed: {str(e)}",
                 metadata={"error": str(e), "template_id": template_id},
             )
-    
+
     async def _list_templates(self, **kwargs: Any) -> ToolResult:
         """
         List all 10 workflow templates with category info.
@@ -257,38 +257,38 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.orchestrators.workflow.template_registry import (
                 WorkflowTemplateRegistry,
             )
-            
+
             registry = WorkflowTemplateRegistry()
             templates = registry.list_all_templates()
-            
+
             # Format output
             output_lines = ["**Available Workflow Templates:**\n"]
             by_category: Dict[str, List[Dict[str, Any]]] = {}
-            
+
             for template in templates:
                 category = template.get("category", "other")
                 if category not in by_category:
                     by_category[category] = []
                 by_category[category].append(template)
-            
+
             for category, cat_templates in sorted(by_category.items()):
                 output_lines.append(f"\n**{category.upper()}:**")
                 for tmpl in cat_templates:
                     output_lines.append(f"- `{tmpl['id']}`: {tmpl['name']}")
-            
+
             return ToolResult(
                 success=True,
                 content="\n".join(output_lines),
                 metadata={"template_count": len(templates), "templates": templates},
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,
                 content=f"Failed to list templates: {str(e)}",
                 metadata={"error": str(e)},
             )
-    
+
     async def _list_sdlc_templates(self, **kwargs: Any) -> ToolResult:
         """List available SDLC workflow templates (Phase 79 GAP-79-D-03).
 
@@ -333,29 +333,29 @@ class CortexWorkflow(ConsolidatedTool):
         Fuzzy search across all templates.
         """
         query = kwargs.get("query")
-        
+
         if not query:
             return ToolResult(
                 success=False,
                 content="Missing query for search operation",
                 metadata={"error": "missing_query"},
             )
-        
+
         try:
             from cortex.orchestrators.workflow.template_registry import (
                 WorkflowTemplateRegistry,
             )
-            
+
             registry = WorkflowTemplateRegistry()
             results = registry.search_templates(query)
-            
+
             if not results:
                 return ToolResult(
                     success=True,
                     content=f"No templates found matching '{query}'",
                     metadata={"query": query, "results": []},
                 )
-            
+
             # Format output
             output_lines = [f"**Search Results for '{query}':**\n"]
             for result in results:
@@ -363,33 +363,33 @@ class CortexWorkflow(ConsolidatedTool):
                 output_lines.append(
                     f"- `{result['id']}` (score: {score:.2f}): {result['name']}"
                 )
-            
+
             return ToolResult(
                 success=True,
                 content="\n".join(output_lines),
                 metadata={"query": query, "results": results},
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,
                 content=f"Search failed: {str(e)}",
                 metadata={"error": str(e), "query": query},
             )
-    
+
     async def _validate_template(self, **kwargs: Any) -> ToolResult:
         """
         Governance check on template.
         """
         template_id = kwargs.get("template_id")
-        
+
         if not template_id:
             return ToolResult(
                 success=False,
                 content="Missing template_id for validate operation",
                 metadata={"error": "missing_template_id"},
             )
-        
+
         try:
             from cortex.orchestrators.workflow.template_registry import (
                 WorkflowTemplateRegistry,
@@ -397,14 +397,14 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.enforcement.governance_enforcement_agent import (
                 GovernanceEnforcementAgent,
             )
-            
+
             registry = WorkflowTemplateRegistry()
             template = registry.get_template(template_id)
-            
+
             # Run governance validation
             agent = GovernanceEnforcementAgent()
             validation_result = agent.validate_template_governance(template)
-            
+
             return ToolResult(
                 success=validation_result["is_valid"],
                 content=(
@@ -421,29 +421,29 @@ class CortexWorkflow(ConsolidatedTool):
                 ),
                 metadata=validation_result,
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,
                 content=f"Validation failed: {str(e)}",
                 metadata={"error": str(e), "template_id": template_id},
             )
-    
+
     async def _preview_template(self, **kwargs: Any) -> ToolResult:
         """
         Show resolved template WITHOUT executing.
-        
+
         AC-PHASE100-S2-003: Preview shows resolved template (with knowledge)
         """
         template_id = kwargs.get("template_id")
-        
+
         if not template_id:
             return ToolResult(
                 success=False,
                 content="Missing template_id for preview operation",
                 metadata={"error": "missing_template_id"},
             )
-        
+
         try:
             from cortex.orchestrators.workflow.template_registry import (
                 WorkflowTemplateRegistry,
@@ -451,26 +451,26 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
                 KnowledgeSynthesisEngine,
             )
-            
+
             registry = WorkflowTemplateRegistry()
             knowledge_engine = KnowledgeSynthesisEngine()
-            
+
             # Detect mode
             mode = registry.detect_mode()
-            
+
             # Get template
             template = registry.get_template(template_id)
-            
+
             # Resolve placeholders (knowledge-aware)
             resolved_template = registry.resolve_placeholders(template, mode)
-            
+
             # Format preview
             output_lines = [
                 f"**Template Preview: {template_id}**\n",
                 f"**Mode:** {mode}",
                 f"**Steps:** {len(resolved_template.get('steps', []))}\n",
             ]
-            
+
             for idx, step in enumerate(resolved_template.get("steps", []), 1):
                 output_lines.append(f"\n**Step {idx}: {step.get('id')}**")
                 output_lines.append(f"- Action: {step.get('action')}")
@@ -479,7 +479,7 @@ class CortexWorkflow(ConsolidatedTool):
                     output_lines.append(
                         f"- Convergence: max_cycles={convergence.get('max_cycles')}"
                     )
-            
+
             return ToolResult(
                 success=True,
                 content="\n".join(output_lines),
@@ -489,44 +489,44 @@ class CortexWorkflow(ConsolidatedTool):
                     "resolved_template": resolved_template,
                 },
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,
                 content=f"Preview failed: {str(e)}",
                 metadata={"error": str(e), "template_id": template_id},
             )
-    
+
     async def _monitor_execution(self, **kwargs: Any) -> ToolResult:
         """
         Real-time step state (FSM state + cycle count + convergence signal).
-        
+
         AC-PHASE100-S2-006: Monitor shows real-time step state + cycle count
         """
         workflow_id = kwargs.get("workflow_id")
-        
+
         if not workflow_id:
             return ToolResult(
                 success=False,
                 content="Missing workflow_id for monitor operation",
                 metadata={"error": "missing_workflow_id"},
             )
-        
+
         try:
             from cortex.orchestrators.workflow.autonomous_workflow_executor import (
                 AutonomousWorkflowExecutor,
             )
-            
+
             executor = AutonomousWorkflowExecutor()
             state = executor.get_execution_state(workflow_id)
-            
+
             if not state:
                 return ToolResult(
                     success=False,
                     content=f"Workflow '{workflow_id}' not found or completed",
                     metadata={"workflow_id": workflow_id},
                 )
-            
+
             # Format state output
             output_lines = [
                 f"**Workflow Execution Monitor: {workflow_id}**\n",
@@ -537,13 +537,13 @@ class CortexWorkflow(ConsolidatedTool):
                 f"**Convergence Signal:** {state.get('convergence_signal', 0.0):.2%}",
                 f"**Status:** {state.get('status')}",
             ]
-            
+
             return ToolResult(
                 success=True,
                 content="\n".join(output_lines),
                 metadata=state,
             )
-            
+
         except Exception as e:
             return ToolResult(
                 success=False,

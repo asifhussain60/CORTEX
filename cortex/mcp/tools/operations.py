@@ -31,7 +31,7 @@ from cortex.mcp.mcp_tool_base import (
 class CortexDebug(ConsolidatedTool):
     """
     Debug cycle management.
-    
+
     Operations:
     - inject: Inject debug markers
     - capture: Capture debug logs
@@ -39,12 +39,12 @@ class CortexDebug(ConsolidatedTool):
     - fix_plan: Generate fix plan
     - cleanup: Remove debug markers
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_debug"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -52,12 +52,12 @@ class CortexDebug(ConsolidatedTool):
             "Comprehensive debugging for CORTEX applications. Inject markers, "
             "capture logs, analyze issues, and generate fix plans."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -89,42 +89,42 @@ class CortexDebug(ConsolidatedTool):
                 enum=["debug", "info", "warning", "error"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["inject", "capture", "analyze", "fix_plan", "cleanup"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute debug operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "analyze")
         target = params.get("target")
         markers = params.get("markers", [])
         log_level = params.get("log_level", "debug")
-        
+
         # WAVE-R Integration: Use DebugMCPTools for operations
         if operation == "inject":
             try:
                 from cortex.mcp.tools.debug_tools import DebugMCPTools
                 from cortex.core.event_bus import EventBus
                 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
-                
+
                 # Initialize infrastructure
                 event_bus = EventBus()
                 orchestrator = DebuggerOrchestrator(event_bus)
                 tools = DebugMCPTools(event_bus, orchestrator)
-                
+
                 # Extract marker injection parameters
                 trigger_type = params.get("trigger_type", "test_failure")
                 file_path = target or "/tmp/unknown.py"
                 line_number = params.get("line_number", 1)
                 context = params.get("context", {})
-                
+
                 # Inject markers via DebugMCPTools
                 result = tools.auto_inject(
                     trigger_type=trigger_type,
@@ -132,7 +132,7 @@ class CortexDebug(ConsolidatedTool):
                     line_number=line_number,
                     context=context
                 )
-                
+
                 return ToolResult(
                     success=result["status"] == "success",
                     data=result,
@@ -144,20 +144,20 @@ class CortexDebug(ConsolidatedTool):
                     error=f"Debug marker injection failed: {str(e)}",
                     metadata={"operation": "inject"}
                 )
-        
+
         elif operation == "list_sessions":
             try:
                 from cortex.mcp.tools.debug_tools import DebugMCPTools
                 from cortex.core.event_bus import EventBus
                 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
-                
+
                 event_bus = EventBus()
                 orchestrator = DebuggerOrchestrator(event_bus)
                 tools = DebugMCPTools(event_bus, orchestrator)
-                
+
                 status_filter = params.get("status_filter", "all")
                 result = tools.list_sessions(status_filter=status_filter)
-                
+
                 return ToolResult(
                     success=True,
                     data=result,
@@ -169,21 +169,21 @@ class CortexDebug(ConsolidatedTool):
                     error=f"Session listing failed: {str(e)}",
                     metadata={"operation": "list_sessions"}
                 )
-        
+
         elif operation == "cleanup":
             try:
                 from cortex.mcp.tools.debug_tools import DebugMCPTools
                 from cortex.core.event_bus import EventBus
                 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
-                
+
                 event_bus = EventBus()
                 orchestrator = DebuggerOrchestrator(event_bus)
                 tools = DebugMCPTools(event_bus, orchestrator)
-                
+
                 session_id = params.get("session_id")
                 cleanup_all = params.get("cleanup_all", False)
                 result = tools.cleanup(session_id=session_id, cleanup_all=cleanup_all)
-                
+
                 return ToolResult(
                     success=result["status"] == "success",
                     data=result,
@@ -195,7 +195,7 @@ class CortexDebug(ConsolidatedTool):
                     error=f"Debug cleanup failed: {str(e)}",
                     metadata={"operation": "cleanup"}
                 )
-        
+
         elif operation == "capture":
             return ToolResult(
                 success=True,
@@ -207,7 +207,7 @@ class CortexDebug(ConsolidatedTool):
                 },
                 metadata={"operation": "capture"},
             )
-        
+
         elif operation == "analyze":
             return ToolResult(
                 success=True,
@@ -219,7 +219,7 @@ class CortexDebug(ConsolidatedTool):
                 },
                 metadata={"operation": "analyze"},
             )
-        
+
         elif operation == "fix_plan":
             return ToolResult(
                 success=True,
@@ -231,14 +231,14 @@ class CortexDebug(ConsolidatedTool):
                 },
                 metadata={"operation": "fix_plan"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
 class CortexRefactor(ConsolidatedTool):
     """
     Semantic refactoring operations.
-    
+
     Operations:
     - extract: Extract method/class
     - rename: Rename symbol
@@ -246,12 +246,12 @@ class CortexRefactor(ConsolidatedTool):
     - inline: Inline variable/method
     - organize: Organize imports/code
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_refactor"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -259,12 +259,12 @@ class CortexRefactor(ConsolidatedTool):
             "Execute semantic refactoring operations. Supports extract, rename, "
             "move, inline, and organize across Python, C#, TypeScript/JavaScript."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -395,20 +395,20 @@ class CortexRefactor(ConsolidatedTool):
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["extract", "rename", "move", "inline", "organize", "gate"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute refactoring operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "organize")
         target = params.get("target", "")
         new_name = params.get("new_name")
         destination = params.get("destination")
         scope = params.get("scope", "module")
-        
+
         if operation == "extract":
             return ToolResult(
                 success=True,
@@ -420,7 +420,7 @@ class CortexRefactor(ConsolidatedTool):
                 },
                 metadata={"operation": "extract"},
             )
-        
+
         elif operation == "rename":
             if not new_name:
                 return ToolResult(success=False, error="new_name required for rename")
@@ -434,7 +434,7 @@ class CortexRefactor(ConsolidatedTool):
                 },
                 metadata={"operation": "rename"},
             )
-        
+
         elif operation == "move":
             if not destination:
                 return ToolResult(success=False, error="destination required for move")
@@ -447,7 +447,7 @@ class CortexRefactor(ConsolidatedTool):
                 },
                 metadata={"operation": "move"},
             )
-        
+
         elif operation == "inline":
             return ToolResult(
                 success=True,
@@ -458,7 +458,7 @@ class CortexRefactor(ConsolidatedTool):
                 },
                 metadata={"operation": "inline"},
             )
-        
+
         elif operation == "organize":
             return ToolResult(
                 success=True,
@@ -731,7 +731,7 @@ class CortexRefactor(ConsolidatedTool):
 class CortexPlan(ConsolidatedTool):
     """
     Phase planning operations.
-    
+
     Operations:
     - create: Create new phase
     - update: Update phase status
@@ -739,12 +739,12 @@ class CortexPlan(ConsolidatedTool):
     - query: Query phases
     - sync: Sync with dashboard
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_plan"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -752,12 +752,12 @@ class CortexPlan(ConsolidatedTool):
             "Phase lifecycle management with intelligent resolution, "
             "setup/teardown hooks, and dashboard synchronization."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -788,24 +788,24 @@ class CortexPlan(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["create", "update", "complete", "query", "sync"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute plan operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "query")
         phase_id = params.get("phase_id")
         data = params.get("data", {})
         filter_criteria = params.get("filter", {})
-        
+
         if operation == "create":
             return ToolResult(
                 success=True,
@@ -817,7 +817,7 @@ class CortexPlan(ConsolidatedTool):
                 },
                 metadata={"operation": "create"},
             )
-        
+
         elif operation == "update":
             if not phase_id:
                 return ToolResult(success=False, error="phase_id required for update")
@@ -830,7 +830,7 @@ class CortexPlan(ConsolidatedTool):
                 },
                 metadata={"operation": "update"},
             )
-        
+
         elif operation == "complete":
             if not phase_id:
                 return ToolResult(success=False, error="phase_id required for complete")
@@ -844,7 +844,7 @@ class CortexPlan(ConsolidatedTool):
                 },
                 metadata={"operation": "complete"},
             )
-        
+
         elif operation == "query":
             return ToolResult(
                 success=True,
@@ -857,7 +857,7 @@ class CortexPlan(ConsolidatedTool):
                 },
                 metadata={"operation": "query"},
             )
-        
+
         elif operation == "sync":
             return ToolResult(
                 success=True,
@@ -868,26 +868,26 @@ class CortexPlan(ConsolidatedTool):
                 },
                 metadata={"operation": "sync"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
 class CortexOnboard(ConsolidatedTool):
     """
     Repository onboarding with LENS analysis and security assessment.
-    
+
     Operations:
     - full: Full onboarding (LENS + security)
     - lens: LENS analysis only
     - security: Security assessment only
     - status: Check onboarding status
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_onboard"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -895,12 +895,12 @@ class CortexOnboard(ConsolidatedTool):
             "Onboard repository with holistic LENS analysis and security assessment. "
             "Generates comprehensive knowledge base and security report."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -925,23 +925,23 @@ class CortexOnboard(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["full", "lens", "security", "status"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute onboard operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "full")
         path = params.get("path", ".")
         options = params.get("options", {})
-        
+
         if operation == "full":
             return ToolResult(
                 success=True,
@@ -962,7 +962,7 @@ class CortexOnboard(ConsolidatedTool):
                 },
                 metadata={"operation": "full"},
             )
-        
+
         elif operation == "lens":
             return ToolResult(
                 success=True,
@@ -977,7 +977,7 @@ class CortexOnboard(ConsolidatedTool):
                 },
                 metadata={"operation": "lens"},
             )
-        
+
         elif operation == "security":
             return ToolResult(
                 success=True,
@@ -993,7 +993,7 @@ class CortexOnboard(ConsolidatedTool):
                 },
                 metadata={"operation": "security"},
             )
-        
+
         elif operation == "status":
             return ToolResult(
                 success=True,
@@ -1005,14 +1005,14 @@ class CortexOnboard(ConsolidatedTool):
                 },
                 metadata={"operation": "status"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
 class CortexDashboard(ConsolidatedTool):
     """
     Dashboard operations.
-    
+
     Operations:
     - generate: Generate dashboard
     - update: Update dashboard
@@ -1020,12 +1020,12 @@ class CortexDashboard(ConsolidatedTool):
     - landing: Generate landing page
     - full_cycle: Full dashboard cycle
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_dashboard"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -1033,12 +1033,12 @@ class CortexDashboard(ConsolidatedTool):
             "Generate and manage dashboards. Create landing pages, "
             "repo dashboards, and perform full dashboard cycles."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -1070,24 +1070,24 @@ class CortexDashboard(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["generate", "update", "query", "landing", "full_cycle"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute dashboard operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "query")
         target = params.get("target")
         output_format = params.get("format", "html")
         options = params.get("options", {})
-        
+
         if operation == "generate":
             return ToolResult(
                 success=True,
@@ -1099,7 +1099,7 @@ class CortexDashboard(ConsolidatedTool):
                 },
                 metadata={"operation": "generate"},
             )
-        
+
         elif operation == "update":
             return ToolResult(
                 success=True,
@@ -1110,7 +1110,7 @@ class CortexDashboard(ConsolidatedTool):
                 },
                 metadata={"operation": "update"},
             )
-        
+
         elif operation == "query":
             return ToolResult(
                 success=True,
@@ -1121,7 +1121,7 @@ class CortexDashboard(ConsolidatedTool):
                 },
                 metadata={"operation": "query"},
             )
-        
+
         elif operation == "landing":
             return ToolResult(
                 success=True,
@@ -1132,7 +1132,7 @@ class CortexDashboard(ConsolidatedTool):
                 },
                 metadata={"operation": "landing"},
             )
-        
+
         elif operation == "full_cycle":
             return ToolResult(
                 success=True,
@@ -1148,7 +1148,7 @@ class CortexDashboard(ConsolidatedTool):
                 },
                 metadata={"operation": "full_cycle"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 

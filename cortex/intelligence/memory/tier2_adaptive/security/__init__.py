@@ -86,14 +86,14 @@ class SecurityPolicy:
         """
         # Basic evaluation logic
         return len(self.rules) > 0 or len(self.permissions) > 0
-    
+
     def validate_policy(self, policy_name: str, value: Any) -> bool:
         """Validate value against a security policy.
-        
+
         Args:
             policy_name: Name of the policy to validate against.
             value: Value to validate.
-            
+
         Returns:
             True if valid, False otherwise.
         """
@@ -102,37 +102,37 @@ class SecurityPolicy:
             if isinstance(value, str):
                 return len(value) <= max_length
             return True
-        
+
         elif policy_name == "allowed_file_extensions":
             if isinstance(value, str):
                 allowed = self._policies.get("allowed_file_extensions", [])
                 # Check if any allowed extension is in the value
                 return any(value.endswith(ext) for ext in allowed)
             return True
-        
+
         elif policy_name == "forbidden_modules":
             if isinstance(value, str):
                 forbidden = self._policies.get("forbidden_modules", [])
                 # Check if any forbidden module is in the value
                 return not any(module in value for module in forbidden)
             return True
-        
+
         return True
-    
+
     def get_policy(self, policy_name: str) -> Any:
         """Get a policy value.
-        
+
         Args:
             policy_name: Name of the policy.
-            
+
         Returns:
             Policy value or None if not found.
         """
         return self._policies.get(policy_name)
-    
+
     def set_policy(self, policy_name: str, value: Any) -> None:
         """Set a policy value.
-        
+
         Args:
             policy_name: Name of the policy.
             value: Policy value.
@@ -287,7 +287,7 @@ class SecurityViolation(Exception):
         context: Dict[str, Any] = None,
     ) -> None:
         """Initialize security violation.
-        
+
         Args:
             violation_type: Type of violation.
             severity: Severity level (1-5).
@@ -308,7 +308,7 @@ class SecurityValidator:
 
     def __init__(self, strict_mode: bool = False) -> None:
         """Initialize security validator.
-        
+
         Args:
             strict_mode: Enable strict validation mode.
         """
@@ -329,7 +329,7 @@ class SecurityValidator:
             # Check for injection patterns
             dangerous_patterns = ["<script", "eval(", "exec(", "import os"]
             lower_input = input_data.lower()
-            
+
             for pattern in dangerous_patterns:
                 if pattern in lower_input:
                     violation = SecurityViolation(
@@ -339,19 +339,19 @@ class SecurityValidator:
                     )
                     self.violations.append(violation)
                     return False
-        
+
         return True
-    
+
     def validate_input(self, input_data: str, field_name: str = "") -> bool:
         """Validate input data for security violations.
-        
+
         Args:
             input_data: Input string to validate.
             field_name: Field name for context.
-            
+
         Returns:
             True if valid.
-            
+
         Raises:
             SecurityViolation: If security violation detected in strict mode.
         """
@@ -369,7 +369,7 @@ class SecurityValidator:
             "exec(",
             "execute(",
         ]
-        
+
         # XSS patterns
         xss_patterns = [
             "<script",
@@ -378,7 +378,7 @@ class SecurityValidator:
             "onload=",
             "<iframe",
         ]
-        
+
         # Path traversal patterns
         path_traversal_patterns = [
             "../",
@@ -388,7 +388,7 @@ class SecurityValidator:
             "..%2f",
             "..%5c",
         ]
-        
+
         # Command injection patterns
         command_patterns = [
             "; rm -rf",
@@ -400,7 +400,7 @@ class SecurityValidator:
             "| ls",
             "& dir",
         ]
-        
+
         # Script injection patterns
         script_patterns = [
             "__import__",
@@ -411,9 +411,9 @@ class SecurityValidator:
             "import sys",
             "__builtins__",
         ]
-        
+
         lower_input = input_data.lower()
-        
+
         # Check SQL injection
         for pattern in sql_patterns:
             if pattern in lower_input:
@@ -426,7 +426,7 @@ class SecurityValidator:
                 if self.strict_mode:
                     raise violation
                 return False
-        
+
         # Check XSS
         for pattern in xss_patterns:
             if pattern in lower_input:
@@ -439,7 +439,7 @@ class SecurityValidator:
                 if self.strict_mode:
                     raise violation
                 return False
-        
+
         # Check path traversal
         for pattern in path_traversal_patterns:
             if pattern in lower_input:
@@ -452,7 +452,7 @@ class SecurityValidator:
                 if self.strict_mode:
                     raise violation
                 return False
-        
+
         # Check command injection
         for pattern in command_patterns:
             if pattern in lower_input:
@@ -465,7 +465,7 @@ class SecurityValidator:
                 if self.strict_mode:
                     raise violation
                 return False
-        
+
         # Check script injection
         for pattern in script_patterns:
             if pattern in lower_input:
@@ -478,7 +478,7 @@ class SecurityValidator:
                 if self.strict_mode:
                     raise violation
                 return False
-        
+
         return True
 
     def get_violations(self) -> list:
@@ -531,7 +531,7 @@ class OutputEncoder:
         """
         import json
         return json.dumps(text)
-    
+
     @staticmethod
     def encode_url(text: str) -> str:
         """URL-encode text.
@@ -544,7 +544,7 @@ class OutputEncoder:
         """
         from urllib.parse import quote
         return quote(text)
-    
+
     @staticmethod
     def escape_sql(text: str) -> str:
         """Escape SQL special characters.

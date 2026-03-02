@@ -6,7 +6,7 @@ Compliance: MCP-FIRST architecture
 Purpose:
     Exposes coherence validation via MCP:
     - cortex_validate_coherence: Validate file coherence
-    
+
 ENFORCEMENT: All tools MUST validate orchestrator_context.
 Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 """
@@ -34,17 +34,17 @@ async def cortex_validate_coherence(
     orchestrator_context: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Validate file coherence using Change Coherence Engine.
-    
+
     MCP Tool: cortex_validate_coherence
-    
+
     ENFORCEMENT: Validates orchestrator_context on entry.
-    
+
     This tool validates that file modifications maintain coherence:
     - No duplicate sections introduced
     - Version markers consistent
     - Structure not degraded
     - Best practices maintained
-    
+
     Args:
         file_path: Path to the file being validated
         content: Current/proposed file content
@@ -53,7 +53,7 @@ async def cortex_validate_coherence(
         check_versions: Whether to check version consistency
         check_structure: Whether to check structure preservation
         orchestrator_context: Context from MasterOrchestrator (required)
-        
+
     Returns:
         Dict with validation results:
         {
@@ -73,7 +73,7 @@ async def cortex_validate_coherence(
             "recommendations": [str],
             "summary": str
         }
-    
+
     Example:
         >>> result = await cortex_validate_coherence(
         ...     file_path="README.md",
@@ -87,7 +87,7 @@ async def cortex_validate_coherence(
     # ENFORCEMENT: Validate orchestrator routing (skip when called directly without context)
     if orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     try:
         from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
         from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
@@ -95,16 +95,16 @@ async def cortex_validate_coherence(
             CoherenceValidator,
             ValidationConfig,
         )
-        
+
         analyzer = StructureAnalyzer()
         scanner = DuplicateScanner()
-        
+
         # If we have pre-edit content, do before/after comparison
         if pre_edit_content:
             # Analyze pre-edit structure
             pre_structure = analyzer.analyze(pre_edit_content, file_path)
             pre_duplicates = scanner.scan_sections(pre_structure.sections)
-            
+
             # Create pre-context
             pre_context = PreEditContext(
                 file_path=Path(file_path),
@@ -113,7 +113,7 @@ async def cortex_validate_coherence(
                 existing_duplicates=pre_duplicates.all_duplicates,
                 relevant_practices=[],
             )
-            
+
             # Validate post-edit content
             config = ValidationConfig(
                 check_duplicates=check_duplicates,
@@ -121,20 +121,20 @@ async def cortex_validate_coherence(
                 check_structure=check_structure,
                 similarity_threshold=0.8,
             )
-            
+
             validator = CoherenceValidator(config=config)
             validation_result = validator.validate(pre_context, content)
-            
+
             # Scan post-edit for duplicates
             post_structure = analyzer.analyze(content, file_path)
             post_scan = scanner.scan_sections(post_structure.sections)
-            
+
             # Check version consistency
             version_issues = validation_result.details.get("issues", [])
             has_version_mismatch = any(
                 i.get("type") == "version_mismatch" for i in version_issues
             )
-            
+
             report = CoherenceReport(
                 file_path=Path(file_path),
                 status=validation_result.status,
@@ -151,17 +151,17 @@ async def cortex_validate_coherence(
                 ValidationConfig,
             )
             from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
-            
+
             config = ValidationConfig(
                 check_duplicates=check_duplicates,
                 check_versions=check_versions,
                 check_structure=False,  # Can't check without pre-edit
                 similarity_threshold=0.8,
             )
-            
+
             validator = CoherenceValidator(config=config)
             analyzer = StructureAnalyzer()
-            
+
             # Create minimal pre-context for validation
             structure = analyzer.analyze(content, file_path)
             pre_context = PreEditContext(
@@ -169,20 +169,20 @@ async def cortex_validate_coherence(
                 original_content=content,
                 structure=structure,
             )
-            
+
             validation_result = validator.validate(pre_context, content)
-            
+
             # Build report manually
             from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
-            
+
             scanner = DuplicateScanner()
             scan_result = scanner.scan_sections(structure.sections)
-            
+
             version_issues = validation_result.details.get("issues", [])
             has_version_mismatch = any(
                 i.get("type") == "version_mismatch" for i in version_issues
             )
-            
+
             report = CoherenceReport(
                 file_path=Path(file_path),
                 status=validation_result.status,
@@ -192,7 +192,7 @@ async def cortex_validate_coherence(
                 best_practice_violations=[],
                 recommendations=validation_result.details.get("recommendations", []),
             )
-        
+
         # Format response
         issues = []
         if report.validation_results:
@@ -205,7 +205,7 @@ async def cortex_validate_coherence(
                         "location": issue.get("location", ""),
                         "suggestion": issue.get("suggestion", ""),
                     })
-        
+
         return {
             "status": report.status.value,
             "file_path": str(report.file_path),
@@ -215,7 +215,7 @@ async def cortex_validate_coherence(
             "recommendations": report.recommendations,
             "summary": report.summary(),
         }
-        
+
     except Exception as e:
         logger.exception("Error in cortex_validate_coherence")
         return {

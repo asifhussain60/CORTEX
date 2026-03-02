@@ -183,15 +183,15 @@ ALL_TOOLS = [
 def register_all_tools(registry: Any) -> int:
     """
     Register all tool implementations with the registry.
-    
+
     Args:
         registry: ToolRegistry instance
-        
+
     Returns:
         Number of tools registered
     """
     count = 0
-    
+
     # Register class-based tools
     for tool_class in ALL_TOOLS:
         try:
@@ -201,17 +201,17 @@ def register_all_tools(registry: Any) -> int:
         except Exception as e:
             import logging
             logging.getLogger(__name__).warning(f"Failed to register {tool_class.__name__}: {e}")
-    
+
     # Register function-based toolkit tools (Phase 63)
     from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory
-    
+
     function_tools = [
         ("cortex_scan", cortex_scan),
         ("cortex_batch_transform", cortex_batch_transform),
         ("cortex_enrich", cortex_enrich),
         ("cortex_workflow", cortex_workflow),
     ]
-    
+
     for tool_name, tool_func in function_tools:
         try:
             from cortex.mcp.mcp_tool_base import ToolResult
@@ -243,7 +243,7 @@ def register_all_tools(registry: Any) -> int:
         except Exception as e:
             import logging
             logging.getLogger(__name__).warning(f"Failed to register function tool {tool_name}: {e}")
-    
+
     return count
 
 

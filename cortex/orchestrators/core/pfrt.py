@@ -15,7 +15,7 @@ from typing import Dict, Optional
 class PreFlightRequestTransformer:
     """
     Stage 0 orchestrator for request clarity transformation.
-    
+
     Responsibilities:
     - Remove redundant phrases and repetition
     - Synthesize multiple concerns into unified intent
@@ -23,7 +23,7 @@ class PreFlightRequestTransformer:
     - Convert uncertainty to decisive language
     - Flag anti-pattern directives
     - Inject classification hints for IntentRouter
-    
+
     Pipeline Position: Stage 0 (before InteractionOrchestrator)
     """
 
@@ -68,8 +68,8 @@ class PreFlightRequestTransformer:
         self.last_token_reduction: float = 0.0
 
     def transform(
-        self, 
-        user_request: str, 
+        self,
+        user_request: str,
         include_hints: bool = False
     ) -> str:
         """
@@ -190,13 +190,13 @@ class PreFlightRequestTransformer:
         """Merge fragmented concerns into unified statement."""
         # Split on sentence boundaries
         sentences = re.split(r"[.!]\s+", text)
-        
+
         if len(sentences) <= 2:
             return text  # Already concise
-        
+
         # Extract core action (first meaningful sentence)
         core_action = sentences[0]
-        
+
         # Extract constraints/requirements (remaining sentences)
         constraints = []
         for sentence in sentences[1:]:
@@ -206,13 +206,13 @@ class PreFlightRequestTransformer:
                                 "mcp", "exposed", "must", "required", "tdd"]
             ):
                 constraints.append(sentence.strip())
-        
+
         # Synthesize: "Action with constraint1 and constraint2"
         if constraints:
             synthesized = f"{core_action} with {' and '.join(constraints[:2])}"
         else:
             synthesized = core_action
-        
+
         return synthesized
 
     def _preserve_constraints(self, text: str) -> str:
@@ -228,10 +228,10 @@ class PreFlightRequestTransformer:
             "validation",
             "check existing",
         ]
-        
+
         # If text lacks constraints but original likely had them, flag it
         has_constraint = any(kw in text.lower() for kw in constraint_keywords)
-        
+
         if not has_constraint and any(
             marker in text.lower()
             for marker in ["ensure", "make sure", "don't break", "must be"]
@@ -243,7 +243,7 @@ class PreFlightRequestTransformer:
             else:
                 # Inject generic validation constraint
                 text += " with validation against existing implementations"
-        
+
         return text
 
     def _ensure_single_paragraph(self, text: str) -> str:
@@ -259,20 +259,20 @@ class PreFlightRequestTransformer:
     def _classify_intent(self, text: str) -> str:
         """
         Classify primary intent for IntentRouter hint.
-        
+
         Returns:
             Intent classification (IMPLEMENT|FIX|REFACTOR|ANALYZE|ENHANCE)
         """
         text_lower = text.lower()
-        
+
         # Score each intent based on verb presence
         scores: Dict[str, int] = {intent: 0 for intent in self.INTENT_VERBS}
-        
+
         for intent, verbs in self.INTENT_VERBS.items():
             for verb in verbs:
                 if rf"\b{verb}\b" in text_lower:
                     scores[intent] += 1
-        
+
         # Return highest-scoring intent
         max_intent = max(scores.items(), key=lambda x: x[1])
         return max_intent[0] if max_intent[1] > 0 else "IMPLEMENT"
@@ -280,10 +280,10 @@ class PreFlightRequestTransformer:
     def _estimate_tokens(self, text: str) -> float:
         """
         Estimate token count (approximation: words / 0.75).
-        
+
         Args:
             text: Input text
-            
+
         Returns:
             Estimated token count
         """

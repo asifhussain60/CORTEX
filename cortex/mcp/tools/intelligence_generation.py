@@ -25,19 +25,19 @@ from cortex.mcp.mcp_tool_base import (
 class CortexGenerateTests(ConsolidatedTool):
     """
     Intelligent test generation powered by multi-strategy analysis.
-    
+
     Combines:
     - Blind spot detection (coverage gaps)
     - Edge case generation (boundary values, null checks)
     - Security testing (OWASP vulnerabilities)
     - Value-based prioritization (P0-P3)
     """
-    
+
     @property
     def name(self) -> str:
         """The unique tool name identifier."""
         return "cortex_generate_tests"
-    
+
     @property
     def description(self) -> str:
         """Human-readable description of the tool."""
@@ -46,12 +46,12 @@ class CortexGenerateTests(ConsolidatedTool):
             "Detects blind spots, edge cases, and security vulnerabilities. "
             "Prioritizes tests by value score (P0-CRITICAL to P3-LOW)."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """List of parameters accepted by the tool."""
@@ -112,25 +112,25 @@ class CortexGenerateTests(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Supported operations (single operation tool)."""
         return ["generate"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute intelligent test generation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         try:
             # Validate required parameters
             target = params.get("target")
             target_type = params.get("target_type")
             file_path = params.get("file_path")
-            
+
             if not target or not target_type or not file_path:
                 return ToolResult(
                     success=False,
@@ -138,7 +138,7 @@ class CortexGenerateTests(ConsolidatedTool):
                     error="Missing required parameters: target, target_type, file_path",
                     metadata={"required_params": ["target", "target_type", "file_path"]},
                 )
-            
+
             # Validate target_type
             if target_type not in ["function", "endpoint"]:
                 return ToolResult(
@@ -147,13 +147,13 @@ class CortexGenerateTests(ConsolidatedTool):
                     error=f"Invalid target_type: {target_type}. Must be 'function' or 'endpoint'.",
                     metadata={"valid_types": ["function", "endpoint"]},
                 )
-            
+
             # Import IntelligentTestGenerator
             from cortex.orchestrators.intelligence.intelligent_test_generator import (
                 IntelligentTestGenerator,
                 TestGenerationRequest,
             )
-            
+
             # Build request
             request = TestGenerationRequest(
                 target_type=target_type,
@@ -169,14 +169,14 @@ class CortexGenerateTests(ConsolidatedTool):
                 accesses_filesystem=params.get("accesses_filesystem", False),
                 coverage_data=params.get("coverage_data"),
             )
-            
+
             # Initialize generator
             min_value_score = params.get("min_value_score", 70.0)
             generator = IntelligentTestGenerator(min_value_score=min_value_score)
-            
+
             # Generate tests
             result = generator.generate_tests(request)
-            
+
             # Format result
             tests_data = [
                 {
@@ -188,7 +188,7 @@ class CortexGenerateTests(ConsolidatedTool):
                 }
                 for test in result.tests
             ]
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -205,7 +205,7 @@ class CortexGenerateTests(ConsolidatedTool):
                     "strategies": ["blind_spots", "edge_cases", "security"],
                 },
             )
-            
+
         except ImportError as e:
             return ToolResult(
                 success=False,

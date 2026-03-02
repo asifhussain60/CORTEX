@@ -667,17 +667,17 @@ class LENSOrchestrator:
     def _detect_tech_stack(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Detect tech stack from file and AST imports (Phase 90 S1).
-        
+
         Uses TechStackAnalyzer to identify languages, frameworks, and libraries
         from file extensions, config files, and import statements.
-        
+
         Args:
             file_path: Path to analyzed file
             ast_result: AST analysis result containing imports
-        
+
         Returns:
             Dict with tech_stack detection results
-        
+
         Authority: AC-PHASE90-S1-001
         """
         try:
@@ -686,16 +686,16 @@ class LENSOrchestrator:
             if ast_result and "error" not in ast_result:
                 imports.extend(ast_result.get("imports", []))
                 imports.extend(list(ast_result.get("from_imports", {}).keys()))
-            
+
             # Analyze tech stack
             tech_stack = self.tech_stack_analyzer.analyze(
                 files=[str(file_path)],
                 imports=imports
             )
-            
+
             # Convert to dict for serialization
             return tech_stack.to_dict()
-            
+
         except Exception as e:
             return {
                 "primary_language": None,

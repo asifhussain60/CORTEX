@@ -23,14 +23,14 @@ logger = logging.getLogger(__name__)
 class LandingPageGenerator:
     """
     Generate and maintain the landing page hub for onboarded repositories.
-    
+
     Features:
     - Glassmorphism hero section with CORTEX branding
     - Auto-updating repository tiles grid
     - Registry-driven (registry.json)
     - Health score and status indicators
     - Responsive mobile-first design
-    
+
     Example:
         >>> generator = LandingPageGenerator()
         >>> generator.add_repo_to_registry({
@@ -42,14 +42,14 @@ class LandingPageGenerator:
         ... })
         >>> generator.regenerate_landing_page()
     """
-    
+
     def __init__(
         self,
         dashboards_root: Optional[Path] = None,
     ):
         """
         Initialize Landing Page Generator.
-        
+
         Args:
             dashboards_root: Root path for dashboards (company/dashboards/)
         """
@@ -58,7 +58,7 @@ class LandingPageGenerator:
         self.registry_path = self.dashboards_root / "registry.json"
         self.landing_path = self.dashboards_root / "index.html"
         self.assets_path = self.dashboards_root / "assets"
-    
+
     def add_repo_to_registry(
         self,
         repo_name: Optional[str] = None,
@@ -72,7 +72,7 @@ class LandingPageGenerator:
     ) -> bool:
         """
         Add or update repository in the registry.
-        
+
         Args:
             repo_name: Repository identifier (required if repo_info not provided)
             title: Display name
@@ -82,13 +82,13 @@ class LandingPageGenerator:
             confidence_score: Analysis confidence (0-100)
             tech_stack: List of technologies
             repo_info: Alternative dict with all info (legacy support)
-                
+
         Returns:
             True if successful
         """
         try:
             registry = self._load_registry()
-            
+
             # Support both dict and keyword args
             if repo_info:
                 name = repo_info.get("name")
@@ -106,18 +106,18 @@ class LandingPageGenerator:
                 entry_health = health_score
                 entry_confidence = confidence_score
                 entry_tech = tech_stack or []
-            
+
             if not name:
                 logger.error("Repository name is required")
                 return False
-            
+
             # Find existing or create new
             existing_idx = None
             for i, repo in enumerate(registry.get("repos", [])):
                 if repo.get("name") == name:
                     existing_idx = i
                     break
-            
+
             # Prepare repo entry
             entry = {
                 "name": name,
@@ -132,28 +132,28 @@ class LandingPageGenerator:
                 "onboarded_at": datetime.now().isoformat() if existing_idx is None else registry["repos"][existing_idx].get("onboarded_at", datetime.now().isoformat()),
                 "updated_at": datetime.now().isoformat(),
             }
-            
+
             if existing_idx is not None:
                 registry["repos"][existing_idx] = entry
                 logger.info(f"Updated repo in registry: {entry['name']}")
             else:
                 registry["repos"].append(entry)
                 logger.info(f"Added repo to registry: {entry['name']}")
-            
+
             self._save_registry(registry)
             return True
-            
+
         except Exception as e:
             logger.error(f"Failed to add repo to registry: {e}", exc_info=True)
             return False
-    
+
     def remove_repo_from_registry(self, name: str) -> bool:
         """
         Remove repository from registry.
-        
+
         Args:
             name: Repository name to remove
-            
+
         Returns:
             True if removed, False if not found
         """
@@ -164,52 +164,52 @@ class LandingPageGenerator:
                 r for r in registry.get("repos", [])
                 if r.get("name") != name
             ]
-            
+
             if len(registry["repos"]) < original_len:
                 self._save_registry(registry)
                 logger.info(f"Removed repo from registry: {name}")
                 return True
-            
+
             return False
-            
+
         except Exception as e:
             logger.error(f"Failed to remove repo from registry: {e}", exc_info=True)
             return False
-    
+
     def get_registry(self) -> Dict[str, Any]:
         """Get current registry contents."""
         return self._load_registry()
-    
+
     def list_repos(self) -> List[Dict[str, Any]]:
         """
         List all onboarded repositories.
-        
+
         Returns:
             List of repository info dicts
         """
         registry = self._load_registry()
         return registry.get("repos", [])
-    
+
     def regenerate_landing_page(self) -> Path:
         """
         Regenerate the landing page from registry.
-        
+
         Returns:
             Path to generated index.html
         """
         registry = self._load_registry()
         repos = registry.get("repos", [])
-        
+
         # Sort by most recent first
         repos.sort(key=lambda r: r.get("updated_at", ""), reverse=True)
-        
+
         html = self._generate_landing_html(repos)
-        
+
         get_file_factory().create_file(str(self.landing_path), html)
         logger.info(f"Regenerated landing page: {self.landing_path}")
-        
+
         return self.landing_path
-    
+
     def _load_registry(self) -> Dict[str, Any]:
         """Load registry from JSON file."""
         if self.registry_path.exists():
@@ -219,7 +219,7 @@ class LandingPageGenerator:
             "created": datetime.now().isoformat(),
             "repos": [],
         }
-    
+
     def _save_registry(self, registry: Dict[str, Any]) -> None:
         """Save registry to JSON file."""
         registry["updated"] = datetime.now().isoformat()
@@ -228,7 +228,7 @@ class LandingPageGenerator:
             str(self.registry_path),
             json.dumps(registry, indent=2),
         )
-    
+
     def _get_health_category(self, score: int) -> str:
         """Get health category from score."""
         if score >= 80:
@@ -239,16 +239,16 @@ class LandingPageGenerator:
             return "warning"
         else:
             return "critical"
-    
+
     def _generate_landing_html(self, repos: List[Dict[str, Any]]) -> str:
         """Generate complete landing page HTML."""
-        
+
         # Generate repo tiles
         if repos:
             tiles_html = self._generate_repo_tiles(repos)
         else:
             tiles_html = self._generate_empty_state()
-        
+
         return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -256,14 +256,14 @@ class LandingPageGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CORTEX Onboarding Dashboard Hub - Security-analyzed repository dashboards">
     <title>CORTEX Onboarding Hub | Repository Dashboards</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/CORTEX-logo-64.png">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="assets/css/dashboard-combined.css">
     <link rel="stylesheet" href="assets/css/landing.css">
-    
+
     <style>
         /* Additional inline styles for landing page */
         * {{
@@ -271,11 +271,11 @@ class LandingPageGenerator:
             padding: 0;
             box-sizing: border-box;
         }}
-        
+
         html {{
             scroll-behavior: smooth;
         }}
-        
+
         body {{
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
@@ -284,13 +284,13 @@ class LandingPageGenerator:
             min-height: 100vh;
             line-height: 1.6;
         }}
-        
+
         .container {{
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
         }}
-        
+
         @media (max-width: 768px) {{
             .container {{
                 padding: 1rem;
@@ -302,10 +302,10 @@ class LandingPageGenerator:
     <div class="container">
         <!-- Hero Section -->
         <section class="landing-hero">
-            <img src="assets/images/CORTEX-logo-512.png" 
-                 alt="CORTEX Logo" 
+            <img src="assets/images/CORTEX-logo-512.png"
+                 alt="CORTEX Logo"
                  class="landing-logo"
-                 width="150" 
+                 width="150"
                  height="150">
             <h1 class="landing-title">CORTEX Onboarding Hub</h1>
             <p class="landing-subtitle">
@@ -315,19 +315,19 @@ class LandingPageGenerator:
                 {len(repos)} repositories onboarded • Powered by CORTEX v8.0
             </p>
         </section>
-        
+
         <!-- Repository Tiles Grid -->
         <section class="repos-section">
             <div class="repos-grid">
                 {tiles_html}
             </div>
         </section>
-        
+
         <!-- Footer -->
         <footer class="landing-footer">
             <p>Generated by CORTEX • {datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
             <p style="margin-top: 0.5rem;">
-                <a href="https://github.com/asifhussain60/CORTEX" 
+                <a href="https://github.com/asifhussain60/CORTEX"
                    style="color: #00d4ff; text-decoration: none;"
                    target="_blank">
                     View CORTEX on GitHub →
@@ -335,7 +335,7 @@ class LandingPageGenerator:
             </p>
         </footer>
     </div>
-    
+
     <!-- Tile hover sound effect (optional) -->
     <script>
         // Add subtle interaction effects
@@ -350,22 +350,22 @@ class LandingPageGenerator:
     </script>
 </body>
 </html>'''
-    
+
     def _generate_repo_tiles(self, repos: List[Dict[str, Any]]) -> str:
         """Generate HTML for repository tiles."""
         tiles = []
-        
+
         for repo in repos:
             health_score = repo.get("health_score", 0)
             health_category = repo.get("health_category", self._get_health_category(health_score))
             tech_stack = repo.get("tech_stack", [])
-            
+
             # Tech stack badges
             tech_badges = ""
             if tech_stack:
                 badges = [f'<span style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-right: 0.25rem;">{tech}</span>' for tech in tech_stack[:3]]
                 tech_badges = f'<div style="margin-top: 0.75rem;">{" ".join(badges)}</div>'
-            
+
             tile = f'''
                 <a href="{repo.get('dashboard_path', '#')}" class="repo-tile">
                     <span class="repo-tile-icon">{repo.get('icon', '📦')}</span>
@@ -382,9 +382,9 @@ class LandingPageGenerator:
                 </a>
             '''
             tiles.append(tile)
-        
+
         return '\n'.join(tiles)
-    
+
     def _generate_empty_state(self) -> str:
         """Generate empty state HTML when no repos onboarded."""
         return '''
@@ -392,7 +392,7 @@ class LandingPageGenerator:
                 <div class="empty-state-icon">📂</div>
                 <h3 class="empty-state-title">No Repositories Onboarded</h3>
                 <p class="empty-state-description">
-                    Use the CORTEX MCP tool <code style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">cortex_onboard_repository</code> 
+                    Use the CORTEX MCP tool <code style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">cortex_onboard_repository</code>
                     to analyze and onboard your first repository.
                 </p>
                 <div style="margin-top: 1.5rem; font-family: monospace; font-size: 0.85rem; color: rgba(255,255,255,0.5);">
@@ -400,7 +400,7 @@ class LandingPageGenerator:
                 </div>
             </div>
         '''
-    
+
     def _format_date(self, iso_date: str) -> str:
         """Format ISO date to human readable."""
         if not iso_date:

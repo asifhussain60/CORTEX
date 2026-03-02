@@ -20,7 +20,7 @@ from cortex.core.event_bus import Event
 class FailedEvent:
     """
     Failed event with error context.
-    
+
     Attributes:
         event: Original event that failed
         error_message: Error description
@@ -39,7 +39,7 @@ class FailedEvent:
 class RetryStrategy:
     """
     Retry strategy configuration.
-    
+
     Attributes:
         max_retries: Maximum retry attempts
         backoff_seconds: Base backoff duration
@@ -50,7 +50,7 @@ class RetryStrategy:
     backoff_seconds: int = 60
     exponential: bool = True
     retry_priorities: List[int] = None
-    
+
     def __post_init__(self):
         if self.retry_priorities is None:
             self.retry_priorities = [0, 1, 2]  # Critical, high, normal
@@ -60,7 +60,7 @@ class RetryStrategy:
 class DLQAnalysis:
     """
     Dead Letter Queue analysis results.
-    
+
     Attributes:
         total_failed: Total failed events
         retry_eligible: Events eligible for retry
@@ -80,25 +80,25 @@ class DLQAnalysis:
 class DLQInspector:
     """
     Dead Letter Queue Inspector for CORTEX EventBus.
-    
+
     Analyzes failed events, provides smart retry logic, and helps diagnose
     event processing failures across orchestrators.
     """
-    
+
     def __init__(self, dlq_file: str) -> None:
         """
         Initialize DLQ inspector.
-        
+
         Args:
             dlq_file: Path to dead letter queue JSONL file
         """
         self.dlq_file = Path(dlq_file)
         self.dlq_file.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Create file if it doesn't exist
         if not self.dlq_file.exists():
             self.dlq_file.touch()
-    
+
     def add_failed_event(
         self,
         event: Event,
@@ -106,7 +106,7 @@ class DLQInspector:
     ) -> None:
         """
         Add failed event to DLQ.
-        
+
         Args:
             event: Failed event
             error_message: Error description
@@ -116,7 +116,7 @@ class DLQInspector:
             error_message=error_message,
             failure_time=datetime.now()
         )
-        
+
         dlq_entry = {
             "event": {
                 "type": event.type,
@@ -132,10 +132,10 @@ class DLQInspector:
             "retry_count": 0,
             "last_retry": None
         }
-        
+
         with open(self.dlq_file, 'a') as f:
             f.write(json.dumps(dlq_entry) + '\n')
-    
+
     def get_failed_events(
         self,
         priority: Optional[int] = None,
@@ -144,53 +144,53 @@ class DLQInspector:
     ) -> List[FailedEvent]:
         """
         Retrieve failed events from DLQ.
-        
+
         Args:
             priority: Filter by priority level
             source: Filter by source component
             limit: Maximum events to return
-            
+
         Returns:
             List of FailedEvent objects
         """
         failed_events = []
-        
+
         if not self.dlq_file.exists():
             return failed_events
-        
+
         with open(self.dlq_file, 'r') as f:
             for line in f:
                 try:
                     dlq_entry = json.loads(line.strip())
-                    
+
                     # Apply filters
                     event_data = dlq_entry["event"]
                     if priority is not None and event_data.get("priority") != priority:
                         continue
                     if source and event_data.get("source") != source:
                         continue
-                    
+
                     # Reconstruct FailedEvent
                     failed_event = self._reconstruct_failed_event(dlq_entry)
                     failed_events.append(failed_event)
-                    
+
                     if limit and len(failed_events) >= limit:
                         break
-                        
+
                 except (json.JSONDecodeError, KeyError):
                     continue
-        
+
         return failed_events
-    
+
     def analyze_dlq(self) -> DLQAnalysis:
         """
         Analyze dead letter queue for patterns and recommendations.
-        
+
         Returns:
             DLQAnalysis with statistics and recommendations
         """
         failed_events = self.get_failed_events()
-        
+
         if not failed_events:
             return DLQAnalysis(
                 total_failed=0,
@@ -200,38 +200,38 @@ class DLQInspector:
                 priority_distribution={},
                 recommendations=["✅ DLQ empty - no failed events"]
             )
-        
+
         # Analyze error types
         error_types = {}
         for fe in failed_events:
             error_key = self._categorize_error(fe.error_message)
             error_types[error_key] = error_types.get(error_key, 0) + 1
-        
+
         # Analyze failure sources
         failure_sources = {}
         for fe in failed_events:
             source = fe.event.source or "unknown"
             failure_sources[source] = failure_sources.get(source, 0) + 1
-        
+
         # Analyze priority distribution
         priority_dist = {}
         for fe in failed_events:
             priority = fe.event.priority
             priority_dist[priority] = priority_dist.get(priority, 0) + 1
-        
+
         # Count retry-eligible events
         retry_eligible = sum(
             1 for fe in failed_events
             if fe.retry_count < 3 and fe.event.priority <= 2
         )
-        
+
         # Generate recommendations
         recommendations = self._generate_recommendations(
             failed_events,
             error_types,
             failure_sources
         )
-        
+
         return DLQAnalysis(
             total_failed=len(failed_events),
             retry_eligible=retry_eligible,
@@ -240,37 +240,37 @@ class DLQInspector:
             priority_distribution=priority_dist,
             recommendations=recommendations
         )
-    
+
     def smart_retry(
         self,
         strategy: RetryStrategy
     ) -> Dict[str, Any]:
         """
         Perform smart retry of failed events based on strategy.
-        
+
         Args:
             strategy: Retry strategy configuration
-            
+
         Returns:
             Retry results dictionary
         """
         failed_events = self.get_failed_events()
-        
+
         retry_results = {
             "total_eligible": 0,
             "retried": 0,
             "skipped": 0,
             "reasons": []
         }
-        
+
         for fe in failed_events:
             # Check if eligible for retry
             if not self._is_retry_eligible(fe, strategy):
                 retry_results["skipped"] += 1
                 continue
-            
+
             retry_results["total_eligible"] += 1
-            
+
             # Calculate backoff
             if self._should_retry_now(fe, strategy):
                 retry_results["retried"] += 1
@@ -281,13 +281,13 @@ class DLQInspector:
                 retry_results["reasons"].append(
                     f"Event {fe.event.event_id}: Backoff not elapsed"
                 )
-        
+
         return retry_results
-    
+
     def _categorize_error(self, error_message: str) -> str:
         """Categorize error message into error type."""
         error_lower = error_message.lower()
-        
+
         if "timeout" in error_lower:
             return "timeout"
         elif "connection" in error_lower or "network" in error_lower:
@@ -300,7 +300,7 @@ class DLQInspector:
             return "validation"
         else:
             return "other"
-    
+
     def _generate_recommendations(
         self,
         failed_events: List[FailedEvent],
@@ -309,30 +309,30 @@ class DLQInspector:
     ) -> List[str]:
         """Generate actionable recommendations based on DLQ analysis."""
         recommendations = []
-        
+
         # Error type recommendations
         if error_types.get("timeout", 0) > 5:
             recommendations.append(
                 "⚠️ High timeout rate - consider increasing timeout thresholds"
             )
-        
+
         if error_types.get("network", 0) > 3:
             recommendations.append(
                 "⚠️ Network failures detected - check connectivity"
             )
-        
+
         if error_types.get("authorization", 0) > 0:
             recommendations.append(
                 "🔒 Authorization failures - verify credentials/permissions"
             )
-        
+
         # Source recommendations
         top_source = max(failure_sources.items(), key=lambda x: x[1])
         if top_source[1] > 10:
             recommendations.append(
                 f"🎯 Focus on {top_source[0]} - highest failure source ({top_source[1]} events)"
             )
-        
+
         # Retry recommendations
         retry_eligible = sum(
             1 for fe in failed_events
@@ -342,9 +342,9 @@ class DLQInspector:
             recommendations.append(
                 f"🔄 {retry_eligible} events eligible for retry"
             )
-        
+
         return recommendations or ["✅ No critical issues detected"]
-    
+
     def _is_retry_eligible(
         self,
         failed_event: FailedEvent,
@@ -354,13 +354,13 @@ class DLQInspector:
         # Max retries check
         if failed_event.retry_count >= strategy.max_retries:
             return False
-        
+
         # Priority check
         if failed_event.event.priority not in strategy.retry_priorities:
             return False
-        
+
         return True
-    
+
     def _should_retry_now(
         self,
         failed_event: FailedEvent,
@@ -372,15 +372,15 @@ class DLQInspector:
             elapsed = datetime.now() - failed_event.failure_time
         else:
             elapsed = datetime.now() - failed_event.last_retry
-        
+
         # Calculate backoff
         if strategy.exponential:
             backoff = strategy.backoff_seconds * (2 ** failed_event.retry_count)
         else:
             backoff = strategy.backoff_seconds
-        
+
         return elapsed >= timedelta(seconds=backoff)
-    
+
     def _mark_retried(self, failed_event: FailedEvent) -> None:
         """Mark event as retried in DLQ (increment retry count)."""
         import logging
@@ -391,11 +391,11 @@ class DLQInspector:
             failed_event.retry_count + 1,
         )
         failed_event.retry_count += 1
-    
+
     def _reconstruct_failed_event(self, dlq_entry: Dict[str, Any]) -> FailedEvent:
         """Reconstruct FailedEvent from DLQ entry."""
         event_data = dlq_entry["event"]
-        
+
         event = Event(
             type=event_data["type"],
             payload=event_data["payload"],
@@ -405,7 +405,7 @@ class DLQInspector:
             priority=event_data.get("priority", 2),
             timestamp=datetime.fromisoformat(event_data["timestamp"])
         )
-        
+
         return FailedEvent(
             event=event,
             error_message=dlq_entry["error_message"],

@@ -384,13 +384,13 @@ class GovernanceRegistry:
     def get_rule(self, rule_id: str) -> Result[Optional[GovernanceRule]]:
         """
         Get a single rule by ID, applying tier precedence.
-        
+
         When multiple versions of the same rule exist across tiers, returns
         the highest precedence version (tier 0 > tier 1 > tier 2).
-        
+
         Args:
             rule_id: Rule identifier (e.g., "CORE-008").
-        
+
         Returns:
             Result containing the GovernanceRule if found (applying tier precedence),
             Ok(None) if rule doesn't exist, or Err on failure.
@@ -399,22 +399,22 @@ class GovernanceRegistry:
             init_result = self.initialize()
             if init_result.is_err():
                 return Err(f"Failed to initialize registry: {init_result.unwrap_err()}")
-        
+
         # Check tier 0 first (highest precedence)
         if rule_id in self._tier0_rules:
             return Ok(self._tier0_rules[rule_id])
-        
+
         # Check tier 1 and tier 2 from rules list
         # Sort by tier (0 first, then 1, then 2) to respect precedence
         matching_rules = [r for r in self.rules if r.get("rule_id") == rule_id]
-        
+
         if not matching_rules:
             return Ok(None)
-        
+
         # Sort by tier (ascending: 0, 1, 2) and take first (highest precedence)
         matching_rules.sort(key=lambda r: r.get("tier", 999))
         best_match = matching_rules[0]
-        
+
         # Convert dict to GovernanceRule
         rule = GovernanceRule(
             rule_id=best_match.get("rule_id", rule_id),
@@ -423,7 +423,7 @@ class GovernanceRegistry:
             tier=best_match.get("tier", 0),
             description=best_match.get("description", ""),
         )
-        
+
         return Ok(rule)
 
     def get_all_rules(self) -> Dict[str, List[GovernanceRule]]:

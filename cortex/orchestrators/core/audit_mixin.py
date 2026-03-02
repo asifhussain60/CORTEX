@@ -11,9 +11,9 @@ Usage:
                 "ORCHESTRATE",
                 {"intent": context.get("intent")}
             )
-            
+
             # ... perform work ...
-            
+
             self.audit_complete(
                 correlation_id,
                 "ORCHESTRATE",
@@ -34,25 +34,25 @@ import time
 class OrchestratorAuditMixin:
     """
     Mixin providing structured audit logging for orchestrators.
-    
+
     Features:
     - Automatic correlation ID generation
     - Start/complete event pairs
     - SQLite persistence to governance.db
     - Query support for golden tests
     - Performance tracking (duration_ms)
-    
+
     Requirements:
     - Orchestrator must have `self.__class__.__name__` (standard Python)
     - Optional: `self.session_id` for session tracking
     """
-    
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize audit mixin."""
         super().__init__(*args, **kwargs)
         self._audit_db_path: Optional[Path] = None
         self._audit_session_id: Optional[str] = None
-    
+
     def _get_audit_db_path(self) -> Path:
         """Get path to audit database (governance.db)."""
         if self._audit_db_path is None:
@@ -60,7 +60,7 @@ class OrchestratorAuditMixin:
             project_root = Path(__file__).parent.parent.parent.parent
             self._audit_db_path = project_root / ".cortex-runtime" / "state" / "governance.db"
         return self._audit_db_path
-    
+
     def _get_session_id(self) -> str:
         """Get or create session ID for audit tracking."""
         if self._audit_session_id is None:
@@ -70,7 +70,7 @@ class OrchestratorAuditMixin:
             else:
                 self._audit_session_id = f"session-{uuid.uuid4().hex[:8]}"
         return self._audit_session_id
-    
+
     @contextmanager
     def _get_audit_connection(self) -> sqlite3.Connection:
         """Get database connection for audit logging."""
@@ -81,7 +81,7 @@ class OrchestratorAuditMixin:
             yield conn
         finally:
             conn.close()
-    
+
     def audit_start(
         self,
         activity: str,
@@ -91,13 +91,13 @@ class OrchestratorAuditMixin:
     ) -> str:
         """
         Log orchestrator activity start.
-        
+
         Args:
             activity: Activity name (e.g., "CLASSIFY_INTENT", "GENERATE_TESTS")
             input_parameters: Input parameters as dict
             workflow_stage: One of INTERACTION, INTENT, INTELLIGENCE, EXECUTION
             parent_trace_id: Parent trace ID for hierarchical tracking
-        
+
         Returns:
             correlation_id: Unique ID for this activity (use in audit_complete)
         """
@@ -105,10 +105,10 @@ class OrchestratorAuditMixin:
         timestamp = datetime.now(timezone.utc).isoformat()
         orchestrator_name = self.__class__.__name__
         session_id = self._get_session_id()
-        
+
         # Serialize input parameters
         input_params_json = json.dumps(input_parameters) if input_parameters else None
-        
+
         try:
             with self._get_audit_connection() as conn:
                 conn.execute("""
@@ -133,9 +133,9 @@ class OrchestratorAuditMixin:
             # Table doesn't exist yet - fail silently in development
             # Production should have schema applied
             pass
-        
+
         return correlation_id
-    
+
     def audit_complete(
         self,
         correlation_id: str,
@@ -147,7 +147,7 @@ class OrchestratorAuditMixin:
     ) -> None:
         """
         Log orchestrator activity completion.
-        
+
         Args:
             correlation_id: Correlation ID from audit_start
             activity: Activity name (must match audit_start)
@@ -158,11 +158,11 @@ class OrchestratorAuditMixin:
         """
         timestamp = datetime.now(timezone.utc).isoformat()
         orchestrator_name = self.__class__.__name__
-        
+
         # Serialize output
         output_json = json.dumps(output_results) if output_results else None
         decision_json = json.dumps(decision_point) if decision_point else None
-        
+
         # Calculate duration by finding start event
         duration_ms = None
         try:
@@ -177,7 +177,7 @@ class OrchestratorAuditMixin:
                     start_time = datetime.fromisoformat(row['timestamp'])
                     end_time = datetime.now(timezone.utc)
                     duration_ms = int((end_time - start_time).total_seconds() * 1000)
-                
+
                 # Insert completion event
                 conn.execute("""
                     INSERT INTO orchestrator_audit_events (
@@ -202,7 +202,7 @@ class OrchestratorAuditMixin:
         except sqlite3.OperationalError:
             # Table doesn't exist yet - fail silently
             pass
-    
+
     def get_audit_events(
         self,
         correlation_id: Optional[str] = None,
@@ -210,11 +210,11 @@ class OrchestratorAuditMixin:
     ) -> List[Dict[str, Any]]:
         """
         Retrieve audit events for this orchestrator.
-        
+
         Args:
             correlation_id: Filter by correlation ID
             session_id: Filter by session ID
-        
+
         Returns:
             List of audit events as dicts
         """
@@ -222,23 +222,23 @@ class OrchestratorAuditMixin:
             with self._get_audit_connection() as conn:
                 query = "SELECT * FROM v_golden_test_audit_trail WHERE orchestrator_name = ?"
                 params = [self.__class__.__name__]
-                
+
                 if correlation_id:
                     query += " AND correlation_id = ?"
                     params.append(correlation_id)
-                
+
                 if session_id:
                     query += " AND session_id = ?"
                     params.append(session_id)
-                
+
                 query += " ORDER BY timestamp ASC"
-                
+
                 cursor = conn.execute(query, params)
                 return [dict(row) for row in cursor.fetchall()]
         except sqlite3.OperationalError:
             # Table or view doesn't exist
             return []
-    
+
     @contextmanager
     def audit_activity(
         self,
@@ -248,23 +248,23 @@ class OrchestratorAuditMixin:
     ) -> Generator[None, None, None]:
         """
         Context manager for automatic start/complete logging.
-        
+
         Usage:
             with self.audit_activity("CLASSIFY_INTENT", {"text": utterance}):
                 result = self._do_classification(utterance)
                 return result
-        
+
         Args:
             activity: Activity name
             input_parameters: Input parameters
             workflow_stage: Workflow stage
-        
+
         Yields:
             correlation_id: Correlation ID for this activity
         """
         correlation_id = self.audit_start(activity, input_parameters, workflow_stage)
         start_time = time.time()
-        
+
         try:
             yield correlation_id
             # Success - log completion

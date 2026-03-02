@@ -27,11 +27,11 @@ class ComplianceReporter:
         findings: Optional[List[Dict[str, Any]]] = None,
     ) -> ComplianceReport:
         """Generate report.
-        
+
         Args:
             regulation: Parameter for regulation.
             findings: Parameter for findings.
-        
+
         Returns:
             ComplianceReport result.
         """
@@ -47,10 +47,10 @@ class ComplianceReporter:
 
     def export_csv(self, report: ComplianceReport) -> str:
         """Export csv.
-        
+
         Args:
             report: Parameter for report.
-        
+
         Returns:
             str result.
         """
@@ -68,7 +68,7 @@ class EvidenceCollector:
 
     def collect(self, evidence_type: str, data: Any, source: str = "system") -> None:
         """Collect.
-        
+
         Args:
             evidence_type: Parameter for evidence type.
             data: Parameter for data.
@@ -83,7 +83,7 @@ class EvidenceCollector:
 
     def get_evidence(self) -> List[Dict[str, Any]]:
         """Get evidence.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -100,10 +100,10 @@ class ComplianceAutomation:
 
     def run_checks(self, controls: List[str]) -> Dict[str, Any]:
         """Run checks.
-        
+
         Args:
             controls: Parameter for controls.
-        
+
         Returns:
             Dict[str, Any] result.
         """
@@ -122,10 +122,10 @@ class ComplianceDashboard:
 
     def get_summary(self, findings: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
         """Get summary.
-        
+
         Args:
             findings: Parameter for findings.
-        
+
         Returns:
             Dict[str, Any] result.
         """
@@ -149,10 +149,10 @@ class ComplianceOrchestrator:
 
     def run(self, regulations: Optional[List[str]] = None) -> List[ComplianceReport]:
         """Run.
-        
+
         Args:
             regulations: Parameter for regulations.
-        
+
         Returns:
             List[ComplianceReport] result.
         """
@@ -165,10 +165,10 @@ class CertificationGenerator:
 
     def generate(self, report: ComplianceReport) -> str:
         """Generate.
-        
+
         Args:
             report: Parameter for report.
-        
+
         Returns:
             str result.
         """

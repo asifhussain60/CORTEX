@@ -13,7 +13,7 @@ from datetime import datetime
 
 class ComponentName(str, Enum):
     """Component names for SLA tracking."""
-    
+
     ORCHESTRATOR = "orchestrator"
     INTENT_ROUTER = "intent_router"
     KNOWLEDGE_GRAPH = "knowledge_graph"
@@ -26,7 +26,7 @@ class ComponentName(str, Enum):
 
 class MetricType(str, Enum):
     """Metric types for performance tracking."""
-    
+
     LATENCY = "latency"
     LATENCY_MS = "latency_ms"
     RESPONSE_TIME_MS = "response_time_ms"
@@ -42,9 +42,9 @@ class MetricType(str, Enum):
 @dataclass
 class PerformanceSLA:
     """Performance SLA definition.
-    
+
     Defines performance baselines for CORE-030 compliance.
-    
+
     Args:
         component: Component name
         metric: Metric type
@@ -53,11 +53,11 @@ class PerformanceSLA:
         maximum: Maximum acceptable value
         unit: Unit of measurement (optional, defaults to "ms")
         description: Human-readable description (optional, defaults to empty)
-    
+
     Raises:
         ValueError: If constraints are invalid (target > p99 > maximum)
     """
-    
+
     component: str
     metric: str
     target: float
@@ -65,7 +65,7 @@ class PerformanceSLA:
     maximum: float
     unit: str = "ms"
     description: str = ""
-    
+
     def __post_init__(self) -> None:
         """Validate SLA constraints."""
         if self.target > self.p99:
@@ -74,17 +74,17 @@ class PerformanceSLA:
             raise ValueError(f"P99 ({self.p99}) cannot be greater than maximum ({self.maximum})")
         if self.target <= 0 or self.p99 <= 0 or self.maximum <= 0:
             raise ValueError("All values must be positive")
-    
+
     def check_compliance(self, value: float) -> tuple:
         """Check compliance of a value against this SLA.
-        
+
         Args:
             value: Value to check
-        
+
         Returns:
             Tuple of (compliant, severity) where:
             - compliant: True if within maximum, False otherwise
-            - severity: "ok" if within target, "warning" if within p99, 
+            - severity: "ok" if within target, "warning" if within p99,
                        "critical" if within maximum, "violation" if exceeds maximum
         """
         if value > self.maximum:
@@ -100,7 +100,7 @@ class PerformanceSLA:
 @dataclass
 class ComplianceViolation:
     """Record of SLA compliance violation.
-    
+
     Args:
         component: Component that violated SLA
         metric: Metric that was violated
@@ -110,7 +110,7 @@ class ComplianceViolation:
         timestamp: When violation occurred (optional, defaults to now)
         severity: Violation severity (auto-calculated if not provided)
     """
-    
+
     component: str
     metric: str
     measured_value: float
@@ -118,12 +118,12 @@ class ComplianceViolation:
     sla_maximum: float
     timestamp: datetime = None
     severity: str = None
-    
+
     def __post_init__(self) -> None:
         """Validate violation data and auto-calculate severity."""
         if self.timestamp is None:
             self.timestamp = datetime.utcnow()
-        
+
         if self.severity is None:
             # Auto-calculate severity based on measured value
             midpoint = self.sla_target + (self.sla_maximum - self.sla_target) / 2
@@ -133,20 +133,20 @@ class ComplianceViolation:
                 self.severity = "WARNING"
             else:
                 self.severity = "INFO"
-        
+
         if self.severity not in ["INFO", "WARNING", "CRITICAL"]:
             raise ValueError(f"Invalid severity: {self.severity}")
 
 
 class PerformanceMonitor:
     """Performance monitoring and SLA compliance tracking.
-    
+
     Tracks performance measurements and detects SLA violations.
-    
+
     Args:
         slas: Dictionary of SLAs keyed by component, then metric
     """
-    
+
     def __init__(self, slas: Optional[Dict[str, Dict[str, PerformanceSLA]]] = None) -> None:
         """Initialize monitor with SLAs."""
         if slas is None:
@@ -155,27 +155,27 @@ class PerformanceMonitor:
         self._slas = slas
         self._violations: List[ComplianceViolation] = []
         self._measurements: Dict[tuple, List[tuple]] = {}
-    
+
     def add_sla(self, sla: PerformanceSLA) -> None:
         """Add SLA to monitor.
-        
+
         Args:
             sla: SLA to add
         """
         if sla.component not in self._slas:
             self._slas[sla.component] = {}
         self._slas[sla.component][sla.metric] = sla
-    
+
     def get_sla(self, component: str, metric: str) -> PerformanceSLA:
         """Get SLA for component and metric.
-        
+
         Args:
             component: Component name
             metric: Metric type
-        
+
         Returns:
             PerformanceSLA for the component/metric
-        
+
         Raises:
             ValueError: If component or metric not found
         """
@@ -184,7 +184,7 @@ class PerformanceMonitor:
         if metric not in self._slas[component]:
             raise ValueError(f"Unknown metric: {metric}")
         return self._slas[component][metric]
-    
+
     def record_measurement(
         self,
         component: str,
@@ -193,34 +193,34 @@ class PerformanceMonitor:
         timestamp: Optional[datetime] = None
     ) -> Optional[ComplianceViolation]:
         """Record performance measurement and check compliance.
-        
+
         Args:
             component: Component name
             metric: Metric type
             value: Measured value
             timestamp: Measurement timestamp (defaults to now)
-        
+
         Returns:
             ComplianceViolation if SLA exceeded, None otherwise
         """
         if timestamp is None:
             timestamp = datetime.now()
-        
+
         # Store measurement
         key = (component, metric)
         if key not in self._measurements:
             self._measurements[key] = []
         self._measurements[key].append((timestamp, value))
-        
+
         # Check compliance
         sla = self._slas.get(component, {}).get(metric)
         if sla is None:
             return None
-        
+
         # Check if value exceeds target (any level)
         if value <= sla.target:
             return None
-        
+
         # Create violation record
         violation = ComplianceViolation(
             component=component,
@@ -230,10 +230,10 @@ class PerformanceMonitor:
             sla_maximum=sla.maximum,
             timestamp=timestamp
         )
-        
+
         self._violations.append(violation)
         return violation
-    
+
     def get_violations(
         self,
         component: Optional[str] = None,
@@ -241,58 +241,58 @@ class PerformanceMonitor:
         severity: Optional[str] = None
     ) -> List[ComplianceViolation]:
         """Get recorded violations with optional filtering.
-        
+
         Args:
             component: Filter by component
             metric: Filter by metric
             severity: Filter by severity
-        
+
         Returns:
             List of matching violations
         """
         violations = self._violations
-        
+
         if component:
             violations = [v for v in violations if v.component == component]
         if metric:
             violations = [v for v in violations if v.metric == metric]
         if severity:
             violations = [v for v in violations if v.severity == severity]
-        
+
         return violations
-    
+
     def get_measurements(
         self,
         component: str,
         metric: str
     ) -> List[tuple]:
         """Get all measurements for a component/metric.
-        
+
         Args:
             component: Component name
             metric: Metric type
-        
+
         Returns:
             List of (timestamp, value) tuples
         """
         key = (component, metric)
         return self._measurements.get(key, []).copy()
-    
+
     def clear_violations(self) -> None:
         """Clear all recorded violations."""
         self._violations.clear()
-    
+
     def get_statistics(
         self,
         component: str,
         metric: str
     ) -> Dict[str, float]:
         """Get statistics for measurements.
-        
+
         Args:
             component: Component name
             metric: Metric type
-        
+
         Returns:
             Dictionary with count, min, max, mean, p50, p95, p99
         """
@@ -307,11 +307,11 @@ class PerformanceMonitor:
                 "p95": 0,
                 "p99": 0
             }
-        
+
         values = [v for _, v in measurements]
         values_sorted = sorted(values)
         count = len(values)
-        
+
         def percentile(data: List[float], p: float) -> float:
             """Calculate percentile."""
             if not data:
@@ -322,7 +322,7 @@ class PerformanceMonitor:
             if f == c:
                 return data[f]
             return data[f] * (c - k) + data[c] * (k - f)
-        
+
         return {
             "count": count,
             "min": min(values),
@@ -332,7 +332,7 @@ class PerformanceMonitor:
             "p95": percentile(values_sorted, 95),
             "p99": percentile(values_sorted, 99)
         }
-    
+
     def check_compliance(
         self,
         component: str,
@@ -340,19 +340,19 @@ class PerformanceMonitor:
         value: float
     ) -> bool:
         """Check if value is within SLA and record violation if not.
-        
+
         Args:
             component: Component name
             metric: Metric type
             value: Value to check
-        
+
         Returns:
             True if within SLA (p99), False otherwise
         """
         sla = self._slas.get(component, {}).get(metric)
         if sla is None:
             return True
-        
+
         # Record violation if exceeds target
         if value > sla.target:
             violation = ComplianceViolation(
@@ -364,7 +364,7 @@ class PerformanceMonitor:
                 timestamp=datetime.now()
             )
             self._violations.append(violation)
-        
+
         # Compliance is based on p99
         return value <= sla.p99
 
@@ -502,7 +502,7 @@ _monitor: Optional[PerformanceMonitor] = None
 
 def get_monitor() -> PerformanceMonitor:
     """Get global performance monitor instance.
-    
+
     Returns:
         Global PerformanceMonitor instance
     """
@@ -514,12 +514,12 @@ def get_monitor() -> PerformanceMonitor:
 
 def check_sla(component: str, metric: str, value: float) -> bool:
     """Check if value is within SLA (convenience function).
-    
+
     Args:
         component: Component name
         metric: Metric type
         value: Value to check
-    
+
     Returns:
         True if within SLA, False otherwise
     """
@@ -533,13 +533,13 @@ def record_measurement(
     timestamp: Optional[datetime] = None
 ) -> Optional[ComplianceViolation]:
     """Record measurement and check compliance (convenience function).
-    
+
     Args:
         component: Component name
         metric: Metric type
         value: Measured value
         timestamp: Measurement timestamp (defaults to now)
-    
+
     Returns:
         ComplianceViolation if SLA exceeded, None otherwise
     """

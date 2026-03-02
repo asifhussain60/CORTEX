@@ -27,7 +27,7 @@ class ExecutionStatus(str, Enum):
 class ExecutionContext:
     """
     Execution context for strategies.
-    
+
     Attributes:
         strategy_type: Type of strategy (phase/wave/track)
         phase_id: Unique phase identifier (optional, defaults to wave_id or track_id)
@@ -52,7 +52,7 @@ class ExecutionContext:
     dependencies: List[str] = field(default_factory=list)
     resources: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         """Auto-populate phase_id from wave_id or track_id if not provided."""
         if not self.phase_id:
@@ -63,7 +63,7 @@ class ExecutionContext:
 class ExecutionResult:
     """
     Execution result from strategy.
-    
+
     Attributes:
         success: True if execution succeeded
         phase_id: Phase identifier
@@ -86,7 +86,7 @@ class ExecutionResult:
 class ValidationResult:
     """
     Validation result from strategy.
-    
+
     Attributes:
         passed: True if validation passed (matches test expectation)
         valid: Alias for passed (backward compatibility)
@@ -96,7 +96,7 @@ class ValidationResult:
     passed: bool
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
-    
+
     @property
     def valid(self) -> bool:
         """Alias for passed."""
@@ -106,42 +106,42 @@ class ValidationResult:
 class ExecutionStrategy(ABC):
     """
     Base class for all planning execution strategies.
-    
+
     All strategies must implement execute() and validate() methods.
     This enforces a consistent interface across all strategy types.
-    
+
     Example:
         class CustomStrategy(ExecutionStrategy):
             def execute(self, context: ExecutionContext) -> ExecutionResult:
                 # Implementation here
                 pass
-            
+
             def validate(self, context: ExecutionContext) -> ValidationResult:
                 # Validation logic here
                 pass
     """
-    
+
     @abstractmethod
     def execute(self, context: ExecutionContext) -> ExecutionResult:
         """
         Execute strategy against provided context.
-        
+
         Args:
             context: Execution context containing phase data
-        
+
         Returns:
             ExecutionResult with success/failure and output data
         """
         pass
-    
+
     @abstractmethod
     def validate(self, context: ExecutionContext) -> ValidationResult:
         """
         Validate strategy preconditions.
-        
+
         Args:
             context: Execution context to validate
-        
+
         Returns:
             ValidationResult with any errors/warnings
         """

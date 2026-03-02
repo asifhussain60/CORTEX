@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class PipelineStage(str, Enum):
     """Pipeline execution stages."""
-    
+
     DISCOVER = "discover"
     EXTRACT = "extract"
     RENDER = "render"
@@ -32,14 +32,14 @@ class PipelineStage(str, Enum):
 
 class BuildMode(str, Enum):
     """Build execution modes."""
-    
+
     FULL = "full"
     INCREMENTAL = "incremental"
 
 
 class NavigationLevel(str, Enum):
     """Navigation hierarchy levels."""
-    
+
     ROLE = "role"
     CATEGORY = "category"
     PAGE = "page"
@@ -48,7 +48,7 @@ class NavigationLevel(str, Enum):
 @dataclass
 class ContentSection:
     """Content section metadata."""
-    
+
     title: str
     content: str
     order: int
@@ -58,7 +58,7 @@ class ContentSection:
 @dataclass
 class NavigationItem:
     """Navigation item for site structure."""
-    
+
     title: str
     url: str
     level: NavigationLevel
@@ -69,7 +69,7 @@ class NavigationItem:
 @dataclass
 class PageMetadata:
     """Generated page metadata."""
-    
+
     title: str
     role: str
     path: Path
@@ -81,7 +81,7 @@ class PageMetadata:
 @dataclass
 class HTMLGenerationReport:
     """Report of HTML generation."""
-    
+
     status: str
     pages_generated: int
     roles_processed: List[str]
@@ -92,14 +92,14 @@ class HTMLGenerationReport:
 class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Orchestrates end-to-end documentation site generation.
-    
+
     Connects existing pipeline components:
     - Discovery pipeline (orchestrators/tools discovery)
     - Content extraction (MD → content.json)
     - Template rendering (Jinja2 → HTML)
     - Validation (link checking, schema validation)
     - Deployment (GitHub Pages)
-    
+
     Attributes:
         content_root: Source Markdown directory
         output_root: Generated HTML output directory
@@ -112,7 +112,7 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
     # Phase 94f — advisory: docs build pipeline, invoked by DIGEST/SYNC intents.
     # Not a primary code-execution entry point. Gateway routing deferred.
     PHASE90_GATEWAY_EXEMPT: bool = True
-    
+
     def __init__(
         self,
         content_root: Path = Path("cortex-docs/content/src"),
@@ -124,7 +124,7 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
     ) -> None:
         """
         Initialize orchestrator.
-        
+
         Args:
             content_root: Source Markdown directory
             output_root: Generated HTML output directory
@@ -139,20 +139,20 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
         self.build_mode = build_mode
         self.skip_stages = skip_stages or []
         self.dry_run = dry_run
-        
+
         # Pipeline results storage
         self._discovery_data: Dict[str, Any] = {}
         self._content_json: Dict[str, Any] = {}
         self._rendered_pages: List[PageMetadata] = []
         self._validation_errors: List[str] = []
-    
+
     def run(self) -> Dict[str, Any]:
         """
         Execute full documentation pipeline.
-        
+
         Returns:
             Pipeline execution report with status and metrics
-            
+
         Raises:
             Exception: If any pipeline stage fails
         """
@@ -163,31 +163,31 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
 
         try:
             stages_completed = 0
-            
+
             # Stage 1: Discovery
             if PipelineStage.DISCOVER not in self.skip_stages:
                 self._discovery_data = self.run_stage(PipelineStage.DISCOVER)
                 stages_completed += 1
-            
+
             # Stage 2: Extraction
             if PipelineStage.EXTRACT not in self.skip_stages:
                 self._content_json = self.run_stage(PipelineStage.EXTRACT)
                 stages_completed += 1
-            
+
             # Stage 3: Rendering
             if PipelineStage.RENDER not in self.skip_stages:
                 render_result = self.run_stage(PipelineStage.RENDER)
                 self._rendered_pages = render_result.get("pages", [])
                 stages_completed += 1
-            
+
             # Stage 4: Validation
             if PipelineStage.VALIDATE not in self.skip_stages:
                 validation_result = self.run_stage(PipelineStage.VALIDATE)
                 self._validation_errors = validation_result.get("errors", [])
                 stages_completed += 1
-            
+
             duration = time.time() - start_time
-            
+
             return {
                 "status": "success",
                 "stages_completed": stages_completed,
@@ -197,30 +197,30 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
                 "cache_hit": self.build_mode == BuildMode.INCREMENTAL and len(self._rendered_pages) == 0,
                 "validation_errors": len(self._validation_errors),
             }
-            
+
         except Exception as e:
             logger.error(f"Pipeline failed: {e}")
             raise
-    
+
     def run_stage(self, stage: PipelineStage) -> Dict[str, Any]:
         """
         Execute a single pipeline stage.
-        
+
         Args:
             stage: Pipeline stage to execute
-            
+
         Returns:
             Stage execution results
-            
+
         Raises:
             ValueError: If stage is invalid
             Exception: If stage execution fails
         """
         if not isinstance(stage, PipelineStage):
             raise ValueError(f"Invalid stage: {stage}")
-        
+
         logger.info(f"Running stage: {stage.value}")
-        
+
         if stage == PipelineStage.DISCOVER:
             return self._run_discovery()
         elif stage == PipelineStage.EXTRACT:
@@ -233,16 +233,16 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
             return self._run_deployment()
         else:
             raise ValueError(f"Unknown stage: {stage}")
-    
+
     def _run_discovery(self) -> Dict[str, Any]:
         """Run discovery pipeline (orchestrators, tools, metrics)."""
         # Import here to avoid circular dependencies
         try:
             from cortex.intelligence.documentation.discovery_pipeline import DiscoveryPipeline
-            
+
             pipeline = DiscoveryPipeline()
             result = pipeline.discover()
-            
+
             return {
                 "status": "success",
                 "orchestrators": result.get("orchestrators", 0),
@@ -255,15 +255,15 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
                 "orchestrators": 28,
                 "tools": 10,
             }
-    
+
     def _run_extraction(self) -> Dict[str, Any]:
         """Run content extraction (MD → content.json)."""
         try:
             from cortex.intelligence.documentation.content_extractor import ContentExtractor
-            
+
             extractor = ContentExtractor(self.content_root)
             result = extractor.extract()
-            
+
             return {
                 "status": "success",
                 "documents": result.get("documents", 0),
@@ -274,15 +274,15 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
                 "status": "success",
                 "documents": 30,
             }
-    
+
     def _run_rendering(self) -> Dict[str, Any]:
         """Run template rendering (content.json → HTML)."""
         try:
             from cortex.intelligence.documentation.docs_template_renderer import TemplateRenderer
-            
+
             renderer = TemplateRenderer(self.template_dir, self.output_root)
             result = renderer.render(self._content_json)
-            
+
             return {
                 "status": "success",
                 "pages": result.get("pages", []),
@@ -293,15 +293,15 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
                 "status": "success",
                 "pages": [],
             }
-    
+
     def _run_validation(self) -> Dict[str, Any]:
         """Run content validation (link checking, schema)."""
         try:
             from cortex.intelligence.documentation.content_validator import ContentValidator
-            
+
             validator = ContentValidator(self.output_root)
             result = validator.validate()
-            
+
             return {
                 "status": "success",
                 "errors": result.get("errors", []),
@@ -312,13 +312,13 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
                 "status": "success",
                 "errors": [],
             }
-    
+
     def _run_deployment(self) -> Dict[str, Any]:
         """Run deployment (GitHub Pages)."""
         if self.dry_run:
             logger.info("Dry run: skipping deployment")
             return {"status": "success", "deployed": False}
-        
+
         # Deployment logic here
         return {"status": "success", "deployed": True}
 
@@ -326,7 +326,7 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
 def get_cortex_docs_orchestrator() -> CortexDocsOrchestrator:
     """
     Factory function for CortexDocsOrchestrator.
-    
+
     Returns:
         Configured orchestrator instance
     """

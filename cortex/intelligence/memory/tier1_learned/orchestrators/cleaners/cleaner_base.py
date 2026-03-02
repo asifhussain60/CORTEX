@@ -31,7 +31,7 @@ from pathlib import Path
 class Analysis:
     """
     Analysis result from cleaner scan.
-    
+
     Attributes:
         cleaner_id: Unique identifier for cleaner
         timestamp: ISO timestamp of analysis
@@ -52,7 +52,7 @@ class Analysis:
 class Report:
     """
     Execution report from cleaner.
-    
+
     Attributes:
         cleaner_id: Unique identifier for cleaner
         timestamp: ISO timestamp of execution
@@ -75,7 +75,7 @@ class Report:
 class RollbackResult:
     """
     Rollback operation result.
-    
+
     Attributes:
         cleaner_id: Unique identifier for cleaner
         timestamp: ISO timestamp of rollback
@@ -98,7 +98,7 @@ class RollbackResult:
 class CleanerInterface(ABC):
     """
     Abstract base class for all vacuum cleaner plugins.
-    
+
     Subclasses must implement:
         - name: Cleaner name
         - version: Cleaner version
@@ -111,7 +111,7 @@ class CleanerInterface(ABC):
     def __init__(self, config: Dict[str, Any]) -> None:
         """
         Initialize cleaner with configuration.
-        
+
         Args:
             config: Cleaner configuration dictionary
         """
@@ -126,7 +126,7 @@ class CleanerInterface(ABC):
     def name(self) -> str:
         """
         Return cleaner name.
-        
+
         Returns:
             Human-readable cleaner name
         """
@@ -137,7 +137,7 @@ class CleanerInterface(ABC):
     def version(self) -> str:
         """
         Return cleaner version.
-        
+
         Returns:
             Semantic version string (e.g., "1.0.0")
         """
@@ -148,7 +148,7 @@ class CleanerInterface(ABC):
     def domain(self) -> str:
         """
         Return cleaner domain identifier.
-        
+
         Returns:
             Domain identifier (e.g., "database_migration")
         """
@@ -158,7 +158,7 @@ class CleanerInterface(ABC):
     def analyze(self) -> Analysis:
         """
         Scan repository and generate execution plan.
-        
+
         Returns:
             Analysis object with scan results and execution plan
         """
@@ -168,10 +168,10 @@ class CleanerInterface(ABC):
     def execute(self, plan: Dict[str, Any]) -> Report:
         """
         Execute cleanup plan.
-        
+
         Args:
             plan: Execution plan from analyze()
-        
+
         Returns:
             Report object with execution results
         """
@@ -181,7 +181,7 @@ class CleanerInterface(ABC):
     def rollback(self) -> RollbackResult:
         """
         Rollback changes made by execute().
-        
+
         Returns:
             RollbackResult with restoration status
         """
@@ -190,7 +190,7 @@ class CleanerInterface(ABC):
     def _log(self, message: str) -> None:
         """
         Log message if verbose mode enabled.
-        
+
         Args:
             message: Log message
         """
@@ -200,7 +200,7 @@ class CleanerInterface(ABC):
     def _timestamp(self) -> str:
         """
         Generate ISO timestamp.
-        
+
         Returns:
             ISO 8601 timestamp string
         """

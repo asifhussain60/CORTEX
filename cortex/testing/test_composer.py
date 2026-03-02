@@ -84,41 +84,41 @@ class TestCodeComposer:
         code = textwrap.dedent(f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup
         orchestrator = self.orchestrator_class()
         initial_files = set(Path(self.state_dir).glob("*.yaml"))
-        
+
         # Execute (silent - no prompts)
         result = orchestrator.execute(request="{demand.scenario}")
-        
+
         # Validate: File created
         final_files = set(Path(self.state_dir).glob("*.yaml"))
         new_files = final_files - initial_files
-        
+
         assert len(new_files) > 0, "No YAML file created"
         created_file = list(new_files)[0]
         assert created_file.suffix == ".yaml"
-        
+
         # Validate: File content
         with open(created_file) as f:
             content = yaml.safe_load(f)
-        
+
         required_keys = {demand.validation_rules.get("contains_keys", [])}
         for key in required_keys:
             assert key in content, f"Missing key: {{key}}"
-        
+
         # Validate: Audit trail
         audit = get_audit_trail()
         assert any("created" in str(entry).lower() for entry in audit), \\
             "Audit trail missing file creation event"
-        
+
         assert result.status == "success"
         # AC_COMPLETE: AC-{demand.id} ✅
 ''').strip()
@@ -144,18 +144,18 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup - mock each knowledge source
         governance_rules = {{"CORE-008": "TDD-first", "CORE-011": "Type hints"}}
         domain_rules = {{"business_domain": "payment_processing"}}
         company_standards = {{"language": "simple", "code_style": "PEP-8"}}
-        
+
         # Execute - LENS synthesis merges all three
         orchestrator = self.orchestrator_class()
         result = orchestrator.execute(
@@ -164,19 +164,19 @@ class TestCodeComposer:
             domain=domain_rules,
             company_standards=company_standards
         )
-        
+
         # Validate: All layers present
         synthesis = result.lens_synthesis
-        
+
         assert "governance" in synthesis, "Governance layer missing"
         assert len(synthesis["governance"]) > 0, "Governance empty"
-        
+
         assert "domain" in synthesis, "Domain layer missing"
         assert len(synthesis["domain"]) > 0, "Domain empty"
-        
+
         assert "standards" in synthesis, "Company standards layer missing"
         assert len(synthesis["standards"]) > 0, "Standards empty"
-        
+
         # Validate: No duplication
         all_keys = set(synthesis["governance"].keys()) | \\
                    set(synthesis["domain"].keys()) | \\
@@ -187,12 +187,12 @@ class TestCodeComposer:
             synthesis["standards"]
         ])
         assert len(all_keys) == total_items, "Duplication detected"
-        
+
         # Validate: Audit trail
         audit = get_audit_trail()
         synthesis_events = [e for e in audit if "synthesis" in str(e).lower()]
         assert len(synthesis_events) > 0, "No synthesis events in audit"
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 
@@ -217,28 +217,28 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup - mock failing tests to trigger loop iterations
         orchestrator = self.orchestrator_class()
         iteration_log = []
-        
+
         def mock_test_runner(test_file):
             # Simulate test failures that improve each iteration
             iteration = len(iteration_log) + 1
             iteration_log.append({{"iteration": iteration}})
-            
+
             # Improve each iteration (RED→GREEN progression)
             if iteration < 3:
                 return {{"status": "FAIL", "failures": iteration}}  # Failing
             else:
                 return {{"status": "PASS", "failures": 0}}  # Passing
-        
+
         # Patch test runner
         with patch("orchestrator.run_tests", side_effect=mock_test_runner):
             # Execute RED→GREEN→REFACTOR loop
@@ -246,26 +246,26 @@ class TestCodeComposer:
                 request="Implement feature",
                 enable_rgr_loop=True
             )
-        
+
         # Validate: Loop ran until DoD met
         dod_status = result.dod_status
         assert dod_status == "COMPLETE", f"DoD not met: {{dod_status}}"
-        
+
         # Validate: Loop iterations
         iterations = len(iteration_log)
         assert iterations > 0, "Loop never executed"
         assert iterations <= {demand.validation_rules.get("max_iterations", 5)}, \\
             f"Loop exceeded max iterations: {{iterations}}"
-        
+
         # Validate: Each iteration logged
         audit = get_audit_trail()
         rgr_events = [e for e in audit if "RED" in str(e) or "GREEN" in str(e)]
         assert len(rgr_events) >= iterations * 2, "RGR phases not logged"
-        
+
         # Validate: Loop terminates on DoD
         final_event = rgr_events[-1]
         assert "COMPLETE" in str(final_event), "Loop didn't terminate on DoD"
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 
@@ -290,57 +290,57 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup - create state with failing tests
         orchestrator = self.orchestrator_class()
-        
+
         test_state = {{
             "tests_passed": 0,
             "tests_failed": 2,
             "violations": [{{"rule": "CORE-008", "severity": "critical"}}],
             "dod_status": "INCOMPLETE"
         }}
-        
+
         # Execute - attempt to approve with incomplete DoD
         with self.assertRaises(RuntimeError) as ctx:
             orchestrator.request_approval(
                 request_id="test-request",
                 state=test_state
             )
-        
+
         # Validate: Approval blocked
         error_msg = str(ctx.exception)
         assert "approval" in error_msg.lower()
         assert "blocked" in error_msg.lower() or "denied" in error_msg.lower()
-        
+
         # Validate: Error message is intelligent
         assert "tests" in error_msg.lower() or "dod" in error_msg.lower()
-        
+
         # Validate: Audit trail shows block
         audit = get_audit_trail()
         block_events = [e for e in audit if "blocked" in str(e).lower()]
         assert len(block_events) > 0, "Approval block not logged"
-        
+
         # Now validate success case - approval allowed when DoD met
         test_state["tests_passed"] = 10
         test_state["tests_failed"] = 0
         test_state["violations"] = []
         test_state["dod_status"] = "COMPLETE"
-        
+
         # Should NOT raise
         result = orchestrator.request_approval(
             request_id="test-request",
             state=test_state
         )
-        
+
         assert result.approved is True
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 
@@ -365,30 +365,30 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup
         orchestrator = self.orchestrator_class()
-        
+
         # Execute - trigger multiple responses
         responses = []
         for i in range(5):
             result = orchestrator.execute_step(step_num=i)
             responses.append(result.user_response)
-        
+
         # Validate: Each response follows standards
         for i, response in enumerate(responses):
             assert response is not None, f"Response {{i}} is empty"
-            
+
             # Check 1: Has progress bar
             assert "██" in response or "progress" in response.lower(), \\
                 f"Response {{i}} missing progress indicator"
-            
+
             # Check 2: Simple language (no technical jargon)
             complex_words = [
                 "orchestrator", "synchronize", "datastructure", "callback",
@@ -397,12 +397,12 @@ class TestCodeComposer:
             response_lower = response.lower()
             technical_count = sum(1 for word in complex_words if word in response_lower)
             assert technical_count == 0, f"Response {{i}} uses technical jargon"
-            
+
             # Check 3: No code snippets in explanations
             code_markers = ["def ", "class ", "import ", ">>>"]
             has_code = any(marker in response for marker in code_markers)
             assert not has_code, f"Response {{i}} contains code snippets"
-            
+
             # Check 4: Information not sprawled
             lines = response.split("\\n")
             # Each logical section should be <5 lines
@@ -410,11 +410,11 @@ class TestCodeComposer:
                 if section.strip():
                     assert len(section) < 100, \\
                         f"Response {{i}} has overly long line: {{len(section)}} chars"
-        
+
         # Validate: Consistency across responses
         response_structures = [r.split("\\n")[0] for r in responses]
         assert len(set(response_structures)) == 1, "Response structure inconsistent"
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 
@@ -439,51 +439,51 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         Validates: {demand.description}
         Scenario: {demand.scenario}
         Expected: {demand.expected_behavior}
         """
         # AC_START: AC-{demand.id}
-        
+
         # Setup - clear audit trail
         clear_audit_trail()
-        
+
         # Execute - complete interaction workflow
         orchestrator = self.orchestrator_class()
         result = orchestrator.execute(
             request="{demand.scenario}",
             track_audit=True
         )
-        
+
         # Validate: Audit trail captured
         audit = get_audit_trail()
         assert len(audit) > 0, "Audit trail empty"
-        
+
         # Validate: AC_START marker present
         start_markers = [e for e in audit if "AC_START" in str(e)]
         assert len(start_markers) > 0, "No AC_START markers found"
-        
+
         # Validate: AC_COMPLETE marker present
         complete_markers = [e for e in audit if "AC_COMPLETE" in str(e)]
         assert len(complete_markers) > 0, "No AC_COMPLETE markers found"
-        
+
         # Validate: Each AC_START has corresponding AC_COMPLETE
         starts = {{e["operation_id"]: e for e in start_markers}}
         completes = {{e["operation_id"]: e for e in complete_markers}}
-        
+
         for op_id in starts:
             assert op_id in completes, f"AC_START {{op_id}} missing AC_COMPLETE"
-        
+
         # Validate: Timestamps and sequence
         for entry in audit:
             assert "timestamp" in entry, f"Entry missing timestamp: {{entry}}"
-        
+
         # Validate: Checksum/verification
         for entry in complete_markers:
             assert "status" in entry, f"AC_COMPLETE missing status: {{entry}}"
             assert entry["status"] == "✅", f"Entry not marked successful: {{entry}}"
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 
@@ -508,17 +508,17 @@ class TestCodeComposer:
         code = f'''
     def {test_name}(self):
         """DEMAND: {demand.title}
-        
+
         {demand.description}
         """
         # AC_START: AC-{demand.id}
-        
+
         # TODO: Implement test for {demand.category}
         # Scenario: {demand.scenario}
         # Expected: {demand.expected_behavior}
-        
+
         pytest.skip("Generic test stub - needs implementation")
-        
+
         # AC_COMPLETE: AC-{demand.id} ✅
 '''
 

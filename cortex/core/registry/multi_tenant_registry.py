@@ -16,7 +16,7 @@ Example:
     >>> registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
     >>> data = registry.load_yaml("agents/core/tdd-orchestrator.yaml")
     # Loads from cortex-registry/acme-dev/ first, falls back to _cortex-master/
-    
+
     # Single-tenant mode (backward compatible)
     >>> registry = MultiTenantRegistry()  # Defaults to workspace_id="local"
     >>> data = registry.load_yaml("agents/core/tdd-orchestrator.yaml")
@@ -38,28 +38,28 @@ logger = logging.getLogger(__name__)
 class MultiTenantRegistry:
     """
     Workspace-aware registry loader with tenant isolation.
-    
+
     Provides:
     - Load YAML from cortex-registry/{workspace_id}/ first
     - Fallback to cortex-registry/_cortex-master/ for shared resources
     - Per-tenant caching with ≥70% hit rate
     - Zero cross-tenant data leakage
-    
+
     Attributes:
         workspace_id: Unique workspace identifier (default: "local")
         tenant_id: Tenant identifier (default: "local")
         registry_root: Root path to cortex-registry/ directory
-        
+
     Example:
         >>> # Multi-tenant workspace
         >>> registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
         >>> data = registry.load_yaml("agents/core/tdd-orchestrator.yaml")
-        
+
         >>> # Single-tenant mode (backward compatible)
         >>> registry = MultiTenantRegistry()
         >>> data = registry.load_yaml("agents/core/tdd-orchestrator.yaml")
     """
-    
+
     def __init__(
         self,
         workspace_id: str = "local",
@@ -68,7 +68,7 @@ class MultiTenantRegistry:
     ) -> None:
         """
         Initialize multi-tenant registry.
-        
+
         Args:
             workspace_id: Workspace identifier (default: "local" for single-tenant mode)
             tenant_id: Tenant identifier (default: same as workspace_id)
@@ -77,34 +77,34 @@ class MultiTenantRegistry:
         self.workspace_id = workspace_id
         self.tenant_id = tenant_id or workspace_id
         self.registry_root = registry_root or Path("cortex-registry")
-        
+
         # Per-tenant cache
         self._cache: Dict[str, Any] = {}
         self._cache_hits = 0
         self._cache_misses = 0
-        
+
         logger.debug(
             f"MultiTenantRegistry initialized: workspace_id={workspace_id}, "
             f"tenant_id={self.tenant_id}"
         )
-    
+
     def load_yaml(self, file_path: str) -> Dict[str, Any]:
         """
         Load YAML from workspace-specific or global registry.
-        
+
         Load order:
         1. cortex-registry/{workspace_id}/{file_path} (workspace-specific)
         2. cortex-registry/_cortex-master/{file_path} (global fallback)
-        
+
         Args:
             file_path: Relative path within registry (e.g., "agents/core/tdd-orchestrator.yaml")
-        
+
         Returns:
             Parsed YAML content as dict
-        
+
         Raises:
             FileNotFoundError: If file not found in workspace or global registry
-        
+
         Example:
             >>> registry = MultiTenantRegistry(workspace_id="acme-dev")
             >>> data = registry.load_yaml("agents/core/tdd-orchestrator.yaml")
@@ -116,10 +116,10 @@ class MultiTenantRegistry:
             self._cache_hits += 1
             logger.debug(f"Cache HIT: {cache_key}")
             return self._cache[cache_key]
-        
+
         self._cache_misses += 1
         logger.debug(f"Cache MISS: {cache_key}")
-        
+
         # Try workspace-specific registry first (if not local mode)
         if self.workspace_id != "local":
             workspace_path = self.registry_root / self.workspace_id / file_path
@@ -128,7 +128,7 @@ class MultiTenantRegistry:
                 data = self._load_yaml_file(workspace_path)
                 self._cache[cache_key] = data
                 return data
-        
+
         # Fallback to global registry (_cortex-master/)
         global_path = self.registry_root / "_cortex-master" / file_path
         if global_path.exists():
@@ -136,7 +136,7 @@ class MultiTenantRegistry:
             data = self._load_yaml_file(global_path)
             self._cache[cache_key] = data
             return data
-        
+
         # File not found anywhere
         raise FileNotFoundError(
             f"File not found in workspace or global registry: {file_path}\n"
@@ -144,17 +144,17 @@ class MultiTenantRegistry:
             f"  - {self.registry_root / self.workspace_id / file_path}\n"
             f"  - {self.registry_root / '_cortex-master' / file_path}"
         )
-    
+
     def _load_yaml_file(self, file_path: Path) -> Dict[str, Any]:
         """
         Load and parse YAML file.
-        
+
         Args:
             file_path: Absolute path to YAML file
-        
+
         Returns:
             Parsed YAML content as dict
-        
+
         Raises:
             yaml.YAMLError: If YAML parsing fails
         """
@@ -168,17 +168,17 @@ class MultiTenantRegistry:
         except Exception as e:
             logger.error(f"Error loading file {file_path}: {e}")
             raise
-    
+
     def get_cache_key(self, file_path: str) -> str:
         """
         Generate cache key for workspace+tenant+file.
-        
+
         Args:
             file_path: Relative file path
-        
+
         Returns:
             Cache key string (format: "workspace_id:tenant_id:file_path")
-        
+
         Example:
             >>> registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
             >>> key = registry.get_cache_key("agents/core/tdd.yaml")
@@ -186,14 +186,14 @@ class MultiTenantRegistry:
             acme-dev:acme:agents/core/tdd.yaml
         """
         return f"{self.workspace_id}:{self.tenant_id}:{file_path}"
-    
+
     def get_cache_hit_rate(self) -> float:
         """
         Calculate cache hit rate.
-        
+
         Returns:
             Hit rate as float (0.0 to 1.0)
-        
+
         Example:
             >>> registry = MultiTenantRegistry()
             >>> # After some loads...
@@ -204,15 +204,15 @@ class MultiTenantRegistry:
         if total == 0:
             return 0.0
         return self._cache_hits / total
-    
+
     def clear_cache(self) -> None:
         """
         Clear cache for this registry instance.
-        
+
         Resets:
         - Cached data
         - Hit/miss counters
-        
+
         Example:
             >>> registry = MultiTenantRegistry()
             >>> registry.clear_cache()
@@ -222,14 +222,14 @@ class MultiTenantRegistry:
         self._cache_hits = 0
         self._cache_misses = 0
         logger.debug(f"Cache cleared for workspace_id={self.workspace_id}")
-    
+
     def get_cache_stats(self) -> Dict[str, Any]:
         """
         Get cache statistics.
-        
+
         Returns:
             Dict with cache metrics (hits, misses, size, hit_rate)
-        
+
         Example:
             >>> registry = MultiTenantRegistry()
             >>> stats = registry.get_cache_stats()
@@ -241,7 +241,7 @@ class MultiTenantRegistry:
             "size": len(self._cache),
             "hit_rate": self.get_cache_hit_rate()
         }
-    
+
     def __repr__(self) -> str:
         """Return string representation."""
         return (

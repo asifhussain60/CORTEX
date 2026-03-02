@@ -16,30 +16,30 @@ from typing import Any
 
 class ExecutionTraceRecorder:
     """Records execution traces to SQLite for timeline reconstruction.
-    
+
     Thread-safe SQLite recorder that captures orchestrator invocations,
     template selections, and tool engagements. Enforces 30-day retention.
     """
 
     def __init__(self, db_path: str | None = None) -> None:
         """Initialize ExecutionTraceRecorder with SQLite database.
-        
+
         Args:
             db_path: Path to SQLite database. Defaults to .cortex-runtime/traces/orchestrator-traces.db
         """
         if db_path is None:
             db_path = ".cortex-runtime/traces/orchestrator-traces.db"
-        
+
         self.db_path = db_path
         self._ensure_schema()
 
     def _ensure_schema(self) -> None:
         """Create execution_traces table if it doesn't exist."""
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
-        
+
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS execution_traces (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,13 +59,13 @@ class ExecutionTraceRecorder:
                 rationale TEXT
             )
         """)
-        
+
         # Create index on timestamp for retention cleanup
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_execution_traces_timestamp
             ON execution_traces(timestamp)
         """)
-        
+
         conn.commit()
         conn.close()
 
@@ -78,7 +78,7 @@ class ExecutionTraceRecorder:
         session_id: str | None = None,
     ) -> None:
         """Record an orchestrator invocation.
-        
+
         Args:
             orchestrator: Orchestrator class name
             operation: Operation type (implement, refactor, audit, etc.)
@@ -88,7 +88,7 @@ class ExecutionTraceRecorder:
         """
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             INSERT INTO execution_traces
@@ -97,7 +97,7 @@ class ExecutionTraceRecorder:
             """,
             (session_id, orchestrator, operation, status, duration_ms),
         )
-        
+
         conn.commit()
         conn.close()
 
@@ -109,7 +109,7 @@ class ExecutionTraceRecorder:
         session_id: str | None = None,
     ) -> None:
         """Record a workflow template selection.
-        
+
         Args:
             template_id: Template path (e.g., 'frontend/html-refactor-validation')
             orchestrator: Orchestrator that selected the template
@@ -118,7 +118,7 @@ class ExecutionTraceRecorder:
         """
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             INSERT INTO execution_traces
@@ -127,7 +127,7 @@ class ExecutionTraceRecorder:
             """,
             (session_id, orchestrator, template_id, rationale),
         )
-        
+
         conn.commit()
         conn.close()
 
@@ -140,7 +140,7 @@ class ExecutionTraceRecorder:
         session_id: str | None = None,
     ) -> None:
         """Record a tool engagement (linter, formatter, external command).
-        
+
         Args:
             tool: Tool name (ruff, eslint, dotnet format, etc.)
             command: Full command executed
@@ -150,7 +150,7 @@ class ExecutionTraceRecorder:
         """
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             INSERT INTO execution_traces
@@ -166,7 +166,7 @@ class ExecutionTraceRecorder:
                 "success" if exit_code == 0 else "error",
             ),
         )
-        
+
         conn.commit()
         conn.close()
 
@@ -180,7 +180,7 @@ class ExecutionTraceRecorder:
         session_id: str | None = None,
     ) -> None:
         """Record a linter execution result.
-        
+
         Args:
             linter: Linter name (ruff, eslint, stylelint, etc.)
             file_path: File that was linted
@@ -191,7 +191,7 @@ class ExecutionTraceRecorder:
         """
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute(
             """
             INSERT INTO execution_traces
@@ -200,23 +200,23 @@ class ExecutionTraceRecorder:
             """,
             (session_id, linter, file_path, issues_found, issues_fixed, duration_ms),
         )
-        
+
         conn.commit()
         conn.close()
 
     def get_timeline(self, session_id: str | None = None) -> list[dict[str, Any]]:
         """Retrieve chronological timeline of all execution events.
-        
+
         Args:
             session_id: Optional filter by session ID
-            
+
         Returns:
             List of event dictionaries in chronological order
         """
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        
+
         if session_id is not None:
             cursor.execute(
                 "SELECT * FROM execution_traces WHERE session_id=? ORDER BY timestamp ASC",
@@ -224,31 +224,31 @@ class ExecutionTraceRecorder:
             )
         else:
             cursor.execute("SELECT * FROM execution_traces ORDER BY timestamp ASC")
-        
+
         rows = cursor.fetchall()
         conn.close()
-        
+
         return [dict(row) for row in rows]
 
     def cleanup_old_traces(self, retention_days: int = 30) -> int:
         """Remove traces older than retention period.
-        
+
         Args:
             retention_days: Number of days to retain (default: 30)
-            
+
         Returns:
             Number of rows deleted
         """
         cutoff = datetime.now() - timedelta(days=retention_days)
         cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M:%S")
-        
+
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         cursor = conn.cursor()
-        
+
         cursor.execute("DELETE FROM execution_traces WHERE timestamp < ?", (cutoff_str,))
         deleted = cursor.rowcount
-        
+
         conn.commit()
         conn.close()
-        
+
         return deleted

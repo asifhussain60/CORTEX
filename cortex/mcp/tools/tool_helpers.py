@@ -32,11 +32,11 @@ def format_response(
         "data": data,
         "error": error,
     }
-    
+
     # Phase 89-c: Add engagement if provided (GAP-89-09)
     if engagement is not None:
         response["engagement"] = engagement
-    
+
     return response
 
 

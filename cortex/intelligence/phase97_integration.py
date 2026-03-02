@@ -30,19 +30,19 @@ from cortex.orchestrators.health.agents.consolidation_analyzer import (
 @dataclass
 class IntegratedIntelligenceReport:
     """Comprehensive intelligence report combining all analyzers.
-    
+
     Attributes:
         lens_analysis: LENS workflow results
         evolution_timeline: Git history evolution
         consolidation_report: Orchestrator sprawl analysis
         registry_stats: Analyzer registry statistics
     """
-    
+
     lens_analysis: Dict[str, Any]
     evolution_timeline: Optional[EvolutionTimeline] = None
     consolidation_report: Optional[ConsolidationReport] = None
     registry_stats: Dict[str, int] = None
-    
+
     def __post_init__(self) -> None:
         """Initialize default values."""
         if self.registry_stats is None:
@@ -51,9 +51,9 @@ class IntegratedIntelligenceReport:
 
 class IntelligenceIntegrator:
     """Integration layer for Phase 97 intelligence components.
-    
+
     Provides unified access to LENS, Evolution, and Consolidation analysis.
-    
+
     Attributes:
         repo_path: Repository path
         lens_facade: LENS intelligence facade
@@ -61,10 +61,10 @@ class IntelligenceIntegrator:
         consolidation_analyzer: Consolidation analyzer
         registry: Analyzer registry
     """
-    
+
     def __init__(self, repo_path: Path) -> None:
         """Initialize intelligence integrator.
-        
+
         Args:
             repo_path: Path to repository root
         """
@@ -73,7 +73,7 @@ class IntelligenceIntegrator:
         self.evolution_analyzer = EvolutionAnalyzer(repo_path=repo_path)
         self.consolidation_analyzer = ConsolidationAnalyzer(repo_path=repo_path)
         self.registry = get_analyzer_registry()
-    
+
     def analyze_comprehensive(
         self,
         target_path: Path,
@@ -82,13 +82,13 @@ class IntelligenceIntegrator:
         include_consolidation: bool = True,
     ) -> IntegratedIntelligenceReport:
         """Perform comprehensive analysis using all components.
-        
+
         Args:
             target_path: Path to analyze
             workflow: LENS workflow type
             include_evolution: Whether to include evolution analysis
             include_consolidation: Whether to include consolidation analysis
-        
+
         Returns:
             Integrated intelligence report
         """
@@ -97,7 +97,7 @@ class IntelligenceIntegrator:
             workflow=workflow,
             target_path=target_path,
         )
-        
+
         # Evolution analysis (optional)
         evolution_timeline = None
         if include_evolution:
@@ -105,12 +105,12 @@ class IntelligenceIntegrator:
                 target_path=target_path if target_path.is_file() else None,
                 days=90,
             )
-        
+
         # Consolidation analysis (optional)
         consolidation_report = None
         if include_consolidation:
             consolidation_report = self.consolidation_analyzer.analyze()
-        
+
         # Registry statistics
         all_analyzers = self.registry.get_all()
         registry_stats = {
@@ -118,50 +118,50 @@ class IntelligenceIntegrator:
             "capabilities_count": len(AnalyzerCapability),
             "languages_count": len(LanguageSupport),
         }
-        
+
         return IntegratedIntelligenceReport(
             lens_analysis=lens_result,
             evolution_timeline=evolution_timeline,
             consolidation_report=consolidation_report,
             registry_stats=registry_stats,
         )
-    
+
     def get_registry_summary(self) -> Dict[str, Any]:
         """Get analyzer registry summary.
-        
+
         Returns:
             Registry summary with counts and capabilities
         """
         all_analyzers = self.registry.get_all()
-        
+
         capabilities_breakdown = {}
         for capability in AnalyzerCapability:
             analyzers = self.registry.find_by_capability(capability)
             capabilities_breakdown[capability.value] = len(analyzers)
-        
+
         languages_breakdown = {}
         for language in LanguageSupport:
             analyzers = self.registry.find_by_language(language)
             languages_breakdown[language.value] = len(analyzers)
-        
+
         return {
             "total_analyzers": len(all_analyzers),
             "capabilities": capabilities_breakdown,
             "languages": languages_breakdown,
             "analyzer_names": [a.name for a in all_analyzers],
         }
-    
+
     def get_evolution_summary(self, days: int = 90) -> Dict[str, Any]:
         """Get evolution timeline summary.
-        
+
         Args:
             days: Number of days to analyze
-        
+
         Returns:
             Evolution summary
         """
         timeline = self.evolution_analyzer.analyze(days=days)
-        
+
         return {
             "total_commits": timeline.total_commits,
             "total_refactorings": timeline.total_refactorings,
@@ -170,15 +170,15 @@ class IntelligenceIntegrator:
             "active_contributors": len(timeline.active_contributors),
             "milestones": len(timeline.milestones),
         }
-    
+
     def get_consolidation_summary(self) -> Dict[str, Any]:
         """Get consolidation analysis summary.
-        
+
         Returns:
             Consolidation summary
         """
         report = self.consolidation_analyzer.analyze()
-        
+
         return {
             "total_orchestrators": report.total_orchestrators,
             "target_count": report.target_count,

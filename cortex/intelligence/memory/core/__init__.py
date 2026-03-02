@@ -37,7 +37,7 @@ def __getattr__(name: str):
         'macos_path_compat': 'cortex.intelligence.memory.core.macos_path_compat',
         'windows_path_compat': 'cortex.intelligence.memory.core.windows_path_compat',
     }
-    
+
     if name in tier0_modules:
         try:
             import importlib

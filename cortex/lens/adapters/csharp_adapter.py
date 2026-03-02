@@ -53,13 +53,13 @@ class CSharpAdapter(LanguageAdapter):
 
     def __init__(self) -> None:
         """Initialize CSharpAdapter with tree-sitter parser.
-        
+
         Handles both tree-sitter 0.20 (PyCapsule) and 0.21+ (Language) APIs.
         """
         try:
             # Get language from tree-sitter-c-sharp
             lang_obj = ts_csharp.language()
-            
+
             # Check if it's already a Language object (0.21+ API)
             if isinstance(lang_obj, Language):
                 self.language = lang_obj
@@ -79,11 +79,11 @@ class CSharpAdapter(LanguageAdapter):
                     print("   Recommend: pip install --upgrade tree-sitter>=0.21.0")
                     print("   Fallback: Using pattern-based analysis for C#")
                     self.language = None
-            
+
             self.parser = Parser()
             if self.language:
                 self.parser.set_language(self.language)
-            
+
         except Exception as e:
             print(f"⚠️ CSharpAdapter initialization failed: {e}")
             print("   Falling back to pattern-based analysis")

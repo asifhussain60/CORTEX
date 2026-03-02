@@ -15,7 +15,7 @@ class DomainRegistry:
     def register(self, domain_id: str, metadata: Dict[str, Any]) -> None:
         """
         Register a domain type.
-        
+
         Args:
             domain_id: Domain identifier.
             metadata: Domain metadata.
@@ -25,10 +25,10 @@ class DomainRegistry:
     def unregister(self, domain_id: str) -> bool:
         """
         Unregister a domain type.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             True if unregistered.
         """
@@ -40,10 +40,10 @@ class DomainRegistry:
     def is_registered(self, domain_id: str) -> bool:
         """
         Check if domain is registered.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             True if registered.
         """
@@ -52,10 +52,10 @@ class DomainRegistry:
     def get_domain(self, domain_id: str) -> Optional[Dict[str, Any]]:
         """
         Get domain metadata.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             Domain metadata or None.
         """
@@ -64,7 +64,7 @@ class DomainRegistry:
     def list_domains(self) -> List[str]:
         """
         List all registered domains.
-        
+
         Returns:
             List of domain IDs.
         """
@@ -73,7 +73,7 @@ class DomainRegistry:
     def list_all_available_domains(self) -> List[str]:
         """
         List all available domains (including built-ins).
-        
+
         Returns:
             List of available domain IDs.
         """

@@ -105,12 +105,12 @@ __all__ = [
 
 class MarkerInjectionEngine:
     """
-    
+
     Uses Strategy Pattern to support multiple injection strategies:
     - test_failure: Parse traceback, inject at failure point
     - refactor_regression: Parse git diff, inject at changed lines
     - governance_violation: Inject at violation location
-    
+
     Example:
         >>> engine = MarkerInjectionEngine()
         >>> engine.inject(
@@ -122,7 +122,7 @@ class MarkerInjectionEngine:
         ... )
         True
     """
-    
+
     # Marker template (Jinja2)
     MARKER_TEMPLATE = Template(
         "# === CORTEX DEBUG MARKER [{{ trigger_type }}] ===\n"
@@ -132,7 +132,7 @@ class MarkerInjectionEngine:
         "# timestamp: {{ timestamp }}\n"
         "# === END MARKER ===\n"
     )
-    
+
     def __init__(self) -> None:
         """Initialize MarkerInjectionEngine with strategies."""
         self.strategies: Dict[str, AbstractInjectionStrategy] = {
@@ -142,7 +142,7 @@ class MarkerInjectionEngine:
         }
         # Phase 86 — Multi-Stack Debug Pipeline: register 5 new strategies
         self.strategies.update(_load_phase86_strategies())
-    
+
     def inject(
         self,
         strategy: str,
@@ -186,7 +186,7 @@ class MarkerInjectionEngine:
         strategy_obj = self.strategies[strategy]
         result: InjectionResult = strategy_obj.inject(marker_context)
         return result.success
-    
+
     def format_marker(
         self,
         session_id: str,
@@ -196,13 +196,13 @@ class MarkerInjectionEngine:
     ) -> str:
         """
         Format marker using template.
-        
+
         Args:
             session_id: Debug session identifier
             event_type: Trigger type (TEST_FAILURE | REFACTOR_REGRESSION | GOVERNANCE_VIOLATION)
             context_summary: Brief description of issue
             original_code: Original code to wrap
-        
+
         Returns:
             Formatted marker string
         """

@@ -1046,7 +1046,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
         if self._enforcement:
             try:
                 validation_result = self._enforcement.validate_response_content(response)
-                
+
                 if validation_result.is_err():
                     # Response contains forbidden file suggestions - transform to inline
                     enforcement_result = validation_result.error
@@ -1059,7 +1059,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                             "count": len(enforcement_result.violations),
                         }
                     )
-                    
+
                     # Transform response to suggest inline display instead
                     response = self._enforcement.transform_response_to_inline(response)
                     self.logger.log_operation_complete(
@@ -1425,13 +1425,13 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 # Phase 93: expose lens_orchestrator for Stage1 direct LENS fallback
                 "lens_orchestrator": getattr(self, "_lens_orchestrator", None),
             }
-            
+
             # ═══════════════════════════════════════════════════════════════════════
             # STAGE 1: Comprehension + Challenge + DoR Approval
             # ═══════════════════════════════════════════════════════════════════════
             stage1 = Stage1ComprehensionStrategy(dependencies=dependencies)
             stage1_result = stage1.execute(stage_context)
-            
+
             if stage1_result.is_err():
                 # Stage 1 failed - return error
                 self.logger.log_operation_complete(
@@ -1441,10 +1441,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     details={"error": stage1_result.error}
                 )
                 return stage1_result
-            
+
             # Update context with Stage 1 results
             stage_context = stage1_result.unwrap()
-            
+
             self.logger.log_operation_complete(
                 ac_id="ENH-087-TRACK-1.3",
                 operation="STAGE_1_COMPREHENSION_COMPLETE",
@@ -1454,13 +1454,13 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "dor_approved": stage_context.metadata.get("dor_approved", False)
                 }
             )
-            
+
             # ═══════════════════════════════════════════════════════════════════════
             # STAGE 2: Intent Classification via IntentRouter
             # ═══════════════════════════════════════════════════════════════════════
             stage2 = Stage2IntentClassificationStrategy(dependencies=dependencies)
             stage2_result = stage2.execute(stage_context)
-            
+
             if stage2_result.is_err():
                 # Stage 2 failed - return error (or warn and continue based on severity)
                 self.logger.log_operation_complete(
@@ -1478,7 +1478,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             else:
                 # Update context with Stage 2 results
                 stage_context = stage2_result.unwrap()
-                
+
                 self.logger.log_operation_complete(
                     ac_id="ENH-087-TRACK-1.3",
                     operation="STAGE_2_INTENT_CLASSIFICATION_COMPLETE",
@@ -1488,13 +1488,13 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                         "confidence": stage_context.metadata.get("intent_classification", {}).get("confidence")
                     }
                 )
-            
+
             # ═══════════════════════════════════════════════════════════════════════
             # STAGE 3: Compliance Validation via EnforcementOrchestrator
             # ═══════════════════════════════════════════════════════════════════════
             stage3 = Stage3ComplianceValidationStrategy(dependencies=dependencies)
             stage3_result = stage3.execute(stage_context)
-            
+
             if stage3_result.is_err():
                 # Stage 3 failed - compliance violation, BLOCK execution
                 self.logger.log_operation_complete(
@@ -1504,10 +1504,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     details={"error": stage3_result.error}
                 )
                 return stage3_result
-            
+
             # Update context with Stage 3 results
             stage_context = stage3_result.unwrap()
-            
+
             self.logger.log_operation_complete(
                 ac_id="ENH-087-TRACK-1.3",
                 operation="STAGE_3_COMPLIANCE_VALIDATION_COMPLETE",
@@ -1548,10 +1548,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     details={"error": stage4_result.error}
                 )
                 return stage4_result
-            
+
             # Update context with Stage 4 results
             stage_context = stage4_result.unwrap()
-            
+
             self.logger.log_operation_complete(
                 ac_id="ENH-087-TRACK-1.3",
                 operation="STAGE_4_DOMAIN_EXECUTION_COMPLETE",
@@ -1561,7 +1561,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "execution_time_ms": stage_context.metadata.get("execution", {}).get("duration_ms")
                 }
             )
-            
+
             # ═══════════════════════════════════════════════════════════════════════
             # PIPELINE COMPLETE: Return final result from Stage 4
             # ═══════════════════════════════════════════════════════════════════════
@@ -1649,7 +1649,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     pipeline_result_data["engagement"] = _pipeline_engagement
 
             final_result = Ok(pipeline_result_data)
-            
+
             self.logger.log_operation_complete(
                 ac_id="ENH-087-TRACK-1.3",
                 operation="4_STAGE_PIPELINE_COMPLETE",
@@ -1660,14 +1660,14 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "total_metadata_keys": len(stage_context.metadata)
                 }
             )
-            
+
             # ENH-092 Phase 53.3: Trigger lifecycle hooks for automatic cleanup
             # Note: Hooks are fire-and-forget (non-blocking completion reporting)
             if hasattr(self, '_lifecycle_hook_system') and self._lifecycle_hook_system:
                 self._trigger_lifecycle_hooks_sync(operation_name, stage_context.metadata)
-            
+
             return final_result
-            
+
         except Exception as pipeline_err:
             # Catch any unexpected errors in strategy pipeline
             # AC_COMPLETE: {_exec_ac_id} ❌ execute_operation pipeline error
@@ -1678,7 +1678,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 details={"error": str(pipeline_err)}
             )
             return Err(f"Pipeline execution failed: {str(pipeline_err)}")
-    
+
 
     def execute_approved_operation(
         self,
@@ -2859,20 +2859,20 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
         name="tech_intelligence_get_readiness",
         description="Get tech stack readiness score for implementation. Provides 4-factor weighted scoring (best practices 40%, TDD 30%, security 20%, usage 10%) with automatic learning gap detection."
     )
-    
+
     def _trigger_lifecycle_hooks_sync(self, operation_name: str, metadata: Dict[str, Any]) -> None:
         """
         Trigger lifecycle hooks synchronously (fire-and-forget).
-        
+
         ENH-092 Phase 53.3: Automatic cleanup on completions.
-        
+
         Args:
             operation_name: Operation that completed (implement, fix, refactor, etc.)
             metadata: Operation metadata for context
         """
         import asyncio
         from cortex.orchestrators.core.lifecycle_hook_system import CompletionEvent
-        
+
         try:
             # Determine event type from operation name
             event_map = {
@@ -2881,10 +2881,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 "stage": CompletionEvent.STAGE_COMPLETE,
                 "session": CompletionEvent.SESSION_END
             }
-            
+
             event_type = None
             entity_id = operation_name
-            
+
             # Extract event type from operation name or metadata
             for key, event in event_map.items():
                 if key in operation_name.lower():
@@ -2894,11 +2894,11 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     event_type = event
                     entity_id = metadata.get("id", operation_name)
                     break
-            
+
             # Default to STAGE_COMPLETE if no specific event detected
             if not event_type:
                 event_type = CompletionEvent.STAGE_COMPLETE
-            
+
             # Create async task (fire-and-forget)
             async def _trigger() -> None:
                 """Trigger."""
@@ -2918,14 +2918,14 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             except RuntimeError:
                 # No running event loop — sync context, skip fire-and-forget
                 pass
-            
+
             self.logger.log_operation_complete(
                 ac_id="AC-ENH-092-002",
                 operation="LIFECYCLE_HOOK_TRIGGERED",
                 success=True,
                 details={"event": event_type.value, "entity": entity_id}
             )
-            
+
         except Exception as hook_err:
             # Log but don't fail - hooks are non-blocking
             self.logger.log_operation_complete(
@@ -2997,12 +2997,12 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
             # Import complexity router
             from cortex.orchestrators.core.intent_router.workflow_gate import WorkflowComplexityRouter, Intent as ComplexityIntent
             from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy
-            
+
             # Extract operation details
             operation = context.get("operation", "").lower()
             description = context.get("description", "").lower()
             combined_text = f"{operation} {description}"
-            
+
             # Detect operation type — covers all 20 CORTEX intent types (GAP-90-14/15 fix)
             operation_type = "implement"
             if any(kw in combined_text for kw in ["fix", "bug", "issue", "broken", "patch"]):
@@ -3043,12 +3043,12 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 operation_type = "plan"
             elif any(kw in combined_text for kw in ["security"]):
                 operation_type = "security"
-            
+
             # Extract files and dependencies
             target_files = context.get("target_files", [])
             dependencies = context.get("dependencies", [])
             risk_level = context.get("risk_level", "MEDIUM")
-            
+
             # Build complexity intent
             complexity_intent = ComplexityIntent(
                 operation_type=operation_type,
@@ -3057,11 +3057,11 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 risk_level=risk_level,
                 metadata=context
             )
-            
+
             # Route based on complexity
             router = WorkflowComplexityRouter()
             decision = router.route(complexity_intent)
-            
+
             # If workflow template recommended, return template info
             if decision.route == RoutingStrategy.WORKFLOW_TEMPLATE:
                 self.logger.log_operation_complete(
@@ -3074,7 +3074,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                         "rationale": decision.rationale
                     }
                 )
-                
+
                 return {
                     "template_id": decision.template_id,
                     "template_name": decision.template_id.replace("/", "_"),
@@ -3083,7 +3083,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "complexity_score": decision.complexity,
                     "requires_confirmation": decision.requires_confirmation
                 }
-            
+
             # Direct orchestrator routing - return None to continue standard flow
             self.logger.log_operation_complete(
                 ac_id="WORKFLOW-COMPLEXITY-GATE-001",
@@ -3095,7 +3095,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "rationale": decision.rationale
                 }
             )
-            
+
             return None
 
         except Exception as e:

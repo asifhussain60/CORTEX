@@ -195,11 +195,11 @@ class OrchestratorTraceLogger:
                     ON trace_flush_log(timestamp DESC)
                     """
                 )
-                
+
                 # Store schema version in metadata
                 conn.execute(
                     """
-                    INSERT OR REPLACE INTO trace_metadata (id, orchestrator_id, orchestrator_class, 
+                    INSERT OR REPLACE INTO trace_metadata (id, orchestrator_id, orchestrator_class,
                                                            table_name, created_at, last_updated, schema_version)
                     VALUES ('_schema_version', 'system', 'system', '_schema', ?, ?, ?)
                     """,
@@ -490,7 +490,7 @@ class PerOrchestrationTraceWriter:
                 conn.execute(
                     f"""
                     INSERT INTO {self.table_name}
-                    (trace_id, timestamp, action, level, correlation_id, request_id, 
+                    (trace_id, timestamp, action, level, correlation_id, request_id,
                      context, result, violation_type, duration_ms, metadata)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,

@@ -119,9 +119,9 @@ class UniversalLearningLoop:
     def capture_pattern(self, learning: LearningCapture) -> None:
         """
         Capture a single learning pattern.
-        
+
         Used by OrchestratorLearningMixin for direct pattern capture.
-        
+
         Args:
             learning: LearningCapture to store
         """
@@ -129,13 +129,13 @@ class UniversalLearningLoop:
         if cache_key not in self._learning_cache:
             self._learning_cache[cache_key] = []
         self._learning_cache[cache_key].append(learning)
-        
+
         # Update metrics
         self._total_learnings += 1
         self._learnings_by_orchestrator[learning.orchestrator] = (
             self._learnings_by_orchestrator.get(learning.orchestrator, 0) + 1
         )
-        
+
         if self.enable_logging:
             logger.debug(
                 f"Captured pattern: {learning.pattern_description} "

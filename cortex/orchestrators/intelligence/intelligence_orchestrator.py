@@ -18,14 +18,14 @@ logger = logging.getLogger(__name__)
 
 class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Unified intelligence: AST + comments + routing + comprehension + caching.
-    
+
     Consolidates:
     - ASTIntelligenceEngine (Python AST parsing)
     - CommentAnalyzer (docstring & comment extraction)
     - ComprehensionLoopEngine (understanding workflow)
     - IntelligenceRoutingEngine (prompt/agent routing)
     - CachedLENSOrchestrator (result caching)
-    
+
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """
@@ -35,14 +35,14 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
     # Phase 94e — advisory: intelligence layer, not a primary entry point.
     # Invoked by domain orchestrators. Gateway routing deferred.
     PHASE90_GATEWAY_EXEMPT: bool = True
-    
+
     def __init__(
         self,
         audit_db_path: Optional[Path] = None,
         scanner: Optional[Any] = None,
     ) -> None:
         """Initialize intelligence orchestrator.
-        
+
         Args:
             audit_db_path: Optional SQLite audit DB path
             scanner: Optional HierarchicalScanner for canonical file discovery
@@ -53,7 +53,7 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
         self.routing_engine = IntelligenceRoutingEngine()
         self._cache: Dict[str, Any] = {}
         self._scanner = scanner  # GAP-66-003: canonical file discovery scanner
-        
+
         # SQLite audit logging (store in .cortex-runtime/ to avoid root pollution)
         if audit_db_path:
             self.audit_db_path = audit_db_path
@@ -62,7 +62,7 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "intelligence_audit.db"
         self._init_audit_db()
-    
+
     def _init_audit_db(self) -> None:
         """Initialize SQLite audit database."""
         conn = sqlite3.connect(self.audit_db_path)
@@ -78,7 +78,7 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
         """)
         conn.commit()
         conn.close()
-    
+
     def _audit_log(
         self,
         operation: str,
@@ -99,36 +99,36 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
         )
         conn.commit()
         conn.close()
-    
+
     def _compute_cache_key(self, file_path: Path) -> str:
         """Compute cache key from file path and content hash."""
         content = file_path.read_text()
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         return f"{file_path}:{content_hash}"
-    
+
     def parse_python_file(self, file_path: Path) -> ParseResult:
         """Parse Python file with caching and audit logging.
-        
+
         Args:
             file_path: Path to Python file
-            
+
         Returns:
             ParseResult with AST information
         """
         cache_key = self._compute_cache_key(file_path)
-        
+
         # Check cache
         if cache_key in self._cache:
             cached = self._cache[cache_key]
             self._audit_log("PARSE", str(file_path), {"cached": True})
             return cached
-        
+
         # Parse file
         result = self.ast_engine.parse_file(file_path)
-        
+
         # Cache result
         self._cache[cache_key] = result
-        
+
         # Audit log
         self._audit_log(
             "PARSE",
@@ -140,46 +140,46 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
                 "cached": False
             }
         )
-        
+
         return result
-    
+
     def analyze_comments(self, file_path: Path) -> List[Dict[str, Any]]:
         """Analyze comments and docstrings in file.
-        
+
         Args:
             file_path: Path to file
-            
+
         Returns:
             List of comment analysis results
         """
         result = self.comment_analyzer.analyze_file(file_path)
-        
+
         # CommentAnalysisResult is a dataclass, convert to list
         comments = []
         if result and hasattr(result, 'comments'):
             comments = result.comments
         elif result:
             comments = [result]  # Single result
-        
+
         self._audit_log(
             "ANALYZE_COMMENTS",
             str(file_path),
             {"comment_count": len(comments)}
         )
-        
+
         return comments
-    
+
     def route_intelligence(
         self,
         intent: str,
         context: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Route to appropriate intelligence handler.
-        
+
         Args:
             intent: User intent (IMPLEMENT, ANALYZE, etc.)
             context: Request context
-            
+
         Returns:
             Routing decision with target and confidence
         """
@@ -197,60 +197,60 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
             intent_enum = IntentType[intent.upper()]
         except KeyError:
             intent_enum = IntentType.IMPLEMENT
-        
+
         # Create request string from context
         request = json.dumps(context)
-        
+
         routing_result = self.routing_engine.route(intent_enum, request)
-        
+
         # RoutingDecision is a dataclass, convert to dict
         result_dict = {
             "target": getattr(routing_result, "target", None),
             "confidence": getattr(routing_result, "confidence", 0.0)
         }
-        
+
         self._audit_log(
             "ROUTE",
             intent,
             {"target": result_dict["target"], "confidence": result_dict["confidence"]}
         )
-        
+
         return result_dict
-    
+
     def get_cached_analysis(self, file_path: Path) -> Optional[ParseResult]:
         """Get cached analysis for file.
-        
+
         Args:
             file_path: Path to file
-            
+
         Returns:
             Cached ParseResult or None
         """
         cache_key = self._compute_cache_key(file_path)
         return self._cache.get(cache_key)
-    
+
     def clear_cache(self) -> None:
         """Clear analysis cache."""
         self._cache.clear()
         self._audit_log("CLEAR_CACHE", "all", {})
-    
+
     def query_audit_log(
         self,
         operation: Optional[str] = None,
         limit: int = 100
     ) -> List[Dict[str, Any]]:
         """Query audit log.
-        
+
         Args:
             operation: Optional operation filter
             limit: Max results
-            
+
         Returns:
             List of audit entries
         """
         conn = sqlite3.connect(self.audit_db_path)
         cursor = conn.cursor()
-        
+
         if operation:
             cursor.execute(
                 "SELECT * FROM intelligence_audit WHERE operation = ? ORDER BY timestamp DESC LIMIT ?",
@@ -261,10 +261,10 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
                 "SELECT * FROM intelligence_audit ORDER BY timestamp DESC LIMIT ?",
                 (limit,)
             )
-        
+
         rows = cursor.fetchall()
         conn.close()
-        
+
         return [
             {
                 "id": r[0],

@@ -16,10 +16,10 @@ from datetime import datetime
 class ArchitectureReport:
     """
     Report from architectural pattern analysis.
-    
+
     Contains detected patterns, violations, component hierarchy,
     and dependency graph information.
-    
+
     Attributes:
         repo_path: Path to analyzed repository
         patterns_detected: List of detected architectural patterns
@@ -28,7 +28,7 @@ class ArchitectureReport:
         dependency_graph: Graph of file dependencies
         total_files_analyzed: Count of files processed
         analysis_timestamp: When analysis was performed
-    
+
     Example:
         >>> report = ArchitectureReport(
         ...     repo_path=Path("/repo"),
@@ -42,7 +42,7 @@ class ArchitectureReport:
         >>> report.get_violation_summary()
         {'total_violations': 0, 'by_type': {}, 'by_severity': {}}
     """
-    
+
     repo_path: Path
     patterns_detected: List[Dict[str, Any]] = field(default_factory=list)
     violations: List[Dict[str, Any]] = field(default_factory=list)
@@ -50,11 +50,11 @@ class ArchitectureReport:
     dependency_graph: Dict[str, List[str]] = field(default_factory=dict)
     total_files_analyzed: int = 0
     analysis_timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert report to dictionary for JSON export.
-        
+
         Returns:
             Dictionary representation of report
         """
@@ -70,14 +70,14 @@ class ArchitectureReport:
             "total_files_analyzed": self.total_files_analyzed,
             "analysis_timestamp": self.analysis_timestamp,
         }
-    
+
     def get_violation_summary(self) -> Dict[str, Any]:
         """
         Generate summary statistics for violations.
-        
+
         Returns:
             Dictionary with total counts, breakdown by type and severity
-            
+
         Example:
             >>> report.violations = [
             ...     {"violation_type": "circular", "severity": "high"},
@@ -92,22 +92,22 @@ class ArchitectureReport:
             "by_type": {},
             "by_severity": {},
         }
-        
+
         for violation in self.violations:
             # Count by type
             vtype = violation.get("violation_type", "unknown")
             summary["by_type"][vtype] = summary["by_type"].get(vtype, 0) + 1
-            
+
             # Count by severity
             severity = violation.get("severity", "unknown")
             summary["by_severity"][severity] = summary["by_severity"].get(severity, 0) + 1
-        
+
         return summary
-    
+
     def get_critical_violations(self) -> List[Dict[str, Any]]:
         """
         Get only critical and high severity violations.
-        
+
         Returns:
             Filtered list of high-priority violations
         """
@@ -115,15 +115,15 @@ class ArchitectureReport:
             v for v in self.violations
             if v.get("severity") in ["critical", "high"]
         ]
-    
+
     def has_violations(self) -> bool:
         """Check if any violations were detected."""
         return len(self.violations) > 0
-    
+
     def get_pattern_summary(self) -> Dict[str, int]:
         """
         Get count of each detected pattern type.
-        
+
         Returns:
             Dictionary mapping pattern types to counts
         """

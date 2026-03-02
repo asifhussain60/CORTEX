@@ -11,10 +11,10 @@ class DomainFactory:
     def create_domain(self, domain_id: str) -> Any:
         """
         Create a domain instance.
-        
+
         Args:
             domain_id: Domain identifier.
-            
+
         Returns:
             Domain instance.
         """

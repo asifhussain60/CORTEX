@@ -94,18 +94,18 @@ SCOPE_KEYWORDS = {
 def parse_primary_intent(request: str) -> str:
     """Parse user request to identify primary intent."""
     request_lower = request.lower()
-    
+
     # Check for QUERY intent first (explicit teaching/explanation keywords)
     query_keywords = ["what is", "explain", "how do", "tell me", "teach", "describe"]
     if any(kw in request_lower for kw in query_keywords):
         return IntentType.QUERY.value
-    
+
     # Score each intent type
     scores = {}
     for intent_type, keywords in INTENT_KEYWORDS.items():
         score = sum(1 for kw in keywords if kw in request_lower)
         scores[intent_type] = score
-    
+
     # Return highest scoring intent (default to QUERY if tied)
     best_intent = max(scores, key=scores.get) if max(scores.values()) > 0 else IntentType.QUERY
     return best_intent.value
@@ -114,12 +114,12 @@ def parse_primary_intent(request: str) -> str:
 def extract_scope(request: str) -> str:
     """Extract entity scope from request."""
     request_lower = request.lower()
-    
+
     # Detect scope hierarchy (file > module > system)
     for scope_level in ["file", "function", "class", "module", "system"]:
         if any(kw in request_lower for kw in SCOPE_KEYWORDS[scope_level]):
             return scope_level
-    
+
     return "system"  # Default to system scope
 
 
@@ -127,7 +127,7 @@ def measure_confidence(request: str) -> float:
     """Measure classification confidence (0.0-1.0)."""
     # Factors: length, clarity, specificity
     length_score = min(len(request) / 50, 1.0)  # Longer = more detail (adjusted divisor)
-    
+
     # Count explicit keywords (higher = clearer intent)
     keyword_count = sum(
         1 for keywords in INTENT_KEYWORDS.values()
@@ -135,11 +135,11 @@ def measure_confidence(request: str) -> float:
         if kw in request.lower()
     )
     clarity_score = min(keyword_count / 3, 1.0)  # Adjusted threshold
-    
+
     # Penalize vague terms
     vague_terms = ["maybe", "probably", "might", "some kind of", "i think"]
     vagueness_penalty = sum(0.1 for term in vague_terms if term in request.lower())
-    
+
     confidence = (length_score + clarity_score) / 2 - vagueness_penalty
     return max(0.0, min(1.0, confidence))
 
@@ -385,7 +385,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
     output.append("")
     output.append("---")
     output.append("")
-    
+
     # Governance rules
     output.append("GOVERNANCE RULES ACTIVE:")
     output.append("| Rule | Context |")
@@ -394,7 +394,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
         explanation = RULE_EXPLANATIONS.get(rule, rule)
         output.append(f"| {rule} | {explanation} |")
     output.append("")
-    
+
     # Architecture context
     output.append("ORCHESTRATOR ROUTING:")
     output.append("| Component | Status | Notes |")
@@ -402,7 +402,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
     primary = identify_orchestrator(context.intent)
     output.append(f"| Primary: {primary} | ACTIVE | MCP-wired |")
     output.append("")
-    
+
     output.append("ARCHITECTURE CONTEXT:")
     protocols = identify_active_protocols(context.intent)
     if protocols:
@@ -410,7 +410,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
     output.append(f"- Wiring: {context.architecture_context.get('Wiring', 'Active')}")
     output.append(f"- Dependencies: {context.architecture_context.get('Dependencies', 'Minimal')}")
     output.append("")
-    
+
     # Challenge-first analysis
     output.append("CHALLENGE-FIRST ANALYSIS:")
     output.append("| Pillar | Status | Insight |")
@@ -419,27 +419,27 @@ def format_rephrase_output(context: RephraseContext) -> str:
         insight = "Meets design requirements"
         output.append(f"| {pillar.title()} | {status} | {insight} |")
     output.append("")
-    
+
     # Recommendation
     output.append("SINGLE BEST RECOMMENDATION:")
     output.append(context.recommendation)
     output.append("")
-    
+
     # Risk
     breaking_risk = context.risk_assessment.get("Breaking Risk", "LOW")
     output.append(f"BREAKING RISK: {breaking_risk}")
     output.append("")
-    
+
     output.append("Ready for MasterOrchestrator: ✅")
     output.append("")
     output.append("<hr>")
-    
+
     return "\n".join(output)
 
 
 class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Main orchestrator for request rephrase.
-    
+
     Stage -1: Async context pre-fetch (LENS context synthesis)
     Stage 0: Synchronous governance audit (NEW)
       - CORE-002 file generation checks
@@ -463,10 +463,10 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
 
         # Step 2: Governance rules
         governance_rules = lookup_governance_rules(intent, scope)
-        
+
         # Step 2.5: STAGE 0 - Synchronous Governance Audit (NEW)
         governance_violations = _run_stage_0_audit(request, intent, scope, governance_rules)
-        
+
         # Step 3: Architecture context
         orchestrator = identify_orchestrator(intent)
         protocols = identify_active_protocols(intent)
@@ -476,7 +476,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
             "Wiring": get_wiring_status(orchestrator),
             "Dependencies": ", ".join(analyze_dependencies(intent, scope)) or "Minimal",
         }
-        
+
         # Step 4: Risk assessment
         dependencies = analyze_dependencies(intent, scope)
         breaking_risk = calculate_breaking_risk(scope, "modify", dependencies)
@@ -485,11 +485,11 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
             "Dependencies": len(dependencies),
             "Governance Violations": len(governance_violations),
         }
-        
+
         # Step 5: Challenge-first evaluation (with governance tensions)
         pillar_scores = evaluate_pillars(intent, scope)
         challenge_detected = intent in ["DESIGN", "PLAN"] or len(governance_violations) > 0
-        
+
         # Generate recommendation (with governance violations injected)
         if governance_violations:
             recommendation = (
@@ -504,7 +504,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
                 f"No alternatives needed (single best approach). "
                 f"Async pre-processor, Stage -1 integration."
             )
-        
+
         return RephraseContext(
             intent=intent,
             scope=scope,
@@ -521,7 +521,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
     def format_output(context: RephraseContext) -> str:
         """Format context for display with challenge protocol."""
         output = format_rephrase_output(context)
-        
+
         # Append challenge protocol to every rephrase output
         challenge_protocol = (
             "\n\n---\n\n"
@@ -530,7 +530,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
             "Present an alternative approach that could yield better outcomes. "
             "Structure as: \"Assumption: [X]. Alternative: [Y]. Trade-off: [Z].\""
         )
-        
+
         return output + challenge_protocol
 
     @staticmethod
@@ -539,11 +539,11 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
         # Skip if user explicitly doing manual rephrase
         if request.lower().startswith("rephrase:"):
             return False
-        
+
         # Skip for educational/QUERY mode
         if any(q in request.lower() for q in ["what is", "explain", "how do"]):
             return False
-        
+
         # Auto-run for all other intents
         return True
 
@@ -566,38 +566,38 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
 def _run_stage_0_audit(request: str, intent: str, scope: str, governance_rules: List[str]) -> List[str]:
     """
     Stage 0: Synchronous Governance Audit.
-    
+
     Runs before tool selection to catch violations upstream.
     Returns list of violations detected (empty if all checks pass).
     """
     violations = []
-    
+
     # Check 1: CORE-002 - File generation scope
     if intent == "IMPLEMENT" and any(kw in request.lower() for kw in ["create", "generate", "write"] + list(SCOPE_KEYWORDS.get("file", []))):
         # Scan for .md file references outside allowed paths
         md_files = re.findall(r'(?:create|write|generate).*?(\w+\.md)', request, re.IGNORECASE)
         for md_file in md_files:
-            if not (md_file.startswith(".github/prompts/") or 
-                    md_file.startswith(".github/agents/") or 
+            if not (md_file.startswith(".github/prompts/") or
+                    md_file.startswith(".github/agents/") or
                     md_file == "README.md"):
                 violations.append(f"CORE-002: MD file outside allowed path ({md_file})")
-    
+
     # Check 2: CORE-008 - TDD enforcement
     if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
         # Verify request doesn't ask to skip tests
         if any(skip in request.lower() for skip in ["skip test", "ignore test", "--ignore", "bypass test"]):
             violations.append("CORE-008: Test bypass detected (TDD violation)")
-    
+
     # Check 3: CORE-049 - Silent execution compatibility
     if intent in ["IMPLEMENT", "FIX"] and "?" in request:
         # Requests with questions suggest approval-seeking, not silent mode
         # This is advisory, not blocking
         pass
-    
+
     # Check 4: CORE-027 - Audit trail markers
     if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
         # Recommend AC markers (advisory)
         if not any(marker in request for marker in ["AC_START", "AC_COMPLETE"]):
             violations.append("CORE-027: Recommend AC_START/AC_COMPLETE markers for audit trail")
-    
+
     return violations

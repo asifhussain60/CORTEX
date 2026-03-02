@@ -43,13 +43,13 @@ class CleanupResult:
 class CleanupManager:
     """
     Manages cleanup operations for CORTEX workspace.
-    
+
     Consolidates:
     - Markdown sprawl detection and archival (vacuum)
     - Debug marker removal (CORTEX_DEBUG cleanup)
     - Temporary file cleanup
     - Archive management
-    
+
     Attributes:
         workspace_root: Root directory of CORTEX workspace
         dry_run: If True, report what would be done without making changes
@@ -81,7 +81,7 @@ class CleanupManager:
     ) -> None:
         """
         Initialize CleanupManager.
-        
+
         Args:
             workspace_root: Root directory of workspace
             dry_run: If True, simulate operations without making changes
@@ -92,18 +92,18 @@ class CleanupManager:
     def scan_markdown_sprawl(self) -> List[CleanupResult]:
         """
         Scan workspace for markdown sprawl.
-        
+
         Returns:
             List of CleanupResult objects for detected sprawl files
         """
         results = []
-        
+
         for pattern in self.MARKDOWN_SPRAWL_PATTERNS:
             for file_path in self.workspace_root.rglob(pattern):
                 # Skip excluded directories
                 if any(exclude in file_path.parts for exclude in self.EXCLUDE_DIRS):
                     continue
-                
+
                 results.append(
                     CleanupResult(
                         operation=CleanupOperation.VACUUM_MARKDOWN,
@@ -112,24 +112,24 @@ class CleanupManager:
                         message=f"Detected markdown sprawl: {file_path.name}"
                     )
                 )
-        
+
         return results
 
     def scan_debug_markers(self) -> List[CleanupResult]:
         """
         Scan workspace for CORTEX_DEBUG markers.
-        
+
         Returns:
             List of CleanupResult objects for files with debug markers
         """
         results = []
-        
+
         # Search Python files for CORTEX_DEBUG markers
         for file_path in self.workspace_root.rglob("*.py"):
             # Skip excluded directories
             if any(exclude in file_path.parts for exclude in self.EXCLUDE_DIRS):
                 continue
-            
+
             try:
                 content = file_path.read_text()
                 if "CORTEX_DEBUG" in content:
@@ -151,7 +151,7 @@ class CleanupManager:
                         message=f"Error scanning file: {e}"
                     )
                 )
-        
+
         return results
 
     def vacuum_markdown_files(
@@ -161,23 +161,23 @@ class CleanupManager:
     ) -> List[CleanupResult]:
         """
         Vacuum (archive) markdown files.
-        
+
         Args:
             files: List of files to vacuum (if None, uses scan_markdown_sprawl)
             archive_dir: Directory to archive files to (default: _archives/markdown)
-        
+
         Returns:
             List of CleanupResult objects
         """
         if files is None:
             scan_results = self.scan_markdown_sprawl()
             files = [r.file_path for r in scan_results if r.success]
-        
+
         if archive_dir is None:
             archive_dir = self.workspace_root / "_archives" / "markdown"
-        
+
         results = []
-        
+
         for file_path in files:
             try:
                 if self.dry_run:
@@ -193,11 +193,11 @@ class CleanupManager:
                 else:
                     # Create archive directory if needed
                     archive_dir.mkdir(parents=True, exist_ok=True)
-                    
+
                     # Move file to archive
                     archived_path = archive_dir / file_path.name
                     shutil.move(str(file_path), str(archived_path))
-                    
+
                     results.append(
                         CleanupResult(
                             operation=CleanupOperation.VACUUM_MARKDOWN,
@@ -216,7 +216,7 @@ class CleanupManager:
                         message=f"Error archiving file: {e}"
                     )
                 )
-        
+
         return results
 
     def remove_debug_markers(
@@ -225,25 +225,25 @@ class CleanupManager:
     ) -> CleanupResult:
         """
         Remove CORTEX_DEBUG markers from a file.
-        
+
         Args:
             file_path: Path to file to clean
-        
+
         Returns:
             CleanupResult object
         """
         try:
             content = file_path.read_text()
             original_lines = content.split('\n')
-            
+
             # Remove lines containing CORTEX_DEBUG
             cleaned_lines = [
                 line for line in original_lines
                 if "CORTEX_DEBUG" not in line
             ]
-            
+
             removed_count = len(original_lines) - len(cleaned_lines)
-            
+
             if self.dry_run:
                 return CleanupResult(
                     operation=CleanupOperation.REMOVE_DEBUG_MARKERS,
@@ -254,7 +254,7 @@ class CleanupManager:
             else:
                 # Write cleaned content
                 file_path.write_text('\n'.join(cleaned_lines))
-                
+
                 return CleanupResult(
                     operation=CleanupOperation.REMOVE_DEBUG_MARKERS,
                     file_path=file_path,
@@ -275,28 +275,28 @@ class CleanupManager:
     ) -> str:
         """
         Generate cleanup summary report.
-        
+
         Args:
             results: List of CleanupResult objects
-        
+
         Returns:
             Formatted report string
         """
         total = len(results)
         successful = sum(1 for r in results if r.success)
         failed = total - successful
-        
+
         by_operation = {}
         for result in results:
             op = result.operation.value
             if op not in by_operation:
                 by_operation[op] = {"success": 0, "failed": 0}
-            
+
             if result.success:
                 by_operation[op]["success"] += 1
             else:
                 by_operation[op]["failed"] += 1
-        
+
         report_lines = [
             "Cleanup Summary",
             "=" * 50,
@@ -306,19 +306,19 @@ class CleanupManager:
             "",
             "By Operation:",
         ]
-        
+
         for op, counts in by_operation.items():
             report_lines.append(
                 f"  {op}: {counts['success']} successful, {counts['failed']} failed"
             )
-        
+
         if failed > 0:
             report_lines.append("")
             report_lines.append("Failed Operations:")
             for result in results:
                 if not result.success:
                     report_lines.append(f"  - {result.file_path.name}: {result.message}")
-        
+
         return "\n".join(report_lines)
 
 # AC_COMPLETE: AC-P90-004 ✅ Cleanup module with vacuum + debug marker removal

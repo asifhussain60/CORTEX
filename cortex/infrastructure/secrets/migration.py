@@ -27,12 +27,12 @@ class SecretsMigrator:
         keys: Optional[List[str]] = None,
     ) -> MigrationResult:
         """Migrate.
-        
+
         Args:
             source: Parameter for source.
             destination: Parameter for destination.
             keys: Parameter for keys.
-        
+
         Returns:
             MigrationResult result.
         """
@@ -55,12 +55,12 @@ class SecretsValidator:
 
     def validate_secret(self, provider: ISecretsProvider, key: str, policy: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Validate secret.
-        
+
         Args:
             provider: Parameter for provider.
             key: Parameter for key.
             policy: Parameter for policy.
-        
+
         Returns:
             Dict[str, Any] result.
         """
@@ -76,10 +76,10 @@ class SecretsValidator:
 
     def validate_all(self, provider: ISecretsProvider) -> List[Dict[str, Any]]:
         """Validate all.
-        
+
         Args:
             provider: Parameter for provider.
-        
+
         Returns:
             List[Dict[str, Any]] result.
         """
@@ -95,7 +95,7 @@ class SecretsRollback:
 
     def snapshot(self, provider: ISecretsProvider) -> None:
         """Snapshot.
-        
+
         Args:
             provider: Parameter for provider.
         """
@@ -107,10 +107,10 @@ class SecretsRollback:
 
     def rollback(self, provider: ISecretsProvider) -> bool:
         """Rollback.
-        
+
         Args:
             provider: Parameter for provider.
-        
+
         Returns:
             bool result.
         """
@@ -131,11 +131,11 @@ class SecretsMigrationDetector:
         destination: ISecretsProvider,
     ) -> bool:
         """Needs migration.
-        
+
         Args:
             source: Parameter for source.
             destination: Parameter for destination.
-        
+
         Returns:
             bool result.
         """
@@ -149,11 +149,11 @@ class SecretsMigrationDetector:
         destination: ISecretsProvider,
     ) -> Dict[str, Any]:
         """Diff.
-        
+
         Args:
             source: Parameter for source.
             destination: Parameter for destination.
-        
+
         Returns:
             Dict[str, Any] result.
         """
@@ -183,12 +183,12 @@ class SecretsMigrationOrchestrator:
         dry_run: bool = False,
     ) -> MigrationResult:
         """Run.
-        
+
         Args:
             source: Parameter for source.
             destination: Parameter for destination.
             dry_run: Parameter for dry run.
-        
+
         Returns:
             MigrationResult result.
         """

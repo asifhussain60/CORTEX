@@ -12,7 +12,7 @@ Architecture:
 - Shared data models: Type-safe data exchange
 - Layered validation: Gate checks → Challenge generation → Meta-audit → Report
 
-CORTEX COMPLIANCE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), 
+CORTEX COMPLIANCE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
 CORE-013 (specific exceptions), CORE-027 (audit trail with AC markers)
 """
 

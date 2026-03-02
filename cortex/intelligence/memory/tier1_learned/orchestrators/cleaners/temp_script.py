@@ -27,7 +27,7 @@ from .base import Analysis, CleanerInterface, Report, RollbackResult
 
 class TempScriptCleaner(CleanerInterface):
     """Cleaner for temporary and phase-specific scripts."""
-    
+
     # Scripts that must NEVER be deleted
     PROTECTED_SCRIPTS: Set[str] = {
         "vacuum-runner.py",
@@ -36,7 +36,7 @@ class TempScriptCleaner(CleanerInterface):
         "build-docs-site.py",
         "enhanced_cleanup.py",
     }
-    
+
     # Patterns indicating temporary/phase-specific scripts
     TEMP_PATTERNS: List[str] = [
         r"^phase[-_]?\d+[-_].*\.py$",       # phase-81-*, phase25_*
@@ -54,20 +54,20 @@ class TempScriptCleaner(CleanerInterface):
         r"^add[-_].*\.py$",                  # add_cortex_semantic_ids.py
         r"^update[-_].*\.py$",               # update_archived_paths.py
     ]
-    
+
     # Shell script patterns
     TEMP_SHELL_PATTERNS: List[str] = [
         r"^restore[-_].*\.sh$",
         r"^restructure[-_].*\.sh$",
         r"^update[-_].*\.sh$",
     ]
-    
+
     # Minimum age in days before a script can be cleaned
     MIN_AGE_DAYS: int = 30
-    
+
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize temp script cleaner.
-        
+
         Args:
             config: Configuration with repo_root and optional min_age_days
         """
@@ -76,32 +76,32 @@ class TempScriptCleaner(CleanerInterface):
         self.scripts_dir = self.repo_root / "scripts"
         self.min_age_days = config.get("min_age_days", self.MIN_AGE_DAYS)
         self.dry_run = config.get("dry_run", False)
-        
+
         # Compile patterns for efficiency
         self._temp_patterns = [re.compile(p, re.IGNORECASE) for p in self.TEMP_PATTERNS]
         self._shell_patterns = [re.compile(p, re.IGNORECASE) for p in self.TEMP_SHELL_PATTERNS]
-    
+
     @property
     def name(self) -> str:
         """Get cleaner name."""
         return "TempScriptCleaner"
-    
+
     @property
     def version(self) -> str:
         """Get cleaner version."""
         return "1.0.0"
-    
+
     @property
     def domain(self) -> str:
         """Get cleaner domain."""
         return "temp_scripts"
-    
+
     def _is_temp_script(self, filename: str) -> bool:
         """Check if filename matches temporary script patterns.
-        
+
         Args:
             filename: Script filename to check
-        
+
         Returns:
             True if matches temp pattern
         """
@@ -109,31 +109,31 @@ class TempScriptCleaner(CleanerInterface):
         for pattern in self._temp_patterns:
             if pattern.match(filename):
                 return True
-        
+
         # Check shell patterns
         for pattern in self._shell_patterns:
             if pattern.match(filename):
                 return True
-        
+
         return False
-    
+
     def _is_protected(self, filename: str) -> bool:
         """Check if script is protected from deletion.
-        
+
         Args:
             filename: Script filename to check
-        
+
         Returns:
             True if protected
         """
         return filename in self.PROTECTED_SCRIPTS
-    
+
     def _get_file_age_days(self, file_path: Path) -> int:
         """Get file age in days based on modification time.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Age in days
         """
@@ -143,13 +143,13 @@ class TempScriptCleaner(CleanerInterface):
             return age.days
         except OSError:
             return 0
-    
+
     def _has_uncommitted_changes(self, file_path: Path) -> bool:
         """Check if file has uncommitted git changes.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             True if has uncommitted changes
         """
@@ -166,13 +166,13 @@ class TempScriptCleaner(CleanerInterface):
         except (subprocess.SubprocessError, FileNotFoundError):
             # If git check fails, assume file has changes (safe default)
             return True
-    
+
     def _is_tracked_by_git(self, file_path: Path) -> bool:
         """Check if file is tracked by git.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             True if tracked by git
         """
@@ -186,10 +186,10 @@ class TempScriptCleaner(CleanerInterface):
             return result.returncode == 0
         except (subprocess.SubprocessError, FileNotFoundError):
             return False
-    
+
     def analyze(self) -> Analysis:
         """Analyze scripts folder for temporary scripts.
-        
+
         Returns:
             Analysis with detected temporary scripts
         """
@@ -197,7 +197,7 @@ class TempScriptCleaner(CleanerInterface):
         logs: List[str] = []
         issues: List[Dict[str, Any]] = []
         files_scanned = 0
-        
+
         if not self.scripts_dir.exists():
             logs.append(f"Scripts directory not found: {self.scripts_dir}")
             return Analysis(
@@ -208,37 +208,37 @@ class TempScriptCleaner(CleanerInterface):
                 plan={"issues": []},
                 logs=logs,
             )
-        
+
         logs.append(f"Scanning scripts directory: {self.scripts_dir}")
-        
+
         # Scan for temporary scripts
         for script_file in self.scripts_dir.iterdir():
             if not script_file.is_file():
                 continue
-            
+
             files_scanned += 1
             filename = script_file.name
-            
+
             # Skip protected scripts
             if self._is_protected(filename):
                 logs.append(f"Protected: {filename}")
                 continue
-            
+
             # Check if matches temp pattern
             if not self._is_temp_script(filename):
                 continue
-            
+
             # Check age
             age_days = self._get_file_age_days(script_file)
             if age_days < self.min_age_days:
                 logs.append(f"Too young ({age_days}d < {self.min_age_days}d): {filename}")
                 continue
-            
+
             # Check git status
             if self._has_uncommitted_changes(script_file):
                 logs.append(f"Has uncommitted changes: {filename}")
                 continue
-            
+
             # Add as cleanup candidate
             issues.append({
                 "type": "temp_script",
@@ -250,7 +250,7 @@ class TempScriptCleaner(CleanerInterface):
                 "reason": f"Temporary script, {age_days} days old",
             })
             logs.append(f"Candidate: {filename} ({age_days} days old)")
-        
+
         return Analysis(
             cleaner_id=self.name,
             timestamp=timestamp,
@@ -259,13 +259,13 @@ class TempScriptCleaner(CleanerInterface):
             plan={"issues": issues},
             logs=logs,
         )
-    
+
     def execute(self, plan: Any) -> Report:
         """Execute cleanup of temporary scripts.
-        
+
         Args:
             plan: Execution plan (either Analysis object or dict with issues)
-        
+
         Returns:
             Report with cleanup results
         """
@@ -273,7 +273,7 @@ class TempScriptCleaner(CleanerInterface):
         logs: List[str] = []
         actions_taken: List[Dict[str, Any]] = []
         errors: List[str] = []
-        
+
         # Handle both Analysis object and dict
         if hasattr(plan, 'plan'):
             # It's an Analysis object
@@ -283,10 +283,10 @@ class TempScriptCleaner(CleanerInterface):
             issues = plan.get("issues", [])
         else:
             issues = []
-        
+
         for issue in issues:
             file_path = Path(issue["path"])
-            
+
             try:
                 if self.dry_run:
                     logs.append(f"[DRY RUN] Would delete: {file_path.name}")
@@ -308,10 +308,10 @@ class TempScriptCleaner(CleanerInterface):
                 error_msg = f"Failed to delete {file_path.name}: {e}"
                 errors.append(error_msg)
                 logs.append(f"ERROR: {error_msg}")
-        
+
         deleted_count = len([a for a in actions_taken if not a.get("dry_run")])
         status = "SUCCESS" if len(errors) == 0 else ("PARTIAL" if deleted_count > 0 else "FAILED")
-        
+
         return Report(
             cleaner_id=self.name,
             timestamp=timestamp,
@@ -321,13 +321,13 @@ class TempScriptCleaner(CleanerInterface):
             errors=errors,
             logs=logs,
         )
-    
+
     def rollback(self, report: Report) -> RollbackResult:
         """Rollback is not supported for deletions.
-        
+
         Args:
             report: Report from execute phase
-        
+
         Returns:
             RollbackResult indicating not supported
         """

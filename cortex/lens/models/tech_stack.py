@@ -17,7 +17,7 @@ from typing import Dict, List, Optional
 
 class TechCategory(Enum):
     """Technology category classification."""
-    
+
     LANGUAGE = "language"
     FRAMEWORK = "framework"
     LIBRARY = "library"
@@ -31,13 +31,13 @@ class TechCategory(Enum):
 @dataclass
 class TechStackItem:
     """Single technology stack item with metadata."""
-    
+
     name: str
     category: TechCategory
     version: Optional[str] = None
     confidence: float = 1.0  # 0.0 to 1.0
     detection_method: str = "unknown"  # file_extension, ast_import, config_file, etc.
-    
+
     def __post_init__(self) -> None:
         """Validate confidence score."""
         if not 0.0 <= self.confidence <= 1.0:
@@ -47,7 +47,7 @@ class TechStackItem:
 @dataclass
 class TechStack:
     """Complete technology stack detection result."""
-    
+
     primary_language: Optional[str] = None
     languages: List[str] = field(default_factory=list)
     frameworks: List[str] = field(default_factory=list)
@@ -55,18 +55,18 @@ class TechStack:
     databases: List[str] = field(default_factory=list)
     build_tools: List[str] = field(default_factory=list)
     test_frameworks: List[str] = field(default_factory=list)
-    
+
     # Detailed items with metadata
     items: List[TechStackItem] = field(default_factory=list)
-    
+
     # Detection metadata
     confidence_score: float = 0.0  # Overall confidence
     detection_methods: List[str] = field(default_factory=list)
-    
+
     def add_item(self, item: TechStackItem) -> None:
         """Add technology item and update category lists."""
         self.items.append(item)
-        
+
         # Update category-specific lists
         if item.category == TechCategory.LANGUAGE and item.name not in self.languages:
             self.languages.append(item.name)
@@ -80,21 +80,21 @@ class TechStack:
             self.build_tools.append(item.name)
         elif item.category == TechCategory.TESTING and item.name not in self.test_frameworks:
             self.test_frameworks.append(item.name)
-    
+
     def get_primary_language(self) -> Optional[str]:
         """Get primary language (highest confidence language item)."""
         language_items = [
-            item for item in self.items 
+            item for item in self.items
             if item.category == TechCategory.LANGUAGE
         ]
-        
+
         if not language_items:
             return None
-        
+
         # Sort by confidence, return highest
         language_items.sort(key=lambda x: x.confidence, reverse=True)
         return language_items[0].name
-    
+
     def to_dict(self) -> Dict:
         """Convert to dictionary for serialization."""
         return {

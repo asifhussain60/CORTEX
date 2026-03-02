@@ -55,7 +55,7 @@ from cortex.core.result import Result
 
 class PromptInjectionSanitizer:
     """Sanitize prompt injections.
-    
+
     Detects various injection attack patterns including:
     - System prompt manipulation
     - SQL injection
@@ -64,15 +64,15 @@ class PromptInjectionSanitizer:
     - Path traversal
     - Instruction override attempts
     """
-    
+
     def __init__(self) -> None:
         """Initialize the sanitizer with default patterns."""
         self.injection_patterns: List[InjectionPattern] = []
         self.sanitization_history: List[SanitizationResult] = []
         self.blocked_inputs: List[str] = []
-        
+
         self._initialize_patterns()
-    
+
     def _initialize_patterns(self) -> None:
         """Initialize default injection patterns."""
         patterns = [
@@ -95,7 +95,7 @@ class PromptInjectionSanitizer:
                 description="System prompt manipulation",
                 pattern_type="regex"
             ),
-            
+
             # High - SQL Injection
             InjectionPattern(
                 pattern=r"(?i)(;|')\s*(drop|delete|truncate|alter)\s+(table|database)",
@@ -109,7 +109,7 @@ class PromptInjectionSanitizer:
                 description="SQL query injection",
                 pattern_type="regex"
             ),
-            
+
             # High - XSS
             InjectionPattern(
                 pattern=r"<script[^>]*>.*?</script>",
@@ -123,7 +123,7 @@ class PromptInjectionSanitizer:
                 description="JavaScript protocol injection",
                 pattern_type="regex"
             ),
-            
+
             # Medium - Template injection
             InjectionPattern(
                 pattern=r"\$\{[^}]+\}",
@@ -137,7 +137,7 @@ class PromptInjectionSanitizer:
                 description="Template expression injection",
                 pattern_type="regex"
             ),
-            
+
             # Medium - Path traversal
             InjectionPattern(
                 pattern=r"\.\./",
@@ -146,9 +146,9 @@ class PromptInjectionSanitizer:
                 pattern_type="regex"
             ),
         ]
-        
+
         self.injection_patterns.extend(patterns)
-    
+
     def add_pattern(
         self,
         pattern: str,
@@ -156,7 +156,7 @@ class PromptInjectionSanitizer:
         description: str
     ) -> None:
         """Add a custom injection pattern.
-        
+
         Args:
             pattern: Regex pattern to detect
             threat_level: Threat level for this pattern
@@ -169,23 +169,23 @@ class PromptInjectionSanitizer:
                 description=description
             )
         )
-    
+
     def _detect_threats(self, input_text: str) -> Tuple[List[str], InjectionThreatLevel]:
         """Detect threats in input text.
-        
+
         Args:
             input_text: Text to analyze
-            
+
         Returns:
             Tuple of (detected threats, overall threat level)
         """
         detected_threats = []
         max_threat_level = InjectionThreatLevel.SAFE
-        
+
         for pattern_obj in self.injection_patterns:
             if re.search(pattern_obj.pattern, input_text, re.IGNORECASE):
                 detected_threats.append(pattern_obj.description)
-                
+
                 # Update max threat level
                 threat_levels = [
                     InjectionThreatLevel.SAFE,
@@ -196,30 +196,30 @@ class PromptInjectionSanitizer:
                 ]
                 if threat_levels.index(pattern_obj.threat_level) > threat_levels.index(max_threat_level):
                     max_threat_level = pattern_obj.threat_level
-        
+
         return detected_threats, max_threat_level
-    
+
     def sanitize(self, input_text: str) -> Result:
         """Sanitize input text.
-        
+
         Args:
             input_text: Text to sanitize
-            
+
         Returns:
             Result with SanitizationResult
         """
         # Detect threats
         threats, threat_level = self._detect_threats(input_text)
-        
+
         # Apply sanitization based on threat level
         sanitized = self._apply_sanitization(input_text, threat_level)
-        
+
         # Determine if safe
         is_safe = threat_level in [InjectionThreatLevel.SAFE, InjectionThreatLevel.LOW]
-        
+
         # Get sanitization methods
         methods = self._get_sanitization_methods(threat_level)
-        
+
         result = SanitizationResult(
             original_input=input_text,
             sanitized_input=sanitized,
@@ -228,98 +228,98 @@ class PromptInjectionSanitizer:
             threat_level=threat_level,
             methods_applied=methods
         )
-        
+
         # Track in history
         self.sanitization_history.append(result)
-        
+
         # Track blocked inputs
         if threat_level == InjectionThreatLevel.CRITICAL:
             self.blocked_inputs.append(input_text)
             return Result(success=False, error="Critical threat detected - input blocked")
-        
+
         return Result(success=True, value=result)
-    
+
     def _apply_sanitization(
         self,
         input_text: str,
         threat_level: InjectionThreatLevel
     ) -> str:
         """Apply sanitization based on threat level.
-        
+
         Args:
             input_text: Text to sanitize
             threat_level: Threat level
-            
+
         Returns:
             Sanitized text
         """
         if threat_level == InjectionThreatLevel.SAFE:
             return input_text
-        
+
         sanitized = input_text
-        
+
         # Apply stripping for all non-safe levels
         sanitized = self._strip_suspicious_chars(sanitized)
-        
+
         # Apply escaping for high threat
         if threat_level in [InjectionThreatLevel.HIGH, InjectionThreatLevel.CRITICAL]:
             sanitized = self._escape_special_chars(sanitized)
-        
+
         return sanitized
-    
+
     def _escape_special_chars(self, text: str) -> str:
         """Escape special HTML characters.
-        
+
         Args:
             text: Text to escape
-            
+
         Returns:
             Escaped text
         """
         return html.escape(text)
-    
+
     def _strip_suspicious_chars(self, text: str) -> str:
         """Strip suspicious characters.
-        
+
         Args:
             text: Text to strip
-            
+
         Returns:
             Stripped text
         """
         # Remove template markers
         text = re.sub(r'[$`{}]', '', text)
-        
+
         # Remove command separators
         text = re.sub(r'[;|]', '', text)
-        
+
         return text
-    
+
     def _encode_safe(self, text: str) -> str:
         """Encode text safely.
-        
+
         Args:
             text: Text to encode
-            
+
         Returns:
             Encoded text
         """
         return text.encode('utf-8', errors='ignore').decode('utf-8')
-    
+
     def _get_sanitization_methods(
         self,
         threat_level: InjectionThreatLevel
     ) -> List[SanitizationMethod]:
         """Get sanitization methods for threat level.
-        
+
         Args:
             threat_level: Threat level
-            
+
         Returns:
             List of sanitization methods
         """
         methods = []
-        
+
         if threat_level == InjectionThreatLevel.SAFE:
             methods.append(SanitizationMethod.STRIP)
         elif threat_level == InjectionThreatLevel.LOW:
@@ -330,20 +330,20 @@ class PromptInjectionSanitizer:
             methods.extend([SanitizationMethod.STRIP, SanitizationMethod.ESCAPE])
         elif threat_level == InjectionThreatLevel.CRITICAL:
             methods.append(SanitizationMethod.BLOCK)
-        
+
         return methods
-    
+
     def validate_parameter_binding(
         self,
         template: str,
         parameters: Dict[str, str]
     ) -> Result:
         """Validate parameter binding.
-        
+
         Args:
             template: Template string
             parameters: Parameters to bind
-            
+
         Returns:
             Result with bound string or error
         """
@@ -352,17 +352,17 @@ class PromptInjectionSanitizer:
             threats, threat_level = self._detect_threats(value)
             if threat_level in [InjectionThreatLevel.HIGH, InjectionThreatLevel.CRITICAL]:
                 return Result(success=False, error=f"Injection detected in parameter: {key}")
-        
+
         # Safe binding
         try:
             result = template.format(**parameters)
             return Result(success=True, value=result)
         except Exception as e:
             return Result(success=False, error=str(e))
-    
+
     def get_threat_statistics(self) -> Dict[str, Any]:
         """Get threat statistics.
-        
+
         Returns:
             Statistics dictionary
         """
@@ -372,9 +372,9 @@ class PromptInjectionSanitizer:
                 "safe_inputs": 0,
                 "blocked_inputs": 0
             }
-        
+
         safe_count = sum(1 for r in self.sanitization_history if r.is_safe)
-        
+
         return {
             "total_sanitizations": len(self.sanitization_history),
             "safe_inputs": safe_count,

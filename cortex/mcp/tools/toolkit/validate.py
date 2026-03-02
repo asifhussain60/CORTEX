@@ -19,25 +19,25 @@ from cortex.tools.toolkit.toolkit_validation import ValidationManager as Governa
 class ToolkitValidateTool(ConsolidatedTool):
     """
     MCP tool for governance validation and production readiness.
-    
+
     Exposes GovernanceValidator functionality via MCP protocol.
     """
-    
+
     @property
     def name(self) -> str:
         """The unique tool name identifier."""
         return "toolkit_validate"
-    
+
     @property
     def description(self) -> str:
         """Human-readable description of the tool."""
         return "Validate governance compliance and production readiness"
-    
+
     @property
     def category(self) -> ToolCategory:
         """The tool category for registry classification."""
         return ToolCategory.GOVERNANCE
-    
+
     @property
     def parameters(self) -> list:
         """List of parameters accepted by the tool."""
@@ -58,30 +58,30 @@ class ToolkitValidateTool(ConsolidatedTool):
                 default=False
             )
         ]
-    
+
     @property
     def supported_operations(self) -> list:
         """List of operation types this tool supports."""
         return ["governance", "production", "security", "compliance", "all"]
-    
+
     def execute(self, validation_type: str = "all", dry_run: bool = False, **kwargs) -> ToolResult:
         """
         Execute governance validation.
-        
+
         Args:
             validation_type: Type of validation (governance, production, security, compliance, all)
             dry_run: Preview validation without side effects
-        
+
         Returns:
             ToolResult with validation results
         """
         try:
             validator = GovernanceValidator()
-            
+
             if validation_type == "all" or validation_type == "production":
                 report = validator.validate_production_readiness(dry_run=dry_run)
                 formatted_report = validator.generate_readiness_report(report)
-                
+
                 return ToolResult(
                     success=report.overall_status == "PRODUCTION READY",
                     data={
@@ -90,30 +90,30 @@ class ToolkitValidateTool(ConsolidatedTool):
                     },
                     metadata={"validation_type": validation_type, "dry_run": dry_run}
                 )
-            
+
             elif validation_type == "governance":
                 result = validator.check_governance_alignment()
-                
+
                 return ToolResult(
                     success=result,
                     data={"governance_aligned": result},
                     metadata={"validation_type": validation_type}
                 )
-            
+
             elif validation_type == "security":
                 result = validator.assess_security_posture()
-                
+
                 return ToolResult(
                     success=result.get("score", 0) >= 70.0,
                     data=result,
                     metadata={"validation_type": validation_type}
                 )
-            
+
             elif validation_type == "compliance":
                 # Compliance is a combination of governance + security
                 governance_result = validator.check_governance_alignment()
                 security_result = validator.assess_security_posture()
-                
+
                 return ToolResult(
                     success=governance_result and security_result.get("score", 0) >= 70.0,
                     data={
@@ -122,7 +122,7 @@ class ToolkitValidateTool(ConsolidatedTool):
                     },
                     metadata={"validation_type": validation_type}
                 )
-            
+
             else:
                 return ToolResult(
                     success=False,
@@ -130,7 +130,7 @@ class ToolkitValidateTool(ConsolidatedTool):
                     error=f"Unknown validation_type: {validation_type}",
                     metadata={"available_types": self.supported_operations}
                 )
-        
+
         except Exception as e:
             return ToolResult(
                 success=False,

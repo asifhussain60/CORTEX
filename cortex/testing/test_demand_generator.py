@@ -54,35 +54,35 @@ class ValidationType(str, Enum):
 @dataclass
 class TestDemand:
     """A test demand - what a test MUST validate."""
-    
+
     id: str
     orchestrator: str
     category: DemandCategory
     title: str
     description: str
-    
+
     # What to test
     scenario: str  # Real-world scenario (e.g., "user says 'implement login'")
     expected_behavior: str  # What MUST happen
-    
+
     # How to validate
     validation_type: ValidationType
     validation_rules: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Dependencies
     depends_on: List[str] = field(default_factory=list)  # Other demand IDs
     blocks: List[str] = field(default_factory=list)  # Which demands this blocks
-    
+
     # Metadata
     complexity: str = "medium"  # simple|medium|complex
     priority: int = 1  # 1=critical, 5=optional
     audit_requirements: List[str] = field(default_factory=list)  # AC markers needed
-    
+
     # Quality metrics
     coverage_percentage: float = 0.0
     is_golden_path: bool = False
     estimated_test_lines: int = 0
-    
+
     created_at: str = field(default_factory=lambda: "2026-02-13")
 
     @classmethod
@@ -106,11 +106,11 @@ class DemandAnalysisResult:
     orchestrator_name: str
     demands: List[TestDemand] = field(default_factory=list)
     gaps: List[str] = field(default_factory=list)  # Missing coverage areas
-    
+
     total_lines_of_test_code: int = 0
     estimated_test_count: int = 0
     coverage_percentage: float = 0.0
-    
+
     analysis_notes: str = ""
     timestamp: str = field(default_factory=lambda: "2026-02-13T00:00:00Z")
 
@@ -363,23 +363,23 @@ class DemandRegistry:
             f"Registered {len(analysis_result.demands)} demands for {orchestrator_name}"
         )
         return file_path
-    
+
     def save_demands(self, demands: List[TestDemand]) -> Path:
         """
         Save demands directly (simpler API for adapter usage).
-        
+
         Args:
             demands: List of TestDemand objects
-        
+
         Returns:
             Path to created YAML file
         """
         if not demands:
             raise ValueError("Cannot save empty demands list")
-        
+
         orchestrator_name = demands[0].orchestrator
         file_path = self.demands_dir / f"{orchestrator_name.lower()}-demands.yaml"
-        
+
         # Convert to YAML-friendly format
         demands_data = {
             "orchestrator": orchestrator_name,
@@ -391,11 +391,11 @@ class DemandRegistry:
                 "generated_at": demands[0].created_at,
             },
         }
-        
+
         # Write to registry
         file_path.write_text(yaml.dump(demands_data, default_flow_style=False))
         self._cache[orchestrator_name] = demands
-        
+
         logger.info(f"Saved {len(demands)} demands for {orchestrator_name}")
         return file_path
 

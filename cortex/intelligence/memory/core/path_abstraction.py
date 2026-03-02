@@ -43,10 +43,10 @@ class PathStrategy(ABC):
     @abstractmethod
     def normalize(self, path_str: str) -> str:
         """Normalize path for the platform.
-        
+
         Args:
             path_str: Raw path string to normalize
-            
+
         Returns:
             Normalized path string
         """
@@ -55,10 +55,10 @@ class PathStrategy(ABC):
     @abstractmethod
     def join(self, *parts: str) -> str:
         """Join path parts correctly for the platform.
-        
+
         Args:
             parts: Path components to join
-            
+
         Returns:
             Joined path string
         """
@@ -67,10 +67,10 @@ class PathStrategy(ABC):
     @abstractmethod
     def resolve(self, path_str: str) -> str:
         """Resolve path to absolute form.
-        
+
         Args:
             path_str: Path to resolve
-            
+
         Returns:
             Resolved absolute path
         """
@@ -79,10 +79,10 @@ class PathStrategy(ABC):
     @abstractmethod
     def is_absolute(self, path_str: str) -> bool:
         """Check if path is absolute.
-        
+
         Args:
             path_str: Path to check
-            
+
         Returns:
             True if path is absolute
         """
@@ -94,10 +94,10 @@ class PosixPathStrategy(PathStrategy):
 
     def normalize(self, path_str: str) -> str:
         """Normalize POSIX path.
-        
+
         Args:
             path_str: Raw path string
-            
+
         Returns:
             Normalized path with consistent separators and resolved . and ..
         """
@@ -111,10 +111,10 @@ class PosixPathStrategy(PathStrategy):
 
     def join(self, *parts: str) -> str:
         """Join path parts using POSIX separators.
-        
+
         Args:
             parts: Path components to join
-            
+
         Returns:
             Joined path string
         """
@@ -125,10 +125,10 @@ class PosixPathStrategy(PathStrategy):
 
     def resolve(self, path_str: str) -> str:
         """Resolve path to absolute form on POSIX system.
-        
+
         Args:
             path_str: Path to resolve
-            
+
         Returns:
             Absolute path string
         """
@@ -144,10 +144,10 @@ class PosixPathStrategy(PathStrategy):
 
     def is_absolute(self, path_str: str) -> bool:
         """Check if path is absolute on POSIX system.
-        
+
         Args:
             path_str: Path to check
-            
+
         Returns:
             True if path starts with /
         """
@@ -159,10 +159,10 @@ class WindowsPathStrategy(PathStrategy):
 
     def normalize(self, path_str: str) -> str:
         """Normalize Windows path.
-        
+
         Args:
             path_str: Raw path string (may contain mixed separators)
-            
+
         Returns:
             Normalized path with consistent Windows separators
         """
@@ -176,10 +176,10 @@ class WindowsPathStrategy(PathStrategy):
 
     def join(self, *parts: str) -> str:
         """Join path parts using Windows separators.
-        
+
         Args:
             parts: Path components to join
-            
+
         Returns:
             Joined path string with Windows separators
         """
@@ -190,10 +190,10 @@ class WindowsPathStrategy(PathStrategy):
 
     def resolve(self, path_str: str) -> str:
         """Resolve path to absolute form on Windows system.
-        
+
         Args:
             path_str: Path to resolve
-            
+
         Returns:
             Absolute path string
         """
@@ -208,10 +208,10 @@ class WindowsPathStrategy(PathStrategy):
 
     def is_absolute(self, path_str: str) -> bool:
         """Check if path is absolute on Windows system.
-        
+
         Args:
             path_str: Path to check
-            
+
         Returns:
             True if path has drive letter or UNC root
         """
@@ -231,10 +231,10 @@ class UniversalPathStrategy(PathStrategy):
 
     def normalize(self, path_str: str) -> str:
         """Normalize path using current OS strategy.
-        
+
         Args:
             path_str: Raw path string
-            
+
         Returns:
             Normalized path
         """
@@ -242,10 +242,10 @@ class UniversalPathStrategy(PathStrategy):
 
     def join(self, *parts: str) -> str:
         """Join path parts using current OS strategy.
-        
+
         Args:
             parts: Path components
-            
+
         Returns:
             Joined path
         """
@@ -253,10 +253,10 @@ class UniversalPathStrategy(PathStrategy):
 
     def resolve(self, path_str: str) -> str:
         """Resolve path using current OS strategy.
-        
+
         Args:
             path_str: Path to resolve
-            
+
         Returns:
             Absolute path
         """
@@ -264,10 +264,10 @@ class UniversalPathStrategy(PathStrategy):
 
     def is_absolute(self, path_str: str) -> bool:
         """Check if path is absolute using current OS strategy.
-        
+
         Args:
             path_str: Path to check
-            
+
         Returns:
             True if path is absolute
         """
@@ -276,11 +276,11 @@ class UniversalPathStrategy(PathStrategy):
 
 class PathAbstraction:
     """Unified path abstraction layer for cross-platform path operations.
-    
+
     This class provides a consistent interface for path operations across
     Windows, macOS, and Linux platforms. It wraps pathlib.Path with
     additional utilities and ensures consistent behavior.
-    
+
     Attributes:
         _path: Internal Path object
         _strategy: Platform-specific path strategy
@@ -291,10 +291,10 @@ class PathAbstraction:
 
     def __init__(self, path: Union[str, Path, 'PathAbstraction']) -> None:
         """Initialize PathAbstraction with a path.
-        
+
         Args:
             path: String path, pathlib.Path object, or another PathAbstraction
-            
+
         Raises:
             ValueError: If path is None or empty
         """
@@ -307,13 +307,13 @@ class PathAbstraction:
                 if not path:
                     raise ValueError("Path cannot be empty")
                 self._path = Path(path)
-            
+
             self._strategy = UniversalPathStrategy()
             logger.debug(f"Created PathAbstraction for: {self._path}")
 
     def __str__(self) -> str:
         """Return string representation of the path.
-        
+
         Returns:
             Path as string
         """
@@ -321,7 +321,7 @@ class PathAbstraction:
 
     def __repr__(self) -> str:
         """Return detailed representation.
-        
+
         Returns:
             Detailed string representation
         """
@@ -329,10 +329,10 @@ class PathAbstraction:
 
     def __eq__(self, other: Any) -> bool:
         """Check equality with another PathAbstraction or path-like object.
-        
+
         Args:
             other: Object to compare
-            
+
         Returns:
             True if paths are equal
         """
@@ -344,10 +344,10 @@ class PathAbstraction:
 
     def __truediv__(self, other: str) -> 'PathAbstraction':
         """Support / operator for path joining.
-        
+
         Args:
             other: Path component to append
-            
+
         Returns:
             New PathAbstraction with joined path
         """
@@ -355,10 +355,10 @@ class PathAbstraction:
 
     def join(self, *parts: str) -> 'PathAbstraction':
         """Join path components.
-        
+
         Args:
             parts: Path components to join
-            
+
         Returns:
             New PathAbstraction with joined path
         """
@@ -368,7 +368,7 @@ class PathAbstraction:
 
     def normalize(self) -> 'PathAbstraction':
         """Normalize the path by resolving . and .. components.
-        
+
         Returns:
             New PathAbstraction with normalized path
         """
@@ -378,7 +378,7 @@ class PathAbstraction:
 
     def resolve(self) -> 'PathAbstraction':
         """Resolve the path to absolute form.
-        
+
         Returns:
             New PathAbstraction with absolute path
         """
@@ -388,7 +388,7 @@ class PathAbstraction:
 
     def parent(self) -> 'PathAbstraction':
         """Get the parent directory.
-        
+
         Returns:
             New PathAbstraction for parent directory
         """
@@ -397,7 +397,7 @@ class PathAbstraction:
 
     def name(self) -> str:
         """Get the filename component (last part of path).
-        
+
         Returns:
             Filename as string
         """
@@ -406,7 +406,7 @@ class PathAbstraction:
 
     def stem(self) -> str:
         """Get filename without extension.
-        
+
         Returns:
             Filename stem
         """
@@ -415,7 +415,7 @@ class PathAbstraction:
 
     def suffix(self) -> str:
         """Get file extension.
-        
+
         Returns:
             File extension including dot (e.g., '.py')
         """
@@ -424,7 +424,7 @@ class PathAbstraction:
 
     def suffixes(self) -> List[str]:
         """Get all file extensions.
-        
+
         Returns:
             List of all extensions (e.g., ['.tar', '.gz'])
         """
@@ -433,7 +433,7 @@ class PathAbstraction:
 
     def parts(self) -> Tuple[str, ...]:
         """Get all path components.
-        
+
         Returns:
             Tuple of path parts
         """
@@ -442,7 +442,7 @@ class PathAbstraction:
 
     def exists(self) -> bool:
         """Check if path exists in file system.
-        
+
         Returns:
             True if path exists
         """
@@ -454,7 +454,7 @@ class PathAbstraction:
 
     def is_file(self) -> bool:
         """Check if path points to a regular file.
-        
+
         Returns:
             True if path is a file
         """
@@ -466,7 +466,7 @@ class PathAbstraction:
 
     def is_dir(self) -> bool:
         """Check if path points to a directory.
-        
+
         Returns:
             True if path is a directory
         """
@@ -478,7 +478,7 @@ class PathAbstraction:
 
     def is_symlink(self) -> bool:
         """Check if path points to a symbolic link.
-        
+
         Returns:
             True if path is a symlink
         """
@@ -490,7 +490,7 @@ class PathAbstraction:
 
     def is_absolute(self) -> bool:
         """Check if path is absolute.
-        
+
         Returns:
             True if path is absolute
         """
@@ -499,13 +499,13 @@ class PathAbstraction:
 
     def relative_to(self, other: Union['PathAbstraction', Path, str]) -> 'PathAbstraction':
         """Compute the relative path from other to self.
-        
+
         Args:
             other: Base path to compute relative path from
-            
+
         Returns:
             New PathAbstraction with relative path
-            
+
         Raises:
             ValueError: If paths are not relative to each other
         """
@@ -516,16 +516,16 @@ class PathAbstraction:
                 other_path = other
             else:
                 other_path = Path(other)
-            
+
             relative = self._path.relative_to(other_path)
             return PathAbstraction(relative)
 
     def with_name(self, name: str) -> 'PathAbstraction':
         """Return path with filename changed.
-        
+
         Args:
             name: New filename
-            
+
         Returns:
             New PathAbstraction with changed filename
         """
@@ -534,10 +534,10 @@ class PathAbstraction:
 
     def with_stem(self, stem: str) -> 'PathAbstraction':
         """Return path with stem (filename without extension) changed.
-        
+
         Args:
             stem: New stem
-            
+
         Returns:
             New PathAbstraction with changed stem
         """
@@ -546,10 +546,10 @@ class PathAbstraction:
 
     def with_suffix(self, suffix: str) -> 'PathAbstraction':
         """Return path with extension changed.
-        
+
         Args:
             suffix: New extension (including dot, e.g., '.py')
-            
+
         Returns:
             New PathAbstraction with changed suffix
         """
@@ -558,25 +558,25 @@ class PathAbstraction:
 
     def iterdir(self) -> List['PathAbstraction']:
         """List directory contents.
-        
+
         Returns:
             List of PathAbstraction objects for directory contents
-            
+
         Raises:
             NotADirectoryError: If path is not a directory
         """
         with self._global_lock:
             if not self.is_dir():
                 raise NotADirectoryError(f"{self._path} is not a directory")
-            
+
             return [PathAbstraction(p) for p in self._path.iterdir()]
 
     def read_text(self, encoding: str = "utf-8") -> str:
         """Read text file contents.
-        
+
         Args:
             encoding: File encoding (default: utf-8)
-            
+
         Returns:
             File contents as string
         """
@@ -585,11 +585,11 @@ class PathAbstraction:
 
     def write_text(self, data: str, encoding: str = "utf-8") -> int:
         """Write text to file.
-        
+
         Args:
             data: Text content to write
             encoding: File encoding (default: utf-8)
-            
+
         Returns:
             Number of characters written
         """
@@ -598,7 +598,7 @@ class PathAbstraction:
 
     def mkdir(self, parents: bool = False, exist_ok: bool = False) -> None:
         """Create directory.
-        
+
         Args:
             parents: If True, create parent directories as needed
             exist_ok: If True, don't raise error if directory exists
@@ -608,7 +608,7 @@ class PathAbstraction:
 
     def unlink(self, missing_ok: bool = False) -> None:
         """Delete file.
-        
+
         Args:
             missing_ok: If True, don't raise error if file doesn't exist
         """
@@ -617,7 +617,7 @@ class PathAbstraction:
 
     def rmdir(self) -> None:
         """Remove empty directory.
-        
+
         Raises:
             OSError: If directory is not empty
         """
@@ -626,7 +626,7 @@ class PathAbstraction:
 
     def as_posix(self) -> str:
         """Return path with forward slashes (POSIX style).
-        
+
         Returns:
             Path string with forward slashes
         """
@@ -635,7 +635,7 @@ class PathAbstraction:
 
     def as_uri(self) -> str:
         """Return path as a file URI.
-        
+
         Returns:
             File URI representation
         """
@@ -644,7 +644,7 @@ class PathAbstraction:
 
     def stat(self) -> Any:
         """Get file statistics.
-        
+
         Returns:
             os.stat_result object
         """
@@ -653,7 +653,7 @@ class PathAbstraction:
 
     def touch(self, exist_ok: bool = True) -> None:
         """Create an empty file or update its timestamp.
-        
+
         Args:
             exist_ok: If True, don't raise error if file exists
         """
@@ -662,10 +662,10 @@ class PathAbstraction:
 
     def glob(self, pattern: str) -> List['PathAbstraction']:
         """Match path components against pattern.
-        
+
         Args:
             pattern: Glob pattern
-            
+
         Returns:
             List of matching paths as PathAbstraction objects
         """
@@ -674,10 +674,10 @@ class PathAbstraction:
 
     def rglob(self, pattern: str) -> List['PathAbstraction']:
         """Recursive glob pattern matching.
-        
+
         Args:
             pattern: Glob pattern
-            
+
         Returns:
             List of matching paths as PathAbstraction objects
         """

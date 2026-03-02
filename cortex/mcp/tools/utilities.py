@@ -157,7 +157,7 @@ class CortexVerify(ConsolidatedTool):
             return await self._check_orchestrator_health(orchestrator_name, parallel)
 
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
-    
+
     async def _verify_environment(self, auto_fix: bool) -> ToolResult:
         """Verify development environment."""
         checks = {
@@ -179,12 +179,12 @@ class CortexVerify(ConsolidatedTool):
                 "exists": os.path.exists(".vscode/settings.json"),
             },
         }
-        
+
         all_passed = all([
             checks["python_version"]["passed"],
             checks["virtual_env"]["active"],
         ])
-        
+
         return ToolResult(
             success=True,
             data={
@@ -194,12 +194,12 @@ class CortexVerify(ConsolidatedTool):
             },
             metadata={"operation": "environment"},
         )
-    
+
     async def _verify_claim(self, claim: Optional[str]) -> ToolResult:
         """Verify claim against implementation."""
         if not claim:
             return ToolResult(success=False, error="claim text required")
-        
+
         return ToolResult(
             success=True,
             data={
@@ -210,7 +210,7 @@ class CortexVerify(ConsolidatedTool):
             },
             metadata={"operation": "claim"},
         )
-    
+
     async def _verify_mcp(self) -> ToolResult:
         """Verify MCP configuration."""
         return ToolResult(
@@ -317,18 +317,18 @@ class CortexVerify(ConsolidatedTool):
 class CortexAsk(ConsolidatedTool):
     """
     Educational questions about CORTEX.
-    
+
     Operations:
     - architecture: Questions about CORTEX architecture
     - features: Feature-related questions
     - governance: Governance rule questions
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_ask"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -336,12 +336,12 @@ class CortexAsk(ConsolidatedTool):
             "Ask educational questions about CORTEX architecture "
             "with truth-based verification."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -360,22 +360,22 @@ class CortexAsk(ConsolidatedTool):
                 required=True,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["architecture", "features", "governance"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute ask operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "architecture")
         question = params.get("question", "")
-        
+
         # Mock response - will be wired to actual knowledge base
         return ToolResult(
             success=True,
@@ -393,19 +393,19 @@ class CortexAsk(ConsolidatedTool):
 class CortexVacuum(ConsolidatedTool):
     """
     Markdown cleanup and sprawl prevention.
-    
+
     Operations:
     - scan: Scan for markdown sprawl
     - clean: Clean up markdown files
     - archive: Archive old markdown
     - verify: Verify cleanup
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_vacuum"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -413,12 +413,12 @@ class CortexVacuum(ConsolidatedTool):
             "Clean up markdown sprawl with automated archival and verification. "
             "Enforces CORE-002 (no markdown generation)."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -443,23 +443,23 @@ class CortexVacuum(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["scan", "clean", "archive", "verify"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute vacuum operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "scan")
         path = params.get("path", ".")
         dry_run = params.get("dry_run", False)
-        
+
         if operation == "scan":
             return ToolResult(
                 success=True,
@@ -471,7 +471,7 @@ class CortexVacuum(ConsolidatedTool):
                 },
                 metadata={"operation": "scan"},
             )
-        
+
         elif operation == "clean":
             return ToolResult(
                 success=True,
@@ -482,7 +482,7 @@ class CortexVacuum(ConsolidatedTool):
                 },
                 metadata={"operation": "clean"},
             )
-        
+
         elif operation == "archive":
             return ToolResult(
                 success=True,
@@ -493,7 +493,7 @@ class CortexVacuum(ConsolidatedTool):
                 },
                 metadata={"operation": "archive"},
             )
-        
+
         elif operation == "verify":
             return ToolResult(
                 success=True,
@@ -504,7 +504,7 @@ class CortexVacuum(ConsolidatedTool):
                 },
                 metadata={"operation": "verify", "rule": "CORE-002"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
@@ -769,18 +769,18 @@ class CortexTotalRecall(ConsolidatedTool):
 class CortexMetrics(ConsolidatedTool):
     """
     Metrics operations.
-    
+
     Operations:
     - capture: Capture development metrics
     - report: Generate metrics report
     - query: Query specific metrics
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_metrics"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -788,12 +788,12 @@ class CortexMetrics(ConsolidatedTool):
             "Record and report development metrics. Capture TDD cycles, "
             "debug sessions, code generation, and orchestrator invocations."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -825,24 +825,24 @@ class CortexMetrics(ConsolidatedTool):
                 enum=["yaml", "json"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["capture", "report", "query"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute metrics operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "query")
         metric_type = params.get("metric_type")
         data = params.get("data", {})
         output_format = params.get("format", "json")
-        
+
         if operation == "capture":
             return ToolResult(
                 success=True,
@@ -854,7 +854,7 @@ class CortexMetrics(ConsolidatedTool):
                 },
                 metadata={"operation": "capture"},
             )
-        
+
         elif operation == "report":
             return ToolResult(
                 success=True,
@@ -870,7 +870,7 @@ class CortexMetrics(ConsolidatedTool):
                 },
                 metadata={"operation": "report"},
             )
-        
+
         elif operation == "query":
             return ToolResult(
                 success=True,
@@ -881,7 +881,7 @@ class CortexMetrics(ConsolidatedTool):
                 },
                 metadata={"operation": "query"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 
@@ -944,18 +944,18 @@ class CortexCheck(ConsolidatedTool):
 class CortexVision(ConsolidatedTool):
     """
     Image analysis via Vision API.
-    
+
     Operations:
     - analyze: Analyze image
     - ui: Detect UI elements
     - extract: Extract text/URLs
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_vision"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -963,12 +963,12 @@ class CortexVision(ConsolidatedTool):
             "Analyze images via Vision API for UI elements, URLs, issues, "
             "and structural mappings."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -993,23 +993,23 @@ class CortexVision(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["analyze", "ui", "extract"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute vision operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "analyze")
         image = params.get("image", "")
         options = params.get("options", {})
-        
+
         # Vision operations would integrate with actual Vision API
         return ToolResult(
             success=True,
@@ -1030,18 +1030,18 @@ class CortexVision(ConsolidatedTool):
 class CortexOrchestrator(ConsolidatedTool):
     """
     Orchestrator management.
-    
+
     Operations:
     - list: List registered orchestrators
     - status: Get orchestrator status
     - invoke: Invoke specific orchestrator
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_orchestrator"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -1049,12 +1049,12 @@ class CortexOrchestrator(ConsolidatedTool):
             "Manage and invoke CORTEX orchestrators. List available orchestrators, "
             "check status, and invoke specific ones."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.UTILITIES
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -1079,23 +1079,23 @@ class CortexOrchestrator(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["list", "status", "invoke", "health_check"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute orchestrator operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "list")
         orchestrator = params.get("orchestrator")
         invoke_params = params.get("params", {})
-        
+
         orchestrators = [
             {"name": "MasterOrchestrator", "status": "active", "type": "core", "priority": 10},
             {"name": "IntentRouter", "status": "active", "type": "core", "priority": 20},
@@ -1112,7 +1112,7 @@ class CortexOrchestrator(ConsolidatedTool):
             {"name": "SweepCatalogueOrchestrator", "status": "active", "type": "support", "priority": 180},
             {"name": "DebuggerOrchestrator", "status": "active", "type": "support", "priority": 190},
         ]
-        
+
         if operation == "list":
             return ToolResult(
                 success=True,
@@ -1128,7 +1128,7 @@ class CortexOrchestrator(ConsolidatedTool):
                 },
                 metadata={"operation": "list"},
             )
-        
+
         elif operation == "status":
             if not orchestrator:
                 return ToolResult(success=False, error="orchestrator name required")
@@ -1145,7 +1145,7 @@ class CortexOrchestrator(ConsolidatedTool):
                 },
                 metadata={"operation": "status"},
             )
-        
+
         elif operation == "invoke":
             if not orchestrator:
                 return ToolResult(success=False, error="orchestrator name required")
@@ -1159,7 +1159,7 @@ class CortexOrchestrator(ConsolidatedTool):
                 },
                 metadata={"operation": "invoke"},
             )
-        
+
         elif operation == "health_check":
             if not orchestrator:
                 # Return health for all orchestrators
@@ -1175,12 +1175,12 @@ class CortexOrchestrator(ConsolidatedTool):
                     },
                     metadata={"operation": "health_check", "scope": "all"},
                 )
-            
+
             # Check specific orchestrator
             matching = [o for o in orchestrators if o["name"] == orchestrator]
             if not matching:
                 return ToolResult(success=False, error=f"Orchestrator not found: {orchestrator}")
-            
+
             return ToolResult(
                 success=True,
                 data={
@@ -1193,7 +1193,7 @@ class CortexOrchestrator(ConsolidatedTool):
                 },
                 metadata={"operation": "health_check"},
             )
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
 

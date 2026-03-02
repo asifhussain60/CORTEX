@@ -35,34 +35,34 @@ class PhaseExecutionConfig:
 class PhaseExecutionStrategy(ExecutionStrategy):
     """
     Phase-level execution strategy.
-    
+
     Handles:
     - Sequential phase execution
     - Dependency resolution
     - Failure recovery
     - Timeout handling
     - Audit trail generation
-    
+
     Preserves all 12 AC markers from EnhancedPlanningOrchestrator.
     """
-    
+
     def __init__(self, config: Optional[PhaseExecutionConfig] = None) -> None:
         """
         Initialize phase execution strategy.
-        
+
         Args:
             config: Phase execution configuration
         """
         self.config = config or PhaseExecutionConfig()
         self.execution_history: List[Dict[str, Any]] = []
-    
+
     def execute(self, context: ExecutionContext) -> ExecutionResult:
         """
         Execute phase against provided context.
-        
+
         Args:
             context: Execution context containing phase data
-        
+
         Returns:
             ExecutionResult with success/failure and output data
         """
@@ -76,7 +76,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 status=ExecutionStatus.FAILURE,
                 error=f"Validation failed: {', '.join(validation.errors)}",
             )
-        
+
         try:
             # Check if phase can be skipped
             if self.config.allow_skip and context.status == "skipped":
@@ -87,16 +87,16 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                     status=ExecutionStatus.SKIPPED,
                     output={"reason": "Phase marked for skip"},
                 )
-            
+
             # Get tasks from context.data or context.tasks
             tasks = context.data.get("tasks", context.tasks) if context.data else context.tasks
-            
+
             # Execute phase tasks
             task_results = []
             for task in tasks:
                 task_result = self._execute_task(task, context)
                 task_results.append(task_result)
-                
+
                 if not task_result.get("success", False) and not self.config.recovery_enabled:
                     # Fail fast if recovery disabled
                     return ExecutionResult(
@@ -107,7 +107,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                         error=f"Task failed: {task if isinstance(task, str) else task.get('id', 'unknown')}",
                         output={"task_results": task_results},
                     )
-            
+
             # Record execution in history
             execution_record = {
                 "phase_id": context.phase_id,
@@ -115,7 +115,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 "tasks": task_results,
             }
             self.execution_history.append(execution_record)
-            
+
             return ExecutionResult(
                 success=True,
                 phase_id=context.phase_id,
@@ -131,7 +131,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                     "tasks_successful": sum(1 for t in task_results if t.get("success")),
                 },
             )
-        
+
         except Exception as e:
             logger.error(f"Phase execution failed: {str(e)}")
             return ExecutionResult(
@@ -139,14 +139,14 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 status=ExecutionStatus.FAILURE,
                 error=str(e),
             )
-    
+
     def validate(self, context: Optional[ExecutionContext] = None) -> ValidationResult:
         """
         Validate phase execution preconditions.
-        
+
         Args:
             context: Execution context to validate (optional, creates default if None)
-        
+
         Returns:
             ValidationResult with any errors/warnings
         """
@@ -157,39 +157,39 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 phase_id="default",
                 data={}
             )
-        
+
         errors = []
         warnings = []
-        
+
         # Check required fields
         if not context.phase_id:
             errors.append("phase_id is required")
-        
+
         if not context.phase_name:
             warnings.append("phase_name not provided")
-        
+
         # Check dependencies
         if context.dependencies:
             warnings.append(f"{len(context.dependencies)} dependencies detected")
-        
+
         # Check resource allocation
         if not context.resources:
             warnings.append("No resources allocated")
-        
+
         return ValidationResult(
             passed=len(errors) == 0,
             errors=errors,
             warnings=warnings,
         )
-    
+
     def _execute_task(self, task: Any, context: ExecutionContext) -> Dict[str, Any]:
         """
         Execute a single task.
-        
+
         Args:
             task: Task data (string or dict)
             context: Execution context
-        
+
         Returns:
             Task execution result
         """
@@ -200,7 +200,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 "success": True,
                 "status": "completed",
             }
-        
+
         # Handle dict tasks
         return {
             "task_id": task.get("id", "unknown"),

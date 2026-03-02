@@ -10,32 +10,32 @@ from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowle
 class GraphVisualizer:
     """
     Generate interactive graph visualizations.
-    
+
     Example:
         viz = GraphVisualizer(graph)
         html = viz.generate_dependency_graph()
     """
-    
+
     def __init__(self, graph: ASTKnowledgeGraph) -> None:
         """Initialize visualizer with graph."""
         self.graph = graph
-    
+
     def generate_dependency_graph(self) -> str:
         """
         Generate interactive dependency graph HTML.
-        
+
         Returns:
             HTML string with embedded graph visualization
         """
         nodes_html = ""
         for name, node in self.graph.nodes.items():
             nodes_html += f'<div class="node">{name}</div>\n'
-        
+
         edges_html = ""
         for rel in self.graph.relationships:
             if rel.relation_type == "IMPORTS":
                 edges_html += f'<div class="edge">{rel.source} → {rel.target}</div>\n'
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -52,11 +52,11 @@ class GraphVisualizer:
 </body>
 </html>"""
         return html
-    
+
     def generate_class_diagram(self) -> str:
         """
         Generate class diagram HTML.
-        
+
         Returns:
             HTML string with class diagram
         """
@@ -74,7 +74,7 @@ class GraphVisualizer:
                     <ul>{methods_html}</ul>
                 </div>
                 """
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -89,11 +89,11 @@ class GraphVisualizer:
 </body>
 </html>"""
         return html
-    
+
     def generate_call_graph(self) -> str:
         """
         Generate function call graph HTML.
-        
+
         Returns:
             HTML string with call graph
         """
@@ -106,7 +106,7 @@ class GraphVisualizer:
                 ]
                 calls_html = " → ".join(calls) if calls else "(no calls)"
                 functions_html += f'<div>{name}: {calls_html}</div>\n'
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head><title>Call Graph</title></head>

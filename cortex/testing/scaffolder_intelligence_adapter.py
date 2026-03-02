@@ -18,7 +18,7 @@ Architecture:
 TestDemandGenerator  TestComposer  QualityValidator
   │                │             │
   Generate demands  Compose tests  Validate quality
-  
+
 Flow:
   1. Scaffolder calls adapter.generate_tests(orchestrator_spec)
   2. Adapter → TestDemandGenerator → analyze spec → create 10 demands
@@ -72,12 +72,12 @@ class GeneratedTestSuite:
     quality_score: float
     coverage_percentage: float
     warnings: List[str]
-    
+
     @property
     def test_count(self) -> int:
         """Total tests generated."""
         return len(self.tests)
-    
+
     @property
     def total_lines(self) -> int:
         """Total lines of test code."""
@@ -87,21 +87,21 @@ class GeneratedTestSuite:
 class ScaffolderIntelligenceAdapter:
     """
     Adapter bridging Test Intelligence layers to OrchestratorScaffolder.
-    
+
     Responsibilities:
     1. Translate orchestrator spec → test demands (via DemandAnalyzer)
     2. Generate test code from demands (via DemandComposer)
     3. Validate test quality (via QualityValidator)
     4. Return production-ready tests to scaffolder
-    
+
     Design:
     - Stateless: each call is independent
     - Registry-backed: demands persisted in YAML
     - Quality-gated: tests below threshold rejected
-    
+
     Usage:
         adapter = ScaffolderIntelligenceAdapter()
-        
+
         spec = OrchestratorSpec(
             name="PlanOrchestrator",
             domain="planning",
@@ -112,14 +112,14 @@ class ScaffolderIntelligenceAdapter:
             integrations=["git", "dashboard"],
             mcp_tools=["cortex_plan_create", "cortex_plan_execute"]
         )
-        
+
         suite = adapter.generate_test_suite(spec)
-        
+
         # suite.tests contains 10 ComposedTest objects ready to write
         for test in suite.tests:
             print(test.code)  # Python test code
     """
-    
+
     def __init__(
         self,
         registry_path: Optional[Path] = None,
@@ -127,24 +127,24 @@ class ScaffolderIntelligenceAdapter:
     ) -> None:
         """
         Initialize adapter with intelligence components.
-        
+
         Args:
             registry_path: Path to demand registry (defaults to cortex/intelligence/tier0/test_demands/)
             quality_threshold: Minimum quality score (0.0-1.0) to accept test
         """
         self.registry_path = registry_path or Path("cortex/intelligence/tier0/test_demands")
         self.quality_threshold = quality_threshold
-        
+
         # Initialize components
         self.registry = DemandRegistry(self.registry_path)
         self.composer = TestCodeComposer()
         self.validator = QualityValidator()
-        
+
         logger.info(
             f"ScaffolderIntelligenceAdapter initialized "
             f"(registry={self.registry_path}, threshold={quality_threshold})"
         )
-    
+
     def generate_test_suite(
         self,
         spec: OrchestratorSpec,
@@ -152,14 +152,14 @@ class ScaffolderIntelligenceAdapter:
     ) -> GeneratedTestSuite:
         """
         Generate complete test suite for orchestrator.
-        
+
         Args:
             spec: Orchestrator specification
             target_count: Target number of tests (default: 10)
-        
+
         Returns:
             GeneratedTestSuite with tests, metrics, and warnings
-        
+
         Process:
             1. Analyze spec → generate demands (target_count demands)
             2. Compose tests from demands (1 test per demand)
@@ -167,22 +167,22 @@ class ScaffolderIntelligenceAdapter:
             4. Return suite with passing tests
         """
         logger.info(f"Generating test suite for {spec.name} (target: {target_count} tests)")
-        
+
         # Stage 1: Generate demands
         demands = self._generate_demands(spec, target_count)
         logger.debug(f"Generated {len(demands)} demands for {spec.name}")
-        
+
         # Stage 2: Compose tests
         composed_tests: List[ComposedTest] = []
         warnings: List[str] = []
-        
+
         for demand in demands:
             try:
                 test = self.composer.compose(demand)
-                
+
                 # Stage 3: Validate test
                 validation = self.validator._score_test(test.name, test.test_code)
-                
+
                 if validation.overall_score >= self.quality_threshold:
                     composed_tests.append(test)
                     logger.debug(
@@ -196,12 +196,12 @@ class ScaffolderIntelligenceAdapter:
                     )
                     warnings.append(warning)
                     logger.warning(warning)
-            
+
             except Exception as e:
                 warning = f"Failed to compose test for demand {demand.id}: {e}"
                 warnings.append(warning)
                 logger.error(warning)
-        
+
         # Calculate metrics
         quality_score = (
             sum(
@@ -211,9 +211,9 @@ class ScaffolderIntelligenceAdapter:
             if composed_tests
             else 0.0
         )
-        
+
         coverage_percentage = (len(composed_tests) / target_count) * 100
-        
+
         suite = GeneratedTestSuite(
             orchestrator_name=spec.name,
             tests=composed_tests,
@@ -222,15 +222,15 @@ class ScaffolderIntelligenceAdapter:
             coverage_percentage=coverage_percentage,
             warnings=warnings,
         )
-        
+
         logger.info(
             f"Test suite generation complete for {spec.name}: "
             f"{suite.test_count}/{target_count} tests "
             f"(quality: {quality_score:.2f}, coverage: {coverage_percentage:.1f}%)"
         )
-        
+
         return suite
-    
+
     def _generate_demands(
         self,
         spec: OrchestratorSpec,
@@ -238,7 +238,7 @@ class ScaffolderIntelligenceAdapter:
     ) -> List[TestDemand]:
         """
         Generate test demands from orchestrator spec.
-        
+
         Strategy:
         - 3 silent_operation tests (YAML creation, audit logging)
         - 2 context_synthesis tests (LENS merging, registry loading)
@@ -246,12 +246,12 @@ class ScaffolderIntelligenceAdapter:
         - 1 template_quality test (response formatting)
         - 1 error_recovery test (graceful failure handling)
         - 1 integration_coupling test (orchestrator events)
-        
+
         Returns:
             List of 10 TestDemand objects
         """
         demands: List[TestDemand] = []
-        
+
         # Category distribution (10 total)
         demand_plan = [
             (DemandCategory.SILENT_OPERATION, 3),
@@ -261,9 +261,9 @@ class ScaffolderIntelligenceAdapter:
             (DemandCategory.ERROR_RECOVERY, 1),
             (DemandCategory.INTEGRATION_COUPLING, 1),
         ]
-        
+
         demand_id_counter = 1
-        
+
         for category, count in demand_plan:
             for i in range(count):
                 demand = self._create_demand_for_category(
@@ -273,12 +273,12 @@ class ScaffolderIntelligenceAdapter:
                 )
                 demands.append(demand)
                 demand_id_counter += 1
-        
+
         # Store demands in registry
         self.registry.save_demands(demands)
-        
+
         return demands[:target_count]  # Return exactly target_count demands
-    
+
     def _create_demand_for_category(
         self,
         spec: OrchestratorSpec,
@@ -287,7 +287,7 @@ class ScaffolderIntelligenceAdapter:
     ) -> TestDemand:
         """Create test demand for specific category."""
         demand_id = f"{spec.name.upper()}-DEMAND-{sequence:03d}"
-        
+
         # Category-specific demand templates
         templates = {
             DemandCategory.SILENT_OPERATION: {
@@ -350,9 +350,9 @@ class ScaffolderIntelligenceAdapter:
                 },
             },
         }
-        
+
         template = templates.get(category, templates[DemandCategory.SILENT_OPERATION])
-        
+
         return TestDemand(
             id=demand_id,
             orchestrator=spec.name,
@@ -370,7 +370,7 @@ class ScaffolderIntelligenceAdapter:
             ] else 2,
             estimated_test_lines=25,
         )
-    
+
     def generate_batch(
         self,
         specs: List[OrchestratorSpec],
@@ -378,23 +378,23 @@ class ScaffolderIntelligenceAdapter:
     ) -> Dict[str, GeneratedTestSuite]:
         """
         Generate test suites for multiple orchestrators (batch mode).
-        
+
         Args:
             specs: List of orchestrator specifications
             target_count_per_orchestrator: Tests per orchestrator
-        
+
         Returns:
             Dictionary mapping orchestrator name → GeneratedTestSuite
-        
+
         Example:
             specs = [
                 OrchestratorSpec(name="PlanOrchestrator", ...),
                 OrchestratorSpec(name="LENSOrchestrator", ...),
                 ...
             ]
-            
+
             results = adapter.generate_batch(specs, target_count_per_orchestrator=10)
-            
+
             # results = {
             #     "PlanOrchestrator": GeneratedTestSuite(...),
             #     "LENSOrchestrator": GeneratedTestSuite(...),
@@ -405,9 +405,9 @@ class ScaffolderIntelligenceAdapter:
             f"Batch generation: {len(specs)} orchestrators × "
             f"{target_count_per_orchestrator} tests = {len(specs) * target_count_per_orchestrator} tests"
         )
-        
+
         results: Dict[str, GeneratedTestSuite] = {}
-        
+
         for spec in specs:
             try:
                 suite = self.generate_test_suite(spec, target_count_per_orchestrator)
@@ -423,8 +423,8 @@ class ScaffolderIntelligenceAdapter:
                     coverage_percentage=0.0,
                     warnings=[f"Generation failed: {e}"],
                 )
-        
+
         total_tests = sum(suite.test_count for suite in results.values())
         logger.info(f"Batch generation complete: {total_tests} tests across {len(specs)} orchestrators")
-        
+
         return results

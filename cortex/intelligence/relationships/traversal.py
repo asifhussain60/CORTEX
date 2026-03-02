@@ -196,34 +196,34 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
     def validate_context(self, context: Any) -> bool:
         """
         Validate analysis context before execution.
-        
+
         Args:
             context: AnalysisContext with file_path to validate
-            
+
         Returns:
             True if valid
-            
+
         Raises:
             ValueError: If file doesn't exist or is not Python
         """
         # Handle dict-based context (legacy)
         if isinstance(context, dict):
             return True
-            
+
         # Handle AnalysisContext object
         if hasattr(context, 'file_path'):
             file_path = Path(context.file_path)
-            
+
             # Check file exists
             if not file_path.exists():
                 raise ValueError(f"File does not exist: {file_path}")
-                
+
             # Check it's a Python file
             if file_path.suffix != '.py':
                 raise ValueError(f"File must be Python, got: {file_path}")
-                
+
             return True
-            
+
         # Default to valid for backward compatibility
         return True
 
@@ -248,7 +248,7 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
                     return Ok(relationships.to_dict())
                 else:
                     return Err(f"File not found: {file_path}")
-            
+
             # Handle dict-based context
             # If source code provided, analyze it
             if "source" in context:

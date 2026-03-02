@@ -29,7 +29,7 @@ from cortex.mcp.mcp_tool_base import (
 class CortexGovernance(ConsolidatedTool):
     """
     Execute governance actions.
-    
+
     Operations:
     - enforce: Enforce governance rules
     - query: Query governance state
@@ -37,12 +37,12 @@ class CortexGovernance(ConsolidatedTool):
     - approve: Approve classified request
     - block: Block non-compliant operation
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_governance"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -50,12 +50,12 @@ class CortexGovernance(ConsolidatedTool):
             "Execute governance actions including enforcement, blocking, "
             "remediation, and audit logging. Ensures CORE rule compliance."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.GOVERNANCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -92,25 +92,25 @@ class CortexGovernance(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["enforce", "query", "report", "approve", "block", "stage0_audit"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute governance operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "query")
         target = params.get("target")
         rules = params.get("rules", [])
         context = params.get("context", {})
         request = params.get("request")
-        
+
         if operation == "enforce":
             return await self._enforce(target, rules, context)
         elif operation == "query":
@@ -123,9 +123,9 @@ class CortexGovernance(ConsolidatedTool):
             return await self._block(target, rules, context)
         elif operation == "stage0_audit":
             return await self._stage0_audit(request, context)
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
-    
+
     async def _enforce(
         self, target: Optional[str], rules: List[str], context: Dict[str, Any]
     ) -> ToolResult:
@@ -136,7 +136,7 @@ class CortexGovernance(ConsolidatedTool):
             {"id": "CORE-035", "name": "No Duplicates", "status": "pass"},
             {"id": "CORE-002", "name": "No Markdown Generation", "status": "pass"},
         ]
-        
+
         return ToolResult(
             success=True,
             data={
@@ -148,7 +148,7 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "enforce"},
         )
-    
+
     async def _query(
         self, target: Optional[str], rules: List[str]
     ) -> ToolResult:
@@ -164,7 +164,7 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "query"},
         )
-    
+
     async def _report(self, target: Optional[str]) -> ToolResult:
         """Generate governance report."""
         return ToolResult(
@@ -182,7 +182,7 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "report"},
         )
-    
+
     async def _approve(self, context: Dict[str, Any]) -> ToolResult:
         """Approve classified request."""
         return ToolResult(
@@ -195,7 +195,7 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "approve"},
         )
-    
+
     async def _block(
         self, target: Optional[str], rules: List[str], context: Dict[str, Any]
     ) -> ToolResult:
@@ -211,25 +211,25 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "block"},
         )
-    
+
     async def _stage0_audit(
         self, request: Optional[str], context: Dict[str, Any]
     ) -> ToolResult:
         """
         Execute Stage 0 Governance Audit (Pre-Flight).
-        
+
         Checks for:
         - CORE-002: MD file scope violations
         - CORE-008: TDD bypass attempts
         - CORE-027: Audit trail markers
-        
+
         Returns: Inline violations or clean approval
         """
         violations = []
-        
+
         if request:
             request_lower = request.lower()
-            
+
             # Check for MD file generation keywords (CORE-002)
             md_keywords = [
                 "create .md", "write markdown", "generate report",
@@ -243,7 +243,7 @@ class CortexGovernance(ConsolidatedTool):
                     "severity": "P0",
                     "matched_pattern": next(kw for kw in md_keywords if kw in request_lower),
                 })
-            
+
             # Check for TDD bypass keywords (CORE-008)
             tdd_bypass_keywords = [
                 "skip test", "skip the test", "ignore test", "bypass test",
@@ -257,7 +257,7 @@ class CortexGovernance(ConsolidatedTool):
                     "severity": "P0",
                     "matched_pattern": next(kw for kw in tdd_bypass_keywords if kw in request_lower),
                 })
-        
+
         if violations:
             return ToolResult(
                 success=True,
@@ -269,7 +269,7 @@ class CortexGovernance(ConsolidatedTool):
                 },
                 metadata={"operation": "stage0_audit", "stage": "pre_flight"},
             )
-        
+
         return ToolResult(
             success=True,
             data={
@@ -285,19 +285,19 @@ class CortexGovernance(ConsolidatedTool):
 class CortexValidate(ConsolidatedTool):
     """
     Validate code against CORE governance rules.
-    
+
     Operations:
     - compliance: Full compliance check
     - security: Security-focused validation (OWASP)
     - venv: Virtual environment validation
     - environment: Full environment check
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_validate"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -305,12 +305,12 @@ class CortexValidate(ConsolidatedTool):
             "Validate code against CORE governance rules with real rule checking. "
             "Supports compliance, security, venv, and environment validation."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.GOVERNANCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -341,24 +341,24 @@ class CortexValidate(ConsolidatedTool):
                 required=False,
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["compliance", "security", "venv", "environment"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute validation operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "compliance")
         target = params.get("target")
         rules = params.get("rules", [])
         auto_fix = params.get("fix", False)
-        
+
         if operation == "compliance":
             return await self._validate_compliance(target, rules, auto_fix)
         elif operation == "security":
@@ -367,9 +367,9 @@ class CortexValidate(ConsolidatedTool):
             return await self._validate_venv()
         elif operation == "environment":
             return await self._validate_environment()
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
-    
+
     async def _validate_compliance(
         self, target: Optional[str], rules: List[str], auto_fix: bool
     ) -> ToolResult:
@@ -380,7 +380,7 @@ class CortexValidate(ConsolidatedTool):
             {"rule": "CORE-012", "passed": True, "message": "Docstrings present"},
             {"rule": "CORE-035", "passed": True, "message": "No duplicates"},
         ]
-        
+
         return ToolResult(
             success=True,
             data={
@@ -392,7 +392,7 @@ class CortexValidate(ConsolidatedTool):
             },
             metadata={"operation": "compliance"},
         )
-    
+
     async def _validate_security(self, target: Optional[str]) -> ToolResult:
         """Security-focused validation (OWASP)."""
         return ToolResult(
@@ -409,16 +409,16 @@ class CortexValidate(ConsolidatedTool):
             },
             metadata={"operation": "security", "framework": "OWASP"},
         )
-    
+
     async def _validate_venv(self) -> ToolResult:
         """Validate virtual environment."""
         import sys
         import os
-        
+
         in_venv = hasattr(sys, "real_prefix") or (
             hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
         )
-        
+
         return ToolResult(
             success=True,
             data={
@@ -430,12 +430,12 @@ class CortexValidate(ConsolidatedTool):
             },
             metadata={"operation": "venv"},
         )
-    
+
     async def _validate_environment(self) -> ToolResult:
         """Full environment validation."""
         import sys
         import os
-        
+
         return ToolResult(
             success=True,
             data={
@@ -465,19 +465,19 @@ class CortexValidate(ConsolidatedTool):
 class CortexLoad(ConsolidatedTool):
     """
     Load configurations and rules from registry.
-    
+
     Operations:
     - rules: Load CORE governance rules
     - modes: Load HEXA-MODE definitions
     - checklist: Load audit checklist
     - format: Load response formatting standards
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_load"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -485,12 +485,12 @@ class CortexLoad(ConsolidatedTool):
             "Load configurations and rules from YAML registry. "
             "Supports rules, modes, checklists, and format standards."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.GOVERNANCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -516,23 +516,23 @@ class CortexLoad(ConsolidatedTool):
                 enum=["tier0", "tier1", "tier2"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["rules", "modes", "checklist", "format"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute load operation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         operation = params.get("operation", "rules")
         filter_value = params.get("filter")
         tier = params.get("tier")
-        
+
         if operation == "rules":
             return await self._load_rules(filter_value, tier)
         elif operation == "modes":
@@ -541,9 +541,9 @@ class CortexLoad(ConsolidatedTool):
             return await self._load_checklist()
         elif operation == "format":
             return await self._load_format()
-        
+
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
-    
+
     async def _load_rules(
         self, filter_value: Optional[str], tier: Optional[str]
     ) -> ToolResult:
@@ -557,13 +557,13 @@ class CortexLoad(ConsolidatedTool):
             {"id": "CORE-049", "name": "Silent Execution", "tier": "tier0"},
             {"id": "CORE-050", "name": "MCP Circuit Breaker", "tier": "tier0"},
         ]
-        
+
         # Apply filters
         if filter_value:
             rules = [r for r in rules if filter_value in r["id"]]
         if tier:
             rules = [r for r in rules if r["tier"] == tier]
-        
+
         return ToolResult(
             success=True,
             data={
@@ -573,7 +573,7 @@ class CortexLoad(ConsolidatedTool):
             },
             metadata={"operation": "rules", "tier": tier},
         )
-    
+
     async def _load_modes(self) -> ToolResult:
         """Load HEXA-MODE definitions."""
         modes = [
@@ -585,7 +585,7 @@ class CortexLoad(ConsolidatedTool):
             {"id": "PLAN", "description": "Phase planning"},
             {"id": "DESIGN", "description": "Architecture design"},
         ]
-        
+
         return ToolResult(
             success=True,
             data={
@@ -595,7 +595,7 @@ class CortexLoad(ConsolidatedTool):
             },
             metadata={"operation": "modes"},
         )
-    
+
     async def _load_checklist(self) -> ToolResult:
         """Load audit checklist."""
         checklist = {
@@ -615,7 +615,7 @@ class CortexLoad(ConsolidatedTool):
                 {"id": "P3-001", "name": "Style consistency"},
             ],
         }
-        
+
         return ToolResult(
             success=True,
             data={
@@ -625,7 +625,7 @@ class CortexLoad(ConsolidatedTool):
             },
             metadata={"operation": "checklist"},
         )
-    
+
     async def _load_format(self) -> ToolResult:
         """Load response formatting standards."""
         return ToolResult(
@@ -663,30 +663,30 @@ __all__ = [
 class CortexValidateRequest(ConsolidatedTool):
     """
     Phase 48: Holistic validation with challenge generation and confidence scoring.
-    
+
     Pre-implementation validation gate that:
     1. Runs 12-category checklist (security, performance, etc.)
     2. Generates 3 alternative implementation approaches
     3. Calculates confidence score (0.0-1.0)
     4. Gates execution at 0.7 threshold
-    
+
     Integrates with MasterOrchestrator workflow to ensure high-quality implementations.
-    
+
     Operations:
     - validate: Full validation with all stages
     - quick: Fast validation (checklist only)
     - challenges: Generate alternatives without full validation
-    
+
     Author: Asif Hussain
     Authority: PHASE-48-IMPLEMENTATION-PLAN.yaml Stage 4
     AC-ID: AC-PHASE48-S4-IMPL-001
     """
-    
+
     @property
     def name(self) -> str:
         """Return the name."""
         return "cortex_validate_request"
-    
+
     @property
     def description(self) -> str:
         """Return the description."""
@@ -695,12 +695,12 @@ class CortexValidateRequest(ConsolidatedTool):
             "challenge generation + confidence scoring with 0.7 threshold gating. "
             "Ensures high-quality implementations before execution."
         )
-    
+
     @property
     def category(self) -> ToolCategory:
         """Return the category."""
         return ToolCategory.GOVERNANCE
-    
+
     @property
     def parameters(self) -> List[ToolParameter]:
         """Return the parameters."""
@@ -738,43 +738,43 @@ class CortexValidateRequest(ConsolidatedTool):
                 enum=["validate", "quick", "challenges"],
             ),
         ]
-    
+
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
         return ["validate", "quick", "challenges"]
-    
+
     async def execute(self, **params) -> ToolResult:
         """Execute holistic validation."""
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
             validate_orchestrator_context(_oc)
-        
+
         intent = params.get("intent", "IMPLEMENT")
         request = params.get("request", "")
         target = params.get("target", "")
         context = params.get("context", {})
         operation = params.get("operation", "validate")
-        
+
         # Import orchestrator (lazy load to avoid circular imports)
         from cortex.orchestrators.validation import HolisticValidationOrchestrator
-        
+
         orchestrator = HolisticValidationOrchestrator()
-        
+
         try:
             if operation == "validate":
                 # Full validation: all 3 stages
                 # Note: target is stored in context, not passed separately
                 validation_context = context.copy()
                 validation_context["target"] = target
-                
+
                 validation_result = orchestrator.validate(
                     request=request,
                     intent=intent,
                     context=validation_context,
                 )
-                
+
                 return ToolResult(
                     success=True,
                     data={
@@ -822,18 +822,18 @@ class CortexValidateRequest(ConsolidatedTool):
                         "phase": "48-stage-4",
                     },
                 )
-            
+
             elif operation == "quick":
                 # Quick validation: checklist only
                 validation_context = context.copy()
                 validation_context["target"] = target
-                
+
                 validation_result = orchestrator.validate(
                     request=request,
                     intent=intent,
                     context=validation_context,
                 )
-                
+
                 return ToolResult(
                     success=True,
                     data={
@@ -859,18 +859,18 @@ class CortexValidateRequest(ConsolidatedTool):
                     },
                     metadata={"intent": intent},
                 )
-            
+
             elif operation == "challenges":
                 # Challenges only: alternative generation
                 validation_context = context.copy()
                 validation_context["target"] = target
-                
+
                 validation_result = orchestrator.validate(
                     request=request,
                     intent=intent,
                     context=validation_context,
                 )
-                
+
                 return ToolResult(
                     success=True,
                     data={
@@ -899,14 +899,14 @@ class CortexValidateRequest(ConsolidatedTool):
                     },
                     metadata={"intent": intent},
                 )
-            
+
             else:
                 return ToolResult(
                     success=False,
                     data={"error": f"Unknown operation: {operation}"},
                     metadata={"operation": operation},
                 )
-        
+
         except Exception as e:
             # Graceful error handling
             return ToolResult(

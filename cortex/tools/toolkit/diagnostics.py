@@ -17,7 +17,7 @@ import subprocess
 
 class DiagnosticLevel(str, Enum):
     """Diagnostic result severity levels."""
-    
+
     OK = "ok"
     WARNING = "warning"
     ERROR = "error"
@@ -26,14 +26,14 @@ class DiagnosticLevel(str, Enum):
 @dataclass
 class DiagnosticResult:
     """Result of a diagnostic check."""
-    
+
     check_name: str
     passed: bool
     level: DiagnosticLevel
     message: str
     details: Optional[Dict[str, Any]] = None
     recommendation: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -49,24 +49,24 @@ class DiagnosticResult:
 class MCPDiagnostics:
     """
     Consolidated MCP diagnostics.
-    
+
     Provides comprehensive health checks for MCP server, tools,
     and VS Code integration.
     """
-    
+
     def __init__(self, workspace_root: Path = Path.cwd()) -> None:
         """
         Initialize diagnostics.
-        
+
         Args:
             workspace_root: CORTEX workspace root directory
         """
         self.workspace_root = workspace_root
-    
+
     def check_server_running(self) -> DiagnosticResult:
         """
         Check if MCP server is running.
-        
+
         Returns:
             Diagnostic result for server status
         """
@@ -75,7 +75,7 @@ class MCPDiagnostics:
         # actual MCP server health endpoint
         try:
             # Try to import MCP server module
-            
+
             return DiagnosticResult(
                 check_name="mcp_server_running",
                 passed=True,
@@ -91,19 +91,19 @@ class MCPDiagnostics:
                 message="MCP server module not found",
                 recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
-    
+
     def check_tools_available(self) -> DiagnosticResult:
         """
         Check if MCP tools are available.
-        
+
         Returns:
             Diagnostic result for tools availability
         """
         try:
             from cortex.mcp.tools import TOOL_REGISTRY
-            
+
             tool_count = len(TOOL_REGISTRY)
-            
+
             if tool_count >= 10:
                 return DiagnosticResult(
                     check_name="mcp_tools_available",
@@ -129,16 +129,16 @@ class MCPDiagnostics:
                 message="MCP tools module not found",
                 recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
-    
+
     def check_settings_configured(self) -> DiagnosticResult:
         """
         Check if .vscode/settings.json is configured.
-        
+
         Returns:
             Diagnostic result for VS Code settings
         """
         settings_path = self.workspace_root / ".vscode" / "settings.json"
-        
+
         if not settings_path.exists():
             return DiagnosticResult(
                 check_name="settings_configured",
@@ -147,11 +147,11 @@ class MCPDiagnostics:
                 message=".vscode/settings.json not found",
                 recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
-        
+
         try:
             with open(settings_path) as f:
                 settings = json.load(f)
-            
+
             # Check for MCP configuration
             if "mcp" in settings or "github.copilot" in settings:
                 return DiagnosticResult(
@@ -177,11 +177,11 @@ class MCPDiagnostics:
                 message="Invalid JSON in settings.json",
                 recommendation="Fix JSON syntax or run setup-mcp.py",
             )
-    
+
     def check_python_version(self) -> DiagnosticResult:
         """
         Check Python version compatibility.
-        
+
         Returns:
             Diagnostic result for Python version
         """
@@ -193,13 +193,13 @@ class MCPDiagnostics:
                 timeout=5,
             )
             version_str = result.stdout.strip()
-            
+
             # Extract version number
             import re
             match = re.search(r"(\d+)\.(\d+)", version_str)
             if match:
                 major, minor = int(match.group(1)), int(match.group(2))
-                
+
                 if major >= 3 and minor >= 9:
                     return DiagnosticResult(
                         check_name="python_version",
@@ -216,14 +216,14 @@ class MCPDiagnostics:
                         message=f"Python {major}.{minor} < 3.9 (required)",
                         recommendation="Upgrade to Python 3.9+",
                     )
-            
+
             return DiagnosticResult(
                 check_name="python_version",
                 passed=False,
                 level=DiagnosticLevel.WARNING,
                 message="Could not parse Python version",
             )
-            
+
         except Exception as e:
             return DiagnosticResult(
                 check_name="python_version",
@@ -231,11 +231,11 @@ class MCPDiagnostics:
                 level=DiagnosticLevel.ERROR,
                 message=f"Python check failed: {str(e)}",
             )
-    
+
     def run_full_diagnostics(self) -> List[DiagnosticResult]:
         """
         Run full diagnostic suite.
-        
+
         Returns:
             List of diagnostic results
         """
@@ -245,17 +245,17 @@ class MCPDiagnostics:
             self.check_tools_available(),
             self.check_settings_configured(),
         ]
-    
+
     def generate_summary(
         self,
         results: List[DiagnosticResult]
     ) -> Dict[str, Any]:
         """
         Generate summary from diagnostic results.
-        
+
         Args:
             results: List of diagnostic results
-            
+
         Returns:
             Summary dictionary
         """
@@ -263,7 +263,7 @@ class MCPDiagnostics:
         failed = [r for r in results if not r.passed]
         warnings = [r for r in results if r.level == DiagnosticLevel.WARNING]
         errors = [r for r in results if r.level == DiagnosticLevel.ERROR]
-        
+
         return {
             "total_checks": len(results),
             "passed_checks": len(passed),
@@ -272,22 +272,22 @@ class MCPDiagnostics:
             "errors": len(errors),
             "overall_status": "ok" if len(failed) == 0 else "failed",
         }
-    
+
     def generate_report(
         self,
         results: List[DiagnosticResult]
     ) -> Dict[str, Any]:
         """
         Generate full diagnostic report.
-        
+
         Args:
             results: List of diagnostic results
-            
+
         Returns:
             Complete report dictionary
         """
         summary = self.generate_summary(results)
-        
+
         # Extract recommendations from failed checks
         recommendations = []
         for result in results:
@@ -296,7 +296,7 @@ class MCPDiagnostics:
                     "check": result.check_name,
                     "recommendation": result.recommendation,
                 })
-        
+
         return {
             "summary": summary,
             "results": [r.to_dict() for r in results],

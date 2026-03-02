@@ -23,13 +23,13 @@ class AuditLogger:
 
     def log(self, action: str, key: str, actor: str = "system", success: bool = True, **meta: Any) -> AuditEntry:
         """Log.
-        
+
         Args:
             action: Parameter for action.
             key: Parameter for key.
             actor: Parameter for actor.
             success: Parameter for success.
-        
+
         Returns:
             AuditEntry result.
         """
@@ -48,7 +48,7 @@ class AuditLogger:
 
     def get_entries(self) -> List[AuditEntry]:
         """Get entries.
-        
+
         Returns:
             List[AuditEntry] result.
         """
@@ -65,10 +65,10 @@ class HashChain:
 
     def append(self, entry: Dict[str, Any]) -> str:
         """Append.
-        
+
         Args:
             entry: Parameter for entry.
-        
+
         Returns:
             str result.
         """
@@ -80,7 +80,7 @@ class HashChain:
 
     def verify(self) -> bool:
         """Verify.
-        
+
         Returns:
             bool result.
         """
@@ -88,7 +88,7 @@ class HashChain:
 
     def get_chain(self) -> List[str]:
         """Get chain.
-        
+
         Returns:
             List[str] result.
         """
@@ -105,12 +105,12 @@ class AuditTrail:
 
     def record(self, action: str, key: str, actor: str = "system", **meta: Any) -> str:
         """Record.
-        
+
         Args:
             action: Parameter for action.
             key: Parameter for key.
             actor: Parameter for actor.
-        
+
         Returns:
             str result.
         """
@@ -119,7 +119,7 @@ class AuditTrail:
 
     def verify_integrity(self) -> bool:
         """Verify integrity.
-        
+
         Returns:
             bool result.
         """
@@ -127,7 +127,7 @@ class AuditTrail:
 
     def get_entries(self) -> List[AuditEntry]:
         """Get entries.
-        
+
         Returns:
             List[AuditEntry] result.
         """
@@ -143,10 +143,10 @@ class AuditTrailRetention:
 
     def purge_old_entries(self, entries: List[AuditEntry]) -> List[AuditEntry]:
         """Purge old entries.
-        
+
         Args:
             entries: Parameter for entries.
-        
+
         Returns:
             List[AuditEntry] result.
         """
@@ -160,11 +160,11 @@ class AuditTrailWithSignatures(AuditTrail):
 
     def sign_entry(self, entry: AuditEntry, private_key: Any = None) -> str:
         """Sign entry.
-        
+
         Args:
             entry: Parameter for entry.
             private_key: Parameter for private key.
-        
+
         Returns:
             str result.
         """
@@ -177,12 +177,12 @@ class ComplianceAuditTrail(AuditTrail):
 
     def record_compliance_event(self, regulation: str, action: str, key: str, **meta: Any) -> str:
         """Record compliance event.
-        
+
         Args:
             regulation: Parameter for regulation.
             action: Parameter for action.
             key: Parameter for key.
-        
+
         Returns:
             str result.
         """

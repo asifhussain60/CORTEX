@@ -42,31 +42,31 @@ class EditResult:
 class SafeTemplateEditor:
     """
     Safe editor for Jinja2 templates in Python files.
-    
+
     CORE-057: Prevents template corruption by:
     1. Creating backup before modification
     2. Syntax checking before write
     3. Atomic write (temp → rename)
     4. Automatic rollback on failure
     5. Import verification after edit
-    
+
     Example:
         editor = SafeTemplateEditor()
         result = editor.replace_template(
             file_path="cortex/debugging/marker_injection_engine.py",
             template_var="MARKER_TEMPLATE",
         )
-        
+
         if result.success:
             print(f"Template updated, backup at {result.backup_path}")
         else:
             print(f"Failed: {result.error}")
     """
-    
+
     def __init__(self) -> None:
         """Initialize SafeTemplateEditor."""
         self.backup_suffix = ".bak"
-    
+
     def replace_template(
         self,
         file_path: str,
@@ -78,7 +78,7 @@ class SafeTemplateEditor:
     ) -> EditResult:
         """
         Replace Jinja2 template with safety checks.
-        
+
         Args:
             file_path: Path to Python file containing template
             template_var: Name of template variable (e.g., "MARKER_TEMPLATE")
@@ -86,33 +86,33 @@ class SafeTemplateEditor:
             allow_empty: Allow empty templates (default False)
             verify_imports: Check imports after edit (default True)
             keep_strip: Keep .strip() in template definition (default True)
-        
+
         Returns:
             EditResult with success status and details
-        
+
         Raises:
             TemplateCorruptionError: If corruption detected
             TemplateSyntaxError: If syntax invalid
             ValueError: If template variable not found
         """
         file_path = Path(file_path)
-        
+
         # Step 1: Validate inputs
         if not allow_empty and not new_template.strip():
             raise TemplateCorruptionError(
                 f"Empty template not allowed for {template_var}"
             )
-        
+
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        
+
         # Step 2: Create backup
         backup_path = self._create_backup(file_path)
-        
+
         try:
             # Step 3: Read original content
             original_content = file_path.read_text()
-            
+
             # Step 4: Find and replace template
             new_content = self._replace_template_content(
                 content=original_content,
@@ -120,18 +120,18 @@ class SafeTemplateEditor:
                 new_template=new_template,
                 keep_strip=keep_strip
             )
-            
+
             # Step 5: Syntax check
             self._check_syntax(new_content, file_path)
-            
+
             # Step 6: Atomic write
             self._atomic_write(file_path, new_content)
-            
+
             # Step 7: Import verification (optional)
             import_ok = True
             if verify_imports:
                 import_ok = self._verify_imports(file_path)
-            
+
             return EditResult(
                 success=True,
                 backup_path=backup_path,
@@ -139,11 +139,11 @@ class SafeTemplateEditor:
                 write_method="atomic",
                 import_check_passed=import_ok
             )
-        
+
         except (TemplateCorruptionError, TemplateSyntaxError, ValueError):
             # Re-raise validation errors without rollback
             raise
-        
+
         except Exception as e:
             # Rollback on any error
             self._rollback(file_path, backup_path)
@@ -152,7 +152,7 @@ class SafeTemplateEditor:
                 backup_path=backup_path,
                 error=str(e)
             )
-    
+
     def _create_backup(self, file_path: Path) -> Path:
         """Create backup of original file."""
         backup_path = file_path.with_suffix(
@@ -160,7 +160,7 @@ class SafeTemplateEditor:
         )
         shutil.copy2(file_path, backup_path)
         return backup_path
-    
+
     def _replace_template_content(
         self,
         content: str,
@@ -170,7 +170,7 @@ class SafeTemplateEditor:
     ) -> str:
         """
         Replace template in content.
-        
+
         Handles:
         - Single-line templates: Template("{{ x }}")
         - Multi-line templates with triple quotes
@@ -181,13 +181,13 @@ class SafeTemplateEditor:
         # or: TEMPLATE = Template("...")
         # Optional .strip() at the end
         pattern = rf'{template_var}\s*=\s*Template\((""".*?"""|\'\'\'.*?\'\'\'|".*?"|\'.*?\')(?:\s*\.strip\(\))?\s*\)'
-        
+
         match = re.search(pattern, content, re.DOTALL)
         if not match:
             raise ValueError(
                 f"Template variable '{template_var}' not found in content"
             )
-        
+
         # Determine quote style (prefer triple quotes for multi-line)
         if '\n' in new_template:
             quote_style = '"""'
@@ -195,18 +195,18 @@ class SafeTemplateEditor:
         else:
             quote_style = '"'
             template_str = f'{quote_style}{new_template}{quote_style}'
-        
+
         # Add .strip() if requested
         if keep_strip:
             replacement = f'{template_var} = Template({template_str}.strip())'
         else:
             replacement = f'{template_var} = Template({template_str})'
-        
+
         # Replace entire template assignment
         new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
-        
+
         return new_content
-    
+
     def _check_syntax(self, content: str, file_path: Path) -> None:
         """Check Python syntax of new content."""
         try:
@@ -215,11 +215,11 @@ class SafeTemplateEditor:
             raise TemplateSyntaxError(
                 f"Syntax error in {file_path.name}: {e}"
             )
-    
+
     def _atomic_write(self, file_path: Path, content: str) -> None:
         """
         Write content atomically using temp file + rename.
-        
+
         This ensures file is never in a corrupted state.
         """
         temp_fd, temp_path = tempfile.mkstemp(
@@ -227,26 +227,26 @@ class SafeTemplateEditor:
             prefix=f".{file_path.name}.",
             suffix=".tmp"
         )
-        
+
         try:
             # Write to temp file
             with open(temp_fd, 'w') as f:
                 f.write(content)
-            
+
             # Atomic rename
             temp_path_obj = Path(temp_path)
             temp_path_obj.replace(file_path)
-        
+
         except Exception:
             # Clean up temp file on error
             if Path(temp_path).exists():
                 Path(temp_path).unlink()
             raise
-    
+
     def _verify_imports(self, file_path: Path) -> bool:
         """
         Verify file can be imported after edit.
-        
+
         Returns True if imports work, False otherwise.
         """
         try:
@@ -260,9 +260,9 @@ class SafeTemplateEditor:
                 return True
         except Exception:
             return False
-        
+
         return False
-    
+
     def _rollback(self, file_path: Path, backup_path: Path) -> None:
         """Rollback to backup on error."""
         if backup_path.exists():

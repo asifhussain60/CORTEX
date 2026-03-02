@@ -33,7 +33,7 @@ class ROIWeights:
     accuracy_improvement: float = 0.20
     effort_cost: float = 0.15
     blocking_severity: float = 0.05
-    
+
     def __post_init__(self):
         """Validate weights sum to 1.0"""
         total = (
@@ -55,17 +55,17 @@ class PhaseMetrics:
     accuracy_improvement: float
     effort_cost: float
     blocking_severity: float
-    
+
     def __post_init__(self):
         """Validate all metrics are in [0.0, 1.0] range"""
-        for field_name in ["architectural_impact", "efficiency_gain", 
+        for field_name in ["architectural_impact", "efficiency_gain",
                            "accuracy_improvement", "effort_cost", "blocking_severity"]:
             value = getattr(self, field_name)
             if not (0.0 <= value <= 1.0):
                 raise ValueError(
                     f"{field_name} must be in [0.0, 1.0], got {value}"
                 )
-    
+
     def to_dict(self) -> Dict[str, float]:
         """Convert to dictionary"""
         return {
@@ -80,9 +80,9 @@ class PhaseMetrics:
 class ROICompositeScorer:
     """
     Calculate ROI scores for phases using weighted formula.
-    
+
     Thread-safe, stateless scorer that can be reused across operations.
-    
+
     Example:
         >>> scorer = ROICompositeScorer()
         >>> metrics = PhaseMetrics(
@@ -97,28 +97,28 @@ class ROICompositeScorer:
         >>> tier = scorer.get_priority_tier(metrics)
         >>> print(tier)  # PriorityTier.HIGH
     """
-    
+
     # Default thresholds (from phase-25 spec)
     HIGH_ROI_THRESHOLD = 0.75
     MEDIUM_ROI_THRESHOLD = 0.60
     LOW_ROI_THRESHOLD = 0.40
-    
+
     def __init__(self, weights: Optional[ROIWeights] = None) -> None:
         """
         Initialize scorer with optional custom weights.
-        
+
         Args:
             weights: Custom ROI weights (defaults to phase-25 spec)
         """
         self.weights = weights or ROIWeights()
-    
+
     def calculate(self, metrics: PhaseMetrics) -> float:
         """
         Calculate ROI score from phase metrics.
-        
+
         Args:
             metrics: Phase metrics (all 0.0-1.0)
-        
+
         Returns:
             ROI score (0.0-1.0), rounded to 4 decimal places
         """
@@ -129,21 +129,21 @@ class ROICompositeScorer:
             ((1.0 - metrics.effort_cost) * self.weights.effort_cost) +  # Inverted
             (metrics.blocking_severity * self.weights.blocking_severity)
         )
-        
+
         return round(roi_score, 4)
-    
+
     def get_priority_tier(self, metrics: PhaseMetrics) -> PriorityTier:
         """
         Determine priority tier from phase metrics.
-        
+
         Args:
             metrics: Phase metrics
-        
+
         Returns:
             Priority tier enum
         """
         roi_score = self.calculate(metrics)
-        
+
         if roi_score >= self.HIGH_ROI_THRESHOLD:
             return PriorityTier.HIGH
         elif roi_score >= self.MEDIUM_ROI_THRESHOLD:
@@ -152,14 +152,14 @@ class ROICompositeScorer:
             return PriorityTier.LOW
         else:
             return PriorityTier.DEFER
-    
+
     def calculate_from_dict(self, metrics_dict: Dict[str, float]) -> float:
         """
         Calculate ROI from dictionary (convenience method).
-        
+
         Args:
             metrics_dict: Dictionary with metric keys
-        
+
         Returns:
             ROI score (0.0-1.0)
         """

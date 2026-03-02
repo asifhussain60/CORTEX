@@ -618,7 +618,7 @@ class ProgressReporter:
         width: int = 40,
     ) -> str:
         """Create ASCII progress bar.
-        
+
         Uses inline code block to prevent VS Code markdown renderer
         from interpreting [███░░░] as a link reference definition.
         See: .github/templates/cortex-response-templates.md §Progress Bar Format Rules

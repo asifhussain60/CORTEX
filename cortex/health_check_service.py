@@ -65,7 +65,7 @@ class HealthCheckService:
     """Service for health checking and readiness probes."""
     def __init__(self, router: IntentRouter) -> None:
         """Initialize health check service.
-        
+
         Args:
             router: IntentRouter instance to check
         """
@@ -75,7 +75,7 @@ class HealthCheckService:
 
     def get_uptime_seconds(self) -> float:
         """Get service uptime in seconds.
-        
+
         Returns:
             Uptime in seconds since service start
         """
@@ -83,7 +83,7 @@ class HealthCheckService:
 
     def check_router_health(self) -> ComponentHealth:
         """Check router component health.
-        
+
         Returns:
             ComponentHealth status for router
         """
@@ -135,7 +135,7 @@ class HealthCheckService:
 
     def check_mcp_executor_health(self) -> ComponentHealth:
         """Check MCP executor component health.
-        
+
         Returns:
             ComponentHealth status for MCP executor
         """
@@ -179,7 +179,7 @@ class HealthCheckService:
 
     def check_cache_health(self) -> ComponentHealth:
         """Check cache component health.
-        
+
         Returns:
             ComponentHealth status for cache
         """
@@ -223,7 +223,7 @@ class HealthCheckService:
 
     def liveness_probe(self) -> HealthResponse:
         """Liveness probe: is service process alive?
-        
+
         Returns:
             HealthResponse indicating if service is running
         """
@@ -250,7 +250,7 @@ class HealthCheckService:
 
     def readiness_probe(self) -> HealthResponse:
         """Readiness probe: is service ready to accept traffic?
-        
+
         Returns:
             HealthResponse indicating readiness status
         """
@@ -274,7 +274,7 @@ class HealthCheckService:
 
     def deep_readiness_check(self) -> HealthResponse:
         """Deep readiness check: comprehensive system health.
-        
+
         Returns:
             HealthResponse with all component statuses
         """
@@ -315,10 +315,10 @@ class HealthCheckService:
 
     def to_http_status_code(self, health: HealthResponse) -> int:
         """Convert health status to HTTP status code.
-        
+
         Args:
             health: HealthResponse to convert
-            
+
         Returns:
             HTTP status code (200, 503)
         """
@@ -329,10 +329,10 @@ class HealthCheckService:
 
     def to_dict(self, health: HealthResponse) -> Dict[str, Any]:
         """Convert health response to dictionary for JSON serialization.
-        
+
         Args:
             health: HealthResponse to convert
-            
+
         Returns:
             Dictionary representation
         """

@@ -17,7 +17,7 @@ import platform
 
 class SetupCheck(str, Enum):
     """Setup verification checks."""
-    
+
     VIRTUAL_ENV = "virtual_env"
     DEPENDENCIES = "dependencies"
     MCP_CONFIG = "mcp_config"
@@ -28,7 +28,7 @@ class SetupCheck(str, Enum):
 @dataclass
 class SetupResult:
     """Result of a setup verification check."""
-    
+
     check: SetupCheck
     passed: bool
     message: str
@@ -40,24 +40,24 @@ class SetupResult:
 class SetupVerifier:
     """
     Consolidated setup verification.
-    
+
     Verifies Python environment, dependencies, MCP configuration,
     and VS Code settings. Provides auto-fix recommendations.
     """
-    
+
     def __init__(self, workspace_root: Path = Path.cwd()) -> None:
         """
         Initialize setup verifier.
-        
+
         Args:
             workspace_root: CORTEX workspace root directory
         """
         self.workspace_root = workspace_root
-    
+
     def check_virtual_environment(self) -> SetupResult:
         """
         Check if virtual environment is activated.
-        
+
         Returns:
             Setup result for virtual environment check
         """
@@ -66,7 +66,7 @@ class SetupVerifier:
             hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
         )
-        
+
         if in_venv:
             return SetupResult(
                 check=SetupCheck.VIRTUAL_ENV,
@@ -82,23 +82,23 @@ class SetupVerifier:
                 autofix_available=True,
                 fix_command="source venv/bin/activate  # macOS/Linux\nvenv\\Scripts\\activate  # Windows",
             )
-    
+
     def check_dependencies(self) -> SetupResult:
         """
         Check if required dependencies are installed.
-        
+
         Returns:
             Setup result for dependencies check
         """
         required_packages = ["yaml", "pytest", "jinja2"]
         missing = []
-        
+
         for package in required_packages:
             try:
                 __import__(package)
             except ImportError:
                 missing.append(package)
-        
+
         if not missing:
             return SetupResult(
                 check=SetupCheck.DEPENDENCIES,
@@ -115,16 +115,16 @@ class SetupVerifier:
                 autofix_available=True,
                 fix_command=f"pip install {' '.join(missing)}",
             )
-    
+
     def check_mcp_configuration(self) -> SetupResult:
         """
         Check if MCP server is configured.
-        
+
         Returns:
             Setup result for MCP configuration check
         """
         try:
-            
+
             return SetupResult(
                 check=SetupCheck.MCP_CONFIG,
                 passed=True,
@@ -139,16 +139,16 @@ class SetupVerifier:
                 autofix_available=True,
                 fix_command="python .cortex-runtime/setup-mcp.py",
             )
-    
+
     def check_vscode_settings(self) -> SetupResult:
         """
         Check if VS Code settings.json exists and is valid.
-        
+
         Returns:
             Setup result for VS Code settings check
         """
         settings_path = self.workspace_root / ".vscode" / "settings.json"
-        
+
         if not settings_path.exists():
             return SetupResult(
                 check=SetupCheck.VSCODE_SETTINGS,
@@ -157,12 +157,12 @@ class SetupVerifier:
                 autofix_available=True,
                 fix_command="python .cortex-runtime/setup-mcp.py",
             )
-        
+
         try:
             import json
             with open(settings_path) as f:
                 settings = json.load(f)
-            
+
             return SetupResult(
                 check=SetupCheck.VSCODE_SETTINGS,
                 passed=True,
@@ -177,16 +177,16 @@ class SetupVerifier:
                 autofix_available=True,
                 fix_command="python .cortex-runtime/setup-mcp.py",
             )
-    
+
     def check_python_version(self) -> SetupResult:
         """
         Check Python version compatibility.
-        
+
         Returns:
             Setup result for Python version check
         """
         version_info = sys.version_info
-        
+
         if version_info.major >= 3 and version_info.minor >= 9:
             return SetupResult(
                 check=SetupCheck.PYTHON_VERSION,
@@ -202,11 +202,11 @@ class SetupVerifier:
                 autofix_available=False,
                 fix_command="Upgrade to Python 3.9+",
             )
-    
+
     def run_full_verification(self) -> List[SetupResult]:
         """
         Run full setup verification suite.
-        
+
         Returns:
             List of setup results
         """
@@ -217,37 +217,37 @@ class SetupVerifier:
             self.check_mcp_configuration(),
             self.check_vscode_settings(),
         ]
-    
+
     def generate_fix_commands(self, result: SetupResult) -> List[str]:
         """
         Generate fix commands for a failed check.
-        
+
         Args:
             result: Setup result that failed
-            
+
         Returns:
             List of fix commands
         """
         if not result.autofix_available or not result.fix_command:
             return []
-        
+
         # Split multi-line commands
         commands = [cmd.strip() for cmd in result.fix_command.split("\n")]
         return [cmd for cmd in commands if cmd and not cmd.startswith("#")]
-    
+
     def generate_report(self, results: List[SetupResult]) -> Dict[str, Any]:
         """
         Generate setup verification report.
-        
+
         Args:
             results: List of setup results
-            
+
         Returns:
             Complete report dictionary
         """
         passed = [r for r in results if r.passed]
         failed = [r for r in results if not r.passed]
-        
+
         # Gather recommendations
         recommendations = []
         for result in failed:
@@ -256,7 +256,7 @@ class SetupVerifier:
                     "check": result.check.value,
                     "command": result.fix_command,
                 })
-        
+
         # Environment info
         environment = {
             "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
@@ -264,7 +264,7 @@ class SetupVerifier:
             "platform_version": platform.version(),
             "workspace": str(self.workspace_root),
         }
-        
+
         return {
             "summary": {
                 "total_checks": len(results),

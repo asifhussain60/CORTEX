@@ -19,7 +19,7 @@ except ImportError:
 # Import consolidated cleanup from Phase 90
 try:
     from pathlib import Path
-    
+
     # Import from sibling cleanup.py file
     cleanup_file = Path(__file__).parent.parent / "cleanup.py"
     if cleanup_file.exists():

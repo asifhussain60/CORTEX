@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RoutingContext:
     """Context for intelligent routing decisions.
-    
+
     Attributes:
         intent_type: Type of intent (IMPLEMENT, FIX, REFACTOR, etc.)
         user_query: Original user query
@@ -37,7 +37,7 @@ class RoutingContext:
 @dataclass
 class ContextAnalysisResult:
     """Result of context analysis.
-    
+
     Attributes:
         context_type: Type classification (simple, moderate, complex)
         confidence: Confidence score (0.0-1.0)
@@ -54,7 +54,7 @@ class ContextAnalysisResult:
 @dataclass
 class PatternMatchResult:
     """Result of pattern matching.
-    
+
     Attributes:
         matched_patterns: List of matched pattern identifiers
         best_match: Best matching pattern (if any)
@@ -71,7 +71,7 @@ class PatternMatchResult:
 @dataclass
 class TemplateSelectionResult:
     """Result of template selection.
-    
+
     Attributes:
         template_id: Selected template identifier
         complexity_level: Complexity level (simple, moderate, complex, detailed)
@@ -91,19 +91,19 @@ class TemplateSelectionResult:
 
 class IntelligentResponseRouter:
     """Intelligent response router with context analysis and pattern matching.
-    
+
     Provides three-stage routing pipeline:
     1. Context Analysis: Analyzes query context and complexity
     2. Pattern Matching: Matches patterns based on context
     3. Template Selection: Selects optimal response template
-    
+
     Features:
         - Context-aware routing
         - Pattern similarity matching
         - Template optimization
         - Caching for performance
         - User preference integration
-    
+
     Example:
         >>> router = IntelligentResponseRouter()
         >>> context = RoutingContext(
@@ -166,31 +166,31 @@ class IntelligentResponseRouter:
 
     def analyze_context(self, context: RoutingContext) -> ContextAnalysisResult:
         """Analyze routing context and determine context type.
-        
+
         Examines the routing context to determine:
         - Context type (simple, moderate, complex)
         - Key factors affecting routing
         - Confidence in the analysis
         - Any warnings or misalignments
-        
+
         Args:
             context: RoutingContext with intent, query, domain, etc.
-        
+
         Returns:
             ContextAnalysisResult with analysis findings
         """
         warnings = []
         key_factors = []
-        
+
         # Analyze query length and content
         query_lower = context.user_query.lower()
         query_words = query_lower.split()
-        
+
         # Extract key factors from query
         for word in query_words:
             if word in ["implement", "refactor", "fix", "analyze", "security", "api"]:
                 key_factors.append(word)
-        
+
         # Determine context type based on complexity
         if context.complexity <= 3:
             context_type = "simple"
@@ -202,7 +202,7 @@ class IntelligentResponseRouter:
             context_type = "complex"
             base_confidence = 0.88  # Slightly higher for complex contexts
             warnings.append("high_complexity")
-        
+
         # Check for intent-query alignment
         intent_keywords = {
             "IMPLEMENT": ["implement", "create", "add", "build"],
@@ -210,40 +210,40 @@ class IntelligentResponseRouter:
             "REFACTOR": ["refactor", "improve", "restructure"],
             "ANALYZE": ["analyze", "review", "inspect", "examine"],
         }
-        
+
         expected_keywords = intent_keywords.get(context.intent_type, [])
         if expected_keywords and not any(kw in query_lower for kw in expected_keywords):
             warnings.append("intent_mismatch")
             base_confidence *= 0.9
-        
+
         # Add domain to key factors if meaningful
         if context.domain and context.domain != "unknown":
             key_factors.append(context.domain)
-        
+
         # Handle empty query
         if not context.user_query.strip():
             base_confidence = 0.4
             context_type = "simple"
-        
+
         # Build confidence factors
         confidence_factors = {
             "query_clarity": 0.97 if len(query_words) >= 3 else 0.6,
             "domain_specificity": 0.95 if context.domain != "unknown" else 0.5,
             "complexity_reasonable": 0.97 if context.complexity <= 7 else 0.92,
         }
-        
+
         metadata = {
             "confidence_factors": confidence_factors,
             "query_word_count": len(query_words),
         }
-        
+
         # Include user preferences if provided
         if context.user_preferences:
             metadata["user_preferences"] = context.user_preferences
-        
+
         # Calculate final confidence
         confidence = base_confidence * sum(confidence_factors.values()) / len(confidence_factors)
-        
+
         return ContextAnalysisResult(
             context_type=context_type,
             confidence=min(confidence, 1.0),
@@ -254,22 +254,22 @@ class IntelligentResponseRouter:
 
     def match_patterns(self, context_result: ContextAnalysisResult) -> PatternMatchResult:
         """Match patterns based on context analysis.
-        
+
         Uses similarity matching to find patterns that match the
         analyzed context. Ranks patterns by confidence.
-        
+
         Args:
             context_result: Result from analyze_context
-        
+
         Returns:
             PatternMatchResult with matched patterns
         """
         matched_patterns = []
         pattern_scores: Dict[str, float] = {}
-        
+
         # Get key factors from context
         key_factors = context_result.key_factors
-        
+
         if not key_factors:
             # No patterns can be matched
             return PatternMatchResult(
@@ -279,7 +279,7 @@ class IntelligentResponseRouter:
                 metadata={"fallback_patterns": ["general_response"]},
                 warnings=[],
             )
-        
+
         # Match patterns using similarity
         for pattern_name, pattern_keywords in self.PATTERNS.items():
             score = 0.0
@@ -289,19 +289,19 @@ class IntelligentResponseRouter:
                     similarity = SequenceMatcher(None, key_factor, keyword).ratio()
                     if similarity > 0.7:  # Threshold for match
                         score += similarity
-            
+
             if score > 0:
                 pattern_scores[pattern_name] = score
                 matched_patterns.append(pattern_name)
-        
+
         # Sort patterns by score
         sorted_patterns = sorted(
             matched_patterns, key=lambda p: pattern_scores.get(p, 0), reverse=True
         )
-        
+
         # Determine best match
         best_match = sorted_patterns[0] if sorted_patterns else None
-        
+
         # Calculate confidence based on top score
         if pattern_scores:
             max_score = max(pattern_scores.values())
@@ -312,7 +312,7 @@ class IntelligentResponseRouter:
             confidence = min(max(normalized_scores.values()) * 1.3, 1.0)
         else:
             confidence = 0.4
-        
+
         # Build metadata
         metadata = {
             "pattern_scores": pattern_scores,
@@ -322,20 +322,20 @@ class IntelligentResponseRouter:
             },
             "context_type": context_result.context_type,  # Propagate context type
         }
-        
+
         # Add fallback patterns if needed
         if not matched_patterns:
             metadata["fallback_patterns"] = ["general_response"]
-        
+
         # Propagate context metadata if present
         if "user_preferences" in context_result.metadata:
             metadata["user_preferences"] = context_result.metadata["user_preferences"]
-        
+
         # Check for domain-specific patterns
         domain = context_result.metadata.get("domain")
         if domain:
             metadata["domain"] = domain
-        
+
         return PatternMatchResult(
             matched_patterns=sorted_patterns,
             best_match=best_match,
@@ -346,13 +346,13 @@ class IntelligentResponseRouter:
 
     def select_template(self, pattern_result: PatternMatchResult) -> TemplateSelectionResult:
         """Select optimal response template.
-        
+
         Selects template based on matched patterns, complexity,
         and user preferences. Applies caching for performance.
-        
+
         Args:
             pattern_result: Result from match_patterns
-        
+
         Returns:
             TemplateSelectionResult with selected template
         """
@@ -362,29 +362,29 @@ class IntelligentResponseRouter:
             cached_result = self._template_cache[cache_key]
             cached_result.metadata["cache_hit"] = True
             return cached_result
-        
+
         # Determine template based on best match
         if not pattern_result.best_match:
             # Fallback template
             return self._fallback_template()
-        
+
         # Find matching template
         selected_template_id = None
         complexity_level = "moderate"
         attributes = []
-        
+
         for template_id, template_config in self.TEMPLATES.items():
             if pattern_result.best_match in template_config["patterns"]:
                 selected_template_id = template_id
                 complexity_level = template_config["complexity"]
                 attributes = template_config["attributes"]
                 break
-        
+
         # Apply user preferences if present
         user_prefs = pattern_result.metadata.get("user_preferences", {})
         if user_prefs.get("format") == "concise" and "concise" not in attributes:
             attributes.append("concise")
-        
+
         # Check context type from metadata
         context_type = pattern_result.metadata.get("context_type")
         if not context_type:
@@ -397,19 +397,19 @@ class IntelligentResponseRouter:
                 context_type = "moderate"
             else:
                 context_type = "complex"
-        
+
         # Override complexity level based on context type if not explicitly set
         if context_type == "complex" and complexity_level != "complex":
             complexity_level = "complex"
-        
+
         # Use fallback if no template selected
         if not selected_template_id:
             selected_template_id = "general_response"
             attributes = ["flexible"]
-        
+
         # Apply optimization for quick fixes
         optimization_applied = "quick" in pattern_result.best_match.lower()
-        
+
         result = TemplateSelectionResult(
             template_id=selected_template_id or "general_response",
             complexity_level=complexity_level,
@@ -425,15 +425,15 @@ class IntelligentResponseRouter:
                 },
             },
         )
-        
+
         # Cache result
         self._template_cache[cache_key] = result
-        
+
         return result
 
     def _fallback_template(self) -> TemplateSelectionResult:
         """Provide fallback template when no patterns match.
-        
+
         Returns:
             TemplateSelectionResult with fallback template
         """

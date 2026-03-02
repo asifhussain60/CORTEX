@@ -67,7 +67,7 @@ class AuditLogEntry:
     orchestrator_name: str
     ac_marker: str
     details: Dict[str, Any]
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON storage."""
         return {
@@ -82,24 +82,24 @@ class AuditLogEntry:
 class ScaffolderAuditLogger:
     """
     Comprehensive audit logger for scaffolder operations.
-    
+
     Logs all intelligence decisions to governance.db with AC markers
     for forensic analysis and compliance verification.
     """
-    
+
     def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize audit logger.
-        
+
         Args:
             db_path: Path to governance.db (defaults to .cortex-runtime/governance.db)
         """
         if db_path is None:
             db_path = Path(__file__).parent.parent.parent / ".cortex-runtime" / "governance.db"
-        
+
         self.db_path = db_path
         self._ensure_audit_table()
-    
+
     def _ensure_audit_table(self) -> None:
         """Ensure audit table exists in governance.db."""
         with sqlite3.connect(str(self.db_path)) as conn:
@@ -115,15 +115,15 @@ class ScaffolderAuditLogger:
                 )
             """)
             conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_scaffolder_audit_operation 
+                CREATE INDEX IF NOT EXISTS idx_scaffolder_audit_operation
                 ON scaffolder_audit_log(operation)
             """)
             conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_scaffolder_audit_orchestrator 
+                CREATE INDEX IF NOT EXISTS idx_scaffolder_audit_orchestrator
                 ON scaffolder_audit_log(orchestrator_name)
             """)
             conn.commit()
-    
+
     def log_pre_scaffolding_check(
         self,
         orchestrator_name: str,
@@ -134,20 +134,20 @@ class ScaffolderAuditLogger:
     ) -> str:
         """
         Log pre-scaffolding registry query and duplicate check.
-        
+
         Args:
             orchestrator_name: Name of orchestrator being scaffolded
             query_result: Result of registry query
             decision: upgrade|replace|create_new|cancel
             decision_rationale: Why this decision was made
             user_override: Whether user overrode recommendation
-            
+
         Returns:
             AC marker for this audit entry
         """
         timestamp = datetime.now().isoformat()
         ac_marker = f"AC-WAVE-2-S1A-{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        
+
         details = {
             "registry_query_result": {
                 "found": query_result.found,
@@ -159,7 +159,7 @@ class ScaffolderAuditLogger:
             "decision_rationale": decision_rationale,
             "user_override": user_override,
         }
-        
+
         entry = AuditLogEntry(
             timestamp=timestamp,
             operation=AuditOperation.PRE_SCAFFOLDING_CHECK.value,
@@ -167,10 +167,10 @@ class ScaffolderAuditLogger:
             ac_marker=ac_marker,
             details=details,
         )
-        
+
         self._write_log(entry)
         return ac_marker
-    
+
     def log_holistic_replacement(
         self,
         orchestrator_name: str,
@@ -184,7 +184,7 @@ class ScaffolderAuditLogger:
     ) -> str:
         """
         Log holistic replacement operation.
-        
+
         Args:
             orchestrator_name: Name of orchestrator
             old_location: Path to old implementation
@@ -194,13 +194,13 @@ class ScaffolderAuditLogger:
             actions_taken: List of actions performed
             registry_updated: Whether registry was updated
             core_035_violation: Whether CORE-035 was violated
-            
+
         Returns:
             AC marker for this audit entry
         """
         timestamp = datetime.now().isoformat()
         ac_marker = f"AC-WAVE-2-S1B-{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        
+
         details = {
             "duplicate_details": {
                 "old_location": old_location,
@@ -212,7 +212,7 @@ class ScaffolderAuditLogger:
             "registry_updated": registry_updated,
             "core_035_violation": core_035_violation,
         }
-        
+
         entry = AuditLogEntry(
             timestamp=timestamp,
             operation=AuditOperation.HOLISTIC_REPLACEMENT.value,
@@ -220,10 +220,10 @@ class ScaffolderAuditLogger:
             ac_marker=ac_marker,
             details=details,
         )
-        
+
         self._write_log(entry)
         return ac_marker
-    
+
     def log_intelligent_test_generation(
         self,
         orchestrator_name: str,
@@ -235,7 +235,7 @@ class ScaffolderAuditLogger:
     ) -> str:
         """
         Log intelligent test generation (demand → compose → validate).
-        
+
         Args:
             orchestrator_name: Name of orchestrator
             stage: demand|compose|validate
@@ -243,25 +243,25 @@ class ScaffolderAuditLogger:
             demand_analysis: Results of demand generation
             composition: Results of test composition (if stage=compose)
             quality_validation: Quality scores (if stage=validate)
-            
+
         Returns:
             AC marker for this audit entry
         """
         timestamp = datetime.now().isoformat()
         ac_marker = f"AC-WAVE-2-S2-{orchestrator_name.upper()}-{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        
+
         details = {
             "stage": stage,
             "spec_source": spec_source,
             "demand_analysis": demand_analysis,
         }
-        
+
         if composition:
             details["composition"] = composition
-        
+
         if quality_validation:
             details["quality_validation"] = asdict(quality_validation)
-        
+
         entry = AuditLogEntry(
             timestamp=timestamp,
             operation=AuditOperation.INTELLIGENT_TEST_GENERATION.value,
@@ -269,16 +269,16 @@ class ScaffolderAuditLogger:
             ac_marker=ac_marker,
             details=details,
         )
-        
+
         self._write_log(entry)
         return ac_marker
-    
+
     def _write_log(self, entry: AuditLogEntry) -> None:
         """Write audit log entry to database."""
         with sqlite3.connect(str(self.db_path)) as conn:
             conn.execute(
                 """
-                INSERT INTO scaffolder_audit_log 
+                INSERT INTO scaffolder_audit_log
                 (timestamp, operation, orchestrator_name, ac_marker, details)
                 VALUES (?, ?, ?, ?, ?)
                 """,
@@ -291,7 +291,7 @@ class ScaffolderAuditLogger:
                 ),
             )
             conn.commit()
-    
+
     def query_logs(
         self,
         operation: Optional[str] = None,
@@ -300,33 +300,33 @@ class ScaffolderAuditLogger:
     ) -> List[AuditLogEntry]:
         """
         Query audit logs with filters.
-        
+
         Args:
             operation: Filter by operation type
             orchestrator_name: Filter by orchestrator name
             limit: Maximum number of entries to return
-            
+
         Returns:
             List of audit log entries
         """
         with sqlite3.connect(str(self.db_path)) as conn:
             query = "SELECT timestamp, operation, orchestrator_name, ac_marker, details FROM scaffolder_audit_log WHERE 1=1"
             params = []
-            
+
             if operation:
                 query += " AND operation = ?"
                 params.append(operation)
-            
+
             if orchestrator_name:
                 query += " AND orchestrator_name = ?"
                 params.append(orchestrator_name)
-            
+
             query += " ORDER BY created_at DESC LIMIT ?"
             params.append(limit)
-            
+
             cursor = conn.execute(query, params)
             rows = cursor.fetchall()
-            
+
             return [
                 AuditLogEntry(
                     timestamp=row[0],

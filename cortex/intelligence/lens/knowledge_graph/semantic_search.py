@@ -22,28 +22,28 @@ class SearchResult:
 class SemanticSearchEngine:
     """
     Semantic search over knowledge graph.
-    
+
     Example:
         search = SemanticSearchEngine(graph)
         results = search.find_by_name("calculate_total")
     """
-    
+
     def __init__(self, graph: ASTKnowledgeGraph) -> None:
         """Initialize search engine with graph."""
         self.graph = graph
-    
+
     def find_by_name(self, query: str) -> List[SearchResult]:
         """
         Search for entities by name.
-        
+
         Args:
             query: Entity name to search for
-            
+
         Returns:
             List of matching SearchResults
         """
         results = []
-        
+
         for name, node in self.graph.nodes.items():
             if query.lower() in name.lower():
                 results.append(SearchResult(
@@ -53,21 +53,21 @@ class SemanticSearchEngine:
                     line_number=node.line_number,
                     relevance_score=1.0 if query == name else 0.8
                 ))
-        
+
         return sorted(results, key=lambda r: r.relevance_score, reverse=True)
-    
+
     def find_pattern(self, pattern_type: str) -> List[SearchResult]:
         """
         Search for architectural patterns.
-        
+
         Args:
             pattern_type: Pattern to search for (e.g., "repository_pattern")
-            
+
         Returns:
             List of matching entities
         """
         results = []
-        
+
         # Simple heuristic: look for naming conventions
         if pattern_type == "repository_pattern":
             for name, node in self.graph.nodes.items():
@@ -80,5 +80,5 @@ class SemanticSearchEngine:
                         line_number=node.line_number,
                         relevance_score=0.9
                     ))
-        
+
         return results

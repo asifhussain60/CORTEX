@@ -12,7 +12,7 @@ import uuid
 class Event:
     """
     Event data structure for EventBus communication with debugging support.
-    
+
     Attributes:
         type: Event type identifier (e.g., 'feature.enabled', 'test.failed')
         payload: Event data dictionary
@@ -37,7 +37,7 @@ class EventBus:
     def __init__(self, log_file: Optional[str] = None) -> None:
         """
         Initialize event bus with optional event logging.
-        
+
         Args:
             log_file: Optional path to JSONL file for event audit trail.
                       If provided, all events will be logged for audit purposes.
@@ -45,7 +45,7 @@ class EventBus:
         self.subscribers = {}
         self.log_file = log_file
         self.logging_enabled = log_file is not None
-        
+
         if self.logging_enabled:
             # Create log directory if it doesn't exist
             log_path = Path(log_file)
@@ -60,7 +60,7 @@ class EventBus:
     def publish(self, event: object, data: object = None) -> None:
         """
         Publish event to subscribers with audit trail logging.
-        
+
         Args:
             event: Event object or event_type string (for backward compatibility)
             data: Event data (for backward compatibility with legacy format)
@@ -73,11 +73,11 @@ class EventBus:
             # Legacy format: publish(event_type, data)
             event_type = event
             payload = data or {}
-        
+
         # Log event for audit trail
         if self.logging_enabled:
             self._log_event(event_type, payload)
-        
+
         if event_type in self.subscribers:
             for handler in self.subscribers[event_type]:
                 # Pass Event object to new handlers, data to legacy handlers
@@ -92,11 +92,11 @@ class EventBus:
                 except Exception as e:
                     # Don't let handler errors break event delivery
                     print(f"Warning: Event handler error for {event_type}: {e}")
-    
+
     def _log_event(self, event_type: str, payload: Dict[str, Any]) -> None:
         """
         Log event to audit trail file.
-        
+
         Args:
             event_type: Type of event
             payload: Event payload data
@@ -107,7 +107,7 @@ class EventBus:
                 "type": event_type,
                 "payload": payload
             }
-            
+
             with open(self.log_file, 'a') as f:
                 f.write(json.dumps(log_entry) + '\n')
         except Exception as e:

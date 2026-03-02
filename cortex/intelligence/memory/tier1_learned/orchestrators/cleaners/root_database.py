@@ -27,16 +27,16 @@ from .base import (
 class RootDatabaseCleaner(CleanerInterface):
     """
     Cleaner for orphaned root database files.
-    
+
     Deletes:
         - intelligence_audit.db
         - contract_validation_audit.db
         - observability_audit.db
         - solid_audit.db
-    
+
     Preserves:
         - All databases in subdirectories
-    
+
     Warns:
         - Unknown database files in root
     """
@@ -67,27 +67,27 @@ class RootDatabaseCleaner(CleanerInterface):
     def analyze(self) -> Analysis:
         """
         Scan for orphaned root database files.
-        
+
         Returns:
             Analysis with databases to delete
         """
         self._log("Scanning for root database files...")
-        
+
         files_to_delete = []
         warnings = []
         files_scanned = 0
-        
+
         # Check for known database files in root
         files_to_delete = []
         actions = []
         database_paths = self.config.get("database_paths", {})
-        
+
         for db_name in self.KNOWN_ROOT_DATABASES:
             db_path = self.repo_root / db_name
             if db_path.exists():
                 files_to_delete.append(db_name)
                 files_scanned += 1
-                
+
                 # If database_paths configured, create action with target
                 if database_paths:
                     # Extract domain from db name (e.g., "intelligence_audit.db" -> "intelligence")
@@ -96,25 +96,25 @@ class RootDatabaseCleaner(CleanerInterface):
                     actions.append(f"{db_name} -> {target_path}")
                 else:
                     actions.append(db_name)
-        
+
         # Check for unknown .db files in root (warn only)
         for db_file in self.repo_root.glob("*.db"):
             files_scanned += 1
             if db_file.name not in self.KNOWN_ROOT_DATABASES:
                 warnings.append(f"{db_file.name}: Unknown database file in root")
-        
+
         plan = {
             "actions": actions if actions else files_to_delete,  # Use enriched actions if available
             "files_to_delete": files_to_delete,  # Keep for backward compat
             "warnings": warnings,
             "known_databases": self.KNOWN_ROOT_DATABASES,
         }
-        
+
         self._log(f"Found {len(files_to_delete)} database files to delete")
         if warnings:
             for warning in warnings:
                 self._log(f"WARNING: {warning}")
-        
+
         return Analysis(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
@@ -131,29 +131,29 @@ class RootDatabaseCleaner(CleanerInterface):
     def execute(self, plan: Dict[str, Any]) -> Report:
         """
         Execute database cleanup.
-        
+
         Args:
             plan: Execution plan from analyze()
-        
+
         Returns:
             Report with deletion results
         """
         self._log("Executing root database cleanup...")
-        
+
         files_to_delete = plan.get("files_to_delete", [])
         warnings = plan.get("warnings", [])
         deleted_count = 0
         errors = []
         logs = []
-        
+
         for db_name in files_to_delete:
             db_path = self.repo_root / db_name
-            
+
             if self.dry_run:
                 logs.append(f"[DRY RUN] Would delete: {db_name}")
                 deleted_count += 1
                 continue
-            
+
             try:
                 if db_path.exists():
                     db_path.unlink()
@@ -167,15 +167,15 @@ class RootDatabaseCleaner(CleanerInterface):
                 errors.append(error_msg)
                 logs.append(error_msg)
                 self._log(error_msg)
-        
+
         # Add warnings to logs
         for warning in warnings:
             logs.append(f"WARNING: {warning}")
-        
+
         status = "SUCCESS" if len(errors) == 0 else "PARTIAL"
         if deleted_count == 0 and len(errors) > 0:
             status = "FAILED"
-        
+
         return Report(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
@@ -189,9 +189,9 @@ class RootDatabaseCleaner(CleanerInterface):
     def rollback(self) -> RollbackResult:
         """
         Rollback database cleanup.
-        
+
         Note: Rollback not supported for deletions (no backup made).
-        
+
         Returns:
             RollbackResult indicating no rollback possible
         """

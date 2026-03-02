@@ -61,40 +61,40 @@ class ProductionReadinessReport:
 class GovernanceValidator:
     """
     Validates CORTEX governance alignment and production readiness.
-    
+
     Consolidates functionality from:
     - scripts/validate-production.py (production readiness)
     - scripts/validate_governance_alignment.py (CORE rules alignment)
     """
-    
+
     def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize governance validator.
-        
+
         Args:
             workspace_root: Root of CORTEX workspace (defaults to current directory)
         """
         self.workspace_root = workspace_root or Path.cwd()
         self.checks: List[ValidationCheck] = []
-    
+
     def validate_production_readiness(self, dry_run: bool = False) -> ProductionReadinessReport:
         """
         Run complete production readiness assessment.
-        
+
         Args:
             dry_run: If True, perform validation without side effects
-        
+
         Returns:
             ProductionReadinessReport with all findings
         """
         logger.info("🔍 Running CORTEX Production Readiness Assessment...")
-        
+
         if dry_run:
             logger.info("   (dry-run mode - no side effects)")
-        
+
         # Reset checks
         self.checks = []
-        
+
         # Run all validation categories
         self._validate_infrastructure()
         self._validate_dependencies()
@@ -104,65 +104,65 @@ class GovernanceValidator:
         self._validate_monitoring()
         self._validate_tests()
         self._validate_governance_files()
-        
+
         # Generate report
         return self._generate_report()
-    
+
     def check_governance_alignment(self) -> bool:
         """
         Validate governance alignment across layers.
-        
+
         Checks:
         - .github/prompts/ directory exists with prompt files
         - .github/agents/ directory exists with agent specifications
         - CORE rules compliance
         - Registry structure
-        
+
         Returns:
             True if validation passes, False otherwise
         """
         logger.info("🔍 Validating Governance Alignment...")
-        
+
         # Check prompts directory
         prompts_dir = self.workspace_root / ".github" / "prompts"
         if not prompts_dir.exists():
             logger.error(f"❌ Missing: {prompts_dir}")
             return False
-        
+
         prompt_files = list(prompts_dir.glob("*.md"))
         logger.info(f"✅ {prompts_dir}: {len(prompt_files)} prompt files")
-        
+
         # Check agents directory
         agents_dir = self.workspace_root / ".github" / "agents"
         if not agents_dir.exists():
             logger.error(f"❌ Missing: {agents_dir}")
             return False
-        
+
         agent_files = list(agents_dir.glob("**/*.md"))
         logger.info(f"✅ {agents_dir}: {len(agent_files)} agent files")
-        
+
         # Check registry structure
         registry_dir = self.workspace_root / "cortex-registry"
         if not registry_dir.exists():
             logger.warning(f"⚠️  Missing registry: {registry_dir}")
             return False
-        
+
         logger.info(f"✅ {registry_dir}: Registry structure exists")
-        
+
         return True
-    
+
     def assess_security_posture(self) -> Dict[str, Any]:
         """
         Assess security posture with OWASP compliance checks.
-        
+
         Returns:
             Dict with security score and findings
         """
         logger.info("🔒 Assessing Security Posture...")
-        
+
         findings = []
         score = 100.0
-        
+
         # Check OWASP knowledge files
         owasp_file = self.workspace_root / "cortex" / "knowledge" / "best-practices" / "security" / "owasp-top-10.yaml"
         if owasp_file.exists():
@@ -170,7 +170,7 @@ class GovernanceValidator:
         else:
             findings.append({"check": "OWASP Knowledge", "status": "FAIL", "detail": "Missing OWASP knowledge"})
             score -= 15.0
-        
+
         # Check secrets management
         secrets_dir = self.workspace_root / "cortex" / "secrets"
         if secrets_dir.exists():
@@ -178,7 +178,7 @@ class GovernanceValidator:
         else:
             findings.append({"check": "Secrets Management", "status": "WARN", "detail": "No secrets module"})
             score -= 10.0
-        
+
         # Check .env in .gitignore
         gitignore = self.workspace_root / ".gitignore"
         if gitignore.exists() and ".env" in gitignore.read_text():
@@ -186,7 +186,7 @@ class GovernanceValidator:
         else:
             findings.append({"check": ".env Protection", "status": "FAIL", "detail": ".env not protected"})
             score -= 20.0
-        
+
         return {
             "score": max(0.0, score),
             "findings": findings,
@@ -195,14 +195,14 @@ class GovernanceValidator:
                 "file_exists": owasp_file.exists()
             }
         }
-    
+
     def generate_readiness_report(self, report: ProductionReadinessReport) -> str:
         """
         Generate formatted readiness report.
-        
+
         Args:
             report: ProductionReadinessReport to format
-        
+
         Returns:
             Formatted string report
         """
@@ -214,14 +214,14 @@ class GovernanceValidator:
         lines.append(f"Overall Status: {report.overall_status}")
         lines.append(f"Readiness Score: {report.readiness_score:.1f}%")
         lines.append("")
-        
+
         # Summary
         lines.append("SUMMARY")
         lines.append("-" * 80)
         for category, result in report.summary.items():
             lines.append(f"  {category}: {result}")
         lines.append("")
-        
+
         # Issues by severity
         if report.critical_issues:
             lines.append(f"CRITICAL ISSUES ({len(report.critical_issues)})")
@@ -231,7 +231,7 @@ class GovernanceValidator:
                 if check.remediation:
                     lines.append(f"     → {check.remediation}")
             lines.append("")
-        
+
         if report.high_issues:
             lines.append(f"HIGH PRIORITY ISSUES ({len(report.high_issues)})")
             lines.append("-" * 80)
@@ -240,7 +240,7 @@ class GovernanceValidator:
                 if check.remediation:
                     lines.append(f"     → {check.remediation}")
             lines.append("")
-        
+
         if report.medium_issues:
             lines.append(f"MEDIUM PRIORITY ISSUES ({len(report.medium_issues)})")
             lines.append("-" * 80)
@@ -249,16 +249,16 @@ class GovernanceValidator:
             if len(report.medium_issues) > 5:
                 lines.append(f"  ... and {len(report.medium_issues) - 5} more")
             lines.append("")
-        
+
         # Passed checks summary
         lines.append(f"PASSED CHECKS: {len(report.passed_checks)}")
         lines.append("=" * 80)
-        
+
         return "\n".join(lines)
-    
+
     # Private helper methods
-    
-    def _add_check(self, name: str, passed: bool, severity: Severity, message: str, 
+
+    def _add_check(self, name: str, passed: bool, severity: Severity, message: str,
                    details: Optional[Dict[str, Any]] = None, remediation: Optional[str] = None) -> None:
         """Add validation check result."""
         self.checks.append(ValidationCheck(
@@ -269,11 +269,11 @@ class GovernanceValidator:
             details=details or {},
             remediation=remediation
         ))
-    
+
     def _validate_infrastructure(self) -> None:
         """Validate core infrastructure components."""
         logger.info("📋 Validating Infrastructure...")
-        
+
         # Python version
         if sys.version_info >= (3, 9):
             self._add_check(
@@ -290,7 +290,7 @@ class GovernanceValidator:
                 f"Python {sys.version_info.major}.{sys.version_info.minor} < 3.9 required",
                 remediation="Upgrade Python to 3.9+ for production deployment"
             )
-        
+
         # Core directories
         required_dirs = ["cortex", "tests", "deployment"]
         for dir_name in required_dirs:
@@ -302,11 +302,11 @@ class GovernanceValidator:
                 f"Required directory {'exists' if dir_path.exists() else 'missing'}: {dir_path}",
                 remediation=f"Create {dir_name}/ directory" if not dir_path.exists() else None
             )
-    
+
     def _validate_dependencies(self) -> None:
         """Validate Python dependencies."""
         logger.info("📦 Validating Dependencies...")
-        
+
         req_path = self.workspace_root / "requirements.txt"
         self._add_check(
             "requirements.txt",
@@ -314,11 +314,11 @@ class GovernanceValidator:
             Severity.HIGH if not req_path.exists() else Severity.INFO,
             f"Requirements file {'exists' if req_path.exists() else 'missing'}: {req_path}"
         )
-    
+
     def _validate_mcp_server(self) -> None:
         """Validate MCP server configuration."""
         logger.info("🔧 Validating MCP Server...")
-        
+
         server_path = self.workspace_root / "cortex" / "mcp" / "server.py"
         self._add_check(
             "MCP Server Module",
@@ -326,7 +326,7 @@ class GovernanceValidator:
             Severity.CRITICAL if not server_path.exists() else Severity.INFO,
             f"MCP server {'exists' if server_path.exists() else 'missing'}: {server_path}"
         )
-    
+
     def _validate_mcp_configuration(self) -> None:
         """Validate MCP deployment configuration.
 
@@ -353,11 +353,11 @@ class GovernanceValidator:
             f"VS Code MCP config {'exists' if vscode_settings.exists() else 'missing'}: {vscode_settings}",
             remediation="Run python3 scripts/setup-mcp.py to configure VS Code MCP settings" if not vscode_settings.exists() else None
         )
-    
+
     def _validate_security_configuration(self) -> None:
         """Validate security configurations."""
         logger.info("🔒 Validating Security Configuration...")
-        
+
         owasp_file = self.workspace_root / "cortex" / "knowledge" / "best-practices" / "security" / "owasp-top-10.yaml"
         self._add_check(
             "OWASP Knowledge",
@@ -365,11 +365,11 @@ class GovernanceValidator:
             Severity.MEDIUM if not owasp_file.exists() else Severity.INFO,
             f"OWASP knowledge {'exists' if owasp_file.exists() else 'missing'}: {owasp_file}"
         )
-    
+
     def _validate_monitoring(self) -> None:
         """Validate monitoring configuration."""
         logger.info("📊 Validating Monitoring...")
-        
+
         prometheus = self.workspace_root / "deployment" / "prometheus.yml"
         self._add_check(
             "Prometheus Config",
@@ -377,43 +377,43 @@ class GovernanceValidator:
             Severity.MEDIUM if not prometheus.exists() else Severity.INFO,
             f"Prometheus config {'exists' if prometheus.exists() else 'missing'}: {prometheus}"
         )
-    
+
     def _validate_tests(self) -> None:
         """Validate test suite."""
         logger.info("🧪 Validating Tests...")
-        
+
         tests_dir = self.workspace_root / "tests"
         test_count = len(list(tests_dir.glob("**/test_*.py"))) if tests_dir.exists() else 0
-        
+
         self._add_check(
             "Test Suite",
             test_count > 0,
             Severity.HIGH if test_count == 0 else Severity.INFO,
             f"Found {test_count} test files in {tests_dir}"
         )
-    
+
     def _validate_governance_files(self) -> None:
         """Validate governance file structure."""
         logger.info("📜 Validating Governance Files...")
-        
+
         # CORE-002 compliance
         prompts_dir = self.workspace_root / ".github" / "prompts"
         agents_dir = self.workspace_root / ".github" / "agents"
-        
+
         self._add_check(
             "Prompts Directory",
             prompts_dir.exists(),
             Severity.HIGH if not prompts_dir.exists() else Severity.INFO,
             f"Prompts directory {'exists' if prompts_dir.exists() else 'missing'}: {prompts_dir}"
         )
-        
+
         self._add_check(
             "Agents Directory",
             agents_dir.exists(),
             Severity.HIGH if not agents_dir.exists() else Severity.INFO,
             f"Agents directory {'exists' if agents_dir.exists() else 'missing'}: {agents_dir}"
         )
-    
+
     def _generate_report(self) -> ProductionReadinessReport:
         """Generate production readiness report from checks."""
         # Categorize issues
@@ -422,11 +422,11 @@ class GovernanceValidator:
         medium = [c for c in self.checks if not c.passed and c.severity == Severity.MEDIUM]
         low = [c for c in self.checks if not c.passed and c.severity == Severity.LOW]
         passed = [c for c in self.checks if c.passed]
-        
+
         # Calculate score
         total = len(self.checks)
         score = (len(passed) / total * 100) if total > 0 else 0.0
-        
+
         # Determine overall status
         if critical:
             status = "BLOCKED"
@@ -436,7 +436,7 @@ class GovernanceValidator:
             status = "READY WITH WARNINGS"
         else:
             status = "PRODUCTION READY"
-        
+
         # Build summary
         summary = {
             "infrastructure": f"{sum(1 for c in passed if 'infrastructure' in c.name.lower())} checks passed",
@@ -445,7 +445,7 @@ class GovernanceValidator:
             "security": f"{sum(1 for c in passed if 'secur' in c.name.lower() or 'owasp' in c.name.lower())} checks passed",
             "tests": f"{sum(1 for c in passed if 'test' in c.name.lower())} checks passed",
         }
-        
+
         return ProductionReadinessReport(
             overall_status=status,
             readiness_score=score,

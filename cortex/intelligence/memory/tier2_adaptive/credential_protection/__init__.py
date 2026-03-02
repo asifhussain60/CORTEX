@@ -293,7 +293,7 @@ class SecureCredentialStore:
             "status": CredentialStatus.ACTIVE,
             "metadata": metadata or {},
         }
-        
+
         self._access_log.append({
             "action": "store",
             "credential_id": credential_id,
@@ -315,7 +315,7 @@ class SecureCredentialStore:
         cred = self.store[credential_id]
         if cred["status"] != CredentialStatus.ACTIVE:
             return None
-        
+
         self._access_log.append({
             "action": "retrieve",
             "credential_id": credential_id,
@@ -351,13 +351,13 @@ class SecureCredentialStore:
             return False
 
         self.store[credential_id]["status"] = CredentialStatus.REVOKED
-        
+
         self._access_log.append({
             "action": "revoke",
             "credential_id": credential_id,
             "timestamp": datetime.utcnow().isoformat()
         })
-        
+
         return True
 
     def delete_credential(self, credential_id: str) -> bool:
@@ -376,7 +376,7 @@ class SecureCredentialStore:
 
     def expire_credential(self, credential_id: str) -> None:
         """Expire a credential.
-        
+
         Args:
             credential_id: Credential identifier.
         """
@@ -386,7 +386,7 @@ class SecureCredentialStore:
 
     def get_access_log(self) -> List[Dict[str, Any]]:
         """Get access log for credential operations.
-        
+
         Returns:
             List[Dict[str, Any]]: List of access log entries.
         """
@@ -396,7 +396,7 @@ class SecureCredentialStore:
 
     def rotate_key(self, credential_id: str, new_key_id: str) -> None:
         """Rotate encryption key for a credential.
-        
+
         Args:
             credential_id: Credential identifier.
             new_key_id: New encryption key identifier.
@@ -404,7 +404,7 @@ class SecureCredentialStore:
         if credential_id in self.store:
             if not hasattr(self, '_access_log'):
                 self._access_log = []
-            
+
             self._access_log.append({
                 "action": "key_rotation",
                 "credential_id": credential_id,
@@ -441,7 +441,7 @@ class KeyRotationManager:
 
     def __init__(self, store: Optional[SecureCredentialStore] = None) -> None:
         """Initialize key rotation manager.
-        
+
         Args:
             store: Optional credential store to manage.
         """
@@ -472,10 +472,10 @@ class KeyRotationManager:
         """
         # Support both parameter names for compatibility
         period = rotation_period_days if rotation_period_days is not None else days
-        
+
         self._rotation_schedule[credential_id] = period
         self._last_rotation[credential_id] = datetime.utcnow()
-        
+
         schedule = {
             "key_id": credential_id,
             "rotation_period_days": period,
@@ -490,25 +490,25 @@ class KeyRotationManager:
 
     def needs_rotation(self, credential_id: str) -> bool:
         """Check if credential needs key rotation.
-        
+
         Args:
             credential_id: Credential identifier.
-            
+
         Returns:
             bool: True if rotation is needed, False otherwise.
         """
         if credential_id not in self._rotation_schedule:
             return False
-        
+
         if credential_id not in self._last_rotation:
             return True
-        
+
         days_since_rotation = (datetime.utcnow() - self._last_rotation[credential_id]).days
         return days_since_rotation >= self._rotation_schedule[credential_id]
 
     def get_rotation_status(self) -> Dict[str, Dict[str, Any]]:
         """Get rotation status for all scheduled credentials.
-        
+
         Returns:
             Dict[str, Dict[str, Any]]: Rotation status for each credential.
         """
@@ -517,8 +517,8 @@ class KeyRotationManager:
             status[credential_id] = {
                 "needs_rotation": self.needs_rotation(credential_id),
                 "rotation_interval_days": self._rotation_schedule[credential_id],
-                "last_rotation": self._last_rotation.get(credential_id, "never").isoformat() 
-                    if isinstance(self._last_rotation.get(credential_id), datetime) 
+                "last_rotation": self._last_rotation.get(credential_id, "never").isoformat()
+                    if isinstance(self._last_rotation.get(credential_id), datetime)
                     else "never"
             }
         return status

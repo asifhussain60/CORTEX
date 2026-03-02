@@ -27,7 +27,7 @@ from .base import Analysis, CleanerInterface, Report, RollbackResult
 
 class OrphanedTestCleaner(CleanerInterface):
     """Cleaner for orphaned and misplaced test files."""
-    
+
     # Files that must NEVER be deleted from tests/ root
     PROTECTED_FILES: Set[str] = {
         "conftest.py",
@@ -35,19 +35,19 @@ class OrphanedTestCleaner(CleanerInterface):
         "pytest.ini",
         "baseline.json",
     }
-    
+
     # Patterns indicating phase-specific or temporary tests
     TEMP_PATTERNS: List[str] = [
         r"^phase[-_]?\d+.*\.py$",           # phase_26_*, phase-53-*
         r"^test_temp[-_].*\.py$",            # test_temp_*
         r"^conftest_.*\.py$",                # conftest_optimize.py
     ]
-    
+
     # Patterns for tests that should be in subdirectories
     MISPLACED_PATTERNS: List[str] = [
         r"^test_.*\.py$",                    # All test_*.py files
     ]
-    
+
     # Proper test subdirectories
     PROPER_SUBDIRS: Set[str] = {
         "unit",
@@ -58,13 +58,13 @@ class OrphanedTestCleaner(CleanerInterface):
         "regression",
         "contracts",
     }
-    
+
     # Minimum age in days before cleanup
     MIN_AGE_DAYS: int = 14
-    
+
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize orphaned test cleaner.
-        
+
         Args:
             config: Configuration with repo_root and options
         """
@@ -74,43 +74,43 @@ class OrphanedTestCleaner(CleanerInterface):
         self.min_age_days = config.get("min_age_days", self.MIN_AGE_DAYS)
         self.dry_run = config.get("dry_run", False)
         self.relocate_mode = config.get("relocate_mode", False)  # Move instead of delete
-        
+
         # Compile patterns
         self._temp_patterns = [re.compile(p, re.IGNORECASE) for p in self.TEMP_PATTERNS]
         self._misplaced_patterns = [re.compile(p, re.IGNORECASE) for p in self.MISPLACED_PATTERNS]
-    
+
     @property
     def name(self) -> str:
         """Get cleaner name."""
         return "OrphanedTestCleaner"
-    
+
     @property
     def version(self) -> str:
         """Get cleaner version."""
         return "1.0.0"
-    
+
     @property
     def domain(self) -> str:
         """Get cleaner domain."""
         return "orphaned_tests"
-    
+
     def _is_protected(self, filename: str) -> bool:
         """Check if file is protected from cleanup.
-        
+
         Args:
             filename: File name to check
-        
+
         Returns:
             True if protected
         """
         return filename in self.PROTECTED_FILES
-    
+
     def _is_temp_test(self, filename: str) -> bool:
         """Check if file matches temporary test patterns.
-        
+
         Args:
             filename: File name to check
-        
+
         Returns:
             True if temporary/phase-specific
         """
@@ -118,13 +118,13 @@ class OrphanedTestCleaner(CleanerInterface):
             if pattern.match(filename):
                 return True
         return False
-    
+
     def _is_misplaced_test(self, filename: str) -> bool:
         """Check if file is a test that should be in subdirectory.
-        
+
         Args:
             filename: File name to check
-        
+
         Returns:
             True if misplaced test
         """
@@ -132,13 +132,13 @@ class OrphanedTestCleaner(CleanerInterface):
             if pattern.match(filename):
                 return True
         return False
-    
+
     def _get_file_age_days(self, file_path: Path) -> int:
         """Get file age in days.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Age in days
         """
@@ -148,30 +148,30 @@ class OrphanedTestCleaner(CleanerInterface):
             return age.days
         except OSError:
             return 0
-    
+
     def _is_imported_elsewhere(self, file_path: Path) -> bool:
         """Check if file is imported by other test files.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             True if imported elsewhere
         """
         module_name = file_path.stem
-        
+
         # Search for imports in tests directory
         for test_file in self.tests_dir.rglob("*.py"):
             if test_file == file_path:
                 continue
-            
+
             try:
                 content = test_file.read_text()
-                
+
                 # Quick string check first
                 if module_name not in content:
                     continue
-                
+
                 # Parse AST for accurate import detection
                 try:
                     tree = ast.parse(content)
@@ -193,47 +193,47 @@ class OrphanedTestCleaner(CleanerInterface):
                     ]
                     if any(p in content for p in import_patterns):
                         return True
-                        
+
             except (OSError, UnicodeDecodeError):
                 continue
-        
+
         return False
-    
+
     def _suggest_target_dir(self, filename: str, file_path: Path) -> str:
         """Suggest target subdirectory for misplaced test.
-        
+
         Args:
             filename: Test file name
             file_path: Full path to file
-        
+
         Returns:
             Suggested subdirectory name
         """
         # Try to infer from file content
         try:
             content = file_path.read_text()
-            
+
             # Check for integration markers
             if "integration" in content.lower() or "@pytest.mark.integration" in content:
                 return "integration"
-            
+
             # Check for e2e markers
             if "e2e" in content.lower() or "end-to-end" in content.lower():
                 return "e2e"
-            
+
             # Check for performance markers
             if "benchmark" in content.lower() or "@pytest.mark.slow" in content:
                 return "performance"
-            
+
             # Default to unit
             return "unit"
-            
+
         except (OSError, UnicodeDecodeError):
             return "unit"
-    
+
     def analyze(self) -> Analysis:
         """Analyze tests/ root for orphaned files.
-        
+
         Returns:
             Analysis with detected orphaned tests
         """
@@ -241,7 +241,7 @@ class OrphanedTestCleaner(CleanerInterface):
         logs: List[str] = []
         issues: List[Dict[str, Any]] = []
         files_scanned = 0
-        
+
         if not self.tests_dir.exists():
             logs.append(f"Tests directory not found: {self.tests_dir}")
             return Analysis(
@@ -252,43 +252,43 @@ class OrphanedTestCleaner(CleanerInterface):
                 plan={"issues": []},
                 logs=logs,
             )
-        
+
         logs.append(f"Scanning tests root: {self.tests_dir}")
-        
+
         # Only scan root level (not subdirectories)
         for test_file in self.tests_dir.iterdir():
             if not test_file.is_file():
                 continue
-            
+
             if not test_file.suffix == ".py":
                 continue
-            
+
             files_scanned += 1
             filename = test_file.name
-            
+
             # Skip protected files
             if self._is_protected(filename):
                 logs.append(f"Protected: {filename}")
                 continue
-            
+
             # Determine issue type
             is_temp = self._is_temp_test(filename)
             is_misplaced = self._is_misplaced_test(filename)
-            
+
             if not is_temp and not is_misplaced:
                 continue
-            
+
             # Check age for temp files
             age_days = self._get_file_age_days(test_file)
             if is_temp and age_days < self.min_age_days:
                 logs.append(f"Too young ({age_days}d): {filename}")
                 continue
-            
+
             # Check if imported elsewhere
             if self._is_imported_elsewhere(test_file):
                 logs.append(f"Imported elsewhere: {filename}")
                 continue
-            
+
             # Determine action
             if is_temp:
                 action = "delete"
@@ -297,7 +297,7 @@ class OrphanedTestCleaner(CleanerInterface):
                 action = "relocate" if self.relocate_mode else "delete"
                 target_dir = self._suggest_target_dir(filename, test_file)
                 reason = f"Misplaced test, should be in tests/{target_dir}/"
-            
+
             issues.append({
                 "type": "temp_test" if is_temp else "misplaced_test",
                 "path": str(test_file),
@@ -309,7 +309,7 @@ class OrphanedTestCleaner(CleanerInterface):
                 "reason": reason,
             })
             logs.append(f"Candidate ({action}): {filename}")
-        
+
         return Analysis(
             cleaner_id=self.name,
             timestamp=timestamp,
@@ -318,13 +318,13 @@ class OrphanedTestCleaner(CleanerInterface):
             plan={"issues": issues},
             logs=logs,
         )
-    
+
     def execute(self, plan: Any) -> Report:
         """Execute cleanup of orphaned tests.
-        
+
         Args:
             plan: Execution plan (either Analysis object or dict with issues)
-        
+
         Returns:
             Report with cleanup results
         """
@@ -332,7 +332,7 @@ class OrphanedTestCleaner(CleanerInterface):
         logs: List[str] = []
         actions_taken: List[Dict[str, Any]] = []
         errors: List[str] = []
-        
+
         # Handle both Analysis object and dict
         if hasattr(plan, 'plan'):
             # It's an Analysis object
@@ -342,11 +342,11 @@ class OrphanedTestCleaner(CleanerInterface):
             issues = plan.get("issues", [])
         else:
             issues = []
-        
+
         for issue in issues:
             file_path = Path(issue["path"])
             action = issue["action"]
-            
+
             try:
                 if action == "delete":
                     if self.dry_run:
@@ -354,41 +354,41 @@ class OrphanedTestCleaner(CleanerInterface):
                     else:
                         file_path.unlink()
                         logs.append(f"Deleted: {file_path.name}")
-                    
+
                     actions_taken.append({
                         "action": "delete",
                         "path": str(file_path),
                         "dry_run": self.dry_run,
                     })
-                    
+
                 elif action == "relocate":
                     target_dir = self.tests_dir / issue.get("target_dir", "unit")
                     target_path = target_dir / file_path.name
-                    
+
                     if self.dry_run:
                         logs.append(f"[DRY RUN] Would move: {file_path.name} → {target_dir.name}/")
                     else:
                         target_dir.mkdir(parents=True, exist_ok=True)
                         file_path.rename(target_path)
                         logs.append(f"Moved: {file_path.name} → {target_dir.name}/")
-                    
+
                     actions_taken.append({
                         "action": "relocate",
                         "source": str(file_path),
                         "target": str(target_path),
                         "dry_run": self.dry_run,
                     })
-                    
+
             except Exception as e:
                 error_msg = f"Failed to {action} {file_path.name}: {e}"
                 errors.append(error_msg)
                 logs.append(f"ERROR: {error_msg}")
-        
+
         deleted = len([a for a in actions_taken if a["action"] == "delete" and not a.get("dry_run")])
         relocated = len([a for a in actions_taken if a["action"] == "relocate" and not a.get("dry_run")])
-        
+
         status = "SUCCESS" if len(errors) == 0 else ("PARTIAL" if (deleted + relocated) > 0 else "FAILED")
-        
+
         return Report(
             cleaner_id=self.name,
             timestamp=timestamp,
@@ -398,13 +398,13 @@ class OrphanedTestCleaner(CleanerInterface):
             errors=errors,
             logs=logs,
         )
-    
+
     def rollback(self, report: Report) -> RollbackResult:
         """Rollback is not supported.
-        
+
         Args:
             report: Report from execute
-        
+
         Returns:
             RollbackResult indicating not supported
         """

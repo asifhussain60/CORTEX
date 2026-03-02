@@ -15,8 +15,8 @@ class RuleApplicabilityEngine:
         self._initialized = True
 
     def get_applicable_rules(
-        self, 
-        all_rules: List[Dict[str, Any]], 
+        self,
+        all_rules: List[Dict[str, Any]],
         context: Dict[str, Any]
     ) -> List[Dict[str, Any]]:
         """Get rules applicable to given context"""
@@ -24,8 +24,8 @@ class RuleApplicabilityEngine:
         return all_rules
 
     def is_rule_applicable(
-        self, 
-        rule: Dict[str, Any], 
+        self,
+        rule: Dict[str, Any],
         context: Dict[str, Any]
     ) -> bool:
         """Check if a rule is applicable to given context"""

@@ -177,7 +177,7 @@ def onboard_repository_tool(
 ) -> Dict[str, Any]:
     """
     Enhanced MCP tool for repository onboarding with knowledge persistence.
-    
+
     ENFORCEMENT: Validates orchestrator_context on entry.
 
     Args:
@@ -216,14 +216,14 @@ def onboard_repository_tool(
     # ENFORCEMENT: Validate orchestrator routing (only in non-test mode, only if context provided)
     if not test_mode and orchestrator_context is not None:
         validate_orchestrator_context(orchestrator_context)
-    
+
     # Add timestamp if missing
     if orchestrator_context and "timestamp" not in orchestrator_context:
         orchestrator_context["timestamp"] = datetime.now().isoformat()
-    
+
     try:
         repo_path = Path(repository_path)
-        
+
         # Check if repository exists
         if not repo_path.exists():
             return OnboardingResult(
@@ -249,7 +249,7 @@ def onboard_repository_tool(
                     artifacts={},
                     error=f"BLOCKED: ephemeral path detected: {repository_path}"
                 ).to_dict()
-        
+
         # Initialize components
         orchestrator = EnhancedOnboardingOrchestrator()
 
@@ -295,7 +295,7 @@ def onboard_repository_tool(
             try:
                 # Get repo name
                 repo_name = repo_path.name.lower()
-                
+
                 # Determine base directory: test mode or production
                 if test_mode and test_output_dir:
                     # Validate test_output_dir is a valid path string, not a function object
@@ -310,15 +310,15 @@ def onboard_repository_tool(
                     # Go up to CORTEX root
                     base_dir = Path(__file__).parent.parent.parent.parent
                     logger.info(f"PRODUCTION MODE: Using project root: {base_dir}")
-                
+
                 # Company structure for repository artifacts
                 company_repos = base_dir / "cortex-registry" / "company" / "repos"
                 repo_artifacts_dir = company_repos / repo_name
-                
+
                 # Legacy locations for backward compatibility (registry only)
                 registry_kb = base_dir / "cortex-registry" / "knowledge-base" / "repositories"
                 registry_ast = base_dir / "cortex-registry" / "artifacts" / "ast-graphs"
-                
+
                 # Create all directories (NO cortex.intelligence writes)
                 repo_artifacts_dir.mkdir(parents=True, exist_ok=True)
                 registry_kb.mkdir(parents=True, exist_ok=True)
@@ -338,9 +338,9 @@ def onboard_repository_tool(
                         "generated_at": now_ts,
                     }
                     tab_file.write_text(json.dumps(tab_data, indent=2))
-                
+
                 files_generated = []
-                
+
                 # Generate YAML file in cortex-registry/company/repos/{repo_name}/
                 yaml_path = repo_artifacts_dir / "repository.yaml"
                 yaml_data = {
@@ -359,14 +359,14 @@ def onboard_repository_tool(
                     yaml.dump(yaml_data, f, default_flow_style=False)
                 logger.info(f"Generated YAML: {yaml_path}")
                 files_generated.append(str(yaml_path))
-                
+
                 # Also generate in legacy location for backward compatibility
                 yaml_path_legacy = registry_kb / f"{repo_name}.yaml"
                 with open(yaml_path_legacy, 'w') as f:
                     yaml.dump(yaml_data, f, default_flow_style=False)
                 logger.info(f"Generated legacy YAML: {yaml_path_legacy}")
                 files_generated.append(str(yaml_path_legacy))
-                
+
                 # Generate AST graph file in cortex-registry/company/repos/{repo_name}/
                 ast_path = repo_artifacts_dir / "ast-graph.json"
                 ast_data = {
@@ -377,7 +377,7 @@ def onboard_repository_tool(
                         "generated_at": now_ts,
                     }
                 }
-                
+
                 # Scan for code files and generate basic AST nodes
                 code_extensions = {'.py', '.ts', '.js', '.rs', '.cs', '.java', '.go'}
                 file_count = 0
@@ -392,19 +392,19 @@ def onboard_repository_tool(
                             "extension": ext
                         })
                         file_count += 1
-                
+
                 with open(ast_path, 'w') as f:
                     json.dump(ast_data, f, indent=2)
                 logger.info(f"Generated AST graph: {ast_path} ({file_count} nodes)")
                 files_generated.append(str(ast_path))
-                
+
                 # Also generate in legacy location
                 ast_path_legacy = registry_ast / f"{repo_name}_ast.json"
                 with open(ast_path_legacy, 'w') as f:
                     json.dump(ast_data, f, indent=2)
                 logger.info(f"Generated legacy AST: {ast_path_legacy}")
                 files_generated.append(str(ast_path_legacy))
-                
+
                 # Generate profile JSON in cortex-registry (NOT cortex.intelligence)
                 profile_path = repo_artifacts_dir / "profile.json"
                 profile_data = {
@@ -425,7 +425,7 @@ def onboard_repository_tool(
                     json.dump(profile_data, f, indent=2)
                 logger.info(f"Generated profile: {profile_path}")
                 files_generated.append(str(profile_path))
-                
+
                 # Generate onboarding summary in company/repos/{repo_name}/
                 summary_path = repo_artifacts_dir / "onboarding-summary.json"
                 summary_data = {
@@ -450,7 +450,7 @@ def onboard_repository_tool(
                     json.dump(summary_data, f, indent=2)
                 logger.info(f"Generated summary: {summary_path}")
                 files_generated.append(str(summary_path))
-                
+
                 artifacts = {
                     "files_generated": files_generated,
                     "company_artifacts_dir": str(repo_artifacts_dir),
@@ -461,7 +461,7 @@ def onboard_repository_tool(
                     "total_files": len(files_generated),
                     "ast_node_count": file_count
                 }
-                
+
             except Exception as e:
                 logger.warning(f"Artifact generation failed (non-blocking): {e}")
                 warnings.append(f"Artifact generation failed: {str(e)}")
@@ -479,13 +479,13 @@ def onboard_repository_tool(
                     "brain_enhancement": brain_enhancement,
                     "artifacts": artifacts
                 }
-                
+
                 validation_results = enforcement_agent.validate(validation_context)
                 blocking_violations = [
                     r for r in validation_results
                     if not r.passed and r.level.name == "BLOCKING"
                 ]
-                
+
                 if blocking_violations:
                     logger.warning(f"Governance warnings (non-blocking): {blocking_violations}")
                     warnings.append(f"Governance warnings: {[v.message for v in blocking_violations]}")

@@ -239,7 +239,7 @@ class WorkflowComposer:
             if orchestrator is None:
                 error_msg = f"Orchestrator '{step.orchestrator_name}' not found"
                 logger.warning(f"Phase 84: {error_msg}")
-                
+
                 result = WorkflowExecutionResult(
                     success=False,
                     steps_completed=steps_completed,
@@ -256,7 +256,7 @@ class WorkflowComposer:
                 if not step_result.get("success", False):
                     error_msg = f"Step '{step.step_id}' failed"
                     logger.warning(f"Phase 84: {error_msg}")
-                    
+
                     result = WorkflowExecutionResult(
                         success=False,
                         steps_completed=steps_completed,
@@ -269,7 +269,7 @@ class WorkflowComposer:
             except Exception as e:
                 error_msg = f"Step '{step.step_id}' raised exception: {e}"
                 logger.error(f"Phase 84: {error_msg}")
-                
+
                 result = WorkflowExecutionResult(
                     success=False,
                     steps_completed=steps_completed,

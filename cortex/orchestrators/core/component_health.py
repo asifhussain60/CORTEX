@@ -39,7 +39,7 @@ class ComponentHealth:
     error_count: int = 0
     success_count: int = 0
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def record_success(self) -> None:
         """Record successful component operation."""
         self.success_count += 1
@@ -54,22 +54,22 @@ class ComponentHealth:
                     self.status = HealthStatus.HEALTHY
         else:
             self.status = HealthStatus.HEALTHY
-    
+
     def record_failure(self, error: Optional[Exception] = None) -> None:
         """Record failed component operation."""
         self.error_count += 1
         self.last_check = datetime.now()
-        
+
         if error:
             self.metadata["last_error"] = str(error)
             self.metadata["last_error_time"] = datetime.now().isoformat()
-        
+
         # Degrade status based on error count
         if self.error_count >= 5:
             self.status = HealthStatus.UNHEALTHY
         elif self.error_count >= 2:
             self.status = HealthStatus.DEGRADED
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -85,10 +85,10 @@ class ComponentHealth:
 
 class ComponentHealthTracker:
     """Tracks health of system components for monitoring and graceful degradation.
-    
+
     Used by MasterOrchestrator to monitor critical components and enable
     graceful degradation when components fail.
-    
+
     Example:
         >>> tracker = ComponentHealthTracker()
         >>> tracker.register_component("MasterOrchestrator", ComponentType.CRITICAL)
@@ -96,11 +96,11 @@ class ComponentHealthTracker:
         >>> tracker.get_health_status("MasterOrchestrator")
         'HEALTHY'
     """
-    
+
     def __init__(self) -> None:
         """Initialize component health tracker."""
         self._components: Dict[str, ComponentHealth] = {}
-    
+
     def register_component(
         self,
         name: str,
@@ -108,7 +108,7 @@ class ComponentHealthTracker:
         metadata: Optional[Dict[str, Any]] = None
     ) -> None:
         """Register a component for health tracking.
-        
+
         Args:
             name: Component name
             component_type: Classification of component importance
@@ -126,26 +126,26 @@ class ComponentHealthTracker:
                 component_type=component_type,
                 metadata=metadata or {}
             )
-    
+
     def record_success(self, name: str) -> None:
         """Record successful operation for component.
-        
+
         Args:
             name: Component name
         """
         if name not in self._components:
             # Auto-register as OPTIONAL if not registered
             self.register_component(name, ComponentType.OPTIONAL)
-        
+
         self._components[name].record_success()
-    
+
     def record_failure(
         self,
         name: str,
         error: Optional[Exception] = None
     ) -> None:
         """Record failed operation for component.
-        
+
         Args:
             name: Component name
             error: Optional exception that caused failure
@@ -153,45 +153,45 @@ class ComponentHealthTracker:
         if name not in self._components:
             # Auto-register as OPTIONAL if not registered
             self.register_component(name, ComponentType.OPTIONAL)
-        
+
         self._components[name].record_failure(error)
-    
+
     def get_health_status(self, name: str) -> str:
         """Get health status of component.
-        
+
         Args:
             name: Component name
-            
+
         Returns:
             Health status string (HEALTHY, DEGRADED, UNHEALTHY, UNKNOWN)
         """
         if name not in self._components:
             return HealthStatus.UNKNOWN.value
-        
+
         return self._components[name].status.value
-    
+
     def get_component_health(self, name: str) -> Optional[ComponentHealth]:
         """Get full health information for component.
-        
+
         Args:
             name: Component name
-            
+
         Returns:
             ComponentHealth instance or None if not registered
         """
         return self._components.get(name)
-    
+
     def get_all_components(self) -> List[ComponentHealth]:
         """Get health information for all components.
-        
+
         Returns:
             List of ComponentHealth instances
         """
         return list(self._components.values())
-    
+
     def get_critical_components(self) -> List[ComponentHealth]:
         """Get health information for critical components.
-        
+
         Returns:
             List of ComponentHealth instances for critical components
         """
@@ -199,36 +199,36 @@ class ComponentHealthTracker:
             component for component in self._components.values()
             if component.component_type == ComponentType.CRITICAL
         ]
-    
+
     def is_system_healthy(self) -> bool:
         """Check if system is healthy overall.
-        
+
         System is healthy if all CRITICAL components are HEALTHY or DEGRADED.
-        
+
         Returns:
             True if system is healthy, False otherwise
         """
         critical_components = self.get_critical_components()
-        
+
         if not critical_components:
             # No critical components registered - assume healthy
             return True
-        
+
         for component in critical_components:
             if component.status == HealthStatus.UNHEALTHY:
                 return False
-        
+
         return True
-    
+
     def get_system_health_summary(self) -> Dict[str, Any]:
         """Get summary of system health.
-        
+
         Returns:
             Dictionary with health summary
         """
         all_components = self.get_all_components()
         critical_components = self.get_critical_components()
-        
+
         healthy_count = sum(
             1 for c in all_components
             if c.status == HealthStatus.HEALTHY
@@ -241,7 +241,7 @@ class ComponentHealthTracker:
             1 for c in all_components
             if c.status == HealthStatus.UNHEALTHY
         )
-        
+
         return {
             "is_healthy": self.is_system_healthy(),
             "total_components": len(all_components),
@@ -251,10 +251,10 @@ class ComponentHealthTracker:
             "unhealthy_count": unhealthy_count,
             "components": [c.to_dict() for c in all_components],
         }
-    
+
     def reset_component(self, name: str) -> None:
         """Reset health tracking for component.
-        
+
         Args:
             name: Component name
         """
@@ -263,7 +263,7 @@ class ComponentHealthTracker:
             self._components[name].error_count = 0
             self._components[name].success_count = 0
             self._components[name].last_check = None
-    
+
     def get_initialization_status(self) -> List[Dict[str, Any]]:
         """Get initialization status for all registered components.
 
@@ -286,7 +286,7 @@ class ComponentHealthTracker:
 
     def unregister_component(self, name: str) -> None:
         """Unregister component from health tracking.
-        
+
         Args:
             name: Component name
         """

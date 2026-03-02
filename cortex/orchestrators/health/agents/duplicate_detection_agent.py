@@ -27,22 +27,22 @@ from .base_agent import (
 
 class DuplicateDetectionAgent(BaseHealthAgent):
     """Agent for detecting duplicate files and implementations.
-    
+
     Detects:
     - Exact file duplicates (identical content)
     - Near-duplicate Python classes (same name, similar LOC)
     - Near-duplicate YAML files (similar structure)
     - Multiple files with same basename in different locations
-    
+
     Attributes:
         name: Agent name
         description: Agent description
         config: Configuration with exclude patterns
     """
-    
+
     def __init__(self, config: Dict[str, any] = None) -> None:
         """Initialize Duplicate Detection Agent.
-        
+
         Args:
             config: Optional configuration with:
                 - exclude_patterns: List of glob patterns to exclude
@@ -55,7 +55,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             description="Detects CORE-035 violations (duplicate files and implementations)",
             config=config,
         )
-        
+
         self.exclude_patterns = self.config.get("exclude_patterns", [
             "*/_archives/*",
             "*/_workspaces/*",
@@ -65,42 +65,42 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             "*/__pycache__/*",
             "*/.mypy_cache/*",
         ])
-        
+
         self.check_python = self.config.get("check_python", True)
         self.check_yaml = self.config.get("check_yaml", True)
         self.similarity_threshold = self.config.get("similarity_threshold", 0.8)
-    
+
     def check(self, workspace_root: Path) -> HealthCheckResult:
         """Run duplicate detection check.
-        
+
         Args:
             workspace_root: Root path of workspace to check
-        
+
         Returns:
             HealthCheckResult with detected duplicates
         """
         start_time = time.time()
         issues: List[HealthIssue] = []
         files_scanned = 0
-        
+
         # Find exact duplicates by hash
         if self.check_python:
             python_issues, python_scanned = self._check_python_duplicates(workspace_root)
             issues.extend(python_issues)
             files_scanned += python_scanned
-        
+
         if self.check_yaml:
             yaml_issues, yaml_scanned = self._check_yaml_duplicates(workspace_root)
             issues.extend(yaml_issues)
             files_scanned += yaml_scanned
-        
+
         # Find basename duplicates (same filename in different locations)
         basename_issues, basename_scanned = self._check_basename_duplicates(workspace_root)
         issues.extend(basename_issues)
         files_scanned += basename_scanned
-        
+
         duration = time.time() - start_time
-        
+
         return HealthCheckResult(
             agent_name=self.name,
             issues=issues,
@@ -112,25 +112,25 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                 "similarity_threshold": self.similarity_threshold,
             },
         )
-    
+
     def _check_python_duplicates(self, workspace_root: Path) -> Tuple[List[HealthIssue], int]:
         """Check for duplicate Python files.
-        
+
         Args:
             workspace_root: Workspace root path
-        
+
         Returns:
             Tuple of (issues list, files scanned count)
         """
         issues: List[HealthIssue] = []
         hash_map: Dict[str, List[Path]] = defaultdict(list)
         files_scanned = 0
-        
+
         # Find all Python files
         for py_file in workspace_root.rglob("*.py"):
             if self._should_exclude(py_file, workspace_root):
                 continue
-            
+
             # Skip trivial __init__.py files (Python package markers)
             if py_file.name == "__init__.py":
                 try:
@@ -141,7 +141,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                         continue
                 except Exception:
                     pass
-            
+
             try:
                 file_hash = self._calculate_file_hash(py_file)
                 hash_map[file_hash].append(py_file)
@@ -149,7 +149,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             except Exception as e:
                 # Skip files that can't be read
                 continue
-        
+
         # Report duplicates
         for file_hash, files in hash_map.items():
             if len(files) > 1:
@@ -157,18 +157,18 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                 all_empty = all(f.stat().st_size == 0 for f in files)
                 if all_empty:
                     continue  # Skip empty file duplicates
-                
+
                 # Get file sizes for SSOT determination
                 file_info = [(f, f.stat().st_size) for f in files]
                 file_info.sort(key=lambda x: x[1], reverse=True)  # Largest first
-                
+
                 ssot_file = file_info[0][0]
                 duplicate_files = [f[0] for f in file_info[1:]]
-                
+
                 for dup_file in duplicate_files:
                     rel_path = dup_file.relative_to(workspace_root)
                     ssot_rel_path = ssot_file.relative_to(workspace_root)
-                    
+
                     # Check if this is a documented redirect (CORE-035 compliant)
                     try:
                         content = dup_file.read_text()
@@ -177,7 +177,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                             continue
                     except Exception:
                         pass
-                    
+
                     issues.append(HealthIssue(
                         category=HealthIssueCategory.DUPLICATE,
                         severity=HealthIssueSeverity.CRITICAL,
@@ -192,34 +192,34 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                             "duplicate_size": dup_file.stat().st_size,
                         },
                     ))
-        
+
         return issues, files_scanned
-    
+
     def _check_yaml_duplicates(self, workspace_root: Path) -> Tuple[List[HealthIssue], int]:
         """Check for duplicate YAML files.
-        
+
         Args:
             workspace_root: Workspace root path
-        
+
         Returns:
             Tuple of (issues list, files scanned count)
         """
         issues: List[HealthIssue] = []
         hash_map: Dict[str, List[Path]] = defaultdict(list)
         files_scanned = 0
-        
+
         # Find all YAML files
         for yaml_file in list(workspace_root.rglob("*.yaml")) + list(workspace_root.rglob("*.yml")):
             if self._should_exclude(yaml_file, workspace_root):
                 continue
-            
+
             try:
                 file_hash = self._calculate_file_hash(yaml_file)
                 hash_map[file_hash].append(yaml_file)
                 files_scanned += 1
             except Exception:
                 continue
-        
+
         # Report duplicates
         for file_hash, files in hash_map.items():
             if len(files) > 1:
@@ -234,11 +234,11 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                     file_info.sort(key=lambda x: x[1], reverse=True)
                     ssot_file = file_info[0][0]
                     duplicate_files = [f[0] for f in file_info[1:]]
-                
+
                 for dup_file in duplicate_files:
                     rel_path = dup_file.relative_to(workspace_root)
                     ssot_rel_path = ssot_file.relative_to(workspace_root)
-                    
+
                     issues.append(HealthIssue(
                         category=HealthIssueCategory.DUPLICATE,
                         severity=HealthIssueSeverity.CRITICAL,
@@ -251,31 +251,31 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                             "file_hash": file_hash,
                         },
                     ))
-        
+
         return issues, files_scanned
-    
+
     def _check_basename_duplicates(self, workspace_root: Path) -> Tuple[List[HealthIssue], int]:
         """Check for files with same basename in different locations.
-        
+
         Args:
             workspace_root: Workspace root path
-        
+
         Returns:
             Tuple of (issues list, files scanned count)
         """
         issues: List[HealthIssue] = []
         basename_map: Dict[str, List[Path]] = defaultdict(list)
         files_scanned = 0
-        
+
         # Find all Python files
         for py_file in workspace_root.rglob("*.py"):
             if self._should_exclude(py_file, workspace_root):
                 continue
-            
+
             basename = py_file.name
             basename_map[basename].append(py_file)
             files_scanned += 1
-        
+
         # Report basename duplicates
         # Exclude common legitimate patterns (models.py, __main__.py, etc.)
         common_module_names = {
@@ -286,12 +286,12 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             "test_*.py",  # Test files
             "bootstrap.py",  # Legitimate in different contexts
         }
-        
+
         for basename, files in basename_map.items():
             # Skip common module names and test files
             if basename in common_module_names or basename.startswith("test_"):
                 continue
-                
+
             if len(files) > 1:
                 # Check if files are actually different (not exact duplicates)
                 unique_hashes = set()
@@ -300,22 +300,22 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                         unique_hashes.add(self._calculate_file_hash(f))
                     except Exception:
                         pass
-                
+
                 if len(unique_hashes) > 1:
                     # Check if files are in completely separate package hierarchies
                     # (e.g., cortex/wiring/ vs cortex/intelligence/ is OK)
                     paths = [str(f.relative_to(workspace_root)) for f in files]
                     root_packages = set(p.split('\\')[0] if '\\' in p else p.split('/')[0] for p in paths)
-                    
+
                     # If all files are in different root packages, it's legitimate
                     if len(root_packages) >= len(files):
                         continue
-                    
+
                     # Different content, same name = potential confusion
                     for i, file in enumerate(files[1:], 1):
                         rel_path = file.relative_to(workspace_root)
                         primary_rel_path = files[0].relative_to(workspace_root)
-                        
+
                         issues.append(HealthIssue(
                             category=HealthIssueCategory.MULTIPLE_EXECUTION_PATHS,
                             severity=HealthIssueSeverity.HIGH,
@@ -328,15 +328,15 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                                 "duplicate_type": "basename_collision",
                             },
                         ))
-        
+
         return issues, files_scanned
-    
+
     def _calculate_file_hash(self, file_path: Path) -> str:
         """Calculate SHA256 hash of file content.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Hex digest of file hash
         """
@@ -345,25 +345,25 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             for byte_block in iter(lambda: f.read(4096), b""):
                 sha256_hash.update(byte_block)
         return sha256_hash.hexdigest()
-    
+
     def _should_exclude(self, file_path: Path, workspace_root: Path) -> bool:
         """Check if file should be excluded from checking.
-        
+
         Args:
             file_path: File path to check
             workspace_root: Workspace root for relative path calculation
-        
+
         Returns:
             True if file should be excluded, False otherwise
         """
         rel_path = str(file_path.relative_to(workspace_root))
-        
+
         for pattern in self.exclude_patterns:
             # Simple glob matching
             pattern_clean = pattern.replace("*", "").replace("/", "")
             if pattern_clean in rel_path:
                 return True
-        
+
         return False
 
 

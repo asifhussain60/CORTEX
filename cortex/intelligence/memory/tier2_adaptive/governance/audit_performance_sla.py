@@ -20,7 +20,7 @@ class SLAStatus(Enum):
 @dataclass
 class SLAResult:
     """SLA evaluation result.
-    
+
     Attributes:
         status: Compliance status
         duration_ms: Operation duration in milliseconds
@@ -34,7 +34,7 @@ class SLAResult:
 @dataclass
 class OperationResult:
     """Result wrapper for operation recording.
-    
+
     Attributes:
         success: Whether operation succeeded
         value: SLAResult if successful
@@ -45,14 +45,14 @@ class OperationResult:
 
 class AuditPerformanceSLA:
     """Audit performance SLA tracker.
-    
+
     Tracks audit operation performance against SLA targets.
-    
+
     Attributes:
         operations: List of recorded operations
         sla_targets: SLA thresholds by operation type
     """
-    
+
     def __init__(self) -> None:
         """Initialize SLA tracker."""
         self.operations: List[Dict[str, Any]] = []
@@ -62,7 +62,7 @@ class AuditPerformanceSLA:
             "query": 150,
             "update": 200,
         }
-    
+
     def record_operation(
         self,
         operation_id: str,
@@ -71,19 +71,19 @@ class AuditPerformanceSLA:
         end_time: datetime
     ) -> OperationResult:
         """Record an audit operation.
-        
+
         Args:
             operation_id: Unique operation identifier
             operation_type: Type of operation (read, write, etc.)
             start_time: Operation start time
             end_time: Operation end time
-            
+
         Returns:
             OperationResult with SLA status
         """
         duration_ms = (end_time - start_time).total_seconds() * 1000
         threshold_ms = self.sla_targets.get(operation_type, 100)
-        
+
         # Determine status
         if duration_ms <= threshold_ms:
             status = SLAStatus.COMPLIANT
@@ -91,7 +91,7 @@ class AuditPerformanceSLA:
             status = SLAStatus.WARNING
         else:
             status = SLAStatus.VIOLATED
-        
+
         # Record operation
         self.operations.append({
             "operation_id": operation_id,
@@ -101,18 +101,18 @@ class AuditPerformanceSLA:
             "start_time": start_time,
             "end_time": end_time,
         })
-        
+
         result = SLAResult(
             status=status,
             duration_ms=duration_ms,
             threshold_ms=threshold_ms
         )
-        
+
         return OperationResult(success=True, value=result)
-    
+
     def get_sla_report(self) -> Dict[str, Any]:
         """Get SLA compliance report.
-        
+
         Returns:
             Dictionary with compliance metrics
         """
@@ -124,12 +124,12 @@ class AuditPerformanceSLA:
                 "violations": 0,
                 "compliance_percentage": 0.0,
             }
-        
+
         total = len(self.operations)
         compliant = sum(1 for op in self.operations if op["status"] == SLAStatus.COMPLIANT)
         warnings = sum(1 for op in self.operations if op["status"] == SLAStatus.WARNING)
         violations = sum(1 for op in self.operations if op["status"] == SLAStatus.VIOLATED)
-        
+
         return {
             "total_operations": total,
             "compliant": compliant,
@@ -137,13 +137,13 @@ class AuditPerformanceSLA:
             "violations": violations,
             "compliance_percentage": (compliant / total) * 100 if total > 0 else 0.0,
         }
-    
+
     def check_sla(self, duration_ms: int) -> bool:
         """Check if duration meets SLA (backward compatibility).
-        
+
         Args:
             duration_ms: Duration in milliseconds
-            
+
         Returns:
             True if compliant
         """

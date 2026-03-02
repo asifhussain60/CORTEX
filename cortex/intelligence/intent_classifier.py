@@ -33,7 +33,7 @@ class IntentType(str, Enum):
 class IntentClassification:
     """
     Result of intent classification.
-    
+
     Attributes:
         intent: Classified intent type
         confidence: Confidence score (0.0-1.0)
@@ -46,14 +46,14 @@ class IntentClassification:
     is_ambiguous: bool
     alternative_intents: Dict[IntentType, float]
     reasoning: str
-    
+
     def needs_clarification(self, threshold: float = 0.75) -> bool:
         """
         Check if clarification is needed.
-        
+
         Args:
             threshold: Confidence threshold (default: 0.75)
-        
+
         Returns:
             True if clarification needed
         """
@@ -63,11 +63,11 @@ class IntentClassification:
 class IntentClassifier:
     """
     Enhanced intent classifier with 90% accuracy target.
-    
+
     Uses pattern recognition, keyword analysis, and confidence scoring
     to classify user requests with high accuracy.
     """
-    
+
     # Strong indicators for each intent (high confidence)
     STRONG_PATTERNS: Dict[IntentType, List[str]] = {
         IntentType.IMPLEMENT: [
@@ -156,7 +156,7 @@ class IntentClassifier:
             r"\bexplain\b.*\b(architecture|system|how)\b",
         ],
     }
-    
+
     # Weak indicators (lower confidence, may need clarification)
     WEAK_PATTERNS: Dict[IntentType, List[str]] = {
         IntentType.IMPLEMENT: [
@@ -174,22 +174,22 @@ class IntentClassifier:
             r"\benhance\b",
         ],
     }
-    
+
     def __init__(self) -> None:
         """Initialize the classifier."""
         # Compile patterns for performance
         self._strong_compiled = {
-            intent: [re.compile(pattern, re.IGNORECASE) 
+            intent: [re.compile(pattern, re.IGNORECASE)
                     for pattern in patterns]
             for intent, patterns in self.STRONG_PATTERNS.items()
         }
-        
+
         self._weak_compiled = {
-            intent: [re.compile(pattern, re.IGNORECASE) 
+            intent: [re.compile(pattern, re.IGNORECASE)
                     for pattern in patterns]
             for intent, patterns in self.WEAK_PATTERNS.items()
         }
-    
+
     def classify(
         self,
         user_request: str,
@@ -197,14 +197,14 @@ class IntentClassifier:
     ) -> IntentClassification:
         """
         Classify user request into intent type.
-        
+
         Args:
             user_request: User's request text
             context: Optional context from previous turns
-        
+
         Returns:
             IntentClassification with confidence and alternatives
-        
+
         Example:
             >>> classifier = IntentClassifier()
             >>> result = classifier.classify("implement authentication system")
@@ -219,23 +219,23 @@ class IntentClassifier:
                 alternative_intents={},
                 reasoning="Empty request"
             )
-        
+
         # Calculate scores for each intent
         intent_scores: Dict[IntentType, float] = {}
-        
+
         for intent in IntentType:
             if intent == IntentType.UNKNOWN:
                 continue
-            
+
             score = self._calculate_intent_score(
                 user_request,
                 intent,
                 context
             )
-            
+
             if score > 0:
                 intent_scores[intent] = score
-        
+
         # No matches found
         if not intent_scores:
             return IntentClassification(
@@ -245,16 +245,16 @@ class IntentClassifier:
                 alternative_intents={},
                 reasoning="No intent patterns matched"
             )
-        
+
         # Sort by score
         sorted_intents = sorted(
             intent_scores.items(),
             key=lambda x: x[1],
             reverse=True
         )
-        
+
         top_intent, top_score = sorted_intents[0]
-        
+
         # Check for ambiguity
         is_ambiguous = False
         if len(sorted_intents) > 1:
@@ -262,13 +262,13 @@ class IntentClassifier:
             # If second score is within 20% of top score, consider ambiguous
             if second_score >= top_score * 0.8:
                 is_ambiguous = True
-        
+
         # Build alternative intents (excluding top)
         alternatives = {
             intent: score
             for intent, score in sorted_intents[1:4]  # Top 3 alternatives
         }
-        
+
         # Generate reasoning
         reasoning = self._generate_reasoning(
             user_request,
@@ -276,10 +276,10 @@ class IntentClassifier:
             top_score,
             alternatives
         )
-        
+
         # Normalize confidence to 0-1 range
         confidence = min(1.0, top_score)
-        
+
         return IntentClassification(
             intent=top_intent,
             confidence=confidence,
@@ -287,7 +287,7 @@ class IntentClassifier:
             alternative_intents=alternatives,
             reasoning=reasoning
         )
-    
+
     def _calculate_intent_score(
         self,
         text: str,
@@ -296,45 +296,45 @@ class IntentClassifier:
     ) -> float:
         """
         Calculate score for a specific intent.
-        
+
         Args:
             text: User request text
             intent: Intent to score
             context: Optional context
-        
+
         Returns:
             Score (0.0-1.0+, higher is better)
         """
         score = 0.0
         strong_matches = 0
-        
+
         # Check strong patterns (high weight)
         if intent in self._strong_compiled:
             for pattern in self._strong_compiled[intent]:
                 if pattern.search(text):
                     score += 0.5  # Strong indicator adds 0.5 (increased from 0.4)
                     strong_matches += 1
-        
+
         # Check weak patterns (low weight)
         if intent in self._weak_compiled:
             for pattern in self._weak_compiled[intent]:
                 if pattern.search(text):
                     score += 0.15  # Weak indicator adds 0.15 (increased from 0.1)
-        
+
         # Context boost (if previous intent was same)
         if context and context.get("previous_intent") == intent.value:
             score += 0.2  # Increased from 0.15
-        
+
         # Keyword density bonus
         keyword_density = self._calculate_keyword_density(text, intent)
         score += keyword_density * 0.3  # Increased from 0.2
-        
+
         # Multiple strong matches bonus (shows clear intent)
         if strong_matches >= 2:
             score += 0.15
-        
+
         return score
-    
+
     def _calculate_keyword_density(
         self,
         text: str,
@@ -342,11 +342,11 @@ class IntentClassifier:
     ) -> float:
         """
         Calculate keyword density for intent.
-        
+
         Args:
             text: User request text
             intent: Intent type
-        
+
         Returns:
             Density score (0.0-1.0)
         """
@@ -362,25 +362,25 @@ class IntentClassifier:
             IntentType.DIGEST: ["digest", "extract", "learn", "summarize"],
             IntentType.QUERY: ["what", "how", "why", "explain", "documentation"],
         }
-        
+
         if intent not in keywords:
             return 0.0
-        
+
         text_lower = text.lower()
         words = text_lower.split()
-        
+
         if not words:
             return 0.0
-        
+
         # Count keyword matches
         matches = sum(
             1 for keyword in keywords[intent]
             if keyword in text_lower
         )
-        
+
         # Normalize by keyword count
         return min(1.0, matches / len(keywords[intent]))
-    
+
     def _generate_reasoning(
         self,
         text: str,
@@ -390,21 +390,21 @@ class IntentClassifier:
     ) -> str:
         """
         Generate human-readable reasoning for classification.
-        
+
         Args:
             text: User request text
             intent: Classified intent
             score: Confidence score
             alternatives: Alternative intents
-        
+
         Returns:
             Reasoning string
         """
         reasoning_parts = []
-        
+
         # Primary classification
         reasoning_parts.append(f"Classified as {intent.value.upper()}")
-        
+
         # Confidence level
         if score >= 0.85:
             reasoning_parts.append("(high confidence)")
@@ -412,7 +412,7 @@ class IntentClassifier:
             reasoning_parts.append("(moderate confidence)")
         else:
             reasoning_parts.append("(low confidence)")
-        
+
         # Alternatives if close
         if alternatives:
             alt_str = ", ".join(
@@ -420,7 +420,7 @@ class IntentClassifier:
                 for i, s in list(alternatives.items())[:2]
             )
             reasoning_parts.append(f"| alternatives: {alt_str}")
-        
+
         return " ".join(reasoning_parts)
 
 
@@ -430,14 +430,14 @@ def classify_intent(
 ) -> IntentClassification:
     """
     Convenience function to classify intent.
-    
+
     Args:
         user_request: User's request text
         context: Optional context
-    
+
     Returns:
         IntentClassification result
-    
+
     Example:
         >>> result = classify_intent("fix the login bug")
         >>> assert result.intent == IntentType.FIX
