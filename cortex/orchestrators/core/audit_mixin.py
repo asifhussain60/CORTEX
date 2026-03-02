@@ -66,7 +66,7 @@ class OrchestratorAuditMixin:
         if self._audit_session_id is None:
             # Try to get from orchestrator instance
             if hasattr(self, 'session_id'):
-                self._audit_session_id = getattr(self, 'session_id')
+                self._audit_session_id = self.session_id
             else:
                 self._audit_session_id = f"session-{uuid.uuid4().hex[:8]}"
         return self._audit_session_id

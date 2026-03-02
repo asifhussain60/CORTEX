@@ -164,7 +164,7 @@ class ParallelismCalculator:
             List of ExecutionLevel objects in order
         """
         # Calculate in-degrees (number of dependencies)
-        in_degree = {phase: 0 for phase in graph.phases}
+        in_degree = dict.fromkeys(graph.phases, 0)
 
         for phase_id, deps in graph.dependencies.items():
             in_degree[phase_id] = len(deps)

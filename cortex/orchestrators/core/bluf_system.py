@@ -472,7 +472,7 @@ class AnalyticsOrchestrator(OrchestratorProtocolMixin):
 
     def __init__(self) -> None:
         """Initialize AnalyticsOrchestrator."""
-        self.format_usage: Dict[ResponseFormat, int] = {fmt: 0 for fmt in ResponseFormat}
+        self.format_usage: Dict[ResponseFormat, int] = dict.fromkeys(ResponseFormat, 0)
         self.satisfaction_scores: Dict[ResponseFormat, List[float]] = {fmt: [] for fmt in ResponseFormat}
         self._activate_cross_cutting_hooks(operation="analytics_init")
 

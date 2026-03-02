@@ -305,7 +305,7 @@ class DependencyResolver(OrchestratorProtocolMixin):
             )
 
         # Kahn's algorithm for topological sort
-        in_degree = {phase: 0 for phase in graph.phases}
+        in_degree = dict.fromkeys(graph.phases, 0)
 
         # Calculate in-degrees: count how many dependencies each phase has
         for phase_id, deps in graph.dependencies.items():

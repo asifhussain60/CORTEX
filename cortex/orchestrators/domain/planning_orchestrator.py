@@ -433,7 +433,7 @@ class PlanningOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
         Raises:
             ValueError: If circular dependency detected
         """
-        in_degree: Dict[str, int] = {pid: 0 for pid in self.phases}
+        in_degree: Dict[str, int] = dict.fromkeys(self.phases, 0)
         for phase in self.phases.values():
             for dep in (phase.dependencies or []):
                 if dep in in_degree:

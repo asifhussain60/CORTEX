@@ -108,7 +108,7 @@ class HealthCheckExecutor:
             checks_performed.append('method_existence')
 
             # Check 2: Execute health_check
-            health_check_method = getattr(orchestrator, 'health_check')
+            health_check_method = orchestrator.health_check
             result = None
 
             try:

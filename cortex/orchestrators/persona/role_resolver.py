@@ -220,9 +220,7 @@ class RoleResolver:
         Returns:
             Tuple of (PersonaId, confidence_score)
         """
-        persona_scores: Dict[PersonaId, float] = {
-            persona: 0.0 for persona in PersonaId
-        }
+        persona_scores: Dict[PersonaId, float] = dict.fromkeys(PersonaId, 0.0)
 
         # Score based on keywords (high weight - specific and deliberate)
         # Use word boundaries to avoid substring matches (e.g., "cto" in "refactor")

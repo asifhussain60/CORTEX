@@ -221,8 +221,8 @@ class FaultIsolator:
             )
 
         # Backoff tracking for flip-flop prevention
-        self._backoff: Dict[str, float] = {name: 1.0 for name in self.domains}
-        self._last_state: Dict[str, DomainStatus] = {name: DomainStatus.HEALTHY for name in self.domains}
+        self._backoff: Dict[str, float] = dict.fromkeys(self.domains, 1.0)
+        self._last_state: Dict[str, DomainStatus] = dict.fromkeys(self.domains, DomainStatus.HEALTHY)
 
         # Operation-level isolation
         self._operation_health: Dict[str, Dict[str, int]] = {}

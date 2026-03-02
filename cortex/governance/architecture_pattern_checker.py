@@ -256,7 +256,7 @@ class ArchitecturePatternChecker:
         Returns:
             Dict mapping pattern name to violation count
         """
-        summary = {pattern: 0 for pattern in self.patterns.keys()}
+        summary = dict.fromkeys(self.patterns.keys(), 0)
 
         for violation in self.violations:
             summary[violation.pattern_name] += 1

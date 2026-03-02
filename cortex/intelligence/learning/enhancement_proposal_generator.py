@@ -249,7 +249,7 @@ class EnhancementProposalGenerator:
         Returns:
             Most likely enhancement category
         """
-        category_scores = {cat: 0 for cat in EnhancementCategory}
+        category_scores = dict.fromkeys(EnhancementCategory, 0)
 
         text_lower = text.lower()
 

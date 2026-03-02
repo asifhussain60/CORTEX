@@ -544,7 +544,7 @@ class ValidationManager:
             Formatted report string
         """
         total = len(results)
-        by_level = {level: 0 for level in ValidationLevel}
+        by_level = dict.fromkeys(ValidationLevel, 0)
 
         for result in results:
             by_level[result.level] += 1

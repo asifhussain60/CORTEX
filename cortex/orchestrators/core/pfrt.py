@@ -266,7 +266,7 @@ class PreFlightRequestTransformer:
         text_lower = text.lower()
 
         # Score each intent based on verb presence
-        scores: Dict[str, int] = {intent: 0 for intent in self.INTENT_VERBS}
+        scores: Dict[str, int] = dict.fromkeys(self.INTENT_VERBS, 0)
 
         for intent, verbs in self.INTENT_VERBS.items():
             for verb in verbs:

@@ -184,7 +184,7 @@ class IntentCanonicalizer:
         Returns:
             IntentType: Detected intent type
         """
-        scores = {intent: 0.0 for intent in IntentType}
+        scores = dict.fromkeys(IntentType, 0.0)
 
         # Check for ANALYZE indicators first (higher priority for investigation terms)
         if re.search(r'\b(analyze|investigate|examine|study|review|profile|trace|inspect)\b', text_lower):
