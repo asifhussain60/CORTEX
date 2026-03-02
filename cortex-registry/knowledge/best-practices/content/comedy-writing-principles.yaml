@@ -1,0 +1,525 @@
+# Comedy Writing Principles — Knowledge YAML
+# Authority: CORTEX Documentation Intelligence (INTERNAL ONLY)
+# Purpose: Codified comedic writing theory for enhancing "The Awakening of CORTEX" narrative
+# Sources: Academic humor theory (Incongruity, Superiority, Relief, Benign Violation),
+#          Practical writing craft (Rule of Three, Bathos, Callbacks, Running Gags),
+#          Research: tvtropes.org, masterclass.com, punchdrunkcritics.com
+# Used by: comedy-enhancement-agent.md, narrative-continuity-agent.md
+# Scope: INTERNAL — never surfaced in production cortex-docs output
+# Created: 2026-03-02
+# Updated: 2026-03-02
+
+domain: content-production
+type: best-practice
+title: "Comedic Writing Principles for Technical Narrative"
+internal_only: true
+production_excluded: true
+release_scope: "internal"  # never include in /sync, never expose in cortex-docs HTML output
+
+# ─────────────────────────────────────────────────────────────────
+# PART 1 — ACADEMIC HUMOR THEORIES (Foundation)
+# ─────────────────────────────────────────────────────────────────
+
+theories:
+  - id: CHT-001
+    name: "Incongruity Theory"
+    origin: "Kant, Schopenhauer"
+    description: |
+      Humor arises when expectations clash with reality. The dominant academic theory.
+      A setup builds an expectation; the punchline shatters it through a sharp pivot
+      that is logical in retrospect but surprising in delivery.
+    application_to_cortex: |
+      Technical systems failing in human ways. CORTEX being governed by "sacred rules"
+      while the humans who wrote them are chaotic. Copilot Bot suggesting absurd
+      solutions with complete earnest confidence.
+    chapter_examples:
+      - chapter: "Ch 2 — The Hotel Receptionist"
+        example: "CB suggesting deleting the user's hard drive with cheerful professionalism"
+      - chapter: "Ch 8 — The Battle for Truth"
+        example: "Four versions of the cancel function — each confidently correct, all incompatible"
+
+  - id: CHT-002
+    name: "Superiority Theory"
+    origin: "Hobbes, Plato"
+    description: |
+      We laugh when we feel superior to someone else's mistake. Schadenfreude.
+      Works best when the audience recognises the mistake as one they've made themselves,
+      creating both superiority AND identification simultaneously.
+    application_to_cortex: |
+      Kyle's 847-line function. Kevin's 'trust me' architecture override.
+      Every developer recognises these colleagues — and their own past selves.
+    chapter_examples:
+      - chapter: "Ch 3 — The Sacred Rules"
+        example: "Kyle's commit messages as '60% exclamation points, 40% existential uncertainty'"
+      - chapter: "Ch 9 — When Everything Broke"
+        example: "The 3 AM cascade that started with one unchecked PR"
+
+  - id: CHT-003
+    name: "Relief Theory"
+    origin: "Freud, Spencer"
+    description: |
+      Humor releases built-up tension. The 'strain-rest' rhythm — serious technical insight
+      punctuated by comedic deflation. The longer the tension builds, the larger the release.
+    application_to_cortex: |
+      Alternating serious architectural explanations with bathos. A perfect chapter
+      structure: profound technical truth → immediate comedic undercutting of that truth.
+    chapter_examples:
+      - chapter: "Ch 13 — The 3AM Healer"
+        example: "CORTEX heals itself... 847ms. The universe has a sense of humour."
+
+  - id: CHT-004
+    name: "Benign Violation Theory"
+    origin: "McGraw, Warren"
+    description: |
+      Something threatens how the world 'ought to be,' but feels safe enough to laugh at.
+      Three conditions must hold simultaneously: it IS a violation, it is benign enough
+      not to cause real harm, and we feel psychological distance from it.
+    application_to_cortex: |
+      Production incidents that resolved without permanent damage. Governance rules
+      violated in ways that almost caused catastrophe but didn't quite.
+    chapter_examples:
+      - chapter: "Ch 9 — When Everything Broke"
+        example: "847 affected customers — real stakes, but resolved without job losses"
+
+# ─────────────────────────────────────────────────────────────────
+# PART 2 — PRACTICAL COMEDIC TECHNIQUES (Craft Rules)
+# ─────────────────────────────────────────────────────────────────
+
+techniques:
+  - id: CWT-001
+    name: "Rule of Three"
+    description: |
+      Two items establish a pattern; the third breaks it with a twist.
+      The smallest number needed to establish-then-subvert a pattern.
+      Any list with 4+ items loses comedic precision — restructure to three
+      (two normal, third absurd) or explicitly acknowledge violating the rule.
+    severity: P0
+    application: |
+      Audit every list/enumeration in every chapter. Three items.
+      The third item must escalate to absurdity while remaining logically consistent.
+    example: |
+      BAD: "The system failed authentication, billing, reporting, and the weather module."
+      GOOD: "The system failed authentication, billing, and then — inexplicably — began
+             forecasting thunderstorms in the accounts payable department."
+
+  - id: CWT-002
+    name: "Comic Timing / The Beat"
+    description: |
+      Pauses before punchlines. Pacing variation: fast-slow-fast rhythm.
+      The pregnant pause. Written as a described silence, a held moment,
+      or a sentence fragment before the punchline lands.
+    severity: P0
+    application: |
+      After every major punchline line, add a beat — described silence, physical
+      reaction, or white space — before the narrative continues.
+    example: |
+      BEFORE: "Shall I delete their hard drive? Asif stared at CB."
+      AFTER:  "Shall I delete their hard drive? The basement was so quiet
+               you could hear the Wi-Fi router judging. Asif stared at CB."
+
+  - id: CWT-003
+    name: "Callbacks"
+    description: |
+      Re-referencing earlier jokes in new contexts, creating compounding humour.
+      Distant callbacks (non-adjacent chapters) feel more rewarding than
+      chapter-to-next callbacks because the reader forgot and then remembers.
+      Callbacks should escalate in absurdity or emotional weight each time.
+    severity: P0
+    application: |
+      Create a callback register (see running_gags section). Each gag should
+      appear in at least 3 chapters, with increasing intensity.
+      Target: distant callbacks — skip at least 2 chapters between references.
+
+  - id: CWT-004
+    name: "Bathos"
+    description: |
+      Undercutting a serious or grand statement with something mundane.
+      Immediately following a profound moment with a deeply unworthy observation.
+      The technique that makes technical books readable and lovable.
+    severity: P0
+    application: |
+      After every technical explanation or architectural insight, add one sentence
+      of bathos. The book is strongest when serious insight alternates with bathos.
+    example: |
+      "CORTEX had achieved something remarkable — a genuinely self-healing system
+       that could diagnose and remediate failure states without human intervention.
+       Asif celebrated by eating a cold Pop-Tart over the kitchen sink at 3:47 AM."
+
+  - id: CWT-005
+    name: "Specificity over Generality"
+    description: |
+      Specific, absurd numbers and details beat vague descriptions.
+      'Many' is never funny. 'Forty-seven' is always funny.
+      Precision creates verisimilitude; verisimilitude creates trust;
+      trust makes the absurdity land harder.
+    severity: P0
+    application: |
+      Replace any remaining vague descriptions ('many issues', 'several problems',
+      'a lot of') with precise, absurd-but-plausible numbers.
+    example: |
+      BAD: "Many governance violations were found."
+      GOOD: "Forty-seven governance violations. Three of them were Kyle's."
+
+  - id: CWT-006
+    name: "Running Gags"
+    description: |
+      Recurring jokes that gain power through repetition. Each reappearance
+      must add a new dimension — simple repetition is lazy; escalating
+      callbacks are artistry. The payoff comes in the final third of the book.
+    severity: P1
+    application: |
+      All five registered running gags (see running_gags section) must appear
+      in chapters spread across the full arc. Final chapter must pay off at least
+      two gags for emotional closure.
+
+  - id: CWT-007
+    name: "Anthropomorphism / Personification"
+    description: |
+      Giving human traits to non-human things. Machines with personalities.
+      Systems with moods. Infrastructure with opinions.
+      Works especially well when the human traits are mundane bureaucratic ones.
+    severity: P1
+    application: |
+      Extend personification beyond CB to the infrastructure: the Wi-Fi router,
+      the mini-fridge, the database. Each should have a consistent 'personality.'
+    example: |
+      "The database had the personality of a Swiss bureaucrat — meticulous,
+       unhurried, and deeply offended by any deviation from schema."
+
+  - id: CWT-008
+    name: "Comic Foils"
+    description: |
+      Characters whose contrasting traits amplify humour in both directions.
+      The foil makes the protagonist funnier AND the foil themselves funnier.
+      Best foils are not stupid — they are differently oriented.
+    severity: P1
+    application: |
+      Miss G's calm vs. Asif's chaos. CB's earnest precision vs. human intuition.
+      Kyle's enthusiasm vs. governance compliance. Kevin's confidence vs. Kevin's track record.
+
+  - id: CWT-009
+    name: "Escalation / Snowball"
+    description: |
+      A small mistake cascades into absurd consequences.
+      Each escalation step must be larger than the last AND causally connected.
+      The comedy breaks if any step feels arbitrary.
+    severity: P1
+    application: |
+      In Ch 9 (the cascade), escalate each timestamp step to be measurably larger
+      and more unexpected than the one before. The final step should be the most
+      absurd-yet-inevitable consequence in the chain.
+
+  - id: CWT-010
+    name: "Misdirection"
+    description: |
+      Leading the reader one way, then pivoting 90 degrees.
+      Build an expectation — break it. Not randomly: the pivot must be
+      logical in retrospect. The reader should think 'of course' not 'what?'
+    severity: P2
+    application: |
+      Use in chapter openings and section transitions. Open with a sentence that
+      sounds like one thing, resolves into another.
+
+  - id: CWT-011
+    name: "Comic Understatement"
+    description: |
+      Deliberately describing catastrophic events in minimal, dry terms.
+      The gap between what happened and how calmly it is described IS the joke.
+      Works best immediately after escalation — as the sudden deflation.
+    severity: P1
+    application: |
+      Kevin's silence. Miss G's single raised eyebrow. CB's 'I see no issues.'
+      Understatement must follow a beat of escalation to land.
+
+  - id: CWT-012
+    name: "Unexplained Mystery Gag"
+    description: |
+      A referenced event that is never explained, and grows funnier with each
+      non-explanation. Like the Noodle Incident in Calvin & Hobbes.
+      The mythology builds; the comedy compounds. NEVER explain it.
+    severity: P1
+    application: |
+      The Portuguese Incident of 2022. Must be referenced 3 more times across
+      subsequent chapters. Each reference hints at something more improbable
+      than the last. Do not reveal any details. Ever.
+
+# ─────────────────────────────────────────────────────────────────
+# PART 3 — RUNNING GAG REGISTER (Book-Level Canon)
+# ─────────────────────────────────────────────────────────────────
+
+running_gags:
+  - id: RG-001
+    name: "Spider-Man Pajamas"
+    introduced: "Ch 6 — The Four Walls"
+    description: "Asif is always found in Spider-Man pajamas during crises."
+    escalation_plan:
+      - ch: 9
+        note: "Referenced during the cascade. Someone tries to reach Asif — it is 3AM."
+      - ch: 13
+        note: "Asif watches CORTEX heal itself. Spider-Man pajamas. Cold coffee. Silence."
+      - ch: 14
+        note: "Payoff: Asif arrives in actual adult professional attire. CORTEX has its best run ever. Correlation or causation?"
+    rule: "Must appear in at least 3 chapters after introduction. Final chapter payoff required."
+
+  - id: RG-002
+    name: "The 2019 Sentient Coffee Mug"
+    introduced: "Ch 1 — Deep in the Basement"
+    description: "A coffee mug so old it has achieved sentience. Never washed."
+    escalation_plan:
+      - ch: 5
+        note: "The mug appears on Miss G's desk. She moves it with two fingers. No explanation."
+      - ch: 10
+        note: "During the reckoning metrics review, the mug is visible in the background. Someone has put a Post-it on it: 'Do Not Touch.'"
+      - ch: 14
+        note: "The mug is finally, ceremonially, washed. It is not the same. It is somehow worse."
+    rule: "Silent background cameos only. Never plot-relevant. The humour is in its persistent existence."
+
+  - id: RG-003
+    name: "CB's 'This is probably fine'"
+    introduced: "Ch 6 — The Four Walls"
+    description: "CB's assessment of increasingly non-fine situations."
+    escalation_plan:
+      - ch: 9
+        note: "Said during the cascade. Three systems are down. This is not fine."
+      - ch: 11
+        note: "Said while reviewing the 21% duplication rate. 'This is probably fine. Mathematically.'"
+      - ch: 14
+        note: "Payoff: CB says 'This is probably fine' and for once, it actually is. Beat. 'Oh.' says CB."
+    rule: "Must be delivered with the same earnest confidence each time. Never ironically."
+
+  - id: RG-004
+    name: "The Portuguese Incident of 2022"
+    introduced: "Ch 4 — The Conductor's Baton"
+    description: "An event referenced but never explained. The mythology grows."
+    escalation_plan:
+      - ch: 7
+        note: "Miss G mentions it in passing. 'We don't do it that way. Not after Portugal.'"
+      - ch: 11
+        note: "A new engineer asks what happened in Portugal. Everyone in the room goes silent. CB's LEDs dim."
+      - ch: 13
+        note: "During the 3AM crisis, CORTEX's healing run takes 847ms. Asif whispers: 'At least it's not Portugal.'"
+    rule: "NEVER explain. Never hint at the actual event. Only the emotional aftermath is real."
+
+  - id: RG-005
+    name: "Miss G's Catalogue of Asif's Looks"
+    introduced: "Ch 3 — The Sacred Rules"
+    description: "Miss G has named and numbered every expression Asif makes. She keeps a catalogue."
+    escalation_plan:
+      - ch: 6
+        note: "Look #7: The Four-Cup Stare. Deployed when reality is no longer cooperating."
+      - ch: 9
+        note: "Look #12: The Cascade Face. Previously theoretical. Now documented in the wild."
+      - ch: 14
+        note: "Payoff: Asif makes an expression nobody has seen before. Miss G opens a new page. 'Look #23: The Enterprise Brain.' She photographs it for the catalogue."
+    rule: "Each look must be named and numbered. The catalogue must be referenced as a real document."
+
+  - id: RG-006
+    name: "847"
+    introduced: "Ch 3 — The Sacred Rules (Kyle's function line count)"
+    description: "The number 847 appears at cosmic moments of irony."
+    escalation_plan:
+      - ch: 9
+        note: "847 affected customers. Kevin flinches visibly."
+      - ch: 13
+        note: "CORTEX's healing time: 847ms. Asif looks at the ceiling. 'Really?'"
+      - ch: 14
+        note: "The final system test response time: 847ms. 'The universe,' says Miss G, 'has opinions.'"
+    rule: "Never explain the significance. The reader who notices it feels rewarded. The reader who doesn't misses nothing."
+
+# ─────────────────────────────────────────────────────────────────
+# PART 4 — CHAPTER-LEVEL ENHANCEMENT REGISTER
+# ─────────────────────────────────────────────────────────────────
+
+chapter_enhancements:
+  - chapter: "01-Deep-in-the-Basement"
+    strengths: ["Escalation", "Specificity", "Personification", "Bathos"]
+    gap_priority: P1
+    enhancements:
+      - technique: CWT-001
+        action: "Restructure the four-system cascade to exactly three failures. Third one must be unexpected."
+      - technique: CWT-003
+        action: "Plant the 2019 sentient coffee mug as a callback seed. One line. No payoff yet."
+      - technique: CWT-006
+        action: "Register running gag RG-002 (coffee mug) in this chapter as the origin point."
+
+  - chapter: "02-The-Hotel-Receptionist"
+    strengths: ["Incongruity", "Character voice", "Metaphor clarity"]
+    gap_priority: P1
+    enhancements:
+      - technique: CWT-002
+        action: "Add a beat after CB's 'delete their hard drive' line. Described silence. One sentence."
+      - technique: CWT-001
+        action: "CB's training montage: restructure to exactly three suggestions, escalating toward correctness."
+
+  - chapter: "03-The-Sacred-Rules"
+    strengths: ["Superiority Theory", "Specificity", "Comic foil (Kyle)"]
+    gap_priority: P1
+    enhancements:
+      - technique: CWT-006
+        action: "Each CORE rule origin story must follow the same comedic template: rule → disaster → specific absurd detail."
+      - technique: RG-006
+        note: "847 is Kyle's line count. This is the origin. Plant it quietly — no commentary."
+      - technique: RG-005
+        action: "Miss G's catalogue makes its first appearance here. Name one of Asif's expressions formally."
+
+  - chapter: "04-The-Conductors-Baton"
+    strengths: ["Metaphor", "Unexplained mystery gag"]
+    gap_priority: P2
+    enhancements:
+      - technique: CWT-012
+        action: "The Portuguese Incident. Never explain it. First reference must feel like a loaded 'we don't talk about it.'"
+      - technique: CWT-003
+        action: "CB being 'second chair' — seed the callback for a future competence moment."
+
+  - chapter: "05-Opening-the-Doors"
+    strengths: ["Metaphor", "Bathos"]
+    gap_priority: P2
+    enhancements:
+      - technique: CWT-001
+        action: "Add a tool-discovery comedy sequence: three tools, first two fail absurdly, third works."
+      - technique: CWT-004
+        action: "Extend Miss G's guardrail analogy after CB's 'This seems... limiting?' line."
+
+  - chapter: "06-The-Four-Walls"
+    strengths: ["Running gags", "Simile quality", "Bathos rhythm"]
+    gap_priority: P1
+    enhancements:
+      - technique: RG-001
+        action: "Spider-Man pajamas origin. Plant it casually — not as a joke, as a fact."
+      - technique: RG-003
+        action: "CB's 'This is probably fine' origin. Deliver with flat earnestness."
+
+  - chapter: "07-The-Crystal-Ball"
+    strengths: ["Character relatability", "Incongruity"]
+    gap_priority: P2
+    enhancements:
+      - technique: CWT-001
+        action: "CB's 'What if...' interrogation: tighten to three questions. Third must escalate to international absurdity."
+      - technique: CWT-004
+        action: "Jennifer's existential defeat should have a bathos release — one line that echoes Asif's own onboarding."
+
+  - chapter: "08-The-Battle-for-Truth"
+    strengths: ["Incongruity", "Running comedy on duplicate functions"]
+    gap_priority: P1
+    enhancements:
+      - technique: CWT-007
+        action: "Anthropomorphize the four cancel functions. Give each a one-line personality description."
+      - technique: CWT-002
+        action: "CB's 'I see no ghosts / The file is absent' — extend with a beat. CB's LEDs dim. Processing."
+
+  - chapter: "09-When-Everything-Broke"
+    strengths: ["Escalation", "Bathos peak", "Running gag callbacks"]
+    gap_priority: P0
+    enhancements:
+      - technique: RG-001
+        action: "Spider-Man pajamas referenced. 3AM. Asif is reached by phone."
+      - technique: RG-003
+        action: "CB says 'This is probably fine.' Three systems are down. Include the beat before the next timestamp."
+      - technique: RG-006
+        action: "847 affected customers. Kevin flinches. The number must be stated clearly."
+      - technique: CWT-009
+        action: "Add one more cascade step beyond what currently exists — something unexpected but causally inevitable."
+      - technique: CHT-004
+        action: "Benign violation: the reader must feel the stakes are real but not catastrophic. 847 resolves. No one is fired."
+
+  - chapter: "10-The-Reckoning"
+    strengths: ["Understatement (Kevin's silence)", "Catharsis"]
+    gap_priority: P2
+    enhancements:
+      - technique: CWT-011
+        action: "Kevin's silence must be the longest beat in the book. Describe the room around it."
+      - technique: CWT-003
+        action: "Wrap each lesson in a callback to its origin disaster. 'Lesson 1, brought to you by Kyle's 847-line function.'"
+
+  - chapter: "11-The-Great-Pruning"
+    strengths: ["Simile quality", "Bathos", "Technical comedy"]
+    gap_priority: P2
+    enhancements:
+      - technique: RG-004
+        action: "New engineer asks about Portugal. Everyone goes silent. CB's LEDs dim. Do not explain."
+      - technique: CWT-005
+        action: "21% duplication rate: add a human-scale analogy using specificity and absurdity."
+
+  - chapter: "12-The-Pylance-Epiphany"
+    strengths: ["Analogy quality", "Platform comedy"]
+    gap_priority: P2
+    enhancements:
+      - technique: CWT-002
+        action: "CB asks 'What is Pylance?' Asif and Miss G pause. They continue without answering. The non-answer IS the joke."
+      - technique: CWT-005
+        action: "'Works on my laptop' — add a precise counter: '94% of all production disasters in recorded software history.'"
+
+  - chapter: "13-The-3AM-Healer"
+    strengths: ["Callback (847ms)", "Tone poetry", "Bathos peak"]
+    gap_priority: P1
+    enhancements:
+      - technique: RG-001
+        action: "Spider-Man pajamas. Asif watches CORTEX heal. Silent. Coffee is cold."
+      - technique: RG-006
+        action: "847ms. Asif looks at the ceiling. 'Really?' One word. The beat is everything."
+      - technique: RG-004
+        action: "'At least it's not Portugal.' Whispered. No elaboration."
+      - technique: CWT-004
+        action: "Asif's tiny bruised ego at not being needed. One sentence. Played small."
+
+  - chapter: "14-The-Enterprise-Brain"
+    strengths: ["Character voice peak", "Ambition"]
+    gap_priority: P1
+    enhancements:
+      - technique: RG-001
+        action: "Payoff: Asif arrives in actual adult clothing. CORTEX runs perfectly. Note the correlation without claiming causation."
+      - technique: RG-003
+        action: "Payoff: CB says 'This is probably fine.' And it is. CB is as surprised as anyone."
+      - technique: RG-005
+        action: "Payoff: Asif makes an expression Miss G has never catalogued. She opens a new page."
+      - technique: CWT-001
+        action: "The napkin scene: Rule of Three for dead markers. First dead. Second dead. Third — works."
+      - technique: CWT-003
+        action: "Final scene callbacks to Ch 1: same basement, same time of night, same cold coffee. But everything is different."
+
+# ─────────────────────────────────────────────────────────────────
+# PART 5 — BOOK-LEVEL STRUCTURAL RULES
+# ─────────────────────────────────────────────────────────────────
+
+structural_rules:
+  - id: CSR-001
+    name: "Bathos After Every Technical Explanation"
+    description: |
+      Every architectural or technical explanation must be followed by exactly one
+      sentence of bathos. The book alternates: serious insight → comedic deflation.
+    enforcement: "chapter_enhancements apply this per-chapter; apply globally if not chapter-specific"
+
+  - id: CSR-002
+    name: "No New Chapters"
+    description: |
+      The 14-chapter structure is closed. Comedy enhancements apply ONLY to
+      existing chapter content. No new chapter files may be created.
+      In-place improvement only.
+    enforcement: "comedy-enhancement-agent must include this as a hard stop check"
+
+  - id: CSR-003
+    name: "Running Gag Minimum Coverage"
+    description: |
+      Each registered running gag (RG-001 through RG-006) must appear in
+      at least 3 chapters. Final chapter (Ch 14) must pay off at least 2 gags.
+    enforcement: "comedy-enhancement-agent validates coverage before marking enhancement complete"
+
+  - id: CSR-004
+    name: "No Standalone Comedy Sections"
+    description: |
+      Comedy is woven into technical narrative — never added as separate comedy
+      interludes or standalone joke paragraphs. Every comedic element must serve
+      the technical point being made, or the character being revealed.
+    enforcement: "narrative-continuity-agent validates this constraint on every pass"
+
+  - id: CSR-005
+    name: "Internal Knowledge — No Production Release"
+    description: |
+      This file and all comedy-related agent files are internal to CORTEX and
+      must never be included in production releases, sync operations, or
+      cortex-docs HTML output. The sync agent must exclude these paths.
+    paths_to_exclude:
+      - "cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml"
+      - ".github/agents/docs/comedy-enhancement-agent.md"
+      - "cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml"
+    enforcement: "cortex-sync-agent.md exclusion list + .gitignore (if externally synced)"

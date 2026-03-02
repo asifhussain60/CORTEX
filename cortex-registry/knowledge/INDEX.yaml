@@ -233,3 +233,20 @@ business-rules:
     - path: "business-rules/extracted-rules.yaml"
       title: "Extracted Business Rules"
       keywords: ["billing", "invoice", "payment", "price", "finance", "business", "rules", "compliance", "constraint", "validation"]
+
+# ─── Internal-Only Knowledge (never synced or released) ──────────────────────
+# CORTEX-internal knowledge. internal_only: true — excluded from all sync and
+# production release operations. Loaded only during local development sessions.
+
+internal-content:
+  internal_only: true
+  production_excluded: true
+  guides:
+    - path: "best-practices/content/comedy-writing-principles.yaml"
+      title: "Comedic Writing Principles for Technical Narrative"
+      internal_only: true
+      keywords: ["comedy", "enhance", "narrative", "awakening", "chapters", "running gag", "comedic writing", "humor", "bathos", "rule of three"]
+      used_by:
+        - ".github/agents/docs/comedy-enhancement-agent.md"
+        - ".github/agents/docs/narrative-continuity-agent.md"
+        - "cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml"

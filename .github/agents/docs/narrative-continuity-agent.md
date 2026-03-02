@@ -222,9 +222,42 @@ Each chapter has a corresponding image prompt in `cortex-docs/awakening-of-corte
 
 ---
 
+## 🎭 Comedy Enhancement Integration
+
+When intent includes "enhance", "apply comedy", "comedic writing", "improve chapters", or "running gag", this agent delegates to the **Comedy Enhancement Agent** before performing its own continuity pass.
+
+**Delegation protocol:**
+```
+narrative-continuity-agent (canon authority)
+    └── comedy-enhancement-agent (specialist — comedy craft)
+            └── comedy-writing-principles.yaml (knowledge base — INTERNAL ONLY)
+            └── narrative-comedy-enhancement.yaml (workflow template — INTERNAL ONLY)
+```
+
+**Comedy knowledge authority:**
+- Theories, craft techniques, running gag register: `cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml`
+- Enhancement pipeline: `cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml`
+- Agent spec: `.github/agents/docs/comedy-enhancement-agent.md`
+
+**Running Gag Canon (6 registered gags — must be preserved on every pass):**
+
+| ID | Gag | Origin | Payoff |
+|----|-----|--------|--------|
+| RG-001 | Spider-Man Pajamas | Ch 06 | Ch 14 |
+| RG-002 | 2019 Sentient Coffee Mug | Ch 01 | Ch 14 |
+| RG-003 | CB's "This is probably fine" | Ch 06 | Ch 14 |
+| RG-004 | The Portuguese Incident of 2022 | Ch 04 | Never explained |
+| RG-005 | Miss G's Catalogue of Asif's Looks | Ch 03 | Ch 14 |
+| RG-006 | The Number 847 | Ch 03 | Ch 14 |
+
+**Internal-Only Constraint:** Comedy enhancement files are scoped `internal_only: true`. They must never be included in sync operations, production releases, or cortex-docs HTML output.
+
+---
+
 ## 🛡️ Safety
 
 - **Canon-preserving** — immutable chapters are never modified
 - **Voice-locked** — character profiles enforced on every edit
 - **Regression-checked** — continuity verified before and after changes
+- **Comedy-enhanced** — comedy-enhancement-agent applies craft techniques; this agent validates the result against canon
 - **Audit-trailed** — all narrative changes logged with rationale

@@ -94,6 +94,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **diagram-regeneration-agent.md** | Regenerate Mermaid/D3.js diagrams | 3 — Synchronization |
 | **media-prompt-agent.md** | Maintain DALL-E image + video script prompts | 3 — Synchronization |
 | **narrative-continuity-agent.md** | Guard Awakening of CORTEX story arc | 4 — Narrative Update |
+| **comedy-enhancement-agent.md** | Apply comedic writing principles to chapters (INTERNAL ONLY — sub-agent of narrative-continuity) | 4 — Comedy Enhancement |
 | **coverage-audit-agent.md** | Validate completeness, produce certification | 5 — Certification |
 | **release-notes-agent.md** | Generate changelogs from Git diffs | 5 — Certification |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
@@ -269,7 +270,7 @@ IF BLOCK → Show remediation, require override
 | User Intent | Load These Agents | Token Cost |
 |-------------|-------------------|-----------|
 | **DOCUMENT (STS)** | doc-sync-agent.md | ~4,500 |
-| **DOCUMENT (CORTEX)** | cortex-doc.prompt.md → 8 docs agents (git-discovery, drift-detection, doc-sync, diagram-regeneration, media-prompt, narrative-continuity, coverage-audit, release-notes) | ~8,000 |
+| **DOCUMENT (CORTEX)** | cortex-doc.prompt.md → 9 docs agents (git-discovery, drift-detection, doc-sync, diagram-regeneration, media-prompt, narrative-continuity, comedy-enhancement[internal], coverage-audit, release-notes) | ~8,500 |
 
 **STS Trigger Phrases:** "document STS", "review STS", "STS sample app docs", "account-modernized README", "payment-processor README", "fix mmd diagrams", "STS architecture diagram"
 

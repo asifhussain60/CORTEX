@@ -1,0 +1,310 @@
+metadata:
+  id: NARRATIVE-COMEDY-001
+  name: Narrative Comedy Enhancement Pipeline
+  version: 1.0.0
+  author: Asif Hussain
+  updated: 2026-03-02
+  authority: comedy-enhancement-agent.md | narrative-continuity-agent.md | CORE-002 | CORE-049
+  sweep_id: SWEEP-COMEDY-ENHANCE
+  status: ACTIVE
+  internal_only: true
+  production_excluded: true
+  release_scope: internal  # never included in /sync or cortex-docs production output
+
+# ============================================================
+# PURPOSE
+# ============================================================
+purpose: |
+  Declarative pipeline for applying comedic writing principles to the
+  "Awakening of CORTEX" chapter collection.
+
+  Knowledge authority:
+    cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml
+
+  Applies:
+    - 4 academic humor theories (CHT-001 through CHT-004)
+    - 12 craft techniques (CWT-001 through CWT-012)
+    - 6 registered running gags (RG-001 through RG-006)
+    - 5 structural rules (CSR-001 through CSR-005)
+
+  Constraints:
+    - In-place enhancement ONLY (no new chapter files)
+    - 14-chapter structure is immutable
+    - index.html chapter links must not break
+    - No Book Two content
+    - Internal only — never synced or released
+
+# ============================================================
+# TRIGGERS
+# ============================================================
+triggers:
+  - intent: DIGEST
+    match_keywords: ["enhance chapters", "comedy", "comedic", "running gag", "improve narrative"]
+  - intent: IMPLEMENT
+    match_keywords: ["apply comedy", "comedy enhancement", "comedic writing", "enhance story"]
+  - manual: true  # callable directly: "run narrative comedy enhancement"
+
+# ============================================================
+# STAGES
+# ============================================================
+stages:
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 0 — Pre-Flight Validation
+  # ─────────────────────────────────────────────────────────
+  - id: stage_0_preflight
+    name: "Pre-Flight Validation"
+    description: |
+      Validate that all required inputs are present before any enhancement begins.
+      Hard-stop if any required file is missing.
+    steps:
+      - id: check_knowledge_yaml
+        action: verify_file_exists
+        path: "cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml"
+        on_fail: HARD_STOP
+        error_message: "Comedy knowledge YAML missing — run DIGEST of comedic writing principles first"
+
+      - id: check_chapters_exist
+        action: list_directory
+        path: "cortex-docs/awakening-of-cortex/chapters"
+        expected_count: 14
+        on_fail: HARD_STOP
+        error_message: "Expected 14 chapter files — count mismatch detected"
+
+      - id: check_index_html
+        action: verify_file_exists
+        path: "cortex-docs/awakening-of-cortex/index.html"
+        on_fail: HARD_STOP
+        error_message: "index.html missing — cannot proceed without chapter navigation anchor"
+
+      - id: check_comedy_agent
+        action: verify_file_exists
+        path: ".github/agents/docs/comedy-enhancement-agent.md"
+        on_fail: HARD_STOP
+        error_message: "Comedy enhancement agent missing"
+
+      - id: snapshot_chapter_directory
+        action: capture_state
+        description: "Record current chapter filenames to detect any inadvertent additions"
+        path: "cortex-docs/awakening-of-cortex/chapters"
+        store_as: chapter_snapshot
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 1 — Knowledge Loading
+  # ─────────────────────────────────────────────────────────
+  - id: stage_1_knowledge_load
+    name: "Comedy Knowledge Loading"
+    description: |
+      Load and index comedy principles. Build the enhancement plan from
+      the chapter_enhancements map and running_gag register.
+    steps:
+      - id: load_comedy_yaml
+        action: load_yaml
+        path: "cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml"
+        sections: [theories, techniques, running_gags, chapter_enhancements, structural_rules]
+        store_as: comedy_knowledge
+
+      - id: build_running_gag_matrix
+        action: build_coverage_matrix
+        source: comedy_knowledge.running_gags
+        dimensions: [gag_id, required_chapters, payoff_chapter]
+        store_as: gag_matrix
+        description: "Track which chapters each running gag must appear in"
+
+      - id: build_enhancement_plan
+        action: build_enhancement_plan
+        source: comedy_knowledge.chapter_enhancements
+        priority_order: [P0, P1, P2]
+        store_as: enhancement_plan
+        description: "Ordered list of enhancements per chapter, sorted by priority"
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 2 — Chapter Analysis (Read-Only Pass)
+  # ─────────────────────────────────────────────────────────
+  - id: stage_2_analysis
+    name: "Chapter Analysis Pass"
+    description: |
+      Read all 14 chapters. For each chapter, identify:
+        - Missing techniques from the enhancement plan
+        - Running gag gaps (required appearance not found)
+        - Vague quantities to replace (specificity violations)
+        - Missing bathos after technical explanations
+        - Lists with 4+ items that need Rule of Three restructure
+    for_each: chapter in chapter_snapshot
+    steps:
+      - id: read_chapter
+        action: read_file
+        path: "cortex-docs/awakening-of-cortex/chapters/{chapter}"
+
+      - id: scan_technique_coverage
+        action: scan_for_technique_markers
+        techniques: [CWT-001, CWT-002, CWT-003, CWT-004, CWT-005]
+        # P0 techniques — must all be present per chapter's enhancement plan
+        emit_gaps: true
+        store_as: technique_gaps[chapter]
+
+      - id: scan_running_gag_presence
+        action: scan_for_gag_markers
+        gag_matrix: gag_matrix
+        chapter: "{chapter}"
+        emit_missing: true
+        store_as: gag_gaps[chapter]
+
+      - id: detect_vague_quantities
+        action: pattern_match
+        pattern: "\\b(many|several|lots of|a lot of|some|various|numerous)\\s+(violations|issues|errors|tests|files|functions)"
+        emit_line_numbers: true
+        store_as: specificity_violations[chapter]
+
+      - id: detect_list_overruns
+        action: detect_list_items
+        min_count: 4
+        emit_line_numbers: true
+        note: "Lists of 4+ need Rule of Three restructuring"
+        store_as: list_violations[chapter]
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 3 — Enhancement Execution
+  # ─────────────────────────────────────────────────────────
+  - id: stage_3_enhancement
+    name: "Comedy Enhancement Execution"
+    description: |
+      Apply enhancements chapter by chapter. P0 → P1 → P2 priority order.
+      Running gags applied as their escalation_plan specifies.
+      All changes are in-place — no new files created.
+    agent: comedy-enhancement-agent
+    for_each: chapter in enhancement_plan
+    steps:
+      - id: apply_p0_techniques
+        action: apply_techniques
+        techniques: [CWT-001, CWT-002, CWT-003, CWT-004, CWT-005]
+        plan: enhancement_plan[chapter]
+        constraint: in_place_only
+
+      - id: apply_p1_techniques
+        action: apply_techniques
+        techniques: [CWT-006, CWT-007, CWT-008, CWT-009, CWT-011, CWT-012]
+        plan: enhancement_plan[chapter]
+        constraint: in_place_only
+
+      - id: apply_running_gags
+        action: apply_running_gag_content
+        gag_matrix: gag_matrix
+        chapter: "{chapter}"
+        source: comedy_knowledge.running_gags
+        constraint: |
+          Use escalation_plan[chapter].note as the guide for what to add.
+          Weave into existing paragraphs — never append as standalone sections.
+          Preserve all existing content unless a specificity replacement applies.
+
+      - id: apply_bathos_pass
+        action: apply_bathos_after_technical
+        rule: CSR-001
+        description: "After every technical explanation, ensure exactly one bathos sentence follows"
+
+      - id: validate_no_new_files
+        action: assert_directory_unchanged
+        path: "cortex-docs/awakening-of-cortex/chapters"
+        snapshot: chapter_snapshot
+        on_fail: HARD_STOP
+        error_message: "New chapter file detected — this pipeline must not create new chapters (CSR-002)"
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 4 — Running Gag Coverage Validation
+  # ─────────────────────────────────────────────────────────
+  - id: stage_4_gag_validation
+    name: "Running Gag Coverage Validation"
+    description: |
+      Verify all 6 running gags meet minimum coverage requirements after enhancement.
+    steps:
+      - id: validate_gag_coverage
+        action: validate_running_gag_coverage
+        gag_matrix: gag_matrix
+        chapters_enhanced: all
+        rules:
+          min_appearances: 3
+          ch14_payoff_required: true
+        on_fail: SURFACE_AND_CONTINUE
+        note: "Report gaps but do not hard-stop — partial enhancement is still valuable"
+
+      - id: validate_portuguese_incident
+        action: assert_never_explained
+        gag_id: RG-004
+        description: "Scan all chapters to confirm the Portuguese Incident is referenced but never explained"
+        check: no_explanation_text_found
+        on_fail: HARD_STOP
+        error_message: "The Portuguese Incident must NEVER be explained. Remove any explanatory text."
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 5 — Structural Rule Validation
+  # ─────────────────────────────────────────────────────────
+  - id: stage_5_structural_validation
+    name: "Structural Rule Validation"
+    description: |
+      Final structural checks before reporting completion.
+    steps:
+      - id: validate_csr_001
+        action: scan_for_technical_explanations_without_bathos
+        rule: CSR-001
+        emit_violations: true
+
+      - id: validate_csr_002
+        action: assert_file_count
+        path: "cortex-docs/awakening-of-cortex/chapters"
+        expected: 14
+        on_fail: HARD_STOP
+        error_message: "Chapter count changed — CSR-002 violation"
+
+      - id: validate_csr_004
+        action: scan_for_standalone_comedy_sections
+        pattern: "^#+\\s*(Comedy|Humor|Joke|Fun)"
+        expect_count: 0
+        note: "Comedy must be woven into narrative — never standalone sections"
+        on_fail: SURFACE_AND_CONTINUE
+
+      - id: validate_index_html_links
+        action: verify_chapter_links
+        index_file: "cortex-docs/awakening-of-cortex/index.html"
+        chapters_dir: "cortex-docs/awakening-of-cortex/chapters"
+        description: "All 14 chapter links must still resolve"
+        on_fail: HARD_STOP
+        error_message: "Index.html chapter links broken after enhancement"
+
+  # ─────────────────────────────────────────────────────────
+  # STAGE 6 — Enhancement Report
+  # ─────────────────────────────────────────────────────────
+  - id: stage_6_report
+    name: "Enhancement Report (Inline)"
+    description: |
+      Emit the full comedy enhancement report inline (CORE-002 — no .md files).
+    output_format: inline_markdown
+    sections:
+      - running_gag_coverage_table
+      - techniques_applied_per_chapter_table
+      - specificity_replacements_made
+      - structural_rule_status_table
+      - remaining_gaps_if_any
+
+# ============================================================
+# CONVERGENCE GATE (CORE-068)
+# ============================================================
+convergence:
+  max_cycles: 2
+  predicate:
+    - csr_001_pass: true  # bathos after every technical explanation
+    - csr_002_pass: true  # still 14 chapters
+    - csr_003_pass: true  # all 6 gags in 3+ chapters with Ch 14 payoff
+    - index_html_links_pass: true  # no broken chapter links
+  on_cycle_exhaust: surface_remaining_inline
+
+# ============================================================
+# EXCLUSION MANIFEST (Production Safety)
+# ============================================================
+production_exclusions:
+  description: "These paths must never appear in production output or sync operations"
+  paths:
+    - "cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml"
+    - ".github/agents/docs/comedy-enhancement-agent.md"
+    - "cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml"
+  sync_agent_guard: true
+  gitignore_candidate: false  # these files should exist in the repo; only excluded from sync/release
