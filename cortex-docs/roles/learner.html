@@ -7,10 +7,10 @@
 <meta content="CORTEX, learning paths, software development, TDD, architecture, Python, beginner, intermediate, advanced, AI governance, engineering standards" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
 <title>CORTEX &mdash; Curious Learner View | Beginner &middot; Intermediate &middot; Advanced</title>
-<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+<link href="../assets/images/cortex-logo-64.png" rel="icon" type="image/png"/>
 <meta content="CORTEX &mdash; Curious Learner View" property="og:title"/>
 <meta content="Structured learning tracks from Beginner to Advanced, built on real governance rules and production-grade engineering standards." property="og:description"/>
-<meta content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png" property="og:image"/>
+<meta content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" property="og:image"/>
 <meta content="website" property="og:type"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +18,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<link href="../assets/css/glassmorphism.css" rel="stylesheet"/>
 <link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
 <link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
 <link href="../assets/css/glass-ui-components.css" rel="stylesheet"/>
@@ -45,7 +46,7 @@
     <div class="hero-section-wrapper">
         <div class="hero-robot-container">
             <a href="../index.html" title="Back to CORTEX Home">
-                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high" src="../assets/images/CORTEX-logo-200.png"/>
+                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high" src="../assets/images/cortex-logo-200.png"/>
             </a>
         </div>
         <div class="hero-divider-line"></div>
@@ -867,6 +868,11 @@ if (typeof mermaid !== 'undefined') {
     g.append('rect').attr('x', w/2 + 10).attr('y', lgY).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill','rgba(255,255,255,0.12)').attr('stroke','rgba(255,255,255,0.3)').attr('stroke-width',1);
     g.append('text').attr('x', w/2 + 26).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif').text('Skill depth index');
 })();
+</script>
+
+<script src="../assets/js/content-loader.js"></script>
+<script>
+    window.cortexLoader = new ContentLoader('../data/content.json');
 </script>
 
 </body>

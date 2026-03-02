@@ -26,12 +26,12 @@
       { "id": "summary", "title": "Summary Metrics", "anchor": "12-summary-metrics" }
     ],
     "summary_metrics": {
-      "wired_orchestrators": 51,
-      "orchestrator_files": 259,
+      "wired_orchestrators": 185,
+      "orchestrator_files": 258,
       "orchestrator_domains": 9,
-      "active_mcp_tools": 29,
-      "total_mcp_tools": 39,
-      "core_rules": 38,
+      "active_mcp_tools": 30,
+      "total_mcp_tools": 35,
+      "core_rules": 32,
       "governance_yamls": 32,
       "lens_analyzers": 17,
       "knowledge_yaml_files": 38,
@@ -41,10 +41,10 @@
       "package_directories": 20,
       "knowledge_tech_stacks": 32,
       "knowledge_domains": 34,
-      "phases_completed": 99,
-      "intent_types": 28
+      "phases_completed": 25,
+      "intent_types": 29
     },
-    "last_verified": "2026-02-28"
+    "last_verified": "2026-03-02"
   },
   "categories": [
     {

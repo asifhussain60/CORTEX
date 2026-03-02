@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated": "2026-02-28",
+    "generated": "2026-03-02",
     "source": "cortex/mcp/mcp_registry.py",
     "version": "2.1.0",
-    "total_registered": 29,
-    "total_target": 39,
+    "total_registered": 30,
+    "total_target": 35,
     "transport": "stdio",
     "protocol": "Pylance-style auto-start",
     "note": "Tools marked registered:false are planned. Counts reflect latest registry state."

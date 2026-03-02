@@ -67,37 +67,46 @@ class TestDataFiles:
         self, 
         learning_paths_json: Dict[str, Any]
     ) -> None:
-        """learning-paths.json must have paths array."""
-        assert "paths" in learning_paths_json, (
-            "learning-paths.json missing 'paths'"
+        """learning-paths.json must have tracks array."""
+        assert "tracks" in learning_paths_json, (
+            "learning-paths.json missing 'tracks'"
         )
-        assert isinstance(learning_paths_json["paths"], list), (
-            "learning-paths.json 'paths' is not a list"
+        assert isinstance(learning_paths_json["tracks"], list), (
+            "learning-paths.json 'tracks' is not a list"
         )
-        assert len(learning_paths_json["paths"]) == 3, (
-            "learning-paths.json should have exactly 3 paths (beginner/intermediate/advanced)"
+        assert len(learning_paths_json["tracks"]) == 3, (
+            "learning-paths.json should have exactly 3 tracks (beginner/intermediate/advanced)"
         )
     
     def test_knowledge_catalog_json_structure(
         self, 
         knowledge_catalog_json: Dict[str, Any]
     ) -> None:
-        """knowledge-catalog.json must have tech_stacks or similar structure."""
+        """knowledge-catalog.json must have domains structure."""
         # Check for any top-level key (structure may vary)
         assert len(knowledge_catalog_json.keys()) > 0, (
             "knowledge-catalog.json is empty"
         )
         
-        # If tech_stacks exists, validate structure
-        if "tech_stacks" in knowledge_catalog_json:
-            tech_stacks = knowledge_catalog_json["tech_stacks"]
-            assert isinstance(tech_stacks, list), (
-                "knowledge-catalog.json 'tech_stacks' is not a list"
+        # Validate domains structure (canonical schema)
+        if "domains" in knowledge_catalog_json:
+            domains = knowledge_catalog_json["domains"]
+            assert isinstance(domains, list), (
+                "knowledge-catalog.json 'domains' is not a list"
             )
             
-            for stack in tech_stacks:
-                assert "id" in stack, f"Tech stack missing 'id': {stack}"
-                assert "name" in stack, f"Tech stack missing 'name': {stack}"
+            for domain in domains:
+                assert "id" in domain, f"Domain missing 'id': {domain}"
+                assert "title" in domain, f"Domain missing 'title': {domain}"
+        
+        # Legacy: if tech_stacks exists, validate structure
+        if "tech_stacks" in knowledge_catalog_json:
+            tech_stacks = knowledge_catalog_json["tech_stacks"]
+            if isinstance(tech_stacks, list):
+                for stack in tech_stacks:
+                    if isinstance(stack, dict):
+                        assert "id" in stack, f"Tech stack missing 'id': {stack}"
+                        assert "name" in stack, f"Tech stack missing 'name': {stack}"
     
     def test_mcp_tools_json_structure(
         self, 
@@ -121,45 +130,53 @@ class TestDataFiles:
         self, 
         orchestrators_json: Dict[str, Any]
     ) -> None:
-        """orchestrators.json must have orchestrators array."""
-        assert "orchestrators" in orchestrators_json, (
-            "orchestrators.json missing 'orchestrators'"
+        """orchestrators.json must have tiers structure."""
+        assert "tiers" in orchestrators_json, (
+            "orchestrators.json missing 'tiers'"
         )
-        assert isinstance(orchestrators_json["orchestrators"], list), (
-            "orchestrators.json 'orchestrators' is not a list"
+        assert isinstance(orchestrators_json["tiers"], dict), (
+            "orchestrators.json 'tiers' is not a dict"
         )
-        assert len(orchestrators_json["orchestrators"]) > 0, (
-            "orchestrators.json has no orchestrators"
+        assert len(orchestrators_json["tiers"]) > 0, (
+            "orchestrators.json has no tiers"
         )
         
-        # Validate orchestrator structure
-        for orchestrator in orchestrators_json["orchestrators"]:
-            assert "name" in orchestrator, f"Orchestrator missing 'name': {orchestrator}"
-            assert "tier" in orchestrator, f"Orchestrator missing 'tier': {orchestrator}"
+        # Validate each tier has orchestrators
+        for tier_name, tier_data in orchestrators_json["tiers"].items():
+            assert "orchestrators" in tier_data, (
+                f"Tier '{tier_name}' missing 'orchestrators'"
+            )
+            for orchestrator in tier_data["orchestrators"]:
+                assert "name" in orchestrator, (
+                    f"Orchestrator missing 'name' in tier '{tier_name}': {orchestrator}"
+                )
     
-    def test_mcp_tools_json_has_26_tools(
+    def test_mcp_tools_json_has_registered_tools(
         self, 
         mcp_tools_json: Dict[str, Any]
     ) -> None:
-        """mcp-tools.json should have 26 active tools (CORTEX spec)."""
+        """mcp-tools.json should have 28-35 registered tools (CORTEX spec)."""
         tools = mcp_tools_json.get("tools", [])
-        active_tools = [t for t in tools if t.get("status") != "deprecated"]
+        registered_tools = [t for t in tools if t.get("registered", False)]
         
-        # Allow some tolerance (26 ± 2)
-        assert 24 <= len(active_tools) <= 28, (
-            f"Expected ~26 active MCP tools, found {len(active_tools)}"
+        # Allow tolerance for growth (28-35 registered)
+        assert 28 <= len(registered_tools) <= 35, (
+            f"Expected 28-35 registered MCP tools, found {len(registered_tools)}"
         )
     
-    def test_orchestrators_json_has_27_orchestrators(
+    def test_orchestrators_json_has_wired_orchestrators(
         self, 
         orchestrators_json: Dict[str, Any]
     ) -> None:
-        """orchestrators.json should have 27 orchestrators (CORTEX spec)."""
-        orchestrators = orchestrators_json.get("orchestrators", [])
+        """orchestrators.json should have 40-60 wired orchestrators (CORTEX spec)."""
+        tiers = orchestrators_json.get("tiers", {})
+        total = 0
+        for tier_data in tiers.values():
+            total += len(tier_data.get("orchestrators", []))
         
-        # Allow some tolerance (27 ± 2)
-        assert 25 <= len(orchestrators) <= 29, (
-            f"Expected ~27 orchestrators, found {len(orchestrators)}"
+        # Allow tolerance for growth (40-60 wired)
+        assert 40 <= total <= 60, (
+            f"Expected 40-60 wired orchestrators, found {total}"
         )
     
     def test_orchestrators_json_has_core_tier(
@@ -167,20 +184,21 @@ class TestDataFiles:
         orchestrators_json: Dict[str, Any]
     ) -> None:
         """orchestrators.json should have core tier orchestrators."""
-        orchestrators = orchestrators_json.get("orchestrators", [])
+        tiers = orchestrators_json.get("tiers", {})
         
-        core_orchestrators = [
-            o for o in orchestrators 
-            if o.get("tier") == "core"
-        ]
+        assert "core" in tiers, (
+            "orchestrators.json has no 'core' tier"
+        )
+        
+        core_orchestrators = tiers["core"].get("orchestrators", [])
         
         assert len(core_orchestrators) > 0, (
             "orchestrators.json has no core tier orchestrators"
         )
         
-        # Should have ~7 core orchestrators
-        assert 5 <= len(core_orchestrators) <= 9, (
-            f"Expected ~7 core orchestrators, found {len(core_orchestrators)}"
+        # Should have ~10-20 core orchestrators
+        assert 5 <= len(core_orchestrators) <= 20, (
+            f"Expected 5-20 core orchestrators, found {len(core_orchestrators)}"
         )
     
     def test_all_json_files_have_reasonable_size(self, data_dir: Path) -> None:

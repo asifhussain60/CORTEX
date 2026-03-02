@@ -60,9 +60,9 @@ class TestLearningPaths:
         learning_levels: List[str]
     ) -> None:
         """learning-paths.json must define all 3 levels."""
-        paths = learning_paths_json.get("paths", [])
+        tracks = learning_paths_json.get("tracks", [])
         
-        defined_levels = [path.get("id") for path in paths]
+        defined_levels = [track.get("id") for track in tracks]
         
         for level in learning_levels:
             assert level in defined_levels, (

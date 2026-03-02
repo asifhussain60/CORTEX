@@ -4,7 +4,7 @@
  * 
  * @author Asif Hussain
  * @version 1.0.0
- * @copyright © 2025 Asif Hussain. All rights reserved.
+ * @copyright © 2025–2026 Asif Hussain. All rights reserved.
  */
 
 class CORTEXLayoutValidator {

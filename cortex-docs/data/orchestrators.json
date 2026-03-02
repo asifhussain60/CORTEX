@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-02-28",
+    "generated": "2026-03-02",
     "source": "cortex/orchestrators/",
     "version": "2.1.0",
-    "total": 51,
-    "total_files": 259,
-    "domains": "core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:6"
+    "total": 185,
+    "total_files": 258,
+    "domains": "core:77 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6"
   },
   "tiers": {
     "core": {
