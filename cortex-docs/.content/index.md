@@ -4,7 +4,7 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
@@ -31,7 +31,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it architecturally different:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through test-driven development enforcement to governed code delivery.
-- One canonical Python package, 259+ specialised processing engines across 9 domains, 29 tools accessible directly in your IDE, and 32 governance rules enforced at every stage.
+- One canonical Python package, 259+ specialised processing engines across 9 domains, 30 tools accessible directly in your IDE, and 32 governance rules enforced at every stage.
 - Test-driven development is not optional. Tests are written before implementation on every feature and every bug fix — enforced structurally, not by policy.
 - Everything is Git-backed. No external databases, no cloud dependencies for development — just structured configuration files versioned alongside your code.
 
@@ -42,7 +42,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Capability | What It Means for Your Team |
 |---|---|
 | **259+ specialised processing engines** | Every category of engineering work — building, testing, auditing, debugging, security, planning — has a dedicated expert engine |
-| **29 IDE-accessible tools** | All CORTEX capabilities available directly in your coding assistant — no context switching, no separate applications |
+| **30 IDE-accessible tools** | All CORTEX capabilities available directly in your coding assistant — no context switching, no separate applications |
 | **32 governance rules** | Quality standards enforced automatically at every commit, build, and deployment — not dependent on code reviewers remembering to check |
 | **6 programming languages** | Deep analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML — including framework-specific understanding for Angular, React, and Vue |
 | **29 request types understood** | From "implement this feature" to "debug this failure" to "audit this codebase" — CORTEX classifies and routes every request to the right specialist |
@@ -56,7 +56,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ### Architecture at a Glance
 
-CORTEX is structured around three interconnected pillars working in concert. The **MCP Gateway** exposes 29 tools directly in your coding assistant, providing the interface through which every request enters the system. The **Orchestration Layer** routes requests through 259+ specialised processing engines across 9 domains — from core coordination through domain specialists to operational support. The **Intelligence Layer** combines code analysis (LENS), three tiers of reasoning (Perception, Reasoning, Action), and a continuous learning system that improves with every interaction.
+CORTEX is structured around three interconnected pillars working in concert. The **MCP Gateway** exposes 30 tools directly in your coding assistant, providing the interface through which every request enters the system. The **Orchestration Layer** routes requests through 259+ specialised processing engines across 9 domains — from core coordination through domain specialists to operational support. The **Intelligence Layer** combines code analysis (LENS), three tiers of reasoning (Perception, Reasoning, Action), and a continuous learning system that improves with every interaction.
 
 Underpinning all three pillars are the **Governance Registry** (32 rules enforced at every stage), the **Testing Infrastructure** (comprehensive parallel test execution), and the **Git-Backed Configuration Store** (all rules, templates, and knowledge versioned as YAML alongside your code).
 

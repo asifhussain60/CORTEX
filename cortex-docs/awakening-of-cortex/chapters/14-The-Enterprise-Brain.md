@@ -429,7 +429,7 @@ To give every enterprise a brain.
 
 **Author's Note:**
 
-CORTEX is real. The architecture is real. The 16,942 tests are real. The 51 orchestrators, 38 governance rules, and 29 MCP tools are real. The basement in New Jersey is real (though slightly better ventilated now).
+CORTEX is real. The architecture is real. The 16,942 tests are real. The 258 orchestrator engines, 32 governance rules, and 30 MCP tools are real. The basement in New Jersey is real (though slightly better ventilated now).
 
 Miss G remains imaginary. Copilot Bot remains confidently incorrect approximately 27% of the time.
 

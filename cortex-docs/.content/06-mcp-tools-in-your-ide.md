@@ -1,14 +1,14 @@
 # Tools in Your IDE — The MCP Gateway
 
 ---
-title: MCP Gateway — 29 CORTEX Capabilities Accessible Directly in Your Coding Assistant
+title: MCP Gateway — 30 CORTEX Capabilities Accessible Directly in Your Coding Assistant
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 order: 6
 ---
 
-> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 29 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 30 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
 
 ---
 
@@ -35,7 +35,7 @@ To verify CORTEX is running, a developer simply types `cortex_verify` in Copilot
 
 ---
 
-## The 29 Registered Tools — Organised by Purpose
+## The 30 Registered Tools — Organised by Purpose
 
 All tools are registered in a central tool registry and discovered automatically by the IDE. Calling `cortex_tools_catalog` from your coding assistant returns a live list of all registered tools with descriptions.
 
@@ -46,11 +46,10 @@ These tools handle intent classification and request lifecycle management — th
 | Tool | What It Does |
 |---|---|
 | **cortex_classify** | Classifies a request into one of 29 intent types and returns the routing decision |
-| **cortex_orchestrator** | Routes a request directly to any of the 259 wired orchestrators across all 9 domains |
+| **cortex_orchestrator** | Routes a request directly to any of the wired orchestrators across all 9 domains |
 | **cortex_request_lifecycle** | Executes the complete request lifecycle — classify, plan, execute, validate — with full audit trail |
 | **cortex_challenge** | Generates two or more alternative approaches for a proposed change, with trade-off analysis |
 | **cortex_ask** | Answers educational questions about CORTEX architecture with verification against live code |
-| **cortex_total_recall** | Produces a comprehensive recall of all CORTEX features, components, and architecture |
 | **cortex_tools_catalog** | Lists all registered tools with their categories and descriptions |
 
 ### Governance and Compliance
@@ -63,7 +62,6 @@ These tools expose the governance layer — rule checking, compliance validation
 | **cortex_load** | Loads governance rules, audit checklists, execution modes, and response format standards |
 | **cortex_validate** | Checks code or a proposed operation against active governance rules |
 | **cortex_validate_request** | Runs a governance gate check on a request before execution begins |
-| **cortex_check** | Detects drift between declared dependencies and installed packages |
 
 ### Intelligence and Code Analysis
 
@@ -75,6 +73,8 @@ These tools expose the intelligence layer — code analysis, semantic operations
 | **cortex_vision** | Analyses screenshots using Vision API — identifies UI elements, maps visual structure to CSS selectors and HTML elements, surfaces layout discrepancies, and bridges the gap between what developers see in the browser and what exists in the code |
 | **cortex_knowledge** | Synthesises knowledge from governance registries and applies it to a specific context — resolving conflicts between generic and team-specific guidance automatically |
 | **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis with four structured methodologies — building institutional memory that prevents recurring failures |
+| **cortex_brain_query** | Queries the CORTEX reinforcement signal engine — retrieve signal history, decay stale patterns, promote high-confidence signals — exposing the continuous learning state directly |
+| **cortex_scan** | Hierarchical file scanning with organisation detection — scans any directory with configurable extensions and pluggable adapters for code, documentation, and media organisation |
 
 ### Contextually Intelligent Response Headers
 
@@ -97,6 +97,7 @@ These tools connect CORTEX to project planning and repository assessment workflo
 |---|---|
 | **cortex_plan** | Creates structured remediation and project plans from audit findings |
 | **cortex_onboard** | Runs a complete repository analysis — security assessment, architecture mapping, dashboard generation |
+| **cortex_master_plan** | Creates, queries, updates, and synchronises phase planning documents in the master plan registry |
 
 ### Test Generation
 
@@ -112,12 +113,20 @@ These tools connect CORTEX to project planning and repository assessment workflo
 | **cortex_debug** | Captures debug logs, analyses errors, and generates a structured fix plan |
 | **cortex_metrics** | Records and reports development metrics — build cycles, debug sessions, invocations |
 
+### Dashboards and Reporting
+
+| Tool | What It Does |
+|---|---|
+| **cortex_dashboard** | Generates and manages interactive dashboards — suite landing pages, per-repository dashboards, and full lifecycle management for visual reporting |
+
 ### Workflow and Automation
 
 | Tool | What It Does |
 |---|---|
 | **cortex_workflow** | Lists, loads, and executes YAML workflow templates from the template registry |
 | **cortex_enrich** | Adds metadata and context to structured data for downstream processing |
+| **cortex_batch_transform** | Batch-processes collections of items with configurable triggers (size or timeout) and selectable transformation operations |
+| **cortex_scaffold_files** | Writes new files from templates, checks for existing artefacts, and lists all scaffolded files — the gateway for creating new modules from canonical templates |
 
 ### Maintenance
 
@@ -167,4 +176,4 @@ For business leaders, work item integration means delivery metrics are grounded 
 
 ---
 
-*Tool catalog verified against live MCP registry · Integration patterns verified against live configuration*
+*Tool catalog verified against live MCP registry (30 tools) · Integration patterns verified against live configuration · Last verified: 2026-03-02*

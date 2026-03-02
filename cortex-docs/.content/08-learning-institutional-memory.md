@@ -4,7 +4,7 @@
 title: Institutional Memory — Root Cause Analysis, Reinforcement Learning, and the Knowledge Engine
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 order: 8
 ---
 

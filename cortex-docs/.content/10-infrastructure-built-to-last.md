@@ -4,7 +4,7 @@
 title: Infrastructure — Observability, Resilience, Deployment, and the Audit Database
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 order: 10
 ---
 
