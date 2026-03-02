@@ -18,11 +18,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-02T10:00:00Z'
-  total_phases: 99
+  total_phases: 100
   active: 0
   completed: 76
   in_progress: 0
-  planned: 5
+  planned: 6
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -40,6 +40,17 @@ metadata:
 # archived: superseded files moved to planned/_archived/ (CORE-064 lineage).
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
+
+  # ── SLOT #NEXT — phase-106 (P1, PLANNED) ─────────────────────────────────────
+  - id: phase-106
+    title: "Root-Cause Guard Loop + Certification Gate — Audit-Fix Closed-Loop Intelligence"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-106-RCA-GUARD-CERTIFICATION
+    gaps: 6
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-106-rca-guard-certification.yaml"
+    note: "Closes 3 audit-fix islands + 2 certification gaps + 1 CORE-035 violation. (A) Regression guard generator primitive → tests/regression/guards/. (B) RCA dispatch wiring: pattern_detection → RCAEngine.analyze() → PreventionRule. (C) Stage 9 tier upgrade: preflight → smoke. (D) audit_certifications SQLite table + cortex_governance op:certification_status. (E) Check #29 security/monitoring + validate-production.py deprecation. Expands: /fix guards (phase-107), pre-commit prevention rules, certification trend dashboard."
 
   # ── SLOT #-2 — phase-91 (P1, COMPLETE) ──────────────────────────────────────
   - id: phase-91
