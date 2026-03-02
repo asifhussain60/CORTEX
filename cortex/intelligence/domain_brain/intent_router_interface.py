@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, List
 
 if TYPE_CHECKING:
-    from cortex.intelligence.domain_brain.domain_brain.nlp_handler_router import IntentResult
+    from cortex.intelligence.domain_brain.nlp_handler_router import IntentResult
 
 
 class IIntentRouter(ABC):

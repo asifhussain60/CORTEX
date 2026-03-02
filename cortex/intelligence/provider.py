@@ -561,7 +561,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         # so KGInference.infer_related_rules() has entity data to work with.
         # Idempotent: overwriting existing entities is safe.
         try:
-            from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+            from cortex.intelligence.domain_brain.kg_indexer import KnowledgeIndexer
             from pathlib import Path as _Path
 
             _registry_root = _Path(__file__).parents[3] / "cortex-registry"

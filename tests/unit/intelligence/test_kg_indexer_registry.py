@@ -30,7 +30,7 @@ def _write_yaml(tmp: Path, filename: str, data: dict) -> Path:
 
 def test_kg_indexer_has_index_registry_yaml() -> None:
     """AC-P20-004: KGIndexer (KnowledgeIndexer) has index_registry_yaml() method."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+    from cortex.intelligence.domain_brain.kg_indexer import KnowledgeIndexer
 
     indexer = KnowledgeIndexer()
     assert hasattr(indexer, "index_registry_yaml"), (
@@ -40,7 +40,7 @@ def test_kg_indexer_has_index_registry_yaml() -> None:
 
 def test_kg_indexer_indexes_entities_from_yaml() -> None:
     """AC-P20-004b: index_registry_yaml() reads YAML and indexes entities."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+    from cortex.intelligence.domain_brain.kg_indexer import KnowledgeIndexer
 
     indexer = KnowledgeIndexer()
     with tempfile.TemporaryDirectory() as tmp_str:
@@ -63,7 +63,7 @@ def test_kg_indexer_indexes_entities_from_yaml() -> None:
 
 def test_kg_indexer_handles_missing_file_gracefully() -> None:
     """AC-P20-004c: index_registry_yaml() does not raise when file is missing."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+    from cortex.intelligence.domain_brain.kg_indexer import KnowledgeIndexer
 
     indexer = KnowledgeIndexer()
     missing = Path("/tmp/nonexistent_registry_yaml_12345.yaml")
@@ -77,7 +77,7 @@ def test_kg_indexer_handles_missing_file_gracefully() -> None:
 
 def test_kg_indexer_idempotent() -> None:
     """AC-P20-014: index_registry_yaml() is idempotent — double call does not duplicate entities."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+    from cortex.intelligence.domain_brain.kg_indexer import KnowledgeIndexer
 
     indexer = KnowledgeIndexer()
     with tempfile.TemporaryDirectory() as tmp_str:
@@ -100,7 +100,7 @@ def test_kg_indexer_idempotent() -> None:
 
 def test_kg_inference_has_infer_related_rules() -> None:
     """AC-P20-005: KnowledgeInference exposes infer_related_rules() method."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_inference import KnowledgeInference
+    from cortex.intelligence.domain_brain.kg_inference import KnowledgeInference
 
     inference = KnowledgeInference()
     assert hasattr(inference, "infer_related_rules"), (
@@ -110,7 +110,7 @@ def test_kg_inference_has_infer_related_rules() -> None:
 
 def test_kg_inference_infer_related_rules_returns_list() -> None:
     """AC-P20-005b: infer_related_rules() returns a list (possibly empty) for any entity_id."""
-    from cortex.intelligence.domain_brain.domain_brain.kg_inference import KnowledgeInference
+    from cortex.intelligence.domain_brain.kg_inference import KnowledgeInference
 
     inference = KnowledgeInference()
     result = inference.infer_related_rules("finops-v1.0")

@@ -2,7 +2,7 @@
 Golden Truth Test: Knowledge Synthesis — Canonical Import Paths
 
 Phase 63-B rewrite — replaces legacy test_ado_brain_synthesis_truth.py
-(which used double-dot path: cortex.intelligence.domain_brain.domain_brain.kg_indexer).
+(which used double-dot path: cortex.intelligence.domain_brain.kg_indexer).
 
 Validates:
 1. KnowledgeIndexer importable at canonical path cortex.intelligence.domain_brain.kg_indexer

@@ -8,10 +8,10 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 from cortex.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter
-from cortex.intelligence.domain_brain.domain_brain.kg_deduplicator import (
+from cortex.intelligence.domain_brain.kg_deduplicator import (
     EntityDeduplicator,
 )
-from cortex.intelligence.domain_brain.domain_brain.kg_ingest_adapter import EntityIngestAdapter
+from cortex.intelligence.domain_brain.kg_ingest_adapter import EntityIngestAdapter
 
 
 class SyncAuditEntry:

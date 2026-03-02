@@ -8,8 +8,16 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class SynthesisResult:
-    """Result of cross-source knowledge synthesis."""
+class KnowledgeSynthesisResult:
+    """Result of cross-source knowledge synthesis (tier3 internal — Phase 107 rename).
+
+    Renamed from SynthesisResult → KnowledgeSynthesisResult to resolve CORE-035
+    name collision with the canonical cortex.intelligence.models.SynthesisResult.
+    This class has a different structure (query/sources/confidence) vs. the
+    canonical intelligence SynthesisResult (merged_rules/citations/violations/guidance).
+
+    Authority: GAP-107-02 (Phase 107 Sub-Phase A)
+    """
 
     query: str
     sources: List[Dict[str, Any]]
@@ -17,6 +25,10 @@ class SynthesisResult:
     confidence: float
     conflicts: List[str] = field(default_factory=list)
     recommendations: List[str] = field(default_factory=list)
+
+
+# Backward-compat alias — remove after Sub-Phase B sweep
+SynthesisResult = KnowledgeSynthesisResult  # type: ignore[misc]  # noqa: N818
 
 
 class SynthesisEngine:
@@ -27,10 +39,10 @@ class SynthesisEngine:
         query: str,
         sources: List[Dict[str, Any]],
         strategy: str = "merge",
-    ) -> SynthesisResult:
+    ) -> KnowledgeSynthesisResult:
         """Synthesize knowledge from *sources* to answer *query*."""
         if not sources:
-            return SynthesisResult(
+            return KnowledgeSynthesisResult(
                 query=query,
                 sources=[],
                 synthesized_content="No sources available.",
@@ -44,7 +56,7 @@ class SynthesisEngine:
         else:
             content = "\n".join(f"- {c}" for c in contents if c)
         confidence = min(1.0, 0.5 + len(sources) * 0.1)
-        return SynthesisResult(
+        return KnowledgeSynthesisResult(
             query=query,
             sources=sources,
             synthesized_content=content,

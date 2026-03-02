@@ -18,11 +18,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-02T10:00:00Z'
-  total_phases: 100
+  total_phases: 101
   active: 0
   completed: 76
   in_progress: 0
-  planned: 6
+  planned: 7
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -41,7 +41,18 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #NEXT — phase-106 (P1, PLANNED) ─────────────────────────────────────
+  # ── SLOT #NEXT — phase-107 (P0, PLANNED) ─────────────────────────────────────
+  - id: phase-107
+    title: "Intelligence Layer Consolidation — Layered Diamond Architecture, Migration Automation, Prompt/Agent Refresh, Audit Hardening, P0 Wiring Verification"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-107-INTELLIGENCE-CONSOLIDATION
+    gaps: 20
+    sub_phases: 10
+    file: "cortex-registry/planning/phases/planned/phase-107-intelligence-layer-consolidation.yaml"
+    note: "Consolidates 4 packages (intelligence/lens/knowledge/governance) into Layered Diamond. 5→1 synthesis engines, 3→1 facades, 2→1 base classes. Sub-phases: (A) Unified models, (B) Synthesis consolidation, (C) LENS merge + facade, (D) Dir flattening, (E) Prompt/agent refresh, (F) E2E audit AC verification, (G) P0 wiring YAML alignment gate, (H) Vacuum migration stages, (I) Check #29 intelligence health. Target: 379→80 files, 100→12 dirs."
+
+  # ── SLOT #NEXT-1 — phase-106 (P1, PLANNED) ───────────────────────────────────
   - id: phase-106
     title: "Root-Cause Guard Loop + Certification Gate — Audit-Fix Closed-Loop Intelligence"
     priority: P1

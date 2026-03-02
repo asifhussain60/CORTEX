@@ -28,6 +28,12 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/orchestrators/documentation.py",
     "cortex/orchestrators/health/constants.py",
     "cortex/tools/toolkit/verify_mcp_tools.py",
+    # Phase 107 Sub-Phase A — 90-day compat shims (expiry: 2026-06-01)
+    # Canonical definitions moved to cortex/intelligence/models/
+    # These re-export for zero-breaking-change backward compatibility (GAP-107-01, GAP-107-02)
+    "cortex/intelligence/base.py",
+    "cortex/intelligence/base_engine.py",
+    "cortex/intelligence/knowledge/unified_intelligence_context.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

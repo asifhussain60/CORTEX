@@ -1389,6 +1389,170 @@ class KnowledgeSynthesisEngine:
         except Exception as exc:
             logger.debug("KnSynth.track_instruction_outcome: non-fatal — %s", exc)
 
+    # =========================================================================
+    # PHASE 107 SUB-PHASE B: Absorbed capabilities from tier3 SynthesisEngine
+    # GAP-107-03: Consolidate overlapping synthesis engines (CORE-035)
+    # =========================================================================
+
+    def synthesize_from_sources(
+        self,
+        query: str,
+        sources: List[Dict[str, Any]],
+        strategy: str = "merge",
+    ) -> Any:
+        """Synthesize knowledge from multiple sources to answer a query.
+
+        Absorbs ``SynthesisEngine(tier3).synthesize()`` into the canonical
+        ``KnowledgeSynthesisEngine``. Callers that previously used the tier3
+        engine can now use this method directly.
+
+        Args:
+            query: The question or topic to synthesize an answer for.
+            sources: List of knowledge source dicts, each with at least
+                     a ``content`` or ``description`` key.
+            strategy: Merge strategy — ``"merge"`` (join all), ``"first"``
+                      (use first source), or ``"list"`` (bullet list).
+
+        Returns:
+            ``KnowledgeSynthesisResult`` with synthesized content,
+            confidence score, and source references.
+
+        Example::
+
+            engine = KnowledgeSynthesisEngine()
+            result = engine.synthesize_from_sources(
+                query="Best TDD practices?",
+                sources=[{"id": "tdd-1", "content": "Write tests first"}],
+            )
+            print(result.synthesized_content)
+
+        Authority: GAP-107-03 (Phase 107 Sub-Phase B)
+        """
+        from cortex.intelligence.tier3.knowledge.synthesis_engine import (
+            KnowledgeSynthesisResult,
+        )
+
+        if not sources:
+            return KnowledgeSynthesisResult(
+                query=query,
+                sources=[],
+                synthesized_content="No sources available.",
+                confidence=0.0,
+            )
+
+        contents = [
+            str(s.get("content", s.get("description", ""))) for s in sources
+        ]
+
+        if strategy == "merge":
+            content = "\n\n".join(c for c in contents if c)
+        elif strategy == "first":
+            content = contents[0] if contents else ""
+        else:
+            content = "\n".join(f"- {c}" for c in contents if c)
+
+        confidence = min(1.0, 0.5 + len(sources) * 0.1)
+
+        return KnowledgeSynthesisResult(
+            query=query,
+            sources=sources,
+            synthesized_content=content,
+            confidence=confidence,
+        )
+
+    def detect_source_conflicts(
+        self,
+        sources: List[Dict[str, Any]],
+        sweep_id: Optional[str] = None,
+    ) -> List[str]:
+        """Detect conflicting information across knowledge sources.
+
+        Absorbs ``SynthesisEngine(tier3).detect_conflicts()`` into the canonical
+        ``KnowledgeSynthesisEngine``. Compares ``content`` fields across sources
+        for contradictory signals using negation marker heuristics.
+
+        When conflicts are found and ``sweep_id`` is provided, each conflict is
+        submitted to ``SweepCatalogueOrchestrator``.
+
+        Args:
+            sources: List of knowledge source dicts, each with at least
+                     an ``id`` and ``content`` key.
+            sweep_id: Optional sweep identifier for SweepCatalogue submission.
+
+        Returns:
+            List of conflict description strings. Empty when no conflicts.
+
+        Authority: GAP-107-03 (Phase 107 Sub-Phase B)
+        """
+        if len(sources) < 2:
+            return []
+
+        conflicts: List[str] = []
+        contents = [
+            (s.get("id", str(i)), str(s.get("content", "")))
+            for i, s in enumerate(sources)
+        ]
+
+        _NEGATION_MARKERS = (
+            "not", "deprecated", "instead", "replaced",
+            "conflicts", "incorrect",
+        )
+        seen_ids: set = set()
+        for i, (id_a, content_a) in enumerate(contents):
+            for j, (id_b, content_b) in enumerate(contents):
+                if i >= j:
+                    continue
+                pair_key = f"{id_a}:{id_b}"
+                if pair_key in seen_ids:
+                    continue
+                seen_ids.add(pair_key)
+
+                words_a = set(content_a.lower().split())
+                words_b = set(content_b.lower().split())
+                common = words_a & words_b
+
+                if common and any(
+                    m in words_a or m in words_b for m in _NEGATION_MARKERS
+                ):
+                    conflict_desc = (
+                        f"Conflict between '{id_a}' and '{id_b}': "
+                        f"shared topic words {list(common)[:5]!r} with opposing signals."
+                    )
+                    conflicts.append(conflict_desc)
+
+        if conflicts and sweep_id:
+            self._submit_source_conflicts_to_sweep(
+                sweep_id=sweep_id, conflicts=conflicts,
+            )
+
+        return conflicts
+
+    def _submit_source_conflicts_to_sweep(
+        self,
+        sweep_id: str,
+        conflicts: List[str],
+    ) -> None:
+        """Submit detected source conflicts to SweepCatalogueOrchestrator.
+
+        Args:
+            sweep_id: Sweep identifier to attach issues to.
+            conflicts: List of conflict description strings.
+        """
+        try:
+            from cortex.orchestrators.support.sweep_catalogue_orchestrator import (
+                SweepCatalogueOrchestrator,
+            )
+            catalogue = SweepCatalogueOrchestrator()
+            for conflict in conflicts:
+                catalogue.add_issue(
+                    sweep_id=sweep_id,
+                    file="KnowledgeSynthesisEngine",
+                    description=conflict,
+                )
+        except Exception:  # noqa: BLE001
+            # Graceful degradation — never block synthesis on catalogue errors
+            pass
+
 
 # Singleton accessor
 _engine: Optional[KnowledgeSynthesisEngine] = None

@@ -9,7 +9,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from cortex.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter
-from cortex.intelligence.domain_brain.domain_brain.kg_query_interface import (
+from cortex.intelligence.domain_brain.kg_query_interface import (
     QueryEdge,
     QueryNode,
     QueryPath,

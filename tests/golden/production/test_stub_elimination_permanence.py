@@ -107,30 +107,50 @@ class TestBusinessRulesPipelineWiring:
         GAP-84-03: BusinessKnowledgeRepository must NOT be an in-memory dict stub.
 
         Permanence: prevents regression to PHASE-E unblocking stub.
+
+        Phase 107 update: canonical location moved to
+        cortex/intelligence/knowledge/business_knowledge_repository.py.
+        The domain_brain version is now a compat shim re-exporting from there.
+        We check the CANONICAL file for persistence, and the shim for delegation.
         """
-        repo_file = (
-            CORTEX_SRC / "intelligence" / "domain_brain"
+        # Phase 107: canonical definition is in knowledge/
+        canonical_file = (
+            CORTEX_SRC / "intelligence" / "knowledge"
             / "business_knowledge_repository.py"
         )
-        assert repo_file.exists(), f"Repository file not found: {repo_file}"
+        assert canonical_file.exists(), (
+            f"Canonical BusinessKnowledgeRepository not found: {canonical_file}"
+        )
 
-        content = repo_file.read_text(encoding="utf-8")
+        canonical_content = canonical_file.read_text(encoding="utf-8")
 
-        # Must NOT have the PHASE-E stub markers
-        assert "PHASE-E" not in content and "Stub for" not in content, (
+        # Canonical must NOT have the PHASE-E stub markers
+        assert "PHASE-E" not in canonical_content and "Stub for" not in canonical_content, (
             "GAP-84-03 REGRESSION: BusinessKnowledgeRepository still has PHASE-E stub markers. "
             "Must be replaced with YAML-backed implementation."
         )
 
-        # Must reference YAML or file-based persistence
+        # Canonical must reference YAML or file-based persistence
         has_persistence = any(
-            keyword in content
+            keyword in canonical_content
             for keyword in ["yaml", "YAML", ".yaml", "Path", "pathlib", "open(", "read_text"]
         )
         assert has_persistence, (
             "GAP-84-03 REGRESSION: BusinessKnowledgeRepository appears to still be in-memory. "
             "Must use YAML or file-based persistence."
         )
+
+        # Domain_brain shim must re-export from canonical (Phase 107)
+        shim_file = (
+            CORTEX_SRC / "intelligence" / "domain_brain"
+            / "business_knowledge_repository.py"
+        )
+        if shim_file.exists():
+            shim_content = shim_file.read_text(encoding="utf-8")
+            assert "knowledge.business_knowledge_repository" in shim_content, (
+                "domain_brain/business_knowledge_repository.py exists but does not "
+                "delegate to knowledge/business_knowledge_repository.py"
+            )
 
     # ── GAP-84-04: Enforcement loop for business rules ───────────────────────
     def test_gap_04_enforcement_orchestrator_has_business_rule_agent(self) -> None:
