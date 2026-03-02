@@ -1,0 +1,128 @@
+# performance_checklist.yaml
+# CORTEX Documentation — Performance Checklist
+# Authority: a11y-perf-guardian
+# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
+# Sources: web.dev Core Web Vitals, MDN Performance, Lighthouse audit patterns
+
+targets:
+  LCP: "< 2.5s (Largest Contentful Paint)"
+  FID: "< 100ms (First Input Delay)"
+  CLS: "< 0.1 (Cumulative Layout Shift)"
+  INP: "< 200ms (Interaction to Next Paint)"
+  TTFB: "< 800ms (Time to First Byte — static hosting)"
+
+checks:
+  resource_loading:
+    - id: perf-001
+      rule: "Critical CSS preloaded"
+      current_state: "IMPLEMENTED — cortex-grid-system.css, main.css, index-multipanel.css preloaded"
+      test: "grep 'rel=\"preload\"' cortex-docs/index.html | grep 'as=\"style\"'"
+
+    - id: perf-002
+      rule: "Hero image preloaded with fetchpriority=high"
+      current_state: "IMPLEMENTED — cortex-logo-512.png preloaded"
+      test: "grep 'fetchpriority=\"high\"' cortex-docs/index.html"
+
+    - id: perf-003
+      rule: "Below-fold images use loading=lazy"
+      current_state: "PARTIALLY IMPLEMENTED — verify all non-hero images"
+      test: "grep '<img' cortex-docs/index.html | grep -v 'loading='"
+      fix: "Add loading='lazy' to all images below the hero section"
+
+    - id: perf-004
+      rule: "JavaScript deferred where possible"
+      current_state: "IMPLEMENTED — index.js uses defer attribute"
+      test: "grep '<script src' cortex-docs/index.html | grep -v 'defer\\|async\\|type=\"module\"'"
+
+    - id: perf-005
+      rule: "Font preconnect hints present"
+      current_state: "IMPLEMENTED — preconnect to fonts.googleapis.com and fonts.gstatic.com"
+      test: "grep 'rel=\"preconnect\"' cortex-docs/index.html"
+
+    - id: perf-006
+      rule: "External scripts use SRI (Subresource Integrity)"
+      current_state: "IMPLEMENTED — Font Awesome CDN has integrity hash"
+      test: "grep 'crossorigin' cortex-docs/index.html"
+
+  css_performance:
+    - id: perf-010
+      rule: "No CSS @import chains (causes sequential fetches)"
+      current_state: "main.css imports cortex-glass-system.css — review chain depth"
+      test: "grep '@import' cortex-docs/assets/css/*.css"
+      fix: "Move @import to HTML <link> tags for parallel fetching (Phase 109 optimization)"
+
+    - id: perf-011
+      rule: "backdrop-filter used sparingly — max 3 glassmorphism layers visible at once"
+      current_state: "Multiple glass panels stack — verify GPU compositing cost"
+      test: "Chrome DevTools > Layers panel — each blur layer creates a compositing layer"
+      fix: "Use will-change: transform on glass panels that animate"
+
+    - id: perf-012
+      rule: "Animations use transform/opacity only (no layout-triggering properties)"
+      current_state: "glass-animations.css — verify no width/height/top/left animations"
+      test: 'grep -n "animation|@keyframes" cortex-docs/assets/css/glass-animations.css | grep -v "transform|opacity"'
+      fix: "Replace layout-triggering animations with transform equivalents"
+
+    - id: perf-013
+      rule: "CSS custom properties reduce duplication — value tokens not repeated inline"
+      current_state: "glass-design-tokens.css centralises 100+ tokens ✅"
+
+  image_optimization:
+    - id: perf-020
+      rule: "Images served in modern format (WebP/AVIF) with PNG fallback"
+      current_state: "PNG used — WebP conversion recommended"
+      fix: "Add <picture> element with WebP source + PNG fallback for hero images"
+      priority: P2
+
+    - id: perf-021
+      rule: "SVG preferred for icons and diagrams (scalable, small file size)"
+      current_state: "FontAwesome used for icons (icon font — 70KB+ CSS overhead)"
+      fix: "Consider replacing icon font with SVG sprite for critical icons"
+      priority: P2
+
+    - id: perf-022
+      rule: "Diagram images include explicit width + height to prevent CLS"
+      current_state: "Diagrams are .md spec files — not yet rendered as <img>"
+      fix: "When diagram images are added, always include width/height attributes"
+      priority: P1
+
+  layout_stability:
+    - id: perf-030
+      rule: "All images have explicit width/height attributes (prevents CLS)"
+      current_state: "Hero logo has width=500 height=500 ✅; verify others"
+      test: "grep '<img' cortex-docs/index.html | grep -v 'width='"
+
+    - id: perf-031
+      rule: "No flash of unstyled content (FOUC)"
+      current_state: "CSS loaded synchronously in <head> ✅"
+
+    - id: perf-032
+      rule: "Loading overlay masks content until JS initialises (prevents CLS)"
+      current_state: "IMPLEMENTED — #pageLoadingOverlay hides content during JS init"
+
+  web_vitals_monitoring:
+    - id: perf-040
+      rule: "Web Vitals instrumented"
+      current_state: "IMPLEMENTED — web-vitals@3 module tracks CLS, FID, LCP, TTFB, INP"
+      note: "Currently console.log only; connect to analytics endpoint for production monitoring"
+
+css_architecture_performance:
+  file_load_order:
+    - "1. cortex-grid-system.css (preloaded)"
+    - "2. glass-design-tokens.css"
+    - "3. glass-ui-components.css"
+    - "4. main.css (preloaded, imports cortex-glass-system.css)"
+    - "5. index-multipanel.css (preloaded)"
+    - "6. glass-animations.css"
+    - "7. glassmorphism.css"
+    - "8. generated-classes.css"
+    - "9. intentional-classes.css"
+    - "10. inline-styles-cleanup.css"
+  optimization_note: "Consider bundling 8-10 into a single utilities.css in Phase 109"
+
+regression_rules:
+  - "Any PR that adds render-blocking <script> in <head> without async/defer → P0 block"
+  - "Any PR that adds a new CSS @import chain → P1 flag"
+  - "Any PR that adds images without width/height → P1 flag (CLS risk)"
+  - "Any PR that removes preload hints for critical CSS → P1 flag"
+  - "Any PR that adds animations using layout-triggering properties → P1 flag"

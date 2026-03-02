@@ -1,8 +1,9 @@
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-02 (Phase 108 — Documentation Governance Layer) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-02 (Phase 108 — Documentation Governance Layer + Design+Implement Mode) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
-**Agents:** 8 modular agents in `.github/agents/docs/`
+**Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
+**Knowledge Base:** `cortex-docs/.content/knowledge/` (5 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist)
 
 ---
 
@@ -119,11 +120,62 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 ---
 
-## 🎯 Commands
+## � Design + Implement Mode
+
+**Trigger:** Any request to update, redesign, or improve an HTML view in `cortex-docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
+
+**Mode contract (non-negotiable):**
+- ❌ **NEVER** add `style=` inline attributes — all styling via CSS classes
+- ❌ **NEVER** introduce new CSS values without first checking `glass-design-tokens.css`
+- ❌ **NEVER** drift the dark blue glassmorphism theme — `design_system.yaml` is the identity contract
+- ✅ CSS changes → `cortex-docs/assets/css/` files only (matching the existing layer)
+- ✅ Read `cortex-docs/.content/knowledge/` before proposing any structural change
+- ✅ Validate against `a11y_checklist.yaml` and `performance_checklist.yaml`
+- ✅ All new components must reference entries in `components.yaml`
+
+### Step 1 — Design (before any implementation)
+
+**Agent:** `html-view-designer`
+
+1. Load `cortex-docs/.content/knowledge/doc_best_practices.yaml` — IA and navigation rules
+2. Load `cortex-docs/.content/knowledge/design_system.yaml` — token constraints
+3. Load `cortex-docs/.content/knowledge/components.yaml` — approved component patterns
+4. Read the target HTML file — understand current structure and DOM hooks
+5. Read existing CSS files in `cortex-docs/assets/css/` — understand current styles
+6. Propose: layout changes, component additions, structural improvements
+7. Present **BLOCK-INTENT-REFLECTION** with the design proposal
+8. Wait for `proceed` before implementing
+
+### Step 2 — Implement (after proceed)
+
+**Agents:** `design-system-enforcer` → `doc-sync-agent` (CSS rules) → `a11y-perf-guardian` → `regression-sentinel`
+
+1. **design-system-enforcer** — verify all proposed CSS values reference tokens from `glass-design-tokens.css`
+2. Apply HTML changes to target file — semantic elements, ARIA, stable DOM hooks
+3. Apply CSS changes to correct CSS layer file — never create a new file unless no existing layer fits
+4. **a11y-perf-guardian** — run `a11y_checklist.yaml` checks; block on P0 regressions
+5. **regression-sentinel** — diff HTML/CSS changes; confirm no theme drift, no broken links, no removed ARIA landmarks
+6. Report completion with `BLOCK-COMPLETION-STATE`
+
+### Design + Implement Agent Delegation Map
+
+| Step | Agent | Knowledge Input | Gate |
+|------|-------|-----------------|------|
+| Audit current state | `html-view-designer` | `doc_best_practices.yaml`, `components.yaml` | — |
+| Propose design | `html-view-designer` | `design_system.yaml` | BLOCK-PROCEED-GATE |
+| Token validation | `design-system-enforcer` | `design_system.yaml`, `glass-design-tokens.css` | P0 block on violation |
+| Implement HTML | `html-view-designer` + `doc-sync-agent` | `components.yaml`, `a11y_checklist.yaml` | — |
+| Implement CSS | `doc-sync-agent` (CSS rules) | `design_system.yaml`, `performance_checklist.yaml` | — |
+| A11y + perf gate | `a11y-perf-guardian` | `a11y_checklist.yaml`, `performance_checklist.yaml` | P0 block on regression |
+| Regression guard | `regression-sentinel` | Current vs proposed diff | P1 flag on theme drift |
+
+---
+
+## �🎯 Commands
 
 | Command | Action | Agents Invoked |
 |---------|--------|----------------|
-| `/doc` | Full autonomous cycle: Discovery → Drift → Sync → Narrative → Certification | All 8 agents |
+| `/doc` | Full autonomous cycle: Discovery → Drift → Sync → Narrative → Certification | All 13 agents |
 | `/doc-discover` | Git discovery only — surface changes since last run | `git-discovery-agent` |
 | `/doc-drift` | Drift detection only — find orphaned/phantom/stale docs | `drift-detection-agent` |
 | `/doc-sync` | Documentation synchronization — update all targets | `doc-sync-agent`, `diagram-regeneration-agent`, `media-prompt-agent` |
@@ -132,6 +184,8 @@ Update the **Awakening of CORTEX** story arc and associated media:
 | `/doc-release` | Generate release notes from Git diffs | `release-notes-agent` |
 | `/doc-diagrams` | Regenerate all architecture diagrams | `diagram-regeneration-agent` |
 | `/doc-media` | Update all image and video prompts | `media-prompt-agent` |
+| `/doc-design {file}` | Design + Implement mode — improve target HTML view | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
+| `/doc-harvest` | Harvest best practices from sources → update knowledge YAMLs | `knowledge-harvester-agent` |
 
 ---
 
@@ -142,13 +196,18 @@ All documentation agents live in `.github/agents/docs/` with single responsibili
 | Agent | File | Responsibility |
 |-------|------|----------------|
 | **Git Discovery** | `git-discovery-agent.md` | Inspect Git history, classify changes, detect architectural shifts |
-| **Doc Sync** | `doc-sync-agent.md` | Update `.content/`, glossary, video-prompts, image-prompts |
+| **Doc Sync** | `doc-sync-agent.md` | Update `.content/`, glossary, video-prompts, image-prompts; enforce CSS-no-inline rule |
 | **Diagram Regeneration** | `diagram-regeneration-agent.md` | Regenerate Mermaid and D3.js diagrams when architecture changes |
 | **Media Prompt** | `media-prompt-agent.md` | Maintain DALL-E image prompts and video script prompts |
 | **Narrative Continuity** | `narrative-continuity-agent.md` | Guard and evolve the Awakening of CORTEX story arc |
 | **Drift Detection** | `drift-detection-agent.md` | Cross-reference implementation vs documentation for drift |
 | **Coverage Audit** | `coverage-audit-agent.md` | Validate documentation completeness and certification |
 | **Release Notes** | `release-notes-agent.md` | Generate structured changelogs from Git diffs |
+| **HTML View Designer** | `html-view-designer.md` | Design + Implement mode — IA, layout proposals, semantic HTML implementation |
+| **Design System Enforcer** | `design-system-enforcer.md` | Token validation, CSS layer assignment, theme integrity gate |
+| **A11y + Perf Guardian** | `a11y-perf-guardian.md` | WCAG 2.1 AA checklist gate + performance regression detection |
+| **Regression Sentinel** | `regression-sentinel.md` | Diff guard — no theme drift, no broken links, no ARIA regressions |
+| **Knowledge Harvester** | `knowledge-harvester-agent.md` | Source → distilled notes → knowledge YAMLs in `.content/knowledge/` |
 
 ### Agent Composition — Documentation Certification Pipeline
 

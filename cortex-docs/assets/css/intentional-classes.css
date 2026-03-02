@@ -1,5 +1,15 @@
 /* Glassmorphism-compliant styles for intentional classes - 2026-01-03 09:33:38 */
 
+/**
+ * .hidden-panel — Replaces all inline style="display:none" on panels/sections
+ * that are intentionally hidden from the rendered page (not yet published).
+ * Using a class preserves the HTML structure while keeping styling in CSS.
+ * See: a11y_checklist.yaml css-001 | doc_best_practices.yaml css-001
+ */
+.hidden-panel {
+    display: none;
+}
+
 .agent-planning {
     /* Generic glassmorphism style */
     padding: var(--space-md);

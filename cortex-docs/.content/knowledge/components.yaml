@@ -1,0 +1,181 @@
+# components.yaml
+# CORTEX Documentation — Reusable Component Registry
+# Authority: html-view-designer, design-system-enforcer
+# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
+# Purpose: Canonical list of approved HTML/CSS components for cortex-docs views
+
+components:
+  navigation:
+    - id: comp-nav-001
+      name: "Sticky Top Nav"
+      class: ".main-nav"
+      html_element: "<nav>"
+      css_file: "main.css"
+      aria: "role='navigation' aria-label='Main navigation'"
+      constraints:
+        - "Always sticky; scroll class .scrolled added by JS"
+        - "Max 6 nav items before hamburger collapse"
+        - "Logo link: <a class='logo-link'> with .nav-logo img"
+
+    - id: comp-nav-002
+      name: "Skip Link"
+      class: ".skip-link"
+      html_element: "<a>"
+      css_file: "main.css"
+      aria: "href='#main-content'"
+      constraints:
+        - "First child of <body> — non-negotiable WCAG 2.4.1"
+        - "Visually hidden until focused; no display:none (must be focusable)"
+
+    - id: comp-nav-003
+      name: "Breadcrumb"
+      class: ".breadcrumb"
+      html_element: "<nav aria-label='Breadcrumb'><ol>"
+      css_file: "main.css (to add)"
+      aria: "aria-label='Breadcrumb'; current page: aria-current='page'"
+      constraints:
+        - "Required on all pages depth > 1"
+        - "Ordered list <ol> — not <ul> (sequential hierarchy)"
+
+  cards:
+    - id: comp-card-001
+      name: "Glass Card (static)"
+      class: ".glass-card"
+      html_element: "<div> or <section>"
+      css_file: "glass-ui-components.css"
+      constraints:
+        - "background: var(--glass-bg-base); backdrop-filter: blur(var(--glass-blur-sm))"
+        - "border: 1px solid var(--glass-border)"
+
+    - id: comp-card-002
+      name: "Glass Card (clickable)"
+      class: ".glass-card-clickable"
+      html_element: "<a> for links, <button> for actions"
+      css_file: "glass-ui-components.css"
+      aria: "aria-label required when icon-only or ambiguous"
+      constraints:
+        - "Use <article> for content cards with meaningful standalone content"
+        - "Use <a> for navigation cards (persona tiles, feature cards)"
+
+    - id: comp-card-003
+      name: "Persona Tile"
+      class: ".persona-tile"
+      html_element: "<a>"
+      css_file: "main.css (persona section)"
+      aria: "aria-label='[Role] — [Tagline]'"
+      constraints:
+        - "4 tiles max in the grid — mobile: 1-col, tablet: 2-col, desktop: 4-col"
+        - "Each tile: .persona-tile-accent (accent bar) + .persona-card-header + .persona-benefits"
+
+  tabs:
+    - id: comp-tab-001
+      name: "Horizontal Tab Panel"
+      class: ".cortex-tabs / .cortex-tab / .cortex-tab-panel"
+      html_element: "div[role='tablist'] > button[role='tab'] + div[role='tabpanel']"
+      css_file: "glass-ui-components.css"
+      aria: |
+        tablist: role='tablist' aria-label='[description]'
+        tab: role='tab' aria-selected='true/false' aria-controls='panel-id'
+        panel: role='tabpanel' id='panel-id'
+      constraints:
+        - "First tab active by default (class .active + aria-selected='true')"
+        - "Keyboard: Arrow keys to navigate tabs, Enter/Space to activate"
+        - "Tab panels use id matching tab's aria-controls"
+
+    - id: comp-tab-002
+      name: "Vertical Tab Panel (Demo Sidebar)"
+      class: ".demo-tabs-vertical / .demo-tab-v"
+      html_element: "div[role='tablist'] > button[role='tab']"
+      css_file: "index-multipanel.css"
+      constraints:
+        - "Same ARIA rules as horizontal tabs"
+        - "Sidebar layout: tab nav left, content right (flex-row)"
+
+  callouts:
+    - id: comp-callout-001
+      name: "Info/Warning Callout"
+      class: ".callout .callout--info / .callout--warning / .callout--danger"
+      html_element: "<aside role='note'> or <div role='alert'>"
+      css_file: "glass-ui-components.css (to add)"
+      aria: "role='note' for informational; role='alert' for urgent"
+      constraints:
+        - "Left border accent using border-left: 4px solid var(--accent-primary)"
+        - "Background: var(--glass-bg-base-low)"
+
+  hero:
+    - id: comp-hero-001
+      name: "Hero Section"
+      class: ".hero / .hero-acronym / .hero-stats-bar"
+      html_element: "<header role='banner'> > <section class='hero'>"
+      css_file: "main.css + index-multipanel.css"
+      constraints:
+        - "Logo: eager-loaded, fetchpriority='high'"
+        - "Stats bar: max 6 items; each .hero-stat-item with .hero-stat-value + .hero-stat-label"
+        - "Acronym: styled with <strong> on each letter"
+
+  diagrams:
+    - id: comp-diagram-001
+      name: "Architecture Diagram Embed"
+      class: ".diagram-figure"
+      html_element: "<figure class='diagram-figure'><img><figcaption>"
+      css_file: "glass-ui-components.css (to add in .diagram-figure)"
+      aria: "img alt='[diagram description — not just title]'"
+      constraints:
+        - "max-width: 100%; height: auto — always responsive"
+        - "figcaption: font-size var(--heading-h6-size); color var(--text-secondary)"
+        - "Lightbox: optional — if added, use native <dialog> element, not third-party lib"
+        - "Diagram data sourced from cortex-docs/assets/diagrams/ spec files"
+
+  badges:
+    - id: comp-badge-001
+      name: "Soon Badge"
+      class: ".badge-soon / .badge-soon-small"
+      html_element: "<sup>"
+      css_file: "main.css"
+      constraints:
+        - "Use <sup> — not <span> — for semantic superscript positioning"
+
+  buttons:
+    - id: comp-btn-001
+      name: "Hero CTA Button"
+      class: ".btn-hero .btn-hero-primary / .btn-hero-warning / .btn-hero-knowledge"
+      html_element: "<a> for navigation; <button> for action"
+      css_file: "main.css"
+      constraints:
+        - "Icon: first child span.btn-hero-icon"
+        - "Text: span.btn-hero-text"
+        - "Caption: span.btn-hero-caption (sub-label)"
+
+  footer:
+    - id: comp-footer-001
+      name: "Page Footer"
+      class: ".page-footer / .footer-content"
+      html_element: "<footer role='contentinfo'>"
+      css_file: "main.css"
+      constraints:
+        - "role='contentinfo' — ARIA landmark"
+        - "External links: target='_blank' rel='noopener noreferrer'"
+
+dom_hooks:
+  # Stable IDs for automation, regression testing, future JS targeting
+  - id: "main-content"
+    element: "<main id='main-content' role='main'>"
+    purpose: "Skip link target; ARIA main landmark"
+  - id: "hero-section"
+    element: "<section class='hero' id='hero-section'>"
+    purpose: "Hero section anchor"
+  - id: "who-is-cortex-for"
+    element: "<section id='who-is-cortex-for'>"
+    purpose: "Persona section anchor"
+  - id: "governance-audit-panel"
+    element: "<section id='governance-audit-panel'>"
+    purpose: "Governance panel anchor"
+  - id: "discovery-toolkit-panel"
+    element: "<section id='discovery-toolkit-panel'>"
+    purpose: "Discovery panel anchor"
+  - id: "sts-panel"
+    element: "<section id='sts-panel'>"
+    purpose: "Sharpen The Saw panel anchor"
+  - id: "pageLoadingOverlay"
+    element: "<div id='pageLoadingOverlay'>"
+    purpose: "JS-controlled loading overlay"

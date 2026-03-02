@@ -1,0 +1,119 @@
+# doc_best_practices.yaml
+# CORTEX Documentation Best Practices — Distilled Knowledge
+# Authority: html-view-designer, design-system-enforcer, a11y-perf-guardian
+# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
+# Sources: MDN Web Docs, W3C ARIA APG, WCAG 2.1 AA, GitHub Docs IA patterns
+
+information_architecture:
+  principles:
+    - id: ia-001
+      rule: "Progressive disclosure — surface the 'what' before the 'how'"
+      enforcement: "Hero → Persona → Feature → Detail hierarchy must be preserved in all doc views"
+    - id: ia-002
+      rule: "Single entry point per user role — never require knowledge of system internals to navigate"
+      enforcement: "Persona tiles must remain the primary navigation for role-based entry"
+    - id: ia-003
+      rule: "Breadcrumb trail required for all pages deeper than level 1"
+      enforcement: "All non-index HTML files must include a <nav aria-label='Breadcrumb'> element"
+    - id: ia-004
+      rule: "Content hierarchy: H1 (page) → H2 (section) → H3 (subsection) — never skip levels"
+      enforcement: "html-view-designer validates heading order before approving any view change"
+    - id: ia-005
+      rule: "Maximum 3 click depth from homepage to any feature detail"
+      enforcement: "regression-sentinel checks link depth on each design iteration"
+
+navigation:
+  patterns:
+    - id: nav-001
+      pattern: "Sticky glassmorphism top nav"
+      usage: "Primary site navigation — always visible on scroll"
+      constraint: "Never add more than 6 top-level nav items (cognitive load limit)"
+    - id: nav-002
+      pattern: "Persona-based entry tiles"
+      usage: "Homepage role routing — Business / Product / Engineer / Learner"
+      constraint: "4 tiles maximum; each links directly to a role-specific page"
+    - id: nav-003
+      pattern: "Tab panels for feature exploration"
+      usage: "Multi-facet feature display within a single section"
+      constraint: "ARIA tablist/tab/tabpanel pattern required; keyboard navigable"
+    - id: nav-004
+      pattern: "Skip-to-main link"
+      usage: "WCAG 2.4.1 — first focusable element on every page"
+      constraint: "Must be the first child of <body>; styled with .skip-link class"
+
+content_patterns:
+  - id: cp-001
+    pattern: "Hero section with stat bar"
+    purpose: "Immediate credibility signal — key metrics at a glance"
+    constraints:
+      - "Stats must be drawn from live architecture counts (not hardcoded prose)"
+      - "Maximum 6 stat items in the bar before wrapping breaks layout"
+  - id: cp-002
+    pattern: "Feature card grid (2-col or 3-col)"
+    purpose: "Parallel comparison of capabilities"
+    constraints:
+      - "Cards must use <article> for content, <a> for clickable cards"
+      - "Icons: emoji only (no icon font mixing) for consistency"
+  - id: cp-003
+    pattern: "Tabbed panel sections"
+    purpose: "Progressive disclosure of multi-facet content without page reload"
+    constraints:
+      - "First tab active by default; aria-selected managed in JS"
+      - "Tab panel content never taller than 400px before scroll"
+  - id: cp-004
+    pattern: "Diagram embed with caption"
+    purpose: "Visual architecture evidence — not decorative"
+    constraints:
+      - "Use <figure><img><figcaption> — never bare <img>"
+      - "alt text must describe the diagram content, not just its title"
+      - "Responsive: max-width 100%; no fixed pixel widths"
+
+search_ux:
+  notes:
+    - "Static HTML sites: use Pagefind or client-side lunr.js for search"
+    - "CORTEX docs: deferred — add search input in nav with aria-label='Search documentation'"
+    - "Until search implemented: ensure internal anchor links (#section-id) are stable"
+
+css_architecture:
+  layers:
+    - name: "design-tokens"
+      file: "glass-design-tokens.css"
+      purpose: "CSS custom properties — single source of truth for all visual values"
+    - name: "base"
+      file: "main.css (top section)"
+      purpose: "Reset, global element styles, typography scale"
+    - name: "layout"
+      file: "cortex-grid-system.css"
+      purpose: "Grid system, container widths, responsive breakpoints"
+    - name: "components"
+      file: "glass-ui-components.css"
+      purpose: "Reusable UI patterns: cards, tabs, buttons, badges"
+    - name: "animations"
+      file: "glass-animations.css"
+      purpose: "Keyframes and transition utilities"
+    - name: "page-specific"
+      file: "index-multipanel.css"
+      purpose: "Page-specific layout overrides — must not duplicate component styles"
+    - name: "utilities"
+      file: "intentional-classes.css"
+      purpose: "Deliberate utility classes (.hidden-panel, .sr-only, .flex-1, etc.)"
+    - name: "cleanup"
+      file: "inline-styles-cleanup.css"
+      purpose: "Overrides that replace removed inline styles — temporary; refactor into components"
+
+  rules:
+    - id: css-001
+      rule: "Zero inline style= attributes — all styling via CSS classes"
+      severity: P0
+    - id: css-002
+      rule: "All custom properties must be defined in glass-design-tokens.css before use"
+      severity: P0
+    - id: css-003
+      rule: "No magic numbers — spacing/color/radius values use CSS variables"
+      severity: P1
+    - id: css-004
+      rule: "BEM-adjacent naming: block__element--modifier (relaxed for utility classes)"
+      severity: P2
+    - id: css-005
+      rule: "Media queries use token breakpoints from cortex-grid-system.css"
+      severity: P1

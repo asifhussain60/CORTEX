@@ -1,0 +1,111 @@
+# design_system.yaml
+# CORTEX Documentation Design System — Token Registry
+# Authority: design-system-enforcer
+# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
+# Source: glass-design-tokens.css (canonical), main.css
+# Constraint: This YAML is a human-readable mirror of CSS tokens — CSS is SSOT
+
+identity:
+  theme: "Dark Blue Glassmorphism"
+  version: "4.0.0"
+  constraint: "Theme identity is IMMUTABLE — no light mode, no alternative palettes"
+  standard: "glassmorphism-design-standard.md v4.0"
+
+colors:
+  backgrounds:
+    primary: "rgba(10, 14, 39, 1)   — #0a0e27 — page background deep navy"
+    secondary: "rgba(26, 31, 58, 1) — #1a1f3a — card/panel background"
+    glass_base: "rgba(26, 31, 58, 0.7) — var(--glass-bg-base)"
+    glass_hover: "rgba(26, 31, 58, 0.8) — var(--glass-bg-hover)"
+    glass_active: "rgba(26, 31, 58, 0.9) — var(--glass-bg-active)"
+    glass_modal: "rgba(26, 31, 58, 0.95) — var(--glass-bg-modal)"
+    overlay: "rgba(10, 14, 39, 0.8) — var(--glass-bg-overlay)"
+  accents:
+    primary: "#00d4ff — var(--accent-primary) — electric cyan"
+    secondary: "#7b61ff — var(--accent-secondary) — indigo violet"
+    success: "#00ff88 — var(--success)"
+    warning: "#ffa500 — var(--warning)"
+    danger: "#ff4444 — var(--danger)"
+    info: "#3b82f6 — var(--info)"
+  text:
+    primary: "#ffffff — var(--text-primary)"
+    secondary: "#a0a6c0 — var(--text-secondary)"
+    muted: "#6b7280 — var(--text-muted)"
+
+typography:
+  fonts:
+    body: "Inter — var(--font-family-body) — weights: 400, 500, 600"
+    heading: "Space Grotesk — var(--font-family-heading) — weights: 500, 700"
+    mono: "JetBrains Mono — var(--font-family-mono) — weights: 400, 500"
+  scale:
+    h1: "clamp(2rem, 4vw + 1rem, 3.5rem) — var(--heading-h1-size)"
+    h2: "clamp(1.5rem, 3vw + 0.5rem, 2.5rem) — var(--heading-h2-size)"
+    h3: "clamp(1.25rem, 2vw + 0.5rem, 1.875rem) — var(--heading-h3-size)"
+    h4: "clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem) — var(--heading-h4-size)"
+    h5: "1.125rem — var(--heading-h5-size)"
+    body: "1rem / 1.7 line-height"
+    small: "0.875rem"
+    mono: "0.875rem"
+  enforcement:
+    - "All headings use var(--font-family-heading) — Space Grotesk"
+    - "All body copy uses var(--font-family-body) — Inter"
+    - "Code snippets use var(--font-family-mono) — JetBrains Mono"
+    - "Font sizes use CSS variables only — no raw px/rem in component files"
+
+blur:
+  small: "10px — var(--glass-blur-sm) — standard cards, panels"
+  medium: "20px — var(--glass-blur-md) — hero sections, modals"
+  large: "30px — var(--glass-blur-lg) — overlays, full-screen backgrounds"
+  enforcement: "Never use raw blur values — always reference CSS variable tier"
+
+borders:
+  standard: "1px solid rgba(255, 255, 255, 0.1) — var(--glass-border)"
+  accent: "1px solid rgba(0, 212, 255, 0.2)"
+  accent_active: "1px solid rgba(0, 212, 255, 0.3)"
+  radius:
+    sm: "8px — var(--radius-sm)"
+    md: "12px — var(--radius-md)"
+    lg: "16px — var(--radius-lg)"
+    full: "9999px — var(--radius-full) — pills, badges"
+
+shadows:
+  standard: "0 8px 32px 0 rgba(0, 0, 0, 0.37) — var(--shadow)"
+  large: "0 20px 60px 0 rgba(0, 0, 0, 0.5) — var(--shadow-lg)"
+  glow: "0 0 20px rgba(0, 212, 255, 0.3) — var(--glow)"
+  glow_strong: "0 0 40px rgba(0, 212, 255, 0.5)"
+
+spacing:
+  xs: "0.25rem — var(--spacing-xs)"
+  sm: "0.5rem — var(--spacing-sm)"
+  md: "1rem — var(--spacing-md)"
+  lg: "1.5rem — var(--spacing-lg)"
+  xl: "2rem — var(--spacing-xl)"
+  xxl: "3rem — var(--spacing-2xl)"
+
+elevation:
+  # Z-index layers for consistent stacking
+  base: 1
+  card: 10
+  dropdown: 100
+  sticky_nav: 1000
+  modal: 2000
+  toast: 3000
+
+transitions:
+  fast: "150ms ease-in-out — var(--transition-fast)"
+  base: "200ms ease-in-out — var(--transition-base)"
+  slow: "300ms ease-in-out — var(--transition-slow)"
+
+animation_classes:
+  - ".animation-t1 — stagger 0.1s (first elements)"
+  - ".animation-t2 — stagger 0.2s (secondary elements)"
+  - ".animation-t3 — stagger 0.3s (tertiary elements)"
+  - ".pulse-glow-glass--fast — repeating glow pulse for icons"
+
+design_constraints:
+  - "NEVER introduce light backgrounds — dark navy is the identity"
+  - "NEVER use inline style= — all values via CSS class and token"
+  - "NEVER add new font families — Inter + Space Grotesk + JetBrains Mono are locked"
+  - "NEVER override blur with raw pixel values — use tier variables"
+  - "ALL new components inherit from glass-design-tokens.css"
+  - "Glassmorphism effect = backdrop-filter blur + semi-transparent bg + glass-border"
