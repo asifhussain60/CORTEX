@@ -165,7 +165,7 @@
 flowchart LR
     A["🔧 Code Change\nor AI Request"] --> B["⚡ Request\nEnrichment\nStage -1"]
     B --> C["🌐 MCP\nGateway\nStage 0"]
-    C --> D["🎯 Intent\nClassifier\n28 Types"]
+    C --> D["🎯 Intent\nClassifier\n29 Types"]
     D --> E["🔬 LENS\nAnalysis\n300-800ms"]
     E --> F["🧠 Brain\nIntelligence\n50-200ms"]
     F --> G{"🛡️ Governance\nGate\n10 Agents"}
@@ -213,7 +213,7 @@ flowchart LR
                         <i class="fas fa-network-wired bl-pipeline-icon bl-pipeline-icon--cyan"></i>
                     </div>
                     <div class="bl-pipeline-card-title">MCP Gateway</div>
-                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 29 registered tools, and enforces rate limiting.</div>
+                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 30 registered tools, and enforces rate limiting.</div>
                 </div>
 
                 <div class="bl-pipeline-card bl-pipeline-card--violet">
@@ -222,7 +222,7 @@ flowchart LR
                         <i class="fas fa-crosshairs bl-pipeline-icon bl-pipeline-icon--violet"></i>
                     </div>
                     <div class="bl-pipeline-card-title">Intent Classification</div>
-                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 28 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
+                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 29 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
                 </div>
 
                 <div class="bl-pipeline-card bl-pipeline-card--violet">
@@ -329,19 +329,19 @@ flowchart LR
                 </div>
                 <div class="roi-card">
                     <div class="roi-icon">🧪</div>
-                    <div class="roi-value">17,735</div>
+                    <div class="roi-value">18,116</div>
                     <div class="roi-label">Automated Tests</div>
                     <div class="roi-detail">Regression protection that grows with every feature</div>
                 </div>
                 <div class="roi-card roi-card--emerald">
                     <div class="roi-icon">🤖</div>
-                    <div class="roi-value">186</div>
+                    <div class="roi-value">258</div>
                     <div class="roi-label">Orchestrator Files</div>
                     <div class="roi-detail">Autonomous workflow execution across 9 domains</div>
                 </div>
                 <div class="roi-card roi-card--amber">
                     <div class="roi-icon">📊</div>
-                    <div class="roi-value">29</div>
+                    <div class="roi-value">30</div>
                     <div class="roi-label">MCP Tools</div>
                     <div class="roi-detail">Machine-callable quality gates and intelligence APIs</div>
                 </div>
@@ -663,8 +663,8 @@ mindmap
                 <span class="bl-badge bl-badge--emerald"><i class="fas fa-search"></i> LENS Code Intelligence</span>
                 <span class="bl-badge bl-badge--emerald"><i class="fas fa-brain"></i> RCA Memory Engine</span>
                 <span class="bl-badge bl-badge--emerald"><i class="fas fa-database"></i> SQLite Audit Trail</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-plug"></i> 29 MCP Tools</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> 186 Orchestrators · 9 Domains</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-plug"></i> 30 MCP Tools</span>
+                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> 258 Orchestrators · 9 Domains</span>
                 <span class="bl-badge bl-badge--violet"><i class="fas fa-bug"></i> Multi-Stack Debug (8 Strategies)</span>
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-heartbeat"></i> Health Monitoring</span>
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-chart-bar"></i> Prometheus Metrics</span>

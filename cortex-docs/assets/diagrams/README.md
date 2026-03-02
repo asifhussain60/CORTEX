@@ -37,7 +37,7 @@ This folder (`cortex-docs/assets/diagrams`) is the **only** canonical location f
 - `13-diagram-orchestration-intent-classification-routing.md` — 29 intent types, confidence routing, orchestrator mapping
 
 ### Intelligence (code understanding)
-- `11-diagram-intelligence-lens-analysis-pipeline.md` — 4-layer LENS analysis: git → AST → annotations → patterns
+- `11-diagram-intelligence-lens-analysis-pipeline.md` — 4-layer LENS analysis (git → AST → annotations → patterns) + Diamond Facade architecture (IntelligenceFacade single entry: analyze/synthesize/query) + Phase 109 migration state
 
 ### Debugging (multi-stack)
 - `14-diagram-debugging-multi-stack-pipeline.md` — 8 strategies across Python, JS, C#, SQL, .NET with auto-cleanup

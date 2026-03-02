@@ -4,6 +4,7 @@
 # Sources: NNGroup, HubSpot, Wyzowl, industry-standard cognitive load research
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
 # Updated: 2026-03-02 — Counts verified against live architecture (258 orchestrators, 35 MCP tool files, 30 registered)
+# Updated: 2026-03-02 — Intelligence Diamond enhancements reflected (Phase 107 COMPLETE, Phase 109 IN_PROGRESS)
 
 domain: content-production
 type: best-practice
@@ -339,7 +340,10 @@ architecture_facts:
   mcp_tool_files: 35              # find cortex/mcp/tools -name "*.py" ! -name "__init__.py" | wc -l
   intent_types: 29                 # cortex/models/canonical_enums.py IntentType enum
   governance_yamls: 32             # find cortex-registry/core -name "*.yaml" | wc -l
-  intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry
+  intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry (Phase 109: all orchestrators now wired)
+  intelligence_diamond_layers: 3   # analyze() → LENS pipeline | synthesize() → KnowledgeSynthesisEngine | query() → KnowledgeRegistryProxy
+  intelligence_facade_api: "analyze / synthesize / query"  # Three public methods — single entry replaces UnifiedIntelligenceProvider + LENSIntelligenceFacade + KnowledgeRegistryProxy
+  intelligence_phase: "Phase 107 COMPLETE (facade created) · Phase 109 IN_PROGRESS (flatten to diamond: analysis/ knowledge/ learning/ models/)"
   rca_methodologies: 4             # Five-Whys, Fishbone, Causal-Chain, Fault-Tree
   debug_strategies: 8              # 3 Python + 5 multi-stack
   tdd_phases: 3                    # RED → GREEN → REFACTOR
