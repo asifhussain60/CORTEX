@@ -19,7 +19,7 @@ from cortex.orchestrators.core.intent_router.workflow_gate import (
 
 # Import the REAL IntentRouter from the renamed implementation file
 try:
-    from cortex.orchestrators.core.intent_router_impl import (
+    from ..intent_router_impl import (
         IntentRouter,
         IntentType,
         RoutingDecision,

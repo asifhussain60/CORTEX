@@ -33,9 +33,9 @@ from cortex.testing.test_value_scorer import TestMetrics, get_test_value_scorer
 logger = logging.getLogger(__name__)
 
 
-class OrchestratorLearningMixin:
+class OrchestratorIntegrationMixin:
     """
-    Mixin for orchestrators to enable learning capture.
+    Mixin for orchestrators to enable learning capture (Phase 71 S5).
 
     Provides:
     - Non-blocking learning integration
@@ -44,7 +44,7 @@ class OrchestratorLearningMixin:
     - Learning metrics tracking
 
     Usage:
-        class MyOrchestrator(OrchestratorLearningMixin, BaseOrchestrator):
+        class MyOrchestrator(OrchestratorIntegrationMixin, BaseOrchestrator):
             def _execute_domain_logic(self, ...):
                 # Your logic
 
@@ -248,5 +248,10 @@ class OrchestratorLearningMixin:
 
 
 __all__ = [
-    "OrchestratorLearningMixin",
+    "OrchestratorIntegrationMixin",
+    "OrchestratorLearningMixin",  # backward-compat alias — CORE-035: single canonical class
 ]
+
+# CORE-035 backward-compat alias: OrchestratorLearningMixin → OrchestratorIntegrationMixin
+# Direct imports from this module continue to work; canonical class is OrchestratorIntegrationMixin.
+OrchestratorLearningMixin = OrchestratorIntegrationMixin  # noqa: E305

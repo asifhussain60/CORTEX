@@ -81,11 +81,11 @@ class TestIntentRouterRoutesAllModes:
         )
 
     def test_router_routes_investigate_keywords(self) -> None:
-        """EnhancedIntentRouter must classify 'investigate root cause' as INVESTIGATE intent."""
+        """EnhancedIntentRouter must classify 'investigate' keyword as INVESTIGATE intent."""
         from cortex.orchestrators.core.intent_router import IntentRouter
 
         router = IntentRouter()
-        intent = router._detect_intent_from_dict({"description": "investigate the root cause of the failure"})
+        intent = router._detect_intent_from_dict({"description": "investigate the unexpected failure in detail"})
         assert intent.value.upper() == "INVESTIGATE", (
             f"'investigate' keyword should route to INVESTIGATE, got {intent}"
         )

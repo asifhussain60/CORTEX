@@ -1534,13 +1534,28 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                     "warnings": stage_context.metadata.get("compliance_validation", {}).get("warnings", [])
                 }
             )
-            
+
+            # ═══════════════════════════════════════════════════════════════════════
+            # CORE-050 MCP GATE: Hard-block code-modifying intents if MCP unavailable
+            # ═══════════════════════════════════════════════════════════════════════
+            mcp_gate_result = self._check_mcp_gate(
+                classified_intent=stage_context.metadata.get("intent_classification", {}).get("classified_intent", operation_name),
+            )
+            if mcp_gate_result.is_err():
+                self.logger.log_operation_complete(
+                    ac_id="CORE-050",
+                    operation="MCP_GATE_BLOCKED",
+                    success=False,
+                    details={"reason": mcp_gate_result.error, "intent": operation_name}
+                )
+                return mcp_gate_result
+
             # ═══════════════════════════════════════════════════════════════════════
             # STAGE 4: Domain Execution via Orchestrator Delegation
             # ═══════════════════════════════════════════════════════════════════════
             stage4 = Stage4DomainExecutionStrategy(dependencies=dependencies)
             stage4_result = stage4.execute(stage_context)
-            
+
             if stage4_result.is_err():
                 # Stage 4 failed - execution error
                 self.logger.log_operation_complete(
@@ -2936,6 +2951,47 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                 success=False,
                 details={"error": f"Failed to trigger lifecycle hooks: {str(hook_err)}"}
             )
+
+    def _check_mcp_gate(self, classified_intent: str) -> "Result[None]":
+        """CORE-050: Hard-block code-modifying intents when MCP is unavailable.
+
+        Implements the CORE-050 MCP Circuit Breaker at the Python level. This
+        gate runs after Stage 3 compliance validation and before Stage 4 domain
+        execution. It ensures that IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, and
+        ANALYZE operations are never executed without an active MCP connection.
+
+        Args:
+            classified_intent: The intent string from Stage 2 classification
+                (e.g. "IMPLEMENT", "FIX", "REFACTOR").
+
+        Returns:
+            Ok(None) if allowed or MCP is available.
+            Err(str) with a user-facing message if hard-blocked.
+        """
+        # Intents that REQUIRE MCP (CORE-050 tiered blocking)
+        _MCP_REQUIRED_INTENTS = {
+            "implement", "fix", "refactor", "audit",
+            "analyze", "plan", "tdd", "design",
+        }
+
+        if classified_intent.lower() not in _MCP_REQUIRED_INTENTS:
+            return Ok(None)
+
+        # Check MCP availability via NativeToolInterceptor detector
+        try:
+            from cortex.governance.enforcement.native_tool_interceptor import MCPDetector
+            mcp_available = MCPDetector().is_mcp_available()
+        except Exception:
+            # If detector fails to import/run, assume available (fail-open)
+            mcp_available = True
+
+        if not mcp_available:
+            return Err(
+                f"CORE-050: MCP server required for '{classified_intent}' intent but is unavailable. "
+                "Run `python3 scripts/setup-mcp.py` and reload VS Code."
+            )
+
+        return Ok(None)
 
     def _check_for_workflow_template(
         self, context: Dict[str, Any]

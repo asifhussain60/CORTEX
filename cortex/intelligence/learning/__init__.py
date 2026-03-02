@@ -39,8 +39,12 @@ from cortex.intelligence.learning.learning_dashboard import (
     MetricsSnapshot,
     get_learning_dashboard,
 )
-from cortex.intelligence.learning.orchestrator_integration_mixin import (
+from cortex.intelligence.learning.orchestrator_learning_mixin import (
     OrchestratorLearningMixin,
+    LearningContext,
+)
+from cortex.intelligence.learning.orchestrator_integration_mixin import (
+    OrchestratorIntegrationMixin,
 )
 from cortex.intelligence.learning.pattern_extractor import (
     ExtractedPattern,
@@ -72,8 +76,10 @@ __all__ = [
     # Confidence Scoring
     "ConfidenceScorer",
     "ConfidenceLevel",
-    # Orchestrator Integration
-    "OrchestratorLearningMixin",
+    # Orchestrator Integration (Phase 71 S5)
+    "OrchestratorIntegrationMixin",
+    "OrchestratorLearningMixin",  # canonical (orchestrator_learning_mixin.py)
+    "LearningContext",
     # Validation
     "IntelligenceValidator",
     "ValidationReport",

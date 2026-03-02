@@ -1302,6 +1302,20 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             )
             return IntentType.IMPLEMENT
 
+    def _detect_intent_from_dict(self, context: Dict[str, Any]) -> "IntentType":
+        """Thin wrapper around detect_intent() for test and external API compatibility.
+
+        Accepts a plain dict with 'description', 'user_request', 'keywords',
+        'operation', or 'intent' keys — identical to detect_intent() contract.
+
+        Args:
+            context: Dict containing intent signals (description, user_request, etc.)
+
+        Returns:
+            IntentType: The detected intent type.
+        """
+        return self.detect_intent(context)
+
     def _is_vacuum_operation(self, combined_text: str) -> bool:
         """
         Detect if the operation is a VACUUM cleanup operation.
