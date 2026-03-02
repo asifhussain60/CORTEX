@@ -649,7 +649,6 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         Returns:
             List of :class:`OperationResult` — one per shim detected.
         """
-        import ast
         import re
 
         results: List[OperationResult] = []

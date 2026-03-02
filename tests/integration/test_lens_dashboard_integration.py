@@ -371,7 +371,7 @@ class TestCLIIntegration:
         
         runner = CliRunner()
         
-        with patch('cortex.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
+        with patch('cortex.infrastructure.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
             mock_analyze.return_value = {
                 'overview': {'total_files': 1},
                 'dependencies': {'nodes': []},

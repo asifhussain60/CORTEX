@@ -2046,6 +2046,9 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 IntentType.ONBOARD: "onboard",
                 IntentType.REPHRASE: "rephrase",
                 IntentType.WORKFLOW_COMPOSE: "workflow_compose",
+                # VACUUM classified for "clean" keywords; code-smell cleanup is a
+                # refactoring concern — route it as refactor, not workspace vacuum.
+                IntentType.VACUUM: "refactor",
             }
             operation_type = _intent_to_op.get(clf_result.intent_type, "implement")
 
@@ -2170,6 +2173,13 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             "create": IntentType.IMPLEMENT,
             "implement": IntentType.IMPLEMENT,
             "refactor": IntentType.REFACTOR,
+            "clean": IntentType.REFACTOR,
+            "clean_code": IntentType.REFACTOR,
+            "cleanup": IntentType.REFACTOR,
+            "improve": IntentType.REFACTOR,
+            "optimize": IntentType.REFACTOR,
+            "restructure": IntentType.REFACTOR,
+            "simplify": IntentType.REFACTOR,
             "test": IntentType.IMPLEMENT,
             "document": IntentType.DOCUMENT,
             "security": IntentType.AUDIT,

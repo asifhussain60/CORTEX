@@ -1,0 +1,684 @@
+# CORTEX Phase Plan — Phase 84
+# Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep
+# Authority: CORE-008 (TDD), CORE-064 (Sweep Completeness), CORE-035 (No Duplicates)
+# Created from: chat01.md holistic stub audit (2026-02-26)
+
+id: "phase-84"
+title: "Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep"
+version: "1.0"
+created: "2026-02-26"
+status: COMPLETE
+priority: P0
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # No duplicates
+  - CORE-064   # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-84-STUB-ELIMINATION"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: chat01.md holistic stub audit (2026-02-26)
+  Score at entry: 7.5 / 10
+  Target score: 9.5 / 10
+  Baseline measurements:
+    - Smoke tests: 1,443+ passed
+    - Stub files identified: 29 (P0: 6, P1: 15, P2: 8)
+    - False-positive wired stubs: 11 (imported by production code)
+  Git prerequisite: CORTEX branch, all 83 phases complete
+
+  PROBLEM STATEMENT:
+  29 stub/hollow implementations create false-positive health signals.
+  The most dangerous are Tier A (GAPs 6-11) — stubs actively imported by
+  production MCP tools and auto-initialization, reporting "all systems healthy"
+  when enforcement, knowledge composition, and intelligence integration are hollow.
+
+  BUSINESS RULES PIPELINE (GAPs 1-5):
+  RuleExtractor exists (430 LOC, 8 test classes) but is never wired into LENS.
+  BusinessKnowledgeRepository is an in-memory stub. No business-rules.yaml
+  artifact is generated. No enforcement loop validates extracted rules.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — CORE-064 Sweep Completeness
+# Every gap must be CLOSED before phase-84 can be marked COMPLETE.
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  # ── SWEEP 1: Business Rules Pipeline (P0) ──────────────────────────────────
+  - id: "GAP-84-01"
+    title: "RuleExtractor unwired from LENS pipeline"
+    severity: P0
+    source: "chat01.md audit"
+    evidence: "grep -rn 'RuleExtractor' cortex/lens/ → 0 results. Only imported in tests/"
+    action_ref: "phase-84-a"
+    status: CLOSED
+
+  - id: "GAP-84-02"
+    title: "No business-rules.yaml persistence artifact"
+    severity: P0
+    source: "chat01.md audit"
+    evidence: "KnowledgePersistenceService has 4 generators, none for business rules"
+    action_ref: "phase-84-a"
+    status: CLOSED
+
+  - id: "GAP-84-03"
+    title: "BusinessKnowledgeRepository is in-memory stub"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "52 lines, labeled 'Stub for PHASE-E unblocking', dict-only, no YAML backing"
+    action_ref: "phase-84-b"
+    status: CLOSED
+
+  - id: "GAP-84-04"
+    title: "No enforcement loop for extracted business rules"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "EnforcementOrchestrator has 9 agents, none load extracted business rules"
+    action_ref: "phase-84-b"
+    status: CLOSED
+
+  - id: "GAP-84-05"
+    title: "No INDEX.yaml entry for business-rules domain"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "INDEX.yaml has 11 domains, no business-rules"
+    action_ref: "phase-84-b"
+    status: CLOSED
+
+  # ── SWEEP 2: False Positive Elimination (P0/P1) ───────────────────────────
+  - id: "GAP-84-06"
+    title: "GovernanceEnforcementAgent stub always returns allowed=True"
+    severity: P0
+    source: "chat01.md audit"
+    evidence: "cortex/enforcement/governance_enforcement_agent.py: 19 lines, always returns {violations: [], allowed: True}. Imported by cortex/mcp/tools/workflow_tools.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  - id: "GAP-84-07"
+    title: "GovernanceIntelligence stub imported by auto_initialization_suite"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/core/governance_intelligence.py: 18 lines, analyse() empty. Imported by cortex/testing/auto_initialization_suite.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  - id: "GAP-84-08"
+    title: "KnowledgeComposer stub imported by auto_initialization_suite"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/core/knowledge_composer.py: 18 lines, compose() empty. Imported by cortex/testing/auto_initialization_suite.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  - id: "GAP-84-09"
+    title: "TierComposer stub imported by auto_initialization_suite"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/core/tier_composer.py: 15 lines, compose_tiers() empty. Imported by cortex/testing/auto_initialization_suite.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  - id: "GAP-84-10"
+    title: "CortexIntelligenceIntegration stub imported by business_wisdom_formatter"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/tools/cortex_intelligence_integration.py: 19 lines, GovernanceRuleLoader returns empty. Imported by cortex/orchestrators/core/business_wisdom_formatter.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  - id: "GAP-84-11"
+    title: "RegistryBackedOrchestratorRegistry stub imported by orchestrator_scaffolder"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/core/wiring/registry_backed_orchestrator_registry.py: 31 lines, empty registry. Imported by cortex/tools/orchestrator_scaffolder.py"
+    action_ref: "phase-84-c"
+    status: CLOSED
+
+  # ── SWEEP 3: Stub Orchestrator Resolution (P1) ────────────────────────────
+  - id: "GAP-84-12"
+    title: "ContextAssemblyOrchestrator is labeled stub (35 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/support/context_assembly_orchestrator.py: docstring says stub, process() returns empty"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-13"
+    title: "LensVisualizationOrchestrator is labeled stub (50 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/support/lens_visualization_orchestrator.py: docstring says stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-14"
+    title: "RepoDetectionOrchestrator is labeled stub (35 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/support/repo_detection_orchestrator.py: docstring says stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-15"
+    title: "TechIntelligenceOrchestrator is labeled stub (40 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py: docstring says stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-16"
+    title: "InquiryOrchestrator is labeled stub (45 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/domain/inquiry_orchestrator.py: docstring says stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-17"
+    title: "PlanOrchestrator is labeled stub (68 lines)"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/support/plan_orchestrator.py: docstring says stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  # ── SWEEP 4: Silent Degradation & Support Stubs (P1/P2) ───────────────────
+  - id: "GAP-84-18"
+    title: "AuditTrail is in-memory only — events lost on restart"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/observability/audit_trail.py: 29 lines, list-based, no SQLite persistence"
+    action_ref: "phase-84-e"
+    status: CLOSED
+
+  - id: "GAP-84-19"
+    title: "HealthMonitor always returns healthy — never actually checks"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/observability/health_monitor.py: 18 lines, returns {status: healthy, latency_ms: 0} unconditionally"
+    action_ref: "phase-84-e"
+    status: CLOSED
+
+  - id: "GAP-84-20"
+    title: "NLP package empty — __all__ = []"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/intelligence/nlp/__init__.py: 3 lines, empty package"
+    action_ref: "phase-84-e"
+    status: CLOSED
+
+  - id: "GAP-84-21"
+    title: "Domain brain adapters all return [] from query_source()"
+    severity: P1
+    source: "chat01.md audit"
+    evidence: "cortex/intelligence/domain_brain/adapters.py: 144 lines, 4 adapters, 12 return [] statements"
+    action_ref: "phase-84-e"
+    status: CLOSED
+
+  - id: "GAP-84-22"
+    title: "SemanticRanking stub (19 lines)"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/core/semantic_ranking.py: labeled stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-23"
+    title: "LensContextProvider stub (63 lines)"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/core/lens_context_provider.py: labeled stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-24"
+    title: "GovernancePrinciples stub (25 lines)"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/orchestrators/core/governance_principles.py: labeled stub"
+    action_ref: "phase-84-d"
+    status: CLOSED
+
+  - id: "GAP-84-25"
+    title: "CLI onboard command raises NotImplementedError"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/cli/commands/onboard.py line 23"
+    action_ref: "phase-84-f"
+    status: CLOSED
+
+  - id: "GAP-84-26"
+    title: "CLI lens command raises NotImplementedError"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/cli/commands/lens.py line 23"
+    action_ref: "phase-84-f"
+    status: CLOSED
+
+  - id: "GAP-84-27"
+    title: "CLI governance command raises NotImplementedError"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/cli/__main__.py line 64"
+    action_ref: "phase-84-f"
+    status: CLOSED
+
+  - id: "GAP-84-28"
+    title: "WorkItemProvider 3 methods raise NotImplementedError"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/repositories/work_item_provider.py: 3 NotImplementedError"
+    action_ref: "phase-84-f"
+    status: CLOSED
+
+  - id: "GAP-84-29"
+    title: "Secrets providers labeled stub in docstrings"
+    severity: P2
+    source: "chat01.md audit"
+    evidence: "cortex/infrastructure/secrets/providers/aws.py, azure.py, vault.py: all labeled 'backend stub' but have real SDK integration"
+    action_ref: "phase-84-f"
+    status: CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — 7 sub-phases (a-g), ROI-ordered, TDD-gated
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── SUB-PHASE A: Wire RuleExtractor + Business Rules Persistence ──────────
+  - id: "phase-84-a"
+    title: "Wire RuleExtractor into LENS + Add Business Rules Persistence"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-84-01", "GAP-84-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1443 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_business_rules_pipeline_phase_84_a.py BEFORE any implementation"
+        gate: "python3 -m pytest tests/golden/test_business_rules_pipeline_phase_84_a.py -x — ALL tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Wire RuleExtractor into LENS orchestrator + add _generate_business_rules_artifact() to KnowledgePersistenceService"
+        gate: "python3 -m pytest tests/golden/test_business_rules_pipeline_phase_84_a.py -x — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, deduplication check"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_rule_extractor_importable_from_lens — verify domain_inference.RuleExtractor can be imported"
+        - "test_lens_orchestrator_invokes_rule_extractor — LENS targeted analysis calls RuleExtractor on Python files"
+        - "test_extracted_rules_returned_in_lens_result — LENS analysis result dict contains 'business_rules' key"
+        - "test_persistence_service_generates_business_rules_yaml — KnowledgePersistenceService creates business-rules.yaml"
+        - "test_business_rules_yaml_contains_extracted_rules — persisted YAML has rules with field/description/confidence"
+        - "test_persistence_idempotent_for_business_rules — re-persist overwrites cleanly"
+      green:
+        - "Import RuleExtractor in cortex/lens/lens_orchestrator.py"
+        - "Add _extract_business_rules() method to LENS orchestrator"
+        - "Add _generate_business_rules_artifact() to KnowledgePersistenceService"
+        - "Include business_rules in artifact_generators list"
+      refactor:
+        - "Add docstrings to all new public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate extraction logic exists (CORE-035)"
+
+    acceptance_criteria:
+      - "LENS targeted analysis includes business_rules in result dict"
+      - "KnowledgePersistenceService generates business-rules.yaml"
+      - "All 6 tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_business_rules_pipeline_phase_84_a.py -v"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE B: BusinessKnowledgeRepository YAML Backing + Enforcement ──
+  - id: "phase-84-b"
+    title: "YAML-Backed BusinessKnowledgeRepository + Enforcement Agent + INDEX Entry"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-84-03", "GAP-84-04", "GAP-84-05"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-84-a"]
+    prerequisite: "phase-84-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_business_rules_enforcement_phase_84_b.py"
+        gate: "python3 -m pytest tests/golden/test_business_rules_enforcement_phase_84_b.py -x — ALL tests must FAIL"
+        blocker: "Do NOT implement until all tests fail"
+      green:
+        action: "Replace in-memory stub with YAML-backed repo + add BusinessRuleEnforcementAgent + INDEX entry"
+        gate: "python3 -m pytest tests/golden/test_business_rules_enforcement_phase_84_b.py -x — ALL tests must PASS"
+        blocker: "Do NOT REFACTOR until all pass"
+      refactor:
+        action: "Type hints, docstrings, dedup check"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_yaml_backed_repository_loads_from_file — repo reads business-rules.yaml from disk"
+        - "test_yaml_backed_repository_survives_restart — data persists across instances"
+        - "test_yaml_backed_repository_query_by_domain — filter rules by billing/auth/compliance"
+        - "test_enforcement_agent_loads_business_rules — BusinessRuleEnforcementAgent loads from YAML"
+        - "test_enforcement_agent_blocks_on_violation — agent blocks when change violates extracted rule"
+        - "test_enforcement_agent_passes_clean_change — agent passes when no violation"
+        - "test_index_yaml_has_business_rules_domain — INDEX.yaml contains business-rules entry"
+        - "test_knowledge_router_routes_business_rules — IntelligentKnowledgeRouter recognizes billing/finance keywords"
+      green:
+        - "Replace _DefaultBusinessKnowledgeRepository with YAMLBusinessKnowledgeRepository"
+        - "Add BusinessRuleEnforcementAgent to enforcement_orchestrator.py"
+        - "Add business-rules domain to INDEX.yaml"
+        - "Add billing/finance/compliance keywords to IntelligentKnowledgeRouter"
+      refactor:
+        - "Remove PHASE-E stub comment from business_knowledge_repository.py"
+        - "Verify CORE-012 docstrings on all new classes"
+        - "Verify CORE-011 type hints"
+
+    acceptance_criteria:
+      - "BusinessKnowledgeRepository backed by YAML file on disk"
+      - "BusinessRuleEnforcementAgent integrated in EnforcementOrchestrator"
+      - "INDEX.yaml has business-rules domain with keywords"
+      - "All 8 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_business_rules_enforcement_phase_84_b.py -v"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE C: False Positive Elimination (Tier A) ──────────────────────
+  - id: "phase-84-c"
+    title: "Replace 6 Hollow Stubs Imported by Production Code"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-84-06", "GAP-84-07", "GAP-84-08", "GAP-84-09", "GAP-84-10", "GAP-84-11"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-84-b"]
+    prerequisite: "phase-84-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_false_positive_elimination_phase_84_c.py"
+        gate: "python3 -m pytest tests/golden/test_false_positive_elimination_phase_84_c.py -x — ALL tests must FAIL"
+        blocker: "Do NOT implement until all tests fail"
+      green:
+        action: "Replace each stub with delegation to canonical implementation or delete with import update"
+        gate: "python3 -m pytest tests/golden/test_false_positive_elimination_phase_84_c.py -x — ALL tests must PASS"
+        blocker: "Do NOT REFACTOR until all pass"
+      refactor:
+        action: "Remove 'stub' from docstrings of implemented files, verify CORE-035"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_governance_enforcement_agent_delegates_to_real_enforcer — not always allowed=True"
+        - "test_governance_intelligence_delegates_to_enforcement — analyse() calls EnforcementOrchestrator"
+        - "test_knowledge_composer_delegates_to_synthesis — compose() calls KnowledgeSynthesisEngine"
+        - "test_tier_composer_reads_wiring_specs — compose_tiers() reads YAML specs"
+        - "test_intelligence_integration_delegates_to_provider — query() calls UnifiedIntelligenceProvider"
+        - "test_registry_backed_registry_loads_yaml — loads from cortex-registry/core/specifications/"
+        - "test_no_stub_docstrings_in_production — grep confirms zero '— stub' docstrings in replaced files"
+      green:
+        - "GovernanceEnforcementAgent → delegate to EnforcementOrchestrator.run_enforcement_check()"
+        - "GovernanceIntelligence → delegate to EnforcementOrchestrator"
+        - "KnowledgeComposer → delegate to KnowledgeSynthesisEngine"
+        - "TierComposer → read wiring YAML specs and build tier map"
+        - "CortexIntelligenceIntegration → delegate to UnifiedIntelligenceProvider"
+        - "RegistryBackedOrchestratorRegistry → load from wiring YAML specs"
+      refactor:
+        - "Update auto_initialization_suite.py assertions to verify real behavior"
+        - "Remove 'stub' from docstrings of all 6 files"
+
+    acceptance_criteria:
+      - "All 6 stubs delegate to canonical implementations"
+      - "auto_initialization_suite.py validates real behavior, not just import success"
+      - "Zero '— stub' docstrings remain in the 6 replaced files"
+      - "All 7 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_false_positive_elimination_phase_84_c.py -v"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE D: Stub Orchestrator Resolution ─────────────────────────────
+  - id: "phase-84-d"
+    title: "Resolve 9 Stub Orchestrators — Implement or Delete"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-84-12", "GAP-84-13", "GAP-84-14", "GAP-84-15", "GAP-84-16", "GAP-84-17", "GAP-84-22", "GAP-84-23", "GAP-84-24"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-84-c"]
+    prerequisite: "phase-84-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_stub_orchestrator_resolution_phase_84_d.py"
+        gate: "python3 -m pytest tests/golden/test_stub_orchestrator_resolution_phase_84_d.py -x — ALL tests must FAIL"
+        blocker: "Do NOT implement until all tests fail"
+      green:
+        action: "For each stub: implement real logic OR delete stub + update imports/wiring"
+        gate: "python3 -m pytest tests/golden/test_stub_orchestrator_resolution_phase_84_d.py -x — ALL tests must PASS"
+        blocker: "Do NOT REFACTOR until all pass"
+      refactor:
+        action: "Update wiring specs with accurate counts, remove 'stub' docstrings"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_no_stub_labeled_orchestrators_in_support — grep confirms zero '— stub' in cortex/orchestrators/support/"
+        - "test_no_stub_labeled_orchestrators_in_domain — grep confirms zero '— stub' in cortex/orchestrators/domain/"
+        - "test_no_stub_labeled_orchestrators_in_intelligence — grep confirms zero '— stub' in cortex/orchestrators/intelligence/"
+        - "test_no_stub_labeled_orchestrators_in_core — grep confirms zero '— stub' in cortex/orchestrators/core/ (excluding test_stub references)"
+        - "test_all_wired_orchestrators_have_real_process_method — every wired orchestrator process() does more than return {}"
+        - "test_orchestrator_count_matches_wiring_specs — claimed count matches actual non-stub orchestrators"
+      green:
+        - "For each of 9 stubs: evaluate if capability exists elsewhere (consolidate) or implement minimal viable logic"
+        - "Delete stubs that duplicate existing orchestrator capabilities"
+        - "Update wiring YAML specs to reflect accurate orchestrator count"
+      refactor:
+        - "Remove all '— stub' and '— Stub' docstring labels from resolved files"
+        - "Update .github/copilot-instructions.md with corrected orchestrator count"
+
+    acceptance_criteria:
+      - "Zero files with '— stub' docstrings in cortex/orchestrators/"
+      - "All wired orchestrators have non-trivial process() methods"
+      - "Orchestrator count in prompts/agents matches wiring spec reality"
+      - "All 6 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_stub_orchestrator_resolution_phase_84_d.py -v"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE E: Silent Degradation Fix ───────────────────────────────────
+  - id: "phase-84-e"
+    title: "Fix Silent Degradation — Observability + Domain Brain Adapters"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-84-18", "GAP-84-19", "GAP-84-20", "GAP-84-21"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-84-d"]
+    prerequisite: "phase-84-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_silent_degradation_fix_phase_84_e.py"
+        gate: "python3 -m pytest tests/golden/test_silent_degradation_fix_phase_84_e.py -x — ALL tests must FAIL"
+        blocker: "Do NOT implement until all tests fail"
+      green:
+        action: "Wire AuditTrail to SQLite, HealthMonitor to real probes, adapters to LENS analyzers"
+        gate: "python3 -m pytest tests/golden/test_silent_degradation_fix_phase_84_e.py -x — ALL tests must PASS"
+        blocker: "Do NOT REFACTOR until all pass"
+      refactor:
+        action: "Remove 'stub' docstrings, verify CORE-012"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_audit_trail_persists_to_sqlite — events survive AuditTrail re-instantiation"
+        - "test_health_monitor_returns_real_status — check() returns actual health, not hardcoded"
+        - "test_nlp_package_exports_embedding_cache — cortex.intelligence.nlp.__all__ contains EmbeddingCache"
+        - "test_ast_adapter_query_source_returns_results — ASTAdapter.query_source('function:*') returns non-empty"
+        - "test_git_adapter_query_source_returns_results — GitAdapter.query_source('recent:10') returns non-empty"
+      green:
+        - "Wire AuditTrail to .cortex-runtime/traces/ SQLite"
+        - "Wire HealthMonitor to HealthOrchestrator health_check()"
+        - "Export EmbeddingCache from NLP __init__.py"
+        - "Wire ASTAdapter to cortex.intelligence.ast_intelligence"
+        - "Wire GitAdapter to cortex.intelligence.change_frequency"
+      refactor:
+        - "Remove 'stub' from docstrings"
+        - "Verify CORE-011 type hints"
+
+    acceptance_criteria:
+      - "AuditTrail events persist to SQLite in .cortex-runtime/"
+      - "HealthMonitor returns real health status"
+      - "Domain brain adapters return real data from LENS analyzers"
+      - "All 5 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_silent_degradation_fix_phase_84_e.py -v"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE F: CLI + Provider Feature Gaps ──────────────────────────────
+  - id: "phase-84-f"
+    title: "CLI Commands + Provider Stubs — Implement or Guard"
+    priority: P2
+    status: COMPLETE
+    gap_refs: ["GAP-84-25", "GAP-84-26", "GAP-84-27", "GAP-84-28", "GAP-84-29"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-84-e"]
+    prerequisite: "phase-84-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_cli_provider_gaps_phase_84_f.py"
+        gate: "python3 -m pytest tests/golden/test_cli_provider_gaps_phase_84_f.py -x — ALL tests must FAIL"
+        blocker: "Do NOT implement until all tests fail"
+      green:
+        action: "Wire CLI commands to orchestrators or add graceful not-available messages. Fix provider docstrings."
+        gate: "python3 -m pytest tests/golden/test_cli_provider_gaps_phase_84_f.py -x — ALL tests must PASS"
+        blocker: "Do NOT REFACTOR until all pass"
+      refactor:
+        action: "Verify all CLI commands have --help text, remove 'stub' from provider docstrings"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_cli_onboard_does_not_raise_not_implemented — onboard command provides meaningful output"
+        - "test_cli_lens_does_not_raise_not_implemented — lens command provides meaningful output"
+        - "test_cli_governance_does_not_raise_not_implemented — governance command provides meaningful output"
+        - "test_work_item_provider_methods_not_raise — fetch_user_stories etc. return empty or raise proper error"
+        - "test_secrets_providers_no_stub_docstrings — aws/azure/vault docstrings say 'backend' not 'backend stub'"
+      green:
+        - "Wire CLI onboard → OnboardingOrchestrator"
+        - "Wire CLI lens → LENS orchestrator"
+        - "Wire CLI governance → EnforcementOrchestrator"
+        - "WorkItemProvider: return empty list with log warning instead of NotImplementedError"
+        - "Secrets providers: update docstring from 'stub' to 'backend'"
+      refactor:
+        - "Add --help text to all CLI commands"
+        - "Verify CORE-012 docstrings"
+
+    acceptance_criteria:
+      - "No CLI command raises NotImplementedError"
+      - "No secrets provider docstring contains 'stub'"
+      - "All 5 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/golden/test_cli_provider_gaps_phase_84_f.py -v"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── FINAL: Smoke Gate + Golden Permanence + CORE-064 Close ────────────────
+  - id: "phase-84-final"
+    title: "Smoke Gate + Golden Permanence Tests + CORE-064 Sweep Close"
+    priority: P0
+    status: COMPLETE
+    gap_refs: []
+    depends_on: ["phase-84-f"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1443 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "Verify all 29 sweep_catalogue entries are CLOSED before proceeding"
+        gate: "All sweep_catalogue entries verified CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke + golden permanence test"
+        gate: "python3 scripts/run_tests.py smoke && python3 -m pytest tests/golden/test_stub_elimination_permanence.py -v"
+        blocker: "Do NOT mark phase COMPLETE if any gate fails"
+      refactor:
+        action: "Move phase YAML planned/ → completed/, update cortex-master.yaml"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 29 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥1443 tests"
+      - "Golden permanence test passes — no stub regression possible"
+      - "Zero new test failures vs baseline"
+      - "phase-84 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-84-STUB-ELIMINATION-{timestamp}"
+  complete: "AC_COMPLETE: AC-84-STUB-ELIMINATION-{timestamp} ✅"

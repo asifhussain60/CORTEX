@@ -1,0 +1,33 @@
+# Phase 03 — Package Consolidation
+# 3 packages → 1 canonical package
+
+phase:
+  id: "phase-03"
+  title: "Package Consolidation — 3 Packages to 1"
+  status: complete
+  completed: "2026-02-19"
+  priority: P0
+  risk: medium
+
+  description: |
+    Consolidated three separate packages (cortex/, cortex_intelligence/, cortex_lens/)
+    into a single canonical cortex.* package. Migrated 118 files, rewrote 151 imports,
+    and archived originals. Import quarantine check confirms zero old imports remain.
+
+  deliverables:
+    - "cortex_intelligence/ → archived, unique logic → cortex/intelligence/memory/"
+    - "cortex_lens/ → archived, unique logic → cortex/intelligence/lens/"
+    - "All imports rewritten: cortex.* only"
+    - "Import quarantine passing: zero imports from archived packages"
+
+  artifacts:
+    files_migrated: 118
+    imports_rewritten: 151
+    tests_added: 64
+    tests_passing: 64
+
+  metrics:
+    duration: "30 minutes"
+    commits: ["db2a8aafc"]
+
+  dependencies: [phase-02]

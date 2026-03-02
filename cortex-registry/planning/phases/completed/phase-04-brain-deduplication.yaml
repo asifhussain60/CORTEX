@@ -1,0 +1,35 @@
+# Phase 04 — Brain Deduplication
+# Dissolve brain/ into proper domain directories
+
+phase:
+  id: "phase-04"
+  title: "Brain Deduplication — Dissolve brain/ into Proper Domains"
+  status: complete
+  completed: "2026-02-19"
+  priority: P0
+  risk: high
+
+  description: |
+    Dissolved the monolithic brain/ directory (261 files, 28 subdirectories) into
+    canonical domain directories. brain/core/ → cortex/core/, brain/governance/ →
+    cortex/governance/, brain/lens/ → cortex/intelligence/lens/, brain/domain_brain/ →
+    cortex/intelligence/domain_brain/, brain/domain_orchestrators/ →
+    cortex/orchestrators/domain/, brain/observability/ → cortex/observability/.
+
+  deliverables:
+    - "brain/ (261 files, 28 subdirs) dissolved into canonical domain dirs"
+    - "brain/core/ → cortex/core/"
+    - "brain/governance/ → cortex/governance/"
+    - "brain/lens/ → cortex/intelligence/lens/"
+    - "brain/domain_brain/ → cortex/intelligence/domain_brain/"
+    - "brain/domain_orchestrators/ → cortex/orchestrators/domain/"
+    - "brain/observability/ → cortex/observability/"
+
+  artifacts:
+    files_relocated: 261
+    tests_passing: 41
+
+  metrics:
+    duration: "~1 hour"
+
+  dependencies: [phase-03]

@@ -1,0 +1,173 @@
+id: "phase-99"
+title: "Phase 99 — Secure MCP Wiring: API Key Management, Auth Middleware, HTTP Transport, Pre-commit Gate"
+version: "1.0"
+created: "2026-03-01"
+status: COMPLETE
+priority: P0
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints on all functions
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-028  # snake_case file naming
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-099-SECURE-MCP-WIRING"
+
+background: |
+  Source: copilot-review.md digest + Phase 4 security wiring audit (chat session 2026-03-01)
+  Score at entry: 7.5 / 10 (75% wiring — 12/16 checks passed)
+  Target score: 10.0 / 10
+  Baseline measurements:
+    - Preflight tests: 48 passed
+    - Smoke tests: 1,784 passed (pre-session)
+  Gaps identified:
+    - G1: SecretsManager had no generate_api_key / validate_api_key / revoke_api_key / list_api_keys
+    - G2: MCP server had no authentication middleware (any caller could invoke tools)
+    - G3: MCP had no HTTP/SSE transport (K8s liveness/readiness probes unreachable)
+    - G4: Pre-commit hook ran copyright/naming checks only — no test gate
+    - G5 (pre-existing bugs): set_secret / get_secret / delete_secret called
+           audit_logger.log_secret_modification() and hash_chain.append_event()
+           — neither method exists on AuditLogger or HashChain
+
+sweep_catalogue:
+  - id: "GAP-99-01"
+    title: "SecretsManager: no API key lifecycle methods"
+    severity: P0
+    source: "copilot-review.md + security wiring audit"
+    evidence: |
+      grep -n "def " cortex/infrastructure/secrets/secrets_manager.py
+      → generate_api_key, validate_api_key, revoke_api_key, list_api_keys: absent
+    action_ref: "phase-99-a"
+    status: CLOSED
+    closed_evidence: |
+      tests/secrets/test_api_key_management.py — 21 tests GREEN
+      Methods added: generate_api_key(), validate_api_key(), revoke_api_key(),
+      list_api_keys(), _hash_api_key(), _list_api_key_vault_entries()
+      Constant-time validation via hmac.compare_digest.
+
+  - id: "GAP-99-02"
+    title: "Pre-existing audit call bugs in set_secret / get_secret / delete_secret"
+    severity: P0
+    source: "Discovered during Phase 99-A TDD run"
+    evidence: |
+      set_secret line 137: self.audit_logger.log_secret_modification(...)  → AttributeError
+      get_secret line ~189: self.audit_logger.log_secret_access(...)       → AttributeError
+      delete_secret line 247: self.audit_logger.log_secret_modification(...) → AttributeError
+      All three also called self.hash_chain.append_event() → AttributeError
+      AuditLogger only exposes: log(action, key, actor, success, **meta)
+      HashChain only exposes: append(entry: Dict)
+    action_ref: "phase-99-a"
+    status: CLOSED
+    closed_evidence: |
+      All three methods fixed to use audit_logger.log(action=..., key=...) and
+      hash_chain.append({...}). get_audit_trail() fixed: .events → get_entries(),
+      .verify_integrity() → .verify(), .previous_hash → get_chain()[-1].
+      21/21 tests GREEN after fix.
+
+  - id: "GAP-99-03"
+    title: "MCP server has no authentication middleware"
+    severity: P0
+    source: "copilot-review.md + security wiring audit"
+    evidence: |
+      cortex/mcp/server.py — no auth check in dispatch loop
+      Any caller with stdio access can invoke any tool without credentials
+    action_ref: "phase-99-b"
+    status: CLOSED
+    closed_evidence: |
+      cortex/mcp/auth_middleware.py — ApiKeyAuthMiddleware + AuthenticationError
+      tests/mcp/test_auth_middleware.py — 20 tests GREEN
+      authenticate(): constant-time via SecretsManager.validate_api_key()
+      enforce(): raises AuthenticationError with generic message (no key echo)
+
+  - id: "GAP-99-04"
+    title: "MCP has no HTTP/SSE transport — K8s probes unreachable"
+    severity: P0
+    source: "copilot-review.md gap G2"
+    evidence: |
+      cortex/mcp/ — no FastAPI app, no /health endpoint
+      K8s liveness + readiness probes would fail; no HTTP tool invocation path
+    action_ref: "phase-99-c"
+    status: CLOSED
+    closed_evidence: |
+      cortex/mcp/http_transport.py — create_app() returns configured FastAPI app
+      GET  /health        — public, 200 {"status": "ok"}
+      GET  /health/ready  — public, 200 {"status": "ok", "ready": true}
+      GET  /tools/list    — auth-gated, returns registry.to_mcp_schema()
+      POST /tools/call    — auth-gated, dispatches to registered tool
+      tests/mcp/test_http_transport.py — 16 tests GREEN
+
+  - id: "GAP-99-05"
+    title: "Pre-commit hook had no test gate — broken wiring could be shipped"
+    severity: P1
+    source: "copilot-review.md gap G4 + security wiring audit"
+    evidence: |
+      .git/hooks/pre-commit — only copyright, naming, placement, stub checks
+      No pytest execution — a developer could commit code that breaks preflight
+    action_ref: "phase-99-d"
+    status: CLOSED
+    closed_evidence: |
+      .git/hooks/pre-commit — PREFLIGHT GATE section appended (Phase 99-D)
+      Runs: python3 -m pytest tests/preflight/ -q --tb=short
+      Blocks commit if any preflight test fails; < 5s on 48 tests
+      scripts/install-hooks.sh — one-command setup for new developers
+      Verified: bash scripts/install-hooks.sh → 48 passed ✅
+
+sub_phases:
+  - id: "phase-99-a"
+    title: "SecretsManager API key lifecycle + audit trail bug fixes"
+    status: COMPLETE
+    tdd_cycle: RED(21) → GREEN(21) → REFACTOR
+    files_modified:
+      - cortex/infrastructure/secrets/secrets_manager.py
+    tests:
+      - tests/secrets/test_api_key_management.py  # 21 tests
+    completion_gate: "21/21 GREEN + 48/48 preflight GREEN"
+
+  - id: "phase-99-b"
+    title: "ApiKeyAuthMiddleware — MCP authentication layer"
+    status: COMPLETE
+    tdd_cycle: RED(20) → GREEN(20) → REFACTOR
+    files_created:
+      - cortex/mcp/auth_middleware.py
+    tests:
+      - tests/mcp/test_auth_middleware.py  # 20 tests
+    completion_gate: "20/20 GREEN + 48/48 preflight GREEN"
+
+  - id: "phase-99-c"
+    title: "HTTP transport — FastAPI dual-mode server with auth"
+    status: COMPLETE
+    tdd_cycle: RED(16) → GREEN(16) → REFACTOR
+    files_created:
+      - cortex/mcp/http_transport.py
+    tests:
+      - tests/mcp/test_http_transport.py  # 16 tests
+    completion_gate: "16/16 GREEN + 48/48 preflight GREEN"
+
+  - id: "phase-99-d"
+    title: "Pre-commit preflight gate + install-hooks.sh"
+    status: COMPLETE
+    tdd_cycle: N/A (shell script + hook extension)
+    files_modified:
+      - .git/hooks/pre-commit
+    files_created:
+      - scripts/install-hooks.sh
+    completion_gate: "bash scripts/install-hooks.sh → 48 passed ✅"
+
+acceptance_criteria:
+  - ✅ GAP-99-01 CLOSED: generate_api_key / validate_api_key / revoke_api_key / list_api_keys — 21 tests GREEN
+  - ✅ GAP-99-02 CLOSED: set_secret / get_secret / delete_secret audit calls fixed — no AttributeError
+  - ✅ GAP-99-03 CLOSED: ApiKeyAuthMiddleware wired — 20 tests GREEN, constant-time auth, generic error messages
+  - ✅ GAP-99-04 CLOSED: /health + /health/ready public, /tools/list + /tools/call auth-gated — 16 tests GREEN
+  - ✅ GAP-99-05 CLOSED: pre-commit blocks commits when preflight fails; install-hooks.sh for new devs
+  - ✅ CORE-068: 0 P0/P1 violations at close — 57 new tests GREEN, 48 preflight GREEN
+  - ✅ CORE-064: all 5 sweep_catalogue gaps CLOSED
+
+final_metrics:
+  new_tests: 57
+  tests_green: 57
+  preflight_gate: "48/48"
+  files_created: 4
+  files_modified: 3
+  p0_violations_at_close: 0
+  p1_violations_at_close: 0

@@ -1,0 +1,37 @@
+# Phase 23 — Workflow Template Injection
+# WorkflowTemplateMixin on OrchestratorBase + all orchestrators wired
+
+phase:
+  id: "phase-23"
+  title: "Workflow Template Injection — WorkflowTemplateMixin"
+  status: complete
+  completed: "2026-02-22"
+  priority: P0
+  risk: medium
+
+  description: |
+    Added WorkflowTemplateMixin to OrchestratorBase giving every orchestrator
+    template discovery/load capability. TDDOrchestrator.get_recommended_template()
+    returns tdd/tdd-feature-implementation. Created cortex_list_workflow_templates
+    MCP tool. Implemented company override auto-discovery (company/workflows/
+    with override precedence). All 22 orchestrators inherit template capability.
+
+  deliverables:
+    - "D1: WorkflowTemplateMixin — cortex/core/workflow_template_mixin.py"
+    - "D2: OrchestratorBase inherits WorkflowTemplateMixin"
+    - "D3: TDDOrchestrator template wiring"
+    - "D4: Template-orchestrator mapping registry"
+    - "D5: cortex_list_workflow_templates MCP tool"
+    - "D6: Company override auto-discovery (company/workflows/)"
+
+  artifacts:
+    files_created:
+      - cortex/core/workflow_template_mixin.py
+      - cortex/mcp/tools/list_workflow_templates.py
+    tests_added: 23
+    tests_passing: 23
+
+  metrics:
+    duration: "~2 hours"
+
+  dependencies: [phase-05]

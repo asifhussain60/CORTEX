@@ -18,9 +18,9 @@ from cortex.lens.models.tech_stack import TechStack, TechCategory, TechStackItem
 class TestLENSTechStackIntegration:
     """Test tech stack detection integration with LENS."""
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_includes_tech_stack(self, mock_comment, mock_ast, mock_git):
         """Test: LENS analyze_file returns tech_stack field."""
         # Setup mocks
@@ -56,9 +56,9 @@ class TestLENSTechStackIntegration:
         assert "frameworks" in result["tech_stack"]
         assert "libraries" in result["tech_stack"]
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_detects_python_flask(self, mock_comment, mock_ast, mock_git):
         """Test: LENS detects Python + Flask correctly."""
         # This test validates primary language detection from .py file
@@ -93,9 +93,9 @@ class TestLENSTechStackIntegration:
         assert tech_stack["primary_language"] == "python", "Python should be detected from .py file"
         assert "python" in tech_stack["languages"], "Python should be in languages list"
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_detects_dotnet(self, mock_comment, mock_ast, mock_git):
         """Test: LENS detects .NET from .cs file."""
         # Setup mocks
@@ -125,9 +125,9 @@ class TestLENSTechStackIntegration:
         # Verify .NET detected
         assert "csharp" in result["tech_stack"]["languages"]
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_tech_stack_in_metadata(self, mock_comment, mock_ast, mock_git):
         """Test: Tech stack detection tracked in metadata."""
         # Setup mocks
@@ -157,9 +157,9 @@ class TestLENSTechStackIntegration:
         # Verify metadata includes tech_stack analyzer
         assert "tech_stack" in result["_metadata"]["analyzers_run"]
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_context_includes_tech_stack(self, mock_comment, mock_ast, mock_git):
         """Test: LENSContext includes tech_stack field."""
         # Create LENSContext
@@ -181,9 +181,9 @@ class TestLENSTechStackIntegration:
         assert result["tech_stack"]["primary_language"] == "python"
         assert "flask" in result["tech_stack"]["frameworks"]
     
-    @patch('cortex.lens.orchestrator.GitHistoryAnalyzer')
-    @patch('cortex.lens.orchestrator.ASTAnalyzer')
-    @patch('cortex.lens.orchestrator.CommentExtractor')
+    @patch('cortex.lens.lens_orchestrator.GitHistoryAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.ASTAnalyzer')
+    @patch('cortex.lens.lens_orchestrator.CommentExtractor')
     def test_lens_error_handling(self, mock_comment, mock_ast, mock_git):
         """Test: LENS handles tech stack detection errors gracefully."""
         # Setup mocks

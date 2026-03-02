@@ -1,0 +1,33 @@
+# Phase 20 — Registry Expansion + Cleanup
+# Audit cortex-registry/, activate unused YAMLs, prune stale entries
+
+phase:
+  id: "phase-20"
+  title: "Registry Expansion + Cleanup"
+  status: complete
+  completed: "2026-02-21"
+  priority: P1
+  risk: low
+
+  description: |
+    Audited every cortex-registry/ folder, wired useful content into synthesis
+    pipeline, pruned stale YAMLs. Created architecture-best-practices.yaml
+    (DDD, microservices, event-driven), added security-ops domain profile,
+    refreshed repository.yaml (architecture_type=hexagonal), wired metric
+    baselines into TestQualityGate for drift detection.
+
+  deliverables:
+    - "architecture-best-practices.yaml — consumed by IMPLEMENT/DESIGN tiers"
+    - "security-ops.yaml domain profile (10 SOC rules)"
+    - "repository.yaml refreshed (architecture_type=hexagonal)"
+    - "test-count-baseline.yaml with drift_threshold_pct=10"
+    - "Stale YAML pruning — all cross-references resolve"
+
+  artifacts:
+    tests_added: 12
+    tests_passing: 12
+
+  metrics:
+    duration: "~2 hours"
+
+  dependencies: [phase-19]

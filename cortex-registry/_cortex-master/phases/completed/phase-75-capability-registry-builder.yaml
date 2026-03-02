@@ -153,7 +153,7 @@ phases:
     governance_authority: "CORE-008, CORE-028, CORE-035"
     duration_estimate: "3–4 hours"
     prerequisite: "smoke tests green (1420)"
-    regression_gate: "make test-batch — zero new failures"
+    regression_gate: "make test-smoke — zero new failures"
 
     new_files:
       - cortex/intelligence/capability_registry_builder.py

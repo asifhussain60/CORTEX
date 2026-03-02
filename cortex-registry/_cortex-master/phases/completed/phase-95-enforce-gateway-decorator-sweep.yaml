@@ -1,0 +1,120 @@
+id: phase-95-enforce-gateway-decorator-sweep
+title: "Phase 95 — enforce_gateway Decorator Sweep: Bypass-Gap Closure on All execute_operation() Overrides"
+status: COMPLETE
+priority: P0
+created: "2026-02-28"
+completed: "2026-02-28"
+sweep_id: SWEEP-095-ENFORCE-GATEWAY-DECORATOR
+
+description: >
+  Applies @enforce_gateway decorator to all execute_operation() overrides across
+  CORTEX orchestrators. Fixes WorkflowEnforcementMixin._wrapper to accept *args/**kwargs
+  (kwarg call compatibility). Produces architectural classification of all orchestrators
+  into Category A (gateway-mode receivers, True) and Category B (domain-operation
+  receivers, False + decorator armed for Phase 96 promotion).
+
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+
+background: |
+  Phase 94f completed the full WorkflowEnforcementMixin opt-in sweep (all ~56
+  orchestrators wired). Phase 95 addresses the remaining architectural bypass gap:
+  7 orchestrators override execute_operation() without @enforce_gateway, meaning
+  callers can bypass the gateway by calling execute_operation() directly.
+
+  Architectural Finding (Phase 95 analysis):
+    - Category A (True — gateway-mode receivers): Health, Vacuum (health/), TDD,
+      Debugger, Refactoring — receive structured mode strings ("IMPLEMENT", "FIX")
+      that match _MODE_TEMPLATE_MAP. Gateway works correctly. No changes.
+    - Category B (False — domain-operation receivers): Interaction, Security,
+      EnhancedPlanning, Planning, SDLCWorkflow, Trainer — receive domain-specific
+      operation names ("comprehend", "scan", "plan_phases", "ANALYZE") or raw user
+      requests. These do NOT match _MODE_TEMPLATE_MAP. Flag stays False.
+    - MasterOrchestrator: raw user request entry point ("Implement auth with JWT...").
+      IS the gateway initiator, not a gated target. Flag stays False. No decorator.
+
+  Phase 95 achievement: @enforce_gateway applied to all 6 Category B overrides.
+  The decorator is armed — when Phase 96 extends _MODE_TEMPLATE_MAP to cover domain
+  operation strings, flipping to True is the ONLY change needed per orchestrator.
+
+  Also fixed: WorkflowEnforcementMixin._wrapper now accepts *args/**kwargs, resolving
+  the "unexpected keyword argument 'operation_name'" regression when callers use
+  keyword-argument call style (e.g., execute_operation(operation_name="...", parameters=...)).
+
+acceptance_criteria:
+  - ✅ @enforce_gateway applied to InteractionOrchestrator.execute_operation
+  - ✅ @enforce_gateway applied to SecurityOrchestrator.execute_operation
+  - ✅ @enforce_gateway applied to EnhancedPlanningOrchestrator.execute_operation
+  - ✅ @enforce_gateway applied to PlanningOrchestrator.execute_operation
+  - ✅ @enforce_gateway applied to SDLCWorkflowOrchestrator.execute_operation
+  - ✅ @enforce_gateway applied to TrainerOrchestrator.execute_operation
+  - ✅ MasterOrchestrator: NO decorator (architectural constraint — raw request entry)
+  - ✅ _wrapper(*args, **kwargs): keyword-arg call style regression fixed
+  - ✅ 21 tests GREEN
+  - ✅ Smoke: 1,784 passed, 0 failed
+
+sweep_catalogue:
+  - id: GAP-95-01
+    description: "6 orchestrators with execute_operation() overrides lack @enforce_gateway — bypass gap open"
+    severity: P0
+    status: CLOSED
+    closed_by: "@enforce_gateway applied to all 6 Category B execute_operation overrides"
+
+  - id: GAP-95-02
+    description: "_wrapper() signature only accepts positional args — keyword callers get TypeError"
+    severity: P0
+    status: CLOSED
+    closed_by: "_wrapper updated to *args/**kwargs with kwarg name resolution (operation_name/parameters/context)"
+
+  - id: GAP-95-03
+    description: "Architectural classification missing: no documentation of which orchestrators can be True vs must stay False"
+    severity: P1
+    status: CLOSED
+    closed_by: "Category A/B classification documented in phase file, test docstrings, and orchestrator comments"
+
+files_created:
+  - tests/orchestrators/workflow/test_phase95_enforce_gateway_promotion.py
+  - cortex-registry/planning/phases/completed/phase-95-enforce-gateway-decorator-sweep.yaml
+
+files_modified:
+  - cortex/core/workflow_enforcement_mixin.py  # _wrapper: positional → *args/**kwargs
+  # @enforce_gateway added to execute_operation() + import updated:
+  - cortex/orchestrators/core/interaction_orchestrator.py
+  - cortex/orchestrators/core/security_orchestrator.py
+  - cortex/orchestrators/core/master_orchestrator.py       # import only (no decorator — by design)
+  - cortex/orchestrators/domain/enhanced_planning_orchestrator.py
+  - cortex/orchestrators/domain/planning_orchestrator.py
+  - cortex/orchestrators/domain/sdlc_workflow_orchestrator.py
+  - cortex/orchestrators/intelligence/trainer_orchestrator.py
+
+test_results:
+  phase_95_enforce_gateway: "21 tests GREEN (6 category-B orchestrators × 3 + MasterOrchestrator × 3)"
+  smoke_gate: "1,784 passed, 0 failed"
+
+gateway_scoreboard:
+  category_a_true:
+    - HealthOrchestrator           # receives "HEALTH" mode string
+    - VacuumOrchestrator           # receives "VACUUM" mode string
+    - TDDOrchestrator              # receives "TDD" / "IMPLEMENT" mode strings
+    - DebuggerOrchestrator         # receives "DEBUG" mode string
+    - RefactoringOrchestrator      # receives "REFACTOR" mode string
+  category_b_false_decorator_armed:
+    # @enforce_gateway applied — ready for Phase 96 True promotion
+    - InteractionOrchestrator      # domain op: "comprehend"
+    - SecurityOrchestrator         # domain op: "scan"
+    - EnhancedPlanningOrchestrator # domain op: varies
+    - PlanningOrchestrator         # domain op: "plan_phases"
+    - SDLCWorkflowOrchestrator     # domain op: "ANALYZE", "DESIGN" (SDLC intent map)
+    - TrainerOrchestrator          # domain op: "scan", "propose", "execute"
+  special_false_no_decorator:
+    - MasterOrchestrator  # raw user request entry point — gateway INITIATOR, not target
+
+next_milestone: >
+  Phase 96: Extend WorkflowGateway._MODE_TEMPLATE_MAP to cover domain-specific
+  operation strings (Category B). Once _MODE_TEMPLATE_MAP covers "comprehend",
+  "scan", "plan_phases", "ANALYZE", etc., each Category B orchestrator can be
+  promoted to True with a single flag change — no structural rework.
+  Also: MasterOrchestrator integration — route resolved mode through
+  execute_via_gateway() internally after IntentRouter classification.

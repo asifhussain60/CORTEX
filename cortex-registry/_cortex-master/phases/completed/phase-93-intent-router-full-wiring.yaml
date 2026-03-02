@@ -1,0 +1,81 @@
+id: phase-93-intent-router-full-wiring
+title: "Phase 93 — IntentRouter Full Wiring into MasterOrchestrator"
+status: COMPLETE
+priority: P0
+created: "2026-02-28"
+completed: "2026-02-28"
+sweep_id: SWEEP-093
+
+description: >
+  Confirm and implement full wiring of IntentRouter into MasterOrchestrator
+  for all CORTEX functionality. InteractionOrchestrator is the always-active
+  default orchestrator with intelligent LENS analysis as the Stage 1 foundation
+  of the 4-stage pipeline.
+
+acceptance_criteria:
+  - ✅ Stage2._classify() calls router.route() (not missing classify() method)
+  - ✅ Stage2 passes request + operation_name context dict to router.route()
+  - ✅ Stage2 extracts intent_type.value + target_handler from RoutingDecision
+  - ✅ Stage2._get_routing_target() covers all 27 IntentType values (no MasterOrchestrator catch-all)
+  - ✅ UNKNOWN/QUERY/INTERACT → InteractionOrchestrator (LENS default)
+  - ✅ Stage1 uses interaction_orchestrator.execute() from dependencies when available
+  - ✅ Stage1 preserves breadcrumb in context.metadata from InteractionOrchestrator
+  - ✅ MasterOrchestrator passes both interaction_orchestrator and lens_orchestrator to Stage1 deps
+  - ✅ 30 RED→GREEN tests (4 clusters), 0 regressions
+
+sweep_catalogue:
+  - id: GAP-93-01
+    description: "Stage2._classify() calls router.classify() which doesn't exist on IntentRouter (only route())"
+    file: cortex/orchestrators/core/stage234_strategies.py
+    status: CLOSED
+    fix: "Replaced router.classify() call with router.route(context_dict). Stores _last_decision for target_handler extraction."
+
+  - id: GAP-93-02
+    description: "Stage2 doesn't pass request/operation context to router.route() — just request string"
+    file: cortex/orchestrators/core/stage234_strategies.py
+    status: CLOSED
+    fix: "Builds proper routing_context dict with request, operation, user_intent, description."
+
+  - id: GAP-93-03
+    description: "_get_routing_target() covers only 5 intents — 22 of 27 fall through to MasterOrchestrator catch-all"
+    file: cortex/orchestrators/core/stage234_strategies.py
+    status: CLOSED
+    fix: "Expanded to all 27 IntentType values. UNKNOWN/QUERY/INTERACT → InteractionOrchestrator. TOTALRECALL → AuditOrchestrator."
+
+  - id: GAP-93-04
+    description: "Stage1 never calls InteractionOrchestrator — uses LENSOrchestrator direct only"
+    file: cortex/orchestrators/core/stage1_comprehension_strategy.py
+    status: CLOSED
+    fix: "Phase 93: when interaction_orchestrator in deps, calls .execute() first. Preserves breadcrumb in context.metadata."
+
+  - id: GAP-93-05
+    description: "MasterOrchestrator doesn't pass lens_orchestrator to Stage1 dependencies"
+    file: cortex/orchestrators/core/master_orchestrator.py
+    status: CLOSED
+    fix: "Added lens_orchestrator: getattr(self, '_lens_orchestrator', None) to dependencies dict."
+
+wiring_confirmation:
+  stage1_interaction_orchestrator: "CONFIRMED — Stage1 calls interaction_orchestrator.execute() → LENS + breadcrumb"
+  stage2_intent_router: "CONFIRMED — Stage2 calls intent_router.route(context_dict) → RoutingDecision.intent_type + target_handler"
+  stage3_enforcement: "CONFIRMED — Stage3 calls enforcement_orchestrator (pre-existing)"
+  stage4_domain_delegation: "CONFIRMED — Stage4 delegates to routing_target orchestrator"
+  default_fallback: "CONFIRMED — InteractionOrchestrator (LENS) is default for UNKNOWN/QUERY and workflow_gate fallback"
+  breadcrumb_chain: "CONFIRMED — InteractionOrchestrator.execute() → breadcrumb → Stage1 metadata → pipeline output"
+
+test_files:
+  - tests/orchestrators/test_phase93_intent_wiring.py
+
+changes:
+  - file: cortex/orchestrators/core/stage234_strategies.py
+    change: "_classify() now calls router.route(); _get_routing_target() covers all 27 IntentType values; _last_decision cache for target_handler"
+  - file: cortex/orchestrators/core/stage1_comprehension_strategy.py
+    change: "execute() uses interaction_orchestrator.execute() from deps, preserves breadcrumb in metadata"
+  - file: cortex/orchestrators/core/master_orchestrator.py
+    change: "Added lens_orchestrator to Stage1/2/3/4 dependencies dict"
+  - file: tests/orchestrators/test_phase93_intent_wiring.py
+    change: "30 RED→GREEN tests across 4 clusters: Stage2 routing, routing coverage, breadcrumb propagation, always-active IO"
+
+governance:
+  core_rules: [CORE-008, CORE-035, CORE-049, CORE-064]
+  tdd_cycle: "RED(20) → GREEN(30) → smoke(1698 passed)"
+  pipeline_authority: "cortex/orchestrators/strategies/__init__.py + ENH-087"

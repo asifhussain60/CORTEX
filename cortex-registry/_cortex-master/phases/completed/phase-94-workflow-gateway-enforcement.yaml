@@ -1,0 +1,267 @@
+id: phase-94-workflow-gateway-enforcement
+title: "Phase 94 — Workflow Gateway + Mandatory Enforcement: WorkflowGateway, WorkflowEnforcementMixin, enforce_gateway Decorator"
+status: COMPLETE
+priority: P0
+created: "2026-02-28"
+completed: "2026-02-28"
+sweep_id: SWEEP-094-WORKFLOW-GATEWAY-ENFORCEMENT
+
+description: >
+  Implements the mandatory Workflow Composer enforcement layer: no orchestrator
+  may touch code without first passing through WorkflowGateway and receiving a
+  canonical workflow template. Three sub-phases: (a) core gateway + mixin
+  foundation + mode-workflow templates; (b) strict disk verification, TDD /
+  Debugger / Refactoring opt-in; (c) enforce_gateway decorator + top-level
+  coordinator wiring (Master, Enforcement, Audit).
+
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-048  # Holistic validation gate
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+
+background: |
+  Originated from user audit request: "confirm no CODE will be touched by
+  CORTEX without the workflow composer using dedicated workflow templates,
+  convergence and conditional loops for all operational orchestrators."
+  Baseline smoke: 1,717 → Final smoke: 1,784 passed (zero regressions).
+  Architectural tensions addressed:
+    Tension 1: execute_operation() bypass gap → enforce_gateway decorator
+    Tension 2: YAML templates may not exist on disk → strict=True resolver
+    Tension 3: Top-level coordinators untracked → advisory mixin wiring
+
+acceptance_criteria:
+  - ✅ WorkflowGateway: single enforced pre-execution gate for all code-touching modes
+  - ✅ _MODE_TEMPLATE_MAP: 18 modes mapped (11 code-touching + 7 exempt)
+  - ✅ WorkflowGateway.resolve_template(strict=True): disk YAML existence check
+  - ✅ WorkflowGateway.execute_gated(): AC markers + SQLite trace
+  - ✅ WorkflowEnforcementMixin: PHASE90_GATEWAY_ENABLED=False default, zero-risk rollout
+  - ✅ enforce_gateway decorator: closes bypass gap on execute_operation() overrides
+  - ✅ 5 orchestrators PHASE90_GATEWAY_ENABLED=True: Health, Vacuum, TDD, Debugger, Refactoring
+  - ✅ 3 orchestrators advisory-wired (False): Master, Enforcement, Audit
+  - ✅ tdd-workflow.yaml + review-and-cleanup.yaml primitive created
+  - ✅ review-and-cleanup injected into all 7 mode-workflow templates
+  - ✅ 27 golden tests GREEN (GW-001..GW-027)
+  - ✅ 16 golden tests GREEN (GHV-001..GHV-016, health+vacuum)
+  - ✅ 22 unit tests GREEN (Phase 94b enforcement cluster)
+  - ✅ 14 unit tests GREEN (Phase 94c enforce_gateway cluster)
+  - ✅ Smoke gate: 1,784 passed, 0 failed
+
+sweep_catalogue:
+  - id: GAP-94-01
+    description: "No mandatory gateway: orchestrators could touch code without template routing"
+    severity: P0
+    status: CLOSED
+    closed_by: "WorkflowGateway + WorkflowEnforcementMixin"
+
+  - id: GAP-94-02
+    description: "execute_operation() bypass: direct callers skip execute_via_gateway()"
+    severity: P0
+    status: CLOSED
+    closed_by: "enforce_gateway decorator (Phase 94c)"
+
+  - id: GAP-94-03
+    description: "_MODE_TEMPLATE_MAP entries may point to non-existent YAML files"
+    severity: P1
+    status: CLOSED
+    closed_by: "resolve_template(strict=True) + _assert_template_yaml_exists()"
+
+  - id: GAP-94-04
+    description: "TDD / Debug / Refactoring orchestrators not opted-in to gateway"
+    severity: P1
+    status: CLOSED
+    closed_by: "Phase 94b: PHASE90_GATEWAY_ENABLED=True on all three"
+
+  - id: GAP-94-05
+    description: "Top-level coordinators (Master, Enforcement, Audit) have no mixin"
+    severity: P1
+    status: CLOSED
+    closed_by: "Phase 94c: advisory mixin wiring, PHASE90_GATEWAY_ENABLED=False"
+
+  - id: GAP-94-06
+    description: "No review-and-cleanup step mandated after every CORTEX operation"
+    severity: P1
+    status: CLOSED
+    closed_by: "review-and-cleanup.yaml primitive injected into all 7 mode-workflow templates"
+
+  - id: GAP-94-07
+    description: "No golden test coverage for WorkflowGateway routing and orchestrator opt-in"
+    severity: P1
+    status: CLOSED
+    closed_by: "test_phase90_gateway_golden.py (27 tests) + test_phase90_health_vacuum_golden.py (16 tests)"
+
+  - id: GAP-94-08
+    description: "9 high-impact domain orchestrators (Interaction, Security, Planning, EnhancedPlanning, SDLC, Onboarding, HolisticValidation, Upgrade, Git) lack WorkflowEnforcementMixin"
+    severity: P1
+    status: CLOSED
+    closed_by: "Phase 94d: advisory mixin wiring, PHASE90_GATEWAY_ENABLED=False, 18 tests GREEN"
+
+  - id: GAP-94-09
+    description: "14 additional orchestrators (MasterPlan, Review, Workflow, RequestRephrase, Domain, ServiceDecomposition, Dashboard, DigestSession, UnifiedQA, SweepCatalogue, SecurityVulnerability, Intelligence, PreCommitEnforcement, Sanitization) lack WorkflowEnforcementMixin"
+    severity: P1
+    status: CLOSED
+    closed_by: "Phase 94e: advisory mixin wiring, PHASE90_GATEWAY_ENABLED=False, 28 tests GREEN"
+
+  - id: GAP-94-10
+    description: "24 remaining orchestrators (BrainHealth, CentralBrain, Conversation, Observability, PhaseOrchestrator, State, Inquiry, GitPublish, TechIntelligence, Trainer, PersonaMaster, AutoHealingMCP, BulkDigest, ContextAssembly, CortexDocs, LENSVisualization, PlanRegistrySync, PhaseCompletion, Plan, RepoDetection, Setup, TestClassifier, SupportVacuum, SOLID) lack WorkflowEnforcementMixin"
+    severity: P1
+    status: CLOSED
+    closed_by: "Phase 94f: advisory mixin wiring, PHASE90_GATEWAY_ENABLED=False, 48 tests GREEN — SWEEP COMPLETE (all ~56 orchestrators wired)"
+
+files_created:
+  - cortex/orchestrators/workflow/workflow_gateway.py
+  - cortex/core/workflow_enforcement_mixin.py
+  - cortex-registry/workflows/templates/tdd/tdd-workflow.yaml
+  - cortex-registry/workflows/templates/primitives/execution/review-and-cleanup.yaml
+  - tests/golden/workflow/test_phase90_gateway_golden.py
+  - tests/golden/orchestrators/health_vacuum/test_phase90_health_vacuum_golden.py
+  - tests/orchestrators/workflow/test_phase90b_enforcement.py
+  - tests/orchestrators/workflow/test_phase90c_enforce_gateway.py
+  - tests/orchestrators/workflow/test_phase94d_domain_opt_in.py    # Phase 94d
+  - tests/orchestrators/workflow/test_phase94f_batch3_opt_in.py    # Phase 94f
+
+files_modified:
+  - cortex/orchestrators/workflow/__init__.py            # enforce_gateway export
+  - cortex/orchestrators/health/health_orchestrator.py  # PHASE90_GATEWAY_ENABLED=True
+  - cortex/orchestrators/health/vacuum_orchestrator.py  # PHASE90_GATEWAY_ENABLED=True
+  - cortex/orchestrators/core/tdd_orchestrator.py       # PHASE90_GATEWAY_ENABLED=True
+  - cortex/orchestrators/support/debugger_orchestrator.py  # PHASE90_GATEWAY_ENABLED=True
+  - cortex/orchestrators/domain/refactoring_orchestrator.py  # PHASE90_GATEWAY_ENABLED=True
+  - cortex/orchestrators/core/master_orchestrator.py    # mixin + PHASE90_GATEWAY_ENABLED=False
+  - cortex/orchestrators/core/enforcement_orchestrator.py  # mixin + PHASE90_GATEWAY_ENABLED=False
+  - cortex/orchestrators/core/audit_orchestrator.py     # mixin + PHASE90_GATEWAY_ENABLED=False
+  # Phase 94d (9 orchestrators):
+  - cortex/orchestrators/core/interaction_orchestrator.py
+  - cortex/orchestrators/core/security_orchestrator.py
+  - cortex/orchestrators/domain/planning_orchestrator.py
+  - cortex/orchestrators/domain/enhanced_planning_orchestrator.py
+  - cortex/orchestrators/domain/sdlc_workflow_orchestrator.py
+  - cortex/orchestrators/support/repository_onboarding_orchestrator.py
+  - cortex/orchestrators/support/upgrade_orchestrator.py
+  - cortex/orchestrators/validation/holistic_validation_orchestrator.py
+  - cortex/orchestrators/git/git_orchestrator.py
+  # Phase 94e (14 orchestrators):
+  - cortex/orchestrators/core/master_plan_orchestrator.py
+  - cortex/orchestrators/core/review_orchestrator.py
+  - cortex/orchestrators/core/workflow_orchestrator.py
+  - cortex/orchestrators/core/request_rephrase_orchestrator.py
+  - cortex/orchestrators/domain/domain_orchestrator.py
+  - cortex/orchestrators/domain/service_decomposition_orchestrator.py
+  - cortex/orchestrators/domain/dashboard_orchestrator.py
+  - cortex/orchestrators/support/digest_session_orchestrator.py
+  - cortex/orchestrators/support/unified_quality_orchestrator.py
+  - cortex/orchestrators/support/sweep_catalogue_orchestrator.py
+  - cortex/orchestrators/validation/security_vulnerability_orchestrator.py
+  - cortex/orchestrators/intelligence/intelligence_orchestrator.py
+  - cortex/orchestrators/git/git_enforcement_orchestrator.py
+  - cortex/orchestrators/git/sanitization_orchestrator.py
+  # Phase 94f (24 orchestrators — SWEEP COMPLETE):
+  - cortex/orchestrators/core/brain_health_orchestrator.py
+  - cortex/orchestrators/core/central_brain_orchestrator.py
+  - cortex/orchestrators/core/conversation_orchestrator.py
+  - cortex/orchestrators/core/observability_orchestrator.py
+  - cortex/orchestrators/core/phase_executors/phase_orchestrator.py
+  - cortex/orchestrators/core/state_orchestrator.py
+  - cortex/orchestrators/domain/inquiry_orchestrator.py
+  - cortex/orchestrators/git/git_publish_orchestrator.py
+  - cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py
+  - cortex/orchestrators/intelligence/trainer_orchestrator.py
+  - cortex/orchestrators/persona/master_orchestrator.py
+  - cortex/orchestrators/support/auto_healing_mcp_orchestrator.py
+  - cortex/orchestrators/support/bulk_digest_orchestrator.py
+  - cortex/orchestrators/support/context_assembly_orchestrator.py
+  - cortex/orchestrators/support/cortex_docs_orchestrator.py
+  - cortex/orchestrators/support/lens_visualization_orchestrator.py
+  - cortex/orchestrators/support/phase_completion_orchestrator.py
+  - cortex/orchestrators/support/plan_orchestrator.py
+  - cortex/orchestrators/support/repo_detection_orchestrator.py
+  - cortex/orchestrators/support/setup_orchestrator.py
+  - cortex/orchestrators/support/test_classifier_orchestrator.py
+  - cortex/orchestrators/support/vacuum_orchestrator.py
+  - cortex/orchestrators/validation/solid_orchestrator.py
+  - cortex-registry/workflows/templates/sdlc/implement-workflow.yaml
+  - cortex-registry/workflows/templates/sdlc/fix-workflow.yaml
+  - cortex-registry/workflows/templates/quality/refactor-workflow.yaml
+  - cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml
+  - cortex-registry/workflows/templates/maintenance/health-check-workflow.yaml
+  - cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml
+  - cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml
+
+test_results:
+  golden_gateway: "27 tests GREEN (GW-001..GW-027)"
+  golden_health_vacuum: "16 tests GREEN (GHV-001..GHV-016)"
+  unit_enforcement: "22 tests GREEN (Phase 94b cluster)"
+  unit_enforce_gateway: "14 tests GREEN (Phase 94c cluster)"
+  phase_94d_domain_opt_in: "18 tests GREEN (9 orchestrators × 2 tests)"
+  phase_94e_batch2_opt_in: "28 tests GREEN (14 orchestrators × 2 tests)"
+  phase_94f_batch3_opt_in: "48 tests GREEN (24 orchestrators × 2 tests) — SWEEP COMPLETE"
+  smoke_gate: "1,784 passed, 0 failed"
+
+gateway_opt_in_scoreboard:
+  enabled_true:
+    - HealthOrchestrator
+    - VacuumOrchestrator
+    - TDDOrchestrator
+    - DebuggerOrchestrator
+    - RefactoringOrchestrator
+  advisory_false:
+    - MasterOrchestrator   # enable last — after all downstream opt-in
+    - EnforcementOrchestrator  # IS the gate; self-gating = circular dependency
+    - AuditOrchestrator    # invoked BY audit-fix-pipeline.yaml, not a caller
+    # Phase 94d (9 orchestrators):
+    - InteractionOrchestrator
+    - SecurityOrchestrator
+    - PlanningOrchestrator
+    - EnhancedPlanningOrchestrator
+    - SDLCWorkflowOrchestrator
+    - RepositoryOnboardingOrchestrator
+    - UpgradeOrchestrator
+    - HolisticValidationOrchestrator
+    - GitOrchestrator
+    # Phase 94e (14 orchestrators):
+    - CortexMasterPlanOrchestrator
+    - ReviewOrchestrator
+    - WorkflowOrchestrator
+    - RequestRephraseOrchestrator
+    - DomainOrchestrator
+    - ServiceDecompositionOrchestrator
+    - DashboardOrchestrator
+    - DigestSessionOrchestrator
+    - UnifiedQualityAssuranceOrchestrator
+    - SweepCatalogueOrchestrator
+    - SecurityVulnerabilityOrchestrator
+    - IntelligenceOrchestrator
+    - PreCommitEnforcementOrchestrator
+    - SanitizationOrchestrator
+    # Phase 94f (24 orchestrators — SWEEP COMPLETE):
+    - BrainHealthOrchestrator
+    - CentralBrainOrchestrator
+    - ConversationOrchestrator
+    - ObservabilityOrchestrator
+    - PhaseOrchestrator
+    - StateOrchestrator
+    - InquiryOrchestrator
+    - GitPublishOrchestrator
+    - TechIntelligenceOrchestrator
+    - TrainerOrchestrator
+    - PersonaMasterOrchestrator
+    - AutoHealingMCPOrchestrator
+    - BulkDigestOrchestrator
+    - ContextAssemblyOrchestrator
+    - CortexDocsOrchestrator
+    - LENSVisualizationOrchestrator
+    - PlanRegistrySyncOrchestrator
+    - PhaseCompletionOrchestrator
+    - PlanOrchestrator
+    - RepoDetectionOrchestrator
+    - SetupOrchestrator
+    - TestClassifierOrchestrator
+    - SupportVacuumOrchestrator  # adapter override; health/ VacuumOrchestrator is True
+    - SOLIDOrchestrator
+
+next_milestone: >
+  SWEEP COMPLETE — all ~56 CORTEX orchestrators carry WorkflowEnforcementMixin.
+  5 orchestrators are PHASE90_GATEWAY_ENABLED=True (active enforcement).
+  ~51 orchestrators are advisory False (ready for promotion when validated).
+  Phase 95: promote advisory orchestrators to True in controlled batches,
+  starting with the highest-risk code-touching entry points.

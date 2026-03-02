@@ -1,0 +1,38 @@
+# Phase 10 — Parallel Test Framework
+# pytest-xdist, CortexXdistPlugin, VS Code tasks, batch execution
+
+phase:
+  id: "phase-10"
+  title: "Parallel Test Framework — Batch Execution & Real-time Progress"
+  status: complete
+  completed: "2026-02-20"
+  priority: P1
+  risk: low
+
+  description: |
+    Built parallel test execution framework with pytest-xdist integration.
+    Created CortexXdistPlugin for batch boundaries and live stderr output,
+    ParallelRunner with 4 execution profiles (smoke/unit/integration/golden),
+    BatchProgressReporter, test categorizer, and 6 VS Code tasks.
+
+  deliverables:
+    - "D1: cortex/testing/framework/parallel_runner.py — EXECUTION_PROFILES + ParallelRunner"
+    - "D2: cortex/testing/framework/progress_reporter.py — BatchProgressReporter"
+    - "D3: cortex/testing/framework/test_categorizer.py — auto-tier assignment"
+    - "D4: cortex/testing/plugins/cortex_xdist_plugin.py — CortexXdistPlugin"
+    - "D5: pytest.ini updated — -n auto + --dist loadscope"
+    - "D6: .vscode/tasks.json — 6 tiered VS Code tasks"
+
+  artifacts:
+    files_created:
+      - cortex/testing/framework/parallel_runner.py
+      - cortex/testing/framework/progress_reporter.py
+      - cortex/testing/framework/test_categorizer.py
+      - cortex/testing/plugins/cortex_xdist_plugin.py
+    tests_added: 49
+    tests_passing: 49
+
+  metrics:
+    duration: "45 minutes"
+
+  dependencies: [phase-07]

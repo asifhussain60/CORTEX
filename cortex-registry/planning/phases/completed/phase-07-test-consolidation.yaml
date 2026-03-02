@@ -1,0 +1,35 @@
+# Phase 07 — Test Consolidation
+# 55 → 27 test directories, high-value only
+
+phase:
+  id: "phase-07"
+  title: "Test Consolidation — 55 to 27 Test Directories"
+  status: complete
+  completed: "2026-02-20"
+  priority: P1
+  risk: medium
+
+  description: |
+    Archived 9 phase-named test directories, merged 4 duplicate directory pairs,
+    archived low-value tests, and consolidated structure to mirror cortex/ source.
+    1,035 tests preserved across consolidation with zero test files lost.
+
+  deliverables:
+    - "9 phase-named test dirs archived"
+    - "4 duplicate directory pairs merged"
+    - "Low-value tests archived (100% preserved, recoverable)"
+    - "Test structure mirrors source: 27 canonical directories"
+    - "1,035 tests preserved"
+
+  artifacts:
+    test_dirs_before: 42
+    test_dirs_after: 27
+    tests_preserved: 1035
+    tests_added: 41
+    tests_passing: 41
+
+  metrics:
+    duration: "3 hours 30 minutes"
+    commits: ["c2d3e4f5g", "784b98213", "d0fca35a4"]
+
+  dependencies: [phase-06]

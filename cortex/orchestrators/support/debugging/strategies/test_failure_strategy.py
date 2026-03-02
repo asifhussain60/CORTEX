@@ -48,8 +48,10 @@ class TestFailureStrategy(AbstractInjectionStrategy):
         )
 
         if user_line is None:
-            # Fallback to line_number from context
-            return [context.line_number] if context.line_number > 0 else []
+            # Fallback to line_number from context — convert 1-indexed to 0-indexed
+            if context.line_number > 0:
+                return [max(0, context.line_number - 1)]
+            return [0]  # Inject at file start as last resort
 
         return [user_line]
 
@@ -68,7 +70,7 @@ class TestFailureStrategy(AbstractInjectionStrategy):
         timestamp = context.additional_context.get("timestamp", "")
 
         marker = (
-            f"test={test_name} | time={timestamp}"
+            f"CORTEX_DEBUG TEST_FAILURE test={test_name} | time={timestamp}"
         )
 
         return marker
