@@ -213,6 +213,7 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 |---------------------|---------|---------|
 | **AST (Python)** | `ast` (stdlib) | Python code analysis, stub detection, import rewriting |
 | **LENS** | `cortex/lens/` | 8 analyzers: Language → Examination → Navigation → Synthesis |
+| **Intelligence Facade** | `cortex/intelligence/facade.py` | `IntelligenceFacade` — canonical single entry: `analyze()`, `synthesize()`, `query()` (Phase 107 Sub-Phase C) |
 | **Roslyn (C#)** | `cortex/orchestrators/support/roslyn/` | C#/.NET semantic analysis (requires `dotnet` CLI) |
 | **tree-sitter** | `tree-sitter>=0.21.0` | Multi-language parsing (Python, C#, TypeScript) |
 | **ruff** | `ruff>=0.3.0` | Python linting + auto-fix (PostRefactorLintGate) |

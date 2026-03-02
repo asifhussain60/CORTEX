@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instru- ✅ **Product icon is fixed**: 🧠 for `CORTEX.prompt.md` · 🛠️ for `cortex-architect.prompt.md` — never swapped for a mode-specific icontions
 
-**Updated:** 2026-03-01 (Phase 98 — Dead Code Cleanup) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
+**Updated:** 2026-03-02 (Phase 107 — Intelligence Layer Consolidation) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 ---
 
@@ -169,8 +169,8 @@ Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for 
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **186 Orchestrator files** across 9 domains (`core:78 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) — all satisfy IOrchestrator protocol
-- **29 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 35 tool files in `cortex/mcp/tools/`
+- **185 Orchestrator files** across 9 domains (`core:77 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) — all satisfy IOrchestrator protocol
+- **30 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 28 tool files in `cortex/mcp/tools/`
 - **32 Governance YAMLs** in `cortex-registry/core/` enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -179,9 +179,10 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 - **RCA Memory Engine** — 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; `cortex/intelligence/learning/rca_engine.py`
 - **Multi-Stack Debug Pipeline** — 8 injection strategies (3 Python + 5 multi-stack: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, auto-cleanup
 - **Self-Healing Prompt Suite** — `scripts/refresh_prompt_suite.py` introspects live architecture + SQLite audit logs to regenerate all prompts/agents with zero drift
-- **28 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`) — plus INTRODUCE for interactive onboarding
+- **29 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`) — plus INTRODUCE for interactive onboarding
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 - **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models
+- **Intelligence Facade** — `cortex/intelligence/facade.py` — `IntelligenceFacade` is the single canonical entry point replacing 3 legacy facades (Phase 107 Sub-Phase C)
 
 ---
 
@@ -190,16 +191,17 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrator files | 186 across 9 domains in `cortex/orchestrators/` |
-| MCP Tools | 29 registered in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
+| Orchestrator files | 185 across 9 domains in `cortex/orchestrators/` |
+| MCP Tools | 30 registered in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance YAMLs | 32 in `cortex-registry/core/` |
-| Test Suite | ~17,735 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
+| Test Suite | ~17,848 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
-| Phases | 21 completed, 2 planned |
-| Master YAML | 503/800 lines (THIN INDEX CONTRACT) |
-| Intent Types | 28 (see `cortex/models/canonical_enums.py`) |
+| Phases | 24 completed, 8 planned |
+| Master YAML | 519/800 lines (THIN INDEX CONTRACT) |
+| Intent Types | 29 (see `cortex/models/canonical_enums.py`) |
 | SQLite Databases | 7 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
+| **Intelligence Facade** | `cortex/intelligence/facade.py` — `IntelligenceFacade` canonical entry (Phase 107) |
 
 ---
 
@@ -317,8 +319,8 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (20 dirs)
-  orchestrators/     ← 186 orchestrator files across 9 domains (core:78 domain:17 support:34 git:4 health:8 +more)
-  mcp/tools/         ← 29 registered MCP tools (35 tool files)
+  orchestrators/     ← 185 orchestrator files across 9 domains (core:77 domain:17 support:34 git:4 health:8 +more)
+  mcp/tools/         ← 30 registered MCP tools (28 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -348,6 +350,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` |
 | RCA Engine | `cortex/intelligence/learning/rca_engine.py` (Phase 87 — 4 methodologies) |
 | RCA Store | `cortex/intelligence/learning/rca_store.py` |
+| **Intelligence Facade** | `cortex/intelligence/facade.py` — `IntelligenceFacade` canonical entry point (Phase 107 Sub-Phase C) |
 
 ---
 
