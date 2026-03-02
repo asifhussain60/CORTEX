@@ -157,7 +157,23 @@ All sync edits MUST maintain the established content voice:
 
 ## 📊 Video Prompt Synchronization
 
-For each video prompt in `cortex-docs/assets/video-prompts/`:
+**File Count Contract:** There are exactly **16 video prompt files** (9 root-level + 7 tutorial files under `videos/tutorials/`). This count is FROZEN.
+
+| Root-Level Files (9) | Tutorial Files (7) |
+|----------------------|--------------------|
+| `01-intro-what-is-cortex.md` | `tutorial-01-installation-setup.md` |
+| `02-intro-copilot-plus-cortex.md` | `tutorial-02-essential-commands.md` |
+| `03-intro-how-cortex-works-architecture-tour.md` | `tutorial-03-building-feature-e2e.md` |
+| `04-product-owner-outcomes.md` | `tutorial-04-onboarding-customization.md` |
+| `05-engineer-tdd-and-convergence.md` | `tutorial-05-getting-started-in-vscode.md` |
+| `06-engineer-mcp-tools-and-workflows.md` | `tutorial-06-first-chat-workflows.md` |
+| `07-curious-users-learn-with-cortex.md` | `tutorial-07-reading-results-and-next-steps.md` |
+| `08-engineer-self-learning-and-root-cause-analysis.md` | |
+| `09-architect-knowledge-domain-synthesis-and-governance.md` | |
+
+**❌ Never add a new video prompt file.** If a new capability needs coverage, extend an existing prompt — the file set is a fixed canonical catalogue. Discovery gaps are filled within existing prompts, not by proliferating new files.
+
+**Synchronization Rules for each existing video prompt:**
 
 1. Read the prompt's capability description
 2. Cross-reference against current implementation

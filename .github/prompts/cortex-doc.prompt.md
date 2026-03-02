@@ -100,6 +100,11 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ✅ New system capabilities integrated organically into existing story arc
 - ✅ Maintain narrative continuity and internal lore consistency
 - ✅ Running gags preserved and evolved (router blinks red, coffee going cold, LED eyes, etc.)
+- ✅ All chapter links in `cortex-docs/awakening-of-cortex/index.html` must remain valid and resolvable
+- ❌ **No new chapter `.md` files** — the 14-chapter structure is locked; new chapters are NEVER added
+- ❌ **Do not modify `index.html` chapter list** — link structure is frozen; chapter additions break this invariant
+- ❌ **No Book Two content** injected into Book One chapters — "The Collective Consciousness" is a future placeholder only
+- ❌ **No new video prompt files** — existing 16 files (9 root + 7 tutorials) cover all discovery gaps; enhance within existing files only, never create additional prompt files
 - ❌ No canon-breaking changes to established plot or character arcs
 - ❌ No tone drift — comedic warmth with technical authenticity must persist
 - ❌ No jargon injection — story remains accessible to non-technical readers
@@ -287,6 +292,9 @@ Documentation is versioned consistently with release tags:
 | Coverage map — zero orphaned features | 100% coverage | P0 |
 | Coverage map — zero phantom docs | 0 undead docs | P0 |
 | Diagram accuracy — node counts match live architecture | Exact match | P0 |
+| **Chapter file count** — exactly 14 `.md` files in `chapters/` | 14 (immutable) | P0 |
+| **index.html chapter links** — all 14 chapter links resolve (HTTP 200) | 100% | P0 |
+| **Video prompt file count** — exactly 16 files (9 root + 7 tutorials) | 16 (no additions) | P1 |
 | Terminology consistency — glossary enforced | 0 violations | P1 |
 | Narrative continuity — no canon breaks | 0 regressions | P1 |
 | Media prompt alignment — prompts match actual system | 0 stale prompts | P1 |

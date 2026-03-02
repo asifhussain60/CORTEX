@@ -247,11 +247,15 @@ coverage_map:
     with_images: 14
     with_story_prompts: 14
     coverage: 100%
+    file_count_gate: "FROZEN — must equal exactly 14; additions or deletions are P0 violations"
+    index_html_gate: "All 14 chapter links in awakening-of-cortex/index.html must resolve HTTP 200"
 
   video_prompts:
     total: 16
+    breakdown: "9 root-level + 7 tutorials under videos/tutorials/"
     current: 16
     stale: 0
+    file_count_gate: "FROZEN — must equal exactly 16; additions are P0 violations"
 
   image_prompts:
     total_prompts: 0  # To be populated
@@ -268,7 +272,18 @@ coverage_map:
 ## ⚙️ Certification Logic
 
 ```
-P0_issues = count(orphaned_features) + count(phantom_docs) + count(stale_diagram_nodes)
+# Structural integrity checks
+chapter_count = count(cortex-docs/awakening-of-cortex/chapters/*.md)
+video_prompt_count = count(cortex-docs/assets/video-prompts/*.md) + count(cortex-docs/assets/video-prompts/videos/tutorials/*.md)
+
+if chapter_count != 14:
+  P0 FAIL: "Chapter file count is {chapter_count} — must be exactly 14"
+
+if video_prompt_count != 16:
+  P0 FAIL: "Video prompt file count is {video_prompt_count} — must be exactly 16 (9 root + 7 tutorials)"
+
+# Standard certification logic
+P0_issues = count(orphaned_features) + count(phantom_docs) + count(stale_diagram_nodes) + chapter_count_violation + video_prompt_count_violation
 P1_issues = count(stale_references) + count(stale_counts) + count(stale_media) + count(freshness_violations)
 P2_issues = count(terminology_drift) + count(narrative_drift) + count(missing_release_notes)
 

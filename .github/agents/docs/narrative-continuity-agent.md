@@ -63,7 +63,9 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 | 13 | The 3AM Healer | Phase 24 | ✅ | Enhanceable |
 | 14 | The Enterprise Brain | Phase 25+ | ✅ | Enhanceable |
 
-**Next:** Book Two: The Collective Consciousness (PLANNED)
+**Book Two: The Collective Consciousness** — PLANNED (future, not yet started)
+
+> ⚠️ **Book Two Hard Guard:** Book Two is a future placeholder ONLY. No Book Two scenes, characters, concepts, or forward references may be inserted into any Book One chapter. The 14-chapter structure of Book One is FROZEN. Enhancement = in-place improvement of existing chapters only.
 
 ### Characters — Voice Profiles
 
@@ -128,6 +130,9 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 | ❌ Jargon injection | Story is for non-technical readers — zero jargon policy |
 | ❌ Character voice change | Each character has an established voice profile — no deviation |
 | ❌ Running gag removal | Gags are continuity anchors — may evolve, never die |
+| ❌ **New chapter files** | 14-chapter structure is frozen — no `.md` additions to `chapters/` |
+| ❌ **index.html modification** | Chapter navigation links are immutable — additions break all 14 href anchors |
+| ❌ **Book Two content in Book One** | Forward content must never leak backward; Book Two is future-only |
 
 ---
 
