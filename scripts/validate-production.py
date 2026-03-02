@@ -217,9 +217,10 @@ class CORTEXProductionValidator:
                 
                 # Check for core tools — aligned with SSOT (mcp_registry.py)
                 # NOTE: cortex_process_request, cortex.lens deprecated per architect spec
+                # NOTE: cortex_total_recall removed — ops absorbed into cortex_tools_catalog
                 required_tools = [
                     "cortex_challenge",
-                    "cortex_total_recall",
+                    "cortex_tools_catalog",
                     "cortex_validate",
                     "cortex_verify",
                 ]
