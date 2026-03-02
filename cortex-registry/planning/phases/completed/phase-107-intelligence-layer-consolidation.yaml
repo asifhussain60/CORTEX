@@ -7,7 +7,7 @@ id: "phase-107"
 title: "Intelligence Layer Consolidation — Layered Diamond Architecture with Migration Automation, Prompt/Agent Refresh, Audit Hardening, and P0 Wiring Verification"
 version: "1.0"
 created: "2026-03-02"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008   # TDD mandatory
@@ -67,7 +67,7 @@ sweep_catalogue:
       cortex/intelligence/base_engine.py — concrete with EngineMetrics, caching
       Both define 'BaseIntelligenceEngine' — CORE-035 violation
     action_ref: "phase-107-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-02"
     title: "Duplicate UnifiedIntelligenceContext / SynthesisResult definitions across 3+ files"
@@ -78,7 +78,7 @@ sweep_catalogue:
       cortex/intelligence/tier3/knowledge/synthesis_engine.py — SynthesisResult (duplicate)
       cortex/intelligence/knowledge/knowledge_synthesis_engine.py — SynthesizedInstruction
     action_ref: "phase-107-a"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase B: Synthesis Engine Consolidation ────────────────────────
   - id: "GAP-107-03"
@@ -93,7 +93,7 @@ sweep_catalogue:
       5. cortex/intelligence/domain_brain/lens_integration.py (LENSSynthesis)
       grep: 'grep -rn "class.*Synthesis" cortex/intelligence --include="*.py"' → 9 hits
     action_ref: "phase-107-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-04"
     title: "Duplicate BusinessKnowledgeRepository in 2 locations"
@@ -103,7 +103,7 @@ sweep_catalogue:
       cortex/intelligence/knowledge/business_knowledge_repository.py
       cortex/intelligence/domain_brain/business_knowledge_repository.py
     action_ref: "phase-107-b"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase C: LENS Merge + Facade Unification ──────────────────────
   - id: "GAP-107-05"
@@ -116,7 +116,7 @@ sweep_catalogue:
       LENSOrchestrator in cortex/lens/lens_orchestrator.py (2045 LOC)
       LENSIntelligenceFacade in cortex/lens/facade.py (308 LOC)
     action_ref: "phase-107-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-06"
     title: "3 entry point facades — callers don't know which to use"
@@ -127,7 +127,7 @@ sweep_catalogue:
       2. cortex/lens/facade.py — LENSIntelligenceFacade (308 LOC)
       3. cortex/knowledge/registry_proxy.py — KnowledgeRegistryProxy (248 LOC)
     action_ref: "phase-107-c"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase D: Directory Flattening + Stub Pruning ───────────────────
   - id: "GAP-107-07"
@@ -138,7 +138,7 @@ sweep_catalogue:
       cortex/intelligence/domain_brain/domain_brain/ — 15 KG files nested redundantly
       DomainBrainAPI defined in BOTH __init__.py AND api.py
     action_ref: "phase-107-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-08"
     title: "8 single-file subdirectories should be modules not packages"
@@ -154,7 +154,7 @@ sweep_catalogue:
       education/ — 3 files
       infrastructure/ — 2 files
     action_ref: "phase-107-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-09"
     title: "Memory tier (46 files) — mostly stubs/config-holders with minimal runtime value"
@@ -165,7 +165,7 @@ sweep_catalogue:
       tier3_scratch/ — 1 YAML file only
       memory/core/ — path_abstraction.py, linux/mac/windows compat (platform utils, not intelligence)
     action_ref: "phase-107-d"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase E: Prompt/Agent/copilot-instructions Refresh ─────────────
   - id: "GAP-107-10"
@@ -181,7 +181,7 @@ sweep_catalogue:
       All prompts in .github/prompts/ reference intelligence paths
       All agents in .github/agents/ reference intelligence paths
     action_ref: "phase-107-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-11"
     title: "Audit agent (cortex-auditor.md) references Check #20 without end-to-end wiring verification"
@@ -192,7 +192,7 @@ sweep_catalogue:
       No golden test validates the complete audit pipeline E2E
       No test verifies AC_START→AC_COMPLETE persistence for all 9 audit stages
     action_ref: "phase-107-e"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase F: Audit-Fix Pipeline Hardening ──────────────────────────
   - id: "GAP-107-12"
@@ -204,7 +204,7 @@ sweep_catalogue:
       orchestrator-traces.db may have 0 AC_START rows even when workflow_runs > 0
       No test asserts: 'for each audit stage, trace_master contains AC_START AND AC_COMPLETE'
     action_ref: "phase-107-f"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-13"
     title: "28-Point audit checks lack machine-verifiable acceptance tests — manual grep commands only"
@@ -215,7 +215,7 @@ sweep_catalogue:
       Each check has a 'command' column but no pytest test that executes and asserts
       Checks #1-#28 are verified manually — no test gate prevents regression
     action_ref: "phase-107-f"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase G: P0 Wiring Verification Gate ──────────────────────────
   - id: "GAP-107-14"
@@ -228,7 +228,7 @@ sweep_catalogue:
       But wiring YAMLs declare MORE orchestrators — no test validates spec↔reality alignment
       architecture-integrity-agent.md describes L1/L2/L3 checks but no automated P0 gate
     action_ref: "phase-107-g"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-15"
     title: "No test validates every wiring.yaml 'entry_point' is importable and class exists"
@@ -239,7 +239,7 @@ sweep_catalogue:
       domain-orchestrator-wiring.yaml, support-orchestrator-wiring.yaml have more
       No test iterates ALL wiring YAML entry_points and verifies import + class existence
     action_ref: "phase-107-g"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-16"
     title: "MCP registry tool count (29) not validated against actual tool file count (35) in preflight"
@@ -251,7 +251,7 @@ sweep_catalogue:
       cortex/mcp/tools/ has 35 tool files
       No test asserts: len(registered_tools) >= MINIMUM and all registered are importable
     action_ref: "phase-107-g"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase H: VacuumOrchestrator Migration Stages ───────────────────
   - id: "GAP-107-17"
@@ -263,7 +263,7 @@ sweep_catalogue:
       No stage handles: compat shim detection, stale import path cleanup, empty __init__.py after moves
       Post-consolidation, stale cortex/lens/ and cortex/knowledge/ compat shims need lifecycle management
     action_ref: "phase-107-h"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-18"
     title: "VacuumOrchestrator doesn't detect stale intelligence path imports in non-cortex files"
@@ -273,7 +273,7 @@ sweep_catalogue:
       After moving cortex/lens/ → cortex/intelligence/analysis/, any external consumer
       referencing old paths will break. Vacuum should scan for 'from cortex.lens' in tests/ and scripts/
     action_ref: "phase-107-h"
-    status: OPEN
+    status: CLOSED
 
   # ── Sub-phase I: Production Readiness Check Expansion ──────────────────
   - id: "GAP-107-19"
@@ -287,7 +287,7 @@ sweep_catalogue:
         - UnifiedIntelligenceProvider.synthesize() callable
         - All knowledge YAML paths resolvable
     action_ref: "phase-107-i"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-107-20"
     title: "copilot-instructions.md audit check table out of sync after intelligence consolidation"
@@ -297,7 +297,7 @@ sweep_catalogue:
       The 28-point table in copilot-instructions.md (carried into cortex-architect.prompt.md)
       will have stale paths (cortex/lens/ etc.) and needs new intelligence-layer checks
     action_ref: "phase-107-i"
-    status: OPEN
+    status: CLOSED
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT
@@ -321,7 +321,7 @@ phases:
   - id: "phase-107-a"
     title: "Unified Intelligence Models — Single BaseIntelligenceEngine + Consolidated Data Models"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-01", "GAP-107-02"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -394,7 +394,7 @@ phases:
   - id: "phase-107-b"
     title: "Synthesis Engine Consolidation — 5→1 Knowledge Merge Engine"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-03", "GAP-107-04"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "6 hours"
@@ -468,7 +468,7 @@ phases:
   - id: "phase-107-c"
     title: "LENS Merge into Intelligence + Single IntelligenceFacade"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-05", "GAP-107-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "8 hours"
@@ -543,7 +543,7 @@ phases:
   - id: "phase-107-d"
     title: "Directory Flattening — domain_brain + Single-File Dirs + Memory Tier Pruning"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-07", "GAP-107-08", "GAP-107-09"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -611,7 +611,7 @@ phases:
   - id: "phase-107-e"
     title: "Prompt Suite Refresh — copilot-instructions.md + All Prompts + All Agents"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-10", "GAP-107-11"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "4 hours"
@@ -683,7 +683,7 @@ phases:
   - id: "phase-107-f"
     title: "E2E Audit Log Verification — AC_START→AC_COMPLETE Acceptance Tests for All 9 Stages"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-12", "GAP-107-13"]
     governance_authority: "CORE-008, CORE-064, CORE-068"
     duration_estimate: "6 hours"
@@ -756,7 +756,7 @@ phases:
   - id: "phase-107-g"
     title: "P0 Wiring Verification — Spec↔Reality Alignment Gate for ALL Wiring YAMLs"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-14", "GAP-107-15", "GAP-107-16"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -830,7 +830,7 @@ phases:
   - id: "phase-107-h"
     title: "VacuumOrchestrator Enhancement — Migration Cleanup + Stale Import Scanner"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-17", "GAP-107-18"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "4 hours"
@@ -900,7 +900,7 @@ phases:
   - id: "phase-107-i"
     title: "Production Readiness Check #29 — Intelligence Layer Health + Audit Table Sync"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-107-19", "GAP-107-20"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "3 hours"
@@ -969,7 +969,7 @@ phases:
   - id: "phase-107-final"
     title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml Update"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: []
     depends_on: ["phase-107-i"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"

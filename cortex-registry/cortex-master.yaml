@@ -18,11 +18,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-02T10:00:00Z'
-  total_phases: 101
+  total_phases: 102
   active: 0
   completed: 76
   in_progress: 0
-  planned: 7
+  planned: 8
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -41,16 +41,16 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #NEXT — phase-107 (P0, PLANNED) ─────────────────────────────────────
+  # ── SLOT #NEXT — phase-107 (P0, COMPLETE) ────────────────────────────────────
   - id: phase-107
     title: "Intelligence Layer Consolidation — Layered Diamond Architecture, Migration Automation, Prompt/Agent Refresh, Audit Hardening, P0 Wiring Verification"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-107-INTELLIGENCE-CONSOLIDATION
     gaps: 20
     sub_phases: 10
-    file: "cortex-registry/planning/phases/planned/phase-107-intelligence-layer-consolidation.yaml"
-    note: "Consolidates 4 packages (intelligence/lens/knowledge/governance) into Layered Diamond. 5→1 synthesis engines, 3→1 facades, 2→1 base classes. Sub-phases: (A) Unified models, (B) Synthesis consolidation, (C) LENS merge + facade, (D) Dir flattening, (E) Prompt/agent refresh, (F) E2E audit AC verification, (G) P0 wiring YAML alignment gate, (H) Vacuum migration stages, (I) Check #29 intelligence health. Target: 379→80 files, 100→12 dirs."
+    file: "cortex-registry/planning/phases/completed/phase-107-intelligence-layer-consolidation.yaml"
+    note: "COMPLETE. Consolidates 4 packages (intelligence/lens/knowledge/governance) into Layered Diamond. 5→1 synthesis engines, 3→1 facades, 2→1 base classes. All 20 GAPs CLOSED. New: 29-Point audit, VacuumOrchestrator 3 migration stages, dynamic wiring YAML alignment gate (190 preflight tests). Smoke: 2113 passed."
 
   # ── SLOT #NEXT-1 — phase-106 (P1, PLANNED) ───────────────────────────────────
   - id: phase-106
@@ -349,23 +349,24 @@ playbooks:
     smells_covered: 25
 
 registry_structure:
-  - _cortex-master/phases/completed/
-  - _cortex-master/phases/planned/
-  - _cortex-master/phases/deferred/
-  - _cortex-master/playbooks/
+  - _cortex-master/phases/completed/  # → will merge into planning/phases/completed/ (phase-108)
+  - _cortex-master/phases/planned/    # → will merge into planning/phases/planned/ (phase-108)
+  - _cortex-master/playbooks/         # → will merge into playbooks/ (phase-108)
   - core/tier0-skull/
-  - core/config/
+  - core/config/                      # → will merge into config/ (phase-108)
   - config/
   - company/
   - governance/
   - knowledge/
-  - knowledge-base/
+  - knowledge-base/                   # → will merge into knowledge/ (phase-108)
   - patterns/
   - workflows/
   - metrics/
   - artifacts/
-  - integration/
+  - integration/                      # → candidate for deletion (phase-108)
   - memory/
+  - plans/                            # → empty, will delete (phase-108)
+  - planning/
 
 health_status:
   p0_issues: 0
@@ -391,15 +392,15 @@ verification:
   last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 99
+  total_phases: 100
   completed: 95
   active: 0
   in_progress: 0
-  planned: 5
+  planned: 6
   archived: 4
   playbooks: 1
-  completion_percentage: 96
-  consolidation_summary: "v46.0: 105 phases — 98 COMPLETE, 3 PLANNED (101-103, 105: Architectural Audit Cleanup). Phase 100+104 COMPLETE 2026-03-02."
+  completion_percentage: 95
+  consolidation_summary: "v47.0: 106 phases — 98 COMPLETE, 4 PLANNED (101-103, 105, 108: Architectural Audit Cleanup + Registry Consolidation). Phase 100+104 COMPLETE 2026-03-02. Phase 108 added: cortex-registry consolidation."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
@@ -407,6 +408,7 @@ summary:
     phase-103: "PLANNED — God Object Decomposition (P1)"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
+    phase-108: "PLANNED — cortex-registry Consolidation (P1)"
 
 phases:
   # ── ARCHITECTURAL AUDIT CLEANUP ROADMAP (2026-03-02) ─────────────────────────
@@ -473,6 +475,16 @@ phases:
     sub_phases: 2
     file: "cortex-registry/planning/phases/planned/phase-105-stale-imports-naming.yaml"
     note: "References to dissolved underscore-packages and legacy brain path in 8+ files. Depends on phase-102."
+
+  - id: phase-108
+    title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-108-REGISTRY-CONSOLIDATION
+    gaps: 11
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-108-registry-consolidation.yaml"
+    note: "Consolidates cortex-registry/ sprawl: 150→~90 dirs, 17→11 top-level dirs. Merges 2 phase hierarchies→1, 3 governance namespaces→1, 2 knowledge namespaces→1, 2 config namespaces→1. Deletes empty plans/, relocates .yaml-reader. Updates ~15 Python path refs. Depends on phase-107, phase-105."
 
   # ── SLOT #-1 — phase-99 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-99-secure-mcp-wiring

@@ -245,13 +245,14 @@ class OperationResult:
     """Single vacuum operation outcome.
 
     Attributes:
-        op_type: Operation kind (rename, delete, relocate, archive, …).
+        op_type: Operation kind (rename, delete, relocate, archive, report, …).
         source: Source path.
         destination: Destination path (if applicable).
         success: Whether the operation succeeded.
         error: Error message on failure.
         dry_run: Whether this was a preview-only run.
         timestamp: ISO-8601 timestamp.
+        notes: Optional informational message for report-type operations.
     """
 
     op_type: str
@@ -261,6 +262,7 @@ class OperationResult:
     error: Optional[str] = None
     dry_run: bool = False
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+    notes: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialise to plain dictionary."""
@@ -272,6 +274,7 @@ class OperationResult:
             "error": self.error,
             "dry_run": self.dry_run,
             "timestamp": self.timestamp,
+            "notes": self.notes,
         }
 
 
@@ -286,6 +289,8 @@ class VacuumReport:
         failed_operations: Count of failures.
         dry_run: Whether the entire run was preview-only.
         timestamp: ISO-8601 report timestamp.
+        migration_shim_count: Count of compat shim modules detected during
+            migration cleanup stage (Phase 107 Sub-phase H).
     """
 
     operations: List[OperationResult] = field(default_factory=list)
@@ -294,6 +299,7 @@ class VacuumReport:
     failed_operations: int = 0
     dry_run: bool = False
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+    migration_shim_count: int = 0
 
     def recount(self) -> None:
         """Recalculate totals from ``self.operations``."""
@@ -308,6 +314,7 @@ class VacuumReport:
             "successful_operations": self.successful_operations,
             "failed_operations": self.failed_operations,
             "dry_run": self.dry_run,
+            "migration_shim_count": self.migration_shim_count,
             "operations": [o.to_dict() for o in self.operations],
             "timestamp": self.timestamp,
         }

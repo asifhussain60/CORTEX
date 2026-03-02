@@ -1,9 +1,9 @@
 # CORTEX Auditor
 
-**Purpose:** 28-Point Production Readiness Scanning (Checks #1–#28)
+**Purpose:** 29-Point Production Readiness Scanning (Checks #1–#29)
 **Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
 
-**SSOT:** The canonical 28-Point audit checklist is defined in `.github/prompts/cortex-architect.prompt.md` § 28-Point Production Readiness Audit.
+**SSOT:** The canonical 29-Point audit checklist is defined in `.github/prompts/cortex-architect.prompt.md` § 29-Point Production Readiness Audit.
 
 **Stage:** `/audit fix` Stage 2
 

@@ -35,7 +35,7 @@ provides:
   - name: IntentRouter
     category: CORE
     description: "Routes intents to appropriate orchestrators"
-    entry_point: "cortex.orchestrators.core.intent_router:IntentRouter"
+    entry_point: "cortex.orchestrators.core.intent_router_impl:IntentRouter"
     features:
       - intent_detection
       - routing_logic
@@ -188,16 +188,6 @@ provides:
     features:
       - stage2_routing
       - knowledge_synthesis
-    phase_added: "62-G"
-
-  - name: IntentRouter
-    category: CORE
-    description: "Primary intent router — complexity-gated routing with LENS context"
-    entry_point: "cortex.orchestrators.core.intent_router:IntentRouter"
-    features:
-      - complexity_gating
-      - lens_context
-      - fallback_routing
     phase_added: "62-G"
 
 initialization_order: 10

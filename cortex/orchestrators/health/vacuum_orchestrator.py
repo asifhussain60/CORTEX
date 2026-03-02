@@ -630,6 +630,183 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         return results
 
     # ─────────────────────────────────────────────────────────────────────
+    # MIGRATION CLEANUP STAGES (Phase 107 Sub-phase H)
+    # ─────────────────────────────────────────────────────────────────────
+
+    def run_compat_shim_detection(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Stage 9 — Detect re-export-only compat shim modules.
+
+        Scans ``cortex/`` for Python files that consist entirely of import
+        re-exports (no class/function/variable definitions).  These are
+        deprecated compat shims left over from intelligence consolidation
+        and should be reviewed for removal.
+
+        Phase 107 Sub-phase H (GAP-107-17).
+
+        Args:
+            dry_run: If ``True``, plan operations without executing.
+
+        Returns:
+            List of :class:`OperationResult` — one per shim detected.
+        """
+        import ast
+        import re
+
+        results: List[OperationResult] = []
+        scan_root = self.workspace_root / "cortex"
+        if not scan_root.exists():
+            return results
+
+        for py_file in scan_root.rglob("*.py"):
+            # Only scan __init__.py — shims are typically in package init files
+            if py_file.name != "__init__.py":
+                continue
+
+            try:
+                source = py_file.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+
+            # Strip comments to get real content
+            lines = [
+                ln for ln in source.splitlines()
+                if ln.strip() and not ln.strip().startswith("#")
+            ]
+            if not lines:
+                # Truly empty — handled by run_empty_init_cleanup
+                continue
+
+            # Heuristic: if every non-blank, non-comment line is an import
+            # statement, the file is a re-export shim
+            non_import_lines = [
+                ln for ln in lines
+                if not re.match(
+                    r"^\s*(from\s+\S+\s+import|import\s+|__all__\s*=|#)", ln
+                )
+            ]
+            if non_import_lines:
+                # Has real logic — not a shim
+                continue
+
+            # Confirmed shim
+            results.append(
+                OperationResult(
+                    op_type="report",
+                    source=py_file,
+                    success=True,
+                    dry_run=dry_run,
+                    notes=f"Compat shim detected — only re-exports, no real logic",
+                )
+            )
+
+        return results
+
+    def run_stale_import_scanner(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Stage 10 — Detect stale cortex.lens.* import paths.
+
+        Scans ``tests/`` and ``scripts/`` for any Python file that still
+        imports from the old ``cortex.lens`` namespace (moved to
+        ``cortex.intelligence.analysis`` during Phase 107 consolidation).
+
+        Phase 107 Sub-phase H (GAP-107-18).
+
+        Args:
+            dry_run: If ``True``, plan only (no writes).
+
+        Returns:
+            List of :class:`OperationResult` — one per stale file detected.
+        """
+        import re
+
+        STALE_PATTERNS = [
+            re.compile(r"from\s+cortex\.lens[\.\s]"),
+            re.compile(r"import\s+cortex\.lens"),
+        ]
+
+        results: List[OperationResult] = []
+        scan_dirs = [
+            self.workspace_root / "tests",
+            self.workspace_root / "scripts",
+        ]
+
+        for scan_dir in scan_dirs:
+            if not scan_dir.exists():
+                continue
+            for py_file in scan_dir.rglob("*.py"):
+                try:
+                    source = py_file.read_text(encoding="utf-8", errors="replace")
+                except OSError:
+                    continue
+                if any(pat.search(source) for pat in STALE_PATTERNS):
+                    results.append(
+                        OperationResult(
+                            op_type="report",
+                            source=py_file,
+                            success=True,
+                            dry_run=dry_run,
+                            notes=(
+                                f"Stale 'cortex.lens' import detected — "
+                                f"update to 'cortex.intelligence.analysis'"
+                            ),
+                        )
+                    )
+
+        return results
+
+    def run_empty_init_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Stage 11 — Detect __init__.py files with no real code.
+
+        Scans ``cortex/`` for ``__init__.py`` files whose content consists
+        only of comments, blank lines, or docstrings with no actual imports
+        or definitions.  These are left-over empty inits after package moves.
+
+        Phase 107 Sub-phase H (GAP-107-17).
+
+        Args:
+            dry_run: If ``True``, plan operations without executing.
+
+        Returns:
+            List of :class:`OperationResult` — one per empty init detected.
+        """
+        import re
+
+        results: List[OperationResult] = []
+        scan_root = self.workspace_root / "cortex"
+        if not scan_root.exists():
+            return results
+
+        for init_file in scan_root.rglob("__init__.py"):
+            try:
+                source = init_file.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+
+            # Strip blank lines, comments, and docstrings
+            real_lines = [
+                ln for ln in source.splitlines()
+                if ln.strip()
+                and not ln.strip().startswith("#")
+                and not re.match(r'^\s*("""|\'\'\').*', ln)
+                and ln.strip() not in ('"""', "'''")
+            ]
+
+            if real_lines:
+                # Has real content — skip
+                continue
+
+            results.append(
+                OperationResult(
+                    op_type="report",
+                    source=init_file,
+                    success=True,
+                    dry_run=dry_run,
+                    notes="Empty __init__.py — only comments/docstrings, no real code",
+                )
+            )
+
+        return results
+
+    # ─────────────────────────────────────────────────────────────────────
     # COMPANION PUBLIC API
     # ─────────────────────────────────────────────────────────────────────
 

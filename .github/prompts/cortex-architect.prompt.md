@@ -279,13 +279,13 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 **Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 **Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
-The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 28-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
+The workflow template defines all 9 stages (Environment Readiness → Inflight Upgrade → Governance Pre-Flight → 29-Point Scan → Wiring Validation → Health Check → Vacuum → Meta-Audit → Auto-Fix Convergence → Tests + AC_COMPLETE).
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 
-### 28-Point Production Readiness Audit
+### 29-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -317,6 +317,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 26 | **Duplicate class implementations (CORE-035)** — same class name defined in more than one non-test `cortex/` file; Python silently uses the last import, making earlier definitions dead code | `python3 -c "import ast,pathlib,collections; locs=collections.defaultdict(list); [locs[n.name].append(str(f)) for f in pathlib.Path('cortex').rglob('*.py') if '__pycache__' not in str(f) for n in ast.walk(ast.parse(f.read_text())) if isinstance(n,ast.ClassDef)]; dups={k:v for k,v in locs.items() if len(v)>1}; print(f'DUPLICATES={len(dups)}'); [print(k,v) for k,v in dups.items()]"` — must return `DUPLICATES=0` | ✅ Identify canonical file for each pair; merge or delete the shadow copy; update all imports; run `make test-smoke` |
 | 27 | **Stale test directory mirror** — `tests/` dirs whose corresponding `cortex/` source was dissolved (e.g. `tests/cortex_brain/` with no `cortex/brain/`); test-source mirror integrity. **DISSOLVED PACKAGE GUARD:** Any test dir matching a name in `DISSOLVED_PACKAGES` (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) must be DELETED, never relocated — the source package no longer exists. SSOT: `DISSOLVED_PACKAGES` in `cortex/orchestrators/health/constants.py` | `python3 -c "import pathlib; td={d.name for d in pathlib.Path('tests').iterdir() if d.is_dir()}; sd={d.name for d in pathlib.Path('cortex').iterdir() if d.is_dir()}; stale=[t for t in td if t not in sd and 'cortex_'+t not in sd]; print('STALE='+str(len(stale))); [print('  tests/'+s) for s in stale]"` — must return `STALE=0` after accounting for known exceptions; also recursively scan `tests/unit/`, `tests/integration/` for dissolved package subdirs | ✅ `rm -rf` dirs matching dissolved packages; `git mv tests/{stale_dir}/ tests/{correct_mirror_path}/` for non-dissolved stale dirs; update conftest.py references |
 | 28 | **AC marker persistence gap** — `trace_master.action` column must receive `AC_START` / `AC_COMPLETE` entries whenever orchestrators run; symptom: `workflow_runs` has rows but `AC_START_COUNT == 0` means emission is silently broken | `python3 -c "import sqlite3; conn=sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); n=conn.execute(\"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\").fetchone()[0]; wf=conn.execute('SELECT COUNT(*) FROM workflow_runs').fetchone()[0]; print('AC_START='+str(n)+' WF_RUNS='+str(wf)); print('GAP' if wf>0 and n==0 else 'OK')"` — must print `OK` | 🟡 Trace `OrchestratorProtocolMixin.emit_ac_marker()` routing; ensure `OrchestratorTraceLogger._write_to_db()` inserts into `trace_master` with `action='AC_START'`/`'AC_COMPLETE'`; run `make test-smoke` to confirm |
+| 29 | **Intelligence layer health** — `IntelligenceFacade` importable; `analyze()`, `synthesize()`, `query()` methods present; `UnifiedIntelligenceContext` importable from `cortex.intelligence.models.context`; compat shims in `cortex/intelligence/base.py` resolve correctly (Phase 107 consolidation) | `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; from cortex.intelligence.models.context import UnifiedIntelligenceContext; assert hasattr(IntelligenceFacade,'analyze') and hasattr(IntelligenceFacade,'synthesize') and hasattr(IntelligenceFacade,'query'); print('OK')"` — must print `OK` | ✅ Verify `cortex/intelligence/facade.py` exists and exports `IntelligenceFacade`; verify compat shims `cortex/intelligence/base.py` and `cortex/intelligence/base_engine.py` re-export from canonical `cortex.intelligence.models`; run `make test-smoke` |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -712,7 +713,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Orchestrator count | Matches `refresh_prompt_suite.py --counts-only` output |
 | MCP tool count | Matches live `mcp_registry.py` grep count |
 | Governance YAML count | Matches live `cortex-registry/core/` count |
-| Audit check count | All say "28-Point Production Readiness Audit" |
+| Audit check count | All say "29-Point Production Readiness Audit" |
 | Meta-audit check count | All say "26 checks" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Ghost directory absent | No filesystem artifacts with dots (`cortex.intelligence/`, `cortex.brain/`) |
