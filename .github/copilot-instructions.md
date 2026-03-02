@@ -195,10 +195,10 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | MCP Tools | 30 registered in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance YAMLs | 32 in `cortex-registry/core/` |
-| Test Suite | ~17,848 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
+| Test Suite | ~18,085 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
-| Phases | 24 completed, 8 planned |
-| Master YAML | 519/800 lines (THIN INDEX CONTRACT) |
+| Phases | 25 completed, 9 planned |
+| Master YAML | 543/800 lines (THIN INDEX CONTRACT) |
 | Intent Types | 29 (see `cortex/models/canonical_enums.py`) |
 | SQLite Databases | 7 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 | **Intelligence Facade** | `cortex/intelligence/facade.py` — `IntelligenceFacade` canonical entry (Phase 107) |
@@ -400,7 +400,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
-| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
+| `/totalrecall` | Production certification — 10-phase autonomous pipeline (delta→drift→regression→optimize→wire→memory→vacuum→db→harden→certify) | 10 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
 | `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies: 3 Python + 5 multi-stack) | INJECT |

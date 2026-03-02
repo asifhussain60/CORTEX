@@ -25,6 +25,14 @@ agents/
 │   ├── cortex-gitpages-builder.md # GitHub Pages deployment
 │   ├── request-rephrase-orchestrator.md # Request optimization
 │   └── architecture-integrity-agent.md # Wiring enforcement
+├── certification/                  # Total Recall — Production Certification
+│   ├── cortex-certification-coordinator.md # Pipeline orchestrator
+│   ├── cortex-audit-agent.md      # Delta analysis + drift detection (P1-2)
+│   ├── cortex-regression-agent.md # Regression + dead code scan (P3)
+│   ├── cortex-refactor-agent.md   # Prompt optimization + intel wiring (P4-5)
+│   ├── cortex-memory-agent.md     # Adaptive learning + lifecycle (P6)
+│   ├── cortex-db-agent.md         # SQLite integrity + migrations (P7)
+│   └── cortex-certification-agent.md # Hardening + scoring + sign-off (P8-9)
 ├── orchestration/                  # Cross-agent orchestration
 │   └── cortex-universal-orchestration.md
 ├── education/                      # Educational agents
@@ -69,7 +77,7 @@ agents/
 | SYNC | cortex-sync-agent.md |
 | VACUUM | cortex-vacuum.md |
 | DEBUG | cortex-debugger.md |
-| TOTAL RECALL | cortex-totalrecall.prompt.md |
+| TOTAL RECALL | cortex-total-recall.prompt.md → certification/ agents |
 
 ---
 

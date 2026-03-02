@@ -70,4 +70,38 @@ Let me begin by gathering comprehensive evidence across the codebase before prod
 
 Ran terminal command: grep -rn "cortex_intelligence\|cortex_lens\|cortex\.brain\|from cortex.brain" cortex/ --include="*.py" | head -40
 
+
+asifhussain60: Follow instructions in [cortex-total-recall.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-total-recall.prompt.md).
+
+GitHub Copilot: 
+
+## 🧠 CORTEX Certifying
+
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** Classifier → Mission Control → Audit Coordinator → Code Improver → Governance Enforcer
+
+> *"Quality is not an act, it is a habit."*
+> — Aristotle
+
+---
+
+*🧭 Classifier → Audit Coordinator → Code Improver → Health Monitor → Workspace Cleaner → Governance Enforcer*
+
+### 🎯 Intent Reflection
+
+I'm executing the **Total Recall 9-Phase Production Certification Pipeline** — a full autonomous inspection, optimization, and hardening pass across the CORTEX workspace to certify production-readiness.
+
+Let me begin by gathering the current state across all critical dimensions.
+
+---
+
+### Phase 1: DELTA ANALYSIS — Git History Inspection 
+
+Ran terminal command: git log --oneline -20
+
+Ran terminal command: git diff 47dff6468..HEAD --stat | tail -20
+
+
+
+
 HEADER NOT DISPLAYINC CORRECTLY> ADD A HR after the author information to separate it from the Via: Classifier  line. This will ensure the header is formatted correctly and visually distinct from the rest of the content.

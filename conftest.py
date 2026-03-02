@@ -22,10 +22,8 @@ from cortex.infrastructure.orchestrator_trace_logger import get_trace_logger, Tr
 
 # Register CORTEX testing plugins
 # cortex_xdist_plugin: batch-aware progress reporter (works sequentially — no xdist needed)
-# pytest_progress_plugin: retained for slow-test detection
 pytest_plugins = [
     "cortex.testing.plugins.cortex_xdist_plugin",
-    "cortex.testing.pytest_progress_plugin",
 ]
 
 # Counter for batched flushing — avoids 16K+ SQLite connections per full test run

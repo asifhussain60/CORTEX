@@ -335,7 +335,8 @@ intent_routing:
   TOTALRECALL:
     workflow_ref: 'lifecycle/totalrecall-workflow'
     convergence: 'primitives/validation/detect-fix-rescan-loop'
-    agent: 'cortex-totalrecall.prompt.md'
+    agent: 'cortex-total-recall.prompt.md'
+    agent_dir: '.github/agents/certification/'
 
   SYNC:
     workflow_ref: 'lifecycle/sync-workflow'

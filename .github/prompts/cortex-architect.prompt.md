@@ -167,7 +167,7 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 | DEBUG | 🐛 | `/debug`, "debug", "trace", "diagnose" | DebuggerOrchestrator | ✅ | `cortex-debugger.md` |
 | SYNC | 🔄 | `/sync`, "sync to company", "privacy-safe copy" | GitOrchestrator + WorkflowOrchestrator | ⚪ | `cortex-sync-agent.md` |
 | TRAIN | 🎓 | `/train`, "learn from repo", "evolve templates" | TrainerOrchestrator | 🔵 | `cortex-trainer.md` |
-| TOTALRECALL | 🔁 | `/totalrecall`, "total recall", "holistic refactor" | MasterOrchestrator (7-phase) | ✅ | `cortex-totalrecall.prompt.md` |
+| TOTALRECALL | 🔁 | `/totalrecall`, "total recall", "production certification" | MasterOrchestrator (10-phase) | ✅ | `cortex-total-recall.prompt.md` |
 | RCA | 🧠 | "root cause", "why did it fail", "rca" | InvestigationOrchestrator + RCAEngine | ✅ | `cortex-architect.md` |
 | GOLDEN_TEST | 🥇 | "golden test", "acceptance criteria" | TDDOrchestrator | ✅ | `cortex-executor.md` |
 | WORKFLOW_COMPOSE | 🔧🔄 | "workflow composer", "compose workflow", "workflow template", "convergence loop" | WorkflowComposer | ✅ | `cortex-architect.md` |
@@ -242,11 +242,11 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 
 ### 🔁 TOTALRECALL MODE — Holistic Production Readiness
 
-**Trigger:** `/totalrecall`, "total recall", "holistic refactor", "everything is broken"
+**Trigger:** `/totalrecall`, "total recall", "production certification"
 **Workflow Template:** `cortex-registry/workflows/templates/lifecycle/totalrecall-workflow.yaml`
 
-**7-Phase Protocol:** INVENTORY → CONTRADICTION → ARCHITECTURE → RECOMMENDATION → IMPLEMENTATION → REGRESSION PROOF → VERIFICATION
-**Authority:** `cortex-totalrecall.prompt.md` (self-contained, loads alone — ~4,500 tokens)
+**9-Phase Pipeline:** DELTA ANALYSIS → DRIFT DETECTION → REGRESSION SCAN → PROMPT OPTIMIZATION → INTELLIGENCE WIRING → MEMORY HYGIENE → SQLITE INTEGRITY → PRODUCTION HARDENING → CERTIFICATION
+**Authority:** `cortex-total-recall.prompt.md` + `certification/` agents (~8,500 tokens)
 **MCP Tool:** `cortex_total_recall` (op=`discover|recall|search`)
 
 ### 🔄 SYNC MODE — Privacy-Safe Cross-Repo Sync
@@ -920,7 +920,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | HEALTH | `cortex-auditor.md` (Check #11) | ~3,500 |
 | SYNC | `cortex-sync.prompt.md` + `cortex-sync-agent.md` | ~6,000 |
 | TRAIN | `cortex-trainer.md` | ~3,000 |
-| TOTALRECALL | `cortex-totalrecall.prompt.md` (self-contained) | ~4,500 |
+| TOTALRECALL | `cortex-total-recall.prompt.md` → `certification/` agents | ~8,500 |
 | RCA | `cortex-architect.md` + `cortex_learning` op=`rca` | ~2,500 |
 | GOLDEN_TEST | `cortex-executor.md` | ~2,500 |
 | WORKFLOW_COMPOSE | `cortex-architect.md` (§ WORKFLOW COMPOSE MODE) | ~3,000 |

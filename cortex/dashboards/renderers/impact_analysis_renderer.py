@@ -14,10 +14,20 @@ Task: 008 - Impact Analysis Renderer
 """
 
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
+
+
+class RiskLevel(str, Enum):
+    """Risk level classification for impact analysis."""
+
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
 
 
 @dataclass

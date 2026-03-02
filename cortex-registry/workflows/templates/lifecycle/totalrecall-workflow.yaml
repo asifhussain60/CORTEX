@@ -1,12 +1,12 @@
 # ============================================================================
 # MODE WORKFLOW: TOTALRECALL — Holistic Production Readiness (7-Phase)
 # ============================================================================
-# Authority: cortex-totalrecall.prompt.md
-# Trigger: "/totalrecall", "total recall", "holistic refactor"
-# Orchestrator: MasterOrchestrator (7-phase protocol)
-# Agent: cortex-totalrecall.prompt.md (self-contained)
+# Authority: cortex-total-recall.prompt.md
+# Trigger: "/totalrecall", "total recall", "production certification"
+# Orchestrator: MasterOrchestrator (9-phase certification pipeline)
+# Agent: cortex-total-recall.prompt.md → certification/ agents
 #
-# Replaces: Inline 7-phase protocol in cortex-totalrecall.prompt.md
+# Replaces: Inline 7-phase protocol in cortex-total-recall.prompt.md
 # ============================================================================
 
 workflow:

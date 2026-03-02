@@ -2,7 +2,7 @@
 
 **Updated:** 2026-03-01 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 21 completed, 2 planned | **Tests:** ~17,735 | **Intent Types:** 28
+**Phases:** 21 completed, 2 planned | **Tests:** ~17,735 | **Intent Types:** 29
 
 ---
 
@@ -39,11 +39,11 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Metric | Value |
 |--------|-------|
 | Orchestrator files | **186** across 9 domains (`core:78 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) |
-| MCP Tools | **29 registered** in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
+| MCP Tools | **30 registered** in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **32** in `cortex-registry/core/` |
 | Package | `cortex` (single) |
 | Tests | **~17,735** collected |
-| Intent Types | **28** (see `cortex/models/canonical_enums.py`) |
+| Intent Types | **29** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
 | RCA Engine | 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
@@ -95,39 +95,44 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **phase-creation-standards.md** | Standards for new phases |
 | **cleanup-audit-guide.md** | Cleanup procedure reference |
 | **STAGE-0-GOVERNANCE-AUDIT-SPEC.md** | Governance audit specification |
-| **totalrecall.md** | 7-phase holistic refactor protocol (numeric drift + version audit + contradiction resolution) |
+
+### Certification Agents (Total Recall)
+
+**Directory:** `.github/agents/certification/`
+**Prompt:** `.github/prompts/cortex-total-recall.prompt.md`
+**Trigger:** `/totalrecall`
+
+| Agent | Role | Phases |
+|-------|------|--------|
+| **cortex-certification-coordinator.md** | Pipeline orchestrator, state persistence, multi-session continuity | ALL |
+| **cortex-audit-agent.md** | Git delta analysis, drift detection, duplication discovery | 1–2 |
+| **cortex-regression-agent.md** | Regression identification, dead code, bloat, backward compatibility | 3 |
+| **cortex-refactor-agent.md** | Prompt/agent optimization, Intelligence Diamond wiring validation | 4–5 |
+| **cortex-memory-agent.md** | Adaptive learning, failure patterns, document lifecycle hygiene | 6 |
+| **cortex-vacuum-agent.md** | Workspace cleanup — markdown sprawl, empty dirs, orphans, OS/build artifacts | 7 |
+| **cortex-db-agent.md** | SQLite integrity, schema optimization, self-healing migrations | 8 |
+| **cortex-certification-agent.md** | Production hardening, scoring, release sign-off, report generation | 9–10 |
 
 ---
 
-## Total Recall Protocol (Numeric Drift Prevention)
+## Total Recall — Production Certification Authority
 
-**Authority:** `_workspaces/.chats/totalrecall.md`  
-**Trigger:** `/totalrecall`, or when numeric claims diverge from reality  
-**Purpose:** Holistic audit of ALL documentation for drift, version violations, contradictions
+**Authority:** `.github/prompts/cortex-total-recall.prompt.md`
+**Trigger:** `/totalrecall`, or when production readiness certification is needed
+**Purpose:** Autonomous 10-phase production certification pipeline
 
-**7-Phase Protocol:**
-1. **INVENTORY** — Establish canonical values from file system (grep-based truth)
-2. **CONTRADICTION** — Detect numeric drift, version violations (CORE-035), stale refs
-3. **ARCHITECTURE** — Map orchestration flows, identify duplication
-4. **RECOMMENDATION** — Single unified solution (no forks, no v2)
-5. **IMPLEMENTATION** — In-place edits only (highest leverage first)
-6. **REGRESSION PROOF** — Golden tests + validation gates
-7. **VERIFICATION** — 7-step checklist with expected signals
+**9-Phase Pipeline:**
+1. **DELTA ANALYSIS** — Git diff since last execution, build change manifest
+2. **DRIFT DETECTION** — Numeric, version, structural, architectural, config, dependency drift
+3. **REGRESSION SCAN** — Test regressions, dead code, bloat, duplicates, backward compat
+4. **PROMPT OPTIMIZATION** — Holistic review of `copilot-instructions.md`, `prompts/`, `agents/`
+5. **INTELLIGENCE WIRING** — Validate Intelligence Diamond (Reasoning, Memory, Orchestration, Validation)
+6. **MEMORY HYGIENE** — Adaptive learning, document lifecycle, recurring failure detection
+7. **SQLITE INTEGRITY** — Schema optimization, self-healing migrations, unbounded growth prevention
+8. **PRODUCTION HARDENING** — 12-point hardening checklist (H1–H12)
+9. **CERTIFICATION** — Weighted scorecard, release sign-off or block
 
-**Canonical Value Derivation (Examples):**
-
-```bash
-# Wired Orchestrators
-{ grep '  - name:' cortex-registry/core/specifications/*-wiring.yaml; } | \
-  grep -v 'governance_registry\|audit_logger\|state_manager' | sort -u | wc -l
-
-# MCP Tools
-grep -rn 'class Cortex.*Tool' cortex/mcp/tools/ --include="*.py" | \
-  grep -v '__pycache__\|Base\|Category' | wc -l
-
-# CORE Rules
-grep -c 'rule_id: CORE-' cortex-registry/core/tier0-skull/skull-rules.yaml
-```
+**Certification Levels:** 🟢 CERTIFIED (≥95%) · 🟡 CONDITIONAL (85–94%) · 🟠 DEFERRED (70–84%) · 🔴 BLOCKED (<70%)
 
 **Validation Command:** `python3 scripts/validate-architecture-counts.py` (should output: ALL CHECKS PASSED)
 
@@ -159,7 +164,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md | ~8,000 |
 | **AUDIT FIX** | cortex.md + cortex-auditor.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
-| **TOTAL RECALL** | cortex-totalrecall.prompt.md (self-contained 7-phase protocol) | ~4,500 |
+| **TOTALRECALL** | cortex-total-recall.prompt.md → certification-coordinator.md + 7 specialist agents | ~8,800 |
 | **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
 | **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
 | **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
@@ -175,8 +180,6 @@ are resolved or explicitly approved as WONT-FIX.
 | **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~5,000 |
 | **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
-| **TRAIN** | cortex-trainer.md + cortex-sts-refactoring.md | ~6,500 |
-| **TOTALRECALL** | cortex-architect.prompt.md + totalrecall.md (self-contained 7-phase protocol) | ~4,500 |
 | **RCA** | cortex-architect.prompt.md + `cortex_learning` op=`rca` | ~3,500 |
 | **GOLDEN_TEST** | cortex-executor.md + cortex-holistic-validator.md | ~5,500 |
 | **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
