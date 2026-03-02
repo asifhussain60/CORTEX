@@ -17,19 +17,16 @@ class SharedAuditTrail:
     Provides centralized audit logging and cross-repo search capabilities.
     """
 
-    def __init__(self, db_path: str = ".cortex-runtime/traces/governance.db"):
+    def __init__(self, db_path: str = ".cortex-runtime/audit.db"):
         """Initialize shared audit trail.
 
         Args:
-            db_path: Path to unified governance database. Canonical location: .cortex-runtime/traces/.
+            db_path: Path to unified audit database. Canonical location: .cortex-runtime/.
 
-        Note — P2-A (ghost DB audit):
-            This is the ONLY legitimate writer to `.cortex-runtime/traces/governance.db`.
-            The `audit_log` table here is for cross-repo / multi-project governance events.
-            EnforcementOrchestrator writes to `.cortex-runtime/audit.db` (not this file).
-            If `.cortex-runtime/traces/governance.db` has 0 rows, SharedAuditTrail has not
-            been exercised in the current session — that is expected for single-repo usage.
-            Do NOT redirect EnforcementOrchestrator writes here; use audit.db (SSOT).
+        Note — DB consolidation (Phase 104):
+            traces/governance.db was deleted (0 rows, ghost DB from dissolved cortex.brain era).
+            SharedAuditTrail now writes to `.cortex-runtime/audit.db` alongside
+            EnforcementOrchestrator. The `audit_log` table is created if not present.
         """
         self.db_path = db_path
         self._ensure_db()

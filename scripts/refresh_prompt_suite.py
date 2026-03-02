@@ -41,14 +41,14 @@ REGISTRY_DIR = ROOT / "cortex-registry"
 MASTER_YAML = REGISTRY_DIR / "cortex-master.yaml"
 
 # SQLite databases managed by CORTEX
+# Phase 104: Consolidated from 9 → 7 databases (deleted 2 empty ghost DBs:
+#   traces/governance.db (0 rows) and state/cortex_brain/state/governance.db (0 rows))
 SQLITE_DATABASES = {
     "orchestrator-traces": CORTEX_RUNTIME / "traces" / "orchestrator-traces.db",
-    "governance-traces": CORTEX_RUNTIME / "traces" / "governance.db",
     "rca-store": CORTEX_RUNTIME / "rca" / "rca_store.db",
     "audit": CORTEX_RUNTIME / "audit.db",
     "governance": CORTEX_RUNTIME / "governance.db",
     "conversations": CORTEX_RUNTIME / "state" / "conversations.db",
-    "brain-governance": CORTEX_RUNTIME / "state" / "cortex_brain" / "state" / "governance.db",
     "wiring-audit": CORTEX_RUNTIME / "wiring" / "contract_validation_audit.db",
     "intelligence-audit": CORTEX_RUNTIME / "intelligence" / "intelligence_audit.db",
 }

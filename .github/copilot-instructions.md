@@ -199,7 +199,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Phases | 21 completed, 2 planned |
 | Master YAML | 503/800 lines (THIN INDEX CONTRACT) |
 | Intent Types | 28 (see `cortex/models/canonical_enums.py`) |
-| SQLite Databases | 9 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
+| SQLite Databases | 7 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 
 ---
 
@@ -325,7 +325,7 @@ cortex/              ← Python source (20 dirs)
   governance/        ← Rule enforcement, compliance
 cortex-registry/     ← YAML governance rules, patterns, plans
 tests/               ← All tests (mirrors cortex/ structure)
-.cortex-runtime/     ← Runtime data (logs, traces, 9 .db files)
+.cortex-runtime/     ← Runtime data (logs, traces, 7 .db files)
 .github/             ← CI/CD, prompts, agents, templates
 cortex-docs/         ← User-facing documentation (HTML/CSS only)
 ```
@@ -368,17 +368,15 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 - `AC_COMPLETE` on failure with ❌ + error classification
 - No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation)
 
-**SQLite Activity Logging:** 9 databases in `.cortex-runtime/`:
+**SQLite Activity Logging:** 7 databases in `.cortex-runtime/`:
 
 | Database | Path | Tables | Purpose |
 |---|---|---|---|
 | orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`, `trace_*` | Primary trace store |
-| governance-traces | `traces/governance.db` | `audit_log` | Governance enforcement |
 | rca-store | `rca/rca_store.db` | `rca_analyses`, `prevention_rules`, `recurrence_*` | Root cause analysis |
 | audit | `audit.db` | `audit_events`, `orchestrator_traces`, `governance_checks`, `phase_progress` | Audit events |
 | governance | `governance.db` | `scaffolder_audit_log` | Scaffolder audit |
 | conversations | `state/conversations.db` | `conversations`, `turn_records` | Session state |
-| brain-governance | `state/cortex_brain/state/governance.db` | `audit_log` | Brain governance |
 | wiring-audit | `wiring/contract_validation_audit.db` | `validation_audit`, `contract_versions` | Wiring contracts |
 | intelligence-audit | `intelligence/intelligence_audit.db` | `intelligence_audit` | Intelligence traces |
 
@@ -535,7 +533,7 @@ Use `python scripts\run_tests.py {mode}` in PowerShell/cmd — `python3` may not
 | Step | Command | What It Does |
 |---|---|---|
 | 1 | `python3 scripts/refresh_prompt_suite.py --counts-only` | Introspect live architecture: orchestrators, MCP tools, tests, governance |
-| 2 | `python3 scripts/refresh_prompt_suite.py --db-cleanup` | Enforce 30-day retention, delete orphaned AC_START, VACUUM all 9 databases |
+| 2 | `python3 scripts/refresh_prompt_suite.py --db-cleanup` | Enforce 30-day retention, delete orphaned AC_START, VACUUM all 7 databases |
 | 3 | `python3 scripts/refresh_prompt_suite.py` | Full refresh: cleanup → counts → validate → report |
 | 4 | `python3 scripts/refresh_prompt_suite.py --dry-run` | Preview all changes without writing |
 

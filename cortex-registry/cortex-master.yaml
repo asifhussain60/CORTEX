@@ -1,5 +1,5 @@
 version: '1.0'
-updated: '2026-02-27'
+updated: '2026-03-02'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -510,14 +510,14 @@ phases:
     note: "12 files >1000 lines (max 3,126). 4 files >2000 lines. 4 coupling hotspots (5-6 subsystem imports). Depends on phase-101."
 
   - id: phase-104
-    title: "Build Artifact Purge + Test-Source Mirror Alignment"
+    title: "Build Artifact Purge + Test-Source Mirror Alignment + DB Consolidation"
     priority: P1
     status: IN_PROGRESS
     sweep_id: SWEEP-104-ARTIFACTS-AND-MIRRORS
     gaps: 6
     sub_phases: 3
     file: "cortex-registry/planning/phases/planned/phase-104-artifacts-and-mirrors.yaml"
-    note: "4/6 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired with BuildArtifactCleaner, .ds-store untracked. 2 GAPs remaining: test mirror dirs."
+    note: "4/6 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired with BuildArtifactCleaner, .ds-store untracked. DB consolidation: 9→7 databases (deleted 2 empty ghost DBs, dropped hardcoded session table). SharedAuditTrail redirected to audit.db. 2 GAPs remaining: test mirror dirs."
 
   - id: phase-105
     title: "Stale Import References + Legacy Naming Remediation"

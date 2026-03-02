@@ -2,7 +2,7 @@
 -- Context Efficiency Audit Queries (ENH-046 Phase 1.6)
 -- ═══════════════════════════════════════════════════════════════════════
 -- Purpose: Evidence-based validation of EXIT GATE performance
--- Database: cortex_brain/state/governance.db
+-- Database: .cortex-runtime/audit.db (consolidated — was cortex_brain/state/governance.db)
 -- Author: CORTEX Architect
 -- Date: 2026-02-06
 -- ═══════════════════════════════════════════════════════════════════════
