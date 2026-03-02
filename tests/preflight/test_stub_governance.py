@@ -49,6 +49,9 @@ class TestNoNewProxyRedirectStubs:
     implementation rule — callers can't tell which path is authoritative.
     """
 
+    # AST-scans 1000+ files — run in a single worker to avoid xdist OOM crashes
+    pytestmark = pytest.mark.timeout(60)
+
     def test_no_new_pure_proxy_files(self) -> None:
         """No non-__init__ cortex/ file may consist entirely of import statements.
 
