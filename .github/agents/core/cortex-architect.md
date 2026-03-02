@@ -142,7 +142,7 @@ Execute on `/audit`:
 | # | Check | Pass Criteria |
 |---|-------|---------------|
 | 1–9 | Imports, stubs, duplicates, tests, refs, clutter, CORE rules, .db files, deprecated names | See SSOT |
-| 10 | Test-source mirror | `tests/` dirs match `cortex/` dirs; no stale dirs like `cortex_brain/` referencing deleted packages |
+| 10 | Test-source mirror | `tests/` dirs match `cortex/` dirs; no stale dirs like `cortex_brain/` referencing deleted packages. **NEVER recreate dirs for dissolved packages** (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) — SSOT: `DISSOLVED_PACKAGES` in `constants.py` |
 | 11–21 | Health, markdown, prompts, MCP alignment, LENS, SQLite, Workflow Composer, challenge gate | See SSOT |
 | 22 | F811 duplicate method defs | `ruff check cortex/ --select=F811` → `All checks passed!` |
 | 23 | F401 unused imports | `ruff check cortex/ --select=F401 --fix` → 0 non-intentional |
@@ -159,7 +159,7 @@ Execute on `/audit`:
 
 ### Subfolder Level
 - `cortex/` — no empty modules, no stub classes
-- `tests/` — mirrors `cortex/` structure, no orphan tests
+- `tests/` — mirrors `cortex/` structure, no orphan tests, **no dirs for dissolved packages** (`cortex_brain`, `cortex_intelligence`, `cortex_lens`)
 - `cortex-registry/` — no stale phase files
 
 ### Prompt/Agent Level
@@ -176,7 +176,7 @@ Execute on `/audit`:
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
-| Tests | `tests/` (mirrors `cortex/` structure) |
+| Tests | `tests/` (mirrors `cortex/` structure — excludes dissolved packages: `cortex_brain`, `cortex_intelligence`, `cortex_lens`) |
 | Registry | `cortex-registry/` |
 | Runtime data | `.cortex-runtime/` |
 

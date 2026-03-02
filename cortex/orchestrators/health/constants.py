@@ -151,6 +151,23 @@ ROLLBACK_FILENAME: str = "rollback-manifest.json"
 """Filename for the Vacuum rollback manifest."""
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dissolved packages — NEVER recreate directories for these
+# ─────────────────────────────────────────────────────────────────────────────
+
+DISSOLVED_PACKAGES: FrozenSet[str] = frozenset({
+    "cortex_brain",
+    "cortex_intelligence",
+    "cortex_lens",
+})
+"""Package names that were dissolved/relocated into ``cortex/``.
+
+These names MUST NOT appear as new directories anywhere in the workspace.
+Audit Check #10 (test-source mirror) and Check #27 (stale test dir) must
+skip directory creation for any path containing a dissolved package name.
+Vacuum orchestrator treats recreation of these directories as a P0 violation.
+"""
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Legacy folder relocation rules
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -181,5 +198,6 @@ __all__ = [
     "ARCHIVE_DIR",
     "HANDOFF_FILENAME",
     "ROLLBACK_FILENAME",
+    "DISSOLVED_PACKAGES",
     "LEGACY_ROOT_FOLDERS_RELOCATION",
 ]

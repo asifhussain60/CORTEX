@@ -324,7 +324,7 @@ cortex/              ← Python source (20 dirs)
   intelligence/      ← LENS, domain brain, knowledge synthesis
   governance/        ← Rule enforcement, compliance
 cortex-registry/     ← YAML governance rules, patterns, plans
-tests/               ← All tests (mirrors cortex/ structure)
+tests/               ← All tests (mirrors cortex/ structure — excludes dissolved packages: cortex_brain, cortex_intelligence, cortex_lens)
 .cortex-runtime/     ← Runtime data (logs, traces, 7 .db files)
 .github/             ← CI/CD, prompts, agents, templates
 cortex-docs/         ← User-facing documentation (HTML/CSS only)
