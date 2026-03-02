@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/
   - cortex-registry/
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 diagram_type: Architecture
 render: ascii
 ---
@@ -43,19 +43,19 @@ render: ascii
 │  │(intent map) │   │ RED→GRN→RF │   │ (agents)      │   │ Refactor/Plan/... │          │
 │  └─────────────┘   └────────────┘   └───────────────┘   └───────────────────┘          │
 │                                                                                         │
-│  Wired orchestrators: 259 files · core · domain · support · health · git                                     │
+│  Wired orchestrators: 258 files · core · domain · support · health · git · intelligence · persona · validation │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐
 │                            INTELLIGENCE    │  LAYER                                     │
 │                                            │                                            │
 │     ┌─────────────────┐  ┌────────────────┐│ ┌─────────────────┐  ┌─────────────────┐   │
-│     │      LENS       │  │  Brain Tiers   ││ │  Knowledge Base │  │  Domain Brain   │   │
+│     │      LENS       │  │  Brain Tiers   ││ │  Knowledge Base │  │ IntelligenceFacade│ │
 │     │  analyzers      │  │  (P→R→A)       ││ │  cortex/        │  │  cortex/intel/  │   │
-│     │  cortex/lens/   │  │                ││ │  knowledge/     │  │  domain_brain/  │   │
+│     │  cortex/lens/   │  │                ││ │  knowledge/     │  │  facade.py      │   │
 │     └─────────────────┘  └────────────────┘│ └─────────────────┘  └─────────────────┘   │
 │                                            │                                            │
-│  cortex/intelligence/ + cortex/lens/ + cortex/knowledge/                                │
+│  cortex/intelligence/ + cortex/lens/ + cortex/knowledge/ — canonical entry: IntelligenceFacade (cortex/intelligence/facade.py) │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐

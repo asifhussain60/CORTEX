@@ -7,7 +7,7 @@
 # Used by: comedy-enhancement-agent.md, narrative-continuity-agent.md
 # Scope: INTERNAL — never surfaced in production cortex-docs output
 # Created: 2026-03-02
-# Updated: 2026-03-02
+# Updated: 2026-03-02 — No structural changes; architecture facts live in video-design-best-practices.yaml
 
 domain: content-production
 type: best-practice

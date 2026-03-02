@@ -50,6 +50,7 @@ Does NOT repeat: business identity (Video 01), lane comparison (Video 02), TDD l
 - 4-stage pipeline: Interaction → Intent → Intelligence → Execution
 - 29 intent types routed via IntentRouter (`cortex/orchestrators/core/intent_router.py`)
 - LENS: 8 analyzers — Language → Examination → Navigation → Synthesis
+- IntelligenceFacade: `cortex/intelligence/facade.py` — canonical single entry point for all intelligence operations (Phase 107)
 - Token budget: 20,000 tokens per turn, enforced by `ContextSynthesisGateway` (`cortex/orchestrators/core/context_synthesis_gateway.py`); cache hit rate target >50%; health-checked by `TokenOptimizationAgent`
 - Workflow templates: YAML registry at `cortex-registry/workflows/templates/` — composed from primitives
 - All runtime data: `.cortex-runtime/` (SQLite traces, logs — never sidebar paths)

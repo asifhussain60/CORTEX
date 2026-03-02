@@ -3,12 +3,13 @@
 # Purpose: Codified best practices for tutorial & explainer video production
 # Sources: NNGroup, HubSpot, Wyzowl, industry-standard cognitive load research
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
+# Updated: 2026-03-02 — Counts verified against live architecture (258 orchestrators, 30 MCP tools)
 
 domain: content-production
 type: best-practice
 title: "Video Design Best Practices for Technical Tutorials and Explainers"
 created: "2026-02-27"
-updated: "2026-02-27"
+updated: "2026-03-02"
 
 principles:
   - id: VBP-001
@@ -325,3 +326,25 @@ copilot_contrast_narrative:
       raw_copilot: "No secret scanning, no vulnerability detection, no security gate."
       cortex_solution: "Five-layer security pipeline from keystroke to deployment."
       video_ref: "V06 Scene 4"
+
+# ─────────────────────────────────────────────────────────────────
+# GROUND-TRUTH ARCHITECTURE FACTS (Live — updated 2026-03-02)
+# Use these as the ONLY permitted callout numbers in video content.
+# Run `scripts/refresh_prompt_suite.py --counts-only` to revalidate.
+# ─────────────────────────────────────────────────────────────────
+architecture_facts:
+  verified: "2026-03-02"
+  orchestrator_files: 258          # find cortex/orchestrators -name "*.py" -not -name "__init__.py" | wc -l
+  mcp_tools_registered: 30        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict (WAVE-101)
+  mcp_tool_files: 31              # ls cortex/mcp/tools/*.py | wc -l
+  intent_types: 29                 # cortex/models/canonical_enums.py IntentType enum
+  governance_yamls: 32             # find cortex-registry/core -name "*.yaml" | wc -l
+  intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry
+  rca_methodologies: 4             # Five-Whys, Fishbone, Causal-Chain, Fault-Tree
+  debug_strategies: 8              # 3 Python + 5 multi-stack
+  tdd_phases: 3                    # RED → GREEN → REFACTOR
+  sdlc_pipeline_phases: 7          # Requirements → Solution → Implement → Review → Integration → Security → Release
+  audit_pipeline_stages: 9         # /audit fix 9-stage convergence pipeline
+  sqlite_databases: 7              # .cortex-runtime/ (orchestrator-traces, rca-store, audit, governance, conversations, wiring-audit, intelligence-audit)
+  quote_library_count: 32          # BLOCK-QUOTE-LIBRARY in cortex-response-templates.md
+  quote_themes: 9                  # quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal (note: 10 themes listed, 9 used in routing)

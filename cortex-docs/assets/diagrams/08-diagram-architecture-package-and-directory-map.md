@@ -10,7 +10,7 @@ source_of_truth:
   - cortex/
   - cortex-registry/
   - tests/
-last_verified: 2026-03-01
+last_verified: 2026-03-02
 diagram_type: Architecture
 render: ascii
 ---
@@ -22,17 +22,18 @@ render: ascii
  │  REPO ROOT                                                                  │
  │                                                                             │
  │  cortex/                          ← Single canonical Python package         │
- │  ├── orchestrators/               ← 259 files across 9 domains            │
+ │  ├── orchestrators/               ← 258 files across 9 domains            │
  │  │   ├── core/                       MasterOrch, IntentRouter, TDD, Enforce │
  │  │   ├── domain/                     Onboarding, Planning, Design           │
  │  │   ├── support/                    Debug, Sweep, Refactoring              │
  │  │   ├── health/                     Health, Vacuum                         │
  │  │   ├── workflow/                   WorkflowComposer, TemplateComposer     │
  │  │   └── ... (9 domains total)                                              │
- │  ├── mcp/                         ← MCP stdio server + 29 registered tools  │
- │  │   └── tools/                      35 tool files                          │
+ │  ├── mcp/                         ← MCP stdio server + 30 registered tools  │
+ │  │   └── tools/                      31 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │
  │  ├── intelligence/                ← Reasoning, learning, RCA engine         │
+ │  │   ├── facade.py               ← IntelligenceFacade — canonical entry (Phase 107) │
  │  │   └── learning/                   rca_engine.py, rca_store.py            │
  │  ├── governance/                  ← Rule enforcement, compliance            │
  │  ├── knowledge/                   ← Knowledge base, domain synthesis        │

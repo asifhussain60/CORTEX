@@ -8,8 +8,8 @@ audience:
   - Software Developers
 source_of_truth:
   - cortex/lens/
-  - cortex/intelligence/provider.py
-last_verified: 2026-03-01
+  - cortex/intelligence/facade.py
+last_verified: 2026-03-02
 diagram_type: Intelligence
 render: ascii
 ---

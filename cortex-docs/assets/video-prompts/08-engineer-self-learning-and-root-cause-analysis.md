@@ -44,6 +44,7 @@ Does NOT repeat: what CORTEX is (Video 01), architecture pipeline overview (Vide
   - Pattern types: `TECHNICAL`, `BUSINESS`, `GOVERNANCE`, `INTERACTION`, `PERFORMANCE`
   - Every orchestrator feeds this loop; it is not opt-in per orchestrator
   - Cross-session persistence: `cortex/intelligence/learning/cross_session_pattern_cache.py`
+  - All intelligence access via `IntelligenceFacade` — canonical entry: `cortex/intelligence/facade.py` (Phase 107)
 - Reinforcement signal: `cortex/intelligence/learning/reinforcement_signal.py`
   - Scoring: strong reward +1.0 (test pass, governance compliance) through strong punishment -1.0 (test fail, governance violation)
   - PROMOTE threshold: confidence ≥ 0.9 with 3 or more rewards
