@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-01 (Phase 98 — Dead Code Cleanup) | **Architecture:** 186 Orchestrator files · 29 MCP Tools · 32 Governance YAMLs · 28 Intent Types · 1 Package  
+**Updated:** 2026-03-02 (DIGEST chat01 — Count Reconciliation) | **Architecture:** 185 Orchestrator files · 30 MCP Tools · 32 Governance YAMLs · 29 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
@@ -48,7 +48,7 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (29 registered) | `cortex/mcp/tools/` (35 tool files) |
+| MCP Tools (30 registered) | `cortex/mcp/tools/` (28 tool files) |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -833,7 +833,7 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-## ⚡ MCP TOOLS (29 registered, 39 target)
+## ⚡ MCP TOOLS (30 registered, 39 target)
 
 **Verification:** Call `cortex_verify` (operation: `mcp`). If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -843,13 +843,13 @@ Progress bar + stage bullet list. See templates SSOT.
 - **Tier 1 (WARN):** QUERY, DIGEST, DESIGN, PLAN — warn if unavailable
 - **Tier 2 (SILENT):** REPHRASE — no MCP needed
 
-**Key Tools (29 registered — operation-based):**
+**Key Tools (30 registered — operation-based):**
 - `cortex_verify` (op: `mcp`) — MCP health check (verify server active)
 - `cortex_validate` (op: `compliance`) — CORE rules check
 - `cortex_onboard` (op: `full`) — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_governance` (op: `remediation_plan`) — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 29 registered tools
+- `cortex_tools_catalog` — Discover all 30 registered tools
 - `cortex_load` (op: `rules`) — Load governance rules from registry
 - `cortex_check` (op: `dependencies|orchestrator_health`) — dependency drift + orchestrator health
 - `cortex_governance` (op: `query`) — Active violations count + P0 status
@@ -868,7 +868,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | Type | Location |
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
+| MCP Tools (30 registered, 39 target) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure — excludes dissolved packages: `cortex_brain`, `cortex_intelligence`, `cortex_lens`) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
