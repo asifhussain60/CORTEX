@@ -22,7 +22,7 @@ metadata:
   active: 0
   completed: 78
   in_progress: 0
-  planned: 4
+  planned: 5
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -38,6 +38,8 @@ metadata:
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  # ── Phase 113 (Request Sequence Persistence) ──────────────────────────────
+  - { id: phase-113, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-113-request-sequence-persistence.yaml" }
   # ── Phase 111 sub-phases (Duplicate Class Sweep) ──────────────────────────
   - { id: phase-111a, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-111a-critical-enum-consolidation.yaml" }
   - { id: phase-111b, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-111b-medium-duplicate-resolution.yaml" }
@@ -115,7 +117,7 @@ summary:
   completed: 10
   active: 0
   in_progress: 0
-  planned: 4
+  planned: 5
   archived: 4
   playbooks: 1
   completion_percentage: 71
@@ -131,6 +133,7 @@ summary:
     phase-111: "IN-PROGRESS — Duplicate Class Sweep → 111a COMPLETE, 111b COMPLETE, 111c PLANNED"
     phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
     phase-111: "PLANNED — Duplicate Class Sweep (P1) → sub-phases: 111a, 111b, 111c"
+    phase-113: "PLANNED — Request Sequence Persistence (P0)"
 
 phases:
   # ── DIGEST chat01 REMEDIATION PLAN (2026-03-02) ──────────────────────────────
@@ -138,6 +141,16 @@ phases:
   # Execution order: 112 (non-code) → 110 (CLI) → 111 (duplicates, longest).
   # 112 is independent and can run first as it only edits YAML files.
   # ─────────────────────────────────────────────────────────────────────────────
+
+  - id: phase-113
+    title: "Request Sequence Persistence — SQLite Request Table + InteractionOrchestrator Context Chain"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-113-REQUEST-SEQUENCE-PERSISTENCE
+    gaps: 5
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/planned/phase-113-request-sequence-persistence.yaml"
+    note: "Wire request_log table + ConversationStateManager into MasterOrchestrator. Enable InteractionOrchestrator prior-turn context queries."
 
   - id: phase-112
     title: "Master YAML THIN INDEX CONTRACT — Reduce cortex-master.yaml from 579L to ≤500L"

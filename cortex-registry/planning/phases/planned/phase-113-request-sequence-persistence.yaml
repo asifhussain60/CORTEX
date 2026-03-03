@@ -1,0 +1,537 @@
+# CORTEX Phase Plan — Phase 113: Request Sequence Persistence
+# User request lifecycle tracing via SQLite — pre-API persistence + InteractionOrchestrator context chain
+
+id: "phase-113"
+title: "Request Sequence Persistence — SQLite Request Table + InteractionOrchestrator Context Chain"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints
+  - CORE-012  # Docstrings
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-113-REQUEST-SEQUENCE-PERSISTENCE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND — why this phase exists
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: User request analysis — 2026-03-03 session review
+  Score at entry: 4.0 / 10 (request tracing non-existent)
+  Target score: 9.0 / 10 (full request lifecycle tracing)
+
+  PROBLEM STATEMENT:
+  ==================
+  When a user sends a request to MasterOrchestrator, the raw request text is passed
+  through the pipeline as a transient parameter but is NEVER persisted as a
+  first-class entity before processing begins. This creates 5 critical gaps:
+
+  1. NO REQUEST TABLE — No dedicated `requests` or `user_requests` table exists
+     anywhere in the 7 SQLite databases. The raw user request is ephemeral.
+
+  2. DISCONNECTED ConversationStateManager — `cortex/interaction/conversation_state.py`
+     has a fully-built ConversationStateManager with `conversations` and `turn_records`
+     tables (including `user_input` column), but it is NOT wired into MasterOrchestrator
+     or InteractionOrchestrator. The manager exists but is never called.
+
+  3. TRUNCATED HINTS ONLY — The `challenge_decisions` table in orchestrator-traces.db
+     stores `user_request_hint` (first 100 chars) but only when a challenge fires —
+     not for every request. This is insufficient for sequence reconstruction.
+
+  4. NO SEQUENCE CHAIN — Consecutive requests have no linkage. There is no mechanism
+     for InteractionOrchestrator to query "what did the user ask in the last N turns?"
+     to build cumulative context. Each request is processed in isolation.
+
+  5. NO PRE-API PERSISTENCE — The request should be saved to SQLite BEFORE being
+     passed to the Copilot API, creating an audit trail and enabling context
+     reconstruction if the API call fails or times out.
+
+  EXISTING INFRASTRUCTURE:
+  ========================
+  - ConversationStateManager (cortex/interaction/conversation_state.py) — 237 lines,
+    fully functional SQLite manager with create_conversation(), save_turn(),
+    load_conversation(), list_conversations(). Database: .cortex-runtime/state/conversations.db
+  - MasterOrchestrator.process_user_request() — entry point at line 1162
+  - InteractionOrchestrator.process_comprehension() — Stage 1 comprehension at line 444
+  - orchestrator-traces.db — existing trace infrastructure
+  - 7 SQLite databases already managed in .cortex-runtime/
+
+  SOLUTION APPROACH:
+  ==================
+  Wire ConversationStateManager into the MasterOrchestrator → InteractionOrchestrator
+  pipeline. Add a dedicated `request_log` table for pre-API persistence. Enable
+  InteractionOrchestrator to query prior turns for cumulative context building.
+
+  Baseline measurements:
+    - Smoke tests: 2,174 passed
+    - SQLite databases: 7 in .cortex-runtime/
+    - ConversationStateManager: exists but disconnected
+    - Request persistence: 0% (no requests persisted)
+  Git prerequisite: main branch clean, phase-110 COMPLETE
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all open issues (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-113-01"
+    title: "No request_log table — raw user requests not persisted before API dispatch"
+    severity: P0
+    source: "2026-03-03 architecture review"
+    evidence: |
+      grep -r "CREATE TABLE.*request" cortex/ → 0 results.
+      MasterOrchestrator.process_user_request() passes `user_request: str` through
+      pipeline without any sqlite3.connect() or save() call.
+      File: cortex/orchestrators/core/master_orchestrator.py line 1162
+    action_ref: "phase-113-a"
+    status: OPEN
+
+  - id: "GAP-113-02"
+    title: "ConversationStateManager not wired into MasterOrchestrator"
+    severity: P0
+    source: "2026-03-03 architecture review"
+    evidence: |
+      cortex/interaction/conversation_state.py defines ConversationStateManager with
+      full SQLite persistence (create_conversation, save_turn, load_conversation).
+      But neither MasterOrchestrator.__init__() nor process_user_request() imports
+      or instantiates ConversationStateManager.
+      grep -r "ConversationStateManager" cortex/orchestrators/ → 0 results
+    action_ref: "phase-113-b"
+    status: OPEN
+
+  - id: "GAP-113-03"
+    title: "InteractionOrchestrator cannot query prior request sequence for context"
+    severity: P0
+    source: "2026-03-03 architecture review"
+    evidence: |
+      InteractionOrchestrator.process_comprehension() (line 444) processes each
+      request in isolation. No mechanism to query "last N user requests" from
+      conversations.db. The turn_number counter increments in-memory only.
+      Result: no cumulative context building across turns.
+    action_ref: "phase-113-c"
+    status: OPEN
+
+  - id: "GAP-113-04"
+    title: "No request-to-response correlation ID for end-to-end tracing"
+    severity: P1
+    source: "2026-03-03 architecture review"
+    evidence: |
+      MasterOrchestrator generates AC markers (AC-MASTER-PROCESS-{timestamp}) but
+      these are not linked to a persistent request_id in any database table.
+      The AC marker is ephemeral — generated from timestamp, not from a stored
+      request record. No foreign key links request → intent → execution → response.
+    action_ref: "phase-113-a"
+    status: OPEN
+
+  - id: "GAP-113-05"
+    title: "challenge_decisions.user_request_hint truncated to 100 chars"
+    severity: P1
+    source: "2026-03-03 architecture review"
+    evidence: |
+      InteractionOrchestrator._persist_challenge_decision() stores
+      user_request_hint = user_request[:100]. This truncation loses context
+      for long requests. Should reference full request via request_id FK
+      instead of duplicating truncated text.
+    action_ref: "phase-113-c"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── Sub-phase A: Request Log Table + Pre-API Persistence ──────────────────
+  - id: "phase-113-a"
+    title: "RequestLogManager — request_log table + pre-API save in MasterOrchestrator"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-113-01", "GAP-113-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2,174 baseline)"
+    regression_gate: "python scripts\\run_tests.py smoke — zero new failures"
+
+    description: |
+      Create RequestLogManager class that persists every user request to SQLite
+      BEFORE the request enters the orchestration pipeline. This ensures:
+      - Audit trail even if API call fails/times out
+      - Unique request_id for end-to-end correlation
+      - Session-level grouping via session_id
+      - Timing metadata (received_at, completed_at, duration_ms)
+      - Intent classification result (updated post-routing)
+      - Response summary (updated post-completion)
+
+      Schema for `request_log` table in conversations.db:
+      ```sql
+      CREATE TABLE IF NOT EXISTS request_log (
+          request_id TEXT PRIMARY KEY,           -- UUID, generated before API dispatch
+          session_id TEXT NOT NULL,              -- groups requests in same session
+          sequence_number INTEGER NOT NULL,      -- 1-based, auto-incremented per session
+          user_request TEXT NOT NULL,            -- full raw request text (no truncation)
+          request_hash TEXT NOT NULL,            -- SHA-256 of user_request for dedup
+          received_at TEXT NOT NULL,             -- ISO timestamp when request arrived
+          completed_at TEXT,                     -- ISO timestamp when processing finished
+          duration_ms REAL,                      -- total processing time
+          intent_type TEXT,                      -- classified intent (updated post-routing)
+          orchestrator_chain TEXT,               -- JSON array of orchestrator display names
+          status TEXT NOT NULL DEFAULT 'RECEIVED', -- RECEIVED | PROCESSING | COMPLETED | FAILED
+          error_summary TEXT,                    -- error message if FAILED
+          context_snapshot TEXT,                 -- JSON blob of context at request time
+          parent_request_id TEXT,                -- FK to prior request in sequence (nullable)
+          FOREIGN KEY (parent_request_id) REFERENCES request_log(request_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_request_log_session ON request_log(session_id, sequence_number);
+      CREATE INDEX IF NOT EXISTS idx_request_log_received ON request_log(received_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_request_log_status ON request_log(status);
+      ```
+
+      File: cortex/interaction/request_log_manager.py (NEW)
+      Integration: cortex/orchestrators/core/master_orchestrator.py (EDIT — add pre-API save)
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/interaction/test_request_log_manager.py"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_request_log_manager.py — ALL tests FAIL"
+        blocker: "Do NOT write implementation until every test fails"
+      green:
+        action: "Implement RequestLogManager + wire into MasterOrchestrator.process_user_request()"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_request_log_manager.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python scripts\\run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python scripts\\run_tests.py smoke"
+      fix_step: "Fix any issues found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_request_log_table_created — RequestLogManager creates request_log table on init"
+        - "test_log_request_before_processing — log_request() inserts row with status=RECEIVED before pipeline"
+        - "test_request_id_is_uuid — request_id is valid UUID4"
+        - "test_sequence_number_auto_increments — consecutive requests in same session get 1, 2, 3..."
+        - "test_parent_request_id_links_chain — second request's parent_request_id = first request's request_id"
+        - "test_update_request_status — update_status() transitions RECEIVED→PROCESSING→COMPLETED"
+        - "test_update_intent_type — update_intent() sets classified intent post-routing"
+        - "test_update_orchestrator_chain — update_chain() records orchestrator breadcrumb"
+        - "test_failed_request_captures_error — FAILED status includes error_summary"
+        - "test_request_hash_for_dedup — identical requests produce same hash"
+        - "test_get_session_history — get_session_requests() returns ordered list of prior requests"
+        - "test_master_orchestrator_saves_before_processing — process_user_request saves to request_log before Stage 1"
+      green:
+        - "Implement RequestLogManager class with __init__, log_request, update_status, update_intent, update_chain methods"
+        - "Add request_log table schema creation in _init_database()"
+        - "Wire RequestLogManager into MasterOrchestrator.__init__() and process_user_request()"
+        - "Generate request_id before Stage 1, save with status=RECEIVED"
+        - "Update status to PROCESSING before pipeline entry"
+        - "Update status to COMPLETED/FAILED after pipeline exit"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate request log implementations exist (CORE-035)"
+
+    acceptance_criteria:
+      - "request_log table exists in conversations.db with all columns defined above"
+      - "Every call to process_user_request() creates a request_log entry BEFORE pipeline execution"
+      - "request_id is a UUID4 generated pre-pipeline and carried through all stages"
+      - "sequence_number auto-increments per session"
+      - "parent_request_id links consecutive requests in a chain"
+      - "Status transitions: RECEIVED → PROCESSING → COMPLETED (or FAILED)"
+      - "All 12 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python scripts\\run_tests.py file tests/interaction/test_request_log_manager.py"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: Wire ConversationStateManager into Pipeline ──────────────
+  - id: "phase-113-b"
+    title: "Wire ConversationStateManager into MasterOrchestrator lifecycle"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-113-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-113-a"]
+    prerequisite: "phase-113-a completion_gate PASSED"
+    regression_gate: "python scripts\\run_tests.py smoke — zero new failures"
+
+    description: |
+      Wire the existing ConversationStateManager (cortex/interaction/conversation_state.py)
+      into MasterOrchestrator so that:
+      1. A conversation is created (or resumed) at session start
+      2. Each turn is saved via save_turn() after pipeline completion
+      3. TurnRecord captures: user_input, orchestrator_output, context_state,
+         duration_ms, tokens_used, continuation_reason
+      4. request_log.request_id is included in TurnRecord context for cross-reference
+      5. ConversationStateManager and RequestLogManager share the same conversations.db
+
+      Integration points:
+      - MasterOrchestrator.__init__() — instantiate ConversationStateManager
+      - MasterOrchestrator.process_user_request() — create/resume conversation,
+        save TurnRecord after each turn
+      - Link: TurnRecord.context_state includes {"request_id": "<from request_log>"}
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests in tests/interaction/test_conversation_wiring.py"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_conversation_wiring.py — ALL tests FAIL"
+        blocker: "Do NOT write implementation until every test fails"
+      green:
+        action: "Wire ConversationStateManager into MasterOrchestrator"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_conversation_wiring.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, dedup check"
+        gate: "python scripts\\run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python scripts\\run_tests.py smoke"
+      fix_step: "Fix any issues found"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_master_creates_conversation_on_first_request — conversation_id assigned on first process_user_request()"
+        - "test_master_reuses_conversation_in_session — subsequent requests use same conversation_id"
+        - "test_turn_record_saved_after_processing — TurnRecord persisted with user_input and output"
+        - "test_turn_record_includes_request_id — context_state contains request_id from request_log"
+        - "test_conversation_total_turns_increments — total_turns reflects actual turn count"
+        - "test_conversation_marked_complete — is_complete=True when session ends"
+        - "test_shared_database_path — ConversationStateManager and RequestLogManager use same .db file"
+      green:
+        - "Add ConversationStateManager to MasterOrchestrator.__init__()"
+        - "Call create_conversation() on first request, store conversation_id"
+        - "Call save_turn() after pipeline completion with populated TurnRecord"
+        - "Include request_id in TurnRecord.context_state"
+      refactor:
+        - "Docstrings on new methods (CORE-012)"
+        - "Type hints on all signatures (CORE-011)"
+        - "Confirm single ConversationStateManager instance (CORE-035)"
+
+    acceptance_criteria:
+      - "MasterOrchestrator holds a ConversationStateManager instance"
+      - "Every process_user_request() call saves a TurnRecord to conversations.db"
+      - "TurnRecord.context_state contains request_id FK to request_log table"
+      - "conversation_id is stable within a session"
+      - "All 7 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python scripts\\run_tests.py file tests/interaction/test_conversation_wiring.py"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: InteractionOrchestrator Context Chain ────────────────────
+  - id: "phase-113-c"
+    title: "InteractionOrchestrator prior-turn context query + challenge_decisions FK linkage"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-113-03", "GAP-113-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-113-b"]
+    prerequisite: "phase-113-b completion_gate PASSED"
+    regression_gate: "python scripts\\run_tests.py smoke — zero new failures"
+
+    description: |
+      Enable InteractionOrchestrator to query the request_log for prior turns,
+      building cumulative context for LENS analysis and challenge evaluation.
+
+      Key capabilities:
+      1. get_prior_requests(session_id, limit=5) — returns last N requests from
+         request_log for the current session, ordered by sequence_number DESC
+      2. build_context_summary(prior_requests) — creates a compact context string
+         from prior request texts + intent types for inclusion in LENS analysis
+      3. process_comprehension() receives prior_context and includes it in the
+         enriched context passed to Stage 2 (IntentRouter)
+      4. challenge_decisions table gets request_id FK column instead of truncated
+         user_request_hint (backward-compatible: hint column retained, FK added)
+
+      Integration points:
+      - InteractionOrchestrator.__init__() — receive RequestLogManager reference
+      - InteractionOrchestrator.process_comprehension() — query prior requests,
+        inject into LENS context
+      - InteractionOrchestrator._persist_challenge_decision() — add request_id FK
+
+      Context chain example (what this enables):
+        Turn 1: "Create a user authentication module" → saved with seq=1
+        Turn 2: "Add password hashing" → InteractionOrchestrator queries seq=1,
+                 sees prior context about auth module, enriches LENS analysis
+        Turn 3: "Add rate limiting" → queries seq=1,2, sees auth + hashing context
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests in tests/interaction/test_context_chain.py"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_context_chain.py — ALL tests FAIL"
+        blocker: "Do NOT write implementation until every test fails"
+      green:
+        action: "Implement context query + injection in InteractionOrchestrator"
+        gate: "python scripts\\run_tests.py file tests/interaction/test_context_chain.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, dedup check"
+        gate: "python scripts\\run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python scripts\\run_tests.py smoke"
+      fix_step: "Fix any issues found"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_get_prior_requests_returns_ordered_list — last 5 requests for session, newest first"
+        - "test_get_prior_requests_empty_session — returns empty list for new session"
+        - "test_build_context_summary_formats_history — creates compact string from prior requests"
+        - "test_build_context_summary_includes_intents — includes classified intent types in summary"
+        - "test_process_comprehension_injects_prior_context — LENS context includes prior_request_summary"
+        - "test_process_comprehension_first_turn_no_prior — first turn works with empty prior context"
+        - "test_challenge_decision_includes_request_id — challenge_decisions row has request_id FK"
+        - "test_challenge_decision_retains_hint_backward_compat — user_request_hint column still populated"
+        - "test_context_chain_three_turns — 3 consecutive requests build cumulative context"
+        - "test_prior_context_limit_respected — limit=3 returns only 3 most recent, not all"
+      green:
+        - "Add get_prior_requests(session_id, limit) to RequestLogManager"
+        - "Add build_context_summary(prior_requests) to InteractionOrchestrator"
+        - "Inject prior_context into process_comprehension() LENS analysis"
+        - "Add request_id column to challenge_decisions table (ALTER TABLE IF NOT EXISTS)"
+        - "Update _persist_challenge_decision() to include request_id"
+      refactor:
+        - "Docstrings on get_prior_requests, build_context_summary (CORE-012)"
+        - "Type hints on all new signatures (CORE-011)"
+        - "Confirm no duplicate context-building logic (CORE-035)"
+
+    acceptance_criteria:
+      - "InteractionOrchestrator can query last N requests from request_log"
+      - "process_comprehension() includes prior request context in LENS output"
+      - "Context chain works across 3+ consecutive turns"
+      - "challenge_decisions table has request_id FK column"
+      - "Backward compatibility: user_request_hint still populated"
+      - "All 10 tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python scripts\\run_tests.py file tests/interaction/test_context_chain.py"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase D (FINAL): Smoke Gate + CORE-064 Close ──────────────────────
+  - id: "phase-113-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-113-c"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python scripts\\run_tests.py smoke — ≥2,174 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate, not implementation"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate"
+        gate: "python scripts\\run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase YAML: planned/ → completed/, update cortex-master.yaml"
+        gate: "python -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 5 sweep_catalogue GAPs have status: CLOSED"
+      - "python scripts\\run_tests.py smoke passes ≥2,174 tests"
+      - "Zero new test failures vs baseline"
+      - "phase-113 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+      - "Request sequence chain verified: 3 consecutive requests → all persisted, linked, queryable"
+
+    completion_gate:
+      test_runner_command: "python scripts\\run_tests.py smoke"
+      min_tests_pass: 2174
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-113-REQUEST-SEQUENCE-PERSISTENCE-{timestamp}"
+  complete: "AC_COMPLETE: AC-113-REQUEST-SEQUENCE-PERSISTENCE-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURE SUMMARY — Data Flow After Phase 113
+# ─────────────────────────────────────────────────────────────────────────────
+# User Request → MasterOrchestrator.process_user_request()
+#   │
+#   ├─ [PRE-API] RequestLogManager.log_request()
+#   │   └─ INSERT INTO request_log (request_id, session_id, seq, user_request, status=RECEIVED)
+#   │   └─ parent_request_id = previous request's request_id (chain linkage)
+#   │
+#   ├─ [STATUS UPDATE] RequestLogManager.update_status(PROCESSING)
+#   │
+#   ├─ Stage 1: InteractionOrchestrator.process_comprehension()
+#   │   ├─ RequestLogManager.get_prior_requests(session_id, limit=5)
+#   │   ├─ build_context_summary(prior_requests) → prior_context string
+#   │   ├─ LENS analysis (enriched with prior_context)
+#   │   └─ Challenge evaluation (request_id FK in challenge_decisions)
+#   │
+#   ├─ Stage 2: IntentRouter (intent classified)
+#   │   └─ RequestLogManager.update_intent(request_id, intent_type)
+#   │
+#   ├─ Stage 3: Governance validation
+#   │
+#   ├─ Stage 4: Domain execution
+#   │
+#   ├─ [POST-PIPELINE] ConversationStateManager.save_turn(TurnRecord)
+#   │   └─ TurnRecord.context_state = {"request_id": "<uuid>", ...}
+#   │
+#   └─ [STATUS UPDATE] RequestLogManager.update_status(COMPLETED | FAILED)
+#
+# Database: .cortex-runtime/state/conversations.db
+# Tables: conversations, turn_records, request_log (NEW)
+# ─────────────────────────────────────────────────────────────────────────────
