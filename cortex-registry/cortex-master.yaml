@@ -17,12 +17,12 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   version: '1.0'
-  last_updated: '2026-03-03T12:00:00Z'
+  last_updated: '2026-03-02T10:00:00Z'
   total_phases: 103
   active: 0
-  completed: 78
+  completed: 76
   in_progress: 0
-  planned: 5
+  planned: 9
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -38,24 +38,6 @@ metadata:
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
-  # ── Phase 113 (Request Sequence Persistence) ──────────────────────────────
-  - { id: phase-113, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-113-request-sequence-persistence.yaml" }
-  # ── Phase 111 sub-phases (Duplicate Class Sweep) ──────────────────────────
-  - { id: phase-111a, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-111a-critical-enum-consolidation.yaml" }
-  - { id: phase-111b, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-111b-medium-duplicate-resolution.yaml" }
-  - { id: phase-111c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-111c-benign-2x-triage.yaml" }
-  # ── Phase 102 sub-phases (Subsystem Boundaries) ───────────────────────────
-  - { id: phase-102a, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-102a-orphan-package-absorption.yaml" }
-  - { id: phase-102b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-102b-governance-namespace-dedup.yaml" }
-  - { id: phase-102c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-102c-brain-file-renaming.yaml" }
-  # ── Phase 103 sub-phases (God Object Decomposition) ───────────────────────
-  - { id: phase-103a, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103a-master-orchestrator-decomposition.yaml" }
-  - { id: phase-103b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103b-intent-tdd-decomposition.yaml" }
-  - { id: phase-103c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103c-remaining-god-objects.yaml" }
-  # ── Phase 108 sub-phases (cortex-registry Consolidation) ──────────────────
-  - { id: phase-108a, status: COMPLETE, file: "cortex-registry/planning/phases/planned/phase-108a-dead-dir-purge.yaml" }
-  - { id: phase-108b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-108b-knowledge-config-consolidation.yaml" }
-  # ── Phase 107 (Intelligence Layer Consolidation) ──────────────────────────
   - { id: phase-107, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-107-intelligence-layer-consolidation.yaml" }
   - { id: phase-109, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-109-diamond-intelligence-completion.yaml" }
   - { id: phase-106, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-106-rca-guard-certification.yaml" }
@@ -104,36 +86,34 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phase 111-A/B + 108-A COMPLETE 2026-03-03. CORE-035: 0 unannotated 4x+ duplicates. Smoke: 2,179 passed."
-  overall_score: 98%
+  status: "✅ Phase 110 COMPLETE — Smoke: 2,140 passed. CLI + Governance Validator live."
+  overall_score: 99%
   deployment_date: '2026-03-03'
 
 verification:
   method: git_history + code_inspection + test_verification
-  last_verified: '2026-03-03T12:00:00Z'
+  last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 103
-  completed: 10
+  total_phases: 100
+  completed: 96
   active: 0
   in_progress: 0
-  planned: 5
+  planned: 6
   archived: 4
   playbooks: 1
-  completion_percentage: 71
-  consolidation_summary: "v53.0: 2026-03-03 — Phase 111-A/B (CORE-035 4x+ sweep: 0 violations), 108-A (registry cleanup), 102-A (orphan pkg docs). Smoke: 2,179 passed."
+  completion_percentage: 96
+  consolidation_summary: "v49.0: Phase 110 COMPLETE 2026-03-03 — CLI entry point + governance validator real impl. 6 PLANNED remain (101-103, 105, 108, 111)."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
-    phase-101: "COMPLETE — Duplicate Consolidation CORE-035 (P0) ✅"
-    phase-102: "IN-PROGRESS — Subsystem Boundaries (P1) → 102a COMPLETE, 102b/c PLANNED"
-    phase-103: "PLANNED — God Object Decomposition (P1) → sub-phases: 103a, 103b, 103c"
+    phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
+    phase-102: "PLANNED — Subsystem Boundaries (P1)"
+    phase-103: "PLANNED — God Object Decomposition (P1)"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
-    phase-105: "COMPLETE — Stale Imports and Legacy Naming (P1) ✅"
-    phase-108: "IN-PROGRESS — cortex-registry Consolidation (P1) → 108a COMPLETE, 108b PLANNED"
-    phase-111: "IN-PROGRESS — Duplicate Class Sweep → 111a COMPLETE, 111b COMPLETE, 111c PLANNED"
+    phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
+    phase-108: "PLANNED — cortex-registry Consolidation (P1)"
     phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
-    phase-111: "PLANNED — Duplicate Class Sweep (P1) → sub-phases: 111a, 111b, 111c"
-    phase-113: "PLANNED — Request Sequence Persistence (P0)"
+    phase-111: "PLANNED — Duplicate Class Sweep (P1)"
 
 phases:
   # ── DIGEST chat01 REMEDIATION PLAN (2026-03-02) ──────────────────────────────
@@ -141,16 +121,6 @@ phases:
   # Execution order: 112 (non-code) → 110 (CLI) → 111 (duplicates, longest).
   # 112 is independent and can run first as it only edits YAML files.
   # ─────────────────────────────────────────────────────────────────────────────
-
-  - id: phase-113
-    title: "Request Sequence Persistence — SQLite Request Table + InteractionOrchestrator Context Chain"
-    priority: P0
-    status: PLANNED
-    sweep_id: SWEEP-113-REQUEST-SEQUENCE-PERSISTENCE
-    gaps: 5
-    sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-113-request-sequence-persistence.yaml"
-    note: "Wire request_log table + ConversationStateManager into MasterOrchestrator. Enable InteractionOrchestrator prior-turn context queries."
 
   - id: phase-112
     title: "Master YAML THIN INDEX CONTRACT — Reduce cortex-master.yaml from 579L to ≤500L"
@@ -198,12 +168,12 @@ phases:
   - id: phase-101
     title: "Duplicate File Consolidation — CORE-035 Single Canonical Implementation"
     priority: P0
-    status: COMPLETE
+    status: PLANNED
     sweep_id: SWEEP-101-DUPLICATE-CONSOLIDATION
     gaps: 8
     sub_phases: 4
-    file: "cortex-registry/planning/phases/completed/phase-101-duplicate-consolidation.yaml"
-    note: "COMPLETE 2026-03-03. 5 CORE-035 class name collisions resolved via canonical rename + backward-compat alias: PersonaOrchestrator, EnhancedIntentClassifier, CrossLayerCoherenceValidator, SecretsAuditTrail, SecretsStorageError/SecretsPermissionError. 23 TDD tests GREEN. Smoke: 2,163 passed."
+    file: "cortex-registry/planning/phases/planned/phase-101-duplicate-consolidation.yaml"
+    note: "28 duplicate file names (3x orchestrator_lookup, 2x intent_classifier, etc). Depends on phase-100."
 
   - id: phase-102
     title: "Subsystem Boundary Cleanup — Duplicate Domains and Orphaned Packages"
@@ -238,12 +208,12 @@ phases:
   - id: phase-105
     title: "Stale Import References + Legacy Naming Remediation"
     priority: P1
-    status: COMPLETE
+    status: PLANNED
     sweep_id: SWEEP-105-STALE-IMPORTS-NAMING
     gaps: 4
     sub_phases: 2
-    file: "cortex-registry/planning/phases/completed/phase-105-stale-imports-naming.yaml"
-    note: "COMPLETE 2026-03-03. 4 GAPs CLOSED: brain→intelligence in dashboard colors, lens tool removed from display names, intelligence_path renamed canonical, collaboration_* function renames. 11 TDD tests GREEN. Smoke: 2,174 passed."
+    file: "cortex-registry/planning/phases/planned/phase-105-stale-imports-naming.yaml"
+    note: "References to dissolved underscore-packages and legacy brain path in 8+ files. Depends on phase-102."
 
   - id: phase-108
     title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
