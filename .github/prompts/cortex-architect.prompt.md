@@ -755,7 +755,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 > Correct anything above before confirming, or type `proceed` to execute.
 ```
 
-> **CORE-RESP-001 (P0):** `### ⚡ If you say proceed, I will:` is ALWAYS the last section — never inside `## 🎯 Next Steps`. When all work is complete instead, replace with `BLOCK-COMPLETION-STATE` (`✅ **All work is complete.**`). Exactly one. Never both. SSOT: `cortex-response-templates.md` § BLOCK-PROCEED-GATE + BLOCK-COMPLETION-STATE.
+> **CORE-RESP-001 (P0):** `### ⚡ If you say proceed, I will:` is ALWAYS the last section — never inside `## 🎯 Next Steps`. When all work is complete instead, replace with `BLOCK-COMPLETION-STATE`. **Two variants:** Variant A (phase from `cortex-master.yaml` just marked COMPLETE) → emit `✅ Phase {id} complete.` + `### 🚀 Next Phase` sub-block with paste-ready continuation prompt for the next VS Code Copilot Chat session; Variant B (non-phase work done) → emit `✅ All work is complete.` Exactly one. Never both. SSOT: `cortex-response-templates.md` § BLOCK-PROCEED-GATE + BLOCK-COMPLETION-STATE.
 
 **Quote selection:** Pick from `BLOCK-QUOTE-LIBRARY` in `cortex-response-templates.md` — match quote `themes` to the user's active intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, etc.). Full theme→intent mapping in the library.
 
@@ -768,7 +768,7 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
-- ✅ **CORE-RESP-001 (P0):** Every response ends with exactly ONE closure block — `BLOCK-PROCEED-GATE` (work pending) OR `BLOCK-COMPLETION-STATE` (work done) — always the absolute last element. Never both. Never neither.
+- ✅ **CORE-RESP-001 (P0):** Every response ends with exactly ONE closure block — `BLOCK-PROCEED-GATE` (work pending) OR `BLOCK-COMPLETION-STATE` (work done) — always the absolute last element. Never both. Never neither. **When a `cortex-master.yaml` phase completes**, use Variant A: `✅ Phase {id} complete.` + `### 🚀 Next Phase` sub-block with paste-ready continuation prompt (reads next `PLANNED` phase from `cortex-master.yaml`). For all other completions, use Variant B: `✅ All work is complete.`
 - ✅ `## 🎯 Next Steps` contains only Immediate (numbered) + Later (bullets) — proceed content lives exclusively in `BLOCK-PROCEED-GATE` after `---`, never inside Next Steps
 - ✅ **Templates are composable blocks** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")

@@ -431,6 +431,41 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 
 #### BLOCK-COMPLETION-STATE — Work Done (canonical template)
 
+**Variant A — Phase Completion (cortex-master.yaml phase just marked COMPLETE):**
+
+```markdown
+---
+
+✅ **Phase {id} complete.**
+
+{1–2 sentences confirming what was done, files/systems touched, and test baseline achieved.}
+
+> Run `/audit fix` to validate or `/health` to confirm orchestrator status.
+
+---
+
+### 🚀 Next Phase — {next-phase-id}: {next-phase-title}
+
+**Priority:** {next-phase-priority} | **Status:** PLANNED | **GAPs:** {next-phase-gaps}
+
+> *{next-phase-note — one sentence from the `note:` field in cortex-master.yaml}*
+
+**To start in a new VS Code Copilot Chat session, paste this prompt:**
+
+```
+#file:.github/prompts/cortex-architect.prompt.md
+
+/implement {next-phase-id}: {next-phase-title}
+
+Context: Phase {completed-phase-id} is COMPLETE (smoke: {smoke-count} passed).
+Next: {next-phase-id} — {next-phase-title} ({next-phase-gaps} GAPs, {next-phase-sub-phases} sub-phases).
+Branch: CORTEX
+```
+
+```
+
+**Variant B — Non-phase Work Done (no phase in cortex-master.yaml was completed):**
+
 ```markdown
 ---
 
@@ -447,11 +482,48 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 - ✅ Ends with the standard blockquote suggesting a validation command
 - ✅ This block is ALWAYS the last thing in the response — nothing after the blockquote
 - ✅ Preceded by `---` (HR) to visually separate from any preceding content
+- ✅ **When a phase from `cortex-master.yaml` is marked COMPLETE, use Variant A** — look up the next `PLANNED` phase by reading `cortex-master.yaml` in execution order (top-to-bottom in the `phases:` list); emit `BLOCK-NEXT-PHASE-HANDOFF` inline within the completion block
+- ✅ **When no cortex-master.yaml phase completed, use Variant B** — standard single-state completion
 - ❌ NOT used when there is still pending work — use `BLOCK-PROCEED-GATE` instead
 - ❌ NO ambiguous language ("mostly done", "almost complete", "you may want to")
 - ❌ NO open questions — work is done, state it clearly
+- ❌ DO NOT emit Variant A if no next `PLANNED` phase exists in `cortex-master.yaml` — fall back to Variant B with a note that all phases are complete
 
-**Example — correct:**
+**Example — Variant A correct (phase just completed):**
+
+```markdown
+---
+
+✅ **Phase 113 complete.**
+
+`RequestLogManager`, `MasterOrchestrator` context chain, and `cortex_context` MCP tool (#31) are wired. 272 tests GREEN. Smoke: 2,181 passed.
+
+> Run `/audit fix` to validate or `/health` to confirm orchestrator status.
+
+---
+
+### 🚀 Next Phase — phase-102: Subsystem Boundary Cleanup
+
+**Priority:** P1 | **Status:** PLANNED | **GAPs:** 8
+
+> *6x governance namespace, 4x knowledge, 2x lens, 7 brain-named files, 3 orphan packages. Depends on phase-101.*
+
+**To start in a new VS Code Copilot Chat session, paste this prompt:**
+
+```
+#file:.github/prompts/cortex-architect.prompt.md
+
+/implement phase-102: Subsystem Boundary Cleanup — Duplicate Domains and Orphaned Packages
+
+Context: Phase 113 is COMPLETE (smoke: 2181 passed).
+Next: phase-102 — Subsystem Boundary Cleanup (8 GAPs, 4 sub-phases).
+Branch: CORTEX
+```
+
+```
+
+**Example — Variant B correct (non-phase work completed):**
+
 ```markdown
 ---
 
@@ -477,6 +549,8 @@ That's everything! Let me know if you need anything else.
 | Neither block present | CORE-RESP-001 P0 violation | Add the appropriate block as the final element |
 | `BLOCK-PROCEED-GATE` mid-response (not last) | Placement violation | Move to end — always the absolute last rendered element |
 | Proceed gate omitted because response "seems complete" | Silent CORE-RESP-001 violation | Always explicit — never assume user knows |
+| Phase completes but no next-phase handoff shown | Session continuity gap — user loses context switching to new chat | Use Variant A of `BLOCK-COMPLETION-STATE` — read next `PLANNED` phase from `cortex-master.yaml`, emit `### 🚀 Next Phase` block with paste-ready continuation prompt |
+| Next-phase prompt shown for non-phase work | False positive — confuses user with irrelevant phase routing | Only emit Variant A when a `cortex-master.yaml` phase entry was explicitly marked COMPLETE in this execution |
 
 
 
@@ -753,7 +827,7 @@ Reusable content sections that compose into situation-specific responses without
 | **BLOCK-ENGAGEMENT-TIMELINE** | Collapsible per-orchestrator timing log | collapsible | Completion of any 3+ step operation |
 | **BLOCK-INTRODUCTION** | Interactive role-based introduction + capability showcase | 400 words | "introduce yourself", "who are you", "hello", "get started" |
 | **BLOCK-PROCEED-GATE** | Work-pending closure — "If you say proceed, I will…" numbered plan | ≤5 numbered items | Last block of every response where work awaits user confirmation |
-| **BLOCK-COMPLETION-STATE** | Work-done closure — "✅ All work is complete." statement | 2 sentences + blockquote | Last block of every response after autonomous execution completes |
+| **BLOCK-COMPLETION-STATE** | Work-done closure — "✅ All work is complete." statement (Variant B) or phase completion + next-phase handoff (Variant A) | 2 sentences + blockquote; Variant A adds `### 🚀 Next Phase` sub-block with paste-ready continuation prompt | Last block of every response after autonomous execution completes |
 
 ### Assembly Rules
 
@@ -2653,6 +2727,8 @@ Before sending any response, verify:
 - [ ] **Stage status uses Markdown bullet lists** (`- {icon} S{N}: ...`) — **NEVER `├─ └─` tree characters**
 - [ ] **Linear narrative flow: Context → Analysis → Action → Result (no repetition)**
 - [ ] **Completion confirmation used instead of "Next Steps" when work is done**
+- [ ] **Phase completion uses Variant A of `BLOCK-COMPLETION-STATE`** — when a `cortex-master.yaml` phase is marked COMPLETE, `### 🚀 Next Phase` sub-block is present with paste-ready continuation prompt; next phase ID and title sourced directly from `cortex-master.yaml` next `PLANNED` entry
+- [ ] **Non-phase completion uses Variant B** — `✅ **All work is complete.**` only, no next-phase block emitted
 - [ ] **No exit options during holistic implementation**
 - [ ] **Continuation prompt ONLY shown when token budget >90% AND work incomplete**
 - [ ] **Continuation prompt uses efficient format (<500 tokens) with #file: prefix**

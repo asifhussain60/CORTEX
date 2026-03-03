@@ -65,12 +65,14 @@ BLOCK-SESSION-IDENTITY (once per session, first turn only)
 → BLOCK-METRICS-DASHBOARD (IMPLEMENT/FIX/REFACTOR completions only)
 → BLOCK-NEXT-STEPS (educational responses only — Immediate + Later bullets, NO proceed content)
 → BLOCK-PROCEED-GATE  ← work pending: "### ⚡ If you say proceed, I will:" — ALWAYS LAST
-→ BLOCK-COMPLETION-STATE  ← work done: "✅ All work is complete." — ALWAYS LAST
+→ BLOCK-COMPLETION-STATE  ← work done: Variant A (phase complete) = "✅ Phase {id} complete." + "### 🚀 Next Phase" handoff; Variant B (non-phase) = "✅ All work is complete." — ALWAYS LAST
 ```
 
 **CORE-RESP-001 (P0 — non-negotiable):** Every response MUST end with exactly ONE of:
 - `BLOCK-PROCEED-GATE` — when work is pending user confirmation (`### ⚡ If you say \`proceed\`, I will:` + numbered list)
-- `BLOCK-COMPLETION-STATE` — when all work is done (`✅ **All work is complete.**` + confirmation sentence)
+- `BLOCK-COMPLETION-STATE` — when all work is done. **Two variants:**
+  - **Variant A** (a `cortex-master.yaml` phase was marked COMPLETE): `✅ **Phase {id} complete.**` + `### 🚀 Next Phase` sub-block with paste-ready continuation prompt for next VS Code Copilot Chat session (reads next `PLANNED` phase from `cortex-master.yaml`)
+  - **Variant B** (non-phase work done): `✅ **All work is complete.**` + confirmation sentence
 
 Never both. Never neither (for any actionable or completed response). Always the absolute last rendered block. Proceed bullets MUST NOT appear inside `## 🎯 Next Steps` — that section ends at "Later:" bullets. The proceed gate lives exclusively in `BLOCK-PROCEED-GATE`.
 
