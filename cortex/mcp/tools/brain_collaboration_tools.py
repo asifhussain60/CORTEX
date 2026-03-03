@@ -9,7 +9,7 @@ import uuid
 from typing import Any, Dict, List
 
 
-def cortex_intelligence_share(
+def collaboration_share(
     user_id: str = "",
     context_data: Dict[str, Any] | None = None,
     scope: str = "project",
@@ -25,7 +25,7 @@ def cortex_intelligence_share(
     }
 
 
-def cortex_intelligence_merge(
+def collaboration_merge(
     source_contexts: List[str] | None = None,
     merge_strategy: str = "intelligent",
     **kwargs: Any,
@@ -41,7 +41,7 @@ def cortex_intelligence_merge(
     }
 
 
-def cortex_intelligence_sync(
+def collaboration_sync(
     user_ids: List[str] | None = None,
     sync_type: str = "bidirectional",
     **kwargs: Any,
@@ -55,7 +55,16 @@ def cortex_intelligence_sync(
     }
 
 
+# Backward-compat aliases (Phase 105)
+cortex_intelligence_share = collaboration_share
+cortex_intelligence_merge = collaboration_merge
+cortex_intelligence_sync = collaboration_sync
+
+
 __all__ = [
+    "collaboration_share",
+    "collaboration_merge",
+    "collaboration_sync",
     "cortex_intelligence_share",
     "cortex_intelligence_merge",
     "cortex_intelligence_sync",

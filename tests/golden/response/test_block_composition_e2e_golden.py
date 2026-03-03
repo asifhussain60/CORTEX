@@ -52,7 +52,7 @@ def simple_stages() -> list[dict[str, Any]]:
     """Minimal 2-stage list for stage-pulse and timeline tests."""
     return [
         {"name": "Intent Classification", "duration_ms": 45, "tool": None, "status": "done"},
-        {"name": "LENS Analysis", "duration_ms": 120, "tool": "cortex_lens", "status": "active"},
+        {"name": "LENS Analysis", "duration_ms": 120, "tool": "cortex_validate", "status": "active"},
     ]
 
 
@@ -145,7 +145,6 @@ class TestToolDisplayNames:
         "cortex_governance": "Governance Enforcer",
         "cortex_vacuum": "Workspace Cleaner",
         "cortex_health": "Health Monitor",
-        "cortex_lens": "LENS Analyser",
         "cortex_check": "Wiring Validator",
     }
 
@@ -270,12 +269,12 @@ class TestRenderStagePulse:
 
     def test_active_stage_shows_display_name(self, renderer) -> None:
         stages = [
-            {"name": "LENS Scan", "duration_ms": 0, "tool": "cortex_lens", "status": "active"},
+            {"name": "LENS Scan", "duration_ms": 0, "tool": "cortex_validate", "status": "active"},
         ]
         result = renderer.render_stage_pulse(stages)
         assert result is not None
         # Tool display name should appear
-        assert "LENS Analyser" in result or "cortex_lens" in result, (
+        assert "Governance Validator" in result or "cortex_validate" in result, (
             "Active stage should show tool display name"
         )
 

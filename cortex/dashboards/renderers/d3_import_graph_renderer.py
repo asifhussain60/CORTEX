@@ -53,7 +53,7 @@ class D3ImportGraphRenderer:
 
     # Color palette for package hierarchies
     PACKAGE_COLORS = {
-        "cortex.brain": "#9f7aea",      # Purple
+        "cortex.intelligence": "#9f7aea",   # Purple
         "cortex.orchestrators": "#4299e1",  # Blue
         "cortex.visualization": "#48bb78",  # Green
         "cortex.infrastructure": "#ed8936",  # Orange

@@ -79,9 +79,13 @@ def resolve_path(*parts: str) -> Path:
     return get_project_root().joinpath(*parts)
 
 
-def cortex_intelligence_path() -> Path:
+def intelligence_path() -> Path:
     """Get path to cortex/intelligence directory (canonical since Phase 03)."""
     return resolve_path("cortex", "intelligence")
+
+
+# Backward-compat alias (Phase 105)
+cortex_intelligence_path = intelligence_path
 
 
 def tier_path(tier: int) -> Path:

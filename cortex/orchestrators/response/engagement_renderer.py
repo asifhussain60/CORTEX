@@ -64,7 +64,6 @@ class EngagementRenderer:
         "cortex_governance": "Governance Enforcer",
         "cortex_vacuum": "Workspace Cleaner",
         "cortex_health": "Health Monitor",
-        "cortex_lens": "LENS Analyser",
         "cortex_check": "Wiring Validator",
     }
 
