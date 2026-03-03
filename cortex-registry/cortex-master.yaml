@@ -102,11 +102,11 @@ summary:
   planned: 6
   archived: 4
   playbooks: 1
-  completion_percentage: 96
-  consolidation_summary: "v50.0: Phase 111 COMPLETE 2026-03-03 — CORE-035 duplicate class sweep. AST scan DUPLICATES=0. 5 planned remain (101-103, 105, 108)."
+  completion_percentage: 97
+  consolidation_summary: "v51.0: Phase 101 COMPLETE 2026-03-03 — CORE-035 duplicate file sweep. All 8 GAPs CLOSED. 66 tests GREEN. 2,255 smoke passed."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
-    phase-101: "PLANNED — Duplicate Consolidation CORE-035 (P0)"
+    phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "PLANNED — Subsystem Boundaries (P1)"
     phase-103: "PLANNED — God Object Decomposition (P1)"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
@@ -179,12 +179,12 @@ phases:
   - id: phase-101
     title: "Duplicate File Consolidation — CORE-035 Single Canonical Implementation"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-101-DUPLICATE-CONSOLIDATION
     gaps: 8
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-101-duplicate-consolidation.yaml"
-    note: "28 duplicate file names (3x orchestrator_lookup, 2x intent_classifier, etc). Depends on phase-100."
+    file: "cortex-registry/planning/phases/completed/phase-101-duplicate-consolidation.yaml"
+    note: "All 8 GAPs CLOSED. 3x orchestrator_lookup→shims, 5x justified-distinct (diff class names). 66 tests GREEN. Smoke: 2,255 passed. Completed 2026-03-03."
 
   - id: phase-102
     title: "Subsystem Boundary Cleanup — Duplicate Domains and Orphaned Packages"

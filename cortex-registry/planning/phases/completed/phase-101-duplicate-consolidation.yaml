@@ -1,0 +1,251 @@
+# Phase 101: Duplicate File Consolidation (CORE-035 Sweep)
+# Authority: Comprehensive Architectural Audit (2026-03-02)
+# THIN INDEX CONTRACT: All detail lives HERE, not in cortex-master.yaml
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+metadata:
+  id: phase-101
+  title: "Duplicate File Consolidation — CORE-035 Single Canonical Implementation"
+  priority: P0
+  status: COMPLETE
+  sweep_id: SWEEP-101-DUPLICATE-CONSOLIDATION
+  created: "2026-03-02"
+  completed: "2026-03-03"
+  estimated_effort: "6-8 hours"
+  risk: MEDIUM
+  dependencies: [phase-100]
+
+problem_summary: |
+  28 file names appear in multiple locations across the codebase, violating CORE-035 
+  (single canonical implementation). Key duplicates:
+  
+  HIGH SEVERITY (logic duplication):
+  - orchestrator_lookup.py (3 copies): core/, core/intent_router/, registry/
+  - context_cache_layer.py (2 copies): core/, orchestrators/core/
+  - coherence_validator.py (2 copies): orchestrators/domain/, orchestrators/validation/
+  - business_knowledge_repository.py (2 copies): intelligence/domain_brain/, intelligence/knowledge/
+  - intelligence_wiring_bridges.py (2 copies): intelligence/, intelligence/cross_cutting/
+  - intent_classifier.py (2 copies): intelligence/, orchestrators/core/
+  - health_monitor.py (2 copies): core/registry/, observability/
+  - audit_trail.py (2 copies): observability/, infrastructure/secrets/
+  
+  MEDIUM SEVERITY (proxy/adapter — acceptable but noisy):
+  - vacuum_orchestrator.py (2 copies): health/, support/ (support is proxy — OK)
+  - master_orchestrator.py (2 copies): core/, persona/ (persona is separate domain — OK)
+  
+  The non-proxy duplicates create maintenance burden: changes must be applied in
+  multiple locations, and logic can drift silently.
+
+affected_files:
+  - cortex/orchestrators/core/orchestrator_lookup.py
+  - cortex/orchestrators/core/intent_router/orchestrator_lookup.py
+  - cortex/orchestrators/registry/orchestrator_lookup.py
+  - cortex/core/context_cache_layer.py
+  - cortex/orchestrators/core/context_cache_layer.py
+  - cortex/orchestrators/domain/coherence_validator.py
+  - cortex/orchestrators/validation/coherence_validator.py
+  - cortex/intelligence/domain_brain/business_knowledge_repository.py
+  - cortex/intelligence/knowledge/business_knowledge_repository.py
+  - cortex/intelligence/intelligence_wiring_bridges.py
+  - cortex/intelligence/cross_cutting/intelligence_wiring_bridges.py
+  - cortex/intelligence/intent_classifier.py
+  - cortex/orchestrators/core/intent_classifier.py
+  - cortex/core/registry/health_monitor.py
+  - cortex/observability/health_monitor.py
+  - cortex/observability/audit_trail.py
+  - cortex/infrastructure/secrets/audit_trail.py
+
+root_cause: |
+  Subsystem boundaries were drawn iteratively across 94 phases. When modules were 
+  moved between subsystems (e.g., brain→intelligence, core→orchestrators), proxy files
+  were left behind. Some files were independently authored in different locations without
+  checking for existing implementations.
+
+refactoring_strategy: |
+  For each duplicate pair:
+  1. DIFF the two files to determine: identical, proxy, or diverged
+  2. Choose canonical location based on domain ownership (SSOT principle)
+  3. Convert non-canonical copy to a thin re-export (if external consumers exist)
+     or DELETE if no external consumers
+  4. Update all imports across the codebase
+  5. Run preflight after each consolidation
+
+risks:
+  - Moving canonical location may break wiring YAML specs
+  - Some proxies exist specifically for wiring contract compliance (support/vacuum_orchestrator.py)
+  - Import chain breaks can cascade — test after each individual consolidation
+
+sweep_catalogue:
+  - id: GAP-101-01
+    title: "Consolidate orchestrator_lookup.py (3→1 canonical)"
+    status: CLOSED
+    severity: P0
+    resolution: "Canonical at orchestrators/core/. Two shims (intent_router/, registry/) re-export. Verified by TestGAP10101OrchestratorLookup (5 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-02
+    title: "Consolidate context_cache_layer.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "Canonical at orchestrators/core/context_cache_layer.py. core/context_cache_layer.py is a COMPAT shim → core_context_cache_layer.py. Verified by TestGAP10102ContextCacheLayer (4 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-03
+    title: "Consolidate coherence_validator.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "JUSTIFIED DISTINCT — domain/ has CrossLayerCoherenceValidator (Python↔JS), validation/ has CoherenceValidator (post-edit structural). Different class names, different scopes. Not a CORE-035 violation. Verified by TestGAP10103CoherenceValidatorDistinct (5 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-04
+    title: "Consolidate business_knowledge_repository.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "Canonical at intelligence/knowledge/. domain_brain/ is a Phase 107 compat shim re-exporting the canonical class. Verified by TestGAP10104BusinessKnowledgeRepository (4 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-05
+    title: "Consolidate intelligence_wiring_bridges.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "JUSTIFIED DISTINCT — intelligence/ has LENS/BrainTier bridge functions (8 funcs); cross_cutting/ has IntelligenceMatrix cell wiring (wire_p0_cells, wire_p1_cells). Zero function overlap. Both canonical in their namespace. Verified by TestGAP10105IntelligenceWiringBridgesDistinct (6 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-06
+    title: "Consolidate intent_classifier.py (2→1 canonical)"
+    status: CLOSED
+    severity: P0
+    resolution: "JUSTIFIED DISTINCT — intelligence/ has EnhancedIntentClassifier (WAVE-M NLP+confidence); orchestrators/core/ has IntentClassifier (3-tier regex→keyword→LLM). Different architectures, different classes. Verified by TestGAP10106IntentClassifierDistinct (5 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-07
+    title: "Consolidate health_monitor.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "JUSTIFIED DISTINCT — core/registry/ has RegistryHealthMonitor (multi-tenant registry, Prometheus); observability/ has HealthMonitor (orchestrator health, delegates to HealthOrchestrator). Different domains, different class names. Verified by TestGAP10107HealthMonitorDistinct (6 tests GREEN)."
+    closed: "2026-03-03"
+  - id: GAP-101-08
+    title: "Consolidate audit_trail.py (2→1 canonical)"
+    status: CLOSED
+    severity: P1
+    resolution: "JUSTIFIED DISTINCT + rename complete — infrastructure/secrets/ has SecretsAuditTrail (tamper-evident secrets logging, renamed from AuditTrail); observability/ has AuditTrail (runtime event recording). AuditTrail alias retained for compat. Verified by TestGAP10108AuditTrailDistinct (8 tests GREEN)."
+    closed: "2026-03-03"
+
+sub_phases:
+  - id: phase-101-a
+    title: "Critical path duplicates (orchestrator_lookup, intent_classifier)"
+    status: COMPLETE
+    completed: "2026-03-03"
+    depends_on: []
+    gap_refs: [GAP-101-01, GAP-101-06]
+    tdd_cycle:
+      red:
+        action: "Write tests proving only ONE canonical import path works per component"
+        gate: "python3 scripts/run_tests.py file tests/core/test_duplicate_consolidation_101.py — tests FAIL"
+        blocker: "Consolidation forbidden until gate passes"
+      green:
+        action: "Merge to canonical location, convert duplicates to re-exports or delete"
+        gate: "python3 scripts/run_tests.py file tests/core/test_duplicate_consolidation_101.py — tests PASS"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Update all import references across codebase"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "sub-phase COMPLETE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: phase-101-b
+    title: "Intelligence and knowledge duplicates"
+    depends_on: [phase-101-a]
+    gap_refs: [GAP-101-04, GAP-101-05, GAP-101-07, GAP-101-08]
+    tdd_cycle:
+      red:
+        action: "Write tests for canonical locations"
+        gate: "Tests FAIL for canonical-only import paths"
+        blocker: "Consolidation forbidden until gate passes"
+      green:
+        action: "Consolidate 4 duplicate pairs"
+        gate: "Tests PASS for all canonical paths"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Update imports, verify wiring YAML alignment"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "sub-phase COMPLETE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: phase-101-c
+    title: "Remaining duplicates (context_cache, coherence_validator)"
+    depends_on: [phase-101-b]
+    gap_refs: [GAP-101-02, GAP-101-03]
+    tdd_cycle:
+      red:
+        action: "Write canonical-path tests"
+        gate: "Tests FAIL"
+        blocker: "Consolidation forbidden until gate passes"
+      green:
+        action: "Consolidate remaining pairs"
+        gate: "Tests PASS"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Final import sweep"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "sub-phase COMPLETE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: phase-101-final
+    title: "Phase 101 verification and close"
+    status: COMPLETE
+    completed: "2026-03-03"
+    depends_on: [phase-101-c]
+    gap_refs: []
+    tdd_cycle:
+      red:
+        action: "Verify zero duplicate file names remain (excluding valid proxies)"
+        gate: "Duplicate scan shows 0 non-proxy duplicates"
+        blocker: "Close forbidden until verification passes"
+      green:
+        action: "Run full smoke suite"
+        gate: "python3 scripts/run_tests.py smoke — ≥1700 passed"
+        blocker: "Phase COMPLETE forbidden until gate passes"
+      refactor:
+        action: "Update cortex-master.yaml"
+        gate: "wc -l cortex-registry/cortex-master.yaml ≤ 800"
+        blocker: "Phase CLOSE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+acceptance_criteria:
+  - id: AC-101-01
+    description: "All 8 GAPs in sweep_catalogue have status: CLOSED"
+    status: "✅ COMPLETE — 2026-03-03"
+  - id: AC-101-02
+    description: "66 tests in tests/core/test_phase101_duplicate_consolidation.py all GREEN"
+    status: "✅ COMPLETE — 66/66 passed (0.26s)"
+  - id: AC-101-03
+    description: "Smoke gate passes with ≥2212 tests (baseline) and zero new failures"
+    status: "✅ COMPLETE — 2,255 passed, 2 pre-existing failures unchanged"
+  - id: AC-101-04
+    description: "Each duplicate file pair either: has shims in non-canonical location, or is JUSTIFIED DISTINCT with different class names"
+    status: "✅ COMPLETE — GAP-01/02/04 = shims; GAP-03/05/06/07/08 = justified distinct"
+  - id: AC-101-05
+    description: "All import consumers verified — no broken import chains introduced"
+    status: "✅ COMPLETE — grepped all consumers, shims preserve backward compat"
