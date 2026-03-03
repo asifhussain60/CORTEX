@@ -23,7 +23,7 @@ class ResolutionStatus(Enum):
 
 
 @dataclass
-class DependencyGraph:
+class DependencyGraph:  # noqa: CORE-035-scoped — independent dependency graph — domain-specific structure
     """Phase dependency graph"""
     phases: Set[str]
     dependencies: Dict[str, Set[str]]  # phase_id → set of required phases

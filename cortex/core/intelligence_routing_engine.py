@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class IntentType(Enum):
+class IntentType(Enum):  # noqa: CORE-035-scoped — uppercase routing values differ from canonical lowercase
     """Supported intent types for routing."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

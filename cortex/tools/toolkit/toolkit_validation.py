@@ -46,7 +46,7 @@ class ValidationCheck(Enum):
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of a validation check."""
     check: ValidationCheck
     level: ValidationLevel

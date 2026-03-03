@@ -32,7 +32,7 @@ class ContractViolation:
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Validation result with violations."""
     is_valid: bool
     violations: List[ContractViolation] = field(default_factory=list)

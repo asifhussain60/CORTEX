@@ -84,7 +84,7 @@ class HealthIssue:
 
 
 @dataclass
-class HealthCheckResult:
+class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
     """Result of a health agent check.
 
     Attributes:

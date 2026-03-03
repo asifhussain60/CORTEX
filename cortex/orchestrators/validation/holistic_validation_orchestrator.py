@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of holistic validation with gating decision.
 
     Attributes:

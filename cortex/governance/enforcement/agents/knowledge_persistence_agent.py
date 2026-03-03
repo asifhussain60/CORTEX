@@ -36,7 +36,7 @@ class ViolationLevel(Enum):
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Knowledge persistence validation result."""
 
     rule_id: str

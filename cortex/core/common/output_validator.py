@@ -26,7 +26,7 @@ class ValidationViolation:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of validating LLM output."""
     is_valid: bool
     score: float  # 0-1 confidence score

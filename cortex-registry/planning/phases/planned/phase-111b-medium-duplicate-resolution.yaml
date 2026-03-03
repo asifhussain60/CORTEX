@@ -1,0 +1,44 @@
+id: "phase-111b"
+title: "Phase 111-B — Medium-Count Duplicate Resolution (3x occurrences, 37 class names)"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-111"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-111B-MEDIUM-DUPES"
+depends_on: ["phase-111a"]
+
+background: |
+  Sub-phase B targets the 37 class names with exactly 3 definitions.
+  These are medium-severity CORE-035 violations — less urgent than 4x+ but still
+  creating shadow copies that confuse Python's import resolver.
+
+  Key categories:
+  1. SHARED MODELS re-defined in multiple orchestrators (most common)
+  2. RESULT/RESPONSE types duplicated across layers
+  3. CONFIGURATION classes duplicated across subsystems
+
+scope:
+  focus: "Classes with exactly 3 definitions"
+  class_count: 37
+  total_definitions: 111
+  target: "Reduce to 0 classes with 3+ definitions (combined with 111a)"
+
+estimated_effort: "2-3 hours"
+risk: LOW
+depends_on: ["phase-111a"]
+
+strategy: |
+  For each 3x class:
+  1. Identify which definition is most complete (has most methods/fields)
+  2. That is the canonical — move to appropriate cortex/models/ or cortex/core/ location
+  3. Other two become thin re-exports: `from canonical.module import ClassName`
+  4. Verify no circular imports introduced
+
+acceptance_criteria:
+  - "AST scan returns 0 classes with 3+ definitions"
+  - "Smoke tests: >= 2172 passed"

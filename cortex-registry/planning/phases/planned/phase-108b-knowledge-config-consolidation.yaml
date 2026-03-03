@@ -1,0 +1,54 @@
+id: "phase-108b"
+title: "Phase 108-B — Knowledge & Config Namespace Consolidation"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-108"
+governance_authority:
+  - CORE-035  # Single canonical location
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-108B-KNOWLEDGE-CONFIG"
+depends_on: ["phase-108a"]
+
+background: |
+  Two namespace duplications remain in cortex-registry/:
+  
+  1. KNOWLEDGE NAMESPACE (2 locations → 1):
+     a. cortex-registry/knowledge/ (39 files) — CANDIDATE CANONICAL
+     b. cortex-registry/knowledge-base/ (21 files) — OVERLAPPING
+     
+     Analysis:
+     - knowledge/ contains domain knowledge YAMLs (patterns, strategies, templates)
+     - knowledge-base/ contains reference docs and governance best practices
+     The split is actually meaningful — they serve different purposes.
+     Action: Rename knowledge-base/ → knowledge/reference/ to clarify hierarchy.
+     Keep knowledge/ as-is (canonical domain knowledge).
+  
+  2. CONFIG NAMESPACE (2 locations → 1):
+     a. cortex-registry/config/ (4 files) — framework configuration
+     b. cortex-registry/core/config/ (6 files) — core governance configuration
+     
+     Analysis: config/ has framework-level settings; core/config/ has governance constants.
+     Action: Merge cortex-registry/config/ INTO cortex-registry/core/config/.
+     Update ~5 Python references.
+
+scope:
+  actions:
+    - "Move cortex-registry/knowledge-base/ → cortex-registry/knowledge/reference/"
+    - "Update cortex-master.yaml references"
+    - "Move cortex-registry/config/*.yaml → cortex-registry/core/config/"
+    - "Update Python files that reference cortex-registry/config/ (grep for ~5)"
+    - "Update any test file references"
+
+estimated_effort: "1-2 hours"
+risk: LOW
+depends_on: ["phase-108a"]
+
+acceptance_criteria:
+  - "cortex-registry/knowledge-base/ does not exist"
+  - "cortex-registry/knowledge/reference/ exists with 21 moved files"
+  - "cortex-registry/config/ does not exist"
+  - "cortex-registry/core/config/ has all 10 merged files"
+  - "All Python path references updated"
+  - "Smoke tests: >= 2172 passed"

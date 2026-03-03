@@ -31,7 +31,7 @@ from cortex.models.canonical_enums import HealthStatus
 
 
 @dataclass
-class HealthCheckResult:
+class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
     """Result of a health check."""
     status: HealthStatus
     timestamp: float

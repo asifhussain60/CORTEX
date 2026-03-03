@@ -22,7 +22,7 @@ class PackageDependency:
 
 
 @dataclass
-class DependencyGraph:
+class DependencyGraph:  # noqa: CORE-035-scoped — independent dependency graph — domain-specific structure
     """Complete dependency graph."""
     root_packages: List[PackageDependency]
     all_packages: Set[str]

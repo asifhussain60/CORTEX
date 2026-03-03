@@ -43,7 +43,7 @@ class ValidationError:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of template validation."""
     valid: bool = True
     errors: List[ValidationError] = field(default_factory=list)

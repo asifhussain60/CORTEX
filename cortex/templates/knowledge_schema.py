@@ -9,7 +9,7 @@ from enum import Enum
 from typing import Any, Dict, List, NamedTuple
 
 
-class ValidationResult(NamedTuple):
+class ValidationResult(NamedTuple):  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of validation operation."""
     valid: bool
     errors: List[str]

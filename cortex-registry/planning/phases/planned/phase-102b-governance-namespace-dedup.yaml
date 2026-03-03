@@ -1,0 +1,50 @@
+id: "phase-102b"
+title: "Phase 102-B — Governance Namespace Deduplication (6 locations → 1 canonical)"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-102"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-102B-GOVERNANCE-DEDUP"
+depends_on: ["phase-102a"]
+
+background: |
+  Governance logic is scattered across 6 locations:
+  1. cortex/governance/ — CANONICAL (28 files, enforcement_orchestrator wires here)
+  2. cortex/core/governance/__init__.py — ORPHAN (1 file, just re-exports)
+  3. cortex/intelligence/governance/ — INTELLIGENCE-LAYER subset
+  4. cortex/intelligence/memory/tier2_adaptive/governance/ — ADAPTIVE MEMORY subset
+  5. cortex/intelligence/memory/tier1_learned/governance/ — LEARNED MEMORY subset
+  6. cortex/knowledge/best_practices/governance/ — KNOWLEDGE subset
+
+  Key distinction: items 3-6 are NOT duplicates of cortex/governance/ — they're
+  DOMAIN-SPECIFIC governance for their respective subsystems. Only item 2 is a true
+  orphan.
+
+  Action:
+  - Delete cortex/core/governance/__init__.py (it's empty or just re-exports)
+  - Document that items 3-6 are domain-specific governance (add module docstrings)
+  - Ensure cortex/governance/ remains the ENFORCEMENT canonical location
+
+scope:
+  true_orphans:
+    - cortex/core/governance/__init__.py (absorb into cortex/governance/)
+  domain_specific_documented:
+    - cortex/intelligence/governance/ (intelligence-layer CORE-030 baselines)
+    - cortex/intelligence/memory/tier2_adaptive/governance/ (adaptive baselines)
+    - cortex/intelligence/memory/tier1_learned/governance/ (learned rules)
+    - cortex/knowledge/best_practices/governance/ (knowledge best practices)
+
+acceptance_criteria:
+  - "cortex/core/governance/ absorbed into cortex/governance/"
+  - "All domain-specific governance dirs have module docstrings explaining their scope"
+  - "cortex/governance/ README clarifies canonical vs domain-specific locations"
+  - "Smoke tests: >= 2172 passed"
+
+estimated_effort: "1-2 hours"
+risk: LOW
+depends_on: ["phase-102a"]

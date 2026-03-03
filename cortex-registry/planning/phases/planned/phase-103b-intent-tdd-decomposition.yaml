@@ -1,0 +1,64 @@
+id: "phase-103b"
+title: "Phase 103-B — IntentRouterImpl & TDDOrchestrator Decomposition (2,895L + 2,120L)"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-103"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-103B-INTENT-TDD-DECOMP"
+depends_on: ["phase-103a"]
+
+background: |
+  Two more critical god objects after MasterOrchestrator:
+  
+  1. cortex/orchestrators/core/intent_router_impl.py (2,895 lines)
+     Responsibility clusters:
+     a. PATTERN MATCHING (keyword/regex intent detection) — ~700L
+     b. CONFIDENCE SCORING (multi-signal scoring engine) — ~600L
+     c. CAPABILITY MATCHING (orchestrator→intent capability map) — ~500L
+     d. ROUTING (final orchestrator selection) — ~400L
+     e. FALLBACK (chain-of-responsibility fallback strategies) — ~400L
+     f. TODO ANALYSIS (intent from TODO comments) — ~295L
+     Target: Extract a-e into sub-modules; keep f in place or merge into a
+  
+  2. cortex/orchestrators/core/tdd_orchestrator.py (2,120 lines)
+     Responsibility clusters:
+     a. RED PHASE ENGINE (failing test generation) — ~500L
+     b. GREEN PHASE ENGINE (minimal implementation) — ~500L
+     c. REFACTOR ENGINE (code improvement) — ~400L
+     d. TEST GENERATION (stub→test templates) — ~400L
+     e. CODE GENERATION (implementation scaffolding) — ~320L
+     Target: Extract each phase into its own engine file
+
+target_structure:
+  intent_router:
+    main: "cortex/orchestrators/core/intent_router_impl.py (~400L)"
+    sub_modules:
+      - "cortex/orchestrators/core/intent_router/pattern_matcher.py"
+      - "cortex/orchestrators/core/intent_router/confidence_scorer.py"
+      - "cortex/orchestrators/core/intent_router/capability_matcher.py"
+      - "cortex/orchestrators/core/intent_router/routing_engine.py"
+      - "cortex/orchestrators/core/intent_router/fallback_strategy.py"
+  tdd_orchestrator:
+    main: "cortex/orchestrators/core/tdd_orchestrator.py (~400L)"
+    sub_modules:
+      - "cortex/orchestrators/core/tdd/red_phase_engine.py"
+      - "cortex/orchestrators/core/tdd/green_phase_engine.py"
+      - "cortex/orchestrators/core/tdd/refactor_engine.py"
+      - "cortex/orchestrators/core/tdd/test_generator.py"
+      - "cortex/orchestrators/core/tdd/code_generator.py"
+
+acceptance_criteria:
+  - "intent_router_impl.py < 600 lines"
+  - "tdd_orchestrator.py < 600 lines"
+  - "All sub-modules created"
+  - "All existing tests pass (2172+)"
+  - "Public API of both classes unchanged"
+
+estimated_effort: "4-6 hours"
+risk: HIGH
+depends_on: ["phase-103a"]

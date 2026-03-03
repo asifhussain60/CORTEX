@@ -69,7 +69,7 @@ class CanonicalIntent:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of input validation"""
     input_id: str
     valid: bool

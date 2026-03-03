@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """Single cache entry with TTL."""
     key: str
     value: Any

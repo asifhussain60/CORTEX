@@ -19,7 +19,7 @@ from diskcache import Cache
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """Cache entry with metadata.
 
     Attributes:

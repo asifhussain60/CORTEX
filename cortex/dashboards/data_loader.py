@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """Single cache entry with TTL tracking"""
     repository: str
     data: Dict[str, Any]

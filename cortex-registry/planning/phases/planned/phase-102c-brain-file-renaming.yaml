@@ -1,0 +1,70 @@
+id: "phase-102c"
+title: "Phase 102-C — Brain-Prefixed File Renaming (7 files)"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-102"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-028  # File naming: snake_case only (domain-appropriate names)
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-102C-BRAIN-NAMING"
+depends_on: ["phase-102b"]
+
+background: |
+  7 files retain "brain" naming from the deleted cortex/brain/ package (dissolved Phase 54).
+  These are all FUNCTIONAL files — their content is valid — but their names create
+  confusion about package boundaries.
+
+  Files to rename (canonical → functional domain name):
+  1. cortex/core/brain_state_manager.py
+     → cortex/core/orchestrator_state_manager.py
+     (manages per-orchestrator state, not "brain" state)
+  
+  2. cortex/mcp/tools/brain_collaboration_tools.py  
+     → cortex/mcp/tools/collaboration_tools.py
+     (already partially fixed in phase-105: functions renamed)
+  
+  3. cortex/mcp/tools/brain.py
+     → cortex/mcp/tools/memory_tools.py OR merge into collaboration_tools.py
+     (review content first)
+  
+  4. cortex/orchestrators/core/central_brain_orchestrator.py
+     → cortex/orchestrators/core/central_coordinator.py OR central_routing_orchestrator.py
+     (check current class name and purpose)
+  
+  5. cortex/orchestrators/core/brain_health_orchestrator.py
+     → cortex/orchestrators/core/core_health_orchestrator.py
+     (health monitoring for core orchestrators)
+  
+  6. cortex/infrastructure/brain_health_metrics.py
+     → cortex/infrastructure/orchestrator_health_metrics.py
+  
+  7. cortex/infrastructure/shared_brain_store.py
+     → cortex/infrastructure/shared_orchestrator_store.py OR shared_context_store.py
+
+  Process for each rename:
+  1. git mv <old> <new>
+  2. Create thin backward-compat shim at old path: `from new.path import *`
+  3. Update all imports in consuming files
+  4. Run smoke tests
+  5. In next cleanup cycle, remove the shim (after 1 session)
+
+scope:
+  files_to_rename: 7
+  risk_level: MEDIUM
+  key_concern: "MCP tool functions in brain_collaboration_tools.py are already registered
+    under canonical names (not brain_* names) — safe to rename file"
+
+acceptance_criteria:
+  - "0 files with 'brain' in filename under cortex/"
+  - "All backward-compat shims in place"
+  - "All imports resolve"
+  - "Smoke tests: >= 2172 passed"
+  - "Governance validator: 0 CORE-028 violations"
+
+estimated_effort: "2-3 hours"
+risk: MEDIUM
+depends_on: ["phase-102b"]

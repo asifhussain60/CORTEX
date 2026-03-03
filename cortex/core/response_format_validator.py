@@ -60,7 +60,7 @@ class FormatViolation:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """
     Format validation result.
 

@@ -1,0 +1,49 @@
+id: "phase-111c"
+title: "Phase 111-C — Benign 2x Triage: Domain-Scoped vs True CORE-035 Violations"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P2
+parent_phase: "phase-111"
+governance_authority:
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-111C-TRIAGE-2X"
+depends_on: ["phase-111b"]
+
+background: |
+  194 class names appear exactly twice in the codebase. The CRITICAL insight:
+  many of these are NOT true CORE-035 violations because they are:
+  
+  CATEGORY A — TRULY BENIGN (same name, intentionally different domain):
+    - Result types in separate subsystems (e.g., LensResult vs HealthResult)
+    - Config classes for different tools (e.g., DashboardConfig vs AgentConfig)
+    - Inner classes with common names (e.g., class Meta, class Config inside dataclasses)
+    These should be ANNOTATED with # noqa: CORE-035-benign in their respective files
+  
+  CATEGORY B — TRUE VIOLATIONS (same concept, different implementation):
+    - These need the canonical treatment from 111a/111b
+    - Estimated: ~40-60 of the 194 are true violations
+
+scope:
+  focus: "Classes with exactly 2 definitions — triage then fix true violations"
+  class_count: 194
+  estimated_true_violations: 50
+  estimated_benign: 144
+  target: "Fix ~50 true violations; annotate ~144 benign same-name-different-domain"
+
+strategy: |
+  1. Run automated triage: compare class body similarity (>80% similar = true violation)
+  2. Manually classify remaining edge cases
+  3. Fix true violations (canonical + re-export pattern)
+  4. Add # noqa: CORE-035-benign comment to intentional domain-specific same-name classes
+
+estimated_effort: "2-3 hours"
+risk: LOW
+depends_on: ["phase-111b"]
+
+acceptance_criteria:
+  - "All true 2x violations resolved (canonical + re-export)"
+  - "Benign 2x classes annotated with # noqa: CORE-035-benign"
+  - "Audit Check #26 returns DUPLICATES=0 for un-annotated classes"
+  - "Smoke tests: >= 2172 passed"

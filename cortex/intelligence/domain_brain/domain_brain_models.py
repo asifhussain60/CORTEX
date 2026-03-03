@@ -264,7 +264,7 @@ class ConflictResolution:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Domain validation result.
 
     Attributes:

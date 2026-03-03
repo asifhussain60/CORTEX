@@ -11,22 +11,9 @@ AC-ID: AC-WAVE-M-001
 
 import re
 from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, List, Optional
 
-
-class IntentType(str, Enum):
-    """Canonical intent types."""
-    IMPLEMENT = "implement"
-    FIX = "fix"
-    REFACTOR = "refactor"
-    ANALYZE = "analyze"
-    AUDIT = "audit"
-    DESIGN = "design"
-    PLAN = "plan"
-    DIGEST = "digest"
-    QUERY = "query"
-    UNKNOWN = "unknown"
+from cortex.models.canonical_enums import IntentType  # CORE-035: import from canonical
 
 
 @dataclass

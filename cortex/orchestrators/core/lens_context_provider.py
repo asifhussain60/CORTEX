@@ -13,7 +13,7 @@ from typing import Any
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """A single LENS cache entry."""
     key: str
     data: dict[str, Any] = field(default_factory=dict)

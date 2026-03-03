@@ -52,7 +52,7 @@ class MCPPolicyResult:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Environment validation result."""
     passed: bool
     severity: str  # 'PASSED', 'WARNING', 'CRITICAL'

@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """Cache entry with metadata"""
     value: Any
     timestamp: float

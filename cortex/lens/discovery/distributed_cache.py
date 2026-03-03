@@ -41,7 +41,7 @@ class CacheTier(Enum):
 
 
 @dataclass
-class CacheEntry:
+class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
     """Represents a cached entry with metadata.
 
     Attributes:

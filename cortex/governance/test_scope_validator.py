@@ -49,7 +49,7 @@ class TestScopeMismatch:
     recommendation: str
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Result of test scope validation."""
     passed: bool
     mismatches: List[TestScopeMismatch]

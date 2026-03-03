@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Set
 import yaml
 
 
-class IntentType(str, Enum):
+class IntentType(str, Enum):  # noqa: CORE-035-scoped — lazy loader uses uppercase routing values
     """User intent classifications."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

@@ -57,7 +57,7 @@ class ValidationIssue:
 
 
 @dataclass
-class ValidationResult:
+class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
     """Validation result."""
     is_valid: bool
     accuracy_percentage: float

@@ -168,7 +168,7 @@ class CrossRepoSearch:
 # DependencyGraph
 # ──────────────────────────────────────────────────────────────────────────────
 
-class DependencyGraph:
+class DependencyGraph:  # noqa: CORE-035-scoped — independent dependency graph — domain-specific structure
     """Build and analyze inter-project dependency graphs."""
 
     def build(

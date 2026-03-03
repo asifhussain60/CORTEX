@@ -1,0 +1,68 @@
+id: "phase-103a"
+title: "Phase 103-A — MasterOrchestrator Mixin Extraction (3,108 → <800 lines)"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+parent_phase: "phase-103"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints
+  - CORE-012  # Docstrings
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-103A-MASTER-ORCHESTRATOR"
+
+background: |
+  cortex/orchestrators/core/master_orchestrator.py is 3,108 lines.
+  Phase 80-a already reduced it from 5,222 lines by extracting mixins.
+  The same pattern must continue.
+
+  Current responsibility clusters in MasterOrchestrator:
+  1. REQUEST ROUTING (intent detection, orchestrator selection) — ~600 lines
+  2. EXECUTION ENGINE (operation dispatch, retry, timeout) — ~800 lines
+  3. HEALTH MONITORING (endpoint checks, heartbeat) — ~500 lines
+  4. KNOWLEDGE ACCESS (domain brain queries, LENS integration) — ~400 lines
+  5. WORKFLOW MANAGEMENT (template resolution, convergence gate) — ~400 lines
+  6. COORDINATION GLUE (wires 1-5 together) — target <400 lines
+
+  Target: Extract clusters 1-5 into dedicated mixins, leaving cluster 6 as the main file.
+
+target_structure:
+  main_file: "cortex/orchestrators/core/master_orchestrator.py (~400L)"
+  new_mixins:
+    - "cortex/orchestrators/core/mixins/routing_mixin.py (~600L)"
+    - "cortex/orchestrators/core/mixins/execution_mixin.py (~800L)"
+    - "cortex/orchestrators/core/mixins/health_mixin.py (~500L)"
+    - "cortex/orchestrators/core/mixins/knowledge_mixin.py (~400L)"
+    - "cortex/orchestrators/core/mixins/workflow_mixin.py (~400L)"
+
+tdd_sequence:
+  red:
+    file: "tests/core/test_master_orchestrator_decomposed.py"
+    assertions:
+      - "master_orchestrator.py < 800 lines"
+      - "All 5 mixin files exist"
+      - "MasterOrchestrator has all original public methods (no API breakage)"
+  green:
+    steps:
+      - "Extract HealthMixin first (lowest coupling)"
+      - "Extract RoutingMixin"
+      - "Extract ExecutionMixin"
+      - "Extract KnowledgeMixin"
+      - "Extract WorkflowMixin"
+      - "Rebuild MasterOrchestrator as composition"
+  refactor:
+    steps:
+      - "Run full test suite to catch regressions"
+      - "Verify wiring contract still satisfied"
+
+acceptance_criteria:
+  - "master_orchestrator.py < 800 lines"
+  - "All 5 mixin files exist and are < 1000 lines each"
+  - "All existing tests pass (2172+)"
+  - "MasterOrchestrator public API unchanged"
+
+estimated_effort: "4-6 hours"
+risk: HIGH
+depends_on: []

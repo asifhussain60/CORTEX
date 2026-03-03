@@ -10,7 +10,7 @@ from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
 
-class IntentType(Enum):
+class IntentType(Enum):  # noqa: CORE-035-scoped — capability matcher uses uppercase routing values
     """User intent types."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

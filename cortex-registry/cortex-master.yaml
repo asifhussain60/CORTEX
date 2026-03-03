@@ -38,6 +38,22 @@ metadata:
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  # ── Phase 111 sub-phases (Duplicate Class Sweep) ──────────────────────────
+  - { id: phase-111a, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-111a-critical-enum-consolidation.yaml" }
+  - { id: phase-111b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-111b-medium-duplicate-resolution.yaml" }
+  - { id: phase-111c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-111c-benign-2x-triage.yaml" }
+  # ── Phase 102 sub-phases (Subsystem Boundaries) ───────────────────────────
+  - { id: phase-102a, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-102a-orphan-package-absorption.yaml" }
+  - { id: phase-102b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-102b-governance-namespace-dedup.yaml" }
+  - { id: phase-102c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-102c-brain-file-renaming.yaml" }
+  # ── Phase 103 sub-phases (God Object Decomposition) ───────────────────────
+  - { id: phase-103a, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103a-master-orchestrator-decomposition.yaml" }
+  - { id: phase-103b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103b-intent-tdd-decomposition.yaml" }
+  - { id: phase-103c, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-103c-remaining-god-objects.yaml" }
+  # ── Phase 108 sub-phases (cortex-registry Consolidation) ──────────────────
+  - { id: phase-108a, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-108a-dead-dir-purge.yaml" }
+  - { id: phase-108b, status: PLANNED, file: "cortex-registry/planning/phases/planned/phase-108b-knowledge-config-consolidation.yaml" }
+  # ── Phase 107 (Intelligence Layer Consolidation) ──────────────────────────
   - { id: phase-107, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-107-intelligence-layer-consolidation.yaml" }
   - { id: phase-109, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-109-diamond-intelligence-completion.yaml" }
   - { id: phase-106, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-106-rca-guard-certification.yaml" }
@@ -86,34 +102,34 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phase 105 COMPLETE — Smoke: 2,174 passed. Stale references remediated. Governance: 0 violations."
-  overall_score: 99%
+  status: "✅ DIGEST chat01 sub-phases decomposed 2026-03-03. Smoke baseline: 2,172 passed. 4 PLANNED phases broken into 11 sub-phases."
+  overall_score: 97%
   deployment_date: '2026-03-03'
 
 verification:
   method: git_history + code_inspection + test_verification
-  last_verified: '2026-02-28T08:00:00Z'
+  last_verified: '2026-03-03T12:00:00Z'
 
 summary:
-  total_phases: 100
-  completed: 97
+  total_phases: 103
+  completed: 10
   active: 0
   in_progress: 0
-  planned: 5
+  planned: 4
   archived: 4
   playbooks: 1
-  completion_percentage: 97
-  consolidation_summary: "v51.0: Phase 105 COMPLETE 2026-03-03 — Stale references remediated (6 files). 4 PLANNED remain (102-103, 108, 111)."
+  completion_percentage: 71
+  consolidation_summary: "v52.0: DIGEST chat01 2026-03-03 — sub-phase decomposition complete. Phases 111→111a/b/c, 102→102a/b/c, 103→103a/b/c, 108→108a/b."
   active_phases:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate Consolidation CORE-035 (P0) ✅"
-    phase-102: "PLANNED — Subsystem Boundaries (P1)"
-    phase-103: "PLANNED — God Object Decomposition (P1)"
+    phase-102: "PLANNED — Subsystem Boundaries (P1) → sub-phases: 102a, 102b, 102c"
+    phase-103: "PLANNED — God Object Decomposition (P1) → sub-phases: 103a, 103b, 103c"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "COMPLETE — Stale Imports and Legacy Naming (P1) ✅"
-    phase-108: "PLANNED — cortex-registry Consolidation (P1)"
+    phase-108: "PLANNED — cortex-registry Consolidation (P1) → sub-phases: 108a, 108b"
     phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
-    phase-111: "PLANNED — Duplicate Class Sweep (P1)"
+    phase-111: "PLANNED — Duplicate Class Sweep (P1) → sub-phases: 111a, 111b, 111c"
 
 phases:
   # ── DIGEST chat01 REMEDIATION PLAN (2026-03-02) ──────────────────────────────
@@ -213,7 +229,7 @@ phases:
     gaps: 4
     sub_phases: 2
     file: "cortex-registry/planning/phases/completed/phase-105-stale-imports-naming.yaml"
-    note: "COMPLETE 2026-03-03. 4 GAPs CLOSED: cortex.brain→cortex.intelligence in dashboard colors, cortex_lens removed from tool display names, cortex_intelligence_path→intelligence_path, cortex_intelligence_*→collaboration_* function renames. 11 TDD tests GREEN. Smoke: 2,174 passed."
+    note: "COMPLETE 2026-03-03. 4 GAPs CLOSED: brain→intelligence in dashboard colors, lens tool removed from display names, intelligence_path renamed canonical, collaboration_* function renames. 11 TDD tests GREEN. Smoke: 2,174 passed."
 
   - id: phase-108
     title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
