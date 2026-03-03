@@ -1,14 +1,15 @@
 """
-Intent Router Orchestrator - Routes operations based on intent type
+Intent Router Orchestrator — Routes operations based on intent type.
 
-AC-PROD-001-02: Intent Router - Create basic structure and routing logic
-Resolves ISSUE-001: Intent Router missing (Master Stage 2 routing broken)
+Phase 103-b: Decomposed from 2,895L → ≤500L via 4 extracted mixin modules:
+  - keyword_registry.py          — All IntentType keyword lists
+  - lens_analysis_mixin.py       — LENS confidence boosts
+  - registry_intelligence_mixin.py — Capability/governance registry logic
+  - routing_core_mixin.py        — Core routing pipeline
+  - smart_citations_mixin.py     — Rule citations + LENS auto-fetch
 
-The IntentRouter analyzes operation context and determines the appropriate
-execution path for different operation types:
-  - IMPLEMENT: New feature development
-  - FIX: Bug fixes and issue resolution
-  - REFACTOR: Code improvement and restructuring
+AC-PROD-001-02: Intent Router — basic structure and routing logic.
+Resolves ISSUE-001: Intent Router missing (Master Stage 2 routing broken).
 
 CORE Governance Rules Applied:
   - CORE-008: TDD (tests created first, RED → GREEN pattern)
@@ -18,39 +19,36 @@ CORE Governance Rules Applied:
   - CORE-027: Audit trail logging (AC_START → AC_EXECUTE → AC_COMPLETE)
 """
 
-import hashlib
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import yaml
-
-# Phase 51: Enhanced response template with semantic color coding
-# REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.intelligence.knowledge.unified_intelligence_context import (
-    UnifiedIntelligenceContext,
-)
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
-from cortex.orchestrators.core.routing_enforcement import (
-    RoutingEnforcementEngine,
-    RoutingViolation,
-)
-# REMOVED: ResponseEngineMixin import (unused - Phase 53 cleanup)
-
-# Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
-# Phase 8.2: Import orchestrator lookup and enforcement
 from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
+from cortex.orchestrators.core.routing_enforcement import RoutingEnforcementEngine
+from cortex.orchestrators.core.intent_router import (
+    WorkflowComplexityRouter,
+    Intent as ComplexityIntent,
+)
+from cortex.orchestrators.core.intent_classifier import IntentClassifier as _IntentClassifier
+from cortex.governance import GoldenHammerRules
+from cortex.intelligence.knowledge.unified_intelligence_context import (
+    UnifiedIntelligenceContext,
+)
 
-# WORKFLOW-COMPLEXITY-GATE-001: Complexity-based routing
-from cortex.orchestrators.core.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+# Phase 103-b mixins (extracted from this file)
+from cortex.orchestrators.core.intent_router.keyword_registry import IntentKeywordRegistry
+from cortex.orchestrators.core.intent_router.lens_analysis_mixin import LensAnalysisMixin
+from cortex.orchestrators.core.intent_router.registry_intelligence_mixin import RegistryIntelligenceMixin
+from cortex.orchestrators.core.intent_router.routing_core_mixin import RoutingCoreMixin
+from cortex.orchestrators.core.intent_router.smart_citations_mixin import SmartCitationsMixin
 
-# GAP-57-09: Wire StrategySelector into routing confidence calculation (Phase 57-f)
+# Optional dependencies (graceful degradation)
 try:
     from cortex.intelligence.reasoning.strategy_selector import StrategySelector as _StrategySelector
     _routing_strategy_selector = _StrategySelector()
@@ -61,57 +59,51 @@ except ImportError:
         "cortex.intelligence.reasoning.strategy_selector — feature degraded"
     )
     _routing_strategy_selector = None  # type: ignore[assignment]
-from cortex.governance import GoldenHammerRules
 
-# Registry Intelligence Integration
 try:
     from cortex.intelligence.learning.registry_intelligence_agent import (
         get_registry_intelligence_agent,
     )
 except ImportError:
-    get_registry_intelligence_agent = None
+    get_registry_intelligence_agent = None  # type: ignore[assignment]
 
-# Phase 70 GAP-70-A4: Three-tier intent classifier (regex + keyword + LLM)
-from cortex.orchestrators.core.intent_classifier import IntentClassifier as _IntentClassifier
 
+# ---------------------------------------------------------------------------
+# Data models — kept in this file (public API, referenced by callers)
+# ---------------------------------------------------------------------------
 
 @dataclass
 class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
-    """
-    Represents a routing decision made by the IntentRouter.
+    """Represents a routing decision made by the IntentRouter.
 
     Attributes:
-        intent_type: Detected operation intent (IMPLEMENT, FIX, REFACTOR)
-        target_handler: Name of target handler/orchestrator
-        confidence_score: Confidence of routing decision (0.0-1.0)
-        reasoning: Human-readable explanation of routing decision
-        metadata: Additional routing context metadata
-        timestamp: When routing decision was made
-        composite_intents: AC-FUTURE-005 - List of detected intents for composite requests
-        target_orchestrator: AC-PHASE-8.2-01 - Actual orchestrator instance (NEW)
-        fallback_orchestrators: AC-PHASE-8.2-01 - Ranked alternative orchestrators (NEW)
-        keyword_matches: AC-PHASE-8.2-01 - Keywords that matched routing config (NEW)
-        confidence_breakdown: AC-PHASE-8.2-01 - Detailed confidence scoring (NEW)
-        confidence: Alias for confidence_score (compatibility with IntentRoutingResult API)
-        primary_agent_id: Alias for target_handler (compatibility with IntentRoutingResult API)
+        intent_type: Detected operation intent (IMPLEMENT, FIX, REFACTOR, …)
+        target_handler: Name of target handler/orchestrator.
+        confidence_score: Confidence of routing decision (0.0–1.0).
+        reasoning: Human-readable explanation of routing decision.
+        metadata: Additional routing context metadata.
+        timestamp: When routing decision was made.
+        composite_intents: Detected secondary intents (AC-FUTURE-005).
+        target_orchestrator: Actual orchestrator instance (Phase 8.2).
+        fallback_orchestrators: Ranked alternative orchestrators (Phase 8.2).
+        keyword_matches: Keywords that matched routing config (Phase 8.2).
+        confidence_breakdown: Detailed confidence scoring (Phase 8.2).
     """
+
     intent_type: IntentType
     target_handler: str
     confidence_score: float
     reasoning: str
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    composite_intents: List[IntentType] = field(default_factory=list)  # AC-FUTURE-005
-    # Phase 8.2 additions:
-    target_orchestrator: Optional[IOrchestrator] = None  # AC-PHASE-8.2-01
-    fallback_orchestrators: List[IOrchestrator] = field(default_factory=list)  # AC-PHASE-8.2-01
-    keyword_matches: List[str] = field(default_factory=list)  # AC-PHASE-8.2-01
-    confidence_breakdown: Dict[str, float] = field(default_factory=dict)  # AC-PHASE-8.2-01
+    composite_intents: List[IntentType] = field(default_factory=list)
+    target_orchestrator: Optional[IOrchestrator] = None
+    fallback_orchestrators: List[IOrchestrator] = field(default_factory=list)
+    keyword_matches: List[str] = field(default_factory=list)
+    confidence_breakdown: Dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         """Initialise compatibility aliases after dataclass fields are set."""
-        # confidence / primary_agent_id are properties that delegate to the
-        # canonical fields — exposed via __getattr__ so they don't shadow fields.
         pass
 
     @property
@@ -127,18 +119,18 @@ class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing deci
 
 @dataclass
 class RoutingContext:
-    """
-    Represents the full context for a routing decision.
+    """Represents the full context for a routing decision.
 
     Attributes:
-        operation: Operation name/identifier
-        description: Human-readable operation description
-        domain: Target domain (core, orchestrators, infrastructure, etc.)
-        keywords: Keywords from operation description
-        urgency: Operation urgency level (low, medium, high, critical)
-        user_intent: User's stated intent or goal
-        metadata: Additional context metadata
+        operation: Operation name/identifier.
+        description: Human-readable operation description.
+        domain: Target domain (core, orchestrators, infrastructure, …).
+        keywords: Keywords from operation description.
+        urgency: Operation urgency level (low, medium, high, critical).
+        user_intent: User's stated intent or goal.
+        metadata: Additional context metadata.
     """
+
     operation: str
     description: Optional[str] = None
     domain: Optional[str] = None
@@ -149,507 +141,215 @@ class RoutingContext:
 
 
 class CompositeIntentDetector:
-    """
-    Detects composite intents when a request contains multiple operation types.
+    """Detects composite intents when a request spans multiple operation types.
 
-    AC-FUTURE-005: Composite intent detection for multi-faceted requests
+    AC-FUTURE-005: Composite intent detection for multi-faceted requests.
 
-        Examples of composite intents:
-        - "Implement feature AND test it" → IMPLEMENT + TEST (implicit)
-        - "Fix bug AND refactor the code" → FIX + REFACTOR
-        - "Implement with proper documentation" → IMPLEMENT + DOCUMENT
-        - "Refactor and optimize performance" → REFACTOR (with optimization emphasis)    Composite patterns detected:
-    1. AND patterns: "X and Y" or "X then Y"
-    2. WITH patterns: "Implement with tests" → Do both
-    3. SEQUENTIAL patterns: "Fix, then refactor" → Do both
-    4. IMPLICIT patterns: "Fix bug" + "need tests" → Add tests
+    Patterns detected:
+        1. AND patterns: "X and Y" or "X then Y"
+        2. WITH patterns: "Implement with tests"
+        3. SEQUENTIAL patterns: "Fix, then refactor"
+        4. IMPLICIT patterns: "Fix bug" + "need tests"
     """
 
-    # Composite connectors that indicate multiple intents
     AND_CONNECTORS = ["and", "with", "plus", "also", "then", ",", "&", "+"]
     THEN_CONNECTORS = ["then", "after that", "once", "before"]
     OR_CONNECTORS = ["or", "alternatively", "|"]
-
-    # Implicit intent triggers (when one action implies another)
     IMPLICIT_PATTERNS = {
-        "fix": ["test", "verify", "check"],  # Fix should be tested
-        "implement": ["test", "document", "type hints"],  # Implement should be tested
-        "refactor": ["test", "verify"],  # Refactor should be tested
+        "fix": ["test", "verify", "check"],
+        "implement": ["test", "document", "type hints"],
+        "refactor": ["test", "verify"],
     }
 
     @staticmethod
     def detect_composite_intents(
         request: str,
-        primary_intent: IntentType
+        primary_intent: IntentType,
     ) -> List[IntentType]:
-        """
-        Detect composite intents from request text.
-
-        AC-FUTURE-005: Multi-faceted request handling
+        """Detect composite intents from request text.
 
         Args:
-            request: User's natural language request
-            primary_intent: Primary intent already detected
+            request: User's natural language request.
+            primary_intent: Primary intent already detected.
 
         Returns:
-            List of intents (including primary_intent + any detected secondary intents)
+            List of intents including primary + any detected secondary intents.
         """
         intents = [primary_intent]
         request_lower = request.lower()
 
-        # Check for AND patterns
         for connector in CompositeIntentDetector.AND_CONNECTORS:
             if connector in request_lower:
-                # If we have "fix and implement" - both intents present
                 if "implement" in request_lower and "fix" in request_lower:
                     if IntentType.IMPLEMENT not in intents:
                         intents.append(IntentType.IMPLEMENT)
                     if IntentType.FIX not in intents:
                         intents.append(IntentType.FIX)
-
-                # If we have "refactor and fix"
                 if "refactor" in request_lower and "fix" in request_lower:
                     if IntentType.REFACTOR not in intents:
                         intents.append(IntentType.REFACTOR)
                     if IntentType.FIX not in intents:
                         intents.append(IntentType.FIX)
-
-                # If we have "implement with documentation/tests"
-                if "implement" in request_lower and ("document" in request_lower or "test" in request_lower):
+                if "implement" in request_lower and (
+                    "document" in request_lower or "test" in request_lower
+                ):
                     if IntentType.IMPLEMENT not in intents:
                         intents.append(IntentType.IMPLEMENT)
-                    if IntentType.DOCUMENT not in intents and "document" in request_lower:
+                    if (
+                        IntentType.DOCUMENT not in intents
+                        and "document" in request_lower
+                    ):
                         intents.append(IntentType.DOCUMENT)
 
-        # Check for THEN patterns (sequential)
         for connector in CompositeIntentDetector.THEN_CONNECTORS:
             if connector in request_lower:
-                # Split by connector
                 parts = request_lower.split(connector)
                 if len(parts) >= 2:
-                    # Analyze each part for intents
-                    all_intents_found = set(intents)
+                    found: set = set(intents)
                     for part in parts:
-                        if "implement" in part and IntentType.IMPLEMENT not in all_intents_found:
-                            all_intents_found.add(IntentType.IMPLEMENT)
-                        if "fix" in part and IntentType.FIX not in all_intents_found:
-                            all_intents_found.add(IntentType.FIX)
-                        if "refactor" in part and IntentType.REFACTOR not in all_intents_found:
-                            all_intents_found.add(IntentType.REFACTOR)
+                        if "implement" in part and IntentType.IMPLEMENT not in found:
+                            found.add(IntentType.IMPLEMENT)
+                        if "fix" in part and IntentType.FIX not in found:
+                            found.add(IntentType.FIX)
+                        if "refactor" in part and IntentType.REFACTOR not in found:
+                            found.add(IntentType.REFACTOR)
+                    intents = list(found)
 
-                    intents = list(all_intents_found)
-
-        # Check for implicit patterns
-        if primary_intent == IntentType.FIX:
-            # If fixing, should we also test?
-            if any(keyword in request_lower for keyword in CompositeIntentDetector.IMPLICIT_PATTERNS["fix"]):
-                # Test is implicit, but we don't have a TEST intent type
-                # This is noted in metadata for handler
-                pass
-
-        elif primary_intent == IntentType.IMPLEMENT:
-            # If implementing, should we also create documentation?
+        if primary_intent == IntentType.IMPLEMENT:
             if "document" in request_lower and IntentType.DOCUMENT not in intents:
                 intents.append(IntentType.DOCUMENT)
 
-        elif primary_intent == IntentType.REFACTOR:
-            # If refactoring, should we test?
-            if any(keyword in request_lower for keyword in CompositeIntentDetector.IMPLICIT_PATTERNS["refactor"]):
-                # Test is implicit
-                pass
-
-        return list(set(intents))  # Remove duplicates, maintain order
+        return list(set(intents))
 
 
-class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
-    """
-    Routes operations based on intent type and context.
+# ---------------------------------------------------------------------------
+# IntentRouter — slim coordination class (Phase 103-b, ≤500L)
+# ---------------------------------------------------------------------------
+
+class IntentRouter(
+    LensAnalysisMixin,
+    RegistryIntelligenceMixin,
+    RoutingCoreMixin,
+    SmartCitationsMixin,
+    OrchestratorProtocolMixin,
+    IOrchestrator,
+):
+    """Routes operations based on intent type and context.
 
     Implements Stage 2 (Routing) of the Master Orchestrator 4-stage workflow.
-    Analyzes operation context to determine appropriate execution path.
+    Analyses operation context to determine the appropriate execution path.
 
-    The IntentRouter:
-    1. Analyzes operation description and keywords
-    2. Detects intent type (IMPLEMENT, FIX, REFACTOR)
-    3. Routes to appropriate handler based on intent and domain
-    4. Caches decisions for identical contexts
-    5. Maintains audit trail of routing decisions
+    Responsibility clusters (Phase 103-b):
+        LensAnalysisMixin           → LENS confidence boosts
+        RegistryIntelligenceMixin   → Capability/governance discovery
+        RoutingCoreMixin            → Core detection/cache/rules pipeline
+        SmartCitationsMixin         → Rule citations + LENS auto-fetch
+        OrchestratorProtocolMixin   → AC markers, cross-cutting hooks
 
     CORE Governance:
-      - CORE-008: TDD - tests provided first
-      - CORE-011: Type hints on all methods
-      - CORE-012: Docstrings (Google style)
-      - CORE-013: Specific exception handling
-      - CORE-027: Audit trail logging
-
-    Example:
-        router = IntentRouter()
-        context = {
-            "operation": "fix_race_condition",
-            "description": "Fix race condition in Master Orchestrator",
-            "keywords": ["bug", "race condition", "fix"]
-        }
-        decision = router.route(context)
-        print(f"Route to: {decision.target_handler}")
+        CORE-008 · CORE-011 · CORE-012 · CORE-013 · CORE-027
     """
 
-    # Operation type detection keywords
-    IMPLEMENT_KEYWORDS: List[str] = [
-        # Core verbs
-        "create", "add", "new", "implement", "develop", "build", "construct",
-        "establish", "feature", "enhancement",
-        # Natural-language aliases (user-facing synonyms)
-        "rebuild", "rework", "stand up", "wire up", "scaffold",
-        "spin up", "generate", "produce", "assemble", "fabricate",
-        "make", "write", "port", "clone", "replicate",
-    ]
-
-    FIX_KEYWORDS: List[str] = [
-        # Core verbs
-        "fix", "bug", "issue", "error", "problem", "crash", "fail", "broken",
-        "resolve", "correct", "repair", "patch", "race condition",
-        # Natural-language aliases
-        "address", "remediate", "mitigate", "squash", "root out",
-        "restore", "recover", "unblock", "hotfix", "incident",
-    ]
-
-    REFACTOR_KEYWORDS: List[str] = [
-        # Core verbs
-        "refactor", "improve", "cleanup", "restructure", "simplify", "optimize",
-        "clean", "modernize", "reorganize", "rewrite", "redesign", "performance",
-        # Natural-language aliases (Fix = Refactor quality operations)
-        "tidy", "consolidate", "decouple", "extract", "rename",
-        "inline", "move", "split", "merge", "eliminate duplication",
-        "clean up code", "deduplicate", "untangle",
-    ]
-
-    DOCUMENT_KEYWORDS: List[str] = [
-        "file", "write", "output", "report", "generate", "save", "persist",
-        "export", "create file", "write file", "output file", "report file"
-    ]
-
-    # AC-LENS-LLM-005: ANALYZE intent keywords (intelligent LENS)
-    ANALYZE_KEYWORDS: List[str] = [
-        "analyze", "analyse", "investigate", "inspect", "examine", "scan",
-        "deep dive", "deep analysis", "use lens", "cortex lens", "find patterns",
-        "detect", "discover", "explore", "review", "audit", "check"
-    ]
-
-    # AC-ONBOARD-001: Repository onboarding keywords
-    ONBOARD_KEYWORDS: List[str] = [
-        "onboard", "onboarding", "setup", "initialize", "bootstrap", "configure",
-        "register", "integrate", "import project", "analyze repository", "scan repo",
-        "discover", "inventory"
-    ]
-
-    # PHASE-25: PLAN mode keywords (CORTEX development planning)
-    PLAN_KEYWORDS: List[str] = [
-        "plan", "phase", "enhance cortex", "add to cortex", "modify cortex",
-        "implement orchestrator", "create orchestrator", "add mcp tool",
-        "update wiring", "cortex change", "cortex enhancement", "add mode",
-        "deprecate", "remove orchestrator", "delete feature"
-    ]
-
-    # VACUUM mode keywords - Efficient cleanup of CORTEX repo
-    VACUUM_KEYWORDS: List[str] = [
-        "vacuum", "cleanup", "clean up", "clean", "prune", "remove junk",
-        "efficient cleanup", "cortex vacuum", "vacuum repo", "remove artifacts",
-        "delete cache", "clear logs", "compact", "defragment", "garbage collection",
-        "purge", "archive", "organize", "tidyup", "remove old", "remove legacy",
-        "remove broken", "remove unused", "remove temp", "remove temporary",
-        # Natural-language aliases
-        "housekeeping", "declutter", "sweep", "spring clean", "tidy workspace",
-    ]
-
-    # GAP-005: Missing CORTEX execution modes — phase-11 remediation
-    AUDIT_KEYWORDS: List[str] = [
-        "audit", "scan repo", "production readiness", "health check", "check repo",
-        "/audit", "scan for issues", "repo health", "10-point"
-    ]
-
-    DESIGN_KEYWORDS: List[str] = [
-        "design", "architect", "architecture", "structure", "pattern", "blueprint",
-        "design the", "architect the", "system design", "design pattern"
-    ]
-
-    DIGEST_KEYWORDS: List[str] = [
-        "digest", "summarize", "summary", "what happened", "recap", "recap of",
-        "give me a summary", "synthesize", "tldr", "tl;dr"
-    ]
-
-    REPHRASE_KEYWORDS: List[str] = [
-        "rephrase", "reword", "token optimize", "optimize this prompt", "rewrite request",
-        "make this concise", "compact this"
-    ]
-
-    INVESTIGATE_KEYWORDS: List[str] = [
-        "investigate", "why is", "what causes", "deep analysis",
-        "investigate the", "find the cause"
-    ]
-
-    # GAP-90-01: DEBUG mode keywords — multi-stack debug pipeline (Phase 86 + 89)
-    DEBUG_KEYWORDS: List[str] = [
-        "debug", "debugger", "/debug", "/debug-inject", "/debug-cleanup",
-        "diagnose", "breakpoint", "stack trace", "marker injection",
-        "trace the", "debug why", "debug this", "injection strategy",
-        "cortex debug", "debug mode", "step through"
-    ]
-
-    # GAP-90-02: HEALTH mode keywords — orchestrator health checks (22 endpoints)
-    HEALTH_KEYWORDS: List[str] = [
-        "health", "health check", "healthcheck", "/health", "/healthcheck",
-        "orchestrator status", "orchestrator health", "component health",
-        "uptime", "latency", "service health", "endpoint health",
-        "all orchestrators", "22 orchestrators", "health endpoint"
-    ]
-
-    # GAP-90-03: SYNC mode keywords — privacy-safe cross-repo sync
-    SYNC_KEYWORDS: List[str] = [
-        "sync", "/sync", "sync to company", "sync to work", "cross-repo sync",
-        "privacy-safe", "privacy safe", "push to work repo", "folder sync",
-        "sanitize sync", "cortex sync", "sync target", "one-way sync"
-    ]
-
-    # GAP-90-04: TRAIN mode keywords — TrainerOrchestrator / template evolution
-    TRAIN_KEYWORDS: List[str] = [
-        "train", "/train", "learn from", "learn from repo", "evolve templates",
-        "gap-driven training", "template evolution", "pattern training",
-        "cortex train", "train from codebase", "reinforcement training"
-    ]
-
-    # GAP-90-05: TOTALRECALL mode keywords — 7-phase holistic refactor protocol
-    TOTALRECALL_KEYWORDS: List[str] = [
-        "totalrecall", "total recall", "/totalrecall", "holistic refactor",
-        "production readiness refactor", "everything is broken", "7-phase protocol",
-        "cortex total recall", "holistic production", "full recall"
-    ]
-
-    # GAP-90-06: RCA mode keywords — Root Cause Analysis (Phase 87, 4 methodologies)
-    RCA_KEYWORDS: List[str] = [
-        "rca", "/rca", "root cause analysis", "root cause", "five whys", "5 whys",
-        "fishbone", "ishikawa", "fault tree", "causal chain", "causal-chain",
-        "why did it fail", "recurrence detection", "prevention rule",
-        "rca analysis", "cortex rca", "what caused"
-    ]
-
-    # Legacy IntentType keywords — TEST, DEPLOY, GOVERNANCE, QUERY, VALIDATE, MIGRATE
-    # These were present in the enum but lacked operation_type_mappings entries (GAP-90-completeness).
-    TEST_KEYWORDS: List[str] = [
-        "test", "/test", "run tests", "tdd", "unit test", "integration test",
-        "pytest", "test suite", "test coverage", "write tests", "golden test",
-        "preflight", "smoke test", "test-driven",
-    ]
-    DEPLOY_KEYWORDS: List[str] = [
-        "deploy", "deployment", "release", "ship", "publish", "rollout",
-        "kubernetes", "helm", "docker", "canary", "production deploy",
-        "deploy to prod", "cd pipeline",
-    ]
-    GOVERNANCE_KEYWORDS: List[str] = [
-        "governance", "enforce governance", "core rule", "core-rule", "compliance",
-        "enforcement", "pre-commit", "governance violation", "cortex governance",
-        "governance check", "rule enforcement",
-    ]
-    QUERY_KEYWORDS: List[str] = [
-        "query", "ask", "what is", "how does", "explain", "describe",
-        "tell me", "show me", "lookup", "find", "search",
-    ]
-    VALIDATE_KEYWORDS: List[str] = [
-        "validate", "validation", "verify", "check", "lint", "assert",
-        "confirm", "ensure", "certify", "schema validation",
-    ]
-    MIGRATE_KEYWORDS: List[str] = [
-        "migrate", "migration", "port", "move", "convert", "transition",
-        "upgrade migration", "schema migration", "data migration", "alembic",
-    ]
-
-    # GAP-89-COMPOSE: Workflow Composer keywords — compose, execute, and manage
-    # dedicated workflow templates using convergence/condition loops and the full
-    # CORTEX toolchain (AST, LENS, Roslyn, ruff, tree-sitter, etc.)
-    WORKFLOW_COMPOSE_KEYWORDS: List[str] = [
-        "workflow composer", "workflow compose", "compose workflow",
-        "compose template", "compose a workflow", "compose a template",
-        "workflow template", "workflow templates", "create workflow",
-        "build workflow", "generate workflow", "dynamic workflow",
-        "convergence loop", "convergence gate", "condition loop",
-        "template composition", "template composer", "on the fly workflow",
-        "on-the-fly workflow", "dedicated template", "dedicated workflow",
-        "workflow pipeline", "compose pipeline", "toolchain workflow",
-        "ast workflow", "lens workflow", "roslyn workflow",
-        "workflow engine", "workflow execution", "execute workflow",
-        "run workflow template", "use workflow composer",
-    ]
-
-    # GAP-64: Golden test lifecycle keywords — review, create, enhance, consolidate,
-    # delete golden tests and VSCode Copilot Chat response templates.
-    # This includes E2E trace-verified scenarios, harness upgrades, acceptance
-    # criteria authoring, and response template rendering validation.
-    # NOTE: "workflow template" moved to WORKFLOW_COMPOSE_KEYWORDS for correct routing.
-    GOLDEN_TEST_KEYWORDS: List[str] = [
-        "golden test", "golden tests",
-        "response template", "response templates", "acceptance criteria",
-        "e2e scenario", "e2e scenarios", "trace assertion", "trace assertions",
-        "test harness", "holistic integration", "trace verified", "ac marker",
-        "ac_start", "ac_complete", "golden harness", "golden scenario",
-        "create golden", "review golden", "enhance golden", "consolidate golden",
-        "delete golden", "copilot chat response", "vscode response", "chat session feedback",
-        "user response template", "inline feedback template"
-    ]
-
-    # INTRODUCE keywords — interactive onboarding + role-based introduction
-    INTRODUCE_KEYWORDS: List[str] = [
-        "introduce yourself", "introduce", "who are you", "what are you",
-        "what is cortex", "what's cortex", "hello", "hi", "hey",
-        "get started", "getting started", "help me", "how can you help",
-        "what can you do", "capabilities", "how do i use",
-        "tell me about yourself", "about cortex", "meet cortex",
-        "new here", "first time", "onboard me", "walk me through",
-        "show me around", "tour", "welcome",
-    ]
+    # Backward-compatible class-level keyword lists (delegated to registry)
+    IMPLEMENT_KEYWORDS = IntentKeywordRegistry.IMPLEMENT_KEYWORDS
+    FIX_KEYWORDS = IntentKeywordRegistry.FIX_KEYWORDS
+    REFACTOR_KEYWORDS = IntentKeywordRegistry.REFACTOR_KEYWORDS
+    DOCUMENT_KEYWORDS = IntentKeywordRegistry.DOCUMENT_KEYWORDS
+    ANALYZE_KEYWORDS = IntentKeywordRegistry.ANALYZE_KEYWORDS
+    ONBOARD_KEYWORDS = IntentKeywordRegistry.ONBOARD_KEYWORDS
+    PLAN_KEYWORDS = IntentKeywordRegistry.PLAN_KEYWORDS
+    VACUUM_KEYWORDS = IntentKeywordRegistry.VACUUM_KEYWORDS
+    AUDIT_KEYWORDS = IntentKeywordRegistry.AUDIT_KEYWORDS
+    DESIGN_KEYWORDS = IntentKeywordRegistry.DESIGN_KEYWORDS
+    DIGEST_KEYWORDS = IntentKeywordRegistry.DIGEST_KEYWORDS
+    REPHRASE_KEYWORDS = IntentKeywordRegistry.REPHRASE_KEYWORDS
+    INVESTIGATE_KEYWORDS = IntentKeywordRegistry.INVESTIGATE_KEYWORDS
+    DEBUG_KEYWORDS = IntentKeywordRegistry.DEBUG_KEYWORDS
+    HEALTH_KEYWORDS = IntentKeywordRegistry.HEALTH_KEYWORDS
+    SYNC_KEYWORDS = IntentKeywordRegistry.SYNC_KEYWORDS
+    TRAIN_KEYWORDS = IntentKeywordRegistry.TRAIN_KEYWORDS
+    TOTALRECALL_KEYWORDS = IntentKeywordRegistry.TOTALRECALL_KEYWORDS
+    RCA_KEYWORDS = IntentKeywordRegistry.RCA_KEYWORDS
+    TEST_KEYWORDS = IntentKeywordRegistry.TEST_KEYWORDS
+    DEPLOY_KEYWORDS = IntentKeywordRegistry.DEPLOY_KEYWORDS
+    GOVERNANCE_KEYWORDS = IntentKeywordRegistry.GOVERNANCE_KEYWORDS
+    QUERY_KEYWORDS = IntentKeywordRegistry.QUERY_KEYWORDS
+    VALIDATE_KEYWORDS = IntentKeywordRegistry.VALIDATE_KEYWORDS
+    MIGRATE_KEYWORDS = IntentKeywordRegistry.MIGRATE_KEYWORDS
+    WORKFLOW_COMPOSE_KEYWORDS = IntentKeywordRegistry.WORKFLOW_COMPOSE_KEYWORDS
+    GOLDEN_TEST_KEYWORDS = IntentKeywordRegistry.GOLDEN_TEST_KEYWORDS
+    INTRODUCE_KEYWORDS = IntentKeywordRegistry.INTRODUCE_KEYWORDS
 
     def __init__(self) -> None:
-        """
-        Initialize IntentRouter orchestrator.
+        """Initialise IntentRouter orchestrator.
 
-        AC-FUTURE-001: Load routing rules from YAML (CONFIG-DRIVEN)
-        AC-PHASE-8.2-01: Initialize orchestrator lookup and enforcement
-
-        Sets up:
-        - Operation type keyword mappings
-        - Routing rules (loaded from YAML or fallback to hardcoded)
-        - Audit logger
-        - Decision cache (LRU with 128 entries)
-        - Complexity classifier for request analysis
-        - Orchestrator lookup (Phase 8.2)
-        - Routing enforcement engine (Phase 8.2)
-
-        Raises:
-            Exception: If audit logger cannot be initialized
+        Sets up operation type keyword mappings (via IntentKeywordRegistry),
+        routing rules from YAML, decision cache, orchestrator lookup,
+        enforcement engine, complexity router, and capability/governance registries.
         """
         self.logger: EnhancedAuditLogger = EnhancedAuditLogger.instance()
 
-        # Operation type detection mappings
-        self.operation_type_mappings: Dict[IntentType, List[str]] = {
-            IntentType.IMPLEMENT: self.IMPLEMENT_KEYWORDS,
-            IntentType.FIX: self.FIX_KEYWORDS,
-            IntentType.REFACTOR: self.REFACTOR_KEYWORDS,
-            IntentType.DOCUMENT: self.DOCUMENT_KEYWORDS,
-            IntentType.ANALYZE: self.ANALYZE_KEYWORDS,  # AC-LENS-LLM-005
-            IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
-            IntentType.PLAN: self.PLAN_KEYWORDS,  # PHASE-25: CORTEX planning
-            # GAP-005: All 10 CORTEX execution modes
-            IntentType.AUDIT: self.AUDIT_KEYWORDS,
-            IntentType.DESIGN: self.DESIGN_KEYWORDS,
-            IntentType.DIGEST: self.DIGEST_KEYWORDS,
-            IntentType.REPHRASE: self.REPHRASE_KEYWORDS,
-            IntentType.INVESTIGATE: self.INVESTIGATE_KEYWORDS,
-            # GAP-64: Golden test lifecycle intent
-            IntentType.GOLDEN_TEST: self.GOLDEN_TEST_KEYWORDS,
-            # GAP-89-COMPOSE: Workflow Composer — convergence loops + full toolchain
-            IntentType.WORKFLOW_COMPOSE: self.WORKFLOW_COMPOSE_KEYWORDS,
-            # GAP-90-01..07: Phase 89 IntentTypes — now wired into standard pipeline
-            IntentType.DEBUG: self.DEBUG_KEYWORDS,
-            IntentType.HEALTH: self.HEALTH_KEYWORDS,
-            IntentType.SYNC: self.SYNC_KEYWORDS,
-            IntentType.TRAIN: self.TRAIN_KEYWORDS,
-            IntentType.TOTALRECALL: self.TOTALRECALL_KEYWORDS,
-            IntentType.RCA: self.RCA_KEYWORDS,
-            # GAP-90-07: VACUUM now in standard pipeline (was separate _is_vacuum_operation shortcut)
-            IntentType.VACUUM: self.VACUUM_KEYWORDS,
-            # GAP-90-completeness: legacy IntentTypes that were in enum but missing from mappings
-            IntentType.TEST: self.TEST_KEYWORDS,
-            IntentType.DEPLOY: self.DEPLOY_KEYWORDS,
-            IntentType.GOVERNANCE: self.GOVERNANCE_KEYWORDS,
-            IntentType.QUERY: self.QUERY_KEYWORDS,
-            IntentType.VALIDATE: self.VALIDATE_KEYWORDS,
-            IntentType.MIGRATE: self.MIGRATE_KEYWORDS,
-            # INTRODUCE: Interactive onboarding + role-based introduction
-            IntentType.INTRODUCE: self.INTRODUCE_KEYWORDS,
-        }
-
-        # GAP-90-07: vacuum_keywords kept for backward-compat references but VACUUM
-        # is now classified through the standard 3-tier classifier pipeline.
-        # _is_vacuum_operation() is retained but NO LONGER short-circuits detect_intent()
-        # to return REFACTOR — it is only used for legacy callers outside detect_intent().
+        # Operation type detection mappings (delegated to keyword registry)
+        self.operation_type_mappings: Dict[IntentType, List[str]] = (
+            IntentKeywordRegistry.build_operation_type_mappings()
+        )
+        # Backward-compat alias kept for legacy callers
         self.vacuum_keywords = self.VACUUM_KEYWORDS
 
-        # AC-FUTURE-001: Try loading routing rules from YAML
+        # Routing config + rules (via RoutingCoreMixin methods)
         self.routing_rules_config: Dict[str, Any] = self._load_routing_config()
+        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = (
+            self._build_routing_rules()
+        )
 
-        # Build routing rules dict from config (fallback if YAML loading fails)
-        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = self._build_routing_rules()
-
-        # Decision cache (populated by _route_internal, accessed via route)
+        # Decision cache
         self.cached_decisions: Dict[str, RoutingDecision] = {}
 
-        # AC-FUTURE-008: Complexity classifier configuration
-        self.complexity_thresholds = self.routing_rules_config.get("complexity_thresholds", {
-            "low": 0,
-            "medium": 2,
-            "high": 5,
-            "critical": 8
-        })
-
-        # AC-FUTURE-009: Fuzzy matching configuration
-        self.fuzzy_config = self.routing_rules_config.get("fuzzy_matching", {
-            "enabled": False,
-            "algorithm": "levenshtein",
-            "threshold": 0.75
-        })
-
-        # Cache for fuzzy matching results
+        # Complexity thresholds + fuzzy config
+        self.complexity_thresholds = self.routing_rules_config.get(
+            "complexity_thresholds",
+            {"low": 0, "medium": 2, "high": 5, "critical": 8},
+        )
+        self.fuzzy_config = self.routing_rules_config.get(
+            "fuzzy_matching",
+            {"enabled": False, "algorithm": "levenshtein", "threshold": 0.75},
+        )
         self.fuzzy_cache: Dict[str, List[str]] = {}
 
-        # AC-PHASE-8.2-01: Initialize orchestrator lookup (singleton)
+        # Orchestrator lookup + registry intelligence
         self.orchestrator_lookup: OrchestratorLookup = OrchestratorLookup()
+        self.registry_agent = (
+            get_registry_intelligence_agent()
+            if get_registry_intelligence_agent
+            else None
+        )
 
-        # Registry Intelligence: Initialize gap detection
-        self.registry_agent = get_registry_intelligence_agent() if get_registry_intelligence_agent else None
-
-
-
-        # Build routing rules dict from config (fallback if YAML loading fails)
-        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = self._build_routing_rules()
-
-        # Decision cache (populated by _route_internal, accessed via route)
-        self.cached_decisions: Dict[str, RoutingDecision] = {}
-
-        # AC-FUTURE-008: Complexity classifier configuration
-        self.complexity_thresholds = self.routing_rules_config.get("complexity_thresholds", {
-            "low": 0,
-            "medium": 2,
-            "high": 5,
-            "critical": 8
-        })
-
-        # AC-FUTURE-009: Fuzzy matching configuration
-        self.fuzzy_config = self.routing_rules_config.get("fuzzy_matching", {
-            "enabled": False,
-            "algorithm": "levenshtein",
-            "threshold": 0.75
-        })
-
-        # Cache for fuzzy matching results
-        self.fuzzy_cache: Dict[str, List[str]] = {}
-
-        # AC-PHASE-8.2-01: Initialize orchestrator lookup (singleton)
-        self.orchestrator_lookup: OrchestratorLookup = OrchestratorLookup()
-
-        # Registry Intelligence: Initialize gap detection
-        self.registry_agent = get_registry_intelligence_agent() if get_registry_intelligence_agent else None
-
-        # Phase 70 GAP-70-A4: Three-tier intent classifier (regex + keyword + LLM)
-        # LLM tier is enabled in production but skipped when API key is absent (CORE-049)
+        # Three-tier intent classifier (Phase 70 GAP-70-A4)
         self.intent_classifier: _IntentClassifier = _IntentClassifier(enable_llm=True)
 
-        # AC-PHASE-8.2-01: Initialize routing enforcement engine
+        # Routing enforcement engine
         enforcement_config = self.routing_rules_config.get("enforcement", {})
         self.enforcement_engine: RoutingEnforcementEngine = RoutingEnforcementEngine(
             confidence_threshold=enforcement_config.get("confidence_threshold", 0.6),
             disambiguation_threshold=enforcement_config.get("disambiguation_threshold", 0.7),
-            blocking_enabled=enforcement_config.get("blocking_enabled", True)
+            blocking_enabled=enforcement_config.get("blocking_enabled", True),
         )
 
-        # Log initialization
+        # Complexity router + governance rules
+        self.complexity_router = WorkflowComplexityRouter()
+        self.golden_hammer_rules = GoldenHammerRules()
+
+        # Capability registry + governance registry (RegistryIntelligenceMixin)
+        self.capability_registry = self._init_capability_registry()
+        self._governance_registry: Optional[Any] = self._init_governance_registry()
+
+        # Response engine stub (Wave H-S4)
+        self._init_response_engine(
+            intent_type=IntentType.QUERY,
+            orchestrator_name="IntentRouter",
+            enable=False,
+        )
+
         self.logger.log_operation_complete(
             ac_id="AC-PROD-001-02",
             operation="INTENT_ROUTER_INIT",
@@ -660,2040 +360,176 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 "cache_enabled": True,
                 "fuzzy_matching_enabled": self.fuzzy_config.get("enabled", False),
                 "yaml_config_loaded": "routing_rules" in self.routing_rules_config,
-                "orchestrator_lookup_enabled": True,  # AC-PHASE-8.2-01
-                "enforcement_enabled": enforcement_config.get("blocking_enabled", True)  # AC-PHASE-8.2-01
-            }
+                "orchestrator_lookup_enabled": True,
+                "enforcement_enabled": enforcement_config.get("blocking_enabled", True),
+            },
         )
 
-        # AC-ENH082-W2-S4-004: Initialize ResponseEngine (disabled by default for safety)
-        self._init_response_engine(
-            intent_type=IntentType.QUERY,  # Intent routing is query-like analysis
-            orchestrator_name="IntentRouter",
-            enable=False  # TODO: Enable after Wave H-S4 validation
-        )
-
-        # WORKFLOW-COMPLEXITY-GATE-001: Initialize complexity router
-        self.complexity_router = WorkflowComplexityRouter()
-        self.golden_hammer_rules = GoldenHammerRules()
-
-        # Phase 72-c: Capability registry from generated manifest (GAP-72-04)
-        self.capability_registry = self._init_capability_registry()
-
-        # Phase 71-B ES-003: GovernanceRegistry cross-wiring
-        self._governance_registry: Optional[Any] = self._init_governance_registry()
-
-    def _init_governance_registry(self) -> Optional[Any]:
-        """Initialise GovernanceRegistry reference for complexity inflation (Phase 71-B ES-003).
-
-        Returns:
-            GovernanceRegistry instance or None (graceful degradation).
-        """
-        try:
-            from cortex.governance.governance_auditor import GovernanceAuditor  # noqa: PLC0415
-            return GovernanceAuditor()
-        except Exception:
-            return None
-
-    def _get_governance_violations(self) -> List[Dict[str, Any]]:
-        """Return active governance violations from the GovernanceRegistry.
-
-        Phase 71-B ES-003: violations are used to inflate complexity scores so
-        that the router promotes flagged work to higher-priority orchestrators.
-
-        Returns:
-            List of violation dicts with at least ``severity`` and ``rule`` keys.
-            Empty list when no registry is available.
-        """
-        if self._governance_registry is None:
-            return []
-        try:
-            return list(self._governance_registry.get_active_violations())
-        except Exception:
-            return []
-
-    def compute_complexity(self, request: Dict[str, Any]) -> float:
-        """Compute a complexity score for *request*, inflated by active P0 violations.
-
-        Phase 71-B ES-003: active P0 governance violations raise the base score
-        so that the router can prefer heavyweight orchestrators for flagged work.
-
-        Args:
-            request: Request dict (must contain at least ``intent`` key).
-
-        Returns:
-            Float complexity score.  Higher values indicate more complex requests.
-        """
-        # Base heuristic: intent length + payload token count
-        intent_str = str(request.get("intent", ""))
-        base_score: float = min(len(intent_str) / 10.0, 5.0)
-
-        # Inflate by active violations (P0 → +3, P1 → +1 per violation)
-        violations = self._get_governance_violations()
-        for violation in violations:
-            severity = str(violation.get("severity", "")).upper()
-            if severity == "P0":
-                base_score += 3.0
-            elif severity == "P1":
-                base_score += 1.0
-
-        return base_score
-
-    def _init_capability_registry(self) -> Optional[Any]:
-        """
-        Initialize CapabilityMatcher from generated capabilities-manifest.yaml.
-
-        Graceful degradation: returns None if manifest is absent or imports fail.
-        This allows IntentRouter to function without the manifest (backward-compatible).
-
-        Returns:
-            CapabilityMatcher instance or None.
-        """
-        try:
-            from cortex.intelligence.intelligence_capability_matcher import CapabilityMatcher
-            manifest_path = (
-                Path(__file__).parent.parent.parent.parent
-                / "cortex-registry" / "core" / "capabilities-manifest.yaml"
-            )
-            if manifest_path.exists():
-                return CapabilityMatcher.load_from_manifest(manifest_path)
-        except Exception:
-            pass
-        return None
-
-    def _load_routing_config(self) -> Dict[str, Any]:
-        """
-        Load routing configuration from YAML file.
-
-        AC-FUTURE-001: YAML-based rule loading
-
-        Returns:
-            Dict[str, Any]: Configuration dict, or empty if YAML not found
-        """
-        config_path = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "knowledge" / "intent-routing.yaml"
-
-        try:
-            if config_path.exists():
-                with open(config_path) as f:
-                    raw_config = yaml.safe_load(f)
-                    config: Dict[str, Any] = raw_config if isinstance(raw_config, dict) else {}
-                self.logger.log_operation_complete(
-                    ac_id="AC-FUTURE-001",
-                    operation="YAML_ROUTING_CONFIG_LOADED",
-                    success=True,
-                    details={"path": str(config_path)}
-                )
-                return config
-        except (FileNotFoundError, yaml.YAMLError) as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-FUTURE-001",
-                operation="YAML_ROUTING_CONFIG_LOAD_FAILED",
-                success=False,
-                details={"error": str(e), "using_fallback": True}
-            )
-
-        return {}
-
-    def _build_routing_rules(self) -> Dict[Tuple[Optional[IntentType], Optional[str]], str]:
-        """
-        Build routing rules from config or fallback to hardcoded.
-
-        AC-FUTURE-001: Support both YAML-driven and fallback routing
-
-        Returns:
-            Dict[Tuple[Optional[IntentType], Optional[str]], str]: Routing rules
-        """
-        rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = {}
-
-        # Try YAML config first
-        if "routing_rules" in self.routing_rules_config:
-            yaml_rules = self.routing_rules_config.get("routing_rules", {})
-            if isinstance(yaml_rules, dict):
-                for intent_str, domain_rules in yaml_rules.items():
-                    try:
-                        intent = IntentType(intent_str)
-                        if isinstance(domain_rules, dict):
-                            for domain, rule_config in domain_rules.items():
-                                handler_str: str = ""
-                                if isinstance(rule_config, dict):
-                                    handler_str = str(rule_config.get("handler", ""))
-                                else:
-                                    handler_str = str(rule_config)
-
-                                if handler_str:
-                                    domain_key = None if domain == "default" else domain
-                                    rules[(intent, domain_key)] = handler_str
-                    except (ValueError, KeyError) as e:
-                        self.logger.log_operation_complete(
-                            ac_id="AC-FUTURE-001",
-                            operation="YAML_RULE_PARSE_ERROR",
-                            success=False,
-                            details={"error": str(e), "intent": intent_str}
-                        )
-
-            # If YAML rules loaded, return them
-            if rules:
-                return rules
-
-        # Fallback to hardcoded rules (backward compatibility)
-        # GAP-89-20: Complete routing rules for all 27 IntentType values (Phase 89-c)
-        return {
-            # IMPLEMENT routing
-            (IntentType.IMPLEMENT, "orchestrators"): "ImplementationOrchestrator",
-            (IntentType.IMPLEMENT, "core"): "CoreImplementationHandler",
-            (IntentType.IMPLEMENT, "infrastructure"): "InfrastructureImplementationHandler",
-            (IntentType.IMPLEMENT, None): "GeneralImplementationHandler",
-
-            # FIX routing
-            (IntentType.FIX, "orchestrators"): "OrchestratorFixOrchestrator",
-            (IntentType.FIX, "core"): "CoreFixOrchestrator",
-            (IntentType.FIX, "infrastructure"): "InfrastructureFixOrchestrator",
-            (IntentType.FIX, None): "GeneralFixOrchestrator",
-
-            # REFACTOR routing
-            (IntentType.REFACTOR, "orchestrators"): "RefactoringOrchestrator",
-            (IntentType.REFACTOR, "core"): "CoreRefactoringHandler",
-            (IntentType.REFACTOR, "infrastructure"): "InfrastructureRefactoringHandler",
-            (IntentType.REFACTOR, None): "GeneralRefactoringHandler",
-
-            # DOCUMENT routing (CORE-028/CORE-038 validation)
-            (IntentType.DOCUMENT, "documentation"): "DocumentationOrchestrator",
-            (IntentType.DOCUMENT, "governance"): "DocumentationOrchestrator",
-            (IntentType.DOCUMENT, "reports"): "DocumentationOrchestrator",
-            (IntentType.DOCUMENT, None): "DocumentationOrchestrator",
-
-            # PLAN routing (PHASE-25: CORTEX planning + registry management)
-            (IntentType.PLAN, "registry"): "PlanOrchestrator",
-            (IntentType.PLAN, "orchestrators"): "PlanOrchestrator",
-            (IntentType.PLAN, "cortex"): "PlanOrchestrator",
-            (IntentType.PLAN, None): "PlanOrchestrator",
-
-            # ===== GAP-89-20: Missing intent routing rules (21 intents) =====
-
-            # ANALYZE routing (AC-LENS-LLM-005: intelligent LENS)
-            (IntentType.ANALYZE, None): "IntelligenceOrchestrator",
-
-            # TEST routing (TDD orchestration)
-            (IntentType.TEST, None): "TDDOrchestrator",
-
-            # DEPLOY routing (deployment pipeline)
-            (IntentType.DEPLOY, None): "DeploymentOrchestrator",
-
-            # GOVERNANCE routing (enforcement + compliance)
-            (IntentType.GOVERNANCE, None): "EnforcementOrchestrator",
-
-            # QUERY routing (knowledge base queries)
-            (IntentType.QUERY, None): "KnowledgeOrchestrator",
-
-            # VALIDATE routing (compliance validation)
-            (IntentType.VALIDATE, None): "ValidationOrchestrator",
-
-            # MIGRATE routing (code migration + upgrades)
-            (IntentType.MIGRATE, None): "MigrationOrchestrator",
-
-            # ONBOARD routing (AC-ONBOARD-001: repository onboarding)
-            (IntentType.ONBOARD, None): "OnboardOrchestrator",
-
-            # AUDIT routing (GAP-005: production readiness scan)
-            (IntentType.AUDIT, None): "AuditOrchestrator",
-
-            # DESIGN routing (challenge-first architecture)
-            (IntentType.DESIGN, None): "ChallengeOrchestrator",
-
-            # DIGEST routing (knowledge synthesis)
-            (IntentType.DIGEST, None): "DigestOrchestrator",
-
-            # REPHRASE routing (token optimization)
-            (IntentType.REPHRASE, None): "RephraseOrchestrator",
-
-            # INVESTIGATE routing (deep analysis + evidence)
-            (IntentType.INVESTIGATE, None): "InvestigationOrchestrator",
-
-            # GOLDEN_TEST routing (GAP-64: golden test lifecycle)
-            (IntentType.GOLDEN_TEST, None): "GoldenTestOrchestrator",
-
-            # VACUUM routing (markdown sprawl cleanup)
-            (IntentType.VACUUM, None): "VacuumOrchestrator",
-
-            # DEBUG routing (Phase 86: multi-stack debug pipeline)
-            (IntentType.DEBUG, None): "DebuggerOrchestrator",
-
-            # HEALTH routing (orchestrator health checks)
-            (IntentType.HEALTH, None): "HealthOrchestrator",
-
-            # SYNC routing (privacy-safe folder sync)
-            (IntentType.SYNC, None): "SyncOrchestrator",
-
-            # TRAIN routing (learning/reinforcement operations)
-            (IntentType.TRAIN, None): "LearningOrchestrator",
-
-            # TOTALRECALL routing (Phase 89: holistic refactor protocol)
-            (IntentType.TOTALRECALL, None): "TotalRecallOrchestrator",
-
-            # RCA routing (Phase 87: root cause analysis)
-            (IntentType.RCA, None): "LearningOrchestrator",
-
-            # WORKFLOW_COMPOSE routing (GAP-89-COMPOSE: convergence loops + full toolchain)
-            (IntentType.WORKFLOW_COMPOSE, None): "WorkflowComposer",
-
-            # INTRODUCE routing (interactive onboarding via InteractionOrchestrator)
-            (IntentType.INTRODUCE, None): "InteractionOrchestrator",
-        }
-
-    # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====
-
-    def _extract_keywords(self, context: Dict[str, Any]) -> List[str]:
-        """
-        Extract routing keywords from user request context.
-
-        AC-PHASE-8.2-01: Parse description and operation fields to identify
-        trigger keywords that map to orchestrators in routing config.
-
-        Args:
-            context: User request context with operation/description
-
-        Returns:
-            List[str]: Extracted keywords (lowercase, unique)
-
-        Example:
-            >>> context = {"description": "Use CORTEX LENS to onboard repo XYZ"}
-            >>> keywords = self._extract_keywords(context)
-            >>> print(keywords)
-            ['lens', 'onboard', 'repo']
-        """
-        keywords: List[str] = []
-
-        try:
-            # Extract from description
-            description = context.get("description", "")
-            if description:
-                # Tokenize (split by whitespace and common delimiters)
-                tokens = description.lower().replace(":", " ").replace(",", " ").split()
-                keywords.extend(tokens)
-
-            # Extract from operation field
-            operation = context.get("operation", "")
-            if operation:
-                tokens = operation.lower().replace("_", " ").split()
-                keywords.extend(tokens)
-
-            # Extract from user_intent field
-            user_intent = context.get("user_intent", "")
-            if user_intent:
-                tokens = user_intent.lower().split()
-                keywords.extend(tokens)
-
-            # Remove duplicates and filter out common stop words
-            stop_words = {"the", "a", "an", "is", "are", "to", "of", "for", "with", "in", "on"}
-            unique_keywords = list(set(kw for kw in keywords if kw not in stop_words and len(kw) > 2))
-
-            # AC-PHASE-8.2-01: Merge caller-supplied explicit keywords (highest priority)
-            explicit_keywords: list = context.get("keywords", [])
-            if isinstance(explicit_keywords, list):
-                for kw in explicit_keywords:
-                    if isinstance(kw, str) and kw.lower() not in [k.lower() for k in unique_keywords]:
-                        unique_keywords.append(kw.lower())
-
-            return unique_keywords
-
-        except (TypeError, AttributeError) as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE-8.2-01",
-                operation="KEYWORD_EXTRACTION_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            return []
-
-    def _lookup_orchestrators(
-        self,
-        keywords: List[str],
-        intent: IntentType
-    ) -> List[Tuple[str, IOrchestrator, float]]:
-        """
-        Lookup orchestrators matching extracted keywords.
-
-        AC-PHASE-8.2-01: Query OrchestratorLookup registry to find
-        orchestrators with matching keywords, then resolve instances.
-
-        Args:
-            keywords: Extracted keywords from user request
-            intent: Detected intent type for filtering
-
-        Returns:
-            List[Tuple[str, IOrchestrator, float]]: (name, instance, confidence) tuples
-
-        Example:
-            >>> keywords = ['lens', 'onboard']
-            >>> candidates = self._lookup_orchestrators(keywords, IntentType.IMPLEMENT)
-            >>> # Returns: [('OnboardingOrchestrator', <instance>, 0.85), ...]
-        """
-        candidates: List[Tuple[str, IOrchestrator, float]] = []
-
-        try:
-            # Initialize orchestrator lookup (singleton)
-            lookup = OrchestratorLookup()
-
-            # Query by keywords from routing config
-            matches = lookup.find_by_keywords(keywords, self.routing_rules_config)
-
-            # Resolve orchestrator instances
-            for orchestrator_name, confidence in matches:
-                result = lookup.resolve_instance(orchestrator_name)
-
-                if result.is_ok():
-                    instance = result.value
-                    candidates.append((orchestrator_name, instance, confidence))
-                else:
-                    # Log failure but continue
-                    self.logger.log_operation_complete(
-                        ac_id="AC-PHASE-8.2-01",
-                        operation="ORCHESTRATOR_RESOLVE_FAILED",
-                        success=False,
-                        details={
-                            "orchestrator": orchestrator_name,
-                            "error": result.error
-                        }
-                    )
-
-            return candidates
-
-        except Exception as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE-8.2-01",
-                operation="ORCHESTRATOR_LOOKUP_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            return []
-
-    def _rank_orchestrators(
-        self,
-        candidates: List[Tuple[str, IOrchestrator, float]]
-    ) -> List[Tuple[str, IOrchestrator, float]]:
-        """
-        Rank orchestrator candidates by confidence score.
-
-        AC-PHASE-8.2-01: Sort candidates descending by confidence,
-        applying tie-breaking rules if needed.
-
-        Args:
-            candidates: List of (name, instance, confidence) tuples
-
-        Returns:
-            List[Tuple[str, IOrchestrator, float]]: Ranked candidates
-
-        Example:
-            >>> candidates = [
-            ...     ('LENSOrchestrator', <instance>, 0.75),
-            ...     ('OnboardingOrchestrator', <instance>, 0.85),
-            ... ]
-            >>> ranked = self._rank_orchestrators(candidates)
-            >>> # Returns: [('OnboardingOrchestrator', ..., 0.85), ('LENSOrchestrator', ..., 0.75)]
-        """
-        try:
-            # Sort by confidence descending
-            ranked = sorted(candidates, key=lambda x: x[2], reverse=True)
-
-            # Log ranking results
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE-8.2-01",
-                operation="ORCHESTRATOR_RANKING",
-                success=True,
-                details={
-                    "candidate_count": len(ranked),
-                    "top_candidate": ranked[0][0] if ranked else None,
-                    "top_confidence": ranked[0][2] if ranked else 0.0
-                }
-            )
-
-            return ranked
-
-        except Exception as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE-8.2-01",
-                operation="ORCHESTRATOR_RANKING_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            # Return unsorted on error
-            return candidates
+    # ------------------------------------------------------------------
+    # IOrchestrator protocol — identity + lifecycle
+    # ------------------------------------------------------------------
 
     def get_version(self) -> str:
-        """
-        Get the version of this orchestrator.
-
-        Returns:
-            str: "1.0.0" (semantic versioning)
-        """
+        """Get orchestrator version."""
         return "1.0.0"
 
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        return "IntentRouter"
+
+    def get_mode(self) -> OperationMode:
+        """Get operation mode."""
+        return OperationMode.NORMAL
+
     def initialize(self) -> Result[str]:
-        """
-        Initialize IntentRouter orchestrator.
-
-        This method is called when the orchestrator is registered.
-
-        Returns:
-            Result[str]: Ok with initialization message, or Err with error
-        """
+        """Initialise the IntentRouter orchestrator."""
         try:
             self.logger.log_operation_complete(
                 ac_id="AC-PROD-001-02",
                 operation="INTENT_ROUTER_INITIALIZE",
                 success=True,
-                details={"status": "initialized"}
+                details={"status": "initialized"},
             )
             return Ok("IntentRouter initialized successfully")
-
         except Exception as e:
             return Err(f"IntentRouter initialization failed: {str(e)}")
 
-    def get_audit_trail(self, limit: int = 100) -> Result[list]:
-        """
-        Get audit trail with hash chain.
-
-        AC-AR-011-03: Get audit trail with hash chain verification.
+    def validate_input(self, parameters: Dict[str, Any]) -> Result[bool]:
+        """Validate input parameters for routing operations.
 
         Args:
-            limit: Maximum number of entries to return (default 100)
+            parameters: Input parameters to validate.
 
         Returns:
-            Result[list]: List of audit trail entries
+            Result[bool]: Ok(True) if valid, Err with message if invalid.
+        """
+        if not isinstance(parameters, dict):
+            return Err("Parameters must be a dictionary")
+        if not parameters:
+            return Err("Parameters cannot be empty")
+        if "operation" not in parameters and "description" not in parameters:
+            return Err("Parameters must include 'operation' or 'description'")
+        return Ok(True)
+
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """Get audit trail with hash chain.
+
+        Args:
+            limit: Maximum number of entries to return.
+
+        Returns:
+            Result[list]: List of audit trail entries.
         """
         try:
-            # Delegate to EnhancedAuditLogger
-            audit_entries = self.logger.get_audit_trail(limit)
-            return Ok(audit_entries)
-
+            return Ok(self.logger.get_audit_trail(limit))
         except Exception as e:
             return Err(f"Failed to retrieve audit trail: {str(e)}")
 
-    def get_name(self) -> str:
-        """
-        Get the name of this orchestrator.
-
-        Returns:
-            str: "IntentRouter"
-        """
-        return "IntentRouter"
-
-    def get_mode(self) -> OperationMode:
-        """
-        Get the operation mode of this orchestrator.
-
-        Returns:
-            OperationMode: NORMAL (default routing mode)
-        """
-        return OperationMode.NORMAL
-
-    def validate_input(self, parameters: Dict[str, Any]) -> Result[bool]:
-        """
-        Validate input parameters for routing operations.
-
-        Checks that:
-        - parameters is a non-empty dictionary
-        - required fields are present or can be inferred
-
-        Args:
-            parameters: Input parameters to validate
-
-        Returns:
-            Result[bool]: Ok(True) if valid, Err(message) if invalid
-        """
-        try:
-            if not isinstance(parameters, dict):
-                return Err("Parameters must be a dictionary")
-
-            if not parameters:
-                return Err("Parameters cannot be empty")
-
-            # Check for at least operation or description
-            if "operation" not in parameters and "description" not in parameters:
-                return Err("Parameters must include 'operation' or 'description'")
-
-            return Ok(True)
-
-        except Exception as e:
-            return Err(f"Validation error: {str(e)}")
-
-    def detect_intent(self, context: Dict[str, Any]) -> IntentType:
-        """
-        Detect operation intent type from context using a three-tier classifier.
-
-        Detection pipeline (Phase 70 GAP-70-A4):
-        1. Explicit "intent" field short-circuits all classification.
-        2. Vacuum keyword check (dedicated orchestrator pathway).
-        3. Three-tier IntentClassifier:
-               Tier 0 — exact operation-field match  (<1 ms)
-               Tier 1 — regex / exact-phrase match    (<1 ms)
-               Tier 2 — keyword bag-of-words scoring  (<1 ms)
-               Tier 3 — LLM disambiguation (only when tiers 1+2 are
-                         inconclusive AND an API key is available)
-        4. Default: IMPLEMENT.
-
-        Args:
-            context: Context dictionary containing operation details
-                - description:   Operation description (optional)
-                - user_request:  Raw user text (optional)
-                - keywords:      List of additional keywords (optional)
-                - operation:     Explicit operation name (optional)
-                - intent:        Pre-resolved IntentType (optional, highest priority)
-
-        Returns:
-            IntentType: Detected intent.
-
-        Raises:
-            ValueError: If context is None or invalid type.
-        """
-        try:
-            # Priority 0: Explicit IntentType already resolved
-            if "intent" in context and isinstance(context.get("intent"), IntentType):
-                return context["intent"]
-
-            # Collect text for analysis
-            text_parts: List[str] = []
-            if context.get("description"):
-                text_parts.append(str(context["description"]))
-            if context.get("user_request"):
-                text_parts.append(str(context["user_request"]))
-            if isinstance(context.get("keywords"), list):
-                text_parts.extend(str(k) for k in context["keywords"])
-
-            combined_text = " ".join(text_parts).lower()
-            operation = str(context.get("operation", "")).lower().strip()
-
-            # Priority 1: Vacuum keyword check (dedicated pathway)
-            # GAP-90-07 fix: return IntentType.VACUUM (was wrongly returning REFACTOR)
-            if self._is_vacuum_operation(combined_text):
-                context["is_vacuum_operation"] = True
-                return IntentType.VACUUM
-
-            # Priority 2: Three-tier classifier
-            clf_result = self.intent_classifier.classify(
-                text=combined_text,
-                operation=operation,
-            )
-
-            self.logger.log_operation_complete(
-                ac_id="AC-70-INTENT-CLASSIFIER-001",
-                operation="INTENT_CLASSIFIED",
-                success=True,
-                details={
-                    "intent": clf_result.intent_type.value,
-                    "confidence": clf_result.confidence,
-                    "tier": clf_result.tier_used,
-                    "reasoning": clf_result.reasoning,
-                },
-            )
-
-            # Phase 91: Routing miss detection — log low-confidence fallbacks
-            # so /audit fix can surface unclassified keywords as candidates
-            if clf_result.confidence < 0.4 or clf_result.intent_type == IntentType.UNKNOWN:
-                self._log_routing_miss(combined_text, clf_result)
-
-            return clf_result.intent_type
-
-        except (ValueError, TypeError, AttributeError) as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-PROD-001-02",
-                operation="INTENT_DETECTION_ERROR",
-                success=False,
-                details={"error": str(e), "context_type": type(context).__name__},
-            )
-            return IntentType.IMPLEMENT
-
-    def _detect_intent_from_dict(self, context: Dict[str, Any]) -> "IntentType":
-        """Thin wrapper around detect_intent() for test and external API compatibility.
-
-        Accepts a plain dict with 'description', 'user_request', 'keywords',
-        'operation', or 'intent' keys — identical to detect_intent() contract.
-
-        Args:
-            context: Dict containing intent signals (description, user_request, etc.)
-
-        Returns:
-            IntentType: The detected intent type.
-        """
-        return self.detect_intent(context)
-
-    def _is_vacuum_operation(self, combined_text: str) -> bool:
-        """
-        Detect if the operation is a VACUUM cleanup operation.
-
-        VACUUM operations are requests to clean up the CORTEX repository
-        efficiently, removing artifacts, caches, legacy files, etc.
-
-        Uses keyword matching against VACUUM_KEYWORDS list.
-
-        Args:
-            combined_text: Combined text from description, keywords, and operation
-
-        Returns:
-            bool: True if vacuum operation detected, False otherwise
-
-        Example:
-            >>> router = IntentRouter()
-            >>> router._is_vacuum_operation("use vacuum to cleanup repo")
-            True
-            >>> router._is_vacuum_operation("implement new feature")
-            False
-        """
-        try:
-            # Check if any vacuum keyword matches
-            for keyword in self.vacuum_keywords:
-                if keyword.lower() in combined_text:
-                    self.logger.log_operation_complete(
-                        ac_id="VACUUM-DETECT-001",
-                        operation="VACUUM_KEYWORD_DETECTED",
-                        success=True,
-                        details={"matched_keyword": keyword}
-                    )
-                    return True
-
-            return False
-
-        except Exception as e:
-            self.logger.log_operation_complete(
-                ac_id="VACUUM-DETECT-001",
-                operation="VACUUM_DETECTION_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            return False
-
-    def _log_routing_miss(self, text: str, clf_result: Any) -> None:
-        """Log a routing miss for audit-driven keyword expansion.
-
-        Phase 91: When the classifier returns low confidence (<0.4) or
-        UNKNOWN, record the unclassified text so ``/audit fix`` can surface
-        it as a keyword candidate for IntentRouter expansion.
-
-        Args:
-            text: The combined request text that was not confidently classified.
-            clf_result: The ClassificationResult from the 3-tier classifier.
-        """
-        try:
-            self.logger.log_operation_complete(
-                ac_id="AC-91-ROUTING-MISS-001",
-                operation="ROUTING_MISS_DETECTED",
-                success=True,
-                details={
-                    "unclassified_text": text[:200],  # truncate for storage
-                    "fallback_intent": clf_result.intent_type.value,
-                    "confidence": clf_result.confidence,
-                    "tier": clf_result.tier_used,
-                    "reasoning": clf_result.reasoning,
-                },
-            )
-        except Exception:
-            pass  # Non-blocking — routing miss logging must never break routing
-
-    def _get_cache_key(self, context: Dict[str, Any]) -> str:
-        """
-        Generate cache key for routing decision.
-
-        Creates a hash of the relevant context fields to enable
-        caching of identical routing decisions.
-
-        LENS-002: Includes lens_context in cache key to ensure
-        LENS-enhanced and non-LENS decisions are cached separately.
-
-        Args:
-            context: Context dictionary
-
-        Returns:
-            str: Cache key (MD5 hash of context)
-        """
-        try:
-            # Create deterministic representation
-            key_fields = {
-                "operation": context.get("operation"),
-                "description": context.get("description"),
-                "domain": context.get("domain"),
-                "keywords": sorted(context.get("keywords", [])) if context.get("keywords") else None,
-                "has_lens": bool(context.get("lens_context"))  # LENS-002: Include LENS presence
-            }
-
-            # Serialize to JSON for hashing
-            key_json = json.dumps(key_fields, sort_keys=True, default=str)
-
-            # Create hash
-            return hashlib.md5(key_json.encode()).hexdigest()
-
-        except Exception:
-            # Fallback: return context operation name if hashing fails
-            return str(context.get("operation", "default"))
-
-    def _route_internal(self, context: Dict[str, Any]) -> RoutingDecision:
-        """
-        Internal routing implementation (logic only, no caching).
-
-        AC-PHASE-8.2-01: Enhanced with keyword-based orchestrator lookup.
-
-        Flow:
-        1. Extract keywords from user request
-        2. Detect intent type
-        3. Lookup matching orchestrators by keywords
-        4. Rank candidates by confidence
-        5. Enforce routing rules (ROUTING-001 through ROUTING-004)
-        6. Return decision with orchestrator instance
-
-        Args:
-            context: Context dictionary with operation details
-
-        Returns:
-            RoutingDecision: Routing decision with target orchestrator instance
-
-        Raises:
-            KeyError: If required context fields missing
-            ValueError: If routing cannot be determined or enforcement blocks
-        """
-        try:
-            # Extract relevant fields
-            operation = context.get("operation", "unknown")
-            domain = context.get("domain")
-
-            # Detect intent
-            intent_type = self.detect_intent(context)
-
-            # AC-FUTURE-005: Detect composite intents (multi-faceted requests)
-            description = context.get("description", "")
-            composite_intents = CompositeIntentDetector.detect_composite_intents(
-                description,
-                intent_type
-            )
-
-            # AC-PHASE-8.2-01: Extract keywords from request
-            keywords = self._extract_keywords(context)
-
-            # AC-PHASE-8.2-01: Lookup orchestrators by keywords
-            candidates = self._lookup_orchestrators(keywords, intent_type)
-
-            # AC-PHASE-8.2-01: Rank candidates by confidence
-            ranked_candidates = self._rank_orchestrators(candidates)
-
-            # Determine target handler and orchestrator
-            if ranked_candidates:
-                # Phase 8.2: Use top-ranked orchestrator
-                target_name, target_orch, base_confidence = ranked_candidates[0]
-                target_handler = target_name
-                target_orchestrator = target_orch
-
-                # Extract fallback orchestrators (top 3 alternatives)
-                fallback_orchestrators = [orch for _, orch, _ in ranked_candidates[1:4]]
-
-                # Build confidence breakdown
-                confidence_breakdown = {
-                    "keyword_match": base_confidence,
-                    "intent_detection": 0.2,  # Base intent detection confidence
-                }
-
-                # Apply LENS boost if available (LENS-002 integration)
-                lens_context = context.get("lens_context")
-                if lens_context:
-                    git_pattern = self._extract_git_pattern(lens_context)
-                    ast_complexity = self._calculate_ast_complexity(lens_context)
-
-                    if git_pattern == intent_type:
-                        confidence_breakdown["lens_git_exact"] = 0.15
-                    elif git_pattern:
-                        confidence_breakdown["lens_git_partial"] = 0.05
-
-                    if ast_complexity > 75:
-                        confidence_breakdown["lens_ast_very_high"] = 0.20
-                    elif ast_complexity > 50:
-                        confidence_breakdown["lens_ast_high"] = 0.15
-                    elif ast_complexity > 25:
-                        confidence_breakdown["lens_ast_medium"] = 0.10
-
-                # Calculate final confidence
-                confidence = sum(confidence_breakdown.values())
-
-            else:
-                # REGISTRY INTELLIGENCE: No orchestrator found by keywords
-                # Attempt intelligent discovery and auto-registration
-                target_handler, target_orchestrator = self._handle_missing_orchestrator(
-                    intent_type, keywords, context
-                )
-
-                if not target_orchestrator:
-                    # Fallback: Use old routing rules (backward compatibility)
-                    routing_key = (intent_type, domain)
-                    if routing_key not in self.routing_rules:
-                        routing_key = (intent_type, None)
-
-                    target_handler = self.routing_rules.get(
-                        routing_key,
-                        f"{intent_type.value.capitalize()}OrchestrationHandler"
-                    )
-
-                    # Try resolving orchestrator instance from handler name
-                    result = self.orchestrator_lookup.resolve_instance(target_handler)
-                    target_orchestrator = result.value if result.is_ok() else None
-
-                fallback_orchestrators = []
-
-                # Fallback confidence calculation
-                context_keywords = context.get("keywords", [])
-                operation_type_keywords = self.operation_type_mappings[intent_type]
-                matches = sum(1 for kw in context_keywords if kw.lower() in
-                             [k.lower() for k in operation_type_keywords])
-                confidence = min(1.0, (matches / len(operation_type_keywords)) + 0.5) if operation_type_keywords else 0.75
-
-                confidence_breakdown = {
-                    "legacy_routing": confidence,
-                }
-
-            # If composite intents detected, enhance handler selection
-            if len(composite_intents) > 1:
-                target_handler = f"CompositeHandler_{'+'.join([i.value for i in composite_intents])}"
-                confidence *= 0.95
-                confidence_breakdown["composite_penalty"] = -0.05
-
-            # Build reasoning
-            reasoning = (
-                f"Routed '{context.get('operation')}' to {target_handler} "
-                f"(confidence: {confidence:.2f}) based on "
-                f"intent type '{intent_type.value}'"
-            )
-            if keywords:
-                reasoning += f", keywords: {', '.join(keywords[:3])}"
-            if len(composite_intents) > 1:
-                reasoning += f". Detected composite intents: {', '.join([i.value for i in composite_intents])}"
-
-            # Special handling for VACUUM operations
-            if context.get("is_vacuum_operation"):
-                reasoning = (
-                    f"VACUUM operation detected for '{context.get('operation')}'. "
-                    f"Routing to VacuumOrchestrator for efficient CORTEX repository cleanup."
-                )
-                target_handler = "VacuumOrchestrator"
-                # Try to resolve VacuumOrchestrator instance
-                vacuum_result = self.orchestrator_lookup.resolve_instance("VacuumOrchestrator")
-                if vacuum_result.is_ok():
-                    target_orchestrator = vacuum_result.value
-
-            # Create decision
-            decision = RoutingDecision(
-                intent_type=intent_type,
-                target_handler=target_handler,
-                confidence_score=min(1.0, confidence),  # Clamp to [0, 1]
-                reasoning=reasoning,
-                metadata={
-                    "operation": context.get("operation"),
-                    "domain": domain,
-                    "keywords_matched": len(keywords),
-                    "total_keywords": len(keywords),
-                    "composite_intents": len(composite_intents) > 1,
-                    "candidates_found": len(ranked_candidates) if ranked_candidates else 0,
-                },
-                composite_intents=composite_intents,
-                # AC-PHASE-8.2-01: New fields
-                target_orchestrator=target_orchestrator,
-                fallback_orchestrators=fallback_orchestrators,
-                keyword_matches=keywords,
-                confidence_breakdown=confidence_breakdown,
-            )
-
-            # AC-PHASE-8.2-01: Enforce routing rules
-            enforcement_result = self.enforcement_engine.validate_routing_decision(decision)
-
-            if not enforcement_result.passed:
-                # Log violations
-                self.logger.log_operation_complete(
-                    ac_id="AC-PHASE-8.2-01",
-                    operation="ROUTING_ENFORCEMENT_VIOLATION",
-                    success=False,
-                    details={
-                        "violations": [v.value for v in enforcement_result.violations],
-                        "target_handler": target_handler,
-                        "confidence": confidence,
-                    }
-                )
-
-                # Check if blocking is enabled
-                blocking_violations = [
-                    v for v in enforcement_result.violations
-                    if v in [
-                        RoutingViolation.ORCHESTRATOR_NOT_FOUND,
-                        RoutingViolation.CONFIDENCE_TOO_LOW,
-                        RoutingViolation.NOT_AUDITABLE,
-                    ]
-                ]
-                if self.enforcement_engine.blocking_enabled and blocking_violations:
-                    raise ValueError(
-                        f"Routing blocked by enforcement: {', '.join([v.value for v in blocking_violations])}"
-                    )
-
-            return decision
-
-        except (KeyError, ValueError, AttributeError) as e:
-            # Specific exception handling per CORE-013
-            raise ValueError(f"Routing failed: {str(e)}")
-
-    # ===== LENS-002: LENS Intelligence Enhancement Methods =====
-
-    def _extract_git_pattern(self, lens_context: Dict[str, Any]) -> Optional[IntentType]:
-        """
-        Extract predominant intent type from Git commit history.
-
-        LENS-002: Analyze Git commit messages to identify patterns
-        that validate or contradict the detected intent.
-
-        Args:
-            lens_context: LENS analyzer data (flexible format):
-                - git_history.commits OR git_analysis.recent_commits
-
-        Returns:
-            IntentType: Predominant intent from Git history, or None
-        """
-        try:
-            # Support both formats: git_history and git_analysis
-            git_data = lens_context.get("git_history") or lens_context.get("git_analysis", {})
-
-            # Support both formats: commits and recent_commits
-            commits = git_data.get("commits") or git_data.get("recent_commits", [])
-
-            if not commits:
-                return None
-
-            # Count intent types from commit messages
-            intent_counts: Dict[IntentType, int] = {
-                IntentType.FIX: 0,
-                IntentType.IMPLEMENT: 0,
-                IntentType.REFACTOR: 0,
-                IntentType.DOCUMENT: 0
-            }
-
-            fix_keywords = {"fix", "bug", "issue", "resolve", "patch"}
-            implement_keywords = {"add", "implement", "feature", "create", "new"}
-            refactor_keywords = {"refactor", "cleanup", "improve", "optimize", "restructure"}
-            doc_keywords = {"doc", "documentation", "comment", "readme"}
-
-            for commit in commits:
-                # Support both dict format and string format
-                if isinstance(commit, dict):
-                    message = commit.get("message", "").lower()
-                else:
-                    message = str(commit).lower()
-
-                if any(kw in message for kw in fix_keywords):
-                    intent_counts[IntentType.FIX] += 1
-                if any(kw in message for kw in implement_keywords):
-                    intent_counts[IntentType.IMPLEMENT] += 1
-                if any(kw in message for kw in refactor_keywords):
-                    intent_counts[IntentType.REFACTOR] += 1
-                if any(kw in message for kw in doc_keywords):
-                    intent_counts[IntentType.DOCUMENT] += 1
-
-            # Return most frequent intent
-            if max(intent_counts.values()) > 0:
-                return max(intent_counts.items(), key=lambda x: x[1])[0]
-
-            return None
-
-        except (KeyError, TypeError, AttributeError):
-            return None
-
-    def _calculate_ast_complexity(self, lens_context: Dict[str, Any]) -> int:
-        """
-        Calculate code complexity from AST analysis.
-
-        LENS-002: Extract complexity metrics from AST data
-        to validate refactor intent or identify technical debt.
-
-        Args:
-            lens_context: LENS analyzer data (flexible format):
-                - ast_analysis.function_count OR ast_analysis.functions (list)
-                - ast_analysis.class_count OR ast_analysis.classes (list)
-
-        Returns:
-            int: Complexity score (0-100 scale)
-        """
-        try:
-            ast_analysis = lens_context.get("ast_analysis", {})
-
-            # Support both formats: count fields and list fields
-            function_count = ast_analysis.get("function_count", 0)
-            if not function_count:
-                # Count from functions list
-                functions = ast_analysis.get("functions", [])
-                function_count = len(functions) if isinstance(functions, list) else 0
-
-            class_count = ast_analysis.get("class_count", 0)
-            if not class_count:
-                # Count from classes list
-                classes = ast_analysis.get("classes", [])
-                class_count = len(classes) if isinstance(classes, list) else 0
-
-            # Simple complexity heuristic:
-            # Classes contribute more weight than functions
-            complexity = (class_count * 10) + (function_count * 2)
-
-            return min(100, complexity)
-
-        except (KeyError, TypeError, AttributeError):
-            return 0
-
-    def _analyze_comment_hints(self, lens_context: Dict[str, Any]) -> Dict[str, List[str]]:
-        """
-        Analyze TODO/FIXME comments for intent hints.
-
-        LENS-002: Extract comment-based hints that suggest
-        specific types of work needed (fix, refactor, implement).
-
-        Args:
-            lens_context: LENS analyzer data
-
-        Returns:
-            Dict with categorized hints:
-                - refactor_hints: Comments suggesting refactoring
-                - fix_hints: Comments suggesting bug fixes
-                - implement_hints: Comments suggesting new features
-        """
-        try:
-            comment_analysis = lens_context.get("comment_analysis", {})
-            todos = comment_analysis.get("todos", [])
-            fixmes = comment_analysis.get("fixmes", [])
-
-            hints: Dict[str, List[str]] = {
-                "refactor_hints": [],
-                "fix_hints": [],
-                "implement_hints": []
-            }
-
-            refactor_keywords = {"refactor", "cleanup", "improve", "optimize", "technical debt"}
-            fix_keywords = {"fix", "bug", "issue", "broken", "error"}
-            implement_keywords = {"add", "implement", "feature", "create", "support"}
-
-            all_comments = todos + fixmes
-            for comment in all_comments:
-                # Support multiple format variations: text, content, or string
-                if isinstance(comment, dict):
-                    comment_text = (
-                        comment.get("text") or
-                        comment.get("content") or
-                        comment.get("message") or
-                        ""
-                    ).lower()
-                else:
-                    comment_text = str(comment).lower()
-
-                if any(kw in comment_text for kw in refactor_keywords):
-                    hints["refactor_hints"].append(comment_text)
-                elif any(kw in comment_text for kw in fix_keywords):
-                    hints["fix_hints"].append(comment_text)
-                elif any(kw in comment_text for kw in implement_keywords):
-                    hints["implement_hints"].append(comment_text)
-
-            return hints
-
-        except (KeyError, TypeError, AttributeError):
-            return {"refactor_hints": [], "fix_hints": [], "implement_hints": []}
-
-    def _calculate_lens_boost(
+    def _init_response_engine(
         self,
         intent_type: IntentType,
-        lens_context: Dict[str, Any]
-    ) -> float:
-        """
-        Calculate confidence boost from LENS evidence.
-
-        LENS-002: Compute confidence score enhancement (0.0 to 0.4)
-        based on how well LENS intelligence supports the detected intent.
+        orchestrator_name: str,
+        enable: bool = False,
+    ) -> None:
+        """Stub for response engine initialisation (Wave H-S4 feature).
 
         Args:
-            intent_type: Detected intent type
-            lens_context: LENS analyzer data
-
-        Returns:
-            float: Confidence boost (0.0-0.4)
+            intent_type: Intent type for response formatting.
+            orchestrator_name: Name of orchestrator.
+            enable: Whether to enable (default False).
         """
-        boost = 0.0
+        if enable:
+            raise NotImplementedError("_init_response_engine not yet implemented")
+        self._response_engine_enabled = False
 
-        # Git pattern matching (up to +0.15)
-        git_pattern = self._extract_git_pattern(lens_context)
-        if git_pattern == intent_type:
-            boost += 0.15
-        elif git_pattern is not None:
-            boost += 0.05  # Partial credit for any git intelligence
-
-        # AST complexity for refactor intent (up to +0.20)
-        if intent_type == IntentType.REFACTOR:
-            complexity = self._calculate_ast_complexity(lens_context)
-            if complexity >= 80:
-                boost += 0.20  # Very high complexity
-            elif complexity > 40:
-                boost += 0.15  # High complexity
-            elif complexity > 20:
-                boost += 0.10  # Medium complexity
-            elif complexity > 10:
-                boost += 0.05  # Low complexity
-
-        # Comment hints (up to +0.05)
-        hints = self._analyze_comment_hints(lens_context)
-        hint_key = f"{intent_type.value}_hints"
-        if hint_key in hints and len(hints[hint_key]) > 0:
-            boost += 0.05
-
-        return min(0.4, boost)  # Cap at 0.4
-
-    def _enhance_with_lens(
-        self,
-        decision: RoutingDecision,
-        lens_context: Dict[str, Any]
-    ) -> RoutingDecision:
-        """
-        Enhance routing decision with LENS intelligence.
-
-        LENS-002: Apply LENS-based confidence boost and enrich metadata.
-
-        Args:
-            decision: Original routing decision
-            lens_context: LENS analyzer data
-
-        Returns:
-            RoutingDecision: Enhanced decision with LENS boost
-        """
-        try:
-            # Calculate LENS confidence boost
-            lens_boost = self._calculate_lens_boost(decision.intent_type, lens_context)
-
-            # Apply boost (capped at 1.0 confidence)
-            new_confidence = min(1.0, decision.confidence_score + lens_boost)
-
-            # Enrich metadata
-            enhanced_metadata = {
-                **decision.metadata,
-                "lens_enhanced": True,
-                "lens_confidence_boost": lens_boost,
-                "original_confidence": decision.confidence_score
-            }
-
-            # Extract LENS insights for metadata
-            git_pattern = self._extract_git_pattern(lens_context)
-            if git_pattern:
-                enhanced_metadata["lens_git_pattern"] = git_pattern.value
-
-            complexity = self._calculate_ast_complexity(lens_context)
-            if complexity > 0:
-                enhanced_metadata["lens_ast_complexity"] = complexity
-                # Flag for tests expecting boolean
-                enhanced_metadata["ast_complexity_detected"] = True
-
-            hints = self._analyze_comment_hints(lens_context)
-            if any(hints.values()):
-                total_hints = sum(len(v) for v in hints.values())
-                enhanced_metadata["lens_comment_hints"] = total_hints
-
-                # Add specific hint categories for test expectations
-                if hints.get("refactor_hints"):
-                    enhanced_metadata["todo_refactor_hints"] = len(hints["refactor_hints"])
-                if hints.get("fix_hints"):
-                    enhanced_metadata["todo_fix_hints"] = len(hints["fix_hints"])
-                if hints.get("implement_hints"):
-                    enhanced_metadata["todo_implement_hints"] = len(hints["implement_hints"])
-
-            # Create enhanced decision
-            return RoutingDecision(
-                intent_type=decision.intent_type,
-                target_handler=decision.target_handler,
-                confidence_score=new_confidence,
-                reasoning=decision.reasoning + f" (LENS boost: +{lens_boost:.2f})",
-                metadata=enhanced_metadata,
-                composite_intents=decision.composite_intents
-            )
-
-        except Exception:
-            # On any error, return original decision unchanged
-            return decision
-
-    def _handle_missing_orchestrator(
-        self,
-        intent_type: IntentType,
-        keywords: List[str],
-        context: Dict[str, Any]
-    ) -> Tuple[str, Optional[IOrchestrator]]:
-        """
-        Handle missing orchestrator by attempting intelligent discovery.
-
-        Args:
-            intent_type: Detected intent type
-            keywords: Extracted keywords from request
-            context: Full request context
-
-        Returns:
-            Tuple of (handler_name, orchestrator_instance)
-        """
-        if not self.registry_agent:
-            return f"{intent_type.value.capitalize()}Handler", None
-
-        try:
-            # Scan for missing orchestrators
-            discoveries = self.registry_agent.scan_for_orchestrators(force_rescan=True)
-
-            # Look for orchestrators that match our intent keywords
-            matching_discoveries = []
-            for discovery in discoveries:
-                if not discovery.is_registered:
-                    # Check if this orchestrator's keywords match our intent
-                    keyword_overlap = discovery.keywords & set(kw.lower() for kw in keywords)
-                    if keyword_overlap:
-                        matching_discoveries.append((discovery, len(keyword_overlap)))
-
-            if matching_discoveries:
-                # Sort by keyword overlap (highest first)
-                matching_discoveries.sort(key=lambda x: x[1], reverse=True)
-                best_discovery = matching_discoveries[0][0]
-
-                # Learn from this intent gap
-                self.registry_agent.learn_from_intent_gap(
-                    user_intent=context.get("description", "") or context.get("operation", ""),
-                    missing_orchestrator=best_discovery.name
-                )
-
-                # Attempt to auto-register (if enabled)
-                gaps = self.registry_agent.detect_registry_gaps([best_discovery])
-                if gaps:
-                    fix_results = self.registry_agent.auto_fix_gaps(gaps, dry_run=False)
-                    if fix_results["fixed"]:
-                        # Try to get the orchestrator instance after registration
-                        result = self.orchestrator_lookup.resolve_instance(best_discovery.name)
-                        if result.is_ok():
-                            return best_discovery.name, result.value
-
-                # Return discovered orchestrator name even if registration failed
-                return best_discovery.name, None
-
-            # No matching discoveries found
-            return f"{intent_type.value.capitalize()}Handler", None
-
-        except Exception as e:
-            self.logger.log_operation_complete(
-                ac_id="REGISTRY-INTELLIGENCE-001",
-                operation="MISSING_ORCHESTRATOR_DISCOVERY",
-                success=False,
-                details={"error": str(e), "intent": intent_type.value}
-            )
-            return f"{intent_type.value.capitalize()}Handler", None
-
-    # ===== End Registry Intelligence Methods =====
-
-    def _check_workflow_complexity(
-        self, context: Dict[str, Any]
-    ) -> Optional[RoutingDecision]:
-        """
-        Check if workflow template should be used based on task complexity.
-
-        WORKFLOW-COMPLEXITY-GATE-001: Stage 2a complexity-based routing.
-
-        Analyzes task complexity using 4-dimension scoring:
-        - File count (30%): Number of files involved
-        - Operation type (40%): Type of operation (migrate, fix, refactor, etc.)
-        - Dependencies (20%): Number of dependencies
-        - Risk level (10%): Risk assessment (LOW, MEDIUM, HIGH, CRITICAL)
-
-        Routing thresholds:
-        - TRIVIAL (<0.15): Direct orchestrator (auto-approve)
-        - SIMPLE (0.15-0.35): Direct orchestrator (minimal validation)
-        - MODERATE (0.35-0.60): Workflow template (recommended)
-        - COMPLEX (≥0.60): Workflow template (mandatory)
-
-        Args:
-            context: Operation context with description, keywords, files, etc.
-
-        Returns:
-            RoutingDecision if complexity routing applies, None to fallback to standard routing.
-
-        Example:
-            >>> context = {
-            ...     "operation": "refactor",
-            ...     "description": "Refactor 5 modules",
-            ...     "target_files": ["src/a.py", "src/b.py", "src/c.py", "src/d.py", "src/e.py"],
-            ...     "dependencies": ["dep1", "dep2", "dep3"],
-            ...     "risk_level": "MEDIUM"
-            ... }
-            >>> decision = router._check_workflow_complexity(context)
-            >>> assert decision.route == RoutingStrategy.WORKFLOW_TEMPLATE
-            >>> assert decision.template_id == "quality/refactoring"
-        """
-        try:
-            # Extract operation details
-            operation = context.get("operation", "").lower()
-            description = context.get("description", "").lower()
-            user_request = context.get("user_request", "").lower()
-
-            # Detect operation type using the three-tier classifier
-            # This replaces the hand-coded keyword cascade with a prioritised,
-            # LLM-augmented pipeline (Phase 70 GAP-70-A4).
-            combined_text = f"{operation} {description} {user_request}".strip()
-            clf_result = self.intent_classifier.classify(
-                text=combined_text,
-                operation=operation,
-            )
-            # Map IntentType → operation_type string used by complexity router
-            _intent_to_op: Dict[IntentType, str] = {
-                IntentType.FIX: "fix",
-                IntentType.AUDIT: "audit",
-                IntentType.REFACTOR: "refactor",
-                IntentType.DESIGN: "design",
-                IntentType.PLAN: "plan",
-                IntentType.INVESTIGATE: "investigate",
-                IntentType.ANALYZE: "analyze",
-                IntentType.DIGEST: "digest",
-                IntentType.IMPLEMENT: "implement",
-                IntentType.DOCUMENT: "document",
-                IntentType.ONBOARD: "onboard",
-                IntentType.REPHRASE: "rephrase",
-                IntentType.WORKFLOW_COMPOSE: "workflow_compose",
-                # VACUUM classified for "clean" keywords; code-smell cleanup is a
-                # refactoring concern — route it as refactor, not workspace vacuum.
-                IntentType.VACUUM: "refactor",
-            }
-            operation_type = _intent_to_op.get(clf_result.intent_type, "implement")
-
-            # Extract target files (look for file paths in context)
-            target_files = context.get("target_files", [])
-            if not target_files:
-                # Try to infer from description/keywords
-                # Look for file patterns like .py, .ts, .yaml, etc.
-                import re
-                file_pattern = r'\b[\w/.-]+\.(py|ts|js|yaml|yml|json|md|txt)\b'
-                matches = re.findall(file_pattern, combined_text)
-                target_files = [m[0] if isinstance(m, tuple) else m for m in matches]
-
-            # Extract dependencies
-            dependencies = context.get("dependencies", [])
-
-            # Extract risk level
-            risk_level = context.get("risk_level", "MEDIUM").upper()
-            if "critical" in combined_text or "production" in combined_text:
-                risk_level = "CRITICAL"
-            elif "high" in combined_text or "complex" in combined_text:
-                risk_level = "HIGH"
-            elif "low" in combined_text or "simple" in combined_text or "trivial" in combined_text:
-                risk_level = "LOW"
-
-            # Build complexity intent
-            complexity_intent = ComplexityIntent(
-                operation_type=operation_type,
-                target_files=target_files,
-                dependencies=dependencies,
-                risk_level=risk_level,
-                metadata=context
-            )
-
-            # Get routing decision from complexity router
-            from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy as ComplexityRoutingStrategy
-            complexity_routing = self.complexity_router.route(complexity_intent)
-
-            # Validate with golden hammer rules
-            self.golden_hammer_rules.validate_routing_decision(
-                complexity_routing,
-                override_rationale=context.get("override_rationale")
-            )
-
-            # Log complexity decision
-            self.logger.log_operation_complete(
-                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
-                operation="COMPLEXITY_ROUTING_CHECK",
-                success=True,
-                details={
-                    "complexity_score": complexity_routing.complexity,
-                    "route": complexity_routing.route.value,
-                    "rationale": complexity_routing.rationale,
-                    "template_id": complexity_routing.template_id,
-                    "orchestrator": complexity_routing.orchestrator
-                }
-            )
-
-            # Convert to IntentRouter RoutingDecision format
-            # Extract keywords for downstream use
-            explicit_kw = [k.lower() for k in context.get("keywords", []) if isinstance(k, str)]
-
-            if complexity_routing.route == ComplexityRoutingStrategy.WORKFLOW_TEMPLATE:
-                # Route to workflow template
-                return RoutingDecision(
-                    intent_type=IntentType.IMPLEMENT,  # Templates handle all intent types
-                    target_handler=f"WorkflowTemplate:{complexity_routing.template_id}",
-                    confidence_score=complexity_routing.complexity,
-                    reasoning=(
-                        f"{operation_type} routed via workflow template: "
-                        f"{complexity_routing.rationale}"
-                    ),
-                    keyword_matches=explicit_kw,
-                    metadata={
-                        "complexity_score": complexity_routing.complexity,
-                        "template_id": complexity_routing.template_id,
-                        "requires_confirmation": complexity_routing.requires_confirmation,
-                        "governance_gate": complexity_routing.governance_gate,
-                        "operation_type": operation_type,
-                        "routing_source": "complexity_gate",
-                        "domain": context.get("domain"),
-                    }
-                )
-            elif complexity_routing.route == ComplexityRoutingStrategy.DIRECT_ORCHESTRATOR:
-                # Route to direct orchestrator
-                return RoutingDecision(
-                    intent_type=self._map_operation_to_intent(operation_type),
-                    target_handler=complexity_routing.orchestrator,
-                    confidence_score=1.0 - complexity_routing.complexity,  # Inverse for direct routing
-                    reasoning=(
-                        f"{operation_type} routed directly to "
-                        f"{complexity_routing.orchestrator}: {complexity_routing.rationale}"
-                    ),
-                    keyword_matches=explicit_kw,
-                    metadata={
-                        "complexity_score": complexity_routing.complexity,
-                        "orchestrator": complexity_routing.orchestrator,
-                        "requires_confirmation": complexity_routing.requires_confirmation,
-                        "operation_type": operation_type,
-                        "routing_source": "complexity_gate",
-                        "domain": context.get("domain"),
-                    }
-                )
-
-            # Fallback to standard routing
-            return None
-
-        except Exception as e:
-            # Log error but don't block routing
-            self.logger.log_operation_complete(
-                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
-                operation="COMPLEXITY_ROUTING_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            return None
-
-    def _map_operation_to_intent(self, operation_type: str) -> IntentType:
-        """Map operation type to IntentType enum."""
-        mapping = {
-            "fix": IntentType.FIX,
-            "create": IntentType.IMPLEMENT,
-            "implement": IntentType.IMPLEMENT,
-            "refactor": IntentType.REFACTOR,
-            "clean": IntentType.REFACTOR,
-            "clean_code": IntentType.REFACTOR,
-            "cleanup": IntentType.REFACTOR,
-            "improve": IntentType.REFACTOR,
-            "optimize": IntentType.REFACTOR,
-            "restructure": IntentType.REFACTOR,
-            "simplify": IntentType.REFACTOR,
-            "test": IntentType.IMPLEMENT,
-            "document": IntentType.DOCUMENT,
-            "security": IntentType.AUDIT,
-            "migrate": IntentType.IMPLEMENT,
-            "audit": IntentType.AUDIT,
-            "design": IntentType.DESIGN,
-            "plan": IntentType.PLAN,
-            "investigate": IntentType.INVESTIGATE,
-            "analyze": IntentType.ANALYZE,
-            "digest": IntentType.DIGEST,
-        }
-        return mapping.get(operation_type, IntentType.IMPLEMENT)
-
-    # ===== End Registry Intelligence Methods =====
-
-    def _intelligence_matrix_lookup(
-        self, intent: str, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Look up the best orchestrator chain via the intelligence matrix.
-
-        Phase 78 GAP-78-A-06: Replace keyword-only routing with matrix-aware
-        selection that consults UnifiedIntelligenceProvider for context-informed
-        orchestrator chain selection.
-
-        Args:
-            intent: Classified intent string (e.g. "IMPLEMENT", "AUDIT").
-            context: Full routing context dict including domain, complexity, etc.
-
-        Returns:
-            Dict with 'primary_orchestrator', 'chain', 'confidence_boost' keys.
-        """
-        try:
-            from cortex.intelligence.facade import IntelligenceFacade
-            facade = IntelligenceFacade()
-            bp = facade.synthesize(query=f"routing:{intent.lower()}")
-            return {
-                "primary_orchestrator": bp.get("recommended_orchestrator", ""),
-                "chain": bp.get("orchestrator_chain", []),
-                "confidence_boost": bp.get("confidence_boost", 0.0),
-            }
-        except Exception:
-            return {"primary_orchestrator": "", "chain": [], "confidence_boost": 0.0}
-
-    def _select_best_orchestrator_chain(
-        self, intent: str, context: Dict[str, Any]
-    ) -> list:
-        """Select best orchestrator chain for intent using matrix lookup.
-
-        Phase 78 GAP-78-A-06: Convenience wrapper over _intelligence_matrix_lookup.
-
-        Returns:
-            List of orchestrator names in execution order.
-        """
-        result = self._intelligence_matrix_lookup(intent, context)
-        return result.get("chain", [])
+    # ------------------------------------------------------------------
+    # Primary routing entry point
+    # ------------------------------------------------------------------
 
     def route(self, context: Dict[str, Any]) -> RoutingDecision:
-        """
-        Route an operation based on context (with caching).
+        """Route an operation based on context (with decision caching).
 
-        Analyzes operation context and determines appropriate handler.
-        Uses caching to avoid redundant decisions for identical contexts.
-
-        LENS Integration (LENS-002):
-        - Accepts optional lens_context with Git/AST/Comment intelligence
-        - Enhances confidence scoring based on LENS evidence
-        - Logs LENS usage for audit trail
+        LENS Integration (LENS-002): accepts optional lens_context in context dict.
 
         Args:
-            context: Context dictionary with operation details:
-                - operation: Operation name (required or description required)
-                - description: Operation description (optional)
-                - domain: Target domain (optional)
-                - keywords: List of keywords (optional)
-                - urgency: Urgency level (optional)
-                - user_intent: User's stated intent (optional)
-                - lens_context: LENS analyzer data (optional):
-                    * git_history: Git commit analysis
-                    * ast_analysis: AST complexity data
-                    * comment_analysis: TODO/FIXME extraction
+            context: Dict with operation, description, domain, keywords,
+                urgency, user_intent, lens_context.
 
         Returns:
-            RoutingDecision: Routing decision with target handler and metadata
+            RoutingDecision: Routing decision with target handler.
 
         Raises:
-            ValueError: If context is invalid or routing cannot be determined
-
-        Example:
-            context = {
-                "operation": "fix_race_condition",
-                "description": "Fix race condition in Master Orchestrator",
-                "domain": "core",
-                "keywords": ["bug", "fix", "race condition"],
-                "lens_context": {
-                    "git_history": {...},
-                    "ast_analysis": {...},
-                    "comment_analysis": {...}
-                }
-            }
-            decision = router.route(context)
-            print(f"Route to: {decision.target_handler} (confidence: {decision.confidence_score})")
+            ValueError: If context is invalid or routing cannot be determined.
         """
         try:
-            # Get cache key
             cache_key = self._get_cache_key(context)
-
-            # Check cache
             if cache_key in self.cached_decisions:
                 return self.cached_decisions[cache_key]
 
-            # WORKFLOW-COMPLEXITY-GATE-001: Stage 2a - Complexity-based routing
             complexity_decision = self._check_workflow_complexity(context)
             if complexity_decision is not None:
-                # Store in cache and return
                 self.cached_decisions[cache_key] = complexity_decision
                 return complexity_decision
 
-            # Compute routing decision (fallback to standard routing)
             decision = self._route_internal(context)
 
-            # LENS-002: Enhance decision with LENS intelligence if available
             lens_context = context.get("lens_context")
             if lens_context:
                 decision = self._enhance_with_lens(decision, lens_context)
-
-                # Log LENS usage for audit trail
                 self.logger.log_operation_complete(
                     ac_id="LENS-002",
                     operation="LENS_ENHANCED_ROUTING",
                     success=True,
                     details={
                         "intent_type": decision.intent_type.value,
-                        "confidence_boost_applied": decision.metadata.get("lens_confidence_boost", 0.0),
-                        "lens_evidence": {
-                            "git_pattern": "git_history" in lens_context,
-                            "ast_complexity": "ast_analysis" in lens_context,
-                            "comment_hints": "comment_analysis" in lens_context
-                        }
-                    }
+                        "confidence_boost_applied": decision.metadata.get(
+                            "lens_confidence_boost", 0.0
+                        ),
+                    },
                 )
 
-            # Store in cache
             self.cached_decisions[cache_key] = decision
-
             return decision
 
         except (ValueError, KeyError, TypeError) as e:
-            # Specific exception handling per CORE-013
             self.logger.log_operation_complete(
                 ac_id="AC-PROD-001-02",
                 operation="ROUTING_ERROR",
                 success=False,
-                details={"error": str(e)}
+                details={"error": str(e)},
             )
             raise
 
-    def route_with_lens_auto_fetch(
-        self,
-        request: Dict[str, Any],
-        unified_intelligence: Optional[UnifiedIntelligenceContext] = None
-    ) -> Dict[str, Any]:
-        """
-        Route request with automatic LENS context fetching and smart rule citations.
-
-        Phase 20 Component #3: IntentRouter LENS Auto-Fetch
-        Phase 20.5 Component #4: Smart Rule Citations
-
-        Automatically fetches LENS context if missing for IMPLEMENT/FIX/REFACTOR/ANALYZE intents.
-        Uses cache-first strategy from LENSContextProvider.
-
-        Phase 20.5 Enhancement: Accepts UnifiedIntelligenceContext from MasterOrchestrator
-        Stage 2 synthesis and cites specific CORE rules in routing reasoning.
-
-        Args:
-            request: Request dictionary with:
-                - intent: Intent type string (IMPLEMENT, FIX, REFACTOR, etc.)
-                - description: Operation description
-                - file_path: Optional file path for LENS analysis
-                - company_name: Optional company name for company knowledge
-                - context: Optional existing context dict
-            unified_intelligence: Optional UnifiedIntelligenceContext from Stage 2 synthesis
-                - Contains merged LENS + Company + CORTEX knowledge
-                - Provides cited rules for intelligent routing decisions
-                - Includes violations and proactive guidance
-
-        Returns:
-            Dict[str, Any]: Routing result with:
-                - intent: Detected intent type
-                - target_orchestrator: Target orchestrator name
-                - confidence_score: Routing confidence (0.0-1.0)
-                - reasoning: Routing explanation (with rule citations if unified_intelligence provided)
-                - context: Enhanced context with LENS insights if fetched
-                - cited_rules: List of CORE rules cited in decision (if unified_intelligence provided)
-
-        Example:
-            # Without unified intelligence (backward compatible)
-            request = {"intent": "IMPLEMENT", "description": "Add auth"}
-            result = router.route_with_lens_auto_fetch(request)
-
-            # With unified intelligence (Phase 20.5)
-            unified_context = synthesis_engine.synthesize_unified_context(...)
-            result = router.route_with_lens_auto_fetch(request, unified_context)
-            # result["reasoning"] now includes rule citations like:
-            # "Routing to TDDOrchestrator (CORE-008: TDD required for IMPLEMENT)"
-
-        Authority: AC-PHASE-20-COMPONENT-3, AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5 Component #4)
-        """
-        try:
-            # Extract request components
-            intent_str = request.get("intent", "")
-            file_path = request.get("file_path")
-            company_name = request.get("company_name")
-            context = request.get("context", {})
-
-            # Check if LENS context already exists
-            has_lens_context = "lens_insights" in context
-
-            # Determine if should auto-fetch LENS (only for IMPLEMENT/FIX/REFACTOR/ANALYZE)
-            should_fetch = (
-                not has_lens_context
-                and intent_str in ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE"]
-                and file_path is not None
-            )
-
-            # Auto-fetch LENS context if needed
-            if should_fetch:
-                try:
-                    from cortex.orchestrators.core.lens_context_provider import (
-                        get_lens_context_provider,
-                    )
-
-                    lens_provider = get_lens_context_provider()
-                    lens_data = lens_provider.get_context(
-                        intent=intent_str,
-                        file_path=file_path,
-                        company_name=company_name
-                    )
-
-                    # Merge LENS insights into context
-                    context.update(lens_data)
-
-                    self.logger.log_operation_complete(
-                        ac_id="AC-PHASE-20-COMPONENT-3",
-                        operation="LENS_AUTO_FETCH",
-                        success=True,
-                        details={
-                            "intent": intent_str,
-                            "file_path": file_path,
-                            "company_name": company_name,
-                            "context_size": len(str(lens_data))
-                        }
-                    )
-
-                except Exception as e:
-                    # Fail-safe: Continue without LENS context
-                    self.logger.log_operation_complete(
-                        ac_id="AC-PHASE-20-COMPONENT-3",
-                        operation="LENS_AUTO_FETCH_FAILED",
-                        success=False,
-                        details={"error": str(e)}
-                    )
-
-            # Perform standard routing
-            routing_context = {
-                "operation": request.get("description", ""),
-                "description": request.get("description"),
-                "domain": request.get("domain"),
-                "keywords": request.get("keywords"),
-                "user_intent": intent_str,
-                "lens_context": context.get("lens_insights")
-            }
-
-            decision = self.route(routing_context)
-
-            # Phase 20.5: Enhance reasoning with rule citations if unified intelligence available
-            enhanced_reasoning = decision.reasoning
-            cited_rules: List[str] = []
-
-            if unified_intelligence:
-                try:
-                    # Extract cited rules from synthesis result
-                    cited_rules = unified_intelligence.synthesis_result.citations
-
-                    # Build rule citation text
-                    if cited_rules:
-                        # Get intent-specific applicable rules
-                        intent_rules = self._get_intent_applicable_rules(
-                            intent_str,
-                            cited_rules,
-                            unified_intelligence
-                        )
-
-                        if intent_rules:
-                            rule_text = ", ".join(intent_rules[:3])  # Top 3 rules
-                            enhanced_reasoning = f"{decision.reasoning} (Cited: {rule_text})"
-
-                    # Add violation warnings to reasoning if present
-                    violations = unified_intelligence.synthesis_result.violations
-                    if violations:
-                        violation_text = f" ⚠️ {len(violations)} violation(s) detected"
-                        enhanced_reasoning += violation_text
-
-                    self.logger.log_operation_complete(
-                        ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
-                        operation="SMART_CITATIONS_APPLIED",
-                        success=True,
-                        details={
-                            "intent": intent_str,
-                            "cited_rules_count": len(cited_rules),
-                            "violations_count": len(violations)
-                        }
-                    )
-
-                except Exception as citation_err:
-                    # Fail-safe: Continue without citations
-                    self.logger.log_operation_complete(
-                        ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
-                        operation="SMART_CITATIONS_FAILED",
-                        success=False,
-                        details={"error": str(citation_err)}
-                    )
-
-            # Build result with enhanced context
-            result = {
-                "intent": decision.intent_type.value,
-                "target_orchestrator": decision.target_handler,
-                "confidence_score": decision.confidence_score,
-                "reasoning": enhanced_reasoning,  # Enhanced with citations
-                "context": context
-            }
-
-            # Add cited rules to result if available
-            if cited_rules:
-                result["cited_rules"] = cited_rules
-
-            return result
-
-        except Exception as e:
-            # Fail-safe: Return basic routing result
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE-20-COMPONENT-3",
-                operation="ROUTING_WITH_AUTO_FETCH_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-
-            # Return minimal valid result
-            return {
-                "intent": request.get("intent", "UNKNOWN"),
-                "target_orchestrator": "MasterOrchestrator",
-                "confidence_score": 0.0,
-                "reasoning": f"Error during routing: {str(e)}",
-                "context": request.get("context", {})
-            }
-
-    def _get_intent_applicable_rules(
-        self,
-        intent: str,
-        cited_rules: List[str],
-        unified_intelligence: UnifiedIntelligenceContext
-    ) -> List[str]:
-        """
-        Filter cited rules to only those applicable to current intent.
-
-        Phase 20.5 Component #4: Smart Citations Helper
-
-        Args:
-            intent: Current intent type (IMPLEMENT, FIX, etc.)
-            cited_rules: All cited rule IDs from synthesis
-            unified_intelligence: Full unified intelligence context
-
-        Returns:
-            List[str]: Filtered rule IDs applicable to intent with titles
-
-        Example:
-            For IMPLEMENT intent with cited_rules ["CORE-008", "CORE-011", "CORE-013"]:
-            Returns: ["CORE-008: TDD Required", "CORE-011: Type Hints"]
-
-        Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
-        """
-        # Intent-specific rule priorities
-        intent_priorities = {
-            "IMPLEMENT": ["CORE-008", "CORE-011", "CORE-012", "CORE-026"],  # TDD, types, docs, git
-            "FIX": ["CORE-013", "CORE-027", "CORE-008"],  # Exceptions, audit, TDD
-            "REFACTOR": ["CORE-011", "CORE-012", "CORE-035"],  # Types, docs, no duplication
-            "ANALYZE": ["CORE-030", "CORE-036"],  # Implementation truth, standards
-            "TEST": ["CORE-008", "CORE-013"],  # TDD, exceptions
-        }
-
-        # Get priority rules for intent
-        priority_rules = intent_priorities.get(intent, [])
-
-        # Filter cited rules to only priority ones for this intent
-        applicable = [rule for rule in cited_rules if rule in priority_rules]
-
-        # Add rule titles from unified intelligence
-        result = []
-        merged_practices = unified_intelligence.synthesis_result.merged_rules
-
-        for rule_id in applicable:
-            if rule_id in merged_practices:
-                rule_data = merged_practices[rule_id]
-                title = rule_data.get("title", rule_id)
-                result.append(f"{rule_id}: {title}")
-            else:
-                result.append(rule_id)
-
-        return result
-
-    def _format_routing_message_with_books(self, rule_id: str) -> str:
-        """
-        Format routing message with book reference for inline display.
-
-        AC-PHASE-06-S2-002: IntentRouter book reference enrichment
-
-        Uses BusinessWisdomFormatter to enrich routing messages with
-        authoritative book citations, enhancing user education during
-        intent classification.
-
-        Args:
-            rule_id: CORE rule ID (e.g., "CORE-008")
-
-        Returns:
-            Formatted string with book reference. Falls back to rule_id if formatting fails.
-
-        Example:
-            >>> router._format_routing_message_with_books("CORE-008")
-            '**Red-Green-Refactor Discipline** → CORE-008 (TDD by Kent Beck)'
-
-        Authority:
-            - business-wisdom-wiring.md (Stage 2)
-            - phase-06-business-wisdom-display-enhancement.yaml
-
-        AC-ID: AC-PHASE-06-S2-002
-        """
-        try:
-            from cortex.orchestrators.core.business_wisdom_formatter import BusinessWisdomFormatter
-
-            formatter = BusinessWisdomFormatter()
-            markdown = formatter.format_governance_with_books(
-                rule_ids=[rule_id],
-                max_display=1,
-                include_icon=False
-            )
-
-            if markdown:
-                # Strip list marker for inline display
-                lines = markdown.split("\n")
-                for line in lines:
-                    if line.startswith("- "):
-                        return line[2:].strip()  # Remove "- " prefix
-
-            # Fallback to rule ID only
-            return rule_id
-
-        except Exception as e:
-            # Graceful degradation on any error
-            return rule_id
-
-    def _init_response_engine(self, intent_type: IntentType, orchestrator_name: str, enable: bool = False) -> None:
-        """
-        Stub for response engine initialization (Wave H-S4 feature).
-
-        AC-ENH082-W2-S4-004: ResponseEngine initialization
-
-        This is a placeholder for future response engine integration.
-        Currently disabled for safety until Wave H-S4 validation complete.
-
-        Args:
-            intent_type: Intent type for response formatting
-            orchestrator_name: Name of orchestrator
-            enable: Whether to enable response engine (default False)
-        """
-        # Phase 70: Guard — only raise if enable=True (response engine not yet implemented)
-        if enable:
-            raise NotImplementedError("_init_response_engine not yet implemented")
-        # When disabled, silently skip initialization
-        self._response_engine_enabled = False
+    # ------------------------------------------------------------------
+    # IOrchestrator execute / execute_operation
+    # ------------------------------------------------------------------
 
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
-        """
-        Execute routing operation (IOrchestrator interface).
-
-        Validates input and performs routing based on parameters.
+        """Execute routing operation (IOrchestrator interface).
 
         Args:
-            parameters: Operation parameters
+            parameters: Operation parameters.
 
         Returns:
-            Result[str]: Ok with routing decision JSON, or Err with error message
+            Result[str]: Ok with routing decision JSON, or Err on failure.
         """
-        # Log operation start
         self.logger.log_operation_start(
             ac_id="AC-PROD-001-02",
             operation="ROUTING_EXECUTE",
-            details=parameters
+            details=parameters,
         )
-
         try:
-            # Validate input
             validation_result = self.validate_input(parameters)
             if validation_result.is_err():
                 self.logger.log_operation_complete(
                     ac_id="AC-PROD-001-02",
                     operation="ROUTING_EXECUTE",
                     success=False,
-                    details={"error": validation_result.unwrap_err()}
+                    details={"error": validation_result.unwrap_err()},
                 )
-                return validation_result
+                return validation_result  # type: ignore[return-value]
 
-            # Perform routing
             decision = self.route(parameters)
-
-            # Log success
             self.logger.log_operation_complete(
                 ac_id="AC-PROD-001-02",
                 operation="ROUTING_EXECUTE",
@@ -2701,54 +537,44 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 details={
                     "target_handler": decision.target_handler,
                     "confidence": decision.confidence_score,
-                    "intent_type": decision.intent_type.value
-                }
+                    "intent_type": decision.intent_type.value,
+                },
             )
-
-            # Return decision as JSON
-            return Ok(json.dumps({
-                "target_handler": decision.target_handler,
-                "intent_type": decision.intent_type.value,
-                "confidence": decision.confidence_score,
-                "reasoning": decision.reasoning,
-                "timestamp": decision.timestamp
-            }))
-
+            return Ok(
+                json.dumps({
+                    "target_handler": decision.target_handler,
+                    "intent_type": decision.intent_type.value,
+                    "confidence": decision.confidence_score,
+                    "reasoning": decision.reasoning,
+                    "timestamp": decision.timestamp,
+                })
+            )
         except Exception as e:
-            # Specific exception handling per CORE-013
             self.logger.log_operation_complete(
                 ac_id="AC-PROD-001-02",
                 operation="ROUTING_EXECUTE",
                 success=False,
-                details={"error": str(e)}
+                details={"error": str(e)},
             )
             return Err(f"Routing execution failed: {str(e)}")
 
     def execute_operation(
         self,
         operation_name: str,
-        parameters: Dict[str, Any]
+        parameters: Dict[str, Any],
     ) -> Result[Any]:
-        """
-        Execute specific routing operation.
+        """Execute a named routing operation.
 
-        Supports operations:
-        - "analyze_and_route": Analyze context and route to handler
-        - "route_operation": Route based on operation context
-        - "detect_intent": Detect operation intent type only
-        - "get_routing_rules": Get available routing rules
+        Supports: analyze_and_route, route_operation, detect_intent,
+        get_routing_rules.
 
         Args:
-            operation_name: Name of operation to execute
-            parameters: Operation parameters
+            operation_name: Name of the operation to execute.
+            parameters: Operation parameters.
 
         Returns:
-            Result[Any]: Operation result or error
-
-        Raises:
-            ValueError: If operation_name is not recognized
+            Result[Any]: Operation result or Err on failure.
         """
-        # Phase 58 — cross-cutting hooks
         self._activate_cross_cutting_hooks(
             operation=operation_name,
             orchestrator_context=parameters.get("orchestrator_context"),
@@ -2757,131 +583,95 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         try:
             if operation_name == "analyze_and_route":
                 return self.execute(parameters)
-
             elif operation_name == "route_operation":
-                decision = self.route(parameters)
-                return Ok(decision)
-
+                return Ok(self.route(parameters))
             elif operation_name == "detect_intent":
                 intent_type = self.detect_intent(parameters)
                 return Ok({
                     "intent_type": intent_type.value,
-                    "description": f"Detected {intent_type.value} operation"
+                    "description": f"Detected {intent_type.value} operation",
                 })
-
             elif operation_name == "get_routing_rules":
                 rules_list = [
-                    {
-                        "intent": intent.value,
-                        "domain": domain,
-                        "handler": handler
-                    }
+                    {"intent": intent.value if intent else None, "domain": domain, "handler": handler}
                     for (intent, domain), handler in self.routing_rules.items()
                 ]
                 return Ok({"routing_rules": rules_list})
-
             else:
                 return Err(f"Unknown operation: {operation_name}")
-
         except Exception as e:
-            # Specific exception handling per CORE-013
             return Err(f"Operation '{operation_name}' failed: {str(e)}")
+
+    # ------------------------------------------------------------------
+    # Additional public API
+    # ------------------------------------------------------------------
 
     def classify_intent_with_workflow_suggestion(
         self, context: Dict[str, Any]
     ) -> Tuple[str, Optional[str]]:
-        """
-        Classify intent and suggest workflow template if applicable.
+        """Classify intent and suggest a workflow template if applicable.
 
         Phase 100 Stage 3: Template suggestion based on context analysis.
 
         Args:
-            context: Operation context with description, intent, attachments, keywords.
+            context: Operation context dict.
 
         Returns:
-            Tuple of (intent_type, Optional[template_id])
-            - intent_type: Detected intent (IMPLEMENT, FIX, REFACTOR, etc.)
-            - template_id: Suggested workflow template or None
-
-        Examples:
-            >>> router = IntentRouter()
-            >>> context = {
-            ...     "description": "Fix button styling",
-            ...     "intent": "FIX",
-            ...     "attachments": [{"type": "image/png"}]
-            ... }
-            >>> intent, template = router.classify_intent_with_workflow_suggestion(context)
-            >>> assert intent == "FIX"
-            >>> assert template == "tdd/frontend-visual"
+            Tuple[str, Optional[str]]: (intent_type, Optional[template_id]).
         """
-        # Extract intent
         intent = context.get("intent", "IMPLEMENT")
-
-        # Check for visual context (screenshots)
         attachments = context.get("attachments", [])
-        has_visual_context = any(
-            att.get("type", "").startswith("image/") for att in attachments
-        )
-
-        # Extract keywords
+        has_visual = any(att.get("type", "").startswith("image/") for att in attachments)
         keywords = context.get("keywords", [])
         description = context.get("description", "").lower()
 
-        # Template suggestion logic
-        template_id = None
-
-        # Visual context → frontend-visual-tdd
-        if has_visual_context and intent in ["FIX", "IMPLEMENT"]:
+        template_id: Optional[str] = None
+        if has_visual and intent in ["FIX", "IMPLEMENT"]:
             template_id = "tdd/frontend-visual"
-
-        # API keywords → api-service
         elif any(kw in description or kw in keywords for kw in ["api", "endpoint", "rest"]):
             if intent == "IMPLEMENT":
                 template_id = "tdd/api-service"
-
-        # Security keywords → security-compliance
-        elif any(kw in description or kw in keywords for kw in ["security", "compliance", "audit"]):
+        elif any(
+            kw in description or kw in keywords
+            for kw in ["security", "compliance", "audit"]
+        ):
             if intent == "AUDIT":
                 template_id = "security/compliance-audit"
-
-        # Generic feature implementation
         elif intent == "IMPLEMENT" and template_id is None:
             template_id = "tdd/feature-implementation"
 
         return intent, template_id
 
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
-        """
-        Get MCP tools exposed by this orchestrator.
+        """Get MCP tools exposed by this orchestrator.
 
         Returns:
-            Result[Dict]: Dictionary of available MCP tools
+            Result[Dict]: Dictionary of available MCP tools.
         """
         try:
             tools = {
                 "route_operation": {
                     "description": "Route operation to appropriate handler based on intent",
                     "parameters": ["operation", "description", "domain", "keywords"],
-                    "returns": "RoutingDecision with target_handler"
+                    "returns": "RoutingDecision with target_handler",
                 },
                 "analyze_and_route": {
-                    "description": "Analyze operation context and route to handler",
+                    "description": "Analyse operation context and route to handler",
                     "parameters": ["operation", "description", "domain", "keywords"],
-                    "returns": "Routing decision result"
+                    "returns": "Routing decision result",
                 },
                 "detect_intent": {
-                    "description": "Detect operation intent type (IMPLEMENT, FIX, REFACTOR)",
+                    "description": "Detect operation intent type",
                     "parameters": ["operation", "description", "keywords"],
-                    "returns": "IntentType enum"
+                    "returns": "IntentType enum",
                 },
                 "get_routing_rules": {
                     "description": "Get available routing rules",
                     "parameters": [],
-                    "returns": "List of routing rules"
-                }
+                    "returns": "List of routing rules",
+                },
             }
             return Ok(tools)
-
         except Exception as e:
             return Err(f"Failed to get MCP tools: {str(e)}")
 
@@ -2892,4 +682,5 @@ __all__ = [
     "IntentType",
     "RoutingDecision",
     "RoutingContext",
+    "CompositeIntentDetector",
 ]

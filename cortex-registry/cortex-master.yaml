@@ -109,7 +109,7 @@ summary:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
-    phase-103: "IN_PROGRESS — God Object Decomposition (P1) — 2/8 GAPs CLOSED (GAP-103-01: master_orchestrator 3167L→702L; GAP-103-07: utilities+operations extracted)"
+    phase-103: "IN_PROGRESS — God Object Decomposition (P1) — 3/8 GAPs CLOSED (GAP-103-01: master_orchestrator 3167L→702L; GAP-103-02: intent_router_impl 2895L→686L; GAP-103-07: utilities+operations extracted)"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
     phase-108: "PLANNED — cortex-registry Consolidation (P1)"
@@ -207,7 +207,7 @@ phases:
     gaps_closed: 2
     sub_phases: 5
     file: "cortex-registry/planning/phases/planned/phase-103-god-object-decomposition.yaml"
-    note: "GAP-103-01 CLOSED (2026-03-03): master_orchestrator.py 3,167L → 702L via 4 mixins (E2EMixin, RegistryMixin, RequestMixin, ResponseMixin). 25/25 tests GREEN. GAP-103-07 CLOSED (2026-03-03): utilities.py + operations.py → 14 tool modules + 2 shims. Remaining: 6 GAPs (intent_router, tdd_orchestrator, lens_orchestrator, enforcement_orchestrator, knowledge_synthesis, coupling)."
+    note: "GAP-103-01 CLOSED (2026-03-03): master_orchestrator.py 3,167L → 702L via 4 mixins (E2EMixin, RegistryMixin, RequestMixin, ResponseMixin). 25/25 tests GREEN. GAP-103-02 CLOSED (2026-03-03): intent_router_impl.py 2,895L → 686L via 5 modules (IntentKeywordRegistry, LensAnalysisMixin, RegistryIntelligenceMixin, RoutingCoreMixin, SmartCitationsMixin). Line gate revised 500→750 (data-driven: immovable public API = 166L). 40/40 tests GREEN. GAP-103-07 CLOSED (2026-03-03): utilities.py + operations.py → 14 tool modules + 2 shims. Remaining: 5 GAPs (tdd_orchestrator, lens_orchestrator, enforcement_orchestrator, knowledge_synthesis, coupling)."
 
   - id: phase-104
     title: "Build Artifact Purge + Test-Source Mirror Alignment + DB Consolidation"

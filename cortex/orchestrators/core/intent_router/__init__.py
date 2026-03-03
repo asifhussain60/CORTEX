@@ -81,6 +81,12 @@ def get_registry_intelligence_agent() -> None:
     return None
 
 
+from cortex.orchestrators.core.intent_router.keyword_registry import IntentKeywordRegistry
+from cortex.orchestrators.core.intent_router.lens_analysis_mixin import LensAnalysisMixin
+from cortex.orchestrators.core.intent_router.registry_intelligence_mixin import RegistryIntelligenceMixin
+from cortex.orchestrators.core.intent_router.routing_core_mixin import RoutingCoreMixin
+from cortex.orchestrators.core.intent_router.smart_citations_mixin import SmartCitationsMixin
+
 __all__ = [
     "WorkflowComplexityRouter",
     "Intent",
@@ -94,4 +100,10 @@ __all__ = [
     "RoutingEnforcementEngine",
     "StrategySelector",
     "get_registry_intelligence_agent",
+    # Phase 103-b: decomposed mixin modules
+    "IntentKeywordRegistry",
+    "LensAnalysisMixin",
+    "RegistryIntelligenceMixin",
+    "RoutingCoreMixin",
+    "SmartCitationsMixin",
 ]
