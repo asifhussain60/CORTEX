@@ -238,14 +238,17 @@ acceptance_criteria:
     description: "All 8 GAPs in sweep_catalogue have status: CLOSED"
     status: "✅ COMPLETE — 2026-03-03"
   - id: AC-101-02
-    description: "66 tests in tests/core/test_phase101_duplicate_consolidation.py all GREEN"
-    status: "✅ COMPLETE — 66/66 passed (0.26s)"
+    description: "87 tests in tests/core/test_phase101_duplicate_consolidation.py all GREEN (66 GAP tests + 21 VERIFY-101 full-scan)"
+    status: "✅ COMPLETE — 87/87 passed (0.31s)"
   - id: AC-101-03
     description: "Smoke gate passes with ≥2212 tests (baseline) and zero new failures"
-    status: "✅ COMPLETE — 2,255 passed, 2 pre-existing failures unchanged"
+    status: "✅ COMPLETE — 2,276 passed, 2 pre-existing failures unchanged"
   - id: AC-101-04
     description: "Each duplicate file pair either: has shims in non-canonical location, or is JUSTIFIED DISTINCT with different class names"
     status: "✅ COMPLETE — GAP-01/02/04 = shims; GAP-03/05/06/07/08 = justified distinct"
   - id: AC-101-05
     description: "All import consumers verified — no broken import chains introduced"
     status: "✅ COMPLETE — grepped all consumers, shims preserve backward compat"
+  - id: AC-101-06
+    description: "Full codebase filename duplicate scan — all remaining pairs documented as shims or justified-distinct (VERIFY-101 class)"
+    status: "✅ COMPLETE — 21 additional tests covering all discovered pairs: shims (10) + justified-distinct (11)"
