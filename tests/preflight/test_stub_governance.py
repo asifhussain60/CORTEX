@@ -40,10 +40,12 @@ CORTEX_ROOT = pathlib.Path(__file__).parents[2]
 
 
 def _all_cortex_py_files() -> List[pathlib.Path]:
-    """Return all non-pycache, non-__init__ Python files under cortex/."""
+    """Return all non-pycache, non-__init__, non-__main__ Python files under cortex/."""
     return [
         f for f in (CORTEX_ROOT / "cortex").rglob("*.py")
-        if "__pycache__" not in str(f) and f.name != "__init__.py"
+        if "__pycache__" not in str(f)
+        and f.name != "__init__.py"
+        and f.name != "__main__.py"  # __main__.py files are entry points by design
     ]
 
 
