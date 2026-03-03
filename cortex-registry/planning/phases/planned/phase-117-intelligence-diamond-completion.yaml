@@ -390,7 +390,9 @@ sweep_catalogue:
 
       Plus top-level: facade.py, provider.py, __init__.py (canonical entry points)
     action_ref: "phase-117-c"
-    status: OPEN
+    status: CLOSED
+    closed_by: "AC-PHASE117-C-001"
+    closed_date: "2026-03-04"
     acceptance_criteria: |
       - cortex/intelligence/ has ≤8 top-level directories
       - All existing import paths work via compat shims
@@ -413,7 +415,9 @@ sweep_catalogue:
       Move: hp_output_validator.py → verification/
       Move: intelligence_metadata_discovery.py → analysis/
     action_ref: "phase-117-c"
-    status: OPEN
+    status: CLOSED
+    closed_by: "AC-PHASE117-C-001"
+    closed_date: "2026-03-04"
     acceptance_criteria: |
       - ≤5 top-level .py files in cortex/intelligence/ (facade, provider, base, base_engine, __init__)
       - All relocated files have compat shims at old paths
@@ -428,7 +432,9 @@ sweep_catalogue:
       cortex/intelligence/intelligence_capability_matcher.py
       One is a shim, one is canonical. Merge into single canonical file.
     action_ref: "phase-117-c"
-    status: OPEN
+    status: CLOSED
+    closed_by: "AC-PHASE117-C-001"
+    closed_date: "2026-03-04"
     acceptance_criteria: |
       - Single canonical capability_matcher module
       - Old import paths resolve via compat shim
@@ -639,7 +645,9 @@ phases:
   - id: "phase-117-c"
     title: "Directory flatten — 25 subdirs → ≤8 diamond shape"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_by: "AC-PHASE117-C-001"
+    completed_date: "2026-03-04"
     gap_refs: ["GAP-117-08", "GAP-117-09", "GAP-117-10"]
     governance_authority: "CORE-008, CORE-028, CORE-035"
     duration_estimate: "4 hours"
