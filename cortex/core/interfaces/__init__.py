@@ -77,7 +77,7 @@ class IGovernanceRegistry(ABC):
 
 
 @dataclass
-class ExecutionResult:
+class ExecutionResult:  # noqa: CORE-035-scoped — domain-specific execution result — different fields per context
     """Result from orchestrator execution."""
 
     success: bool

@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Dict, List
 
 
-class ViolationType(enum.Enum):
+class ViolationType(enum.Enum):  # noqa: CORE-035-scoped — domain-specific violation classification
     """Types of naming violations."""
 
     UNDERSCORE = "underscore"  # Uses underscore instead of hyphen (should be kebab-case)

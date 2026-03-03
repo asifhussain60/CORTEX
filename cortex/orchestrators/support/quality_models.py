@@ -26,7 +26,7 @@ class GateType(Enum):
     SECURITY = "security"
 
 
-class RiskLevel(Enum):
+class RiskLevel(Enum):  # noqa: CORE-035-scoped — domain-specific risk level — local orchestrator values
     """Risk levels for quality assessment."""
 
     SAFE = "safe"
@@ -105,7 +105,7 @@ class RecommendationSafetyResult:
 
 
 @dataclass
-class Challenge:
+class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
     """Generated challenge for user request disagreement detection."""
 
     challenge_type: ChallengeType

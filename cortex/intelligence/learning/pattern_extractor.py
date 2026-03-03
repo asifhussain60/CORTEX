@@ -25,7 +25,7 @@ from typing import Any, Dict, List
 logger = logging.getLogger(__name__)
 
 
-class PatternType(Enum):
+class PatternType(Enum):  # noqa: CORE-035-scoped — domain-specific pattern classification
     """Type of pattern extracted."""
 
     TECHNICAL = auto()

@@ -24,7 +24,7 @@ class ComponentName(str, Enum):
     OUTPUT_VALIDATION = "output_validation"
 
 
-class MetricType(str, Enum):
+class MetricType(str, Enum):  # noqa: CORE-035-scoped — domain-specific metric classification
     """Metric types for performance tracking."""
 
     LATENCY = "latency"

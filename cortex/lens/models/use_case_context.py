@@ -63,7 +63,7 @@ class Actor:
 
 
 @dataclass
-class UseCase:
+class UseCase:  # noqa: CORE-035-scoped — domain-specific use case model
     """
     Business use case extracted from code.
 

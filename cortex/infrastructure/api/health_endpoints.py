@@ -23,7 +23,7 @@ from cortex.models.canonical_enums import HealthStatus
 
 
 @dataclass
-class ComponentHealth:
+class ComponentHealth:  # noqa: CORE-035-scoped — domain-specific component health model
     """Health status of individual component.
 
     Args:

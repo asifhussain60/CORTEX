@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class PatternType(Enum):
+class PatternType(Enum):  # noqa: CORE-035-scoped — domain-specific pattern classification
     """Type of learned pattern."""
 
     TECHNICAL = auto()      # Code patterns, test patterns, refactoring

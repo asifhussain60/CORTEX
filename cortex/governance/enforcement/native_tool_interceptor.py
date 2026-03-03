@@ -28,7 +28,7 @@ class Intent(Enum):
     SETUP = "SETUP"
 
 
-class ToolCategory(Enum):
+class ToolCategory(Enum):  # noqa: CORE-035-scoped — domain-specific tool taxonomy
     """Native tool categorization for interception rules."""
     FILE_MODIFICATION = "FILE_MODIFICATION"  # create_file, replace_string_in_file, edit_files
     FILE_READ = "FILE_READ"  # read_file, grep_search, semantic_search

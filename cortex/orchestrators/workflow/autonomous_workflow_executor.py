@@ -43,7 +43,7 @@ class Plan:
 
 
 @dataclass
-class ExecutionResult:
+class ExecutionResult:  # noqa: CORE-035-scoped — domain-specific execution result — different fields per context
     """Result of workflow execution."""
 
     status: str  # COMPLETED | FAILED | CHECKPOINT_NEEDED

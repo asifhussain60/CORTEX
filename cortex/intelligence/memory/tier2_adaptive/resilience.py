@@ -161,7 +161,7 @@ class DegradedResponse(Generic[T]):
         }
 
 
-class FallbackStrategy:
+class FallbackStrategy:  # noqa: CORE-035-scoped — domain-specific fallback strategy model
     """
     Represents a single fallback strategy with retry capability.
 
@@ -950,7 +950,7 @@ class CircuitBreakerConfig:
         self.name = name
 
 
-class CircuitBreaker:
+class CircuitBreaker:  # noqa: CORE-035-scoped — domain-specific circuit breaker — independent implementations
     """
     Circuit Breaker pattern implementation.
 

@@ -60,7 +60,7 @@ logger = logging.getLogger(__name__)
 # ENUMS
 # ============================================================================
 
-class SeverityLevel(Enum):
+class SeverityLevel(Enum):  # noqa: CORE-035-scoped — domain-specific severity level — local orchestrator values
     """Security finding severity levels."""
     CRITICAL = "CRITICAL"
     HIGH = "HIGH"

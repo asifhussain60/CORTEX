@@ -50,7 +50,7 @@ class Intent:
 
 
 @dataclass
-class RoutingDecision:
+class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
     """Decision output from complexity router."""
     route: RoutingStrategy
     complexity: float

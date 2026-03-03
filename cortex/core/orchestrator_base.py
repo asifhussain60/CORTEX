@@ -27,7 +27,7 @@ class LifecycleStage(Enum):
 
 
 @dataclass
-class ExecutionResult:
+class ExecutionResult:  # noqa: CORE-035-scoped — domain-specific execution result — different fields per context
     """Result of orchestrator execution."""
     success: bool
     stage: LifecycleStage

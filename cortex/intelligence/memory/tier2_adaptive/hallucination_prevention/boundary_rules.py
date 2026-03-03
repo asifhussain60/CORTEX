@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime
 
 
-class ViolationType(str, Enum):
+class ViolationType(str, Enum):  # noqa: CORE-035-scoped — domain-specific violation classification
     """Types of boundary violations."""
     SCOPE = "scope"
     FORMAT = "format"

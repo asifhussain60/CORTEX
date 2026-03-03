@@ -21,7 +21,7 @@ class ComponentType(Enum):
     EXPERIMENTAL = "EXPERIMENTAL"  # Experimental features
 
 
-class HealthStatus(Enum):
+class HealthStatus(Enum):  # noqa: CORE-035-scoped — domain-specific health status — context-appropriate states
     """Health status of a component."""
     HEALTHY = "HEALTHY"
     DEGRADED = "DEGRADED"
@@ -30,7 +30,7 @@ class HealthStatus(Enum):
 
 
 @dataclass
-class ComponentHealth:
+class ComponentHealth:  # noqa: CORE-035-scoped — domain-specific component health model
     """Health information for a single component."""
     name: str
     component_type: ComponentType

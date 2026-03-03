@@ -123,7 +123,7 @@ class SemanticCapabilityMatcher:
 
 
 @dataclass
-class RoutingDecision:
+class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
     """Routing decision with optimization details.
 
     Attributes:

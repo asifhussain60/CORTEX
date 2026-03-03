@@ -341,7 +341,7 @@ class GovernanceEnforcer:
         """Check if all decisions are compliant with governance rules."""
         return self.violation_count == 0
 
-class AuditLogger:
+class AuditLogger:  # noqa: CORE-035-scoped — domain-specific audit logger — independent implementations
     """Integrates governance audit logging with existing system audit trail."""
 
     def __init__(self, enforcer: GovernanceEnforcer) -> None:

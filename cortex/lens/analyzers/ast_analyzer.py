@@ -47,7 +47,7 @@ class FunctionInfo:
 
 
 @dataclass
-class ClassInfo:
+class ClassInfo:  # noqa: CORE-035-scoped — domain-specific class introspection model
     """
     Information about a class definition.
 

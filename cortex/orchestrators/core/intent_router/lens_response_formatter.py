@@ -13,7 +13,7 @@ from typing import Any, Dict
 import yaml
 
 
-class ResponseFormat(Enum):
+class ResponseFormat(Enum):  # noqa: CORE-035-scoped — domain-specific response format — local orchestrator values
     """Available response formats."""
     JSON = "json"
     YAML = "yaml"

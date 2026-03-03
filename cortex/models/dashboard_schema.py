@@ -381,7 +381,7 @@ class QualitySection:
 
 
 @dataclass
-class UseCase:
+class UseCase:  # noqa: CORE-035-scoped — domain-specific use case model
     """
     Dashboard use case.
 

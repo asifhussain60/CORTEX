@@ -35,7 +35,7 @@ class ChallengeSeverity(Enum):
 
 
 @dataclass
-class Challenge:
+class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
     """Represents a challenge with description, severity, and confidence."""
     description: str
     severity: ChallengeSeverity

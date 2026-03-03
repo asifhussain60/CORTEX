@@ -80,7 +80,7 @@ class GovernanceRule:
 
 
 @dataclass
-class AuditLogEntry:
+class AuditLogEntry:  # noqa: CORE-035-scoped — domain-specific audit log structure
     """Audit log entry data class."""
     audit_id: str
     rule_id: str

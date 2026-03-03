@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class MetricType(Enum):
+class MetricType(Enum):  # noqa: CORE-035-scoped — domain-specific metric classification
     """Types of metrics."""
     COUNTER = "counter"           # Monotonically increasing
     GAUGE = "gauge"               # Can go up and down

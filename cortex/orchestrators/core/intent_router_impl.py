@@ -76,7 +76,7 @@ from cortex.orchestrators.core.intent_classifier import IntentClassifier as _Int
 
 
 @dataclass
-class RoutingDecision:
+class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
     """
     Represents a routing decision made by the IntentRouter.
 

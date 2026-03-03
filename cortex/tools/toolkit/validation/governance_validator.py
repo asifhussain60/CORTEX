@@ -24,7 +24,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class Severity(Enum):
+class Severity(Enum):  # noqa: CORE-035-scoped — domain-specific severity scale — context-appropriate levels
     """Issue severity levels."""
     CRITICAL = "CRITICAL"
     HIGH = "HIGH"

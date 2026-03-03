@@ -37,7 +37,7 @@ class SynthesisStrategy(str, Enum):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @dataclass
-class SynthesisResult:
+class SynthesisResult:  # noqa: CORE-035-scoped — domain-specific synthesis result structure
     """Result of content synthesis"""
     content: str
     original_size: int

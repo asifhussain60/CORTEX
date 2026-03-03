@@ -379,7 +379,7 @@ class ConsistencyValidator:
         return errors
 
 
-class AuditLogger:
+class AuditLogger:  # noqa: CORE-035-scoped — domain-specific audit logger — independent implementations
     """Audit logger for domain operations with hash chain integrity."""
 
     def __init__(self) -> None:

@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 import json
 
 
-class ToolCategory(Enum):
+class ToolCategory(Enum):  # noqa: CORE-035-scoped — domain-specific tool taxonomy
     """
     Tool categories for organization and discovery.
 

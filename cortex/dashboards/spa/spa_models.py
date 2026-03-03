@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
-class Severity(Enum):
+class Severity(Enum):  # noqa: CORE-035-scoped — domain-specific severity scale — context-appropriate levels
     """Severity levels for findings and use cases."""
 
     INFO = "info"
@@ -46,7 +46,7 @@ class UseCaseCategory(Enum):
 
 
 @dataclass
-class UseCase:
+class UseCase:  # noqa: CORE-035-scoped — domain-specific use case model
     """
     Use case definition for dashboard.
 

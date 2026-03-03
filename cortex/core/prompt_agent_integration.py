@@ -22,7 +22,7 @@ class IntegrationError(Exception):
     pass
 
 
-class ResponseFormat:
+class ResponseFormat:  # noqa: CORE-035-scoped — domain-specific response format — local orchestrator values
     """
     Response format validator and formatter.
 

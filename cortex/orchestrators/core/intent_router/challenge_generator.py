@@ -18,7 +18,7 @@ from cortex.models.canonical_enums import ChallengeCategory
 
 
 @total_ordering
-class Severity:
+class Severity:  # noqa: CORE-035-scoped — domain-specific severity scale — context-appropriate levels
     """Comparable severity level that acts like a string."""
 
     _ORDER = {"CRITICAL": 4, "HIGH": 3, "MEDIUM": 2, "LOW": 1}
@@ -66,7 +66,7 @@ class ChallengeSeverity:
 
 
 @dataclass
-class Challenge:
+class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
     """Represents a detected challenge requiring attention.
 
     Attributes:

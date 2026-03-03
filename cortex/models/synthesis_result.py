@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class SynthesisResult:
+class SynthesisResult:  # noqa: CORE-035-scoped — domain-specific synthesis result structure
     """Canonical synthesis result representing merged intelligence output.
 
     This is the single source-of-truth SynthesisResult for CORTEX.

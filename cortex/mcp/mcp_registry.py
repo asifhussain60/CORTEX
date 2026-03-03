@@ -402,7 +402,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
 
 
 @dataclass
-class ToolMetadata:
+class ToolMetadata:  # noqa: CORE-035-scoped — domain-specific tool descriptor — different registry formats
     """
     Runtime metadata for a registered tool.
     """

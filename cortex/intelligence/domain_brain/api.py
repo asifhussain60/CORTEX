@@ -11,7 +11,7 @@ from cortex.intelligence.domain_brain.domain_brain_models import Conflict
 from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
-class AuditLogger:
+class AuditLogger:  # noqa: CORE-035-scoped — domain-specific audit logger — independent implementations
     """Audit logger for tracking operations."""
 
     def __init__(self) -> None:

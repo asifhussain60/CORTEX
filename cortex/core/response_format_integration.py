@@ -25,7 +25,7 @@ class IntegrationError(Exception):
     pass
 
 
-class EnforcementLevel(Enum):
+class EnforcementLevel(Enum):  # noqa: CORE-035-scoped — domain-specific enforcement level — local orchestrator values
     """Enforcement strictness levels."""
     STRICT = "STRICT"      # Maximum enforcement
     MODERATE = "MODERATE"  # Balanced enforcement

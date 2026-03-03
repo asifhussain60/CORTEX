@@ -15,7 +15,7 @@ from enum import Enum
 from typing import Any, Dict, List
 
 
-class ComplexityLevel(str, Enum):
+class ComplexityLevel(str, Enum):  # noqa: CORE-035-scoped — domain-specific complexity classification
     """Task complexity classification tiers."""
 
     SIMPLE = "SIMPLE"

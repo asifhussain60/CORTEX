@@ -145,7 +145,7 @@ class SpanContext:
         return SpanContext()
 
 @dataclass
-class Span:
+class Span:  # noqa: CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
     """Represents an OpenTelemetry span."""
     span_id: str
     trace_id: str

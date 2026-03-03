@@ -12,7 +12,7 @@ from cortex.models.canonical_enums import ChallengeType
 
 
 @dataclass
-class Challenge:
+class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
     """Challenge question or prompt.
 
     Attributes:

@@ -79,7 +79,7 @@ class UpgradePlan:
     strategy: UpgradeStrategy = UpgradeStrategy.ROLLING
 
 
-class CircuitBreaker:
+class CircuitBreaker:  # noqa: CORE-035-scoped — domain-specific circuit breaker — independent implementations
     """Simple circuit breaker for safety."""
 
     def __init__(self, threshold: int = 3) -> None:

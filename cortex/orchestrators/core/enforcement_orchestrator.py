@@ -69,7 +69,7 @@ except ImportError:
 # ENUMS
 # ============================================================================
 
-class EnforcementLevel(Enum):
+class EnforcementLevel(Enum):  # noqa: CORE-035-scoped — domain-specific enforcement level — local orchestrator values
     """Enforcement result severity levels."""
     PASS = "pass"
     WARNING = "warning"

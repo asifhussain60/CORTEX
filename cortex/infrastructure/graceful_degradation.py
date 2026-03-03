@@ -42,7 +42,7 @@ class FallbackResult:
             self.timestamp = datetime.utcnow()
 
 
-class FallbackStrategy:
+class FallbackStrategy:  # noqa: CORE-035-scoped — domain-specific fallback strategy model
     """Base class for fallback strategies."""
 
     def __init__(self, name: str, degradation_level: DegradationLevel) -> None:

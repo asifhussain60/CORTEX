@@ -37,7 +37,7 @@ class InsightType(Enum):
     BEST_PRACTICE = "BEST_PRACTICE"
 
 
-class PatternType(Enum):
+class PatternType(Enum):  # noqa: CORE-035-scoped — domain-specific pattern classification
     """Types of recognized patterns."""
     IMPLEMENTATION = "IMPLEMENTATION"
     DEBUGGING = "DEBUGGING"

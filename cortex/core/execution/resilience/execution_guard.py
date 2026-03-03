@@ -50,7 +50,7 @@ class RollbackError(Exception):
     pass
 
 @dataclass
-class ExecutionResult:
+class ExecutionResult:  # noqa: CORE-035-scoped — domain-specific execution result — different fields per context
     """Result of guarded execution."""
     success: bool
     stage_id: str

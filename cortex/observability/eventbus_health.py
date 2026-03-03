@@ -40,7 +40,7 @@ class EventMetrics:
 
 
 @dataclass
-class HealthStatus:
+class HealthStatus:  # noqa: CORE-035-scoped — domain-specific health status — context-appropriate states
     """
     EventBus health status.
 

@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 
-class ToolCategory(str, Enum):
+class ToolCategory(str, Enum):  # noqa: CORE-035-scoped — domain-specific tool taxonomy
     """MCP tool categories."""
     GOVERNANCE = "governance"
     INTELLIGENCE = "intelligence"
@@ -14,7 +14,7 @@ class ToolCategory(str, Enum):
 
 
 @dataclass
-class ToolMetadata:
+class ToolMetadata:  # noqa: CORE-035-scoped — domain-specific tool descriptor — different registry formats
     """Metadata for a registered MCP tool."""
     name: str
     category: ToolCategory

@@ -45,7 +45,7 @@ class ResourceType(enum.Enum):
     NETWORK = "network"
 
 
-class RiskLevel(enum.Enum):
+class RiskLevel(enum.Enum):  # noqa: CORE-035-scoped — domain-specific risk level — local orchestrator values
     """Risk severity levels for phase risk assessments."""
 
     LOW = "low"

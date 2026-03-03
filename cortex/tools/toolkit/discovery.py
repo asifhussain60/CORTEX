@@ -14,7 +14,7 @@ from typing import Dict, List
 import re
 
 
-class ToolCategory(str, Enum):
+class ToolCategory(str, Enum):  # noqa: CORE-035-scoped — domain-specific tool taxonomy
     """Tool categorization."""
 
     DIAGNOSTICS = "diagnostics"
@@ -25,7 +25,7 @@ class ToolCategory(str, Enum):
 
 
 @dataclass
-class ToolMetadata:
+class ToolMetadata:  # noqa: CORE-035-scoped — domain-specific tool descriptor — different registry formats
     """Metadata for a discovered tool."""
 
     name: str

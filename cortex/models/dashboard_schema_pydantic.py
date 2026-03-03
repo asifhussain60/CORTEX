@@ -103,7 +103,7 @@ class Repository(BaseModel):
 # OVERVIEW & SUMMARY MODELS
 # ============================================================================
 
-class UseCase(BaseModel):
+class UseCase(BaseModel):  # noqa: CORE-035-scoped — domain-specific use case model
     """Business use case extracted from repository analysis"""
     id: str = Field(..., description="Unique use case identifier (e.g., uc-001)")
     title: str = Field(..., description="Business-friendly use case title")

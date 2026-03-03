@@ -20,7 +20,7 @@ class FallbackType(Enum):
     USER_PROMPT = "user_prompt"
 
 
-class FallbackStrategy:
+class FallbackStrategy:  # noqa: CORE-035-scoped — domain-specific fallback strategy model
     """Fallback routing strategies.
 
     Provides fallback chains for intent categories and confidence-based

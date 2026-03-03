@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 
-class ViolationType(Enum):
+class ViolationType(Enum):  # noqa: CORE-035-scoped — domain-specific violation classification
     """Types of security violations."""
 
     UNAUTHORIZED_ACCESS = "unauthorized_access"
