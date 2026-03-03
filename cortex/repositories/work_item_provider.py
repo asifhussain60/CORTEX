@@ -10,7 +10,7 @@ Authority: CORE-011 (type hints) · CORE-012 (docstrings) · CORE-035 (single ca
 Phase: Phase 15 — Work Item Provider
 AC-IDs: AC-P15-001, AC-P15-002, AC-P15-009
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

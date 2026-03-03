@@ -8,7 +8,7 @@ CORE-011: All functions have type hints.
 CORE-012: All methods have Google-style docstrings.
 CORE-013: Specific exceptions only.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

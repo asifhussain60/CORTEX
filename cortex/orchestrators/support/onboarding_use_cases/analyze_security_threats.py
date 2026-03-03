@@ -14,7 +14,7 @@ from typing import Any, Dict, List
 import re
 
 
-class SeverityLevel(str, Enum):  # noqa: CORE-035-scoped — domain-specific severity level — local orchestrator values
+class SeverityLevel(str, Enum):  # CORE-035-scoped — domain-specific severity level — local orchestrator values
     """Threat severity classification."""
     P0_CRITICAL = "P0"
     P1_HIGH = "P1"

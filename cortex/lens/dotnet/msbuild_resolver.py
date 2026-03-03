@@ -39,7 +39,7 @@ class ProjectNode:
 
 
 @dataclass
-class DependencyGraph:  # noqa: CORE-035-scoped — independent dependency graph — domain-specific structure
+class DependencyGraph:  # CORE-035-scoped — independent dependency graph — domain-specific structure
     """Project-to-project dependency graph."""
 
     nodes: Dict[str, ProjectNode] = field(default_factory=dict)

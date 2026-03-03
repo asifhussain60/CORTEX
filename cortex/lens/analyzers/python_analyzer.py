@@ -3,7 +3,7 @@ PythonAnalyzer — Python code analysis for golden tests.
 
 Authority: Phase 29 S2 | Production Verification
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 import ast
 from dataclasses import dataclass
 from pathlib import Path

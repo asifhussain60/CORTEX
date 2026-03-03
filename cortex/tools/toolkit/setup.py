@@ -6,7 +6,7 @@ Replaces: verify-setup.py, verify-autonomous-setup.py, setup-mcp.py checks
 
 AC_START: AC-P90-S3-T1
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

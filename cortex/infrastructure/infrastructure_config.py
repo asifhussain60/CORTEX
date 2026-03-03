@@ -9,7 +9,7 @@ Centralized configuration for infrastructure components including:
 AC-FIX-BRITTLENESS-004: Timeout Configuration
 
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import os
 from dataclasses import dataclass

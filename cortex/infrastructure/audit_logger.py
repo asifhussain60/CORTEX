@@ -29,7 +29,7 @@ from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
 
 @dataclass
-class AuditLogEntry:  # noqa: CORE-035-scoped — domain-specific audit log structure
+class AuditLogEntry:  # CORE-035-scoped — domain-specific audit log structure
     """Internal audit log entry with hash chain."""
 
     id: str

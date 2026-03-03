@@ -22,7 +22,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
 if TYPE_CHECKING:
-    pass  # noqa: CORE-035  # interface pattern — used in type hints only
+    pass  # CORE-035  # interface pattern — used in type hints only
 
 
 class SeverityLevel(Enum):
@@ -72,7 +72,7 @@ class CanonicalIntent:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of input validation"""
     input_id: str
     valid: bool

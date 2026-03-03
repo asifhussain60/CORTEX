@@ -5,7 +5,7 @@ AC-STATE-002-01: Provides ACID transactions with configurable isolation
 levels, automatic deadlock detection and retry, nested transaction support
 via savepoints, and connection pooling.
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import queue
 import sqlite3

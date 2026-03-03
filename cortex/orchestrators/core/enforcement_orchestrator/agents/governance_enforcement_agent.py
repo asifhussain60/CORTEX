@@ -18,7 +18,7 @@ from cortex.orchestrators.core.enforcement_orchestrator.models import (
 )
 
 
-class GovernanceEnforcementAgent:  # noqa: CORE-035 — scoped extraction: this is the rule-checker extracted from enforcement_orchestrator; cortex/enforcement/governance_enforcement_agent.py is a separate MCP-facing delegator
+class GovernanceEnforcementAgent:  # CORE-035 — scoped extraction: this is the rule-checker extracted from enforcement_orchestrator; cortex/enforcement/governance_enforcement_agent.py is a separate MCP-facing delegator
     """
     Enforces Tier 0 code quality rules.
 

@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
-class ResponseFormat(Enum):  # noqa: CORE-035-scoped — domain-specific response format — local orchestrator values
+class ResponseFormat(Enum):  # CORE-035-scoped — domain-specific response format — local orchestrator values
     """Response format types."""
 
     STRUCTURED = "structured"

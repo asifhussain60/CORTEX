@@ -10,7 +10,7 @@ from cortex.models.canonical_enums import ValidationSeverity
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of validation."""
     is_valid: bool
     severity: ValidationSeverity = ValidationSeverity.INFO

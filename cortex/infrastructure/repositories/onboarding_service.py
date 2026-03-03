@@ -4,7 +4,7 @@ OnboardingService — repository onboarding with security scanning.
 Authority: Phase 29 S2 | Production Verification
 Purpose: E2E onboarding workflow for golden tests
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 from dataclasses import dataclass
 from pathlib import Path
 

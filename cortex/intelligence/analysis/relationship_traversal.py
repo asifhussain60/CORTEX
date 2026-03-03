@@ -149,7 +149,7 @@ class FileDependency:
 
 
 @dataclass
-class DependencyGraph:  # noqa: CORE-035-scoped — independent dependency graph — domain-specific structure
+class DependencyGraph:  # CORE-035-scoped — independent dependency graph — domain-specific structure
     """A graph of file dependencies."""
     nodes: Set[str] = field(default_factory=set)
     edges: List[Tuple[str, str]] = field(default_factory=list)

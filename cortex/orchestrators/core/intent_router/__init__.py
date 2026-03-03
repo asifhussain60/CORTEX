@@ -37,7 +37,7 @@ except ImportError:
     RoutingDecision = WorkflowRoutingDecision  # type: ignore[assignment,misc]
     # Provide a minimal IntentType enum stub so imports never fail
     from enum import Enum
-    class IntentType(str, Enum):  # type: ignore[no-redef]  # noqa: CORE-035-scoped — fallback stub when impl unavailable
+    class IntentType(str, Enum):  # type: ignore[no-redef]  # CORE-035-scoped — fallback stub when impl unavailable
         """Fallback IntentType when intent_router_impl is unavailable."""
         UNKNOWN = "UNKNOWN"
 

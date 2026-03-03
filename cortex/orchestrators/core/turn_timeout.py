@@ -3,7 +3,7 @@ Turn timeout and cancellation handling for conversations.
 
 Implements per-turn timeouts with graceful cleanup and user cancellation.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import asyncio
 import signal

@@ -7,7 +7,7 @@ Documents actual vs expected orchestrator architecture.
 Authority: Phase 38.0 Stage 2 - Remediation & Baseline Restoration
 TDD: Tests BEFORE code (CORE-008)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 import json
 import re
 from dataclasses import asdict, dataclass, field

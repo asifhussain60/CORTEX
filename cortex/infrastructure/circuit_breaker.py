@@ -101,7 +101,7 @@ class CircuitBreakerResult:
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-class CircuitBreaker:  # noqa: CORE-035-scoped — domain-specific circuit breaker — independent implementations
+class CircuitBreaker:  # CORE-035-scoped — domain-specific circuit breaker — independent implementations
     """
     Implements the circuit breaker pattern to prevent cascading failures.
 

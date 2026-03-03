@@ -88,7 +88,7 @@ class MethodInfo:
 
 
 @dataclass
-class ClassInfo:  # noqa: CORE-035-scoped — domain-specific class introspection model
+class ClassInfo:  # CORE-035-scoped — domain-specific class introspection model
     """Represents a Python class."""
 
     name: str

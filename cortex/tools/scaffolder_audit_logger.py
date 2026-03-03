@@ -60,7 +60,7 @@ class ReplacementAction:
 
 
 @dataclass
-class AuditLogEntry:  # noqa: CORE-035-scoped — domain-specific audit log structure
+class AuditLogEntry:  # CORE-035-scoped — domain-specific audit log structure
     """Single audit log entry."""
     timestamp: str
     operation: str

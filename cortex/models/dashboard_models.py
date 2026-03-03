@@ -1,5 +1,5 @@
 """Dashboard data models."""
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from typing import Optional

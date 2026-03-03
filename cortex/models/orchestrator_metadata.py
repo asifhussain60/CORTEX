@@ -7,7 +7,7 @@ Authority: CORE-035 (Single Canonical Implementation)
 This module provides the canonical definitions for orchestrator metadata used
 across registry, lookup, and runtime systems.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any, List, Optional
 
 if TYPE_CHECKING:
-    from cortex.core.interfaces.i_orchestrator import IOrchestrator  # noqa: CORE-035  # interface pattern — L0 model references L1 interface type-hint only
+    from cortex.core.interfaces.i_orchestrator import IOrchestrator  # CORE-035  # interface pattern — L0 model references L1 interface type-hint only
 
 
 @dataclass

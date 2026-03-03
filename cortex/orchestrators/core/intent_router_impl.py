@@ -69,7 +69,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 @dataclass
-class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
+class RoutingDecision:  # CORE-035-scoped — domain-specific routing decision model
     """Represents a routing decision made by the IntentRouter.
 
     Attributes:

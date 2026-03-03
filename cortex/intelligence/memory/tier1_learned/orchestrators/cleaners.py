@@ -2,7 +2,7 @@
 
 Author: CORTEX Framework
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

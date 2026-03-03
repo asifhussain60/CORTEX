@@ -33,7 +33,7 @@ class DeploymentMode(Enum):
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Deployment validation result.
 
     Attributes:

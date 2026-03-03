@@ -40,7 +40,7 @@ class PlanPriority(str, Enum):
     P3 = "P3"
 
 
-class IntentType(str, Enum):  # noqa: CORE-035-scoped — plan model subset with uppercase values
+class IntentType(str, Enum):  # CORE-035-scoped — plan model subset with uppercase values
     """Plan intent classification."""
 
     IMPLEMENT = "IMPLEMENT"

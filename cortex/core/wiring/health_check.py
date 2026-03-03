@@ -30,7 +30,7 @@ class HealthStatus(str, Enum):
 
 
 @dataclass
-class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
+class HealthCheckResult:  # CORE-035-scoped — domain-specific health check result variant
     """Result of a single health check"""
     orchestrator_name: str
     status: HealthStatus

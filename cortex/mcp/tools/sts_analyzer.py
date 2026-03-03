@@ -1,4 +1,4 @@
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 """
 STS Analyzer MCP Tool

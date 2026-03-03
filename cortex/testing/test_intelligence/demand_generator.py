@@ -6,7 +6,7 @@ Analyzes orchestrator specifications and generates test demand YAMLs.
 Authority: WAVE-1 Stage 3, cortex-architect.prompt.md v15.3
 Phase: THEME-A Intelligence Foundation
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from pathlib import Path

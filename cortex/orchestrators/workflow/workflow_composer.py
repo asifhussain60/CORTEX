@@ -9,7 +9,7 @@ Phase: 84 | Stage: 1 | Priority: P0
 Description: GREEN phase — WorkflowComposer implementation
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from pathlib import Path

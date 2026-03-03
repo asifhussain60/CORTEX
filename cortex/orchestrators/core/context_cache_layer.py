@@ -18,7 +18,7 @@ Author: CORTEX Context Synthesis System
 Created: 2026-02-06
 Updated: 2026-02-06 (v1.0 - Initial Implementation)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import threading

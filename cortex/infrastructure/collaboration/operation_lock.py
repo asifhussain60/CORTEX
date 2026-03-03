@@ -12,7 +12,7 @@ Date: 2026-01-27
 CORE-030: MCP-first architecture - uses file-based locks (process-safe).
 Lock files are stored in .cortex-runtime/locks/.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

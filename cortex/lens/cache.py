@@ -25,7 +25,7 @@ from typing import Any, Dict, Optional, Protocol
 
 
 @dataclass
-class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
+class CacheEntry:  # CORE-035-scoped — independent cache implementation — not shared type
     """Cached LENS analysis result.
 
     Attributes:

@@ -16,7 +16,7 @@ Task: DISC-006
 Authority: PHASE-9-DISCOVERY-ORCHESTRATOR.yaml
 Governance: CORE-008, CORE-011, CORE-012, CORE-030
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

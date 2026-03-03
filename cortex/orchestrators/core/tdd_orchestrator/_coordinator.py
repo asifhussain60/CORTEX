@@ -1,5 +1,5 @@
 # AC-ID: ARCH-012-REFACTOR - TDDOrchestrator V2 with Base Protocol (Phase 103-c slim)
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 """
 TDDOrchestrator — slim coordinator after Phase 103-c god-object decomposition.
 

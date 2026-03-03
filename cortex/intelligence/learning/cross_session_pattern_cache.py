@@ -21,7 +21,7 @@ Example Usage:
     # Later session: Find similar patterns
     matches = cache.find_similar({"structure": "MVC"}, threshold=0.7)
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta

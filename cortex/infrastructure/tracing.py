@@ -62,7 +62,7 @@ class TraceContext:
 
 
 @dataclass
-class Span:  # noqa: CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
+class Span:  # CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
     """Individual span representation.
 
     Args:

@@ -39,7 +39,7 @@ class ServiceHealth:
     is_healthy: bool = True
 
 
-class FallbackStrategy:  # noqa: CORE-035-scoped — domain-specific fallback strategy model
+class FallbackStrategy:  # CORE-035-scoped — domain-specific fallback strategy model
     """Encapsulates fallback logic."""
 
     def __init__(

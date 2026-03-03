@@ -44,7 +44,7 @@ Example Usage:
   for directive in directives:
       orchestrator.execute(directive)  # Route to appropriate orchestrator
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 from __future__ import annotations
 
 import logging

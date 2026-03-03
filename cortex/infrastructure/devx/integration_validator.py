@@ -69,7 +69,7 @@ class IntegrationPoint:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Validation result."""
     valid: bool
     status: IntegrationStatus = IntegrationStatus.VALID

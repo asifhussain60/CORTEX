@@ -1,5 +1,5 @@
 # PHASE-21: Intelligent Knowledge Protocol (AC-IKP-001-01)
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 """
 Core knowledge provider protocol definition (Tier0 abstraction).
 

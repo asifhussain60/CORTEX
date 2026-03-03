@@ -5,7 +5,7 @@ Defines the property graph schema for code knowledge storage.
 
 AC_START: AC-PHASE66-S2-002
 """
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional

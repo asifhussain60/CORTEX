@@ -7,7 +7,7 @@ Provides:
 - Pattern-based invalidation
 - Cache statistics tracking
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from .cache_key_builder import CacheKeyConfig, build_cache_key, get_repo_state_hash
 from .lens_cache import CacheEntry, CacheKey, LENSCache, get_lens_cache

@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional
 # CONSOLIDATED: Import from cortex.models.canonical_enums
 
 
-class RiskLevel(str, Enum):  # noqa: CORE-035-scoped — domain-specific risk level — local orchestrator values
+class RiskLevel(str, Enum):  # CORE-035-scoped — domain-specific risk level — local orchestrator values
     """Risk level classification for impact analysis."""
 
     LOW = "LOW"

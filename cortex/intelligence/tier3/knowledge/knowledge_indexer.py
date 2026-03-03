@@ -1,5 +1,5 @@
 """KnowledgeIndexer — auto-indexing system for tier3 knowledge (KN-001-02)."""
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 import sqlite3

@@ -13,7 +13,7 @@ Phase: 14 - LENS Dashboard Implementation
 Task: 009 - Enhanced Mermaid Generator
 AC-ID: LENS-DASH-003
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from pathlib import Path

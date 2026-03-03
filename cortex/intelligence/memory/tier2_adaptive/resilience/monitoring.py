@@ -3,7 +3,7 @@ Monitoring — MetricsCollector, RealTimeProgressDashboard, AlertManager, and su
 
 Phase 103-f: extracted from resilience.py (1,876L) god-object.
 """
-# noqa: CORE-035 — domain-scoped; Alert/AlertManager intentionally parallel infrastructure copies
+# CORE-035 — domain-scoped; Alert/AlertManager intentionally parallel infrastructure copies
 from __future__ import annotations
 
 import abc

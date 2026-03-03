@@ -6,7 +6,7 @@ the unified pipeline.  FileContext has its own module (file_context.py).
 Phase: PHASE-51
 CORE: CORE-011 (type hints), CORE-012 (docstrings)
 """
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 from __future__ import annotations
 

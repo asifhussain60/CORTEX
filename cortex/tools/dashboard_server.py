@@ -33,7 +33,7 @@ class DashboardStatus(Enum):
 
 
 @dataclass
-class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
+class HealthCheckResult:  # CORE-035-scoped — domain-specific health check result variant
     """Result of a health check operation."""
     status: DashboardStatus
     message: str

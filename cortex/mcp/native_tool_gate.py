@@ -45,7 +45,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class IntentType(Enum):  # noqa: CORE-035-scoped — MCP gate uses uppercase routing values
+class IntentType(Enum):  # CORE-035-scoped — MCP gate uses uppercase routing values
     """User intent classification."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

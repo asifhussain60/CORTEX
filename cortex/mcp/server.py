@@ -8,7 +8,7 @@ Implements JSON-RPC 2.0 compliant MCP protocol with:
 - Extensible architecture
 - Comprehensive error handling
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

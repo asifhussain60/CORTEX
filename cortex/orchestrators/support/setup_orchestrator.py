@@ -12,7 +12,7 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class ComplexityLevel(enum.Enum):  # noqa: CORE-035-scoped — domain-specific complexity classification
+class ComplexityLevel(enum.Enum):  # CORE-035-scoped — domain-specific complexity classification
     """Complexity level for environment setup.
 
     Attributes:
@@ -26,7 +26,7 @@ class ComplexityLevel(enum.Enum):  # noqa: CORE-035-scoped — domain-specific c
     ADVANCED = "advanced"
 
 
-class CircuitBreaker:  # noqa: CORE-035-scoped — domain-specific circuit breaker — independent implementations
+class CircuitBreaker:  # CORE-035-scoped — domain-specific circuit breaker — independent implementations
     """Circuit breaker for setup safety.
 
     Args:

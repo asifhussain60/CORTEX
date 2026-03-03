@@ -1,7 +1,7 @@
 """
 Domain Registry - Discovery and registration of domain types.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from typing import Dict, List, Any, Optional
 

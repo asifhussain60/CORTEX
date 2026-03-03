@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).parents[2]
 CORTEX = ROOT / "cortex"
 CANONICAL_ENUMS = CORTEX / "models" / "canonical_enums.py"
 
-NOQA_ANNOTATION = "noqa: CORE-035"
+NOQA_ANNOTATION = "# CORE-035"
 
 
 def _get_duplicate_classes(min_count: int = 4) -> dict[str, list[str]]:
@@ -94,12 +94,12 @@ class TestPhase111ACriticalDuplicates:
             )
             pytest.fail(
                 f"CORE-035: {len(dups)} class names with 7+ unannotated definitions.\n"
-                f"Add 'noqa: CORE-035-scoped' to domain-specific files, or consolidate to canonical:\n"
+                f"Add 'CORE-035-scoped' comment to domain-specific files, or consolidate to canonical:\n"
                 f"{detail}"
             )
 
     def test_noqa_annotations_are_meaningful(self) -> None:
-        """Files with noqa: CORE-035 annotation must also have a class definition."""
+        """Files with CORE-035 annotation must also have a class definition."""
         annotated_without_class = []
         for py_file in CORTEX.rglob("*.py"):
             if "__pycache__" in str(py_file):
@@ -115,7 +115,7 @@ class TestPhase111ACriticalDuplicates:
             except Exception:
                 continue
         assert not annotated_without_class, (
-            f"Files with noqa: CORE-035 but no class definitions (spurious annotation):\n"
+            f"Files with CORE-035 but no class definitions (spurious annotation):\n"
             + "\n".join(f"  {f}" for f in annotated_without_class)
         )
 
@@ -170,7 +170,7 @@ class TestPhase111AAnnotationProtocol:
                     if not has_noqa and not has_canonical_import:
                         issues.append(
                             f"{py_file}:{node.lineno} — IntentType re-defined without "
-                            f"noqa: CORE-035-scoped annotation or canonical import"
+                            f"CORE-035-scoped annotation or canonical import"
                         )
         
         if issues:

@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
-class AuditLogger:  # noqa: CORE-035-scoped — domain-specific audit logger — independent implementations
+class AuditLogger:  # CORE-035-scoped — domain-specific audit logger — independent implementations
     """Appends structured audit entries to a log file."""
 
     def __init__(self, log_path: Optional[str] = None) -> None:

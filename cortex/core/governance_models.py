@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
-class EnforcementLevel(str, Enum):  # noqa: CORE-035-scoped — domain-specific enforcement level — local orchestrator values
+class EnforcementLevel(str, Enum):  # CORE-035-scoped — domain-specific enforcement level — local orchestrator values
     """Enforcement level for CORE rules."""
     BLOCKED = "BLOCKED"
     WARNING = "WARNING"

@@ -10,7 +10,7 @@ Example:
   categories = mapper.map_imports(imports)
   # Returns: [('fastapi', 0.95), ('pydantic', 0.90), ('pytest', 0.88)]
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass

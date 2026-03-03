@@ -47,7 +47,7 @@ class StateOperation(str, Enum):
     CONVERSATION_GET = "CONVERSATION_GET"
 
 @dataclass
-class AuditLogEntry:  # noqa: CORE-035-scoped — domain-specific audit log structure
+class AuditLogEntry:  # CORE-035-scoped — domain-specific audit log structure
     """Audit log entry for state operations.
 
     Attributes:

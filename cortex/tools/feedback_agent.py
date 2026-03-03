@@ -12,7 +12,7 @@ This prevents response format violations and ensures consistent output formattin
 
 Copyright © 2025 Asif Hussain. All rights reserved.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass, field

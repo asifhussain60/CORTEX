@@ -8,7 +8,7 @@ AC-ID: LENS-DASH-009
 Author: Asif Hussain
 Phase: 14
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 from dataclasses import dataclass, field

@@ -9,7 +9,7 @@ CORE-008: TDD-first architecture
 CORE-011: Type hints mandatory
 CORE-012: Google-style docstrings
 """
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import logging
 from abc import ABC, abstractmethod

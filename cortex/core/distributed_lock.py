@@ -12,7 +12,7 @@ Features:
 
 Author: Asif Hussain
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import threading
 import time

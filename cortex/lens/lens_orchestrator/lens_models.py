@@ -4,7 +4,7 @@ LENS data models — LENSContext dataclass.
 Extracted from lens_orchestrator.py (Phase 103-d, GAP-103-04).
 Authority: CORE-008, CORE-011, CORE-012, LENS-003
 """
-# noqa: CORE-035 — LENSContext here is the analyzer-result context (git/ast/comment fields);
+# CORE-035 — LENSContext here is the analyzer-result context (git/ast/comment fields);
 # distinct from cortex/lens/models/context.py which is the Phase 65 operation context.
 from __future__ import annotations
 

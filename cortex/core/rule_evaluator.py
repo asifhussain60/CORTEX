@@ -22,7 +22,7 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.core.interfaces import GovernanceRule
 
 if TYPE_CHECKING:
-    pass  # noqa: CORE-035  # interface pattern — registry lives in L3
+    pass  # CORE-035  # interface pattern — registry lives in L3
 
 logger = logging.getLogger(__name__)
 

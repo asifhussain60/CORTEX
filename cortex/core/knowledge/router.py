@@ -131,7 +131,7 @@ class AffinityScores:
 
 
 @dataclass
-class RoutingDecision:  # noqa: CORE-035-scoped — domain-specific routing decision model
+class RoutingDecision:  # CORE-035-scoped — domain-specific routing decision model
     """
     Decision for how to route a knowledge query.
 

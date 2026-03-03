@@ -16,7 +16,7 @@ CORE-008 COMPLIANCE:
 - Uses context managers for deterministic resource management
 - All transaction boundaries explicit
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import logging
 import sqlite3

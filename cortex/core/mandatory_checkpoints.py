@@ -26,7 +26,7 @@ class CheckpointError(Exception):
     pass
 
 
-class ViolationType(Enum):  # noqa: CORE-035-scoped — domain-specific violation classification
+class ViolationType(Enum):  # CORE-035-scoped — domain-specific violation classification
     """Types of violations detected by checkpoints."""
     TDD_VIOLATION = "TDD_VIOLATION"
     SECURITY_VIOLATION = "SECURITY_VIOLATION"

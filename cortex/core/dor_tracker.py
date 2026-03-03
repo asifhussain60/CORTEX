@@ -38,7 +38,7 @@ class UserResponse(Enum):
 
 
 @dataclass
-class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
+class Challenge:  # CORE-035-scoped — domain-specific challenge model variant
     """Challenge offered to user during turn."""
     challenge_id: str
     challenge_type: str  # "security", "harmful", "srp", "architecture", etc.

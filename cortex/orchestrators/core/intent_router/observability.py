@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class MetricType(Enum):  # noqa: CORE-035-scoped — domain-specific metric classification
+class MetricType(Enum):  # CORE-035-scoped — domain-specific metric classification
     """Types of metrics."""
     COUNTER = "counter"
     GAUGE = "gauge"
@@ -32,7 +32,7 @@ class Metric:
 
 
 @dataclass
-class Span:  # noqa: CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
+class Span:  # CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
     """A tracing span."""
 
     operation: str

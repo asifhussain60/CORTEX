@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ExecutionResult:  # noqa: CORE-035-scoped — domain-specific execution result — different fields per context
+class ExecutionResult:  # CORE-035-scoped — domain-specific execution result — different fields per context
     """Result of phase execution."""
     phase_id: str
     status: str  # "SUCCESS", "FAILED", "PARTIAL"

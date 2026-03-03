@@ -9,7 +9,7 @@ Writes YAML to:
 AC-ID: AC-OPJ-PHASE52-WRITER
 CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

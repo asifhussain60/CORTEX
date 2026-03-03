@@ -11,7 +11,7 @@ Tracks dependencies between orchestrators and tiers:
 Enables orchestrator composition and vision evolution while
 maintaining consistency between vision and implementation.
 """
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
 from dataclasses import dataclass, field

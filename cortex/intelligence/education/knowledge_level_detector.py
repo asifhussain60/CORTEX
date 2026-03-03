@@ -15,7 +15,7 @@ Levels:
 Authority: AC-EDUCATIONAL-INTERACTION-001, PHASE-22-ASK-MODE-SYSTEM.yaml
 Rules: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

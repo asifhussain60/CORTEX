@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 import yaml
 
 if TYPE_CHECKING:
-    from cortex.orchestrators.workflow.template_registry import (  # noqa: CORE-035  # interface pattern — registry in L3
+    from cortex.orchestrators.workflow.template_registry import (  # CORE-035  # interface pattern — registry in L3
         WorkflowTemplateRegistry,
     )
 

@@ -92,7 +92,7 @@ class StrategyExecutionException(Exception):
         super().__init__(message)
 
 
-class FallbackStrategy:  # noqa: CORE-035-scoped — domain-specific fallback strategy model
+class FallbackStrategy:  # CORE-035-scoped — domain-specific fallback strategy model
     """Represents a single fallback strategy with retry capability."""
 
     def __init__(

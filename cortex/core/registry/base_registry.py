@@ -52,7 +52,7 @@ T = TypeVar("T")
 
 
 @dataclass
-class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
+class HealthCheckResult:  # CORE-035-scoped — domain-specific health check result variant
     """Health check result"""
     status: HealthStatus
     message: str

@@ -49,7 +49,7 @@ class AnomalyType(Enum):
     """Unexpected changes in entry volume or query patterns."""
 
 
-class SeverityLevel(Enum):  # noqa: CORE-035-scoped — domain-specific severity level — local orchestrator values
+class SeverityLevel(Enum):  # CORE-035-scoped — domain-specific severity level — local orchestrator values
     """Severity classification for detected anomalies."""
 
     INFO = "info"

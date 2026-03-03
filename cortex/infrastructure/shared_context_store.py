@@ -315,4 +315,4 @@ class SharedBrainStore:
 
 # Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → collaboration naming)
 # CORE-035: SharedBrainStore remains canonical; CollaborationStore is the forward path.
-CollaborationStore = SharedBrainStore  # noqa: CORE-035  # alias pattern — backward compat re-export
+CollaborationStore = SharedBrainStore  # CORE-035  # alias pattern — backward compat re-export

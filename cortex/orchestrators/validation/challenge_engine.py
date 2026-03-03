@@ -49,7 +49,7 @@ class AlternativeApproach:
 
 
 @dataclass
-class Challenge:  # noqa: CORE-035-scoped — domain-specific challenge model variant
+class Challenge:  # CORE-035-scoped — domain-specific challenge model variant
     """Challenge with multiple alternative approaches.
 
     Attributes:

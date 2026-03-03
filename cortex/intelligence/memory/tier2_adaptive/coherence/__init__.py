@@ -5,7 +5,7 @@ quality metrics for orchestrator responses.
 
 Author: CORTEX Framework
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple

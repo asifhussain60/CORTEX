@@ -8,7 +8,7 @@ before they can be marked as completed.
 Design: Single-responsibility validator for AC audit requirements.
 Focuses on audit trail validation, not mutation enforcement.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import sqlite3
 from dataclasses import dataclass

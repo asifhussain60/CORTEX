@@ -10,7 +10,7 @@ Authority: GAP-107-01 (CORE-035 — single canonical implementation)
 SSOT:      cortex/intelligence/models/base_engine.py
 Compat:    cortex/intelligence/base.py and cortex/intelligence/base_engine.py re-export from here
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

@@ -75,7 +75,7 @@ class TemplateSection:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of template validation."""
     valid: bool
     errors: List[str] = field(default_factory=list)

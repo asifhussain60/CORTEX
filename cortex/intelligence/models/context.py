@@ -57,7 +57,7 @@ class CORTEXKnowledge:
 
 
 @dataclass
-class SynthesisResult:  # noqa: CORE-035-scoped — domain-specific synthesis result structure
+class SynthesisResult:  # CORE-035-scoped — domain-specific synthesis result structure
     """Synthesis result from KnowledgeSynthesisEngine.
 
     Canonical definition — single source of truth (GAP-107-02, CORE-035).

@@ -74,7 +74,7 @@ class PlacementViolation:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of filename validation."""
     is_valid: bool
     violations: List[NamingViolation] = field(default_factory=lambda: [])

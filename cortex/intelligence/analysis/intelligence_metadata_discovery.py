@@ -16,7 +16,7 @@ Example Usage:
     result = discovery.discover_by_mode("IMPLEMENT")
     patterns = discovery.discover_collaboration_patterns()
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from pathlib import Path

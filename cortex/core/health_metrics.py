@@ -19,7 +19,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
-class MetricType(Enum):  # noqa: CORE-035-scoped — domain-specific metric classification
+class MetricType(Enum):  # CORE-035-scoped — domain-specific metric classification
     """Types of metrics tracked"""
     VALIDATION_SUCCESS = "validation_success"
     VALIDATION_FAILURE = "validation_failure"

@@ -12,7 +12,7 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 @dataclass
-class Span:  # noqa: CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
+class Span:  # CORE-035-scoped — domain-scoped tracing span — independent of OpenTelemetry canonical
     """Simplified span for tracing."""
     span_id: str
     operation_name: str

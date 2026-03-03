@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Optional, Tuple
 from cortex.core.result import Err, Ok, Result
 
 if TYPE_CHECKING:
-    from cortex.orchestrators.core.governance_registry import (  # noqa: CORE-035  # interface pattern
+    from cortex.orchestrators.core.governance_registry import (  # CORE-035  # interface pattern
         GovernanceRegistry,
         GovernanceRule,
     )

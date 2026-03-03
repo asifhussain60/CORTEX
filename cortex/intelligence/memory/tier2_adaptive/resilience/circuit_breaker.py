@@ -61,7 +61,7 @@ class CircuitBreakerConfig:
         self.name = name
 
 
-class CircuitBreaker:  # noqa: CORE-035-scoped — domain-specific circuit breaker — independent implementations
+class CircuitBreaker:  # CORE-035-scoped — domain-specific circuit breaker — independent implementations
     """
     Circuit Breaker pattern implementation.
 

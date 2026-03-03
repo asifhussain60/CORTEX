@@ -5,7 +5,7 @@ for caching vector representations of text (GAP-84-20).
 
 Authority: CORE-011 (type hints), CORE-012 (docstrings)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 from typing import Dict, List, Optional

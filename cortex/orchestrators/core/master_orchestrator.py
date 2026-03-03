@@ -9,28 +9,19 @@ AC_COMPLETE: AC-MASTER-ORCH-001 ✅
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
     from cortex.orchestrators.core.bluf_system import AdaptiveRouter
-    from cortex.intelligence.provider import ExecutionTier
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.state_manager import (
-    OperationState,
-)
-from cortex.intelligence.knowledge.unified_intelligence_context import (
-    UnifiedIntelligenceContext,
-)
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
 from cortex.orchestrators.core.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
-from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager  # noqa: F401 — patched by test harness
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
@@ -38,13 +29,7 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.orchestrators.core.component_health import (
     ComponentHealthTracker,
 )
-from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-
-# AC-PERMANENT-FIX-007: Import mcp_tool decorator for MCP tool exposure
-from cortex.mcp.decorators import mcp_tool
-
-# AC-UX-VISIBILITY-001: Import orchestrator context decorator
-from cortex.orchestrators.core.orchestrator_context_injector import inject_orchestrator_context
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry  # noqa: F401 — patched by test harness
 
 # Phase 33-35: Lazily-loaded response optimization / verbosity / autonomous-execution components
 ChatResponsePolicyValidator = None  # type: ignore[assignment]

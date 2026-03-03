@@ -9,7 +9,7 @@ Purpose: Enable users to define and manage custom architectural patterns via YAM
 
 Tests Target: 12 tests (pattern loading, schema validation, registry operations)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 import hashlib
 import json
 from dataclasses import asdict, dataclass, field

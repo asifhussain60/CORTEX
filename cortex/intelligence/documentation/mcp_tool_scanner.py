@@ -51,7 +51,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 @dataclass
-class ToolMetadata:  # noqa: CORE-035-scoped — domain-specific tool descriptor — different registry formats
+class ToolMetadata:  # CORE-035-scoped — domain-specific tool descriptor — different registry formats
     """
     Metadata extracted from @mcp_tool decorator.
 

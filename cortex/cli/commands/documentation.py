@@ -13,7 +13,7 @@ Implements 8 CLI commands for documentation orchestration:
 
 Type HintsUnion[Complete, Docstrings]: Google-style | Error Handling: Comprehensive
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

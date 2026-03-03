@@ -1,5 +1,5 @@
 """Knowledge search service with multi-backend support and semantic ranking."""
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional

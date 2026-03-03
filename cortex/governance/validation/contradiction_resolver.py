@@ -2,7 +2,7 @@
 ENH-068 Stage 2: Contradiction Resolver
 Automated resolution strategies with history tracking and rollback
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from datetime import datetime

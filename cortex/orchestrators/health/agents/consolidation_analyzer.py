@@ -6,7 +6,7 @@ Author: CORTEX Framework
 Phase: PHASE-97 S5
 CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from pathlib import Path

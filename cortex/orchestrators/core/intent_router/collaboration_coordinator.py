@@ -8,7 +8,7 @@ Module: cortex/intent_router/collaboration_coordinator.py
 Authority: Phase 81 S3 - IntentRouter Capability-Based Routing
 Version: 1.0
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum

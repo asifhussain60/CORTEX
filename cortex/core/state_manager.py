@@ -9,7 +9,7 @@ CORE-011: All functions have type hints.
 CORE-012: All public APIs have Google-style docstrings.
 CORE-008: Implementation follows TDD specification.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

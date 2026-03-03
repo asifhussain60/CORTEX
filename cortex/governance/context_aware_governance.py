@@ -8,7 +8,7 @@ Provides dynamic governance rule weighting based on:
 - Operation context (security, performance, etc.)
 - Team context (size, experience, etc.)
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass
 from pathlib import Path

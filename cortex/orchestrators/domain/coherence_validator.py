@@ -12,7 +12,7 @@ before implementation begins, catching Phase 21-style mismatches at design time.
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 AC-ID: AC-SDLC-PHASE4-001
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

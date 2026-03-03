@@ -15,7 +15,7 @@ from enum import Enum
 from typing import Any, Dict, List
 
 
-class EnforcementLevel(Enum):  # noqa: CORE-035-scoped — domain-specific enforcement level — local orchestrator values
+class EnforcementLevel(Enum):  # CORE-035-scoped — domain-specific enforcement level — local orchestrator values
     """Enforcement result severity levels."""
     PASS = "pass"
     WARNING = "warning"

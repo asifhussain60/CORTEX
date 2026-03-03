@@ -35,14 +35,14 @@ class IntentRoutingRequest:
     query: str
     context: Optional[Dict[str, Any]] = None
 
-class HealthStatus(Enum):  # noqa: CORE-035-scoped — domain-specific health status — context-appropriate states
+class HealthStatus(Enum):  # CORE-035-scoped — domain-specific health status — context-appropriate states
     """Health status enumeration."""
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
 
 @dataclass
-class ComponentHealth:  # noqa: CORE-035-scoped — domain-specific component health model
+class ComponentHealth:  # CORE-035-scoped — domain-specific component health model
     """Health status of a single component."""
     name: str
     status: HealthStatus

@@ -2,8 +2,9 @@
 KSE data models — KnowledgeSource, SynthesizedInstruction.
 
 Phase 103-g: extracted from knowledge_synthesis_engine.py (1,567L) god-object.
-noqa: CORE-035 — domain-scoped dataclass; distinct from canonical_enums.KnowledgeSource(Enum)
+CORE-035 — domain-scoped dataclass; distinct from canonical_enums.KnowledgeSource(Enum)
 """
+# CORE-035-scoped — domain-scoped KnowledgeSource dataclass, distinct from canonical_enums Enum
 from __future__ import annotations
 
 from dataclasses import dataclass, field

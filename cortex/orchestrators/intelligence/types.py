@@ -8,7 +8,7 @@ Author: CORTEX Team
 Created: 2026-02-06
 Authority: Phase 34B Week 3 (Increment 6)
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass, field
 from datetime import datetime

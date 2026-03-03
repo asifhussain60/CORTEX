@@ -57,7 +57,7 @@ class ContextWindow:
 
 
 @dataclass
-class SynthesisResult:  # noqa: CORE-035-scoped — domain-specific synthesis result structure
+class SynthesisResult:  # CORE-035-scoped — domain-specific synthesis result structure
     """
     Context synthesis result.
 

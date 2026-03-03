@@ -27,7 +27,7 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 
-class IntentType(Enum):  # noqa: CORE-035-scoped — orchestrator-local uppercase routing values
+class IntentType(Enum):  # CORE-035-scoped — orchestrator-local uppercase routing values
     """User intent classification."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

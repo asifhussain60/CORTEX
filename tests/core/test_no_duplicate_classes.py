@@ -34,15 +34,15 @@ INTENTIONAL_DUPLICATES: dict[str, str] = {
     # (excluded by top-level-only scan, but listing here for reference)
 }
 
-# Classes exempt due to annotated files (noqa: CORE-035)
-NOQA_ANNOTATION = "noqa: CORE-035"
+# Classes exempt due to annotated files (CORE-035 governance comment)
+NOQA_ANNOTATION = "# CORE-035"
 
 
 def _scan_top_level_classes() -> dict[str, list[str]]:
     """Scan cortex/ for TOP-LEVEL class names (direct Module children only).
 
     - Excludes __pycache__
-    - Excludes files annotated with 'noqa: CORE-035'
+    - Excludes files annotated with 'CORE-035'
     - Only counts top-level class definitions (not inner Pydantic Config etc.)
     """
     class_locs: dict[str, list[str]] = defaultdict(list)
@@ -83,7 +83,7 @@ class TestNoDuplicateClasses:
         """CORE-035: Each class name must have exactly ONE top-level definition in cortex/.
 
         Exclusions:
-          - Files annotated with 'noqa: CORE-035'
+          - Files annotated with 'CORE-035'
           - Known intentional proxies listed in INTENTIONAL_DUPLICATES
           - Inner/nested classes (only top-level module children are checked)
 
@@ -104,7 +104,7 @@ class TestNoDuplicateClasses:
                 f"Top violations (showing ≤20 of {count}):\n{detail}\n\n"
                 f"Fix: consolidate each to one canonical file, then delete shadow copies.\n"
                 f"Exempt intentional proxies by adding to INTENTIONAL_DUPLICATES or "
-                f"'# noqa: CORE-035' in the file."
+                f"'# CORE-035' in the file."
             )
 
     def test_validation_result_canonical_import(self) -> None:

@@ -17,7 +17,7 @@ class InvalidationStrategy(str, Enum):
     LRU = "lru"
 
 @dataclass
-class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
+class CacheEntry:  # CORE-035-scoped — independent cache implementation — not shared type
     """
     Single cache entry with TTL and metadata.
 

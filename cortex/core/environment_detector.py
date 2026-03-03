@@ -11,7 +11,7 @@ CORE-012: Google-style docstrings
 
 Implements graceful degradation: MCP (primary) → Copilot (fallback) → Development
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import os

@@ -2,8 +2,9 @@
 Retry — RetryPolicy, RetryPolicyBuilder, RetryResult, ExponentialBackoffRetry.
 
 Phase 103-f: extracted from resilience.py (1,876L) god-object.
-noqa: CORE-035 — domain-scoped; RetryPolicy/RetryResult intentionally parallel infrastructure copies.
+CORE-035 — domain-scoped; RetryPolicy/RetryResult intentionally parallel infrastructure copies.
 """
+# CORE-035-scoped — domain-scoped RetryPolicy/RetryResult parallel to infrastructure copies
 from __future__ import annotations
 
 import logging

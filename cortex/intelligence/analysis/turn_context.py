@@ -7,7 +7,7 @@ persist in-memory for subsequent turn reference.
 
 Authority: AC-PHASE65-S5-001
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 # AC_START: AC-PHASE65-S5-001
 # Description: Phase 65 S5 - Turn-Over-Turn Intelligence Accumulation

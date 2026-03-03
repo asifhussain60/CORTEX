@@ -42,7 +42,7 @@ class ExecutionTier(Enum):
 
 
 @dataclass
-class CacheEntry:  # noqa: CORE-035-scoped — independent cache implementation — not shared type
+class CacheEntry:  # CORE-035-scoped — independent cache implementation — not shared type
     """Cache entry for intelligence context."""
     context: UnifiedIntelligenceContext
     timestamp: float

@@ -7,7 +7,7 @@ automatic conflict detection, retry logic, and configurable merge strategies.
 Author: Asif Hussain
 Copyright © 2026 Asif Hussain. All rights reserved.
 """
-# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
+# CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import sqlite3
 import time

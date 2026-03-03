@@ -13,7 +13,7 @@ Coordinator: _coordinator.py (≤ 750L)
 
 Authority: CORE-008, CORE-011, CORE-012, LENS-003, SWEEP-103-GOD-OBJECT-DECOMPOSITION
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 from __future__ import annotations
 
 import logging

@@ -5,7 +5,7 @@ Format: [████████░░] 80% Phase 2: KSESSIONS Implementation
 
 Authority: Phase 35 R2 + cortex-architect.prompt.md lines 268-310
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from typing import List, Optional
 

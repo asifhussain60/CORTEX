@@ -14,7 +14,7 @@ Phase: 14 - LENS Dashboard Implementation
 AC-ID: LENS-DASH-007
 Task: 018 - Dependency Bundling
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import hashlib
 import json

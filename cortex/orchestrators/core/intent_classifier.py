@@ -19,7 +19,7 @@ Governance:
     CORE-013: Specific exception handling
     CORE-049: Silent degradation — LLM tier failure never raises; falls back
 """
-# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
+# CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from __future__ import annotations
 

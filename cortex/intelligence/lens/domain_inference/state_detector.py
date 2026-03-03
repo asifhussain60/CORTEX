@@ -6,7 +6,7 @@ Detects state machines, extracts transitions, and builds lifecycle graphs.
 Author: CORTEX Architect
 Phase: Phase 66 S3
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import re

@@ -83,7 +83,7 @@ class ExecutionResult:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """
     Validation result from strategy.
 

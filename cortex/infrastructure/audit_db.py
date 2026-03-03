@@ -5,7 +5,7 @@ Provides centralized audit trail for all orchestrator operations.
 
 Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 import sqlite3
 import json

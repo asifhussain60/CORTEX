@@ -11,7 +11,7 @@ Consolidates markdown vacuum and debug marker cleanup scripts.
 
 **Authority:** Phase 90 S-90-05
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 # AC_START: AC-P90-004
 # Description: Cleanup module for markdown vacuum and debug marker removal

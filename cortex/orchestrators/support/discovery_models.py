@@ -11,7 +11,7 @@ Provides shared type definitions for educational and business language discovery
 CORTEX COMPLIANCE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
 CORE-028 (snake_case), CORE-035 (single canonical implementation)
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

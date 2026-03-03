@@ -85,7 +85,7 @@ class ScanResult:
 
 
 @dataclass
-class ValidationResult:  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of post-morph integrity validation.
 
     Attributes:

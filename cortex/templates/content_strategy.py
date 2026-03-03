@@ -11,7 +11,7 @@ from typing import Any, Dict, List, NamedTuple, Optional, Set
 
 
 
-class ValidationResult(NamedTuple):  # noqa: CORE-035-scoped — domain-specific ValidationResult variant
+class ValidationResult(NamedTuple):  # CORE-035-scoped — domain-specific ValidationResult variant
     """Result of validation operation."""
     valid: bool
     errors: List[str]

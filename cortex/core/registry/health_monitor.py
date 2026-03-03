@@ -27,7 +27,7 @@ from cortex.core.registry.workspace_manager import WorkspaceManager
 logger = logging.getLogger(__name__)
 
 
-class HealthCheckResult:  # noqa: CORE-035-scoped — domain-specific health check result variant
+class HealthCheckResult:  # CORE-035-scoped — domain-specific health check result variant
     """Result of a health check."""
 
     def __init__(self, name: str, healthy: bool, message: str = "") -> None:

@@ -5,7 +5,7 @@ Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 Stage: S1 - Pattern Recognition Foundation
 AC Marker: AC-PHASE57-S1-002
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

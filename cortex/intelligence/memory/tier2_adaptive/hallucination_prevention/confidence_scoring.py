@@ -4,7 +4,7 @@ Provides confidence scoring for operations to detect unreliable outputs.
 
 Author: CORTEX Framework
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
+# CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from datetime import datetime
