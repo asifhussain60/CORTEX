@@ -145,6 +145,7 @@ def _check_core_002(workspace_root: Path, verbose: bool) -> list[GovernanceViola
                 "CONTRIBUTING.MD",
                 "SECURITY.MD",
                 "CODEOWNERS",
+                "REQUIREMENTS.TXT",
             ):
                 continue
             violations.append(GovernanceViolation(
@@ -182,12 +183,8 @@ def _check_core_028(workspace_root: Path, verbose: bool) -> list[GovernanceViola
             if stem == "conftest":
                 continue
 
-            # Check snake_case: allow leading test_ prefix
-            check_stem = stem
-            if check_stem.startswith("test_"):
-                check_stem = check_stem[5:]  # Remove test_ prefix for check
-
-            if not SNAKE_CASE_RE.match(check_stem) and check_stem:
+            # Check snake_case: validate full stem (test_ prefix is valid snake_case)
+            if not SNAKE_CASE_RE.match(stem) and stem:
                 violations.append(GovernanceViolation(
                     rule="CORE-028",
                     file=str(py_file.relative_to(workspace_root)),
