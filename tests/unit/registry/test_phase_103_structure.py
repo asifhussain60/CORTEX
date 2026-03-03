@@ -75,13 +75,13 @@ class TestPhase103RegistryStructure:
             assert path.exists(), f"Missing integration path: {path}"
 
     def test_knowledge_base_structure(self):
-        """Verify knowledge-base/ structure for architecture and security KB."""
+        """Verify knowledge/ structure for architecture and security KB."""
         required_paths = [
-            self.registry / "knowledge-base" / "architecture",
-            self.registry / "knowledge-base" / "security",
+            self.registry / "knowledge" / "architecture",
+            self.registry / "knowledge" / "security",
         ]
         for path in required_paths:
-            assert path.exists(), f"Missing knowledge-base path: {path}"
+            assert path.exists(), f"Missing knowledge path: {path}"
 
     def test_metrics_structure(self):
         """Verify metrics/ structure for baselines, dashboards, reports, status."""
@@ -183,7 +183,7 @@ class TestRegistryYAMLFolderStructure:
         """Verify all expected top-level folders exist in cortex-registry."""
         expected_folders = [
             "_cortex-master", "artifacts", "core", "integration",
-            "knowledge-base", "metrics", "planning",
+            "knowledge", "metrics", "planning",
         ]
         for folder in expected_folders:
             folder_path = self.registry / folder
@@ -200,8 +200,8 @@ class TestRegistryYAMLFolderStructure:
             self.registry / "integration" / "interaction",
             self.registry / "integration" / "patterns",
             self.registry / "artifacts" / "workflows",
-            self.registry / "knowledge-base" / "architecture",
-            self.registry / "knowledge-base" / "security",
+            self.registry / "knowledge" / "architecture",
+            self.registry / "knowledge" / "security",
             self.registry / "metrics" / "baselines",
             self.registry / "metrics" / "dashboards",
             self.registry / "metrics" / "reports",

@@ -371,8 +371,8 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             logger.warning(f"LENS analysis failed for {file_path}: {e}")
             return {
                 'ast_analysis': {},
-                'git_history': {},
-                'comments': {}
+                'git_analysis': {},
+                'comment_analysis': {}
             }
 
     def get_domain_knowledge(
@@ -380,19 +380,77 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         intent: str,
         repo_name: Optional[str] = None
     ) -> Dict[str, Any]:
-        """Get domain-specific knowledge."""
+        """Get domain-specific knowledge for *intent* from KnowledgeRegistryProxy.
+
+        GAP-117-03b (Phase 117-a): replaced hardcoded placeholder ``{}`` with
+        real delegation to KnowledgeRegistryProxy.  Maps intent names to the
+        registry's domain taxonomy so callers get actual governance rules and
+        best-practice entries rather than an empty structure.
+
+        Domain mapping (CORTEX registry taxonomy):
+            IMPLEMENT / BUILD  → sdlc, best-practices
+            REFACTOR / CLEAN   → best-practices, architecture
+            FIX / DEBUG        → backend-python, testing-validation
+            SECURITY           → security
+            TEST               → testing-validation
+            AUDIT / GOVERN     → business-rules, architecture
+            default            → all entries (first 20 keys)
+        """
+        _INTENT_DOMAIN_MAP: Dict[str, List[str]] = {
+            "IMPLEMENT":  ["sdlc", "best-practices"],
+            "BUILD":      ["sdlc", "best-practices"],
+            "REFACTOR":   ["best-practices", "architecture"],
+            "CLEAN":      ["best-practices", "architecture"],
+            "FIX":        ["backend-python", "testing-validation"],
+            "DEBUG":      ["backend-python", "testing-validation"],
+            "SECURITY":   ["security"],
+            "AUDIT":      ["business-rules", "architecture"],
+            "GOVERN":     ["business-rules", "architecture"],
+            "TEST":       ["testing-validation"],
+            "PLAN":       ["sdlc", "architecture"],
+        }
+        intent_upper = (intent or "").upper()
+        target_domains = _INTENT_DOMAIN_MAP.get(intent_upper, [])
         try:
-            # Placeholder - future integration with knowledge graph
-            return {
-                'domain_rules': {},
-                'compliance_standards': []
+            from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
+            registry = KnowledgeRegistryProxy()
+            all_entries = registry.all()
+            if target_domains:
+                domain_entries = [
+                    e for e in all_entries
+                    if e.get("domain", "") in target_domains
+                ]
+            else:
+                # Unknown intent — return first 20 entries as general rules
+                domain_entries = all_entries[:20]
+            # Convert list of entries to domain_rules dict keyed by entry key
+            domain_rules: Dict[str, Any] = {
+                e.get("key", f"entry_{i}"): {
+                    "domain": e.get("domain", ""),
+                    "path":   e.get("path", ""),
+                    "content": e.get("content", {}),
+                }
+                for i, e in enumerate(domain_entries)
             }
-        except Exception as e:
-            logger.warning(f"Domain knowledge loading failed: {e}")
+            compliance: List[str] = sorted({
+                e.get("domain", "") for e in domain_entries if e.get("domain")
+            })
             return {
-                'domain_rules': {},
-                'compliance_standards': []
+                "domain_rules": domain_rules,
+                "compliance_standards": compliance,
             }
+        except Exception as exc:
+            logger.warning(f"Domain knowledge loading failed for intent={intent}: {exc}")
+            # Degraded fallback: still return non-empty structure from core rules
+            try:
+                from cortex.intelligence.knowledge.knowledge_synthesis_engine.loaders import get_core_rules
+                core = get_core_rules()
+                return {
+                    "domain_rules": core,
+                    "compliance_standards": ["core"],
+                }
+            except Exception:
+                return {"domain_rules": {}, "compliance_standards": []}
 
     def get_best_practices(self, intent: str) -> Dict[str, Any]:
         """Get intent-specific best practices."""
@@ -474,9 +532,9 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             lens_data = self.get_lens_analysis(file_path)
 
         lens_intelligence = LENSIntelligence(
-            git_analysis=lens_data.get('git_history', {}),
+            git_analysis=lens_data.get('git_analysis', lens_data.get('git_history', {})),
             ast_analysis=lens_data.get('ast_analysis', {}),
-            comment_analysis=lens_data.get('comments', {})
+            comment_analysis=lens_data.get('comment_analysis', lens_data.get('comments', {}))
         )
 
         # Load real company knowledge via CompanyDomainLoader (AC-P18-005)
@@ -515,9 +573,9 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
                 logger.warning(f"LENS analysis failed in full tier: {e}")
 
         lens_intelligence = LENSIntelligence(
-            git_analysis=lens_data.get('git_history', {}),
+            git_analysis=lens_data.get('git_analysis', lens_data.get('git_history', {})),
             ast_analysis=lens_data.get('ast_analysis', {}),
-            comment_analysis=lens_data.get('comments', {})
+            comment_analysis=lens_data.get('comment_analysis', lens_data.get('comments', {}))
         )
 
         # --- Company domain knowledge (AC-P18-006) --------------------------

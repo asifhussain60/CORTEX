@@ -109,7 +109,7 @@ def test_gap_78_a04_enforcement_orchestrator_governance_injection() -> None:
     )
     assert has_hook, (
         "EnforcementOrchestrator missing governance knowledge injection hook (GAP-78-A-04)\n"
-        "Add: _inject_governance_knowledge() consuming cortex-registry/knowledge-base/governance/*.yaml"
+        "Add: _inject_governance_knowledge() consuming cortex-registry/knowledge/governance/*.yaml"
     )
 
 
@@ -126,10 +126,10 @@ def test_gap_78_a05_security_orchestrator_importable() -> None:
 
 def test_gap_78_a05_owasp_knowledge_file_exists() -> None:
     """GAP-78-A-05: OWASP knowledge YAML must exist for security orchestrator."""
-    owasp_path = CORTEX_ROOT / "cortex-registry/knowledge-base/security/owasp-top10.yaml"
+    owasp_path = CORTEX_ROOT / "cortex-registry/knowledge/security/owasp-top10.yaml"
     assert owasp_path.exists(), (
         f"OWASP knowledge file missing: {owasp_path}\n"
-        "Action: create cortex-registry/knowledge-base/security/owasp-top10.yaml"
+        "Action: create cortex-registry/knowledge/security/owasp-top10.yaml"
     )
 
 

@@ -96,16 +96,17 @@ verification:
   last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 100
-  completed: 96
+  total_phases: 101
+  completed: 97
   active: 0
   in_progress: 0
-  planned: 6
+  planned: 5
   archived: 4
   playbooks: 1
-  completion_percentage: 97
-  consolidation_summary: "v51.0: Phase 101 COMPLETE 2026-03-03 — CORE-035 duplicate file sweep. All 8 GAPs CLOSED. 66 tests GREEN. 2,255 smoke passed."
+  completion_percentage: 96
+  consolidation_summary: "v52.0: Phase 117 COMPLETE 2026-03-03 — Intelligence Diamond Completion. 10/10 GAPs CLOSED. analyze()→LENS, best_practices sig fix, LENS key mismatch, domain knowledge real, singleton, WorkflowGateway injection, dead code removed, stubs eliminated. 32 unit + 8 golden GREEN. Preflight: 220 passed."
   active_phases:
+    phase-117: "COMPLETE — Intelligence Diamond Completion: 10/10 GAPs CLOSED. analyze()→LENS, best_practices sig, LENS keys, domain knowledge, singleton, gateway injection. 220 preflight ✅"
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
@@ -117,6 +118,18 @@ summary:
     phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
 
 phases:
+  # ── PHASE 117: INTELLIGENCE DIAMOND COMPLETION (2026-03-03) ─────────────────
+  - id: phase-117
+    title: "Intelligence Diamond Completion — Broken Delegation Chains, Dead Intelligence Paths, Directory Flatten"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-117-DIAMOND-COMPLETION
+    gaps: 10
+    gaps_closed: 10
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-117-intelligence-diamond-completion.yaml"
+    note: "COMPLETE 2026-03-03. 10/10 GAPs CLOSED. Sub-phase A: analyze()→LENS delegation, best_practices signature fix, LENS key mismatch (git_history→git_analysis), domain knowledge placeholder replaced, query domain filter verified. Sub-phase B: singleton, WorkflowGateway injection, dead code removal, stubs eliminated. Sub-phase C: directory flatten. 32 unit + 8 golden tests GREEN. Preflight: 220 passed."
+
   # ── DIGEST chat01 REMEDIATION PLAN (2026-03-02) ──────────────────────────────
   # 3 phases from DIGEST chat01.md findings + proceed execution.
   # Execution order: 112 (non-code) → 110 (CLI) → 111 (duplicates, longest).

@@ -25,7 +25,7 @@ PIPELINE_PATH = (
     / "audit-fix-pipeline.yaml"
 )
 VALIDATE_PRODUCTION_PATH = WORKSPACE / "scripts" / "validate-production.py"
-KNOWLEDGE_SECURITY_DIR = WORKSPACE / "cortex-registry" / "knowledge-base" / "security"
+KNOWLEDGE_SECURITY_DIR = WORKSPACE / "cortex-registry" / "knowledge" / "security"
 PROMETHEUS_PATH = WORKSPACE / "deployment" / "prometheus.yml"
 
 

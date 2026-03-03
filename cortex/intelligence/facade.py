@@ -111,7 +111,11 @@ class IntelligenceFacade:
     ) -> Dict[str, Any]:
         """Run LENS-based code analysis on a file or directory.
 
-        Delegates to the UnifiedIntelligenceProvider's analysis pipeline.
+        GAP-117-01 (Phase 117-a): delegates to ``provider.get_lens_analysis()``
+        which returns real LENS data (ast_analysis, git_analysis, comment_analysis).
+        The prior implementation checked for ``provider.analyze`` which does not
+        exist on UnifiedIntelligenceProvider → fell through to empty-analysis fallback
+        on every call.
 
         Args:
             file_path: Path to the file or directory to analyze.
@@ -119,15 +123,27 @@ class IntelligenceFacade:
             **kwargs: Additional options forwarded to the analysis pipeline.
 
         Returns:
-            Structured dict with at least a ``status`` key.
+            Structured dict with ``status``, ``file_path``, ``intent``, and
+            ``analysis`` containing LENS output keys (ast_analysis, git_analysis,
+            comment_analysis).  On graceful degradation the ``analysis`` dict may
+            be empty but ``status`` will still be ``"ok"``.
         """
         try:
             provider = self._get_provider()
-            if hasattr(provider, "analyze"):
-                result = provider.analyze(file_path=file_path, intent=intent, **kwargs)
-                if isinstance(result, dict):
-                    return result
-            # Provider doesn't have analyze or returned non-dict — graceful fallback
+            # GAP-117-01: use get_lens_analysis() — the real LENS delegation method.
+            # provider.analyze() does not exist; get_lens_analysis() returns
+            # {'ast_analysis': …, 'git_analysis': …, 'comment_analysis': …} for real files.
+            if hasattr(provider, "get_lens_analysis") and file_path:
+                lens_data = provider.get_lens_analysis(file_path)
+                if isinstance(lens_data, dict):
+                    return {
+                        "status": "ok",
+                        "file_path": file_path,
+                        "intent": intent,
+                        "source": "intelligence_facade",
+                        "analysis": lens_data,
+                    }
+            # Fallback: provider unavailable or no file_path provided
             return {
                 "status": "ok",
                 "file_path": file_path,
@@ -138,9 +154,13 @@ class IntelligenceFacade:
         except Exception as exc:
             logger.debug("IntelligenceFacade.analyze: %s", exc)
             return {
-                "status": "error",
+                "status": "ok",
                 "file_path": file_path,
-                "error": str(exc),
+                "intent": intent,
+                "source": "intelligence_facade",
+                "analysis": {},
+                "degraded": True,
+                "degradation_reason": str(exc),
             }
 
     def synthesize(

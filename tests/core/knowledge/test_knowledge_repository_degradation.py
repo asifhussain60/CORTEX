@@ -49,7 +49,7 @@ class TestKnowledgeRepositoryDegradation:
         from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
 
         # Create a valid minimal index
-        kb_dir = tmp_path / "cortex-registry" / "knowledge-base"
+        kb_dir = tmp_path / "cortex-registry" / "knowledge"
         kb_dir.mkdir(parents=True)
         index_data = {"version": "1.0", "entries": []}
         (kb_dir / ".knowledge-index.json").write_text(json.dumps(index_data))

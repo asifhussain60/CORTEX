@@ -21,9 +21,9 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).parents[3]
-PROFILES_DIR = ROOT / "cortex-registry" / "knowledge-base" / "profiles"
+PROFILES_DIR = ROOT / "cortex-registry" / "knowledge" / "profiles"
 KNOWLEDGE_DIR = ROOT / "cortex-registry" / "knowledge"
-KNOWLEDGE_BASE_DIR = ROOT / "cortex-registry" / "knowledge-base"
+KNOWLEDGE_BASE_DIR = ROOT / "cortex-registry" / "knowledge"
 
 
 class TestCanonicalKnowledgeImports:
@@ -85,22 +85,22 @@ class TestKnowledgeRegistryHealth:
         )
 
     def test_knowledge_base_directory_exists(self) -> None:
-        """cortex-registry/knowledge-base/ must exist."""
+        """cortex-registry/knowledge/ must exist."""
         assert KNOWLEDGE_BASE_DIR.exists(), (
-            "cortex-registry/knowledge-base/ does not exist"
+            "cortex-registry/knowledge/ does not exist"
         )
 
     def test_profiles_directory_exists(self) -> None:
-        """cortex-registry/knowledge-base/profiles/ must exist."""
+        """cortex-registry/knowledge/profiles/ must exist."""
         assert PROFILES_DIR.exists(), (
-            "cortex-registry/knowledge-base/profiles/ does not exist"
+            "cortex-registry/knowledge/profiles/ does not exist"
         )
 
     def test_knowledge_base_has_yaml_entries(self) -> None:
-        """cortex-registry/knowledge-base/ must contain at least 1 YAML file."""
+        """cortex-registry/knowledge/ must contain at least 1 YAML file."""
         yaml_files = list(KNOWLEDGE_BASE_DIR.rglob("*.yaml"))
         assert len(yaml_files) >= 1, (
-            "cortex-registry/knowledge-base/ has no YAML entries — registry is empty"
+            "cortex-registry/knowledge/ has no YAML entries — registry is empty"
         )
 
     def test_knowledge_synthesis_engine_importable(self) -> None:

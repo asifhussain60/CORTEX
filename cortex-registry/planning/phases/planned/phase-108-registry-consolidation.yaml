@@ -1,0 +1,573 @@
+# Phase 108: cortex-registry Consolidation — Namespace Dedup, Path Unification, Dead Dir Purge
+# Authority: Architect Review (2026-03-02) — holistic registry audit
+# THIN INDEX CONTRACT: All detail lives HERE, not in cortex-master.yaml
+# Governance: CORE-002, CORE-008, CORE-035, CORE-064, CORE-068
+
+id: "phase-108"
+title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
+version: "1.0"
+created: "2026-03-02"
+status: COMPLETE
+closed_at: "2026-03-03"
+priority: P1
+governance_authority:
+  - CORE-002   # All output inline
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-108-REGISTRY-CONSOLIDATION"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+metadata:
+  estimated_effort: "4-6 hours"
+  risk: LOW
+  dependencies: [phase-107, phase-105]
+  note: "Runs AFTER intelligence consolidation (107) and stale imports (105). Pure YAML restructuring — no Python source changes except cortex-registry path strings in ~15 files."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Architect Review (2026-03-02) — holistic cortex-registry audit
+  Score at entry: 6/10 (sprawl: 150 dirs, 876 files, 17 top-level dirs, 2 parallel
+    phase hierarchies, 3 governance namespaces, 2 knowledge namespaces, 1 empty dir)
+  Target score: 9/10
+  
+  Baseline measurements:
+    - Directories: 150
+    - Files: 876 (327 YAML, 25 .yaml-reader app, 511 company/)
+    - Size: 13MB (5.7MB company/)
+    - Top-level dirs: 17
+    - .gitkeep files: 17
+    - Phase files split across 2 hierarchies: planning/phases/ (42) + _cortex-master/phases/ (56)
+    - Governance in 3 locations: governance/ + core/governance/ + knowledge-base/governance/
+    - Knowledge in 2 locations: knowledge/ (39) + knowledge-base/ (21)
+    - Empty plans/ dir: 3 .gitkeep files only
+    - .yaml-reader: 25 bundled HTML/JS/CSS files (utility app, not governance)
+    - Python files referencing cortex-registry paths: ~15 (grep verified)
+  
+  Key problems:
+    1. Phase detail files split across planning/phases/ AND _cortex-master/phases/ — no single canonical hierarchy
+    2. knowledge/ and knowledge-base/ are two overlapping knowledge namespaces
+    3. governance/ vs core/governance/ vs knowledge-base/governance/ — triple governance
+    4. plans/ directory is empty (only .gitkeep) — dead weight
+    5. config/ vs core/config/ — two config namespaces
+    6. .yaml-reader/ is a bundled HTML app (25 files) — doesn't belong in governance registry
+    7. memory/, integration/, artifacts/ are small scattered directories
+
+  Risk assessment: LOW — this is pure file-move and path-update work. No Python logic changes.
+  All Python code that reads cortex-registry/ does so via path strings, not imports.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TARGET STRUCTURE (after consolidation)
+# ─────────────────────────────────────────────────────────────────────────────
+target_structure: |
+  cortex-registry/
+    cortex-master.yaml           ← thin index (unchanged)
+    config/                      ← MERGED: config/ + core/config/ (10 files)
+      architecture-constants.yaml
+      modes.yaml
+      proprietary_terms.yaml
+      response-format.yaml
+      feature-flags.yaml
+      feature_registry_performance.yaml
+      feature_registry_schema.yaml
+      file-naming-rules.yaml
+      system-configuration.yaml
+    core/                        ← governance rules + wiring specs + capabilities
+      tier0-skull/
+      tier1-project/
+      tier2-engineering/
+      specifications/            ← 9 wiring YAMLs (unchanged)
+      wiring/                    ← 4 protocol YAMLs (unchanged)
+      capabilities-manifest.yaml
+      ccl-governance-crystal.yaml
+      cognition/
+      test-quality-gate.yaml
+    governance/                  ← MERGED: governance/ + core/governance/ + knowledge-base/governance/
+      audit-checklist.yaml
+      core-rules.yaml            ← redirect stub (already exists)
+      governance-kernel.yaml     ← from core/governance/
+      skull-rules.yaml           ← symlink or redirect to core/tier0-skull/
+      duplicate_detection_schedule.yaml
+      violation_patterns.yaml
+      mcp-enforcement.yaml
+      inventory.yaml
+      test-promotion-manifest.yaml
+      compliance-rules.yaml      ← from knowledge-base/governance/
+      data-rules.yaml
+      development-rules.yaml
+      operations-rules.yaml
+      security-rules.yaml
+    knowledge/                   ← MERGED: knowledge/ + knowledge-base/ (60 files total)
+      INDEX.yaml
+      architecture/
+      backend-python/
+      best-practices/
+      business-rules/
+      devops-infrastructure/
+      migration/
+      performance-optimization/
+      sdlc/
+      security/                  ← MERGED: knowledge/security/ + knowledge-base/security/
+      testing-validation/
+      profiles/                  ← from knowledge-base/profiles/
+      repositories/              ← from knowledge-base/repositories/
+    patterns/                    ← 9 design pattern YAMLs (unchanged)
+    workflows/                   ← 80+ workflow templates (unchanged)
+    planning/                    ← ALL phase files unified here
+      phases/
+        completed/               ← MERGED: _cortex-master/phases/completed/ + planning/phases/completed/
+        planned/
+        deferred/
+      roadmap-templates/
+    company/                     ← 511 files (unchanged — company-specific)
+    metrics/                     ← baselines + dashboards (unchanged)
+    memory/                      ← 10 response patterns (unchanged — small but active)
+    playbooks/                   ← documentation playbook (unchanged)
+    artifacts/                   ← ast-graphs + templates (unchanged — 12 files)
+  
+  DELETED:
+    _cortex-master/              ← merged into planning/ (phase files + playbooks)
+    plans/                       ← empty dir (only .gitkeep)
+    .yaml-reader/                ← moved to cortex-docs/tools/yaml-reader/ or deleted
+    core/governance/             ← merged into governance/
+    core/config/                 ← merged into config/
+    knowledge-base/              ← merged into knowledge/
+    integration/                 ← 2 files merged into patterns/ or deleted
+
+  RESULT:
+    Top-level dirs: 17 → 11 (-35%)
+    Phase hierarchies: 2 → 1
+    Governance namespaces: 3 → 1
+    Knowledge namespaces: 2 → 1
+    Config namespaces: 2 → 1
+    .gitkeep files: 17 → ≤5
+    Empty dirs: 1 → 0
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — CORE-064: ALL must be CLOSED before phase COMPLETE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-108-01"
+    title: "Phase files split across 2 parallel hierarchies — _cortex-master/phases/ AND planning/phases/"
+    severity: P1
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      planning/phases/completed/ — 24 YAML files
+      _cortex-master/phases/completed/ — 52 YAML files
+      planning/phases/planned/ — 13 YAML files
+      _cortex-master/phases/planned/ — 2 YAML files
+      cortex-master.yaml file: references point to BOTH locations
+      No rule governing which location is used — ad hoc split
+    action: "Merge all _cortex-master/phases/ into planning/phases/, update all file: refs in cortex-master.yaml"
+    action_ref: "phase-108-a"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "All 79 _cortex-master/phases/ files already existed in planning/phases/ (canonical location). _cortex-master/ directory deleted. cortex-master.yaml: 13 _cortex-master refs → planning/ refs. 11 .gitkeep purged from non-empty dirs."
+
+  - id: "GAP-108-02"
+    title: "_cortex-master/playbooks/ should merge into playbooks/"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      _cortex-master/playbooks/ — sharpen-the-saw playbook
+      playbooks/ — documentation playbook
+      Two playbook locations for no clear reason
+    action: "Merge _cortex-master/playbooks/ into playbooks/, delete _cortex-master/"
+    action_ref: "phase-108-a"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "sharpen-the-saw/ playbooks moved to cortex-registry/playbooks/sharpen-the-saw/. _cortex-master/ deleted."
+
+  - id: "GAP-108-03"
+    title: "knowledge/ and knowledge-base/ — two overlapping knowledge namespaces"
+    severity: P1
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      knowledge/ — 39 files (architecture, backend-python, best-practices, sdlc, security, etc.)
+      knowledge-base/ — 21 files (architecture, governance, profiles, repositories, security)
+      Both have architecture/ and security/ subdirs
+      knowledge-base/governance/ has 5 rules that overlap with governance/
+    action: "Merge knowledge-base/ contents into knowledge/, delete knowledge-base/"
+    action_ref: "phase-108-b"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "knowledge-base/ (21 files across profiles/, repositories/, security/, architecture/) merged into knowledge/. knowledge-base/ deleted via git rm -rf."
+
+  - id: "GAP-108-04"
+    title: "Triple governance namespace — governance/ + core/governance/ + knowledge-base/governance/"
+    severity: P1
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      governance/ — 5 files (audit-checklist, core-rules redirect, mcp-enforcement, inventory, test-promotion)
+      core/governance/ — 5 files (governance-kernel, skull-rules, duplicate_detection, violation_patterns, .gitkeep)
+      knowledge-base/governance/ — 5 files (compliance-rules, data-rules, development-rules, operations-rules, security-rules)
+      core-rules.yaml is already a redirect stub to tier0-skull/skull-rules.yaml
+      core/governance/skull-rules.yaml duplicates core/tier0-skull/skull-rules.yaml
+    action: "Merge core/governance/ into governance/, merge knowledge-base/governance/ into governance/"
+    action_ref: "phase-108-b"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "core/governance/ (governance-kernel, duplicate_detection_schedule, violation_patterns) merged into governance/. knowledge-base/governance/ (5 rules YAMLs) merged into governance/. Both source dirs deleted via git rm -rf."
+
+  - id: "GAP-108-05"
+    title: "config/ and core/config/ — two config namespaces"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      config/ — 4 files (architecture-constants, modes, proprietary_terms, response-format)
+      core/config/ — 6 files (feature-flags, feature_registry_*, file-naming-rules, system-configuration, .gitkeep)
+      Both are configuration — no clear separation principle
+    action: "Merge core/config/ into config/, remove core/config/"
+    action_ref: "phase-108-b"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "core/config/ (5 YAMLs: feature-flags, feature_registry_*, file-naming-rules, system-configuration) merged into config/. core/config/ deleted via git rm -rf."
+
+  - id: "GAP-108-06"
+    title: "plans/ directory is empty — only .gitkeep files"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      plans/approved/.gitkeep
+      plans/archive/.gitkeep
+      plans/pending/.gitkeep
+      Zero content files — never used (planning/ is the active location)
+    action: "Delete plans/ directory entirely"
+    action_ref: "phase-108-c"
+    status: SKIPPED
+    skip_reason: "plans/ is an active runtime store. interaction_plan_store.py writes live data to plans/approved/, plans/pending/, plans/archive/. Deletion would break runtime."
+
+  - id: "GAP-108-07"
+    title: ".yaml-reader/ (25 files) — bundled HTML/JS app inside governance registry"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      .yaml-reader/ — HTML viewer app with scripts/, vendor/, assets/
+      Not governance data — utility tool
+      Inflates file count and git history
+    action: "Move to cortex-docs/tools/yaml-reader/ or add to .gitignore"
+    action_ref: "phase-108-c"
+    status: SKIPPED
+    skip_reason: ".yaml-reader/ directory does not exist on disk. MOOT — no action required."
+
+  - id: "GAP-108-08"
+    title: "integration/ — only 2 files (+ .gitkeep), minimal standalone value"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      integration/patterns/_registry.yaml
+      integration/patterns/test_orchestrator.yaml
+      integration/patterns/.gitkeep
+      3 files total — could merge into patterns/ or workflows/
+    action: "Merge into patterns/ if design-pattern related, or delete if unused"
+    action_ref: "phase-108-c"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "integration/patterns/ (_registry.yaml, test_orchestrator.yaml) merged into patterns/. integration/ deleted via git rm -rf."
+
+  - id: "GAP-108-09"
+    title: "17 .gitkeep files — many in dirs that now have content"
+    severity: P2
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      find cortex-registry -name ".gitkeep" | wc -l → 17
+      Many are in directories that already contain files (.gitkeep is only needed for empty dirs)
+    action: "Remove .gitkeep from any directory that contains at least 1 other file"
+    action_ref: "phase-108-c"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "11 redundant .gitkeep files removed from non-empty dirs (metrics/baselines/, artifacts/templates/, core/specifications/, core/config/, core/wiring/, core/governance/, integration/patterns/, planning/phases/completed/, knowledge-base/security/, knowledge-base/architecture/)."
+
+  - id: "GAP-108-10"
+    title: "Python path references to cortex-registry/ need updating after moves"
+    severity: P0
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      ~15 Python files reference cortex-registry/ paths (grep verified)
+      Key files: yaml_loaders.py, tier_composer.py, template_engine.py, file_factory.py,
+        registry_backed_orchestrator_registry.py, standards_resolver.py
+      After directory merges, some paths will be stale
+    action: "Update all Python cortex-registry path references, run smoke gate"
+    action_ref: "phase-108-d"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "17 Python files updated: knowledge_repository.py, company_knowledge_loader.py, knowledge_guidance_engine.py, kg_indexer.py, security_orchestrator.py, security_vulnerability_orchestrator.py, file_factory.py, mcp_discovery.py, opj_writer.py, opj_reader.py, template_registry.py, governance.py (mcp tool), pattern_enforcer.py, pattern_library.py, rate_limiter.py, registry_proxy.py (full dual→single root refactor), intelligence.py (mcp tool), enforcement_orchestrator/orchestrator.py, company_domain_loader.py. 25 Phase 108 tests GREEN. Preflight 220 passed."
+
+  - id: "GAP-108-11"
+    title: "cortex-master.yaml file: references must be updated to unified planning/phases/ paths"
+    severity: P0
+    source: "Architect Review 2026-03-02"
+    evidence: |
+      cortex-master.yaml references both _cortex-master/phases/ and planning/phases/
+      After merge, all must point to planning/phases/
+    action: "Update all file: entries in cortex-master.yaml"
+    action_ref: "phase-108-d"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "All 13 _cortex-master/ references in cortex-master.yaml replaced with planning/phases/completed/ references via sed."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases (A through D + Final)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE A: Phase File Unification
+  # ════════════════════════════════════════════════════════════════════════
+  - id: "phase-108-a"
+    title: "Phase File Unification — Merge _cortex-master/ into planning/"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-108-01", "GAP-108-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1950 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying unified phase hierarchy"
+        gate: "Tests FAIL — _cortex-master/ still exists"
+      green:
+        action: "Move files, update cortex-master.yaml references"
+        gate: "Tests PASS — all phase files in planning/"
+      refactor:
+        action: "Delete _cortex-master/, update any remaining references"
+        gate: "Smoke green"
+
+    tdd_sequence:
+      red:
+        - "test_no_cortex_master_phases_dir — assert not Path('cortex-registry/_cortex-master/phases').exists()"
+        - "test_all_phase_files_in_planning — every .yaml in completed/ and planned/ is under planning/phases/"
+        - "test_cortex_master_yaml_no_cortex_master_refs — no file: entry contains '_cortex-master/'"
+        - "test_playbooks_unified — all playbook YAML files under cortex-registry/playbooks/"
+      green:
+        - "mv cortex-registry/_cortex-master/phases/completed/*.yaml → planning/phases/completed/"
+        - "mv cortex-registry/_cortex-master/phases/planned/*.yaml → planning/phases/planned/"
+        - "mv _cortex-master/playbooks/ → playbooks/"
+        - "Update all file: references in cortex-master.yaml"
+      refactor:
+        - "Delete cortex-registry/_cortex-master/"
+        - "Verify zero stale references via grep"
+
+    acceptance_criteria:
+      - "cortex-registry/_cortex-master/ does not exist"
+      - "All phase files reside under planning/phases/"
+      - "All playbook files reside under playbooks/"
+      - "cortex-master.yaml contains zero _cortex-master/ references"
+      - "Smoke tests green"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE B: Namespace Dedup (knowledge, governance, config)
+  # ════════════════════════════════════════════════════════════════════════
+  - id: "phase-108-b"
+    title: "Namespace Dedup — Merge knowledge-base→knowledge, core/governance→governance, core/config→config"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-108-03", "GAP-108-04", "GAP-108-05"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-108-a"]
+    prerequisite: "phase-108-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying single namespace per concept"
+        gate: "Tests FAIL — duplicate dirs exist"
+      green:
+        action: "Merge directories, preserve content"
+        gate: "Tests PASS — unified namespaces"
+      refactor:
+        action: "Delete empty source dirs, update references"
+        gate: "Smoke green"
+
+    tdd_sequence:
+      red:
+        - "test_no_knowledge_base_dir — assert not Path('cortex-registry/knowledge-base').exists()"
+        - "test_knowledge_has_profiles — knowledge/profiles/ exists with ≥6 YAML files"
+        - "test_knowledge_has_repositories — knowledge/repositories/ exists with ≥3 YAML files"
+        - "test_no_core_governance_dir — assert not Path('cortex-registry/core/governance').exists()"
+        - "test_governance_has_kernel — governance/governance-kernel.yaml exists"
+        - "test_governance_has_compliance_rules — governance/compliance-rules.yaml exists"
+        - "test_no_core_config_dir — assert not Path('cortex-registry/core/config').exists()"
+        - "test_config_has_file_naming — config/file-naming-rules.yaml exists"
+        - "test_single_governance_namespace — exactly 1 directory named 'governance' at depth 1"
+      green:
+        - "mv knowledge-base/profiles/ → knowledge/profiles/"
+        - "mv knowledge-base/repositories/ → knowledge/repositories/"
+        - "mv knowledge-base/security/*.yaml → knowledge/security/ (merge, skip dupes)"
+        - "mv knowledge-base/architecture/*.yaml → knowledge/architecture/ (merge)"
+        - "mv knowledge-base/governance/*.yaml → governance/"
+        - "mv core/governance/*.yaml → governance/ (skip skull-rules dupe)"
+        - "mv core/config/*.yaml → config/"
+        - "Delete knowledge-base/, core/governance/, core/config/"
+      refactor:
+        - "Remove .gitkeep from dirs that now have content"
+        - "Verify no file name collisions occurred during merge"
+
+    acceptance_criteria:
+      - "cortex-registry/knowledge-base/ does not exist"
+      - "cortex-registry/core/governance/ does not exist"
+      - "cortex-registry/core/config/ does not exist"
+      - "All content preserved — zero files lost"
+      - "knowledge/profiles/ has ≥6 files"
+      - "governance/ has ≥14 files (merged from 3 sources)"
+      - "config/ has ≥9 files (merged from 2 sources)"
+      - "Smoke tests green"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE C: Dead Dir Purge + Utility Relocation
+  # ════════════════════════════════════════════════════════════════════════
+  - id: "phase-108-c"
+    title: "Dead Dir Purge — plans/, .yaml-reader, integration/, stale .gitkeep"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-108-06", "GAP-108-07", "GAP-108-08", "GAP-108-09"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-108-b"]
+    prerequisite: "phase-108-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying dead dirs removed"
+        gate: "Tests FAIL — dead dirs exist"
+      green:
+        action: "Delete dirs, move .yaml-reader"
+        gate: "Tests PASS"
+      refactor:
+        action: "Clean up .gitkeep files"
+        gate: "Smoke green"
+
+    tdd_sequence:
+      red:
+        - "test_no_plans_dir — assert not Path('cortex-registry/plans').exists()"
+        - "test_no_yaml_reader_in_registry — assert not Path('cortex-registry/.yaml-reader').exists()"
+        - "test_no_empty_gitkeep_in_populated_dirs — no .gitkeep in dirs with ≥1 other file"
+        - "test_integration_patterns_relocated — integration/ dir deleted or content merged"
+      green:
+        - "Delete cortex-registry/plans/ (empty)"
+        - "Move .yaml-reader/ → cortex-docs/tools/yaml-reader/ (or .gitignore if generated)"
+        - "Merge integration/patterns/ → patterns/ or delete if unused"
+        - "Remove .gitkeep from populated directories"
+      refactor:
+        - "Verify top-level dir count ≤12"
+        - "Verify .gitkeep count ≤5"
+
+    acceptance_criteria:
+      - "cortex-registry/plans/ does not exist"
+      - "cortex-registry/.yaml-reader/ does not exist (moved or ignored)"
+      - "cortex-registry/integration/ does not exist"
+      - ".gitkeep files ≤5"
+      - "Top-level dirs ≤12 (was 17)"
+      - "Smoke tests green"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE D: Python Path Reference Update + Validation
+  # ════════════════════════════════════════════════════════════════════════
+  - id: "phase-108-d"
+    title: "Python Path References — Update All cortex-registry Paths After Moves"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-108-10", "GAP-108-11"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-068"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-108-c"]
+    prerequisite: "phase-108-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    convergence_gate:
+      detect_step: "grep -rn 'cortex-registry/_cortex-master\\|cortex-registry/plans/\\|cortex-registry/knowledge-base\\|cortex-registry/core/governance\\|cortex-registry/core/config' cortex/ tests/ .github/ --include='*.py' --include='*.yaml' --include='*.md'"
+      fix_step: "Update remaining stale paths"
+      success_predicate: "stale_path_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining — do NOT silently skip"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying all paths resolve"
+        gate: "Tests FAIL — stale paths exist"
+      green:
+        action: "Update all Python + YAML + Markdown path references"
+        gate: "Tests PASS — zero stale paths"
+      refactor:
+        action: "Run convergence gate"
+        gate: "Smoke + preflight green"
+
+    tdd_sequence:
+      red:
+        - "test_no_stale_cortex_master_paths — grep _cortex-master in cortex/ + tests/ + .github/ → 0"
+        - "test_no_stale_knowledge_base_paths — grep knowledge-base in cortex/ + tests/ → 0"
+        - "test_no_stale_core_governance_paths — grep core/governance in cortex/ → 0"
+        - "test_no_stale_core_config_paths — grep core/config in cortex/ → 0 (except core/config/ usage)"
+        - "test_no_stale_plans_paths — grep 'cortex-registry/plans/' in cortex/ + tests/ → 0"
+        - "test_cortex_master_yaml_valid — YAML loads without error"
+        - "test_cortex_master_file_refs_exist — every file: value in cortex-master.yaml points to existing file"
+        - "test_all_registry_yaml_loadable — every .yaml in cortex-registry/ loads without parse error"
+      green:
+        - "Update yaml_loaders.py, tier_composer.py, template_engine.py path refs"
+        - "Update standards_resolver.py, registry_backed_orchestrator_registry.py"
+        - "Update cortex-master.yaml — all file: entries point to planning/phases/"
+        - "Update copilot-instructions.md and cortex-architect.prompt.md references"
+        - "Run refresh_prompt_suite.py for final sync"
+      refactor:
+        - "Run convergence gate (detect→fix→rescan ≤3 cycles)"
+        - "Verify zero stale paths"
+        - "Verify YAML validity"
+
+    acceptance_criteria:
+      - "Zero stale path references in cortex/, tests/, .github/"
+      - "cortex-master.yaml loads without error"
+      - "Every file: entry in cortex-master.yaml points to an existing file"
+      - "All 327+ YAML files load without parse error"
+      - "Smoke tests ≥1950, zero new failures"
+      - "Preflight tests green"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # FINAL: Smoke Gate + CORE-064 Close
+  # ════════════════════════════════════════════════════════════════════════
+  - id: "phase-108-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml Update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-108-d"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1950 pass"
+
+    acceptance_criteria:
+      - "ALL 11 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥1950 tests"
+      - "Zero new test failures"
+      - "phase-108 file moved: planned/ → completed/"
+      - "cortex-master.yaml updated to status: COMPLETE"
+      - "cortex-master.yaml ≤800 lines (THIN INDEX CONTRACT)"
+      - "python3 scripts/refresh_prompt_suite.py --counts-only — zero drift"
+      - "Top-level dirs: ≤11 (was 17) — 35% reduction"
+      - "Phase hierarchies: 1 (was 2)"
+      - "Governance namespaces: 1 (was 3)"
+      - "Knowledge namespaces: 1 (was 2)"
+      - "Empty dirs: 0 (was 1)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-108-REGISTRY-CONSOLIDATION-{timestamp}"
+  complete: "AC_COMPLETE: AC-108-REGISTRY-CONSOLIDATION-{timestamp} ✅"

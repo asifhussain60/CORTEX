@@ -447,7 +447,7 @@ class TestProductionStubDetection:
             # - CoherenceReport: coherence validator vs validation models
             # - CheckResult: git enforcement vs pre-implementation checklist
             # - Pattern: discovery_models (learning path entity) vs flush_manager
-            #             (knowledge-base pattern dataclass) — semantically distinct
+            #             (knowledge pattern dataclass) — semantically distinct
             "ScanResult", "VacuumOrchestrator", "WorkflowStep",
             "RefactoringResult", "CoherenceReport", "CheckResult", "Pattern",
             # Infrastructure domain-local types (each sub-domain defines its own)

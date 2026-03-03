@@ -4,3 +4,4 @@ This shim will be removed after 1 consolidation session.
 """
 
 from cortex.mcp.tools.collaboration_tools import *  # noqa: F401, F403
+from cortex.mcp.tools.collaboration_tools import __all__  # re-export for module introspection

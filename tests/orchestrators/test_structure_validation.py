@@ -47,7 +47,7 @@ class TestGoldenTestStructure:
         
         assert (base / "orchestrator-configs").exists(), "Missing orchestrator-configs"
         assert (base / "sample-repos").exists(), "Missing sample-repos"
-        assert (base / "knowledge-bases").exists(), "Missing knowledge-bases"
+        assert (base / "knowledges").exists(), "Missing knowledges"
     
     def test_e2e_directory_exists(self):
         """Should have e2e test directory."""

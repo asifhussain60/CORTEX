@@ -28,7 +28,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).parents[3]  # tests/golden/integration/ → repo root
 DOMAINS_DIR = REPO_ROOT / "cortex-registry" / "company" / "domains"
-PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge-base" / "profiles"
+PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge" / "profiles"
 PATTERNS_DIR = REPO_ROOT / "cortex-registry" / "patterns"
 
 
@@ -118,7 +118,7 @@ class TestDomainProfileDetectionTruth:
     """Golden tests for detect_profile_for_repo() against live profiles/."""
 
     def test_profiles_directory_has_yaml_files(self) -> None:
-        """AC-P18-012: cortex-registry/knowledge-base/profiles/ contains *.yaml files."""
+        """AC-P18-012: cortex-registry/knowledge/profiles/ contains *.yaml files."""
         yamls = list(PROFILES_DIR.glob("*.yaml"))
         assert len(yamls) >= 4, (
             f"Expected at least 4 profile YAMLs, found {len(yamls)}"

@@ -16,8 +16,8 @@ import pytest
 import yaml
 
 REPO_ROOT = Path(__file__).parents[3]
-ARCH_YAML = REPO_ROOT / "cortex-registry" / "knowledge-base" / "architecture" / "architecture-best-practices.yaml"
-PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge-base" / "profiles"
+ARCH_YAML = REPO_ROOT / "cortex-registry" / "knowledge" / "architecture" / "architecture-best-practices.yaml"
+PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge" / "profiles"
 REPO_YAML = REPO_ROOT / "cortex-registry" / "company" / "repos" / "cortex" / "repository.yaml"
 BASELINES_DIR = REPO_ROOT / "cortex-registry" / "metrics" / "baselines"
 SECURITY_OPS_YAML = PROFILES_DIR / "security-ops.yaml"
@@ -28,7 +28,7 @@ SECURITY_OPS_YAML = PROFILES_DIR / "security-ops.yaml"
 # ===========================================================================================
 
 def test_architecture_best_practices_yaml_exists() -> None:
-    """AC-P19-001: cortex-registry/knowledge-base/architecture/architecture-best-practices.yaml exists."""
+    """AC-P19-001: cortex-registry/knowledge/architecture/architecture-best-practices.yaml exists."""
     assert ARCH_YAML.exists(), f"Expected {ARCH_YAML} to exist"
 
 
@@ -78,7 +78,7 @@ def test_synthesis_engine_loads_architecture_yaml_for_design() -> None:
 # ===========================================================================================
 
 def test_security_ops_profile_exists() -> None:
-    """AC-P19-003: security-ops.yaml profile file exists in knowledge-base/profiles/."""
+    """AC-P19-003: security-ops.yaml profile file exists in knowledge/profiles/."""
     assert SECURITY_OPS_YAML.exists(), f"Expected {SECURITY_OPS_YAML}"
 
 

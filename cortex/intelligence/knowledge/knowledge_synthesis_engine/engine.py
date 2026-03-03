@@ -121,15 +121,14 @@ class KnowledgeSynthesisEngine:
     # =========================================================================
 
     def _load_cortex_best_practices(self, intent_type: str) -> Dict[str, Any]:
-        """Load applicable CORTEX best practices (cached 5-min TTL)."""
-        cache_key = f"cortex_practices_{intent_type}"
-        entry = self._cortex_knowledge_cache.get(cache_key)
-        if entry:
-            ts, practices = entry
-            if time.time() - ts < 300:
-                return practices
-        practices = load_cortex_best_practices(intent_type)
-        self._cortex_knowledge_cache[cache_key] = (time.time(), practices)
+        """Load applicable CORTEX best practices (cached 5-min TTL).
+
+        GAP-117-02 (Phase 117-a): pass self._cortex_knowledge_cache to loader
+        so the signature matches load_cortex_best_practices(intent_type, cache, …).
+        Previously called with only intent_type → TypeError swallowed silently
+        → empty best_practices on every synthesize() call.
+        """
+        practices = load_cortex_best_practices(intent_type, self._cortex_knowledge_cache)
         return practices
 
     # =========================================================================

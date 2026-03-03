@@ -23,20 +23,20 @@ REGISTRY = pathlib.Path(__file__).parents[2] / "cortex-registry"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# GAP-108-03  knowledge-base/ merged into knowledge/
+# GAP-108-03  knowledge/ merged into knowledge/
 # ─────────────────────────────────────────────────────────────────────────────
 
 class TestKnowledgeNamespaceMerge:
-    """GAP-108-03: knowledge-base/ absorbed into knowledge/."""
+    """GAP-108-03: knowledge/ absorbed into knowledge/."""
 
     def test_no_knowledge_base_dir(self) -> None:
-        """knowledge-base/ must not exist after merge."""
-        assert not (REGISTRY / "knowledge-base").exists(), (
-            "cortex-registry/knowledge-base/ still exists — merge into knowledge/ (GAP-108-03)"
+        """knowledge/ must not exist after merge."""
+        assert not (REGISTRY / "knowledge").exists(), (
+            "cortex-registry/knowledge/ still exists — merge into knowledge/ (GAP-108-03)"
         )
 
     def test_knowledge_has_profiles(self) -> None:
-        """knowledge/profiles/ must exist with content from knowledge-base/profiles/."""
+        """knowledge/profiles/ must exist with content from knowledge/profiles/."""
         profiles = REGISTRY / "knowledge" / "profiles"
         assert profiles.exists(), "knowledge/profiles/ missing"
         yaml_files = list(profiles.glob("*.yaml"))
@@ -45,7 +45,7 @@ class TestKnowledgeNamespaceMerge:
         )
 
     def test_knowledge_has_repositories(self) -> None:
-        """knowledge/repositories/ must exist with content from knowledge-base/repositories/."""
+        """knowledge/repositories/ must exist with content from knowledge/repositories/."""
         repos = REGISTRY / "knowledge" / "repositories"
         assert repos.exists(), "knowledge/repositories/ missing"
         yaml_files = list(repos.glob("*.yaml"))
@@ -54,12 +54,12 @@ class TestKnowledgeNamespaceMerge:
         )
 
     def test_knowledge_security_has_owasp(self) -> None:
-        """knowledge/security/ must contain owasp-top10.yaml (from knowledge-base/security/)."""
+        """knowledge/security/ must contain owasp-top10.yaml (from knowledge/security/)."""
         owasp = REGISTRY / "knowledge" / "security" / "owasp-top10.yaml"
         assert owasp.exists(), "knowledge/security/owasp-top10.yaml missing after merge"
 
     def test_knowledge_security_has_cicd_hardening(self) -> None:
-        """knowledge/security/ must contain cicd-hardening.yaml (from knowledge-base/security/)."""
+        """knowledge/security/ must contain cicd-hardening.yaml (from knowledge/security/)."""
         cicd = REGISTRY / "knowledge" / "security" / "cicd-hardening.yaml"
         assert cicd.exists(), "knowledge/security/cicd-hardening.yaml missing after merge"
 
@@ -74,7 +74,7 @@ class TestKnowledgeNamespaceMerge:
 # ─────────────────────────────────────────────────────────────────────────────
 
 class TestGovernanceNamespaceMerge:
-    """GAP-108-04: core/governance/ and knowledge-base/governance/ merged into governance/."""
+    """GAP-108-04: core/governance/ and knowledge/governance/ merged into governance/."""
 
     def test_no_core_governance_dir(self) -> None:
         """core/governance/ must not exist after merge."""
@@ -98,24 +98,24 @@ class TestGovernanceNamespaceMerge:
         assert dd.exists(), "governance/duplicate_detection_schedule.yaml missing after merge"
 
     def test_governance_has_compliance_rules(self) -> None:
-        """governance/compliance-rules.yaml must exist (from knowledge-base/governance/)."""
+        """governance/compliance-rules.yaml must exist (from knowledge/governance/)."""
         cr = REGISTRY / "governance" / "compliance-rules.yaml"
         assert cr.exists(), "governance/compliance-rules.yaml missing after merge"
 
     def test_governance_has_security_rules(self) -> None:
-        """governance/security-rules.yaml must exist (from knowledge-base/governance/)."""
+        """governance/security-rules.yaml must exist (from knowledge/governance/)."""
         sr = REGISTRY / "governance" / "security-rules.yaml"
         assert sr.exists(), "governance/security-rules.yaml missing after merge"
 
     def test_governance_has_data_rules(self) -> None:
-        """governance/data-rules.yaml must exist (from knowledge-base/governance/)."""
+        """governance/data-rules.yaml must exist (from knowledge/governance/)."""
         dr = REGISTRY / "governance" / "data-rules.yaml"
         assert dr.exists(), "governance/data-rules.yaml missing after merge"
 
     def test_no_knowledge_base_governance_dir(self) -> None:
-        """knowledge-base/governance/ must not exist after merge."""
-        assert not (REGISTRY / "knowledge-base" / "governance").exists(), (
-            "cortex-registry/knowledge-base/governance/ still exists — merge into governance/ (GAP-108-04)"
+        """knowledge/governance/ must not exist after merge."""
+        assert not (REGISTRY / "knowledge" / "governance").exists(), (
+            "cortex-registry/knowledge/governance/ still exists — merge into governance/ (GAP-108-04)"
         )
 
 
@@ -202,7 +202,7 @@ class TestPythonPathReferences:
         ]
 
     def test_no_knowledge_base_runtime_refs(self) -> None:
-        """No Python file may use cortex-registry/knowledge-base/ as a runtime path constant."""
+        """No Python file may use cortex-registry/knowledge/ as a runtime path constant."""
         violations = []
         for f in self._python_files():
             text = f.read_text(encoding="utf-8", errors="ignore")
@@ -212,10 +212,10 @@ class TestPythonPathReferences:
                 # Skip pure comments
                 if stripped.startswith("#"):
                     continue
-                if "cortex-registry/knowledge-base" in line:
+                if "cortex-registry/knowledge" in line:
                     violations.append(f"{f.relative_to(pathlib.Path(__file__).parents[2])}:{i}: {stripped}")
         assert not violations, (
-            f"GAP-108-10: {len(violations)} runtime ref(s) to cortex-registry/knowledge-base/ must be updated to cortex-registry/knowledge/:\n"
+            f"GAP-108-10: {len(violations)} runtime ref(s) to cortex-registry/knowledge/ must be updated to cortex-registry/knowledge/:\n"
             + "\n".join(violations)
         )
 

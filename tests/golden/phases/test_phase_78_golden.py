@@ -205,7 +205,7 @@ class TestPhase78InfrastructureComponents:
 
     def test_owasp_knowledge_yaml_exists(self) -> None:
         """OWASP knowledge YAML must exist (GAP-78-A-05 prerequisite)."""
-        owasp = CORTEX_ROOT / "cortex-registry" / "knowledge-base" / "security" / "owasp-top10.yaml"
+        owasp = CORTEX_ROOT / "cortex-registry" / "knowledge" / "security" / "owasp-top10.yaml"
         assert owasp.exists(), f"OWASP knowledge YAML missing: {owasp}"
 
 

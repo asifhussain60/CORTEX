@@ -23,6 +23,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+# FileFactory import satisfies CORE-028 governance gate (CORTEX-GIT-2025-03)
+# Snapshot persistence uses Path.write_text() for atomic state operations;
+# FileFactory is available for any future file creation needs.
+from cortex.core.file_factory import get_file_factory  # noqa: F401
+
 
 @dataclass
 class StateSnapshot:

@@ -1,0 +1,191 @@
+# CORTEX Phase Plan — Phase 116: Metadata Reconciliation + Silent Failure Cleanup
+# Authority: cortex-architect audit 2026-03-03
+# Governance: master-plan-phase-lifecycle.yaml
+
+id: "phase-116"
+title: "Metadata Reconciliation — cortex-master.yaml Truth Alignment + Silent Failure Patterns"
+version: "1.0"
+created: "2026-03-03"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-002   # All output inline
+  - CORE-008   # TDD mandatory
+  - CORE-064   # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-116-METADATA-RECONCILIATION"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Holistic architecture audit 2026-03-03 (copilot chat session).
+  cortex-master.yaml has metadata contradictions:
+    - metadata.completed_phases: 76  vs  summary.completed: 96
+    - metadata.total_phases: 103     vs  summary.total_phases: 100
+    - smoke_baseline: 1950 (actual: 2,194 when last measured)
+    - production_readiness.overall_score: 99% → should be ~85-88% given:
+        26 circular cycles, 65 unreferenced infra, monolith not deleted,
+        broken test collection, 585 noqa suppressions
+  Additionally:
+    - 2 silent `except Exception: pass` blocks in master_orchestrator_response_mixin.py
+      (lines 24 and 33) — swallow errors, hinder debugging
+    - 151 total `except ImportError` blocks, many are appropriate try/except for
+      optional dependencies, but some mask broken wiring
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-116-01"
+    title: "Reconcile metadata.completed_phases vs summary.completed"
+    severity: P0
+    source: "cortex-master.yaml metadata block vs summary block"
+    evidence: |
+      metadata:
+        completed_phases: 76       ← stale
+      summary:
+        completed: 96             ← also possibly stale
+      Actual: run count_phases.py to get true number from phases list
+    action_ref: "phase-116-a"
+    status: OPEN
+    acceptance_criteria: |
+      - metadata.completed_phases == summary.completed == actual count
+      - metadata.total_phases == summary.total_phases == actual count
+      - No contradictions survive
+
+  - id: "GAP-116-02"
+    title: "Update production_readiness.overall_score to evidence-based value"
+    severity: P0
+    source: "Claims 99% but audit found 26 circular cycles, 65 unreferenced modules, etc."
+    action_ref: "phase-116-a"
+    status: OPEN
+    acceptance_criteria: |
+      - production_readiness.overall_score reflects reality
+      - Each sub-score (code_quality, test_coverage, governance, architecture) updated
+      - Score recalculated AFTER phases 114+115 complete (record pre/post)
+
+  - id: "GAP-116-03"
+    title: "Update smoke_baseline to current count"
+    severity: P1
+    source: "smoke_baseline: 1950, actual ≥ 2,194"
+    action_ref: "phase-116-a"
+    status: OPEN
+    acceptance_criteria: |
+      - smoke_baseline matches output of make test-smoke (passed count)
+      - test_count.total matches pytest --collect-only -q count
+
+  - id: "GAP-116-04"
+    title: "Fix 2 silent except Exception:pass in response mixin"
+    severity: P1
+    source: "cortex/orchestrators/core/master_orchestrator_response_mixin.py lines 24, 33"
+    evidence: |
+      except Exception:
+          pass  # silently swallows all errors
+    action_ref: "phase-116-b"
+    status: OPEN
+    acceptance_criteria: |
+      - Both blocks replaced with proper logging + specific exception types
+      - No bare `except Exception: pass` in orchestrator code
+      - smoke green
+
+  - id: "GAP-116-05"
+    title: "Audit 151 except ImportError blocks for masked wiring failures"
+    severity: P2
+    source: "grep 'except ImportError' cortex/ → 151 hits"
+    action_ref: "phase-116-b"
+    status: OPEN
+    acceptance_criteria: |
+      - Each except ImportError classified: LEGITIMATE (optional dep) or MASKING (broken)
+      - MASKING blocks converted to direct imports
+      - Count of except ImportError blocks reduced by ≥30%
+      - smoke green
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-116-a"
+    title: "cortex-master.yaml metadata truth alignment"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-116-01", "GAP-116-02", "GAP-116-03"]
+    governance_authority: "CORE-064"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-115"]
+    prerequisite: "Phase 115 completion_gate passed (accurate module counts needed)"
+    regression_gate: "YAML validates, values match evidence"
+    tdd_cycle:
+      red:
+        action: |
+          Write tests/preflight/test_master_yaml_consistency.py:
+          - test_metadata_matches_summary
+          - test_completed_count_matches_phases_list
+          - test_total_count_matches_phases_list
+          - test_smoke_baseline_within_5pct_of_actual
+      green:
+        action: |
+          1. Count actual completed/planned phases from cortex-master.yaml phases list
+          2. Update metadata block: completed_phases, total_phases, planned_phases
+          3. Update summary block: completed, total_phases
+          4. Run make test-smoke, capture count → update smoke_baseline
+          5. Run pytest --collect-only -q | tail -1 → update test_count.total
+          6. Set production_readiness.overall_score based on post-Phase115 evidence
+      refactor:
+        action: "Verify preflight test passes, zero contradictions"
+    completion_gate: "metadata/summary consistent, smoke_baseline accurate"
+
+  - id: "phase-116-b"
+    title: "Silent failure pattern cleanup"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-116-04", "GAP-116-05"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-116-a"]
+    prerequisite: "phase-116-a completion_gate passed"
+    regression_gate: "make test-smoke — zero new failures"
+    tdd_cycle:
+      red:
+        action: |
+          Write tests/governance/test_no_silent_failures.py:
+          - test_no_bare_except_exception_pass
+          - test_except_import_error_all_classified
+      green:
+        action: |
+          1. Fix master_orchestrator_response_mixin.py: replace bare except with
+             specific exception types + logging
+          2. Audit 151 except ImportError blocks:
+             - Tag each as LEGITIMATE or MASKING in a sweep log
+             - Convert MASKING blocks to direct imports
+          3. Run smoke after each batch of 20 changes
+      refactor:
+        action: "Verify except ImportError count reduced ≥30%, 0 bare except:pass"
+    completion_gate: "0 bare except:pass, ImportError blocks classified, smoke green"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VERIFICATION
+# ─────────────────────────────────────────────────────────────────────────────
+verification:
+  final_gate: |
+    - cortex-master.yaml: metadata == summary == actual counts
+    - production_readiness.overall_score: evidence-based
+    - smoke_baseline: accurate
+    - 0 bare `except Exception: pass` in orchestrator code
+    - except ImportError: reduced ≥30% (from 151)
+    - make test-preflight: ALL PASS
+    - make test-smoke: green
+  note: |
+    Phase 116 should execute AFTER Phases 114 + 115 so the metadata reflects
+    the cleaned-up state rather than being updated twice. The production_readiness
+    score will be recalculated based on post-cleanup evidence.
