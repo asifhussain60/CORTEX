@@ -10,9 +10,10 @@
 
 id: "phase-106"
 title: "Root-Cause Guard Loop + Certification Gate — Audit-Fix Closed-Loop Intelligence"
-version: "1.0"
+version: "1.1"
 created: "2026-03-02"
-status: PLANNED
+completed: "2026-03-03"
+status: COMPLETE
 priority: P1
 governance_authority:
   - CORE-002  # All output inline — no .md/.txt report files
@@ -75,7 +76,7 @@ sweep_catalogue:
       Result: the same violation (e.g. stale import in cortex/X.py) can recur
       in the next session because no guard test prevents it.
     action_ref: "phase-106-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-106-02"
     title: "RCA Engine never dispatched from audit-fix pattern_detection"
@@ -88,7 +89,7 @@ sweep_catalogue:
       No PreventionRule written from audit violation data.
       rca_engine.py Phase 87 — 121 GREEN tests, fully functional, unused.
     action_ref: "phase-106-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-106-03"
     title: "Stage 9 test gate runs preflight only — golden/regression tests excluded"
@@ -101,7 +102,7 @@ sweep_catalogue:
       222 golden test files never run during /audit fix.
       Auto-fix in Stage 7-8 could silently break golden contracts.
     action_ref: "phase-106-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-106-04"
     title: "No formal certification stamp — no composite proof on clean audit exit"
@@ -117,7 +118,7 @@ sweep_catalogue:
       cortex-meta-auditor.md Check #23: "audit_sessions has ≥1 row with
         exit_status='clean' in last 7 days" — but this is insufficient proof.
     action_ref: "phase-106-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-106-05"
     title: "validate-production.py orphaned + CORE-002 + CORE-035 violations"
@@ -133,7 +134,7 @@ sweep_catalogue:
       Not called by audit-fix-pipeline.yaml, totalrecall, or any MCP tool.
       Unique checks (security posture, monitoring files) not in 28-point scan.
     action_ref: "phase-106-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-106-06"
     title: "PreventionRules never consumed by future audit scans"
@@ -146,7 +147,7 @@ sweep_catalogue:
       EnforcementOrchestrator.run_full_audit(): no prevention_rules lookup.
       Result: known recurring root causes (P1→P0 escalation) never applied.
     action_ref: "phase-106-f"
-    status: OPEN
+    status: CLOSED
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT
@@ -168,7 +169,7 @@ phases:
   - id: "phase-106-a"
     title: "Regression Guard Generator — primitive + tests/regression/guards/"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-106-01"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
     duration_estimate: "2 hours"
@@ -241,7 +242,7 @@ phases:
   - id: "phase-106-b"
     title: "RCA Dispatch Wiring — pattern_detection → RCAEngine → PreventionRule"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-106-02", "GAP-106-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"
@@ -312,7 +313,7 @@ phases:
   - id: "phase-106-c"
     title: "Stage 9 Test Tier Upgrade — preflight → smoke (golden + regression coverage)"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-106-03"]
     governance_authority: "CORE-008, CORE-064, CORE-068"
     duration_estimate: "1 hour"
@@ -373,7 +374,7 @@ phases:
   - id: "phase-106-d"
     title: "Certification Gate — audit_certifications SQLite table + MCP op"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-106-04"]
     governance_authority: "CORE-002, CORE-008, CORE-011, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -470,7 +471,7 @@ phases:
   - id: "phase-106-e"
     title: "Check #29 (Security + Monitoring) + validate-production.py Deprecation"
     priority: P2
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-106-05"]
     governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"

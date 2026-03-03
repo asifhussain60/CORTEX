@@ -1,0 +1,2 @@
+# .gitkeep — preserve tests/regression/guards/ directory in git
+# Generated guard tests are committed alongside this file.

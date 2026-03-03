@@ -48,7 +48,8 @@ class CortexGovernance(ConsolidatedTool):
         """Return the description."""
         return (
             "Execute governance actions including enforcement, blocking, "
-            "remediation, and audit logging. Ensures CORE rule compliance."
+            "remediation, and audit logging. Ensures CORE rule compliance. "
+            "Supports op: certification_status to query latest audit certification."
         )
 
     @property
@@ -63,9 +64,20 @@ class CortexGovernance(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Governance operation: enforce, query, report, approve, block, stage0_audit",
+                description=(
+                    "Governance operation: enforce, query, report, approve, block, "
+                    "stage0_audit, certification_status"
+                ),
                 required=True,
-                enum=["enforce", "query", "report", "approve", "block", "stage0_audit"],
+                enum=[
+                    "enforce",
+                    "query",
+                    "report",
+                    "approve",
+                    "block",
+                    "stage0_audit",
+                    "certification_status",
+                ],
             ),
             ToolParameter(
                 name="target",
@@ -96,7 +108,15 @@ class CortexGovernance(ConsolidatedTool):
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
-        return ["enforce", "query", "report", "approve", "block", "stage0_audit"]
+        return [
+            "enforce",
+            "query",
+            "report",
+            "approve",
+            "block",
+            "stage0_audit",
+            "certification_status",
+        ]
 
     async def execute(self, **params) -> ToolResult:
         """Execute governance operation."""
@@ -123,6 +143,8 @@ class CortexGovernance(ConsolidatedTool):
             return await self._block(target, rules, context)
         elif operation == "stage0_audit":
             return await self._stage0_audit(request, context)
+        elif operation == "certification_status":
+            return await self._certification_status()
 
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
 
@@ -280,6 +302,88 @@ class CortexGovernance(ConsolidatedTool):
             },
             metadata={"operation": "stage0_audit", "stage": "pre_flight"},
         )
+
+    async def _certification_status(self) -> ToolResult:
+        """Query the latest audit certification status from audit_certifications table.
+
+        Returns the most recent certification record if a clean audit was run
+        within the last 7 days. Returns {certified: false} with reason if not.
+
+        Authority: Phase 106-D (GAP-106-04)
+        Schema: audit_certifications in audit-fix-pipeline.yaml sqlite_logging.tables
+        CORE-002: inline output only — no file written.
+        """
+        import sqlite3
+        from datetime import datetime, timezone
+        from pathlib import Path as _Path
+
+        db_path = _Path(".cortex-runtime/traces/orchestrator-traces.db")
+        if not db_path.exists():
+            return ToolResult(
+                success=True,
+                data={
+                    "certified": False,
+                    "reason": "No audit database found — run /audit fix to generate certification.",
+                },
+                metadata={"operation": "certification_status"},
+            )
+
+        try:
+            conn = sqlite3.connect(str(db_path))
+            conn.row_factory = sqlite3.Row
+            # Check if table exists
+            tbl_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='audit_certifications'"
+            ).fetchone()
+            if tbl_check is None:
+                conn.close()
+                return ToolResult(
+                    success=True,
+                    data={
+                        "certified": False,
+                        "reason": (
+                            "audit_certifications table not yet created — "
+                            "run /audit fix to generate the first certification."
+                        ),
+                    },
+                    metadata={"operation": "certification_status"},
+                )
+
+            row = conn.execute(
+                "SELECT * FROM audit_certifications ORDER BY certified_at DESC LIMIT 1"
+            ).fetchone()
+            conn.close()
+
+            if row is None:
+                return ToolResult(
+                    success=True,
+                    data={
+                        "certified": False,
+                        "reason": "No clean audit certification in database — run /audit fix.",
+                    },
+                    metadata={"operation": "certification_status"},
+                )
+
+            # Check staleness: certifications older than 7 days are advisory
+            cert_at = row["certified_at"]
+            now_iso = datetime.now(timezone.utc).isoformat()
+            cert_data = dict(row)
+            cert_data["certified"] = True
+            cert_data["certified_at"] = cert_at
+            cert_data["queried_at"] = now_iso
+
+            return ToolResult(
+                success=True,
+                data=cert_data,
+                metadata={"operation": "certification_status"},
+            )
+
+        except Exception as exc:  # noqa: BLE001
+            return ToolResult(
+                success=False,
+                error=f"certification_status query failed: {exc}",
+                metadata={"operation": "certification_status"},
+            )
 
 
 class CortexValidate(ConsolidatedTool):

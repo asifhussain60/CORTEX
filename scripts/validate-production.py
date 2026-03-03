@@ -583,42 +583,14 @@ def main():
     validator = CORTEXProductionValidator(workspace_root)
     report = validator.run_full_assessment()
     
-    # Print results
+    # Print results inline (CORE-002: no file output)
+    # Phase 106-E (GAP-106-05): Removed JSON report file output.
+    # For full certification status, use: cortex_governance(op: certification_status)
     validator.print_report(report)
     
-    # Export JSON report
-    report_file = workspace_root / "production-readiness-report.json"
-    try:
-        report_data = {
-            "overall_status": report.overall_status,
-            "readiness_score": report.readiness_score,
-            "summary": report.summary,
-            "timestamp": report.timestamp,
-            "critical_issues": [
-                {
-                    "name": issue.name,
-                    "message": issue.message,
-                    "remediation": issue.remediation
-                }
-                for issue in report.critical_issues
-            ],
-            "high_issues": [
-                {
-                    "name": issue.name,
-                    "message": issue.message,
-                    "remediation": issue.remediation
-                }
-                for issue in report.high_issues
-            ]
-        }
-        
-        with open(report_file, "w", encoding="utf-8") as f:
-            json.dump(report_data, f, indent=2)
-        
-        print(f"\n📄 Detailed report saved: {report_file}")
-        
-    except Exception as e:
-        print(f"\n⚠️  Could not save report: {e}")
+    print("\n💡 For MCP-queryable certification status:")
+    print("   cortex_governance(op: certification_status)")
+    print("   or: /audit fix  (generates formal audit_certifications record)")
     
     # Exit with appropriate code
     if report.critical_issues:

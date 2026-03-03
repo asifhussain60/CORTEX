@@ -144,6 +144,37 @@ workflow:
               detected_at     TEXT NOT NULL
           );
 
+      # Phase 106-D (GAP-106-04): Formal certification gate — composite proof on clean audit exit
+      audit_certifications:
+        description: |
+          One row per clean audit certification. Ties together: audit result,
+          test results, RCA state, guard test count, git SHA, readiness score.
+          Written by Stage 9 post_run when: p0==0 AND p1==0 AND test_fail==0 AND
+          readiness_score>=95.0. MCP-queryable via cortex_governance(op: certification_status).
+        ddl: |
+          CREATE TABLE IF NOT EXISTS audit_certifications (
+              certification_id   TEXT PRIMARY KEY,    -- "CERT-{session_id[:8]}"
+              session_id         TEXT NOT NULL REFERENCES audit_sessions(session_id),
+              git_sha            TEXT NOT NULL,
+              git_branch         TEXT NOT NULL,
+              audit_checks_total INTEGER NOT NULL,    -- 29 after Check #29
+              audit_p0_final     INTEGER NOT NULL,    -- must be 0
+              audit_p1_final     INTEGER NOT NULL,    -- must be 0
+              test_tier          TEXT NOT NULL,       -- "smoke" (T1_smoke)
+              test_pass_count    INTEGER NOT NULL,
+              test_fail_count    INTEGER NOT NULL,    -- must be 0
+              golden_test_pass   INTEGER,             -- from tests/golden/ suite
+              guard_tests_gen    INTEGER DEFAULT 0,   -- regression guards generated this run
+              rca_analyses_run   INTEGER DEFAULT 0,   -- RCA dispatches this run
+              prevention_rules   INTEGER DEFAULT 0,   -- active prevention rules total
+              readiness_score    REAL,                -- 0-100.0, from GovernanceValidator (inline)
+              certified_at       TEXT NOT NULL,       -- ISO-8601 UTC
+              certified_by       TEXT DEFAULT 'CORTEX-AUDIT-FIX',
+              notes              TEXT                 -- optional inline summary
+          );
+        certification_predicate: "p0==0 AND p1==0 AND test_fail==0 AND readiness_score>=95.0"
+        mcp_query_op: "cortex_governance(op: certification_status)"
+
     cleanup_policy:
       description: |
         Runs after every pipeline exit (Stage 9 AC_COMPLETE boundary).
@@ -193,6 +224,25 @@ workflow:
           Emit inline: "⚠️ CORTEX detected {count} recurring P0 pattern(s) across
           multiple audit sessions — these require architectural fix, not point
           remediation: {violation_list}"
+
+    # Phase 106-B (GAP-106-02, GAP-106-06): RCA dispatch for recurring violations
+    rca_dispatch:
+      description: |
+        When pattern_detection returns rows (recurrence_count >= 3), dispatch
+        RCAEngine.analyze() per recurring violation. Persist the resulting
+        PreventionRule to rca_store.db, then surface the rule inline (CORE-002).
+        This closes the audit→root-cause→prevention feedback loop.
+      trigger: "pattern_detection returns recurrence_count >= 3"
+      for_each_violation:
+        action: "RCAEngine.analyze(failure_id=rule_id, symptom=description, category=TECHNOLOGY)"
+        persist: "rca_store.persist(rca_analysis)"
+        generate_prevention_rule: "rca_analysis.generate_prevention_rule(gate_level=ADVISORY)"
+        emit_inline: "🔬 RCA: {root_cause} → PreventionRule {rule_id} written to rca_store (ADVISORY)"
+      governance:
+        - "CORE-002: emit_inline only — no .md/.txt/.json files created"
+        - "CORE-035: RCAEngine in cortex/intelligence/learning/rca_engine.py (single canonical)"
+      python_ref: "cortex/intelligence/learning/rca_engine.py (Phase 87 — 121 GREEN tests)"
+      rca_store_ref: "cortex/intelligence/learning/rca_store.py → .cortex-runtime/rca/rca_store.db"
 
   # ==========================================================================
   # STAGES
@@ -350,6 +400,23 @@ workflow:
       stage_num: 2
       name: 'Stage 2 — 28-Point Production Readiness Scan (Checks #1–#28)'
       orchestrator: 'EnforcementOrchestrator'
+      # Phase 106-B (GAP-106-06): consult prevention_rules before scan
+      # Known recurring root causes are elevated from P1 → P0 before checks run.
+      prevention_rules_lookup:
+        description: |
+          Query active prevention_rules in rca_store.db before the scan begins.
+          Any rule where gate_level >= WARNING that matches a known violation
+          pattern is elevated to P0 severity for this session, ensuring the
+          audit catches known recurring root causes with maximum urgency.
+        query: |
+          SELECT rule_id, category, description, gate_level
+          FROM prevention_rules
+          WHERE gate_level IN ('WARNING', 'BLOCK')
+          ORDER BY gate_level DESC, created_at DESC;
+        action: "elevate_severity(matched_violations, P0)"
+        emit_inline: "🛡️ {count} active PreventionRule(s) applied — matched violations elevated to P0"
+        governance: "CORE-002 (inline only), Phase 106-B (GAP-106-06)"
+        rca_store_ref: ".cortex-runtime/rca/rca_store.db"
       checks:
         - num: 1
           label: 'Stale imports'
@@ -960,6 +1027,77 @@ workflow:
               Thumbs.db
               desktop.ini
 
+        # Phase 106-E (GAP-106-05): Check #29 — Security + Monitoring Posture
+        # Migrated unique checks from validate-production.py that weren't in Checks #1-28.
+        - num: 29
+          label: 'Security + Monitoring Posture'
+          scope: ['cortex-registry/knowledge-base/security/', '.gitignore', 'cortex/secrets/',
+                  'deployment/prometheus.yml', 'deployment/health_checks.yaml']
+          tool: 'GovernanceValidator.assess_security_posture() — inline output only (CORE-002)'
+          severity: 'P1'
+          description: |
+            Verify security and monitoring posture — unique checks from validate-production.py
+            that were not covered by Checks #1-28. No file output (CORE-002).
+
+            Checks (all emit inline only):
+              1. OWASP knowledge file exists in cortex-registry/knowledge-base/security/
+              2. .env in .gitignore (no secret leak)
+              3. cortex/secrets/ module exists (secrets management in place)
+              4. deployment/prometheus.yml exists (observability configured)
+              5. deployment/health_checks.yaml exists (health endpoints configured)
+              6. cortex.mcp importable (MCP server healthy)
+          detect_command: |
+            python3 -c "
+            import pathlib, sys
+            issues = []
+            root = pathlib.Path('.')
+
+            # 1. OWASP knowledge file
+            sec_dir = root / 'cortex-registry' / 'knowledge-base' / 'security'
+            if not sec_dir.exists() or not list(sec_dir.glob('*.yaml')):
+                issues.append('P1: OWASP knowledge file missing in cortex-registry/knowledge-base/security/')
+
+            # 2. .env in .gitignore
+            gitignore = root / '.gitignore'
+            if gitignore.exists():
+                gi_content = gitignore.read_text()
+                if '.env' not in gi_content:
+                    issues.append('P1: .env not in .gitignore — secret leak risk')
+            else:
+                issues.append('P1: .gitignore missing — .env not protected')
+
+            # 3. cortex/secrets/ exists
+            if not (root / 'cortex' / 'secrets').exists():
+                issues.append('P1: cortex/secrets/ module missing')
+
+            # 4. deployment/prometheus.yml
+            if not (root / 'deployment' / 'prometheus.yml').exists():
+                issues.append('P1: deployment/prometheus.yml missing — observability not configured')
+
+            # 5. deployment/health_checks.yaml
+            if not (root / 'deployment' / 'health_checks.yaml').exists():
+                issues.append('P1: deployment/health_checks.yaml missing')
+
+            # 6. cortex.mcp importable
+            try:
+                import cortex.mcp
+            except Exception as e:
+                issues.append(f'P1: cortex.mcp not importable: {e}')
+
+            if issues:
+                print(f'SECURITY_POSTURE_ISSUES={len(issues)}')
+                for i in issues: print(f'  {i}')
+                sys.exit(1)
+            else:
+                print('SECURITY_POSTURE_OK')
+            "
+          pass_criteria: 'SECURITY_POSTURE_OK'
+          auto_fix: |
+            1. Create cortex-registry/knowledge-base/security/ if missing
+            2. Add .env to .gitignore if missing
+            3. Remaining items require human review (prometheus config, health checks)
+          governance: 'CORE-002: inline output only — no .json/.md/.txt report files'
+
       sqlite_logging:
         table: 'audit_stage_log'
         violations_table: 'audit_violations'
@@ -1076,6 +1214,25 @@ workflow:
           action: 'auto_remediate'
           params:
             confidence_threshold: 0.90
+          on_success:
+            # Phase 106-A (GAP-106-01): generate regression guard test after each successful fix
+            regression_guard_generation:
+              description: |
+                For each fix_log entry where issues_fixed > 0, invoke the
+                regression-guard-generator primitive to create a guard test at
+                tests/regression/guards/test_guard_{rule_id}.py.
+                Guard asserts: detect_command returns zero hits on next scan.
+                Makes every auto-fix self-defending against recurrence.
+              primitive: 'primitives/testing/regression-guard-generator'
+              for_each_fix:
+                condition: "fix_log.issues_fixed > 0"
+                inputs:
+                  rule_id: "fix_log.check_id"
+                  detect_command: "fix_log.detect_command"
+                  fix_description: "fix_log.fix_summary"
+                  guard_test_path: "tests/regression/guards/test_guard_{fix_log.check_id_safe}.py"
+              emit_inline: "✅ Guard generated: tests/regression/guards/test_guard_{rule_id}.py"
+              governance: "CORE-002 (inline output only), CORE-008 (guard is a test)"
         success_predicate: 'p0_count == 0 and p1_count == 0'
         max_cycles: 5
         backoff_strategy: 'linear'
@@ -1117,8 +1274,11 @@ workflow:
       stage_num: 9
       name: 'Stage 9 — Run Tests + AC_COMPLETE'
       description: |
-        Run: python3 scripts/run_tests.py preflight
-        Gate: 0 new failures vs baseline.json
+        Run: python3 scripts/run_tests.py smoke
+        Gate: 0 new failures vs baseline.json (T1_smoke: preflight + golden + core)
+        Phase 106-C (GAP-106-03): Upgraded from preflight (~40 tests) to smoke
+        (~150 tests: preflight + golden + core) so auto-fixes in Stage 7-8 cannot
+        silently break golden contracts.
         On pass:
           → Write audit_sessions.exit_status = "clean"
           → Write audit_sessions.test_result = "pass"
