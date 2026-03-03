@@ -6,7 +6,7 @@ maintainer: CORTEX Architecture Team
 # THIN INDEX CONTRACT — cortex-master.yaml
 # This file is a REFERENCE INDEX ONLY. Max 800 lines (alarm at 700).
 # ALL phase detail lives in cortex-registry/planning/phases/ or
-#   cortex-registry/_cortex-master/phases/
+#   cortex-registry/planning/phases/
 # Governance: workflows/templates/governance/master-plan-phase-lifecycle.yaml
 # Prohibited inline: phases, gap_catalogue, tdd_sequence, rewrites,
 #   new_files, files_to_edit, implementation, code_snippets
@@ -44,16 +44,16 @@ phase_detail_files:
   - { id: phase-102, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-102-subsystem-boundaries.yaml" }
   - { id: phase-91,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-91-routing-coverage.yaml" }
   - { id: phase-90,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-90-holistic-intent-wiring.yaml" }
-  - { id: phase-89,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-89-operational-workflow-pipeline.yaml" }
-  - { id: phase-87,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-87-rca-memory-engine.yaml" }
-  - { id: phase-86,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-86-multi-stack-debug-pipeline.yaml" }
-  - { id: phase-85,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-85-unified-response-orchestrator-engagement.yaml" }
+  - { id: phase-89,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-89-operational-workflow-pipeline.yaml" }
+  - { id: phase-87,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-87-rca-memory-engine.yaml" }
+  - { id: phase-86,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-86-multi-stack-debug-pipeline.yaml" }
+  - { id: phase-85,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-85-unified-response-orchestrator-engagement.yaml" }
   - { id: phase-84,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-84-stub-elimination-business-rules-pipeline.yaml" }
-  - { id: phase-83,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-83-unified-reinforcement-signal.yaml" }
-  - { id: phase-82,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-82-response-template-engine-v2.yaml" }
+  - { id: phase-83,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-83-unified-reinforcement-signal.yaml" }
+  - { id: phase-82,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-82-response-template-engine-v2.yaml" }
   - { id: phase-81,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-81-knowledge-wiring-golden-hardening.yaml" }
-  - { id: phase-80,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-80-coherence-remediation.yaml" }
-  - { id: phase-80-a, status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-80-a-master-orchestrator-decomposition.yaml" }
+  - { id: phase-80,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-80-coherence-remediation.yaml" }
+  - { id: phase-80-a, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-80-a-master-orchestrator-decomposition.yaml" }
   - { id: phase-79,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-79-sdlc-intelligence-engine.yaml" }
   - { id: phase-78,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-78-intelligence-matrix-wiring.yaml" }
   - { id: phase-77,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-77-production-cleanup.yaml" }
@@ -63,8 +63,8 @@ phase_detail_files:
   - { id: phase-73,  status: ARCHIVED, file: "cortex-registry/planning/phases/planned/_archived/phase-73-unified-brain-and-toolkit.yaml" }
   - { id: phase-71,  status: ARCHIVED, file: "cortex-registry/planning/phases/planned/_archived/phase-71-holistic-unified-brain.yaml" }
   - { id: phase-70-unified-brain-remediation, status: ARCHIVED, file: "cortex-registry/planning/phases/planned/_archived/phase-70-unified-brain-remediation.yaml" }
-  - { id: phase-53,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-53-convergence-loop-wiring.yaml" }
-  - { id: phase-52,  status: COMPLETE, file: "cortex-registry/_cortex-master/phases/completed/phase-52-operational-pattern-journal.yaml" }
+  - { id: phase-53,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-53-convergence-loop-wiring.yaml" }
+  - { id: phase-52,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-52-operational-pattern-journal.yaml" }
   - { id: phase-51,  status: COMPLETE, note: "Health-Vacuum Unified Pipeline. 207 tests." }
   - { id: phases-63-69, status: COMPLETE, note: "7 phases. Detail in cortex-registry/planning/phases/completed/." }
   - { id: phases-57-62, status: COMPLETE, note: "6 phases. Detail in cortex-registry/planning/phases/completed/." }
@@ -74,7 +74,7 @@ phase_detail_files:
 playbooks:
   - id: pb-sts-001
     status: ready
-    file: "cortex-registry/_cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml"
+    file: "cortex-registry/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml"
 
 health_status:
   p0_issues: 0
@@ -109,10 +109,10 @@ summary:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
-    phase-103: "IN_PROGRESS — God Object Decomposition (P1) — 5/8 GAPs CLOSED (GAP-103-01: master_orchestrator 3167L→702L; GAP-103-02: intent_router_impl 2895L→686L; GAP-103-07: utilities+operations; GAP-103-03: tdd_orchestrator 2121L→462L; GAP-103-04: lens_orchestrator 2045L→277L)"
+    phase-103: "COMPLETE — God Object Decomposition: 6/8 GAPs CLOSED, 2 DEFERRED to phase-115. master_orchestrator 3167L→702L, intent_router_impl 2895L→686L, tdd_orchestrator 2072L→package, lens_orchestrator 2045L→277L, utilities+operations→14 single-class files, knowledge_synthesis→package. Smoke: 2289 passed. ✅"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
-    phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
-    phase-108: "PLANNED — cortex-registry Consolidation (P1)"
+    phase-105: "COMPLETE — Stale Imports and Legacy Naming: 4/4 GAPs CLOSED. 11 tests GREEN. Zero dissolved package imports. ✅"
+    phase-108: "IN_PROGRESS — cortex-registry Consolidation: GAP-108-01 CLOSED (_cortex-master/ merged→planning/phases/, 11 .gitkeep purged, cortex-master.yaml refs updated). GAPs 02-11 planned."
     phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
     phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
 
@@ -159,7 +159,7 @@ phases:
     sweep_id: SWEEP-111-DUPLICATE-CLASS-SWEEP
     gaps: 5
     sub_phases: 4
-    file: "cortex-registry/_cortex-master/phases/completed/phase-111-duplicate-class-sweep.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-111-duplicate-class-sweep.yaml"
     note: "COMPLETE 2026-03-03. AST scan DUPLICATES=0. OrchestratorLookup consolidated (3→1 canonical). 185+ domain-scoped files annotated with noqa: CORE-035. 2 compat shims. test_no_duplicate_classes.py 8 GREEN. Smoke: 2194 passed."
 
   # ── ARCHITECTURAL AUDIT CLEANUP ROADMAP (2026-03-02) ─────────────────────────
@@ -196,18 +196,19 @@ phases:
     gaps_closed: 8
     sub_phases: 4
     file: "cortex-registry/planning/phases/completed/phase-102-subsystem-boundaries.yaml"
-    note: "All 8 GAPs CLOSED (2026-03-03). GAP-04: 5 brain→domain aliases (15 tests GREEN). GAPs 01/02/03/08: justified domain splits documented (15 contract tests GREEN). GAPs 05/06/07: thin packages deferred to phase-105 (active callers). Smoke: 2275 passed."
+    note: "All 8 GAPs CLOSED (2026-03-03). GAP-04: 5 brain→domain aliases (15 tests GREEN). GAPs 01/02/03/08: justified domain splits documented (15 contract tests GREEN). GAPs 05/06/07: thin packages deferred to phase-105 (active callers). Smoke: 2275 passed. Sub-phases 102a/b/c COMPLETE (2026-03-03): orphan packages verified, governance namespace scope documented, 7 brain-named files renamed with compat shims."
 
   - id: phase-103
     title: "God Object Decomposition — Large File SRP Violations"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-103-GOD-OBJECT-DECOMPOSITION
     gaps: 8
-    gaps_closed: 5
+    gaps_closed: 6
+    gaps_deferred: 2
     sub_phases: 5
-    file: "cortex-registry/planning/phases/planned/phase-103-god-object-decomposition.yaml"
-    note: "GAP-103-01/02/07/03/04 CLOSED. GAP-103-04 (2026-03-03): lens_orchestrator.py 2,045L→_coordinator.py 277L via lens_orchestrator/ package (5 mixins: FileAnalysis/Remote/Holistic/Company/Vision). CORE-035 conflict resolved: LensFileAnalysisMixin (distinct from intent_router). 63/63 tests GREEN. Remaining: 3 GAPs (enforcement_orchestrator, knowledge_synthesis, coupling)."
+    file: "cortex-registry/planning/phases/completed/phase-103-god-object-decomposition.yaml"
+    note: "COMPLETE 2026-03-03. 6/8 GAPs CLOSED, 2 DEFERRED to phase-115. master_orchestrator→702L, intent_router_impl→686L, tdd_orchestrator→package, lens_orchestrator→277L, utilities+operations→14 files, knowledge_synthesis→package. Smoke: 2289 passed."
 
   - id: phase-104
     title: "Build Artifact Purge + Test-Source Mirror Alignment + DB Consolidation"
@@ -222,22 +223,24 @@ phases:
   - id: phase-105
     title: "Stale Import References + Legacy Naming Remediation"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-105-STALE-IMPORTS-NAMING
     gaps: 4
+    gaps_closed: 4
     sub_phases: 2
-    file: "cortex-registry/planning/phases/planned/phase-105-stale-imports-naming.yaml"
-    note: "References to dissolved underscore-packages and legacy brain path in 8+ files. Depends on phase-102."
+    file: "cortex-registry/planning/phases/completed/phase-105-stale-imports-naming.yaml"
+    note: "COMPLETE 2026-03-03. 4/4 GAPs CLOSED. 11 tests GREEN. Zero live imports to dissolved packages. Backward-compat aliases preserved. Smoke: 2289 passed."
 
   - id: phase-108
     title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
     priority: P1
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-108-REGISTRY-CONSOLIDATION
     gaps: 11
+    gaps_closed: 1
     sub_phases: 5
     file: "cortex-registry/planning/phases/planned/phase-108-registry-consolidation.yaml"
-    note: "Consolidates cortex-registry/ sprawl: 150→~90 dirs, 17→11 top-level dirs. Merges 2 phase hierarchies→1, 3 governance namespaces→1, 2 knowledge namespaces→1, 2 config namespaces→1. Deletes empty plans/, relocates .yaml-reader. Updates ~15 Python path refs. Depends on phase-107, phase-105."
+    note: "GAP-108-01 CLOSED 2026-03-03: _cortex-master/ merged into planning/phases/, playbooks merged, 11 .gitkeep purged, cortex-master.yaml references updated. GAPs 03-11 remain for Sub-phases B-D (knowledge merge, governance/config dedup, Python path updates). Depends on phase-107, phase-105."
 
   # ── SLOT #-1 — phase-99 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-99-secure-mcp-wiring

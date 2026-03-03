@@ -45,6 +45,16 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     # imports remain unbroken after Phase 103-d single-class extraction.
     "cortex/mcp/tools/operations.py",
     "cortex/mcp/tools/utilities.py",
+    # Phase 102-C — brain-named file renames (expiry: 2026-06-01)
+    # Canonical names eliminate legacy "brain" prefix from dissolved cortex/brain/ package (Phase 54)
+    # These shims preserve backward-compat imports for any external callers (GAP-102-C)
+    "cortex/core/brain_state_manager.py",
+    "cortex/mcp/tools/brain.py",
+    "cortex/mcp/tools/brain_collaboration_tools.py",
+    "cortex/orchestrators/core/central_brain_orchestrator.py",
+    "cortex/orchestrators/core/brain_health_orchestrator.py",
+    "cortex/infrastructure/brain_health_metrics.py",
+    "cortex/infrastructure/shared_brain_store.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

@@ -1,82 +1,13 @@
-"""Brain Health Orchestrator for CORTEX.
+"""brain_health_orchestrator.py — Backward-compatibility shim (Phase 102-C).
 
-Monitors and reports on the health of the CORTEX brain components.
+The canonical file is now:
+  cortex/orchestrators/core/intelligence_health_orchestrator.py
 
-AC-PHASE38-007: Central Brain Health
+This shim will be removed after 1 consolidation session.
 """
+from cortex.orchestrators.core.intelligence_health_orchestrator import (  # noqa: F401
+    BrainHealthOrchestrator,
+    IntelligenceHealthOrchestrator,
+)
 
-from typing import Any, Dict, Optional
-
-from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
-
-
-class BrainHealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
-    """Monitors health of CORTEX brain components.
-
-    Checks:
-    - Knowledge synthesis engine health
-    - LENS analysis engine health
-    - Orchestrator connectivity
-    - MCP server health
-
-    Example:
-        >>> orchestrator = BrainHealthOrchestrator()
-        >>> metrics = orchestrator.get_health_metrics()
-    """
-
-    # Phase 94f — advisory: health monitor, invoked by HealthOrchestrator pipeline.
-    # Not a primary code-execution entry point. Gateway routing deferred.
-    PHASE90_GATEWAY_EXEMPT: bool = True
-
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
-        """Initialize brain health orchestrator.
-
-        Args:
-            workspace_root: Root of workspace to monitor
-        """
-        self.workspace_root = workspace_root
-        self._health_score: float = 0.0
-
-    def get_health_metrics(self) -> Dict[str, Any]:
-        """Get current health metrics for all brain components.
-
-        Returns:
-            Dict with health scores per component
-        """
-        # Phase 58 — cross-cutting hooks
-        self._activate_cross_cutting_hooks(operation="get_health_metrics")
-        return {
-            "overall_score": self._health_score,
-            "components": {
-                "knowledge_synthesis": {"status": "healthy", "score": 100},
-                "lens_analysis": {"status": "healthy", "score": 100},
-                "orchestrators": {"status": "healthy", "score": 100},
-                "mcp_server": {"status": "healthy", "score": 100},
-            },
-        }
-
-    def check_health(self) -> bool:
-        """Run health check.
-
-        Returns:
-            True if all components healthy
-        """
-        metrics = self.get_health_metrics()
-        return metrics.get("overall_score", 0) >= 70
-
-    def generate_health_report(self) -> Dict[str, Any]:
-        """Generate comprehensive health report.
-
-        Returns:
-            Health report with all component statuses
-        """
-        return {
-            "status": "healthy",
-            "metrics": self.get_health_metrics(),
-        }
-
-
-# Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → intelligence naming)
-# CORE-035: BrainHealthOrchestrator remains canonical; IntelligenceHealthOrchestrator is the forward path.
-IntelligenceHealthOrchestrator = BrainHealthOrchestrator  # noqa: CORE-035
+__all__ = ["BrainHealthOrchestrator", "IntelligenceHealthOrchestrator"]

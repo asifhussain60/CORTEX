@@ -169,7 +169,9 @@ sweep_catalogue:
       No rule governing which location is used — ad hoc split
     action: "Merge all _cortex-master/phases/ into planning/phases/, update all file: refs in cortex-master.yaml"
     action_ref: "phase-108-a"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "All 79 _cortex-master/phases/ files already existed in planning/phases/ (canonical location). _cortex-master/ directory deleted. cortex-master.yaml: 13 _cortex-master refs → planning/ refs. 11 .gitkeep purged from non-empty dirs."
 
   - id: "GAP-108-02"
     title: "_cortex-master/playbooks/ should merge into playbooks/"
@@ -181,7 +183,9 @@ sweep_catalogue:
       Two playbook locations for no clear reason
     action: "Merge _cortex-master/playbooks/ into playbooks/, delete _cortex-master/"
     action_ref: "phase-108-a"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "sharpen-the-saw/ playbooks moved to cortex-registry/playbooks/sharpen-the-saw/. _cortex-master/ deleted."
 
   - id: "GAP-108-03"
     title: "knowledge/ and knowledge-base/ — two overlapping knowledge namespaces"
@@ -269,7 +273,9 @@ sweep_catalogue:
       Many are in directories that already contain files (.gitkeep is only needed for empty dirs)
     action: "Remove .gitkeep from any directory that contains at least 1 other file"
     action_ref: "phase-108-c"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "11 redundant .gitkeep files removed from non-empty dirs (metrics/baselines/, artifacts/templates/, core/specifications/, core/config/, core/wiring/, core/governance/, integration/patterns/, planning/phases/completed/, knowledge-base/security/, knowledge-base/architecture/)."
 
   - id: "GAP-108-10"
     title: "Python path references to cortex-registry/ need updating after moves"
@@ -293,7 +299,9 @@ sweep_catalogue:
       After merge, all must point to planning/phases/
     action: "Update all file: entries in cortex-master.yaml"
     action_ref: "phase-108-d"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "All 13 _cortex-master/ references in cortex-master.yaml replaced with planning/phases/completed/ references via sed."
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASES — ROI-ordered, TDD-gated sub-phases (A through D + Final)

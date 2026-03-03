@@ -1,0 +1,57 @@
+id: "phase-102a"
+title: "Phase 102-A — Orphan Package Absorption (cortex/enforcement, cortex/config, cortex/secrets)"
+version: "1.0"
+created: "2026-03-03"
+status: COMPLETE
+closed_at: "2026-03-03"
+priority: P1
+parent_phase: "phase-102"
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-102A-ORPHAN-PACKAGES"
+
+background: |
+  Three thin/orphaned packages exist alongside their canonical equivalents:
+  
+  1. cortex/enforcement/ (2 files) — proxy to cortex/governance/enforcement/ (28 files)
+     Current: cortex/enforcement/__init__.py just re-exports from cortex/governance/enforcement/
+     Fix: Make cortex/enforcement/ a pure shim pointing to cortex/governance/
+  
+  2. cortex/config/ (3 files) — config utilities used by exactly 1 caller
+     Current: cortex/config/ has architecture_constants.py, cortex_config.py, feature_flags.py
+     Fix: Merge into cortex/core/config/ or keep as-is with clear purpose statement
+  
+  3. cortex/secrets/ (2 files) — proxy to cortex/infrastructure/secrets/ (18 files)
+     Current: cortex/secrets/__init__.py just re-exports from cortex.infrastructure.secrets
+     Fix: Already a clean shim — document this pattern; it's intentional for API ergonomics
+
+scope:
+  packages:
+    - cortex/enforcement/ (2 files, thin proxy)
+    - cortex/config/ (3 files, thin utility)
+    - cortex/secrets/ (2 files, thin proxy)
+
+tdd_sequence:
+  red:
+    file: "tests/core/test_phase102a_orphan_packages.py"
+    assertions:
+      - "cortex.enforcement imports correctly proxy to cortex.governance"
+      - "cortex.config provides architecture constants"
+      - "cortex.secrets correctly re-exports from cortex.infrastructure.secrets"
+
+  green:
+    steps:
+      - "Verify cortex/enforcement/ re-exports are clean and documented"
+      - "Add module docstring to cortex/config/ explaining purpose"
+      - "Verify cortex/secrets/ shim is clean"
+      - "Add __all__ exports to all three packages"
+
+acceptance_criteria:
+  - "All 3 packages have clear module docstrings stating their role"
+  - "All consumers import correctly"
+  - "Smoke tests: >= 2172 passed"
+
+estimated_effort: "1-2 hours"
+risk: LOW
