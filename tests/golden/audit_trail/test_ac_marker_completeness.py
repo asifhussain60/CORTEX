@@ -24,7 +24,7 @@ WIRED_ORCHESTRATOR_FILES = [
     "core/master_orchestrator.py",
     "core/intent_router.py",
     "core/tdd_orchestrator.py",
-    "core/enforcement_orchestrator.py",
+    "core/enforcement_orchestrator/__init__.py",  # Phase 103-e: converted to sub-package
     "core/master_orchestrator_stage_1.py",
     "core/master_orchestrator_stage_3.py",
     "core/master_orchestrator_stage_4.py",

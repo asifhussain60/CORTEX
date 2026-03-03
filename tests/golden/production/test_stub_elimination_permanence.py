@@ -162,6 +162,11 @@ class TestBusinessRulesPipelineWiring:
         enforcement_file = (
             CORTEX_SRC / "orchestrators" / "core" / "enforcement_orchestrator.py"
         )
+        # Phase 103-e: enforcement_orchestrator is now a sub-package
+        if not enforcement_file.exists():
+            enforcement_file = (
+                CORTEX_SRC / "orchestrators" / "core" / "enforcement_orchestrator" / "__init__.py"
+            )
         assert enforcement_file.exists(), f"EnforcementOrchestrator not found: {enforcement_file}"
 
         content = enforcement_file.read_text(encoding="utf-8")

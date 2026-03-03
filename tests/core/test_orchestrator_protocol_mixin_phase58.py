@@ -267,7 +267,9 @@ class TestActivateCrossCuttingHooks:
         # - master_orchestrator.py delegates to MasterOrchestratorRequestMixin which holds
         #   the self._activate_cross_cutting_hooks call (Phase 103-a mixin extraction)
         EXCEPTIONS = {
-            "core/enforcement_orchestrator.py",
+            # EnforcementOrchestrator is the governance gate itself (avoids infinite recursion)
+            # Phase 103-e: now a sub-package — orchestrator.py is the coordinator
+            "core/enforcement_orchestrator/orchestrator.py",
             "core/master_orchestrator.py",
         }
         missing = []
@@ -289,8 +291,19 @@ class TestActivateCrossCuttingHooks:
     def test_enforcement_orchestrator_uses_direct_hooks_to_avoid_recursion(self) -> None:
         """EnforcementOrchestrator is the GovGate — it uses _extract_lens_context
         and _consume_unified_context directly instead of _activate_cross_cutting_hooks
-        to prevent infinite recursion."""
-        with open("cortex/orchestrators/core/enforcement_orchestrator.py") as f:
-            src = f.read()
+        to prevent infinite recursion.
+        Phase 103-e: coordinator is now in enforcement_orchestrator/orchestrator.py."""
+        import pathlib
+        candidates = [
+            "cortex/orchestrators/core/enforcement_orchestrator/orchestrator.py",
+            "cortex/orchestrators/core/enforcement_orchestrator.py",
+        ]
+        src = ""
+        for candidate in candidates:
+            p = pathlib.Path(candidate)
+            if p.exists():
+                src = p.read_text()
+                break
+        assert src, "EnforcementOrchestrator coordinator file not found in any expected location"
         assert "_extract_lens_context" in src, "Must use _extract_lens_context for LENS dimension"
         assert "_consume_unified_context" in src, "Must use _consume_unified_context for KnSynth dimension"

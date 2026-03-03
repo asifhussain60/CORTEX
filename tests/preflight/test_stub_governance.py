@@ -39,6 +39,12 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     # These re-export for import-path backward compatibility (SWEEP-111-DUPLICATE-CLASS-SWEEP)
     "cortex/orchestrators/core/intent_router/orchestrator_lookup.py",
     "cortex/orchestrators/registry/orchestrator_lookup.py",
+    # Phase 103-d (GAP-103-07) — MCP tool extraction compat shims (expiry: 2026-06-01)
+    # Canonical: individual cortex/mcp/tools/cortex_*_tool.py files
+    # These re-export all classes so existing `from cortex.mcp.tools.operations import X`
+    # imports remain unbroken after Phase 103-d single-class extraction.
+    "cortex/mcp/tools/operations.py",
+    "cortex/mcp/tools/utilities.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

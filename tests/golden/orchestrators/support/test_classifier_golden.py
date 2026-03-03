@@ -32,6 +32,11 @@ from cortex.orchestrators.support.test_classifier_orchestrator import (
 class TestGoldenPathClassification:
     """GC-001 through GC-007: tier determination for all path patterns."""
 
+    pytestmark = [
+        pytest.mark.xdist_group("classifier_golden"),
+        pytest.mark.timeout(120),
+    ]
+
     def setup_method(self):
         self.classifier = TestClassifierOrchestrator()
 
@@ -85,6 +90,14 @@ class TestGoldenPathClassification:
 
 class TestDecisionFields:
     """GC-008 through GC-012: TestDecision field contracts."""
+
+    # Each classify() call loads workspace context — ~5s per test cold.
+    # Module total ~76s; set per-test timeout to 120s to avoid false failures
+    # under xdist parallel load where worker startup adds latency.
+    pytestmark = [
+        pytest.mark.xdist_group("classifier_golden"),
+        pytest.mark.timeout(120),
+    ]
 
     def setup_method(self):
         self.classifier = TestClassifierOrchestrator()
@@ -145,6 +158,11 @@ class TestDecisionFields:
 
 class TestAdditionalPathClassification:
     """GC-013 through GC-015: edge cases and additional paths."""
+
+    pytestmark = [
+        pytest.mark.xdist_group("classifier_golden"),
+        pytest.mark.timeout(120),
+    ]
 
     def setup_method(self):
         self.classifier = TestClassifierOrchestrator()

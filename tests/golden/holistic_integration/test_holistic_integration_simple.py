@@ -25,7 +25,14 @@ from tests.golden.holistic_integration.fixtures.holistic_integration_harness imp
 
 class TestHolisticIntegrationSimple:
     """Simple tier holistic integration tests (S01-S05)."""
-    
+
+    # Run in a single xdist worker — tests share an in-memory SQLite session store
+    # and fail non-deterministically when executed concurrently across workers.
+    pytestmark = [
+        pytest.mark.timeout(120),
+        pytest.mark.xdist_group("holistic_integration"),
+    ]
+
     @pytest.fixture
     def harness(self, tmp_path):
         """Create test harness with temporary database."""

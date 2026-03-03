@@ -219,14 +219,21 @@ class TestWiringStructuralIntegrity:
     """Validate wiring YAML structural integrity (no phantoms, version present)."""
 
     def test_no_phantom_wiring_entries(self) -> None:
-        """Every entry_point string points to a real Python source file."""
+        """Every entry_point string points to a real Python source file.
+
+        Phase 103-e: modules that were converted to sub-packages are resolved via
+        the package __init__.py fallback (e.g. enforcement_orchestrator/ package).
+        """
         phantoms: List[str] = []
         for yaml_file, name, ep in ALL_ENTRY_POINTS:
             mod_path, _ = ep.rsplit(":", 1)
             # Convert module path to file path
             rel_path = mod_path.replace(".", "/") + ".py"
             abs_path = Path(__file__).parents[2] / rel_path
-            if not abs_path.exists():
+            # Phase 103-e: also accept sub-package __init__.py as a valid resolution
+            pkg_path = abs_path.parent / rel_path.rsplit(".py", 1)[0].split("/")[-1] / "__init__.py"
+            pkg_abs = Path(__file__).parents[2] / rel_path.replace(".py", "") / "__init__.py"
+            if not abs_path.exists() and not pkg_abs.exists():
                 phantoms.append(f"[{yaml_file}] {name}: {rel_path} does not exist")
 
         assert not phantoms, (
