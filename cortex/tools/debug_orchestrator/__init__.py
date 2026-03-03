@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Optional, Set
 # CORTEX imports
 try:
     from cortex.mcp.decorators import mcp_tool
-    from cortex.mcp.types import ToolResult
+    from cortex.mcp.mcp_tool_base import ToolResult
 except ImportError:
     # Fallback for standalone usage
     def mcp_tool(name: str, description: str) -> None:

@@ -4,7 +4,7 @@ version: "1.0"
 status: active
 mode: CERTIFY
 author: Asif Hussain
-updated: 2026-03-02
+updated: 2026-03-03
 agent_dir: .github/agents/certification/
 orchestrators_used:
   - MasterOrchestrator (cortex/orchestrators/core/master_orchestrator.py)
@@ -41,7 +41,7 @@ token_cost_estimate: 5800
 # CORTEX Total Recall — Production Certification Authority
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02 | **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
+**Updated:** 2026-03-03 | **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
 **Scope:** Autonomous production certification — inspect, optimize, harden, certify
 
 ---
@@ -276,7 +276,7 @@ ssot_ownership:
 |-------|-----------|-------------|------------|
 | **Reasoning** | LENS Analysis Pipeline | `cortex/intelligence/facade.py` → `IntelligenceFacade` | `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; print('OK')"` |
 | **Memory** | RCA Engine + URS | `cortex/intelligence/learning/rca_engine.py` | RCA store accessible, URS emit/history operational |
-| **Orchestration** | 185+ orchestrators via IntentRouter | `cortex/orchestrators/core/intent_router.py` | All 29 intent types routed, zero orphan orchestrators |
+| **Orchestration** | 320 orchestrators across 15 domains via IntentRouter | `cortex/orchestrators/core/intent_router.py` | All 29 intent types routed, zero orphan orchestrators |
 | **Validation** | Governance enforcement + AC markers | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit hooks active, AC markers on all public methods |
 
 **Wiring Checks:**

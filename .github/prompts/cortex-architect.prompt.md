@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-02 (DIGEST chat01 — Count Reconciliation) | **Architecture:** 185 Orchestrator files · 30 MCP Tools · 32 Governance YAMLs · 29 Intent Types · 1 Package  
+**Updated:** 2026-03-03 (Total Recall — Phase 117 Production Truth Reconciliation) | **Architecture:** 320 Orchestrator files · 30 MCP Tools · 36 Governance YAMLs · 29 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
@@ -48,7 +48,7 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (30 registered) | `cortex/mcp/tools/` (28 tool files) |
+| MCP Tools (30 registered) | `cortex/mcp/tools/` (54 tool files) |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -57,7 +57,7 @@
 | RCA Store | `cortex/intelligence/learning/rca_store.py` |
 | Prompt Refresh | `scripts/refresh_prompt_suite.py` (self-healing prompt suite) |
 
-**14 Orchestrator Domains:** core · domain · git · health · intelligence · persona · registry · response · strategies · support · synthesis · tools · validation · workflow
+**15 Orchestrator Domains:** _top_level · core · domain · git · health · intelligence · persona · registry · response · strategies · support · synthesis · tools · validation · workflow
 
 **⛔ Deleted paths — never reference these:**
 - `cortex/brain/` — dissolved into `cortex/orchestrators/`, `cortex/intelligence/`, `cortex/governance/`
@@ -817,7 +817,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/recall {feature}` | Feature discovery | — |
-| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
+| `/totalrecall` | Production certification — 10-phase autonomous pipeline | 10 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder (4-gate: PULL→DIFF→SANITIZE→MERGE) | — |
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup (8 strategies) | 5 phases |
 | `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies) | INJECT |
@@ -858,7 +858,7 @@ Progress bar + stage bullet list. See templates SSOT.
 - `cortex_learning` (op: `emit|history|decay|promote|quarantine|metrics|rca`) — URS reinforcement signals + Phase 87 RCA Memory Engine
 - `cortex_git` — Git history analysis, blame, diff, context extraction
 - `cortex_vision` (op: `analyze|ui|extract`) — Vision API for UI analysis + HTML-Vision debug mapping
-- `cortex_total_recall` (op: `discover|recall|search`) — Holistic 7-phase production readiness
+- `cortex_total_recall` (op: `discover|recall|search`) — 10-phase production certification
 - `cortex_debug` (op: `analyze`) — Multi-stack debug: 8 strategies, Vision API, auto-cleanup
 
 ---

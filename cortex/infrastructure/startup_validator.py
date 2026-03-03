@@ -336,9 +336,9 @@ class StartupValidator:
             Result indicating tools are exposed
         """
         try:
-            from cortex.mcp.tool_registry import get_mcp_tool_registry
+            from cortex.mcp.mcp_registry import get_registry
 
-            registry = get_mcp_tool_registry()
+            registry = get_registry()
             tools = registry.list_tools()
 
             if not tools:

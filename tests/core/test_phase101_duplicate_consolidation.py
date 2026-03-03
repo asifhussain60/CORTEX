@@ -642,10 +642,10 @@ class TestVerify101FullDuplicateScan:
         from cortex.lens.facade import LENSIntelligenceFacade
         assert IntelligenceFacade is not LENSIntelligenceFacade
 
-    def test_types_py_mcp_vs_orchestrators_justified(self) -> None:
-        """mcp/types.py and orchestrators/intelligence/types.py are different domains."""
+    def test_types_py_mcp_server_vs_orchestrators_justified(self) -> None:
+        """mcp/server.py (MCPRequest/MCPResponse) and orchestrators/intelligence/types.py are different domains."""
         import importlib
-        mcp_t = importlib.import_module("cortex.mcp.types")
+        mcp_t = importlib.import_module("cortex.mcp.server")
         orch_t = importlib.import_module("cortex.orchestrators.intelligence.types")
         assert mcp_t is not orch_t
 

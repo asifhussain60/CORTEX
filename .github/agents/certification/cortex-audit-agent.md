@@ -123,7 +123,7 @@ Zero matches expected. Any CORTEX-internal version > 1.0 = P0.
 
 | Check | Command | Expected |
 |-------|---------|----------|
-| Ghost directories | `find cortex/ -maxdepth 1 -type d \| sort` | Only canonical 20 dirs |
+| Ghost directories | `find cortex/ -maxdepth 1 -type d \| sort` | Only canonical 21 dirs |
 | Stale imports | `grep -rn 'cortex_intelligence\|cortex_lens\|cortex\.brain\|from cortex.brain' cortex/ tests/` | Zero |
 | Deprecated files | `find . -name "DEPRECATED-*" -o -name "*.old" -o -name "*.backup"` | Zero in active dirs |
 | Empty `__init__` | `find cortex/ -name "__init__.py" -empty` | Acceptable (namespace packages) |

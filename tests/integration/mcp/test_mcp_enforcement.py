@@ -30,11 +30,11 @@ class TestMCPServerInitialization:
     def test_mcp_server_init_syncs_tools(self) -> None:
         """Verify tools are synced to global registry on server init."""
         from cortex.mcp.server import MCPServer
-        from cortex.mcp.tool_registry import get_mcp_tool_registry
+        from cortex.mcp.mcp_registry import get_registry
         
         server = MCPServer()
-        registry = get_mcp_tool_registry()
-        tools = registry.list_all()
+        registry = get_registry()
+        tools = registry.list_tools()
         
         # Should have tools registered after server init
         assert len(tools) > 0, "No tools registered after server init"

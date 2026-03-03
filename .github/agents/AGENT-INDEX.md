@@ -1,8 +1,8 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-03-01 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
+**Updated:** 2026-03-03 (Total Recall — Production Truth Reconciliation) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 21 completed, 2 planned | **Tests:** ~17,735 | **Intent Types:** 29
+**Phases:** 97 completed, 5 planned | **Tests:** ~18,874 | **Intent Types:** 29
 
 ---
 
@@ -38,11 +38,11 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrator files | **186** across 9 domains (`core:78 domain:17 support:34 git:4 health:8 intelligence:16 persona:6 validation:12 workflow:6`) |
-| MCP Tools | **30 registered** in `mcp_registry.py`; 28 tool files in `cortex/mcp/tools/` |
-| Governance YAMLs | **32** in `cortex-registry/core/` |
+| Orchestrator files | **320** across 15 domains (`core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 _top_level:3 response:3 registry:2 synthesis:2 tools:2 strategies:1`) |
+| MCP Tools | **30 registered** in `mcp_registry.py`; 54 tool files in `cortex/mcp/tools/` |
+| Governance YAMLs | **36** across `cortex-registry/core/` (23) and `cortex-registry/governance/` (13) |
 | Package | `cortex` (single) |
-| Tests | **~17,735** collected |
+| Tests | **~18,874** collected |
 | Intent Types | **29** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
@@ -50,7 +50,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Debug Strategies | 8 total: 3 Python + 5 multi-stack (Frontend/HTML-Vision/API/SQL/DotNet) |
 | Response Format | phase-list+bar mandatory; SSOT: `.github/templates/cortex-response-templates.md` |
 | Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP |
-| SQLite Databases | 9 in `.cortex-runtime/` — cleanup: `python3 scripts/refresh_prompt_suite.py --db-cleanup` |
+| SQLite Databases | 7 in `.cortex-runtime/` — cleanup: `python3 scripts/refresh_prompt_suite.py --db-cleanup` |
 | Prompt Refresh | `python3 scripts/refresh_prompt_suite.py` — self-healing, architecture-introspecting |
 
 ---
@@ -135,16 +135,17 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 **Trigger:** `/totalrecall`, or when production readiness certification is needed
 **Purpose:** Autonomous 10-phase production certification pipeline
 
-**9-Phase Pipeline:**
+**10-Phase Pipeline:**
 1. **DELTA ANALYSIS** — Git diff since last execution, build change manifest
 2. **DRIFT DETECTION** — Numeric, version, structural, architectural, config, dependency drift
 3. **REGRESSION SCAN** — Test regressions, dead code, bloat, duplicates, backward compat
 4. **PROMPT OPTIMIZATION** — Holistic review of `copilot-instructions.md`, `prompts/`, `agents/`
 5. **INTELLIGENCE WIRING** — Validate Intelligence Diamond (Reasoning, Memory, Orchestration, Validation)
 6. **MEMORY HYGIENE** — Adaptive learning, document lifecycle, recurring failure detection
-7. **SQLITE INTEGRITY** — Schema optimization, self-healing migrations, unbounded growth prevention
-8. **PRODUCTION HARDENING** — 12-point hardening checklist (H1–H12)
-9. **CERTIFICATION** — Weighted scorecard, release sign-off or block
+7. **WORKSPACE CLEANUP** — VacuumOrchestrator 8-stage cleanup pipeline
+8. **SQLITE INTEGRITY** — Schema optimization, self-healing migrations, unbounded growth prevention
+9. **PRODUCTION HARDENING** — 12-point hardening checklist (H1–H12)
+10. **CERTIFICATION** — Weighted scorecard, release sign-off or block
 
 **Certification Levels:** 🟢 CERTIFIED (≥95%) · 🟡 CONDITIONAL (85–94%) · 🟠 DEFERRED (70–84%) · 🔴 BLOCKED (<70%)
 
@@ -225,7 +226,7 @@ are resolved or explicitly approved as WONT-FIX.
 
 ### Tier 1: YAML Structural Rules (Read-Only)
 
-**Location:** `cortex-registry/core/` — 32 governance YAMLs
+**Location:** `cortex-registry/core/` — 23 governance YAMLs + `cortex-registry/governance/` — 13 governance YAMLs (36 total)
 
 | Category | Change Frequency |
 |----------|-----------------|
@@ -306,22 +307,20 @@ IF BLOCK → Show remediation, require override
 | Command | Purpose |
 |---|---|
 | `--counts-only` | Show live architecture counts (no file changes) |
-| `--db-cleanup` | SQLite 30-day retention + VACUUM (9 databases) |
+| `--db-cleanup` | SQLite 30-day retention + VACUUM (7 databases) |
 | `--dry-run` | Preview all changes without writing |
 | (no args) | Full refresh: cleanup → validate → report |
 
 **When to run:** After phase completion, after `/audit fix`, after major refactoring, monthly.
 
-**SQLite databases (9):**
-- `orchestrator-traces.db` — 400KB, primary trace store
-- `rca_store.db` — 72KB, root cause analysis
-- `intelligence_audit.db` — 64KB, intelligence traces
-- `contract_validation_audit.db` — 44KB, wiring contracts
-- `audit.db` — 40KB, audit events
-- `governance.db` — 32KB, scaffolder audit
-- `conversations.db` — 32KB, session state (90-day retention)
-- `governance.db` (brain) — 12KB, brain governance
-- `governance.db` (traces) — 12KB, governance enforcement
+**SQLite databases (7):**
+- `orchestrator-traces.db` — primary trace store (AC markers, workflow runs)
+- `rca_store.db` — root cause analysis
+- `intelligence_audit.db` — intelligence traces
+- `contract_validation_audit.db` — wiring contracts
+- `audit.db` — audit events
+- `governance.db` — scaffolder audit
+- `conversations.db` — session state (90-day retention)
 
 ---
 

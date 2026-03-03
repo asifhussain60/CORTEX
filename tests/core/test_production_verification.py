@@ -395,6 +395,10 @@ class TestProductionStubDetection:
             "RoutingDecision", "RoutingContext", "RoutingResult",
             "DiscoveryResult", "DiscoveryContext", "DiscoveryQuery",
             "SearchResult", "SearchContext",
+            # Intent classification (two architectures: three-tier vs signal-based)
+            # - intent_classifier.py: Three-tier (regex+keyword+LLM), used by intent_router_impl.py
+            # - intent_router/classifier.py: Phase 103 signal-based decomposition classifier
+            "IntentClassifier",
             # State management (multiple orchestrators manage state)
             "ConversationState", "SessionState", "WorkflowState",
             # Documentation/Diagram patterns

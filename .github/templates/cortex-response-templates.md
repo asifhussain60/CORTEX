@@ -971,9 +971,9 @@ BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → B
 
 **What sets me apart:**
 
-- ⚡ **186 Orchestrators** working in concert — each specialized, all coordinated
+- ⚡ **320 Orchestrators** working in concert — each specialized, all coordinated
 - 🔍 **LENS Intelligence** — I analyze your actual code (git history, AST, patterns) before acting
-- 🛡️ **32 Governance Rules** enforced automatically — security, quality, compliance built-in
+- 🛡️ **36 Governance Rules** enforced automatically — security, quality, compliance built-in
 - ✅ **TDD-First Always** — tests before code, no exceptions, no shortcuts
 - 🔄 **Convergence Guarantee** — I don't stop until every P0/P1 issue is resolved
 - 🐛 **Multi-Stack Debugging** — Python, JavaScript, C#, SQL, .NET — 8 strategies
@@ -1083,7 +1083,7 @@ Here's how CORTEX enforces security at every layer:
 
 | Capability | Security Impact | Try It |
 |-----------|----------------|--------|
-| ️ **32 Governance Rules** | Enforced pre-commit, CI, and runtime — no bypasses | `/rca` |
+| ️ **36 Governance Rules** | Enforced pre-commit, CI, and runtime — no bypasses | `/rca` |
 | 🧠 **Root Cause Analysis** | Prevent recurrence with 4 RCA methodologies | `/rca` |
 | 🔄 **Privacy-Safe Sync** | One-way sanitized sync to company repos | `/sync target={path}` |
 | 📊 **Full Audit Trail** | Every decision logged to SQLite — full traceability | `/digest {path}` |
@@ -2195,7 +2195,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **VACUUM** | `🧹 CORTEX VACUUM` | Summary + Analysis (files archived/deleted, root clutter) | Concise |
 | **SYNC** | `🔄 CORTEX SYNC` | Summary + Analysis (4-gate pipeline: PULL→DIFF→SANITIZE→MERGE) | Medium |
 | **TRAIN** | `🎓 CORTEX TRAIN` | Summary + Analysis + Recommendation (template evolution proposals) | Full |
-| **TOTALRECALL** | `🔁 CORTEX TOTALRECALL` | All 5 sections (7-phase protocol: INVENTORY→CONTRADICTION→ARCHITECTURE→RECOMMENDATION→IMPLEMENTATION→REGRESSION→VERIFICATION) | Full |
+| **TOTALRECALL** | `🔁 CORTEX TOTALRECALL` | All 5 sections (10-phase pipeline: DELTA→DRIFT→REGRESSION→OPTIMIZE→WIRE→MEMORY→VACUUM→SQLITE→HARDEN→CERTIFY) | Full |
 | **RCA** | `🧠 CORTEX RCA` | Summary + Analysis (methodology, cause chain, prevention rule) + Recommendation | Full |
 
 ### Mode-Specific H3 Extensions

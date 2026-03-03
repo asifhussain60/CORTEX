@@ -4,11 +4,12 @@ dor_approval_gate.py — Definition of Ready Approval Gate
 Restored for import compatibility after Wave 7 purge.
 Preserves public interface: IntentReflection, ApprovalDecision, DoRApprovalGate.
 """
-# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+
+from cortex.orchestrators.core.approval_gate import ApprovalDecision
 
 
 @dataclass
@@ -18,15 +19,6 @@ class IntentReflection:
     intent: str
     confidence: float
     context: dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ApprovalDecision:
-    """Result of a DoR approval gate evaluation."""
-
-    approved: bool
-    reason: str = ""
-    violations: list[str] = field(default_factory=list)
 
 
 class DoRApprovalGate:

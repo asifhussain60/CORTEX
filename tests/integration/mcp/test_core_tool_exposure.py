@@ -84,10 +84,10 @@ def test_mcp_tool_decorator_system():
 @pytest.mark.skip(reason="MCP core tools infrastructure under development - Phase 82+")
 def test_tool_registry_integration():
     """Verify ToolRegistry integration with MCP server."""
-    from cortex.mcp.tool_registry import get_mcp_tool_registry
+    from cortex.mcp.mcp_registry import get_registry
     
-    registry = get_mcp_tool_registry()
-    all_tools = registry.list_all()
+    registry = get_registry()
+    all_tools = registry.list_tools()
     
     # NOTE: ToolRegistry may be empty if tools use decorator pattern (@mcp_tool)
     # This is acceptable as long as tools are exposed via list_tools()
