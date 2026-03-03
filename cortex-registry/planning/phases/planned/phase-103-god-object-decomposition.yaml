@@ -117,8 +117,17 @@ sweep_catalogue:
       40/40 decomposition tests GREEN. Smoke: 2,288 passed (2 pre-existing flaky failures).
   - id: GAP-103-03
     title: "Decompose tdd_orchestrator.py (2,072→<500 + modules)"
-    status: OPEN
+    status: CLOSED
     severity: P1
+    resolution: |
+      COMPLETE (2026-03-03 Phase 103-c). Extracted 4 mixins into a tdd_orchestrator/
+      package. Original 2,121L → _coordinator.py (462L) + 4 modules:
+        tdd_models.py (~260L): TDDPhase enum + 5 dataclasses + TDDKnowledgeLoader
+        tdd_execution_mixin.py (~390L): RED/GREEN/REFACTOR phase execution
+        tdd_metrics_mixin.py (~480L): multi-cycle, quality gates, get_tdd_status
+        tdd_batch_mixin.py (~240L): _run_test_suite, _emit_event, run_batch_suite
+      Package resolution: tdd_orchestrator/ directory; coordinator at _coordinator.py.
+      47/47 decomposition tests GREEN. Smoke: 2,286 passed (5 pre-existing failures).
   - id: GAP-103-04
     title: "Decompose lens_orchestrator.py (2,039→<500 + analyzer modules)"
     status: OPEN
