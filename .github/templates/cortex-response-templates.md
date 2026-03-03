@@ -27,7 +27,7 @@
 | R3 | **Table requires: blank line before + header row + separator row** | Missing blank line before table causes the renderer to treat the table as a code block; missing separator makes the header row a plain paragraph | Table not rendered as table; appears as raw pipe-delimited text |
 | R4 | **Omit empty headers** — never emit an H2/H3 if the section below it has no content | Empty headers create phantom whitespace and confuse screen readers; the Whitespace Normalizer flags these as violations | Blank section gap in rendered output; P1 lint flag |
 | R5 | **No hard-wrap within paragraphs** — do not insert `\n` inside prose | Copilot Chat renderer treats each hard-wrapped line as a new paragraph, producing unwanted blank lines between sentences | Mid-paragraph blank lines disrupt reading flow |
-| R6 | **One H2 maximum per response as top-level title** — additional sections use H3 or below | Each H2 is treated as a document root by the Copilot Chat renderer; multiple H2s create visual hierarchy confusion | Response appears as multiple disconnected documents |
+| R6 | **One H1 for the CORTEX title** — all content sections use H2; sub-sections use H3 or below | H1 is the product identity anchor; H2 sections organize content beneath it; deeper nesting uses H3+ | Response has clear visual hierarchy with CORTEX branding at top |
 
 > **Table Safety Switch:** If any table cell would exceed **80 characters**, downgrade the table to a Markdown bullet list. If the bullet list items would exceed **120 characters**, wrap the entire section in a `<details>` block with a concise `<summary>` label. Never let table content overflow — it truncates silently in the Copilot Chat panel.
 
@@ -95,7 +95,7 @@ This document contains ALL response formatting standards in one place:
 
 ---
 
-## 🪞 INTENT REFLECTION BLOCK — BLOCK-INTENT-REFLECTION (SSOT)
+## 🪞 Intent Reflection — Understanding Your Request (SSOT)
 
 **Authority:** CORE-032 (Mandatory Intent Classification) + CORE-048 (Holistic Validation Gate)
 **Scope:** ALL requests — rendered once, immediately after the response header, before any work begins
@@ -157,7 +157,7 @@ You've asked CORTEX to {one-line summary of the overall request}:
 ### Full Rendered Example
 
 ```markdown
-## 🛠️ CORTEX Architect Designing
+# 🛠️ CORTEX Architect Designing
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** Classifier → Architect
 
@@ -186,7 +186,7 @@ full end-to-end quality benchmark:
 ---
 ```
 
-### When to Use BLOCK-INTENT-REFLECTION
+### When to Use Intent Reflection
 
 | Scenario | Use This Block? |
 |----------|----------------|
@@ -210,17 +210,17 @@ full end-to-end quality benchmark:
 |-----------|----------------|
 | **≤60 second read** | Executive-ready, scannable format |
 | **Answer first** | Lead with the bottom line — answer before details |
-| **Visual hierarchy** | H2 → H3 → bold → bullets (optimized for Copilot Chat) |
+| **Visual hierarchy** | H1 (CORTEX title) → H2 (sections) → H3 (sub-sections) → bold → bullets (optimized for Copilot Chat) |
 | **Comparison tables** | Side-by-side analysis for decisions |
 | **Inline only** | Zero file generation — everything in chat session |
 | **Professional icons** | Subtle, semantic — not decorative |
 
 ### The 5-Section Structure (MANDATORY)
 
-Every non-autonomous response MUST follow this H2 structure:
+Every non-autonomous response MUST follow this structure:
 
 ```markdown
-## 🧠 CORTEX {mode}
+# 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
@@ -366,7 +366,7 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 | ❌ Proceed bullets inside `## 🎯 Next Steps` | Duplication — Next Steps and the proceed gate are separate sections | Move proceed bullets to `BLOCK-PROCEED-GATE` as the final block |
 | ❌ Both `BLOCK-PROCEED-GATE` and `BLOCK-COMPLETION-STATE` in same response | Binary state — work is either pending or done | Use exactly one |
 
-### BLOCK-PROCEED-GATE and BLOCK-COMPLETION-STATE — Canonical Definitions (CORE-RESP-001 — P0)
+### ⚡ Proceed Gate & ✅ Completion State — Canonical Definitions (CORE-RESP-001 — P0)
 
 **Authority:** CORE-RESP-001 (Response Closure Contract)
 **Rule:** Every response MUST end with exactly ONE of these two blocks — the absolute last rendered element. No exceptions.
@@ -378,7 +378,7 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 | Work is pending user confirmation | `BLOCK-PROCEED-GATE` | Plan presented, user has not yet said `proceed` |
 | All work is fully complete | `BLOCK-COMPLETION-STATE` | Autonomous execution finished, nothing more to do |
 
-#### BLOCK-PROCEED-GATE — Work Pending (canonical template)
+#### ⚡ Proceed Gate — Work Pending (canonical template)
 
 ```markdown
 ---
@@ -429,7 +429,7 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 ```
 *(Wrong: title phrasing, vague bullets, missing numbered format, missing HR separator)*
 
-#### BLOCK-COMPLETION-STATE — Work Done (canonical template)
+#### ✅ Completion State — Work Done (canonical template)
 
 **Variant A — Phase Completion (cortex-master.yaml phase just marked COMPLETE):**
 
@@ -560,18 +560,19 @@ That's everything! Let me know if you need anything else.
 
 #### Persona binding (P0 — IMMUTABLE)
 
-| Prompt file active | H2 title format | Example |
+| Prompt file active | H1 title format | Example |
 |---|---|---|
-| `CORTEX.prompt.md` | `## 🧠 CORTEX {mode}` | `## 🧠 CORTEX Building` |
-| `cortex-architect.prompt.md` | `## 🛠️ CORTEX Architect {mode}` | `## 🛠️ CORTEX Architect Designing` |
+| `CORTEX.prompt.md` | `# 🧠 CORTEX {mode}` | `# 🧠 CORTEX Building` |
+| `cortex-architect.prompt.md` | `# 🛠️ CORTEX Architect {mode}` | `# 🛠️ CORTEX Architect Designing` |
 
 - The **product icon is fixed**: 🧠 for CORTEX · 🛠️ for CORTEX Architect — never swapped for a mode icon.
+- The CORTEX title uses **H1** (`#`) — it is the primary product identity heading for every response.
 - Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice versa — is a **P1 governance violation** (Check #14, meta-audit).
 
 #### Full canonical template
 
 ```markdown
-## 🧠 CORTEX {mode}
+# 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
@@ -656,7 +657,7 @@ That's everything! Let me know if you need anything else.
 
 ---
 
-## � BLOCK-QUOTE-LIBRARY — Intent-Aligned Business & Engineering Quotes
+## 📚 Quote Library — Intent-Aligned Business & Engineering Quotes
 
 **Authority:** VBP-013 (Business Book Anchoring) + `skull-rules.yaml` `book_reference` fields
 **SSOT:** This section is the single source of all approved response header quotes.
@@ -793,7 +794,7 @@ That's everything! Let me know if you need anything else.
 
 ---
 
-## �📦 COMPOSABLE CONTENT BLOCKS
+## 📦 Composable Content Sections
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml
 ### Purpose
@@ -802,7 +803,7 @@ Reusable content sections that compose into situation-specific responses without
 
 **Principle:** Like LEGO blocks — each block has ONE job, blocks assemble without overlap.
 
-### Block Library (19 Composable Blocks)
+### Content Section Library (19 Composable Sections)
 
 | Block ID | Purpose | Length | When to Use |
 |----------|---------|--------|-------------|
@@ -880,7 +881,7 @@ SMART: Render CAPABILITIES (skip LENS mention) → Render LENS block
 Result: Zero duplication, 350 words
 ```
 
-### Block Compatibility Matrix
+### Section Compatibility Matrix
 
 | Block | Pairs Well With | Avoid With |
 |-------|----------------|------------|
@@ -908,7 +909,7 @@ BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → B
 
 **Rule (CORE-RESP-001 — P0):** `BLOCK-PROCEED-GATE` or `BLOCK-COMPLETION-STATE` is ALWAYS the absolute last element in any response. Exactly one. Never both. Never neither for any actionable or completed response. Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
 
-### When NOT to Use Blocks
+### When NOT to Use Content Sections
 
 **Do NOT use composable blocks for:**
 - ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template (§ Silent Autonomous Mode)
@@ -939,11 +940,11 @@ BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → B
 
 ---
 
-## 📝 BLOCK CONTENT TEMPLATES
+## 📝 Content Section Templates
 
 > **Full content for each composable block.** Use these templates verbatim when assembling educational responses.
 
-### BLOCK-INTRODUCTION: Interactive Role-Based Onboarding (400 words)
+### 👋 Interactive Onboarding: Role-Based Introduction (400 words)
 
 **Trigger:** "introduce yourself", "who are you", "hello", "hi", "hey", "get started", "what can you do", "what is cortex", "help me", "new here"
 
@@ -1123,7 +1124,7 @@ Here's how CORTEX enforces security at every layer:
 
 ---
 
-### BLOCK-INTRO: Role-Based Welcome (150 words)
+### 🤝 Welcome: Role-Based Greeting (150 words)
 
 **Trigger:** First-time user ("who are you"), new session with unknown user profile, after persona selection request
 
@@ -1155,7 +1156,7 @@ Your choice persists in this session. Switch anytime: `/persona engineer`.
 
 ---
 
-### BLOCK-CAPABILITIES: What CORTEX Does (200 words)
+### ⚡ Capabilities: What CORTEX Does (200 words)
 
 **Trigger:** "what can you do", "capabilities", "features", educational introduction
 
@@ -1191,7 +1192,7 @@ No "here's code, you figure out tests" — that's not how partnerships work.
 
 ---
 
-### BLOCK-LENS: Intelligence System Deep-Dive (150 words)
+### 🔍 LENS Intelligence: Deep-Dive (150 words)
 
 **Trigger:** "explain LENS", "how does analysis work", ANALYZE operation explanation
 
@@ -1227,7 +1228,7 @@ This isn't guessing — it's evidence-based reasoning from your actual code.
 
 ---
 
-### BLOCK-ORCHESTRATORS: Architecture Overview (200 words)
+### 🏗️ Orchestrators: Architecture Overview (200 words)
 
 **Trigger:** "how does it work" (technical depth), "orchestrators", "wiring"
 
@@ -1276,7 +1277,7 @@ Think of orchestrators as **specialized teams** — each team has one job, teams
 
 ---
 
-### BLOCK-TUTORIAL: 5-Minute Quick Start (150 words)
+### 🚀 Quick Start: 5-Minute Tutorial (150 words)
 
 **Trigger:** New user ("how do I start"), "give me an example", onboarding
 
@@ -1315,7 +1316,7 @@ Think of orchestrators as **specialized teams** — each team has one job, teams
 
 ---
 
-### BLOCK-ONBOARDING: First-Time Setup (150 words)
+### ⚙️ Setup: First-Time Onboarding (150 words)
 
 **Trigger:** Setup issues, first-time MCP configuration, repository setup problems
 
@@ -1362,7 +1363,7 @@ In Copilot Chat, type: `/cortex-version`
 
 ---
 
-### BLOCK-NEXT-STEPS: Context-Aware Suggestions (80 words)
+### 🎯 Next Steps: Context-Aware Suggestions (80 words)
 
 **Trigger:** End of any educational response, after onboarding blocks
 
@@ -1383,26 +1384,26 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-SESSION-IDENTITY: Session Header (Once Per Session Only)
+### 🧠 Session Identity: Header (Once Per Session Only)
 
 **Trigger:** FIRST response in session only — never on subsequent turns. Once per session.
 
-**Rule (R6 exception):** BLOCK-SESSION-IDENTITY is the ONLY block allowed to use H2. All subsequent blocks use H3 or bold labels.
+**Rule:** The CORTEX title uses **H1** (`#`) — it is the primary product identity heading. All subsequent content sections use H2 or below.
 
-**Format (stable H2 emoji anchor pattern for Copilot Chat):**
+**Format (stable H1 emoji anchor pattern for Copilot Chat):**
 
 ```markdown
-## 🧠 CORTEX — Cognitive Real-Time Execution System
+# 🧠 CORTEX — Cognitive Real-Time Execution System
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 ```
 
-**Note:** Render ONCE per session — omit on all subsequent turns in the same session. Orchestrator engagement is surfaced contextually via `BLOCK-ENGAGEMENT-BREADCRUMB` as operations are routed — never in the header.
+**Note:** Render ONCE per session — omit on all subsequent turns in the same session. Orchestrator engagement is surfaced contextually via the **Via:** routing breadcrumb as operations are routed — never in the header.
 
 ---
 
-### BLOCK-MICRO-ACK: Trivial Confirmation (No ## header)
+### ✅ Quick Acknowledgement: Trivial Confirmation (No ## header)
 
 **Trigger:** Sub-10-word confirmations only ("Done", "Fixed", "Committed"). Standalone — replaces all other blocks for trivial acks.
 
@@ -1412,7 +1413,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-DIFF-PREVIEW: Before/After File Changes
+### 📊 Diff Preview: Before/After File Changes
 
 **Trigger:** Post-implementation responses showing file changes.
 
@@ -1437,7 +1438,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-RESUME-BANNER: Sweep Resume Orientation
+### ▶️ Resume Banner: Sweep Resume Orientation
 
 **Trigger:** User resumes a paused sweep in a new session.
 
@@ -1454,7 +1455,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-ERROR-RECOVERY: Structured Error Display
+### 🔴 Error Recovery: Structured Error Display
 
 **Trigger:** FIX/DEBUG modes — blocked gates, failed tests, P0 violations (known error states).
 
@@ -1473,7 +1474,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-METRICS-DASHBOARD: Test/Coverage/Timing Summary
+### 📈 Metrics Dashboard: Test/Coverage/Timing Summary
 
 **Trigger:** IMPLEMENT/FIX/REFACTOR completion responses.
 
@@ -1485,7 +1486,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-HANDOFF: Orchestrator Routing Chain
+### 🔗 Routing Handoff: Orchestrator Chain
 
 **Trigger:** Complex requests routed through 2+ orchestrators (AUDIT, complex IMPLEMENT).
 
@@ -1495,7 +1496,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-EXECUTION-SPEC: Machine-Readable Step Specification
+### 📋 Execution Spec: Machine-Readable Step Specification
 
 **Trigger:** Before cheaper executor model begins execution (model-tiering workflow). Renders after BLOCK-INTENT-REFLECTION and before first implementation step.
 
@@ -1513,7 +1514,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-DEVIATION-ALERT: Unexpected Executor Divergence — HALT
+### ⚠️ Deviation Alert: Unexpected Executor Divergence — HALT
 
 **Trigger:** Executor detects unexpected divergence from execution spec (more files changed, unexpected test failure, env mismatch, output mismatch).
 
@@ -1534,7 +1535,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
-### BLOCK-PHASE-ROADMAP: Multi-Phase Journey Overview
+### 🗺️ Phase Roadmap: Multi-Phase Journey Overview
 
 **Trigger:** Any operation with N≥2 phases (planning, implementation, audit/fix, digest, onboard). Rendered ONCE at operation start.
 
@@ -1567,41 +1568,40 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 
 ---
 
-### BLOCK-ENGAGEMENT-BREADCRUMB: Routing Chain + Current Orchestrator
+### 🧭 Routing Breadcrumb: Chain + Current Orchestrator
 
-**Trigger:** Every orchestrator invocation — rendered for any multi-hop routing chain (2+ hops). Omitted for single-hop simple responses.
+**Implementation:** The `**Via:**` field in the response header IS this block. For multi-hop chains, populate `**Via:** {DisplayName} → {DisplayName}` on the same line as `**Author:**` in the response header. **Do NOT render a separate `*🧭 ...*` italic block after `---`** — that creates a duplicate that makes the Classifier appear twice (P1 violation).
 
-**Purpose:** Show the full routing chain in plain-language display names so users understand which orchestrator is responding and why — without needing to know class names.
+**Trigger:** Every multi-hop routing chain (2+ orchestrators). Omit `**Via:**` entirely for single-hop responses.
 
-**Format (Sample A — canonical):**
+**Format (in response header — canonical):**
 
 ```markdown
-*🧭 Classifier → TDD Builder*
+# 🛠️ CORTEX Architect Documenting
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+**Via:** Classifier → TDD Builder
 ```
 
 **Workflow Composer variant (backtick parenthetical signals active toolchain):**
 
 ```markdown
-*🧭 Classifier → Code Improver → Workflow Composer `(stitching refactor-workflow.yaml · ruff · Roslyn · detect→fix→rescan ×3)`*
+**Via:** Classifier → Code Improver → Workflow Composer `(stitching refactor-workflow.yaml · ruff · Roslyn · detect→fix→rescan ×3)`
 ```
 
 **Rules:**
-- ✅ Always rendered for multi-hop chains (2+ orchestrators in routing path)
-- ✅ Italic format (`*...*`) — single line, plain-language display names only
-- ✅ 🧭 compass icon prefix — marks the routing breadcrumb visually
-- ✅ Display names from `ORCHESTRATOR_DISPLAY_NAMES` map (never class names)
+- ✅ Rendered as `**Via:** {DisplayName} → {DisplayName}` in the response header (same block as `**Author:**`)
+- ✅ Plain-language display names only — never class names
 - ✅ WorkflowComposer ops include backtick parenthetical showing active template + tools
-- ❌ Single-hop responses: omit entirely (keep response lean)
-- ❌ Never use `**Route:**` prefix — replaced by italic format
-- ❌ Never wrap chain in backtick code spans — use italic only
-- ❌ Never duplicated — appears in header region only (not inline mid-response)
+- ✅ Omit `**Via:**` entirely for single-hop responses (keep response lean)
+- ❌ NEVER render a separate `*🧭 Classifier → ...*` italic block after the `---` separator — `**Via:**` already serves this role, causing the Classifier to appear twice
+- ❌ Never use `**Route:**` prefix
 - ❌ Never use tree characters (├─ └─ │) — Copilot Chat rendering rule
 
-**Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (Sample C timing detail), BLOCK-STAGE-PROGRESS (Sample B pulse)
+**Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (collapsible timing detail), BLOCK-STAGE-PROGRESS (in-progress pulse)
 
 ---
 
-### BLOCK-ENGAGEMENT-TIMELINE: Collapsible Per-Orchestrator Timing Log
+### ⏱️ Engagement Timeline: Collapsible Per-Orchestrator Timing Log
 
 **Trigger:** Completion of any 3+ step operation. Rendered after BLOCK-METRICS-DASHBOARD.
 
@@ -1632,7 +1632,7 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 
 ---
 
-### BLOCK-STAGE-PROGRESS: In-Progress Orchestrator Pulse
+### 🔵 Stage Progress: In-Progress Orchestrator Pulse
 
 **Trigger:** Active orchestrator stage execution (intra-phase progress).
 
@@ -2256,7 +2256,7 @@ All follow the Copilot Chat rendering rules (§ Copilot Chat Rendering Rules).
 
 ---
 
-### BLOCK-INTERACTION-COMPREHENSION
+### 🔬 Stage 1 Comprehension: LENS Analysis Complete
 
 **Trigger:** Every Stage 1 turn with `type == "comprehension"` (non-challenge, LENS complete)
 
@@ -2284,7 +2284,7 @@ Shown before intent classification proceeds to Stage 2+.
 
 ---
 
-### BLOCK-INTERACTION-CHALLENGE
+### ⚠️ Governance Challenge: Code-Touch Gate
 
 **Trigger:** Every Stage 1 turn with `type == "challenge"` (governance concern detected)
 **Mandatory for:** All code-touching requests (IMPLEMENT / FIX / REFACTOR / DEBUG / AUDIT / TDD)
@@ -2323,7 +2323,7 @@ Before I proceed, I detected a concern in your request:
 
 ---
 
-### BLOCK-INTERACTION-DOT-READY (DoR Gate)
+### 📋 Definition of Ready: Pre-Execution Gate
 
 **Trigger:** Pre-execution gate before IMPLEMENT / FIX / REFACTOR / AUDIT / TDD
 **When:** After challenge passes, before Stage 2 Intent Classification
@@ -2351,7 +2351,7 @@ I've validated the following before proceeding:
 
 ---
 
-### BLOCK-INTERACTION-ROLE-CONTEXT
+### 👤 Role Context: User Persona
 
 **Trigger:** First turn of any session, or when `_user_role` changes
 **When:** Prepended to any BLOCK-INTERACTION-COMPREHENSION on first turn
@@ -2686,14 +2686,14 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 **SSOT for this section:** § Response Header — Canonical Spec (above in this document).
 
 ```markdown
-## 🧠 CORTEX {mode}
+# 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
 
 ---
 ```
 
-*Use `## 🛠️ CORTEX Architect {mode}` when `cortex-architect.prompt.md` is active. Product icon (🧠 / 🛠️) is fixed — never replaced by a mode icon.*
+*Use `# 🛠️ CORTEX Architect {mode}` when `cortex-architect.prompt.md` is active. Product icon (🧠 / 🛠️) is fixed — never replaced by a mode icon.*
 
 **Rules:**
 - ✅ Render ONCE — at the very top of the first response only, never repeated
@@ -2703,8 +2703,8 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 - ✅ `{mode}` is a plain-language verb phrase — not an enum (`Building`, not `IMPLEMENT`)
 - ✅ Use `🛠️ CORTEX Architect` when `cortex-architect.prompt.md` is active; use `🧠 CORTEX` otherwise
 - ✅ Followed immediately by `---` separator (Markdown HR — never `<hr>`)
-- ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H2 heading
-- ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the body — the H2 is the only title
+- ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H1 heading
+- ❌ NO secondary title headings inside the body — the H1 is the only title
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
 - ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14 + Check #26, meta-audit)
 - ❌ DO NOT show during silent autonomous execution (progress bars only, no header repetition)
@@ -2715,12 +2715,12 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 
 Before sending any response, verify:
 
-- [ ] **Response header present** — `## 🧠 CORTEX {mode}` (or `## 🛠️ CORTEX Architect {mode}`) + `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` + optional `**Via:**` + `---` — ONCE, at top, first response only (P0 — Check #14 + #26)
-- [ ] **Product icon is fixed** — 🧠 for CORTEX, 🛠️ for CORTEX Architect — no mode icon (⚡ 🔧 ♻️) in the H2 heading (P1 if violated)
+- [ ] **Response header present** — `# 🧠 CORTEX {mode}` (or `# 🛠️ CORTEX Architect {mode}`) + `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` + optional `**Via:**` + `---` — ONCE, at top, first response only (P0 — Check #14 + #26)
+- [ ] **Product icon is fixed** — 🧠 for CORTEX, 🛠️ for CORTEX Architect — no mode icon (⚡ 🔧 ♻️) in the H1 heading (P1 if violated)
 - [ ] **No secondary H1 title** — no `# Welcome to CORTEX` or `# CORTEX` heading inside the body (P1 if present)
 - [ ] **No `**Orchestrator:** {Name} ✅`** in header — replaced by `**Via:**` breadcrumb only (P1 if present)
 - [ ] **Synthesis pass complete** — scanned for duplicate headers, duplicate content, duplicate breadcrumbs, empty headers; zero duplication confirmed before emitting
-- [ ] **BLOCK-ENGAGEMENT-BREADCRUMB rendered** for multi-hop operations — italic `*🧭 {DisplayName} → {DisplayName}*` format, placed after `---` separator, never repeated mid-response
+- [ ] **`**Via:**` IS the breadcrumb** — for multi-hop, populate `**Via:** {DisplayName} → {DisplayName}` in the response header. Do NOT render a separate `*🧭 ...*` italic block after `---` — that duplicates the chain (P1 violation)
 - [ ] **BLOCK-INTENT-REFLECTION rendered** before any work content (first-person, business language, no technical table) — see § Intent Reflection Block
 - [ ] Confidence signal present (🟢 / 🟡 / 🔴) with approval blockquote
 - [ ] Status icons used correctly (🟢=done, ⚪=planned)
@@ -2758,7 +2758,7 @@ Before sending any response, verify:
 
 ---
 
-## BLOCK-ANALYSIS
+## 🔬 Analysis Template
 
 **Renders when:** `INVESTIGATE` / `ANALYZE` / `REQUIREMENTS` mode — any intent requesting understanding, root cause analysis, or scope definition.
 
@@ -2797,7 +2797,7 @@ Before sending any response, verify:
 
 ---
 
-## BLOCK-DESIGN-DECISION
+## 🏗️ Design Decision Template
 
 **Renders when:** `DESIGN` / `ARCHITECTURE` / `PROPOSE` mode — any intent requesting architectural decisions, trade-off analysis, or ADR generation.
 
@@ -2842,7 +2842,7 @@ Before sending any response, verify:
 
 ---
 
-## BLOCK-CODE-REVIEW
+## ♻️ Code Review Template
 
 **Renders when:** `REFACTOR` / `FIX` / `REVIEW` / `IMPLEMENT` completion — any review gate or post-implementation quality report.
 
@@ -2886,7 +2886,7 @@ Before sending any response, verify:
 
 ---
 
-## BLOCK-SECURITY-ASSESSMENT
+## 🔒 Security Assessment Template
 
 **Renders when:** `SECURITY_AUDIT` / `THREAT_MODEL` / `VULNERABILITY_SCAN` mode — any security analysis, OWASP check, or threat modeling session.
 

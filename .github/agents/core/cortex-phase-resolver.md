@@ -166,7 +166,7 @@ Add to **DESIGN MODE** section:
 
 **In DoR Display:**
 
-Render **BLOCK-INTENT-REFLECTION** from `.github/templates/cortex-response-templates.md` § Intent Reflection Block.
+Render **🪞 Intent Reflection** from `.github/templates/cortex-response-templates.md` § 🪞 Intent Reflection — Understanding Your Request.
 Include session context items inline in the numbered list — e.g.:
 - "**Continue from phase 5** — resuming from the last completed phase, queuing Phase 6 and Phase 7 next."
 - "**Resolve ambiguous reference** — 'phase C' resolved to Phase-7 (confidence: 0.98)."

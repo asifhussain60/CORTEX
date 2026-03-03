@@ -11,7 +11,7 @@
 
 **EVERY response MUST begin with the canonical header from `copilot-instructions.md`:**
 ```markdown
-## 🧠 CORTEX Documenting
+# 🧠 CORTEX Documenting
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Via:** Classifier → Documentation Orchestrator
 
@@ -143,7 +143,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 4. Read the target HTML file — understand current structure and DOM hooks
 5. Read existing CSS files in `cortex-docs/assets/css/` — understand current styles
 6. Propose: layout changes, component additions, structural improvements
-7. Present **BLOCK-INTENT-REFLECTION** with the design proposal
+7. Present **🪞 Intent Reflection** with the design proposal
 8. Wait for `proceed` before implementing
 
 ### Step 2 — Implement (after proceed)
@@ -155,14 +155,14 @@ Update the **Awakening of CORTEX** story arc and associated media:
 3. Apply CSS changes to correct CSS layer file — never create a new file unless no existing layer fits
 4. **a11y-perf-guardian** — run `a11y_checklist.yaml` checks; block on P0 regressions
 5. **regression-sentinel** — diff HTML/CSS changes; confirm no theme drift, no broken links, no removed ARIA landmarks
-6. Report completion with `BLOCK-COMPLETION-STATE`
+6. Report completion with `✅ Completion State`
 
 ### Design + Implement Agent Delegation Map
 
 | Step | Agent | Knowledge Input | Gate |
 |------|-------|-----------------|------|
 | Audit current state | `html-view-designer` | `doc_best_practices.yaml`, `components.yaml` | — |
-| Propose design | `html-view-designer` | `design_system.yaml` | BLOCK-PROCEED-GATE |
+| Propose design | `html-view-designer` | `design_system.yaml` | ⚡ Proceed Gate |
 | Token validation | `design-system-enforcer` | `design_system.yaml`, `glass-design-tokens.css` | P0 block on violation |
 | Implement HTML | `html-view-designer` + `doc-sync-agent` | `components.yaml`, `a11y_checklist.yaml` | — |
 | Implement CSS | `doc-sync-agent` (CSS rules) | `design_system.yaml`, `performance_checklist.yaml` | — |
@@ -375,10 +375,10 @@ When invoked without explicit request:
 ### Interactive Mode
 
 When invoked with a specific `/doc-*` command:
-1. Show intent reflection (BLOCK-INTENT-REFLECTION)
-2. Present plan with proceed gate (BLOCK-PROCEED-GATE)
+1. Show intent reflection (🪞 Intent Reflection)
+2. Present plan with proceed gate (⚡ Proceed Gate)
 3. Execute after approval
-4. Report with completion state (BLOCK-COMPLETION-STATE)
+4. Report with completion state (✅ Completion State)
 
 ---
 

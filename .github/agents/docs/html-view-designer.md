@@ -8,7 +8,7 @@
 **Mode:** Design + Implement
 **Responsibility:** Propose and implement structural + layout changes to cortex-docs HTML views using best-practice IA patterns and the CORTEX design system
 **Inputs:** Target HTML file, knowledge YAMLs, existing CSS files
-**Outputs:** Design proposal (BLOCK-INTENT-REFLECTION) → Implemented HTML changes (after proceed)
+**Outputs:** Design proposal (🪞 Intent Reflection) → Implemented HTML changes (after proceed)
 
 ---
 
@@ -37,7 +37,7 @@ Lead the Design + Implement cycle for any `cortex-docs/` HTML view. This agent o
 
 | Output | When | Format |
 |--------|------|--------|
-| **Design proposal** | Before proceed | BLOCK-INTENT-REFLECTION with structured change list |
+| **Design proposal** | Before proceed | 🪞 Intent Reflection with structured change list |
 | **Implemented HTML** | After proceed | In-place edits to target HTML file |
 | **CSS class list** | After proceed | List of CSS classes added/reused (for design-system-enforcer review) |
 
@@ -58,7 +58,7 @@ Lead the Design + Implement cycle for any `cortex-docs/` HTML view. This agent o
    - 🟡 P1 — IA/layout improvements (should fix)
    - 🔵 P2 — Enhancement opportunities (nice to have)
 
-### Step 2 — Propose (BLOCK-INTENT-REFLECTION)
+### Step 2 — Propose (🪞 Intent Reflection)
 
 Present a structured proposal:
 

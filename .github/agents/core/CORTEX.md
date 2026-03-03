@@ -31,7 +31,7 @@
 2. MCP Pre-flight (verify cortex_verify op=mcp)
 3. IntentRouter Classification
 4. Challenge Gate (if risk > 0.4)
-5. DoR Display (MANDATORY) — render BLOCK-INTENT-REFLECTION from `.github/templates/cortex-response-templates.md` § Intent Reflection Block
+5. DoR Display (MANDATORY) — render 🪞 Intent Reflection from `.github/templates/cortex-response-templates.md` § 🪞 Intent Reflection
 6. User Approval ("proceed")
 7. Orchestrator Execution
 8. Results Inline (CORE-002)

@@ -49,7 +49,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | RCA Engine | 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
 | Debug Strategies | 8 total: 3 Python + 5 multi-stack (Frontend/HTML-Vision/API/SQL/DotNet) |
 | Response Format | phase-list+bar mandatory; SSOT: `.github/templates/cortex-response-templates.md` |
-| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP |
+| Engagement Sections | 🧭 Routing Breadcrumb, ⏱️ Engagement Timeline, 🗺️ Phase Roadmap |
 | SQLite Databases | 7 in `.cortex-runtime/` — cleanup: `python3 scripts/refresh_prompt_suite.py --db-cleanup` |
 | Prompt Refresh | `python3 scripts/refresh_prompt_suite.py` — self-healing, architecture-introspecting |
 

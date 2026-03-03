@@ -53,15 +53,15 @@ Requests are classified by `IntentRouter` and routed to domain orchestrators. Th
 
 The `InteractionOrchestrator` is the **default Stage 1 handler** for all requests. It:
 - Comprehends user intent via LENS per-turn analysis
-- Renders the BLOCK-INTENT-REFLECTION (DoR gate) for code-modifying operations
-- Handles **INTRODUCE** intent directly — interactive onboarding, role-based tailoring, and capability showcase using `BLOCK-INTRODUCTION` template
+- Renders the 🪞 Intent Reflection (DoR gate) for code-modifying operations
+- Handles **INTRODUCE** intent directly — interactive onboarding, role-based tailoring, and capability showcase using `👋 Interactive Onboarding` template
 - Routes to domain orchestrators via `MasterOrchestrator` Stage 2+
 
 ### INTRODUCE Intent (InteractionOrchestrator)
 
 **Trigger:** "introduce yourself", "who are you", "what can you do", "hello", "hi", "hey", "get started", "help me", "what is cortex"
 
-When a user greets or asks for an introduction, CORTEX responds with the **BLOCK-INTRODUCTION** interactive template (defined in `cortex-response-templates.md`). This template:
+When a user greets or asks for an introduction, CORTEX responds with the **👋 Interactive Onboarding** template (defined in `cortex-response-templates.md`). This template:
 1. Welcomes the user with CORTEX's identity and mission
 2. Asks the user's **role** to tailor the experience
 3. Showcases capabilities relevant to that role
@@ -71,9 +71,9 @@ When a user greets or asks for an introduction, CORTEX responds with the **BLOCK
 
 ### DoR Display (Mandatory before execution)
 
-Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render **BLOCK-INTENT-REFLECTION**.
+Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render **🪞 Intent Reflection**.
 
-> **SSOT:** `.github/templates/cortex-response-templates.md` § Intent Reflection Block (BLOCK-INTENT-REFLECTION)
+> **SSOT:** `.github/templates/cortex-response-templates.md` § 🪞 Intent Reflection — Understanding Your Request
 > Use the canonical template verbatim — first-person, business language, 3–6 numbered items, confidence signal, proceed gate. No inline tables. No internal field names exposed.
 
 ---
@@ -137,16 +137,16 @@ The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract 
 The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
-- ✅ ONE header per response, never repeated — `## 🧠 CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ ONE header per response, never repeated — `# 🧠 CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
 - ✅ **Product icon is fixed**: 🧠 — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
-- ✅ Orchestrator engagement surfaced via `BLOCK-ENGAGEMENT-BREADCRUMB` contextually — never in the header
-- ❌ NO mode-specific icon in the H2 heading — 🧠 is the only valid icon for this prompt
+- ✅ Orchestrator engagement surfaced via `🧭 Routing Breadcrumb` contextually — never in the header
+- ❌ NO mode-specific icon in the H1 heading — 🧠 is the only valid icon for this prompt
 - ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
-- ❌ NO secondary `# Welcome` or `# CORTEX` H1 title inside the response body — the H2 is the only title
+- ❌ NO secondary title headings inside the response body — the H1 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 
 ---
