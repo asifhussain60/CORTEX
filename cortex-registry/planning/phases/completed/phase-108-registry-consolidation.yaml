@@ -7,7 +7,8 @@ id: "phase-108"
 title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
 version: "1.0"
 created: "2026-03-02"
-status: PLANNED
+status: COMPLETE
+closed_at: "2026-03-03"
 priority: P1
 governance_authority:
   - CORE-002   # All output inline
@@ -198,7 +199,9 @@ sweep_catalogue:
       knowledge-base/governance/ has 5 rules that overlap with governance/
     action: "Merge knowledge-base/ contents into knowledge/, delete knowledge-base/"
     action_ref: "phase-108-b"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "knowledge-base/ (21 files across profiles/, repositories/, security/, architecture/) merged into knowledge/. knowledge-base/ deleted via git rm -rf."
 
   - id: "GAP-108-04"
     title: "Triple governance namespace — governance/ + core/governance/ + knowledge-base/governance/"
@@ -212,7 +215,9 @@ sweep_catalogue:
       core/governance/skull-rules.yaml duplicates core/tier0-skull/skull-rules.yaml
     action: "Merge core/governance/ into governance/, merge knowledge-base/governance/ into governance/"
     action_ref: "phase-108-b"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "core/governance/ (governance-kernel, duplicate_detection_schedule, violation_patterns) merged into governance/. knowledge-base/governance/ (5 rules YAMLs) merged into governance/. Both source dirs deleted via git rm -rf."
 
   - id: "GAP-108-05"
     title: "config/ and core/config/ — two config namespaces"
@@ -224,7 +229,9 @@ sweep_catalogue:
       Both are configuration — no clear separation principle
     action: "Merge core/config/ into config/, remove core/config/"
     action_ref: "phase-108-b"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "core/config/ (5 YAMLs: feature-flags, feature_registry_*, file-naming-rules, system-configuration) merged into config/. core/config/ deleted via git rm -rf."
 
   - id: "GAP-108-06"
     title: "plans/ directory is empty — only .gitkeep files"
@@ -237,7 +244,8 @@ sweep_catalogue:
       Zero content files — never used (planning/ is the active location)
     action: "Delete plans/ directory entirely"
     action_ref: "phase-108-c"
-    status: OPEN
+    status: SKIPPED
+    skip_reason: "plans/ is an active runtime store. interaction_plan_store.py writes live data to plans/approved/, plans/pending/, plans/archive/. Deletion would break runtime."
 
   - id: "GAP-108-07"
     title: ".yaml-reader/ (25 files) — bundled HTML/JS app inside governance registry"
@@ -249,7 +257,8 @@ sweep_catalogue:
       Inflates file count and git history
     action: "Move to cortex-docs/tools/yaml-reader/ or add to .gitignore"
     action_ref: "phase-108-c"
-    status: OPEN
+    status: SKIPPED
+    skip_reason: ".yaml-reader/ directory does not exist on disk. MOOT — no action required."
 
   - id: "GAP-108-08"
     title: "integration/ — only 2 files (+ .gitkeep), minimal standalone value"
@@ -262,7 +271,9 @@ sweep_catalogue:
       3 files total — could merge into patterns/ or workflows/
     action: "Merge into patterns/ if design-pattern related, or delete if unused"
     action_ref: "phase-108-c"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "integration/patterns/ (_registry.yaml, test_orchestrator.yaml) merged into patterns/. integration/ deleted via git rm -rf."
 
   - id: "GAP-108-09"
     title: "17 .gitkeep files — many in dirs that now have content"
@@ -288,7 +299,9 @@ sweep_catalogue:
       After directory merges, some paths will be stale
     action: "Update all Python cortex-registry path references, run smoke gate"
     action_ref: "phase-108-d"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-03"
+    resolution: "17 Python files updated: knowledge_repository.py, company_knowledge_loader.py, knowledge_guidance_engine.py, kg_indexer.py, security_orchestrator.py, security_vulnerability_orchestrator.py, file_factory.py, mcp_discovery.py, opj_writer.py, opj_reader.py, template_registry.py, governance.py (mcp tool), pattern_enforcer.py, pattern_library.py, rate_limiter.py, registry_proxy.py (full dual→single root refactor), intelligence.py (mcp tool), enforcement_orchestrator/orchestrator.py, company_domain_loader.py. 25 Phase 108 tests GREEN. Preflight 220 passed."
 
   - id: "GAP-108-11"
     title: "cortex-master.yaml file: references must be updated to unified planning/phases/ paths"

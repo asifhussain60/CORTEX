@@ -1,0 +1,145 @@
+# Phase 105: Stale Import References + Legacy Naming Remediation
+# Authority: Comprehensive Architectural Audit (2026-03-02)
+# THIN INDEX CONTRACT: All detail lives HERE, not in cortex-master.yaml
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+metadata:
+  id: phase-105
+  title: "Stale Import References + Legacy Naming Remediation"
+  priority: P1
+  status: COMPLETE
+  closed_at: "2026-03-03"
+  sweep_id: SWEEP-105-STALE-IMPORTS-NAMING
+  created: "2026-03-02"
+  estimated_effort: "2-3 hours"
+  risk: LOW
+  dependencies: [phase-102]
+
+problem_summary: |
+  STALE IMPORT REFERENCES (grep scan):
+  - cortex/tools/cortex_intelligence_integration.py references "cortex_intelligence" 
+    in its module name and content
+  - cortex/tools/toolkit/update_imports.py contains mapping "from cortex.brain" 
+    (references deleted package)
+  - cortex/core/path_resolver.py has cortex_intelligence_path() function
+  - cortex/dashboards/renderers/d3_import_graph_renderer.py has "cortex.brain" 
+    color mapping
+  - cortex/orchestrators/response/engagement_renderer.py has "cortex_lens" 
+    tool key mapping
+  - cortex/mcp/tools/brain_collaboration_tools.py exports cortex_intelligence_* 
+    function names
+  
+  LEGACY NAMING PATTERNS:
+  - Functions named cortex_intelligence_* (7 occurrences)
+  - Dashboard color mappings for deleted packages
+  - Import update scripts referencing old paths
+  - MCP registry comments about deleted tools (informational — keep as history)
+
+affected_files:
+  - cortex/tools/cortex_intelligence_integration.py
+  - cortex/tools/toolkit/update_imports.py
+  - cortex/core/path_resolver.py
+  - cortex/dashboards/renderers/d3_import_graph_renderer.py
+  - cortex/dashboards/repository_detector.py
+  - cortex/orchestrators/response/engagement_renderer.py
+  - cortex/mcp/tools/brain_collaboration_tools.py
+  - cortex/orchestrators/core/business_wisdom_formatter.py
+
+root_cause: |
+  When cortex/brain/ was dissolved in Phase 54 and cortex_intelligence/cortex_lens were
+  deleted, the code that referenced these packages was updated in most places but stale
+  references survived in secondary files (renderers, integration tools, path resolvers).
+
+refactoring_strategy: |
+  1. Search-and-fix all references to deleted packages/paths
+  2. Rename cortex_intelligence_* functions to domain-appropriate names
+  3. Update dashboard color mappings to current package structure
+  4. Update path_resolver to remove dead path functions
+  5. Run comprehensive grep to verify zero remaining references
+
+risks:
+  - cortex_intelligence_share/merge/sync may be MCP tool names → check registry
+  - Dashboard renderers may have tests dependent on color mappings
+  - update_imports.py may be used by external tooling
+
+sweep_catalogue:
+  - id: GAP-105-01
+    title: "Remove cortex_intelligence references from 6 files"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    severity: P1
+    resolution: "cortex_intelligence_path retained as backward-compat alias only; canonical function is intelligence_path(). 11/11 tests GREEN."
+  - id: GAP-105-02
+    title: "Remove cortex.brain references from dashboards and tools"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    severity: P1
+    resolution: "PACKAGE_COLORS uses cortex.intelligence; update_imports.py keeps cortex.brain as migration source key (intentional — maps FROM old TO new). Tests verify correct mapping."
+  - id: GAP-105-03
+    title: "Remove cortex_lens stale reference from engagement_renderer"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    severity: P2
+    resolution: "cortex_lens key removed from TOOL_DISPLAY_NAMES in engagement_renderer.py. Test GREEN."
+  - id: GAP-105-04
+    title: "Rename brain_collaboration_tools.py exports to intelligence-appropriate names"
+    status: CLOSED
+    closed_at: "2026-03-03"
+    severity: P1
+    resolution: "Canonical names collaboration_share/merge/sync are primary exports. cortex_intelligence_* retained as backward-compat aliases. All 11 tests GREEN."
+
+sub_phases:
+  - id: phase-105-a
+    title: "Stale reference remediation"
+    depends_on: []
+    gap_refs: [GAP-105-01, GAP-105-02, GAP-105-03, GAP-105-04]
+    tdd_cycle:
+      red:
+        action: "Write tests asserting zero grep hits for deleted package names"
+        gate: "Tests FAIL (stale references exist)"
+        blocker: "Cleanup forbidden until gate passes"
+      green:
+        action: "Fix all stale references, rename functions"
+        gate: "Tests PASS (zero grep hits)"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Update MCP registry if tool names changed"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "sub-phase COMPLETE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: phase-105-final
+    title: "Phase 105 verification and close"
+    depends_on: [phase-105-a]
+    gap_refs: []
+    tdd_cycle:
+      red:
+        action: "Comprehensive grep for all deleted package names"
+        gate: "Zero hits confirmed"
+        blocker: "Close forbidden until verification passes"
+      green:
+        action: "Run full smoke suite"
+        gate: "python3 scripts/run_tests.py smoke — ≥1700 passed"
+        blocker: "Phase COMPLETE forbidden until gate passes"
+      refactor:
+        action: "Update cortex-master.yaml"
+        gate: "wc -l cortex-registry/cortex-master.yaml ≤ 800"
+        blocker: "Phase CLOSE forbidden until gate passes"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false

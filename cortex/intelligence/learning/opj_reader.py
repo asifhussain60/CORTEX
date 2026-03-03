@@ -2,8 +2,8 @@
 OPJReader — queries the Operational Pattern Journal for prior success/failure patterns.
 
 Reads YAML from:
-  cortex-registry/integration/patterns/success/{orchestrator_snake}.yaml
-  cortex-registry/integration/patterns/failure/{orchestrator_snake}.yaml
+  cortex-registry/patterns/success/{orchestrator_snake}.yaml
+  cortex-registry/patterns/failure/{orchestrator_snake}.yaml
 
 AC-ID: AC-OPJ-PHASE52-READER
 CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
@@ -50,10 +50,10 @@ class OPJReader:
 
         Args:
             registry_root: Path to the cortex-registry/ root (or any root from which
-                           integration/patterns/ is resolved). Defaults to canonical location.
+                           patterns/ is resolved). Defaults to canonical location.
         """
         _base = Path(registry_root) if registry_root is not None else _DEFAULT_REGISTRY
-        self._root = _base / "integration" / "patterns"
+        self._root = _base / "patterns"
 
     # ── Public API ──────────────────────────────────────────────────────────
 

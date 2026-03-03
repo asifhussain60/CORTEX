@@ -450,7 +450,7 @@ class KnowledgeGuidanceEngine:
         module_name: str
     ) -> None:
         """
-        Load best practices from cortex-registry/knowledge-base/.
+        Load best practices from cortex-registry/knowledge/.
 
         Args:
             guidance: Guidance object to populate
@@ -471,7 +471,7 @@ class KnowledgeGuidanceEngine:
                     description="Kent Beck methodology: RED → GREEN → REFACTOR",
                     priority=1,
                     tier=TierLevel.CORTEX_BEST_PRACTICES,
-                    source="cortex-registry/knowledge-base/testing/tdd-best-practices.yaml",
+                    source="cortex-registry/knowledge/testing/tdd-best-practices.yaml",
                     patterns=["red_phase", "green_phase", "refactor_phase", "test_isolation"]
                 )
             )

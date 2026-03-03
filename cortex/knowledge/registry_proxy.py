@@ -2,21 +2,15 @@
 cortex.knowledge.registry_proxy — KnowledgeRegistryProxy
 =========================================================
 
-Unified proxy over **all** CORTEX knowledge YAML files across two
-canonical roots inside ``cortex-registry/``:
+Unified proxy over all CORTEX knowledge YAML files inside
+``cortex-registry/knowledge/`` (single root — Phase 108 consolidation
+merged ``knowledge-base/`` into ``knowledge/``).
 
-1. ``cortex-registry/knowledge/``      — best-practice guides (clean code,
-   TDD, SOLID, design patterns, security coding, monitoring)
-2. ``cortex-registry/knowledge-base/`` — runtime knowledge (governance rules,
-   domain profiles, repository metadata, OWASP, CI/CD hardening)
+The proxy loads lazily, caches in-memory, and tags every entry with a
+``source`` field (``"knowledge"``) so consumers can filter by domain.
 
-Together these roots contain **30 YAML files** spanning 11 domains.  The
-proxy loads lazily, caches in-memory, and tags every entry with a ``source``
-field (``"knowledge"`` or ``"knowledge-base"``) so consumers can filter by
-origin when needed.
-
-Phase 59-d → Phase 62-H: Upgraded from single-root to dual-root unified
-loading.  All 30 YAMLs now visible to orchestrators via one import.
+Phase 59-d → Phase 62-H: Upgraded from single-root to dual-root unified loading.
+Phase 108: Collapsed back to single root after knowledge-base/ merge.
 
 CORE Rules: CORE-035 (single canonical), CORE-011, CORE-012
 AC_START: AC-KNOWLEDGE-PROXY-62H
@@ -32,18 +26,17 @@ logger = logging.getLogger(__name__)
 # Resolve project root → cortex-registry/
 _PROJECT_ROOT = Path(__file__).parent.parent.parent
 _KNOWLEDGE_ROOT = _PROJECT_ROOT / "cortex-registry" / "knowledge"
-_KNOWLEDGE_BASE_ROOT = _PROJECT_ROOT / "cortex-registry" / "knowledge-base"
 
 __all__ = ["KnowledgeRegistryProxy"]
 
 
 class KnowledgeRegistryProxy:
-    """Unified proxy that loads and queries YAML knowledge from both
-    ``cortex-registry/knowledge/`` and ``cortex-registry/knowledge-base/``.
+    """Unified proxy that loads and queries YAML knowledge from
+    ``cortex-registry/knowledge/`` (single canonical root, post Phase 108).
 
     Every entry is tagged with:
 
-    - ``source`` — ``"knowledge"`` (guides) or ``"knowledge-base"`` (runtime)
+    - ``source`` — ``"knowledge"``
     - ``domain`` — top-level directory name (e.g. ``"backend-python"``,
       ``"governance"``, ``"profiles"``)
     - ``key``    — dot-separated path without extension
@@ -51,10 +44,8 @@ class KnowledgeRegistryProxy:
     Usage::
 
         proxy = KnowledgeRegistryProxy()
-        all_entries = proxy.all()              # 30 entries
-        proxy.query(domain="governance")       # 5 governance rule files
-        proxy.query(source="knowledge")        # 11 best-practice guides
-        proxy.query(source="knowledge-base")   # 19 runtime knowledge files
+        all_entries = proxy.all()
+        proxy.query(domain="governance")
         proxy.get("governance.compliance-rules")
 
     Attributes:
@@ -64,7 +55,7 @@ class KnowledgeRegistryProxy:
     def __init__(
         self,
         knowledge_root: Optional[Path] = None,
-        knowledge_base_root: Optional[Path] = None,
+        knowledge_base_root: Optional[Path] = None,  # kept for backward-compat signature
         *,
         registry_root: Optional[Path] = None,
     ) -> None:
@@ -72,25 +63,18 @@ class KnowledgeRegistryProxy:
 
         Args:
             knowledge_root: Override path to ``cortex-registry/knowledge/``.
-            knowledge_base_root: Override path to ``cortex-registry/knowledge-base/``.
+            knowledge_base_root: Deprecated (Phase 108) — ignored; kept for
+                                 backward-compat call sites only.
             registry_root: **Backward-compat alias** for ``knowledge_root``.
-                           If provided (and ``knowledge_root`` is not), sets the
-                           primary root and disables the ``knowledge-base`` root.
         """
         # Backward compatibility: registry_root sets knowledge_root
         if registry_root is not None and knowledge_root is None:
             knowledge_root = registry_root
-            # When only registry_root is given, behave like the old single-root proxy
-            knowledge_base_root = knowledge_base_root  # keep if explicitly given
 
         self._primary_root: Path = knowledge_root or _KNOWLEDGE_ROOT
         self.roots: List[tuple] = [
             (self._primary_root, "knowledge"),
         ]
-        # Only add knowledge-base root if not overridden to a custom path
-        kb_root = knowledge_base_root or _KNOWLEDGE_BASE_ROOT
-        if kb_root.exists():
-            self.roots.append((kb_root, "knowledge-base"))
         self._cache: Optional[Dict[str, Any]] = None
 
     @property

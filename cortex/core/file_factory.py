@@ -84,7 +84,7 @@ class FileFactory:
             # Try to load from standard location
             config_path = (
                 Path(__file__).resolve().parents[2] /
-                "cortex-registry/core/config/file-naming-rules.yaml"
+                "cortex-registry/config/file-naming-rules.yaml"
             )
             if config_path.exists():
                 try:

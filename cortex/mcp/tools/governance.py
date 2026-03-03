@@ -695,7 +695,7 @@ class CortexLoad(ConsolidatedTool):
             data={
                 "modes": modes,
                 "total": len(modes),
-                "source": "cortex-registry/integration/interaction/",
+                "source": "cortex-registry/config/modes.yaml",
             },
             metadata={"operation": "modes"},
         )

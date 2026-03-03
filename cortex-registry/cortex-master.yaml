@@ -112,7 +112,7 @@ summary:
     phase-103: "COMPLETE — God Object Decomposition: 6/8 GAPs CLOSED, 2 DEFERRED to phase-115. master_orchestrator 3167L→702L, intent_router_impl 2895L→686L, tdd_orchestrator 2072L→package, lens_orchestrator 2045L→277L, utilities+operations→14 single-class files, knowledge_synthesis→package. Smoke: 2289 passed. ✅"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "COMPLETE — Stale Imports and Legacy Naming: 4/4 GAPs CLOSED. 11 tests GREEN. Zero dissolved package imports. ✅"
-    phase-108: "IN_PROGRESS — cortex-registry Consolidation: GAP-108-01 CLOSED (_cortex-master/ merged→planning/phases/, 11 .gitkeep purged, cortex-master.yaml refs updated). GAPs 02-11 planned."
+    phase-108: "COMPLETE 2026-03-03 — cortex-registry Consolidation: 9/11 GAPs CLOSED. knowledge-base/→knowledge/, core/governance/→governance/, core/config/→config/, integration/→patterns/. 19 Python path refs updated. registry_proxy.py dual→single root. GAPs 06/07 SKIPPED (live store/non-existent). 25 tests GREEN. Preflight: 220 passed ✅"
     phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
     phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
 
@@ -234,13 +234,13 @@ phases:
   - id: phase-108
     title: "cortex-registry Consolidation — Namespace Dedup, Phase Path Unification, Dead Dir Purge"
     priority: P1
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-108-REGISTRY-CONSOLIDATION
     gaps: 11
-    gaps_closed: 1
+    gaps_closed: 9
     sub_phases: 5
-    file: "cortex-registry/planning/phases/planned/phase-108-registry-consolidation.yaml"
-    note: "GAP-108-01 CLOSED 2026-03-03: _cortex-master/ merged into planning/phases/, playbooks merged, 11 .gitkeep purged, cortex-master.yaml references updated. GAPs 03-11 remain for Sub-phases B-D (knowledge merge, governance/config dedup, Python path updates). Depends on phase-107, phase-105."
+    file: "cortex-registry/planning/phases/completed/phase-108-registry-consolidation.yaml"
+    note: "COMPLETE 2026-03-03. GAPs 01/02/09/11 CLOSED prior session. GAPs 03/04/05/08/10 CLOSED this session: knowledge-base/→knowledge/, core/governance/→governance/, core/config/→config/, integration/patterns/→patterns/, 19 Python path refs updated. registry_proxy.py dual→single root. GAPs 06/07 SKIPPED (live runtime store / non-existent). 25 tests GREEN. Preflight: 220 passed."
 
   # ── SLOT #-1 — phase-99 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-99-secure-mcp-wiring

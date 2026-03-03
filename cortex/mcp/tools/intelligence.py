@@ -452,7 +452,7 @@ class CortexKnowledge(ConsolidatedTool):
         return (
             "Access CORTEX knowledge base via IntelligenceFacade.query(). "
             "Search for domain knowledge, best practices, and identify knowledge gaps. "
-            "Wired to cortex-registry/knowledge/ and cortex-registry/knowledge-base/ (30 YAMLs, 11 domains)."
+            "Wired to cortex-registry/knowledge/ (30 YAMLs, 11 domains — Phase 108 consolidated)."
         )
 
     @property
@@ -516,8 +516,7 @@ class CortexKnowledge(ConsolidatedTool):
             Implicit: Exceptions are caught and returned as ToolResult.success=False
 
         Knowledge sources:
-            - cortex-registry/knowledge/ (11 domains, best practices guides)
-            - cortex-registry/knowledge-base/ (19 runtime knowledge files)
+            - cortex-registry/knowledge/ (all domains — Phase 108 consolidated single root)
             Total: 30 YAMLs across 11 domains (backend-python, security, governance, etc.)
         """
         # ENFORCEMENT: Validate orchestrator routing

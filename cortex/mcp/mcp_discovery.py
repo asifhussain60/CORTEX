@@ -214,7 +214,7 @@ class ServiceDiscovery:
             str: Endpoint from config, or None if not found
         """
         config_files = [
-            "cortex-registry/core/config/system-configuration.yaml",
+            "cortex-registry/config/system-configuration.yaml",
             "cortex-config.yaml",  # Legacy location
             ".github/cortex-config.yaml",
             "/etc/cortex/config.yaml",

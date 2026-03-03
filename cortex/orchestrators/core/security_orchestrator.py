@@ -876,7 +876,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
             Path.cwd().parent,  # Parent of cwd
         ]
 
-        kb_relative = Path("cortex-registry/knowledge-base/security")
+        kb_relative = Path("cortex-registry/knowledge/security")
         kb_found = False
 
         for candidate in project_root_candidates:

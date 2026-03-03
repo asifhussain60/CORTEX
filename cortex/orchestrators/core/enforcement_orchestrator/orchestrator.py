@@ -126,7 +126,7 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnfor
     def _inject_governance_knowledge(self) -> Dict[str, Any]:
         """Inject governance knowledge YAMLs into enforcement context.
 
-        Phase 78 GAP-78-A-04: Wire cortex-registry/knowledge-base/governance/*.yaml
+        Phase 78 GAP-78-A-04: Wire cortex-registry/governance/*.yaml
         so rule validation is knowledge-informed (not just hard-coded rule IDs).
 
         Returns:

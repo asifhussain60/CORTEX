@@ -11,7 +11,7 @@ precedence to ensure company policies override generic CORTEX knowledge.
 Precedence Order (highest to lowest):
 1. cortex-registry/company/domains/{company-name}/compliance/  - Company-specific overrides
 2. cortex-registry/company/domains/compliance-standards/       - Generic industry standards
-3. cortex-registry/knowledge-base/               - CORTEX base knowledge
+3. cortex-registry/knowledge/               - CORTEX base knowledge (Phase 108 consolidated)
 
 Core Responsibilities:
 1. Load company-specific knowledge YAMLs from cortex-registry/company/domains/
@@ -194,7 +194,7 @@ class CompanyKnowledgeLoader:
     # Default paths (relative to project root)
     COMPANY_DOMAINS_PATH = "cortex-registry/company/domains"
     COMPLIANCE_STANDARDS_PATH = "cortex-registry/company/domains/compliance-standards"
-    CORTEX_KNOWLEDGE_PATH = "cortex-registry/knowledge-base"
+    CORTEX_KNOWLEDGE_PATH = "cortex-registry/knowledge"
 
     def __init__(
         self,

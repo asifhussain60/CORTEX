@@ -107,7 +107,7 @@ class KnowledgeIndexer:
 
             indexer = KnowledgeIndexer()
             indexer.index_registry_yaml(
-                Path("cortex-registry/knowledge-base/profiles/finops.yaml"),
+                Path("cortex-registry/knowledge/profiles/finops.yaml"),
                 entity_type="profile",
             )
             assert indexer.get_entity("finops-v1.0") is not None

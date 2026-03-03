@@ -16,7 +16,7 @@ ENHANCED (KN-005-01): Now integrates with CompanyKnowledgeLoader to support
 company-specific knowledge overrides with proper precedence:
   1. cortex-registry/company/domains/{company}/  - Company-specific overrides (highest)
   2. cortex-registry/company/domains/compliance-standards/  - Industry standards (medium)
-  3. cortex-registry/knowledge-base/  - CORTEX base knowledge (lowest)
+  3. cortex-registry/knowledge/  - CORTEX base knowledge (lowest)
 
 Core Responsibilities:
 1. Load knowledge index from .knowledge-index.json
@@ -150,8 +150,8 @@ class KnowledgeRepository:
     """
 
     # Default paths (relative to project root)
-    DEFAULT_INDEX_PATH = "cortex-registry/knowledge-base/.knowledge-index.json"
-    DEFAULT_KNOWLEDGE_DIR = "cortex-registry/knowledge-base"
+    DEFAULT_INDEX_PATH = "cortex-registry/knowledge/.knowledge-index.json"
+    DEFAULT_KNOWLEDGE_DIR = "cortex-registry/knowledge"
 
     def __init__(
         self,
@@ -547,7 +547,7 @@ class KnowledgeRepository:
         Precedence Order:
           1. cortex-registry/company/domains/{company}/  - Company-specific (highest)
           2. cortex-registry/company/domains/compliance-standards/  - Industry standards
-          3. cortex-registry/knowledge-base/  - CORTEX base (lowest)
+          3. cortex-registry/knowledge/  - CORTEX base (lowest)
 
         Args:
             domain: Knowledge domain to query (e.g., 'SECURITY', 'API-DESIGN')

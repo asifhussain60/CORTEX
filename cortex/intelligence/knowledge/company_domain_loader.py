@@ -84,8 +84,8 @@ class CompanyDomainLoader:
             domains_dir: Directory containing ``company/domains/*.yaml`` files.
                          Defaults to ``cortex-registry/company/domains/`` relative
                          to the repository root.
-            profiles_dir: Directory containing ``knowledge-base/profiles/*.yaml`` files.
-                          Defaults to ``cortex-registry/knowledge-base/profiles/``.
+            profiles_dir: Directory containing ``knowledge/profiles/*.yaml`` files.
+                          Defaults to ``cortex-registry/knowledge/profiles/``.
         """
         self._domains_dir: Path = domains_dir or _DEFAULT_DOMAINS_DIR
         self._profiles_dir: Path = profiles_dir or _DEFAULT_PROFILES_DIR

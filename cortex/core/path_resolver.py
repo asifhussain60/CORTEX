@@ -95,13 +95,13 @@ def tier_path(tier: int) -> Path:
       0 → cortex-registry/core/tier0-skull/
       1 → cortex-registry/core/tier1-project/
       2 → cortex-registry/core/tier2-conventions/
-      3 → cortex-registry/knowledge-base/
+      3 → cortex-registry/knowledge/
     """
     tier_map = {
         0: resolve_path("cortex-registry", "core", "tier0-skull"),
         1: resolve_path("cortex-registry", "core", "tier1-project"),
         2: resolve_path("cortex-registry", "core"),
-        3: resolve_path("cortex-registry", "knowledge-base"),
+        3: resolve_path("cortex-registry", "knowledge"),
     }
     if tier not in tier_map:
         raise ValueError(f"Invalid tier: {tier}. Must be 0, 1, 2, or 3.")

@@ -2,9 +2,9 @@
 OPJWriter — writes success and failure patterns to the Operational Pattern Journal.
 
 Writes YAML to:
-  cortex-registry/integration/patterns/success/{orchestrator_snake}.yaml
-  cortex-registry/integration/patterns/failure/{orchestrator_snake}.yaml
-  cortex-registry/integration/patterns/_registry.yaml  (index)
+  cortex-registry/patterns/success/{orchestrator_snake}.yaml
+  cortex-registry/patterns/failure/{orchestrator_snake}.yaml
+  cortex-registry/patterns/_registry.yaml  (index)
 
 AC-ID: AC-OPJ-PHASE52-WRITER
 CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
@@ -173,11 +173,11 @@ class OPJWriter:
 
         Args:
             registry_root: Path to the cortex-registry/ root (or any workspace root
-                           from which integration/patterns/ is resolved). Defaults to
+                           from which patterns/ is resolved). Defaults to
                            the canonical workspace cortex-registry/.
         """
         _base = Path(registry_root) if registry_root is not None else _DEFAULT_REGISTRY
-        self._root = _base / "integration" / "patterns"
+        self._root = _base / "patterns"
         self._success_dir = self._root / "success"
         self._failure_dir = self._root / "failure"
         self._registry_file = self._root / "_registry.yaml"
