@@ -14,15 +14,25 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-0
 from __future__ import annotations
 
 import logging
+import threading
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["IntelligenceFacade"]
+__all__ = ["IntelligenceFacade", "get_intelligence_facade"]
+
+# ── Singleton state (process-level) ──────────────────────────────────────────
+_SINGLETON_LOCK: threading.Lock = threading.Lock()
+_SINGLETON_INSTANCE: Optional["IntelligenceFacade"] = None
 
 
 class IntelligenceFacade:
     """Unified Mediator facade for all CORTEX intelligence operations.
+
+    Process-level singleton (GAP-117-05, Phase 117-b): every call to
+    ``IntelligenceFacade()`` or ``get_intelligence_facade()`` returns the
+    same instance, eliminating duplicate provider/registry init across
+    orchestrators.
 
     Provides three core capabilities through one entry point:
 
@@ -35,9 +45,9 @@ class IntelligenceFacade:
 
     Usage::
 
-        from cortex.intelligence.facade import IntelligenceFacade
+        from cortex.intelligence.facade import get_intelligence_facade
 
-        facade = IntelligenceFacade()
+        facade = get_intelligence_facade()
         analysis = facade.analyze(file_path="cortex/core/engine.py", intent="REFACTOR")
         knowledge = facade.synthesize(query="TDD best practices")
         rules = facade.query(query="governance compliance")
@@ -47,10 +57,21 @@ class IntelligenceFacade:
         _registry: Lazy-loaded KnowledgeRegistryProxy instance.
     """
 
+    def __new__(cls) -> "IntelligenceFacade":
+        """Enforce process-level singleton via double-checked locking."""
+        global _SINGLETON_INSTANCE
+        if _SINGLETON_INSTANCE is None:
+            with _SINGLETON_LOCK:
+                if _SINGLETON_INSTANCE is None:
+                    instance = super().__new__(cls)
+                    instance._provider = None  # type: ignore[attr-defined]
+                    instance._registry = None  # type: ignore[attr-defined]
+                    _SINGLETON_INSTANCE = instance
+        return _SINGLETON_INSTANCE
+
     def __init__(self) -> None:
-        """Initialise the IntelligenceFacade with lazy-loaded delegates."""
-        self._provider: Optional[Any] = None
-        self._registry: Optional[Any] = None
+        """No-op — state is initialised once in ``__new__``."""
+        # Intentionally empty: __new__ sets _provider and _registry on first call.
 
     # ── Lazy delegation ─────────────────────────────────────────────────
 
@@ -241,3 +262,19 @@ class _NullRegistry:
 
     def query(self, **kwargs: Any) -> List[Dict[str, Any]]:
         return []
+
+
+# ── Module-level convenience helper ──────────────────────────────────────────
+
+
+def get_intelligence_facade() -> IntelligenceFacade:
+    """Return the process-level :class:`IntelligenceFacade` singleton.
+
+    Preferred over direct ``IntelligenceFacade()`` calls — makes intent
+    explicit and matches the singleton accessor pattern used across CORTEX
+    (e.g. ``get_intelligence_provider()``, ``get_knowledge_registry()``).
+
+    Returns:
+        The single shared ``IntelligenceFacade`` instance for this process.
+    """
+    return IntelligenceFacade()

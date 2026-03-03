@@ -39,8 +39,8 @@ class SmartCitationsMixin:
             Dict with 'primary_orchestrator', 'chain', 'confidence_boost' keys.
         """
         try:
-            from cortex.intelligence.facade import IntelligenceFacade  # noqa: PLC0415
-            facade = IntelligenceFacade()
+            from cortex.intelligence.facade import get_intelligence_facade  # noqa: PLC0415
+            facade = get_intelligence_facade()
             bp = facade.synthesize(query=f"routing:{intent.lower()}")
             return {
                 "primary_orchestrator": bp.get("recommended_orchestrator", ""),

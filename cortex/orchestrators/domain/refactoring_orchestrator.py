@@ -1174,8 +1174,8 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             Dict with SRP targets, complexity thresholds from knowledge base.
         """
         try:
-            from cortex.intelligence.facade import IntelligenceFacade
-            facade = IntelligenceFacade()
+            from cortex.intelligence.facade import get_intelligence_facade
+            facade = get_intelligence_facade()
             return facade.synthesize(query=f"refactoring:{domain}")
         except Exception:
             return {}

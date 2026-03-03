@@ -134,8 +134,8 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnfor
             operations-rules, data-rules, security-rules YAMLs.
         """
         try:
-            from cortex.intelligence.facade import IntelligenceFacade
-            facade = IntelligenceFacade()
+            from cortex.intelligence.facade import get_intelligence_facade
+            facade = get_intelligence_facade()
             return facade.synthesize(query="governance:enforcement")
         except Exception:
             return {}

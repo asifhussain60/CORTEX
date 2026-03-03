@@ -221,8 +221,12 @@ class MasterOrchestratorGateway:
             )
 
     def classify_intent(self, user_input: str) -> IntentClassification:
-        """
-        Classify intent using LENS protocol.
+        """Classify intent using IntentRouter with keyword fallback.
+
+        Delegates to :class:`cortex.orchestrators.core.intent_router.IntentRouter`
+        first.  If the router is unavailable (import error or runtime failure),
+        falls back to the local keyword-matching heuristic so the gateway
+        always returns a valid ``IntentClassification``.
 
         Args:
             user_input: Raw user input text
@@ -230,6 +234,27 @@ class MasterOrchestratorGateway:
         Returns:
             IntentClassification: LENS classification result
         """
+        # GAP-117-03d (Phase 117-b): delegate to IntentRouter before keyword fallback.
+        try:
+            from cortex.orchestrators.core.intent_router import IntentRouter  # noqa: PLC0415
+            router = IntentRouter()
+            routed = router.route(user_input)
+            if routed and isinstance(routed, dict):
+                primary_intent = str(routed.get("intent", "ANALYZE")).upper()
+                confidence = float(routed.get("confidence", 0.8))
+                requires_mcp = primary_intent in self.MCP_REQUIRED_INTENTS
+                return IntentClassification(
+                    primary_intent=primary_intent,
+                    confidence=confidence,
+                    requires_mcp=requires_mcp,
+                    language=f"Router: {user_input[:50]}",
+                    examination=f"Examine intent: {primary_intent}",
+                    navigation="Navigate to relevant code",
+                    synthesis=f"Synthesize {primary_intent} solution",
+                )
+        except Exception:
+            pass  # Router unavailable — fall through to keyword heuristic
+
         user_lower = user_input.lower()
 
         # Simple keyword-based classification (production would use ML)
@@ -291,8 +316,8 @@ class MasterOrchestratorGateway:
             any(kw in request.user_input.lower() for kw in ["file", "function", "class", "module"])
         )
 
-        # Dependencies check (simplified)
-        dependencies_met = True  # Placeholder
+        # GAP-117-03d (Phase 117-b): use real availability check instead of hardcoded True.
+        dependencies_met = self._adapter.is_available("analyze_code")
 
         # Resources check
         resources_available = self._adapter.is_available("analyze_code")
@@ -323,7 +348,9 @@ class MasterOrchestratorGateway:
         Returns:
             Dict: Execution result
         """
-        # Placeholder execution - delegates to adapter based on intent
+        # GAP-117-03d (Phase 117-b): routes to the adapter based on intent.
+        # ANALYZE delegates to analyze_code(); all other intents fall through
+        # to the processed response (further mode-specific routing added per-intent).
         if request.intent == "ANALYZE":
             file_path = request.context.get("file", "unknown")
             result = self._adapter.analyze_code(file_path)

@@ -285,8 +285,16 @@ class TDDOrchestrator(
             Dict with TDD strategy guidance from knowledge base.
         """
         try:
-            from cortex.intelligence.facade import IntelligenceFacade
-            facade = IntelligenceFacade()
+            from cortex.intelligence.facade import get_intelligence_facade
+            # DESIGN CHOICE (GAP-117-07, Phase 117-b): TDDKnowledgeLoader is an
+            # intentional domain-specific loader — NOT a bypass of IntelligenceFacade.
+            # Two complementary paths exist:
+            #   1. TDDKnowledgeLoader: loads TDD-strategy YAMLs at coordinator init
+            #      (fast, offline, deterministic — used for structured guidance).
+            #   2. IntelligenceFacade.synthesize(): delegates to the intelligence
+            #      pipeline at runtime (context-aware, may call external systems).
+            # _inject_knowledge_context() uses path (2) for live synthesis queries.
+            facade = get_intelligence_facade()
             return facade.synthesize(query=f"tdd:{context}")
         except Exception:
             return {}

@@ -70,31 +70,11 @@ class MasterOrchestratorRequestMixin:
             return ExecutionTier.TARGETED
         return ExecutionTier.FULL
 
-    def _get_intelligence_context(self, intent: str, request: Dict[str, Any]) -> Any:
-        """Retrieve intelligence context at the appropriate tier for this request.
-
-        Phase 78 GAP-78-A-01: Replaces unconditional get_best_practices() calls
-        with tier-aware provider invocation.
-
-        Args:
-            intent: Classified intent string.
-            request: Full request dict used for complexity scoring.
-
-        Returns:
-            UnifiedIntelligenceContext from provider at selected tier.
-        """
-        if not hasattr(self, "_intelligence_provider") or self._intelligence_provider is None:
-            return {}
-        tier = self._select_intelligence_tier(request)
-        from cortex.intelligence.provider import ExecutionTier
-        try:
-            if tier == ExecutionTier.QUICK:
-                return self._intelligence_provider.quick(intent)
-            if tier == ExecutionTier.FULL:
-                return self._intelligence_provider.full(intent)
-            return self._intelligence_provider.targeted(intent)
-        except Exception:
-            return self._intelligence_provider.get_best_practices(intent)
+    # _get_intelligence_context() was REMOVED (GAP-117-04, Phase 117-b).
+    # It was defined but never called from production code — confirmed dead code.
+    # Intelligence context is now served by per-orchestrator calls to
+    # get_intelligence_facade().synthesize() / analyze() / query()
+    # via the process-level singleton helper.
 
     def _opj_post_dispatch(
         self, domain: str, success: bool, latency_ms: float = 0.0, error: str = ""

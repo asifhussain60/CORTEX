@@ -230,9 +230,16 @@ class WorkflowGateway:
 
         try:
             composer = self._get_composer()
+            # GAP-117-06 (Phase 117-b): inject the shared IntelligenceFacade singleton
+            # into the execution context so every workflow step can call
+            # context["intelligence_facade"].analyze() / synthesize() / query()
+            # without constructing a new instance.
+            from cortex.intelligence.facade import get_intelligence_facade as _get_facade
+            enriched_context = dict(context or {})
+            enriched_context.setdefault("intelligence_facade", _get_facade())
             composer_result = composer.execute_from_template(
                 template_id,
-                context or {},
+                enriched_context,
                 convergence_mode=True,
             )
 

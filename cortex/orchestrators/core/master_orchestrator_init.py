@@ -300,8 +300,10 @@ class MasterOrchestratorInitialiser:
 
         # Phase 109: IntelligenceFacade replaces direct KnowledgeRegistryProxy
         # and direct provider init — single canonical entry point.
-        from cortex.intelligence.facade import IntelligenceFacade
-        h._intelligence_facade = IntelligenceFacade()
+        # GAP-117-05 (Phase 117-b): use get_intelligence_facade() to ensure
+        # the process-level singleton is used — no extra allocations.
+        from cortex.intelligence.facade import get_intelligence_facade
+        h._intelligence_facade = get_intelligence_facade()
 
         # Expose underlying delegates for backward compatibility:
         # - _knowledge_proxy: used by knowledge synthesis engine wiring below
