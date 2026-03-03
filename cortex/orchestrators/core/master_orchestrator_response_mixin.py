@@ -6,10 +6,13 @@ Single Responsibility: Format responses with CORTEX headers and policy pipeline.
 """
 from __future__ import annotations
 
+import logging
 from typing import Any, Dict, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cortex.intelligence.knowledge.unified_intelligence_context import UnifiedIntelligenceContext
+
+_log = logging.getLogger(__name__)
 
 # Phase 33/34 optional imports (graceful degradation)
 ChatResponsePolicyValidator = None  # type: ignore[assignment]
@@ -27,8 +30,8 @@ try:
         suppress_verbosity,
         inject_plan_spine,
     )
-except Exception:
-    pass
+except ImportError:  # optional dependency — Phase 116-b GAP-116-04
+    _log.warning("Optional dependency unavailable: cortex.orchestrators.response.chat_response_policy")
 
 try:
     from cortex.orchestrators.response.advanced_optimization import (  # type: ignore[import]
@@ -38,8 +41,8 @@ try:
         Role,
     )
     PHASE_34_AVAILABLE = True
-except Exception:
-    pass
+except ImportError:  # optional dependency — Phase 116-b GAP-116-04
+    _log.warning("Optional dependency unavailable: cortex.orchestrators.response.advanced_optimization")
 
 
 class MasterOrchestratorResponseMixin:

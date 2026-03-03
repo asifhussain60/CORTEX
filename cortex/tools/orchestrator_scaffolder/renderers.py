@@ -10,7 +10,7 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List
 
-from cortex.tools.naming_utils import to_class_name, to_module_name, yaml_type_to_python
+from cortex.tools.naming_utils import to_module_name, yaml_type_to_python
 
 
 def render_orchestrator(

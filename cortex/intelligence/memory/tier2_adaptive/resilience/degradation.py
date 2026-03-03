@@ -12,7 +12,6 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from cortex.intelligence.memory.tier2_adaptive.resilience.models import (
     ComponentFailure,
-    FallbackStrategy,
 )
 
 logger = logging.getLogger(__name__)

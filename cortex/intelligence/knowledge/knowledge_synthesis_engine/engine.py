@@ -25,10 +25,6 @@ from cortex.intelligence.knowledge.knowledge_synthesis_engine.models import (
 )
 from cortex.intelligence.knowledge.knowledge_synthesis_engine.loaders import (
     load_cortex_best_practices,
-    get_core_rules,
-    map_intent_to_yamls,
-    keyword_fallback_matching,
-    extract_practices_from_yaml,
     KNOWLEDGE_INDEX_PATH,
 )
 from cortex.intelligence.knowledge.knowledge_synthesis_engine.synthesizers import (

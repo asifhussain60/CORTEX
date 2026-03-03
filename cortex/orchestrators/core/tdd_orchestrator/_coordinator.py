@@ -33,7 +33,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
-    from cortex.orchestrators.intelligence.agent_rules_interpreter import ExecutionDirective
+    pass
 
 # ---------------------------------------------------------------------------
 # Public data models — re-exported for backward compatibility (90+ callers)

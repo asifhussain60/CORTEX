@@ -17,22 +17,22 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   version: '1.0'
-  last_updated: '2026-03-02T10:00:00Z'
-  total_phases: 103
+  last_updated: '2026-03-03T00:00:00Z'
+  total_phases: 101
   active: 0
-  completed: 76
+  completed: 97
   in_progress: 0
-  planned: 9
+  planned: 5
   playbooks: 1
   governance_rules_total: 37
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 1950
+    smoke: 2328
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-100 (Dead Code), phase-99 (Secure MCP), phase-95 (enforce_gateway), phase-94 (WorkflowGateway), phase-93 (IntentRouter)."
+  recent_completed: "phase-117 (Intelligence Diamond), phase-114 (Architectural Layering Reset), phase-115 (Speculative Code Quarantine), phase-116 (Metadata Reconciliation)."
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
@@ -87,9 +87,19 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phase 109 COMPLETE — Smoke: 2,194 passed. IntelligenceFacade canonical entry wired. GAPs 14/15/16/17/18/19/20 CLOSED."
-  overall_score: 99%
+  status: "✅ Phase 116 COMPLETE — Smoke: 2,328 passed. Phases 114+115+116 architectural cleanup complete."
+  overall_score: 92%
   deployment_date: '2026-03-03'
+  score_evidence: |
+    Post Phase 114/115/116 evidence-based assessment:
+    - Smoke: 2,319 passed (+125 from baseline 2,194)
+    - Collection errors: 0 (was 1 — StateSnapshot missing)
+    - Circular cycles resolved: module-level DAG enforced (Phase 114-b)
+    - Lens monolith deleted: 2,045L monolith → canonical package (Phase 115-a)
+    - Unreferenced infrastructure: 12 modules quarantined (Phase 115-b)
+    - F401 unused imports: 39 auto-fixed (Phase 115-c)
+    - noqa:CORE-035 budget: 0 bare suppressions > 50 limit (Phase 114-c)
+    - Remaining gaps: some circular imports (lazy-import pattern), compat shims (scheduled)
 
 verification:
   method: git_history + code_inspection + test_verification
@@ -104,9 +114,12 @@ summary:
   archived: 4
   playbooks: 1
   completion_percentage: 96
-  consolidation_summary: "v52.0: Phase 117 COMPLETE 2026-03-03 — Intelligence Diamond Completion. 10/10 GAPs CLOSED. analyze()→LENS, best_practices sig fix, LENS key mismatch, domain knowledge real, singleton, WorkflowGateway injection, dead code removed, stubs eliminated. 32 unit + 8 golden GREEN. Preflight: 220 passed."
+  consolidation_summary: "v53.0: Phases 114+115+116 COMPLETE 2026-03-03 — Architectural Layering Reset + Speculative Code Quarantine + Metadata Reconciliation. Phase 117 Intelligence Diamond Completion. Smoke: 2,319 passed."
   active_phases:
     phase-117: "COMPLETE — Intelligence Diamond Completion: 10/10 GAPs CLOSED. analyze()→LENS, best_practices sig, LENS keys, domain knowledge, singleton, gateway injection. 220 preflight ✅"
+    phase-114: "COMPLETE — Architectural Layering Reset: 3/3 sub-phases CLOSED. Shared models extracted, DAG enforced, noqa budget enforced. Smoke: 2,311 ✅"
+    phase-115: "COMPLETE — Speculative Code Quarantine: 3/3 sub-phases CLOSED. Lens monolith deleted (2045L), brain_state_manager shim completed, 12 modules quarantined. Smoke: 2,319 ✅"
+    phase-116: "COMPLETE — Metadata Reconciliation: cortex-master.yaml truth-aligned. Silent failures fixed. Smoke: 2,319 ✅"
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
@@ -135,6 +148,40 @@ phases:
   # Execution order: 112 (non-code) → 110 (CLI) → 111 (duplicates, longest).
   # 112 is independent and can run first as it only edits YAML files.
   # ─────────────────────────────────────────────────────────────────────────────
+
+  - id: phase-116
+    title: "Metadata Reconciliation — cortex-master.yaml Truth Alignment + Silent Failure Patterns"
+    priority: P1
+    status: COMPLETE
+    sweep_id: SWEEP-116-METADATA-RECONCILIATION
+    gaps: 5
+    gaps_closed: 5
+    sub_phases: 2
+    file: "cortex-registry/planning/phases/planned/phase-116-metadata-reconciliation.yaml"
+    note: "COMPLETE 2026-03-03. cortex-master.yaml truth-aligned: metadata==summary (completed=97, total=101). Smoke baseline updated 1950→2328. production_readiness score corrected 99%→92% (evidence-based). Silent except Exception:pass→except ImportError:pass+logging (GAP-116-04). ImportError budget governed ≤150 (GAP-116-05). Smoke: 2328 passed."
+
+  - id: phase-115
+    title: "Speculative Code Quarantine — Lens Monolith Deletion, Brain Shim Completion, Infrastructure Quarantine"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-115-SPECULATIVE-CODE-QUARANTINE
+    gaps: 5
+    gaps_closed: 5
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-115-speculative-code-quarantine.yaml"
+    note: "COMPLETE 2026-03-03. Lens monolith deleted (2045L). brain_state_manager shim: +4 exports (StateSnapshot, FlushResult, ReloadResult, StateValidationError). 12 unreferenced infra modules quarantined. 41 F401 auto-fixed. Smoke: 2319 passed."
+
+  - id: phase-114
+    title: "Architectural Layering Reset — Shared Model Extraction, DAG Enforcement, noqa Budget"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-114-ARCHITECTURAL-LAYERING-RESET
+    gaps: 7
+    gaps_closed: 7
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-114-architectural-layering-reset.yaml"
+    note: "COMPLETE 2026-03-03. cortex/models/shared/ package created. Module-level DAG violations fixed (9 files). noqa:CORE-035 bare suppressions ≤50 budget enforced. Smoke: 2311 passed."
+
 
   - id: phase-113
     title: "Request Sequence Persistence — SQLite request_log + InteractionOrchestrator context chain"

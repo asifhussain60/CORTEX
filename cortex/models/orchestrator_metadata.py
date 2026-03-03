@@ -9,11 +9,14 @@ across registry, lookup, and runtime systems.
 """
 # noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional
 
-from cortex.core.interfaces.i_orchestrator import IOrchestrator
+if TYPE_CHECKING:
+    from cortex.core.interfaces.i_orchestrator import IOrchestrator  # noqa: CORE-035  # interface pattern — L0 model references L1 interface type-hint only
 
 
 @dataclass
@@ -31,7 +34,7 @@ class OrchestratorMetadata:
         registered_at: ISO timestamp of registration
     """
     domain: str
-    orchestrator: IOrchestrator
+    orchestrator: "IOrchestrator"
     version: str = "1.0"
     capabilities: List[str] = field(default_factory=list)
     registered_at: str = field(default_factory=lambda: datetime.now().isoformat())

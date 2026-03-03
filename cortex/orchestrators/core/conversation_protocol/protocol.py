@@ -32,7 +32,6 @@ from cortex.orchestrators.core.terminal_events import (
     TokenLimitEvent,
     UserApprovalRejectedEvent,
 )
-from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
 
 from cortex.orchestrators.core.conversation_protocol.models import (
     RequestComplexityClassifier,

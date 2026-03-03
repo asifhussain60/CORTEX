@@ -33,13 +33,9 @@ from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
 from cortex.orchestrators.core.routing_enforcement import RoutingEnforcementEngine
 from cortex.orchestrators.core.intent_router import (
     WorkflowComplexityRouter,
-    Intent as ComplexityIntent,
 )
 from cortex.orchestrators.core.intent_classifier import IntentClassifier as _IntentClassifier
 from cortex.governance import GoldenHammerRules
-from cortex.intelligence.knowledge.unified_intelligence_context import (
-    UnifiedIntelligenceContext,
-)
 
 # Phase 103-b mixins (extracted from this file)
 from cortex.orchestrators.core.intent_router.keyword_registry import IntentKeywordRegistry

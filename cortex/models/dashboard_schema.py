@@ -9,15 +9,32 @@ AC-ID: AC-DASHBOARD-SCHEMA-002
 Authority: CORE-011 (Type hints), CORE-012 (Docstrings), CORE-035 (Single implementation)
 """
 
+from __future__ import annotations
+
 import json
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Tuple
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple
 
-from cortex.core.common.debug_logger import (
-    dashboard_debug,
-    log_dashboard_debug,
-    log_dashboard_schema_validation,
-)
+if TYPE_CHECKING:
+    pass
+
+
+# LAZY: debug_logger lives in cortex.core (L1); models/ is L0 — import at point-of-use
+def _get_debug_helpers() -> tuple:
+    try:
+        from cortex.core.common.debug_logger import (  # LAZY: L1 dep from L0; isolated to this helper
+            dashboard_debug,
+            log_dashboard_debug,
+            log_dashboard_schema_validation,
+        )
+        return dashboard_debug, log_dashboard_debug, log_dashboard_schema_validation
+    except ImportError:
+        identity: Callable = lambda f: f  # noqa: E731
+        noop: Callable = lambda *a, **kw: None  # noqa: E731
+        return identity, noop, noop
+
+
+dashboard_debug, log_dashboard_debug, log_dashboard_schema_validation = _get_debug_helpers()
 
 
 @dataclass

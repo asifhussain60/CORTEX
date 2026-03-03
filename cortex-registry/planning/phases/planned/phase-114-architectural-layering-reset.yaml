@@ -6,7 +6,7 @@ id: "phase-114"
 title: "Architectural Layering Reset — Dependency DAG Enforcement, Circular Reference Elimination, Shared Model Extraction"
 version: "1.0"
 created: "2026-03-03"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008   # TDD mandatory

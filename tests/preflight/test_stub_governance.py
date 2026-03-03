@@ -77,6 +77,10 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/intelligence/relationship_traversal.py",
     "cortex/intelligence/routing_intelligence.py",
     "cortex/intelligence/turn_context.py",
+    # Phase 114-a — Shared model extraction compat re-exports (expiry: 2026-09-03)
+    # Canonical definitions remain in cortex/models/validation_result.py (unchanged)
+    # cortex/models/shared/validation.py re-exports for import-path unification (GAP-114-01)
+    "cortex/models/shared/validation.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

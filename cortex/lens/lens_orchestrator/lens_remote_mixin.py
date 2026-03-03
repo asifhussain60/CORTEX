@@ -14,7 +14,6 @@ Authority: CORE-008, CORE-011, CORE-012, LENS-003
 from __future__ import annotations
 
 import time
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer

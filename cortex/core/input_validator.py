@@ -11,15 +11,18 @@ Components:
 - ValidationError: Custom exception for validation failures
 """
 
+from __future__ import annotations
+
 import json
 import logging
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
-from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+if TYPE_CHECKING:
+    pass  # noqa: CORE-035  # interface pattern — used in type hints only
 
 
 class SeverityLevel(Enum):
@@ -148,6 +151,7 @@ class InputValidator:
 
     def __init__(self) -> None:
         """Initialize InputValidator"""
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry  # LAZY: L3 registry; lazy import breaks L1→L3 module-level DAG violation
         self.logger = logging.getLogger(__name__)
         self.governance_registry = GovernanceRegistry.instance()
         self._ac_id_cache: Set[str] = set()

@@ -13,12 +13,16 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.orchestrators.core.governance_registry import (
-    GovernanceRegistry,
-)
 from cortex.core.interfaces import GovernanceRule
+
+if TYPE_CHECKING:
+    pass  # noqa: CORE-035  # interface pattern — registry lives in L3
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +74,7 @@ class RuleEvaluator:
 
     def __init__(self) -> None:
         """Initialize rule evaluator with registry and audit logger."""
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry  # LAZY: GovernanceRegistry lives in L3; lazy import breaks L1→L3 module-level cycle
         self.logger = EnhancedAuditLogger.instance()
         self.registry = GovernanceRegistry.instance()
 

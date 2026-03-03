@@ -11,7 +11,7 @@ Authority: CORE-008, CORE-011, CORE-012, LENS-003
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 __all__ = ["LensVisionMixin"]
 

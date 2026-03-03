@@ -10,14 +10,18 @@ Provides utilities for:
 Author: Asif Hussain
 """
 
+from __future__ import annotations
+
 import logging
-from typing import Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from cortex.core.result import Err, Ok, Result
-from cortex.orchestrators.core.governance_registry import (
-    GovernanceRegistry,
-    GovernanceRule,
-)
+
+if TYPE_CHECKING:
+    from cortex.orchestrators.core.governance_registry import (  # noqa: CORE-035  # interface pattern
+        GovernanceRegistry,
+        GovernanceRule,
+    )
 
 
 class TierResolver:
@@ -30,17 +34,18 @@ class TierResolver:
     - Tier 2 (engineering standards) lowest precedence
     """
 
-    def __init__(self, registry: Optional[GovernanceRegistry] = None) -> None:
+    def __init__(self, registry: Optional["GovernanceRegistry"] = None) -> None:
         """
         Initialize tier resolver.
 
         Args:
             registry: GovernanceRegistry instance (uses singleton if None)
         """
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry  # LAZY: L3 registry; lazy import breaks L1→L3 module-level DAG violation
         self._registry = registry or GovernanceRegistry.instance()
         self._logger = logging.getLogger(__name__)
 
-    def get_effective_rule(self, rule_id: str) -> Result[Optional[GovernanceRule]]:
+    def get_effective_rule(self, rule_id: str) -> "Result[Optional[GovernanceRule]]":
         """
         Get the effective rule applying tier precedence.
 

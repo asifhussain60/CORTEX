@@ -20,8 +20,6 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.core.tdd_orchestrator.tdd_models import (
-    GateResult,
-    SuccessCriteria,
     TDDImplementationGuidance,
     TDDPhase,
 )

@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import logging
 import time
-import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
@@ -38,11 +37,6 @@ from cortex.lens.lens_orchestrator.lens_vision_mixin import LensVisionMixin
 from cortex.lens.lens_orchestrator.lens_models import LENSContext
 
 # Infrastructure
-from cortex.lens.analysis.vision_analyzer import VisionAnalyzer
-from cortex.lens.analysis.remote_git_adapter import RemoteGitAdapter
-from cortex.lens.analysis.branch_comparator import BranchComparator
-from cortex.intelligence.base import AnalysisContext
-from cortex.intelligence.relationships.traversal import RelationshipTraversalEngine
 from cortex.lens.analyzers.api_analyzer import get_api_analyzer
 from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
 from cortex.lens.analyzers.comment_extractor import CommentExtractor

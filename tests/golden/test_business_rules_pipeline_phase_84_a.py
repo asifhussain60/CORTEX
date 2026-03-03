@@ -26,22 +26,31 @@ class TestRuleExtractorLensWiring:
     def test_rule_extractor_importable_from_lens(self) -> None:
         """
         GAP-84-01: RuleExtractor is importable from cortex.lens context.
-        Verifies the LENS module directly imports RuleExtractor.
+        Phase 115: lens_orchestrator.py monolith deleted — check the package coordinator.
+
+        Updated: Phase 115-b — monolith deleted; source check migrated to package coordinator.
         """
-        lens_orch = CORTEX_SRC / "lens" / "lens_orchestrator.py"
-        assert lens_orch.exists(), "lens_orchestrator.py must exist"
-        source = lens_orch.read_text()
+        # The monolith has been deleted (Phase 115-a). The canonical source is the package.
+        coordinator = CORTEX_SRC / "lens" / "lens_orchestrator" / "_coordinator.py"
+        assert coordinator.exists(), (
+            "cortex/lens/lens_orchestrator/_coordinator.py must exist (package canonical)"
+        )
+        source = coordinator.read_text()
         assert "RuleExtractor" in source, (
-            "lens_orchestrator.py must import RuleExtractor — GAP-84-01 not resolved"
+            "_coordinator.py must import RuleExtractor — GAP-84-01 not resolved"
         )
 
     def test_lens_orchestrator_invokes_rule_extractor(self) -> None:
         """
         GAP-84-01: LENS targeted analysis calls RuleExtractor on Python files.
         Verifies _extract_business_rules method exists in LENSOrchestrator.
+        Phase 115: migrated from monolith to package coordinator.
         """
-        lens_orch = CORTEX_SRC / "lens" / "lens_orchestrator.py"
-        source = lens_orch.read_text()
+        coordinator = CORTEX_SRC / "lens" / "lens_orchestrator" / "_coordinator.py"
+        assert coordinator.exists(), (
+            "cortex/lens/lens_orchestrator/_coordinator.py must exist"
+        )
+        source = coordinator.read_text()
         assert "_extract_business_rules" in source, (
             "LENSOrchestrator must have _extract_business_rules() method — GAP-84-01"
         )

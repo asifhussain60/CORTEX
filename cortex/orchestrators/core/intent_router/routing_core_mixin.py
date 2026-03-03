@@ -21,7 +21,6 @@ import yaml
 
 from cortex.models.canonical_enums import IntentType
 from cortex.orchestrators.core.routing_enforcement import (
-    RoutingEnforcementEngine,
     RoutingViolation,
 )
 
@@ -514,7 +513,6 @@ class RoutingCoreMixin:
         try:
             from cortex.orchestrators.core.intent_router_impl import RoutingDecision  # noqa: PLC0415
             from cortex.orchestrators.core.intent_router import (  # noqa: PLC0415
-                WorkflowComplexityRouter,
                 Intent as ComplexityIntent,
             )
             from cortex.orchestrators.core.intent_router.workflow_gate import (  # noqa: PLC0415

@@ -8,7 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Callable, Dict, List
 
-from cortex.tools.naming_utils import to_class_name, to_module_name, yaml_type_to_python
+from cortex.tools.naming_utils import to_class_name, to_module_name
 from cortex.tools.template_parser import ParsedTemplate
 from cortex.tools.tool_generator.models import (
     GeneratedTool,

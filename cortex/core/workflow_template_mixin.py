@@ -12,15 +12,17 @@ Phase: 23 — Workflow Template Injection
 Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
 """
 
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import yaml
 
-from cortex.orchestrators.workflow.template_registry import (
-    TemplateNotFoundError,
-    WorkflowTemplateRegistry,
-)
+if TYPE_CHECKING:
+    from cortex.orchestrators.workflow.template_registry import (  # noqa: CORE-035  # interface pattern — registry in L3
+        WorkflowTemplateRegistry,
+    )
 
 
 class WorkflowTemplateMixin:
@@ -62,7 +64,7 @@ class WorkflowTemplateMixin:
         "VacuumOrchestrator": "maintenance/vacuum-workflow",
     }
 
-    _registry: Optional[WorkflowTemplateRegistry] = None
+    _registry: Optional["WorkflowTemplateRegistry"] = None
     _registry_loaded: bool = False
 
     def _ensure_registry_loaded(self) -> None:
@@ -75,6 +77,7 @@ class WorkflowTemplateMixin:
         if self._registry_loaded and self._registry is not None:
             return
 
+        from cortex.orchestrators.workflow.template_registry import WorkflowTemplateRegistry  # LAZY: template registry in L3; lazy import breaks L1→L3 DAG violation
         self._registry = WorkflowTemplateRegistry()
         templates_dir = self._find_templates_dir()
 
@@ -210,6 +213,7 @@ class WorkflowTemplateMixin:
         """
         self._ensure_registry_loaded()
         if self._registry is None:
+            from cortex.orchestrators.workflow.template_registry import TemplateNotFoundError  # LAZY: exception in L3
             raise TemplateNotFoundError(
                 f"Template registry not initialized. Cannot load: {template_id}"
             )

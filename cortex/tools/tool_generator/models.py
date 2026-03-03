@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import List, Optional
 
 
 class ToolType(Enum):

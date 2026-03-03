@@ -102,4 +102,4 @@ class CentralBrainOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
 
 # Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → collaboration naming)
 # CORE-035: CentralBrainOrchestrator remains canonical; CollaborationOrchestrator is the forward path.
-CollaborationOrchestrator = CentralBrainOrchestrator  # noqa: CORE-035
+CollaborationOrchestrator = CentralBrainOrchestrator  # noqa: CORE-035  # alias pattern — backward compat re-export
