@@ -1,9 +1,13 @@
 """cortex_intelligence_integration.py — Intelligence Integration.
 
-Delegates to UnifiedIntelligenceProvider for real intelligence queries (Phase 84-c, GAP-84-10).
+Delegates to IntelligenceFacade for all intelligence queries (Phase 109-D, GAP-109-14).
 Imported by cortex/orchestrators/core/business_wisdom_formatter.py.
 
-Authority: CORE-011 (type hints), CORE-012 (docstrings)
+Phase 84-c (GAP-84-10): Original implementation.
+Phase 109-D (GAP-109-14): Migrated from UnifiedIntelligenceProvider to IntelligenceFacade
+  — single canonical entry point per CORE-035.
+
+Authority: CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
 """
 from __future__ import annotations
 
@@ -15,16 +19,19 @@ logger = logging.getLogger(__name__)
 
 class CortexIntelligenceIntegration:
     """
-    Bridges the tool layer with the intelligence provider by delegating to
-    UnifiedIntelligenceProvider (GAP-84-10).
+    Bridges the tool layer with the intelligence layer via IntelligenceFacade (GAP-109-14).
 
-    Replaces the hollow stub that returned empty responses.
+    Routes all queries through the single canonical IntelligenceFacade entry point
+    instead of calling UnifiedIntelligenceProvider directly. This ensures CORE-035
+    compliance and gives IntelligenceFacade visibility into all tool-layer intelligence
+    calls.
+
     Uses lazy import to avoid circular dependencies.
     """
 
     def query(self, domain: str, prompt: str) -> Dict[str, Any]:
         """
-        Query the intelligence layer by delegating to UnifiedIntelligenceProvider.
+        Query the intelligence layer by delegating to IntelligenceFacade.
 
         Args:
             domain: Intelligence domain to query (e.g. 'security', 'architecture').
@@ -34,10 +41,10 @@ class CortexIntelligenceIntegration:
             Intelligence response dictionary with domain, response, and status.
         """
         try:
-            from cortex.intelligence.provider import UnifiedIntelligenceProvider
+            from cortex.intelligence.facade import IntelligenceFacade
 
-            provider = UnifiedIntelligenceProvider()
-            result = provider.query(domain=domain, prompt=prompt)
+            facade = IntelligenceFacade()
+            result = facade.query(query=prompt, domain=domain)
             if isinstance(result, dict):
                 return {"domain": domain, **result, "status": "ok"}
             return {"domain": domain, "response": str(result), "status": "ok"}

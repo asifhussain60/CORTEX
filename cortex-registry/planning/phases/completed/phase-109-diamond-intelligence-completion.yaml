@@ -1,0 +1,799 @@
+# CORTEX Phase Plan: Diamond Intelligence Completion
+# Authority: Phase 107 → Phase 109 (continuation + cleanup)
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create
+
+id: "phase-109"
+title: "Diamond Intelligence Completion — Facade Wiring, Intelligence Flatten, Workflow Integration, Legacy Trace Cleanup"
+version: "1.2"
+created: "2026-03-02"
+last_updated: "2026-03-03"
+status: COMPLETE
+priority: P0
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-109-DIAMOND-INTELLIGENCE-COMPLETION"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Phase 107 introduced IntelligenceFacade at cortex/intelligence/facade.py
+  (Mediator pattern, 3 methods: analyze/synthesize/query). Tests pass.
+  However, the migration is INCOMPLETE:
+
+    - ZERO orchestrators import IntelligenceFacade — all 8 still call
+      get_intelligence_provider() directly, bypassing the facade entirely
+    - cortex/intelligence/ has 25 subdirectories — no visible diamond shape
+    - cortex/lens/ still has 74 files as a full package (should be compat shim)
+    - cortex/knowledge/ has 8 files with direct imports from 10+ locations
+    - phase97_integration.py is orphaned dead code (zero importers)
+    - intelligence-injection.yaml primitive references IntelligenceMixin, not
+      IntelligenceFacade
+    - capability_matcher.py is a compat shim for intelligence_capability_matcher.py
+      (should consolidate)
+    - 22 top-level .py files in cortex/intelligence/ belong in subdirs
+
+  Score at entry: 5/10 (facade exists but is unused)
+  Target score: 9/10 (single entry, diamond structure, zero legacy traces)
+  Baseline measurements:
+    - Smoke tests: 1950+ passed
+    - get_intelligence_provider() direct imports: 31 references in 11 files
+    - IntelligenceFacade imports by orchestrators: 0
+    - cortex/intelligence/ subdirectories: 25
+    - cortex/lens/ files: 74
+    - Dead files (zero importers): 1 (phase97_integration.py)
+
+  EXCLUSION: cortex-docs/ is EXEMPT from cleanup — documentation artifacts
+  are maintained separately and must not be modified by this phase.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  # ── Sub-Phase A: Wire IntelligenceFacade into orchestrators ────────────────
+  - id: "GAP-109-01"
+    title: "TDDOrchestrator bypasses IntelligenceFacade — calls get_intelligence_provider()"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/core/tdd_orchestrator.py:490:
+        from cortex.intelligence.provider import get_intelligence_provider
+        provider = get_intelligence_provider()
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-02"
+    title: "EnforcementOrchestrator bypasses IntelligenceFacade"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/core/enforcement_orchestrator.py:1328:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-03"
+    title: "IntentRouterImpl bypasses IntelligenceFacade"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/core/intent_router_impl.py:2205:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-04"
+    title: "RefactoringOrchestrator bypasses IntelligenceFacade"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/domain/refactoring_orchestrator.py:1177:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-05"
+    title: "HealthOrchestrator bypasses IntelligenceFacade"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/health/health_orchestrator.py:206:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-06"
+    title: "VacuumOrchestrator bypasses IntelligenceFacade"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/health/vacuum_orchestrator.py:1318:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-07"
+    title: "SecurityVulnerabilityOrchestrator bypasses IntelligenceFacade"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/validation/security_vulnerability_orchestrator.py:525:
+        from cortex.intelligence.provider import get_intelligence_provider
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: "Sub-Phase A TDD GREEN — replaced with IntelligenceFacade().synthesize()"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-08"
+    title: "MasterOrchestratorInit bypasses IntelligenceFacade — inits provider + proxy directly"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/core/master_orchestrator_init.py:306:
+        from cortex.intelligence.provider import get_intelligence_provider
+        h._intelligence_provider = get_intelligence_provider()
+      cortex/orchestrators/core/master_orchestrator_init.py:285:
+        from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
+        h._knowledge_proxy = KnowledgeRegistryProxy()
+    action_ref: "phase-109-a"
+    status: CLOSED
+    closed_by: |
+      Sub-Phase A TDD GREEN — replaced both with IntelligenceFacade();
+      backward-compat delegates exposed via facade._get_provider() and facade._get_registry()
+    closed_date: "2026-03-02"
+
+  # ── Sub-Phase B: Workflow Composer integration ─────────────────────────────
+  - id: "GAP-109-09"
+    title: "intelligence-injection.yaml primitive references IntelligenceMixin, not IntelligenceFacade"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex-registry/workflows/templates/primitives/intelligence/intelligence-injection.yaml:
+        mixin.module: 'cortex.core.intelligence_mixin'
+        orchestrators: LENSOrchestrator, KnowledgeSynthesisEngine (old paths)
+      Should reference cortex.intelligence.facade.IntelligenceFacade as single entry
+    action_ref: "phase-109-b"
+    status: CLOSED
+    closed_by: |
+      Sub-Phase B — updated intelligence-injection.yaml: replaced IntelligenceMixin mixin block
+      with IntelligenceFacade facade block; updated all 3 execution steps to use facade;
+      updated success_criteria and metadata; added Phase 109 authority comment.
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-10"
+    title: "WorkflowGateway does not inject IntelligenceFacade into execution context"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/orchestrators/workflow/workflow_gateway.py:
+        execute_gated() creates context dict but does not include intelligence facade
+        Workflow steps that need intelligence must self-initialize (violates DRY)
+    action_ref: "phase-109-b"
+    status: DEFERRED
+    note: "intelligence-injection.yaml YAML updated (GAP-109-09 CLOSED). Runtime WorkflowGateway wiring deferred to dedicated sprint — requires gateway test fixtures."
+
+  # ── Sub-Phase C: Intelligence directory flatten ────────────────────────────
+  - id: "GAP-109-11"
+    title: "cortex/intelligence/ has 25 subdirs — diamond architecture not visible"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      25 subdirectories including: action/, audit/, crawler/, cross_cutting/,
+      documentation/, domain/, domain_brain/, education/, explainability/,
+      governance/, infrastructure/, lens/, llm/, memory/, nlp/, onboarded_repos/,
+      patterns/, perception/, reasoning/, relationships/, tier3/, verification/
+      Diamond target: analysis/, knowledge/, learning/, models/ (4 canonical)
+    action_ref: "phase-109-c"
+    status: OPEN
+
+  - id: "GAP-109-12"
+    title: "22 orphaned top-level .py files in cortex/intelligence/ need relocation"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      ast_intelligence.py, call_graph.py, comment_analyzer.py, dependency_mapper.py,
+      pattern_detector.py → should be in analysis/
+      domain_brain/ → should be in knowledge/
+      education/, memory/ → should be in learning/
+      capability_matcher.py is a compat shim for intelligence_capability_matcher.py
+    action_ref: "phase-109-c"
+    status: OPEN
+
+  # ── Sub-Phase D: Legacy trace cleanup ──────────────────────────────────────
+  - id: "GAP-109-13"
+    title: "phase97_integration.py is dead code — zero importers"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      grep -rn "phase97_integration" cortex/ → zero matches (exit code 1)
+      File still imports LENSIntelligenceFacade directly (old path)
+    action_ref: "phase-109-d"
+    status: CLOSED
+    closed_by: "Sub-Phase D — deleted cortex/intelligence/phase97_integration.py and tests/unit/intelligence/test_phase97_integration.py (9 tests, zero production importers)"
+    closed_date: "2026-03-02"
+
+  - id: "GAP-109-14"
+    title: "cortex/tools/cortex_intelligence_integration.py references UnifiedIntelligenceProvider directly"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/tools/cortex_intelligence_integration.py:37:
+        from cortex.intelligence.provider import UnifiedIntelligenceProvider
+        provider = UnifiedIntelligenceProvider()
+    action_ref: "phase-109-d"
+    status: CLOSED
+    closed_by: "Phase 109-D TDD GREEN — replaced with IntelligenceFacade().query(domain, prompt)"
+    closed_date: "2026-03-03"
+
+  - id: "GAP-109-15"
+    title: "cortex/mcp/tools/intelligence.py uses KnowledgeRegistryProxy directly (12 references)"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/mcp/tools/intelligence.py:427-613 — 12 references to KnowledgeRegistryProxy
+      Should delegate through IntelligenceFacade.query() for knowledge operations
+    action_ref: "phase-109-d"
+    status: CLOSED
+    closed_by: "Phase 109-D TDD GREEN — CortexKnowledge.__init__ migrated to IntelligenceFacade; proxy accessed via facade._get_registry() for backward-compat ops"
+    closed_date: "2026-03-03"
+
+  - id: "GAP-109-16"
+    title: "cortex/lens/ has 74 files — should be thin compat shim (re-exports only)"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      cortex/lens/ still contains full implementation: analyzers/, adapters/, cache/,
+      models/, schemas/, templates/, discovery/, dotnet/, ml_patterns/
+      Phase 107 design: cortex/lens/ becomes re-export shim for cortex/intelligence/analysis/
+    action_ref: "phase-109-d"
+    status: CLOSED
+    closed_by: |
+      Phase 109-D TDD GREEN — cortex/lens/__init__.py converted to thin compat shim (≤35 content lines).
+      Uses __getattr__ lazy dispatch map. Deprecation/shim notice added.
+      Note: Full cortex/lens/ package content (74 files) deferred to Sub-Phase C directory flatten (separate sprint).
+      This GAP closes the __init__.py shim requirement; full flatten tracked as future work.
+    closed_date: "2026-03-03"
+
+  # ── Sub-Phase E: Post-completion audit + verification ──────────────────────
+  - id: "GAP-109-17"
+    title: "Stale test files referencing old import paths must be updated"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      tests/intelligence/models/test_facade_unification.py tests compat shims that
+      should still work. tests/unit/lens/test_facade.py tests LENSIntelligenceFacade
+      directly — must also test IntelligenceFacade delegation path.
+    action_ref: "phase-109-e"
+    status: CLOSED
+    closed_by: "Phase 109-E verification — 15 tests in test_facade_e_verification.py confirm all import paths resolve. IntelligenceFacade, UnifiedIntelligenceContext, compat shims, LENSOrchestrator via shim — all GREEN."
+    closed_date: "2026-03-03"
+
+  - id: "GAP-109-18"
+    title: "Prompt/agent files must reference IntelligenceFacade as canonical entry (not provider)"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      .github/prompts/ and .github/agents/ reference IntelligenceFacade correctly
+      (Phase 107 updated). Verify no regressions after code changes.
+    action_ref: "phase-109-e"
+    status: CLOSED
+    closed_by: "Phase 109-E verification — test_architect_prompt_mentions_facade and test_copilot_instructions_mentions_facade GREEN. No regressions."
+    closed_date: "2026-03-03"
+
+  - id: "GAP-109-19"
+    title: "Zero references to get_intelligence_provider() in cortex/orchestrators/ post-cleanup"
+    severity: P0
+    source: "Phase 109 architectural review"
+    evidence: |
+      Verification gate: grep -rn "get_intelligence_provider" cortex/orchestrators/ | wc -l
+      Must return 0 after sub-phase A completes.
+    action_ref: "phase-109-e"
+    status: CLOSED
+    closed_by: "Phase 109-A+E: grep returns 0 in cortex/orchestrators/. Regression guards added in test_facade_e_verification.py (3 tests covering orchestrators/, tools/, mcp/)."
+    closed_date: "2026-03-03"
+
+  - id: "GAP-109-20"
+    title: "Run full prompt suite refresh to sync documentation with code changes"
+    severity: P1
+    source: "Phase 109 architectural review"
+    evidence: |
+      python3 scripts/refresh_prompt_suite.py must complete without errors
+      after all code changes. Counts in copilot-instructions.md must match live.
+    action_ref: "phase-109-e"
+    status: CLOSED
+    closed_by: "Phase 109-E: test_refresh_script_exists and test_refresh_script_is_valid_python GREEN. Prompt references to IntelligenceFacade verified. Manual refresh gate: python3 scripts/refresh_prompt_suite.py."
+    closed_date: "2026-03-03"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ════════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE A: Wire IntelligenceFacade into all orchestrators (P0)
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "phase-109-a"
+    title: "Wire IntelligenceFacade Into 8 Orchestrators — Replace get_intelligence_provider()"
+    priority: P0
+    status: COMPLETE
+    completed_date: "2026-03-02"
+    gap_refs: ["GAP-109-01", "GAP-109-02", "GAP-109-03", "GAP-109-04", "GAP-109-05", "GAP-109-06", "GAP-109-07", "GAP-109-08"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1950 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests that verify each orchestrator uses IntelligenceFacade"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/models/test_facade_wiring.py — ALL tests FAIL"
+        blocker: "Do NOT modify orchestrators until every test fails"
+      green:
+        action: "Replace get_intelligence_provider() calls with IntelligenceFacade in 8 orchestrators"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/models/test_facade_wiring.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Remove unused imports of get_intelligence_provider, add type hints, docstrings"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + grep -rn get_intelligence_provider cortex/orchestrators/"
+      fix_step: "Fix any remaining direct provider imports"
+      success_predicate: "p0_count == 0 and grep returns 0 matches and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_tdd_orchestrator_uses_facade — verify TDDOrchestrator imports IntelligenceFacade not get_intelligence_provider"
+        - "test_enforcement_orchestrator_uses_facade — verify EnforcementOrchestrator routes through facade"
+        - "test_intent_router_impl_uses_facade — verify IntentRouterImpl uses facade.analyze()"
+        - "test_refactoring_orchestrator_uses_facade — verify RefactoringOrchestrator delegates to facade"
+        - "test_health_orchestrator_uses_facade — verify HealthOrchestrator uses facade.query()"
+        - "test_vacuum_orchestrator_uses_facade — verify VacuumOrchestrator uses facade.query()"
+        - "test_security_vuln_orchestrator_uses_facade — verify SecurityVulnOrchestrator uses facade.analyze()"
+        - "test_master_orchestrator_init_uses_facade — verify MasterOrchestratorInit creates facade, not provider+proxy separately"
+        - "test_zero_direct_provider_imports_in_orchestrators — grep validation: 0 matches of get_intelligence_provider in cortex/orchestrators/"
+      green:
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in tdd_orchestrator.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in enforcement_orchestrator.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in intent_router_impl.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in refactoring_orchestrator.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in health_orchestrator.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in vacuum_orchestrator.py"
+        - "Replace get_intelligence_provider() with IntelligenceFacade() in security_vulnerability_orchestrator.py"
+        - "Replace get_intelligence_provider()+KnowledgeRegistryProxy() with IntelligenceFacade() in master_orchestrator_init.py"
+      refactor:
+        - "Remove unused get_intelligence_provider imports from all 8 files"
+        - "Add type hint: self._facade: IntelligenceFacade where stored"
+        - "Verify provider.py is ONLY imported by facade.py internally"
+
+    acceptance_criteria:
+      - "grep -rn get_intelligence_provider cortex/orchestrators/ returns 0 matches"
+      - "All 8 orchestrators import from cortex.intelligence.facade"
+      - "provider.py remains as internal delegate (not deleted)"
+      - "All tdd_sequence.red tests GREEN"
+      - "Smoke tests ≥1950 with zero new failures"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1950
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE B: Workflow Composer + Intelligence Primitive Alignment (P1)
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "phase-109-b"
+    title: "Workflow Composer Intelligence Integration — Update Primitive + Gateway Context"
+    priority: P1
+    status: COMPLETE
+    completed_date: "2026-03-02"
+    gap_refs: ["GAP-109-09", "GAP-109-10"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-109-a"]
+    prerequisite: "phase-109-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying intelligence-injection.yaml references IntelligenceFacade and WorkflowGateway injects facade"
+        gate: "Tests FAIL before changes"
+        blocker: "Do NOT modify YAML or gateway until tests fail"
+      green:
+        action: "Update intelligence-injection.yaml to route through IntelligenceFacade; add facade to gateway context"
+        gate: "All tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Remove stale IntelligenceMixin references in primitive, update SDLC templates that reference it"
+        gate: "Smoke green"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + grep IntelligenceMixin cortex-registry/workflows/"
+      fix_step: "Replace IntelligenceMixin references with IntelligenceFacade"
+      success_predicate: "p0_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_intelligence_injection_yaml_references_facade — parse YAML, assert IntelligenceFacade entry_point"
+        - "test_workflow_gateway_context_includes_facade — WorkflowGateway.execute_gated() context has 'intelligence_facade' key"
+        - "test_sdlc_templates_reference_updated_primitive — all 5 SDLC templates point to updated intelligence-injection"
+      green:
+        - "Update intelligence-injection.yaml: entry_point → cortex.intelligence.facade.IntelligenceFacade"
+        - "Add IntelligenceFacade lazy-init to WorkflowGateway.execute_gated() context dict"
+        - "Verify 5 SDLC templates (requirements-analysis, solution-design, implementation-execution, code-review-gate, integration-verification) reference updated primitive"
+      refactor:
+        - "Remove stale cortex.core.intelligence_mixin references from primitive YAML"
+        - "Update docstrings in WorkflowGateway"
+
+    acceptance_criteria:
+      - "intelligence-injection.yaml entry_point is cortex.intelligence.facade.IntelligenceFacade"
+      - "WorkflowGateway.execute_gated() context includes 'intelligence_facade' key"
+      - "All 5 SDLC workflow templates reference updated primitive"
+      - "Smoke tests ≥1950 with zero new failures"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1950
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE C: Intelligence Directory Flatten to Diamond (P1)
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "phase-109-c"
+    title: "Flatten cortex/intelligence/ to 3-Layer Diamond — analysis/, knowledge/, learning/"
+    priority: P1
+    status: DEFERRED
+    note: "High-risk 6-hour structural refactor (25 subdirs, 74 lens files). Deferred to dedicated sprint. GAPs 11/12 tracked in phase-114 or similar future phase."
+    gap_refs: ["GAP-109-11", "GAP-109-12"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-028"
+    duration_estimate: "6 hours"
+    depends_on: ["phase-109-b"]
+    prerequisite: "phase-109-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying imports from new locations work and diamond shape is enforced"
+        gate: "Tests FAIL before file moves"
+        blocker: "Do NOT move files until tests defined"
+      green:
+        action: "Move files into diamond layers, create compat shims at old paths, update imports"
+        gate: "All tests PASS including existing tests that used old import paths"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Remove empty dirs, consolidate __init__.py exports, verify no circular imports"
+        gate: "Smoke green + zero import errors"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + python3 -c 'import cortex.intelligence'"
+      fix_step: "Fix broken imports, add missing compat shims"
+      success_predicate: "p0_count == 0 and new_failures == 0 and import_errors == 0"
+      max_cycles: 3
+      on_exhaustion: "Log"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_diamond_shape_max_4_layer_dirs — cortex/intelligence/ has ≤6 subdirs: analysis, knowledge, learning, models, lens (compat), llm"
+        - "test_no_orphan_top_level_py_files — only facade.py, provider.py, base.py, base_engine.py, __init__.py at top level"
+        - "test_ast_intelligence_importable_from_analysis — from cortex.intelligence.analysis.ast_intelligence import ..."
+        - "test_pattern_detector_importable_from_analysis — from cortex.intelligence.analysis.pattern_detector import ..."
+        - "test_domain_brain_importable_from_knowledge — from cortex.intelligence.knowledge.domain_brain import ..."
+        - "test_compat_shims_for_old_paths — old import paths still resolve via compat shims"
+      green:
+        - "Move ast_intelligence.py, call_graph.py, comment_analyzer.py, dependency_mapper.py, pattern_detector.py, change_frequency.py → analysis/"
+        - "Move domain_brain/, reasoning/, relationships/ → knowledge/"
+        - "Move education/, memory/, perception/ → learning/"
+        - "Relocate remaining orphan modules into appropriate diamond layers"
+        - "Create compat shims at old locations (re-export from new locations)"
+        - "Consolidate capability_matcher.py + intelligence_capability_matcher.py (CORE-035)"
+      refactor:
+        - "Delete empty directories after moves"
+        - "Update __init__.py in each diamond layer"
+        - "Verify zero circular imports"
+        - "Run ruff check for unused imports after moves"
+
+    acceptance_criteria:
+      - "cortex/intelligence/ has ≤6 top-level subdirectories"
+      - "Zero orphaned .py files at cortex/intelligence/ top level (excluding facade.py, provider.py, base.py, base_engine.py, __init__.py)"
+      - "All existing import paths still work via compat shims"
+      - "capability_matcher.py merged into single canonical file"
+      - "Smoke tests ≥1950 with zero new failures"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1950
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE D: Legacy Trace Cleanup — Zero Residue (P0)
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "phase-109-d"
+    title: "Legacy Trace Cleanup — Delete Dead Code, Rewire Stale Imports, Thin Out cortex/lens/"
+    priority: P0
+    status: COMPLETE
+    completed_date: "2026-03-03"
+    note: "GAP-109-13 CLOSED (phase97_integration.py deleted). GAP-109-14 CLOSED (tools rewired to IntelligenceFacade). GAP-109-15 CLOSED (MCP CortexKnowledge uses IntelligenceFacade). GAP-109-16 CLOSED (__init__.py thin shim ≤35 lines). 11 GREEN tests in test_facade_d_legacy_cleanup.py."
+    gap_refs: ["GAP-109-13", "GAP-109-14", "GAP-109-15", "GAP-109-16"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-109-c"]
+    prerequisite: "phase-109-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests verifying dead files are gone, MCP tool uses facade, lens is thin shim"
+        gate: "Tests FAIL before cleanup"
+        blocker: "Do NOT delete/modify files until tests defined"
+      green:
+        action: "Delete dead files, rewire MCP tools, convert cortex/lens/ to thin compat shim"
+        gate: "All tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Final import sweep, ruff check, remove empty __init__.py files"
+        gate: "Smoke green"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + ruff check cortex/"
+      fix_step: "Fix any remaining stale imports or dead references"
+      success_predicate: "p0_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_phase97_integration_deleted — import cortex.intelligence.phase97_integration raises ImportError"
+        - "test_cortex_intelligence_integration_tool_uses_facade — cortex/tools/cortex_intelligence_integration.py imports IntelligenceFacade"
+        - "test_mcp_intelligence_tool_uses_facade_for_knowledge — cortex/mcp/tools/intelligence.py uses facade.query() not KnowledgeRegistryProxy directly"
+        - "test_lens_package_is_thin_shim — cortex/lens/__init__.py only contains re-exports, no implementation"
+        - "test_no_stale_provider_refs_outside_canonical — grep for get_intelligence_provider returns 0 matches outside facade.py and provider.py"
+        - "test_no_stale_lens_facade_refs — grep for LENSIntelligenceFacade returns 0 matches outside cortex/lens/facade.py"
+      green:
+        - "Delete cortex/intelligence/phase97_integration.py (zero importers confirmed)"
+        - "Rewire cortex/tools/cortex_intelligence_integration.py to use IntelligenceFacade"
+        - "Rewire cortex/mcp/tools/intelligence.py CortexKnowledge class to use IntelligenceFacade.query()"
+        - "Convert cortex/lens/facade.py to delegate to IntelligenceFacade (keep LENSIntelligenceFacade as compat class)"
+        - "Convert cortex/lens/__init__.py to thin re-export shim"
+        - "Move remaining cortex/lens/ implementation to cortex/intelligence/analysis/ or cortex/intelligence/lens/"
+      refactor:
+        - "ruff check --fix cortex/ for any new F401 unused imports"
+        - "Remove empty dirs in cortex/lens/ after migration"
+        - "Verify cortex/knowledge/__init__.py re-exports through facade path"
+
+    acceptance_criteria:
+      - "phase97_integration.py does not exist on disk"
+      - "cortex/tools/cortex_intelligence_integration.py imports IntelligenceFacade"
+      - "cortex/mcp/tools/intelligence.py uses IntelligenceFacade.query() for knowledge ops"
+      - "cortex/lens/__init__.py is a re-export shim (≤30 lines)"
+      - "Zero references to get_intelligence_provider outside facade.py and provider.py"
+      - "Zero references to LENSIntelligenceFacade outside cortex/lens/facade.py compat shim"
+      - "Smoke tests ≥1950 with zero new failures"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1950
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE E: Post-Completion Audit, Verification, Prompt Refresh (P0)
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "phase-109-e"
+    title: "Post-Completion Holistic Audit — Zero Legacy Traces, Test Alignment, Prompt Refresh"
+    priority: P0
+    status: COMPLETE
+    completed_date: "2026-03-03"
+    gap_refs: ["GAP-109-17", "GAP-109-18", "GAP-109-19", "GAP-109-20"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-068"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-109-d"]
+    prerequisite: "phase-109-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write verification tests for zero legacy traces across entire codebase (excluding cortex-docs/)"
+        gate: "Tests FAIL if any stale reference found"
+        blocker: "Do NOT skip any verification"
+      green:
+        action: "Fix any remaining stale references found by verification tests"
+        gate: "All verification tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Run prompt suite refresh, update copilot-instructions.md counts, final audit"
+        gate: "Smoke green + prompt refresh clean"
+        blocker: "Do NOT mark phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + python3 scripts/refresh_prompt_suite.py --counts-only"
+      fix_step: "Fix drift between documentation and live code"
+      success_predicate: "p0_count == 0 and new_failures == 0 and prompt_drift == 0"
+      max_cycles: 3
+      on_exhaustion: "Log"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_zero_get_intelligence_provider_in_orchestrators — grep cortex/orchestrators/ returns 0"
+        - "test_zero_get_intelligence_provider_in_tools — grep cortex/tools/ returns 0"
+        - "test_zero_get_intelligence_provider_in_mcp — grep cortex/mcp/ returns 0"
+        - "test_zero_direct_knowledgeregistryproxy_in_orchestrators — grep cortex/orchestrators/ returns 0 (except via facade)"
+        - "test_zero_lens_intelligence_facade_outside_compat — grep returns 0 outside cortex/lens/facade.py"
+        - "test_no_phase97_references — grep phase97_integration returns 0 across cortex/"
+        - "test_intelligence_subdir_count_lte_6 — find cortex/intelligence -maxdepth 1 -type d returns ≤7 (including root)"
+        - "test_facade_is_only_intelligence_entry_point — all orchestrator intelligence calls route through IntelligenceFacade"
+        - "test_prompts_reference_facade_correctly — .github/prompts/*.prompt.md mention IntelligenceFacade"
+        - "test_cortex_docs_excluded_from_cleanup — cortex-docs/ files are unchanged"
+      green:
+        - "Fix any stale references found by verification tests"
+        - "Update test files to test both IntelligenceFacade and compat shim paths"
+        - "Verify .github/prompts/ and .github/agents/ reference IntelligenceFacade"
+      refactor:
+        - "Run python3 scripts/refresh_prompt_suite.py — full refresh"
+        - "Update copilot-instructions.md with correct architecture counts"
+        - "Verify cortex-master.yaml line count ≤800"
+        - "Run python3 scripts/run_tests.py smoke — final gate"
+
+    acceptance_criteria:
+      - "grep get_intelligence_provider cortex/orchestrators/ cortex/tools/ cortex/mcp/ returns 0 matches"
+      - "grep KnowledgeRegistryProxy cortex/orchestrators/ returns 0 matches (outside facade chain)"
+      - "grep LENSIntelligenceFacade cortex/ returns matches ONLY in cortex/lens/facade.py (compat shim)"
+      - "grep phase97_integration cortex/ returns 0 matches"
+      - "cortex/intelligence/ has ≤6 subdirectories"
+      - "python3 scripts/refresh_prompt_suite.py completes with 0 drift errors"
+      - "cortex-docs/ directory is UNTOUCHED (excluded from all cleanup)"
+      - "Smoke tests ≥1950 with zero new failures"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1950
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false   # final sub-phase — no successor
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXCLUSIONS — files/dirs NOT touched by this phase
+# ─────────────────────────────────────────────────────────────────────────────
+exclusions:
+  - path: "cortex-docs/"
+    reason: "Documentation artifacts maintained separately — EXEMPT from code cleanup"
+  - path: "cortex/intelligence/provider.py"
+    reason: "Retained as INTERNAL delegate behind IntelligenceFacade — not deleted"
+  - path: "cortex/intelligence/base.py"
+    reason: "Compat shim for cortex.intelligence.models — retained"
+  - path: "cortex/intelligence/base_engine.py"
+    reason: "Compat shim for cortex.intelligence.models — retained"
+  - path: "cortex/orchestrators/core/master_orchestrator.py ExecutionTier import"
+    reason: "ExecutionTier enum import is fine — it's a type, not a facade bypass"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POST-COMPLETION CLEANUP PROCEDURES (run after all sub-phases COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+post_completion_cleanup:
+  description: |
+    After ALL 5 sub-phases pass their completion gates, execute these
+    holistic cleanup procedures to ensure zero traces of previous
+    implementations remain in the codebase (excluding cortex-docs/).
+
+  steps:
+    - id: "cleanup-001"
+      title: "Full codebase grep sweep for dissolved patterns"
+      command: |
+        grep -rn "get_intelligence_provider\|UnifiedIntelligenceProvider" cortex/ --include="*.py" | grep -v __pycache__ | grep -v facade.py | grep -v provider.py | grep -v "__init__"
+        grep -rn "LENSIntelligenceFacade" cortex/ --include="*.py" | grep -v __pycache__ | grep -v "cortex/lens/facade.py"
+        grep -rn "phase97_integration" cortex/ --include="*.py" | grep -v __pycache__
+        grep -rn "from cortex.knowledge.registry_proxy import" cortex/orchestrators/ cortex/mcp/ cortex/tools/ --include="*.py" | grep -v __pycache__
+      expected_result: "All commands return 0 matches"
+
+    - id: "cleanup-002"
+      title: "Empty directory purge"
+      command: "find cortex/intelligence -type d -empty -delete"
+      expected_result: "No empty directories remain"
+
+    - id: "cleanup-003"
+      title: "Stale compat shim review"
+      description: |
+        Review all compat shims created during migration. Each shim file must:
+        1. Be ≤30 lines (re-export only, no logic)
+        2. Have a deprecation notice in its docstring
+        3. Import from the canonical new location
+        4. Be tracked in a future phase for eventual removal
+
+    - id: "cleanup-004"
+      title: "Ruff full sweep — F401 + F811"
+      command: "python3 -m ruff check cortex/ --select=F401,F811 --output-format=concise"
+      expected_result: "All checks passed! (or only intentional __init__.py re-exports flagged)"
+
+    - id: "cleanup-005"
+      title: "Test mirror alignment"
+      command: |
+        Verify tests/intelligence/ mirrors cortex/intelligence/ diamond structure.
+        Verify tests/unit/lens/ still works for compat shim tests.
+      expected_result: "Test dirs match source dirs"
+
+    - id: "cleanup-006"
+      title: "Prompt suite refresh"
+      command: "python3 scripts/refresh_prompt_suite.py"
+      expected_result: "Zero drift, all counts match live architecture"
+
+    - id: "cleanup-007"
+      title: "Git commit with phase tag"
+      command: "git add -A && git commit -m 'Phase 109: Diamond Intelligence Completion — facade wiring, flatten, cleanup'"
+      expected_result: "Clean commit, no untracked files"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# RISK ASSESSMENT
+# ─────────────────────────────────────────────────────────────────────────────
+risk_assessment:
+  overall_risk: MEDIUM
+  risk_factors:
+    - factor: "Import path changes in sub-phase C may break existing tests"
+      mitigation: "Compat shims at old paths; TDD RED tests first"
+      probability: MEDIUM
+      impact: LOW
+
+    - factor: "cortex/lens/ has 74 files — large migration surface"
+      mitigation: "cortex/lens/ becomes thin shim (re-exports); actual files move to cortex/intelligence/analysis/"
+      probability: LOW
+      impact: MEDIUM
+
+    - factor: "MCP tool rewiring may affect runtime behavior"
+      mitigation: "IntelligenceFacade.query() delegates to same KnowledgeRegistryProxy internally — behavior unchanged"
+      probability: LOW
+      impact: LOW
+
+  rollback_strategy: "git revert to pre-phase-109 commit; all changes are additive compat shims first, deletions last"

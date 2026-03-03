@@ -408,9 +408,11 @@ class CortexLens(ConsolidatedTool):
 
 class CortexKnowledge(ConsolidatedTool):
     """
-    Knowledge base operations via KnowledgeRegistryProxy.
+    Knowledge base operations via IntelligenceFacade.query().
 
     Phase 81-a: Wired to cortex.knowledge.registry_proxy.KnowledgeRegistryProxy
+    Phase 109-D (GAP-109-15): Migrated to IntelligenceFacade as single canonical
+      entry point per CORE-035. The facade delegates to KnowledgeRegistryProxy internally.
 
     Operations:
     - search: Search knowledge base by substring in key
@@ -420,16 +422,21 @@ class CortexKnowledge(ConsolidatedTool):
     """
 
     def __init__(self) -> None:
-        """Initialize CortexKnowledge with KnowledgeRegistryProxy."""
+        """Initialize CortexKnowledge via IntelligenceFacade (GAP-109-15)."""
         super().__init__()
+        self._facade: Optional[Any] = None
+        # Keep _proxy as a backward-compat delegate accessed through facade
         self._proxy: Optional[Any] = None
         try:
-            from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
-            self._proxy = KnowledgeRegistryProxy()
+            from cortex.intelligence.facade import IntelligenceFacade
+            self._facade = IntelligenceFacade()
+            # Also wire the internal proxy through facade for operations that
+            # need direct proxy access (domain coverage, all())
+            self._proxy = self._facade._get_registry()
         except Exception as exc:  # noqa: BLE001
             import logging
             logging.getLogger(__name__).warning(
-                "KnowledgeRegistryProxy init failed; cortex_knowledge operating in degraded mode. "
+                "IntelligenceFacade init failed; cortex_knowledge operating in degraded mode. "
                 "Reason: %s",
                 exc,
             )
@@ -443,7 +450,7 @@ class CortexKnowledge(ConsolidatedTool):
     def description(self) -> str:
         """Return the description."""
         return (
-            "Access CORTEX knowledge base via KnowledgeRegistryProxy. "
+            "Access CORTEX knowledge base via IntelligenceFacade.query(). "
             "Search for domain knowledge, best practices, and identify knowledge gaps. "
             "Wired to cortex-registry/knowledge/ and cortex-registry/knowledge-base/ (30 YAMLs, 11 domains)."
         )

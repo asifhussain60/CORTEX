@@ -39,7 +39,7 @@ metadata:
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
   - { id: phase-107, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-107-intelligence-layer-consolidation.yaml" }
-  - { id: phase-109, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-109-diamond-intelligence-completion.yaml" }
+  - { id: phase-109, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-109-diamond-intelligence-completion.yaml" }
   - { id: phase-106, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-106-rca-guard-certification.yaml" }
   - { id: phase-91,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-91-routing-coverage.yaml" }
   - { id: phase-90,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-90-holistic-intent-wiring.yaml" }
@@ -86,7 +86,7 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phase 111 COMPLETE — Smoke: 2,194 passed. CORE-035 DUPLICATES=0. All 5 GAPs CLOSED."
+  status: "✅ Phase 109 COMPLETE — Smoke: 2,194 passed. IntelligenceFacade canonical entry wired. GAPs 14/15/16/17/18/19/20 CLOSED."
   overall_score: 99%
   deployment_date: '2026-03-03'
 
