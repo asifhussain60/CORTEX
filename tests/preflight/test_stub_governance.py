@@ -55,6 +55,28 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/orchestrators/core/brain_health_orchestrator.py",
     "cortex/infrastructure/brain_health_metrics.py",
     "cortex/infrastructure/shared_brain_store.py",
+    # Phase 117-c — Intelligence Diamond flatten compat shims (expiry: 2026-09-03)
+    # Canonical implementations moved to cortex/intelligence/analysis/
+    # These re-export for zero-breaking-change backward compatibility (GAP-117-09)
+    "cortex/intelligence/ast_intelligence.py",
+    "cortex/intelligence/author_context.py",
+    "cortex/intelligence/call_graph.py",
+    "cortex/intelligence/capability_registry_builder.py",
+    "cortex/intelligence/change_frequency.py",
+    "cortex/intelligence/clarification_reducer.py",
+    "cortex/intelligence/comment_analyzer.py",
+    "cortex/intelligence/dependency_mapper.py",
+    "cortex/intelligence/duration_intelligence.py",
+    "cortex/intelligence/error_intelligence.py",
+    "cortex/intelligence/hp_output_validator.py",
+    "cortex/intelligence/intelligence_capability_matcher.py",
+    "cortex/intelligence/intelligence_metadata_discovery.py",
+    "cortex/intelligence/intelligence_wiring_bridges.py",
+    "cortex/intelligence/intent_classifier.py",
+    "cortex/intelligence/pattern_detector.py",
+    "cortex/intelligence/relationship_traversal.py",
+    "cortex/intelligence/routing_intelligence.py",
+    "cortex/intelligence/turn_context.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]
