@@ -146,6 +146,137 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             lines.append(f"  [{seq}] ({intent}) {text}")
         return "\n".join(lines)
 
+    def synthesize_request(
+        self,
+        current_request: str,
+        session_id: str,
+    ) -> Dict[str, Any]:
+        """Synthesize prior requests into a holistic summary with Definition of Done.
+
+        Reads up to ``_prior_context_limit`` prior requests from the
+        ``RequestLogManager`` for the given session, combines them with the
+        current request, and produces:
+
+        - A concise synthesized summary (1–3 sentences)
+        - A Definition of Done (DoD) checklist with concrete, verifiable items
+        - Metadata (prior_count, has_prior_context, raw prior_requests)
+
+        This output is consumed by the ``📋 Request Echo & Definition of Done``
+        response template section.
+
+        Non-blocking: if the RequestLogManager is unavailable or raises, returns
+        an empty synthesis (CORE-049 — silent degradation).
+
+        Args:
+            current_request: The user's current (latest) request text.
+            session_id: Session identifier for querying prior requests.
+
+        Returns:
+            A dict with keys:
+            - ``has_prior_context`` (bool): True if prior requests exist.
+            - ``prior_count`` (int): Number of prior requests found.
+            - ``synthesized_summary`` (str): Holistic 1–3 sentence summary.
+            - ``dod_items`` (list[str]): Definition of Done checklist items.
+            - ``prior_requests`` (list[dict]): Raw prior request dicts.
+        """
+        empty_result: Dict[str, Any] = {
+            "has_prior_context": False,
+            "prior_count": 0,
+            "synthesized_summary": "",
+            "dod_items": [],
+            "prior_requests": [],
+        }
+
+        rlm = getattr(self, "_request_log_manager", None)
+        if rlm is None:
+            return empty_result
+
+        try:
+            prior_requests: List[Dict[str, Any]] = rlm.get_prior_requests(
+                session_id=session_id,
+                limit=getattr(self, "_prior_context_limit", 5),
+            )
+        except Exception:
+            return empty_result
+
+        if not prior_requests:
+            return empty_result
+
+        # Build synthesized summary from all requests (prior + current)
+        all_request_texts: List[str] = []
+        for req in sorted(prior_requests, key=lambda r: r.get("sequence_number", 0)):
+            text = req.get("user_request", "").strip()
+            if text:
+                all_request_texts.append(text)
+        all_request_texts.append(current_request.strip())
+
+        synthesized_summary = self._build_synthesized_summary(all_request_texts)
+
+        # Build DoD items from combined requests
+        dod_items = self._build_dod_items(all_request_texts)
+
+        return {
+            "has_prior_context": True,
+            "prior_count": len(prior_requests),
+            "synthesized_summary": synthesized_summary,
+            "dod_items": dod_items,
+            "prior_requests": prior_requests,
+        }
+
+    def _build_synthesized_summary(self, request_texts: List[str]) -> str:
+        """Build a concise multi-request summary.
+
+        Combines all request texts into a coherent 1–3 sentence summary
+        describing the holistic user intent across the session.
+
+        Args:
+            request_texts: Chronologically ordered request texts.
+
+        Returns:
+            A concise summary string.
+        """
+        if not request_texts:
+            return ""
+
+        if len(request_texts) == 1:
+            return request_texts[0]
+
+        # Build a numbered summary for multi-request sessions
+        parts = []
+        for i, text in enumerate(request_texts, 1):
+            # Truncate very long requests for the summary
+            truncated = text[:200] + "..." if len(text) > 200 else text
+            parts.append(f"({i}) {truncated}")
+
+        return f"Session with {len(request_texts)} requests: " + "; ".join(parts)
+
+    def _build_dod_items(self, request_texts: List[str]) -> List[str]:
+        """Build Definition of Done checklist from request texts.
+
+        Creates concrete, verifiable DoD items — one per distinct request action,
+        plus a mandatory testing item at the end.
+
+        Args:
+            request_texts: Chronologically ordered request texts.
+
+        Returns:
+            List of DoD checklist strings.
+        """
+        if not request_texts:
+            return []
+
+        items: List[str] = []
+        for text in request_texts:
+            # Extract a concise action from each request
+            truncated = text[:150].strip()
+            if truncated:
+                items.append(truncated)
+
+        # Always end with a testing DoD item
+        items.append("All tests pass (make test-preflight)")
+
+        return items
+
     def set_plan_store(self, plan_store: Any) -> None:
         """Inject an InteractionPlanStore for plan-first execution (Phase 00 D10).
 

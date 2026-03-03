@@ -85,6 +85,8 @@ This document contains ALL response formatting standards in one place:
 | § User Response Template — Golden Format | 5-section structure for all work responses | AUDIT, DESIGN, PLAN, QUERY, IMPLEMENT (pre-approval) |
 | § Intent Reflection Block (BLOCK-INTENT-REFLECTION) | Business-language intent mirror before execution | Every request before `proceed` gate |
 | § Composable Content Blocks | Educational/onboarding block templates | "Who are you?", "What can you do?", tutorials |
+| § 📋 Request Echo & Definition of Done | Synthesized prior-request reflection + DoD card | Every multi-turn session before `proceed` |
+| § 🔵 Processing Banner | Lightweight status indicator during tool execution | Autonomous execution (replaces header until complete) |
 | § Silent Autonomous Mode — Golden Template | Progress bars for autonomous execution | After `proceed` / `implement` / `yes` |
 | § Query Response Templates | Q&A format for knowledge questions | "How does X work?", "Explain Y" |
 | § Icon System | Status, severity, operation icons | Every response |
@@ -194,6 +196,142 @@ full end-to-end quality benchmark:
 | Simple one-line QUERY ("what does X do?") | ⚪ Skip — answer directly |
 | DIGEST / REPHRASE operations | ⚪ Skip — intent is self-evident |
 | After `proceed` (autonomous execution phase) | ❌ Never — show progress bar only |
+
+---
+
+## 📋 Request Echo & Definition of Done (SSOT)
+
+**Authority:** Phase 113 (Request Sequence Persistence) + CORE-048 (Holistic Validation Gate)
+**Scope:** Multi-turn sessions where prior requests exist in SQLite — rendered immediately after 🪞 Intent Reflection
+**Rule:** The `InteractionOrchestrator.synthesize_request()` method produces the data; this template renders it. Never fabricate — always source from `RequestLogManager`.
+
+### Purpose
+
+When a user has made multiple requests in a session, CORTEX should not treat each request in isolation. The Request Echo synthesizes the full thread of prior requests (from SQLite `request_log`) into a single holistic summary, then presents a Definition of Done (DoD) card so the user can verify scope before CORTEX acts.
+
+This ensures:
+1. CORTEX demonstrates it understands the **cumulative intent** — not just the latest message
+2. The user sees a clear **DoD contract** — what "done" looks like before any work begins
+3. Multi-turn refinements ("also add X", "actually change Y") are captured, not lost
+
+### Template (CANONICAL — use verbatim, fill in `{placeholders}`)
+
+```markdown
+### 📋 Request Summary & Definition of Done
+
+**Session context:** {n} prior requests synthesized
+
+**Synthesized request:**
+> {1–3 sentence holistic summary of what the user wants, combining all prior requests into a single coherent intent}
+
+**Definition of Done:**
+- [ ] {DoD item 1 — concrete, verifiable outcome}
+- [ ] {DoD item 2 — concrete, verifiable outcome}
+- [ ] {DoD item 3 — concrete, verifiable outcome}
+- [ ] {DoD item 4 — if applicable}
+- [ ] All tests pass (`make test-preflight`)
+```
+
+### Design Rules
+
+| Rule | Requirement |
+|------|-------------|
+| **Source** | Always from `InteractionOrchestrator.synthesize_request()` output — never fabricated |
+| **Tone** | Third-person summary — "The user wants CORTEX to…" |
+| **Length** | Synthesized request: 1–3 sentences max. DoD: 3–6 checklist items. |
+| **DoD items** | Concrete and verifiable — "File X exists", "Test Y passes", "Count ≤ N" |
+| **Always include** | `All tests pass` as the final DoD item |
+| **First turn** | Skip this section entirely — no prior requests to synthesize |
+| **After `proceed`** | Skip — user already approved the scope |
+
+### When to Render
+
+| Scenario | Render? |
+|----------|---------|
+| Multi-turn session (≥2 requests in SQLite) | ✅ Always — after 🪞 Intent Reflection |
+| First request in a new session | ⚪ Skip — no prior context |
+| After `proceed` (autonomous execution) | ❌ Never |
+| Simple one-line QUERY | ⚪ Skip |
+
+### Full Rendered Example
+
+```markdown
+### 📋 Request Summary & Definition of Done
+
+**Session context:** 3 prior requests synthesized
+
+**Synthesized request:**
+> The user wants CORTEX to redesign the response template rendering system. Specifically: (1) move the copyright/quote header to appear after processing completes rather than before, (2) rename all BLOCK-* section headers to professional icon+name format, and (3) add a new Request Echo section that reflects prior requests back with a DoD card.
+
+**Definition of Done:**
+- [ ] Assembly order restructured: processing banner first, header after
+- [ ] All BLOCK-* headers renamed to icon+name format across 10 files
+- [ ] New 📋 Request Echo section added to response templates SSOT
+- [ ] `synthesize_request()` implemented on `InteractionOrchestrator` with TDD
+- [ ] All tests pass (`make test-preflight`)
+```
+
+---
+
+## 🔵 Processing Banner — Lightweight Status During Execution (SSOT)
+
+**Authority:** CORE-049 (Silent Autonomous Execution)
+**Scope:** Displayed DURING tool execution / processing — before the full response header is rendered
+**Rule:** This is a lightweight signal that CORTEX is working. The full response header (copyright, quote) renders AFTER processing completes.
+
+### Purpose
+
+The Processing Banner solves the user experience issue where the response header (with copyright and quote) appears immediately — before CORTEX has done any actual work — giving the false impression that processing is complete. Instead:
+
+1. **During execution:** Show only the Processing Banner (lightweight, no copyright/quote)
+2. **After execution completes:** Render the full Response Header with copyright, quote, and results
+
+### Template (CANONICAL)
+
+```markdown
+🔵 **CORTEX processing…**
+*Analyzing request · Loading context · Executing pipeline*
+```
+
+### Design Rules
+
+| Rule | Requirement |
+|------|-------------|
+| **When** | Show immediately when CORTEX begins processing a non-trivial request |
+| **Duration** | Visible only during tool execution — replaced by full header when done |
+| **Content** | One-line bold status + one-line italic description of current activity |
+| **No copyright** | The Processing Banner does NOT include author/copyright — that goes in the Response Header after completion |
+| **No quote** | No quote during processing — quotes appear in the post-completion header |
+| **Replace, don't stack** | The Processing Banner is REPLACED by the Response Header — they do not both appear |
+
+### Rendering Lifecycle
+
+```
+User sends request
+  ↓
+🔵 Processing Banner (immediate — lightweight)
+  ↓
+[CORTEX reads files, runs analysis, calls tools]
+  ↓
+Processing Banner replaced by:
+  # 🧠 CORTEX {mode}          ← Full Response Header
+  **Author:** ...              ← Copyright
+  > *"{quote}"*                ← Quote
+  ---
+  🪞 Intent Reflection         ← Then work content
+  📋 Request Echo & DoD        ← If multi-turn
+  [Work content]
+  ⚡ Proceed Gate | ✅ Complete
+```
+
+### When to Show
+
+| Scenario | Processing Banner? |
+|----------|--------------------|
+| IMPLEMENT / FIX / REFACTOR / AUDIT (multi-step) | ✅ Yes — show during analysis |
+| Simple QUERY (instant answer) | ⚪ Skip — answer is immediate |
+| After `proceed` (autonomous mode) | ⚪ Skip — use Silent Autonomous progress bars instead |
+| INTRODUCE / onboarding | ⚪ Skip — response is conversational |
 
 ---
 
@@ -896,18 +1034,27 @@ Result: Zero duplication, 350 words
 
 ### Standardized Assembly Order ("Beautiful in Copilot Chat")
 
-Canonical block emission sequence for composable blocks:
+Canonical section emission sequence for composable responses:
 
 ```
-BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → BLOCK-HANDOFF
-→ BLOCK-ERROR-RECOVERY → BLOCK-PHASE-ROADMAP → BLOCK-STAGE-PROGRESS
-→ BLOCK-ENGAGEMENT-TIMELINE → BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD
-→ BLOCK-NEXT-STEPS → BLOCK-RESUME-BANNER
-→ BLOCK-PROCEED-GATE  ← work pending (always last — CORE-RESP-001)
-→ BLOCK-COMPLETION-STATE  ← work done (always last — CORE-RESP-001)
+🧠 Session Identity (once per session, first turn only)
+→ 🔵 Processing Banner (immediate — lightweight status during tool execution)
+→ [CORTEX reads files, runs analysis, calls tools]
+→ Response Header (# 🧠 CORTEX {mode} + Author + **Via:** chain + Quote blockquote + ---)
+   ↳ **Via:** IS the breadcrumb — the *🧭 ...* italic block MUST NOT repeat it after ---
+→ 🪞 Intent Reflection (before any work — first-person, business language)
+→ 📋 Request Echo & DoD (multi-turn sessions only — synthesized prior requests + Definition of Done card)
+→ [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]
+→ ⏱️ Engagement Timeline (collapsible, 3+ step operations only)
+→ 📈 Metrics Dashboard (IMPLEMENT/FIX/REFACTOR completions only)
+→ 🎯 Next Steps (educational responses only — Immediate + Later bullets, NO proceed content)
+→ ⚡ Proceed Gate  ← work pending (always last — CORE-RESP-001)
+→ ✅ Completion State  ← work done (always last — CORE-RESP-001)
 ```
 
-**Rule (CORE-RESP-001 — P0):** `BLOCK-PROCEED-GATE` or `BLOCK-COMPLETION-STATE` is ALWAYS the absolute last element in any response. Exactly one. Never both. Never neither for any actionable or completed response. Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
+**Rendering lifecycle:** The 🔵 Processing Banner appears immediately when CORTEX begins processing. The full Response Header (with copyright and quote) renders AFTER processing completes — replacing the banner. They never appear together.
+
+**Rule (CORE-RESP-001 — P0):** `⚡ Proceed Gate` or `✅ Completion State` is ALWAYS the absolute last element in any response. Exactly one. Never both. Never neither for any actionable or completed response. Emit only the sections that apply — omit inapplicable sections entirely (R4: no empty headers).
 
 ### When NOT to Use Content Sections
 
