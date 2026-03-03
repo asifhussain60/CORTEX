@@ -68,8 +68,12 @@ class DatabaseManager:
         return []
 
     def close(self) -> None:
-        """Stub close - no-ops."""
-        pass
+        """Close the database manager and release resources.
+
+        In the MCP-first architecture this clears in-memory data.
+        """
+        self._data.clear()
+        logger.debug("DatabaseManager stub closed")
 
 
 def get_database_manager() -> DatabaseManager:

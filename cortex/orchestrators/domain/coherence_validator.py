@@ -71,9 +71,12 @@ def _to_camel(snake: str) -> str:
     return parts[0] + "".join(p.capitalize() for p in parts[1:])
 
 
-class CoherenceValidator:
+class CrossLayerCoherenceValidator:
     """
     Validates cross-layer coherence between Python and JavaScript boundaries.
+
+    Renamed from CoherenceValidator → CrossLayerCoherenceValidator (Phase 101)
+    to resolve CORE-035 duplicate with cortex.orchestrators.validation.coherence_validator.
 
     Checks:
         - Enum value alignment (Python Enum ↔ JS const/enum)
@@ -82,7 +85,7 @@ class CoherenceValidator:
         - Schema version alignment
 
     Usage:
-        validator = CoherenceValidator()
+        validator = CrossLayerCoherenceValidator()
         # Simple skip for SIMPLE tasks
         result = validator.validate()
 
@@ -206,18 +209,14 @@ class CoherenceValidator:
 
 
 # ---------------------------------------------------------------------------
-# Phase 50 GAP-007: canonical alias
-# CORE-035 — single name per concept; domain/ validates Python↔JS cross-layer
-# coherence (distinct from coherence/ which validates post-edit file structure).
-# Expose a semantically-clear name while preserving the original for backward compat.
+# Phase 101: Backward-compat alias (CORE-035 resolution)
+# Canonical name is now CrossLayerCoherenceValidator to distinguish from
+# cortex.orchestrators.validation.coherence_validator.CoherenceValidator.
 # ---------------------------------------------------------------------------
-CrossLayerCoherenceValidator = CoherenceValidator
-"""Alias for CoherenceValidator that makes the Python↔JS scope explicit.
+CoherenceValidator = CrossLayerCoherenceValidator
+"""Backward-compat alias. Use ``CrossLayerCoherenceValidator`` in new code.
 
-Use ``CrossLayerCoherenceValidator`` in new code for clarity.
-``CoherenceValidator`` remains available for backward compatibility.
-
-AC: GAP-007 | Phase 50 | CORE-035
+AC: Phase 101 | CORE-035
 """
 
 __all__ = ["CoherenceValidator", "CrossLayerCoherenceValidator"]

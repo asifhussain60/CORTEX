@@ -1,7 +1,8 @@
 """
-MasterOrchestrator: Coordinate RoleResolver → PersonaInjector pipeline
+PersonaOrchestrator: Coordinate RoleResolver → PersonaInjector pipeline
 
 Authority: Phase 37 S3, CORE-008 (TDD-first)
+Renamed: Phase 101 — MasterOrchestrator → PersonaOrchestrator (CORE-035)
 
 Orchestrates:
 - Role detection via RoleResolver
@@ -36,9 +37,12 @@ class PersonaResult:
             self.format_rules_applied = []
 
 
-class MasterOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
+class PersonaOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Coordinate RoleResolver → PersonaInjector pipeline.
+
+    Renamed from MasterOrchestrator → PersonaOrchestrator (Phase 101)
+    to resolve CORE-035 duplicate with cortex.orchestrators.core.master_orchestrator.
 
     Flow:
     1. Message arrives
@@ -224,3 +228,7 @@ class MasterOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
             Dict with current state
         """
         return self.session_context.get_state_dict()
+
+
+# Phase 101: Backward-compat alias (CORE-035 resolution)
+MasterOrchestrator = PersonaOrchestrator

@@ -95,8 +95,12 @@ class HashChain:
         return list(self._chain)
 
 
-class AuditTrail:
-    """High-level audit trail with hash chain integrity."""
+class SecretsAuditTrail:
+    """High-level audit trail with hash chain integrity for secrets access.
+
+    Renamed from AuditTrail → SecretsAuditTrail (Phase 101)
+    to resolve CORE-035 duplicate with cortex.observability.audit_trail.AuditTrail.
+    """
 
     def __init__(self, logger: Optional[AuditLogger] = None) -> None:
         """Initialise audit trail with optional logger."""
@@ -155,7 +159,7 @@ class AuditTrailRetention:
         return [e for e in entries if datetime.fromisoformat(e.timestamp) >= cutoff]
 
 
-class AuditTrailWithSignatures(AuditTrail):
+class AuditTrailWithSignatures(SecretsAuditTrail):
     """Audit trail with digital signature support."""
 
     def sign_entry(self, entry: AuditEntry, private_key: Any = None) -> str:
@@ -172,7 +176,7 @@ class AuditTrailWithSignatures(AuditTrail):
         return hashlib.sha256(data.encode()).hexdigest()
 
 
-class ComplianceAuditTrail(AuditTrail):
+class ComplianceAuditTrail(SecretsAuditTrail):
     """Compliance-focused audit trail with regulatory metadata."""
 
     def record_compliance_event(self, regulation: str, action: str, key: str, **meta: Any) -> str:
@@ -189,10 +193,14 @@ class ComplianceAuditTrail(AuditTrail):
         return self.record(action, key, regulation=regulation, **meta)
 
 
-class ComprehensiveAuditTrail(AuditTrail):
+class ComprehensiveAuditTrail(SecretsAuditTrail):
     """Comprehensive audit trail combining retention, signatures, and compliance."""
 
     def __init__(self) -> None:
         """Initialise comprehensive audit trail with retention and signatures."""
         super().__init__()
         self._signatures: Dict[str, str] = {}
+
+
+# Phase 101: Backward-compat alias (CORE-035 resolution)
+AuditTrail = SecretsAuditTrail

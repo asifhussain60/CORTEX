@@ -60,9 +60,12 @@ class IntentClassification:
         return self.is_ambiguous or self.confidence < threshold
 
 
-class IntentClassifier:
+class EnhancedIntentClassifier:
     """
-    Enhanced intent classifier with 90% accuracy target.
+    Enhanced intent classifier with 90% accuracy target (WAVE-M: ENH-078).
+
+    Renamed from IntentClassifier → EnhancedIntentClassifier (Phase 101)
+    to resolve CORE-035 duplicate with cortex.orchestrators.core.intent_classifier.
 
     Uses pattern recognition, keyword analysis, and confidence scoring
     to classify user requests with high accuracy.
@@ -206,7 +209,7 @@ class IntentClassifier:
             IntentClassification with confidence and alternatives
 
         Example:
-            >>> classifier = IntentClassifier()
+            >>> classifier = EnhancedIntentClassifier()
             >>> result = classifier.classify("implement authentication system")
             >>> assert result.intent == IntentType.IMPLEMENT
             >>> assert result.confidence > 0.85
@@ -442,5 +445,9 @@ def classify_intent(
         >>> result = classify_intent("fix the login bug")
         >>> assert result.intent == IntentType.FIX
     """
-    classifier = IntentClassifier()
+    classifier = EnhancedIntentClassifier()
     return classifier.classify(user_request, context)
+
+
+# Phase 101: Backward-compat alias (CORE-035 resolution)
+IntentClassifier = EnhancedIntentClassifier

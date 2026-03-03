@@ -18,10 +18,22 @@ class ConfigError(SecretsError):
     """Raised when the secrets configuration is invalid."""
 
 
-class StorageError(SecretsError):
-    """Raised when reading/writing to the secrets backend fails."""
+class SecretsStorageError(SecretsError):
+    """Raised when reading/writing to the secrets backend fails.
+
+    Renamed from StorageError → SecretsStorageError (Phase 101)
+    to resolve CORE-035 duplicate with cortex.infrastructure.storage.errors.StorageError.
+    """
 
 
-# Re-export under the test-expected alias
-class PermissionError(SecretsError):  # noqa: A001
-    """Raised when the caller lacks permission to access a secret."""
+class SecretsPermissionError(SecretsError):  # noqa: A001
+    """Raised when the caller lacks permission to access a secret.
+
+    Renamed from PermissionError → SecretsPermissionError (Phase 101)
+    to resolve CORE-035 duplicate with cortex.infrastructure.storage.errors.PermissionError.
+    """
+
+
+# Phase 101: Backward-compat aliases (CORE-035 resolution)
+StorageError = SecretsStorageError
+PermissionError = SecretsPermissionError  # noqa: A001
