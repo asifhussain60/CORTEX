@@ -103,6 +103,49 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         # Initialize LENSOrchestrator for per-turn analysis
         self.lens_orchestrator = self._init_lens_orchestrator()
 
+        # Phase 113-C: Prior-request context chain — injected by MasterOrchestrator
+        self._request_log_manager: Any = None
+        self._prior_context_limit: int = 5  # default: last 5 requests
+
+    def set_request_log_manager(self, manager: Any) -> None:
+        """
+        Inject a RequestLogManager for prior-request context chain (Phase 113-C).
+
+        Called by MasterOrchestrator after init so InteractionOrchestrator can
+        query prior requests and build cumulative LENS context for each turn.
+
+        Args:
+            manager: A ``RequestLogManager`` instance (or compatible duck-type).
+        """
+        self._request_log_manager = manager
+
+    def build_context_summary(self, prior_requests: List[Dict[str, Any]]) -> str:
+        """
+        Build a compact context string from a list of prior requests.
+
+        Used to inject prior-turn context into the LENS analysis for the current
+        turn, enabling cumulative understanding across a session.
+
+        Args:
+            prior_requests: List of request dicts as returned by
+                ``RequestLogManager.get_prior_requests()``.  Each dict must
+                contain ``sequence_number``, ``user_request``, and ``intent_type``.
+
+        Returns:
+            A compact multi-line string summarising prior requests, or ``""``
+            for an empty list (first-turn case).
+        """
+        if not prior_requests:
+            return ""
+
+        lines = ["[Prior context from this session]"]
+        for req in reversed(prior_requests):  # chronological order (oldest → newest)
+            seq = req.get("sequence_number", "?")
+            text = req.get("user_request", "")
+            intent = req.get("intent_type") or "UNKNOWN"
+            lines.append(f"  [{seq}] ({intent}) {text}")
+        return "\n".join(lines)
+
     def set_plan_store(self, plan_store: Any) -> None:
         """Inject an InteractionPlanStore for plan-first execution (Phase 00 D10).
 
@@ -146,6 +189,14 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     "CREATE INDEX IF NOT EXISTS idx_cd_timestamp "
                     "ON challenge_decisions(timestamp DESC)"
                 )
+                # Phase 113-final (GAP-05): add request_id FK column — backward compatible
+                try:
+                    conn.execute(
+                        "ALTER TABLE challenge_decisions ADD COLUMN request_id TEXT"
+                    )
+                except sqlite3.OperationalError:
+                    # Column already exists — safe to ignore on repeated schema init
+                    pass
                 conn.commit()
         except Exception as e:
             # Non-fatal — in-memory audit trail is the fallback
@@ -163,6 +214,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         self,
         challenge: Dict[str, Any],
         session_id: str,
+        request_id: Optional[str] = None,
     ) -> None:
         """Persist a challenge decision to the challenge_decisions SQLite table.
 
@@ -170,6 +222,9 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             challenge: The challenge dict returned by _evaluate_challenge()
                        (keys: category, severity, description, mitigation, …).
             session_id: Session identifier from the round context.
+            request_id: Phase 113 FK — links to request_log.request_id for
+                        full audit trail. None for calls made before Phase 113
+                        wiring was active (backward compatible).
         """
         try:
             import uuid as _uuid
@@ -185,8 +240,9 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     INSERT INTO challenge_decisions
                         (decision_id, timestamp, turn_number, user_request_hint,
                          challenge_category, challenge_severity, decision,
-                         challenge_description, mitigation, session_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         challenge_description, mitigation, session_id,
+                         request_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         decision_id,
@@ -199,6 +255,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                         str(challenge.get("description", ""))[:500],
                         str(challenge.get("mitigation", ""))[:500],
                         session_id,
+                        request_id,
                     ),
                 )
                 conn.commit()
@@ -469,6 +526,20 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         self.turn_number += 1
 
         try:
+            # Phase 113-C: Query prior requests for cumulative context
+            _prior_context_summary: str = ""
+            _rlm = getattr(self, "_request_log_manager", None)
+            if _rlm is not None:
+                try:
+                    _session = str(getattr(round_context, "session_id", "default"))
+                    _prior = _rlm.get_prior_requests(
+                        session_id=_session,
+                        limit=getattr(self, "_prior_context_limit", 5),
+                    )
+                    _prior_context_summary = self.build_context_summary(_prior)
+                except Exception:
+                    pass  # Non-blocking — context failure must never break comprehension
+
             # Step 1: Run LENS analysis (MANDATORY per-turn)
             lens_context = self._run_lens_analysis(user_request)
 
@@ -481,6 +552,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 "timestamp": datetime.now().isoformat(),
                 "challenge_evaluated": False,
                 "user_role": getattr(self, "_user_role", "developer"),  # G7: role-aware context
+                "prior_context_summary": _prior_context_summary,  # Phase 113-C
             }
 
             # Step 3: Optional challenge evaluation
@@ -496,7 +568,12 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     _session = getattr(round_context, "session_id", "unknown")
                     _loggable = dict(challenge_result)
                     _loggable["user_request"] = user_request
-                    self._log_challenge_decision(_loggable, session_id=str(_session))
+                    # Phase 113-final (GAP-05): pass request_id FK from round_context metadata
+                    _rc_meta = getattr(round_context, "metadata", {}) or {}
+                    _challenge_rid = _rc_meta.get("request_id") if isinstance(_rc_meta, dict) else None
+                    self._log_challenge_decision(
+                        _loggable, session_id=str(_session), request_id=_challenge_rid
+                    )
 
             # Step 3b: Render engagement (Phase 92 — three-tier routing gate)
             try:

@@ -1189,6 +1189,21 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
         # AC_START: {_ac_id}
         _ac_start_ms = _time.monotonic() * 1000
         try:
+            # Phase 113-B: Pre-API request persistence (CORE-064 audit trail)
+            _request_id: Optional[str] = None
+            _rlm = getattr(self, "_request_log_manager", None)
+            if _rlm is not None:
+                try:
+                    _session_id = str(getattr(self, "_session_id", None) or id(self))
+                    _request_id = _rlm.log_request(
+                        session_id=_session_id,
+                        user_request=user_request,
+                        context_snapshot=context,
+                    )
+                    _rlm.update_status(_request_id, "PROCESSING")
+                except Exception:
+                    pass  # Non-blocking — logging failure must never prevent execution
+
             # AC-PHASE-35-001: PRE-FLIGHT - Detect autonomous continuation
             # R1: Continuation detection, R3: Skip verbose status, R4: Single decision gate
             autonomous_mode = False
@@ -1254,10 +1269,13 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
 
             # Build RoundContext for InteractionOrchestrator
             if RoundContext:
+                _rc_metadata = dict(context or {})
+                if _request_id is not None:
+                    _rc_metadata["request_id"] = _request_id  # Phase 113-final: FK linkage
                 round_context = RoundContext(
                     user_message=user_request,
                     conversation_history=[],
-                    metadata=context or {}
+                    metadata=_rc_metadata
                 )
 
                 # Execute with challenge system
@@ -1281,23 +1299,64 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnfor
                                 "requires_user_choice": True
                             }
                         )
+                        # Phase 113-B: mark COMPLETED (challenge is a valid resolution)
+                        if _rlm is not None and _request_id is not None:
+                            try:
+                                _rlm.update_status(
+                                    _request_id, "COMPLETED",
+                                    duration_ms=(_time.monotonic() * 1000 - _ac_start_ms),
+                                )
+                            except Exception:
+                                pass
                         return Ok(output)
 
                     # No challenge, proceed to Stage 2+ execution
-                    return self.execute_operation(
+                    _exec_result = self.execute_operation(
                         operation_name="process_request",
                         parameters={"request": user_request, "context": context or {}}
                     )
+                    # Phase 113-B: mark COMPLETED / FAILED based on pipeline result
+                    if _rlm is not None and _request_id is not None:
+                        try:
+                            _final_status = "COMPLETED" if _exec_result.is_ok() else "FAILED"
+                            _rlm.update_status(
+                                _request_id, _final_status,
+                                duration_ms=(_time.monotonic() * 1000 - _ac_start_ms),
+                            )
+                        except Exception:
+                            pass
+                    return _exec_result
                 else:
                     return result
             else:
                 # Fallback if RoundContext not available
-                return self.execute_operation(
+                _exec_result = self.execute_operation(
                     operation_name="process_request",
                     parameters={"request": user_request, "context": context or {}}
                 )
+                # Phase 113-B: mark COMPLETED / FAILED based on pipeline result
+                if _rlm is not None and _request_id is not None:
+                    try:
+                        _final_status = "COMPLETED" if _exec_result.is_ok() else "FAILED"
+                        _rlm.update_status(
+                            _request_id, _final_status,
+                            duration_ms=(_time.monotonic() * 1000 - _ac_start_ms),
+                        )
+                    except Exception:
+                        pass
+                return _exec_result
 
         except Exception as e:
+            # Phase 113-B: Mark FAILED in request log
+            if _rlm is not None and _request_id is not None:
+                try:
+                    _rlm.update_status(
+                        _request_id, "FAILED",
+                        error_summary=f"{type(e).__name__}: {str(e)[:200]}",
+                        duration_ms=(_time.monotonic() * 1000 - _ac_start_ms),
+                    )
+                except Exception:
+                    pass
             # AC_COMPLETE: {_ac_id} ❌ process_user_request failed
             return Err(f"Failed to process user request: {str(e)}")
 

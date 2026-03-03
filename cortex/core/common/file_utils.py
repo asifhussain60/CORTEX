@@ -371,3 +371,65 @@ def normalize_path_separators(path: str) -> str:
         return path.replace('/', '\\')
     else:
         return path.replace('\\', '/')
+
+
+# ============================================================================
+# Cross-Platform Hardening Utilities (Phase 113 Sub-phase 0)
+# ============================================================================
+
+
+def safe_read_text(
+    path: Union[str, Path],
+    encoding: str = "utf-8",
+    errors: str = "replace",
+) -> str:
+    """Read text file content with cross-platform safe defaults.
+
+    Always uses UTF-8 encoding with error replacement to prevent
+    UnicodeDecodeError on Windows (where default is cp1252).
+
+    This is the canonical replacement for bare ``Path.read_text()`` calls
+    throughout the CORTEX codebase.  Prefer this over ``path.read_text()``
+    in all new code.
+
+    Args:
+        path: Path to file (str or Path).
+        encoding: File encoding (default: ``"utf-8"``).
+        errors: Error handling strategy (default: ``"replace"``).
+            Use ``"strict"`` only when encoding correctness is critical.
+
+    Returns:
+        File content as string.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        OSError: On permission or I/O errors.
+
+    Examples:
+        >>> content = safe_read_text("cortex/core/common/file_utils.py")
+        >>> content = safe_read_text(Path("config.yaml"), errors="strict")
+    """
+    return Path(path).read_text(encoding=encoding, errors=errors)
+
+
+def normalize_rel_path(path: Path, root: Path) -> str:
+    """Produce a forward-slash relative path string from *path* relative to *root*.
+
+    On Windows ``Path.relative_to()`` returns backslash-separated strings
+    which fail to match forward-slash frozenset lookups (e.g. the
+    ``ALLOWED_COMPAT_SHIMS`` list in preflight tests).  This helper
+    normalises the result to **always use forward slashes** regardless
+    of the host OS.
+
+    Args:
+        path: Absolute path to normalise.
+        root: Root directory to compute the relative path against.
+
+    Returns:
+        Forward-slash separated relative path string.
+
+    Examples:
+        >>> normalize_rel_path(Path("/repo/cortex/core/a.py"), Path("/repo"))
+        'cortex/core/a.py'
+    """
+    return str(path.relative_to(root)).replace("\\", "/")

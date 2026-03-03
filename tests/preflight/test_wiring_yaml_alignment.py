@@ -39,7 +39,7 @@ ENTRY_POINT_WIRING_FILES = [
 
 
 def _load_wiring(path: Path) -> Dict[str, Any]:
-    return yaml.safe_load(path.read_text())
+    return yaml.safe_load(path.read_text(encoding="utf-8", errors="replace"))
 
 
 def _collect_entry_points() -> List[Tuple[str, str, str]]:

@@ -2,7 +2,7 @@ from typing import Any
 """
 CORTEX MCP v3 — Tool Implementations (WAVE-101 consolidation)
 
-30 production tools organized by category:
+31 production tools organized by category:
 - Core (3): challenge, classify, request_lifecycle
   (CortexProcessRequest deprecated — not registered)
 - Intelligence (5): lens, knowledge, git, generate_tests, brain_query
@@ -16,6 +16,7 @@ CORTEX MCP v3 — Tool Implementations (WAVE-101 consolidation)
 - GitOrchestrator (1): git_push
 - TestQualityGate (1): score_tests
 - Learning (1): learning
+- Context (1): cortex_context (Phase 113 GAP-07)
 
 AC_START: AC-WAVE100-S2-006
 AC_START: AC-P90-S7-001
@@ -121,6 +122,9 @@ from cortex.mcp.tools.mcp_toolkit_tools import (
 # Phase 83 — Unified Reinforcement Signal (URS) learning tool
 from cortex.mcp.tools.learning_tool import CortexLearning
 
+# Phase 113 — Request Sequence Persistence context tool (GAP-07)
+from cortex.mcp.tools.cortex_context import CortexContext
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -177,6 +181,8 @@ ALL_TOOLS = [
     CortexScoreTests,
     # Learning (1) - Phase 83 — Unified Reinforcement Signal
     CortexLearning,
+    # Context (1) - Phase 113 GAP-07 — Request Sequence Persistence
+    CortexContext,
 ]
 
 
@@ -305,6 +311,8 @@ __all__ = [
     "cortex_query_opj",
     # Learning (Phase 83)
     "CortexLearning",
+    # Context (Phase 113)
+    "CortexContext",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",
@@ -316,3 +324,4 @@ __all__ = [
 # AC_COMPLETE: AC-P50-MCP-001 ✅ CortexMasterPlanTool registered
 # AC_COMPLETE: AC-OPJ-PHASE52-MCP ✅ cortex_query_opj registered (MCP tool #26)
 # AC_COMPLETE: AC-WAVE101-CONSOLIDATION ✅ cortex_check→cortex_verify, cortex_total_recall→cortex_tools_catalog
+# AC_COMPLETE: AC-113-MCP-CONTEXT-001 ✅ CortexContext registered (MCP tool #31)

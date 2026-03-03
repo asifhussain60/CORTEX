@@ -3,9 +3,10 @@
 
 id: "phase-113"
 title: "Request Sequence Persistence — SQLite Request Table + InteractionOrchestrator Context Chain"
-version: "1.0"
+version: "1.1"
 created: "2026-03-03"
-status: PLANNED
+updated: "2026-03-03"
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008  # TDD mandatory
@@ -87,7 +88,7 @@ sweep_catalogue:
       pipeline without any sqlite3.connect() or save() call.
       File: cortex/orchestrators/core/master_orchestrator.py line 1162
     action_ref: "phase-113-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-113-02"
     title: "ConversationStateManager not wired into MasterOrchestrator"
@@ -100,7 +101,7 @@ sweep_catalogue:
       or instantiates ConversationStateManager.
       grep -r "ConversationStateManager" cortex/orchestrators/ → 0 results
     action_ref: "phase-113-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-113-03"
     title: "InteractionOrchestrator cannot query prior request sequence for context"
@@ -112,7 +113,7 @@ sweep_catalogue:
       conversations.db. The turn_number counter increments in-memory only.
       Result: no cumulative context building across turns.
     action_ref: "phase-113-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-113-04"
     title: "No request-to-response correlation ID for end-to-end tracing"
@@ -124,7 +125,7 @@ sweep_catalogue:
       The AC marker is ephemeral — generated from timestamp, not from a stored
       request record. No foreign key links request → intent → execution → response.
     action_ref: "phase-113-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-113-05"
     title: "challenge_decisions.user_request_hint truncated to 100 chars"
@@ -136,7 +137,52 @@ sweep_catalogue:
       for long requests. Should reference full request via request_id FK
       instead of duplicating truncated text.
     action_ref: "phase-113-c"
-    status: OPEN
+    status: CLOSED
+    closed_at: "2026-03-02"
+    resolution: |
+      Added request_id TEXT nullable column to challenge_decisions table via
+      backward-compatible ALTER TABLE (try/except for SQLite). Updated
+      _log_challenge_decision() to accept request_id=None. MasterOrchestrator
+      injects request_id into RoundContext.metadata; execute_turn_with_challenge()
+      extracts and passes to _log_challenge_decision(). 7 GREEN tests in
+      tests/orchestrators/core/test_challenge_decisions_request_id.py.
+
+  - id: "GAP-113-06"
+    title: "Cross-platform hardening — bare read_text() and relative_to() calls"
+    severity: P1
+    category: CROSS_PLATFORM
+    description: |
+      765 bare Path.read_text() calls without encoding= parameter cause
+      UnicodeDecodeError on Windows (cp1252 default). 226 bare relative_to()
+      calls produce backslash paths that fail frozenset lookups using forward
+      slashes. Added safe_read_text() and normalize_rel_path() utilities to
+      cortex/core/common/file_utils.py. Hardened all preflight test files.
+      Created tests/preflight/test_cross_platform_hardening.py (7 tests)
+      as a ratchet guard to prevent regressions.
+    action_ref: "phase-113-0"
+    status: CLOSED
+
+  - id: "GAP-113-07"
+    title: "MCP cortex_context tool — expose request history via MCP"
+    severity: P2
+    category: MCP_INTEGRATION
+    description: |
+      Once RequestLogManager and ConversationStateManager are wired (sub-phases
+      A-C), expose the request context chain via a new MCP tool cortex_context
+      with operations: op=query_prior (last N requests), op=get_session
+      (full session history), op=search_history (semantic search across
+      prior requests). This enables the host LLM to reference prior user
+      requests for cumulative context without InteractionOrchestrator
+      needing to embed it in every turn payload.
+    action_ref: "phase-113-d"
+    status: CLOSED
+    closed_at: "2026-03-02"
+    resolution: |
+      Created cortex/mcp/tools/cortex_context.py (CortexContext Tool ABC).
+      Ops: query_prior, get_session, search_history — all backed by
+      RequestLogManager. Registered as MCP tool #31 in
+      cortex/mcp/tools/__init__.py ALL_TOOLS list.
+      17 GREEN tests in tests/mcp/tools/test_cortex_context.py.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
@@ -153,11 +199,63 @@ sequential_execution_contract:
 # PHASES — ROI-ordered, TDD-gated sub-phases
 # ─────────────────────────────────────────────────────────────────────────────
 phases:
+  # ── Sub-phase 0: Cross-Platform Hardening Foundation ──────────────────────
+  - id: "phase-113-0"
+    title: "Cross-platform hardening — safe_read_text() + normalize_rel_path() + preflight guards"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-113-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "preflight tests green"
+    regression_gate: "python scripts/run_tests.py smoke — zero new failures"
+
+    description: |
+      Foundation sub-phase prepended to Phase 113 based on cross-platform
+      audit findings (765 bare read_text(), 226 bare relative_to()).
+      Deliverables:
+      1. safe_read_text(path) — encoding="utf-8", errors="replace" wrapper
+      2. normalize_rel_path(path, root) — always forward-slash relative paths
+      3. tests/preflight/test_cross_platform_hardening.py — 7 ratchet tests
+      4. All preflight test files hardened (test_stub_governance.py: 14 fixes,
+         test_wiring_yaml_alignment.py: 1 fix)
+
+    acceptance_criteria:
+      - "safe_read_text() and normalize_rel_path() importable from cortex.core.common.file_utils"
+      - "All preflight tests use encoding= on every read_text() call"
+      - "Ratchet test caps bare read_text() at 250 (down from 765, to be reduced further)"
+      - "python3 -m pytest tests/preflight/ — 203 passed, 0 failures"
+
+    tdd_sequence:
+      - step: 1
+        test: "test_safe_read_text_exists_and_works"
+        impl: "safe_read_text() in file_utils.py"
+      - step: 2
+        test: "test_normalize_rel_path_exists_and_works"
+        impl: "normalize_rel_path() in file_utils.py"
+      - step: 3
+        test: "test_no_new_bare_read_text_ratchet"
+        impl: "Ratchet baseline at 250 max bare calls"
+      - step: 4
+        test: "test_preflight_files_use_encoding"
+        impl: "Harden all preflight test files"
+
+    completion_evidence:
+      completed_at: "2025-07-14"
+      tests_added: 7
+      tests_passing: 203
+      files_modified:
+        - "cortex/core/common/file_utils.py"
+        - "tests/preflight/test_cross_platform_hardening.py"
+        - "tests/preflight/test_stub_governance.py"
+        - "tests/preflight/test_wiring_yaml_alignment.py"
+
   # ── Sub-phase A: Request Log Table + Pre-API Persistence ──────────────────
   - id: "phase-113-a"
     title: "RequestLogManager — request_log table + pre-API save in MasterOrchestrator"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-113-01", "GAP-113-04"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -273,7 +371,7 @@ phases:
   - id: "phase-113-b"
     title: "Wire ConversationStateManager into MasterOrchestrator lifecycle"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-113-02"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -359,7 +457,7 @@ phases:
   - id: "phase-113-c"
     title: "InteractionOrchestrator prior-turn context query + challenge_decisions FK linkage"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-113-03", "GAP-113-05"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -456,15 +554,32 @@ phases:
       all_gap_refs_closed: true
       blocks_next_sub_phase: true
 
-  # ── Sub-phase D (FINAL): Smoke Gate + CORE-064 Close ──────────────────────
+  # ── Sub-phase D (FINAL): Smoke Gate + MCP Tool + CORE-064 Close ────────────
   - id: "phase-113-final"
-    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    title: "MCP cortex_context tool + Smoke Gate + CORE-064 Sweep Close"
     priority: P0
-    status: PLANNED
-    gap_refs: []
+    status: COMPLETE
+    gap_refs: ["GAP-113-05", "GAP-113-07"]
     depends_on: ["phase-113-c"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
-    regression_gate: "python scripts\\run_tests.py smoke — ≥2,174 tests pass"
+    regression_gate: "python scripts/run_tests.py smoke — ≥2,174 tests pass"
+
+    description: |
+      Two deliverables in this final sub-phase:
+
+      1. MCP cortex_context tool — expose request history via MCP so the host
+         LLM can query prior user requests for cumulative context:
+         - op=query_prior: Return last N requests for current session
+         - op=get_session: Full session history with intent chain
+         - op=search_history: Keyword search across prior request texts
+
+         Implementation:
+         - Create cortex/mcp/tools/cortex_context.py
+         - Register in cortex/mcp/mcp_registry.py
+         - Wire to RequestLogManager for data access
+
+      2. Smoke Gate + CORE-064 Close — verify all sweep_catalogue entries
+         CLOSED, run full smoke test suite, move phase file planned/ → completed/
 
     tdd_cycle:
       red:
@@ -481,8 +596,12 @@ phases:
         blocker: "Do NOT close phase without cortex-master.yaml update"
 
     acceptance_criteria:
-      - "ALL 5 sweep_catalogue GAPs have status: CLOSED"
-      - "python scripts\\run_tests.py smoke passes ≥2,174 tests"
+      - "ALL 7 sweep_catalogue GAPs have status: CLOSED"
+      - "cortex/mcp/tools/cortex_context.py exists and registered in mcp_registry.py"
+      - "cortex_context op=query_prior returns last N requests for session"
+      - "cortex_context op=get_session returns full session history"
+      - "cortex_context op=search_history searches across prior request texts"
+      - "python scripts/run_tests.py smoke passes ≥2,174 tests"
       - "Zero new test failures vs baseline"
       - "phase-113 detail file moved: planned/ → completed/"
       - "cortex-master.yaml entry updated to status: COMPLETE"

@@ -69,11 +69,11 @@ class TestNoNewProxyRedirectStubs:
         violations: List[str] = []
 
         for f in _all_cortex_py_files():
-            rel = str(f.relative_to(CORTEX_ROOT))
+            rel = str(f.relative_to(CORTEX_ROOT)).replace("\\", "/")
             if rel in ALLOWED_COMPAT_SHIMS:
                 continue
             try:
-                tree = ast.parse(f.read_text())
+                tree = ast.parse(f.read_text(encoding="utf-8", errors="replace"))
             except SyntaxError:
                 continue
 
@@ -127,11 +127,11 @@ class TestNoWireeLaterStubs:
         violations: List[Tuple[str, int, str]] = []
 
         for f in _all_cortex_py_files():
-            rel = str(f.relative_to(CORTEX_ROOT))
+            rel = str(f.relative_to(CORTEX_ROOT)).replace("\\", "/")
             if rel in self.ALLOWED_DEFERRED:
                 continue
             try:
-                text = f.read_text()
+                text = f.read_text(encoding="utf-8", errors="replace")
             except Exception:
                 continue
             for i, line in enumerate(text.splitlines(), 1):
@@ -161,13 +161,13 @@ class TestGatewayDecoratorCoverage:
             if "__pycache__" in str(f) or f.name == "__init__.py":
                 continue
             try:
-                text = f.read_text()
+                text = f.read_text(encoding="utf-8", errors="replace")
             except Exception:
                 continue
 
             if "PHASE90_GATEWAY_ENABLED: bool = True" in text:
                 if "@enforce_gateway" not in text:
-                    violations.append(str(f.relative_to(CORTEX_ROOT)))
+                    violations.append(str(f.relative_to(CORTEX_ROOT)).replace("\\", "/"))
 
         assert not violations, (
             f"PHASE90_GATEWAY_ENABLED=True but no @enforce_gateway in {len(violations)} file(s). "
@@ -208,7 +208,7 @@ class TestGatewayChainIntegrity:
             pathlib.Path(__file__).parents[2]
             / "cortex/orchestrators/workflow/workflow_composer.py"
         )
-        tree = ast.parse(composer_src.read_text())
+        tree = ast.parse(composer_src.read_text(encoding="utf-8", errors="replace"))
 
         # Find _get_orchestrator method in WorkflowComposer class
         method_body = None
@@ -305,7 +305,7 @@ class TestNoConcreteClassStubs:
         violations: List[Tuple[str, str, str, int]] = []  # (file, class, method, line)
 
         for f in _all_cortex_py_files():
-            rel = str(f.relative_to(CORTEX_ROOT))
+            rel = str(f.relative_to(CORTEX_ROOT)).replace("\\", "/")
             if rel in _CONCRETE_STUB_EXCLUDED_FILES:
                 continue
             if "test_" in f.name or "_test.py" in f.name:
@@ -386,7 +386,7 @@ class TestNoConcreteClassStubs:
             CORTEX_ROOT
             / "cortex/orchestrators/validation/pre_implementation_checklist.py"
         )
-        text = src.read_text()
+        text = src.read_text(encoding="utf-8", errors="replace")
         # The stub always returned True with no conditional logic at all.
         # After the fix, the method must contain at least one if-statement.
         tree = ast.parse(text)
@@ -418,7 +418,7 @@ class TestNoConcreteClassStubs:
             CORTEX_ROOT
             / "cortex/orchestrators/intelligence/meta_auditor_agent.py"
         )
-        text = src.read_text()
+        text = src.read_text(encoding="utf-8", errors="replace")
         tree = ast.parse(text)
         method_body = None
         for node in ast.walk(tree):
@@ -456,7 +456,7 @@ class TestNoConcreteClassStubs:
             CORTEX_ROOT
             / "cortex/orchestrators/intelligence/meta_auditor_agent.py"
         )
-        text = src.read_text()
+        text = src.read_text(encoding="utf-8", errors="replace")
         tree = ast.parse(text)
         method_body = None
         for node in ast.walk(tree):
@@ -487,7 +487,7 @@ class TestNoConcreteClassStubs:
             CORTEX_ROOT
             / "cortex/infrastructure/metrics_exporter.py"
         )
-        text = src.read_text()
+        text = src.read_text(encoding="utf-8", errors="replace")
         # Find the ConsoleMetricsExporter class section
         class_start = text.find("class ConsoleMetricsExporter")
         assert class_start != -1, "ConsoleMetricsExporter not found"
@@ -530,7 +530,7 @@ class TestNoConcreteClassStubs:
             pathlib.Path(__file__).parents[2]
             / "cortex/orchestrators/workflow/workflow_composer.py"
         )
-        tree = ast.parse(composer_src.read_text())
+        tree = ast.parse(composer_src.read_text(encoding="utf-8", errors="replace"))
 
         # Find _get_orchestrator method in WorkflowComposer class
         method_body = None

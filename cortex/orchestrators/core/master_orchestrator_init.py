@@ -60,8 +60,9 @@ class MasterOrchestratorInitialiser:
     # ------------------------------------------------------------------
 
     def wire_state_and_logging(self) -> None:
-        """StateManager, orchestrator_registry, operation tracking."""
+        """StateManager, RequestLogManager, orchestrator_registry, operation tracking."""
         from cortex.core.state_manager import get_state_manager
+        from cortex.orchestrators.core.request_log_manager import RequestLogManager
 
         h = self._h
         h._state_manager = get_state_manager()
@@ -71,6 +72,24 @@ class MasterOrchestratorInitialiser:
             success=True,
             details={"manager": "StateManager initialized for cross-phase consistency"},
         )
+
+        # Phase 113-B: Wire RequestLogManager for pre-API request persistence (CORE-064)
+        try:
+            h._request_log_manager = RequestLogManager()
+            h.logger.log_operation_complete(
+                ac_id="AC-113-B-001",
+                operation="REQUEST_LOG_MANAGER_INIT",
+                success=True,
+                details={"db_path": str(h._request_log_manager.db_path)},
+            )
+        except Exception as _rlm_err:
+            h._request_log_manager = None
+            h.logger.log_operation_complete(
+                ac_id="AC-113-B-001",
+                operation="REQUEST_LOG_MANAGER_INIT",
+                success=False,
+                details={"error": str(_rlm_err), "fallback": "request logging disabled"},
+            )
 
         # Stage placeholder attributes used throughout coordinate_operation
         h.interaction_orchestrator = None
@@ -482,6 +501,25 @@ class MasterOrchestratorInitialiser:
                     details={"error": str(e)},
                 )
 
+        # Phase 113-C: Inject RequestLogManager into InteractionOrchestrator for context chain
+        if h.interaction_orchestrator is not None and h._request_log_manager is not None:
+            try:
+                if hasattr(h.interaction_orchestrator, "set_request_log_manager"):
+                    h.interaction_orchestrator.set_request_log_manager(h._request_log_manager)
+                    h.logger.log_operation_complete(
+                        ac_id="AC-113-C-001",
+                        operation="INTERACTION_ORCHESTRATOR_CONTEXT_CHAIN_WIRED",
+                        success=True,
+                        details={"stage": "Prior-request context chain active (Phase 113-C)"},
+                    )
+            except Exception as _wire_err:
+                h.logger.log_operation_complete(
+                    ac_id="AC-113-C-001",
+                    operation="INTERACTION_ORCHESTRATOR_CONTEXT_CHAIN_WIRED",
+                    success=False,
+                    details={"error": str(_wire_err)},
+                )
+
         # Stage 2: IntentRouter
         try:
             from cortex.orchestrators.core.intent_router import IntentRouter
@@ -600,11 +638,11 @@ class MasterOrchestratorInitialiser:
         TechIntelligenceOrchestrator, AutonomousPlanExecutor,
         ASCIIProgressBar, ChallengeGenerator, HolisticContextBuilder.
         """
-        from cortex.orchestrators.core.intent_router.challenge_generator import (
-            ChallengeGenerator,
-        )
         from cortex.orchestrators.core.holistic_context_builder import (
             HolisticContextBuilder,
+        )
+        from cortex.orchestrators.core.intent_router.challenge_generator import (
+            ChallengeGenerator,
         )
 
         h = self._h

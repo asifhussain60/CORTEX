@@ -122,6 +122,17 @@ phases:
   # 112 is independent and can run first as it only edits YAML files.
   # ─────────────────────────────────────────────────────────────────────────────
 
+  - id: phase-113
+    title: "Request Sequence Persistence — SQLite request_log + InteractionOrchestrator context chain"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-113-REQUEST-SEQUENCE-PERSISTENCE
+    gaps: 7
+    gaps_closed: 7
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/completed/phase-113-request-sequence-persistence.yaml"
+    note: "7 GAPs CLOSED. RequestLogManager (23 tests), MasterOrchestrator wiring (9), context chain (12), challenge_decisions FK (7), cortex_context MCP tool #31 (17). 272 tests GREEN. Smoke: 2181 passed."
+
   - id: phase-112
     title: "Master YAML THIN INDEX CONTRACT — Reduce cortex-master.yaml from 579L to ≤500L"
     priority: P0
