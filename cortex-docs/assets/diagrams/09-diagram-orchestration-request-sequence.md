@@ -9,7 +9,7 @@ source_of_truth:
   - cortex/orchestrators/core/master_orchestrator.py
   - cortex/orchestrators/core/intent_router.py
   - cortex/mcp/
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 diagram_type: Sequence
 render: ascii
 ---

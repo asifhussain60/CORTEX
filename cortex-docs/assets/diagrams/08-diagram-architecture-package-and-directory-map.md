@@ -10,7 +10,7 @@ source_of_truth:
   - cortex/
   - cortex-registry/
   - tests/
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 diagram_type: Architecture
 render: ascii
 ---
@@ -22,15 +22,19 @@ render: ascii
  │  REPO ROOT                                                                  │
  │                                                                             │
  │  cortex/                          ← Single canonical Python package         │
- │  ├── orchestrators/               ← 258 files across 9 domains            │
+ │  ├── orchestrators/               ← 320 files across 15 domains           │
  │  │   ├── core/                       MasterOrch, IntentRouter, TDD, Enforce │
  │  │   ├── domain/                     Onboarding, Planning, Design           │
  │  │   ├── support/                    Debug, Sweep, Refactoring              │
  │  │   ├── health/                     Health, Vacuum                         │
  │  │   ├── workflow/                   WorkflowComposer, TemplateComposer     │
- │  │   └── ... (9 domains total)                                              │
+ │  │   ├── intelligence/               LENS-backed intelligence orchestrators │
+ │  │   ├── git/                        GitOrchestrator, sync pipeline         │
+ │  │   ├── persona/                    Role-based persona orchestrators       │
+ │  │   ├── validation/                 Contract + wiring validation           │
+ │  │   └── ... (15 domains total)                                             │
  │  ├── mcp/                         ← MCP stdio server + 30 registered tools  │
- │  │   └── tools/                      35 tool files                          │
+ │  │   └── tools/                      54 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │
  │  ├── intelligence/                ← Reasoning, learning, RCA engine         │
  │  │   ├── facade.py               ← IntelligenceFacade — canonical entry (Phase 107) │
@@ -43,7 +47,7 @@ render: ascii
  │  └── config/                      ← Settings, environment                   │
  │                                                                             │
  │  cortex-registry/                 ← Configuration as code (YAML)            │
- │  ├── core/                           32 governance rules (CORE-xxx)         │
+ │  ├── core/                           36 governance rules: 23 in core/ + 13 in governance/ │
  │  │   └── specifications/             4 wiring contract YAMLs               │
  │  ├── workflows/templates/            3-tier: primitives → templates →       │
  │  │   ├── primitives/                    composites                          │
@@ -60,7 +64,7 @@ render: ascii
  │                                                                             │
  │  cortex-docs/                     ← GitHub Pages site (HTML/CSS only)       │
  │  .github/                         ← Prompts, agents, templates, CI/CD       │
- │  .cortex-runtime/                 ← Runtime data (9 SQLite DBs, traces)     │
+ │  .cortex-runtime/                 ← Runtime data (7 SQLite DBs, traces)     │
  │  scripts/                         ← Build tools, test runner, refresh       │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```

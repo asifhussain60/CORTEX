@@ -11,8 +11,8 @@ source_of_truth:
   - cortex/intelligence/facade.py
   - cortex/intelligence/provider.py
   - cortex/knowledge/registry_proxy.py
-last_verified: 2026-03-02
-phase_status: "Phase 107 COMPLETE · Phase 109 IN_PROGRESS (diamond flatten)"
+last_verified: 2026-03-03
+phase_status: "Phase 107 COMPLETE · Phase 109 COMPLETE (diamond flatten deferred to future sprint)"
 diagram_type: Intelligence
 render: ascii
 ---
@@ -99,7 +99,7 @@ render: ascii
 
 # Intelligence Diamond — Single Entry Point Architecture
 
-*Phase 107 COMPLETE · Phase 109 IN_PROGRESS*
+*Phase 107 COMPLETE · Phase 109 COMPLETE*
 
 ```
  ═══════════════════════════════════════════════════════════════════════════════
@@ -164,8 +164,8 @@ render: ascii
                          │     ├── learning/    (RCA + mem.) │
                          │     └── models/      (shared)     │
                          │                                   │
-                         │  Status: IN_PROGRESS              │
-                         │  (25 subdirs → 4 canonical dirs)  │
+                         │  Status: DEFERRED (future sprint) │
+                         │  (26 subdirs → 4 canonical dirs)  │
                          └───────────────────────────────────┘
 ```
 
@@ -182,13 +182,14 @@ render: ascii
   │  Dead code cleanup (Sub-Phase D): ✅ COMPLETE                       │
   │  phase97_integration.py deleted (zero importers, confirmed)        │
   │                                                                     │
-  │  Directory flatten (Sub-Phase C): ⏳ OPEN                           │
-  │  25 subdirs → 4 diamond dirs (analysis/knowledge/learning/models/) │
+  │  Directory flatten (Sub-Phase C): ↗ DEFERRED (future sprint)       │
+  │  26 subdirs → 4 diamond dirs (analysis/knowledge/learning/models/) │
+  │  GAP-109-11 + GAP-109-12 status: OPEN — deferred, not blocking     │
   │                                                                     │
-  │  Legacy direct imports (Sub-Phase D cont.): ⏳ OPEN                 │
-  │  cortex/tools/ + cortex/mcp/tools/ still bypass facade             │
+  │  Legacy direct imports (Sub-Phase D cont.): ↗ DEFERRED             │
+  │  cortex/tools/ + cortex/mcp/tools/ bypass — tracked for next phase │
   └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Business impact:** CORTEX intelligence is now accessible through a single, stable API. Orchestrators that previously had to choose between three different providers now call one facade — reducing coupling, improving testability, and establishing the foundation for the diamond directory structure planned in Phase 109-C.
+**Business impact:** CORTEX intelligence is now accessible through a single, stable API. Orchestrators that previously had to choose between three different providers now call one facade — reducing coupling, improving testability, and establishing the foundation for the diamond directory structure (Sub-Phase C, deferred to a future sprint).
 

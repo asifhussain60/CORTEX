@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/
   - cortex-registry/
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 diagram_type: Architecture
 render: ascii
 ---
@@ -43,7 +43,7 @@ render: ascii
 │  │(intent map) │   │ RED→GRN→RF │   │ (agents)      │   │ Refactor/Plan/... │          │
 │  └─────────────┘   └────────────┘   └───────────────┘   └───────────────────┘          │
 │                                                                                         │
-│  Wired orchestrators: 258 files · core · domain · support · health · git · intelligence · persona · validation · workflow │
+│  Wired orchestrators: 320 files · core · domain · support · health · git · intelligence · persona · validation · workflow · registry · response · synthesis · tools · strategies (15 domains) │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐

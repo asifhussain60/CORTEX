@@ -5,16 +5,18 @@
 #          Practical writing craft (Rule of Three, Bathos, Callbacks, Running Gags),
 #          Research: tvtropes.org, masterclass.com, punchdrunkcritics.com
 # Used by: comedy-enhancement-agent.md, narrative-continuity-agent.md
-# Scope: INTERNAL — never surfaced in production cortex-docs output
+# Scope: INTERNAL — never surfaced in production cortex-docs output; excluded from /sync
 # Created: 2026-03-02
-# Updated: 2026-03-02 — No structural changes; architecture facts live in video-design-best-practices.yaml
+# Updated: 2026-03-03 — No structural changes; architecture facts live in video-design-best-practices.yaml
 
 domain: content-production
 type: best-practice
 title: "Comedic Writing Principles for Technical Narrative"
+release_scope: "internal"  # never include in /sync, never expose in cortex-docs HTML output
+created: "2026-03-02"
+updated: "2026-03-03"
 internal_only: true
 production_excluded: true
-release_scope: "internal"  # never include in /sync, never expose in cortex-docs HTML output
 
 # ─────────────────────────────────────────────────────────────────
 # PART 1 — ACADEMIC HUMOR THEORIES (Foundation)

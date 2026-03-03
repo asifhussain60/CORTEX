@@ -10,7 +10,7 @@ source_of_truth:
   - cortex-registry/core/
   - cortex/governance/
   - cortex/orchestrators/core/enforcement_orchestrator.py
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 diagram_type: Governance
 render: ascii
 ---

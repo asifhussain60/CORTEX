@@ -12,7 +12,7 @@ source_of_truth:
   - cortex/secrets/
   - .vscode/settings.json
   - .github/templates/cortex-response-templates.md
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 diagram_type: Architecture
 render: ascii
 response_header_enhancement:
@@ -75,7 +75,7 @@ response_header_enhancement:
 │  │                             TOOL REGISTRY                                  │  │
 │  │                                                                            │  │
 │  │  Categories: routing · governance · intelligence · audit · testing · docs   │
-  │  Tool count: 30 registered tools · 35 tool files in cortex/mcp/tools/     │  │
+  │  Tool count: 30 registered tools · 54 tool files in cortex/mcp/tools/     │  │
 │  │                                                                            │  │
 │  │  Tool Call Flow:                                                           │  │
 │  │  stdin → JSON parse → tool lookup → validate → orchestrate → stdout        │  │

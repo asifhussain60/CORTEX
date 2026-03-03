@@ -3,14 +3,16 @@
 # Purpose: Codified best practices for tutorial & explainer video production
 # Sources: NNGroup, HubSpot, Wyzowl, industry-standard cognitive load research
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
-# Updated: 2026-03-02 — Counts verified against live architecture (258 orchestrators, 35 MCP tool files, 30 registered)
-# Updated: 2026-03-02 — Intelligence Diamond enhancements reflected (Phase 107 COMPLETE, Phase 109 IN_PROGRESS)
+# Scope: EXTERNAL — included in /sync; used in cortex-docs video prompt generation
+# Created: 2026-02-27
+# Updated: 2026-03-03 — Counts verified against live architecture (320 orchestrators, 54 MCP tool files, 30 registered, 15 domains)
 
 domain: content-production
 type: best-practice
 title: "Video Design Best Practices for Technical Tutorials and Explainers"
+release_scope: "external"  # included in /sync and cortex-docs video prompt generation
 created: "2026-02-27"
-updated: "2026-03-02"
+updated: "2026-03-03"
 
 principles:
   - id: VBP-001
@@ -329,26 +331,29 @@ copilot_contrast_narrative:
       video_ref: "V06 Scene 4"
 
 # ─────────────────────────────────────────────────────────────────
-# GROUND-TRUTH ARCHITECTURE FACTS (Live — updated 2026-03-02)
+# GROUND-TRUTH ARCHITECTURE FACTS (Live — updated 2026-03-03)
 # Use these as the ONLY permitted callout numbers in video content.
 # Run `scripts/refresh_prompt_suite.py --counts-only` to revalidate.
 # ─────────────────────────────────────────────────────────────────
 architecture_facts:
-  verified: "2026-03-02"
-  orchestrator_files: 258          # find cortex/orchestrators -name "*.py" -not -name "__init__.py" | wc -l
-  mcp_tools_registered: 30        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict (WAVE-101)
-  mcp_tool_files: 35              # find cortex/mcp/tools -name "*.py" ! -name "__init__.py" | wc -l
+  verified: "2026-03-03"
+  orchestrator_files: 320          # find cortex/orchestrators -name "*.py" | wc -l
+  mcp_tools_registered: 30        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict
+  mcp_tool_files: 54              # find cortex/mcp/tools -name "*.py" | wc -l
   intent_types: 29                 # cortex/models/canonical_enums.py IntentType enum
-  governance_yamls: 32             # find cortex-registry/core -name "*.yaml" | wc -l
-  intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry (Phase 109: all orchestrators now wired)
+  governance_yamls_core: 23        # find cortex-registry/core -name "*.yaml" | wc -l
+  governance_yamls_governance: 13  # find cortex-registry/governance -name "*.yaml" | wc -l
+  governance_yamls_total: 36       # core (23) + governance (13)
+  intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry
   intelligence_diamond_layers: 3   # analyze() → LENS pipeline | synthesize() → KnowledgeSynthesisEngine | query() → KnowledgeRegistryProxy
   intelligence_facade_api: "analyze / synthesize / query"  # Three public methods — single entry replaces UnifiedIntelligenceProvider + LENSIntelligenceFacade + KnowledgeRegistryProxy
-  intelligence_phase: "Phase 107 COMPLETE (facade created) · Phase 109 IN_PROGRESS (flatten to diamond: analysis/ knowledge/ learning/ models/)"
+  intelligence_phase: "Phase 107 COMPLETE (facade created) · Phase 109 COMPLETE (all orchestrators wired)"
   rca_methodologies: 4             # Five-Whys, Fishbone, Causal-Chain, Fault-Tree
   debug_strategies: 8              # 3 Python + 5 multi-stack
   tdd_phases: 3                    # RED → GREEN → REFACTOR
   sdlc_pipeline_phases: 7          # Requirements → Solution → Implement → Review → Integration → Security → Release
   audit_pipeline_stages: 9         # /audit fix 9-stage convergence pipeline
   sqlite_databases: 7              # .cortex-runtime/ (orchestrator-traces, rca-store, audit, governance, conversations, wiring-audit, intelligence-audit)
+  orchestrator_domains: 15         # core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 registry:2 response:3 synthesis:2 tools:2 strategies:1 _top_level:3
   quote_library_count: 32          # BLOCK-QUOTE-LIBRARY in cortex-response-templates.md
-  quote_themes: 9                  # quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal (note: 10 themes listed, 9 used in routing)
+  quote_themes: 10                 # quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal
