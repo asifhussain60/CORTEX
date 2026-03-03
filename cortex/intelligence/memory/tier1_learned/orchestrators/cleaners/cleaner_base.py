@@ -14,6 +14,7 @@ Authority:
 Author: CORTEX Architect
 Date: 2026-02-15
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

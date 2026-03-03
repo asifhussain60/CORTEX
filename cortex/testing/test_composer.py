@@ -10,6 +10,7 @@ Purpose: Transform demands into beautiful, maintainable test code
 
 Key principle: Compose tests that simulate real-world scenarios, not placeholders
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import textwrap
 from dataclasses import dataclass

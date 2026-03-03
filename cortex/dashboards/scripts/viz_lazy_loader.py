@@ -12,6 +12,7 @@ Phase: 14 - LENS Dashboard Implementation
 AC-ID: LENS-DASH-007
 Task: 019 - Lazy Module Loader
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

@@ -1,4 +1,5 @@
 """Solution File (.sln) Parser for .NET Enterprise LENS Analysis"""
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import re

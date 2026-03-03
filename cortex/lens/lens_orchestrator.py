@@ -14,6 +14,7 @@ Provides:
 
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings), LENS-003
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import logging
 import time

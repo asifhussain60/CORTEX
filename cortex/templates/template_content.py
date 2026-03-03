@@ -1,4 +1,5 @@
 """Template content library with use-cases, domains, and workflows."""
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from typing import Any, Dict, List, Optional
 

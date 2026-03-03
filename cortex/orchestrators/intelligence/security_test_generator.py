@@ -8,6 +8,7 @@ Generates security tests for:
 
 Part of WAVE-2 Stage 4: Intelligent Test Generation.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

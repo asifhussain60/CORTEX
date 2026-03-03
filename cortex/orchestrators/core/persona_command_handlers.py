@@ -10,6 +10,7 @@ Handles:
 - /detail {level} — Override depth for 1 turn
 - /detail sticky {level} — Persist depth for session
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass
 from typing import Any, Optional, Tuple

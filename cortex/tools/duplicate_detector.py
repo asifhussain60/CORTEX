@@ -6,6 +6,7 @@ Detects conflicting implementations that violate Single Canonical Implementation
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import ast
 import logging

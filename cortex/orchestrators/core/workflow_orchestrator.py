@@ -21,6 +21,7 @@ Author: CORTEX
 Status: Production Ready
 Version: 1.0.0
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

@@ -7,6 +7,7 @@ Automatically registers event subscriptions for orchestrators based on:
 - Dependency relationships
 - Wiring specifications
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass

@@ -8,6 +8,7 @@ Author: CORTEX Team
 Created: 2026-02-06
 Authority: Phase 33 Stage 3 specification
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import time

@@ -7,6 +7,7 @@ Three response formats with progressive disclosure:
 2. HYBRID: BLUF + essential details
 3. FULL_DETAIL: Complete analysis with all context
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass, field

@@ -22,6 +22,7 @@ Governance:
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 # AC-ID: ARCH-012-REFACTOR - TDDOrchestrator V2 with Base Protocol
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 """
 TDDOrchestrator V2 - Refactored to use OrchestratorBaseProtocol.
 

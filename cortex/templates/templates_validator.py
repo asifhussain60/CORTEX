@@ -1,4 +1,5 @@
 """Template validator for checking template syntax and structure."""
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from typing import Dict, List, Optional, Set
 

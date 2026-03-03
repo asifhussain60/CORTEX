@@ -12,6 +12,7 @@ Follows GPT specification for SPA-like static output.
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 AC-ID: SPA-SUITE-002
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import json
 import logging

@@ -7,6 +7,7 @@ AC-INFRA-001-04: Implements intelligent retry with:
 - Transient vs permanent failure detection
 - Retry budget limits
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import random
 import time

@@ -4,6 +4,7 @@ Context aggregation for multi-turn conversations.
 Aggregates previous outputs and context across turns, enabling
 "remember what I said 3 turns ago" queries.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from datetime import datetime

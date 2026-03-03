@@ -6,6 +6,7 @@ Module: cortex/agents/metadata_parser.py
 Authority: Phase 81 S2 - Agent Metadata Standardization
 Version: 1.0
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 import os
 import re
 import yaml

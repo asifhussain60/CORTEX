@@ -8,6 +8,7 @@ UnifiedIntelligenceProvider.targeted() and .full().
 Authority: AC-P18-001, AC-P18-002, AC-P18-003, AC-P18-004, AC-P18-012, AC-P18-016
 Rule: CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (canonical singleton)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

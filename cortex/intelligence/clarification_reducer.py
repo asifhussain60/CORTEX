@@ -8,6 +8,7 @@ Authority: cortex-registry/_cortex-master/index.yaml WAVE-M
 Created: 2026-02-12
 AC-ID: AC-WAVE-M-001
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional

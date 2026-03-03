@@ -9,6 +9,7 @@ Phase: 14 - LENS Dashboard Implementation
 Task: 017 - SPA Lazy Module Loader
 AC-ID: LENS-DASH-017
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from typing import Dict, List

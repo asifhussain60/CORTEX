@@ -22,6 +22,7 @@ Implementation Note (CORE-030 — Implementation Truth):
 
 TypeScript Language Service reference: https://github.com/microsoft/TypeScript/wiki/Using-the-Language-Service-API
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 import logging

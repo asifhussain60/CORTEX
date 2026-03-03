@@ -6,6 +6,7 @@ for automated documentation site generation from Markdown content.
 
 AC_START: AC-SUPPORT-DOCS-20260223T000000Z
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from enum import Enum

@@ -7,6 +7,7 @@ Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 Phase 64-G: register_post_step_hook() added for CORE-066 ResponseTemplateValidator wiring.
 Phase 67-E: StepHandlerRegistry + StepError replacing _execute_step() minimal shim (GAP-67-01).
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional

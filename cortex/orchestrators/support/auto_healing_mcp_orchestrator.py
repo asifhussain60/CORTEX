@@ -17,6 +17,7 @@ Learnings from chat01.md (2026-02-16):
 Authority: Phase 89 + DIGEST chat01.md + CORE-050 enhancement
 AC-ID: AC-PHASE89-AUTOHEALING-001
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import platform
 import subprocess

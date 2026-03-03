@@ -3,6 +3,7 @@ JSON Profile Repository - Data Access Pattern (Phase 54-A S2)
 
 Pattern: Data Access Object (DAO), enabling future SQLite/API migration
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime

@@ -7,6 +7,7 @@ Authority: CORE-035 (Single Canonical Implementation)
 This module provides the canonical definitions for orchestrator metadata used
 across registry, lookup, and runtime systems.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from datetime import datetime

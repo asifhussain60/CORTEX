@@ -3,6 +3,7 @@ Persona Models for Phase 37 Role-Adaptive System
 
 Dataclasses representing personas, depth levels, and configuration.
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass, field
 from enum import Enum

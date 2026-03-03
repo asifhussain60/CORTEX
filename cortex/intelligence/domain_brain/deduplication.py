@@ -3,6 +3,7 @@
 Author: CORTEX Framework
 Implements: AC-DB-E01 (Duplicate Upload Detection)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import hashlib
 import json

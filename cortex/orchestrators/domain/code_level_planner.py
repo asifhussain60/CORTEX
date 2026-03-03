@@ -7,6 +7,7 @@ including scope analysis, phase breakdown, and TDD step ordering.
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 AC-ID: AC-SDLC-PHASE3-001
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from __future__ import annotations
 

@@ -5,6 +5,7 @@ Authority: MASTER-5-WAVE-PLAN-2026-02-13.yaml WAVE-2 Stage S1
 Purpose: Prioritize high-value tests using multi-factor scoring
 Formula: (Severity × 0.4) + (Likelihood × 0.3) + (Coverage Gap × 0.3)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

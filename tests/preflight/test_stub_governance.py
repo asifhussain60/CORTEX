@@ -34,6 +34,11 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/intelligence/base.py",
     "cortex/intelligence/base_engine.py",
     "cortex/intelligence/knowledge/unified_intelligence_context.py",
+    # Phase 111 — OrchestratorLookup canonical consolidation (expiry: 2026-06-01)
+    # Canonical: cortex/orchestrators/core/orchestrator_lookup.py
+    # These re-export for import-path backward compatibility (SWEEP-111-DUPLICATE-CLASS-SWEEP)
+    "cortex/orchestrators/core/intent_router/orchestrator_lookup.py",
+    "cortex/orchestrators/registry/orchestrator_lookup.py",
 })
 
 CORTEX_ROOT = pathlib.Path(__file__).parents[2]

@@ -8,6 +8,7 @@ entity index so KGInference can reason over them.
 Authority: AC-P20-004, AC-P20-014
 Rule: CORE-011 (type hints), CORE-012 (docstrings)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from pathlib import Path

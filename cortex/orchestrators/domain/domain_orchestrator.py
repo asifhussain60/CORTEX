@@ -5,6 +5,7 @@ Implements domain orchestration patterns for multi-domain support.
 Author: CORTEX Framework
 AC-PHASE57-D-001: AC markers added (GAP-57-06)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import time

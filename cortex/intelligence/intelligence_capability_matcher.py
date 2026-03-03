@@ -16,6 +16,7 @@ Example Usage:
         best_match = matches[0]  # Ranked by quality
         agent_id = best_match.agent.agent_id
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from enum import Enum

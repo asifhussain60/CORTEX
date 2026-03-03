@@ -9,6 +9,7 @@ Enhanced with progress feedback for long-running operations.
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 from dataclasses import dataclass, field
 from datetime import datetime

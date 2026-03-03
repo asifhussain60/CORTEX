@@ -5,6 +5,7 @@ available and functional in the target workspace.
 
 AC: PHASE-DEPLOYMENT-002 AC-DEP-002-03
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

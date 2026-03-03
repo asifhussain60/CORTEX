@@ -17,6 +17,7 @@ should be wrapped with ResponseHeaderEnforcer.wrap_response() before returning
 to final user/orchestrator to ensure consistent header formatting.
 
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import time
 import traceback

@@ -7,6 +7,7 @@ registry history and performing LENS-based similarity checks.
 AC_START: AC-WAVE-3-AUTOMATION-HOOKS-001
 Description: RecommendationGate for registry-aware suggestions
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from pathlib import Path

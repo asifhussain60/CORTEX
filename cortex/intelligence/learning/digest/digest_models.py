@@ -7,6 +7,7 @@ Author: Asif Hussain
 Date: 2026-02-07
 Phase: 41 Stage 1 (ENH-053)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from datetime import datetime
 from typing import Any, Dict

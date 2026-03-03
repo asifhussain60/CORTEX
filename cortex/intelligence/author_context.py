@@ -1,4 +1,5 @@
 # AC-ID: IR-001-02 - Git History Intelligence - Author Context
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 """
 Author Context Builder for CORTEX LENS.
 

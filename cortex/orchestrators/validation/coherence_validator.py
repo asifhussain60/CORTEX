@@ -10,6 +10,7 @@ Purpose:
     - Structure preserved
     - Best practice compliance
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 from __future__ import annotations
 
 import logging

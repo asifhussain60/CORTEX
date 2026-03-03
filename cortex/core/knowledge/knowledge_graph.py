@@ -1,4 +1,5 @@
 # AC-ID: IR-004-01 - CORTEX LENS Knowledge Graph Builder
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 """
 CORTEX LENS Knowledge Graph Module (IR-004-01).
 

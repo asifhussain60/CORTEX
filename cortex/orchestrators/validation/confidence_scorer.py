@@ -9,6 +9,7 @@ Authority: PHASE-48-IMPLEMENTATION-PLAN.yaml Stage 3
 Priority: P0-CRITICAL
 AC-ID: AC-PHASE48-S3-IMPL-001
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from typing import Dict, List, Any

@@ -27,6 +27,7 @@ Testing: tests/unit/orchestrators/git/test_enforcement_orchestrator.py
 Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
             CORE-028 (snake_case), CORE-035 (single canonical implementation)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 import re

@@ -5,6 +5,7 @@ AC-INFRA-001-06: Provides comprehensive resource tracking,
 automatic cleanup, and leak detection for connections, file
 handles, locks, and other managed resources.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import threading
 import time

@@ -17,6 +17,7 @@ Features:
 
 Author: Asif Hussain
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

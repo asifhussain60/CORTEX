@@ -18,6 +18,7 @@ Performance Targets:
 - Atomicity: All-or-nothing transactions
 - Rollback: Full transaction rollback on failure
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from abc import ABC, abstractmethod

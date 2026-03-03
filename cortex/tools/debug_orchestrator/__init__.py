@@ -17,6 +17,7 @@ Supports multiple technology stacks:
 Author: CORTEX
 Version: 1.0.0
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
 import os

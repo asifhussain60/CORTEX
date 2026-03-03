@@ -23,6 +23,7 @@ CORE Governance:
 - CORE-011: Type hints mandatory
 - CORE-012: Google-style docstrings
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

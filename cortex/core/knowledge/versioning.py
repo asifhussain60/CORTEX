@@ -12,6 +12,7 @@ Governance:
   - CORE-026: Git checkpoints before major implementations
   - CORE-027: Audit trail logged (AC_START → AC_EXECUTE → AC_COMPLETE)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

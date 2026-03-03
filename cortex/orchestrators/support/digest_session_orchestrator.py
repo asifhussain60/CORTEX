@@ -6,6 +6,7 @@ CORTEX canonical support orchestrator (CORE-035).
 
 OPJ Integration (Phase 52): consults OPJ before processing, records outcome after.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

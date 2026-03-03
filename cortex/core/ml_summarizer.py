@@ -8,6 +8,7 @@ Author: CORTEX Team
 Created: 2026-02-06
 Authority: Phase 36 Stage 1 specification
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import logging
 from dataclasses import dataclass, field

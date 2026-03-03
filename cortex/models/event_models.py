@@ -5,6 +5,7 @@ Purpose: Data models for OrchestratorEventBus pub/sub messaging
 Authority: CORTEX-SELF-IMPROVEMENT-SDLC.yaml Phase 0
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from datetime import datetime

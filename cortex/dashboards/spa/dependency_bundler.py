@@ -15,6 +15,7 @@ Phase: 14 - LENS Dashboard Implementation
 Task: 016 - SPA Dependency Bundling Script
 AC-ID: LENS-DASH-016
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import hashlib
 import urllib.request

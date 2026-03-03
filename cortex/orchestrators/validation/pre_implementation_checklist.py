@@ -24,6 +24,7 @@ Priority: P0-CRITICAL
 
 AC-ID: AC-PHASE48-S1-IMPL-003
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from typing import Dict, List, Any

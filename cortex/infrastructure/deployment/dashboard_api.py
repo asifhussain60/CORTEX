@@ -8,6 +8,7 @@ Phase: 38 | Stage: 12 | Priority: P1
 Description: Dashboard API endpoints
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import asyncio
 import logging

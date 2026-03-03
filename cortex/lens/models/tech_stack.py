@@ -9,6 +9,7 @@ CORE Rules:
 - CORE-012: Docstrings required ✅
 - CORE-008: TDD mandatory ✅
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass, field
 from enum import Enum

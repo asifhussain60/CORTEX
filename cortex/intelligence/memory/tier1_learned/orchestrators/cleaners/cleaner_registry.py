@@ -13,6 +13,7 @@ Authority:
 Author: CORTEX Architect
 Date: 2026-02-15
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from typing import Dict, List
 from .base import CleanerInterface

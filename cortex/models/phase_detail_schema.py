@@ -4,6 +4,7 @@ Phase Detail Schema - Pydantic Models for Comprehensive Phase Detail Pages
 Data models for phase detail pages with LLM-generated content, diagrams, and narrative.
 Authority: PHASE-STORY-SYSTEM-COMPREHENSIVE.yaml (ENH-032)
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 from enum import Enum
 from typing import Any, Dict, List, Optional

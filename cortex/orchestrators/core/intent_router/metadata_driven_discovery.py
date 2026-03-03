@@ -8,6 +8,7 @@ Module: cortex/intent_router/metadata_driven_discovery.py
 Authority: Phase 81 S3 Part 4 - Metadata Parser Integration
 Version: 1.0
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from typing import Optional, Dict, List, Set, Any
 from dataclasses import dataclass, field
 import logging

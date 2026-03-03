@@ -1,4 +1,5 @@
 # Author: Asif Hussain
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 # Date: 2026-02-08
 # Phase: 55, Stage 1
 

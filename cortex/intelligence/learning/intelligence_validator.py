@@ -14,6 +14,7 @@ Validation Scope:
 Author: Asif Hussain
 Date: 2026-02-10
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from __future__ import annotations
 

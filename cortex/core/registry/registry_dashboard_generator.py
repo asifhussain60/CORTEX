@@ -7,6 +7,7 @@ with current statistics for Phase 25 PLAN MODE visualization.
 AC-ID: PHASE-25-STAGE-2-001
 Authority: phase-25-plan-mode-cortex-architect.yaml
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
 from dataclasses import dataclass, field

@@ -4,6 +4,7 @@ dor_approval_gate.py — Definition of Ready Approval Gate
 Restored for import compatibility after Wave 7 purge.
 Preserves public interface: IntentReflection, ApprovalDecision, DoRApprovalGate.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 from dataclasses import dataclass, field

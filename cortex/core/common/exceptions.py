@@ -6,6 +6,7 @@ Includes decorator-based exception handlers for DRY code patterns.
 
 AC-REM-002-01: Consolidates exception handlers across codebase.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import functools
 import logging

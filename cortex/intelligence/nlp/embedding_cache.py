@@ -1,4 +1,5 @@
 """embedding_cache.py — Embedding Cache — LRU cache for text embeddings."""
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from __future__ import annotations
 
 

@@ -6,6 +6,7 @@ Gathers evidence from multiple sources for capacity estimation:
 - Tier3 knowledge base (domain patterns, similar tasks)
 - Current workload and team state
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass, field

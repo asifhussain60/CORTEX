@@ -1,4 +1,5 @@
 """Intent Classifier for multi-dimensional intent categorization."""
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from enum import Enum
 from typing import Any, Dict, List

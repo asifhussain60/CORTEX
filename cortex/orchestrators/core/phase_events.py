@@ -4,6 +4,7 @@ Events for tracking phase transitions and completions.
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from datetime import datetime

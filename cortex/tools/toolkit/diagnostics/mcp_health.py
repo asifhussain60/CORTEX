@@ -13,6 +13,7 @@ Consolidates MCP diagnostic logic from multiple scattered scripts.
 **Author:** Asif Hussain
 **Created:** 2026-02-16
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import json
 import os

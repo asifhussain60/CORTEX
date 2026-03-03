@@ -1,4 +1,5 @@
 # AC-ID: KN-002-01 - Knowledge Repository Integration
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 # AC-ID: KN-005-01 - Company Knowledge Override Integration
 """
 Knowledge Repository for Best Practices YAML Access (KN-002-01).

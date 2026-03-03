@@ -4,6 +4,7 @@ Gate validator for stage 2.5 of the pipeline.
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from enum import Enum

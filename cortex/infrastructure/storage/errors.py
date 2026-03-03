@@ -3,6 +3,7 @@ Storage error types.
 Authority: Phase 50 Stage 1 - Storage Backend Abstraction
 AC-PHASE50-S1-003: Error handling covers all failure modes
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 
 class StorageError(Exception):

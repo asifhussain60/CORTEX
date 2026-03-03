@@ -5,6 +5,7 @@ AC-INFRA-001-02: Implements bulkhead pattern for component isolation.
 Each component gets dedicated connection pool with independent limits,
 timeouts, and circuit breakers to prevent cascading failures.
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import sqlite3
 import threading

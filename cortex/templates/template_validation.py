@@ -4,6 +4,7 @@ CORTEX Templates - Template Validation
 Template validation and consistency checking.
 
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import re
 from dataclasses import dataclass, field

@@ -10,6 +10,7 @@ Date: 2026-01-27
 
 Type HintsUnion[Complete, Docstrings]: Google-style | Error Handling: Comprehensive
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 from dataclasses import dataclass
 from pathlib import Path

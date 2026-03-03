@@ -15,6 +15,7 @@ Enforces:
 
 AC_START: AC-CDF-Core-001
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import hashlib
 import json

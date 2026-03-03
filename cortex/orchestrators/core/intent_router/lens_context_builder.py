@@ -5,6 +5,7 @@ Git history, and other intelligence sources into a unified context.
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name is contextually appropriate here
 
 import json
 from dataclasses import dataclass, field

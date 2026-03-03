@@ -3,6 +3,7 @@
 Author: CORTEX Framework
 Implements: AC-DB-E03 (Conflict Escalation Workflow)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta

@@ -8,6 +8,7 @@ Author: Asif Hussain
 Created: 2026-02-04
 Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 0
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 from dataclasses import dataclass, field

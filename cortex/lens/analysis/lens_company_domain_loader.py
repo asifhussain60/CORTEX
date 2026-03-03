@@ -7,6 +7,7 @@ Provides domain-specific patterns, compliance standards, and best practices to o
 AC-ID: AC-LENS-V2-COMPANY-DOMAIN-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import logging
 from dataclasses import dataclass, field

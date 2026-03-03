@@ -9,6 +9,7 @@ Phase 22 Component #4: TruthVerificationEngine (P0)
 Authority: AC-EDUCATIONAL-INTERACTION-001, CORE-030 (Implementation Truth)
 Rule: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import ast
 from dataclasses import dataclass, field

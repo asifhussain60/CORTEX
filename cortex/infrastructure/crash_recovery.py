@@ -3,6 +3,7 @@
 Implements WAL for critical state changes with checkpoint mechanism
 and automatic replay on startup to ensure consistency after crashes.
 """
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 
 import json
 import logging

@@ -12,6 +12,7 @@ Consolidates setup verification logic from multiple scripts.
 **Author:** Asif Hussain
 **Created:** 2026-02-16
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import platform

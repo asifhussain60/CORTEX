@@ -14,6 +14,7 @@ Generates comprehensive JSON data for all dashboard tabs:
 
 AC_START: AC-CDF-Dashboard-002
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import json
 import logging

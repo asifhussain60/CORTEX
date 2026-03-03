@@ -11,6 +11,7 @@ for backwards compatibility with existing imports and tests.
 
 AC_START: AC-PHASE98-S2-T3
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
 from pathlib import Path

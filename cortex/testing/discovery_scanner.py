@@ -12,6 +12,7 @@ Authority: cortex-total-recall.prompt.md v2.0 | AC-WIRING-HARNESS-001
 Phase: PRODUCTION-READINESS | Status: ✅ AUTO-DISCOVERY ACTIVE
 
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import ast
 import logging

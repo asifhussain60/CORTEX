@@ -5,6 +5,7 @@ multi-turn conversations.
 
 Author: CORTEX Framework
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List

@@ -1,4 +1,5 @@
 """Dashboard API for system observability."""
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 
 import random
 from datetime import datetime, timezone

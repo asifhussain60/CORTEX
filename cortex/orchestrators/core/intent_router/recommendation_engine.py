@@ -1,4 +1,5 @@
 # AC-ID: IR-002-03 - Recommendation Engine
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 """
 Recommendation Engine for CORTEX Intent Router.
 

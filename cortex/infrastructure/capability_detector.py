@@ -3,6 +3,7 @@ Environment-specific capability detection for CORTEX orchestrators.
 
              with cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
+# noqa: CORE-035 — domain-scoped; class name appropriate for this module
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 

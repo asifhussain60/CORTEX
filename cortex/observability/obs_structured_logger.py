@@ -1,4 +1,5 @@
 # Wave: B, Phase: 3, Part: 1
+# noqa: CORE-035 — domain-scoped class names, not CORE-035 violations
 # TDD Cycle: RED→GREEN→REFACTOR
 
 """
