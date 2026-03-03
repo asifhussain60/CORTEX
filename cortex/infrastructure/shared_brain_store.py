@@ -311,3 +311,8 @@ class SharedBrainStore:
             "average_score": avg_score,
             "count": len(topic_learnings),
         }
+
+
+# Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → collaboration naming)
+# CORE-035: SharedBrainStore remains canonical; CollaborationStore is the forward path.
+CollaborationStore = SharedBrainStore  # noqa: CORE-035

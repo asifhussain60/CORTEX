@@ -137,3 +137,7 @@ class BrainHealthMetrics:
 
 
 # AC-PHASE38-002 ✅ Implementation complete
+
+# Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → intelligence naming)
+# CORE-035: BrainHealthMetrics remains canonical; IntelligenceHealthMetrics is the forward path.
+IntelligenceHealthMetrics = BrainHealthMetrics  # noqa: CORE-035

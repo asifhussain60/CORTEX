@@ -75,3 +75,8 @@ class BrainHealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             "status": "healthy",
             "metrics": self.get_health_metrics(),
         }
+
+
+# Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → intelligence naming)
+# CORE-035: BrainHealthOrchestrator remains canonical; IntelligenceHealthOrchestrator is the forward path.
+IntelligenceHealthOrchestrator = BrainHealthOrchestrator  # noqa: CORE-035

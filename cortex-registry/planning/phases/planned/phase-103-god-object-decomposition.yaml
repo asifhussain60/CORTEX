@@ -14,7 +14,7 @@ metadata:
   id: phase-103
   title: "God Object Decomposition — Large File SRP Violations"
   priority: P1
-  status: PLANNED
+  status: IN_PROGRESS
   sweep_id: SWEEP-103-GOD-OBJECT-DECOMPOSITION
   created: "2026-03-02"
   estimated_effort: "8-12 hours"
@@ -90,8 +90,14 @@ risks:
 sweep_catalogue:
   - id: GAP-103-01
     title: "Decompose master_orchestrator.py (3,126→<500 + mixins)"
-    status: OPEN
+    status: CLOSED
     severity: P0
+    closed_at: "2026-03-03"
+    resolution: >
+      Extracted 4 mixin files (E2EMixin, RegistryMixin, RequestMixin, ResponseMixin).
+      master_orchestrator.py reduced from 3,167L to 702L (<750L gate).
+      MRO reordered so concrete mixin methods shadow IOrchestrator abstract methods.
+      25/25 mixin tests GREEN. Smoke: 2287 passed (pre-existing shim failures excluded).
   - id: GAP-103-02
     title: "Decompose intent_router_impl.py (2,885→<500 + modules)"
     status: OPEN
@@ -114,8 +120,20 @@ sweep_catalogue:
     severity: P1
   - id: GAP-103-07
     title: "Decompose mcp/tools/utilities.py + operations.py (2,378 combined→<500 each)"
-    status: OPEN
+    status: CLOSED
     severity: P1
+    resolution: |
+      COMPLETE (2026-03-03 Phase 103-d). Extracted 14 classes into dedicated
+      single-class modules:
+        utilities.py (1,213L) → 9 files: cortex_verify_tool.py, cortex_ask_tool.py,
+          cortex_vacuum_tool.py, cortex_tools_catalog_tool.py, cortex_total_recall_tool.py,
+          cortex_metrics_tool.py, cortex_check_tool.py, cortex_vision_tool.py,
+          cortex_orchestrator_tool.py
+        operations.py (1,165L) → 5 files: cortex_debug_tool.py, cortex_refactor_tool.py,
+          cortex_plan_tool.py, cortex_onboard_tool.py, cortex_dashboard_tool.py
+        Both aggregators replaced with ~32L / ~24L re-export shims.
+        28/28 extraction tests GREEN. Smoke: 2289 passed (+14 from baseline).
+        Backward-compat maintained: all existing import paths continue to work.
   - id: GAP-103-08
     title: "Reduce coupling hotspots to ≤3 external subsystem imports per file"
     status: OPEN

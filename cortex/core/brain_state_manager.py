@@ -518,3 +518,8 @@ if __name__ == "__main__":
         # Validate
         is_valid = manager.validate_state(flush_result.snapshot_path)
         print(f"Snapshot valid: {is_valid}")
+
+
+# Phase 102-a — GAP-102-04: Domain-appropriate alias (brain → intelligence naming)
+# CORE-035: BrainStateManager remains canonical; IntelligenceStateManager is the forward path.
+IntelligenceStateManager = BrainStateManager  # noqa: CORE-035

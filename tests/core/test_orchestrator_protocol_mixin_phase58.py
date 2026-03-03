@@ -262,8 +262,14 @@ class TestActivateCrossCuttingHooks:
         """
         import os
         ORCH_DIR = "cortex/orchestrators"
-        # Legitimate exceptions: EnforcementOrchestrator is the governance gate itself
-        EXCEPTIONS = {"core/enforcement_orchestrator.py"}
+        # Legitimate exceptions:
+        # - EnforcementOrchestrator is the governance gate itself (avoids infinite recursion)
+        # - master_orchestrator.py delegates to MasterOrchestratorRequestMixin which holds
+        #   the self._activate_cross_cutting_hooks call (Phase 103-a mixin extraction)
+        EXCEPTIONS = {
+            "core/enforcement_orchestrator.py",
+            "core/master_orchestrator.py",
+        }
         missing = []
         for root, dirs, files in os.walk(ORCH_DIR):
             for fname in sorted(files):

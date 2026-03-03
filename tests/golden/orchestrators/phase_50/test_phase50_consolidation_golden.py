@@ -203,15 +203,22 @@ def test_gp50_012_vacuum_execute_tool_is_function() -> None:
 # ===========================================================================
 
 def test_gp50_013_master_orchestrator_plan_intent_routing() -> None:
-    """GP50-013: MasterOrchestrator handles PLAN intent via CortexMasterPlanOrchestrator."""
+    """GP50-013: MasterOrchestrator handles PLAN intent via CortexMasterPlanOrchestrator.
+
+    Phase 103-a: PLAN routing logic lives in MasterOrchestratorRequestMixin;
+    both master_orchestrator.py and its request mixin are checked.
+    """
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-    # MasterOrchestrator must reference CortexMasterPlanOrchestrator
     import cortex.orchestrators.core.master_orchestrator as mod
     src = Path(mod.__file__).read_text()
+    # Also check the request mixin where PLAN routing was extracted (Phase 103-a)
+    mixin_path = Path(mod.__file__).parent / "master_orchestrator_request_mixin.py"
+    mixin_src = mixin_path.read_text() if mixin_path.exists() else ""
+    combined = src + mixin_src
     assert (
-        "CortexMasterPlanOrchestrator" in src
-        or "master_plan_orchestrator" in src
-        or "plan_orchestrator" in src.lower()
+        "CortexMasterPlanOrchestrator" in combined
+        or "master_plan_orchestrator" in combined
+        or "plan_orchestrator" in combined.lower()
     ), "MasterOrchestrator must route PLAN intent to CortexMasterPlanOrchestrator (GAP-008)"
 
 

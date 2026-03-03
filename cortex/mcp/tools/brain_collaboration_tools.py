@@ -2,6 +2,12 @@
 Brain collaboration MCP tools.
 
 AC-PHASE38-022: Team collaboration MCP tools
+
+Phase 102-a note: File retained as-is (brain_collaboration_tools.py).
+Functions are standalone (not a class), so no class alias is needed.
+The module already provides collaboration_* canonical names alongside
+the legacy cortex_intelligence_* compat aliases (added Phase 105).
+Rename of this file deferred to Phase 105 (stale naming sweep).
 """
 from __future__ import annotations
 
