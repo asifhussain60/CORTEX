@@ -4,7 +4,7 @@
 title: Institutional Memory — Root Cause Analysis, Reinforcement Learning, and the Knowledge Engine
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 order: 8
 ---
 
@@ -121,6 +121,43 @@ In organisations with multiple engineering teams, CORTEX's learning infrastructu
 The learning signal crosses project boundaries. A pattern that consistently produces successful outcomes in one team's microservices architecture is recommended in another team's similar project. A debugging strategy that resolved a difficult issue in one codebase is suggested when a similar symptom appears in another. This cross-pollination of engineering knowledge transforms individual team learning into organisational learning — the kind of capability advantage that compounds over quarters and years.
 
 For organisations evaluating CORTEX at the enterprise level, this shared learning infrastructure is the capability that produces the largest return on investment over time. The first team to adopt benefits from CORTEX's built-in knowledge. The tenth team to adopt benefits from the accumulated knowledge of all nine teams before them.
+
+---
+
+## Request Persistence — Every Interaction, Recorded Before It Executes
+
+CORTEX records every user request to a persistent SQLite database **before** the request enters the orchestration pipeline. This is not a logging side-effect — it is a first-class audit guarantee. If the pipeline crashes, times out, or is interrupted, the record of the request already exists in the database.
+
+### What Is Stored
+
+Each request record in the `request_log` table contains:
+
+| Field | What It Holds |
+|---|---|
+| `request_id` | Globally unique identifier for this request |
+| `session_id` | Identifier for the current developer session |
+| `sequence_number` | Session-scoped counter (1, 2, 3…) — resets each session |
+| `user_request` | Full, untruncated text of the request |
+| `request_hash` | SHA-256 fingerprint for deduplication |
+| `received_at` | Timestamp at point of receipt |
+| `completed_at` | Timestamp on completion |
+| `duration_ms` | End-to-end pipeline execution time |
+| `intent_type` | Classified intent (IMPLEMENT, FIX, AUDIT, etc.) |
+| `orchestrator_chain` | Which orchestrators handled the request |
+| `status` | Lifecycle state: `RECEIVED → PROCESSING → COMPLETED / FAILED` |
+| `parent_request_id` | Links to the previous request in this session — forming a chain |
+
+The parent chain means every session is a linked sequence. You can reconstruct exactly what was asked, in what order, how each request was classified, how long each took, and whether each succeeded — for every session that has ever run.
+
+### The Pre-Pipeline Guarantee
+
+The persistence step fires before any other processing. The status transitions reflect real pipeline progress:
+
+1. **RECEIVED** — the request is written to the database immediately on arrival
+2. **PROCESSING** — updated the moment the pipeline begins
+3. **COMPLETED / FAILED** — updated when the pipeline exits, with duration recorded
+
+This ordering ensures that even a catastrophic pipeline failure produces a complete audit record of what was requested and when — not a silent gap.
 
 ---
 

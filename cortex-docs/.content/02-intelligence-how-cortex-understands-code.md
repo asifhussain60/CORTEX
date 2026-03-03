@@ -4,7 +4,7 @@
 title: Code Intelligence — LENS, the Brain, and Three Tiers of Reasoning
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 order: 2
 ---
 
@@ -117,6 +117,37 @@ The developer sees a clear plan before a single character is typed — grounded 
 
 ---
 
+## Session Context Chain — LENS Remembers Every Turn
+
+Most AI tools treat each request as an isolated event. CORTEX treats every request in a session as part of a continuous chain. Before running LENS analysis on your current request, CORTEX reads the last five requests you made in this session — what you asked, how they were classified, and in what order — and injects that history as enriched context into the current turn's analysis.
+
+This means CORTEX understands *what you are building towards*, not just what you asked for right now.
+
+### How It Works
+
+Every request is persisted to a SQLite audit database **before it enters the pipeline** — even if the pipeline subsequently fails or times out. Each request record carries:
+
+- A unique request ID and session-scoped sequence number
+- The full text of your request (never truncated)
+- A SHA-256 content hash for deduplication
+- A parent request ID linking it to the previous request in this session
+- Status transitions: `RECEIVED → PROCESSING → COMPLETED` (or `FAILED`)
+- Intent classification and orchestrator routing chain
+
+When a new request arrives, the `InteractionOrchestrator` queries this log for the prior five requests in the session, builds a compact context summary, and injects it into the LENS analysis. The LENS run then comprehends your current request *in the context of everything you have been working on*.
+
+### What This Produces
+
+A developer who asks "now add rate limiting" after a session implementing authentication endpoints receives LENS context that already understands the auth module, the service patterns established earlier in the session, and the security constraints that were applied to prior requests. CORTEX does not need to be told what "now" refers to — it already knows.
+
+The chain linkage also creates a complete audit trail. Every request in a session can be reconstructed in sequence, with its outcome, its duration, and its classification — useful for understanding what was built in a session, debugging unexpected outcomes, and satisfying governance review requirements.
+
+### Challenge Decisions — Persisted per Turn
+
+When CORTEX raises a governance challenge against a request (because it detects a risk, an alternative approach, or a governance constraint), the challenge and the decision it produced are also persisted to the audit database — linked to the specific request ID that triggered it. This creates a traceable record of every risk evaluation and every decision made during the session.
+
+---
+
 ## The Intelligence Matrix — Wiring Everything Together
 
 The Intelligence Matrix is CORTEX's internal wiring map. It documents which intelligence-providing capabilities (LENS, Brain tiers, knowledge synthesis) are connected to which intelligence-consuming operations (test-driven development, governance enforcement, audit pipelines, debugging). Every cell in the matrix carries a priority — critical, high, medium, or low — ensuring that the most important connections are always established first.
@@ -125,4 +156,4 @@ The matrix is not documentation — it is a live contract that governance tools 
 
 ---
 
-*LENS analysis · Brain tier architecture · Intelligence matrix verified against live implementation*
+*LENS analysis · Brain tier architecture · Session context chain · Intelligence matrix verified against live implementation*

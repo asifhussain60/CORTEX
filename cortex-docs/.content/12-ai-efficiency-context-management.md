@@ -4,7 +4,7 @@
 title: AI Efficiency — Context Management and Token Optimization
 type: explanation
 audience: [Product Owners, Business Leaders, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-03
 order: 12
 ---
 
@@ -70,6 +70,13 @@ Different operation types have different context requirements. The session budge
 
 ### 7. Intelligent Expiry
 Knowledge loaded for a specific sub-task expires from active context when that sub-task completes. A debugging analysis loaded to support one step doesn't persist into unrelated subsequent steps. This continuous housekeeping prevents context drift — the gradual accumulation of stale context that degrades response quality.
+
+### 8. Prior-Turn Context Chaining
+Rather than relying on the AI model's own implicit memory of the session (which degrades as sessions grow), CORTEX explicitly reads the last five requests from a persistent audit database at the start of each new turn. This compact, structured summary — what was asked, in what order, how each was classified — is injected into the LENS analysis for the current turn.
+
+This is more token-efficient than carrying full conversation history: only the decision-relevant facts (intent, sequence, request text) are loaded, not the full responses. It also survives session interruptions — if a session is resumed after a break, the prior context chain is rebuilt from the database rather than reconstructed from an in-memory conversation that no longer exists.
+
+For developers, this means CORTEX understands "add rate limiting to the endpoint we just built" without requiring you to re-explain what endpoint, what session, or what constraints were established earlier. The chain is real — it is not inference.
 
 ---
 
