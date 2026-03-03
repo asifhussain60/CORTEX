@@ -130,8 +130,19 @@ sweep_catalogue:
       47/47 decomposition tests GREEN. Smoke: 2,286 passed (5 pre-existing failures).
   - id: GAP-103-04
     title: "Decompose lens_orchestrator.py (2,039→<500 + analyzer modules)"
-    status: OPEN
+    status: CLOSED
     severity: P1
+    resolution: |
+      COMPLETE (2026-03-03 Phase 103-d). Extracted 5 mixins into a lens_orchestrator/
+      package. Original 2,045L → _coordinator.py (277L) + 5 modules + 1 models file:
+        lens_models.py       (53L):  LENSContext dataclass (noqa: CORE-035 — distinct from Phase 65 context)
+        lens_analysis_mixin.py (405L): LensFileAnalysisMixin — per-file analysis helpers
+        lens_remote_mixin.py (303L):  LensRemoteMixin — remote/branch analysis
+        lens_holistic_mixin.py (481L): LensHolisticMixin — 9-analyzer holistic analysis
+        lens_company_mixin.py (192L): LensCompanyMixin — company knowledge + compliance
+        lens_vision_mixin.py  (142L): LensVisionMixin — image/vision analysis
+      CORE-035 conflict resolved: renamed LensAnalysisMixin → LensFileAnalysisMixin.
+      63/63 decomposition tests GREEN. Smoke: 2,285 passed (7 pre-existing flaky).
   - id: GAP-103-05
     title: "Decompose enforcement_orchestrator.py (1,860→<500 + modules)"
     status: OPEN

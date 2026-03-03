@@ -109,7 +109,7 @@ summary:
     phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
     phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
     phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
-    phase-103: "IN_PROGRESS — God Object Decomposition (P1) — 4/8 GAPs CLOSED (GAP-103-01: master_orchestrator 3167L→702L; GAP-103-02: intent_router_impl 2895L→686L; GAP-103-07: utilities+operations extracted; GAP-103-03: tdd_orchestrator 2121L→462L)"
+    phase-103: "IN_PROGRESS — God Object Decomposition (P1) — 5/8 GAPs CLOSED (GAP-103-01: master_orchestrator 3167L→702L; GAP-103-02: intent_router_impl 2895L→686L; GAP-103-07: utilities+operations; GAP-103-03: tdd_orchestrator 2121L→462L; GAP-103-04: lens_orchestrator 2045L→277L)"
     phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
     phase-105: "PLANNED — Stale Imports and Legacy Naming (P1)"
     phase-108: "PLANNED — cortex-registry Consolidation (P1)"
@@ -204,10 +204,10 @@ phases:
     status: IN_PROGRESS
     sweep_id: SWEEP-103-GOD-OBJECT-DECOMPOSITION
     gaps: 8
-    gaps_closed: 4
+    gaps_closed: 5
     sub_phases: 5
     file: "cortex-registry/planning/phases/planned/phase-103-god-object-decomposition.yaml"
-    note: "GAP-103-01 CLOSED: master_orchestrator.py 3,167L→702L (4 mixins). GAP-103-02 CLOSED: intent_router_impl.py 2,895L→686L (5 modules). GAP-103-07 CLOSED: utilities+operations→14 tool modules. GAP-103-03 CLOSED (2026-03-03): tdd_orchestrator.py 2,121L→_coordinator.py 462L via tdd_orchestrator/ package (4 mixins: models/execution/metrics/batch). 47/47 tests GREEN. Remaining: 4 GAPs (lens_orchestrator, enforcement_orchestrator, knowledge_synthesis, coupling)."
+    note: "GAP-103-01/02/07/03/04 CLOSED. GAP-103-04 (2026-03-03): lens_orchestrator.py 2,045L→_coordinator.py 277L via lens_orchestrator/ package (5 mixins: FileAnalysis/Remote/Holistic/Company/Vision). CORE-035 conflict resolved: LensFileAnalysisMixin (distinct from intent_router). 63/63 tests GREEN. Remaining: 3 GAPs (enforcement_orchestrator, knowledge_synthesis, coupling)."
 
   - id: phase-104
     title: "Build Artifact Purge + Test-Source Mirror Alignment + DB Consolidation"
