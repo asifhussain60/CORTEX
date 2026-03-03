@@ -42,7 +42,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-CONFIG_PATH = Path(__file__).resolve().parents[2] / "cortex-registry/core/config/file-naming-rules.yaml"
+CONFIG_PATH = Path(__file__).resolve().parents[2] / "cortex-registry/config/file-naming-rules.yaml"
 
 
 # ==============================================================================
@@ -82,7 +82,7 @@ class TestFileFactoryExists:
         assert NamingResult is not None
 
     def test_yaml_config_exists_on_disk(self) -> None:
-        """file-naming-rules.yaml must exist in cortex-registry/core/config/."""
+        """file-naming-rules.yaml must exist in cortex-registry/config/."""
         assert CONFIG_PATH.exists(), f"Missing: {CONFIG_PATH}"
 
     def test_yaml_config_is_valid_yaml(self) -> None:

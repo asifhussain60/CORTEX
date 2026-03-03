@@ -27,12 +27,12 @@ REGISTRY = pathlib.Path(__file__).parents[2] / "cortex-registry"
 # ─────────────────────────────────────────────────────────────────────────────
 
 class TestKnowledgeNamespaceMerge:
-    """GAP-108-03: knowledge/ absorbed into knowledge/."""
+    """GAP-108-03: knowledge-base/ renamed/absorbed into knowledge/."""
 
     def test_no_knowledge_base_dir(self) -> None:
-        """knowledge/ must not exist after merge."""
-        assert not (REGISTRY / "knowledge").exists(), (
-            "cortex-registry/knowledge/ still exists — merge into knowledge/ (GAP-108-03)"
+        """knowledge-base/ (old name) must not exist after rename to knowledge/."""
+        assert not (REGISTRY / "knowledge-base").exists(), (
+            "cortex-registry/knowledge-base/ still exists — should have been renamed to knowledge/ (GAP-108-03)"
         )
 
     def test_knowledge_has_profiles(self) -> None:
@@ -202,7 +202,7 @@ class TestPythonPathReferences:
         ]
 
     def test_no_knowledge_base_runtime_refs(self) -> None:
-        """No Python file may use cortex-registry/knowledge/ as a runtime path constant."""
+        """No Python file may use the old cortex-registry/knowledge-base/ path (renamed to knowledge/)."""
         violations = []
         for f in self._python_files():
             text = f.read_text(encoding="utf-8", errors="ignore")
@@ -212,10 +212,10 @@ class TestPythonPathReferences:
                 # Skip pure comments
                 if stripped.startswith("#"):
                     continue
-                if "cortex-registry/knowledge" in line:
+                if "cortex-registry/knowledge-base" in line:
                     violations.append(f"{f.relative_to(pathlib.Path(__file__).parents[2])}:{i}: {stripped}")
         assert not violations, (
-            f"GAP-108-10: {len(violations)} runtime ref(s) to cortex-registry/knowledge/ must be updated to cortex-registry/knowledge/:\n"
+            f"GAP-108-10: {len(violations)} runtime ref(s) to old cortex-registry/knowledge-base/ must be updated to cortex-registry/knowledge/:\n"
             + "\n".join(violations)
         )
 

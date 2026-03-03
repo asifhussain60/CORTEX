@@ -396,13 +396,13 @@ class TestNamingRulesYaml:
 
     def test_naming_rules_yaml_exists(self) -> None:
         """file-naming-rules.yaml must exist."""
-        config_path = CORTEX_ROOT / "cortex-registry/core/config/file-naming-rules.yaml"
+        config_path = CORTEX_ROOT / "cortex-registry/config/file-naming-rules.yaml"
         assert config_path.exists()
 
     def test_internal_terms_in_prohibited_patterns(self) -> None:
         """All CORTEX-internal terms must be in prohibited_patterns."""
         import yaml
-        config_path = CORTEX_ROOT / "cortex-registry/core/config/file-naming-rules.yaml"
+        config_path = CORTEX_ROOT / "cortex-registry/config/file-naming-rules.yaml"
         data = yaml.safe_load(config_path.read_text())
         patterns = data.get("prohibited_patterns", [])
         pattern_str = " ".join(str(p) for p in patterns)
@@ -416,7 +416,7 @@ class TestNamingRulesYaml:
     def test_enforcement_level_is_strict(self) -> None:
         """Enforcement level must be 'strict'."""
         import yaml
-        config_path = CORTEX_ROOT / "cortex-registry/core/config/file-naming-rules.yaml"
+        config_path = CORTEX_ROOT / "cortex-registry/config/file-naming-rules.yaml"
         data = yaml.safe_load(config_path.read_text())
         enforcement = data.get("enforcement", {})
         assert enforcement.get("level") == "strict"
