@@ -205,7 +205,7 @@ class NativeToolInterceptor:
                 if target_file and self._is_production_code(target_file):
                     return InterceptionResult(
                         allowed=False,
-                        reason=f"Production code modification requires MCP (CORE-049)",
+                        reason="Production code modification requires MCP (CORE-049)",
                         mcp_tool="cortex_process_request"
                     )
 

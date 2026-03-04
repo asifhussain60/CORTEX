@@ -159,7 +159,7 @@ class PortalGenerator:
 
             return result
 
-        except Exception as e:
+        except Exception:
             result.success = False
             return result
 

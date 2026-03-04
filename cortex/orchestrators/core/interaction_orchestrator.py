@@ -582,7 +582,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 audit_entries = self._audit_trail[-limit:]
 
             return Ok(audit_entries)
-        except Exception as e:
+        except Exception:
             # Fallback to in-memory on any error
             return Ok(self._audit_trail[-limit:])
 

@@ -205,7 +205,7 @@ class ConflictDetector:
                     destination=dest,
                     severity="warning",
                     message=f"Destination already exists: {dest}",
-                    suggested_fix=f"Use 'mv -i' to prompt on overwrite, or rename destination",
+                    suggested_fix="Use 'mv -i' to prompt on overwrite, or rename destination",
                 )
                 report.add_conflict(conflict)
 

@@ -378,8 +378,8 @@ class DeadCodeDetector:
     def _generate_rationale(self, candidate: Dict[str, Any], action: str) -> str:
         """Generate human-readable rationale for recommendation"""
         if action == "remove":
-            return f"High confidence dead code: 0% coverage, 0 calls, safe to remove"
+            return "High confidence dead code: 0% coverage, 0 calls, safe to remove"
         elif action == "review":
-            return f"Likely dead code: Low usage detected, manual review recommended"
+            return "Likely dead code: Low usage detected, manual review recommended"
         else:
-            return f"Monitor: Low confidence, continue tracking"
+            return "Monitor: Low confidence, continue tracking"

@@ -136,7 +136,7 @@ class FileLock:
                 logger.info(f"Lock acquired: {self.lock_path}")
                 return
 
-            except (IOError, OSError) as e:
+            except (IOError, OSError):
                 # Lock failed, check timeout
                 elapsed = time.time() - start_time
 

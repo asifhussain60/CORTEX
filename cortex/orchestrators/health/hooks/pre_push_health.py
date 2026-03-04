@@ -54,7 +54,7 @@ def check_health_score(workspace_root: Path) -> None:
         print("\n⚠️  HEALTH WARNINGS (push allowed, fix recommended):\n")
         for warning in warnings:
             print(f"  {warning}")
-        print(f"\nRun 'cortex health' for detailed report.")
+        print("\nRun 'cortex health' for detailed report.")
     else:
         print(f"✅ Health check passed (score: {report.metrics.health_score:.0f}/100)")
 

@@ -137,7 +137,7 @@ class GitCircuitBreaker:
                 )
                 return result
 
-            except subprocess.TimeoutExpired as e:
+            except subprocess.TimeoutExpired:
                 logger.error(
                     f"Git command timed out after {timeout}s: {' '.join(cmd)}"
                 )
@@ -163,7 +163,7 @@ class GitCircuitBreaker:
             result = self.circuit_breaker.call(git_operation)
             return result
 
-        except CircuitBreakerOpenError as e:
+        except CircuitBreakerOpenError:
             logger.error(
                 f"Circuit breaker OPEN for git operations: {' '.join(cmd)}\n"
                 f"Recent git failures exceeded threshold. Cooldown in progress."

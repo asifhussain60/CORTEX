@@ -56,7 +56,7 @@ class GraphBuilder:
         Returns:
             Statistics dict with node and edge counts
         """
-        logger.info(f"Building knowledge graph from architecture report")
+        logger.info("Building knowledge graph from architecture report")
 
         # Extract data from report
         # ArchitectureReport has dependency_graph: Dict[str, List[str]]

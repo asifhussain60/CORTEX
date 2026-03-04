@@ -768,7 +768,7 @@ class FileFactory:
             "",
             "",
             f"class {test_class_name}:",
-            f'    """Test class for module testing."""',
+            '    """Test class for module testing."""',
             "",
         ]
 

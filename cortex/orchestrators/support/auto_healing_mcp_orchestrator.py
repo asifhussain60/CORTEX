@@ -353,7 +353,7 @@ class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementM
 
             if cleaned != content:
                 req_file.write_text(cleaned + "\n")
-                diagnostic.fix_log.append(f"✅ Removed markdown fence from requirements.txt")
+                diagnostic.fix_log.append("✅ Removed markdown fence from requirements.txt")
                 return True
             else:
                 diagnostic.fix_log.append("⚠️ No markdown fence found (unexpected)")

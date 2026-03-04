@@ -325,7 +325,7 @@ class TestScopeValidator:
     ) -> str:
         """Generate actionable recommendation for misalignment."""
         if phase_status == FeatureStatus.DEFERRED and test_status == TestStatus.RUNNING:
-            return f"Defer tests: rename to .deferred or add @pytest.mark.skip"
+            return "Defer tests: rename to .deferred or add @pytest.mark.skip"
 
         elif phase_status == FeatureStatus.DEPRECATED and test_status == TestStatus.RUNNING:
             return "Skip or remove tests for deprecated feature"

@@ -412,7 +412,7 @@ class MCPSelfHealing:
             try:
                 result = tool_callable(**params)
                 return result
-            except Exception as e:
+            except Exception:
                 if attempt < max_retries - 1:
                     # Calculate backoff
                     sleep_time = backoff_base * (2 ** attempt)
@@ -620,6 +620,6 @@ def handle_mcp_tool_error(
 
     # Fix succeeded, caller should retry
     print(f"✅ Fix applied successfully for {issue.issue_id}")
-    print(f"🔄 Please retry your operation")
+    print("🔄 Please retry your operation")
 
     return None  # Signal caller to retry

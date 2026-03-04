@@ -82,7 +82,7 @@ class CrossReferenceValidator:
                     data = yaml.safe_load(f)
                     if data:
                         self.files_data[file_path] = data
-            except Exception as e:
+            except Exception:
                 # Skip files that can't be parsed
                 continue
 

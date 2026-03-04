@@ -302,7 +302,7 @@ class CoherenceValidator:
                 severity="error",
                 message=f"Inconsistent versions found: {', '.join(unique_versions)}",
                 location=", ".join(f"line {m.line_number}" for m in markers),
-                suggestion=f"Update all version markers to the same version",
+                suggestion="Update all version markers to the same version",
             ))
 
         return issues

@@ -90,7 +90,7 @@ def main() -> int:
     args = parser.parse_args()
 
     # Initialize orchestrator
-    print(f"🔍 CORTEX Health Check")
+    print("🔍 CORTEX Health Check")
     print(f"   Workspace: {args.workspace}")
     print()
 

@@ -235,7 +235,7 @@ class RegistrySyncService:
             file_path: Path to file to backup
         """
         try:
-            backup_path = file_path.with_suffix(f".backup")
+            backup_path = file_path.with_suffix(".backup")
             shutil.copy2(file_path, backup_path)
         except Exception as e:
             print(f"Warning: Failed to create backup: {e}")

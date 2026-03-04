@@ -146,7 +146,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                 file_hash = self._calculate_file_hash(py_file)
                 hash_map[file_hash].append(py_file)
                 files_scanned += 1
-            except Exception as e:
+            except Exception:
                 # Skip files that can't be read
                 continue
 

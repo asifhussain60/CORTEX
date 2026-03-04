@@ -322,7 +322,7 @@ class BrittnessDetector:
                         pattern=path,
                         severity="high",
                         description=f"Hardcoded path '{path}' will fail on different environments",
-                        fix_suggestion=f"Use os.path.join() or pathlib.Path instead",
+                        fix_suggestion="Use os.path.join() or pathlib.Path instead",
                     )
                 )
         return issues[:2]  # Limit to top 2

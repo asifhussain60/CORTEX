@@ -298,7 +298,7 @@ class StrategySelector:
             evidence.append(f"High success rate: {strategy.success_rate:.0%}")
 
         # Add context match evidence
-        evidence.append(f"Applicable to current architecture")
+        evidence.append("Applicable to current architecture")
 
         return evidence
 

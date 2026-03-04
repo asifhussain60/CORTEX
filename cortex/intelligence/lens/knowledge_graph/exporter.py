@@ -61,7 +61,7 @@ class GraphExporter:
             nodes_xml += f'  <node id="n{i}">\n'
             nodes_xml += f'    <data key="name">{node.name}</data>\n'
             nodes_xml += f'    <data key="type">{node.type}</data>\n'
-            nodes_xml += f'  </node>\n'
+            nodes_xml += '  </node>\n'
 
         edges_xml = ""
         for i, rel in enumerate(self.graph.relationships):

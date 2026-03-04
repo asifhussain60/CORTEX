@@ -1056,7 +1056,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
 
         # Address cons
         if recommended.cons:
-            explanation += f"\n**Trade-offs to Consider:**\n"
+            explanation += "\n**Trade-offs to Consider:**\n"
             for con in recommended.cons[:2]:
                 explanation += f"- {con}\n"
 

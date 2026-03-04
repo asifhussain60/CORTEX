@@ -465,7 +465,7 @@ class CortexRefactor(ConsolidatedTool):
                     if not health_report.get("clean", True):
                         total_violations += health_report.get("violation_count", 0)
                         blocking_issues.append(
-                            f"ENH-STS-07: health endpoint returns hardcoded stub — "
+                            "ENH-STS-07: health endpoint returns hardcoded stub — "
                             "add a real DB probe and 503 on failure"
                         )
                     gate_results["ENH-STS-07_health_endpoint_realness"] = {

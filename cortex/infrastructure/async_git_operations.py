@@ -153,7 +153,7 @@ class AsyncGitOperations:
         try:
             result = await _execute_git_command()
             return result
-        except (subprocess.CalledProcessError, asyncio.TimeoutError) as e:
+        except (subprocess.CalledProcessError, asyncio.TimeoutError):
             # Let circuit breaker track the failure by attempting sync call that will fail
             # This updates internal state without blocking
             raise

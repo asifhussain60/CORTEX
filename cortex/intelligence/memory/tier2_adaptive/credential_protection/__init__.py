@@ -160,7 +160,7 @@ class CredentialManager:
         credential = self.credentials[credential_id]
         # Simulated decryption
         decrypted_value = credential.encrypted_value.replace(
-            f"encrypted_", ""
+            "encrypted_", ""
         ).replace(f"_{credential.algorithm.value}", "")
         return decrypted_value
 
@@ -276,7 +276,7 @@ class SecureCredentialStore:
             ValueError: If value is empty or credential already exists.
         """
         if not value or value.strip() == "":
-            raise ValueError(f"Credential value cannot be empty")
+            raise ValueError("Credential value cannot be empty")
 
         if credential_id in self.store:
             raise ValueError(f"Credential {credential_id} already exists")

@@ -538,7 +538,7 @@ class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
             "tests": {
                 "golden": f"tests/golden/orchestrators/{slug}/",
                 "unit": f"tests/unit/orchestrators/{slug}/",
-                "integration": f"tests/integration/",
+                "integration": "tests/integration/",
             },
             "workflow_template": "cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml",
         }

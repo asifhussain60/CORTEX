@@ -901,7 +901,7 @@ class IntelligenceMatrixBuilder:
             if cell.is_wired:
                 lines.append(f"- **[{cell.intelligence_id}×{cell.cortex_id}]** via `{cell.wired_via}`")
 
-        lines += ["", "---", f"*AC_COMPLETE: AC-INTELLIGENCE-MATRIX-001 ✅*"]
+        lines += ["", "---", "*AC_COMPLETE: AC-INTELLIGENCE-MATRIX-001 ✅*"]
         return "\n".join(lines)
 
     def persist_matrix(self, matrix: IntelligenceMatrix, output_path: Optional[Path] = None) -> Path:

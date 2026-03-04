@@ -694,7 +694,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                     source=py_file,
                     success=True,
                     dry_run=dry_run,
-                    notes=f"Compat shim detected — only re-exports, no real logic",
+                    notes="Compat shim detected — only re-exports, no real logic",
                 )
             )
 
@@ -744,8 +744,8 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                             success=True,
                             dry_run=dry_run,
                             notes=(
-                                f"Stale 'cortex.lens' import detected — "
-                                f"update to 'cortex.intelligence.analysis'"
+                                "Stale 'cortex.lens' import detected — "
+                                "update to 'cortex.intelligence.analysis'"
                             ),
                         )
                     )

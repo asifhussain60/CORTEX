@@ -103,7 +103,7 @@ class TestCoverageAgent(BaseHealthAgent):
                         severity=severity,
                         file_path=rel_path,
                         description="No corresponding test file found",
-                        suggested_fix=f"Create test file in tests/ directory",
+                        suggested_fix="Create test file in tests/ directory",
                         metadata={
                             "expected_test_paths": self._get_expected_test_paths(py_file, workspace_root),
                         },

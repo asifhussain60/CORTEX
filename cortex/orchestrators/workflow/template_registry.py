@@ -576,7 +576,7 @@ class WorkflowTemplateRegistry:
             if step_id not in visited:
                 if has_cycle(step_id):
                     raise TemplateValidationError(
-                        f"Circular dependency detected in template steps"
+                        "Circular dependency detected in template steps"
                     )
 
 

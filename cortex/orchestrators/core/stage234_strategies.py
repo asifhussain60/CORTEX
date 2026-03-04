@@ -77,7 +77,7 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
 
             return Ok(context)
 
-        except Exception as e:
+        except Exception:
             # Fallback classification
             context.metadata["intent_classification"] = {
                 "classified_intent": context.operation_name.upper(),

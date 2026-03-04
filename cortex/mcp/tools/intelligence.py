@@ -224,7 +224,7 @@ class CortexLens(ConsolidatedTool):
                         "orchestrator": "IntelligenceOrchestrator",
                     },
                 )
-            except Exception as e:
+            except Exception:
                 # Fall back to stub on error
                 return self._analyze_stub(target, depth)
 

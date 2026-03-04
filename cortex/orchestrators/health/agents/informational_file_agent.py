@@ -95,7 +95,7 @@ class InformationalFileAgent(BaseHealthAgent):
                         f"Informational files should be in cortex-docs/, cortex-registry/, or .github/. "
                         f"Consider converting to YAML configuration or moving to documentation."
                     ),
-                    suggested_fix=f"Move to cortex-docs/ or delete if obsolete",
+                    suggested_fix="Move to cortex-docs/ or delete if obsolete",
                 ))
 
         return HealthCheckResult(

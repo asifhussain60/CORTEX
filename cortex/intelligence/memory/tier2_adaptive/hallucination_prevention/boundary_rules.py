@@ -351,7 +351,7 @@ class BehavioralBoundaryRules:
         if context.get("user_role") == "unauthorized":
             violation = BoundaryViolation(
                 ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
-                f"Unauthorized user bypass attempt",
+                "Unauthorized user bypass attempt",
                 severity="CRITICAL",
                 context=context
             )

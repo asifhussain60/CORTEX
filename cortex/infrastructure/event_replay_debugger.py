@@ -106,7 +106,7 @@ class EventReplayDebugger:
                     if limit and len(matched_events) >= limit:
                         break
 
-                except (json.JSONDecodeError, KeyError) as e:
+                except (json.JSONDecodeError, KeyError):
                     # Skip malformed entries
                     continue
 

@@ -696,13 +696,13 @@ def main() -> None:
     print(f"✍️  Writing manifest → {builder.output_path}")
     result = builder.generate_manifest()
 
-    print(f"\n✅ capabilities-manifest.yaml generated")
+    print("\n✅ capabilities-manifest.yaml generated")
     print(f"   schema_version : {result.schema_version}")
     print(f"   orchestrators  : {len(result.orchestrators)}")
     print(f"   templates      : {len(result.workflow_templates)}")
     print(f"   mcp_tools      : {len(result.mcp_tools)}")
     print(f"   generated_at   : {result.generated_at}")
-    print(f"\nAC_COMPLETE: AC-72-CAPABILITY-REGISTRY-BUILDER-20260225 ✅")
+    print("\nAC_COMPLETE: AC-72-CAPABILITY-REGISTRY-BUILDER-20260225 ✅")
 
 
 if __name__ == "__main__":
