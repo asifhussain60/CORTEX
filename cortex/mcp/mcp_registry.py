@@ -149,6 +149,46 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["validate", "quick", "challenges"],
     },
+    "cortex_registry": {
+        "description": (
+            "Registry intelligence: query governance rules, workflow templates, "
+            "patterns, plans, and the full cortex-registry/ index. "
+            "op: query_governance | query_workflows | query_patterns | "
+            "query_plans | registry_index."
+        ),
+        "category": ToolCategory.GOVERNANCE,
+        "parameters": [
+            {
+                "name": "op",
+                "type": "string",
+                "required": True,
+                "enum": [
+                    "query_governance",
+                    "query_workflows",
+                    "query_patterns",
+                    "query_plans",
+                    "registry_index",
+                ],
+                "description": "Registry operation",
+            },
+            {
+                "name": "filter",
+                "type": "string",
+                "required": False,
+                "description": (
+                    "Optional filter: severity for governance, category for workflows, "
+                    "tag for patterns, status for plans, domain for registry_index."
+                ),
+            },
+        ],
+        "operations": [
+            "query_governance",
+            "query_workflows",
+            "query_patterns",
+            "query_plans",
+            "registry_index",
+        ],
+    },
 
     # =========================================================================
     # TIER 4: OPERATIONS (5 tools)

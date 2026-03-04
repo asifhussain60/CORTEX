@@ -50,9 +50,9 @@ class TestDriftLockPrinciplesCatalogue:
         return yaml.safe_load(PRINCIPLES_PATH.read_text())
 
     def test_lock_catalogue_count_is_30(self):
-        """DRIFT LOCK: Catalogue must have exactly 30 principles (Phase 124 baseline)."""
+        """DRIFT LOCK: Catalogue must have exactly 90 principles (Phase 125 expansion)."""
         data = self._load()
-        assert len(data["principles"]) == 30
+        assert len(data["principles"]) == 90
 
     def test_lock_all_domains_present(self):
         """DRIFT LOCK: All 10 canonical domains must be represented."""
@@ -150,9 +150,9 @@ class TestDriftLockPrincipleSelector:
         assert _VALID_POOLS == frozenset({"quotes", "principles"})
 
     def test_lock_ring_buffer_maxlen_is_10(self):
-        """DRIFT LOCK: ring buffer maxlen must remain 10."""
+        """DRIFT LOCK: ring buffer maxlen must remain 20 (bumped from 10 in Phase 125)."""
         from cortex.intelligence.principle_selector import _ring_buffer
-        assert _ring_buffer.maxlen == 10
+        assert _ring_buffer.maxlen == 20
 
     def test_lock_body_truncated_to_200_chars(self):
         """DRIFT LOCK: PrincipleSelector must truncate principle body to ≤200 chars.
@@ -176,7 +176,7 @@ class TestDriftLockPrincipleSelector:
         }]
         try:
             ps = PrincipleSelector("QUERY", pool="principles")
-            result = ps.select()
+            result = ps.select(context_hints={"is_complex": True})
             assert len(result["body"]) <= 200, (
                 f"body length {len(result['body'])} exceeds 200 char limit"
             )
@@ -261,4 +261,37 @@ class TestDriftLockPrincipleTriggerPolicy:
         missing = [intent for intent in required_mentions if intent not in omit_text]
         assert not missing, (
             f"atom-principle omit_if missing operational intent coverage: {missing}"
+        )
+
+    def test_lock_analysis_design_compositions_include_atom_principle(self):
+        """DRIFT LOCK (positive): Analysis/design compositions MUST include atom-principle.
+
+        CORE-PRINCIPLE-TRIGGER declares principle_injection=True for analysis and design
+        categories. Any composition serving these intents must wire atom-principle.
+
+        Covered compositions:
+          - comp-query.yaml   (QUERY — analysis)
+          - comp-introduce.yaml (INTRODUCE — design)
+
+        If this test fails, a composition was updated to remove atom-principle without
+        updating the trigger policy — a CORE-PRINCIPLE-TRIGGER violation.
+        SSOT: cortex-registry/core/principle-trigger-policy.yaml
+        """
+        _ANALYSIS_DESIGN_COMPOSITIONS = {
+            "comp-query.yaml": "QUERY (analysis)",
+            "comp-introduce.yaml": "INTRODUCE (design)",
+        }
+        violations = []
+        for filename, label in _ANALYSIS_DESIGN_COMPOSITIONS.items():
+            comp_path = COMPOSITIONS_DIR / filename
+            assert comp_path.exists(), f"{filename} missing — required for {label}"
+            comp = yaml.safe_load(comp_path.read_text())
+            atoms = [a["id"] for a in comp.get("atoms", [])]
+            if "atom-principle" not in atoms:
+                violations.append(f"{filename} ({label})")
+
+        assert not violations, (
+            f"CORE-PRINCIPLE-TRIGGER violation: atom-principle MISSING from "
+            f"analysis/design composition(s): {violations}. "
+            f"SSOT: cortex-registry/core/principle-trigger-policy.yaml"
         )

@@ -47,27 +47,27 @@ class TestPrincipleSelectorSelection:
         )
 
     def test_ring_buffer_size_is_10(self):
-        """Ring buffer never exceeds 10 entries."""
+        """Ring buffer never exceeds 20 entries (maxlen bumped to 20 in Phase 125)."""
         ps = PrincipleSelector("IMPLEMENT")
-        for _ in range(15):
+        for _ in range(25):
             ps.select()
-        assert len(ps._ring_buffer) <= 10, (
-            f"Ring buffer size must be ≤10, got {len(ps._ring_buffer)}"
+        assert len(ps._ring_buffer) <= 20, (
+            f"Ring buffer size must be ≤20, got {len(ps._ring_buffer)}"
         )
 
     def test_ring_buffer_evicts_oldest(self):
-        """After 11 selections, the ring buffer holds at most 10 dedup_keys."""
+        """After 21 selections, the ring buffer holds at most 20 dedup_keys."""
         # Use QUERY (→ universal theme) which has the largest pool of quotes,
-        # ensuring 11 successful selections can fill the deque past maxlen=10.
+        # ensuring 21 successful selections can fill the deque past maxlen=20.
         import cortex.intelligence.principle_selector as ps_mod
 
         ps_mod._ring_buffer.clear()
         ps = PrincipleSelector("QUERY")
-        for _ in range(11):
+        for _ in range(21):
             ps.select()
-        # Buffer must never exceed maxlen=10 (deque enforces this automatically)
-        assert len(ps._ring_buffer) <= 10, (
-            "Ring buffer must never exceed maxlen=10"
+        # Buffer must never exceed maxlen=20 (deque enforces this automatically)
+        assert len(ps._ring_buffer) <= 20, (
+            "Ring buffer must never exceed maxlen=20"
         )
 
     def test_unknown_intent_falls_back_to_universal(self):

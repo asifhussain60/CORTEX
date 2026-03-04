@@ -120,6 +120,16 @@ class ToolResult:
     error: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def is_error(self) -> bool:
+        """Convenience alias: True when success is False."""
+        return not self.success
+
+    @property
+    def content(self) -> Any:
+        """Convenience alias for data payload."""
+        return self.data if self.data is not None else {}
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         result = {

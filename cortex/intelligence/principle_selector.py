@@ -3,20 +3,29 @@ PrincipleSelector — Weighted Random Selection with Anti-Repetition Ring Buffer
 
 Phase 123 — Principle of the Moment (quotes pool).
 Phase 124 — Principle Block Library (principles pool extension).
+Phase 125 — Intelligence Gate: complexity-aware injection (one principle, complex requests only).
 SSOT: cortex-registry/planning/phases/completed/phase-123-principle-of-the-moment.yaml
       cortex-registry/planning/phases/planned/phase-124-principle-block-library.yaml
 
 Architecture:
-  - pool='quotes' (default): loads atom-quote.yaml — 32 literary quotes
-  - pool='principles': loads high-value-principles.yaml — 30 SDLC principles
-  - Both pools use a shared ring buffer (deque maxlen=10) for anti-repetition
+  - pool='quotes' (default): loads atom-quote.yaml — 120 literary quotes
+  - pool='principles': loads high-value-principles.yaml — 90 SDLC principles
+  - Both pools use a shared ring buffer (deque maxlen=20) for anti-repetition
   - Theme/domain mapping per intent_type for contextual selection
   - Weighted random selection via relevance_weight field
   - Falls back to full pool when theme-filtered candidates are exhausted
+  - Complexity gate: principles are injected ONLY for complex requests
+    (simple queries suppress the principle block entirely)
 
 Performance:
   - p95 target: ≤ 3ms (quotes), ≤ 5ms (principles)
   - No filesystem I/O at select() time after initial YAML load
+
+Complexity Gate (CORE-PRINCIPLE-TRIGGER extension):
+  - Complexity is assessed by is_complex_request(intent_type, context_hints)
+  - Simple requests (short question, single-word query) → suppress principle
+  - Complex requests (design, multi-step, investigation) → inject principle
+  - One principle maximum per response — enforced at call site by atom-principle.yaml max_per_response: 1
 """
 
 from __future__ import annotations
@@ -32,7 +41,7 @@ import yaml
 # ── Module-level singleton state (shared across all PrincipleSelector instances) ──
 _quotes_cache: list[dict[str, Any]] | None = None
 _principles_cache: list[dict[str, Any]] | None = None
-_ring_buffer: deque[str] = deque(maxlen=10)
+_ring_buffer: deque[str] = deque(maxlen=20)  # bumped from 10 → 20 to match 120-quote pool
 
 _VALID_POOLS = frozenset({"quotes", "principles"})
 
@@ -129,25 +138,116 @@ def _load_principles_yaml() -> list[dict[str, Any]]:
     return _principles_cache
 
 
+# ── Complexity signals used by the gate ───────────────────────────────────────
+# Intent types always considered complex (analysis/design by nature)
+_ALWAYS_COMPLEX_INTENTS = frozenset({
+    "DESIGN", "PLAN", "INVESTIGATE", "ANALYZE", "ONBOARD",
+})
+# Intent types where complexity depends on context signals
+_CONTEXT_DEPENDENT_INTENTS = frozenset({
+    "QUERY", "INTRODUCE",
+})
+# Minimum word count in the request for a QUERY to be considered complex
+_COMPLEX_QUERY_MIN_WORDS = 8
+# Signals in the request text that indicate architectural/design complexity
+_COMPLEXITY_SIGNALS = frozenset({
+    "architect", "design", "pattern", "tradeoff", "trade-off", "compare",
+    "versus", " vs ", "should i", "recommend", "best practice", "approach",
+    "strategy", "how would", "what is the best", "when should", "why does",
+    "explain", "difference between", "pros and cons", "evaluate", "assess",
+    "review", "audit", "investigate", "analyse", "analyze", "diagnose",
+    "refactor", "restructure", "migrate", "decompose", "model", "schema",
+})
+
+
+def is_complex_request(
+    intent_type: str,
+    request_text: str = "",
+    context_hints: dict[str, Any] | None = None,
+) -> bool:
+    """Determine whether a request is complex enough to warrant a principle injection.
+
+    Rules (evaluated in order — first match wins):
+      1. DESIGN / PLAN / INVESTIGATE / ANALYZE / ONBOARD → always complex.
+      2. QUERY / INTRODUCE with request_text ≥ 8 words → complex.
+      3. QUERY / INTRODUCE with a complexity signal keyword in request_text → complex.
+      4. context_hints['is_complex'] == True → caller override → complex.
+      5. All other cases → not complex → suppress principle block.
+
+    Args:
+        intent_type: The CORTEX intent string (e.g. "QUERY", "DESIGN").
+        request_text: The raw user request text. Empty string is allowed.
+        context_hints: Optional dict of caller-supplied signals.
+            Recognised keys:
+              - is_complex (bool): explicit override from caller.
+              - word_count (int): pre-computed word count (overrides len(split())).
+
+    Returns:
+        True if a principle should be injected; False if the block should be suppressed.
+    """
+    intent = intent_type.upper()
+
+    # Rule 1: always-complex intents
+    if intent in _ALWAYS_COMPLEX_INTENTS:
+        return True
+
+    # Rule 4: caller override (check before text analysis — explicit beats heuristic)
+    if context_hints and context_hints.get("is_complex") is True:
+        return True
+
+    # Rules 2 & 3: context-dependent intents
+    if intent in _CONTEXT_DEPENDENT_INTENTS:
+        text = request_text.strip().lower()
+
+        # Rule 2: word count threshold
+        word_count = (
+            context_hints.get("word_count")
+            if context_hints and "word_count" in context_hints
+            else len(text.split())
+        )
+        if word_count >= _COMPLEX_QUERY_MIN_WORDS:
+            return True
+
+        # Rule 3: complexity signal keywords
+        if any(signal in text for signal in _COMPLEXITY_SIGNALS):
+            return True
+
+    # Default: suppress
+    return False
+
+
 class PrincipleSelector:
     """Select a thematically appropriate, non-repeating quote or principle.
 
     Supports two pools via the ``pool`` parameter:
-    - ``'quotes'`` (default): 32 literary quotes from atom-quote.yaml
-    - ``'principles'``: 30 SDLC engineering principles from high-value-principles.yaml
+    - ``'quotes'`` (default): 120 literary quotes from atom-quote.yaml
+    - ``'principles'``: 90 SDLC engineering principles from high-value-principles.yaml
 
-    Both pools use the same shared ring buffer (deque maxlen=10) for anti-repetition.
+    Both pools use the same shared ring buffer (deque maxlen=20) for anti-repetition.
     Each pool applies its own intent→theme/domain mapping for contextual selection.
+
+    **Complexity gate (principles pool only):**
+    Pass ``request_text`` and/or ``context_hints`` to ``select()`` to enable
+    intelligent suppression. Simple queries (< 8 words, no complexity signals)
+    return ``None`` instead of a principle — the caller should omit the principle
+    block entirely. Quotes are always returned regardless of complexity.
 
     Usage::
 
-        ps = PrincipleSelector("QUERY", pool="principles")
-        principle = ps.select()
-        print(principle["title"])
-
+        # Quotes — always returned, no gate
         ps = PrincipleSelector("IMPLEMENT")
         quote = ps.select()
         print(quote["text"])
+
+        # Principles — gate-aware: returns None for simple requests
+        ps = PrincipleSelector("QUERY", pool="principles")
+        principle = ps.select(request_text="what is tdd?")
+        if principle:
+            print(principle["title"])
+
+        # Principles — force complex (caller override)
+        ps = PrincipleSelector("QUERY", pool="principles")
+        principle = ps.select(context_hints={"is_complex": True})
 
     Args:
         intent_type: The CORTEX intent enum value (e.g. "IMPLEMENT", "DESIGN").
@@ -183,16 +283,34 @@ class PrincipleSelector:
 
     # ── Public API ─────────────────────────────────────────────────────────────
 
-    def select(self) -> dict[str, Any]:
+    def select(
+        self,
+        request_text: str = "",
+        context_hints: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
         """Select one non-repeating item from the configured pool.
+
+        For pool='principles': applies the complexity gate. Returns None when
+        the request is not complex enough to warrant principle injection.
+        The caller must check for None and suppress the principle block.
+
+        For pool='quotes': complexity gate is not applied. Always returns a quote.
+
+        Args:
+            request_text: The raw user request text. Used by the complexity gate.
+                Empty string disables word-count heuristic (complexity signal
+                keywords still checked if text is non-empty).
+            context_hints: Optional signals dict passed to is_complex_request().
+                Keys: is_complex (bool override), word_count (int pre-computed).
 
         Returns:
             For pool='quotes': dict with keys text, author, book, themes, dedup_key.
-            For pool='principles': dict with keys id, title, body, domain, tags, intent_types.
-            Never returns None — falls back to full pool if theme/domain filter is exhausted.
+                Never None.
+            For pool='principles': dict with keys id, title, body, domain, tags,
+                intent_types. Returns None if complexity gate suppresses injection.
         """
         if self._pool == "principles":
-            return self._select_principle()
+            return self._select_principle(request_text=request_text, context_hints=context_hints)
         return self._select_quote()
 
     # ── Quote selection (pool='quotes') ────────────────────────────────────────
@@ -240,8 +358,16 @@ class PrincipleSelector:
 
     # ── Principle selection (pool='principles') ─────────────────────────────────
 
-    def _select_principle(self) -> dict[str, Any]:
-        """Select one non-repeating SDLC principle from high-value-principles.yaml."""
+    def _select_principle(
+        self,
+        request_text: str = "",
+        context_hints: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
+        """Select one non-repeating SDLC principle, or None if request is not complex."""
+        # ── Complexity gate — suppress for simple requests ─────────────────────
+        if not is_complex_request(self._intent_type, request_text, context_hints):
+            return None
+
         t_start = time.perf_counter_ns()
         repeat_avoided = 0
 

@@ -22,13 +22,13 @@ class TestPrincipleSelectorPoolExtension:
     def test_pool_principles_returns_dict(self):
         """PrincipleSelector with pool='principles' must return a dict."""
         ps = PrincipleSelector("QUERY", pool="principles")
-        result = ps.select()
+        result = ps.select(context_hints={"is_complex": True})
         assert isinstance(result, dict), "select() must return a dict"
 
     def test_pool_principles_has_required_fields(self):
         """Principle result must have id, title, body, domain, tags, intent_types."""
         ps = PrincipleSelector("QUERY", pool="principles")
-        result = ps.select()
+        result = ps.select(context_hints={"is_complex": True})
         missing = REQUIRED_PRINCIPLE_FIELDS - set(result.keys())
         assert not missing, f"Principle result missing fields: {missing}"
 
@@ -52,7 +52,7 @@ class TestPrincipleSelectorPoolExtension:
         seen = set()
         duplicates = 0
         for _ in range(10):
-            r = ps.select()
+            r = ps.select(context_hints={"is_complex": True})
             key = r["id"]
             if key in seen:
                 duplicates += 1
@@ -103,7 +103,7 @@ class TestPrincipleSelectorPoolExtension:
     def test_pool_principles_tdd_intent_returns_tdd_domain(self):
         """TDD intent must return at least one tdd or testing domain in 20 samples."""
         ps = PrincipleSelector("TDD", pool="principles")
-        results = [ps.select() for _ in range(20)]
+        results = [ps.select(context_hints={"is_complex": True}) for _ in range(20)]
         domains = {r["domain"] for r in results}
         assert domains & {"tdd", "testing"}, (
             f"TDD intent returned no tdd/testing domain in 20 samples: {domains}"
@@ -112,6 +112,6 @@ class TestPrincipleSelectorPoolExtension:
     def test_pool_principles_unknown_intent_returns_any_principle(self):
         """Unknown intent with pool='principles' must still return a valid principle."""
         ps = PrincipleSelector("UNKNOWN_INTENT_XYZ", pool="principles")
-        result = ps.select()
+        result = ps.select(context_hints={"is_complex": True})
         assert result is not None
         assert "id" in result, "Unknown intent fallback must return a principle with id"

@@ -18,9 +18,9 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-04T00:00:00Z'
-  total_phases: 106
+  total_phases: 107
   active: 0
-  completed: 103
+  completed: 104
   in_progress: 0
   planned: 0
   playbooks: 1
@@ -28,12 +28,12 @@ metadata:
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 2395
+    smoke: 2582
     preflight: 258
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence), phase-120 (Response Template LEGO)."
+  recent_completed: "phase-123 (Registry Intelligence Engine), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
   planned_next: "next phase TBD — run /audit to identify P0/P1 candidates"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
@@ -119,15 +119,15 @@ verification:
   last_verified: '2026-03-04T00:00:00Z'
 
 summary:
-  total_phases: 106
-  completed: 103
+  total_phases: 107
+  completed: 104
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
-  completion_percentage: 98
-  consolidation_summary: "v62.0: 2026-03-04 — Phase 124 COMPLETE (Principle Block Library). Phase 123 COMPLETE (Principle of the Moment). Phase 122 COMPLETE (Workflow Composer Activation). Smoke: 2,395. Preflight: 258."
+  completion_percentage: 97
+  consolidation_summary: "v63.0: 2026-03-04 — Phase 123 COMPLETE (Registry Intelligence Engine). 7/7 GAPs CLOSED. 5 IntelligenceFacade methods, CortexRegistry MCP tool (5 ops), YAML reader MCP wiring. 55 tests GREEN. Smoke: 2,582."
   active_phases:
     phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (30 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
     phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 32 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"
@@ -422,7 +422,20 @@ phases:
     file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml"
     note: "COMPLETE 2026-03-04. 5/5 GAPs CLOSED. (1) target_files extracted via regex from description text — router now receives meaningful inputs. (2) MODERATE threshold 0.60→0.39; 'implement' added to OPERATION_SCORES. (3) cortex_workflow MCP documented in copilot-instructions.md. (4) Exception swallowing → structured logging. (5) V1-V6 holistic verification PASSED. Smoke: 2395 GREEN."
 
+  # ── PLANNED ───────────────────────────────────────────────────────────────
+
   # ── COMPLETE ──────────────────────────────────────────────────────────────
+  - id: phase-123
+    title: "Registry Intelligence Engine — Unified YAML Registry via IntelligenceFacade + MCP Tool"
+    status: COMPLETE
+    priority: P1
+    sweep_id: SWEEP-123-REGISTRY-INTELLIGENCE-ENGINE
+    gaps: 7
+    gaps_closed: 7
+    sub_phases: 6
+    file: "cortex-registry/planning/phases/completed/phase-123-registry-intelligence-engine.yaml"
+    note: "COMPLETE 2026-03-04. 7/7 GAPs CLOSED. 5 new IntelligenceFacade methods (load_governance, load_workflows, load_patterns, load_plans, registry_index). 2 new model files (MasterPlanIndex, RegistryIndexEntry). CortexRegistry MCP tool (cortex_registry, 5 ops). YAML reader MCP wiring (MCP_MODE flag, fetchFromMCP, loadFromMCP). 26 facade tests + 17 MCP tests + 12 YAML reader tests = 55 GREEN. Smoke: 2582 ✅"
+
   - id: phase-121
     title: "AI Context Intelligence — Scan, Classify, and Disseminate Production Repo AI Artifacts into Registry YAML Hierarchy"
     status: COMPLETE

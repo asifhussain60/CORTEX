@@ -20,8 +20,8 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 id: CORE-PRINCIPLE-TRIGGER
-version: "1.0"
-phase: "124"
+version: "2.0"
+phase: "125"
 last_updated: "2026-03-04"
 
 # ─── Intent Category Taxonomy ─────────────────────────────────────────────────
@@ -84,6 +84,29 @@ brevity:
   body_max_lines: 2
   enforcement: "PrincipleSelector._select_principle() truncates at word boundary before limit"
   governance_check: "P2-004 in audit-checklist.yaml"
+
+# ─── Complexity Gate (Phase 125) ──────────────────────────────────────────────
+# Principles are injected ONLY when the request is complex. Simple queries
+# (short question, single lookup) suppress the principle block entirely.
+# This prevents overwhelming users with unrequested editorial content.
+#
+# Gate implementation: is_complex_request() in cortex/intelligence/principle_selector.py
+# Gate rules (first match wins):
+#   1. DESIGN / PLAN / INVESTIGATE / ANALYZE / ONBOARD → always complex → inject
+#   2. QUERY / INTRODUCE + request_text ≥ 8 words → complex → inject
+#   3. QUERY / INTRODUCE + complexity signal keyword present → complex → inject
+#   4. context_hints['is_complex'] == True (caller override) → inject
+#   5. All other cases → suppress (return None — caller omits the block)
+#
+# Maximum per response: 1 (enforced by atom-principle.yaml max_per_response: 1)
+complexity_gate:
+  enabled: true
+  implementation: "cortex/intelligence/principle_selector.py::is_complex_request"
+  max_principles_per_response: 1
+  always_complex_intents: [DESIGN, PLAN, INVESTIGATE, ANALYZE, ONBOARD]
+  context_dependent_intents: [QUERY, INTRODUCE]
+  complex_query_min_words: 8
+  suppress_return_value: null  # select() returns None → caller must check
 
 # ─── Audit Contract ───────────────────────────────────────────────────────────
 audit_contract:

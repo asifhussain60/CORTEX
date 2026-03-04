@@ -17,6 +17,121 @@ const state = {
     }
 };
 
+// ============================================================================
+// MCP Integration — Phase 123 Registry Intelligence Engine
+// Set MCP_MODE = true to load data from the cortex_registry MCP tool instead
+// of the file:// drag-and-drop workflow.  Defaults to false so the existing
+// file:// workflow is preserved for standalone / offline usage.
+// ============================================================================
+const MCP_MODE = false;
+
+/**
+ * Fetch registry data from the cortex_registry MCP tool.
+ *
+ * @param {string} op  - One of: query_governance | query_workflows |
+ *                       query_patterns | query_plans | registry_index
+ * @param {Object} params - Optional filter params (e.g. { filter: "P0" })
+ * @returns {Promise<Object>} Resolved tool result data object
+ */
+async function fetchFromMCP(op, params = {}) {
+    // VS Code extension host exposes MCP tools via a custom postMessage bridge.
+    // When running in a plain browser context this falls back to a REST shim
+    // at /mcp (e.g. a locally running cortex.mcp HTTP adapter).
+    const payload = { op, ...params };
+
+    // --- VS Code webview bridge (preferred) ---
+    if (typeof acquireVsCodeApi !== 'undefined') {
+        return new Promise((resolve, reject) => {
+            const vscode = acquireVsCodeApi();
+            const msgId = `mcp-${Date.now()}-${Math.random()}`;
+            const handler = (event) => {
+                const msg = event.data;
+                if (msg && msg.id === msgId) {
+                    window.removeEventListener('message', handler);
+                    if (msg.error) {
+                        reject(new Error(msg.error));
+                    } else {
+                        resolve(msg.data);
+                    }
+                }
+            };
+            window.addEventListener('message', handler);
+            vscode.postMessage({ command: 'cortex_registry', id: msgId, payload });
+        });
+    }
+
+    // --- HTTP shim (local cortex.mcp server on port 8765) ---
+    const response = await fetch('http://localhost:8765/mcp/cortex_registry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+        throw new Error(`MCP HTTP error ${response.status}: ${response.statusText}`);
+    }
+    const result = await response.json();
+    if (!result.success) {
+        throw new Error(result.error || 'MCP tool returned failure');
+    }
+    return result.data;
+}
+
+/**
+ * Load all registry data from MCP and populate the viewer.
+ * Called automatically when MCP_MODE is true.
+ */
+async function loadFromMCP() {
+    console.log('🔌 MCP_MODE enabled — loading from cortex_registry tool');
+    try {
+        const [govData, wfData, patData, planData, idxData] = await Promise.all([
+            fetchFromMCP('query_governance'),
+            fetchFromMCP('query_workflows'),
+            fetchFromMCP('query_patterns'),
+            fetchFromMCP('query_plans'),
+            fetchFromMCP('registry_index'),
+        ]);
+
+        // Convert each MCP payload into a synthetic "loaded file" entry so the
+        // existing viewer pipeline can render them without modification.
+        const syntheticFiles = [
+            _mcpPayloadToFile('governance-rules.yaml', govData),
+            _mcpPayloadToFile('workflow-templates.yaml', wfData),
+            _mcpPayloadToFile('patterns.yaml', patData),
+            _mcpPayloadToFile('master-plan.yaml', planData),
+            _mcpPayloadToFile('registry-index.yaml', idxData),
+        ];
+
+        syntheticFiles.forEach(f => {
+            state.loadedFiles.push(f);
+        });
+
+        updateExplorer();
+        showToast(`✅ Loaded ${syntheticFiles.length} registry datasets from MCP`);
+        console.log('✅ MCP registry data loaded successfully');
+    } catch (err) {
+        console.error('❌ MCP load failed:', err);
+        showToast(`❌ MCP load failed: ${err.message}`);
+    }
+}
+
+/**
+ * Convert an MCP data payload into a synthetic file entry for the viewer.
+ * @param {string} name - Display name for the entry
+ * @param {Object} data - Raw MCP data object
+ * @returns {Object} Viewer-compatible file entry
+ */
+function _mcpPayloadToFile(name, data) {
+    return {
+        name,
+        source: 'mcp',
+        content: data,
+        raw: JSON.stringify(data, null, 2),
+        type: 'mcp-registry',
+        timestamp: Date.now(),
+    };
+}
+// ============================================================================
+
 // DOM Elements
 const elements = {
     fileInput: document.getElementById('fileInput'),
@@ -34,7 +149,12 @@ const elements = {
 function init() {
     loadRecentFiles();
     setupEventListeners();
-    console.log('✅ CORTEX YAML Reader initialized (file:// mode)');
+    if (MCP_MODE) {
+        loadFromMCP();
+        console.log('✅ CORTEX YAML Reader initialized (MCP mode)');
+    } else {
+        console.log('✅ CORTEX YAML Reader initialized (file:// mode)');
+    }
 }
 
 // Event Listeners

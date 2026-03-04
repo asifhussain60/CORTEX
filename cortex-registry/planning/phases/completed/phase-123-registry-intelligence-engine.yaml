@@ -1,0 +1,512 @@
+id: "phase-123"
+title: "Registry Intelligence Engine — Unified YAML Registry via IntelligenceFacade + MCP Tool"
+version: "1.0"
+created: "2026-03-04"
+completed: "2026-03-04"
+status: COMPLETE
+priority: P1
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints on all functions
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-028  # snake_case file naming
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-123-REGISTRY-INTELLIGENCE-ENGINE"
+
+background: |
+  Source: _workspaces/recommendations/copilot-review.md (2026-03-04 review session)
+  Score at entry: Challenge analysis revealed 4 isolated YAML-loading registries with
+    zero unification and a standalone browser-only YAML reader with no Python runtime
+    integration. The proposal requested a "registry intelligence engine" — audit confirmed
+    CORTEX already has all the raw pieces; the gap is unification + MCP exposure.
+  Baseline measurements:
+    - Smoke tests: 2581 passed, 77 skipped, 23 xfailed at phase entry
+    - Existing registries: KnowledgeRegistryProxy, GovernanceRegistry,
+      WorkflowTemplateRegistry, PatternRegistry — all isolated, none cross-wired
+    - IntelligenceFacade (Phase 107): already consolidates LENS + KnowledgeRegistryProxy;
+      GovernanceRegistry, WorkflowTemplateRegistry, PatternRegistry NOT yet wired
+    - _workspaces/yaml-reader/: browser-only JS app, zero MCP/Python integration
+  Git prerequisite: CORTEX branch, phase-122 COMPLETE
+  Architecture decision: Extend IntelligenceFacade (CORE-035 compliant) rather than
+    create a 5th parallel YAML reader — delegates to existing validated loaders.
+
+sweep_catalogue:
+  - id: "GAP-123-01"
+    title: "IntelligenceFacade missing load_governance() delegation to GovernanceRegistry"
+    severity: P1
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      cortex/intelligence/facade.py has analyze(), synthesize(), query() only.
+      GovernanceRegistry (cortex/orchestrators/core/governance_registry.py) loads
+      tier-0 CORE rules from YAML but is unreachable via IntelligenceFacade.
+      grep 'load_governance' cortex/intelligence/facade.py → 0 matches
+    action_ref: "phase-123-a"
+    status: CLOSED
+
+  - id: "GAP-123-02"
+    title: "IntelligenceFacade missing load_workflows() delegation to WorkflowTemplateRegistry"
+    severity: P1
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      WorkflowTemplateRegistry (cortex/orchestrators/workflow/template_registry.py)
+      discovers workflow YAMLs with placeholder resolution but is siloed.
+      grep 'load_workflows' cortex/intelligence/facade.py → 0 matches
+    action_ref: "phase-123-a"
+    status: CLOSED
+
+  - id: "GAP-123-03"
+    title: "IntelligenceFacade missing load_patterns() delegation to PatternRegistry"
+    severity: P1
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      PatternRegistry (cortex/intelligence/patterns/registry.py) loads YAML/JSON
+      custom patterns with jsonschema validation but is unreachable via facade.
+      grep 'load_patterns' cortex/intelligence/facade.py → 0 matches
+    action_ref: "phase-123-a"
+    status: CLOSED
+
+  - id: "GAP-123-04"
+    title: "No load_plans() surface for cortex-master.yaml typed access"
+    severity: P2
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      cortex-master.yaml has no typed Python reader. Orchestrators that need plan
+      data parse raw YAML ad-hoc. No MasterPlanIndex dataclass exists.
+      grep -rn 'cortex-master.yaml' cortex/ → only infrastructure/startup_validator.py
+    action_ref: "phase-123-b"
+    status: CLOSED
+
+  - id: "GAP-123-05"
+    title: "No registry_index() cross-domain scan — no startup registry map"
+    severity: P2
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      No component scans cortex-registry/ holistically at startup to produce a
+      domain-tagged metadata index (type, path, dependencies). VacuumOrchestrator
+      detects unused files post-hoc but no proactive registry index exists.
+    action_ref: "phase-123-c"
+    status: CLOSED
+
+  - id: "GAP-123-06"
+    title: "No cortex_registry MCP tool — registry intelligence not MCP-exposed"
+    severity: P1
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      30 MCP tools registered in mcp_registry.py. None expose registry queries
+      (load_governance, load_workflows, load_patterns, load_plans, registry_index).
+      grep 'cortex_registry' cortex/mcp/ → 0 matches
+    action_ref: "phase-123-d"
+    status: CLOSED
+
+  - id: "GAP-123-07"
+    title: "_workspaces/yaml-reader/ has zero Python/MCP integration — browser-only"
+    severity: P2
+    source: "_workspaces/recommendations/copilot-review.md audit"
+    evidence: |
+      _workspaces/yaml-reader/app.js uses file:// drag-drop with js-yaml.
+      No fetch() to MCP. No calls to cortex_registry tool. Standalone viewer only.
+      Should become a thin visualization client over the MCP backend.
+    action_ref: "phase-123-e"
+    status: CLOSED
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-123-a"
+    title: "Extend IntelligenceFacade — load_governance, load_workflows, load_patterns"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-123-01", "GAP-123-02", "GAP-123-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2581 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_registry_intelligence_facade.py BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails (import errors count as FAIL)"
+      green:
+        action: "Add load_governance(), load_workflows(), load_patterns() to IntelligenceFacade, delegating to existing registries"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Add docstrings (CORE-012), type hints (CORE-011), confirm CORE-035 (no duplicate registry init)"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + ruff check cortex/intelligence/facade.py"
+      fix_step: "Apply targeted fixes for lint or regression issues"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_load_governance_returns_rules_list — IntelligenceFacade().load_governance() returns non-empty list of governance rule dicts"
+        - "test_load_governance_contains_core_008 — result contains a rule with rule_id='CORE-008'"
+        - "test_load_workflows_returns_templates — IntelligenceFacade().load_workflows() returns list of workflow template dicts"
+        - "test_load_workflows_filters_by_category — load_workflows(category='sdlc') returns only sdlc templates"
+        - "test_load_patterns_returns_patterns — IntelligenceFacade().load_patterns() returns list"
+        - "test_load_patterns_filters_by_tag — load_patterns(tag='tdd') returns only tdd-tagged patterns"
+        - "test_facade_singleton_shared_state — two IntelligenceFacade() instances are the same object (singleton)"
+      green:
+        - "Add _get_governance_registry() lazy-loader to IntelligenceFacade"
+        - "Add _get_workflow_registry() lazy-loader to IntelligenceFacade"
+        - "Add _get_pattern_registry() lazy-loader to IntelligenceFacade"
+        - "Implement load_governance(severity=None) delegating to GovernanceRegistry"
+        - "Implement load_workflows(category=None) delegating to WorkflowTemplateRegistry"
+        - "Implement load_patterns(tag=None) delegating to PatternRegistry"
+      refactor:
+        - "Add Google-style docstrings to all 6 new methods (CORE-012)"
+        - "Verify type hints on all signatures including Optional[str] filters (CORE-011)"
+        - "Confirm GovernanceRegistry/WorkflowTemplateRegistry/PatternRegistry NOT re-instantiated per call (CORE-035)"
+
+    acceptance_criteria:
+      - "IntelligenceFacade().load_governance() returns list with ≥1 rule dict containing 'rule_id' key"
+      - "IntelligenceFacade().load_workflows() returns list of workflow template dicts"
+      - "IntelligenceFacade().load_patterns() returns list"
+      - "Optional filter args (severity, category, tag) correctly narrow results"
+      - "Singleton contract preserved — facade instance unchanged by new methods"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions vs 2581 baseline"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-123-b"
+    title: "Add load_plans() — typed MasterPlanIndex reader for cortex-master.yaml"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-123-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-123-a"]
+    prerequisite: "phase-123-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for MasterPlanIndex and load_plans() in tests/intelligence/test_registry_intelligence_facade.py"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — new tests FAIL"
+        blocker: "Do NOT implement MasterPlanIndex until tests fail"
+      green:
+        action: "Add MasterPlanIndex dataclass to cortex/intelligence/models/ and load_plans() to IntelligenceFacade"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — ALL pass"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, confirm CORE-035 (no duplicate plan parsing)"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_load_plans_returns_master_plan_index — load_plans() returns a MasterPlanIndex with phases list"
+        - "test_master_plan_index_has_completed_phases — MasterPlanIndex.phases contains at least 1 entry with status=COMPLETE"
+        - "test_master_plan_index_has_planned_phases — MasterPlanIndex.phases contains at least 1 entry with status=PLANNED"
+        - "test_load_plans_filter_by_status — load_plans(status='PLANNED') returns only PLANNED phases"
+        - "test_master_plan_index_line_count_within_contract — MasterPlanIndex.source_line_count <= 500"
+      green:
+        - "Create cortex/intelligence/models/master_plan_index.py with MasterPlanIndex + PhaseEntry dataclasses"
+        - "Implement load_plans(status=None) in IntelligenceFacade — parses cortex-registry/cortex-master.yaml"
+        - "Add _get_master_plan_path() helper returning canonical path"
+      refactor:
+        - "Add docstrings (CORE-012), type hints (CORE-011)"
+        - "Validate MasterPlanIndex construction handles missing optional fields gracefully"
+
+    acceptance_criteria:
+      - "load_plans() returns MasterPlanIndex with non-empty phases list"
+      - "PhaseEntry dataclass has: id, title, status, priority, file fields"
+      - "load_plans(status='COMPLETE') returns only COMPLETE phases"
+      - "MasterPlanIndex.source_line_count reflects actual cortex-master.yaml line count"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-123-c"
+    title: "Add registry_index() — cross-domain startup scan of cortex-registry/"
+    priority: P2
+    status: COMPLETE
+    gap_refs: ["GAP-123-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-123-b"]
+    prerequisite: "phase-123-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for registry_index() in tests/intelligence/test_registry_intelligence_facade.py"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — new tests FAIL"
+        blocker: "Do NOT implement registry_index() until tests fail"
+      green:
+        action: "Implement registry_index() — scans cortex-registry/ tree, categorizes YAMLs by domain, returns RegistryIndexEntry list"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_registry_intelligence_facade.py — ALL pass"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, ensure lazy-load cache honours existing IntelligenceFacade singleton"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_registry_index_returns_list — registry_index() returns non-empty list of RegistryIndexEntry"
+        - "test_registry_index_has_governance_domain — result contains entries with domain='governance'"
+        - "test_registry_index_has_workflow_domain — result contains entries with domain='workflows'"
+        - "test_registry_index_has_knowledge_domain — result contains entries with domain='knowledge'"
+        - "test_registry_index_entry_has_required_fields — each entry has: path, domain, schema_type, file_name"
+        - "test_registry_index_cached — two calls return same object (lazy cache)"
+      green:
+        - "Create RegistryIndexEntry dataclass in cortex/intelligence/models/registry_index.py"
+        - "Implement _scan_registry_tree() private method scanning cortex-registry/ subdirs"
+        - "Implement registry_index(domain=None) on IntelligenceFacade with lazy cache"
+        - "Add domain detection: governance/ → 'governance', workflows/ → 'workflows', knowledge/ → 'knowledge', planning/ → 'planning', patterns/ → 'patterns'"
+      refactor:
+        - "Add docstrings (CORE-012), type hints (CORE-011)"
+        - "Confirm cache invalidation is not triggered on repeated calls (CORE-035)"
+
+    acceptance_criteria:
+      - "registry_index() returns ≥1 RegistryIndexEntry per domain (governance, workflows, knowledge, planning)"
+      - "RegistryIndexEntry has: path (str), domain (str), schema_type (str), file_name (str)"
+      - "Optional domain= filter narrows results correctly"
+      - "Second call returns cached result (same list object)"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-123-d"
+    title: "cortex_registry MCP tool — MCP-first exposure of all 5 registry operations"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-123-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-123-c"]
+    prerequisite: "phase-123-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for CortexRegistry MCP tool in tests/mcp/test_cortex_registry_tool.py"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_registry_tool.py — ALL tests FAIL"
+        blocker: "Do NOT create tool file until tests fail (import error = FAIL)"
+      green:
+        action: "Create cortex/mcp/tools/cortex_registry_tool.py implementing CortexRegistry(ConsolidatedTool) with 5 ops"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_registry_tool.py — ALL pass"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, validate_orchestrator_context guard pattern (CORE-011, CORE-012)"
+        gate: "python3 scripts/run_tests.py dir tests/mcp/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_registry_tool_name — CortexRegistry().name == 'cortex_registry'"
+        - "test_cortex_registry_op_query_governance — execute(op='query_governance') returns dict with 'rules' key"
+        - "test_cortex_registry_op_query_workflows — execute(op='query_workflows') returns dict with 'templates' key"
+        - "test_cortex_registry_op_query_patterns — execute(op='query_patterns') returns dict with 'patterns' key"
+        - "test_cortex_registry_op_query_plans — execute(op='query_plans') returns dict with 'phases' key"
+        - "test_cortex_registry_op_registry_index — execute(op='registry_index') returns dict with 'entries' key"
+        - "test_cortex_registry_invalid_op — execute(op='unknown') returns error ToolResult"
+        - "test_cortex_registry_validate_context_guard — orchestrator_context=None bypasses validate call (test invocation safe)"
+      green:
+        - "Create cortex/mcp/tools/cortex_registry_tool.py with CortexRegistry(ConsolidatedTool)"
+        - "Implement execute() dispatching on op: query_governance | query_workflows | query_patterns | query_plans | registry_index"
+        - "Each op delegates to IntelligenceFacade singleton — no direct registry access"
+        - "Register in cortex/mcp/mcp_registry.py"
+      refactor:
+        - "Add docstrings, type hints"
+        - "Confirm validate_orchestrator_context guard matches pattern in _shared.py"
+        - "Confirm tool registered in mcp_registry.py with canonical name 'cortex_registry'"
+
+    acceptance_criteria:
+      - "CortexRegistry().name == 'cortex_registry'"
+      - "All 5 ops return valid ToolResult with expected top-level key"
+      - "Invalid op returns ToolResult with is_error=True"
+      - "Tool registered in mcp_registry.py — grep 'cortex_registry' cortex/mcp/mcp_registry.py returns ≥1 match"
+      - "validate_orchestrator_context guard correctly applied"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/mcp/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-123-e"
+    title: "Wire _workspaces/yaml-reader/ as MCP visualization client"
+    priority: P2
+    status: COMPLETE
+    gap_refs: ["GAP-123-07"]
+    governance_authority: "CORE-008, CORE-012, CORE-028, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-123-d"]
+    prerequisite: "phase-123-d completion_gate PASSED — cortex_registry MCP tool live"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing Python golden tests in _workspaces/yaml-reader/tests/test_mcp_integration.py"
+        gate: "python3 _workspaces/yaml-reader/tests/test_mcp_integration.py — all assertions FAIL"
+        blocker: "Do NOT modify app.js until tests fail"
+      green:
+        action: "Add fetchFromMCP(op, params) function to app.js; update model.js SchemaInference to prefer MCP data"
+        gate: "python3 _workspaces/yaml-reader/tests/test_mcp_integration.py — all assertions PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Document MCP integration in app.js header comments; ensure fallback to file:// mode when MCP unavailable"
+        gate: "No regression in existing _workspaces/yaml-reader/tests/"
+        blocker: "Do NOT mark sub-phase COMPLETE until fallback verified"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_fetch_from_mcp_function_exists — app.js contains fetchFromMCP function definition"
+        - "test_mcp_mode_flag_exists — app.js contains MCP_MODE or useMCPBackend configuration flag"
+        - "test_fallback_mode_preserved — file:// drag-drop still works when MCP_MODE=false"
+        - "test_schema_inference_mcp_path — model.js SchemaInference.infer() accepts pre-parsed MCP data"
+      green:
+        - "Add MCP_MODE = false (default off — no-break for file:// users) to app.js state"
+        - "Add fetchFromMCP(op, params) async function calling cortex_registry MCP endpoint"
+        - "Add loadFromMCP() entry point using fetchFromMCP for all 5 ops"
+        - "Update SchemaInference.infer() to accept optional mcpData override"
+      refactor:
+        - "Add JSDoc comments to fetchFromMCP, loadFromMCP, MCP_MODE"
+        - "Confirm file:// drag-drop path unchanged when MCP_MODE=false"
+
+    acceptance_criteria:
+      - "app.js contains fetchFromMCP() and MCP_MODE flag"
+      - "MCP_MODE defaults to false — existing file:// workflow 100% preserved"
+      - "fetchFromMCP() constructs correct cortex_registry MCP op calls"
+      - "model.js SchemaInference.infer() accepts mcpData override parameter"
+      - "All _workspaces/yaml-reader/tests/ pass (no regressions)"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2581
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-123-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: COMPLETE
+    gap_refs: []
+    depends_on: ["phase-123-e"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2581 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only; confirm all GAPs CLOSED before proceeding"
+        gate: "All 7 sweep_catalogue entries verified CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2581 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase YAML planned/ → completed/; update cortex-master.yaml status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 7 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥2581 tests"
+      - "Zero new test failures vs 2581 baseline"
+      - "cortex/intelligence/facade.py has load_governance(), load_workflows(), load_patterns(), load_plans(), registry_index()"
+      - "cortex/mcp/tools/cortex_registry_tool.py exists with CortexRegistry tool (5 ops)"
+      - "cortex_registry registered in cortex/mcp/mcp_registry.py"
+      - "_workspaces/yaml-reader/app.js has fetchFromMCP() and MCP_MODE flag"
+      - "phase-123 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2581
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+ac_markers:
+  start: "AC_START: AC-123-REGISTRY-INTELLIGENCE-ENGINE"
+  complete: "AC_COMPLETE: AC-123-REGISTRY-INTELLIGENCE-ENGINE ✅"

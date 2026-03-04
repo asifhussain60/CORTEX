@@ -125,6 +125,9 @@ from cortex.mcp.tools.learning_tool import CortexLearning
 # Phase 113 — Request Sequence Persistence context tool (GAP-07)
 from cortex.mcp.tools.cortex_context import CortexContext
 
+# Phase 123 — Registry Intelligence Engine (GAP-123-06)
+from cortex.mcp.tools.cortex_registry_tool import CortexRegistry
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -183,6 +186,8 @@ ALL_TOOLS = [
     CortexLearning,
     # Context (1) - Phase 113 GAP-07 — Request Sequence Persistence
     CortexContext,
+    # Registry Intelligence (1) - Phase 123 GAP-123-06
+    CortexRegistry,
 ]
 
 

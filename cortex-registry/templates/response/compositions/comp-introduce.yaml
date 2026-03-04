@@ -48,6 +48,10 @@ atoms:
     zone: 2
     params:
       theme: universal
+  - id: atom-principle
+    zone: 3
+    params:
+      intent_type: INTRODUCE
   - id: atom-intent-reflection
     zone: body
   - id: atom-status-footer
@@ -64,6 +68,9 @@ template: |
   > — {author}, **{book}**
 
   ---
+
+  ### 💡 Principle: {title}
+  {body}
 
 # ─── Pre-built Via Chain ──────────────────────────────────────────────────────
 orchestration_chain: "Classifier → Mission Control"

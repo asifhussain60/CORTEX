@@ -12,9 +12,17 @@ description: >
   Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
   ring buffer (n=10) and weighted random selection.
 
+version: "1.0.0"
+description: >
+  Curated library of 90 high-value SDLC engineering principles spanning 10 domains.
+  Selected for relevance to analysis, design, implementation, and review responses.
+  Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
+  ring buffer (n=20) and weighted random selection. ONE principle per response, only
+  when the request is complex (analysis or design category intents only).
+
 principles:
 
-  # ── DOMAIN: tdd ──────────────────────────────────────────────────────────────
+  # ── DOMAIN: tdd (9) ──────────────────────────────────────────────────────────
 
   - id: tdd-001
     title: "Red–Green–Refactor"
@@ -49,7 +57,73 @@ principles:
     intent_types: [TDD, IMPLEMENT]
     relevance_weight: 0.75
 
-  # ── DOMAIN: refactoring ───────────────────────────────────────────────────────
+  - id: tdd-004
+    title: "Tests Are the First Client of Your API"
+    body: >
+      If your tests are hard to write, your API is hard to use. Difficult test
+      setup reveals coupling, poor separation of concerns, or missing abstractions
+      before any real consumer encounters them.
+    domain: tdd
+    tags: [tdd, api, design]
+    intent_types: [DESIGN, IMPLEMENT, TDD]
+    relevance_weight: 0.9
+
+  - id: tdd-005
+    title: "Fast Tests, Frequent Runs"
+    body: >
+      A test suite that takes minutes to run will not be run after every change.
+      Keep the unit suite under 60 seconds. Speed is a design constraint, not a
+      nice-to-have — slow tests break the TDD feedback loop.
+    domain: tdd
+    tags: [tdd, performance, ci]
+    intent_types: [TDD, PLAN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: tdd-006
+    title: "Test Names Are Documentation"
+    body: >
+      A test name should read as a sentence describing exactly what the system
+      does under specific conditions. If the name requires reading the body to
+      understand, the name has failed its documentation purpose.
+    domain: tdd
+    tags: [tdd, documentation, clarity]
+    intent_types: [TDD, IMPLEMENT, QUERY]
+    relevance_weight: 0.8
+
+  - id: tdd-007
+    title: "Failing Tests Are Information, Not Failure"
+    body: >
+      A red test is a precise, machine-verified specification of a missing
+      behaviour. Treat it as a clarification of intent, not a sign of broken
+      code. The absence of failing tests is the danger signal.
+    domain: tdd
+    tags: [tdd, mindset, feedback]
+    intent_types: [TDD, QUERY, INVESTIGATE]
+    relevance_weight: 0.85
+
+  - id: tdd-008
+    title: "Arrange–Act–Assert"
+    body: >
+      Structure every test as three clearly separated phases: set up the context
+      (Arrange), execute the behaviour under test (Act), verify the outcome
+      (Assert). Mixing phases produces tests that are hard to read and harder to debug.
+    domain: tdd
+    tags: [tdd, structure, clarity]
+    intent_types: [TDD, IMPLEMENT]
+    relevance_weight: 0.8
+
+  - id: tdd-009
+    title: "Delete Tests That No Longer Earn Their Keep"
+    body: >
+      A test that never fails, tests nothing observable, or duplicates coverage
+      of another test is maintenance debt. Prune aggressively. A smaller, high-signal
+      suite is more valuable than a large, noisy one.
+    domain: tdd
+    tags: [tdd, hygiene, maintenance]
+    intent_types: [REFACTOR, AUDIT, TDD]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: refactoring (9) ───────────────────────────────────────────────────
 
   - id: refactoring-001
     title: "Refactor Under Green"
@@ -84,7 +158,73 @@ principles:
     intent_types: [REFACTOR, IMPLEMENT, FIX]
     relevance_weight: 0.8
 
-  # ── DOMAIN: architecture ──────────────────────────────────────────────────────
+  - id: refactoring-004
+    title: "Introduce the Seam Before Changing the Logic"
+    body: >
+      Before modifying a tightly coupled block, introduce a seam — an interface,
+      function boundary, or parameter — that allows the behaviour to be tested
+      in isolation. Change logic only after the seam is in place.
+    domain: refactoring
+    tags: [refactoring, seam, testability]
+    intent_types: [REFACTOR, FIX, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: refactoring-005
+    title: "Rename Until the Comment Disappears"
+    body: >
+      If you find yourself adding a comment to explain what a variable, method, or
+      class does, the name is wrong. Rename until the comment is redundant, then
+      delete the comment.
+    domain: refactoring
+    tags: [refactoring, naming, documentation]
+    intent_types: [REFACTOR, IMPLEMENT, QUERY]
+    relevance_weight: 0.85
+
+  - id: refactoring-006
+    title: "Small Steps, Frequent Commits"
+    body: >
+      Refactor in the smallest safe increments and commit after each green step.
+      Large refactoring batches are impossible to code-review, risky to revert,
+      and hide the source of regressions.
+    domain: refactoring
+    tags: [refactoring, git, safety]
+    intent_types: [REFACTOR, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: refactoring-007
+    title: "Collapse the Abstraction Ladder"
+    body: >
+      Each level of abstraction should do one thing at one level. Mixing high-level
+      policy with low-level detail in the same function forces readers to context-switch
+      constantly. Separate the levels; name them clearly.
+    domain: refactoring
+    tags: [refactoring, abstraction, clean-code]
+    intent_types: [REFACTOR, DESIGN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: refactoring-008
+    title: "Strangler Fig for Legacy Replacement"
+    body: >
+      Replace legacy systems incrementally by routing new behaviour through a
+      new implementation alongside the old one, gradually strangling the legacy
+      path until it can be safely removed.
+    domain: refactoring
+    tags: [refactoring, architecture, legacy]
+    intent_types: [REFACTOR, DESIGN, PLAN]
+    relevance_weight: 0.9
+
+  - id: refactoring-009
+    title: "The Rule of Three"
+    body: >
+      The first time you write something, just write it. The second time you write
+      something similar, note the duplication. The third time, extract the abstraction.
+      Abstracting too early is worse than duplicating once.
+    domain: refactoring
+    tags: [refactoring, dry, abstraction]
+    intent_types: [REFACTOR, IMPLEMENT, QUERY]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: architecture (9) ──────────────────────────────────────────────────
 
   - id: architecture-001
     title: "Defer Irreversible Decisions"
@@ -117,20 +257,75 @@ principles:
     domain: architecture
     tags: [architecture, hexagonal, testability]
     intent_types: [DESIGN, IMPLEMENT, REFACTOR]
-    relevance_weight: 0.8
+    relevance_weight: 0.85
 
   - id: architecture-004
     title: "Context Boundaries Before Classes"
     body: >
-      Identify bounded contexts and their relationships (Upstream/Downstream,
-      ACL, Conformist) before designing classes. Class design without context
-      boundaries produces big balls of mud.
+      Identify bounded contexts and their relationships before designing classes.
+      Class design without context boundaries produces big balls of mud where
+      everything depends on everything.
     domain: architecture
     tags: [architecture, ddd, bounded-context]
     intent_types: [DESIGN, PLAN, QUERY]
-    relevance_weight: 0.75
+    relevance_weight: 0.8
 
-  # ── DOMAIN: security ──────────────────────────────────────────────────────────
+  - id: architecture-005
+    title: "Separate What Changes from What Stays"
+    body: >
+      Identify the axes of change in a system and isolate them behind abstractions.
+      Components that change together should live together. Components that change
+      for different reasons must be separated.
+    domain: architecture
+    tags: [architecture, srp, cohesion]
+    intent_types: [DESIGN, REFACTOR, QUERY]
+    relevance_weight: 0.9
+
+  - id: architecture-006
+    title: "Design for Replaceability"
+    body: >
+      Every component should be replaceable without rewriting its callers. If
+      replacing a database, queue, or third-party service requires touching
+      business logic, the architecture has leaked its infrastructure concerns.
+    domain: architecture
+    tags: [architecture, coupling, replaceability]
+    intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.9
+
+  - id: architecture-007
+    title: "Explicit Is Better than Implicit"
+    body: >
+      Hidden coupling, magic configuration, and convention-over-documentation
+      make systems harder to reason about. Prefer explicit wiring, named constants,
+      and declared contracts over implicit behaviour.
+    domain: architecture
+    tags: [architecture, clarity, explicitness]
+    intent_types: [DESIGN, IMPLEMENT, QUERY]
+    relevance_weight: 0.85
+
+  - id: architecture-008
+    title: "Design for the Failure Mode First"
+    body: >
+      Every component will fail. Design the failure mode before the happy path.
+      A system that degrades gracefully under partial failure is more valuable
+      than one that works perfectly until it doesn't.
+    domain: architecture
+    tags: [architecture, resilience, failure-modes]
+    intent_types: [DESIGN, IMPLEMENT, PLAN]
+    relevance_weight: 0.9
+
+  - id: architecture-009
+    title: "Avoid Distributed Monolith"
+    body: >
+      Splitting a monolith into services without splitting its data model or
+      deployment creates a distributed monolith — all the operational complexity
+      of microservices with none of the independence benefits.
+    domain: architecture
+    tags: [architecture, microservices, data]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: security (9) ──────────────────────────────────────────────────────
 
   - id: security-001
     title: "Principle of Least Privilege"
@@ -146,12 +341,12 @@ principles:
     title: "Validate at Trust Boundaries"
     body: >
       Input validation must occur at every trust boundary — API ingress,
-      inter-service calls, database reads, filesystem access. Assuming internal
-      data is clean is a systemic vulnerability pattern.
+      inter-service calls, database reads. Assuming internal data is clean
+      is a systemic vulnerability pattern.
     domain: security
     tags: [security, validation, boundaries]
     intent_types: [IMPLEMENT, FIX, AUDIT]
-    relevance_weight: 0.85
+    relevance_weight: 0.9
 
   - id: security-003
     title: "Fail Secure"
@@ -162,9 +357,75 @@ principles:
     domain: security
     tags: [security, resilience, error-handling]
     intent_types: [DESIGN, IMPLEMENT, FIX]
-    relevance_weight: 0.8
+    relevance_weight: 0.85
 
-  # ── DOMAIN: api_design ────────────────────────────────────────────────────────
+  - id: security-004
+    title: "Defence in Depth"
+    body: >
+      No single control is sufficient. Layer independent security controls so
+      that the failure of any one layer does not expose the system. Redundant
+      protection is the norm in production-grade systems.
+    domain: security
+    tags: [security, hardening, layered]
+    intent_types: [DESIGN, AUDIT, IMPLEMENT]
+    relevance_weight: 0.9
+
+  - id: security-005
+    title: "Threat Model Before You Build"
+    body: >
+      Identify assets, threat actors, attack surfaces, and mitigations before
+      writing a line of security-sensitive code. A threat model converts vague
+      security concerns into a concrete, prioritised list of controls.
+    domain: security
+    tags: [security, threat-model, design]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.9
+
+  - id: security-006
+    title: "Secrets Never in Source"
+    body: >
+      API keys, passwords, tokens, and certificates must never appear in source
+      code or version control. Use environment variables, secret stores, or
+      vault integrations. One leaked commit is a permanent exposure.
+    domain: security
+    tags: [security, secrets, git]
+    intent_types: [IMPLEMENT, AUDIT, FIX]
+    relevance_weight: 0.95
+
+  - id: security-007
+    title: "Dependency Supply Chain Hygiene"
+    body: >
+      Every third-party dependency is a trust decision. Pin versions, verify
+      checksums, scan for CVEs in CI, and audit transitive dependencies.
+      Most breaches in 2024–2025 originated in the supply chain, not the app.
+    domain: security
+    tags: [security, dependencies, supply-chain]
+    intent_types: [AUDIT, IMPLEMENT, PLAN]
+    relevance_weight: 0.9
+
+  - id: security-008
+    title: "Log Security Events, Never Secrets"
+    body: >
+      Log authentication failures, authorisation denials, and anomalous access
+      patterns — but never log passwords, tokens, PII, or request bodies
+      containing credentials. Security logging must be auditable but safe.
+    domain: security
+    tags: [security, logging, observability]
+    intent_types: [IMPLEMENT, DESIGN, AUDIT]
+    relevance_weight: 0.85
+
+  - id: security-009
+    title: "Rotate, Revoke, Expire"
+    body: >
+      Credentials, certificates, and API keys must have bounded lifetimes.
+      Build rotation and revocation into the design — not as an afterthought.
+      A credential that cannot be revoked is a permanent liability.
+    domain: security
+    tags: [security, credentials, lifecycle]
+    intent_types: [DESIGN, IMPLEMENT, AUDIT]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: api_design (9) ────────────────────────────────────────────────────
 
   - id: api_design-001
     title: "Design for the Consumer"
@@ -186,7 +447,7 @@ principles:
     domain: api_design
     tags: [api, versioning, compatibility]
     intent_types: [DESIGN, REFACTOR, IMPLEMENT]
-    relevance_weight: 0.85
+    relevance_weight: 0.9
 
   - id: api_design-003
     title: "Prefer Idempotent Operations"
@@ -197,9 +458,75 @@ principles:
     domain: api_design
     tags: [api, idempotency, reliability]
     intent_types: [DESIGN, IMPLEMENT]
-    relevance_weight: 0.8
+    relevance_weight: 0.85
 
-  # ── DOMAIN: testing ───────────────────────────────────────────────────────────
+  - id: api_design-004
+    title: "Error Contracts Are Part of the API"
+    body: >
+      A public API that returns undocumented error codes forces consumers to
+      reverse-engineer failure modes. Define, document, and version your error
+      schema with the same rigour as your success schema.
+    domain: api_design
+    tags: [api, errors, contracts]
+    intent_types: [DESIGN, IMPLEMENT, QUERY]
+    relevance_weight: 0.9
+
+  - id: api_design-005
+    title: "Pagination from Day One"
+    body: >
+      An API that returns unbounded collections will be called with a dataset
+      ten times larger than you expected at launch. Design cursor-based or
+      keyset pagination before the first consumer ships.
+    domain: api_design
+    tags: [api, pagination, scalability]
+    intent_types: [DESIGN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: api_design-006
+    title: "Rate Limit Every Public Endpoint"
+    body: >
+      An unthrottled API is an invitation to abuse — accidental or deliberate.
+      Define rate limits per consumer at the API gateway layer before launch,
+      not after your first incident.
+    domain: api_design
+    tags: [api, security, reliability]
+    intent_types: [DESIGN, IMPLEMENT, AUDIT]
+    relevance_weight: 0.85
+
+  - id: api_design-007
+    title: "Hypermedia for Discoverability"
+    body: >
+      Embedding links in API responses (HATEOAS) allows consumers to discover
+      valid next actions without hardcoding URLs. It reduces coupling between
+      client and server deployment cycles.
+    domain: api_design
+    tags: [api, rest, hateoas]
+    intent_types: [DESIGN, QUERY]
+    relevance_weight: 0.75
+
+  - id: api_design-008
+    title: "Versioning Strategy Before Breaking Changes"
+    body: >
+      Decide your versioning strategy — URI path, header, or content negotiation —
+      before you ship v1. Retrofitting a versioning strategy after consumers
+      exist is one of the most expensive API migrations possible.
+    domain: api_design
+    tags: [api, versioning, strategy]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.85
+
+  - id: api_design-009
+    title: "Contract Testing Over Integration Testing"
+    body: >
+      Consumer-driven contract tests verify that a provider satisfies each
+      consumer's expectations independently. They catch breaking changes faster
+      than full integration suites and don't require a running environment.
+    domain: api_design
+    tags: [api, testing, contracts]
+    intent_types: [IMPLEMENT, TDD, DESIGN]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: testing (9) ───────────────────────────────────────────────────────
 
   - id: testing-001
     title: "Test Pyramid Discipline"
@@ -221,20 +548,86 @@ principles:
     domain: testing
     tags: [testing, isolation, fixtures]
     intent_types: [TDD, IMPLEMENT, FIX]
-    relevance_weight: 0.8
+    relevance_weight: 0.85
 
   - id: testing-003
     title: "Mutation Testing Reveals Coverage Gaps"
     body: >
       Line coverage tells you which code runs under tests; mutation testing tells
-      you whether the tests detect faults. A suite with 90% line coverage but
-      weak assertions is a false safety net.
+      you whether the tests detect faults. 90% line coverage with weak assertions
+      is a false safety net.
     domain: testing
     tags: [testing, mutation, quality]
     intent_types: [AUDIT, TDD, IMPLEMENT]
-    relevance_weight: 0.75
+    relevance_weight: 0.8
 
-  # ── DOMAIN: observability ─────────────────────────────────────────────────────
+  - id: testing-004
+    title: "Property-Based Testing for Edge Cases"
+    body: >
+      Unit tests verify examples you thought of. Property-based tests generate
+      thousands of inputs to find examples you didn't. Use both: examples for
+      specification clarity, properties for robustness assurance.
+    domain: testing
+    tags: [testing, property-based, edge-cases]
+    intent_types: [TDD, IMPLEMENT, QUERY]
+    relevance_weight: 0.85
+
+  - id: testing-005
+    title: "Test the Contract, Not the Implementation"
+    body: >
+      A test that breaks when you rename a private method is testing the wrong
+      thing. Test the public contract: given these inputs, produce these outputs.
+      Internal structure should be free to change without breaking tests.
+    domain: testing
+    tags: [testing, contracts, black-box]
+    intent_types: [TDD, REFACTOR, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: testing-006
+    title: "Flaky Tests Are Bugs"
+    body: >
+      A test that passes sometimes and fails sometimes is not a test — it is
+      noise that trains your team to ignore failures. Treat flaky tests as
+      P1 bugs and fix them before they rot your test culture.
+    domain: testing
+    tags: [testing, reliability, culture]
+    intent_types: [FIX, AUDIT, IMPLEMENT]
+    relevance_weight: 0.9
+
+  - id: testing-007
+    title: "Golden Path Tests for Critical Flows"
+    body: >
+      Every critical user journey must have at least one end-to-end golden path
+      test that runs in CI. These tests catch integration failures that unit tests
+      cannot see by design.
+    domain: testing
+    tags: [testing, golden, e2e]
+    intent_types: [IMPLEMENT, PLAN, DESIGN]
+    relevance_weight: 0.85
+
+  - id: testing-008
+    title: "Test at the Boundary of Uncertainty"
+    body: >
+      Write tests for the inputs you're unsure about: off-by-one boundaries,
+      empty inputs, maximum sizes, concurrent access. The bugs you don't think
+      of are always in the cases you didn't test.
+    domain: testing
+    tags: [testing, boundaries, edge-cases]
+    intent_types: [TDD, IMPLEMENT, FIX]
+    relevance_weight: 0.85
+
+  - id: testing-009
+    title: "Chaos Engineering for Distributed Systems"
+    body: >
+      Deliberately inject failures — killed processes, network partitions,
+      slow dependencies — in staging to discover how your system behaves before
+      production does it for you unexpectedly.
+    domain: testing
+    tags: [testing, chaos, resilience]
+    intent_types: [PLAN, DESIGN, AUDIT]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: observability (9) ─────────────────────────────────────────────────
 
   - id: observability-001
     title: "Three Pillars: Logs, Metrics, Traces"
@@ -252,7 +645,7 @@ principles:
     body: >
       Every non-trivial operation should emit a correlation ID, structured log
       entry, and latency metric. Systems that produce no signal on failure are
-      not observable — they are black boxes in production.
+      black boxes in production.
     domain: observability
     tags: [observability, debugging, structured-logging]
     intent_types: [IMPLEMENT, DESIGN, FIX]
@@ -261,16 +654,81 @@ principles:
   - id: observability-003
     title: "Alerts on Symptoms, Not Causes"
     body: >
-      Alert on user-facing symptoms (error rates, latency SLOs) not on
-      implementation signals (CPU %, memory). Cause-based alerts are noisy
-      and miss novel failure modes; symptom-based alerts are stable and
-      actionable.
+      Alert on user-facing symptoms (error rates, latency SLOs) not implementation
+      signals (CPU %). Cause-based alerts are noisy and miss novel failure modes;
+      symptom-based alerts are stable and actionable.
     domain: observability
     tags: [observability, alerting, slo]
     intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: observability-004
+    title: "Structured Logs, Not Free-Text Strings"
+    body: >
+      Logs written as free-text strings require brittle regex parsing to query.
+      Structured logs (JSON, key-value pairs) are queryable, filterable, and
+      aggregatable without post-processing. Design the schema before writing the code.
+    domain: observability
+    tags: [observability, logging, structure]
+    intent_types: [IMPLEMENT, DESIGN, QUERY]
+    relevance_weight: 0.85
+
+  - id: observability-005
+    title: "SLOs Before Dashboards"
+    body: >
+      A dashboard without a Service Level Objective is wallpaper. Define what
+      'good enough' means for latency, error rate, and availability before
+      building any alerting or visualisation.
+    domain: observability
+    tags: [observability, slo, reliability]
+    intent_types: [PLAN, DESIGN, QUERY]
+    relevance_weight: 0.9
+
+  - id: observability-006
+    title: "Cardinality Kills Metrics Systems"
+    body: >
+      Every unique label combination creates a new time series. User IDs, request
+      IDs, or URL paths as metric labels will exhaust your metrics backend.
+      Design label sets with bounded cardinality before instrumenting.
+    domain: observability
+    tags: [observability, metrics, performance]
+    intent_types: [IMPLEMENT, DESIGN, AUDIT]
+    relevance_weight: 0.85
+
+  - id: observability-007
+    title: "Trace the Full Request Lifecycle"
+    body: >
+      Distributed traces must cover the full lifecycle of a request — ingress
+      through every service, queue, and database call to egress. Partial traces
+      leave gaps that become production blind spots.
+    domain: observability
+    tags: [observability, tracing, distributed]
+    intent_types: [IMPLEMENT, DESIGN, FIX]
+    relevance_weight: 0.85
+
+  - id: observability-008
+    title: "Error Budgets Make Reliability a Business Conversation"
+    body: >
+      An error budget translates an SLO into a consumable resource. Teams can
+      spend it on risk (deployments, experiments) or preserve it for stability.
+      It replaces subjective reliability debates with measurable ones.
+    domain: observability
+    tags: [observability, sre, reliability]
+    intent_types: [PLAN, QUERY, DESIGN]
+    relevance_weight: 0.85
+
+  - id: observability-009
+    title: "Runbooks Are Observability Artefacts"
+    body: >
+      Every alert must link to a runbook. A runbook that says only 'check the
+      dashboard' is not a runbook — it is a forwarding address. Write the
+      diagnosis steps before the alert fires for the first time.
+    domain: observability
+    tags: [observability, runbooks, operations]
+    intent_types: [PLAN, IMPLEMENT, DESIGN]
     relevance_weight: 0.8
 
-  # ── DOMAIN: code_quality ──────────────────────────────────────────────────────
+  # ── DOMAIN: code_quality (9) ──────────────────────────────────────────────────
 
   - id: code_quality-001
     title: "Cyclomatic Complexity Budget"
@@ -292,31 +750,97 @@ principles:
     domain: code_quality
     tags: [quality, dead-code, hygiene]
     intent_types: [REFACTOR, AUDIT, FIX]
-    relevance_weight: 0.8
+    relevance_weight: 0.85
 
   - id: code_quality-003
     title: "Duplication Is the Root of Most Maintenance Pain"
     body: >
-      Every duplicated block is a future bug waiting to be fixed in one place
-      and forgotten in the other. DRY (Don't Repeat Yourself) is not about
-      keystrokes — it is about single points of truth.
+      Every duplicated block is a future bug fixed in one place and forgotten
+      in the other. DRY (Don't Repeat Yourself) is not about keystrokes —
+      it is about single points of truth.
     domain: code_quality
     tags: [quality, dry, duplication]
     intent_types: [REFACTOR, AUDIT, IMPLEMENT]
     relevance_weight: 0.85
 
-  # ── DOMAIN: documentation ─────────────────────────────────────────────────────
+  - id: code_quality-004
+    title: "Functions Should Do One Thing"
+    body: >
+      A function that does more than one thing does none of them well. The test
+      is simple: if you cannot describe what it does without using 'and', split it.
+      Single-responsibility at the function level is the foundation of readable code.
+    domain: code_quality
+    tags: [quality, srp, clean-code]
+    intent_types: [REFACTOR, IMPLEMENT, QUERY]
+    relevance_weight: 0.9
+
+  - id: code_quality-005
+    title: "Avoid Magic Numbers and Strings"
+    body: >
+      A literal value embedded in logic is documentation that will rot. Replace
+      every magic number and string with a named constant that declares its
+      intent. The name carries context that the value cannot.
+    domain: code_quality
+    tags: [quality, constants, readability]
+    intent_types: [IMPLEMENT, REFACTOR, FIX]
+    relevance_weight: 0.8
+
+  - id: code_quality-006
+    title: "Error Handling Is Not Optional"
+    body: >
+      Code that ignores errors, swallows exceptions, or returns null without
+      signalling failure is not simpler — it is incomplete. Explicit error
+      handling communicates intent and prevents silent data corruption.
+    domain: code_quality
+    tags: [quality, error-handling, correctness]
+    intent_types: [IMPLEMENT, FIX, AUDIT]
+    relevance_weight: 0.9
+
+  - id: code_quality-007
+    title: "Prefer Immutability"
+    body: >
+      Mutable shared state is the primary source of concurrency bugs and
+      unexpected side effects. Default to immutable data structures; introduce
+      mutability only where performance evidence demands it.
+    domain: code_quality
+    tags: [quality, immutability, concurrency]
+    intent_types: [IMPLEMENT, DESIGN, REFACTOR]
+    relevance_weight: 0.85
+
+  - id: code_quality-008
+    title: "Linting and Formatting Are Non-Negotiable in CI"
+    body: >
+      Style debates in code review are a waste of engineering time. Automate
+      formatting and linting in CI from day one. If a style rule isn't enforced
+      by a tool, it isn't a rule — it is a suggestion.
+    domain: code_quality
+    tags: [quality, ci, automation]
+    intent_types: [IMPLEMENT, PLAN, AUDIT]
+    relevance_weight: 0.85
+
+  - id: code_quality-009
+    title: "Code Review Is a Knowledge Transfer Tool"
+    body: >
+      The primary value of code review is not catching bugs — static analysis
+      does that better. Its value is spreading understanding of design decisions,
+      edge cases, and domain knowledge across the team.
+    domain: code_quality
+    tags: [quality, code-review, culture]
+    intent_types: [QUERY, PLAN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: documentation (9) ─────────────────────────────────────────────────
 
   - id: documentation-001
     title: "Document the Why, Not the What"
     body: >
-      Code communicates what happens. Comments and documentation must explain
-      why a decision was made, what alternatives were rejected, and what
-      invariants the code relies upon. Paraphrasing the code is noise.
+      Code communicates what happens. Comments must explain why a decision was
+      made, what alternatives were rejected, and what invariants the code relies
+      upon. Paraphrasing the code is noise.
     domain: documentation
     tags: [documentation, comments, intent]
     intent_types: [IMPLEMENT, REFACTOR, QUERY]
-    relevance_weight: 0.85
+    relevance_weight: 0.9
 
   - id: documentation-002
     title: "Architecture Decision Records"
@@ -327,16 +851,93 @@ principles:
     domain: documentation
     tags: [documentation, adr, architecture]
     intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.85
+
+  - id: documentation-003
+    title: "README Is the Onboarding Contract"
+    body: >
+      A repository without a clear README forces every new contributor to
+      reverse-engineer setup steps. The README must answer: what is this,
+      how do I run it, how do I test it, and how do I contribute.
+    domain: documentation
+    tags: [documentation, onboarding, readme]
+    intent_types: [IMPLEMENT, PLAN, QUERY]
+    relevance_weight: 0.85
+
+  - id: documentation-004
+    title: "Docs as Code"
+    body: >
+      Documentation stored outside version control is documentation that will
+      drift from reality. Keep docs alongside the code they describe, review
+      them in the same PR, and enforce their accuracy in CI.
+    domain: documentation
+    tags: [documentation, version-control, accuracy]
+    intent_types: [IMPLEMENT, PLAN, DESIGN]
+    relevance_weight: 0.85
+
+  - id: documentation-005
+    title: "Public API Docs Before Shipping"
+    body: >
+      An API is not ready to ship until its reference documentation is complete.
+      Discovering a missing parameter or undocumented behaviour in production
+      costs ten times more than documenting it before release.
+    domain: documentation
+    tags: [documentation, api, contracts]
+    intent_types: [IMPLEMENT, DESIGN, AUDIT]
+    relevance_weight: 0.85
+
+  - id: documentation-006
+    title: "Changelog Discipline"
+    body: >
+      Maintain a human-readable changelog that captures what changed, why, and
+      for whom. Auto-generated commit logs are not changelogs — they are
+      implementation history, not user-facing communication.
+    domain: documentation
+    tags: [documentation, changelog, communication]
+    intent_types: [IMPLEMENT, PLAN, QUERY]
     relevance_weight: 0.8
 
-  # ── DOMAIN: devops ────────────────────────────────────────────────────────────
+  - id: documentation-007
+    title: "Runbooks Must Be Tested"
+    body: >
+      A runbook that has never been executed is a hypothesis. Schedule regular
+      fire drills where on-call engineers follow the runbook from scratch. Undiscovered
+      gaps surface in the drill, not during the incident.
+    domain: documentation
+    tags: [documentation, runbooks, reliability]
+    intent_types: [PLAN, AUDIT, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: documentation-008
+    title: "Glossary First in Domain Models"
+    body: >
+      Ubiquitous language starts with a shared glossary. Before modelling
+      entities, define terms in a glossary that both engineers and domain experts
+      agree on. Ambiguous terms produce ambiguous code.
+    domain: documentation
+    tags: [documentation, ddd, ubiquitous-language]
+    intent_types: [DESIGN, QUERY, PLAN]
+    relevance_weight: 0.8
+
+  - id: documentation-009
+    title: "Comment Tombstones for Intentional Gaps"
+    body: >
+      When you intentionally leave something incomplete — a known limitation,
+      a deferred optimisation, a workaround — leave a comment that explains
+      the reason. Future readers will thank you for the honesty.
+    domain: documentation
+    tags: [documentation, comments, technical-debt]
+    intent_types: [IMPLEMENT, FIX, QUERY]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: devops (9) ────────────────────────────────────────────────────────
 
   - id: devops-001
     title: "Build Once, Deploy Many"
     body: >
-      A single immutable artefact (image, package) should be promoted through
-      environments unchanged. Rebuilding per environment introduces drift and
-      invalidates the verification done in earlier stages.
+      A single immutable artefact should be promoted through environments
+      unchanged. Rebuilding per environment introduces drift and invalidates
+      the verification done in earlier stages.
     domain: devops
     tags: [devops, ci-cd, immutability]
     intent_types: [DESIGN, IMPLEMENT, PLAN]
@@ -351,15 +952,82 @@ principles:
     domain: devops
     tags: [devops, continuous-delivery, risk]
     intent_types: [PLAN, IMPLEMENT, DESIGN]
-    relevance_weight: 0.85
+    relevance_weight: 0.9
 
   - id: devops-003
     title: "Infrastructure as Code"
     body: >
       All infrastructure must be defined in version-controlled code. Manual
-      changes to production environments are undocumented, unrepeatable, and
-      unauditable. IaC makes every environment a reproducible artefact.
+      changes to production are undocumented, unrepeatable, and unauditable.
+      IaC makes every environment a reproducible artefact.
     domain: devops
     tags: [devops, iac, reproducibility]
     intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: devops-004
+    title: "Environment Parity"
+    body: >
+      The closer development, staging, and production environments are to
+      identical, the fewer environment-specific bugs reach production. Gaps
+      between environments are technical debt with compounding interest.
+    domain: devops
+    tags: [devops, environments, parity]
+    intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: devops-005
+    title: "Rollback Must Be Tested"
+    body: >
+      A deployment strategy without a tested rollback procedure is incomplete.
+      Run rollback drills regularly. A rollback that has never been executed
+      under pressure is a procedure that will fail under pressure.
+    domain: devops
+    tags: [devops, rollback, resilience]
+    intent_types: [PLAN, DESIGN, IMPLEMENT]
+    relevance_weight: 0.9
+
+  - id: devops-006
+    title: "Pipeline as the Single Gate to Production"
+    body: >
+      No code should reach production outside the CI/CD pipeline. Emergency
+      hotfixes bypass tests, reviews, and audit trails. Every exception to the
+      pipeline becomes a template for the next exception.
+    domain: devops
+    tags: [devops, ci-cd, governance]
+    intent_types: [DESIGN, PLAN, AUDIT]
+    relevance_weight: 0.9
+
+  - id: devops-007
+    title: "Ephemeral Environments for Pull Requests"
+    body: >
+      Spin up a full environment for every pull request. Reviewing code in
+      isolation misses integration failures. Ephemeral PR environments make
+      integration feedback available before merge, not after.
+    domain: devops
+    tags: [devops, preview-environments, ci]
+    intent_types: [PLAN, DESIGN, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: devops-008
+    title: "Measure Deployment Frequency and Lead Time"
+    body: >
+      DORA metrics (deployment frequency, lead time, change failure rate,
+      MTTR) are the four evidence-based indicators of software delivery
+      performance. Measure them before optimising anything.
+    domain: devops
+    tags: [devops, dora, metrics]
+    intent_types: [PLAN, QUERY, AUDIT]
+    relevance_weight: 0.85
+
+  - id: devops-009
+    title: "On-Call Rotation Owns the Deployment"
+    body: >
+      Engineers who build features should be in the on-call rotation for those
+      features. Separating the people who ship from the people who suffer the
+      consequences disconnects incentives from outcomes.
+    domain: devops
+    tags: [devops, on-call, culture]
+    intent_types: [PLAN, QUERY, DESIGN]
     relevance_weight: 0.8
+

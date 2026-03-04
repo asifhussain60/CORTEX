@@ -67,9 +67,9 @@ class TestHighValuePrinciplesStructure:
         )
 
     def test_exactly_30_principles(self, principles_yaml):
-        """Catalogue must have exactly 30 principles."""
+        """Catalogue must have exactly 90 principles (expanded in Phase 125)."""
         count = len(principles_yaml["principles"])
-        assert count == 30, f"Expected 30 principles, got {count}"
+        assert count == 90, f"Expected 90 principles, got {count}"
 
     def test_all_principles_have_required_fields(self, principles_yaml):
         """Every principle entry must contain all required fields."""
