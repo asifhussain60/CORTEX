@@ -1,0 +1,365 @@
+# SDLC Principles Library — High-Value Principles for Analysis/Design Responses
+# Phase: 124 (GAP-124-A-01) | Sweep: SWEEP-124-PRINCIPLE-BLOCK-LIBRARY
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# Injected by: PrincipleSelector (cortex/intelligence/principle_selector.py) via pool='principles'
+# Atom: cortex-registry/templates/response/atoms/atom-principle.yaml (Zone 3, comp-query.yaml)
+# No version field — append-only YAML standard (CORE-002)
+
+version: "1.0.0"
+description: >
+  Curated library of 30 high-value SDLC engineering principles spanning 10 domains.
+  Selected for relevance to analysis, design, implementation, and review responses.
+  Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
+  ring buffer (n=10) and weighted random selection.
+
+principles:
+
+  # ── DOMAIN: tdd ──────────────────────────────────────────────────────────────
+
+  - id: tdd-001
+    title: "Red–Green–Refactor"
+    body: >
+      Write a failing test (Red), write the minimum code to pass it (Green),
+      then improve the code without changing behaviour (Refactor). This cycle
+      keeps confidence high and change sets small.
+    domain: tdd
+    tags: [tdd, testing, feedback-loop]
+    intent_types: [IMPLEMENT, FIX, TDD]
+    relevance_weight: 0.9
+
+  - id: tdd-002
+    title: "Test the Behaviour, Not the Implementation"
+    body: >
+      Tests should assert observable outcomes — return values, state changes,
+      side effects — not internal wiring. Implementation-coupled tests break on
+      every refactor even when behaviour is correct.
+    domain: tdd
+    tags: [tdd, testing, design]
+    intent_types: [IMPLEMENT, REFACTOR, TDD]
+    relevance_weight: 0.85
+
+  - id: tdd-003
+    title: "One Assert per Test Concept"
+    body: >
+      Each test should verify one logical concept. Multiple unrelated assertions
+      in a single test obscure failure signals and complicate diagnosis.
+      Group by concept, not by convenience.
+    domain: tdd
+    tags: [tdd, testing, clarity]
+    intent_types: [TDD, IMPLEMENT]
+    relevance_weight: 0.75
+
+  # ── DOMAIN: refactoring ───────────────────────────────────────────────────────
+
+  - id: refactoring-001
+    title: "Refactor Under Green"
+    body: >
+      Refactoring must only happen when all tests are GREEN. Changing behaviour
+      and structure simultaneously is not refactoring — it is rewriting without
+      a safety net.
+    domain: refactoring
+    tags: [refactoring, tdd, discipline]
+    intent_types: [REFACTOR, FIX]
+    relevance_weight: 0.9
+
+  - id: refactoring-002
+    title: "Extract Until It Has a Name"
+    body: >
+      If a block of code cannot be described in a single noun phrase, extract it
+      into a method or class with that name. Naming is the primary instrument of
+      abstraction.
+    domain: refactoring
+    tags: [refactoring, naming, abstraction]
+    intent_types: [REFACTOR, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: refactoring-003
+    title: "Boy Scout Rule"
+    body: >
+      Always leave the code a little cleaner than you found it. Small, continuous
+      improvements prevent entropy accumulation without requiring scheduled
+      refactoring sprints.
+    domain: refactoring
+    tags: [refactoring, quality, hygiene]
+    intent_types: [REFACTOR, IMPLEMENT, FIX]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: architecture ──────────────────────────────────────────────────────
+
+  - id: architecture-001
+    title: "Defer Irreversible Decisions"
+    body: >
+      Delay architectural commitments until the last responsible moment.
+      The value of a decision is proportional to the information available —
+      early lock-in is the leading cause of avoidable rework.
+    domain: architecture
+    tags: [architecture, decision-making, strategy]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.9
+
+  - id: architecture-002
+    title: "Stable Dependencies Principle"
+    body: >
+      Depend in the direction of stability. Volatile packages must not be
+      depended upon by stable ones. Dependency arrows should point toward
+      components that change the least.
+    domain: architecture
+    tags: [architecture, dependencies, stability]
+    intent_types: [DESIGN, REFACTOR, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: architecture-003
+    title: "Ports and Adapters"
+    body: >
+      The application core depends on abstractions (ports), not on infrastructure
+      (adapters). This makes the core independently testable and infrastructure
+      interchangeable without touching business logic.
+    domain: architecture
+    tags: [architecture, hexagonal, testability]
+    intent_types: [DESIGN, IMPLEMENT, REFACTOR]
+    relevance_weight: 0.8
+
+  - id: architecture-004
+    title: "Context Boundaries Before Classes"
+    body: >
+      Identify bounded contexts and their relationships (Upstream/Downstream,
+      ACL, Conformist) before designing classes. Class design without context
+      boundaries produces big balls of mud.
+    domain: architecture
+    tags: [architecture, ddd, bounded-context]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.75
+
+  # ── DOMAIN: security ──────────────────────────────────────────────────────────
+
+  - id: security-001
+    title: "Principle of Least Privilege"
+    body: >
+      Grant the minimum permissions necessary for a component to perform its
+      function. Excess privilege is a silent amplifier of breach impact.
+    domain: security
+    tags: [security, access-control, hardening]
+    intent_types: [DESIGN, IMPLEMENT, AUDIT]
+    relevance_weight: 0.9
+
+  - id: security-002
+    title: "Validate at Trust Boundaries"
+    body: >
+      Input validation must occur at every trust boundary — API ingress,
+      inter-service calls, database reads, filesystem access. Assuming internal
+      data is clean is a systemic vulnerability pattern.
+    domain: security
+    tags: [security, validation, boundaries]
+    intent_types: [IMPLEMENT, FIX, AUDIT]
+    relevance_weight: 0.85
+
+  - id: security-003
+    title: "Fail Secure"
+    body: >
+      When a system encounters an unexpected state, default to the more
+      restrictive posture — deny access, reject the request, log the anomaly.
+      Never default to open on failure.
+    domain: security
+    tags: [security, resilience, error-handling]
+    intent_types: [DESIGN, IMPLEMENT, FIX]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: api_design ────────────────────────────────────────────────────────
+
+  - id: api_design-001
+    title: "Design for the Consumer"
+    body: >
+      API contracts are promises made to consumers. Design the interface from
+      the consumer's perspective first; derive the implementation from that
+      contract, not the reverse.
+    domain: api_design
+    tags: [api, consumer-driven, contracts]
+    intent_types: [DESIGN, IMPLEMENT, QUERY]
+    relevance_weight: 0.9
+
+  - id: api_design-002
+    title: "Backward Compatibility Is a Feature"
+    body: >
+      Breaking a public API contract breaks every consumer silently until
+      they deploy. Treat backward compatibility as a first-class feature,
+      not a constraint to negotiate away.
+    domain: api_design
+    tags: [api, versioning, compatibility]
+    intent_types: [DESIGN, REFACTOR, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: api_design-003
+    title: "Prefer Idempotent Operations"
+    body: >
+      Idempotent endpoints are safe to retry under network failure without
+      side effects. Design write operations to be idempotent where possible;
+      document clearly when they are not.
+    domain: api_design
+    tags: [api, idempotency, reliability]
+    intent_types: [DESIGN, IMPLEMENT]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: testing ───────────────────────────────────────────────────────────
+
+  - id: testing-001
+    title: "Test Pyramid Discipline"
+    body: >
+      Invest most in fast unit tests, fewer in integration tests, fewest in
+      end-to-end tests. An inverted pyramid is expensive to run, slow to fail,
+      and fragile to maintain.
+    domain: testing
+    tags: [testing, strategy, coverage]
+    intent_types: [IMPLEMENT, PLAN, TDD]
+    relevance_weight: 0.9
+
+  - id: testing-002
+    title: "Test Data Independence"
+    body: >
+      Each test must own and clean up its test data. Tests that share state
+      produce order-dependent, non-deterministic failures — the hardest category
+      of defect to diagnose.
+    domain: testing
+    tags: [testing, isolation, fixtures]
+    intent_types: [TDD, IMPLEMENT, FIX]
+    relevance_weight: 0.8
+
+  - id: testing-003
+    title: "Mutation Testing Reveals Coverage Gaps"
+    body: >
+      Line coverage tells you which code runs under tests; mutation testing tells
+      you whether the tests detect faults. A suite with 90% line coverage but
+      weak assertions is a false safety net.
+    domain: testing
+    tags: [testing, mutation, quality]
+    intent_types: [AUDIT, TDD, IMPLEMENT]
+    relevance_weight: 0.75
+
+  # ── DOMAIN: observability ─────────────────────────────────────────────────────
+
+  - id: observability-001
+    title: "Three Pillars: Logs, Metrics, Traces"
+    body: >
+      Production systems are understood through correlated logs (events),
+      metrics (aggregated measurements), and distributed traces (request paths).
+      Missing any pillar means unknown failure modes in production.
+    domain: observability
+    tags: [observability, telemetry, production]
+    intent_types: [DESIGN, IMPLEMENT, PLAN]
+    relevance_weight: 0.9
+
+  - id: observability-002
+    title: "Design for Debuggability"
+    body: >
+      Every non-trivial operation should emit a correlation ID, structured log
+      entry, and latency metric. Systems that produce no signal on failure are
+      not observable — they are black boxes in production.
+    domain: observability
+    tags: [observability, debugging, structured-logging]
+    intent_types: [IMPLEMENT, DESIGN, FIX]
+    relevance_weight: 0.85
+
+  - id: observability-003
+    title: "Alerts on Symptoms, Not Causes"
+    body: >
+      Alert on user-facing symptoms (error rates, latency SLOs) not on
+      implementation signals (CPU %, memory). Cause-based alerts are noisy
+      and miss novel failure modes; symptom-based alerts are stable and
+      actionable.
+    domain: observability
+    tags: [observability, alerting, slo]
+    intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: code_quality ──────────────────────────────────────────────────────
+
+  - id: code_quality-001
+    title: "Cyclomatic Complexity Budget"
+    body: >
+      Functions exceeding a cyclomatic complexity of 10 are statistically harder
+      to test, review, and understand. Enforce a complexity budget at CI to
+      prevent silent entropy accumulation.
+    domain: code_quality
+    tags: [quality, complexity, maintainability]
+    intent_types: [REFACTOR, AUDIT, IMPLEMENT]
+    relevance_weight: 0.85
+
+  - id: code_quality-002
+    title: "Dead Code Is Technical Debt"
+    body: >
+      Unreachable code misleads readers, inflates coverage metrics, and is
+      frequently copy-pasted into future features carrying its defects. Delete
+      it; version control remembers.
+    domain: code_quality
+    tags: [quality, dead-code, hygiene]
+    intent_types: [REFACTOR, AUDIT, FIX]
+    relevance_weight: 0.8
+
+  - id: code_quality-003
+    title: "Duplication Is the Root of Most Maintenance Pain"
+    body: >
+      Every duplicated block is a future bug waiting to be fixed in one place
+      and forgotten in the other. DRY (Don't Repeat Yourself) is not about
+      keystrokes — it is about single points of truth.
+    domain: code_quality
+    tags: [quality, dry, duplication]
+    intent_types: [REFACTOR, AUDIT, IMPLEMENT]
+    relevance_weight: 0.85
+
+  # ── DOMAIN: documentation ─────────────────────────────────────────────────────
+
+  - id: documentation-001
+    title: "Document the Why, Not the What"
+    body: >
+      Code communicates what happens. Comments and documentation must explain
+      why a decision was made, what alternatives were rejected, and what
+      invariants the code relies upon. Paraphrasing the code is noise.
+    domain: documentation
+    tags: [documentation, comments, intent]
+    intent_types: [IMPLEMENT, REFACTOR, QUERY]
+    relevance_weight: 0.85
+
+  - id: documentation-002
+    title: "Architecture Decision Records"
+    body: >
+      Capture significant architectural decisions in lightweight ADR files.
+      Future maintainers encounter outcomes without context; ADRs preserve
+      the reasoning chain that produced those outcomes.
+    domain: documentation
+    tags: [documentation, adr, architecture]
+    intent_types: [DESIGN, PLAN, QUERY]
+    relevance_weight: 0.8
+
+  # ── DOMAIN: devops ────────────────────────────────────────────────────────────
+
+  - id: devops-001
+    title: "Build Once, Deploy Many"
+    body: >
+      A single immutable artefact (image, package) should be promoted through
+      environments unchanged. Rebuilding per environment introduces drift and
+      invalidates the verification done in earlier stages.
+    domain: devops
+    tags: [devops, ci-cd, immutability]
+    intent_types: [DESIGN, IMPLEMENT, PLAN]
+    relevance_weight: 0.9
+
+  - id: devops-002
+    title: "Ship Small, Ship Often"
+    body: >
+      Smaller change sets have narrower blast radius, shorter feedback loops,
+      and simpler rollbacks. Batch size is the primary lever for deployment risk.
+      Feature flags enable decoupling deployment from release.
+    domain: devops
+    tags: [devops, continuous-delivery, risk]
+    intent_types: [PLAN, IMPLEMENT, DESIGN]
+    relevance_weight: 0.85
+
+  - id: devops-003
+    title: "Infrastructure as Code"
+    body: >
+      All infrastructure must be defined in version-controlled code. Manual
+      changes to production environments are undocumented, unrepeatable, and
+      unauditable. IaC makes every environment a reproducible artefact.
+    domain: devops
+    tags: [devops, iac, reproducibility]
+    intent_types: [DESIGN, PLAN, IMPLEMENT]
+    relevance_weight: 0.8

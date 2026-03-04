@@ -1,0 +1,1225 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CORTEX Phase Plan — Phase 124
+# Principle Block Library & Injection System
+#
+# Source: GitHub Copilot Chat architecture session 2026-03-04
+# Architect: Asif Hussain | © 2025–2026 CORTEX Framework
+# Depends-On: Phase 123 (PrincipleSelector engine + anti-repetition + telemetry)
+# SSOT: cortex-registry/templates/response/ (Lego architecture)
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: "phase-124"
+title: "Principle Block Library & Injection System — Curated SDLC Principles for Analysis/Design Responses"
+version: "1.0"
+created: "2026-03-04"
+status: COMPLETE
+completed: "2026-03-04"
+priority: P2
+depends_on: ["phase-123"]
+governance_authority:
+  - CORE-002   # All output inline — never create .md/.txt report files
+  - CORE-008   # TDD mandatory — tests before implementation
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # snake_case file naming
+  - CORE-035   # Single canonical implementation — no duplicates
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-124-PRINCIPLE-BLOCK-LIBRARY"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Copilot Chat architecture session 2026-03-04. The user's
+  "Principle Block Library and Injection System" proposal was evaluated against
+  the live CORTEX architecture (322 orchestrators, 30 MCP tools, 36 governance
+  YAMLs, 3-tier Lego response template system with 5 atoms + 5 blocks +
+  8 compositions).
+
+  Phase 123 (PLANNED) delivers: PrincipleSelector class with weighted-random
+  selection, anti-repetition ring buffer (deque maxlen=10), dedup_key per quote,
+  telemetry via cortex_capture_metrics, p95 ≤3ms. Phase 123 explicitly declares
+  no_composition_changes: true and no_orchestrator_changes: true.
+
+  This Phase 124 BUILDS ON Phase 123 to deliver:
+  1. A curated SDLC principles library (extending atom-quote.yaml's quote pool)
+  2. A new atom-principle.yaml (Tier 1 atom in the Lego system)
+  3. Composition updates for analysis/design intents
+  4. DoR-aware rendering rules (principles render freely in analysis/design;
+     suppressed in operational intents unless override flag is set)
+  5. Golden tests + drift locks for rendering contract enforcement
+  6. SDLC knowledge YAML with best-practice principles (Azure, 12-Factor, SOLID,
+     security-by-design) — sourced from external research
+
+  Architecture fit: ADDITIVE to the existing Lego system. No orchestrator wiring
+  changes. No workflow template changes. Follows the established atom creation
+  pattern (atom-identity, atom-quote, atom-orchestration, atom-intent-reflection,
+  atom-status-footer). Reuses PrincipleSelector from Phase 123 as the selection
+  engine.
+
+  Anti-sprawl commitment: This phase creates exactly 4 new files:
+    1. cortex-registry/templates/response/atoms/atom-principle.yaml (Lego atom)
+    2. cortex-registry/knowledge/sdlc/high-value-principles.yaml (content SSOT)
+    3. tests/golden/test_principle_block_rendering.py (golden tests)
+    4. tests/intelligence/test_principle_injection.py (injection tests)
+  Plus MODIFICATIONS to 3 existing files:
+    1. cortex-registry/templates/response/_registry.yaml (add atom entry)
+    2. cortex-registry/templates/response/compositions/comp-query.yaml (add atom)
+    3. cortex/intelligence/principle_selector.py (extend for principles — created by Phase 123)
+  Total: 4 new + 3 modified = 7 file touches. Zero sprawl.
+
+  Baseline at entry (post-Phase 123):
+    - Smoke tests: ≥2395 passed (Phase 123 baseline, expected to grow)
+    - Preflight: ≥258 passed
+    - PrincipleSelector: operational with anti-repetition ring buffer
+    - atom-quote.yaml: 32 quotes with dedup_key fields (added by Phase 123)
+    - cortex-master.yaml: ~425 lines (well under 800 ceiling)
+
+  Git prerequisite: branch CORTEX, Phase 123 COMPLETE, all changes committed.
+
+  External research synthesized:
+    - Azure Architecture Design Principles (self-healing, scale-out, design for
+      evolution, minimize coordination, design for operations)
+    - 12-Factor App Methodology (codebase, dependencies, config, disposability,
+      dev/prod parity, logs as event streams)
+    - SOLID principles (SRP, OCP, LSP, ISP, DIP)
+    - Security-by-design (STRIDE/DREAD, OWASP design gates, zero-trust)
+    - Domain-Driven Design (bounded contexts, ubiquitous language, aggregates)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL DECISIONS
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_decisions:
+  # ADR-124-01: Extend atom-quote vs. create new atom-principle
+  - id: ADR-124-01
+    decision: "Create a NEW atom-principle.yaml — do NOT merge into atom-quote.yaml"
+    rationale: |
+      atom-quote.yaml is a curated BOOK QUOTES library (32 entries, literary sources).
+      SDLC principles are a different content type (engineering axioms, not literary quotes).
+      Mixing them violates CORE-035 (single canonical purpose per artifact).
+      A separate atom keeps concerns clean: atom-quote = literary wisdom, atom-principle
+      = engineering principles. Both use the same PrincipleSelector engine (Phase 123)
+      for anti-repetition, just with different source pools.
+    alternatives_rejected:
+      - "Merge into atom-quote.yaml — rejected: mixes literary quotes with engineering axioms"
+      - "Create a new Block (Tier 2) — rejected: principles are atomic, not composed from sub-atoms"
+
+  # ADR-124-02: Where principles render
+  - id: ADR-124-02
+    decision: "Render atom-principle in comp-query and a new comp-design composition ONLY"
+    rationale: |
+      Principles provide value during analysis/design thinking. During operational
+      modes (IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH), they are noise.
+      comp-query handles QUERY/ANALYZE/INVESTIGATE/DESIGN/PLAN intents.
+      Operational compositions (comp-implement-fix, comp-audit-fix, comp-refactor,
+      comp-debug, comp-vacuum, comp-health) do NOT include atom-principle.
+      Override: a future feature flag (principle_override: true) could enable injection
+      into any composition — but this is OUT OF SCOPE for Phase 124.
+
+  # ADR-124-03: Principles content location
+  - id: ADR-124-03
+    decision: "Store curated principles in cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+    rationale: |
+      The knowledge/ directory is the canonical home for SDLC best practices.
+      10 SDLC knowledge YAMLs already exist (analysis-design-patterns, security-by-design,
+      etc.). A principles YAML fits naturally here. atom-principle.yaml POINTS to this
+      file (SSOT pattern) — it does not duplicate the content. This follows the same
+      pattern as atom-quote.yaml which contains its quotes inline (because they're
+      rendering primitives), but atom-principle.yaml references the knowledge YAML
+      because principles have richer metadata (capability_domain, tags, role_hints,
+      learn_more_links).
+
+  # ADR-124-04: Rendering position and header
+  - id: ADR-124-04
+    decision: "Render after the quote blockquote, as a H3 header: ### 💡 Principle for This Design"
+    rationale: |
+      Zone 2 is reserved for the book quote (atom-quote). The principle renders at
+      the TOP of Zone 3 body content, after the orchestration breadcrumb. H3 because
+      H1 = identity, H2 = section headers, H3 = subsection content. The 💡 emoji
+      provides visual distinction from the quote blockquote. Brevity enforced:
+      ≤200 characters for the principle text + ≤1 sentence explanation.
+
+  # ADR-124-05: Selection algorithm integration
+  - id: ADR-124-05
+    decision: "Extend PrincipleSelector (Phase 123) with a second pool — principles_pool"
+    rationale: |
+      Phase 123 creates PrincipleSelector with a quotes pool (from atom-quote.yaml).
+      Phase 124 adds a principles_pool (from high-value-principles.yaml). Both pools
+      share the same ring buffer for anti-repetition. The select() method gains an
+      optional pool parameter: select(pool='quotes') or select(pool='principles').
+      Default remains 'quotes' for backward compatibility. This is a non-breaking
+      extension — Phase 123's tests continue to pass unchanged.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# YAML SCHEMA — Curated Principles Library
+# ─────────────────────────────────────────────────────────────────────────────
+# This schema defines the structure of entries in high-value-principles.yaml.
+# Each principle is a self-contained engineering axiom with rich metadata
+# for contextual selection, deduplication, and learning.
+# ─────────────────────────────────────────────────────────────────────────────
+principles_schema:
+  description: "Schema for curated SDLC principles in cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+  fields:
+    - name: id
+      type: string
+      required: true
+      format: "PRINCIPLE-{DOMAIN}-{NNN}"
+      example: "PRINCIPLE-ARCH-001"
+      description: "Unique identifier. Domain prefix from capability_domain."
+
+    - name: principle
+      type: string
+      required: true
+      max_length: 200
+      description: "The principle statement. ≤200 characters. Clear, actionable, no jargon."
+      example: "Design for failure — every component must handle the unavailability of its dependencies."
+
+    - name: short_explanation
+      type: string
+      required: true
+      max_length: 200
+      description: "≤1 sentence amplification. Provides the 'why' behind the principle."
+      example: "Systems that assume happy-path availability cascade failures across boundaries."
+
+    - name: capability_domain
+      type: string
+      required: true
+      enum: [architecture, decomposition, security, testing, performance, quality, maintainability, observability, resilience, data_integrity]
+      description: "Primary engineering domain. Used for intent-based selection."
+
+    - name: tags
+      type: array
+      items: string
+      required: true
+      min_items: 1
+      max_items: 5
+      description: "Searchable tags for contextual matching. Used by in-memory tag index."
+      example: ["fault-tolerance", "circuit-breaker", "resilience", "microservices"]
+
+    - name: role_hints
+      type: array
+      items: string
+      required: false
+      enum: [architect, developer, tester, security_engineer, devops, tech_lead]
+      description: "Audience hints. Selection can weight toward active user role."
+
+    - name: dedup_key
+      type: string
+      required: true
+      format: "{domain}-{slug}"
+      description: "Unique key for anti-repetition ring buffer. Shared with quote dedup_keys."
+      example: "arch-design-for-failure"
+
+    - name: relevance_weight
+      type: float
+      required: true
+      min: 0.1
+      max: 1.0
+      default: 0.5
+      description: "Base selection weight. Higher = more likely to be selected. Contextual signals can boost."
+
+    - name: source_yaml
+      type: string
+      required: false
+      description: "Pointer to the cortex-registry knowledge YAML that elaborates this principle."
+      example: "cortex-registry/knowledge/architecture/engineering-design-patterns.yaml"
+
+    - name: learn_more_links
+      type: array
+      items: string
+      required: false
+      max_items: 3
+      description: "External reference URLs for deeper learning. NOT rendered in responses — metadata only."
+      example: ["https://learn.microsoft.com/en-us/azure/architecture/guide/design-principles/"]
+
+  validation_rules:
+    - "Every principle.principle must be ≤200 characters (enforced in golden tests)"
+    - "Every principle.short_explanation must be ≤200 characters"
+    - "Every principle must have a unique dedup_key (no duplicates across the entire pool)"
+    - "Every principle must have at least 1 tag"
+    - "capability_domain must be from the enum list (10 domains)"
+    - "Minimum 20 principles in the library at launch (target: 30-40)"
+    - "No principle may duplicate meaning of an existing atom-quote.yaml entry"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CURATED PRINCIPLES — Initial Library (30 principles across 10 domains)
+# These will be written to cortex-registry/knowledge/sdlc/high-value-principles.yaml
+# during implementation. Listed here for design review and completeness.
+# ─────────────────────────────────────────────────────────────────────────────
+initial_principles_catalogue:
+  architecture:  # 4 principles
+    - id: PRINCIPLE-ARCH-001
+      principle: "Design for failure — every component must handle the unavailability of its dependencies."
+      short_explanation: "Systems that assume happy-path availability cascade failures across boundaries."
+      dedup_key: "arch-design-for-failure"
+      tags: [fault-tolerance, resilience, microservices]
+      source: "Azure Design Principles + 12-Factor (disposability)"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-ARCH-002
+      principle: "Minimize coordination between components to achieve scalability."
+      short_explanation: "Tight coupling forces synchronous waiting; loose coupling enables independent scaling."
+      dedup_key: "arch-minimize-coordination"
+      tags: [scalability, loose-coupling, bounded-context]
+      source: "Azure Design Principles"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-ARCH-003
+      principle: "Design for evolution — anticipate change by isolating decisions behind stable interfaces."
+      short_explanation: "The only constant is change; encapsulation protects consumers from implementation shifts."
+      dedup_key: "arch-design-for-evolution"
+      tags: [encapsulation, interfaces, OCP]
+      source: "Azure Design Principles + SOLID (OCP)"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-ARCH-004
+      principle: "Scale out, not up — design for horizontal scaling from the start."
+      short_explanation: "Vertical scaling hits hard limits; horizontal scaling is elastic and cost-efficient."
+      dedup_key: "arch-scale-out"
+      tags: [scalability, horizontal-scaling, cloud-native]
+      source: "Azure Design Principles + 12-Factor (concurrency)"
+      relevance_weight: 0.6
+
+  decomposition:  # 3 principles
+    - id: PRINCIPLE-DECOMP-001
+      principle: "Identify bounded contexts first — service boundaries follow domain boundaries, not technical layers."
+      short_explanation: "Technical layers create coupling; domain boundaries create autonomy."
+      dedup_key: "decomp-bounded-contexts"
+      tags: [DDD, bounded-context, microservices, domain-modeling]
+      source: "DDD (Eric Evans) + analysis-design-patterns.yaml"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-DECOMP-002
+      principle: "Define ubiquitous language before writing code — ambiguous terms become ambiguous systems."
+      short_explanation: "Shared vocabulary between domain experts and developers prevents semantic drift."
+      dedup_key: "decomp-ubiquitous-language"
+      tags: [DDD, ubiquitous-language, requirements]
+      source: "DDD (Eric Evans)"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-DECOMP-003
+      principle: "Capture invariants as executable tests — business rules that aren't tested are suggestions."
+      short_explanation: "An untested invariant will be violated the moment someone unfamiliar modifies the code."
+      dedup_key: "decomp-invariants-as-tests"
+      tags: [TDD, invariants, CORE-008, testing]
+      source: "CORTEX CORE-008 + analysis-design-patterns.yaml"
+      relevance_weight: 0.9
+
+  security:  # 3 principles
+    - id: PRINCIPLE-SEC-001
+      principle: "Apply security at every layer — never rely on a single perimeter for protection."
+      short_explanation: "Defense in depth ensures a breach in one layer doesn't compromise the entire system."
+      dedup_key: "sec-defense-in-depth"
+      tags: [defense-in-depth, zero-trust, STRIDE]
+      source: "security-by-design.yaml + OWASP"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-SEC-002
+      principle: "Treat all input as untrusted — validate, sanitize, and encode at every trust boundary."
+      short_explanation: "Injection attacks exploit the gap between trusted and untrusted data flows."
+      dedup_key: "sec-untrusted-input"
+      tags: [input-validation, injection, OWASP, trust-boundary]
+      source: "OWASP Top 10 + security-by-design.yaml"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-SEC-003
+      principle: "Apply least privilege everywhere — processes, users, and services get only what they need."
+      short_explanation: "Excessive permissions turn minor vulnerabilities into catastrophic breaches."
+      dedup_key: "sec-least-privilege"
+      tags: [least-privilege, IAM, zero-trust]
+      source: "OWASP + security-by-design.yaml"
+      relevance_weight: 0.7
+
+  testing:  # 3 principles
+    - id: PRINCIPLE-TEST-001
+      principle: "Write the test first — TDD is a design tool, not just a verification tool."
+      short_explanation: "Tests written after code verify what was built; tests written before shape what gets built."
+      dedup_key: "test-tdd-design-tool"
+      tags: [TDD, CORE-008, test-first, design]
+      source: "CORTEX CORE-008 + Kent Beck"
+      relevance_weight: 0.9
+
+    - id: PRINCIPLE-TEST-002
+      principle: "Test behavior, not implementation — tests that mirror code structure break on every refactor."
+      short_explanation: "Behavioral tests survive refactoring; structural tests create false failures."
+      dedup_key: "test-behavior-not-implementation"
+      tags: [behavioral-testing, refactoring, test-design]
+      source: "Kent Beck + Martin Fowler"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-TEST-003
+      principle: "Golden tests lock critical rendering contracts — template drift is silent regression."
+      short_explanation: "Snapshot-style tests catch rendering changes that unit tests miss."
+      dedup_key: "test-golden-drift-lock"
+      tags: [golden-tests, drift-detection, rendering-contract]
+      source: "CORTEX Phase 120 (Lego architecture)"
+      relevance_weight: 0.7
+
+  performance:  # 3 principles
+    - id: PRINCIPLE-PERF-001
+      principle: "Measure before optimizing — intuition about bottlenecks is wrong more often than right."
+      short_explanation: "Profiling reveals the actual hot path; premature optimization wastes effort."
+      dedup_key: "perf-measure-first"
+      tags: [profiling, bottleneck, premature-optimization]
+      source: "Donald Knuth + performance-optimization knowledge"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-PERF-002
+      principle: "Cache at the right layer — caching too early hides bugs, caching too late wastes resources."
+      short_explanation: "Effective caching requires understanding the data freshness contract at each boundary."
+      dedup_key: "perf-cache-right-layer"
+      tags: [caching, TTL, data-freshness, performance]
+      source: "Azure Design Principles (design for operations)"
+      relevance_weight: 0.6
+
+    - id: PRINCIPLE-PERF-003
+      principle: "Design for observability from day one — logs, metrics, and traces are not afterthoughts."
+      short_explanation: "A system you can't observe in production is a system you can't debug in production."
+      dedup_key: "perf-observability-day-one"
+      tags: [observability, logging, metrics, tracing, OpenTelemetry]
+      source: "12-Factor (logs) + Azure (design for operations)"
+      relevance_weight: 0.8
+
+  quality:  # 3 principles
+    - id: PRINCIPLE-QUAL-001
+      principle: "Single Responsibility — every module, class, and function should have exactly one reason to change."
+      short_explanation: "Multiple responsibilities create coupling that makes changes risky and reviews harder."
+      dedup_key: "qual-single-responsibility"
+      tags: [SRP, SOLID, cohesion, modularity]
+      source: "SOLID (Robert C. Martin)"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-QUAL-002
+      principle: "Depend on abstractions, not concretions — stable interfaces outlive volatile implementations."
+      short_explanation: "Dependency Inversion keeps high-level policy independent of low-level mechanism."
+      dedup_key: "qual-depend-on-abstractions"
+      tags: [DIP, SOLID, interfaces, decoupling]
+      source: "SOLID (Robert C. Martin)"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-QUAL-003
+      principle: "Make illegal states unrepresentable — use types and constraints to prevent invalid data at compile time."
+      short_explanation: "Runtime validation catches errors late; type systems and enums catch them at definition time."
+      dedup_key: "qual-illegal-states"
+      tags: [type-safety, enums, constraints, correctness]
+      source: "Yaron Minsky + functional programming tradition"
+      relevance_weight: 0.7
+
+  maintainability:  # 3 principles
+    - id: PRINCIPLE-MAINT-001
+      principle: "Optimize for readability — code is read 10x more than it is written."
+      short_explanation: "Clear naming, small functions, and consistent structure reduce cognitive load."
+      dedup_key: "maint-readability"
+      tags: [readability, clean-code, naming, cognitive-load]
+      source: "Robert C. Martin (Clean Code)"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-MAINT-002
+      principle: "Keep configuration external — environment-specific values must never live in code."
+      short_explanation: "Hardcoded config prevents deployment across environments without code changes."
+      dedup_key: "maint-external-config"
+      tags: [12-factor, config, environment, deployment]
+      source: "12-Factor App (config)"
+      relevance_weight: 0.6
+
+    - id: PRINCIPLE-MAINT-003
+      principle: "Every dependency is a liability — add dependencies deliberately, not by default."
+      short_explanation: "Each dependency brings upgrade burden, security surface, and compatibility risk."
+      dedup_key: "maint-deliberate-dependencies"
+      tags: [dependencies, 12-factor, supply-chain, minimal]
+      source: "12-Factor App (dependencies) + supply chain security"
+      relevance_weight: 0.6
+
+  observability:  # 2 principles
+    - id: PRINCIPLE-OBS-001
+      principle: "Treat logs as event streams — structured, not unstructured; streamed, not written to files."
+      short_explanation: "Structured logs enable querying; event streams enable real-time alerting."
+      dedup_key: "obs-logs-as-streams"
+      tags: [logging, structured-logging, 12-factor, event-streams]
+      source: "12-Factor App (logs)"
+      relevance_weight: 0.6
+
+    - id: PRINCIPLE-OBS-002
+      principle: "Correlate across boundaries — distributed tracing connects the dots that logs alone cannot."
+      short_explanation: "A trace ID propagated across services turns isolated log lines into a coherent story."
+      dedup_key: "obs-distributed-tracing"
+      tags: [tracing, correlation, OpenTelemetry, microservices]
+      source: "OpenTelemetry + Azure (design for operations)"
+      relevance_weight: 0.6
+
+  resilience:  # 3 principles
+    - id: PRINCIPLE-RES-001
+      principle: "Design for self-healing — detect anomalies, isolate failures, and recover without human intervention."
+      short_explanation: "Manual recovery doesn't scale; automated health checks and restarts do."
+      dedup_key: "res-self-healing"
+      tags: [self-healing, health-checks, auto-recovery, resilience]
+      source: "Azure Design Principles (self-healing)"
+      relevance_weight: 0.8
+
+    - id: PRINCIPLE-RES-002
+      principle: "Use circuit breakers to prevent cascade failures — fail fast, recover gracefully."
+      short_explanation: "A circuit breaker stops repeated calls to a failing dependency, giving it time to recover."
+      dedup_key: "res-circuit-breaker"
+      tags: [circuit-breaker, resilience, fault-tolerance, patterns]
+      source: "Michael Nygard (Release It!) + Azure"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-RES-003
+      principle: "Partition around critical resources — isolation prevents one component's failure from starving others."
+      short_explanation: "Bulkhead patterns ensure resource contention in one area doesn't affect unrelated areas."
+      dedup_key: "res-bulkhead-partition"
+      tags: [bulkhead, isolation, resource-partitioning, resilience]
+      source: "Azure Design Principles (partition) + Release It!"
+      relevance_weight: 0.6
+
+  data_integrity:  # 3 principles
+    - id: PRINCIPLE-DATA-001
+      principle: "Define consistency boundaries explicitly — not everything needs strong consistency."
+      short_explanation: "Eventual consistency enables availability; strong consistency enables correctness — choose deliberately."
+      dedup_key: "data-consistency-boundaries"
+      tags: [consistency, CAP-theorem, eventual-consistency, ACID]
+      source: "DDD (aggregates) + CAP theorem"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-DATA-002
+      principle: "Schema changes must be backward compatible — breaking changes cascade across all consumers."
+      short_explanation: "Additive-only schema evolution prevents downstream breakage during rolling deployments."
+      dedup_key: "data-backward-compatible-schema"
+      tags: [schema-evolution, backward-compatibility, API, versioning]
+      source: "12-Factor + company API standards"
+      relevance_weight: 0.7
+
+    - id: PRINCIPLE-DATA-003
+      principle: "Validate at the boundary, trust within — data crossing a trust boundary must be verified."
+      short_explanation: "Internal components assume validated data; boundaries enforce the contract."
+      dedup_key: "data-validate-at-boundary"
+      tags: [validation, trust-boundary, contracts, data-integrity]
+      source: "security-by-design.yaml + hexagonal architecture"
+      relevance_weight: 0.7
+
+# ─────────────────────────────────────────────────────────────────────────────
+# RENDERING SPECIFICATION — atom-principle.yaml design
+# ─────────────────────────────────────────────────────────────────────────────
+atom_principle_spec:
+  id: "atom-principle"
+  type: atom
+  tier: 1
+  position: "Zone 3 body — after 🧭 Orchestration: breadcrumb, before work content"
+  heading: "### 💡 Principle for This Design"
+  heading_level: "H3 (H1=identity, H2=sections, H3=sub-content)"
+  max_per_response: 1
+  brevity_limit: "≤200 characters for principle text; ≤200 characters for short_explanation"
+
+  rendering_template: |
+    ### 💡 Principle for This Design
+    > **{principle}**
+    > {short_explanation}
+
+  rendering_rules:
+    copilot_chat_compatible: true
+    element: "H3 heading + blockquote"
+    zone: 3
+    vs_code_render: "H3 renders as bold subsection; blockquote renders with blue accent bar"
+    forbidden_in_content:
+      - "raw URLs (learn_more_links are metadata only, never rendered)"
+      - "HTML tags"
+      - "tree characters"
+      - "tables"
+    max_chars_principle: 200
+    max_chars_explanation: 200
+
+  # Which compositions include atom-principle (WHITELIST — all others excluded)
+  included_in_compositions:
+    - comp-query        # QUERY, ANALYZE, INVESTIGATE, DESIGN, PLAN intents
+  excluded_from_compositions:
+    - comp-implement-fix  # IMPLEMENT, FIX — operational
+    - comp-audit-fix      # AUDIT — operational
+    - comp-refactor       # REFACTOR — operational
+    - comp-debug          # DEBUG — operational
+    - comp-vacuum         # VACUUM — operational
+    - comp-health         # HEALTH — operational
+    - comp-introduce      # INTRODUCE — onboarding, not analysis
+
+  # Override mechanism (future — OUT OF SCOPE for Phase 124)
+  override_flag:
+    name: "principle_override"
+    default: false
+    description: "When true, renders atom-principle in ANY composition. Reserved for future phases."
+    scope: "NOT IMPLEMENTED in Phase 124 — documented for extensibility"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SELECTION ALGORITHM — PrincipleSelector extension
+# ─────────────────────────────────────────────────────────────────────────────
+selection_algorithm:
+  engine: "cortex/intelligence/principle_selector.py (created by Phase 123)"
+  extension_method: "Add select(pool='principles') overload to PrincipleSelector"
+  pool_loading: "Lazy-load high-value-principles.yaml at first select(pool='principles') call"
+  caching: "TTL cache with 300s TTL — invalidates on file modification timestamp check"
+  tag_index: "In-memory dict[str, list[int]] — maps tag → principle indices for O(1) lookup"
+
+  intent_to_domain_map:
+    DESIGN: [architecture, decomposition, quality, maintainability]
+    PLAN: [architecture, decomposition, performance, resilience]
+    ANALYZE: [decomposition, testing, data_integrity, quality]
+    INVESTIGATE: [observability, resilience, performance, security]
+    QUERY: [quality, maintainability, architecture]  # broad — any domain relevant
+    SECURITY_AUDIT: [security, data_integrity, resilience]
+
+  selection_steps:
+    1: "Resolve intent_type → candidate capability_domains via intent_to_domain_map"
+    2: "Filter principles pool to matching capability_domains"
+    3: "Exclude principles whose dedup_key is in the shared ring buffer (anti-repetition)"
+    4: "Apply relevance_weight as selection probability (weighted random)"
+    5: "If all candidates exhausted by ring buffer, evict oldest 5 entries and retry once"
+    6: "Return selected principle dict (or None if pool empty — graceful degradation)"
+    7: "Append selected dedup_key to ring buffer"
+
+  performance_guarantees:
+    p95_max_ms: 3
+    p99_max_ms: 8
+    implementation_notes: |
+      30-40 principle entries = ~4KB in memory. Domain filter is O(n) where n ≤ 40.
+      Tag index enables O(1) tag lookup. Ring buffer is O(1) via deque. YAML loaded
+      once at first call (lazy singleton), cached with TTL. No filesystem I/O at
+      select() time after initial load. Target actual latency: <1ms.
+
+  anti_repetition:
+    ring_buffer: "shared deque(maxlen=10) — same buffer as quotes (Phase 123)"
+    dedup_key_namespace: "principles and quotes share the ring buffer to prevent BOTH types from repeating"
+    eviction_on_exhaustion: "clear oldest 5 entries if all domain candidates are in buffer"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DoR INTEGRATION
+# ─────────────────────────────────────────────────────────────────────────────
+dor_integration:
+  description: |
+    The Definition of Ready (DoR) gate fires for IMPLEMENT/FIX/REFACTOR/AUDIT/TDD
+    (code-touching intents). It does NOT fire for QUERY/ANALYZE/PLAN/DESIGN
+    (non-code-touching intents). This is already the correct behavior.
+
+    Principles render during analysis/design (DoR-exempt intents) — no conflict.
+    When a user transitions from DESIGN → IMPLEMENT, the DoR gate activates and
+    blocks execution until DoR=100%. The principle from the design phase is NOT
+    carried into the implementation response (different composition path).
+
+  principle_reinforces_dor: |
+    Selected principles are contextually aligned to DoR readiness dimensions:
+    - security domain → reinforces security readiness
+    - testing domain → reinforces test coverage readiness
+    - quality domain → reinforces code quality readiness
+    - architecture domain → reinforces architectural fitness
+    The PrincipleSelector.select(pool='principles') call receives the current
+    intent_type, which maps to relevant capability_domains. The selected principle
+    naturally reinforces the readiness dimension most relevant to the current work.
+
+  no_blocking_behavior: |
+    atom-principle NEVER blocks response rendering. If PrincipleSelector returns
+    None (empty pool, all exhausted), the atom is simply omitted. Graceful
+    degradation — the response renders normally without a principle block.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TELEMETRY — extends Phase 123 telemetry
+# ─────────────────────────────────────────────────────────────────────────────
+telemetry:
+  extends: "Phase 123 telemetry (selection_latency_ms, repeat_avoided_count)"
+  new_metrics:
+    - name: "principle_selection_latency_ms"
+      type: histogram
+      description: "Latency of select(pool='principles') calls"
+      target: "p95 ≤ 3ms"
+
+    - name: "principle_cache_hit_rate"
+      type: gauge
+      description: "Ratio of cache hits to total select(pool='principles') calls"
+      target: "> 0.95 after warm-up"
+
+    - name: "principle_pool_exhaustion_count"
+      type: counter
+      description: "Number of times all domain candidates were in ring buffer"
+      target: "< 5% of calls"
+
+    - name: "principle_render_count"
+      type: counter
+      description: "Number of times atom-principle was included in a response"
+      labels: [intent_type, capability_domain]
+
+  emission_target: "cortex_capture_metrics MCP tool (fire-and-forget, disabled by default)"
+  guard: "metrics_enabled=True parameter on PrincipleSelector (default: False)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOLDEN TESTS & DRIFT LOCKS
+# ─────────────────────────────────────────────────────────────────────────────
+golden_tests:
+  file: "tests/golden/test_principle_block_rendering.py"
+  description: "Rendering contract enforcement — ensures template fidelity across all compositions"
+
+  test_specifications:
+    # Rendering contract tests
+    - name: "test_analysis_design_comps_render_exactly_one_principle"
+      assertion: "comp-query assembly includes atom-principle exactly once"
+      category: rendering_contract
+
+    - name: "test_operational_comps_render_zero_principles"
+      assertion: "comp-implement-fix, comp-audit-fix, comp-refactor, comp-debug, comp-vacuum, comp-health do NOT include atom-principle"
+      category: rendering_contract
+
+    - name: "test_principle_heading_is_h3"
+      assertion: "Rendered output starts with '### 💡 Principle for This Design'"
+      category: rendering_contract
+
+    - name: "test_principle_uses_blockquote_format"
+      assertion: "Principle text renders as '> **{principle}**' followed by '> {short_explanation}'"
+      category: rendering_contract
+
+    - name: "test_principle_brevity_limit_200_chars"
+      assertion: "Every principle.principle in high-value-principles.yaml is ≤200 characters"
+      category: brevity
+
+    - name: "test_explanation_brevity_limit_200_chars"
+      assertion: "Every principle.short_explanation is ≤200 characters"
+      category: brevity
+
+    - name: "test_all_principles_have_unique_dedup_key"
+      assertion: "No duplicate dedup_keys across the entire principles pool"
+      category: data_integrity
+
+    - name: "test_all_principles_have_valid_capability_domain"
+      assertion: "Every capability_domain is in the 10-domain enum"
+      category: data_integrity
+
+    - name: "test_dedup_keys_do_not_collide_with_quote_dedup_keys"
+      assertion: "No dedup_key in high-value-principles.yaml matches any dedup_key in atom-quote.yaml"
+      category: data_integrity
+
+    - name: "test_minimum_20_principles_in_library"
+      assertion: "high-value-principles.yaml contains ≥20 principle entries"
+      category: completeness
+
+    - name: "test_all_10_domains_have_at_least_one_principle"
+      assertion: "Every capability_domain enum value has ≥1 principle"
+      category: completeness
+
+    - name: "test_template_consistency_no_contradictions"
+      assertion: "atom-principle.yaml rendering_rules match comp-query.yaml assembly rules — no conflicting zone/heading/format specs"
+      category: consistency
+
+    - name: "test_anti_repetition_across_30_calls"
+      assertion: "Across 30 consecutive select(pool='principles') calls with same intent, repetition rate < 20%"
+      category: anti_repetition
+
+  drift_locks:
+    - lock: "atom-principle.yaml heading must be '### 💡 Principle for This Design'"
+      violation: P1
+    - lock: "atom-principle.yaml max_per_response must be 1"
+      violation: P0
+    - lock: "comp-implement-fix.yaml must NOT reference atom-principle"
+      violation: P0
+    - lock: "comp-audit-fix.yaml must NOT reference atom-principle"
+      violation: P0
+    - lock: "high-value-principles.yaml minimum_principles must be ≥20"
+      violation: P1
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064 — all must be CLOSED before COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-124-01"
+    title: "No curated SDLC principles library exists — only book quotes in atom-quote.yaml"
+    severity: P2
+    source: "GitHub Copilot Chat architecture session 2026-03-04"
+    evidence: |
+      atom-quote.yaml contains 32 literary quotes across 10 themes. There is no
+      engineering principles library with structured metadata (capability_domain,
+      tags, role_hints, relevance_weight). SDLC knowledge YAMLs exist under
+      cortex-registry/knowledge/sdlc/ but they are reference documents, not a
+      renderable principles pool. Gap: no curated, schema-validated, selectable
+      principles library for contextual injection into analysis/design responses.
+    action_ref: "phase-124-a"
+    status: OPEN
+
+  - id: "GAP-124-02"
+    title: "No atom-principle in Lego system — only atom-quote provides content in Zone 2/3"
+    severity: P2
+    source: "GitHub Copilot Chat architecture session 2026-03-04"
+    evidence: |
+      _registry.yaml lists 5 atoms: atom-identity, atom-quote, atom-orchestration,
+      atom-intent-reflection, atom-status-footer. None serve the purpose of
+      rendering an engineering principle in the response body. atom-quote renders
+      in Zone 2 (header); no atom renders engineering guidance in Zone 3 body.
+      Gap: no Tier 1 atom for principle injection.
+    action_ref: "phase-124-b"
+    status: OPEN
+
+  - id: "GAP-124-03"
+    title: "No composition includes principle rendering — comp-query has no atom-principle"
+    severity: P2
+    source: "GitHub Copilot Chat architecture session 2026-03-04"
+    evidence: |
+      comp-query.yaml atoms list: [atom-identity, atom-quote, atom-status-footer].
+      No atom-principle. Analysis/design responses do not render engineering
+      principles. The composition assembly pattern supports adding atoms — but
+      the atom doesn't exist yet (GAP-124-02) and the composition hasn't been
+      updated to include it.
+    action_ref: "phase-124-b"
+    status: OPEN
+
+  - id: "GAP-124-04"
+    title: "PrincipleSelector (Phase 123) only supports quotes pool — no principles pool"
+    severity: P2
+    source: "GitHub Copilot Chat architecture session 2026-03-04"
+    evidence: |
+      Phase 123 designs PrincipleSelector with a single pool (atom-quote.yaml
+      quotes). Phase 124 needs a second pool (high-value-principles.yaml).
+      The extension is non-breaking: add pool='principles' parameter to select().
+      Default remains 'quotes'. Ring buffer shared. This is the integration point
+      between Phase 123 (engine) and Phase 124 (content + rendering).
+    action_ref: "phase-124-c"
+    status: OPEN
+
+  - id: "GAP-124-05"
+    title: "No golden tests enforce rendering contract for principles across compositions"
+    severity: P2
+    source: "GitHub Copilot Chat architecture session 2026-03-04"
+    evidence: |
+      Phase 120 created 49 golden tests for the Lego system (40 functional +
+      9 rendering contract). None test principle block rendering because the
+      atom doesn't exist yet. Gap: no drift locks ensuring operational compositions
+      exclude principles, analysis compositions include exactly one, brevity limits
+      are enforced, and template consistency is maintained.
+    action_ref: "phase-124-d"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── Sub-Phase A: Curated Principles Library YAML ─────────────────────────
+  - id: "phase-124-a"
+    title: "Create high-value-principles.yaml — curated SDLC principles library"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-124-01"]
+    governance_authority: "CORE-008, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "1-2 hours"
+    depends_on: ["phase-123"]  # Phase 123 must be COMPLETE (PrincipleSelector exists)
+    prerequisite: "Phase 123 COMPLETE, smoke tests green"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_principle_injection.py BEFORE creating the YAML"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_injection.py — ALL tests must FAIL"
+        blocker: "Do NOT create high-value-principles.yaml until every listed test fails"
+      green:
+        action: "Create cortex-registry/knowledge/sdlc/high-value-principles.yaml with ≥30 principles matching schema"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_injection.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Review principle wording for clarity, check dedup_key uniqueness, verify domain coverage"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Fix any schema violations or missing fields"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_principles_yaml_exists — high-value-principles.yaml exists at expected path"
+        - "test_principles_yaml_valid_schema — every entry has all required fields from schema"
+        - "test_minimum_30_principles — library contains ≥30 entries"
+        - "test_all_10_domains_covered — every capability_domain enum value has ≥1 principle"
+        - "test_principle_text_under_200_chars — every principle.principle ≤200 characters"
+        - "test_explanation_under_200_chars — every principle.short_explanation ≤200 characters"
+        - "test_all_dedup_keys_unique — no duplicate dedup_keys in the library"
+        - "test_no_dedup_key_collision_with_quotes — no dedup_key collides with atom-quote.yaml dedup_keys (post Phase 123)"
+        - "test_all_tags_non_empty — every principle has at least 1 tag"
+        - "test_relevance_weight_in_range — every relevance_weight is 0.1 ≤ w ≤ 1.0"
+      green:
+        - "Create cortex-registry/knowledge/sdlc/high-value-principles.yaml with 30 principles from initial_principles_catalogue"
+        - "Validate all fields match principles_schema definition"
+        - "Ensure all 10 capability_domains have coverage"
+      refactor:
+        - "Review principle wording for clarity and actionability"
+        - "Confirm no duplication of meaning with atom-quote.yaml entries"
+        - "Verify dedup_key format consistency: {domain}-{slug}"
+
+    acceptance_criteria:
+      - "high-value-principles.yaml exists at cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+      - "Contains ≥30 principles with all required schema fields"
+      - "All 10 capability_domains represented"
+      - "All principle texts ≤200 characters"
+      - "All short_explanations ≤200 characters"
+      - "All dedup_keys unique and non-colliding with atom-quote.yaml"
+      - "All relevance_weights in [0.1, 1.0] range"
+      - "All tests in test_principle_injection.py GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase B: atom-principle + composition injection ──────────────────
+  - id: "phase-124-b"
+    title: "Create atom-principle.yaml and inject into comp-query composition"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-124-02", "GAP-124-03"]
+    governance_authority: "CORE-008, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "2-3 hours"
+    depends_on: ["phase-124-a"]
+    prerequisite: "phase-124-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/golden/test_principle_block_rendering.py BEFORE creating atom YAML"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_principle_block_rendering.py — ALL tests must FAIL"
+        blocker: "Do NOT create atom-principle.yaml until every listed test fails"
+      green:
+        action: |
+          1. Create cortex-registry/templates/response/atoms/atom-principle.yaml (Tier 1 atom)
+          2. Add atom-principle entry to cortex-registry/templates/response/_registry.yaml
+          3. Add atom-principle to comp-query.yaml atoms list (after atom-quote, zone: 3)
+        gate: "python3 scripts/run_tests.py file tests/golden/test_principle_block_rendering.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Verify rendering rules match spec, confirm no other compositions affected"
+        gate: "python3 scripts/run_tests.py dir tests/golden/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Fix any rendering rule violations or composition conflicts"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_atom_principle_yaml_exists — atom-principle.yaml exists in atoms/ directory"
+        - "test_atom_principle_registered — _registry.yaml atoms list includes atom-principle"
+        - "test_comp_query_includes_atom_principle — comp-query.yaml atoms list includes atom-principle entry"
+        - "test_comp_implement_fix_excludes_atom_principle — comp-implement-fix.yaml does NOT reference atom-principle"
+        - "test_comp_audit_fix_excludes_atom_principle — comp-audit-fix.yaml does NOT reference atom-principle"
+        - "test_comp_refactor_excludes_atom_principle — comp-refactor.yaml does NOT reference atom-principle"
+        - "test_comp_debug_excludes_atom_principle — comp-debug.yaml does NOT reference atom-principle"
+        - "test_comp_vacuum_excludes_atom_principle — comp-vacuum.yaml does NOT reference atom-principle"
+        - "test_comp_health_excludes_atom_principle — comp-health.yaml does NOT reference atom-principle"
+        - "test_principle_heading_is_h3 — atom-principle.yaml heading level is H3"
+        - "test_principle_zone_is_3 — atom-principle.yaml zone is 3 (body content)"
+        - "test_principle_max_per_response_is_1 — atom-principle.yaml max_per_response is 1"
+      green:
+        - "Create cortex-registry/templates/response/atoms/atom-principle.yaml matching atom_principle_spec"
+        - "Add entry to _registry.yaml atoms section"
+        - "Add atom-principle to comp-query.yaml after atom-quote with zone: 3"
+      refactor:
+        - "Confirm rendering_rules consistency between atom-principle.yaml and _registry.yaml"
+        - "Verify forbidden patterns list matches rendering_contract"
+        - "Confirm no operational compositions reference atom-principle"
+
+    acceptance_criteria:
+      - "atom-principle.yaml exists with correct rendering rules"
+      - "_registry.yaml includes atom-principle in atoms list"
+      - "comp-query.yaml includes atom-principle (zone 3, after atom-quote)"
+      - "All 6 operational compositions do NOT reference atom-principle"
+      - "Heading is H3: '### 💡 Principle for This Design'"
+      - "max_per_response = 1"
+      - "All tests in test_principle_block_rendering.py GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/golden/"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase C: PrincipleSelector pool extension + tag index ────────────
+  - id: "phase-124-c"
+    title: "Extend PrincipleSelector with principles pool, tag index, and cache"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-124-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2-3 hours"
+    depends_on: ["phase-124-b"]
+    prerequisite: "phase-124-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_principle_injection.py (extend file from phase-124-a) BEFORE implementation"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_injection.py — new tests must FAIL (existing tests remain GREEN)"
+        blocker: "Do NOT modify PrincipleSelector until every NEW listed test fails"
+      green:
+        action: |
+          Extend cortex/intelligence/principle_selector.py (created by Phase 123):
+          1. Add _principles_pool: lazy-loaded from high-value-principles.yaml
+          2. Add _tag_index: dict[str, list[int]] — built at load time
+          3. Add _cache_ttl: 300s TTL cache for principles pool
+          4. Extend select() with pool='quotes'|'principles' parameter
+          5. Add intent_to_domain_map for principle domain filtering
+          6. Ensure ring buffer is shared across both pools
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_injection.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Add docstrings, type hints, confirm CORE-035 (single implementation)"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions (both test files)"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + python3 -m ruff check cortex/intelligence/principle_selector.py"
+      fix_step: "Apply targeted fixes for any ruff violations or test regressions"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_select_principles_returns_principle — PrincipleSelector('DESIGN').select(pool='principles') returns dict with keys [id, principle, short_explanation, capability_domain, tags, dedup_key]"
+        - "test_select_principles_matches_domain — DESIGN intent returns principle with capability_domain in [architecture, decomposition, quality, maintainability]"
+        - "test_select_defaults_to_quotes — PrincipleSelector('IMPLEMENT').select() still returns a quote (backward compatible)"
+        - "test_principles_anti_repetition — across 30 DESIGN calls, repetition rate < 20%"
+        - "test_shared_ring_buffer — selecting a principle blocks that dedup_key for quotes too (and vice versa)"
+        - "test_tag_index_built — PrincipleSelector._tag_index is populated after first select(pool='principles')"
+        - "test_cache_ttl_300s — PrincipleSelector._principles_cache_ttl is 300 seconds"
+        - "test_graceful_degradation_empty_pool — select(pool='principles') with no matching domain returns None"
+        - "test_latency_under_3ms — 100 select(pool='principles') calls, p95 < 3ms"
+        - "test_principle_telemetry_emitted — when metrics_enabled=True, principle_selection_latency_ms is emitted"
+      green:
+        - "Add _principles_pool property with lazy-load from high-value-principles.yaml"
+        - "Add _tag_index: dict[str, list[int]] built at principles load time"
+        - "Add _cache with TTL check (os.path.getmtime comparison)"
+        - "Extend select() to accept pool parameter, default 'quotes'"
+        - "Implement intent_to_domain_map for domain filtering"
+        - "Ensure _ring_buffer (shared deque) is used for both pools"
+        - "Add graceful None return when no candidates match"
+        - "Add telemetry emission for principle_selection_latency_ms"
+      refactor:
+        - "Add docstrings to all new methods (CORE-012)"
+        - "Add type hints to all signatures (CORE-011)"
+        - "Run ruff check — zero violations"
+        - "Confirm PrincipleSelector remains the sole selector implementation (CORE-035)"
+
+    acceptance_criteria:
+      - "select(pool='principles') returns a principle dict for DESIGN/PLAN/ANALYZE intents"
+      - "select() without pool parameter still returns quotes (backward compatible)"
+      - "Ring buffer is shared — principle dedup_keys block quote re-selection and vice versa"
+      - "Tag index is populated at first load"
+      - "Cache TTL is 300 seconds"
+      - "Graceful degradation: returns None when no candidates match"
+      - "p95 latency < 3ms across 100 calls"
+      - "All tests in test_principle_injection.py GREEN"
+      - "All Phase 123 tests still GREEN (no regressions)"
+      - "ruff check clean"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 22   # ~12 from Phase 123 + 10 new
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase D: Golden tests + drift locks ──────────────────────────────
+  - id: "phase-124-d"
+    title: "Golden tests, drift locks, and rendering contract enforcement"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-124-05"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1-2 hours"
+    depends_on: ["phase-124-c"]
+    prerequisite: "phase-124-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Extend tests/golden/test_principle_block_rendering.py with drift lock and anti-repetition tests"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_principle_block_rendering.py — new tests must FAIL"
+        blocker: "Do NOT proceed until every new drift lock test fails"
+      green:
+        action: "Ensure all golden test assertions pass against current YAML + PrincipleSelector state"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_principle_block_rendering.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Review drift lock strictness, ensure no false positive triggers"
+        gate: "python3 scripts/run_tests.py dir tests/golden/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Fix any drift lock violations"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_template_consistency_no_contradictions — atom-principle.yaml rendering_rules match comp-query.yaml assembly"
+        - "test_anti_repetition_across_30_calls — repetition rate < 20% over 30 calls"
+        - "test_drift_lock_heading_text — atom-principle heading exactly '### 💡 Principle for This Design'"
+        - "test_drift_lock_max_per_response — atom-principle max_per_response == 1"
+        - "test_drift_lock_comp_implement_exclusion — comp-implement-fix atoms list has no atom-principle"
+        - "test_drift_lock_comp_audit_exclusion — comp-audit-fix atoms list has no atom-principle"
+        - "test_drift_lock_minimum_principles — high-value-principles.yaml has ≥20 entries"
+      green:
+        - "All assertions should pass against artifacts created in sub-phases A-C"
+        - "If any drift detected, fix the source artifact (not the test)"
+      refactor:
+        - "Review test names for clarity"
+        - "Ensure golden tests are deterministic (no flaky assertions)"
+
+    acceptance_criteria:
+      - "All 13 golden tests + 7 drift lock tests GREEN"
+      - "Template consistency verified across atom-principle and comp-query"
+      - "Anti-repetition enforcement verified (< 20% repetition over 30 calls)"
+      - "All drift locks pass — heading, max_per_response, composition exclusions, minimum principles"
+      - "Zero false positives in drift lock tests"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/golden/"
+      min_tests_pass: 20
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase Final: Smoke Gate + CORE-064 Close ─────────────────────────
+  - id: "phase-124-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P2
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-124-d"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2395 tests pass (Phase 123 baseline)"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2395 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: |
+          1. Move phase-124 YAML: planned/ → completed/
+          2. Update cortex-master.yaml: add thin entry with status: COMPLETE
+          3. Validate YAML: python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 5 sweep_catalogue GAPs (GAP-124-01 through GAP-124-05) have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥2395 tests, zero new failures"
+      - "Zero new test failures vs Phase 123 baseline"
+      - "phase-124 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤800 lines (THIN INDEX CONTRACT)"
+      - "PrincipleSelector importable: python3 -c 'from cortex.intelligence.principle_selector import PrincipleSelector; ps = PrincipleSelector(\"DESIGN\"); p = ps.select(pool=\"principles\"); print(p[\"principle\"] if p else \"graceful-none\")'"
+      - "Anti-sprawl verified: exactly 4 new files + 3 modified files (no unexpected artifacts)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2395
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-P124-001"
+  complete: "AC_COMPLETE: AC-P124-001 ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURE NOTES — for implementer reference
+# ─────────────────────────────────────────────────────────────────────────────
+architecture_notes:
+  key_files:
+    - path: "cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+      role: "NEW — curated SDLC principles library (30 entries, schema-validated)"
+    - path: "cortex-registry/templates/response/atoms/atom-principle.yaml"
+      role: "NEW — Tier 1 Lego atom for principle rendering in Zone 3"
+    - path: "tests/golden/test_principle_block_rendering.py"
+      role: "NEW — golden tests + drift locks (13 rendering + 7 drift lock assertions)"
+    - path: "tests/intelligence/test_principle_injection.py"
+      role: "NEW — principle library schema + PrincipleSelector pool extension tests"
+    - path: "cortex-registry/templates/response/_registry.yaml"
+      role: "MODIFY — add atom-principle entry to atoms list"
+    - path: "cortex-registry/templates/response/compositions/comp-query.yaml"
+      role: "MODIFY — add atom-principle to atoms assembly (zone: 3, after atom-quote)"
+    - path: "cortex/intelligence/principle_selector.py"
+      role: "MODIFY — extend with principles pool, tag index, cache TTL (Phase 123 creates this file)"
+
+  no_new_files_except:
+    - "cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+    - "cortex-registry/templates/response/atoms/atom-principle.yaml"
+    - "tests/golden/test_principle_block_rendering.py"
+    - "tests/intelligence/test_principle_injection.py"
+
+  no_orchestrator_changes: true
+  no_workflow_template_changes: true
+  no_wiring_changes: true
+  no_governance_yaml_changes: true
+  regression_risk: MINIMAL   # Only comp-query.yaml is modified — 7 other compositions untouched
+
+  anti_sprawl_contract: |
+    This phase creates exactly 4 new files and modifies 3 existing files.
+    No new directories. No new patterns. No new abstractions. Reuses:
+    - PrincipleSelector from Phase 123 (extends, doesn't replace)
+    - Lego atom pattern from Phase 120 (follows established atom-*.yaml convention)
+    - Knowledge YAML pattern from existing cortex-registry/knowledge/sdlc/ directory
+    - Golden test pattern from Phase 120 (tests/golden/ directory)
+    Any file created outside this list is a GOVERNANCE VIOLATION.
+
+  extensibility_notes: |
+    Future phases can:
+    - Add more principles to high-value-principles.yaml (append-only)
+    - Add new capability_domains to the enum (schema extension)
+    - Enable principle_override flag to inject into operational compositions
+    - Create comp-design.yaml / comp-plan.yaml compositions (currently comp-query handles all)
+    - Add role_hints-based selection weighting
+    - Add team-specific principle profiles
+    All of these are additive — zero breaking changes to Phase 124 artifacts.
+
+  performance_budget:
+    p95_max_ms: 3
+    p99_max_ms: 8
+    implementation_note: |
+      30-40 principles = ~5KB in memory. Domain filter is O(n) where n ≤ 40.
+      Tag index enables O(1) tag lookup. Ring buffer is O(1) via deque. YAML loaded
+      once at first select(pool='principles') call, cached with 300s TTL. File
+      modification timestamp check is a single os.path.getmtime call (~0.01ms).
+      No filesystem scan at select() time. Target actual latency: <1ms.

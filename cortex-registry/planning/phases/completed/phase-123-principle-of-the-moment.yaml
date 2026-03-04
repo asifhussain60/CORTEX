@@ -11,7 +11,8 @@ id: "phase-123"
 title: "Principle of the Moment — Anti-Repetition Quote Selection with Telemetry"
 version: "1.0"
 created: "2026-03-04"
-status: PLANNED
+status: COMPLETE
+completed: "2026-03-04"
 priority: P2
 governance_authority:
   - CORE-008   # TDD mandatory — tests before implementation

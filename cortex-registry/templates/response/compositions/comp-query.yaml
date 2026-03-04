@@ -46,6 +46,10 @@ atoms:
     zone: 2
     params:
       theme: universal
+  - id: atom-principle
+    zone: 3
+    params:
+      intent_type: QUERY
   - id: atom-status-footer
     zone: footer
 
@@ -60,6 +64,9 @@ template: |
   > — {author}, **{book}**
 
   ---
+
+  ### 💡 Principle: {principle_title}
+  {principle_body}
 
 # ─── Chain Info ───────────────────────────────────────────────────────────────
 orchestration_chain: null

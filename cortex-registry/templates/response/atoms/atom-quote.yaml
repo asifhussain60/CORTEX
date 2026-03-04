@@ -75,176 +75,240 @@ quotes:
     author: "Aristotle"
     book: "Nicomachean Ethics"
     themes: [quality]
+    dedup_key: "aristotle-quality-habit"
+    relevance_weight: 0.9
 
   - text: "The bitterness of poor quality remains long after the sweetness of low price is forgotten."
     author: "Benjamin Franklin"
     book: "Poor Richard's Almanack"
     themes: [quality]
+    dedup_key: "franklin-quality-bitterness"
+    relevance_weight: 0.7
 
   - text: "Measure twice, cut once."
     author: "Traditional Proverb"
     book: "Craftsmanship Wisdom"
     themes: [quality, discipline]
+    dedup_key: "proverb-quality-measure-twice"
+    relevance_weight: 0.8
 
   - text: "First, do it. Then, do it right. Then, do it better."
     author: "Addy Osmani"
     book: "Learning Patterns"
     themes: [quality, improvement]
+    dedup_key: "osmani-quality-do-it"
+    relevance_weight: 0.8
 
   # THEME: systems_thinking
   - text: "A complex system that works is invariably found to have evolved from a simple system that worked."
     author: "John Gall"
     book: "Systemantics"
     themes: [systems_thinking, architecture]
+    dedup_key: "gall-systems-complex"
+    relevance_weight: 0.9
 
   - text: "The system will always defeat the strategy."
     author: "Donella Meadows"
     book: "Thinking in Systems"
     themes: [systems_thinking]
+    dedup_key: "meadows-systems-defeat"
+    relevance_weight: 0.7
 
   - text: "Every system is perfectly designed to get the results it gets."
     author: "W. Edwards Deming"
     book: "Out of the Crisis"
     themes: [systems_thinking, discipline]
+    dedup_key: "deming-systems-designed"
+    relevance_weight: 0.9
 
   - text: "You don't rise to the level of your goals. You fall to the level of your systems."
     author: "James Clear"
     book: "Atomic Habits"
     themes: [systems_thinking, discipline]
+    dedup_key: "clear-systems-fall"
+    relevance_weight: 0.8
 
   # THEME: improvement
   - text: "Make it work, make it right, make it fast."
     author: "Kent Beck"
     book: "Test-Driven Development: By Example"
     themes: [improvement, quality]
+    dedup_key: "beck-improvement-work-right"
+    relevance_weight: 0.9
 
   - text: "Simplicity is the soul of efficiency."
     author: "Austin Freeman"
     book: "The Eye of Osiris"
     themes: [improvement]
+    dedup_key: "freeman-improvement-simplicity"
+    relevance_weight: 0.7
 
   - text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
     author: "Martin Fowler"
     book: "Refactoring"
     themes: [improvement, quality]
+    dedup_key: "fowler-improvement-humans"
+    relevance_weight: 0.9
 
   - text: "The best code is no code at all."
     author: "Jeff Atwood"
     book: "Coding Horror"
     themes: [improvement]
+    dedup_key: "atwood-improvement-no-code"
+    relevance_weight: 0.8
 
   # THEME: architecture
   - text: "Good architecture makes the system easy to understand, easy to develop, easy to maintain, and easy to deploy."
     author: "Robert C. Martin"
     book: "Clean Architecture"
     themes: [architecture]
+    dedup_key: "martin-architecture-good"
+    relevance_weight: 0.9
 
   - text: "Architecture is the art of how to waste space."
     author: "Philip Johnson"
     book: "Philip Johnson: Life and Work"
     themes: [architecture]
+    dedup_key: "johnson-architecture-waste"
+    relevance_weight: 0.6
 
   - text: "Design is not just what it looks like and feels like. Design is how it works."
     author: "Steve Jobs"
     book: "The Innovation Secrets of Steve Jobs"
     themes: [architecture, improvement]
+    dedup_key: "jobs-architecture-design-works"
+    relevance_weight: 0.9
 
   - text: "The purpose of software architecture is to minimize the human resources required to build and maintain the required system."
     author: "Robert C. Martin"
     book: "Clean Architecture"
     themes: [architecture, strategy]
+    dedup_key: "martin-architecture-minimize"
+    relevance_weight: 0.8
 
   # THEME: discipline
   - text: "Discipline equals freedom."
     author: "Jocko Willink"
     book: "Discipline Equals Freedom: Field Manual"
     themes: [discipline]
+    dedup_key: "willink-discipline-freedom"
+    relevance_weight: 0.9
 
   - text: "The strength of a team is each individual member. The strength of each member is the team."
     author: "Phil Jackson"
     book: "Sacred Hoops"
     themes: [discipline, flow]
+    dedup_key: "jackson-discipline-team"
+    relevance_weight: 0.7
 
   - text: "An ounce of prevention is worth a pound of cure."
     author: "Benjamin Franklin"
     book: "Pennsylvania Gazette"
     themes: [discipline, security]
+    dedup_key: "franklin-discipline-prevention"
+    relevance_weight: 0.8
 
   - text: "Excellence is never an accident. It is always the result of high intention, sincere effort, and intelligent execution."
     author: "Aristotle"
     book: "Nicomachean Ethics"
     themes: [discipline, quality]
+    dedup_key: "aristotle-discipline-excellence"
+    relevance_weight: 0.8
 
   # THEME: strategy
   - text: "Plans are nothing; planning is everything."
     author: "Dwight D. Eisenhower"
     book: "Mandate for Change"
     themes: [strategy]
+    dedup_key: "eisenhower-strategy-planning"
+    relevance_weight: 0.9
 
   - text: "However beautiful the strategy, you should occasionally look at the results."
     author: "Winston Churchill"
     book: "War Memoirs"
     themes: [strategy]
+    dedup_key: "churchill-strategy-results"
+    relevance_weight: 0.8
 
   - text: "Give me six hours to chop down a tree and I will spend the first four sharpening the axe."
     author: "Abraham Lincoln"
     book: "Lincoln on Leadership"
     themes: [strategy, discipline]
+    dedup_key: "lincoln-strategy-sharpen"
+    relevance_weight: 0.9
 
   - text: "The essence of strategy is choosing what not to do."
     author: "Michael Porter"
     book: "What is Strategy?"
     themes: [strategy]
+    dedup_key: "porter-strategy-choosing"
+    relevance_weight: 0.9
 
   # THEME: security
   - text: "Security is not a product, but a process."
     author: "Bruce Schneier"
     book: "Secrets and Lies"
     themes: [security]
+    dedup_key: "schneier-security-process"
+    relevance_weight: 0.9
 
   - text: "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room."
     author: "Gene Spafford"
     book: "Practical Unix and Internet Security"
     themes: [security]
+    dedup_key: "spafford-security-powered-off"
+    relevance_weight: 0.7
 
   # THEME: learning
   - text: "Tell me and I forget. Teach me and I remember. Involve me and I learn."
     author: "Benjamin Franklin"
     book: "Poor Richard's Almanack"
     themes: [learning]
+    dedup_key: "franklin-learning-involve"
+    relevance_weight: 0.9
 
   - text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go."
     author: "Dr. Seuss"
     book: "I Can Read With My Eyes Shut!"
     themes: [learning]
+    dedup_key: "seuss-learning-read"
+    relevance_weight: 0.8
 
   # THEME: flow
   - text: "The best way to predict the future is to invent it."
     author: "Alan Kay"
     book: "Creative Think Symposium"
     themes: [flow, strategy]
+    dedup_key: "kay-flow-invent"
+    relevance_weight: 0.9
 
   - text: "Flow is the state in which people are so involved in an activity that nothing else seems to matter."
     author: "Mihaly Csikszentmihalyi"
     book: "Flow: The Psychology of Optimal Experience"
     themes: [flow]
+    dedup_key: "csikszentmihalyi-flow-state"
+    relevance_weight: 0.8
 
   # THEME: universal
   - text: "Done is better than perfect."
     author: "Sheryl Sandberg"
     book: "Lean In"
     themes: [universal]
+    dedup_key: "sandberg-universal-done"
+    relevance_weight: 0.9
 
   - text: "The only way to do great work is to love what you do."
     author: "Steve Jobs"
     book: "Stanford Commencement Address"
     themes: [universal]
+    dedup_key: "jobs-universal-great-work"
+    relevance_weight: 0.9
 
 # ─── Validation Rules ─────────────────────────────────────────────────────────
 validation:
   minimum_quotes: 32
-  required_fields_per_quote: [text, author, book, themes]
+  required_fields_per_quote: [text, author, book, themes, dedup_key]
   required_themes: [quality, systems_thinking, improvement, architecture, discipline, strategy, security, learning, flow, universal]
   theme_coverage: "all 10 themes must have at least 1 quote"
   no_fabricated_quotes: true
-  quote_selection: "deterministic — match theme_map[intent_type] then select by session context"
+  quote_selection: "weighted-random-anti-repeat — PrincipleSelector filters by theme_map[intent_type], excludes ring_buffer dedup_keys, weighted random on remaining pool"
