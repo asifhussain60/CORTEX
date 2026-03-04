@@ -345,3 +345,13 @@ phases:
     gaps: 5
     file: cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml
     note: "5 GAPs CLOSED. IntentRouter.route() wired; 27-intent coverage; InteractionOrchestrator + breadcrumb. 30 tests GREEN."
+
+  - id: phase-119
+    title: "Class Consolidation — Resolve 266 CORE-035 Duplicate Class Definitions"
+    status: PLANNED
+    priority: P1
+    sweep_id: SWEEP-119-CLASS-CONSOLIDATION
+    gaps: 4
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-119-class-consolidation.yaml"
+    note: "P1 non-blocking. 266 duplicate class defs (CORE-035) from dissolved-package migration. Target: ≤20. Baseline: smoke 2340 GREEN, v1.0-certified tag."
