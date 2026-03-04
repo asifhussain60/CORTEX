@@ -40,13 +40,11 @@
 #   CORE-049: Silent on no-finding (progress bar only during scan)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'lifecycle/investigate-workflow'
 
 workflow:
   id: 'lifecycle/investigate-workflow'
   name: 'INVESTIGATE — LENS-First Read-Only Analysis'
-  version: '1.0.0'
   category: 'lifecycle'
   status: 'active'
 

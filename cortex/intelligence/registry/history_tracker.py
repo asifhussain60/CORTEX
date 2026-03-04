@@ -48,7 +48,7 @@ class HistoryTracker:
                 "hash": m.stable_hash(),
             }
 
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, sort_keys=True)
 
         self._enforce_cap()
@@ -100,7 +100,7 @@ class HistoryTracker:
     # ── private helpers ─────────────────────────────────────────────────
 
     def _load(self, path: str) -> Dict[str, Any]:
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)  # type: ignore[no-any-return]
 
     def _enforce_cap(self) -> None:

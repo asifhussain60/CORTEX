@@ -1,6 +1,5 @@
 ---
 agent_id: cortex-sts-refactoring
-version: "1.0"
 status: active
 layer: core
 modes_served:

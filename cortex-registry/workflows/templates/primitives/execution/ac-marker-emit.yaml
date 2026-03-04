@@ -16,7 +16,6 @@
 #   - primitives/validation/detect-fix-rescan-loop.yaml (per-cycle AC markers)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/execution/ac-marker-emit'
 name: 'AC Marker Emission'
 tier: 'primitive'

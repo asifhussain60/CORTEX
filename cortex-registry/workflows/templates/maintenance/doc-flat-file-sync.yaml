@@ -45,7 +45,6 @@
 workflow:
   id: "maintenance/doc-flat-file-sync"
   name: "Documentation Flat-File Sync"
-  version: "1.0.0"
   category: "maintenance"
   description: |
     Mirrors every file in cortex-docs/.content/<nn-category>/ folders into

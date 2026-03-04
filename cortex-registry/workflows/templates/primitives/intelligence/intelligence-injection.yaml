@@ -34,7 +34,6 @@
 #   its presence before REFACTOR/FIX execution is permitted.
 # ==============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/intelligence/intelligence-injection'
 name: 'Intelligence Injection Primitive'
 tier: '1'

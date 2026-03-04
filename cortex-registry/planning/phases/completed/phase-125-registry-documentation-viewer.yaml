@@ -3,7 +3,6 @@
 
 id: "phase-125"
 title: "Registry-Aware Documentation Viewer — YAML→Model→JSON→HTML Pipeline + D3.js Interactive Visualizations"
-version: "1.0"
 created: "2026-03-04"
 completed: "2026-03-04"
 status: COMPLETE

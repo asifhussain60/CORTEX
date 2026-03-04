@@ -15,7 +15,6 @@
 
 id: comp-query
 type: composition
-version: "3.0"
 phase: "120"
 trigger: "simple questions, lookups, explanations"
 intent: QUERY

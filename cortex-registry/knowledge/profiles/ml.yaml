@@ -6,7 +6,6 @@
 profile:
   id: ml-v1.0
   name: Machine Learning
-  version: "1.0"
   category: data-science
   description: >
     Governance profile for machine learning projects including

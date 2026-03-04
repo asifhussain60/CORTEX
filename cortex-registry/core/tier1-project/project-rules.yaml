@@ -7,7 +7,6 @@
 # Precedence: Below Tier 0 (SKULL), above Tier 2 (Engineering)
 # ============================================================
 
-schema_version: "1.0"
 governance_tier: 1
 category: CORTEX_PROJECT
 precedence: HIGH
@@ -16,7 +15,6 @@ metadata:
   author: "Asif Hussain"
   created: "2026-02-18"
   last_updated: "2026-02-18"
-  version: "1.0"
   description: >
     Tier 1 (Project) rules define CORTEX-wide standards that apply across
     all phases, orchestrators and contributors. They refine Tier 0 principles

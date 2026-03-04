@@ -14,7 +14,6 @@
 
 id: comp-debug
 type: composition
-version: "3.0"
 phase: "120"
 trigger: "/debug | /debug-inject | /debug-cleanup"
 intent: DEBUG

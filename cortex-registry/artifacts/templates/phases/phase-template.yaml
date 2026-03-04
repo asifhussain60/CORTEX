@@ -6,7 +6,6 @@
 # Purpose: Standard template for all CORTEX phases with visible governance
 # ============================================================================
 
-version: '1.0'
 phase_id: phase-NN
 title: "Phase Title (60 chars max)"
 status: planned  # planned | active | completed | deferred | consolidated

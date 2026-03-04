@@ -20,7 +20,6 @@
 
 id: block-request-echo-dod
 type: block
-version: "3.0"
 phase: "120"
 
 # ─── Rendering Rules ──────────────────────────────────────────────────────────

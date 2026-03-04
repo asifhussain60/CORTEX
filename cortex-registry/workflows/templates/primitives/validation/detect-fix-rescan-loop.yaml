@@ -25,7 +25,6 @@
 #   Cleanup policy: rows older than retention_days are vacuumed on loop exit.
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/validation/detect-fix-rescan-loop'
 name: 'Detect → Fix → Rescan Convergence Loop'
 tier: 'primitive'

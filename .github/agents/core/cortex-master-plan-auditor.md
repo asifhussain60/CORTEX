@@ -1,6 +1,5 @@
 ---
 agent_id: "cortex-master-plan-auditor"
-version: "1.0"
 status: "active"
 layer: "core"
 capabilities:

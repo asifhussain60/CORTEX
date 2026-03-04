@@ -2,7 +2,6 @@
 metadata:
   id: chat01-lessons-learned
   title: "Chat01 Execution Review — Phase 54 cortex-refactor"
-  version: 1.0.0
   date: "2026-02-23"
   authority: CORTEX Digest Mode Analysis
   scope: "10-phase cortex-refactor execution (Phase 54)"

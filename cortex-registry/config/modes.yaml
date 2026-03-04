@@ -8,7 +8,6 @@
 
 meta:
   name: "CORTEX HEXA-MODE Definitions"
-  version: "1.0"
   updated: "2026-02-26"
   description: "All execution modes available in the CORTEX framework"
 

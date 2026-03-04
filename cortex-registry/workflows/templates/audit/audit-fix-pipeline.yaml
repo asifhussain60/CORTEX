@@ -24,7 +24,6 @@
 workflow:
   id: 'audit/audit-fix-pipeline'
   name: '/audit fix — 9-Stage Production Readiness Pipeline (28-Point Audit)'
-  version: '1.0.0'
   category: 'audit'
   status: 'active'
 

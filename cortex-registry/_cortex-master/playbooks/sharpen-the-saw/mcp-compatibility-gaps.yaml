@@ -15,7 +15,6 @@
 document:
   id: "STS-MCP-GAPS-001"
   title: "MCP Tool Compatibility Gaps — Discovered During PB-STS-001 Execution"
-  version: "1.0.0"
   created: "2026-02-22"
   source_playbook: "pb-sts-001-badmonolith-refactoring.yaml"
   philosophy: "sharpen-the-saw"

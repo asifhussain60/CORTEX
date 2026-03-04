@@ -13,7 +13,6 @@
 # 5. Rule dependency graph
 # ==============================================================================
 
-schema_version: '1.0'
 category: governance_inventory
 status: active
 inventory_date: '2026-02-19'

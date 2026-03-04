@@ -7,7 +7,6 @@
 # Precedence: Lowest (below Tier 0 and Tier 1)
 # ============================================================
 
-schema_version: "1.0"
 governance_tier: 2
 category: CORTEX_ENGINEERING
 precedence: STANDARD
@@ -16,7 +15,6 @@ metadata:
   author: "Asif Hussain"
   created: "2026-02-18"
   last_updated: "2026-02-18"
-  version: "1.0"
   description: >
     Tier 2 (Engineering) rules encode the coding standards, naming
     conventions and tooling constraints that every contributor must follow

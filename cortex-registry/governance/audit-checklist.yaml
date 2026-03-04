@@ -1,5 +1,4 @@
 metadata:
-  version: "1.0"
   description: "CORTEX Audit Checklist - Priority-Based Governance Validation"
   authority: "cortex-architect.prompt.md | CORE-008 (tests before code)"
   last_updated: "2026-02-17"

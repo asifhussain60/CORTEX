@@ -129,7 +129,7 @@ class TestWorkflowTemplates:
             assert "metadata" in workflow, f"{template_name} missing metadata"
             
             metadata = workflow["metadata"]
-            assert "version" in metadata
+            assert "version" not in metadata, f"{template_name} metadata must not contain version"
             assert "author" in metadata
             assert "created" in metadata
 

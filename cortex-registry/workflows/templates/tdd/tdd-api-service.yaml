@@ -5,7 +5,6 @@
 workflow:
   id: "tdd/api-service"
   name: "API Service TDD Workflow"
-  version: "1.0.0"
   category: "tdd"
   description: "TDD cycle for API endpoints with contract and security validation"
 

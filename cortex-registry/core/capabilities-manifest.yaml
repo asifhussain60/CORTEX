@@ -5,7 +5,6 @@
 # Source:    cortex/intelligence/capability_registry_builder.py
 # Authority: cortex-registry/core/specifications/ (wiring specs)
 
-schema_version: '1.0'
 auto_generated: true
 generated_at: '2026-03-03T19:47:41.391764+00:00'
 generated_by: cortex.intelligence.capability_registry_builder.CapabilityRegistryBuilder

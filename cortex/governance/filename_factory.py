@@ -636,41 +636,44 @@ class FilePathEnforcer:
         """
         Check if file is at repository root.
 
+        Uses a portable heuristic: the file is "at root" if its parent
+        directory is the repository root.  The repo root is detected by
+        looking for the ``cortex`` Python package directory as a sibling —
+        no hardcoded absolute paths.
+
         Args:
             path: File path
 
         Returns:
             True if at root
         """
-        # Count path components to root
-        # Repo root is /Users/asifhussain/PROJECTS/CORTEX
-        parts = path.parts
-
-        # Find CORTEX directory
-        try:
-            cortex_idx = parts.index("CORTEX")
-            # If only 2 parts after CORTEX (CORTEX and filename), it's at root
-            return len(parts) == cortex_idx + 2
-        except ValueError:
-            return False
+        parent = path.parent
+        # A file is at the repo root when its parent contains the
+        # canonical ``cortex/__init__.py`` marker.
+        if (parent / "cortex" / "__init__.py").exists():
+            return True
+        # Fallback: check if parent contains typical repo-root markers
+        return (parent / ".git").exists() or (parent / "pyproject.toml").exists()
 
     def _suggest_path(self, path: Path, file_type: str) -> str:
         """
         Suggest compliant path for file.
+
+        Returns a *relative* path suggestion so it works on any OS.
 
         Args:
             path: Invalid file path
             file_type: File extension
 
         Returns:
-            Suggested valid path
+            Suggested valid path (relative to repo root)
         """
         filename = path.name
 
-        # Suggest based on file type
+        # Suggest based on file type — always relative so it's portable
         if file_type == "md":
-            return "/Users/asifhussain/PROJECTS/CORTEX/docs/guides/" + filename
+            return f"docs/guides/{filename}"
         elif file_type == "py":
-            return "/Users/asifhussain/PROJECTS/CORTEX/cortex/governance/" + filename
+            return f"cortex/governance/{filename}"
         else:
-            return "/Users/asifhussain/PROJECTS/CORTEX/reports/analysis/" + filename
+            return f"reports/analysis/{filename}"

@@ -6,7 +6,6 @@
 # Reused by: css-extraction, typescript-refactor (service extraction)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/execution/file-extraction'
 name: 'File Extraction Primitive'
 tier: 'primitive'

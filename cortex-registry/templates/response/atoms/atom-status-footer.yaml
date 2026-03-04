@@ -26,7 +26,6 @@
 
 id: atom-status-footer
 type: atom
-version: "3.0"
 phase: "120"
 separator: "·"
 

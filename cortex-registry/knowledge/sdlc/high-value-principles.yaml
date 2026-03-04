@@ -5,14 +5,12 @@
 # Atom: cortex-registry/templates/response/atoms/atom-principle.yaml (Zone 3, comp-query.yaml)
 # No version field — append-only YAML standard (CORE-002)
 
-version: "1.0.0"
 description: >
   Curated library of 30 high-value SDLC engineering principles spanning 10 domains.
   Selected for relevance to analysis, design, implementation, and review responses.
   Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
   ring buffer (n=10) and weighted random selection.
 
-version: "1.0.0"
 description: >
   Curated library of 90 high-value SDLC engineering principles spanning 10 domains.
   Selected for relevance to analysis, design, implementation, and review responses.

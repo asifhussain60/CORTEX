@@ -6,7 +6,6 @@
 # CORE-040 Compliance: All domain transitions declaratively defined
 
 domain_transitions:
-  version: "1.0"
   created: "2026-01-26"
   authority: "CORTEX Architecture"
   description: |

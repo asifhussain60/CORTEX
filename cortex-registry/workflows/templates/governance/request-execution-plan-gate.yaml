@@ -18,7 +18,6 @@
 workflow:
   id: "request-execution/plan-gate"
   name: "Request Execution with Plan Gate & Intelligent LENS"
-  version: "1.0.0"
   category: "execution"
   description: >
     Full user request execution lifecycle with mandatory plan creation,

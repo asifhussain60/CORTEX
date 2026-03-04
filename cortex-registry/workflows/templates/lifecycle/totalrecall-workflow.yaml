@@ -12,7 +12,6 @@
 workflow:
   id: 'lifecycle/totalrecall-workflow'
   name: 'TOTALRECALL — Holistic Production Readiness'
-  version: '1.0.0'
   category: 'lifecycle'
   status: 'active'
 

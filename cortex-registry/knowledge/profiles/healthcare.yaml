@@ -6,7 +6,6 @@
 profile:
   id: healthcare-v1.0
   name: Healthcare & HIPAA
-  version: "1.0"
   category: healthcare
   description: >
     Governance profile for healthcare applications requiring

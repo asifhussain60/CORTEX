@@ -14,13 +14,13 @@ WHAT THIS TESTS:
      or multi-hop orchestration chain
   5. Workflow template references: every operational composition must reference
      an existing workflow template YAML
-  6. Composition version consistency: all compositions must declare the same
-     version string (3.0 — current LEGO architecture version)
+  6. Composition version absence: compositions must NOT declare a version field
+     (version language eliminated per production-readiness hardening)
   7. Intent uniqueness: no two compositions may claim the same intent value
 
 PASS/FAIL DEFINITIONS:
-  PASS  = composition has correct classification, wiring, and version
-  FAIL  = wrong classification, missing workflow_template, wrong version,
+  PASS  = composition has correct classification, wiring, and no version field
+  FAIL  = wrong classification, missing workflow_template, version present,
           or duplicate intent claimed by multiple compositions
 
 Governance: CORE-008 (TDD), CORE-002 (inline only), CORE-PRINCIPLE-TRIGGER (P2-004)
@@ -59,7 +59,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": True,
         "workflow_template_required": False,
         "single_hop": True,
-        "version": "3.0",
     },
     "comp-introduce.yaml": {
         "category": "design",
@@ -67,7 +66,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": True,
         "workflow_template_required": False,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-implement-fix.yaml": {
         "category": "operations",
@@ -75,7 +73,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-refactor.yaml": {
         "category": "operations",
@@ -83,7 +80,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-debug.yaml": {
         "category": "operations",
@@ -91,7 +87,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-audit-fix.yaml": {
         "category": "operations",
@@ -99,7 +94,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-health.yaml": {
         "category": "operations",
@@ -107,7 +101,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
     "comp-vacuum.yaml": {
         "category": "operations",
@@ -115,7 +108,6 @@ COMPOSITION_MATRIX = {
         "principle_injection": False,
         "workflow_template_required": True,
         "single_hop": False,
-        "version": "3.0",
     },
 }
 
@@ -336,16 +328,15 @@ class TestWorkflowTemplateWiring:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class TestCompositionVersionAndIntentUniqueness:
-    """All compositions must have version=3.0 and declare unique intents."""
+    """All compositions must NOT have a version field; intents must be unique."""
 
     @pytest.mark.parametrize("filename,spec", list(COMPOSITION_MATRIX.items()))
-    def test_composition_version_is_3_0(self, filename: str, spec: dict) -> None:
-        """VERSION: {filename} must declare version='3.0' (LEGO architecture standard)."""
+    def test_composition_has_no_version_field(self, filename: str, spec: dict) -> None:
+        """VERSION: {filename} must NOT declare a version field (version language eliminated)."""
         comp = _load_comp(filename)
-        version = comp.get("version", "")
-        assert str(version) == spec["version"], (
-            f"{filename}: version must be '{spec['version']}', got '{version}'\n"
-            f"All compositions must use version 3.0 (Phase 120 LEGO architecture)."
+        assert "version" not in comp, (
+            f"{filename}: version field must be absent (production-readiness hardening), "
+            f"but found version='{comp.get('version')}'"
         )
 
     def test_no_two_compositions_claim_same_intent(self) -> None:

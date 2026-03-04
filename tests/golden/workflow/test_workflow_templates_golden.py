@@ -39,7 +39,6 @@ REQUIRED_FIELDS = [
     "id",
     "name",
     "category",
-    "version",
     "metadata",
     "gates",
     "steps",

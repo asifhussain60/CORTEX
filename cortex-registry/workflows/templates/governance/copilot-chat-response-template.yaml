@@ -53,7 +53,6 @@
 workflow:
   id: "governance/copilot-chat-response-template"
   name: "VSCode Copilot Chat Response Template Rendering"
-  version: "1.0.0"
   category: "governance"
   tier: "primitive"
 

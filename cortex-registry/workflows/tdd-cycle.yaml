@@ -10,7 +10,6 @@
 workflow:
   id: "cortex/tdd-cycle"
   name: "TDD Cycle (RED → GREEN → REFACTOR)"
-  version: "1.0.0"
   category: "sub-workflow"
   description: "Test-Driven Development cycle for CORTEX phases"
 

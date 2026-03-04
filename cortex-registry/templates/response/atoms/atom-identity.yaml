@@ -21,7 +21,6 @@
 
 id: atom-identity
 type: atom
-version: "3.0"
 phase: "120"
 
 # ─── Rendering Rules (VS Code Copilot Chat contract) ──────────────────────────

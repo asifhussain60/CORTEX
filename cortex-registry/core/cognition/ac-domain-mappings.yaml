@@ -845,7 +845,6 @@ query_patterns:
     # Pattern: domains[orchestrator_domain].acceptance_criteria
 
 versioning:
-  schema_version: "1.0"
   created_at: "2026-01-15T12:00:00Z"
   updated_at: "2026-01-15T12:00:00Z"
   notes: "Initial mapping of all 87 ACs to 4 orchestrator domains"

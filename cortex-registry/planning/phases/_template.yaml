@@ -5,7 +5,6 @@
 
 id: "phase-{N}"
 title: "{Full descriptive title}"
-version: "1.0"
 created: "{YYYY-MM-DD}"
 status: PLANNED  # PLANNED | ACTIVE | COMPLETE | DEFERRED | ARCHIVED
 priority: P0     # P0 | P1 | P2

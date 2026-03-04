@@ -14,7 +14,6 @@
 
 id: comp-vacuum
 type: composition
-version: "3.0"
 phase: "120"
 trigger: "/vacuum"
 intent: VACUUM

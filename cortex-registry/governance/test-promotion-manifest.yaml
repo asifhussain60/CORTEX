@@ -33,7 +33,6 @@
 # =============================================================================
 
 manifest:
-  version: "1.0.0"
   generated: "2026-02-18"
   phase: "phase-49"
   algorithm_version: "7-signal-v1"

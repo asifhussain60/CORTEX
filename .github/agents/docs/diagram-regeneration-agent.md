@@ -1,7 +1,6 @@
 # Diagram Regeneration Agent
 
 **Agent ID:** `diagram-regeneration-agent`  
-**Version:** 1.0  
 **Updated:** 2026-03-02  
 **Layer:** docs  
 **Status:** active  
@@ -74,7 +73,6 @@ mermaid_standards:
   # Metadata header (YAML frontmatter)
   frontmatter:
     title: required        # Diagram title
-    version: required      # Matches documentation version
     generated: required    # ISO 8601 timestamp
     source_of_truth: required  # Path to implementation source
 

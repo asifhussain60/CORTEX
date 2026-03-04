@@ -17,7 +17,6 @@
 
 id: block-session-identity
 type: block
-version: "3.0"
 phase: "120"
 
 # ─── Rendering Rules ──────────────────────────────────────────────────────────

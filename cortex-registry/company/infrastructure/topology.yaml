@@ -6,7 +6,6 @@
 # Regenerated: Automatically when platform/api/application YAMLs change
 # ==============================================================================
 
-version: "1.0.0"
 generated_at: "2026-02-20T00:00:00Z"
 source: "cortex-registry/company/infrastructure/"
 

@@ -6,7 +6,6 @@
 profile:
   id: auth-v1.0
   name: Authentication & Authorization
-  version: "1.0"
   category: security
   description: >
     Governance profile for authentication and authorization services

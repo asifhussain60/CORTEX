@@ -34,7 +34,6 @@
 #            CORE-064 (sweep completeness), CORE-068 (convergence)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/execution/review-and-cleanup'
 name: 'Review + Cleanup — Universal Final Step'
 tier: 'primitive'

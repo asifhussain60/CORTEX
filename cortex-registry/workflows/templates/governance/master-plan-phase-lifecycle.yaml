@@ -20,7 +20,6 @@
 
 workflow:
   name: master_plan_phase_lifecycle
-  version: "1.0.0"
   description: >
     Full lifecycle governance for a CORTEX master plan phase.
     Enforces decomposition rules, file structure, and completion contracts.

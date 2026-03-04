@@ -10,7 +10,6 @@
 workflow:
   id: "cortex/refactor-holistic"
   name: "Holistic Refactoring Sweep"
-  version: "1.0.0"
   category: "sub-workflow"
   description: "Final holistic code quality pass across entire codebase"
 

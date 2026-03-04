@@ -6,7 +6,6 @@
 # Reused by: ALL workflow templates (mandatory import)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/execution/audit-trace'
 name: 'Audit Trace Primitive'
 tier: 'primitive'

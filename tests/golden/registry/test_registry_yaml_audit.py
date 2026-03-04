@@ -216,7 +216,7 @@ class TestNoDeletedPathReferences:
 
 
 class TestQualityGateVersionConsistency:
-    """test-quality-gate.yaml version must match quality_gate.py version constant."""
+    """test-quality-gate.yaml must not contain version fields."""
 
     def test_quality_gate_yaml_parseable(self) -> None:
         """cortex-registry/core/test-quality-gate.yaml must parse as YAML."""
@@ -225,11 +225,11 @@ class TestQualityGateVersionConsistency:
         content = _load_yaml(QUALITY_GATE_YAML)
         assert isinstance(content, dict), "test-quality-gate.yaml parsed as non-dict"
 
-    def test_quality_gate_yaml_has_version_field(self) -> None:
-        """test-quality-gate.yaml must declare a version field."""
+    def test_quality_gate_yaml_has_no_version_field(self) -> None:
+        """test-quality-gate.yaml must not declare a version field."""
         if not QUALITY_GATE_YAML.exists():
             pytest.skip("test-quality-gate.yaml not found")
         content = _load_yaml(QUALITY_GATE_YAML)
-        assert "version" in content, (
-            "test-quality-gate.yaml missing 'version' field"
+        assert "version" not in content, (
+            "test-quality-gate.yaml must not contain 'version' field"
         )

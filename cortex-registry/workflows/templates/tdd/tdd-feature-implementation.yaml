@@ -5,7 +5,6 @@
 workflow:
   id: "tdd/feature-implementation"
   name: "Feature Implementation TDD Workflow"
-  version: "1.0.0"
   category: "tdd"
   description: "Full RED→GREEN→REFACTOR TDD cycle with convergence gates"
 

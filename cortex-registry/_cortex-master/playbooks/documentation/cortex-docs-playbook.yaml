@@ -5,7 +5,6 @@
 
 playbook_id: cortex-docs-playbook
 title: "CORTEX Documentation - Site Design, Content, & Maintenance"
-version: "1.0.0"
 status: ACTIVE
 authority:
   - ".github/prompts/cortex-doc.prompt.md"
@@ -188,7 +187,6 @@ planning_workflow:
 # ============================================
 
 design_system:
-  version: "1.0.0"
   standard: "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
   
   theme:

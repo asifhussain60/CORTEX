@@ -70,7 +70,6 @@
 workflow:
   id: "governance/holistic-file-review-gate"
   name: "Holistic File Review Gate"
-  version: "1.0.0"
   category: "governance"
   tier: "composite"  # composed from primitives
 

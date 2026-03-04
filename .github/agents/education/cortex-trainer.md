@@ -1,6 +1,5 @@
 ---
 agent_id: cortex-trainer
-version: "1.0"
 status: active
 layer: education
 modes_served:
@@ -25,7 +24,7 @@ maintainer: "Asif Hussain"
 
 # CORTEX Trainer Agent
 
-**Updated:** 2026-02-26 | **Version:** 1.0
+**Updated:** 2026-02-26
 **Purpose:** Gap-driven intelligence growth — analyze repositories, detect template gaps, propose surgical changes.
 
 ---

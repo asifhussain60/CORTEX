@@ -20,7 +20,6 @@
 #   - Any mode workflow requiring user intent confirmation
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/governance/dor-display'
 name: 'Definition of Ready (DoR) Display'
 tier: 'primitive'

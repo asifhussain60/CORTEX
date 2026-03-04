@@ -12,7 +12,6 @@
 workflow:
   id: 'lifecycle/sync-workflow'
   name: 'SYNC — Privacy-Safe Cross-Repo Sync'
-  version: '1.0.0'
   category: 'lifecycle'
   status: 'active'
 

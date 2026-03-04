@@ -25,7 +25,6 @@
 #   CORE-035: Single canonical implementation
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/governance/holistic-validation-gate'
 name: 'Holistic Validation Gate'
 tier: 'primitive'

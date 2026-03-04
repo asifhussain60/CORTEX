@@ -84,14 +84,19 @@ class TemplateValidator:
         """
         errors: List[str] = []
 
-        # Build dependency graph
+        # Build dependency graph by extracting Jinja2 include/extends references
         deps: Dict[str, Set[str]] = {}
         for name, template_str in templates.items():
             try:
                 ast = self.env.parse(template_str)
-                # In a real implementation, would parse template references
-                # For now, return empty list as placeholder
-                deps[name] = set()
+                refs: Set[str] = set()
+                # Walk AST nodes for Include and Extends references
+                for node in ast.body:
+                    if hasattr(node, "template"):
+                        tpl = getattr(node.template, "value", None)
+                        if isinstance(tpl, str):
+                            refs.add(tpl)
+                deps[name] = refs
             except Exception as e:
                 errors.append(f"Dependency parse error in '{name}': {str(e)}")
 

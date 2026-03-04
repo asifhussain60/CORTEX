@@ -1,6 +1,5 @@
 ---
 agent_id: cortex-digest
-version: "1.0"
 status: active
 layer: core
 modes_served:
@@ -25,7 +24,7 @@ maintainer: "Asif Hussain"
 
 # CORTEX Digest Agent
 
-**Updated:** 2026-02-23 | **Version:** 1.0
+**Updated:** 2026-02-23
 **Purpose:** Intelligent content ingestion — classify, extract, persist, and feed improvements back into CORTEX.
 
 ---

@@ -1,5 +1,4 @@
-version: '1.0'
-updated: '2026-03-03'
+updated: '2026-03-04'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -16,7 +15,6 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '1.0'
   last_updated: '2026-03-04T00:00:00Z'
   total_phases: 108
   active: 0
@@ -128,7 +126,7 @@ summary:
   archived: 4
   playbooks: 1
   completion_percentage: 97
-  consolidation_summary: "v63.0: 2026-03-04 — Phase 123 COMPLETE (Registry Intelligence Engine). 7/7 GAPs CLOSED. 5 IntelligenceFacade methods, CortexRegistry MCP tool (5 ops), YAML reader MCP wiring. 55 tests GREEN. Smoke: 2,582."
+  consolidation_summary: "2026-03-04 — Phase 125 COMPLETE (Registry-Aware Documentation Viewer). YAML Reader architecture: 8 typed parsers, registry indexer, dependency graph, integrity checker, history tracker. 195 registry tests GREEN. Smoke: 2,582."
   active_phases:
     phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (30 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
     phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 32 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"

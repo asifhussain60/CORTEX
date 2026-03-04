@@ -7,7 +7,6 @@
 # Consumer: cortex/intelligence/lens/ → RuleExtractor
 # ==============================================================================
 
-schema_version: '1.0'
 domain: business-rules
 status: active
 created: '2026-02-28'

@@ -8,7 +8,6 @@
 # Tier 0 = SKULL rules - cannot be overridden.
 # ==============================================================================
 
-schema_version: '1.0'
 governance_tier: 0
 category: CORTEX_CORE
 precedence: HIGHEST
@@ -20,7 +19,6 @@ metadata:
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
   last_update: "2026-02-26 - Total Recall Phase 4: metadata aligned to actual rule count (38 CORE + 2 AC = 40 total)"
-  version: "1.0"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"

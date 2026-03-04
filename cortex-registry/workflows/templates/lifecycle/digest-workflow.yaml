@@ -13,7 +13,6 @@
 workflow:
   id: 'lifecycle/digest-workflow'
   name: 'DIGEST — Intelligent Content Ingestion'
-  version: '1.0.0'
   category: 'lifecycle'
   status: 'active'
 

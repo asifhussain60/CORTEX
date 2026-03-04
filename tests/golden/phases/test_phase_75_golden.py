@@ -109,17 +109,13 @@ class TestPhase75ManifestExists:
         data = yaml.safe_load(MANIFEST_PATH.read_text())
         assert isinstance(data, dict), "Manifest must parse to dict"
 
-    def test_manifest_has_schema_version(self) -> None:
-        """Manifest must declare schema version."""
+    def test_manifest_has_no_version_field(self) -> None:
+        """Manifest must not declare any version or schema_version field."""
         if not MANIFEST_PATH.exists():
             pytest.skip("Manifest not generated yet")
         data = yaml.safe_load(MANIFEST_PATH.read_text())
-        version = (
-            data.get("schema_version")
-            or data.get("metadata", {}).get("schema_version")
-            or data.get("version")
-        )
-        assert version is not None, "Manifest missing schema_version"
+        assert "schema_version" not in data, "Manifest must not contain schema_version"
+        assert "version" not in data, "Manifest must not contain version"
 
     def test_manifest_has_orchestrators(self) -> None:
         """Manifest must list orchestrators (flat list or tiered dict)."""

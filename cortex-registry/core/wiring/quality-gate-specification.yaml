@@ -3,7 +3,6 @@
 # Purpose: Define Phase 48 holistic validation and challenge generation
 # Status: ACTIVE (Phase D - Agent Consolidation)
 
-version: "1.0"
 created_at: 2026-02-09
 updated_at: 2026-02-09
 authority: "CORTEX Validation Team"

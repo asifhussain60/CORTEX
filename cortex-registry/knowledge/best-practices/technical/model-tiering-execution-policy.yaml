@@ -104,7 +104,6 @@ safe_pattern:
 # ── CORTEX Policy (Implementable) ────────────────────────────────────────────
 cortex_policy:
   name: "CORTEX Model-Tiering Execution Policy"
-  version: "1.0"
   date: "2026-02-26"
 
   step_1:

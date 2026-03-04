@@ -12,7 +12,6 @@
 workflow:
   id: 'governance/meta-audit-workflow'
   name: 'META-AUDIT — Prompt/Agent Coherence Validation'
-  version: '1.0.0'
   category: 'governance'
   status: 'active'
 

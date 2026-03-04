@@ -13,7 +13,6 @@
 
 id: prompt-cortex-architect
 type: prompt_intro
-version: "3.0"
 phase: "120"
 prompt_file: ".github/prompts/cortex-architect.prompt.md"
 product_title: "🛠️ CORTEX Architect"

@@ -1,5 +1,4 @@
 id: "master-plan-decomposition-check"
-version: "1.0"
 authority: "THIN-INDEX-CONTRACT (Phase 63)"
 description: |
   Validates that a cortex-master.yaml phase entry adheres to the THIN INDEX CONTRACT.

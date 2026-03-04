@@ -19,7 +19,6 @@
 
 meta:
   name: "CORTEX Response Format"
-  version: "1.0"
   updated: "2026-02-26"
   description: "Response formatting standards for CORTEX output"
 

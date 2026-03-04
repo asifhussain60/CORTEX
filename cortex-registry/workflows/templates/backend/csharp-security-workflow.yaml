@@ -11,7 +11,6 @@
 id: backend/csharp-security-workflow
 name: C# Security Hardening Workflow
 category: backend
-version: 1.1.0
 priority: P0  # Security fixes are always P0
 
 metadata:

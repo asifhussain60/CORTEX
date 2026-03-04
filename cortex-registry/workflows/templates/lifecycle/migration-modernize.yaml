@@ -5,7 +5,6 @@
 workflow:
   id: "migration/modernize"
   name: "Legacy Modernization Workflow"
-  version: "1.0.0"
   category: "migration"
   description: "Incremental migration with rollback safety and validation"
 

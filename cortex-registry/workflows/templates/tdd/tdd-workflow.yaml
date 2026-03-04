@@ -31,7 +31,6 @@
 workflow:
   id: 'tdd/tdd-workflow'
   name: 'TDD — Mode-Dispatching Composite'
-  version: '1.0.0'
   category: 'tdd'
   status: 'active'
 

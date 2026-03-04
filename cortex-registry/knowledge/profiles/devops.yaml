@@ -6,7 +6,6 @@
 profile:
   id: devops-v1.0
   name: DevOps & Infrastructure
-  version: "1.0"
   category: infrastructure
   description: >
     Governance profile for DevOps and infrastructure projects including

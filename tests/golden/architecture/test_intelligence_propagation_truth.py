@@ -363,7 +363,7 @@ class TestIntelligenceInjectionPrimitive:
 
     def test_primitive_has_required_fields(self) -> None:
         """AC_START: AC-P57-031
-        The primitive YAML must declare: version, template_id, tier, category, status,
+        The primitive YAML must declare: template_id, tier, category, status,
         cortex_tooling, parameters, outputs, audit_trace.
         AC_COMPLETE: AC-P57-031 ✅"""
         import yaml
@@ -371,7 +371,7 @@ class TestIntelligenceInjectionPrimitive:
         assert INTELLIGENCE_PRIMITIVE_YAML.exists(), pytest.skip("Primitive YAML not yet created")
         data = yaml.safe_load(INTELLIGENCE_PRIMITIVE_YAML.read_text())
 
-        required_keys = ["version", "template_id", "tier", "category", "status",
+        required_keys = ["template_id", "tier", "category", "status",
                          "cortex_tooling", "parameters", "outputs", "audit_trace"]
         missing = [k for k in required_keys if k not in data]
         assert not missing, f"Primitive YAML missing keys: {missing}"

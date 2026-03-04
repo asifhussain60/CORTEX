@@ -6,7 +6,6 @@
 profile:
   id: legal-v1.0
   name: Legal Tech
-  version: "1.0"
   category: legal
   description: >
     Governance profile for legal technology applications including

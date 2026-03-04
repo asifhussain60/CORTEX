@@ -9,7 +9,6 @@
 # not technical rule IDs. This document bridges the gap.
 # ==============================================================================
 
-schema_version: '1.0'
 name: GovernanceCrystal
 category: business_language
 status: active

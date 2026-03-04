@@ -1,6 +1,5 @@
 ---
 agent_id: cortex-sync-agent
-version: "1.0"
 status: active
 layer: core
 modes_served:
@@ -348,7 +347,6 @@ After all conflicts are resolved and all files written:
 ```yaml
 # <target>/.cortex-sync-state.yaml — written by sync agent
 cortex_sync_state:
-  format_version: "1.0"
   last_sync_at: "{ISO8601_TIMESTAMP}"
   last_sync_sha: "{pull_sha}"          # SHA from Gate 1
   cortex_branch: "CORTEX"

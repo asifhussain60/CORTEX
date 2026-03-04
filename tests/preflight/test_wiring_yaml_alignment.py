@@ -241,15 +241,15 @@ class TestWiringStructuralIntegrity:
             + "\n".join(phantoms)
         )
 
-    def test_all_wiring_yamls_have_version(self) -> None:
-        """Every wiring YAML has a 'version' field."""
-        missing: List[str] = []
+    def test_no_wiring_yamls_have_version(self) -> None:
+        """No wiring YAML should have a 'version' field (version language eliminated)."""
+        has_version: List[str] = []
         for wf in WIRING_FILES:
             data = _load_wiring(wf)
-            if not data.get("version"):
-                missing.append(wf.name)
-        assert not missing, (
-            f"Wiring YAMLs missing 'version' field: {missing}"
+            if data.get("version"):
+                has_version.append(wf.name)
+        assert not has_version, (
+            f"Wiring YAMLs still contain 'version' field: {has_version}"
         )
 
     def test_all_wiring_yamls_have_description(self) -> None:

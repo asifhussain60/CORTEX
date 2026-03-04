@@ -20,7 +20,6 @@
 workflow:
   id: "lifecycle/composite-execution-pipeline"
   name: "Composite Execution Pipeline"
-  version: "1.0.0"
   category: "lifecycle"
   description: |
     Generic pipeline-of-pipelines for end-to-end application transformation.

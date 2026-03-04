@@ -17,7 +17,6 @@
 
 id: prompt-cortex-main
 type: prompt_intro
-version: "3.0"
 phase: "120"
 prompt_file: ".github/prompts/CORTEX.prompt.md"
 product_title: "🧠 CORTEX"

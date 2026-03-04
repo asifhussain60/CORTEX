@@ -314,7 +314,6 @@ blocks: ["PHASE-J"]                   # Must exist
 Best for: Simple phases, single-Phase Execution
 
 ```yaml
-version: "1.0"
 enhancement_id: "ENH-XXX"
 title: "Feature Name"
 priority: "P1-HIGH"
@@ -360,7 +359,6 @@ success_metrics:
 Best for: Complex phases with multiple stages
 
 ```yaml
-version: "1.0"
 enhancement_id: "ENH-XXX"
 title: "Complex Enhancement"
 

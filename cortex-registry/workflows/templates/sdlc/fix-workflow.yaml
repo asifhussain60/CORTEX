@@ -17,7 +17,6 @@
 workflow:
   id: 'sdlc/fix-workflow'
   name: 'FIX — Bug Resolution via TDD'
-  version: '1.0.0'
   category: 'sdlc'
   status: 'active'
 

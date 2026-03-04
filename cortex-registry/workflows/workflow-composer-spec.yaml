@@ -28,7 +28,6 @@
 
 id: 'workflow-composer-spec'
 title: 'CORTEX Workflow Composer Specification'
-version: '1.0.0'
 created: '2026-02-28'
 status: 'active'
 

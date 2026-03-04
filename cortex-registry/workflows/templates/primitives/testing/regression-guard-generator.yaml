@@ -20,7 +20,6 @@ primitive:
   name: "Regression Guard Test Generator"
   tier: 1
   category: "testing"
-  version: "1.0.0"
   created: "2026-03-03"
   governance: ["CORE-002", "CORE-008", "CORE-064"]
 

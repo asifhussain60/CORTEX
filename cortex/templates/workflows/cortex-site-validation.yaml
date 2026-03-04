@@ -10,7 +10,6 @@
 # Phase:  99 Stage 3
 
 name: cortex-site-validation
-version: "1.0"
 description: >
   Full TDD lifecycle for CORTEX site development.
   Integrates LENSOrchestrator (Vision API analysis), ChallengeEngine, and

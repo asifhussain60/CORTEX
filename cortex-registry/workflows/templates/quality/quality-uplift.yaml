@@ -119,7 +119,6 @@ workflow:
     - performance_improvement: ">= 15%"
   
   metadata:
-    version: "1.0"
     author: "CORTEX Phase 84"
     created: "2026-02-14"
     last_updated: "2026-02-14"

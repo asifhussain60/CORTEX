@@ -19,7 +19,6 @@
 #   - Any workflow that modifies source files
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/execution/git-checkpoint'
 name: 'Git Checkpoint'
 tier: 'primitive'

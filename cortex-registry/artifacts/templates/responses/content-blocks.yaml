@@ -15,7 +15,6 @@
 # Purpose: Reusable content sections that compose into situation-specific responses
 
 metadata:
-  version: "1.0"
   last_updated: "2026-02-14"
   authority: "Composable template system for CORTEX responses"
   principle: "LEGO-style blocks that assemble without duplication"

@@ -1,7 +1,6 @@
 # Doc Sync Agent
 
 **Agent ID:** `doc-sync-agent`  
-**Version:** 1.0  
 **Updated:** 2026-03-02  
 **Layer:** docs  
 **Status:** active  

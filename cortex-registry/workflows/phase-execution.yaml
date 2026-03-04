@@ -10,7 +10,6 @@
 workflow:
   id: "cortex/phase-execution"
   name: "CORTEX Phase Execution Workflow"
-  version: "1.0.0"
   category: "cortex-internal"
   description: "Standard workflow for executing CORTEX self-development phases"
 

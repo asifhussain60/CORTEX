@@ -15,7 +15,6 @@
 primitive:
   id: "primitives/governance/dependency-guard-migration"
   name: "Dependency Guard Migration"
-  version: "1.0.0"
   category: "governance"
   reusable: true
 

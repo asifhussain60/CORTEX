@@ -7,7 +7,6 @@
 workflow:
   id: "lifecycle/service-decomposition-workflow"
   name: "Service Decomposition Workflow"
-  version: "1.0.0"
   category: "lifecycle"
   description: |
     Security-first, layer-gated strangler-fig progression for decomposing tightly-coupled systems.

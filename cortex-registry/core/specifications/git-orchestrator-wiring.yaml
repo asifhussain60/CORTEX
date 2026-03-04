@@ -5,7 +5,6 @@
 # Created: 2026-02-25
 
 module_name: git_orchestrators
-version: "1.0.0"
 description: "Git orchestrators: commit/push/PR, pre-commit enforcement, sanitization, core git operations"
 
 dependencies:

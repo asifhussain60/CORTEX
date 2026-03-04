@@ -3,7 +3,6 @@
 # Purpose: Declarative registration of 6 support orchestrators (CORE-031 compliance)
 
 module_name: support_orchestrators
-version: "1.1.0"
 description: "Support orchestrators: Onboarding, Upgrade, Rollback, Setup, Health, Sweep, Vacuum"
 
 dependencies:

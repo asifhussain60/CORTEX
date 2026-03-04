@@ -3,7 +3,6 @@
 # Purpose: Declarative registration of 6 core orchestrators (CORE-031 compliance)
 
 module_name: core_orchestrators
-version: "1.0.0"
 description: "Core orchestrators: Interaction, Intent Router, TDD, Workflow, Master, Conversation, Enforcement"
 
 dependencies:

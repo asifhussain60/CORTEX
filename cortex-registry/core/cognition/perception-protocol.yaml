@@ -9,7 +9,6 @@
 # Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 # ==============================================================================
 
-schema_version: '1.0'
 governance_tier: 0
 category: INTENT_ROUTER
 precedence: HIGH
@@ -36,7 +35,6 @@ metadata:
 
 protocol:
   name: "LENS Protocol"
-  version: "1.0"
   purpose: "Deep intent comprehension before execution"
   confidence_threshold: 0.80  # Abort if confidence < 80%
 

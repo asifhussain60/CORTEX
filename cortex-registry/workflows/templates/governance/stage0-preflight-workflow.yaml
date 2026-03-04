@@ -12,7 +12,6 @@
 workflow:
   id: 'governance/stage0-preflight-workflow'
   name: 'STAGE 0 — Synchronous Governance Pre-Flight'
-  version: '1.0.0'
   category: 'governance'
   status: 'active'
 

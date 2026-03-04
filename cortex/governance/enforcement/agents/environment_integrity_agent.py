@@ -19,6 +19,7 @@ AC-ID: PHASE-51-S2-002 + PHASE-50-MCPCLEANUP-004 + AC-PHASE89-AUTOHEALING-002
 """
 
 import json
+import logging
 import os
 import re
 import socket
@@ -346,20 +347,30 @@ class EnvironmentIntegrityAgent:
 
     def _check_tool_exists(self, tool_name: str) -> bool:
         """
-        Check if MCP tool exists (mock implementation).
+        Check if MCP tool exists by inspecting the ``mcp_registry`` module.
 
-        In production, this would query Copilot's tool registry.
-        For now, returns False to trigger environment variable check.
+        Queries the CORTEX MCP tool registry (``cortex.mcp.mcp_registry``)
+        for the given tool name.  Falls back to ``False`` if the registry
+        cannot be imported (e.g. outside VS Code context).
 
         Args:
             tool_name: Tool name to check
 
         Returns:
-            True if tool exists, False otherwise
+            True if tool is registered, False otherwise
         """
-        # TODO: Implement actual tool registry query
-        # This is a placeholder that always returns False
-        # forcing fallback to env vars and network check
+        try:
+            from cortex.mcp import mcp_registry  # noqa: WPS433
+            registered = getattr(mcp_registry, "TOOL_REGISTRY", None)
+            if isinstance(registered, dict):
+                return tool_name in registered
+            # Fallback: check module-level list if registry is list-based
+            if isinstance(registered, (list, tuple)):
+                return tool_name in registered
+        except ImportError:
+            logging.getLogger(__name__).warning(
+                "Optional dependency unavailable: cortex.mcp.mcp_registry"
+            )
         return False
 
     def _check_env_vars(self) -> bool:

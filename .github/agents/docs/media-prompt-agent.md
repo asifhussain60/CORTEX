@@ -1,7 +1,6 @@
 # Media Prompt Agent
 
 **Agent ID:** `media-prompt-agent`  
-**Version:** 1.0  
 **Updated:** 2026-03-02  
 **Layer:** docs  
 **Status:** active  
@@ -52,7 +51,6 @@ Every `.prompt.md` file MUST follow this structure:
 # Output: cortex-docs/assets/images/generated/{role}/{filename}.png
 # Size: 1200x675 (16:9 landscape)
 # Style: Dark glassmorphism, {audience-specific qualities}
-# Version: {version}
 # Generated: {ISO 8601 timestamp}
 # Source: {capability or feature this visualizes}
 

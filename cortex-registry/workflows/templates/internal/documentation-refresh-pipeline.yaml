@@ -1,7 +1,6 @@
 metadata:
   id: DOC-REFRESH-001
   name: Documentation Discovery & Regeneration Pipeline
-  version: 1.0.0
   author: Asif Hussain
   updated: 2026-02-24
   authority: cortex-doc.prompt.md | ENH-064 | CORE-002 | CORE-049 | CORE-064

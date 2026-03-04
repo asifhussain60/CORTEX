@@ -43,7 +43,7 @@ class TestPlanTemplateLoader:
         template_dir.mkdir()
 
         feature_plan = template_dir / "feature-plan.yaml"
-        feature_plan.write_text("version: 1.0\ntemplate_id: feature-plan\n")
+        feature_plan.write_text("template_id: feature-plan\ntitle: New Feature\n")
 
         assert feature_plan.exists()
 
@@ -51,7 +51,7 @@ class TestPlanTemplateLoader:
         """Test loading feature plan template."""
         template = self._get_feature_plan_template()
 
-        assert "version" in template
+        assert "version" not in template
         assert "template_id" in template
         assert template["template_id"] == "feature-plan"
 
@@ -59,7 +59,7 @@ class TestPlanTemplateLoader:
         """Test loading refactor plan template."""
         template = self._get_refactor_plan_template()
 
-        assert "version" in template
+        assert "version" not in template
         assert "template_id" in template
         assert template["template_id"] == "refactor-plan"
 
@@ -67,7 +67,7 @@ class TestPlanTemplateLoader:
         """Test loading system plan template."""
         template = self._get_system_plan_template()
 
-        assert "version" in template
+        assert "version" not in template
         assert "template_id" in template
         assert template["template_id"] == "system-plan"
 
@@ -75,7 +75,6 @@ class TestPlanTemplateLoader:
     def _get_feature_plan_template() -> Dict[str, Any]:
         """Get feature plan template."""
         return {
-            "version": "1.0",
             "template_id": "feature-plan",
             "title": "New Feature Development",
             "metadata": {
@@ -109,7 +108,6 @@ class TestPlanTemplateLoader:
     def _get_refactor_plan_template() -> Dict[str, Any]:
         """Get refactor plan template."""
         return {
-            "version": "1.0",
             "template_id": "refactor-plan",
             "title": "Code Refactoring Project",
             "metadata": {
@@ -143,7 +141,6 @@ class TestPlanTemplateLoader:
     def _get_system_plan_template() -> Dict[str, Any]:
         """Get system plan template."""
         return {
-            "version": "1.0",
             "template_id": "system-plan",
             "title": "System Architecture Implementation",
             "metadata": {
@@ -202,11 +199,11 @@ class TestPlanTemplateRendering:
         feature = TestPlanTemplateLoader._get_feature_plan_template()
         refactor = TestPlanTemplateLoader._get_refactor_plan_template()
 
-        # Both should have version and template_id
-        assert "version" in feature
+        # Both should have template_id (no version field)
         assert "template_id" in feature
-        assert "version" in refactor
         assert "template_id" in refactor
+        assert "version" not in feature
+        assert "version" not in refactor
 
 
 class TestMCPToolDefinitions:

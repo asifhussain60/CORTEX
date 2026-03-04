@@ -5,7 +5,6 @@
 # Status: Production
 
 metadata:
-  version: "1.0"
   created: "2026-02-09"
   updated: "2026-02-17"
   authority: "cortex-architect.prompt.md"

@@ -30,7 +30,6 @@
 playbook:
   id: "pb-sts-002"
   title: "Documentation Site Refresh — Repeatable Content & Diagram Sync"
-  version: "1.0.0"
   category: "sts"
   repeatable: true
   status: "ready"

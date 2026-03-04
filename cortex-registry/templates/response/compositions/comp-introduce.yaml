@@ -15,7 +15,6 @@
 
 id: comp-introduce
 type: composition
-version: "3.0"
 phase: "120"
 trigger: "who are you, what can you do, introduce yourself, /onboard"
 intent: INTRODUCE

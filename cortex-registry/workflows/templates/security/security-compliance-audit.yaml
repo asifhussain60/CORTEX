@@ -5,7 +5,6 @@
 workflow:
   id: "security/compliance-audit"
   name: "Security Compliance Audit Workflow"
-  version: "1.0.0"
   category: "security"
   description: "Full security audit with OWASP Top 10 and compliance scanning"
 

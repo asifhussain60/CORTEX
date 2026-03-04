@@ -10,7 +10,6 @@
 id: backend/csharp-refactor-workflow
 name: C# SOLID Refactoring Workflow
 category: backend
-version: 1.1.0
 priority: P1
 
 metadata:

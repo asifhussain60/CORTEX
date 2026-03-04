@@ -12,7 +12,6 @@
 workflow:
   id: 'lifecycle/train-workflow'
   name: 'TRAIN — Gap-Driven Template Evolution'
-  version: '1.0.0'
   category: 'lifecycle'
   status: 'active'
 

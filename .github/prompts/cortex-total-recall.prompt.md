@@ -1,6 +1,5 @@
 ---
 prompt_id: cortex-total-recall
-version: "1.0"
 status: active
 mode: CERTIFY
 author: Asif Hussain

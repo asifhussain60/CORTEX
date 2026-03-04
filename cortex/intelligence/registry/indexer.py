@@ -86,7 +86,7 @@ class RegistryIndexer:
     def _parse_file(self, filepath: str) -> Optional[BaseRegistryModel]:
         """Parse a single YAML file into a model."""
         try:
-            with open(filepath) as f:
+            with open(filepath, encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except Exception:
             return None
@@ -95,7 +95,7 @@ class RegistryIndexer:
             return None
 
         schema_type = data.get("schema_type", "generic")
-        relative = os.path.relpath(filepath, self._root_dir)
+        relative = os.path.relpath(filepath, self._root_dir).replace(os.sep, "/")
 
         parser_cls = get_parser_for_type(schema_type)
         parser = parser_cls()
@@ -145,7 +145,7 @@ class RegistryIndexer:
             output_path: Destination file path.
         """
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(self.to_json())
 
     # ── Convenience: Full pipeline ──────────────────────────────────────

@@ -10,7 +10,6 @@
 id: frontend/css-zero-inline-workflow
 name: CSS Zero Inline — Extract All Inline Styles
 category: frontend
-version: 1.1.0
 priority: P1
 
 metadata:

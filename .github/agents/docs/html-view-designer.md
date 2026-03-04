@@ -1,7 +1,6 @@
 # HTML View Designer Agent
 
 **Agent ID:** `html-view-designer`
-**Version:** 1.0
 **Updated:** 2026-03-02
 **Layer:** docs
 **Status:** active

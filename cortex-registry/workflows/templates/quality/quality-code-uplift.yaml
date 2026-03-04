@@ -5,7 +5,6 @@
 workflow:
   id: "quality/code-uplift"
   name: "Code Quality Uplift Workflow"
-  version: "1.0.0"
   category: "quality"
   description: "Systematic code quality improvement (complexity, duplication, coverage)"
 

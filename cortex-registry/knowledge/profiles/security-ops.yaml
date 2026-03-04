@@ -7,7 +7,6 @@
 profile:
   id: security-ops-v1.0
   name: Security Operations
-  version: "1.0"
   category: security
   description: >
     Governance profile for security-operations workloads including SOC pipelines,

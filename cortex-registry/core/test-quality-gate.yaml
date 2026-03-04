@@ -6,7 +6,6 @@
 # AC-ID: AC-PHASE-07B-TEST-QUALITY-GATE-001
 # ==============================================================================
 
-version: "1.0"
 created: "2026-02-20"
 updated: "2026-02-24"
 authority: "test-quality.txt"

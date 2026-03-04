@@ -1,7 +1,6 @@
 # A11y + Perf Guardian Agent
 
 **Agent ID:** `a11y-perf-guardian`
-**Version:** 1.0
 **Updated:** 2026-03-02
 **Layer:** docs
 **Status:** active

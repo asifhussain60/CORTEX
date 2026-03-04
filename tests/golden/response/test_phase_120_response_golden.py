@@ -74,7 +74,7 @@ class TestSubPhaseARegistryStructure:
         assert REGISTRY_YAML.exists(), f"Registry YAML not found: {REGISTRY_YAML}"
         data: dict[str, Any] = yaml.safe_load(REGISTRY_YAML.read_text())
         assert data is not None, "_registry.yaml parsed as None"
-        required_keys = {"version", "atoms", "blocks", "compositions"}
+        required_keys = {"atoms", "blocks", "compositions"}
         missing = required_keys - set(data.keys())
         assert not missing, f"_registry.yaml missing required keys: {missing}"
 
@@ -514,13 +514,13 @@ class TestSubPhaseCBlocks:
 class TestSubPhaseGCertification:
     """G-01 through G-09: Full Phase 120 delivery certification."""
 
-    def test_registry_yaml_version_is_3(self) -> None:
-        """G-01: _registry.yaml must declare version: 3."""
+    def test_registry_yaml_has_no_version_field(self) -> None:
+        """G-01: _registry.yaml must NOT contain a version field (timeless architecture)."""
         if not REGISTRY_YAML.exists():
             pytest.skip("_registry.yaml not yet created")
         data = yaml.safe_load(REGISTRY_YAML.read_text())
-        assert data.get("version") == 3, (
-            f"_registry.yaml version must be 3, got {data.get('version')}"
+        assert "version" not in data, (
+            "_registry.yaml must not contain a 'version' field (timeless architecture)"
         )
 
     def test_total_yaml_count_in_registry(self) -> None:

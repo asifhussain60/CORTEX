@@ -5,7 +5,6 @@
 workflow:
   id: "cleanup/deduplication"
   name: "Code Deduplication Workflow"
-  version: "1.0.0"
   category: "cleanup"
   description: "Systematic duplicate code detection and elimination (CORE-035)"
 

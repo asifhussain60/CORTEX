@@ -5,7 +5,6 @@
 workflow:
   id: "refactor/holistic-sweep"
   name: "Holistic Refactoring Sweep"
-  version: "1.0.0"
   category: "refactor"
   description: "Final holistic code quality pass across entire codebase"
 

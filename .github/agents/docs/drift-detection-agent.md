@@ -1,7 +1,6 @@
 # Drift Detection Agent
 
 **Agent ID:** `drift-detection-agent`  
-**Version:** 1.0  
 **Updated:** 2026-03-02  
 **Layer:** docs  
 **Status:** active  

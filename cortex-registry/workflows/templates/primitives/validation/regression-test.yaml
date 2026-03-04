@@ -6,7 +6,6 @@
 # Reused by: All refactoring templates (final validation step)
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/validation/regression-test'
 name: 'Regression Test Primitive'
 tier: 'primitive'

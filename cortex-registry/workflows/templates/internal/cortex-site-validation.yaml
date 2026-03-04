@@ -6,7 +6,6 @@
 # Author: Asif Hussain
 # ============================================================================
 
-version: '1.0'
 workflow_id: cortex-site-validation
 title: "CORTEX Site TDD Workflow with Vision API"
 description: |

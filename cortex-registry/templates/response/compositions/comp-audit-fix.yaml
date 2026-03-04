@@ -14,7 +14,6 @@
 
 id: comp-audit-fix
 type: composition
-version: "3.0"
 phase: "120"
 trigger: "/audit fix"
 intent: AUDIT

@@ -6,7 +6,6 @@
 # Reused by: csharp-refactor, typescript-refactor, html-refactor, quality/duplicate-validation
 # ============================================================================
 
-version: '1.0.0'
 template_id: 'primitives/validation/duplicate-detection'
 name: 'Duplicate Detection Primitive'
 tier: 'primitive'

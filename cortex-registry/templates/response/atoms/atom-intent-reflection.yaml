@@ -22,7 +22,6 @@
 
 id: atom-intent-reflection
 type: atom
-version: "3.0"
 phase: "120"
 
 # ─── Rendering Rules ──────────────────────────────────────────────────────────

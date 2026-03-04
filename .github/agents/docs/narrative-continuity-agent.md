@@ -1,7 +1,6 @@
 # Narrative Continuity Agent
 
 **Agent ID:** `narrative-continuity-agent`  
-**Version:** 1.0  
 **Updated:** 2026-03-02  
 **Layer:** docs  
 **Status:** active  

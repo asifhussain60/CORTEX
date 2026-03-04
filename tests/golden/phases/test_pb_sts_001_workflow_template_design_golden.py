@@ -78,20 +78,18 @@ def playbook() -> Dict[str, Any]:
 # ══════════════════════════════════════════════════════════════════════════════
 
 class TestPlaybookStructure:
-    """PB-STS-001 playbook must have version 2.0+ with workflow-template design keys."""
+    """PB-STS-001 playbook must have workflow-template design keys (no version field)."""
 
-    def test_playbook_has_version(self, playbook: Dict[str, Any]) -> None:
-        """Playbook must declare a version field under playbook.version."""
+    def test_playbook_has_no_version(self, playbook: Dict[str, Any]) -> None:
+        """Playbook must NOT declare a version field (version language eliminated)."""
         pb = playbook.get("playbook", playbook)
-        assert "version" in pb, "Playbook must have a 'version' field"
+        assert "version" not in pb, "Playbook must not have a 'version' field"
 
-    def test_playbook_version_is_valid(self, playbook: Dict[str, Any]) -> None:
-        """Playbook version must be a valid semver (CORE-035 — single canonical v1.x)."""
+    def test_playbook_version_is_absent(self, playbook: Dict[str, Any]) -> None:
+        """Playbook version field must be absent (production-readiness hardening)."""
         pb = playbook.get("playbook", playbook)
-        version = str(pb.get("version", ""))
-        major = version.split(".")[0]
-        assert major.isdigit() and int(major) >= 1, (
-            f"Playbook version must be a valid semver ≥ 1.0.0, got '{version}'"
+        assert "version" not in pb, (
+            f"Playbook must not contain version field, found: '{pb.get('version')}'"
         )
 
     def test_playbook_has_sdlc_template_section(self, playbook: Dict[str, Any]) -> None:
