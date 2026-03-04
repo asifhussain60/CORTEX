@@ -83,17 +83,20 @@ This document contains ALL response formatting standards in one place:
 |---------|---------|-------------------|
 | § Copilot Chat Rendering Rules | How to render correctly | Every response |
 | § User Response Template — Golden Format | 5-section structure for all work responses | AUDIT, DESIGN, PLAN, QUERY, IMPLEMENT (pre-approval) |
-| § Intent Reflection Block (BLOCK-INTENT-REFLECTION) | Business-language intent mirror before execution | Every request before `proceed` gate |
-| § Composable Content Blocks | Educational/onboarding block templates | "Who are you?", "What can you do?", tutorials |
+| § 🪞 Intent Reflection | Business-language intent mirror before execution | Every request before `proceed` gate |
 | § 📋 Request Echo & Definition of Done | Synthesized prior-request reflection + DoD card | Every multi-turn session before `proceed` |
 | § 🔵 Processing Banner | Lightweight status indicator during tool execution | Autonomous execution (replaces header until complete) |
-| § Silent Autonomous Mode — Golden Template | Progress bars for autonomous execution | After `proceed` / `implement` / `yes` |
-| § Query Response Templates | Q&A format for knowledge questions | "How does X work?", "Explain Y" |
-| § Icon System | Status, severity, operation icons | Every response |
-| § Personality Guidelines | Tone, voice, interaction style | Every response |
-| § Response Templates by Mode | Intent-based template selection | Routing decisions |
-| § Anti-Patterns | What to NEVER do | Code review, self-audit |
-| § Quality Checklist | Pre-send validation (25 items) | Before every response |
+| § 📦 Composable Content Sections | Educational/onboarding block templates | "Who are you?", "What can you do?", tutorials |
+| § 🤖 Silent Autonomous Mode | Progress bars for autonomous execution | After `proceed` / `implement` / `yes` |
+| § 📊 Query Response Templates | Q&A format for knowledge questions | "How does X work?", "Explain Y" |
+| § 🎨 Icon System | Status, severity, operation icons | Every response |
+| § 💬 Personality Guidelines | Tone, voice, interaction style | Every response |
+| § 🎭 Response Templates by Mode | Intent-based template selection | Routing decisions |
+| § 🚫 Anti-Patterns | What to NEVER do | Code review, self-audit |
+| § 📊 Quality Checklist | Pre-send validation (25 items) | Before every response |
+| § ⚙️ Interaction Orchestrator Templates | Per-mode interaction templates (comprehension, challenge, DoR, role context) | All interactive sessions |
+| § 🔬 Analysis Template | INVESTIGATE / ANALYZE response structure (`BLOCK-ANALYSIS`) | Analysis responses |
+| § 🏗️ Design Decision Template | DESIGN / ARCHITECTURE response structure (`BLOCK-DESIGN-DECISION`) | Architecture responses |
 
 ---
 
@@ -2920,8 +2923,6 @@ Before sending any response, verify:
 - [ ] **Whitespace normalizer compliant** — blank line after every heading, blank lines around all lists and tables, no hard-wrap within paragraphs, no empty headers (R1-R5)
 - [ ] **No empty headers emitted** — every H2/H3 has content below it; omit the heading if its section is empty (R4)
 - [ ] **No table cell exceeds 80 chars** — if any cell would overflow, downgrade to bullet list; if list items >120 chars, wrap in `<details>` (Table Safety Switch)
-
----
 
 ---
 
