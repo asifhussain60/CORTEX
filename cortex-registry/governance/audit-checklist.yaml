@@ -265,6 +265,16 @@ priority_checks:
         evidence_required: "benchmark_results"
         severity: "medium"
         blocking: false
+
+      - id: "P2-004"
+        name: "Principle Injection Policy Compliance"
+        description: "No operational composition (comp-implement-fix, comp-refactor, comp-debug, comp-audit-fix, comp-health, comp-vacuum) may include atom-principle. SSOT: cortex-registry/core/principle-trigger-policy.yaml"
+        tool: "cortex_validate_compliance"
+        evidence_required: "composition_audit_report"
+        severity: "medium"
+        blocking: false
+        ssot: "cortex-registry/core/principle-trigger-policy.yaml"
+        drift_lock_test: "tests/intelligence/test_principle_drift_locks.py::TestDriftLockCompQuery"
   
   P3:
     name: "Nice to Have"

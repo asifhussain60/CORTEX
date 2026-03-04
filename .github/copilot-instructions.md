@@ -272,6 +272,13 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full catalogue |
 | CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
 
+**Principle Injection Policy (CORE-PRINCIPLE-TRIGGER — SSOT: `cortex-registry/core/principle-trigger-policy.yaml`):**
+- ✅ Principles render **only** in `analysis` and `design` compositions: `comp-query.yaml` (QUERY, INVESTIGATE) and any future `comp-design.yaml`
+- ❌ Principles **never** render in operational compositions: `comp-implement-fix`, `comp-refactor`, `comp-debug`, `comp-audit-fix`, `comp-health`, `comp-vacuum`
+- ❌ Principles **never** render during silent autonomous execution (CORE-049)
+- 📏 Body enforced at **≤200 characters** at `PrincipleSelector.select()` render time
+- 🔒 Audit check P2-004 detects any operational composition drift; drift-lock tests in `tests/intelligence/test_principle_drift_locks.py`
+
 **MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
 call `validate_orchestrator_context(orchestrator_context)` must guard the call:
 ```python

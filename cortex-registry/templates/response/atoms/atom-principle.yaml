@@ -37,15 +37,29 @@ rendering_rules:
   position: "Zone 3 — after orchestration breadcrumb (if present), before main content"
   zone: 3
   max_per_response: 1
-  body_max_lines: 5
+  body_max_chars: 200
+  body_max_lines: 2
   forbidden_in_content:
     - "raw URLs"
     - "HTML tags"
     - "tree characters"
     - "nested bullet lists"
   omit_if:
-    - "intent is IMPLEMENT or FIX (action intents — no principle injection)"
+    - "intent is IMPLEMENT or FIX (action intents — execution-focused, no principle injection)"
+    - "intent is REFACTOR (execution-focused — use comp-refactor which omits atom-principle)"
+    - "intent is TDD (execution-focused — use comp-implement-fix which omits atom-principle)"
+    - "intent is DEBUG (execution-focused — use comp-debug which omits atom-principle)"
+    - "intent is AUDIT (execution-focused — use comp-audit-fix which omits atom-principle)"
+    - "intent is HEALTH (execution-focused — use comp-health which omits atom-principle)"
+    - "intent is VACUUM (execution-focused — use comp-vacuum which omits atom-principle)"
     - "silent autonomous execution mode (CORE-049)"
+  render_only_for:
+    - "QUERY (analysis — default analysis/question response)"
+    - "DESIGN (design — architecture and interface design responses)"
+    - "PLAN (design-adjacent — roadmap and strategy responses)"
+    - "INVESTIGATE (analysis — root cause and investigation responses)"
+    - "ONBOARD (design-adjacent — repository comprehension)"
+    - "INTRODUCE (design-adjacent — capability introduction)"
 
 # ─── Template ─────────────────────────────────────────────────────────────────
 template: |

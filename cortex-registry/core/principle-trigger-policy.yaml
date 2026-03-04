@@ -1,0 +1,109 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PRINCIPLE TRIGGER POLICY
+# ID: CORE-PRINCIPLE-TRIGGER
+# Phase: 124 (extended — production hardening)
+#
+# PURPOSE: Single SSOT declaring which orchestrator intent categories receive
+#          atom-principle injection and which are permanently excluded.
+#
+# This rule is enforced at:
+#   1. Template layer  — atom-principle.yaml omit_if + render_only_for lists
+#   2. Code layer      — PrincipleSelector._PRINCIPLES_DOMAIN_MAP (operational intents
+#                        are mapped but PrincipleSelector is never called from operational
+#                        compositions — comp-implement-fix, comp-refactor, comp-debug,
+#                        comp-audit-fix, comp-health, comp-vacuum do NOT include atom-principle)
+#   3. Audit layer     — audit-checklist.yaml P2-004 checks for operational composition drift
+#   4. Test layer      — tests/intelligence/test_principle_drift_locks.py drift-lock suite
+#
+# SSOT: cortex-registry/templates/response/atoms/atom-principle.yaml
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: CORE-PRINCIPLE-TRIGGER
+version: "1.0"
+phase: "124"
+last_updated: "2026-03-04"
+
+# ─── Intent Category Taxonomy ─────────────────────────────────────────────────
+#
+# Every CORTEX intent type is assigned to exactly ONE category.
+# PrincipleSelector fires ONLY for intents in the 'analysis' or 'design' category.
+# Override with explicit `principle_override: true` in a composition atom entry.
+
+intent_categories:
+
+  analysis:
+    description: "Understanding-first intents — user seeks to comprehend, explore, or query"
+    principle_injection: true
+    intents:
+      - QUERY
+      - INVESTIGATE
+      - ANALYZE
+
+  design:
+    description: "Architecture and planning intents — user is shaping a solution"
+    principle_injection: true
+    intents:
+      - DESIGN
+      - PLAN
+      - ONBOARD
+      - INTRODUCE
+
+  operations:
+    description: "Execution-focused intents — user is implementing or running something"
+    principle_injection: false
+    override_allowed: false
+    intents:
+      - IMPLEMENT
+      - FIX
+      - REFACTOR
+      - TDD
+      - DEBUG
+      - AUDIT
+      - HEALTH
+      - VACUUM
+      - SYNC
+      - TOTALRECALL
+      - DEPLOY
+
+  meta:
+    description: "Framework-internal intents — not user-facing primary flows"
+    principle_injection: false
+    override_allowed: false
+    intents:
+      - META_AUDIT
+      - RCA
+      - TRAIN
+      - DIGEST
+      - GOLDEN_TEST
+      - WORKFLOW_COMPOSE
+
+# ─── Brevity Enforcement ──────────────────────────────────────────────────────
+brevity:
+  body_max_chars: 200
+  body_max_lines: 2
+  enforcement: "PrincipleSelector._select_principle() truncates at word boundary before limit"
+  governance_check: "P2-004 in audit-checklist.yaml"
+
+# ─── Audit Contract ───────────────────────────────────────────────────────────
+audit_contract:
+  check_id: "P2-004"
+  description: "No operational composition (comp-implement-fix, comp-refactor, comp-debug, comp-audit-fix, comp-health, comp-vacuum) may include atom-principle in its atoms list"
+  detection_method: "Parse all cortex-registry/templates/response/compositions/*.yaml; assert atom-principle absent from operational intent compositions"
+  drift_lock_test: "tests/intelligence/test_principle_drift_locks.py::TestDriftLockCompQuery"
+  severity: "P2"
+  blocking: false
+
+# ─── DoR Dimension Alignment ──────────────────────────────────────────────────
+# Principles do NOT gate DoR — they reinforce readiness DIMENSIONS contextually.
+# DoR gating remains exclusively in atom-intent-reflection.yaml.
+# This relationship is intentional: principles provide epistemic context;
+# DoR enforcement is a separate governance concern.
+dor_alignment:
+  coupling: "none"
+  rationale: "Atoms must remain independent. Principle renders if analysis/design; DoR blocks execution independently."
+  reinforces_dimensions:
+    - security
+    - quality
+    - correctness
+    - maintainability

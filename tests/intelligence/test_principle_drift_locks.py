@@ -10,6 +10,9 @@ RED gate: All tests fail before artefacts exist (or pass if artefacts already
           match the locked values — treated as GREEN since 124-A/B/C are complete).
 
 Governance: CORE-008 (TDD), CORE-002 (no .md files), CORE-064 (sweep completeness).
+CORE-PRINCIPLE-TRIGGER: Principle injection only in analysis/design compositions.
+  SSOT: cortex-registry/core/principle-trigger-policy.yaml
+  Audit check: P2-004 (audit-checklist.yaml)
 """
 from __future__ import annotations
 
@@ -26,6 +29,18 @@ ATOM_QUOTE_PATH = REPO_ROOT / "cortex-registry" / "templates" / "response" / "at
 COMP_QUERY_PATH = REPO_ROOT / "cortex-registry" / "templates" / "response" / "compositions" / "comp-query.yaml"
 REGISTRY_PATH = REPO_ROOT / "cortex-registry" / "templates" / "response" / "_registry.yaml"
 PRINCIPLE_SELECTOR_PATH = REPO_ROOT / "cortex" / "intelligence" / "principle_selector.py"
+TRIGGER_POLICY_PATH = REPO_ROOT / "cortex-registry" / "core" / "principle-trigger-policy.yaml"
+COMPOSITIONS_DIR = REPO_ROOT / "cortex-registry" / "templates" / "response" / "compositions"
+
+# Operational compositions that MUST NOT contain atom-principle (CORE-PRINCIPLE-TRIGGER)
+_OPERATIONAL_COMPOSITIONS = {
+    "comp-implement-fix.yaml",
+    "comp-refactor.yaml",
+    "comp-debug.yaml",
+    "comp-audit-fix.yaml",
+    "comp-health.yaml",
+    "comp-vacuum.yaml",
+}
 
 
 class TestDriftLockPrinciplesCatalogue:
@@ -138,3 +153,112 @@ class TestDriftLockPrincipleSelector:
         """DRIFT LOCK: ring buffer maxlen must remain 10."""
         from cortex.intelligence.principle_selector import _ring_buffer
         assert _ring_buffer.maxlen == 10
+
+    def test_lock_body_truncated_to_200_chars(self):
+        """DRIFT LOCK: PrincipleSelector must truncate principle body to ≤200 chars.
+
+        Governance: atom-principle.yaml body_max_chars=200, CORE-PRINCIPLE-TRIGGER brevity rule.
+        """
+        from cortex.intelligence.principle_selector import PrincipleSelector, _principles_cache
+        import cortex.intelligence.principle_selector as ps_module
+
+        # Inject a long-body principle into the cache directly to test truncation
+        original_cache = ps_module._principles_cache
+        long_body = "A" * 300  # 300 chars — must be truncated to ≤200
+        ps_module._principles_cache = [{
+            "id": "test-truncation",
+            "title": "Truncation Test",
+            "body": long_body,
+            "domain": "universal",
+            "tags": [],
+            "intent_types": ["QUERY"],
+            "relevance_weight": 1.0,
+        }]
+        try:
+            ps = PrincipleSelector("QUERY", pool="principles")
+            result = ps.select()
+            assert len(result["body"]) <= 200, (
+                f"body length {len(result['body'])} exceeds 200 char limit"
+            )
+            assert result["body"].endswith("…"), "truncated body must end with ellipsis"
+        finally:
+            ps_module._principles_cache = original_cache
+
+
+class TestDriftLockPrincipleTriggerPolicy:
+    """Drift locks for CORE-PRINCIPLE-TRIGGER policy (P2-004 audit contract).
+
+    These locks enforce that operational compositions NEVER include atom-principle,
+    and that the trigger policy YAML exists with the correct structure.
+    SSOT: cortex-registry/core/principle-trigger-policy.yaml
+    """
+
+    def _load_policy(self) -> dict:
+        return yaml.safe_load(TRIGGER_POLICY_PATH.read_text())
+
+    def test_lock_trigger_policy_yaml_exists(self):
+        """DRIFT LOCK: principle-trigger-policy.yaml must exist in cortex-registry/core/."""
+        assert TRIGGER_POLICY_PATH.exists(), (
+            "cortex-registry/core/principle-trigger-policy.yaml missing — "
+            "CORE-PRINCIPLE-TRIGGER policy SSOT deleted"
+        )
+
+    def test_lock_policy_has_analysis_category(self):
+        """DRIFT LOCK: policy must define 'analysis' category with principle_injection=True."""
+        policy = self._load_policy()
+        analysis = policy["intent_categories"]["analysis"]
+        assert analysis["principle_injection"] is True
+
+    def test_lock_policy_has_operations_category_blocked(self):
+        """DRIFT LOCK: policy must define 'operations' category with principle_injection=False."""
+        policy = self._load_policy()
+        ops = policy["intent_categories"]["operations"]
+        assert ops["principle_injection"] is False
+        assert ops.get("override_allowed") is False
+
+    def test_lock_operations_intents_cover_all_operational_comps(self):
+        """DRIFT LOCK: operations category must include intents for all operational compositions."""
+        policy = self._load_policy()
+        ops_intents = set(policy["intent_categories"]["operations"]["intents"])
+        # These are the core operational intents that must be blocked
+        required = {"IMPLEMENT", "FIX", "REFACTOR", "DEBUG", "AUDIT", "HEALTH", "VACUUM"}
+        missing = required - ops_intents
+        assert not missing, f"Operations intent category missing: {missing}"
+
+    def test_lock_brevity_policy_is_200_chars(self):
+        """DRIFT LOCK: brevity.body_max_chars must be 200 (governance contract)."""
+        policy = self._load_policy()
+        assert policy["brevity"]["body_max_chars"] == 200
+
+    def test_lock_no_operational_composition_includes_atom_principle(self):
+        """DRIFT LOCK (P2-004): Operational compositions must NOT include atom-principle.
+
+        This is the automated equivalent of audit check P2-004.
+        If this test fails, an operational composition has drifted to include
+        atom-principle — a CORE-PRINCIPLE-TRIGGER violation.
+        """
+        violations = []
+        for filename in _OPERATIONAL_COMPOSITIONS:
+            comp_path = COMPOSITIONS_DIR / filename
+            if not comp_path.exists():
+                continue  # composition not yet created — not a violation
+            comp = yaml.safe_load(comp_path.read_text())
+            atoms = [a["id"] for a in comp.get("atoms", [])]
+            if "atom-principle" in atoms:
+                violations.append(filename)
+
+        assert not violations, (
+            f"CORE-PRINCIPLE-TRIGGER violation (P2-004): atom-principle found in "
+            f"operational composition(s): {violations}. "
+            f"SSOT: cortex-registry/core/principle-trigger-policy.yaml"
+        )
+
+    def test_lock_atom_principle_omit_if_covers_operational_intents(self):
+        """DRIFT LOCK: atom-principle.yaml omit_if must mention all operational intents."""
+        atom = yaml.safe_load(ATOM_PRINCIPLE_PATH.read_text())
+        omit_text = " ".join(atom["rendering_rules"].get("omit_if", []))
+        required_mentions = ["IMPLEMENT", "FIX", "REFACTOR", "TDD", "DEBUG", "AUDIT", "HEALTH", "VACUUM"]
+        missing = [intent for intent in required_mentions if intent not in omit_text]
+        assert not missing, (
+            f"atom-principle omit_if missing operational intent coverage: {missing}"
+        )

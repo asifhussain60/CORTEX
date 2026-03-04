@@ -289,6 +289,15 @@ class PrincipleSelector:
         if principle_id:
             self._ring_buffer.append(principle_id)
 
+        # Step 7b: enforce brevity limit — ≤200 chars on body (governance: atom-principle.yaml body_max_chars)
+        _BODY_MAX_CHARS = 200
+        if "body" in selected:
+            body = selected["body"]
+            if len(body) > _BODY_MAX_CHARS:
+                # Truncate at last word boundary before limit, append ellipsis (ellipsis = 1 char)
+                truncated = body[:_BODY_MAX_CHARS - 1].rsplit(" ", 1)[0]
+                selected = {**selected, "body": truncated + "…"}
+
         # Step 8: optional telemetry
         if self._metrics_enabled:
             latency_ms = (time.perf_counter_ns() - t_start) / 1_000_000
