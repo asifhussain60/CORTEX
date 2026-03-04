@@ -79,29 +79,32 @@ product_titles:
 # {product_title} = "🧠 CORTEX" or "🛠️ CORTEX Architect"
 # {mode}          = plain-language verb phrase from mode_phrases above
 # {author_line}   = "**Author:** Asif Hussain | © 2025-2026 CORTEX Framework. All rights reserved."
-# {via_line}      = "**Via:** {chain}" — omitted for single-hop responses
 #
-# LAYOUT RULE: author_line and via_line on SEPARATE lines within the H1 block
-# (not inside the H1 heading itself — they sit below in the same zone before the first ---)
+# ZONE LAYOUT (canonical — Phase 120 + chat01.md requirement):
+#   Zone 1: H1 title + Author line  ← this atom (no breadcrumb here)
+#   ---
+#   Zone 2: > quote blockquote      ← atom-quote.yaml
+#   ---
+#   Zone 3: 🧭 Orchestration: ...   ← atom-orchestration.yaml (AFTER quote)
+#            [work content]
+#
+# IMPORTANT: The via/breadcrumb is NOT in Zone 1. It belongs in Zone 3.
+# See atom-orchestration.yaml for Zone 3 rendering rules.
 
 template: |
   # {product_title} {mode}
   **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-  {via_line}
 
-# Template variant when via_line is omitted (single-hop, simple responses)
+# Template variant (same for all hops — orchestration moves to Zone 3 via atom-orchestration.yaml)
 template_single_hop: |
   # {product_title} {mode}
   **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
-# ─── Via Line Format ──────────────────────────────────────────────────────────
-via_line_format: "**Via:** {chain}"
-via_line_separator: " → "
-via_line_omit_condition: "single_hop == true"
-
-# ─── Author Line ──────────────────────────────────────────────────────────────
-author_line: "**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved."
-copyright_year_range: "2025-2026"
+# ─── Via Line — DEPRECATED (Phase 120 rename) ────────────────────────────────
+# The **Via:** label has been renamed to 🧭 Orchestration: and moved to Zone 3.
+# See atom-orchestration.yaml. Do not use via_line_format here.
+via_line_format: "DEPRECATED — use atom-orchestration.yaml for Zone 3 breadcrumb"
+via_line_omit_condition: "always (breadcrumb is Zone 3 — see atom-orchestration.yaml)"
 
 # ─── Validation Rules ─────────────────────────────────────────────────────────
 validation:

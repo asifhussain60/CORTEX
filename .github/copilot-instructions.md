@@ -13,12 +13,16 @@ Every **first response** to a user request MUST begin with this exact header blo
 ```
 # 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
+
+---
 
 > *"{quote}"*
 > — {Author}, **{Book}**
 
 ---
+
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
+
 ```
 
 *When `cortex-architect.prompt.md` is active, replace `🧠 CORTEX` with `🛠️ CORTEX Architect`. All other fields are identical.*
@@ -26,18 +30,23 @@ Every **first response** to a user request MUST begin with this exact header blo
 **Rules (non-negotiable):**
 
 - ✅ Render ONCE per user request — at the very top of the first response only
-- ✅ `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` — verbatim, on one line
-- ✅ `**Via:**` line shows plain-language orchestrator display names (e.g. `Classifier → TDD Builder`) — omit for single-hop simple responses
+- ✅ `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` — verbatim, on one line in Zone 1
+- ✅ Zone 1 contains ONLY the H1 title + Author line — no breadcrumb here
+- ✅ Zone 2 (between first and second `---`) contains ONLY the quote blockquote
+- ✅ Zone 3 (after second `---`) opens with `🧭 Orchestration: {chain}` for multi-hop, then work content
+- ✅ `🧭 Orchestration:` shows plain-language orchestrator display names (e.g. `Classifier → TDD Builder`) — omit for single-hop simple responses
 - ✅ **Product icon is fixed**: 🧠 for `CORTEX.prompt.md` · 🛠️ for `cortex-architect.prompt.md` — never swapped for a mode-specific icon
 - ✅ `{mode}` is a plain-language verb phrase: `Building` · `Fixing` · `Auditing` · `Answering` · `Designing` · `Planning` · `Debugging` · `Investigating` · `Cleaning` · `Introducing`
 - ✅ If `cortex-architect.prompt.md` is active: use `🛠️ CORTEX Architect` as the product title; otherwise use `🧠 CORTEX`
-- ✅ One blank line between the `**Author:**` / `**Via:**` line and the `>` quote blockquote
+- ✅ One blank line between the `**Author:**` line and the first `---` zone separator
 - ✅ Quote selected from `📚 Quote Library` in `cortex-response-templates.md` — match `themes` to user intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, audit/governance → `discipline`, fix/debug → `systems-thinking`, plan/roadmap → `strategy`, team/process → `flow`, learn/digest → `learning`, default → `universal`)
 - ✅ Both quote and attribution inside the same `>` blockquote block — renders as one unified left-accent callout
-- ✅ Followed by `---` (Markdown HR — never `<hr>`) after the blockquote
+- ✅ `🧭 Orchestration:` is the first line of Zone 3 — rendered AFTER the quote, not before it
 - ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H1 heading — 🧠 / 🛠️ are the only valid leading icons
-- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
-- ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — `**Via:**` in the header already IS the breadcrumb; rendering both makes the Classifier appear twice (P1 duplication violation)
+- ❌ NO `**Via:**` label — renamed to `🧭 Orchestration:` (Phase 120)
+- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `🧭 Orchestration:` in Zone 3
+- ❌ NO separate `*🧭 Classifier → ...*` italic block anywhere — `🧭 Orchestration:` in Zone 3 IS the breadcrumb; duplicating it is a P1 violation
+- ❌ NO `🧭 Orchestration:` in Zone 1 (alongside Author) — the quote must come first
 - ❌ NO mid-response headers — ONE header per request, period
 - ❌ NO secondary title headings inside the response body — the H1 is the only title
 - ❌ NO header during silent autonomous execution (after `proceed`) — progress bars only
@@ -60,8 +69,13 @@ Every response is assembled from composable sections. The following rules are **
 🧠 Session Identity (once per session, first turn only)
 → 🔵 Processing Banner (immediate — lightweight status during tool execution)
 → [CORTEX reads files, runs analysis, calls tools]
-→ Response Header (# 🧠 CORTEX {mode} + Author + **Via:** chain + Quote blockquote + ---)
-   ↳ **Via:** IS the breadcrumb — the *🧭 ...* italic block MUST NOT repeat it after ---
+→ Response Header:
+     Zone 1: # 🧠 CORTEX {mode} + Author line
+     ---
+     Zone 2: > quote blockquote
+     ---
+     Zone 3: 🧭 Orchestration: {chain} (omit single-hop) + work content
+   ↳ 🧭 Orchestration: IS the breadcrumb — the *🧭 ...* italic block MUST NOT repeat it
 → 🪞 Intent Reflection (before any work — first-person, business language)
 → 📋 Request Echo & DoD (multi-turn sessions only — synthesized prior requests + Definition of Done card)
 → [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]
@@ -90,7 +104,7 @@ Before emitting any response, run a **synthesis pass**:
 
 1. **Scan for duplicate headers** — if the same `##` heading appears twice, collapse to one
 2. **Scan for duplicate content** — if the same concept appears in multiple sections, keep the first occurrence only and remove subsequent repetitions
-3. **Scan for duplicate breadcrumbs** — `**Via:**` in the response header IS the routing chain. NEVER render a separate `*🧭 Classifier → ...*` italic block after `---` — that is a P1 duplication violation (the Classifier appears twice)
+3. **Scan for duplicate breadcrumbs** — `🧭 Orchestration:` in Zone 3 of the response header IS the routing chain. NEVER render a separate `*🧭 Classifier → ...*` italic block after `---` — that is a P1 duplication violation (the Classifier appears twice)
 4. **Scan for empty headers** — any `##` or `###` with no content below it must be removed (R4: no phantom whitespace)
 5. **Enforce block boundaries** — INTRO stops before capabilities, CAPABILITIES stops before LENS detail, LENS stops before orchestrators (no overlap)
 6. **Max 800 words** — trim to keep responses scannable and ≤60 second read time
@@ -116,12 +130,14 @@ This gives users a real-time signal showing which orchestrator is responding and
 
 ### 🧭 Routing Breadcrumb (always rendered for multi-hop)
 
-**The `**Via:**` field in the response header IS the breadcrumb.** For multi-hop responses, populate `**Via:**` with the plain-language routing chain on the same line as the author/copyright — e.g. `**Via:** Classifier → TDD Builder`. Do NOT render a separate `*🧭 Classifier → ...*` italic block after `---`; that duplicates the chain and makes the Classifier appear twice.
+**`🧭 Orchestration:` in Zone 3 IS the breadcrumb.** For multi-hop responses, render `🧭 Orchestration: {DisplayName} → {DisplayName}` as the **first line of Zone 3** (after the second `---` separator, after the quote). The quote must come BEFORE the breadcrumb — Zone 2 (quote) precedes Zone 3 (orchestration + work). Do NOT render a separate `*🧭 Classifier → ...*` italic block anywhere else; that duplicates the chain.
 
-- ✅ Rendered as `**Via:** {DisplayName} → {DisplayName}` in the response header (same block as `**Author:**`)
+- ✅ Rendered as `🧭 Orchestration: {DisplayName} → {DisplayName}` as the first line of Zone 3
 - ✅ Plain-language display names only (from map below — never class names)
-- ✅ Omit `**Via:**` entirely for single-hop simple responses (keep lean)
-- ❌ NEVER render a separate `*🧭 ...*` italic breadcrumb block after the `---` separator — `**Via:**` already serves this role
+- ✅ Omit `🧭 Orchestration:` entirely for single-hop simple responses (keep lean)
+- ❌ NEVER place `🧭 Orchestration:` in Zone 1 (alongside Author) — the quote must come first
+- ❌ NEVER render a separate `*🧭 ...*` italic breadcrumb block — `🧭 Orchestration:` in Zone 3 already serves this role
+- ❌ Never use `**Via:**` label — the canonical label is `🧭 Orchestration:` (renamed Phase 120)
 - ❌ Never use `├─ └─` tree characters (collapse in Copilot Chat)
 
 **Display name map (class → plain language):**
@@ -147,9 +163,9 @@ This gives users a real-time signal showing which orchestrator is responding and
 | LearningOrchestrator | Learning Engine |
 | GitOrchestrator | Git Manager |
 
-**Pre-built `**Via:**` values for common commands:**
+**Pre-built `🧭 Orchestration:` values for common commands:**
 
-| Command | `**Via:**` value |
+| Command | `🧭 Orchestration:` value |
 |---|---|
 | `/audit` or `/audit fix` | `Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer` |
 | `/implement` or `/fix` | `Classifier → TDD Builder` |

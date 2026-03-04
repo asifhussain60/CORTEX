@@ -732,12 +732,15 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 ```
 # 🛠️ CORTEX Architect {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
+
+---
 
 > *"{quote}"*
 > — {Author}, **{Book}**
 
 ---
+
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
 
 ## 📋 Summary — {1-2 sentences, answer first}
 ## 🔍 Analysis — {findings, trade-offs, tables}
@@ -763,7 +766,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 Progress bar + stage bullet list. See templates SSOT.
 
 ### Rules
-- ✅ ONE header per response, never repeated — `# 🛠️ CORTEX Architect {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ ONE header per response, never repeated — `# 🛠️ CORTEX Architect {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---` then quote then `---` then `🧭 Orchestration:` (Zone 3)
 - ✅ **Product icon is fixed**: 🛠️ — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
@@ -773,8 +776,10 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ **Templates are composable sections** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
 - ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
-- ✅ `🧭 Orchestration:` line in the response header IS the orchestrator breadcrumb — shows the routing chain (e.g. `🧭 Orchestration: Classifier → TDD Builder`) — omit on single-hop responses
+- ✅ `🧭 Orchestration:` line in Zone 3 of the response header IS the orchestrator breadcrumb — shows the routing chain (e.g. `🧭 Orchestration: Classifier → TDD Builder`) — appears AFTER the quote blockquote, omit on single-hop responses
+- ❌ NO `🧭 Orchestration:` in Zone 1 (alongside Author) — quote must come first in Zone 2
 - ❌ NO mode-specific icon in the H1 heading — 🛠️ is the only valid icon for this prompt
+- ❌ NO `**Via:**` label — the canonical label is `🧭 Orchestration:` (Phase 120 rename)
 - ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in `🧭 Orchestration:` only
 - ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — that duplicates the `🧭 Orchestration:` chain and makes the Classifier appear twice (P1 duplication violation)
 - ❌ NO secondary title headings inside the response body — the H1 is the only title

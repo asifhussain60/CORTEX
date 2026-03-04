@@ -5,6 +5,33 @@
 #
 # PURPOSE: Shows the routing chain of orchestrators that handled a request.
 # Renders as a bold label + plain text chain on a single line.
+# Position: Zone 3 (first line of work content zone, after second --- separator).
+#           This places it AFTER the quote — matching the chat01.md requirement.
+#
+# LABEL CHANGE: Was "**Via:**" — renamed to "🧭 Orchestration:" (Phase 120).
+# The label change makes the breadcrumb purpose immediately obvious.
+#
+# ZONE ORDER (canonical):
+#   Zone 1: H1 + Author          ← atom-identity.yaml
+#   ---
+#   Zone 2: > quote blockquote   ← atom-quote.yaml
+#   ---
+#   Zone 3: 🧭 Orchestration: …  ← this atom (first line of Zone 3)
+#            [work content]
+#
+# Template:
+#   🧭 Orchestration: {DisplayName} → {DisplayName}
+#
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase A) + chat01.md requirement
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ATOM: Orchestration Breadcrumb
+# ID: atom-orchestration
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: Shows the routing chain of orchestrators that handled a request.
+# Renders as a bold label + plain text chain on a single line.
 # Position: Zone 3 (bottom of the 3-zone header, after second --- separator).
 #
 # LABEL CHANGE: Was "**Via:**" — renamed to "🧭 Orchestration:" for clarity.
@@ -29,9 +56,9 @@ rendering_rules:
   copilot_chat_compatible: true
   heading_level: null
   element: "bold label + plain text"
-  position: "Zone 3 — after second --- separator (bottom of header)"
+  position: "Zone 3 — first line after second --- separator (after the quote blockquote)"
   zone: 3
-  zone_separator_before: "--- (HR)"
+  zone_separator_before: "second --- (HR) — the one that closes Zone 2 / the quote"
   omit_if_single_hop: true
   single_line: true
   chain_separator: " → "
@@ -40,8 +67,10 @@ rendering_rules:
     - "tree characters (U+251C U+2514 U+2502 — box-drawing chars that collapse in VS Code dark themes)"
     - "class names (use display names only)"
     - "separate italic breadcrumb block after ---"
-  note: "🧭 Orchestration: IS the breadcrumb. Never render a separate *🧭 Classifier → ...* italic
-    block after ---. That duplicates the chain (P1 violation). The label + chain on one line is canonical."
+    - "placing in Zone 1 (before the quote) — quote must come first per chat01.md requirement"
+  note: "🧭 Orchestration: IS the breadcrumb. It lives in Zone 3 — AFTER the quote. Never in Zone 1
+    alongside Author. Never render a separate *🧭 Classifier → ...* italic block — that duplicates
+    the chain (P1 violation). The label + chain on one line is canonical."
 
 # ─── Template ─────────────────────────────────────────────────────────────────
 template: "🧭 Orchestration: {chain}"
