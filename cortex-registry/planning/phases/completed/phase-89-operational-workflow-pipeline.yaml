@@ -718,7 +718,7 @@ phases:
   - id: "phase-89-final"
     title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml Update"
     priority: P0
-    status: COMPLETE
+    status: PLANNED
     gap_refs: []
     depends_on: ["phase-89-e"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
@@ -733,37 +733,6 @@ phases:
         action: "Run full smoke gate — confirm ≥1,694 tests pass with zero regressions"
         gate: "python3 scripts/run_tests.py smoke"
         blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
-        completion_evidence: |
-          Smoke gate PASSED:
-          - Command: python3 scripts/run_tests.py smoke
-          - Results: 1,701 passed (baseline: 1,694), 23 xfailed, 68 skipped, 1 xpassed
-          - Duration: 32.74s (9 workers, pytest-xdist)
-          - Zero new failures (1 worker crash on test_classifier_golden.py auto-recovered)
-          - Warnings: 12 duplicate class implementations (CORE-035 review), phase marker typo
-      refactor:
-        action: "Update cortex-master.yaml: status→COMPLETE, gaps_closed→16, sub_phases_complete→6, move file to completed/"
-        gate: "cortex-master.yaml ≤500 lines, YAML valid"
-        completion_evidence: |
-          cortex-master.yaml updated:
-          - Phase 89 status: ACTIVE → COMPLETE
-          - gaps_closed: 10 → 16
-          - sub_phases_complete: 2 → 6
-          - file: planned/phase-89... → completed/phase-89...
-          - Line count: 442 lines (≤500 THIN INDEX compliant)
-          - YAML validation: PASSED
-          - consolidation_summary: v35.0 → v36.0 (89 phases — 86 COMPLETE, 0 ACTIVE)
-
-    completion_gate:
-      condition: "smoke_gate == PASSED and cortex_master_updated == true and all_gaps_verified == true"
-      verification: "grep 'status: COMPLETE' cortex-registry/_cortex-master/phases/completed/phase-89-operational-workflow-pipeline.yaml"
-      blocks_next_phase: true
-
-    completion_summary:
-      gaps_addressed: 16
-      gaps_deferred: 2  # GAP-89-13 (SDLC routing), GAP-89-16 (WorkflowOrchestrator)
-      total_tests_added: 87
-      duration: "4.5 hours (estimated: 10 hours)"
-      completion_timestamp: "2026-02-28T15:30:00Z"
       refactor:
         action: "Update phase YAML: planned/ → completed/, cortex-master.yaml status → COMPLETE"
         gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"

@@ -2,7 +2,7 @@ id: "phase-110"
 title: "CLI Entry Point — Create cortex/__main__.py so python -m cortex works end-to-end"
 version: "1.0"
 created: "2026-03-02"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008  # TDD mandatory
