@@ -1660,6 +1660,10 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ### 🗺️ Phase Roadmap: Multi-Phase Journey Overview
 
+> **Canonical ID:** `BLOCK-PHASE-ROADMAP` — used in YAML registry and cross-references
+
+<!-- ### BLOCK-PHASE-ROADMAP (canonical cross-reference anchor) -->
+
 **Trigger:** Any operation with N≥2 phases (planning, implementation, audit/fix, digest, onboard). Rendered ONCE at operation start.
 
 **Purpose:** Give the user a full journey view before work begins. Differentiates CORTEX from single-shot tools.
@@ -1692,6 +1696,10 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 ---
 
 ### 🧭 Routing Breadcrumb: Chain + Current Orchestrator
+
+> **Canonical ID:** `BLOCK-ENGAGEMENT-BREADCRUMB` — used in YAML registry and cross-references
+
+<!-- ### BLOCK-ENGAGEMENT-BREADCRUMB (canonical cross-reference anchor) -->
 
 **Implementation:** The `**Via:**` field in the response header IS this block. For multi-hop chains, populate `**Via:** {DisplayName} → {DisplayName}` on the same line as `**Author:**` in the response header. **Do NOT render a separate `*🧭 ...*` italic block after `---`** — that creates a duplicate that makes the Classifier appear twice (P1 violation).
 
@@ -1726,6 +1734,10 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 
 ### ⏱️ Engagement Timeline: Collapsible Per-Orchestrator Timing Log
 
+> **Canonical ID:** `BLOCK-ENGAGEMENT-TIMELINE` — used in YAML registry and cross-references
+
+<!-- ### BLOCK-ENGAGEMENT-TIMELINE (canonical cross-reference anchor) -->
+
 **Trigger:** Completion of any 3+ step operation. Rendered after BLOCK-METRICS-DASHBOARD.
 
 **Purpose:** Transparent performance log — shows how long each orchestrator spent, surfacing bottlenecks.
@@ -1756,6 +1768,10 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 ---
 
 ### 🔵 Stage Progress: In-Progress Orchestrator Pulse
+
+> **Canonical ID:** `BLOCK-STAGE-PROGRESS` — used in YAML registry and cross-references
+
+<!-- ### BLOCK-STAGE-PROGRESS (canonical cross-reference anchor) -->
 
 **Trigger:** Active orchestrator stage execution (intra-phase progress).
 
@@ -2917,6 +2933,8 @@ Before sending any response, verify:
 
 ## 🔬 Analysis Template
 
+> **Canonical ID:** `BLOCK-ANALYSIS` — referenced by SDLCWorkflowOrchestrator and YAML registry
+
 **Renders when:** `INVESTIGATE` / `ANALYZE` / `REQUIREMENTS` mode — any intent requesting understanding, root cause analysis, or scope definition.
 
 **Format:**
@@ -2955,6 +2973,8 @@ Before sending any response, verify:
 ---
 
 ## 🏗️ Design Decision Template
+
+> **Canonical ID:** `BLOCK-DESIGN-DECISION` — referenced by SDLCWorkflowOrchestrator and YAML registry
 
 **Renders when:** `DESIGN` / `ARCHITECTURE` / `PROPOSE` mode — any intent requesting architectural decisions, trade-off analysis, or ADR generation.
 
@@ -3001,6 +3021,8 @@ Before sending any response, verify:
 
 ## ♻️ Code Review Template
 
+> **Canonical ID:** `BLOCK-CODE-REVIEW` — referenced by SDLCWorkflowOrchestrator and YAML registry
+
 **Renders when:** `REFACTOR` / `FIX` / `REVIEW` / `IMPLEMENT` completion — any review gate or post-implementation quality report.
 
 **Format:**
@@ -3044,6 +3066,8 @@ Before sending any response, verify:
 ---
 
 ## 🔒 Security Assessment Template
+
+> **Canonical ID:** `BLOCK-SECURITY-ASSESSMENT` — referenced by SDLCWorkflowOrchestrator and YAML registry
 
 **Renders when:** `SECURITY_AUDIT` / `THREAT_MODEL` / `VULNERABILITY_SCAN` mode — any security analysis, OWASP check, or threat modeling session.
 
