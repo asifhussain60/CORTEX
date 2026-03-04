@@ -215,9 +215,9 @@ Six months after the MCP Tool Registry launched, Asif pulled the analytics.
 
 2,147,483 tool calls processed. Zero data loss. 99.97% uptime. Average response time: 23 milliseconds via stdio.
 
-The registry had grown from 4 tools to 29 registered tools, with plans for 39 total. Each one following the same protocol. Each one discoverable. Each one composable.
+The registry had grown from 4 tools to 30 registered tools, with plans for more. Each one following the same protocol. Each one discoverable. Each one composable.
 
-CORTEX could now: validate code against 38 governance rules, run tests in multiple modes, analyze code quality and complexity, search knowledge bases, generate dashboards, manage dependencies, debug across multiple languages, orchestrate deployments, and about twenty other things that Asif couldn't remember because it was 3 AM.
+CORTEX could now: validate code against 24 CORE governance rules, run tests in multiple modes, analyze code quality and complexity, search knowledge bases, generate dashboards, manage dependencies, debug across multiple languages, orchestrate deployments, and about twenty other things that Asif couldn't remember because it was 3 AM.
 
 *"You opened the doors,"* Miss G thought. *"CORTEX isn't locked in the basement anymore."*
 

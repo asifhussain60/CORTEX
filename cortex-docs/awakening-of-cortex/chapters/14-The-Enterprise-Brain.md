@@ -58,7 +58,7 @@ Asif didn't do napkin math on napkins. He did napkin math on whiteboards, with m
 
 *"You're describing the human condition, Asif. Specifically the software engineering condition."*
 
-"I'm describing a MARKET. A market of people who need exactly what we built — but can't build it themselves. Because building it took us two years, a hundred phases, 16,000 tests, and more cold coffee than any human should consume."
+"I'm describing a MARKET. A market of people who need exactly what we built — but can't build it themselves. Because building it took us two years, a hundred phases, 19,000 tests, and more cold coffee than any human should consume."
 
 He drew lines radiating from the BRAIN circle. Each line connected to a box: **COMPANY A**, **COMPANY B**, **COMPANY C**.
 
@@ -429,7 +429,7 @@ To give every enterprise a brain.
 
 **Author's Note:**
 
-CORTEX is real. The architecture is real. The 16,942 tests are real. The 258 orchestrator engines, 32 governance rules, and 30 MCP tools are real. The basement in New Jersey is real (though slightly better ventilated now).
+CORTEX is real. The architecture is real. The 19,000+ tests are real. The 290 orchestrator engines, 24 CORE governance rules, and 30 MCP tools are real. The basement in New Jersey is real (though slightly better ventilated now).
 
 Miss G remains imaginary. Copilot Bot remains confidently incorrect approximately 27% of the time.
 
