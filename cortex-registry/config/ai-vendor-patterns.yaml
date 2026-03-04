@@ -1,0 +1,94 @@
+# CORTEX Phase 121 — AI Vendor Detection Patterns
+# Authority: GAP-121-08 (YAML-driven vendor detection for extensibility)
+# Add new vendors here without any code changes to AIContextScanner.
+# confidence_weight: 1.0 = highest certainty this vendor is in use
+
+github_copilot:
+  vendor: "GitHub Copilot"
+  detection_files:
+    - ".github/copilot-instructions.md"
+    - ".github/copilot-codegeneration-instructions.md"
+    - ".github/prompts/*.md"
+    - ".github/agents/**/*.md"
+    - ".github/copilot-extensions.json"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: true
+    agent_inventory: true
+  confidence_weight: 1.0
+
+cursor:
+  vendor: "Cursor"
+  detection_files:
+    - ".cursorrules"
+    - ".cursor/rules/*.md"
+    - ".cursor/rules/*.mdc"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.9
+
+anthropic_claude:
+  vendor: "Anthropic Claude"
+  detection_files:
+    - "CLAUDE.md"
+    - ".claude/settings.json"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.9
+
+openai_codex:
+  vendor: "OpenAI Codex"
+  detection_files:
+    - "AGENTS.md"
+    - "codex.md"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: true
+  confidence_weight: 0.9
+
+aider:
+  vendor: "Aider"
+  detection_files:
+    - ".aider.conf.yml"
+    - ".aider/conventions.md"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.8
+
+amazon_q:
+  vendor: "Amazon Q"
+  detection_files:
+    - ".amazonq/rules/*.md"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.8
+
+windsurf:
+  vendor: "Windsurf"
+  detection_files:
+    - ".windsurfrules"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.8
+
+cline:
+  vendor: "Cline"
+  detection_files:
+    - ".clinerules"
+    - ".cline/instructions.md"
+  content_extractors:
+    coding_standards: true
+    prompt_inventory: false
+    agent_inventory: false
+  confidence_weight: 0.8

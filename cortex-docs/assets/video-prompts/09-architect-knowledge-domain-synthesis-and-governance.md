@@ -55,7 +55,7 @@ Does NOT repeat: self-learning mechanics (Video 08), workflow template compositi
   - `profile.id`, `profile.name`, `profile.category`, `profile.description`, `profile.tags`
   - `rules[]` each with: `id`, `name`, `severity` (critical/high/medium/low), `description`, `pattern`, `enforcement` (mandatory/recommended), optional `auto_fix: true`
   - `compatibility`: minimum CORTEX version, Python version range
-- Onboard command: `cortex_onboard_repository_v3` MCP tool — runs LENS analysis on a repository and produces a knowledge profile including business language summary and dashboard
+- Onboard command: `cortex_onboard_repository` MCP tool — runs LENS analysis on a repository and produces a knowledge profile including business language summary and dashboard
 - 32 governance YAMLs in `cortex-registry/core/` — enforced at pre-commit, CI, and runtime
 - Domain synthesis: `KnowledgeSynthesizer` (`cortex/intelligence/learning/knowledge_synthesizer.py`) + `KnowledgeRegistryProxy` (`cortex/knowledge/registry_proxy.py`) — CORTEX queries the registry and assembles a precision context per operation
 - Do NOT use acronyms in narration: say "governance rule" not "CORE-XXX", say "domain profile" not "profile ID"

@@ -192,7 +192,7 @@ DASHBOARD_DATA_SCHEMA_V2 = {
         },
         "tabs": {
             "type": "array",
-            "description": "9-tab dashboard structure",
+            "description": "10-tab dashboard structure (Phase 121: tab 10 = AI Context)",
             "items": {
                 "type": "object",
                 "required": ["id", "label"],
@@ -216,7 +216,7 @@ ONBOARDING_SUMMARY_SCHEMA_V2 = {
         "tabs": {
             "type": "array",
             "minItems": 9,
-            "maxItems": 9,
+            "maxItems": 10,
             "items": {
                 "type": "object",
                 "required": ["id", "label"],
@@ -431,7 +431,7 @@ def sample_ast_graph() -> Dict[str, Any]:
 
 @pytest.fixture
 def sample_dashboard_data() -> Dict[str, Any]:
-    """Minimal valid dashboard data artifact (schema_version 2.0.0, 9 tabs)."""
+    """Minimal valid dashboard data artifact (schema_version 2.0.0, 10 tabs — Phase 121)."""
     ts = datetime.utcnow().isoformat()
     return {
         "schema_version": CURRENT_SCHEMA_VERSION,
@@ -470,7 +470,7 @@ def sample_dashboard_data() -> Dict[str, Any]:
 
 @pytest.fixture
 def sample_onboarding_summary() -> Dict[str, Any]:
-    """Minimal valid onboarding-summary.json (schema_version 2.0.0, 9 tabs)."""
+    """Minimal valid onboarding-summary.json (schema_version 2.0.0, 10 tabs — Phase 121)."""
     return {
         "schema_version": CURRENT_SCHEMA_VERSION,
         "repository_name": "test-repo",
@@ -625,7 +625,7 @@ class TestASTGraphSchemaValidation:
 
 
 class TestDashboardDataSchemaValidation:
-    """Golden tests for dashboard data schema (v2.0.0, 9 tabs)."""
+    """Golden tests for dashboard data schema (v2.0.0, 10 tabs — Phase 121)."""
 
     def test_valid_dashboard_data_golden(
         self,
@@ -670,12 +670,12 @@ class TestDashboardDataSchemaValidation:
                 f"Score 150 for {cat!r} should be invalid"
             )
 
-    def test_tabs_array_contains_nine_entries(
+    def test_tabs_array_contains_ten_entries(
         self,
         validator: LENSDataValidator,
         sample_dashboard_data: Dict[str, Any],
     ) -> None:
-        """Golden: dashboard_data tabs array must list all 9 dashboard tabs."""
+        """Golden: dashboard_data tabs array must list all 10 dashboard tabs (Phase 121)."""
         assert len(sample_dashboard_data["tabs"]) == len(DASHBOARD_TABS)
         tab_ids = [t["id"] for t in sample_dashboard_data["tabs"]]
         expected_ids = [t["id"] for t in DASHBOARD_TABS]

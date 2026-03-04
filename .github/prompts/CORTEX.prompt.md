@@ -137,16 +137,17 @@ The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract 
 The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
-- ✅ ONE header per response, never repeated — 3-zone layout: Zone 1 (`# 🧠 CORTEX {mode}` + `**Author:**` + `🧭 Orchestration:`) → `---` → Zone 2 (`> blockquote`) → `---` → Zone 3 (work content)
+- ✅ ONE header per response, never repeated — 3-zone layout: Zone 1 (`# 🧠 CORTEX {mode}` + `**Author:**`) → `---` → Zone 2 (`> blockquote`) → `---` → Zone 3 (`🧭 Orchestration:` + work content)
 - ✅ **Product icon is fixed**: 🧠 — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
 - ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header — Canonical Spec)
-- ✅ `🧭 Orchestration: {DisplayName} → {DisplayName}` in Zone 1 of the header — omit for single-hop responses
+- ✅ `🧭 Orchestration: {DisplayName} → {DisplayName}` in Zone 3 of the header (after quote) — omit for single-hop responses
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
 - ❌ NO mode-specific icon in the H1 heading — 🧠 is the only valid icon for this prompt
-- ❌ NO `**Orchestrator:** {Name} ✅` field — use `🧭 Orchestration:` chain in Zone 1 instead
-- ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — `🧭 Orchestration:` in Zone 1 IS the breadcrumb (duplication = P1 violation)
+- ❌ NO `**Orchestrator:** {Name} ✅` field — use `🧭 Orchestration:` chain in Zone 3 instead
+- ❌ NO `🧭 Orchestration:` in Zone 1 (alongside Author) — the quote must come first; breadcrumb belongs in Zone 3
+- ❌ NO separate `*🧭 Classifier → ...*` italic block anywhere — `🧭 Orchestration:` in Zone 3 IS the breadcrumb (duplication = P1 violation)
 - ❌ NO secondary title headings inside the response body — the H1 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 

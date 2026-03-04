@@ -138,10 +138,23 @@ workflow:
       gate:
         predicate: 'md_file_count == 0'
 
+    # Step 7b: Version suffix cleanup (Phase 121 — GAP-121-13)
+    # Rename any file whose name carries an explicit _v2/_v3/-v2/-v3 suffix
+    # to its canonical un-versioned form.
+    - id: version_suffix_cleanup
+      name: 'Version suffix cleanup — rename *_v2/*_v3 files to canonical names'
+      depends_on: ['cortex_docs_validation']
+      orchestrator: 'VacuumOrchestrator'
+      action: 'run_version_suffix_cleanup'
+      params:
+        dry_run: '{{dry_run | default(false)}}'
+        excluded_dirs: ['.git', '_workspaces', 'node_modules', '.venv', 'venv']
+      outputs: ['renamed_files']
+
     # Step 8: Review + Cleanup (Phase 90 — mandatory universal epilogue)
     - id: review_and_cleanup
       name: 'Review + Cleanup — trace closure and temp file removal'
-      depends_on: ['cortex_docs_validation']
+      depends_on: ['version_suffix_cleanup']
       template_ref: 'primitives/execution/review-and-cleanup'
       inputs:
         changed_files: '{{archived_files | default([])}}'

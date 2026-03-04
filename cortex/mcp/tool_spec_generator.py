@@ -59,11 +59,6 @@ _CANONICAL_TOOLS: List[Dict[str, Any]] = [
         "inputSchema": {"type": "object", "properties": {"repo_path": {"type": "string"}}, "required": ["repo_path"]},
     },
     {
-        "name": "cortex_onboard_repository_v3",
-        "description": "Onboard repository with LENS analysis + LLM business language + SQLite dashboard",
-        "inputSchema": {"type": "object", "properties": {"repo_path": {"type": "string"}}, "required": ["repo_path"]},
-    },
-    {
         "name": "cortex_query_governance",
         "description": "Query governance state, rules, violations, and compliance data",
         "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]},

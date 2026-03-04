@@ -1,0 +1,152 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AI-Augmented Development Practices  (Phase 121 — GAP-121-09)
+# ─────────────────────────────────────────────────────────────────────────────
+# Cross-repo distillation of coding standards, conventions, and architecture
+# patterns extracted by AIContextScanner / AIContentClassifier from onboarded
+# repositories.  This file is the CORTEX-authored baseline; per-repo overrides
+# live in cortex-registry/company/domains/{repo}-ai-standards.yaml.
+#
+# Tier: DOMAIN_OVERRIDE (secondary to hand-authored company/ policies)
+# Loaded by: KnowledgeGuidanceEngine._load_ai_context_overrides()
+# Populated by: AIContextDisseminator (cortex/infrastructure/repositories/)
+# ─────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  title: "AI-Augmented Development Practices"
+  version: "1.0.0"
+  phase: 121
+  status: "active"
+  last_updated: "2026-01-01"
+  authors:
+    - "CORTEX Framework (Phase 121)"
+
+# ─── Supported AI Vendors ─────────────────────────────────────────────────────
+supported_vendors:
+  - id: "github_copilot"
+    detection_files:
+      - ".github/copilot-instructions.md"
+      - ".github/.copilot-instructions.md"
+    context_files:
+      - ".github/prompts/**/*.prompt.md"
+      - ".github/agents/**/*.md"
+    description: "GitHub Copilot workspace-level instruction files"
+
+  - id: "cursor"
+    detection_files:
+      - ".cursorrules"
+      - ".cursor/rules/**/*.mdc"
+    description: "Cursor AI editor rule files"
+
+  - id: "anthropic_claude"
+    detection_files:
+      - "CLAUDE.md"
+      - ".claude/CLAUDE.md"
+    description: "Anthropic Claude project instruction files"
+
+  - id: "aider"
+    detection_files:
+      - ".aider.conf.yml"
+      - ".aider.conventions.md"
+    description: "Aider AI coding assistant configuration"
+
+  - id: "windsurf"
+    detection_files:
+      - ".windsurfrules"
+    description: "Windsurf AI editor rules"
+
+  - id: "amazon_q"
+    detection_files:
+      - ".amazonq/dev/guidelines.md"
+    description: "Amazon Q Developer guidelines"
+
+  - id: "openai_codex"
+    detection_files:
+      - "AGENTS.md"
+      - ".codex/instructions.md"
+    description: "OpenAI Codex / Agents.md instruction files"
+
+  - id: "cline"
+    detection_files:
+      - ".clinerules"
+      - ".cline/instructions.md"
+    description: "Cline AI coding assistant rules"
+
+# ─── Universal AI-Augmented Development Standards ─────────────────────────────
+# These conventions apply to ALL repositories regardless of which AI vendor is
+# detected.  They represent cross-cutting patterns observed across the CORTEX
+# ecosystem and should be treated as ADVISORY (not blocking).
+
+standards:
+  coding_conventions:
+    - "Maintain explicit type annotations on all public functions and methods"
+    - "Write docstrings for every public class, method, and module"
+    - "Keep functions focused: single responsibility, ≤ 50 lines preferred"
+    - "Use snake_case for all identifiers (CORE-028)"
+    - "Prefer composition over inheritance; avoid deep class hierarchies"
+    - "Avoid magic numbers — use named constants or enums"
+    - "Return early to reduce nesting; avoid deeply nested conditionals"
+
+  security_rules:
+    - "Never hard-code credentials, tokens, or API keys in source files"
+    - "Strip PII (emails, personal URLs, author names) before writing to shared registries"
+    - "Validate and sanitise all external inputs at system boundaries"
+    - "Use parameterised queries; never interpolate user data into SQL or shell commands"
+    - "Apply least-privilege principle to file I/O and network operations"
+
+  architecture_patterns:
+    - "Follow CORTEX single-canonical-package rule: all imports use cortex.* (CORE-035)"
+    - "Route AI context results through AIContextDisseminator — never write directly to registry"
+    - "Respect tier precedence: hand-authored > AI-extracted > CORTEX defaults"
+    - "Orchestrators own coordination logic; tools own single-responsibility actions"
+    - "All new orchestrators must satisfy IOrchestrator protocol (OrchestratorProtocolMixin)"
+
+  testing_standards:
+    - "Write failing tests BEFORE implementation (TDD — CORE-008)"
+    - "One test class per behaviour boundary; use descriptive test names"
+    - "Use tmp_path (pytest) for file-system tests — never write to real registry in unit tests"
+    - "Mock external I/O (file reads, HTTP) to keep unit tests deterministic"
+    - "Assert on business semantics, not implementation internals"
+
+# ─── AI Instruction File Quality Signals ─────────────────────────────────────
+# Keywords / phrases that signal high-quality AI instruction content.
+# Used by AIContentClassifier to score and categorise extracted rules.
+
+quality_signals:
+  coding_conventions:
+    - "type hints"
+    - "type annotations"
+    - "docstrings"
+    - "snake_case"
+    - "naming convention"
+    - "function length"
+    - "single responsibility"
+    - "return early"
+
+  security_rules:
+    - "never hard-code"
+    - "no credentials"
+    - "pii"
+    - "sanitise"
+    - "validate input"
+    - "least privilege"
+    - "parameterise"
+
+  architecture_patterns:
+    - "single responsibility"
+    - "composition over inheritance"
+    - "dependency injection"
+    - "orchestrator"
+    - "facade"
+    - "interface"
+    - "protocol"
+    - "canonical"
+
+  testing_standards:
+    - "test first"
+    - "tdd"
+    - "failing test"
+    - "mock"
+    - "fixture"
+    - "assert"
+    - "tmp_path"
+    - "deterministic"

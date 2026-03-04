@@ -181,6 +181,10 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         for result in self.run_os_artifact_cleanup(dry_run=dry_run):
             report.operations.append(result)
 
+        # Version suffix cleanup (_v2, _v3, -v2, -v3 filename variants — Phase 121 GAP-121-13)
+        for result in self.run_version_suffix_cleanup(dry_run=dry_run):
+            report.operations.append(result)
+
         report.recount()
         # AC_COMPLETE: {_ac_id} ✅
         return report
@@ -1329,6 +1333,123 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             Dict with structural anti-pattern detection heuristics.
         """
         return self._load_anti_patterns()
+
+    def run_version_suffix_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Detect and rename files with legacy version suffixes (_v2, _v3, -v2, -v3).
+
+        Scans the workspace for filenames that carry an explicit version suffix
+        (e.g. ``ai_context_scanner_v2.py``, ``phase-120-template-v3.yaml``) and
+        renames them to their un-versioned canonical form.  The following paths
+        are excluded from scanning:
+
+        - ``.git/`` — SCM internals
+        - ``_workspaces/`` — external workspace mirrors
+        - ``node_modules/``, ``.venv/``, ``venv/`` — third-party installs
+
+        Files whose name only contains a semantic-version tag in a PEP-440 /
+        semver format (e.g. ``package-1.2.3.tar.gz``) are **not** touched.
+        Files matching ``test_*_s\\d+_*.py`` (S-numbered test shards) are also
+        excluded.
+
+        Args:
+            dry_run: If ``True``, plan renames without executing.
+
+        Returns:
+            List of :class:`OperationResult` — one entry per detected file.
+        """
+        import re
+
+        _SUFFIX_PATTERN = re.compile(r"[-_]v\d+(?=\.[^.]+$|$)", re.IGNORECASE)
+        _SEMVER_PATTERN = re.compile(r"-\d+\.\d+(\.\d+)?")
+        _S_NUMBER_PATTERN = re.compile(r"test_.*_s\d+_.*\.py$")
+        _EXCLUDED_DIRS = {".git", "_workspaces", "node_modules", ".venv", "venv", "__pycache__"}
+
+        results: List[OperationResult] = []
+        root = Path(self.workspace_root)
+
+        def _should_skip(path: Path) -> bool:
+            """Return True if path is inside an excluded directory."""
+            for part in path.parts:
+                if part in _EXCLUDED_DIRS:
+                    return True
+            return False
+
+        for candidate in root.rglob("*"):
+            if not candidate.is_file():
+                continue
+            if _should_skip(candidate):
+                continue
+
+            stem = candidate.stem
+            suffix = candidate.suffix
+
+            # Skip semantic version filenames (e.g. package-1.2.3.tar.gz)
+            if _SEMVER_PATTERN.search(stem):
+                continue
+            # Skip S-numbered test shards
+            if _S_NUMBER_PATTERN.match(candidate.name):
+                continue
+
+            match = _SUFFIX_PATTERN.search(stem)
+            if not match:
+                continue
+
+            # Build canonical (un-versioned) filename
+            clean_stem = stem[: match.start()]
+            canonical_name = clean_stem + suffix
+            canonical_path = candidate.parent / canonical_name
+
+            if canonical_path.exists():
+                # Target already exists — skip to avoid clobber
+                results.append(
+                    OperationResult(
+                        op_type="rename",
+                        source=candidate,
+                        destination=canonical_path,
+                        success=False,
+                        dry_run=dry_run,
+                        notes=f"Skipped: canonical target already exists — {canonical_name}",
+                    )
+                )
+                continue
+
+            if dry_run:
+                results.append(
+                    OperationResult(
+                        op_type="rename",
+                        source=candidate,
+                        destination=canonical_path,
+                        success=True,
+                        dry_run=True,
+                        notes=f"Would rename: {candidate.name} → {canonical_name}",
+                    )
+                )
+            else:
+                try:
+                    candidate.rename(canonical_path)
+                    results.append(
+                        OperationResult(
+                            op_type="rename",
+                            source=candidate,
+                            destination=canonical_path,
+                            success=True,
+                            dry_run=False,
+                            notes=f"Renamed: {candidate.name} → {canonical_name}",
+                        )
+                    )
+                except OSError as exc:
+                    results.append(
+                        OperationResult(
+                            op_type="rename",
+                            source=candidate,
+                            destination=canonical_path,
+                            success=False,
+                            dry_run=False,
+                            notes=f"Error renaming {candidate.name}: {exc}",
+                        )
+                    )
+
+        return results
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status of the VacuumOrchestrator.

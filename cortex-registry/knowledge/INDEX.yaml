@@ -234,6 +234,28 @@ business-rules:
       title: "Extracted Business Rules"
       keywords: ["billing", "invoice", "payment", "price", "finance", "business", "rules", "compliance", "constraint", "validation"]
 
+# ─── AI Context Knowledge (Phase 121) ────────────────────────────────────────
+# Cross-repo AI-augmented development practices extracted from onboarded repos.
+# Populated by AIContextDisseminator; consumed by KnowledgeGuidanceEngine.
+
+ai-context:
+  guides:
+    - path: "best-practices/ai-context/ai-development-practices.yaml"
+      title: "AI-Augmented Development Practices"
+      keywords:
+        - "copilot"
+        - "cursor"
+        - "claude"
+        - "agents"
+        - "prompts"
+        - "ai-context"
+        - "instructions"
+        - "aider"
+        - "codex"
+        - "windsurf"
+        - "amazon-q"
+        - "ai-vendor"
+
 # ─── Internal-Only Knowledge (never synced or released) ──────────────────────
 # CORTEX-internal knowledge. internal_only: true — excluded from all sync and
 # production release operations. Loaded only during local development sessions.

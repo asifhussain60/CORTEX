@@ -122,13 +122,21 @@ class KnowledgeGuidanceEngine:
     5. CORTEX best practices (default patterns)
     """
 
-    def __init__(self, knowledge_root: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        knowledge_root: Optional[Path] = None,
+        workspace_root: Optional[Path] = None,
+    ) -> None:
         """
         Initialize guidance engine.
 
         Args:
             knowledge_root: Root path to knowledge repository.
                            Defaults to cortex/knowledge/
+            workspace_root: Optional override for the registry root (used in tests
+                            and when a per-repo ai-standards YAML must be resolved).
+                            When provided, company/domains/{repo}-ai-standards.yaml
+                            is resolved relative to this path.
 
         Raises:
             ValueError: If knowledge repository cannot be found
@@ -141,6 +149,8 @@ class KnowledgeGuidanceEngine:
 
         self.knowledge_root = knowledge_root
         self.best_practices_root = knowledge_root / "best-practices"
+        # workspace_root is the registry base (default: two levels above cortex/)
+        self._workspace_root: Path = workspace_root or Path(__file__).parent.parent.parent
         self._cache: Dict[str, ModuleGuidance] = {}
         self._load_tier_mappings()
 
@@ -204,7 +214,8 @@ class KnowledgeGuidanceEngine:
     def get_guidance_for_module(
         self,
         module_path: str,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        repo_name: Optional[str] = None,
     ) -> ModuleGuidance:
         """
         Get comprehensive guidance for module implementation.
@@ -212,6 +223,9 @@ class KnowledgeGuidanceEngine:
         Args:
             module_path: Module path (e.g., "cortex.orchestrators.domain_brain")
             context: Optional execution context with domain, operation type, etc.
+            repo_name: Optional repository name — when provided, AI-extracted
+                       standards from company/domains/{repo_name}-ai-standards.yaml
+                       are loaded at TierLevel.DOMAIN_OVERRIDE precedence.
 
         Returns:
             ModuleGuidance with all applicable patterns and rules
@@ -223,7 +237,7 @@ class KnowledgeGuidanceEngine:
             raise ValueError("module_path must be non-empty string")
 
         # Check cache
-        cache_key = f"{module_path}:{hash(str(context))}"
+        cache_key = f"{module_path}:{hash(str(context))}:{repo_name or ''}"
         if cache_key in self._cache:
             return self._cache[cache_key]
 
@@ -245,6 +259,8 @@ class KnowledgeGuidanceEngine:
         self._load_tier_2_guidance(guidance, domain)
         self._load_best_practices_guidance(guidance, domain, module_name)
         self._load_domain_overrides(guidance, domain)
+        # Phase 121: load AI-extracted standards at DOMAIN_OVERRIDE tier
+        self._load_ai_context_overrides(guidance, repo_name)
         self._synthesize_cross_domain_guidance(guidance)
 
         # Score overall confidence
@@ -553,6 +569,53 @@ class KnowledgeGuidanceEngine:
                         )
                 except (IOError, yaml.YAMLError):
                     pass  # Domain override not available, continue with defaults
+
+    def _load_ai_context_overrides(
+        self,
+        guidance: ModuleGuidance,
+        repo_name: Optional[str],
+    ) -> None:
+        """
+        Load AI-extracted standards as secondary domain overrides (Phase 121).
+
+        Reads ``company/domains/{repo_name}-ai-standards.yaml`` produced by
+        ``AIContextDisseminator`` and appends a ``DOMAIN_OVERRIDE`` tier entry
+        when found.  Resolution order: hand-authored > AI-extracted > CORTEX defaults.
+
+        Args:
+            guidance: Guidance object to populate.
+            repo_name: Repository name; if ``None`` or file missing, this is a no-op.
+        """
+        if not repo_name:
+            return
+        if self._workspace_root is None:
+            return
+        ai_standards_path = (
+            self._workspace_root / "company" / "domains" / f"{repo_name}-ai-standards.yaml"
+        )
+        if not ai_standards_path.exists():
+            return
+        try:
+            with open(ai_standards_path, "r", encoding="utf-8") as fh:
+                data = yaml.safe_load(fh) or {}
+            standards = data.get("standards", {})
+            conventions = standards.get("coding_conventions", [])
+            if conventions:
+                guidance.guidance_entries.append(
+                    GuidanceEntry(
+                        category=GuidanceCategory.DOMAIN_PATTERNS,
+                        title=f"{repo_name.title()} AI-Extracted Standards",
+                        description=(
+                            "Coding standards extracted from AI instruction files (Phase 121)"
+                        ),
+                        priority=1,
+                        tier=TierLevel.DOMAIN_OVERRIDE,
+                        source=f"company/domains/{repo_name}-ai-standards.yaml",
+                        domain_specific=True,
+                    )
+                )
+        except (IOError, yaml.YAMLError):
+            pass  # AI context file not available — continue with defaults
 
     def _synthesize_cross_domain_guidance(self, guidance: ModuleGuidance) -> None:
         """

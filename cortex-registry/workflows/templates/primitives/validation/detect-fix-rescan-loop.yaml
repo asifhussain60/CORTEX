@@ -483,7 +483,7 @@ usage_examples:
           patterns: ['cortex_sample_tool', 'cortex_validate_compliance',
                      'cortex_load_core_rules', 'cortex_query_governance',
                      'cortex_check_dependency_drift', 'cortex_capture_metrics',
-                     'cortex_onboard_repository_v3', 'cortex_audit_remediation_plan']
+                     'cortex_audit_remediation_plan']
       fix_step:
         action: replace_stale_tool_names
         params:
@@ -494,7 +494,6 @@ usage_examples:
             cortex_query_governance: "cortex_governance (op: query)"
             cortex_check_dependency_drift: "cortex_check (op: dependencies)"
             cortex_capture_metrics: "cortex_metrics (op: capture)"
-            cortex_onboard_repository_v3: "cortex_onboard (op: full)"
             cortex_audit_remediation_plan: "cortex_governance (op: remediation_plan)"
       success_predicate: "issues_found == 0"
       max_cycles: 3

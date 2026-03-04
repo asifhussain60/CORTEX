@@ -70,6 +70,11 @@ workflow:
         file: "index.json"
         description: "CI/CD pipeline, branching strategy, release cadence"
 
+      - id: "10_ai_context"
+        label: "AI Context"
+        file: "index.json"
+        description: "AI vendor detection (Copilot, Cursor, Claude, etc.), prompt inventory, agent inventory, coding standards extracted from AI instruction files"
+
     supplementary_files:
       - "repository.yaml"       # Full analysis data in YAML
       - "profile.json"          # Compact profile with learning metrics
@@ -161,6 +166,21 @@ workflow:
         - "Detect architecture_type"
         - "Scan patterns"
 
+    - id: ai_context_scan
+      name: "AI Context Scan"
+      order: 2.5
+      blocking: false
+      actions:
+        - "AIContextScanner.scan(repo_path) → AIContextResult"
+        - "AIContentClassifier.classify(each_file) → ClassifiedContent"
+        - "AIPIIGuard.sanitize(extracted_text)"
+        - "AIContextDisseminator.disseminate(result, content, repo_name, base_dir)"
+      on_fail: "Append warning 'AI context scan failed — non-blocking', continue"
+      validation_rules:
+        - id: ai_context_no_pii
+          rule: "All outputs stripped by AIPIIGuard before write"
+          on_fail: "Block write — PII guard mandatory"
+
     - id: learning_capture
       name: "Learning Capture"
       order: 3
@@ -245,10 +265,10 @@ workflow:
       severity: P0
       test: "test_all_artifacts_schema_version"
 
-    - id: nine_tab_structure
-      description: "Every onboarded repo gets exactly 9 tab subdirectories"
+    - id: ten_tab_structure
+      description: "Every onboarded repo gets exactly 10 tab subdirectories (Phase 121: +AI Context)"
       severity: P0
-      test: "test_nine_tab_dirs_created"
+      test: "test_ten_tab_dirs_created"
 
     - id: utc_timestamps
       description: "All timestamps are datetime.utcnow().isoformat(), not midnight placeholders"

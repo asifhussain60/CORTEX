@@ -192,7 +192,7 @@ smells:
     name: "No audit fields (CreatedAt, ModifiedBy, Version)"
     files:
       - backend/Models/Models.cs
-    cortex_tool: cortex_onboard_repository_v3
+    cortex_tool: cortex_onboard_repository
     severity: P2
 
   - id: SMELL-22
@@ -243,7 +243,7 @@ smells:
 demo:
   estimated_time: "30 minutes"
   steps:
-    - tool: cortex_onboard_repository_v3
+    - tool: cortex_onboard_repository
       target: "cortex-sts/CortexLabs/BadMonolith"
       description: "LENS scan all files — produces smell inventory"
 

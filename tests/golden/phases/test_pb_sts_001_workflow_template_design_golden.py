@@ -243,11 +243,11 @@ class TestBadmonolithOnboardingIntegration:
     )
 
     def test_onboarding_summary_exists(self) -> None:
-        """onboarding-summary.json must exist (produced by cortex_onboard_repository_v3)."""
+        """onboarding-summary.json must exist (produced by cortex_onboard_repository)."""
         path = self.ONBOARDING_ROOT / "onboarding-summary.json"
         assert path.exists(), (
             f"Badmonolith onboarding summary not found at: {path}\n"
-            "Run: cortex_onboard_repository_v3(repository_path='cortex-sts/CortexLabs/BadMonolith')"
+            "Run: cortex_onboard_repository(repository_path='cortex-sts/CortexLabs/BadMonolith')"
         )
 
     def test_onboarding_has_governance_tab(self) -> None:

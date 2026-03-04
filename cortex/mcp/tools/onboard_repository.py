@@ -325,7 +325,7 @@ def onboard_repository_tool(
                 registry_kb.mkdir(parents=True, exist_ok=True)
                 registry_ast.mkdir(parents=True, exist_ok=True)
 
-                # Create 9-tab directory structure with schema_version JSON
+                # Create 10-tab directory structure with schema_version JSON (Phase 121: +AI Context)
                 now_ts = datetime.utcnow().isoformat()
                 for tab in DASHBOARD_TABS:
                     tab_dir = repo_artifacts_dir / tab["id"]
@@ -528,7 +528,7 @@ def onboard_repository_tool(
 # Schema version for golden-test assertions — single canonical version (CORE-035)
 SCHEMA_VERSION = "1.0.0"
 
-# 9-tab dashboard structure per onboarded repo
+# 10-tab dashboard structure per onboarded repo (Phase 121: tab 10 = AI Context)
 DASHBOARD_TABS = [
     {"id": "01_overview",      "label": "Overview",      "file": "index.json"},
     {"id": "02_architecture",  "label": "Architecture",  "file": "index.json"},
@@ -539,6 +539,7 @@ DASHBOARD_TABS = [
     {"id": "07_metrics",       "label": "Metrics",       "file": "index.json"},
     {"id": "08_knowledge",     "label": "Knowledge",     "file": "index.json"},
     {"id": "09_dev_workflow",  "label": "Dev Workflow",  "file": "index.json"},
+    {"id": "10_ai_context",    "label": "AI Context",    "file": "index.json"},
 ]
 
 __all__ = [
