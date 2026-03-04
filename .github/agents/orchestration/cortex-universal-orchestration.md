@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Universal Orchestration Agent
 
 **Updated:** 2026-02-20 | **Status:** ✅ ACTIVE
@@ -176,3 +179,5 @@ All TDD steps (RED → GREEN → REFACTOR → Validate → Commit) plus converge
 ---
 
 **Authority:** CORE-035 (Single Source of Truth) | **Maintainer:** Asif Hussain
+
+> **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

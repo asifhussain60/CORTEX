@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Master Planner Agent
 
 **Updated:** 2026-02-25 | **Role:** Phase-Based Planning & Sequential Execution Orchestration | **Architecture:** ROI + Dependency Graph | **Status:** ACTIVE ✅

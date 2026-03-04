@@ -1,0 +1,88 @@
+---
+# CORTEX Drift-Lock — Check #37: Response Template Canonicalization Enforcement
+# Governs: GAP-126-08 — All 8 terminal compositions must exist and be structurally valid
+# Phase: 126-h
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-37-response-template-lock"
+title: "Response Template Canonicalization Enforcement"
+check_number: 37
+phase: "phase-126-h"
+gap_id: "GAP-126-08"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_37.py"
+primary_test_file: "tests/golden/test_response_template_format_canon.py"
+
+description: >
+  Enforces that all 8 terminal composition YAML files (Phase 120 delivery) remain
+  present, parseable, and structurally valid in cortex-registry/templates/response/compositions/.
+  Validates that no proceed gate appears inside a next_steps section (must be LAST block).
+  The _registry.yaml index must remain present and parseable.
+
+required_compositions:
+  - comp-implement-fix
+  - comp-refactor
+  - comp-audit-fix
+  - comp-health
+  - comp-vacuum
+  - comp-debug
+  - comp-query
+  - comp-introduce
+
+invariants:
+  - id: "INV-37-01"
+    title: "All 8 terminal compositions exist"
+    enforcement: "HARD — glob existence assertion"
+    test_method: "test_all_eight_compositions_exist"
+
+  - id: "INV-37-02"
+    title: "All compositions parse as valid YAML"
+    enforcement: "HARD — yaml.safe_load assertion"
+    test_method: "test_all_compositions_are_parseable_yaml"
+
+  - id: "INV-37-03"
+    title: "All compositions are non-trivial (> 200 bytes)"
+    enforcement: "HARD — file size assertion"
+    test_method: "test_all_compositions_are_non_trivial"
+
+  - id: "INV-37-04"
+    title: "No proceed gate inside next_steps section"
+    description: >
+      The Proceed Gate must always be the last block in a composition.
+      Never nest a proceed/proceed_gate key inside a next_steps section.
+    enforcement: "HARD — content scan"
+    test_method: "test_no_proceed_gate_inside_next_steps_section"
+
+  - id: "INV-37-05"
+    title: "_registry.yaml index exists and is parseable"
+    enforcement: "HARD — path + yaml.safe_load assertion"
+    test_method: "test_composition_registry_is_parseable"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-064"   # Sweep Completeness Contract
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+remediation:
+  on_missing_composition: >
+    Restore the deleted composition YAML from git history. Composition files are
+    Phase 120 permanent delivery artefacts and must not be deleted.
+  on_invalid_yaml: >
+    Fix the YAML syntax error. Run: python3 -c "import yaml; yaml.safe_load(open('file'))"
+    to identify the error location.
+  on_proceed_in_next_steps: >
+    Move the proceed_gate key to be the LAST top-level key in the composition YAML.
+    It must never appear nested inside a next_steps section.
+
+evidence:
+  gap_closed: "GAP-126-08"
+  tests_created: 8
+  compositions_validated: 8
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

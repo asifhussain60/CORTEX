@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 agent_id: cortex-digest
 status: active
 layer: core
@@ -306,3 +307,5 @@ Score the source content. If score >= 5 -> auto-activate Pipeline 1. Score 3-4 -
 - DigestSessionOrchestrator: `cortex/orchestrators/support/digest_session_orchestrator.py`
 - Intelligence Engine: `cortex/intelligence/learning/digest/`
 - MCP: 29 registered (39 target) tools in `cortex/mcp/tools/`
+
+> **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

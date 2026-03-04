@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 prompt_id: cortex-total-recall
 status: active
 mode: CERTIFY

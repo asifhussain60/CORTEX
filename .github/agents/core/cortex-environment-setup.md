@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Environment Setup Agent
 
 **Updated:** 2026-02-20 | ## Role

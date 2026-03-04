@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Doc Sync Agent
 
 **Agent ID:** `doc-sync-agent`  

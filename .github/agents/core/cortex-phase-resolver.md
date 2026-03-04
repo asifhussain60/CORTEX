@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 agent_id: "cortex-phase-resolver"
 status: "active"
 layer: "core"

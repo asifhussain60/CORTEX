@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 agent_id: "cortex-master-plan-auditor"
 status: "active"
 layer: "core"
@@ -224,3 +225,5 @@ python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml
 
 ---
 
+
+> **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

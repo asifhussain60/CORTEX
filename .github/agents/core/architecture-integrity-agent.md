@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Architecture Integrity Agent
 **Created:** 2026-02-10  
 **Authority:** Phase 70 Implementation Alignment Remediation  

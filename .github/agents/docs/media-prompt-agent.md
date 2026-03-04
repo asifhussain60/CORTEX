@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Media Prompt Agent
 
 **Agent ID:** `media-prompt-agent`  

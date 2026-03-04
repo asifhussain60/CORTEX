@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Request Rephrase Orchestrator
 
 **Authority:** MCP-First Architecture + Challenge-First Protocol | **Status:** ✅ ACTIVE | **Integration:** Pre-MasterOrchestrator Gate

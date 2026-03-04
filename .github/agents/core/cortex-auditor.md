@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Auditor
 
 **Purpose:** 41-Point Production Readiness Scanning (Checks #1–#29 source code + Checks #30–#41 production hardening)

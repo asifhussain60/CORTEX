@@ -1,0 +1,79 @@
+---
+# CORTEX Drift-Lock — Check #38: cortex-registry Cohesion and Cross-Reference Integrity
+# Governs: GAP-126-09 — Registry YAML files must be parseable, internally coherent, no duplicate IDs
+# Phase: 126-i
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-38-registry-cohesion-lock"
+title: "cortex-registry Cohesion and Cross-Reference Integrity"
+check_number: 38
+phase: "phase-126-i"
+gap_id: "GAP-126-09"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_38.py"
+primary_test_file: "tests/preflight/test_registry_cohesion.py"
+
+description: >
+  Enforces that all YAML files in cortex-registry/governance/, workflows/templates/,
+  templates/response/, and core/ parse without YAML errors. Drift-lock YAML files must
+  have no duplicate IDs, must contain required fields (id, check_number, status), and
+  their primary_test_file references must point to existing test files.
+  cortex-master.yaml must remain ≤ 500 lines (Thin Index Contract).
+
+invariants:
+  - id: "INV-38-01"
+    title: "All registry YAMLs parse without error"
+    enforcement: "HARD — yaml.safe_load scan, zero-error assertion"
+    test_method: "test_all_registry_yamls_parse_without_error"
+
+  - id: "INV-38-02"
+    title: "No duplicate IDs in drift-lock YAMLs"
+    enforcement: "HARD — ID collision detection"
+    test_method: "test_no_duplicate_ids_in_drift_locks"
+
+  - id: "INV-38-03"
+    title: "All drift-lock YAMLs have required fields (id, check_number, status)"
+    enforcement: "HARD — field presence assertion"
+    test_method: "test_all_drift_lock_yamls_have_required_fields"
+
+  - id: "INV-38-04"
+    title: "Drift-lock primary_test_file references resolve to real files"
+    enforcement: "HARD — path existence assertion"
+    test_method: "test_drift_lock_primary_test_files_exist"
+
+  - id: "INV-38-05"
+    title: "cortex-master.yaml ≤ 500 lines (Thin Index Contract)"
+    enforcement: "HARD — line count assertion"
+    test_method: "test_master_yaml_does_not_exceed_line_limit"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-035"   # Single canonical implementation — no duplicates
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+remediation:
+  on_yaml_parse_error: >
+    Fix the YAML syntax error in the identified file. Validate with:
+    python3 -c "import yaml; yaml.safe_load(open('file'))"
+  on_duplicate_id: >
+    Rename one of the conflicting IDs. Drift-lock IDs must be globally unique.
+  on_missing_fields: >
+    Add the missing field(s) to the drift-lock YAML. All locks require: id, check_number, status.
+  on_broken_test_ref: >
+    Update primary_test_file to the correct test path, or create the missing test file.
+  on_master_yaml_too_long: >
+    Move inline phase detail to cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml.
+    Add only a thin reference entry to cortex-master.yaml. See THIN INDEX CONTRACT rules.
+
+evidence:
+  gap_closed: "GAP-126-09"
+  tests_created: 8
+  registry_yamls_validated: "all"
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Debug Orchestrator Agent
 
 **Role:** Multi-Stack Debugging Specialist  

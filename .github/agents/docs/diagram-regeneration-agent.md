@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Diagram Regeneration Agent
 
 **Agent ID:** `diagram-regeneration-agent`  

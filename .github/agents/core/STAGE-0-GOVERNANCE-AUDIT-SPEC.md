@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Stage 0: Synchronous Governance Audit Specification
 
 **Authority:** cortex-architect.prompt.md § Challenge-First Protocol + CORE-002 Enforcement  

@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # MCP Setup Guide — CORTEX Framework
 
 > **Pylance-style Architecture**: CORTEX MCP server auto-starts when VS Code opens the

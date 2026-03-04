@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 agent_id: cortex-sts-refactoring
 status: active
 layer: core

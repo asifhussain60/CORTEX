@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 prompt_id: cortex-sync
 status: active
 mode: DESIGN
@@ -14,6 +15,14 @@ mcp_tools:
   - cortex_governance
   - cortex_git
 token_cost_estimate: 2800
+production_files:
+  # These files ARE production-core — NEVER excluded from sync targets
+  - ".github/prompts/CORTEX.prompt.md"
+  - ".github/prompts/cortex-architect.prompt.md"
+  - ".github/agents/core/CORTEX.md"
+  - ".github/agents/core/cortex-executor.md"
+  - ".github/agents/core/cortex-architect.md"
+  - ".github/copilot-instructions.md"
 ---
 
 # CORTEX Sync Prompt

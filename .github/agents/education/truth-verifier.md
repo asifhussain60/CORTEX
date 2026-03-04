@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Truth Verifier Agent
 **Updated:** 2026-02-03 | **Role:** Implementation Truth Specialist | **Status:** ACTIVE
 

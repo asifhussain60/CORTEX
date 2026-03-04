@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # HTML View Designer Agent
 
 **Agent ID:** `html-view-designer`

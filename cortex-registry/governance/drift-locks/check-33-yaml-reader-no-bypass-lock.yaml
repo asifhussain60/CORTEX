@@ -1,0 +1,98 @@
+---
+# CORTEX Drift-Lock — Check #33: YAML Reader No-Bypass Enforcement
+# Governs: GAP-126-04 — Production cortex/ must not introduce new direct yaml.safe_load bypasses
+# Phase: 126-d
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-33-yaml-reader-no-bypass-lock"
+title: "YAML Reader No-Bypass Enforcement"
+check_number: 33
+phase: "phase-126-d"
+gap_id: "GAP-126-04"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_33.py"
+primary_test_file: "tests/preflight/test_yaml_reader_no_bypass.py"
+
+description: >
+  Enforces that the number of production cortex/ files using direct yaml.safe_load()
+  or yaml.load() calls never exceeds the ceiling established on 2026-03-04 (135 files).
+  All new YAML loading must route through cortex/core/yaml_loaders.py or the
+  RegistryYAMLReader infrastructure. Also enforces that unsafe yaml.load() without
+  Loader= argument never appears in cortex/ source (security requirement).
+  The yaml-reader.html Phase 125 viewer must remain present and non-trivial (> 1 KB).
+
+bypass_ceiling:
+  value: 135
+  established_date: "2026-03-04"
+  note: "Ceiling may only decrease as legacy call-sites migrate. Never increase."
+
+invariants:
+  - id: "INV-33-01"
+    title: "yaml.safe_load bypass file count does not exceed ceiling"
+    description: >
+      The count of production cortex/ .py files (excluding allowlist) containing
+      yaml.safe_load() or yaml.load() calls must not exceed 135.
+      New code must use cortex.core.yaml_loaders or equivalent registry infrastructure.
+    enforcement: "HARD — grep count assertion, ceiling 135"
+    test_method: "test_yaml_bypass_count_does_not_exceed_ceiling"
+
+  - id: "INV-33-02"
+    title: "cortex/core/yaml_loaders.py exists as canonical abstraction layer"
+    description: >
+      The canonical YAML loading infrastructure must exist at cortex/core/yaml_loaders.py.
+      This is the single entry point for yaml loading in the cortex package.
+    enforcement: "HARD — path existence assertion"
+    test_method: "test_core_yaml_loaders_module_exists"
+
+  - id: "INV-33-03"
+    title: "yaml_loaders.py exposes at least one load function"
+    description: >
+      cortex/core/yaml_loaders.py must expose safe_load, load_yaml, or load.
+    enforcement: "HARD — content scan"
+    test_method: "test_core_yaml_loaders_exposes_safe_load_function"
+
+  - id: "INV-33-04"
+    title: "No unsafe yaml.load() without Loader= in cortex/ source"
+    description: >
+      yaml.load() without an explicit Loader= argument is a security vulnerability
+      (arbitrary code execution). Must never appear in production cortex/ source.
+    enforcement: "HARD — regex scan, zero-match assertion"
+    test_method: "test_no_yaml_load_unsafe_variant_in_production"
+
+  - id: "INV-33-05"
+    title: "cortex-registry/yaml-reader.html exists and is non-trivial"
+    description: >
+      Phase 125 delivered the Registry-Aware Documentation Viewer as yaml-reader.html.
+      This file must remain present and non-trivial (> 1 KB).
+    enforcement: "HARD — path + size assertion"
+    test_method: "test_registry_html_viewer_accessible"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-035"   # Single canonical implementation — no duplicates
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+remediation:
+  on_ceiling_exceeded: >
+    A new file introduced direct yaml.safe_load() bypassing the canonical layer.
+    Route the new YAML loading through cortex.core.yaml_loaders.load_yaml() or
+    cortex/core/yaml_loaders.py safe_load(). Do not raise the ceiling.
+  on_missing_yaml_loaders: >
+    Restore cortex/core/yaml_loaders.py from git history. This is the canonical
+    yaml abstraction layer and must not be deleted.
+  on_unsafe_yaml_load: >
+    Replace yaml.load(f) with yaml.safe_load(f) immediately. Unsafe yaml.load
+    without Loader= is a security vulnerability (CVE category: arbitrary code exec).
+
+evidence:
+  gap_closed: "GAP-126-04"
+  tests_created: 10
+  ceiling_established: 135
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

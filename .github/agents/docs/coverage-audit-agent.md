@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Coverage Audit Agent
 
 **Agent ID:** `coverage-audit-agent`  

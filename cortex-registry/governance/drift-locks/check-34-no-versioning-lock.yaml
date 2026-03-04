@@ -1,0 +1,82 @@
+---
+# CORTEX Drift-Lock — Check #34: No-Versioning-Anywhere Guardrail
+# Governs: GAP-126-05 — Governance YAMLs and prompt/agent files must not contain version: fields
+# Phase: 126-e
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-34-no-versioning-lock"
+title: "No-Versioning-Anywhere Guardrail"
+check_number: 34
+phase: "phase-126-e"
+gap_id: "GAP-126-05"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P0"
+test_file: "tests/preflight/test_drift_lock_check_34.py"
+primary_test_file: "tests/preflight/test_no_versioning_anywhere.py"
+
+description: >
+  Enforces that CORTEX governance YAMLs, workflow templates, response atoms,
+  and prompt/agent markdown files do not contain bare version: or release: fields
+  at the document root level. CORTEX artefacts are date-stamped, not versioned.
+  Workflow template IDs must not carry _v1/_v2/-v1/-v2 suffixes.
+  Fix applied: atom-principle.yaml version: "1.0" field removed 2026-03-04.
+
+invariants:
+  - id: "INV-34-01"
+    title: "No version:/release: fields in governance/workflow/template YAMLs"
+    description: >
+      Scanned directories: cortex-registry/governance/, cortex-registry/workflows/,
+      cortex-registry/templates/, cortex-registry/core/, .github/agents/, .github/prompts/.
+      Exemptions: planning/phases/ (historical), playbooks/, artifacts/, memory/,
+      metrics/, config/, knowledge/, company/.
+    enforcement: "HARD — regex scan, zero-match assertion"
+    test_method: "test_no_version_fields_in_governance_yamls"
+
+  - id: "INV-34-02"
+    title: "agent frontmatter has no version: field"
+    enforcement: "HARD — frontmatter scan (first 30 lines)"
+    test_method: "test_no_version_fields_in_github_agents"
+
+  - id: "INV-34-03"
+    title: "prompt frontmatter has no version: field"
+    enforcement: "HARD — frontmatter scan (first 30 lines)"
+    test_method: "test_no_version_fields_in_github_prompts"
+
+  - id: "INV-34-04"
+    title: "atom-principle.yaml contains no version: field"
+    description: >
+      Specific invariant: atom-principle.yaml had version: "1.0" — removed 2026-03-04.
+      This invariant ensures it never reappears.
+    enforcement: "HARD — content scan"
+    test_method: "test_atom_principle_yaml_has_no_version_field"
+
+  - id: "INV-34-05"
+    title: "No workflow template IDs carry _v1/_v2/-v1/-v2 suffixes"
+    enforcement: "HARD — regex scan on id: fields in cortex-registry/workflows/"
+    test_method: "test_no_v1_v2_markers_in_workflow_template_ids"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-002"   # All output inline — no versioning artefacts
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P0"
+
+remediation:
+  on_version_field_found: >
+    Remove the version: or release: field from the YAML file.
+    Replace with created_date: or phase: if a temporal marker is needed.
+    If the file legitimately needs a schema marker, add to exemption list with justification.
+  on_versioned_workflow_id: >
+    Rename the workflow template ID to remove the _v1/_v2 suffix.
+    Update all references in orchestrators and workflow composer routing.
+
+evidence:
+  gap_closed: "GAP-126-05"
+  violations_fixed: 1
+  fix: "atom-principle.yaml version: '1.0' field removed"
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

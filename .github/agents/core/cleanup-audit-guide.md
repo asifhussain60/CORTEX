@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Cleanup Audit Guide (PHASE-CLEANUP)
 
 **Created:** 2026-02-12 | **Authority:** ENH-085 (PHASE-6)

@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Documentation Orchestrator
 **Updated:** 2026-03-02 (Phase 108 — Documentation Governance Layer + Design+Implement Mode) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)

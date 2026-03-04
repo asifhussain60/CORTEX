@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Drift Detection Agent
 
 **Agent ID:** `drift-detection-agent`  

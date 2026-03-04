@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Regression Sentinel Agent
 
 **Agent ID:** `regression-sentinel`

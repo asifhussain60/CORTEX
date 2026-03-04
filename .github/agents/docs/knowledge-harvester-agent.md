@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Knowledge Harvester Agent
 
 **Agent ID:** `knowledge-harvester-agent`

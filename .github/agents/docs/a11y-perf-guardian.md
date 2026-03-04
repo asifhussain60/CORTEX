@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # A11y + Perf Guardian Agent
 
 **Agent ID:** `a11y-perf-guardian`

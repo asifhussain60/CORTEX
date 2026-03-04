@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Vacuum Agent — Workspace Cleanup Specialist
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
@@ -129,3 +132,5 @@ vacuum_metrics:
 | `cortex-total-recall.prompt.md` | Parent certification pipeline |
 | `cortex-memory-agent.md` | Upstream — document lifecycle states |
 | `cortex-db-agent.md` | Downstream — SQLite cleanup |
+
+> **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

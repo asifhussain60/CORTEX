@@ -35,6 +35,8 @@ Authority: CORE-008 | CORE-011 | CORE-012 | CORE-028
 
 from __future__ import annotations
 
+import datetime
+import json
 import os
 import subprocess
 import sys
@@ -314,20 +316,73 @@ def run_preflight() -> int:
     intelligence layer, LENS pipeline, and governance infrastructure.
     Used by /audit fix Stage 9 for fast confidence checks.
 
+    Emits a machine-readable evidence report to:
+        .cortex-runtime/traces/production-readiness-evidence.json
+
     Returns:
         pytest exit code.
     """
     _print_header("Preflight — T0 wiring checks (< 10s target)")
-    code = _run_batch(
-        test_dirs=["tests/preflight/"],
-        timeout=3,
-        maxfail=5,
-        extra_ignores=False,
-        parallel=True,
-        workers=os.environ.get("CORTEX_WORKERS", "8"),
-    )
+    import time
+    start = time.perf_counter()
+    # Set guard env var so the integration test skips itself (avoids subprocess loop)
+    env_before = os.environ.get("CORTEX_INSIDE_PREFLIGHT")
+    os.environ["CORTEX_INSIDE_PREFLIGHT"] = "true"
+    try:
+        code = _run_batch(
+            test_dirs=["tests/preflight/"],
+            timeout=3,
+            maxfail=5,
+            extra_ignores=False,
+            parallel=True,
+            workers=os.environ.get("CORTEX_WORKERS", "8"),
+        )
+    finally:
+        if env_before is None:
+            os.environ.pop("CORTEX_INSIDE_PREFLIGHT", None)
+        else:
+            os.environ["CORTEX_INSIDE_PREFLIGHT"] = env_before
+    elapsed = time.perf_counter() - start
+    _emit_preflight_evidence(exit_code=code, elapsed=elapsed)
     _print_result(code)
     return code
+
+
+def _emit_preflight_evidence(exit_code: int, elapsed: float) -> None:
+    """Emit a machine-readable JSON evidence report for the production readiness gate.
+
+    Report path: .cortex-runtime/traces/production-readiness-evidence.json
+
+    Args:
+        exit_code: pytest exit code (0 = pass, non-zero = fail).
+        elapsed: Wall-clock time in seconds for the preflight run.
+    """
+    evidence_dir = Path(__file__).parent.parent / ".cortex-runtime" / "traces"
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+    report_path = evidence_dir / "production-readiness-evidence.json"
+
+    # Count preflight test files as a proxy for check count
+    preflight_dir = Path(__file__).parent.parent / "tests" / "preflight"
+    check_files = list(preflight_dir.glob("test_*.py")) if preflight_dir.exists() else []
+
+    report = {
+        "generated_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "runner": "scripts/run_tests.py preflight",
+        "status": "PASS" if exit_code == 0 else "FAIL",
+        "exit_code": exit_code,
+        "elapsed_seconds": round(elapsed, 2),
+        "checks_total": len(check_files),
+        "checks_passed": len(check_files) if exit_code == 0 else 0,
+        "evidence_artifact": str(report_path),
+        "phase": "phase-126-k",
+        "check_number": 40,
+    }
+
+    try:
+        report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    except OSError:
+        # Non-fatal — evidence emission is best-effort
+        pass
 
 
 def run_smoke() -> int:

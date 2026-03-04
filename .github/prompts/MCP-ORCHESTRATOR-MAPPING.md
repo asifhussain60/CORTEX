@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # MCP Orchestrator Mapping Guide
 **Updated:** 2026-02-23 | **Phase:** Production Readiness  
 **Authority:** CORTEX Architect | **Scope:** External Repos + SaaS Deployment

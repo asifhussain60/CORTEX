@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Vacuum Agent
 **Created:** 2026-02-03 | **Updated:** 2026-03-02 (Phase 104) | **Purpose:** Workspace Cleanup — Markdown, OS Artifacts, Build Artifacts, Root Clutter
 

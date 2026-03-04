@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Phase Creation Standards Guide
 
 **Authority:** CORE-042, CORE-008, CORE-064 | **Created:** 2026-02-12 | **Updated:** 2026-02-25

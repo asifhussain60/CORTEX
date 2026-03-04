@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Holistic Validator Agent
 
 **Updated:** 2026-02-20 | ## Role

@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX DB Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.

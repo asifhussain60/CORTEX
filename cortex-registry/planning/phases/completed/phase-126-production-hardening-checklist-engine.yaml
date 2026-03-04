@@ -1,7 +1,8 @@
 id: "phase-126"
 title: "Audit-&-Fix Production Hardening Checklist Engine"
 created: "2026-03-04"
-status: PLANNED
+status: COMPLETE
+completed_date: "2026-03-04"
 priority: P0
 governance_authority:
   - CORE-008  # TDD mandatory
@@ -121,7 +122,10 @@ sweep_catalogue:
       typed models, schema validation, caching, and cross-file reference resolution.
       grep -rn "yaml.safe_load" cortex/ --include="*.py" not enforced in CI.
     action_ref: "phase-126-d"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-d TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "tests/preflight/test_yaml_reader_no_bypass.py: 10 tests GREEN; drift lock check-33 ACTIVE; tests/preflight/test_drift_lock_check_33.py: 6 tests GREEN"
 
   - id: "GAP-126-05"
     title: "No Versioning Anywhere guardrail absent"
@@ -134,7 +138,10 @@ sweep_catalogue:
       code comments, or VS Code Copilot Chat rendered output.
       No build-blocking rule. No auto-fix suggestions.
     action_ref: "phase-126-e"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-e TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "Removed version: 1.0 from atom-principle.yaml; tests/preflight/test_no_versioning_anywhere.py: 7 tests GREEN; drift lock check-34 ACTIVE"
 
   - id: "GAP-126-06"
     title: "Repository Hygiene and Production Purity sweep incomplete"
@@ -149,7 +156,10 @@ sweep_catalogue:
       (unreachable functions, unused classes with no test coverage).
       No CI enforcement of purity sweep.
     action_ref: "phase-126-f"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-f TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "tests/preflight/test_repo_hygiene_purity.py: 8 tests GREEN; drift lock check-35 ACTIVE; tests/preflight/test_drift_lock_check_35.py: 5 tests GREEN"
 
   - id: "GAP-126-07"
     title: "Prompt/Governance determinism validation absent"
@@ -163,7 +173,10 @@ sweep_catalogue:
       - Ambiguous governance language ('may', 'might', 'optionally', 'if available')
       grep -rn "may\|might\|could\|optionally" .github/agents/ not enforced.
     action_ref: "phase-126-g"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-g TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "4 agents updated with governance footnote; tests/preflight/test_prompt_governance_determinism.py: 6 tests GREEN; drift lock check-36 ACTIVE"
 
   - id: "GAP-126-08"
     title: "Response Template canonical format not snapshot-tested"
@@ -176,7 +189,10 @@ sweep_catalogue:
       no contradictory templates, synthesis rearranges Lego pieces logically.
       Format drift can occur silently between phases.
     action_ref: "phase-126-h"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-h TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "8 terminal compositions verified; tests/golden/test_response_template_format_canon.py: 8 tests GREEN; drift lock check-37 ACTIVE"
 
   - id: "GAP-126-09"
     title: "cortex-registry cohesion checks absent"
@@ -191,7 +207,10 @@ sweep_catalogue:
       - Dependency graph validity (no circular references)
       - Windows path compatibility in all YAML path: fields
     action_ref: "phase-126-i"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-i TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: "tests/preflight/test_registry_cohesion.py: 8 tests GREEN; drift lock check-38 ACTIVE; tests/preflight/test_drift_lock_check_38.py: 6 tests GREEN"
 
   - id: "GAP-126-10"
     title: "cortex-sync non-production admin tool marker unenforced"
@@ -203,7 +222,15 @@ sweep_catalogue:
       paths. No marker field exists. No audit check validates this. cortex-sync.prompt.md
       has no enforcement preventing production-only files from being excluded from sync.
     action_ref: "phase-126-j"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-j TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: |
+      - tests/preflight/test_sync_non_production_markers.py: 5 tests GREEN (1 skipped pre-lock)
+      - 44 agent files + 6 prompt files updated with 'scope: non-production-admin'
+      - cortex-sync.prompt.md: production_files: exclusion list added to frontmatter
+      - cortex-registry/governance/drift-locks/check-39-sync-marker-lock.yaml: ACTIVE
+      - tests/preflight/test_drift_lock_check_39.py: 6 tests GREEN
 
   - id: "GAP-126-11"
     title: "Production Readiness Validation Suite Orchestrator absent"
@@ -216,7 +243,16 @@ sweep_catalogue:
       test gate. No integration test for Intelligence Diamond wiring. The
       convergence loop (CORE-068) exists but does not cover all 41 check domains.
     action_ref: "phase-126-k"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-k TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: |
+      - tests/preflight/test_production_readiness_orchestrator.py: 6 tests GREEN (1 skipped)
+      - scripts/run_tests.py: _emit_preflight_evidence() added — JSON evidence report
+      - .cortex-runtime/traces/production-readiness-evidence.json: emitted on preflight run
+      - CORTEX_INSIDE_PREFLIGHT guard prevents circular subprocess invocation
+      - cortex-registry/governance/drift-locks/check-40-production-readiness-orchestrator-lock.yaml: ACTIVE
+      - tests/preflight/test_drift_lock_check_40.py: 6 tests GREEN
 
   - id: "GAP-126-12"
     title: "Drift Lock System absent — gaps close without permanent CI guardrails"
@@ -230,7 +266,16 @@ sweep_catalogue:
       CORE-068 convergence loop re-runs but cannot block future regressions
       permanently. Same category of P0 can reappear silently after a phase.
     action_ref: "phase-126-l"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-l TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: |
+      - tests/preflight/test_drift_lock_system.py: 7 tests GREEN (self-referential system check)
+      - 12 drift lock YAMLs: check-30 through check-41 (check-41 is the drift lock system itself)
+      - 12 drift lock test files: test_drift_lock_check_{30..41}.py — all GREEN
+      - check-30 enforcement_tier: P1 field added for schema compliance
+      - cortex-registry/governance/drift-locks/check-41-drift-lock-system-lock.yaml: ACTIVE
+      - tests/preflight/test_drift_lock_check_41.py: 6 tests GREEN
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SUB-PHASES — 13 sub-phases (12 gap closures + 1 final gate)

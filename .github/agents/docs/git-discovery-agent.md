@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Git Discovery Agent
 
 **Agent ID:** `git-discovery-agent`  

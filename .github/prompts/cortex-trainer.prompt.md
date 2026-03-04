@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX Trainer Prompt
 
 **Updated:** 2026-02-26 | **Agent:** `cortex-trainer.md`

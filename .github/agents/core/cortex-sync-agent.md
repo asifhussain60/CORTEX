@@ -1,4 +1,5 @@
 ---
+scope: non-production-admin
 agent_id: cortex-sync-agent
 status: active
 layer: core

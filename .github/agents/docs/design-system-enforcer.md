@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Design System Enforcer Agent
 
 **Agent ID:** `design-system-enforcer`

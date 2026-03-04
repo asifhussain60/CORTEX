@@ -1,0 +1,28 @@
+id: "check-39-sync-marker-lock"
+check_number: 39
+phase: "phase-126-j"
+gap_id: "GAP-126-10"
+status: "ACTIVE"
+enforcement_tier: "P1"
+title: "cortex-sync Non-Production Admin Tool Marker Enforcement"
+description: |
+  Every .github/prompts/*.prompt.md and .github/agents/**/*.md that is NOT a
+  production-core file must contain 'scope: non-production-admin' in its
+  frontmatter. cortex-sync.prompt.md must declare a production_files exclusion
+  list. Production-core files must NOT carry the non-production marker.
+test_file: "tests/preflight/test_drift_lock_check_39.py"
+primary_test_file: "tests/preflight/test_sync_non_production_markers.py"
+detect_command: "python3 -m pytest tests/preflight/test_sync_non_production_markers.py -q"
+pass_criteria: "5 passed, 1 skipped"
+production_files:
+  - ".github/prompts/CORTEX.prompt.md"
+  - ".github/prompts/cortex-architect.prompt.md"
+  - ".github/agents/core/CORTEX.md"
+  - ".github/agents/core/cortex-executor.md"
+  - ".github/agents/core/cortex-architect.md"
+  - ".github/copilot-instructions.md"
+marker_required: "scope: non-production-admin"
+created: "2026-03-04"
+source_gap: "GAP-126-10"
+ci_gate: true
+auto_fix: "python3 scripts/add_scope_markers.py (or manual frontmatter addition)"

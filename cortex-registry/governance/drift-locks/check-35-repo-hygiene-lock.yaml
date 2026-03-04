@@ -1,0 +1,74 @@
+---
+# CORTEX Drift-Lock — Check #35: Repository Hygiene and Production Purity
+# Governs: GAP-126-06 — Repo must be free of backup/archive/stray-log files and dead code
+# Phase: 126-f
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-35-repo-hygiene-lock"
+title: "Repository Hygiene and Production Purity"
+check_number: 35
+phase: "phase-126-f"
+gap_id: "GAP-126-06"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_35.py"
+primary_test_file: "tests/preflight/test_repo_hygiene_purity.py"
+
+description: >
+  Enforces that the CORTEX repository contains no backup files (*.bak, *.backup, *.old),
+  archive files (*.tar.gz, *.zip), stray log files outside .cortex-runtime/, or dead
+  function definitions (def *_OLD, # DEAD CODE standalone markers) in production cortex/
+  source. VacuumOrchestrator must exist as the purity sweep integration anchor.
+
+invariants:
+  - id: "INV-35-01"
+    title: "No backup files in repo"
+    enforcement: "HARD — filesystem scan, zero-match assertion"
+    test_method: "test_no_backup_files_in_repo"
+
+  - id: "INV-35-02"
+    title: "No archive files in repo"
+    enforcement: "HARD — filesystem scan, zero-match assertion"
+    test_method: "test_no_archive_files_in_repo"
+
+  - id: "INV-35-03"
+    title: "No log files outside .cortex-runtime/"
+    enforcement: "HARD — filesystem scan, zero-match assertion"
+    test_method: "test_no_log_files_outside_cortex_runtime"
+
+  - id: "INV-35-04"
+    title: "No dead function definitions (def *_OLD) or standalone DEAD CODE markers"
+    description: >
+      Scans cortex/ for def *_OLD(...) function definitions and standalone
+      '# DEAD CODE' or '# DEPRECATED' at end-of-line. Section comments like
+      '# Deprecated method aliases — use ...' are NOT flagged (not end-of-line).
+    enforcement: "HARD — regex scan, zero-match assertion"
+    test_method: "test_no_dead_function_definitions_in_cortex_source"
+
+  - id: "INV-35-05"
+    title: "VacuumOrchestrator exists as purity sweep anchor"
+    enforcement: "HARD — glob existence assertion"
+    test_method: "test_vacuum_orchestrator_exists"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-035"   # Single canonical implementation — no duplicates
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+remediation:
+  on_backup_file: "Delete the backup file. If the content is needed, commit it as a proper file."
+  on_archive_file: "Remove archive from repo. Store binaries in release artifacts or external storage."
+  on_stray_log: "Move *.log file to .cortex-runtime/ or add to .gitignore."
+  on_dead_function: "Delete the dead function or rename it (remove _OLD suffix and implement)."
+
+evidence:
+  gap_closed: "GAP-126-06"
+  tests_created: 7
+  violations_found: 0
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

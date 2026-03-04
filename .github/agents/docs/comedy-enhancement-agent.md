@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Comedy Enhancement Agent
 
 **Agent ID:** `comedy-enhancement-agent`

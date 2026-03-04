@@ -1,0 +1,73 @@
+---
+# CORTEX Drift-Lock — Check #36: Prompt/Governance Determinism Validation
+# Governs: GAP-126-07 — Agent/prompt files must use deterministic governance language
+# Phase: 126-g
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-36-prompt-determinism-lock"
+title: "Prompt/Governance Determinism Validation"
+check_number: 36
+phase: "phase-126-g"
+gap_id: "GAP-126-07"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_36.py"
+primary_test_file: "tests/preflight/test_prompt_governance_determinism.py"
+
+description: >
+  Enforces that CORTEX agent and prompt markdown files do not use hedging language
+  ('optionally', 'if available') in governance rule sections, and that every governance
+  agent contains at least one imperative verb (must/shall/always/never/forbidden/mandatory).
+  Also enforces that copilot-instructions.md contains the mandatory P0 header rule.
+  Fixes applied 2026-03-04: Added governance footnotes to 4 agents lacking imperative verbs.
+
+invariants:
+  - id: "INV-36-01"
+    title: "No 'optionally' or 'if available' in governance rule sections"
+    description: >
+      Scanned: .github/agents/ and .github/prompts/ markdown files.
+      Exempted: cortex-sync.prompt.md (admin tool), lines describing hedging as prohibited.
+    enforcement: "HARD — regex scan, zero-match assertion"
+    test_method: "test_no_optionally_if_available_in_governance_files"
+
+  - id: "INV-36-02"
+    title: "Every agent markdown file contains at least one imperative verb"
+    description: >
+      Agent files must contain MUST, SHALL, ALWAYS, NEVER, REQUIRED, FORBIDDEN,
+      MANDATORY, DO NOT, or PROHIBITED (any case). README.md index files exempt.
+    enforcement: "HARD — content scan, all-agent assertion"
+    test_method: "test_agent_files_contain_at_least_one_imperative_verb"
+
+  - id: "INV-36-03"
+    title: "copilot-instructions.md references P0 mandatory response header"
+    enforcement: "HARD — content scan"
+    test_method: "test_copilot_instructions_has_p0_header_mandate"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-002"   # All output inline — no versioning artefacts
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+remediation:
+  on_hedging_found: >
+    Replace 'optionally' with 'when applicable:' or remove. Replace 'if available'
+    with an explicit conditional: 'When X is present, DO Y'. Make the rule deterministic.
+  on_missing_imperative: >
+    Add a governance footnote to the agent: '> **Governance:** This agent MUST ...'
+    Use MUST, NEVER, ALWAYS, or PROHIBITED to signal deterministic intent.
+
+evidence:
+  gap_closed: "GAP-126-07"
+  agents_fixed: 4
+  agents_fixed_list:
+    - ".github/agents/certification/cortex-vacuum-agent.md"
+    - ".github/agents/core/cortex-master-plan-auditor.md"
+    - ".github/agents/core/cortex-digest.md"
+    - ".github/agents/orchestration/cortex-universal-orchestration.md"
+  green_date: "2026-03-04"
+  baseline_smoke: 2634

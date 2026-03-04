@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # CORTEX ASK Coordinator Agent
 **Updated:** 2026-02-03 | **Role:** Educational Query Router | **Status:** ACTIVE
 

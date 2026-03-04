@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Release Notes Agent
 
 **Agent ID:** `release-notes-agent`  

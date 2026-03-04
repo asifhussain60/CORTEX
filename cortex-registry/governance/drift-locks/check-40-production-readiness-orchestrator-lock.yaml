@@ -1,0 +1,22 @@
+id: "check-40-production-readiness-orchestrator-lock"
+check_number: 40
+phase: "phase-126-k"
+gap_id: "GAP-126-11"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Production Readiness Validation Suite Orchestrator — 41-Check Green Gate"
+description: |
+  scripts/run_tests.py preflight must exist, have a 'preflight' mode,
+  and emit a machine-readable JSON evidence report to
+  .cortex-runtime/traces/production-readiness-evidence.json.
+  All checks complete within 120s performance budget.
+test_file: "tests/preflight/test_drift_lock_check_40.py"
+primary_test_file: "tests/preflight/test_production_readiness_orchestrator.py"
+evidence_report: ".cortex-runtime/traces/production-readiness-evidence.json"
+detect_command: "python3 -m pytest tests/preflight/test_production_readiness_orchestrator.py -q"
+pass_criteria: "6 passed, 1 skipped"
+performance_budget_seconds: 120
+ci_gate: true
+auto_fix: "MANUAL — restore scripts/run_tests.py preflight mode and evidence emission"
+created: "2026-03-04"
+source_gap: "GAP-126-11"

@@ -1,3 +1,6 @@
+---
+scope: non-production-admin
+---
 # Narrative Continuity Agent
 
 **Agent ID:** `narrative-continuity-agent`  
