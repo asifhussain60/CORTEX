@@ -18,28 +18,29 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-04T00:00:00Z'
-  total_phases: 104
+  total_phases: 105
   active: 0
   completed: 101
   in_progress: 0
-  planned: 0
+  planned: 1
   playbooks: 1
   governance_rules_total: 37
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 2388
+    smoke: 2395
     preflight: 258
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed: "phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence), phase-120 (Response Template LEGO), phase-119 (Class Consolidation CORE-035)."
-  planned_next: "TBD"
+  planned_next: "phase-123 — Principle of the Moment (anti-repetition quote selection + telemetry)"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-123, status: PLANNED,  file: "cortex-registry/planning/phases/planned/phase-123-principle-of-the-moment.yaml" }
   - { id: phase-122, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml" }
   - { id: phase-120, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-120-response-template-modular-lego.yaml" }
   - { id: phase-119, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-119-class-consolidation.yaml" }
@@ -117,16 +118,17 @@ verification:
   last_verified: '2026-03-04T00:00:00Z'
 
 summary:
-  total_phases: 104
+  total_phases: 105
   completed: 101
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   archived: 4
   playbooks: 1
   completion_percentage: 97
-  consolidation_summary: "v58.0: 2026-03-04 — Phase 122 COMPLETE (Workflow Composer Activation, 5/5 GAPs CLOSED). Phase 121 COMPLETE (AI Context Intelligence). Phase 120 COMPLETE (Response Template LEGO). Smoke: 2,395. Preflight: 258."
+  consolidation_summary: "v59.0: 2026-03-04 — Phase 123 PLANNED (Principle of the Moment). Phase 122 COMPLETE (Workflow Composer Activation, 5/5 GAPs CLOSED). Phase 121 COMPLETE (AI Context Intelligence). Phase 120 COMPLETE (Response Template LEGO). Smoke: 2,395. Preflight: 258."
   active_phases:
+    phase-123: "PLANNED 2026-03-04 — Principle of the Moment: anti-repetition quote selection + telemetry. 3 GAPs, 3 sub-phases. PrincipleSelector (cortex/intelligence/), 12 TDD tests, dedup_key ring buffer (n=10), p95 ≤ 3ms. Zero orchestrator/wiring changes."
     phase-122: "COMPLETE 2026-03-04 — Workflow Composer Activation: 5/5 GAPs CLOSED. target_files extraction (regex), threshold 0.60→0.39, 'implement' OPERATION_SCORES, cortex_workflow MCP documented, exception swallowing→structured logging. V1-V6 holistic verification PASSED. Smoke: 2395 ✅"
     phase-47: "COMPLETE 2026-02-28 — Memory Tier Architecture Migration: 3 stages, 4 GAPs CLOSED. tier1_learned/tier2_adaptive/scratch_space dirs created. BrainTierPusher TIER_PATHS wired. Golden tests GREEN. Previously unregistered in master — registered 2026-03-04."
     phase-120: "COMPLETE 2026-03-04 — Response Template System v3 LEGO: 15/15 GAPs CLOSED. 3-Tier architecture (Atoms→Blocks→Compositions). 26 YAMLs, 8 terminal compositions, 5 content blocks, 6 prompt intros. 49 golden tests GREEN. Smoke: 2388 ✅"
@@ -146,6 +148,17 @@ summary:
     phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
 
 phases:
+  # ── PHASE 123: PRINCIPLE OF THE MOMENT (2026-03-04) ──────────────────────────
+  - id: phase-123
+    title: "Principle of the Moment — Anti-Repetition Quote Selection with Telemetry"
+    priority: P2
+    status: PLANNED
+    sweep_id: SWEEP-123-PRINCIPLE-OF-THE-MOMENT
+    gaps: 3
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-123-principle-of-the-moment.yaml"
+    note: "PLANNED 2026-03-04. Additive to atom-quote.yaml. PrincipleSelector (cortex/intelligence/), ring buffer n=10, weighted random, p95 ≤ 3ms. Zero orchestrator/wiring changes. Smoke baseline: 2395."
+
   # ── PHASE 117: INTELLIGENCE DIAMOND COMPLETION (2026-03-03) ─────────────────
   - id: phase-117
     title: "Intelligence Diamond Completion — Broken Delegation Chains, Dead Intelligence Paths, Directory Flatten"
