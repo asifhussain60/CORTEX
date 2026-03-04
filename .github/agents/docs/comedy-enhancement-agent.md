@@ -211,7 +211,7 @@ Output format (inline — CORE-002):
 
 ---
 
-## 🤝 Agent Wiring
+## 🔗 Agent Wiring
 
 ```
 narrative-continuity-agent

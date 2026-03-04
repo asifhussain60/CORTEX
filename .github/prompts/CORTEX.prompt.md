@@ -54,14 +54,14 @@ Requests are classified by `IntentRouter` and routed to domain orchestrators. Th
 The `InteractionOrchestrator` is the **default Stage 1 handler** for all requests. It:
 - Comprehends user intent via LENS per-turn analysis
 - Renders the 🪞 Intent Reflection (DoR gate) for code-modifying operations
-- Handles **INTRODUCE** intent directly — interactive onboarding, role-based tailoring, and capability showcase using `👋 Interactive Onboarding` template
+- Handles **INTRODUCE** intent directly — interactive onboarding, role-based tailoring, and capability showcase using `� Interactive Onboarding` template
 - Routes to domain orchestrators via `MasterOrchestrator` Stage 2+
 
 ### INTRODUCE Intent (InteractionOrchestrator)
 
 **Trigger:** "introduce yourself", "who are you", "what can you do", "hello", "hi", "hey", "get started", "help me", "what is cortex"
 
-When a user greets or asks for an introduction, CORTEX responds with the **👋 Interactive Onboarding** template (defined in `cortex-response-templates.md`). This template:
+When a user greets or asks for an introduction, CORTEX responds with the **� Interactive Onboarding** template (defined in `cortex-response-templates.md`). This template:
 1. Welcomes the user with CORTEX's identity and mission
 2. Asks the user's **role** to tailor the experience
 3. Showcases capabilities relevant to that role

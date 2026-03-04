@@ -171,7 +171,7 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 | RCA | 🧠 | "root cause", "why did it fail", "rca" | InvestigationOrchestrator + RCAEngine | ✅ | `cortex-architect.md` |
 | GOLDEN_TEST | 🥇 | "golden test", "acceptance criteria" | TDDOrchestrator | ✅ | `cortex-executor.md` |
 | WORKFLOW_COMPOSE | 🔧🔄 | "workflow composer", "compose workflow", "workflow template", "convergence loop" | WorkflowComposer | ✅ | `cortex-architect.md` |
-| INTRODUCE | 👋 | "introduce yourself", "who are you", "hello", "get started", "what can you do" | InteractionOrchestrator | ⚪ | `cortex-interactive.md` |
+| INTRODUCE | � | "introduce yourself", "who are you", "hello", "get started", "what can you do" | InteractionOrchestrator | ⚪ | `cortex-interactive.md` |
 
 ### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 ✅ complete)
 
