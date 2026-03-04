@@ -319,6 +319,56 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 28 | **AC marker persistence gap** — `trace_master.action` column must receive `AC_START` / `AC_COMPLETE` entries whenever orchestrators run; symptom: `workflow_runs` has rows but `AC_START_COUNT == 0` means emission is silently broken | `python3 -c "import sqlite3; conn=sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); n=conn.execute(\"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\").fetchone()[0]; wf=conn.execute('SELECT COUNT(*) FROM workflow_runs').fetchone()[0]; print('AC_START='+str(n)+' WF_RUNS='+str(wf)); print('GAP' if wf>0 and n==0 else 'OK')"` — must print `OK` | 🟡 Trace `OrchestratorProtocolMixin.emit_ac_marker()` routing; ensure `OrchestratorTraceLogger._write_to_db()` inserts into `trace_master` with `action='AC_START'`/`'AC_COMPLETE'`; run `make test-smoke` to confirm |
 | 29 | **Intelligence layer health** — `IntelligenceFacade` importable; `analyze()`, `synthesize()`, `query()` methods present; `UnifiedIntelligenceContext` importable from `cortex.intelligence.models.context`; compat shims in `cortex/intelligence/base.py` resolve correctly (Phase 107 consolidation) | `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; from cortex.intelligence.models.context import UnifiedIntelligenceContext; assert hasattr(IntelligenceFacade,'analyze') and hasattr(IntelligenceFacade,'synthesize') and hasattr(IntelligenceFacade,'query'); print('OK')"` — must print `OK` | ✅ Verify `cortex/intelligence/facade.py` exists and exports `IntelligenceFacade`; verify compat shims `cortex/intelligence/base.py` and `cortex/intelligence/base_engine.py` re-export from canonical `cortex.intelligence.models`; run `make test-smoke` |
 
+### Extended Hardening Checks — Phase 126 Production Hardening Engine (Checks #30–#41)
+
+**Authority:** `cortex-registry/planning/phases/planned/phase-126-production-hardening-checklist-engine.yaml`
+**Workflow Primitive:** `cortex-registry/workflows/templates/primitives/governance/drift-lock-emit.yaml`
+**Drift Lock Dir:** `cortex-registry/governance/drift-locks/` — every gap close emits a permanent lock YAML + preflight test
+
+**Evidence requirement:** These checks REFUSE to mark PASS without verifiable artifacts (grep outputs, test results, JSON evidence report). Self-attestation is not accepted.
+
+| # | Check | Detect Command | Pass Criteria | Auto-Fix |
+|---|-------|----------------|---------------|----------|
+| 30 | **Windows out-of-box boot wiring** — `setup-mcp.py` uses `sys.executable`, `pathlib.Path`; `python -m cortex --help` exits 0; no hardcoded POSIX paths in `cortex/` without pathlib guard; no `os.system` without platform guard | `grep -rn 'os\.path\.' cortex/ --include='*.py' \| grep -v 'pathlib\|test_\|#.*intentional' \| wc -l` — must be `0`; `python3 scripts/setup-mcp.py --dry-run` — exit 0 | 0 matches, exit 0 | ✅ Replace `os.path` → `pathlib.Path`; add platform guard |
+| 31 | **Architecture runtime connectivity** — InteractionOrchestrator → LENS → IntelligenceFacade → cortex-registry YAML chain proven live (not stub) at runtime; all components return non-empty non-default data | `python3 -c "from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator; io=InteractionOrchestrator(); r=io.health_check(); assert r.get('status')=='healthy', r; print('OK')"` — must print `OK`; run `tests/preflight/test_architecture_runtime_connectivity.py` | All GREEN, no stubs | 🟡 Wire disconnected component; report if > 3 cycles |
+| 32 | **Stub/Mock/Blank Object eradication** — no TODO/FIXME in `cortex/` production code; no `raise NotImplementedError` in non-abstract classes; no feature-flag-disabled wiring; no `return {}`/`return []` without business logic in orchestrator public methods | `grep -rn "TODO\|FIXME\|raise NotImplementedError\|return {}\|return \[\]" cortex/ --include="*.py" \| grep -v "test_\|#.*intentional\|abstract"` — must return `0` lines; `grep -rn "disabled.*=.*True\|enabled.*=.*False" cortex/ --include="*.py" \| grep -v test_` — must return `0` | 0 matches in both scans | ✅ Delete or implement; remove feature-flag-disabled paths |
+| 33 | **YAML Reader no-bypass** — all YAML access in `cortex/` routes through `RegistryYAMLReader`; no direct `yaml.safe_load`/`yaml.load` outside registry/reader module; `RegistryYAMLReader` exposes: type_detection, schema_specific_parsing, caching, cross_file_reference_resolution, dependency_graph, hot_reload, parser_registration | `grep -rn "yaml\.safe_load\|yaml\.load(" cortex/ --include="*.py" \| grep -v "registry\|yaml_reader\|test_\|#.*intentional"` — must return `0` lines | 0 bypass calls | ✅ Route through `RegistryYAMLReader` |
+| 34 | **No Versioning Anywhere** — repo-wide scan blocks any `version:`, `v1`/`v2` markers, semver strings, release tags, or versioning language in YAML, prompt/agent, governance, workflow template, or code comment files; build blocks on violation; auto-fix suggested | `grep -rn "\"version\":\|version:\s\|release:\s\|semver\|\bv1\b\|\bv2\b" cortex-registry/ .github/ --include="*.yaml" --include="*.md" \| grep -v "Python 3\|pytest\|tree-sitter\|requirements\|__version__\|>=\|==\|#.*intentional"` — must return `0` lines | 0 matches | ✅ Remove version fields; add `CORE-NO-VERSION` to skull-rules.yaml |
+| 35 | **Repository Hygiene/Production Purity** — no `*.backup`, `*.bak`, `*.old`, `*.tar.gz`, `*.zip` in repo; no `*.log` outside `.cortex-runtime/`; no `_OLD`/`DEPRECATED`/dead function definitions in `cortex/` production source | `find . -name "*.backup" -o -name "*.bak" -o -name "*.old" \| grep -v ".git" \| wc -l` — must be `0`; `find . -name "*.log" \| grep -v ".cortex-runtime" \| wc -l` — must be `0` | 0 files in all scans | ✅ Delete; add purity stage to `VacuumOrchestrator` |
+| 36 | **Prompt/Governance Determinism** — no hedging language ('may', 'might', 'could', 'optionally', 'if available') in `.github/agents/` or `.github/prompts/` governance sections; every agent governance section uses imperative verbs (MUST/SHALL/ALWAYS/NEVER); no agent contradicts another on same action | `grep -rn "\bmay\b\|\bmight\b\|\bcould\b\|\boptionally\b\|\bif available\b" .github/agents/ .github/prompts/ \| grep -v "test_\|#\|cortex-sync"` — must return `0` lines | 0 hedging matches | ✅ Rewrite to imperative |
+| 37 | **Response Template golden snapshot** — all 8 terminal compositions pass: H2 before H3 before H4 (no inversions), one list item per line (no inline lists), no repeated heading block in same composition, Proceed Gate always last block and never inside `## Next Steps` | `python3 -m pytest tests/golden/test_response_template_format_canon.py -p no:xdist` — must be `100% GREEN` | All GREEN | ✅ Fix hierarchy violations; regenerate golden snapshots |
+| 38 | **cortex-registry cohesion** — `RegistryYAMLReader.validate_integrity()` returns `orphans=0, broken_refs=0, duplicate_ids=0, circular_refs=0`; all YAML `path:` fields use Windows-compatible forward-slash patterns | `python3 -c "from cortex.repositories.yaml_reader import RegistryYAMLReader; r=RegistryYAMLReader(); rep=r.validate_integrity(); assert rep['orphans']==0 and rep['broken_refs']==0 and rep['duplicate_ids']==0, rep; print('OK')"` — must print `OK` | OK | ✅ Remove orphans; fix broken refs; deduplicate IDs |
+| 39 | **cortex-sync non-production markers** — every `.github/prompts/*.prompt.md` and `.github/agents/**/*.md` EXCEPT production core files contains `scope: non-production-admin` frontmatter; `cortex-sync.prompt.md` has `production_files` exclusion list | `python3 tests/preflight/test_sync_non_production_markers.py` — must print `ALL PASS` | ALL PASS | ✅ Inject `scope: non-production-admin` in frontmatter |
+| 40 | **Production Readiness Orchestrator (Green Gate)** — single `python3 scripts/run_tests.py preflight` command runs all 41 checks end-to-end; emits JSON evidence report to `.cortex-runtime/traces/production-readiness-evidence.json`; completes in < 120s; Intelligence Diamond integration test passes; approval gate blocks if any check fails | `python3 scripts/run_tests.py preflight` — ≥258 tests, all GREEN, runtime < 120s; `cat .cortex-runtime/traces/production-readiness-evidence.json \| python3 -c "import json,sys; r=json.load(sys.stdin); assert all(c['status']=='PASS' for c in r['checks']), r"` | All 41 checks PASS | ✅ CORE-068 loop |
+| 41 | **Drift Lock System** — every gap close emits: (1) `cortex-registry/governance/drift-locks/<check-id>-lock.yaml` with `ci_gate: true`; (2) `tests/preflight/test_drift_lock_<check-id>.py` that runs detect_command and asserts pass_criteria; drift-lock-emit.yaml primitive wired into audit-fix Stage 8 | `ls cortex-registry/governance/drift-locks/ \| wc -l` — must be ≥11; `python3 scripts/run_tests.py preflight` drift lock tests all GREEN | ≥11 locks, all GREEN | ✅ Auto-emit from `drift-lock-emit.yaml` primitive |
+
+### Drift Lock Protocol (Check #41 — Permanent Guardrail)
+
+**Every gap closed by `/audit fix` MUST emit a drift lock — no exceptions.**
+
+**Lock YAML schema (`cortex-registry/governance/drift-locks/<check-id>-lock.yaml`):**
+```yaml
+lock_id: "LOCK-{CHECK_ID}-{YYYY-MM-DD}"
+check_id: "{e.g. check-30}"
+domain: "{e.g. windows-boot}"
+detect_command: "{exact grep/python3 command that returns 0 or expected output when clean}"
+pass_criteria: "{exact expected output or 'exit 0'}"
+severity: P0      # locks are always P0 — never degrade
+ci_gate: true     # blocks merge if violated
+auto_fix: "{command or MANUAL}"
+created: "{YYYY-MM-DD}"
+source_gap: "{e.g. GAP-126-01}"
+```
+
+**Corresponding test (`tests/preflight/test_drift_lock_<check-id>.py`):**
+- Runs `detect_command` via `subprocess`
+- Asserts output matches `pass_criteria`
+- Tagged with `@pytest.mark.preflight` so it runs in every `preflight` gate
+- Failure = build block = merge blocked
+
+**Primitive:** `cortex-registry/workflows/templates/primitives/governance/drift-lock-emit.yaml`
+**Wired into:** `/audit fix` Stage 8 (auto-fix convergence) — invoked once per GAP closed
+
 ### Wiring Contract Validation (Stage 3)
 
 **Authority:** `architecture-integrity-agent.md` | **Source:** `cortex-registry/core/specifications/` (`orchestration-master-wiring.yaml`, `core-orchestrator-wiring.yaml`, `domain-orchestrator-wiring.yaml`, `support-orchestrator-wiring.yaml`)

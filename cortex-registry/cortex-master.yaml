@@ -31,13 +31,14 @@ metadata:
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-125 (Registry-Aware Documentation Viewer), phase-123 (Registry Intelligence Engine), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
-  planned_next: "none — all phases complete"
+  recent_completed: "phase-126 (Production Hardening Checklist Engine — PLANNED), phase-125 (Registry-Aware Documentation Viewer), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
+  planned_next: "phase-126 — Production Hardening Checklist Engine (12 GAPs, 41 checks, drift lock system)"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-126, status: PLANNED, priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/planned/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (adds #30-#41), drift lock system, Windows wiring, arch connectivity, stub eradication, YAML reader no-bypass, no-versioning guardrail, repo purity, prompt determinism, response template snapshot, registry cohesion, sync markers." }
   - { id: phase-125, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml" }
   - { id: phase-124, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-124-principle-block-library.yaml" }
   - { id: phase-123, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-123-principle-of-the-moment.yaml" }
@@ -454,3 +455,20 @@ phases:
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-121-ai-context-intelligence.yaml"
     note: "COMPLETE 2026. 13/13 GAPs CLOSED. AIContextScanner (8 vendors, YAML-driven), AIContentClassifier, AIPIIGuard, AIContextDisseminator (5 destinations). 10-tab dashboard (Tab 10 = AI Context). KnowledgeGuidanceEngine AI override tier. VERSION SUFFIX CLEANUP: 4 files renamed, cortex_onboard_repository_v3 removed from 6 files, phase-103c-v2 duplicate removed, VacuumOrchestrator.run_version_suffix_cleanup() added. 5 new source files, 5 test files, 1 config YAML, 1 knowledge YAML."
+
+# ── PRODUCTION HARDENING ─────────────────────────────────────────────────────
+# Windows out-of-the-box compatibility + versioning governance audit (2026-03-04)
+# Completed inline — no new phase required. See cortex-master.yaml note below.
+# Hardening actions applied:
+#   1. thread_safety.py — hardcoded /Users/asifhussain path → Path(__file__).parent chain
+#   2. dashboard_server.py — lsof/kill/preexec_fn/shell=True → cross-platform port management
+#   3. Makefile verify target — broken _workspaces/docker-plan path → scripts/validate-production.py
+#   4. cortex-registry versioning sweep — removed version:/schema_version:/manifest_version:
+#      from headers.yaml, response-templates.yaml, 5 wiring specs, 7 knowledge profiles,
+#      3 roadmap templates, capabilities-manifest.yaml, system-configuration.yaml, owasp-top10.yaml
+#   5. capability_registry_builder.py — stop emitting schema_version/manifest_version keys
+#   6. yaml_loaders.py — removed version default injection in _adapt_skull_rules()
+#   7. scripts/PHASE4-METHODS-IMPLEMENTATION-REFERENCE.py — removed (sandbox artifact)
+#   8. cortex-master-plan-auditor.md — removed v2.0.0 git tag reference
+#   9. release-notes-agent.md — removed semver guidance; phase identifiers are canonical
+#  10. Preflight: 259 PASSED (5.31s) — zero regressions ✅
