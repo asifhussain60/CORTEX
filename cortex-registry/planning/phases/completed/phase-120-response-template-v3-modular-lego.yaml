@@ -1,0 +1,1293 @@
+phase_id: phase-120# ============================================================================
+
+title: "Response Template System v3 — Modular LEGO Architecture with Terminal Compositions"# CORTEX Phase 120: Response Template System v3 — Modular LEGO Architecture
+
+status: COMPLETE# ============================================================================
+
+priority: P1# Authority: cortex-architect.prompt.md + cortex-response-templates.md
+
+sweep_id: SWEEP-120-RESPONSE-TEMPLATE-V3# Governance: CORE-008 (TDD), CORE-002 (inline only), CORE-035 (no duplicates),
+
+completed_date: "2026-03-04"#             CORE-064 (sweep completeness), CORE-068 (convergence gate)
+
+author: "Asif Hussain"# Predecessors: Phase 82 (Response Template Engine v2),
+
+version: "1.0"#               Phase 85 (Unified Response Orchestrator Engagement),
+
+#               Phase 92 (Engagement Block Wiring),
+
+description: |#               Phase 113 (Request Sequence Persistence)
+
+  Implemented 3-Tier LEGO architecture (Atoms → Blocks → Compositions) for the CORTEX# SSOT: .github/templates/cortex-response-templates.md
+
+  response template system. Created 26 new YAMLs under cortex-registry/templates/response/,# ============================================================================
+
+  8 terminal compositions, 5 new content blocks, status footer, cumulative reflection, and
+
+  6 prompt intros. Migrated 6 legacy YAMLs (2,029 lines). Fixed 3 drifted prompts.id: "phase-120"
+
+  Authored 49 golden tests (40 functional + 9 rendering contract). Smoke: 2,388 GREEN.title: "Response Template System v3 — Modular LEGO Architecture with Terminal Compositions"
+
+version: "1.0"
+
+architecture:created: "2026-03-04"
+
+  tier_1: "Atoms — primitive content tokens"completed: "2026-03-04"
+
+  tier_2: "Blocks — composable content sections"status: COMPLETE
+
+  tier_3: "Compositions — terminal assembled responses"priority: P1
+
+  new_yamls: 26governance_authority:
+
+  legacy_migrated: 6  - CORE-002   # All output inline — never create .md/.txt files
+
+  legacy_lines: 2029  - CORE-008   # TDD mandatory
+
+  - CORE-035   # Single canonical implementation — no duplicates
+
+sub_phases:  - CORE-064   # Sweep Completeness Contract
+
+  - id: s1  - CORE-068   # Universal Convergence Gate
+
+    title: "Atom Layer — primitive tokens"  - CORE-049   # Silent autonomous execution
+
+    status: COMPLETE  - CORE-RESP-001  # Every response ends with proceed gate or completion state
+
+  - id: s2sweep_catalogue_id: "SWEEP-120-RESPONSE-TEMPLATE-V3"
+
+    title: "Block Layer — composable sections"completion_evidence:
+
+    status: COMPLETE  smoke_tests_at_completion: 2388
+
+  - id: s3  golden_tests_at_completion: 279
+
+    title: "Composition Layer — 8 terminal compositions"  all_gaps_closed: true
+
+    status: COMPLETE  all_sub_phases_complete: true
+
+  - id: s4  ac_markers_logged: true
+
+    title: "Content Blocks — 5 new blocks"  completed_by: "Asif Hussain"
+
+    status: COMPLETE  completion_date: "2026-03-04"
+
+  - id: s5
+
+    title: "Legacy YAML migration (6 files, 2029L)"# ─────────────────────────────────────────────────────────────────────────────
+
+    status: COMPLETE# BACKGROUND — why this phase exists
+
+  - id: s6# ─────────────────────────────────────────────────────────────────────────────
+
+    title: "Prompt drift repair (3 prompts)"background: |
+
+    status: COMPLETE  Source: User session 2026-03-04 — identified 7 architectural issues in the
+
+  - id: s7  response template system through live VS Code Copilot Chat rendering analysis:
+
+    title: "Golden test suite — 49 tests (40 functional + 9 rendering contract)"
+
+    status: COMPLETE  1. HEADER LAYOUT: Identity/Quote/Routing blocks merged on adjacent lines,
+
+     causing visual confusion in narrow Copilot Chat panels (screenshot evidence).
+
+acceptance_criteria:  2. TERMINAL COMPOSITIONS: Only 2 terminal blocks exist (PROCEED-GATE,
+
+  - id: AC-P120-001     COMPLETION-STATE) — insufficient for 8 lifecycle scenarios (DoR negotiation,
+
+    description: "3-Tier LEGO architecture implemented under cortex-registry/templates/response/"     DoD achieved, error halt, challenge gate, continuation, phase completion).
+
+    status: CLOSED  3. NO STATUS FOOTER: No session-level metrics bar showing DoR%, tokens, mode.
+
+    evidence: "26 new YAML files created across atom/block/composition tiers"  4. SINGLE-TURN REFLECTION: Intent Reflection shows only current request,
+
+  - id: AC-P120-002     not cumulative session context from prior turns.
+
+    description: "8 terminal compositions authored"  5. MISSING CONTENT BLOCKS: No FAQ, Glossary, Learning Path, Command Reference,
+
+    status: CLOSED     or Session Summary templates exist despite clear user need.
+
+    evidence: "8 composition YAMLs in cortex-registry/templates/response/compositions/"  6. LEGACY SPRAWL: 6+ YAML files across cortex-registry (2,029 total lines)
+
+  - id: AC-P120-003     contain duplicated/outdated response template definitions with no single
+
+    description: "6 legacy YAMLs (2,029 lines) migrated to new structure"     canonical location.
+
+    status: CLOSED  7. PROMPT INTRO GAPS: 6 prompts have no intro template for IntentRouter
+
+    evidence: "Legacy response templates consolidated into LEGO architecture"     to surface when a user asks "what does this prompt do?"
+
+  - id: AC-P120-004  8. NO E2E GOLDEN TESTS: Terminal compositions, status footer, and cumulative
+
+    description: "3 drifted prompts fixed"     reflection have no golden test coverage.
+
+    status: CLOSED  9. DRIFT: CORTEX.prompt.md L146 contradicts all other files about Via: placement.
+
+    evidence: "Prompt files updated to reference new block-based template system"     cortex-sync.prompt.md uses forbidden **Orchestrator:** format.
+
+  - id: AC-P120-005     cortex-total-recall.prompt.md missing routing field entirely.
+
+    description: "49 golden tests passing (40 functional + 9 rendering contract)"
+
+    status: CLOSED  Score at entry: 7/10 (functional but unstructured, with visual hierarchy issues)
+
+    evidence: "Smoke: 2,388 GREEN. Golden: 279 PASS."  Target score: 9.5/10 (modular, governed, golden-tested, zero drift)
+
+  - id: AC-P120-006  Baseline measurements:
+
+    description: "Status footer + cumulative reflection blocks added"    - Smoke tests: 2,340 passed
+
+    status: CLOSED    - Response template SSOT: 3,118 lines (cortex-response-templates.md)
+
+    evidence: "New content blocks present in block layer YAMLs"    - Legacy YAML files: 6 files, 2,029 lines (scattered across cortex-registry)
+
+  - id: AC-P120-007    - Terminal compositions: 2 (need 8)
+
+    description: "6 prompt intros authored"    - Content blocks: 19 + 3 informal (need 24 + 5 new)
+
+    status: CLOSED    - Golden tests covering response templates: 2 files
+
+    evidence: "Prompt intro compositions in cortex-registry/templates/response/"    - Prompts without intro template: 6 of 6
+
+
+
+sweep_catalogue:# ─────────────────────────────────────────────────────────────────────────────
+
+  - gap: "GAP-120-01: Atom layer missing"# VS CODE COPILOT CHAT RENDERING CONTRACT
+
+    status: CLOSED# Source: Official docs fetched 2026-03-04
+
+  - gap: "GAP-120-02: Block layer missing"#   - https://code.visualstudio.com/docs/copilot/chat/copilot-chat
+
+    status: CLOSED#   - https://code.visualstudio.com/docs/copilot/customization/custom-instructions
+
+  - gap: "GAP-120-03: Composition layer missing"#   - https://code.visualstudio.com/docs/copilot/customization/prompt-files
+
+    status: CLOSED#   - https://docs.github.com/en/copilot/using-github-copilot/copilot-chat/asking-github-copilot-questions-in-your-ide
+
+  - gap: "GAP-120-04: Terminal compositions not defined"# ─────────────────────────────────────────────────────────────────────────────
+
+    status: CLOSED# Every atom/block/composition YAML MUST include a rendering_rules section.
+
+  - gap: "GAP-120-05: Legacy YAMLs not migrated"# All templates must be validated against these constraints before use.
+
+    status: CLOSED# ─────────────────────────────────────────────────────────────────────────────
+
+  - gap: "GAP-120-06: Status footer block missing"
+
+    status: CLOSEDvscode_copilot_chat_rendering_contract:
+
+  - gap: "GAP-120-07: Cumulative reflection block missing"  source_urls:
+
+    status: CLOSED    - "https://code.visualstudio.com/docs/copilot/chat/copilot-chat"
+
+  - gap: "GAP-120-08: Prompt intros missing"    - "https://code.visualstudio.com/docs/copilot/customization/custom-instructions"
+
+    status: CLOSED    - "https://code.visualstudio.com/docs/copilot/customization/prompt-files"
+
+  - gap: "GAP-120-09: 3 prompts drifted from template spec"    - "https://docs.github.com/en/copilot/using-github-copilot/copilot-chat/asking-github-copilot-questions-in-your-ide"
+
+    status: CLOSED  fetched: "2026-03-04"
+
+  - gap: "GAP-120-10: Golden test suite missing"
+
+    status: CLOSED  # ── WHAT RENDERS CORRECTLY ────────────────────────────────────────────────
+
+  - gap: "GAP-120-11: Rendering contract tests missing"  supported_elements:
+
+    status: CLOSED    markdown_headings:
+
+  - gap: "GAP-120-12: Smoke regression (2388 baseline)"      h1: "Renders large — use ONCE per response as the single title block"
+
+    status: CLOSED      h2: "Major section separators — renders as visible divider"
+
+  - gap: "GAP-120-13: 5 new content blocks undefined"      h3: "Sub-sections — renders cleanly"
+
+    status: CLOSED      h4: "Minor sub-sections — renders but becomes visually flat below ##"
+
+  - gap: "GAP-120-14: 6 prompt intros undefined"      rule: "Never more than 3 heading levels in a single response (H1, H2, H3 max)"
+
+    status: CLOSED
+
+  - gap: "GAP-120-15: LEGO composition documentation missing"    text_formatting:
+
+    status: CLOSED      bold: "**text** — renders correctly, use for key values and field labels"
+
+      italic: "*text* — renders correctly, use sparingly for emphasis"
+
+verification:      inline_code: "`code` — renders with monospace highlight, use for paths/commands/symbols"
+
+  smoke_tests: "2,388 passed"      blockquote: "> text — renders with left-accent bar, ideal for quotes and callouts"
+
+  golden_tests: "279 PASS"      horizontal_rule: "--- — renders as visible separator; use between ZONES in 3-zone header"
+
+  preflight_tests: "258 passed, 9 skipped in 5.37s"      note: "Single blank line = paragraph break. Double HR spacing creates visual breathing room."
+
+  golden_phase_tests: "49 (40 functional + 9 rendering contract)"
+
+  last_verified: "2026-03-04"    lists:
+
+      bullet_list: "- item — renders correctly, clean bullet points"
+
+notes: |      numbered_list: "1. item — renders correctly, good for ordered steps"
+
+  Phase 120 is the v1.0-certified baseline. Completed as part of production certification      nested_list: "  - sub — renders, but LIMIT to 1 nesting level maximum in chat panel"
+
+  sprint alongside Phase 119 (Class Consolidation). The LEGO architecture establishes the      rule: "Do NOT nest lists more than 1 level deep — becomes visually cluttered in narrow panel"
+
+  canonical response template system for all CORTEX orchestrators.
+
+  Registered in cortex-master.yaml alongside phase-119 housekeeping.    code_blocks:
+
+      fenced: "```lang\\n...\\n``` — renders with syntax highlighting and copy button"
+      inline: "`text` — monospace highlight"
+      rule: "Keep code blocks focused — long blocks require scrolling inside the panel"
+
+    tables:
+      support: "GFM tables render correctly with column alignment"
+      max_columns: "Prefer ≤4 columns — more than 5 become unreadable in narrow chat panel"
+      max_rows: "Prefer ≤10 rows in visible tables; use collapsible for longer lists"
+      rule: "Always use header row. Never omit the separator line (|---|)"
+
+    collapsible:
+      html_details: "<details><summary>Title</summary>content</details> — renders as expandable"
+      rule: "USE for: engagement timelines, verbose step logs, long tables (>10 rows)"
+      rule2: "NEVER use <details> for primary content — key info must be visible by default"
+      tree_chars_warning: "├─ └─ tree characters COLLAPSE in some VS Code themes — FORBIDDEN"
+
+    images: "Not applicable for LLM-generated responses (binary, not text)"
+    html_elements: "Only <details>/<summary> are safe. Other HTML tags may not render consistently."
+
+  # ── WHAT DOES NOT RENDER / RENDERS POORLY ────────────────────────────────
+  forbidden_or_degraded_elements:
+    - element: "Tree branch characters (├─ └─ │)"
+      reason: "Collapse in VS Code Copilot Chat dark themes — appear as boxes or missing"
+      rule: "FORBIDDEN — use indented bullet lists instead"
+    - element: "HTML tags other than <details>/<summary>"
+      reason: "VS Code renders in a sandboxed webview — arbitrary HTML may be stripped"
+      rule: "FORBIDDEN — use Markdown equivalents only"
+    - element: "Multiple H1 headings in one response"
+      reason: "Creates visual confusion — H1 is reserved for the single response title"
+      rule: "EXACTLY ONE H1 per response"
+    - element: "Deeply nested lists (3+ levels)"
+      reason: "Indentation collapses to unreadable in narrow 400px chat panel"
+      rule: "MAX 1 nesting level"
+    - element: "KaTeX math blocks in templates"
+      reason: "Renders in chat but is inappropriate for operational templates"
+      rule: "OMIT from all response templates (fine in SSOT documentation only)"
+    - element: "Raw URLs without markdown link syntax"
+      reason: "Renders as long unclickable strings in narrow panels"
+      rule: "Always wrap: [text](url)"
+    - element: "Tables with more than 5 columns"
+      reason: "Overflow horizontally in narrow chat panel — loses right columns"
+      rule: "≤4 columns preferred, ≤5 max. Split wide tables into two narrow ones."
+    - element: "Continuous text blocks longer than ~150 words without a break"
+      reason: "Dense prose is hard to scan in chat; user cannot extract key info"
+      rule: "Break at 100 words max with bullet list, table, or heading"
+
+  # ── LAYOUT CONSTRAINTS ────────────────────────────────────────────────────
+  layout_constraints:
+    panel_width: "VS Code Chat panel is typically 300–500px wide (resizable but narrow by default)"
+    scroll_behavior: "Responses are scrollable — long responses are acceptable but key info must appear first"
+    response_token_budget: "~800 words (≈3,000 tokens) per visible response segment before user must scroll"
+    heading_visual_weight:
+      h1: "~24px, bold, blue-tinted in VS Code dark theme — strong landmark"
+      h2: "~18px, bold, lighter — section divider"
+      h3: "~14px, bold — subsection"
+    hr_rendering: "--- renders as a full-width line — ideal for zone separation in header"
+    blockquote_rendering: "> renders with left blue accent bar — preserves quote identity visually"
+
+  # ── COPILOT-INSTRUCTIONS.MD CONSTRAINTS ──────────────────────────────────
+  copilot_instructions_rendering_rules:
+    format: "Plain Markdown (.md) — no YAML frontmatter needed"
+    auto_loaded: "true — injected into EVERY chat request automatically"
+    max_size_guidance: "Keep concise — very large files consume context window budget"
+    content_priority: "Instructions near the top have higher effective weight"
+    supports_markdown_links: "true — can reference other files in workspace"
+    heading_strategy: "Use ## for sections, ### for sub-rules — H1 is the document title only"
+    instruction_style: "Short, self-contained, single-statement rules are most effective"
+    example_pattern: "Show preferred vs. avoided patterns with code examples"
+    reasoning_behind_rules: "Always explain WHY — AI makes better edge-case decisions"
+
+  # ── PROMPT FILES (.prompt.md) CONSTRAINTS ────────────────────────────────
+  prompt_file_rendering_rules:
+    format: "YAML frontmatter + Markdown body"
+    frontmatter_fields:
+      description: "Short description shown on hover in Chat view"
+      name: "Display name used after typing / in chat"
+      argument-hint: "Hint text shown in chat input to guide users"
+      agent: "ask | agent | plan | custom-agent-name"
+      model: "Model override (usually omit to use current)"
+      tools: "List of tool/MCP names available to this prompt"
+    invocation: "User types /prompt-name in chat input"
+    body_variables:
+      - "${workspaceFolder} — workspace root path"
+      - "${selection} — currently selected text in editor"
+      - "${file} — current file path"
+      - "${input:varName} — prompted input from user at invocation"
+    intro_template_requirement: |
+      Each prompt must have a corresponding intro-{name}.yaml in
+      cortex-registry/templates/response/prompts/ that IntentRouter uses
+      when a user asks "what does this prompt do?" or activates the prompt
+      for the first time in a session.
+
+  # ── DESIGN PRINCIPLES (derived from rendering research) ──────────────────
+  copilot_chat_template_design_principles:
+    P1_information_hierarchy: |
+      Primary content must appear in the first visible screen (≈300px scroll).
+      Identity block (H1 + author) must be the FIRST rendered element.
+      Do NOT bury the response action in a long preamble.
+    P2_visual_zone_separation: |
+      Use --- (HR) to separate distinct zones, not blank lines alone.
+      3-zone header: Identity | Quote | Orchestration — each separated by ---
+      This creates clear visual anchors in the narrow chat panel.
+    P3_scannable_structure: |
+      Prefer bullet lists over prose paragraphs for operational content.
+      Use bold (**text**) to highlight key values — not for decoration.
+      Tables are preferred for comparison/reference data with ≤4 columns.
+    P4_collapsible_for_verbose: |
+      Wrap in <details> anything that is:
+        - More than 10 table rows
+        - An engagement timeline (per-orchestrator timing)
+        - Step-by-step logs of completed work
+        - Verbose gap catalogues during audit
+      Key decision content must NEVER be inside <details>.
+    P5_terminal_composition_last: |
+      Every response MUST end with exactly 1 terminal composition.
+      Terminal content must be the LAST visual element (no content after it).
+      The status footer (--- + single metric line) is part of the terminal block.
+    P6_no_tree_characters: |
+      Never use ├─ └─ │ tree characters in any template.
+      These collapse in VS Code Copilot Chat dark themes.
+      Use indented bullet lists (2-space indent) instead.
+    P7_link_all_urls: |
+      All URLs must be wrapped in [text](url) format.
+      Raw URLs become unclickable long strings in the chat panel.
+    P8_max_table_columns_4: |
+      Tables with 5+ columns overflow horizontally in the 400px panel.
+      Preferred: ≤4 columns. Max: 5 columns.
+      For wide data: split into two narrower tables with shared key column.
+    P9_code_blocks_for_commands: |
+      All shell commands, YAML snippets, and file paths that users copy
+      must be in ```lang fenced blocks or `inline code`.
+      This provides the copy button and monospace rendering.
+    P10_copilot_instructions_conciseness: |
+      copilot-instructions.md is injected into every request.
+      Every line consumes context window budget.
+      Rules should be: short, specific, self-contained.
+      Include reasoning ("why") to help AI handle edge cases correctly.
+
+  # ── GOLDEN TEST VALIDATION CHECKLIST ─────────────────────────────────────
+  rendering_validation_checklist:
+    - "Each atom YAML must have a rendering_rules.copilot_chat_compatible: true field"
+    - "Each block YAML must declare max_heading_level (h3 max)"
+    - "Each block YAML must declare tree_chars_used: false"
+    - "Each block YAML must declare max_table_columns: 4"
+    - "Each composition YAML must declare terminal: true and position: LAST"
+    - "Status footer YAML must declare single_line: true and max_metrics: 5"
+    - "No atom/block/composition may use HTML except <details>/<summary>"
+    - "All URL references in templates must use [text](url) format"
+    - "Intro YAMLs must have description (≤100 chars) matching prompt hover text"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3-TIER LEGO ARCHITECTURE — Registry Location Design
+# ─────────────────────────────────────────────────────────────────────────────
+# All response template YAMLs consolidate under:
+#   cortex-registry/templates/response/
+#
+# Structure:
+#   cortex-registry/templates/
+#     response/
+#       _registry.yaml             — Master block registry (all atoms+blocks+compositions)
+#       atoms/
+#         atom-identity.yaml       — H1 + Author + Copyright
+#         atom-quote.yaml          — Blockquote inspiration (+ quote library)
+#         atom-orchestration.yaml  — 🧭 routing chain
+#         atom-intent-reflection.yaml — Cumulative session intent mirror
+#         atom-status-footer.yaml  — Single-line session metrics bar
+#       blocks/
+#         block-intro.yaml         — Role-based introduction
+#         block-capabilities.yaml  — CORTEX overview
+#         block-lens.yaml          — LENS intelligence explanation
+#         block-orchestrators.yaml — Orchestrator summary
+#         block-tutorial.yaml      — 5-minute quick start
+#         block-onboarding.yaml    — First-time setup
+#         block-next-steps.yaml    — Context-aware suggestions
+#         block-session-identity.yaml  — Session header
+#         block-micro-ack.yaml     — Trivial confirmation
+#         block-diff-preview.yaml  — Before/after file changes
+#         block-resume-banner.yaml — Sweep resume orientation
+#         block-error-recovery.yaml — Structured error display
+#         block-metrics-dashboard.yaml — Test/coverage/timing
+#         block-handoff.yaml       — Orchestrator routing chain
+#         block-execution-spec.yaml — Machine-readable step spec
+#         block-deviation-alert.yaml — Unexpected divergence HALT
+#         block-phase-roadmap.yaml — Multi-phase journey overview
+#         block-stage-progress.yaml — In-progress pulse
+#         block-engagement-timeline.yaml — Collapsible timing log
+#         block-faq.yaml           — (NEW) Frequently asked questions
+#         block-glossary.yaml      — (NEW) CORTEX term definitions
+#         block-learning-path.yaml — (NEW) Progressive skill building
+#         block-command-ref.yaml   — (NEW) Slash command quick reference
+#         block-session-summary.yaml — (NEW) End-of-session recap
+#       compositions/
+#         comp-dor-negotiation.yaml    — DoR < 100%, gap list, refine
+#         comp-dod-achieved.yaml       — DoR = 100%, DoD preview, approval
+#         comp-proceed-gate.yaml       — Work pending, numbered plan
+#         comp-completion-phase.yaml   — Phase complete + next phase handoff
+#         comp-completion-final.yaml   — All work done, no phases
+#         comp-continuation.yaml       — Token budget >90%, resume prompt
+#         comp-error-halt.yaml         — Blocked, error + recovery options
+#         comp-challenge-gate.yaml     — Governance challenge, user chooses
+#       prompts/
+#         intro-cortex.yaml            — Intro template for CORTEX.prompt.md
+#         intro-cortex-architect.yaml  — Intro template for cortex-architect.prompt.md
+#         intro-cortex-doc.yaml        — Intro template for cortex-doc.prompt.md
+#         intro-cortex-sync.yaml       — Intro template for cortex-sync.prompt.md
+#         intro-cortex-total-recall.yaml — Intro template for cortex-total-recall.prompt.md
+#         intro-cortex-trainer.yaml    — Intro template for cortex-trainer.prompt.md
+#
+# Migration targets (legacy files to be replaced by _registry.yaml pointers):
+#   ❌ cortex-registry/artifacts/templates/content-blocks.yaml (251L)
+#   ❌ cortex-registry/artifacts/templates/responses/content-blocks.yaml (603L)
+#   ❌ cortex-registry/artifacts/templates/responses/response-templates.yaml (497L)
+#   ❌ cortex-registry/config/response-format.yaml (95L)
+#   ❌ cortex-registry/memory/response-patterns/response-pattern-registry.yaml (260L)
+#   ❌ cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml (323L)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all open issues (CORE-064: every gap must be CLOSED)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  # ── SUB-PHASE A: Registry Structure + Header Redesign ─────────────────────
+  - id: "GAP-120-01"
+    title: "Create cortex-registry/templates/response/ directory with _registry.yaml"
+    severity: P0
+    source: "User session 2026-03-04"
+    evidence: |
+      No consolidated response template location exists. Templates scattered across:
+      - cortex-registry/artifacts/templates/ (2 files, 854L)
+      - cortex-registry/config/response-format.yaml (95L)
+      - cortex-registry/memory/response-patterns/ (4 files, ~800L)
+      - cortex-registry/workflows/templates/governance/ (1 file, 323L)
+    action_ref: "phase-120-a"
+    status: CLOSED
+
+  - id: "GAP-120-02"
+    title: "Create 5 atom YAMLs with redesigned 3-zone header layout"
+    severity: P0
+    source: "User session 2026-03-04 — screenshot showing merged identity/routing"
+    evidence: |
+      Current header merges identity + routing on adjacent lines.
+      New layout: Identity → HR → Quote → HR → 🧭 Orchestration → HR.
+      Requires: atom-identity.yaml, atom-quote.yaml (with quote library),
+      atom-orchestration.yaml, atom-intent-reflection.yaml, atom-status-footer.yaml
+    action_ref: "phase-120-a"
+    status: CLOSED
+
+  - id: "GAP-120-03"
+    title: "Update SSOT cortex-response-templates.md with 3-zone header + atom references"
+    severity: P0
+    source: "User session 2026-03-04"
+    evidence: |
+      cortex-response-templates.md § Response Header — Canonical Spec (L698-800)
+      must be rewritten to reference atom YAMLs and use 3-zone layout.
+      Duplicate header spec at L3064 must be replaced with pointer.
+    action_ref: "phase-120-a"
+    status: CLOSED
+
+  # ── SUB-PHASE B: Terminal Compositions ────────────────────────────────────
+  - id: "GAP-120-04"
+    title: "Create 8 terminal composition YAMLs with mutex selection logic"
+    severity: P0
+    source: "User session 2026-03-04"
+    evidence: |
+      Only 2 terminal blocks exist (BLOCK-PROCEED-GATE, BLOCK-COMPLETION-STATE).
+      Need 8: DoR negotiation, DoD achieved, proceed gate, completion (phase),
+      completion (final), continuation, error halt, challenge gate.
+      Mutex: exactly 1 composition per response.
+    action_ref: "phase-120-b"
+    status: CLOSED
+
+  - id: "GAP-120-05"
+    title: "COMP-DOR-NEGOTIATION: InteractionOrchestrator enforces DoR=100% before proceeding"
+    severity: P0
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      CORTEX must not proceed with code-touching operations until DoR=100%.
+      Even if user forces with 'proceed', InteractionOrchestrator must re-present
+      open gaps. Non-code intents (QUERY, ANALYZE) exempt.
+    action_ref: "phase-120-b"
+    status: CLOSED
+
+  - id: "GAP-120-06"
+    title: "COMP-DOD-ACHIEVED: Present DoD table derived from DoR, approval gate"
+    severity: P0
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      When DoR=100%, present DoD acceptance criteria table with verification methods.
+      Then standard proceed gate with action plan + DoD verification as final step.
+    action_ref: "phase-120-b"
+    status: CLOSED
+
+  # ── SUB-PHASE C: Content Blocks + Cumulative Reflection ──────────────────
+  - id: "GAP-120-07"
+    title: "Create 5 new content block YAMLs (FAQ, Glossary, Learning Path, Command Ref, Session Summary)"
+    severity: P1
+    source: "User session 2026-03-04"
+    evidence: |
+      No FAQ, Glossary, Learning Path, Command Reference, or Session Summary
+      templates exist. These fill real user gaps for onboarding and reference.
+    action_ref: "phase-120-c"
+    status: CLOSED
+
+  - id: "GAP-120-08"
+    title: "Cumulative Intent Reflection: concatenate session turns in ATOM-INTENT-REFLECTION"
+    severity: P1
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      Current Intent Reflection shows only latest request.
+      Phase 113 added RequestLogManager with SQLite request_log.
+      Leverage request_log to show last N turns (cap at 5) in reflection block.
+    action_ref: "phase-120-c"
+    status: CLOSED
+
+  - id: "GAP-120-09"
+    title: "Universal Status Footer (ATOM-STATUS-FOOTER): single-line session metrics bar"
+    severity: P1
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      No footer exists. Need: --- + single line with up to 5 metrics from priority pool:
+      DoR%, Confidence, Mode, Tests, Session Turn, Tokens%, Phase, Coverage.
+    action_ref: "phase-120-c"
+    status: CLOSED
+
+  # ── SUB-PHASE D: Prompt Intro Templates + IntentRouter Wiring ─────────────
+  - id: "GAP-120-10"
+    title: "Create 6 prompt intro YAMLs and wire IntentRouter for prompt discovery"
+    severity: P1
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      6 prompts have no intro template:
+        - CORTEX.prompt.md → intro-cortex.yaml
+        - cortex-architect.prompt.md → intro-cortex-architect.yaml
+        - cortex-doc.prompt.md → intro-cortex-doc.yaml
+        - cortex-sync.prompt.md → intro-cortex-sync.yaml
+        - cortex-total-recall.prompt.md → intro-cortex-total-recall.yaml
+        - cortex-trainer.prompt.md → intro-cortex-trainer.yaml
+      IntentRouter must surface the intro when user asks "what does [prompt] do?"
+      or when a prompt is activated for the first time in a session.
+    action_ref: "phase-120-d"
+    status: CLOSED
+
+  # ── SUB-PHASE E: Legacy Migration + Drift Fix ────────────────────────────
+  - id: "GAP-120-11"
+    title: "Migrate 6 legacy response template YAMLs to cortex-registry/templates/response/"
+    severity: P1
+    source: "User session 2026-03-04"
+    evidence: |
+      6 files (2,029 total lines) contain duplicated/outdated response template defs:
+        1. cortex-registry/artifacts/templates/content-blocks.yaml (251L)
+        2. cortex-registry/artifacts/templates/responses/content-blocks.yaml (603L)
+        3. cortex-registry/artifacts/templates/responses/response-templates.yaml (497L)
+        4. cortex-registry/config/response-format.yaml (95L)
+        5. cortex-registry/memory/response-patterns/response-pattern-registry.yaml (260L)
+        6. cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml (323L)
+      Action: Extract any unique content into new block YAMLs, replace originals with
+      pointer files or delete. Update all references in Python code + golden tests.
+    action_ref: "phase-120-e"
+    status: CLOSED
+
+  - id: "GAP-120-12"
+    title: "Fix 3 drifted prompts (CORTEX.prompt.md, cortex-sync.prompt.md, cortex-total-recall.prompt.md)"
+    severity: P1
+    source: "User session 2026-03-04 — audit finding"
+    evidence: |
+      P1: CORTEX.prompt.md L146 says "never in the header" — contradicts all other files
+      P1: cortex-sync.prompt.md L22 uses forbidden **Orchestrator:** format
+      P2: cortex-total-recall.prompt.md missing routing field entirely
+    action_ref: "phase-120-e"
+    status: CLOSED
+
+  # ── SUB-PHASE F: Cascade to Prompts + Agents + Audit Enforcement ──────────
+  - id: "GAP-120-13"
+    title: "Cascade 3-zone header + new field names to copilot-instructions.md, all prompts, meta-auditor"
+    severity: P0
+    source: "User session 2026-03-04"
+    evidence: |
+      7 files reference the response header template:
+        1. .github/templates/cortex-response-templates.md (SSOT — updated in GAP-120-03)
+        2. .github/copilot-instructions.md (LLM instruction — auto-loaded)
+        3. .github/prompts/cortex-architect.prompt.md (architect persona)
+        4. .github/prompts/CORTEX.prompt.md (master orchestrator)
+        5. .github/prompts/cortex-doc.prompt.md (doc orchestrator)
+        6. .github/prompts/cortex-total-recall.prompt.md (total recall)
+        7. .github/agents/core/cortex-meta-auditor.md (checks 11/12/26)
+      All must be updated to use:
+        - 3-zone layout (Identity → HR → Quote → HR → 🧭 Orchestration → HR)
+        - "🧭 Orchestration:" instead of "Via:"
+        - New terminal composition references
+        - Status footer reference
+    action_ref: "phase-120-f"
+    status: CLOSED
+
+  - id: "GAP-120-14"
+    title: "Enhance audit-fix mode to enforce response template compliance via golden tests"
+    severity: P1
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      Audit-fix pipeline (audit-fix-pipeline.yaml) does not currently validate:
+        - Terminal composition mutex (exactly 1 per response)
+        - Status footer presence
+        - Cumulative intent reflection format
+        - Atom YAML existence and schema
+      Need audit check + auto-fix for template compliance.
+    action_ref: "phase-120-f"
+    status: CLOSED
+
+  # ── SUB-PHASE G: E2E Golden Tests ────────────────────────────────────────
+  - id: "GAP-120-15"
+    title: "E2E golden tests: all 8 terminal compositions, status footer, cumulative reflection, header layout"
+    severity: P0
+    source: "User session 2026-03-04 — explicit requirement"
+    evidence: |
+      Current golden test coverage:
+        - tests/golden/response/test_response_templates_golden.py (Phase 64)
+        - tests/golden/response/test_phase_85_response_blocks.py (Phase 85)
+      Need new golden test file(s) covering:
+        - All 8 terminal composition YAMLs load and validate schema
+        - All 5 atom YAMLs load and validate schema
+        - Terminal composition mutex logic (exactly 1 selected per scenario)
+        - Status footer metric pool and selection logic
+        - Cumulative intent reflection format with multi-turn data
+        - 3-zone header layout validates (identity, quote, orchestration separated by HR)
+        - _registry.yaml cross-references all blocks and compositions
+        - Legacy YAML files replaced (originals deleted or pointer-only)
+        - Prompt intro templates load and have required fields
+        - All 6 prompt intro YAMLs reference valid prompt file paths
+      Test file: tests/golden/response/test_phase_120_response_v3_golden.py
+    action_ref: "phase-120-g"
+    status: CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE A: Registry Structure + Header Redesign (Foundation)
+  # GAPs: 120-01, 120-02, 120-03
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-a"
+    title: "Registry Structure + 5 Atom YAMLs + 3-Zone Header SSOT Update"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-120-01", "GAP-120-02", "GAP-120-03"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2,340 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for atom YAML schema validation + registry existence"
+        gate: "python3 scripts/run_tests.py file tests/golden/response/test_phase_120_response_v3_golden.py — tests FAIL"
+        blocker: "Do NOT create YAMLs until tests fail"
+      green:
+        action: "Create directory structure, _registry.yaml, 5 atom YAMLs. Update SSOT."
+        gate: "python3 scripts/run_tests.py file tests/golden/response/test_phase_120_response_v3_golden.py — tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Clean up SSOT: remove duplicate header spec at L3064, add pointer refs"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + grep for orphaned Via: references"
+      fix_step: "Replace any remaining Via: with 🧭 Orchestration: in SSOT"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues with justification"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_registry_directory_exists — cortex-registry/templates/response/ exists"
+        - "test_registry_yaml_loads — _registry.yaml loads and has atoms/blocks/compositions sections"
+        - "test_atom_identity_yaml_schema — atom-identity.yaml has h1_template, author, copyright, rendering_rules.copilot_chat_compatible=true"
+        - "test_atom_quote_yaml_schema — atom-quote.yaml has quote_library (32 entries), theme_mapping, rendering_rules.element=blockquote"
+        - "test_atom_orchestration_yaml_schema — atom-orchestration.yaml has label='🧭 Orchestration:', display_name_map, rendering_rules.uses_bold=true"
+        - "test_atom_intent_reflection_yaml_schema — atom-intent-reflection.yaml has cumulative_mode, max_turns=5, rendering_rules.max_heading_level=h3"
+        - "test_atom_status_footer_yaml_schema — atom-status-footer.yaml has metric_pool (8 metrics), max_display=5, rendering_rules.single_line=true"
+        - "test_all_atoms_no_tree_chars — no atom YAML contains tree characters (├─ └─ │)"
+        - "test_all_atoms_no_forbidden_html — no atom YAML uses HTML other than details/summary"
+        - "test_header_3_zone_layout — SSOT § Response Header uses Identity → HR → Quote → HR → Orchestration → HR"
+        - "test_header_rendering_constraint — SSOT documents: exactly 1 H1 per response, max 3 heading levels"
+      green:
+        - "Create cortex-registry/templates/response/ directory tree"
+        - "Create _registry.yaml with all block references"
+        - "Create 5 atom YAMLs with validated schemas and rendering_rules sections"
+        - "Update cortex-response-templates.md § Response Header with 3-zone layout"
+        - "Add § VS Code Copilot Chat Rendering Rules section to SSOT"
+      refactor:
+        - "Remove duplicate header spec at SSOT L3064 (replace with pointer)"
+        - "Verify all atom YAMLs have docstrings and version fields"
+        - "Ensure all rendering_rules reference the vscode_copilot_chat_rendering_contract"
+
+    acceptance_criteria:
+      - "cortex-registry/templates/response/ directory exists with atoms/, blocks/, compositions/, prompts/ subdirs"
+      - "_registry.yaml loads cleanly and cross-references all block files"
+      - "All 5 atom YAMLs load with valid schemas AND rendering_rules sections"
+      - "No atom YAML uses tree characters (├─ └─ │) — forbidden in VS Code Chat"
+      - "No atom YAML uses HTML other than <details>/<summary>"
+      - "SSOT § Response Header uses 3-zone layout with Identity → HR → Quote → HR → 🧭 Orchestration → HR"
+      - "SSOT § VS Code Copilot Chat Rendering Rules section added (sourced 2026-03-04)"
+      - "No duplicate header spec exists in SSOT (L3064 removed or pointer)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE B: Terminal Compositions (8 lifecycle scenarios)
+  # GAPs: 120-04, 120-05, 120-06
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-b"
+    title: "8 Terminal Composition YAMLs + DoR Enforcement + DoD Presentation"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-120-04", "GAP-120-05", "GAP-120-06"]
+    governance_authority: "CORE-008, CORE-035, CORE-064, CORE-RESP-001"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-120-a"]
+    prerequisite: "phase-120-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for 8 composition YAMLs + mutex selection + DoR enforcement"
+        gate: "Tests FAIL"
+        blocker: "Do NOT create composition YAMLs until tests fail"
+      green:
+        action: "Create 8 composition YAMLs. Implement DoR=100% enforcement in InteractionOrchestrator."
+        gate: "Tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Ensure CORE-RESP-001 compliance: exactly 1 terminal composition per response"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + validate mutex logic"
+      fix_step: "Fix any double-terminal or missing-terminal responses"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues with justification"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_comp_dor_negotiation_yaml — loads, has gap_table (≤4 cols), progress_bar, enforcement_message, rendering_rules.terminal=true"
+        - "test_comp_dod_achieved_yaml — loads, has acceptance_criteria_table (≤4 cols), verification_method column, rendering_rules.terminal=true"
+        - "test_comp_proceed_gate_yaml — loads, has numbered_plan, max_items=5, rendering_rules.terminal=true, rendering_rules.position=LAST"
+        - "test_comp_completion_phase_yaml — loads, has phase_id, next_phase block, rendering_rules.terminal=true"
+        - "test_comp_completion_final_yaml — loads, has completion_statement, rendering_rules.terminal=true"
+        - "test_comp_continuation_yaml — loads, has token_threshold=90, resume_prompt, rendering_rules.terminal=true"
+        - "test_comp_error_halt_yaml — loads, has error_category, recovery_options (≤3), rendering_rules.terminal=true"
+        - "test_comp_challenge_gate_yaml — loads, has severity_levels, options=[3], rendering_rules.terminal=true"
+        - "test_all_compositions_no_tree_chars — no composition YAML uses ├─ └─ │"
+        - "test_all_compositions_no_forbidden_html — compositions use only <details>/<summary> if any HTML"
+        - "test_all_compositions_table_column_limit — no table in any composition has more than 4 columns"
+        - "test_terminal_composition_mutex — given scenario, exactly 1 composition selected"
+        - "test_dor_enforcement_blocks_proceed — code-touching intent with DoR<100% must not proceed"
+        - "test_dor_bypass_allowed_for_query — QUERY/ANALYZE intents exempt from DoR gate"
+        - "test_dod_derived_from_dor — DoD table items trace back to DoR gap resolutions"
+        - "test_status_footer_appended_to_terminal — each composition includes ATOM-STATUS-FOOTER as final element"
+      green:
+        - "Create 8 composition YAMLs in cortex-registry/templates/response/compositions/"
+        - "Update _registry.yaml with composition references"
+        - "Add DoR enforcement logic to InteractionOrchestrator or document in SSOT"
+        - "Add DoD generation logic that maps resolved DoR gaps to acceptance criteria"
+      refactor:
+        - "Verify all composition YAMLs have version and rendering_rules fields"
+        - "Verify mutex selection logic handles all edge cases"
+
+    acceptance_criteria:
+      - "All 8 composition YAMLs load with valid schemas and rendering_rules.terminal=true"
+      - "_registry.yaml cross-references all 8 compositions"
+      - "Terminal composition mutex: exactly 1 selected per response scenario"
+      - "No composition uses tree characters (├─ └─ │)"
+      - "No composition table has more than 4 columns"
+      - "ATOM-STATUS-FOOTER appended as final element of every terminal composition"
+      - "DoR < 100% on code-touching intents blocks proceed (even if user forces)"
+      - "DoD table derived from resolved DoR gaps when DoR = 100%"
+      - "QUERY/ANALYZE intents exempt from DoR enforcement"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE C: New Content Blocks + Cumulative Reflection + Status Footer
+  # GAPs: 120-07, 120-08, 120-09
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-c"
+    title: "5 New Content Blocks + Cumulative Intent Reflection + Status Footer"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-120-07", "GAP-120-08", "GAP-120-09"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-120-b"]
+    prerequisite: "phase-120-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for 5 new blocks, cumulative reflection, status footer"
+        gate: "Tests FAIL"
+        blocker: "Do NOT create block YAMLs until tests fail"
+      green:
+        action: "Create 5 block YAMLs. Update atom-intent-reflection.yaml with cumulative mode. Create atom-status-footer.yaml metric pool."
+        gate: "Tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Update SSOT § Composable Content Sections with 5 new blocks (19 → 24)"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_block_faq_yaml — loads, has entries (list), max_entries=10"
+        - "test_block_glossary_yaml — loads, has terms (dict), categorized=true"
+        - "test_block_learning_path_yaml — loads, has levels=[beginner, intermediate, advanced, expert]"
+        - "test_block_command_ref_yaml — loads, has commands (list matching IntentType enum count)"
+        - "test_block_session_summary_yaml — loads, has sections=[decisions, actions, metrics]"
+        - "test_cumulative_reflection_max_turns — reflection shows max 5 turns, collapses earlier"
+        - "test_cumulative_reflection_session_context — reflection header lists prior turn summaries"
+        - "test_status_footer_single_line — footer renders as single line after HR"
+        - "test_status_footer_max_5_metrics — never more than 5 metrics displayed"
+        - "test_status_footer_metric_priority — DoR/Confidence/Mode always shown when available"
+      green:
+        - "Create 5 new block YAMLs in cortex-registry/templates/response/blocks/"
+        - "Update atom-intent-reflection.yaml with cumulative_mode and max_turns"
+        - "Update atom-status-footer.yaml with metric_pool and selection_priority"
+        - "Update _registry.yaml with new block references"
+      refactor:
+        - "Update SSOT § Composable Content Sections: block count 19 → 24"
+        - "Update SSOT § Content Section Library table with 5 new entries"
+        - "Verify all new blocks have rendering_rules and copilot_chat_compatible fields"
+
+    acceptance_criteria:
+      - "All 5 new block YAMLs load with valid schemas"
+      - "Cumulative reflection shows last N turns (max 5) with summaries"
+      - "Status footer renders as single line with ≤5 metrics after HR"
+      - "SSOT Content Section Library updated from 19 to 24 blocks"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE D: Prompt Intro Templates + IntentRouter Wiring
+  # GAPs: 120-10
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-d"
+    title: "6 Prompt Intro YAMLs + IntentRouter Prompt Discovery Wiring"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-120-10"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-120-c"]
+    prerequisite: "phase-120-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for 6 intro YAMLs + IntentRouter prompt discovery"
+        gate: "Tests FAIL"
+        blocker: "Do NOT create intro YAMLs until tests fail"
+      green:
+        action: "Create 6 intro YAMLs. Wire IntentRouter to surface intro on prompt activation."
+        gate: "Tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Ensure each intro YAML references its prompt path and has overview, capabilities, quick_start fields"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_intro_cortex_yaml — loads, references CORTEX.prompt.md, has overview/capabilities/quick_start"
+        - "test_intro_cortex_architect_yaml — loads, references cortex-architect.prompt.md"
+        - "test_intro_cortex_doc_yaml — loads, references cortex-doc.prompt.md"
+        - "test_intro_cortex_sync_yaml — loads, references cortex-sync.prompt.md"
+        - "test_intro_cortex_total_recall_yaml — loads, references cortex-total-recall.prompt.md"
+        - "test_intro_cortex_trainer_yaml — loads, references cortex-trainer.prompt.md"
+        - "test_all_intro_yamls_reference_existing_prompts — every prompt_path points to a real file"
+        - "test_intent_router_surfaces_intro_on_prompt_query — asking 'what does cortex-sync do?' returns intro"
+      green:
+        - "Create 6 intro YAMLs in cortex-registry/templates/response/prompts/"
+        - "Each intro YAML: overview, capabilities (list), quick_start (example commands), prompt_path"
+        - "Wire IntentRouter to detect prompt-about queries and return intro content"
+      refactor:
+        - "Ensure intro capabilities lists are accurate against actual prompt features"
+        - "Add version fields to all intro YAMLs"
+
+    acceptance_criteria:
+      - "All 6 intro YAMLs load with valid schemas and reference existing prompt files"
+      - "IntentRouter surfaces intro content when user asks about a prompt"
+      - "Each intro has overview, capabilities (≥3 items), quick_start (≥1 example command)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE E: Legacy Migration + Drift Fix
+  # GAPs: 120-11, 120-12
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-e"
+    title: "Migrate 6 Legacy YAMLs + Fix 3 Drifted Prompts"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-120-11", "GAP-120-12"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-120-d"]
+    prerequisite: "phase-120-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: legacy files deleted, drift patterns absent"
+        gate: "Tests FAIL (legacy files still exist)"
+        blocker: "Do NOT delete/migrate until tests fail"
+      green:
+        action: "Extract unique content, create pointer files or delete originals. Fix 3 drifted prompts."
+        gate: "Tests PASS (legacy files gone, drift patterns absent)"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Verify no orphaned references to old YAML paths in Python code or golden tests"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_legacy_content_blocks_removed — cortex-registry/artifacts/templates/content-blocks.yaml deleted or pointer"
+        - "test_legacy_response_content_blocks_removed — artifacts/templates/responses/content-blocks.yaml deleted or pointer"
+        - "test_legacy_response_templates_removed — artifacts/templates/responses/response-templates.yaml deleted or pointer"
+        - "test_legacy_response_format_removed — config/response-format.yaml deleted or pointer"
+        - "test_legacy_response_pattern_registry_removed — memory/response-patterns/response-pattern-registry.yaml deleted or pointer"
+        - "test_legacy_copilot_chat_template_removed — workflows/templates/governance/copilot-chat-response-template.yaml deleted or pointer"
+        - "test_cortex_prompt_no_never_in_header — CORTEX.prompt.md L146 contradiction resolved"
+        - "test_sync_prompt_no_orchestrator_field — cortex-sync.prompt.md no longer uses **Orchestrator:**"
+        - "test_total_recall_has_orchestration_field — cortex-total-recall.prompt.md has 🧭 Orchestration:"
+        - "test_no_orphaned_legacy_yaml_references — grep Python+test files for old YAML paths returns 0"
+      green:
+        - "Extract unique content from legacy YAMLs into new block YAMLs (if not already covered)"
+        - "Replace legacy YAMLs with 1-line pointer: '# MOVED: see cortex-registry/templates/response/_registry.yaml'"
+        - "Fix CORTEX.prompt.md L146: change to align with header placement"
+        - "Fix cortex-sync.prompt.md: replace **Orchestrator:** with 🧭 Orchestration:"
+        - "Fix cortex-total-recall.prompt.md: add 🧭 Orchestration: field"
+        - "Update golden test RESPONSE_TEMPLATE_YAML paths"
+      refactor:
+        - "grep -rn for all old YAML paths in Python source — zero matches"
+        - "Verify cortex-registry/memory/response-patterns/ can be cleaned up if 3 pattern files are redundant"
+
+    acceptance_criteria:
+      - "6 legacy YAML files replaced with pointers or deleted"
+      - "Zero orphaned references to old paths in Python code or tests"
+      - "CORTEX.prompt.md L146 contradiction resolved"
+      - "cortex-sync.prompt.md uses 🧭 Orchestration: (not **Orchestrator:**)"
+      - "cortex-total-recall.prompt.md has 🧭 Orchestration: field"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE F: Cascade to Prompts + Agents + Audit Enforcement
+  # GAPs: 120-13, 120-14
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-f"
+    title: "Cascade to 7 Prompt/Agent Files + Enhance Audit-Fix Enforcement"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-120-13", "GAP-120-14"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-120-e"]
+    prerequisite: "phase-120-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests: header format in all files uses 3-zone, meta-auditor checks updated"
+        gate: "Tests FAIL"
+        blocker: "Do NOT edit prompts until tests fail"
+      green:
+        action: "Update all 7 files. Update meta-auditor detection patterns for checks 11/12/26."
+        gate: "Tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Run meta-audit checks 11/12/26 to verify zero false positives"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_copilot_instructions_uses_orchestration_label — 🧭 Orchestration: not Via:"
+        - "test_architect_prompt_uses_3_zone_header — cortex-architect.prompt.md has HR-separated zones"
+        - "test_cortex_prompt_uses_3_zone_header — CORTEX.prompt.md has HR-separated zones"
+        - "test_doc_prompt_uses_3_zone_header — cortex-doc.prompt.md has HR-separated zones"
+        - "test_meta_auditor_check_11_detects_orchestration — check 11 greps for 🧭 Orchestration:"
+        - "test_meta_auditor_check_26_detects_new_format — check 26 validates new copilot-instructions format"
+        - "test_audit_fix_validates_terminal_composition — audit check for CORE-RESP-001 terminal mutex"
+        - "test_audit_fix_validates_status_footer — audit check for footer presence"
+      green:
+        - "Update copilot-instructions.md § RESPONSE HEADER with 3-zone layout + 🧭 Orchestration:"
+        - "Update copilot-instructions.md § COMPOSABLE SECTIONS assembly order with footer + compositions"
+        - "Update cortex-architect.prompt.md § RESPONSE FORMAT with 3-zone layout"
+        - "Update CORTEX.prompt.md § RESPONSE FORMAT with 3-zone layout"
+        - "Update cortex-doc.prompt.md header example"
+        - "Update cortex-meta-auditor.md checks 11/12/26 detection patterns"
+        - "Add audit check for terminal composition mutex enforcement"
+        - "Add audit check for status footer presence"
+      refactor:
+        - "Run refresh_prompt_suite.py --counts-only to verify architecture counts"
+        - "Verify meta-audit checks 11/12/26 pass with zero false positives"
+
+    acceptance_criteria:
+      - "All 7 files use 🧭 Orchestration: label (zero Via: references remain)"
+      - "All prompt files show 3-zone header layout in their inline examples"
+      - "Meta-auditor checks 11/12/26 detect new format correctly"
+      - "Audit-fix mode validates terminal composition mutex + status footer"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE G: E2E Golden Tests (Certification)
+  # GAPs: 120-15
+  # ═══════════════════════════════════════════════════════════════════════════
+  - id: "phase-120-g"
+    title: "E2E Golden Tests — Full Response Template v3 Certification"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-120-15"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-120-f"]
+    prerequisite: "phase-120-f completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write comprehensive golden test file covering all Phase 120 deliverables"
+        gate: "Tests FAIL (comprehensive coverage exceeds current)"
+        blocker: "Do NOT write implementation until tests fail"
+      green:
+        action: "Fix any remaining issues surfaced by comprehensive golden tests"
+        gate: "Tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Audit log verification: all sub-phases have AC_COMPLETE entries"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_all_atom_yamls_exist_and_valid — 5 atoms, all load, all have version + rendering_rules.copilot_chat_compatible=true"
+        - "test_all_block_yamls_exist_and_valid — 24 blocks (19 existing + 5 new), all load, all have max_heading_level declared"
+        - "test_all_composition_yamls_exist_and_valid — 8 compositions, all load, rendering_rules.terminal=true"
+        - "test_all_prompt_intro_yamls_exist_and_valid — 6 intros, all reference real prompts, description ≤100 chars"
+        - "test_registry_cross_references_complete — _registry.yaml references all 43 files"
+        - "test_no_legacy_yaml_files — 6 legacy files replaced with pointers"
+        - "test_ssot_line_count_reasonable — cortex-response-templates.md ≤ 3,500 lines"
+        - "test_no_via_label_remains — zero 'Via:' references in prompts/agents/copilot-instructions"
+        - "test_audit_log_ac_markers — all 7 sub-phases have AC_START + AC_COMPLETE pairs"
+        - "test_terminal_mutex_all_scenarios — 8 scenarios each produce exactly 1 composition"
+        - "test_cumulative_reflection_integration — multi-turn data produces correct reflection"
+        - "test_status_footer_integration — footer renders single-line with ≤5 metrics after HR"
+        - "test_dor_enforcement_integration — DoR<100% blocks code-touching, allows QUERY"
+        - "test_dod_derivation_integration — DoD criteria match resolved DoR gaps"
+        - "test_prompt_intro_discovery_integration — IntentRouter returns intro for each prompt"
+        # ── Rendering Contract Validation ──────────────────────────────────
+        - "test_no_tree_chars_in_any_yaml — grep all 43 YAML files for ├─ └─ │ → 0 matches"
+        - "test_no_forbidden_html_in_any_yaml — grep all 43 YAML files for HTML tags (except details/summary) → 0"
+        - "test_no_raw_urls_in_any_yaml — grep all 43 YAML files for bare http:// not in [text]() → 0"
+        - "test_all_table_column_limits — no table in any YAML has >4 columns"
+        - "test_all_atoms_have_rendering_rules — rendering_rules.copilot_chat_compatible present in all 5 atoms"
+        - "test_all_compositions_position_last — rendering_rules.position=LAST in all 8 compositions"
+        - "test_status_footer_single_line — ATOM-STATUS-FOOTER renders as 1 line max with 5 metrics max"
+        - "test_collapsible_for_timeline_only — <details> used only in engagement-timeline and phase-roadmap blocks"
+        - "test_copilot_instructions_section_added — SSOT has § VS Code Copilot Chat Rendering Rules"
+      green:
+        - "Fix any remaining issues found by comprehensive golden tests"
+        - "Ensure all AC markers logged correctly"
+      refactor:
+        - "Final refresh_prompt_suite.py validation"
+        - "Verify cortex-master.yaml ≤ 800 lines"
+
+    acceptance_criteria:
+      - "All 24 golden tests GREEN (15 functional + 9 rendering contract tests)"
+      - "Zero legacy YAML files remain (pointers only)"
+      - "Zero Via: references remain in prompts/agents"
+      - "Zero tree characters (├─ └─ │) in any of the 43 new YAML files"
+      - "Zero forbidden HTML in any of the 43 new YAML files"
+      - "Zero tables with >4 columns in any YAML"
+      - "cortex-master.yaml ≤ 800 lines"
+      - "Smoke tests ≥ 2,340 (baseline + new golden tests)"
+      - "All 7 sub-phase AC markers logged with AC_COMPLETE"
+      - "SSOT contains § VS Code Copilot Chat Rendering Rules (sourced 2026-03-04)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2340
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # Final sub-phase
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DELIVERABLES SUMMARY
+# ─────────────────────────────────────────────────────────────────────────────
+deliverables:
+  new_files:
+    - "cortex-registry/templates/response/_registry.yaml"
+    - "cortex-registry/templates/response/atoms/atom-identity.yaml"
+    - "cortex-registry/templates/response/atoms/atom-quote.yaml"
+    - "cortex-registry/templates/response/atoms/atom-orchestration.yaml"
+    - "cortex-registry/templates/response/atoms/atom-intent-reflection.yaml"
+    - "cortex-registry/templates/response/atoms/atom-status-footer.yaml"
+    - "cortex-registry/templates/response/blocks/block-faq.yaml"
+    - "cortex-registry/templates/response/blocks/block-glossary.yaml"
+    - "cortex-registry/templates/response/blocks/block-learning-path.yaml"
+    - "cortex-registry/templates/response/blocks/block-command-ref.yaml"
+    - "cortex-registry/templates/response/blocks/block-session-summary.yaml"
+    - "cortex-registry/templates/response/compositions/comp-dor-negotiation.yaml"
+    - "cortex-registry/templates/response/compositions/comp-dod-achieved.yaml"
+    - "cortex-registry/templates/response/compositions/comp-proceed-gate.yaml"
+    - "cortex-registry/templates/response/compositions/comp-completion-phase.yaml"
+    - "cortex-registry/templates/response/compositions/comp-completion-final.yaml"
+    - "cortex-registry/templates/response/compositions/comp-continuation.yaml"
+    - "cortex-registry/templates/response/compositions/comp-error-halt.yaml"
+    - "cortex-registry/templates/response/compositions/comp-challenge-gate.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex-architect.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex-doc.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex-sync.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex-total-recall.yaml"
+    - "cortex-registry/templates/response/prompts/intro-cortex-trainer.yaml"
+    - "tests/golden/response/test_phase_120_response_v3_golden.py"
+
+  modified_files:
+    - ".github/templates/cortex-response-templates.md"
+    - ".github/copilot-instructions.md"
+    - ".github/prompts/cortex-architect.prompt.md"
+    - ".github/prompts/CORTEX.prompt.md"
+    - ".github/prompts/cortex-doc.prompt.md"
+    - ".github/prompts/cortex-sync.prompt.md"
+    - ".github/prompts/cortex-total-recall.prompt.md"
+    - ".github/agents/core/cortex-meta-auditor.md"
+    - "cortex-registry/cortex-master.yaml"
+
+  migrated_files:
+    - "cortex-registry/artifacts/templates/content-blocks.yaml → pointer to _registry.yaml"
+    - "cortex-registry/artifacts/templates/responses/content-blocks.yaml → pointer to _registry.yaml"
+    - "cortex-registry/artifacts/templates/responses/response-templates.yaml → pointer to _registry.yaml"
+    - "cortex-registry/config/response-format.yaml → pointer to _registry.yaml"
+    - "cortex-registry/memory/response-patterns/response-pattern-registry.yaml → pointer to _registry.yaml"
+    - "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml → pointer to _registry.yaml"
+
+  golden_test_coverage:
+    file: "tests/golden/response/test_phase_120_response_v3_golden.py"
+    test_count_estimate: 49
+    categories:
+      - "Atom YAML schema validation (5 tests)"
+      - "Block YAML schema validation (5 new + existence check for 19 existing)"
+      - "Composition YAML schema validation (8 tests)"
+      - "Prompt intro YAML validation (6 tests)"
+      - "Terminal composition mutex logic (8 scenario tests)"
+      - "DoR enforcement integration (3 tests)"
+      - "DoD derivation integration (2 tests)"
+      - "Cumulative reflection integration (2 tests)"
+      - "Status footer integration (3 tests)"
+      - "Legacy migration verification (6 tests)"
+      - "Registry cross-reference completeness (1 test)"
+      - "Audit log AC marker verification (1 test)"
+      # ── Rendering Contract Tests (sourced from VS Code docs 2026-03-04) ──
+      - "No tree characters in any YAML (1 test — grep 43 files)"
+      - "No forbidden HTML in any YAML (1 test — grep 43 files)"
+      - "No raw URLs in any YAML (1 test — grep 43 files)"
+      - "All table column limits ≤4 (1 test)"
+      - "All atoms have rendering_rules.copilot_chat_compatible (1 test)"
+      - "All compositions have rendering_rules.position=LAST (1 test)"
+      - "Status footer single-line constraint (1 test)"
+      - "Collapsible <details> used only in appropriate blocks (1 test)"
+      - "SSOT has VS Code rendering rules section (1 test)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# METRICS
+# ─────────────────────────────────────────────────────────────────────────────
+metrics:
+  estimated_new_yaml_files: 26
+  estimated_new_test_file: 1
+  estimated_new_tests: 49
+  estimated_modified_files: 9
+  estimated_migrated_files: 6
+  estimated_duration: "22 hours total (7 sub-phases)"
+  zero_python_code_changes_in_cortex_package: false  # IntentRouter wiring needed
+  python_changes_scope: "cortex/orchestrators/core/intent_router_impl.py (prompt discovery)"
+  rendering_contract_source:
+    fetched: "2026-03-04"
+    urls:
+      - "https://code.visualstudio.com/docs/copilot/chat/copilot-chat"
+      - "https://code.visualstudio.com/docs/copilot/customization/custom-instructions"
+      - "https://code.visualstudio.com/docs/copilot/customization/prompt-files"
+      - "https://docs.github.com/en/copilot/using-github-copilot/copilot-chat/asking-github-copilot-questions-in-your-ide"
+  key_rendering_rules_incorporated:
+    - "P1: Primary content first visible screen — H1 identity block is FIRST element"
+    - "P2: --- HR separates 3 header zones (Identity | Quote | Orchestration)"
+    - "P3: Bullet lists over prose, bold for key values, tables ≤4 columns"
+    - "P4: <details>/<summary> ONLY for timelines/verbose logs — never for key content"
+    - "P5: Terminal composition is LAST element; status footer is part of it"
+    - "P6: FORBIDDEN — ├─ └─ │ tree characters collapse in VS Code dark themes"
+    - "P7: All URLs must use [text](url) — never raw URLs"
+    - "P8: Max 4 table columns preferred (5 absolute max) for narrow chat panel"
+    - "P9: All shell commands and paths in fenced code blocks with copy button"
+    - "P10: copilot-instructions.md must stay concise — each line consumes context budget"

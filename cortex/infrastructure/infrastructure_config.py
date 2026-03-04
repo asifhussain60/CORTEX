@@ -17,7 +17,7 @@ from typing import Dict, Optional
 
 
 @dataclass
-class TimeoutConfig:
+class TimeoutConfig:  # CORE-035-scoped — domain-specific variant
     """
     Timeout configuration for infrastructure operations.
 

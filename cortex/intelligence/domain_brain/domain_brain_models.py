@@ -13,7 +13,7 @@ from enum import Enum
 from cortex.models.canonical_enums import AuditOperationType
 
 
-class EntityType(Enum):
+class EntityType(Enum):  # CORE-035-scoped — domain-specific variant
     """Entity types."""
 
     DOMAIN = "domain"
@@ -29,7 +29,7 @@ class EntityType(Enum):
 
 
 @dataclass
-class Entity:
+class Entity:  # CORE-035-scoped — domain-specific variant
     """Domain entity.
 
     Attributes:
@@ -52,7 +52,7 @@ class Entity:
 
 
 @dataclass
-class Conflict:
+class Conflict:  # CORE-035-scoped — domain-specific variant
     """Conflict between entities or operations.
 
     Attributes:
@@ -106,7 +106,7 @@ class DomainModel:
 
 
 @dataclass
-class DomainCapability:
+class DomainCapability:  # CORE-035-scoped — domain-specific variant
     """Capability within a domain.
 
     Attributes:
@@ -144,7 +144,7 @@ class DomainState:
 
 
 @dataclass
-class DomainContext:
+class DomainContext:  # CORE-035-scoped — domain-specific variant
     """Context for domain operations.
 
     Attributes:

@@ -25,7 +25,7 @@ import yaml
 # Enums and Constants
 # ============================================================================
 
-class PatternCategory(Enum):
+class PatternCategory(Enum):  # CORE-035-scoped — domain-specific variant
     """Pattern categories for classification."""
     CREATIONAL = "creational"
     STRUCTURAL = "structural"

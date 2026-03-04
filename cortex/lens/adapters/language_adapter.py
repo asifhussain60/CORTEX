@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import List
 
 
-class LanguageAdapter(ABC):
+class LanguageAdapter(ABC):  # CORE-035-scoped — domain-specific variant
     """
     Abstract base class for language-specific AST parsers.
 

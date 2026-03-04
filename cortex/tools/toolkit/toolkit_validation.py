@@ -32,7 +32,7 @@ class ValidationLevel(Enum):
     CRITICAL = "critical"
 
 
-class ValidationCheck(Enum):
+class ValidationCheck(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of validation checks."""
     TDD_COMPLIANCE = "tdd_compliance"
     TYPE_HINTS = "type_hints"

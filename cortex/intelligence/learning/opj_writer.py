@@ -87,7 +87,7 @@ def _sanitize_for_yaml(obj: Any, depth: int = 0, max_depth: int = 5) -> Any:
         return "<non-serializable>"
 
 
-class OPJEntry:
+class OPJEntry:  # CORE-035-scoped — domain-specific variant
     """Lightweight entry dataclass used by OPJWriter (internal use)."""
 
     def __init__(
@@ -146,7 +146,7 @@ class OPJEntry:
         return d
 
 
-class OPJOutcome:
+class OPJOutcome:  # CORE-035-scoped — domain-specific variant
     """Outcome constants (mirrors opj_models.OPJOutcome for zero import coupling)."""
 
     SUCCESS = type("_O", (), {"value": "success"})()

@@ -27,7 +27,7 @@ class CodeMetrics(BaseModel):
     test_coverage_percent: Optional[float] = Field(None, ge=0, le=100)
     duplication_percent: Optional[float] = Field(None, ge=0, le=100)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Code Metrics"
         description = "Code quality, complexity, and coverage metrics"
 
@@ -39,7 +39,7 @@ class DependencyMetrics(BaseModel):
     outdated: Optional[int] = Field(None, ge=0)
     vulnerable: Optional[int] = Field(None, ge=0)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Dependency Metrics"
         description = "Dependency version and vulnerability tracking"
 
@@ -52,19 +52,19 @@ class SecurityMetrics(BaseModel):
     low_vulnerabilities: Optional[int] = Field(None, ge=0)
     security_score: Optional[float] = Field(None, ge=0, le=100)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Security Metrics"
         description = "Vulnerability counts and security scoring"
 
 
-class PerformanceMetrics(BaseModel):
+class PerformanceMetrics(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Performance and benchmarking metrics"""
     build_time_seconds: Optional[float] = Field(None, ge=0)
     test_execution_time_seconds: Optional[float] = Field(None, ge=0)
     deployment_frequency_days: Optional[float] = Field(None, ge=0)
     mean_time_to_recovery_hours: Optional[float] = Field(None, ge=0)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Performance Metrics"
         description = "Build, test, and deployment performance indicators"
 
@@ -94,7 +94,7 @@ class Repository(BaseModel):
             raise ValueError("slug cannot start or end with hyphen")
         return v.lower()
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Repository"
         description = "Repository metadata and core information"
 
@@ -115,12 +115,12 @@ class UseCase(BaseModel):  # CORE-035-scoped — domain-specific use case model
     business_value: str = Field("", description="Why this use case matters")
     confidence_score: float = Field(0.5, ge=0.0, le=1.0, description="Detection confidence 0-1")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Use Case"
         description = "Business use case with actors, flows, and value proposition"
 
 
-class Overview(BaseModel):
+class Overview(BaseModel):  # CORE-035-scoped — domain-specific variant
     """High-level repository overview"""
     summary: str = Field(..., description="Technical summary of the repository")
     business_summary: Optional[str] = Field(None, description="Business-friendly narrative")
@@ -131,7 +131,7 @@ class Overview(BaseModel):
     upcoming_maintenance: Optional[List[str]] = Field(None, description="Scheduled maintenance")
     use_cases: Optional[List[UseCase]] = Field(None, description="Business use cases")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Overview"
         description = "Repository summary and key information"
 
@@ -147,7 +147,7 @@ class LensAnalysis(BaseModel):
     anti_patterns_detected: Optional[List[Dict[str, Any]]] = Field(None)
     recommendations: Optional[List[str]] = Field(None)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "LENS Analysis"
         description = "Code intelligence and pattern analysis"
 
@@ -184,7 +184,7 @@ class Dashboard(BaseModel):
             raise ValueError("schema_version must be '3.0'")
         return v
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Dashboard"
         description = "Complete repository intelligence dashboard (schema v3.0)"
         example = {
@@ -224,7 +224,7 @@ class Registry(BaseModel):
     repositories: List[RepositoryTile] = Field(default_factory=list)
     last_updated: datetime = Field(default_factory=datetime.now)
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Repository Registry"
         description = "Index of all repository dashboards"
 
@@ -241,7 +241,7 @@ class GenerationMetadata(BaseModel):
     analysis_duration_seconds: Optional[float] = Field(None, ge=0)
     adapter_type: str = Field(default="json", description="Data adapter used")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         title = "Generation Metadata"
         description = "Dashboard generation tracking and metadata"
 

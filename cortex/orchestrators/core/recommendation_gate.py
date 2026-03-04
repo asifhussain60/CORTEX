@@ -124,7 +124,7 @@ class GateEvaluation:
 # RECOMMENDATION GATE
 # ---------------------------------------------------------------------------
 
-class RecommendationGate:
+class RecommendationGate:  # CORE-035-scoped — domain-specific variant
     """Regression prevention gate for AI recommendations.
 
     Evaluates recommendations against:

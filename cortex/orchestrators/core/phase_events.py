@@ -23,7 +23,7 @@ class PhaseType(Enum):
 
 
 @dataclass
-class PhaseCompletedEvent:
+class PhaseCompletedEvent:  # CORE-035-scoped — domain-specific variant
     """Event when a phase completes.
 
     Attributes:

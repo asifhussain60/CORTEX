@@ -44,7 +44,7 @@ _DEFAULT_DOMAINS_DIR = _REPO_ROOT / "cortex-registry" / "company" / "domains"
 _DEFAULT_PROFILES_DIR = _REPO_ROOT / "cortex-registry" / "knowledge-base" / "profiles"
 
 
-class CompanyDomainLoader:
+class CompanyDomainLoader:  # CORE-035-scoped — domain-specific variant
     """
     Loads company domain rules and compliance standards from YAML files.
 

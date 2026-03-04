@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 from cortex.models.canonical_enums import ValidationSeverity
 
 
-class IntegrationStatus(Enum):
+class IntegrationStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Integration status."""
     VALID = "valid"
     INVALID = "invalid"
@@ -23,7 +23,7 @@ class IntegrationStatus(Enum):
 
 
 @dataclass
-class ValidationIssue:
+class ValidationIssue:  # CORE-035-scoped — domain-specific variant
     """Validation issue."""
     code: str
     message: str

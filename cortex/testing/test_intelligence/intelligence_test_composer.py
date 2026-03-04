@@ -15,7 +15,7 @@ import yaml
 
 
 @dataclass
-class ComposedTest:
+class ComposedTest:  # CORE-035-scoped — domain-specific variant
     """Represents a composed test case."""
 
     test_name: str

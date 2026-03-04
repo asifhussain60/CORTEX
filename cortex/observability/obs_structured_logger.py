@@ -48,7 +48,7 @@ class LogLevel(str, Enum):
     CRITICAL = "CRITICAL"
 
 @dataclass
-class LogContext:
+class LogContext:  # CORE-035-scoped — domain-specific variant
     """Structured log context fields.
 
     Attributes:
@@ -101,7 +101,7 @@ class StructuredLogRecord:
     duration_ms: Optional[float] = None
     memory_mb: Optional[float] = None
 
-class StructuredLogger:
+class StructuredLogger:  # CORE-035-scoped — domain-specific variant
     """JSON structured logger with context propagation.
 
     Example:

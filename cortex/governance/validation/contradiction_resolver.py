@@ -14,14 +14,14 @@ import uuid
 from cortex.governance.validation.cross_reference_validator import ContradictionReport, ContradictionType
 
 
-class ResolutionStrategy(Enum):
+class ResolutionStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Resolution strategy types"""
     AUTOMATIC = "automatic"
     MANUAL_OVERRIDE = "manual_override"
     CONFIDENCE_BASED = "confidence_based"
 
 
-class ResolutionStatus(Enum):
+class ResolutionStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Resolution status types"""
     RESOLVED = "resolved"
     MANUAL_REVIEW_REQUIRED = "manual_review_required"
@@ -30,7 +30,7 @@ class ResolutionStatus(Enum):
 
 
 @dataclass
-class Resolution:
+class Resolution:  # CORE-035-scoped — domain-specific variant
     """
     Resolution result for a contradiction
 

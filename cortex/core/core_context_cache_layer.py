@@ -31,7 +31,7 @@ class CacheEntry:  # CORE-035-scoped — independent cache implementation — no
 
 
 @dataclass
-class CacheStats:
+class CacheStats:  # CORE-035-scoped — context cache layer variant (hits/misses/evictions/size/max_size)
     """Cache statistics"""
     hits: int = 0
     misses: int = 0
@@ -45,7 +45,7 @@ class CacheStats:
         return self.hits / total if total > 0 else 0.0
 
 
-class ContextCacheLayer:
+class ContextCacheLayer:  # CORE-035-scoped — domain-specific variant
     """
     LRU cache with TTL for context reuse
 

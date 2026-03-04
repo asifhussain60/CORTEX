@@ -31,7 +31,7 @@ class ValidationIssueType(Enum):
 
 
 @dataclass
-class ParameterSpec:
+class ParameterSpec:  # CORE-035-scoped — domain-specific variant
     """Parameter specification."""
     name: str
     type_hint: str
@@ -41,14 +41,14 @@ class ParameterSpec:
 
 
 @dataclass
-class ReturnSpec:
+class ReturnSpec:  # CORE-035-scoped — domain-specific variant
     """Return value specification."""
     type_hint: str
     description: str
 
 
 @dataclass
-class ValidationIssue:
+class ValidationIssue:  # CORE-035-scoped — domain-specific variant
     """Validation issue."""
     issue_type: ValidationIssueType
     severity: str

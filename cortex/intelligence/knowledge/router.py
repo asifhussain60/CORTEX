@@ -40,7 +40,7 @@ _BUSINESS_RULES_KEYWORDS = frozenset(
 )
 
 
-class IntelligentKnowledgeRouter:
+class IntelligentKnowledgeRouter:  # CORE-035-scoped — domain-specific variant
     """
     Intelligence-layer knowledge router with business-rules domain support.
 

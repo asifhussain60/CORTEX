@@ -34,7 +34,7 @@ class Severity(Enum):  # CORE-035-scoped — domain-specific severity scale — 
 
 
 @dataclass
-class ValidationCheck:
+class ValidationCheck:  # CORE-035-scoped — domain-specific variant
     """Individual validation check result."""
     name: str
     passed: bool

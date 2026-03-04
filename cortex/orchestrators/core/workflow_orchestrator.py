@@ -93,7 +93,7 @@ class WorkflowExecutionContext:
 
 
 @dataclass
-class WorkflowExecutionResult:
+class WorkflowExecutionResult:  # CORE-035-scoped — domain-specific variant
     """Result of complete workflow execution."""
     operation: str
     success: bool

@@ -29,7 +29,7 @@ from pathlib import Path
 
 
 @dataclass
-class Analysis:
+class Analysis:  # CORE-035-scoped — domain-specific variant
     """
     Analysis result from cleaner scan.
 
@@ -50,7 +50,7 @@ class Analysis:
 
 
 @dataclass
-class Report:
+class Report:  # CORE-035-scoped — domain-specific variant
     """
     Execution report from cleaner.
 

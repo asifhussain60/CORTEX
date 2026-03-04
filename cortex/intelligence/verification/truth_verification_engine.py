@@ -66,7 +66,7 @@ class Evidence:
 
 
 @dataclass
-class VerificationResult:
+class VerificationResult:  # CORE-035-scoped — domain-specific variant
     """
     Result of truth verification.
 

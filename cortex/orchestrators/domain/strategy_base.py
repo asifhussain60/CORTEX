@@ -60,7 +60,7 @@ class ExecutionContext:
 
 
 @dataclass
-class ExecutionResult:
+class ExecutionResult:  # CORE-035-scoped — strategy domain variant with phase_id/message/ExecutionStatus fields
     """
     Execution result from strategy.
 
@@ -103,7 +103,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
         return self.passed
 
 
-class ExecutionStrategy(ABC):
+class ExecutionStrategy(ABC):  # CORE-035-scoped — domain-specific variant
     """
     Base class for all planning execution strategies.
 

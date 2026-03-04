@@ -77,7 +77,7 @@ class CapabilityMapping:
 
 
 @dataclass
-class CapabilityGap:
+class CapabilityGap:  # CORE-035-scoped — domain-specific variant
     """Identified capability gap requiring custom analyzer."""
 
     capability_name: str
@@ -126,7 +126,7 @@ class CrawlerSpec:
 
 
 @dataclass
-class DiscoveryResult:
+class DiscoveryResult:  # CORE-035-scoped — domain-specific variant
     """Result of capability discovery process."""
 
     fingerprint: TechStackFingerprint

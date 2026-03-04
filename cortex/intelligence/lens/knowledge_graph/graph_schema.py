@@ -12,7 +12,7 @@ from typing import Dict, Any, List, Optional
 from enum import Enum
 
 
-class NodeType(Enum):
+class NodeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of nodes in the knowledge graph"""
     FILE = "File"
     CLASS = "Class"
@@ -22,7 +22,7 @@ class NodeType(Enum):
     MODULE = "Module"
 
 
-class EdgeType(Enum):
+class EdgeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of edges (relationships) in the knowledge graph"""
     CALLS = "calls"
     IMPORTS = "imports"
@@ -115,7 +115,7 @@ class Edge:
 
 
 @dataclass
-class GraphQuery:
+class GraphQuery:  # CORE-035-scoped — domain-specific variant
     """
     Query specification for graph traversal.
 

@@ -39,7 +39,7 @@ class CompanyDomainResult:
     load_time_ms: float = 0.0
 
 
-class CompanyDomainLoader:
+class CompanyDomainLoader:  # CORE-035-scoped — domain-specific variant
     """
     Dynamic loader for company domain knowledge YAMLs.
 

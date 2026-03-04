@@ -46,7 +46,7 @@ class Dependency:
     size_kb: int
 
 
-class DependencyBundler:
+class DependencyBundler:  # CORE-035-scoped — domain-specific variant
     """
     Downloads and bundles frontend dependencies locally.
 

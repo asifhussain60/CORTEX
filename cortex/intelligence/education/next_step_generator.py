@@ -21,7 +21,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Set
 
 
-class KnowledgeLevel(Enum):
+class KnowledgeLevel(Enum):  # CORE-035-scoped — domain-specific variant
     """User knowledge level classification."""
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"

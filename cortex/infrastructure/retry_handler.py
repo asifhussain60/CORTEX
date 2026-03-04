@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
-class RetryPolicy(Enum):
+class RetryPolicy(Enum):  # CORE-035-scoped — domain-specific variant
     """Retry policies."""
     EXPONENTIAL_BACKOFF = "exponential_backoff"
     LINEAR_BACKOFF = "linear_backoff"
@@ -27,7 +27,7 @@ class RetryPolicy(Enum):
 
 
 @dataclass
-class RetryConfig:
+class RetryConfig:  # CORE-035-scoped — domain-specific variant
     """Configuration for retry behavior."""
     max_attempts: int = 3
     initial_delay: float = 0.5  # seconds
@@ -49,7 +49,7 @@ class RetryConfig:
 
 
 @dataclass
-class RetryResult:
+class RetryResult:  # CORE-035-scoped — domain-specific variant
     """Result of a retry operation."""
     success: bool
     data: Optional[Any] = None

@@ -57,7 +57,7 @@ class DatabaseOperationError(Exception):
             self.__cause__ = original_exception
 
 
-class RetryExhaustedError(Exception):
+class RetryExhaustedError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when retry attempts are exhausted."""
 
     def __init__(
@@ -327,7 +327,7 @@ class RecoverableError(Exception):
         )
 
 
-class ConfigurationError(Exception):
+class ConfigurationError(Exception):  # CORE-035-scoped — domain-specific variant
     """Configuration validation error.
 
     Indicates invalid or missing configuration values.

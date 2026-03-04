@@ -43,6 +43,7 @@ token_cost_estimate: 5800
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Updated:** 2026-03-03 | **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
 **Scope:** Autonomous production certification — inspect, optimize, harden, certify
+🧭 Orchestration: Classifier → Mission Control → Audit Coordinator → Code Improver
 
 ---
 

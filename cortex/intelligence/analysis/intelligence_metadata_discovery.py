@@ -47,7 +47,7 @@ class AgentDiscoveryResult:
 
 
 @dataclass
-class CollaborationPattern:
+class CollaborationPattern:  # CORE-035-scoped — domain-specific variant
     """
     Detected collaboration pattern between agents.
 
@@ -63,7 +63,7 @@ class CollaborationPattern:
     strength: float = 1.0
 
 
-class MetadataDrivenDiscovery:
+class MetadataDrivenDiscovery:  # CORE-035-scoped — domain-specific variant
     """
     High-level agent discovery using machine-readable metadata.
 

@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class GovernanceEnforcementAgent:
+class GovernanceEnforcementAgent:  # CORE-035-scoped — domain-specific variant
     """
     Governance enforcement agent that delegates to EnforcementOrchestrator.
 

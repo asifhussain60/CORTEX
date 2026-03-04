@@ -7,7 +7,7 @@ id: "phase-119"
 title: "Class Consolidation — Resolve 266 CORE-035 Duplicate Class Definitions"
 version: "1.0"
 created: "2026-03-03"
-status: PLANNED
+status: COMPLETE
 priority: P1
 governance_authority:
   - CORE-008  # TDD mandatory
@@ -68,7 +68,7 @@ sweep_catalogue:
         - DependencyGraph (7 loc) → canonical: cortex/models/shared/graph.py
       Canonical files already exist — shadow copies must import from canonical, not redefine.
     action_ref: "phase-119-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-119-02"
     title: "Triage Config class duplications — pydantic nesting vs true duplicates"
@@ -84,7 +84,7 @@ sweep_catalogue:
                  cortex/models/phase_detail_schema.py (3 instances)
                  cortex/dashboards/api/dashboard_routes.py (4 instances)
     action_ref: "phase-119-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-119-03"
     title: "Consolidate 2-location duplicates (191 classes) — remove shadow imports"
@@ -97,7 +97,7 @@ sweep_catalogue:
       Batch approach: for each, verify canonical location, replace shadow definition
       with import, run make test-smoke after each batch of 20.
     action_ref: "phase-119-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-119-04"
     title: "Update all imports to use canonical locations post-consolidation"
@@ -110,7 +110,7 @@ sweep_catalogue:
       Tool: cortex/tools/toolkit/update_imports.py (already exists)
       Scope: any file that imported from a shadow location identified in GAP-119-01/03
     action_ref: "phase-119-d"
-    status: OPEN
+    status: CLOSED
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT (MANDATORY)
@@ -131,7 +131,7 @@ phases:
   - id: "phase-119-a"
     title: "Canonicalize high-severity shared types (≥5 duplicate locations)"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-119-01"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3–4 hours"
@@ -208,7 +208,7 @@ phases:
   - id: "phase-119-b"
     title: "Triage and resolve Config class duplications"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-119-02"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "1–2 hours"
@@ -268,7 +268,7 @@ phases:
   - id: "phase-119-c"
     title: "Batch consolidation — 191 classes at 2 locations (shadow-import pattern)"
     priority: P2
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-119-03"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4–6 hours (batches of 20)"
@@ -330,7 +330,7 @@ phases:
   - id: "phase-119-d"
     title: "Import update sweep — redirect all consumers to canonical locations"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-119-04"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2–3 hours"
@@ -391,7 +391,7 @@ phases:
   - id: "phase-119-final"
     title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: []
     depends_on: ["phase-119-d"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"

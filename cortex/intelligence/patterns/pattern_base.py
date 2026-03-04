@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 
-class PatternCategory(str, Enum):
+class PatternCategory(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Pattern categories from Gang of Four."""
 
     CREATIONAL = "Creational"

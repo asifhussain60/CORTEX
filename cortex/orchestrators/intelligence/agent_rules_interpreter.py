@@ -231,7 +231,7 @@ class RuleConstraint:
     description: Optional[str] = None
 
 @dataclass
-class RuleViolation:
+class RuleViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a detected rule violation."""
     rule_id: str
     severity: RuleEnforcementLevel

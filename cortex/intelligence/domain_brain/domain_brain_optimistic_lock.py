@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
-class ConflictError(Exception):
+class ConflictError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when optimistic lock conflict occurs.
 
     Attributes:
@@ -84,7 +84,7 @@ class LockToken:
     expires_at: str = ""
 
 
-class OptimisticLockManager:
+class OptimisticLockManager:  # CORE-035-scoped — domain-specific variant
     """Manage optimistic locks for concurrent domain writes.
 
     Implements version-based optimistic locking to detect and prevent

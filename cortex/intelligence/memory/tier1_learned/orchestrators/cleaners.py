@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class Analysis:
+class Analysis:  # CORE-035-scoped — domain-specific variant
     """Analysis result from a cleaner."""
     cleaner_id: str
     timestamp: str
@@ -30,7 +30,7 @@ class Analysis:
 
 
 @dataclass
-class Report:
+class Report:  # CORE-035-scoped — domain-specific variant
     """Execution report from a cleaner."""
     cleaner_id: str
     timestamp: str
@@ -166,7 +166,7 @@ class CleanerInterface(ABC):
         pass
 
 
-class CleanerRegistry:
+class CleanerRegistry:  # CORE-035-scoped — domain-specific variant
     """Registry for cleaner plugins."""
 
     def __init__(self) -> None:

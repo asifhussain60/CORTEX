@@ -22,7 +22,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
-class SpanKind(Enum):
+class SpanKind(Enum):  # CORE-035-scoped — domain-specific variant
     """Span kind enumeration."""
 
     INTERNAL = "INTERNAL"
@@ -32,7 +32,7 @@ class SpanKind(Enum):
     CONSUMER = "CONSUMER"
 
 
-class SpanStatus(Enum):
+class SpanStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Span status enumeration."""
 
     UNSET = "UNSET"
@@ -41,7 +41,7 @@ class SpanStatus(Enum):
 
 
 @dataclass
-class TraceContext:
+class TraceContext:  # CORE-035-scoped — domain-specific variant
     """Trace context for propagation across components.
 
     Args:

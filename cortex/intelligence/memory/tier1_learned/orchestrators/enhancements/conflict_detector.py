@@ -39,7 +39,7 @@ class ConflictType(Enum):
 
 
 @dataclass
-class Conflict:
+class Conflict:  # CORE-035-scoped — domain-specific variant
     """Single detected conflict."""
 
     conflict_type: ConflictType

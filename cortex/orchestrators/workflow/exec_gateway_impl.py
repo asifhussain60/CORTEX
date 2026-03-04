@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class GatewayError(Exception):
+class GatewayError(Exception):  # CORE-035-scoped — domain-specific variant
     """Base exception for MasterGateway errors."""
     pass
 

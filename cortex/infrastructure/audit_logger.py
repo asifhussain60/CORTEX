@@ -124,7 +124,7 @@ class CrossPlatformFileLock:
         return False
 
 
-class EnhancedAuditLogger(IAuditLogger):
+class EnhancedAuditLogger(IAuditLogger):  # CORE-035-scoped — domain-specific variant
     """
     Production-grade audit logger with hash chain integrity.
 

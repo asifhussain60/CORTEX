@@ -37,7 +37,7 @@ class ModuleConfig:
     async_load: bool = False
 
 
-class LazyModuleLoader:
+class LazyModuleLoader:  # CORE-035-scoped — domain-specific variant
     """
     Generates JavaScript for lazy loading frontend modules.
 

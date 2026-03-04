@@ -36,7 +36,7 @@ class TerminalEvent:
 
 
 @dataclass
-class PhaseCompletedEvent(TerminalEvent):
+class PhaseCompletedEvent(TerminalEvent):  # CORE-035-scoped — domain-specific variant
     """Event fired when a phase completes successfully."""
     operation: str = ""
     result: str = ""

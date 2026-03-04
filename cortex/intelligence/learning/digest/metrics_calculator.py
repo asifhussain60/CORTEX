@@ -27,7 +27,7 @@ from cortex.intelligence.learning.digest.digest_metrics_schema import (
 )
 
 
-class MetricsCalculator:
+class MetricsCalculator:  # CORE-035-scoped — domain-specific variant
     """
     Calculate quantitative metrics for DIGEST sessions.
 

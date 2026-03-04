@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class TurnContext:
+class TurnContext:  # CORE-035-scoped — domain-specific variant
     """Context from a single turn."""
 
     turn_number: int

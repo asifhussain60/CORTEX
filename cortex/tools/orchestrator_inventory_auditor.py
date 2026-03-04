@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Set
 
 import yaml
 
-class FileType(Enum):
+class FileType(Enum):  # CORE-035-scoped — domain-specific variant
     """Classification of Python files in orchestrators directory."""
     ORCHESTRATOR = "orchestrator"
     ADAPTER = "adapter"

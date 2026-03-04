@@ -19,7 +19,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-class RecommendationGate:
+class RecommendationGate:  # CORE-035-scoped — domain-specific variant
     """
     Gate for validating recommendations against registry history.
 

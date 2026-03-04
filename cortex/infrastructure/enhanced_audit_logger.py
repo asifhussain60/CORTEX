@@ -26,7 +26,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
-class EnhancedAuditLogger:
+class EnhancedAuditLogger:  # CORE-035-scoped — domain-specific variant
     """
     Audit logger implementing audit-first pattern.
 

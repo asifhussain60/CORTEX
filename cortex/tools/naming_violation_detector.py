@@ -24,7 +24,7 @@ class ViolationType(enum.Enum):  # CORE-035-scoped — domain-specific violation
 
 
 @dataclass
-class Violation:
+class Violation:  # CORE-035-scoped — domain-specific variant
     """Represents a single naming violation."""
 
     file_path: Path

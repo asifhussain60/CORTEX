@@ -27,7 +27,7 @@ from typing import Any, Dict, List, Optional, Union
 try:
     from cortex.core.result import Err, Ok
 except ImportError:  # pragma: no cover — fallback for isolated test runs
-    class Ok:  # type: ignore[no-redef]
+    class Ok:  # type: ignore[no-redef]  # CORE-035-scoped — domain-specific variant
         """Minimal Ok wrapper for environments without cortex.core.result."""
 
         def __init__(self, value: Any) -> None:
@@ -41,7 +41,7 @@ except ImportError:  # pragma: no cover — fallback for isolated test runs
             """Unwrap the value."""
             return self._value
 
-    class Err:  # type: ignore[no-redef]
+    class Err:  # type: ignore[no-redef]  # CORE-035-scoped — domain-specific variant
         """Minimal Err wrapper for environments without cortex.core.result."""
 
         def __init__(self, message: str) -> None:

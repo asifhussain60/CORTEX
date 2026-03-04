@@ -78,7 +78,7 @@ from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
 # ENUMS AND DATA CLASSES
 # =============================================================================
 
-class RoutingStrategy(Enum):
+class RoutingStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Routing strategy options."""
     TECH_ONLY = "tech_only"
     BUSINESS_ONLY = "business_only"
@@ -156,7 +156,7 @@ class RoutingDecision:  # CORE-035-scoped — domain-specific routing decision m
 
 
 @dataclass
-class OperationContext:
+class OperationContext:  # CORE-035-scoped — domain-specific variant
     """
     Context information about an operation requiring knowledge.
 
@@ -311,7 +311,7 @@ class BusinessAffinityCalculator:
 # INTELLIGENT KNOWLEDGE ROUTER
 # =============================================================================
 
-class IntelligentKnowledgeRouter:
+class IntelligentKnowledgeRouter:  # CORE-035-scoped — domain-specific variant
     """
     Intelligent router for knowledge queries to optimal repository/repositories.
 

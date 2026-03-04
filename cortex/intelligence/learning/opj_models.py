@@ -14,7 +14,7 @@ from enum import Enum
 from typing import Any, Dict, Optional
 
 
-class OPJOutcome(Enum):
+class OPJOutcome(Enum):  # CORE-035-scoped — domain-specific variant
     """Outcome of an orchestrator operation recorded in the OPJ."""
 
     SUCCESS = "success"
@@ -26,7 +26,7 @@ class OPJValidationError(ValueError):
 
 
 @dataclass
-class OPJEntry:
+class OPJEntry:  # CORE-035-scoped — domain-specific variant
     """
     A single Operational Pattern Journal entry.
 

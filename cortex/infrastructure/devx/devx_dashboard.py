@@ -22,7 +22,7 @@ class DashboardSection(Enum):
 
 
 @dataclass
-class DashboardMetrics:
+class DashboardMetrics:  # CORE-035-scoped — domain-specific variant
     """Dashboard metrics."""
     reload_count: int = 0
     reload_success_rate: float = 0.0
@@ -52,7 +52,7 @@ class DashboardMetrics:
 
 
 @dataclass
-class LogEntry:
+class LogEntry:  # CORE-035-scoped — domain-specific variant
     """Dashboard log entry."""
     level: str
     source: str

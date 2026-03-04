@@ -137,15 +137,16 @@ The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract 
 The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
-- ✅ ONE header per response, never repeated — `# 🧠 CORTEX {mode}` then `**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.` then `---`
+- ✅ ONE header per response, never repeated — 3-zone layout: Zone 1 (`# 🧠 CORTEX {mode}` + `**Author:**` + `🧭 Orchestration:`) → `---` → Zone 2 (`> blockquote`) → `---` → Zone 3 (work content)
 - ✅ **Product icon is fixed**: 🧠 — never replaced by a mode-specific icon (⚡ 🔧 ♻️ etc.)
-- ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
+- ✅ Author + copyright line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header — Canonical Spec)
+- ✅ `🧭 Orchestration: {DisplayName} → {DisplayName}` in Zone 1 of the header — omit for single-hop responses
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
-- ✅ Orchestrator engagement surfaced via `🧭 Routing Breadcrumb` contextually — never in the header
 - ❌ NO mode-specific icon in the H1 heading — 🧠 is the only valid icon for this prompt
-- ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in the breadcrumb line only
+- ❌ NO `**Orchestrator:** {Name} ✅` field — use `🧭 Orchestration:` chain in Zone 1 instead
+- ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — `🧭 Orchestration:` in Zone 1 IS the breadcrumb (duplication = P1 violation)
 - ❌ NO secondary title headings inside the response body — the H1 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 

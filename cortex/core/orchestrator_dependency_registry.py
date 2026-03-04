@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 
-class TierLevel(Enum):
+class TierLevel(Enum):  # CORE-035-scoped — domain-specific variant
     """Tier levels in the CORTEX system."""
     TIER0 = "tier0"  # Governance rules
     TIER1 = "tier1"  # Acceptance criteria
@@ -29,7 +29,7 @@ class TierLevel(Enum):
     TIER3 = "tier3"  # Orchestration
 
 
-class DependencyType(Enum):
+class DependencyType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of dependencies between orchestrators and tiers."""
     DIRECT = "direct"  # Orchestrator directly uses tier
     TRANSITIVE = "transitive"  # Via other orchestrator
@@ -115,7 +115,7 @@ class OrchestratorProfile:
 
 
 @dataclass
-class DependencyPath:
+class DependencyPath:  # CORE-035-scoped — domain-specific variant
     """Represents a path of dependencies."""
     path: List[str]  # Sequence of orchestrator IDs
     involves_tiers: Set[str] = field(default_factory=set)

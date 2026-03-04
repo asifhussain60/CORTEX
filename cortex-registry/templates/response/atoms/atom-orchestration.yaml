@@ -1,0 +1,103 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Orchestration Breadcrumb
+# ID: atom-orchestration
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: Shows the routing chain of orchestrators that handled a request.
+# Renders as a bold label + plain text chain on a single line.
+# Position: Zone 3 (bottom of the 3-zone header, after second --- separator).
+#
+# LABEL CHANGE: Was "**Via:**" — renamed to "🧭 Orchestration:" for clarity.
+# The label change makes the breadcrumb purpose immediately obvious.
+#
+# Template:
+#   🧭 Orchestration: {DisplayName} → {DisplayName} → {DisplayName}
+#
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase A)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-orchestration
+type: atom
+version: "3.0"
+phase: "120"
+label: "🧭 Orchestration:"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: null
+  element: "bold label + plain text"
+  position: "Zone 3 — after second --- separator (bottom of header)"
+  zone: 3
+  zone_separator_before: "--- (HR)"
+  omit_if_single_hop: true
+  single_line: true
+  chain_separator: " → "
+  max_hops_displayed: 8
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502 — box-drawing chars that collapse in VS Code dark themes)"
+    - "class names (use display names only)"
+    - "separate italic breadcrumb block after ---"
+  note: "🧭 Orchestration: IS the breadcrumb. Never render a separate *🧭 Classifier → ...* italic
+    block after ---. That duplicates the chain (P1 violation). The label + chain on one line is canonical."
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+template: "🧭 Orchestration: {chain}"
+chain_format: "{DisplayName} → {DisplayName}"
+
+# ─── Display Name Map (class name → plain-language display name) ──────────────
+# SSOT source: copilot-instructions.md § Orchestrator Engagement Visual Cue
+# All 18 registered orchestrators + support classes
+display_name_map:
+  IntentRouter: "Classifier"
+  MasterOrchestrator: "Mission Control"
+  TDDOrchestrator: "TDD Builder"
+  AuditOrchestrator: "Audit Coordinator"
+  AuditCoordinator: "Audit Coordinator"
+  EnforcementOrchestrator: "Governance Enforcer"
+  HealthOrchestrator: "Health Monitor"
+  VacuumOrchestrator: "Workspace Cleaner"
+  RefactoringOrchestrator: "Code Improver"
+  DebuggerOrchestrator: "Debug Tracer"
+  DigestSessionOrchestrator: "Content Ingestor"
+  DesignCoordinator: "Architect"
+  PlanningOrchestrator: "Roadmap Planner"
+  WorkflowComposer: "Workflow Composer"
+  RCAEngine: "Root Cause Analyst"
+  MarkerInjectionEngine: "Debug Injector"
+  InteractionOrchestrator: "Stage 1 Comprehension"
+  LearningOrchestrator: "Learning Engine"
+  GitOrchestrator: "Git Manager"
+
+# ─── Pre-built Chains (SSOT: copilot-instructions.md § Orchestrator Engagement Visual Cue) ──
+pre_built_chains:
+  audit_fix: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
+  implement_fix: "Classifier → TDD Builder"
+  refactor: "Classifier → Code Improver → Workflow Composer"
+  health: "Classifier → Health Monitor"
+  vacuum: "Classifier → Workspace Cleaner"
+  debug: "Classifier → Debug Tracer → Debug Injector"
+  totalrecall: "Classifier → Mission Control → Audit Coordinator → Code Improver"
+  rca: "Classifier → Learning Engine → Root Cause Analyst"
+  sync: "Classifier → Git Manager → Workflow Composer"
+
+# ─── Omit Conditions ──────────────────────────────────────────────────────────
+omit_when:
+  - "single_hop == true (simple query with only Classifier)"
+  - "during silent autonomous execution (after 'proceed' command)"
+
+# ─── Anti-Duplication Rules ───────────────────────────────────────────────────
+anti_duplication:
+  rule: "🧭 Orchestration: in Zone 3 IS the breadcrumb. NEVER render a separate italic *🧭 ...* block."
+  violation_class: "P1"
+  check: "grep for '*🧭' and '🧭 Orchestration:' — if both exist in the same response, it is a violation"
+
+# ─── Validation Rules ─────────────────────────────────────────────────────────
+validation:
+  display_name_map_minimum: 18
+  no_class_names_in_output: true
+  chain_separator: " → "
+  no_tree_chars: true
+  single_line: true

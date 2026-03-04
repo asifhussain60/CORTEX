@@ -33,7 +33,7 @@ class ParseError(Exception):
         super().__init__(f"{message}{location}")
 
 
-class SectionType(Enum):
+class SectionType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of sections in a template."""
     METADATA = auto()
     PARAMETERS = auto()

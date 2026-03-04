@@ -1,0 +1,123 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Status Footer
+# ID: atom-status-footer
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: A compact single-line status summary that appears after the final
+# --- separator in every response. Shows current phase, mode, and up to 5
+# contextual metrics from the metric_pool.
+#
+# DESIGN CONSTRAINT: Must be a SINGLE LINE — not a multi-line block.
+# VS Code Copilot Chat's narrow panel (300-500px) makes multi-line footers
+# visually heavy. A single status line after --- is scannable and unobtrusive.
+#
+# Template (single line):
+#   🧠 Phase {phase} · {mode} · {metric_1} · {metric_2} · {metric_3}
+#
+# Example output:
+#   🧠 Phase 120-A · Building · 5/5 atoms ✅ · 38 tests RED · SSOT pending
+#
+# Separator: "·" (middle dot U+00B7) — renders clearly in all VS Code themes
+#
+# SSOT: .github/templates/cortex-response-templates.md § Status Footer
+# Phase: 120 (Sub-Phase A)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-status-footer
+type: atom
+version: "3.0"
+phase: "120"
+separator: "·"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: null
+  element: "single line after final --- separator"
+  single_line: true
+  max_display: 5
+  position: "absolute last line of every response (after final ---)"
+  zone: "footer"
+  zone_separator_before: "--- (HR, final separator)"
+  separator_char: "·"
+  separator_name: "middle dot (U+00B7)"
+  icon: "🧠"
+  forbidden:
+    - "multi-line content"
+    - "bullet lists"
+    - "headers"
+    - "tables"
+    - "tree characters"
+  note: "The footer is ONE line. It gives rapid context without disrupting the response.
+    Only the most relevant metrics from metric_pool are shown (max 5, space permitting)."
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+# {phase_id}   = current phase or sub-phase (e.g., "120-A", "Phase 120")
+# {mode}       = current execution mode (e.g., "Building", "Fixing")
+# {metrics}    = up to 5 selected metrics from metric_pool, joined by " · "
+template: "🧠 Phase {phase_id} · {mode} · {metrics}"
+
+# Template when no phase context (simple query):
+template_no_phase: "🧠 CORTEX · {mode} · {metrics}"
+
+# ─── Metric Pool (8 available metrics — max 5 shown per response) ─────────────
+# Selection: choose the most contextually relevant metrics based on operation type
+metric_pool:
+  - id: tests_status
+    label: "{count} tests {status}"
+    contexts: [IMPLEMENT, FIX, REFACTOR, AUDIT, TDD]
+    example: "38 tests RED"
+
+  - id: files_changed
+    label: "{count} files changed"
+    contexts: [IMPLEMENT, FIX, REFACTOR, VACUUM]
+    example: "3 files changed"
+
+  - id: atoms_complete
+    label: "{done}/{total} atoms ✅"
+    contexts: [IMPLEMENT]
+    example: "5/5 atoms ✅"
+
+  - id: violations_found
+    label: "{count} violations"
+    contexts: [AUDIT, HEALTH, SECURITY_AUDIT]
+    example: "0 violations"
+
+  - id: sweep_status
+    label: "sweep {status}"
+    contexts: [AUDIT, VACUUM, REFACTOR]
+    example: "sweep OPEN"
+
+  - id: ssot_status
+    label: "SSOT {status}"
+    contexts: [IMPLEMENT, FIX, REFACTOR]
+    example: "SSOT pending"
+
+  - id: phase_progress
+    label: "{done}/{total} sub-phases"
+    contexts: [IMPLEMENT, PLAN, DESIGN]
+    example: "1/7 sub-phases"
+
+  - id: smoke_gate
+    label: "smoke {status}"
+    contexts: [IMPLEMENT, FIX, REFACTOR, AUDIT]
+    example: "smoke GREEN"
+
+# ─── Display Selection Logic ──────────────────────────────────────────────────
+selection_logic:
+  max_metrics: 5
+  strategy: "select from metric_pool where context matches current operation type"
+  fallback: "show phase_id and mode only if no metrics are available"
+  priority: "tests_status > violations_found > sweep_status > phase_progress > smoke_gate"
+
+# ─── Validation Rules ─────────────────────────────────────────────────────────
+validation:
+  single_line: true
+  max_display: 5
+  separator_char: "·"
+  metric_pool_minimum: 8
+  no_multi_line: true
+  no_headers: true
+  no_lists: true
+  icon_required: true

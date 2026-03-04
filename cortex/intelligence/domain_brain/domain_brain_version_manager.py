@@ -289,7 +289,7 @@ class VersionedDomainManager:
         }
 
 
-class VersionHistory:
+class VersionHistory:  # CORE-035-scoped — domain-specific variant
     """Version history tracker."""
 
     def __init__(self) -> None:

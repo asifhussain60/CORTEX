@@ -59,7 +59,7 @@ class UserInteraction:
             self.timestamp = datetime.now().isoformat()
 
 
-class RecommendationEngine:
+class RecommendationEngine:  # CORE-035-scoped — domain-specific variant
     """Engine for generating personalized recommendations based on behavior and context.
 
     Learns from user interactions and generates contextual recommendations.

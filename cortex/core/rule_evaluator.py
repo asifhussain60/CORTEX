@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class RuleViolation:
+class RuleViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a rule violation."""
 
     rule_id: str

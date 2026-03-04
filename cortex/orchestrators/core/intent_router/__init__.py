@@ -59,14 +59,14 @@ except ImportError:
 try:
     from cortex.orchestrators.core.intent_router.routing_enforcement import RoutingEnforcementEngine  # type: ignore
 except ImportError:
-    class RoutingEnforcementEngine:  # type: ignore[no-redef]
+    class RoutingEnforcementEngine:  # type: ignore[no-redef]  # CORE-035-scoped — domain-specific variant
         """Stub for backward compatibility."""
         pass
 
 try:
     from cortex.orchestrators.core.intent_router.orchestrator_lookup import OrchestratorLookup  # type: ignore
 except ImportError:
-    class OrchestratorLookup:
+    class OrchestratorLookup:  # CORE-035-scoped — domain-specific variant
         """Stub for backward compatibility."""
         def __init__(self) -> None:
             """Initialize empty orchestrator registry."""

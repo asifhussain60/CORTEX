@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
-class ChangeType(Enum):
+class ChangeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type of change being applied to a file."""
 
     INSERT = "insert"
@@ -25,7 +25,7 @@ class ChangeType(Enum):
     MOVE = "move"
 
 
-class CoherenceStatus(Enum):
+class CoherenceStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Status of coherence validation."""
 
     PASSED = "passed"
@@ -33,7 +33,7 @@ class CoherenceStatus(Enum):
     FAILED = "failed"
 
 
-class SectionType(Enum):
+class SectionType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type of section in a file."""
 
     MARKDOWN_H1 = "markdown_h1"

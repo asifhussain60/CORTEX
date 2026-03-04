@@ -17,7 +17,7 @@ from cortex.intelligence.lens.knowledge_graph.graph_schema import Node, Edge
 logger = logging.getLogger(__name__)
 
 
-class GraphQuery:
+class GraphQuery:  # CORE-035-scoped — domain-specific variant
     """
     High-level query engine for knowledge graph traversal.
 

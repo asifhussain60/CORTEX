@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class DashboardStatus(Enum):
+class DashboardStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Dashboard operational status."""
     RUNNING = "running"
     PAUSED = "paused"

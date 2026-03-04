@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 @dataclass
-class OnboardingResult:
+class OnboardingResult:  # CORE-035-scoped — domain-specific variant
     """Result of repository onboarding."""
     success: bool
     language: str

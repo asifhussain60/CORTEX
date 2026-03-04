@@ -32,7 +32,7 @@ class CleanupOperation(Enum):
 
 
 @dataclass
-class CleanupResult:
+class CleanupResult:  # CORE-035-scoped — domain-specific variant
     """Result of a cleanup operation."""
     operation: CleanupOperation
     file_path: Path

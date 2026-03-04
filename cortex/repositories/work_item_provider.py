@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Protocol, runtime_checkable
 
 
 @dataclass
-class WorkItem:
+class WorkItem:  # CORE-035-scoped — domain-specific variant
     """
     Canonical work item representation across all ticketing systems.
 

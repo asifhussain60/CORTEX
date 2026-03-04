@@ -41,7 +41,7 @@ class PhaseSummary:
 
 
 @dataclass
-class DashboardData:
+class DashboardData:  # CORE-035-scoped — domain-specific variant
     """Complete dashboard data structure."""
     total_phases: int
     active_phases: int
@@ -67,7 +67,7 @@ class DashboardData:
 
 
 @dataclass
-class DashboardSyncResult:
+class DashboardSyncResult:  # CORE-035-scoped — domain-specific variant
     """Result of dashboard sync operation."""
     success: bool
     error_message: str = ""
@@ -75,7 +75,7 @@ class DashboardSyncResult:
     html_updated: bool = False
 
 
-class DashboardGenerator:
+class DashboardGenerator:  # CORE-035-scoped — domain-specific variant
     """
     Generates and updates dashboard data for CORTEX master plan.
 

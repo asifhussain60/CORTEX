@@ -68,7 +68,7 @@ class ClassInfo:  # CORE-035-scoped — domain-specific class introspection mode
 
 
 @dataclass
-class ImportInfo:
+class ImportInfo:  # CORE-035-scoped — domain-specific variant
     """
     Information about an import statement.
 

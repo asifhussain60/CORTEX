@@ -40,7 +40,7 @@ class CacheEntry:  # CORE-035-scoped — independent cache implementation — no
 
 
 @dataclass
-class CacheStats:
+class CacheStats:  # CORE-035-scoped — LENS remote cache variant with size/entries fields
     """Cache statistics.
 
     Attributes:

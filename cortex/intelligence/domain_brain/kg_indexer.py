@@ -19,7 +19,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-class KnowledgeIndexer:
+class KnowledgeIndexer:  # CORE-035-scoped — domain-specific variant
     """Indexes entities and relationships with full-text search."""
 
     def __init__(self) -> None:

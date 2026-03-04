@@ -66,7 +66,7 @@ class DetectedPattern:
 # =============================================================================
 
 
-class PatternDetector:
+class PatternDetector:  # CORE-035-scoped — domain-specific variant
     """Detects architectural patterns in parsed code.
 
     Analyzes parsed AST information to identify common design patterns

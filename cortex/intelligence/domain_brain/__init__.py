@@ -7,7 +7,7 @@ from uuid import uuid4
 import hashlib
 
 
-class DomainBrainAPI:
+class DomainBrainAPI:  # CORE-035-scoped — domain-specific variant
     """Domain Brain API - Query and manage domain knowledge."""
 
     def __init__(self) -> None:
@@ -239,7 +239,7 @@ class DomainBrainAPI:
         }
 
 
-class ConsistencyValidator:
+class ConsistencyValidator:  # CORE-035-scoped — domain-specific variant
     """Validate domain consistency and referential integrity."""
 
     def validate_domain(self, domain: Any) -> Any:

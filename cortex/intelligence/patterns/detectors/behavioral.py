@@ -59,7 +59,7 @@ class StrategyDetector(BasePatternDetector):
         return []
 
 
-class StateDetector(BasePatternDetector):
+class StateDetector(BasePatternDetector):  # CORE-035-scoped — domain-specific variant
     """Detector for State design pattern."""
 
     @property

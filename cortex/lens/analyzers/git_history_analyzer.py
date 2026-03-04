@@ -82,7 +82,7 @@ class GitBlame:
 
 
 @dataclass
-class GitHistoryResult:
+class GitHistoryResult:  # CORE-035-scoped — domain-specific variant
     """
     Result of a git history analysis operation.
 

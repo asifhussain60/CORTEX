@@ -28,7 +28,7 @@ class _ResultMeta(type):
         return cls
 
 
-class Ok(Generic[T], metaclass=_ResultMeta):
+class Ok(Generic[T], metaclass=_ResultMeta):  # CORE-035-scoped — domain-specific variant
     """Success result containing a value."""
 
     def __init__(self, value: T) -> None:
@@ -113,7 +113,7 @@ class Ok(Generic[T], metaclass=_ResultMeta):
         return cls
 
 
-class Err(Generic[E], metaclass=_ResultMeta):
+class Err(Generic[E], metaclass=_ResultMeta):  # CORE-035-scoped — domain-specific variant
     """Error result containing an error value."""
 
     def __init__(self, error: E) -> None:

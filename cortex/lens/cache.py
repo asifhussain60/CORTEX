@@ -63,7 +63,7 @@ class CacheEntry:  # CORE-035-scoped — independent cache implementation — no
 
 
 @dataclass
-class CacheStats:
+class CacheStats:  # CORE-035-scoped — LENS cache variant with total_entries/total_size_bytes/avg_hit_latency_ms fields
     """Cache performance statistics.
 
     Attributes:

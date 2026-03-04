@@ -33,7 +33,7 @@ import threading
 _context_storage = threading.local()
 
 
-class TraceContext:
+class TraceContext:  # CORE-035-scoped — domain-specific variant
     """Context manager for trace operations."""
 
     def __init__(

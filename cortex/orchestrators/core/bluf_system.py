@@ -21,7 +21,7 @@ from cortex.models.canonical_enums import ResponseFormat, RiskLevel
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class UserPreferenceMode(Enum):
+class UserPreferenceMode(Enum):  # CORE-035-scoped — domain-specific variant
     """User preference modes."""
     EXECUTIVE = "executive"        # Prefers BLUF
     TECHNICAL = "technical"        # Prefers details
@@ -30,7 +30,7 @@ class UserPreferenceMode(Enum):
 
 
 @dataclass
-class OperationContext:
+class OperationContext:  # CORE-035-scoped — domain-specific variant
     """Context for operation analysis.
 
     Attributes:

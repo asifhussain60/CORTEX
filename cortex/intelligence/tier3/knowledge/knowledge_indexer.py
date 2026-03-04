@@ -28,7 +28,7 @@ class IndexEntry:
     file_path: Optional[str] = None
 
 
-class KnowledgeIndexer:
+class KnowledgeIndexer:  # CORE-035-scoped — domain-specific variant
     """Maintains a SQLite index of knowledge entries."""
 
     def __init__(self, db_path: Optional[str] = None) -> None:

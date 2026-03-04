@@ -1,3 +1,14 @@
+# ⚠️  DEPRECATED — Phase 120 (Response Template System v3)
+# deprecated: true
+# deprecated_phase: "120"
+# deprecated_date: "2026-03-03"
+# ssot_pointer: "cortex-registry/templates/response/_registry.yaml"
+# reason: >
+#   Superseded by the 3-Tier LEGO architecture (Atoms → Blocks → Compositions).
+#   Pattern registry now lives in cortex-registry/templates/response/_registry.yaml.
+#   This file is retained for historical reference only — do NOT edit or extend.
+# ─────────────────────────────────────────────────────────────────────────────
+
 # =============================================================================
 # CORTEX TIER 2 - RESPONSE TEMPLATES INDEX
 # =============================================================================

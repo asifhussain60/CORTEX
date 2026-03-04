@@ -96,7 +96,7 @@ class KnowledgeQuery:
 
 
 @dataclass
-class KnowledgeQueryResult:
+class KnowledgeQueryResult:  # CORE-035-scoped — domain-specific variant
     """
     Unified result from a knowledge query.
 

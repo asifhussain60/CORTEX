@@ -37,7 +37,7 @@ class FileAction(str, Enum):
 # ============================================================================
 
 @dataclass
-class ParameterSpec:
+class ParameterSpec:  # CORE-035-scoped — domain-specific variant
     """Specification for a function parameter.
 
     Attributes:
@@ -51,7 +51,7 @@ class ParameterSpec:
 
 
 @dataclass
-class ReturnSpec:
+class ReturnSpec:  # CORE-035-scoped — domain-specific variant
     """Specification for a function return value.
 
     Attributes:
@@ -165,7 +165,7 @@ class InterfaceContract:
 
 
 @dataclass
-class TestSpec:
+class TestSpec:  # CORE-035-scoped — domain-specific variant
     """Specification for tests to write (TDD-first).
 
     Attributes:

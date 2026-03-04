@@ -5,7 +5,7 @@ from enum import Enum
 from typing import Any, Dict, List
 
 
-class IntentCategory(Enum):
+class IntentCategory(Enum):  # CORE-035-scoped — domain-specific variant
     """Intent category types."""
 
     API = ("api", "data_retrieval", "resource_access")

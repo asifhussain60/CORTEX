@@ -13,7 +13,7 @@ from cortex.models.dashboard_models import (
 )
 
 
-class DashboardAPI:
+class DashboardAPI:  # CORE-035-scoped — domain-specific variant
     """API for dashboard operations and data retrieval."""
 
     def __init__(self) -> None:

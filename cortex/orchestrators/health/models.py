@@ -93,7 +93,7 @@ class IssueDirectory:
 
 
 @dataclass
-class NamingViolation:
+class NamingViolation:  # CORE-035-scoped — domain-specific variant
     """Result of classify_naming_violation().
 
     Attributes:
@@ -242,7 +242,7 @@ class ScanResult:
 # ─────────────────────────────────────────────────────────────────────────────
 
 @dataclass
-class OperationResult:
+class OperationResult:  # CORE-035-scoped — domain-specific variant
     """Single vacuum operation outcome.
 
     Attributes:

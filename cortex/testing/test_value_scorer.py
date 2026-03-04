@@ -202,7 +202,7 @@ class TestScore:
         }
 
 
-class TestValueScorer:
+class TestValueScorer:  # CORE-035-scoped — domain-specific variant
     """
     Score test quality using 5-dimension framework.
 

@@ -90,7 +90,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
 
 
 @dataclass
-class ComplianceReport:
+class ComplianceReport:  # CORE-035-scoped — domain-specific variant
     """Full compliance report for a template or set of templates."""
     template_name: str
     validation_result: ValidationResult
@@ -136,7 +136,7 @@ class ComplianceReport:
 
 # Validation Rules
 
-class ValidationRule:
+class ValidationRule:  # CORE-035-scoped — domain-specific variant
     """Base class for validation rules."""
 
     code: str = "RULE-000"

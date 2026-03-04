@@ -31,7 +31,7 @@ from cortex.lens.models.polyglot_ast_result import (
 )
 
 
-class TypeScriptAdapter(LanguageAdapter):
+class TypeScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific variant
     """
     TypeScript language adapter using tree-sitter.
 

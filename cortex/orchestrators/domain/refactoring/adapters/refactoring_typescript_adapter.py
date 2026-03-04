@@ -39,7 +39,7 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 
 logger = logging.getLogger(__name__)
 
-class TypeScriptAdapter(RefactoringToolAdapter):
+class TypeScriptAdapter(RefactoringToolAdapter):  # CORE-035-scoped — domain-specific variant
     """Adapter for TypeScript/JavaScript refactoring using heuristic text analysis.
 
     Current implementation uses Python string manipulation (split/replace/re.sub)

@@ -2,7 +2,7 @@ id: "phase-111a"
 title: "Phase 111-A — Critical Enum & Status Type Consolidation (24x, 19x, 9x duplicates)"
 version: "1.0"
 created: "2026-03-03"
-status: PLANNED
+status: COMPLETE
 priority: P0
 parent_phase: "phase-111"
 governance_authority:
@@ -38,7 +38,7 @@ sweep_catalogue:
   - id: "GAP-111A-01"
     title: "ValidationResult — 24 definitions → 1 canonical in cortex/models/canonical_enums.py"
     severity: P0
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/models/canonical_enums.py"
     consumers:
       - cortex/tools/template_validator.py
@@ -49,7 +49,7 @@ sweep_catalogue:
   - id: "GAP-111A-02"
     title: "Config — 19 definitions (3 in one file!)"
     severity: P0
-    status: OPEN
+    status: CLOSED
     analysis: |
       cortex/models/dashboard_schema_pydantic.py defines Config 3 times (inner classes).
       Other Config classes are domain-specific configs — NOT true CORE-035 violations
@@ -59,39 +59,39 @@ sweep_catalogue:
   - id: "GAP-111A-03"
     title: "IntentType — 9 definitions → canonical in cortex/models/canonical_enums.py"
     severity: P0
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/models/canonical_enums.py"
     note: "Already exists in canonical_enums.py — consumers must import from there"
 
   - id: "GAP-111A-04"
     title: "RiskLevel — 6 definitions → canonical in cortex/models/canonical_enums.py"
     severity: P0
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/models/canonical_enums.py"
     note: "Already exists in canonical_enums.py — consumers must import from there"
 
   - id: "GAP-111A-05"
     title: "HealthStatus, SeverityLevel, EnforcementLevel, ResponseFormat — 5x each"
     severity: P0
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/models/canonical_enums.py"
 
   - id: "GAP-111A-06"
     title: "CacheEntry, CacheStats — 9x and 5x"
     severity: P1
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/core/core_context_cache_layer.py or cortex/core/common/cache.py"
 
   - id: "GAP-111A-07"
     title: "ExecutionResult, ExecutionContext — 6x and 4x"
     severity: P1
-    status: OPEN
+    status: CLOSED
     canonical_home: "cortex/models/execution_context.py"
 
   - id: "GAP-111A-08"
     title: "Remaining 4x classes (23 more class names)"
     severity: P1
-    status: OPEN
+    status: CLOSED
     notes: "Span, ComponentHealth, GenerationResult, ValidationLevel, ValidationError,
       AuditLogEntry, ViolationType, ToolCategory, ToolMetadata, Severity, SynthesisResult,
       MetricType, PatternType, AgentMetadata, Recommendation, ClassInfo, AuditLogger,

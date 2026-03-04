@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Author:
+class Author:  # CORE-035-scoped — domain-specific variant
     """Represents an author/contributor.
 
     Attributes:

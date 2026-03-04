@@ -31,7 +31,7 @@ from cortex.lens.discovery import DiscoveryPlugin
 logger = logging.getLogger(__name__)
 
 
-class TestFramework(Enum):
+class TestFramework(Enum):  # CORE-035-scoped — domain-specific variant
     """
     Test framework types.
 

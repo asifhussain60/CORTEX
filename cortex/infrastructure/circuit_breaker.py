@@ -35,7 +35,7 @@ class CircuitBreakerOpenError(Exception):
 
 
 @dataclass
-class CircuitBreakerConfig:
+class CircuitBreakerConfig:  # CORE-035-scoped — domain-specific variant
     """
     Configuration for circuit breaker.
 
@@ -76,7 +76,7 @@ class CircuitBreakerConfig:
 
 
 @dataclass
-class CircuitBreakerMetrics:
+class CircuitBreakerMetrics:  # CORE-035-scoped — domain-specific variant
     """Metrics for circuit breaker."""
     total_calls: int = 0
     successful_calls: int = 0

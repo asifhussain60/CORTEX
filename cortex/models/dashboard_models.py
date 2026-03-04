@@ -16,7 +16,7 @@ class SystemHealth:
 
 
 @dataclass
-class MetricsData:
+class MetricsData:  # CORE-035-scoped — domain-specific variant
     """Performance metrics data."""
 
     p50_latency: float  # milliseconds

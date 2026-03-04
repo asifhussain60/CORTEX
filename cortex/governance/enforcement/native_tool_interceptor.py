@@ -14,7 +14,7 @@ from typing import Optional
 import os
 
 
-class Intent(Enum):
+class Intent(Enum):  # CORE-035-scoped — domain-specific variant
     """User request intent classification."""
     IMPLEMENT = "IMPLEMENT"
     FIX = "FIX"

@@ -26,7 +26,7 @@ class RoutingEnforcementResult:
         return self.allowed
 
 
-class RoutingEnforcementEngine:
+class RoutingEnforcementEngine:  # CORE-035-scoped — domain-specific variant
     """Validates intent routing decisions against governance rules."""
 
     def __init__(

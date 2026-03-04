@@ -23,7 +23,7 @@ class DocumentFormat(str, Enum):
 
 
 @dataclass
-class OrchestrationResult:
+class OrchestrationResult:  # CORE-035-scoped — domain-specific variant
     """Result from orchestrator execution."""
     success: bool
     documents_processed: int = 0

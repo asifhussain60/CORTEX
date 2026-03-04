@@ -48,7 +48,7 @@ class DashboardGenerateRequest(BaseModel):
     repository_path: str
     output_path: Optional[str] = None
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         """Pydantic config."""
 
         schema_extra = {
@@ -67,7 +67,7 @@ class DashboardGenerateResponse(BaseModel):
     repository_name: str
     message: str
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         """Pydantic config."""
 
         schema_extra = {
@@ -80,13 +80,13 @@ class DashboardGenerateResponse(BaseModel):
         }
 
 
-class HealthCheckResponse(BaseModel):
+class HealthCheckResponse(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Response model for health check."""
 
     status: str
     version: str
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         """Pydantic config."""
 
         schema_extra = {
@@ -103,7 +103,7 @@ class DashboardListResponse(BaseModel):
     dashboards: list[str]
     count: int
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         """Pydantic config."""
 
         schema_extra = {

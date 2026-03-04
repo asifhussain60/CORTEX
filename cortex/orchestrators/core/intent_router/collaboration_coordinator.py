@@ -20,7 +20,7 @@ from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor
 
 logger = logging.getLogger(__name__)
 
-class CollaborationPattern(str, Enum):
+class CollaborationPattern(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Collaboration patterns between agents."""
     SEQUENTIAL = "sequential"  # Agent A → Agent B → Agent C (linear)
     PARALLEL = "parallel"  # Agent A || Agent B || Agent C (concurrent)

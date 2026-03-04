@@ -74,7 +74,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
+class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):  # CORE-035-scoped — domain-specific variant
     """Standalone + companion remediation engine.
 
     Usage (standalone)::

@@ -78,7 +78,7 @@ class UseCase:  # CORE-035-scoped — domain-specific use case model
 
 
 @dataclass
-class VulnerabilityFinding:
+class VulnerabilityFinding:  # CORE-035-scoped — domain-specific variant
     """Security vulnerability finding."""
 
     id: str
@@ -92,7 +92,7 @@ class VulnerabilityFinding:
 
 
 @dataclass
-class DependencyInfo:
+class DependencyInfo:  # CORE-035-scoped — domain-specific variant
     """Package dependency information."""
 
     name: str

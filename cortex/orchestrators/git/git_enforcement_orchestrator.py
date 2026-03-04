@@ -47,7 +47,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class CheckResult:
+class CheckResult:  # CORE-035-scoped — domain-specific variant
     """Result of a single enforcement check.
 
     Attributes:

@@ -18,7 +18,7 @@ from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 T = TypeVar('T')
 
 
-class RetryExhaustedError(Exception):
+class RetryExhaustedError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when retry budget is exhausted."""
     pass
 
@@ -35,7 +35,7 @@ class IdempotencyToken:
 
 
 @dataclass
-class RetryConfig:
+class RetryConfig:  # CORE-035-scoped — domain-specific variant
     """Configuration for retry strategy."""
 
     max_attempts: int = 5
@@ -77,7 +77,7 @@ class RetryConfig:
             raise ValueError("jitter_factor must be between 0 and 1")
 
 
-class RetryStrategy:
+class RetryStrategy:  # CORE-035-scoped — domain-specific variant
     """
     Intelligent retry strategy with exponential backoff and jitter.
 

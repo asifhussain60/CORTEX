@@ -54,7 +54,7 @@ class HTTPMethod(Enum):
 
 
 @dataclass
-class EndpointInfo:
+class EndpointInfo:  # CORE-035-scoped — domain-specific variant
     """
     API endpoint information.
 

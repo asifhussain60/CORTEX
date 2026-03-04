@@ -28,7 +28,7 @@ class DuplicateEntry:
     detected_at: Optional[datetime] = None
 
 
-class DuplicateDetector:
+class DuplicateDetector:  # CORE-035-scoped — domain-specific variant
     """Detect duplicate domain uploads using hash-based deduplication.
 
     Uses SHA-256 hashing to identify identical domain uploads and

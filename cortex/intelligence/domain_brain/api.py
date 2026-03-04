@@ -43,7 +43,7 @@ class AuditLogger:  # CORE-035-scoped — domain-specific audit logger — indep
 
 
 @dataclass
-class Entity:
+class Entity:  # CORE-035-scoped — domain-specific variant
     """Domain entity."""
     entity_id: str
     entity_type: EntityType
@@ -64,7 +64,7 @@ class Domain:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-class DomainBrainAPI:
+class DomainBrainAPI:  # CORE-035-scoped — domain-specific variant
     """Domain Brain API for managing domains and entities."""
 
     def __init__(self) -> None:

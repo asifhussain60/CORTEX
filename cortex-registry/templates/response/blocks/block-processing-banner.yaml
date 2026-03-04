@@ -1,0 +1,71 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOCK: Processing Banner
+# ID: block-processing-banner
+# Tier: 2 (Block — composed unit)
+#
+# PURPOSE: Immediate lightweight status signal shown DURING tool execution —
+# before the full response header renders. Replaced by the full header on
+# completion. Never shown together with the response header.
+#
+# Design: One bold status line + one italic activity description.
+# NO copyright, NO quote, NO orchestration chain.
+#
+# VS Code rendering: emoji + bold text is highly visible in the narrow panel.
+# The 🔵 prefix signals "in progress" without any HTML or special elements.
+#
+# SSOT: .github/templates/cortex-response-templates.md § Processing Banner
+# Phase: 120 (Sub-Phase C)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: block-processing-banner
+type: block
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: null
+  element: "emoji + bold text (no HR, no heading)"
+  single_line: false
+  line_count: 2
+  position: "absolute first — before full response header"
+  replaces_header: true
+  never_shown_with_header: true
+  forbidden:
+    - "copyright line"
+    - "quote blockquote"
+    - "orchestration chain"
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML"
+  show_when:
+    - "IMPLEMENT / FIX / REFACTOR / AUDIT (multi-step operations)"
+  skip_when:
+    - "simple QUERY (instant answer)"
+    - "after proceed (use silent autonomous progress bars instead)"
+    - "INTRODUCE / onboarding (conversational)"
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+# {activity} = one of the activity_descriptions below (matches current operation)
+template: |
+  🔵 **CORTEX processing…**
+  *{activity}*
+
+# ─── Activity Descriptions (rotated by operation type) ────────────────────────
+activity_descriptions:
+  IMPLEMENT: "Analyzing request · Loading context · Executing pipeline"
+  FIX: "Reading files · Identifying issues · Planning fixes"
+  REFACTOR: "Analyzing code · Planning refactor · Checking governance"
+  AUDIT: "Loading audit checklist · Running 9-stage scan · Collecting violations"
+  DEBUG: "Injecting markers · Capturing logs · Analyzing root cause"
+  VACUUM: "Scanning workspace · Cataloguing clutter · Planning cleanup"
+  HEALTH: "Polling 22 orchestrator endpoints · Collecting health metrics"
+  TOTALRECALL: "Running 10-phase pipeline · Certifying production state"
+  DEFAULT: "Analyzing request · Loading context · Preparing response"
+
+# ─── Lifecycle ────────────────────────────────────────────────────────────────
+lifecycle:
+  appears: "immediately when CORTEX begins non-trivial processing"
+  replaced_by: "full response header (atom-identity + atom-quote + atom-orchestration)"
+  never_stacks_with: "atom-identity (response header)"

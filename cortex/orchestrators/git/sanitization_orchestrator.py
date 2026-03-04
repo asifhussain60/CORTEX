@@ -98,7 +98,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
 
 
 @dataclass
-class SanitizationResult:
+class SanitizationResult:  # CORE-035-scoped — domain-specific variant
     """Aggregated result of a full sanitization run.
 
     Attributes:
@@ -187,7 +187,7 @@ _BUILTIN_PATTERNS: List[Dict[str, Any]] = [
 ]
 
 
-class PatternRegistry:
+class PatternRegistry:  # CORE-035-scoped — domain-specific variant
     """Catalogue of sanitization patterns (secrets, PII, proprietary terms).
 
     Loads built-in patterns on construction; accepts runtime additions via

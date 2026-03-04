@@ -79,7 +79,7 @@ class CapabilityMatch:
     missing_capabilities: List[str] = field(default_factory=list)
 
 
-class CapabilityMatcher:
+class CapabilityMatcher:  # CORE-035-scoped — domain-specific variant
     """
     Capability-based agent discovery and routing.
 

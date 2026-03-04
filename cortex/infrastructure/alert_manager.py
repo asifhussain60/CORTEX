@@ -169,7 +169,7 @@ class ThresholdMonitor:
         self.alert_history.clear()
 
 
-class AlertManager:
+class AlertManager:  # CORE-035-scoped — domain-specific variant
     """
     Manages alerting system.
     Coordinates threshold monitoring and alert dispatch.

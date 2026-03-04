@@ -36,7 +36,7 @@ class ViolationCode(Enum):
 
 
 @dataclass
-class NamingViolation:
+class NamingViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a naming convention violation."""
     code: str
     filename: str

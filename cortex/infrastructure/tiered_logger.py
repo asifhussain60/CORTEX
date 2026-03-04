@@ -46,7 +46,7 @@ class LogTier(Enum):
 
 
 @dataclass
-class LogEntry:
+class LogEntry:  # CORE-035-scoped — domain-specific variant
     """Structured log entry."""
     timestamp: str
     level: str

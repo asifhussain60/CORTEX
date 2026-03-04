@@ -51,7 +51,7 @@ class LoadTestScenario:
 
 
 @dataclass
-class LoadTestResult:
+class LoadTestResult:  # CORE-035-scoped — domain-specific variant
     """Load test execution result.
 
     Attributes:
@@ -85,7 +85,7 @@ class LoadTestResult:
 
 
 @dataclass
-class RequestMetrics:
+class RequestMetrics:  # CORE-035-scoped — domain-specific variant
     """Metrics for a single request.
 
     Attributes:

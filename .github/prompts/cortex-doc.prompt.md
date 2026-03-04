@@ -13,7 +13,7 @@
 ```markdown
 # 🧠 CORTEX Documenting
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Via:** Classifier → Documentation Orchestrator
+🧭 Orchestration: Classifier → Documentation Orchestrator
 
 > *"{quote}"*
 > — {Author}, **{Book}**

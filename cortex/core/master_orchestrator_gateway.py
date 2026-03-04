@@ -26,7 +26,7 @@ from cortex.core.tool_adapter import (
 logger = logging.getLogger(__name__)
 
 
-class GatewayError(Exception):
+class GatewayError(Exception):  # CORE-035-scoped — domain-specific variant
     """Base exception for gateway errors."""
     pass
 
@@ -47,7 +47,7 @@ class GatewayRequest:
 
 
 @dataclass(frozen=True)
-class IntentClassification:
+class IntentClassification:  # CORE-035-scoped — domain-specific variant
     """
     LENS protocol intent classification.
 

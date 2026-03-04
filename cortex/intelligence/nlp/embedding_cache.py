@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-class EmbeddingCache:
+class EmbeddingCache:  # CORE-035-scoped — domain-specific variant
     """Caches text embeddings for reuse across requests."""
 
     def __init__(self) -> None:

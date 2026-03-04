@@ -18,7 +18,7 @@ from .redis_backend import RedisBackend
 InMemoryCacheBackend = MemoryBackend
 
 # CacheStats placeholder (backward compatibility)
-class CacheStats:
+class CacheStats:  # CORE-035-scoped — LENS cache __init__ backward-compatibility shim
     """Cache statistics tracker."""
     def __init__(self) -> None:
         """Initialize cache statistics counters to zero."""

@@ -23,14 +23,14 @@ from cortex.testing.test_demand_generator import (
 )
 
 
-class TestFramework(str, Enum):
+class TestFramework(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Test framework selection."""
     PYTEST = "pytest"
     UNITTEST = "unittest"
 
 
 @dataclass
-class ComposedTest:
+class ComposedTest:  # CORE-035-scoped — domain-specific variant
     """A generated test ready to run."""
     name: str
     class_name: str

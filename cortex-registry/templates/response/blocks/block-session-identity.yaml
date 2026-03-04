@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOCK: Session Identity
+# ID: block-session-identity
+# Tier: 2 (Block — composed unit)
+#
+# PURPOSE: Session-level identity block shown ONCE per session on the very
+# first turn. Orients the user to the CORTEX context — product version, mode,
+# active prompt. Not shown on subsequent turns in the same session.
+#
+# Position: After the response header (atom-identity), before work content.
+# Frequency: First turn of a new VS Code Copilot Chat session only.
+#
+# SSOT: .github/templates/cortex-response-templates.md § Session Identity
+# Phase: 120 (Sub-Phase C)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: block-session-identity
+type: block
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: H2
+  element: "H2 block + brief metadata"
+  position: "after response header, before work content (first turn only)"
+  frequency: "once per session"
+  max_lines: 5
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML"
+    - "tables with more than 4 columns"
+  show_when:
+    - "first turn of a new VS Code Copilot Chat session"
+  skip_when:
+    - "subsequent turns in same session"
+    - "silent autonomous execution (after proceed)"
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+# {version}       = CORTEX framework version
+# {active_prompt} = active .prompt.md filename
+# {phase}         = current phase being executed (if any)
+template: |
+  ## 🧠 Session Started
+  **Framework:** CORTEX v{version} · **Prompt:** `{active_prompt}`
+
+# ─── Metadata ─────────────────────────────────────────────────────────────────
+session_tracking:
+  storage: "in-memory per conversation"
+  reset_on: "new VS Code Copilot Chat session"
+  emitted_turns: []

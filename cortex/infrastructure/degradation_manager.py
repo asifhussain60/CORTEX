@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Any, Callable, Dict, Optional
 
 
-class DegradationLevel(Enum):
+class DegradationLevel(Enum):  # CORE-035-scoped — domain-specific variant
     """System degradation levels."""
     FULL = 3  # Full functionality
     PARTIAL = 2  # Read-only or cached operations

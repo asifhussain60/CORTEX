@@ -71,7 +71,7 @@ class ProtocolComplianceResult:
 
 
 @dataclass
-class LoadTestResult:
+class LoadTestResult:  # CORE-035-scoped — domain-specific variant
     """Load test execution result.
 
     Attributes:
@@ -111,7 +111,7 @@ class ScalingValidationResult:
 
 
 @dataclass
-class HealthCheckResult:
+class HealthCheckResult:  # CORE-035-scoped — deployment domain variant with startup_time_seconds/checks_passed fields
     """Health check validation result.
 
     Attributes:

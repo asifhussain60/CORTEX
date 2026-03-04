@@ -34,7 +34,7 @@ from cortex.models.canonical_enums import CheckpointStatus
 logger = logging.getLogger(__name__)
 
 
-class OperationState(Enum):
+class OperationState(Enum):  # CORE-035-scoped — domain-specific variant
     """Operational state at checkpoint time."""
     INITIATED = auto()     # Operation just started
     IN_PROGRESS = auto()   # Partially executed

@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class ChallengeSeverity(Enum):
+class ChallengeSeverity(Enum):  # CORE-035-scoped — domain-specific variant
     """Challenge severity levels."""
     LOW = "low"
     MEDIUM = "medium"

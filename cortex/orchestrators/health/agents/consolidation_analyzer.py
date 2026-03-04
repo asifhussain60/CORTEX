@@ -15,7 +15,7 @@ import ast
 
 
 @dataclass
-class OrchestratorMetadata:
+class OrchestratorMetadata:  # CORE-035-scoped — domain-specific variant
     """Metadata for an orchestrator file.
 
     Attributes:

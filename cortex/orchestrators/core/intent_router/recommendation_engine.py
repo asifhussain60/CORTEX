@@ -78,7 +78,7 @@ class RecommendationResult:
         }
 
 
-class RecommendationEngine:
+class RecommendationEngine:  # CORE-035-scoped — domain-specific variant
     """Engine for generating code recommendations.
 
     Analyzes Python code and generates recommendations for:

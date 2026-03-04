@@ -39,7 +39,7 @@ class DiscoveryCategory(str, Enum):
     UNKNOWN = "unknown"
 
 
-class ComponentType(str, Enum):
+class ComponentType(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Component classification."""
     CRITICAL = "critical"
     HIGH = "high"

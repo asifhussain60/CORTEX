@@ -14,7 +14,7 @@ from typing import Any, Callable, Dict, Optional
 
 
 @dataclass
-class TimeoutConfig:
+class TimeoutConfig:  # CORE-035-scoped — domain-specific variant
     """Configuration for turn timeouts."""
 
     timeout_seconds: float = 300.0  # 5 minutes default

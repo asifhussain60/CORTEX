@@ -15,7 +15,7 @@ class WorkItemStatus(Enum):
     CANCELLED = "cancelled"
 
 @dataclass
-class WorkItem:
+class WorkItem:  # CORE-035-scoped — domain-specific variant
     """Work item for pattern discovery."""
     file_path: str
     metadata: Dict[str, Any]

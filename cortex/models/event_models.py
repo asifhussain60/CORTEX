@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 
-class EventType(str, Enum):
+class EventType(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Types of events in orchestrator communication.
 
     These events enable decoupled communication between orchestrators
@@ -83,7 +83,7 @@ class EventChain:
 
 
 @dataclass
-class EventSubscription:
+class EventSubscription:  # CORE-035-scoped — domain-specific variant
     """A subscription to orchestrator events.
 
     Orchestrators register subscriptions to receive specific event types.

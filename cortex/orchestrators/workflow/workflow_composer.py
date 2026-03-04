@@ -49,7 +49,7 @@ class WorkflowStep:
 
 
 @dataclass
-class WorkflowExecutionResult:
+class WorkflowExecutionResult:  # CORE-035-scoped — domain-specific variant
     """Result of workflow execution.
 
     Contains completion status, step counts, and error information.

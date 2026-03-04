@@ -32,7 +32,7 @@ class IssueType(str, Enum):
     MISSING_MAPPING = "missing_mapping"
 
 
-class CoherenceStatus(str, Enum):
+class CoherenceStatus(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Overall status of a coherence validation.
 
     PASS: All validations passed

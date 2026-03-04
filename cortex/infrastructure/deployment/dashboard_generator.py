@@ -16,7 +16,7 @@ from typing import Any, Dict, List
 logger = logging.getLogger(__name__)
 
 
-class DashboardGenerator:
+class DashboardGenerator:  # CORE-035-scoped — domain-specific variant
     """Generates HTML dashboards for deployment analytics.
 
     Creates interactive dashboards with charts, metrics tables,

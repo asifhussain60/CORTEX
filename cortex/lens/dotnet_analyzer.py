@@ -63,7 +63,7 @@ class DotNetSolution:
     folders: Dict[str, List[str]] = field(default_factory=dict)
     platform_target: Optional[str] = None
 
-class SolutionFileParser:
+class SolutionFileParser:  # CORE-035-scoped — domain-specific variant
     """Parse .NET solution (.sln) files."""
     # Regex patterns for .sln parsing
     PROJECT_PATTERN = r'Project\("([^"]*)"\)\s*=\s*"([^"]*)",\s*"([^"]*)",\s*"([^"]*)"\s*EndProject'

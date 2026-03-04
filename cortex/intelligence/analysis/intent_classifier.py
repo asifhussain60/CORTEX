@@ -17,7 +17,7 @@ from cortex.models.canonical_enums import IntentType  # CORE-035: import from ca
 
 
 @dataclass
-class IntentClassification:
+class IntentClassification:  # CORE-035-scoped — domain-specific variant
     """
     Result of intent classification.
 

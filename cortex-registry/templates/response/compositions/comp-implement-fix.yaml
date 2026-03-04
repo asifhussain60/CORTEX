@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPOSITION: Implement / Fix Pipeline
+# ID: comp-implement-fix
+# Tier: 3 (Composition — terminal-ready assembly)
+#
+# PURPOSE: Response header for /implement and /fix — TDD builder flow.
+# Via chain: Classifier → TDD Builder
+#
+# Rendering: VS Code Copilot Chat 3-zone layout (300-500px panel)
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase B)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: comp-implement-fix
+type: composition
+version: "3.0"
+phase: "120"
+trigger: "/implement | /fix"
+intent: [IMPLEMENT, FIX]
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  zone_count: 3
+  zone_separator: "---"
+  max_heading_levels: 3
+  single_h1: true
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML except details/summary"
+    - "raw URLs"
+    - "tables with more than 4 columns"
+
+# ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    zone: 1
+    params:
+      product_title: "🧠 CORTEX"
+      mode: "{Building|Fixing}"
+      mode_map:
+        IMPLEMENT: "Building"
+        FIX: "Fixing"
+  - id: atom-orchestration
+    zone: 1
+    params:
+      chain: "Classifier → TDD Builder"
+  - id: atom-quote
+    zone: 2
+    params:
+      theme: quality
+  - id: atom-intent-reflection
+    zone: body
+  - id: atom-status-footer
+    zone: footer
+
+# ─── Rendered Template ────────────────────────────────────────────────────────
+template: |
+  # 🧠 CORTEX {mode}
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  🧭 Orchestration: Classifier → TDD Builder
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+# ─── Pre-built Via Chain ──────────────────────────────────────────────────────
+orchestration_chain: "Classifier → TDD Builder"
+workflow_template: "cortex-registry/workflows/templates/sdlc/implement-workflow.yaml"
+tdd_required: true
+core_008_enforced: true

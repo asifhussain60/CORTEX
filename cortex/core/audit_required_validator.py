@@ -21,7 +21,7 @@ from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 # DATA STRUCTURES
 # =============================================================================
 
-class AuditOperationType(Enum):
+class AuditOperationType(Enum):  # CORE-035-scoped — domain-specific variant
     """Audit operation types for AC lifecycle."""
     AC_START = "AC_START"
     AC_EXECUTE = "AC_EXECUTE"
@@ -30,7 +30,7 @@ class AuditOperationType(Enum):
     AC_REVERT = "AC_REVERT"
 
 
-class AuditValidationResult(Enum):
+class AuditValidationResult(Enum):  # CORE-035-scoped — domain-specific variant
     """Result of audit validation."""
     SUFFICIENT = "sufficient_entries"
     INSUFFICIENT = "insufficient_entries"

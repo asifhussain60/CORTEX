@@ -16,7 +16,7 @@ from enum import Enum
 from typing import Any, Dict
 
 
-class DiagramType(Enum):
+class DiagramType(Enum):  # CORE-035-scoped — domain-specific variant
     """
     Supported diagram types for visualization.
 

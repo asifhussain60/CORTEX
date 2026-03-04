@@ -108,7 +108,7 @@ class TokenBudget:
         return self.total_budget - self.used_tokens
 
 
-class ContextSynthesizer:
+class ContextSynthesizer:  # CORE-035-scoped — domain-specific variant
     """
     Context synthesis engine.
 

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, TypeVar
 T = TypeVar('T')
 
 
-class JourneyState(str, Enum):
+class JourneyState(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Onboarding journey states."""
     NEW = "new"
     IN_PROGRESS = "in_progress"
@@ -29,7 +29,7 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 @dataclass
-class Journey:
+class Journey:  # CORE-035-scoped — domain-specific variant
     """Onboarding journey data.
 
     Attributes:

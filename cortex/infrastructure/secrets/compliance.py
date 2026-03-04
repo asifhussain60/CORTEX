@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class ComplianceReport:
+class ComplianceReport:  # CORE-035-scoped — domain-specific variant
     """Secrets management compliance report with findings and control scores."""
 
     generated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())

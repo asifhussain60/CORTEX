@@ -24,7 +24,7 @@ from typing import Dict, List, Optional
 
 
 @dataclass
-class VerificationResult:
+class VerificationResult:  # CORE-035-scoped — domain-specific variant
     """Result of a verification check."""
 
     check_name: str
@@ -34,7 +34,7 @@ class VerificationResult:
     severity: str = "INFO"  # INFO, WARNING, ERROR
 
 
-class SetupVerifier:
+class SetupVerifier:  # CORE-035-scoped — domain-specific variant
     """
     Cross-platform setup verifier.
 

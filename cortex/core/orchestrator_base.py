@@ -326,7 +326,7 @@ class OrchestrationStatus(Enum):
 
 
 @dataclass
-class OrchestrationContext:
+class OrchestrationContext:  # CORE-035-scoped — domain-specific variant
     """Context passed to orchestrator during execution."""
 
     orchestrator_id: str
@@ -367,7 +367,7 @@ class OrchestrationContext:
 
 
 @dataclass
-class OrchestrationResult:
+class OrchestrationResult:  # CORE-035-scoped — domain-specific variant
     """Result returned by orchestrator."""
 
     orchestrator_id: str

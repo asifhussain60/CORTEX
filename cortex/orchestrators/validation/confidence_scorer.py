@@ -61,7 +61,7 @@ class ConfidenceResult:
 # CONFIDENCE SCORER
 # ============================================================================
 
-class ConfidenceScorer:
+class ConfidenceScorer:  # CORE-035-scoped — domain-specific variant
     """Calculates confidence scores for validation results with threshold gating.
 
     Multi-factor scoring considers:

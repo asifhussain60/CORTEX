@@ -53,7 +53,7 @@ class ValidationType(str, Enum):
 
 
 @dataclass
-class TestDemand:
+class TestDemand:  # CORE-035-scoped — domain-specific variant
     """A test demand - what a test MUST validate."""
 
     id: str

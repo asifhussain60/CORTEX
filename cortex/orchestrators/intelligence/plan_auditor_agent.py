@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class DashboardSyncResult:
+class DashboardSyncResult:  # CORE-035-scoped — domain-specific variant
     """Result of dashboard sync operation."""
     has_drift: bool
     drifted_phases: List[str]

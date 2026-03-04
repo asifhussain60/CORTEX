@@ -19,7 +19,7 @@ class OutputValidationError(Exception):
     pass
 
 
-class LLMOutputValidator:
+class LLMOutputValidator:  # CORE-035-scoped — domain-specific variant
     """Validates and sanitizes LLM-generated output.
 
     Implements CORE-CRIT-HALL-001: All LLM output must be validated before

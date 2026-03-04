@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class AuditValidationResult:
+class AuditValidationResult:  # CORE-035-scoped — domain-specific variant
     """Result of meta-auditor validation."""
     has_false_positives: bool
     false_positive_rules: List[str]

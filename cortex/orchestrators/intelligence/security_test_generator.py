@@ -33,7 +33,7 @@ class VulnerabilityClass(Enum):
 
 
 @dataclass
-class EndpointInfo:
+class EndpointInfo:  # CORE-035-scoped — domain-specific variant
     """Information about an API endpoint."""
 
     path: str

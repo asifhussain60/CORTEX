@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-class EnvironmentType(str, Enum):
+class EnvironmentType(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Supported environments."""
     DEVELOPMENT = "development"
     STAGING = "staging"

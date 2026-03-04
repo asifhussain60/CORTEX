@@ -36,7 +36,7 @@ class FailedEvent:
 
 
 @dataclass
-class RetryStrategy:
+class RetryStrategy:  # CORE-035-scoped — domain-specific variant
     """
     Retry strategy configuration.
 

@@ -1,0 +1,46 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PROMPT INTRO: CORTEX Sync
+# ID: prompt-cortex-sync
+# Tier: Prompt (intro block for cortex-sync.prompt.md)
+#
+# PURPOSE: Intro block for SYNC responses — one-way privacy-safe sync from
+# CORTEX → company folder.
+#
+# DRIFT FIX APPLIED (Phase 120 Sub-Phase D):
+# L22 of cortex-sync.prompt.md used the forbidden "**Orchestrator:** SyncSessionOrchestrator ✅"
+# format. Fixed to: "**Author:** Asif Hussain | © 2025-2026 CORTEX Framework. All rights reserved."
+# The **Orchestrator:** field has been removed entirely — use 🧭 Orchestration: in responses.
+#
+# Phase: 120 (Sub-Phase D)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: prompt-cortex-sync
+type: prompt_intro
+version: "3.0"
+phase: "120"
+prompt_file: ".github/prompts/cortex-sync.prompt.md"
+product_title: "🧠 CORTEX"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  product_icon: "🧠"
+  icon_fixed: true
+  heading_level: H1
+
+# ─── Drift Fix Record ─────────────────────────────────────────────────────────
+drift_fix:
+  file: ".github/prompts/cortex-sync.prompt.md"
+  line: 22
+  before: "**Author:** Asif Hussain | **Orchestrator:** SyncSessionOrchestrator ✅"
+  after: "**Author:** Asif Hussain | © 2025-2026 CORTEX Framework. All rights reserved."
+  reason: "**Orchestrator:** field is forbidden — replaced by 🧭 Orchestration: in response header"
+  phase: "120-D"
+
+# ─── Intent → Composition Routing ────────────────────────────────────────────
+intent_to_composition:
+  SYNC: comp-query
+  DEFAULT: comp-query
+
+default_orchestration_chain: "Classifier → Git Manager → Workflow Composer"

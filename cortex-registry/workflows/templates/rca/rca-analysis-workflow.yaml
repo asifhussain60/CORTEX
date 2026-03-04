@@ -156,7 +156,7 @@ governance:
 
 # ── References ───────────────────────────────────────────────────────────────
 references:
-  phase_spec: cortex-registry/_cortex-master/phases/planned/phase-87-rca-memory-engine.yaml
+  phase_spec: cortex-registry/_cortex-master/phases/completed/phase-87-rca-memory-engine.yaml
   mcp_tool: cortex/mcp/tools/learning_tool.py (op="rca")
   rca_engine: cortex/intelligence/learning/rca_engine.py
   rca_store: cortex/intelligence/learning/rca_store.py

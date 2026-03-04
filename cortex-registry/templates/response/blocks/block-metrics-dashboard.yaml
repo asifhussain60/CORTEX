@@ -1,0 +1,100 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOCK: Metrics Dashboard
+# ID: block-metrics-dashboard
+# Tier: 2 (Block — composed unit)
+#
+# PURPOSE: Post-completion metrics summary shown after IMPLEMENT / FIX /
+# REFACTOR operations complete. Gives a quantified view of what changed.
+#
+# Table constraint: max 4 columns (VS Code narrow panel — 300-500px).
+# Default layout: 3 columns (Metric | Before | After) — within limit.
+# Extended layout: 4 columns (Metric | Before | After | Delta) — at limit.
+#
+# Trigger: IMPLEMENT / FIX / REFACTOR completion only.
+# NOT shown for: AUDIT, QUERY, HEALTH, VACUUM, DEBUG.
+#
+# SSOT: .github/templates/cortex-response-templates.md § Metrics Dashboard
+# Phase: 120 (Sub-Phase C)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: block-metrics-dashboard
+type: block
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: H3
+  element: "H3 heading + table (max 4 columns)"
+  max_table_columns: 4
+  position: "after completion state, before status footer"
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML"
+    - "tables with more than 4 columns"
+    - "raw URLs"
+  show_when:
+    - "IMPLEMENT completion"
+    - "FIX completion"
+    - "REFACTOR completion"
+  skip_when:
+    - "AUDIT (has its own violation count format)"
+    - "QUERY, HEALTH, VACUUM, DEBUG"
+    - "incomplete operations (only on completion)"
+
+# ─── Standard Template (3 columns) ────────────────────────────────────────────
+template_standard: |
+  ### 📈 Metrics
+  | Metric | Before | After |
+  |---|---|---|
+  {metric_rows}
+
+# ─── Extended Template (4 columns — at VS Code limit) ─────────────────────────
+template_extended: |
+  ### 📈 Metrics
+  | Metric | Before | After | Delta |
+  |---|---|---|---|
+  {metric_rows}
+
+metric_row_format_standard: "| {name} | {before} | {after} |"
+metric_row_format_extended: "| {name} | {before} | {after} | {delta} |"
+
+# ─── Available Metrics ────────────────────────────────────────────────────────
+available_metrics:
+  - id: tests_passed
+    label: "Tests passing"
+    unit: "count"
+    contexts: [IMPLEMENT, FIX, REFACTOR]
+
+  - id: files_changed
+    label: "Files changed"
+    unit: "count"
+    contexts: [IMPLEMENT, FIX, REFACTOR]
+
+  - id: lines_added
+    label: "Lines added"
+    unit: "count"
+    contexts: [IMPLEMENT, FIX, REFACTOR]
+
+  - id: lines_removed
+    label: "Lines removed"
+    unit: "count"
+    contexts: [FIX, REFACTOR]
+
+  - id: violations_fixed
+    label: "Violations fixed"
+    unit: "count"
+    contexts: [FIX]
+
+  - id: coverage_delta
+    label: "Test coverage"
+    unit: "percent"
+    contexts: [IMPLEMENT, FIX]
+
+# ─── Selection Logic ──────────────────────────────────────────────────────────
+selection:
+  max_rows: 6
+  use_extended_format_when: "delta values are meaningful (before vs after comparison available)"
+  fallback: "standard 3-column format"

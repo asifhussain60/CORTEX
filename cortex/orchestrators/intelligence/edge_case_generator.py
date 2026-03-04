@@ -25,7 +25,7 @@ class EdgeCaseType(Enum):
 
 
 @dataclass
-class ParameterInfo:
+class ParameterInfo:  # CORE-035-scoped — domain-specific variant
     """Information about a function parameter."""
 
     name: str

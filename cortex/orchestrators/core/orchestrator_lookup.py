@@ -10,7 +10,7 @@ CORE-035: Single canonical implementation
 from typing import Any, Dict, List, Optional
 
 
-class OrchestratorLookup:
+class OrchestratorLookup:  # CORE-035-scoped — domain-specific variant
     """
     Orchestrator registry lookup service.
 

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ParameterInfo:
+class ParameterInfo:  # CORE-035-scoped — domain-specific variant
     """Function parameter information.
 
     Attributes:

@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Set
 
 
 @dataclass
-class PackageDependency:
+class PackageDependency:  # CORE-035-scoped — domain-specific variant
     """Package dependency model."""
     name: str
     version: str

@@ -87,7 +87,7 @@ class KnowledgeEntry:
 
 
 @dataclass
-class KnowledgeQueryResult:
+class KnowledgeQueryResult:  # CORE-035-scoped — domain-specific variant
     """
     Result from a knowledge query.
 

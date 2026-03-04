@@ -81,7 +81,7 @@ class Persona(BaseModel):
         return v
 
 
-class DepthLevel(BaseModel):
+class DepthLevel(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Detail level definition."""
 
     id: str

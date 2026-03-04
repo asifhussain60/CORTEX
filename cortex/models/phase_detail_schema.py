@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
-class PhaseStatus(str, Enum):
+class PhaseStatus(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Phase lifecycle status"""
     ACTIVE = "ACTIVE"
     COMPLETED = "COMPLETED"
@@ -32,7 +32,7 @@ class MermaidDiagram(BaseModel):
     title: str = Field(..., description="Diagram title for display")
     mermaid_code: str = Field(..., description="Mermaid.js diagram code")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         json_schema_extra = {
             "example": {
                 "type": "architecture",
@@ -60,14 +60,14 @@ class CodeFile(BaseModel):
     complexity_score: Optional[float] = Field(None, description="Cyclomatic complexity score")
 
 
-class ArchitectureSection(BaseModel):
+class ArchitectureSection(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Architecture section with diagrams"""
     overview: str = Field(..., description="LLM-generated architecture overview")
     diagrams: List[MermaidDiagram] = Field(default_factory=list, description="Architecture diagrams")
     components: List[str] = Field(default_factory=list, description="Key components")
     design_patterns: Optional[List[str]] = Field(None, description="Design patterns applied")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         json_schema_extra = {
             "example": {
                 "overview": "Event-driven architecture foundation",
@@ -110,7 +110,7 @@ class ImpactMetrics(BaseModel):
     description: Optional[str] = Field(None, description="Impact narrative")
 
 
-class StoryContext(BaseModel):
+class StoryContext(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Phase narrative and story linking"""
     previous_phase: Optional[str] = Field(None, description="Previous phase ID")
     next_phase: Optional[str] = Field(None, description="Next phase ID")
@@ -119,7 +119,7 @@ class StoryContext(BaseModel):
     theme: Optional[str] = Field(None, description="Phase theme or arc")
 
 
-class TechnicalDecision(BaseModel):
+class TechnicalDecision(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Technical decision documentation"""
     title: str = Field(..., description="Decision title")
     chosen: str = Field(..., description="Chosen approach")
@@ -180,7 +180,7 @@ class PhaseDetail(BaseModel):
     author: Optional[str] = Field(None, description="Phase author")
     created_date: Optional[str] = Field(None, description="Phase creation date")
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         json_schema_extra = {
             "example": {
                 "phase_id": "PHASE-01",

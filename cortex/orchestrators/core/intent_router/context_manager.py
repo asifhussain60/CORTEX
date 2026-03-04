@@ -12,7 +12,7 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class ConversationContext:
+class ConversationContext:  # CORE-035-scoped — domain-specific variant
     """Conversation context for a session.
 
     Attributes:

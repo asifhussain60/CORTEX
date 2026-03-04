@@ -221,7 +221,7 @@ class DashboardUpdate:
         self.timestamp = timestamp or datetime.utcnow()
 
 
-class DashboardMetrics:
+class DashboardMetrics:  # CORE-035-scoped — domain-specific variant
     """Metrics for a single operation on the dashboard."""
 
     def __init__(
@@ -450,7 +450,7 @@ class NotificationChannel(abc.ABC):
         """Send notification for alert."""
 
 
-class AlertManager:
+class AlertManager:  # CORE-035-scoped — domain-specific variant
     """
     Manages alert rules and triggering based on metrics.
 

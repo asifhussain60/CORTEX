@@ -26,7 +26,7 @@ class DependencyValidationResult(Enum):
 
 
 @dataclass
-class DependencyPath:
+class DependencyPath:  # CORE-035-scoped — domain-specific variant
     """Path of dependencies between phases."""
     source: str  # Starting phase
     target: str  # Ending phase

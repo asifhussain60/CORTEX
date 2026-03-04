@@ -38,7 +38,7 @@ class SetupResult:
     fix_command: Optional[str] = None
 
 
-class SetupVerifier:
+class SetupVerifier:  # CORE-035-scoped — domain-specific variant
     """
     Consolidated setup verification.
 

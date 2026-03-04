@@ -1,0 +1,250 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Quote Library
+# ID: atom-quote
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: Thematic quote selection for the response header Zone 2.
+# Renders as a Markdown blockquote — VS Code Copilot Chat renders blockquotes
+# with a distinctive blue left-accent bar, making it visually prominent.
+#
+# Selection logic: match quote.themes to request intent (see theme_map below)
+# Position: Zone 2 of the 3-zone header — after first --- separator
+#
+# Template:
+#   > *"{text}"*
+#   > — {author}, **{book}**
+#
+# SSOT: .github/templates/cortex-response-templates.md § 📚 Quote Library
+# Phase: 120 (Sub-Phase A)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-quote
+type: atom
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  element: blockquote
+  heading_level: null
+  position: "Zone 2 — after first --- separator, before Zone 3"
+  zone: 2
+  zone_separator_before: "--- (HR)"
+  zone_separator_after: "--- (HR)"
+  vs_code_render: "blue left-accent bar — distinctive and scannable"
+  max_per_response: 1
+  forbidden_in_content:
+    - "raw URLs"
+    - "HTML tags"
+    - "tree characters"
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+template: |
+  > *"{text}"*
+  > — {author}, **{book}**
+
+# ─── Theme Map (intent_type → theme) ──────────────────────────────────────────
+# Selection: match request intent → theme → pick quote from matching theme pool
+theme_map:
+  IMPLEMENT: quality
+  FIX: systems_thinking
+  REFACTOR: improvement
+  AUDIT: discipline
+  DEBUG: systems_thinking
+  DESIGN: architecture
+  PLAN: strategy
+  HEALTH: discipline
+  VACUUM: discipline
+  TOTALRECALL: strategy
+  QUERY: universal
+  INTRODUCE: universal
+  SECURITY_AUDIT: security
+  DIGEST: learning
+  ONBOARD: learning
+  SYNC: flow
+  TRAIN: learning
+  META_AUDIT: discipline
+  DEFAULT: universal
+
+# ─── Quote Library (32 quotes across 10 themes) ───────────────────────────────
+quotes:
+  # THEME: quality
+  - text: "Quality is not an act, it is a habit."
+    author: "Aristotle"
+    book: "Nicomachean Ethics"
+    themes: [quality]
+
+  - text: "The bitterness of poor quality remains long after the sweetness of low price is forgotten."
+    author: "Benjamin Franklin"
+    book: "Poor Richard's Almanack"
+    themes: [quality]
+
+  - text: "Measure twice, cut once."
+    author: "Traditional Proverb"
+    book: "Craftsmanship Wisdom"
+    themes: [quality, discipline]
+
+  - text: "First, do it. Then, do it right. Then, do it better."
+    author: "Addy Osmani"
+    book: "Learning Patterns"
+    themes: [quality, improvement]
+
+  # THEME: systems_thinking
+  - text: "A complex system that works is invariably found to have evolved from a simple system that worked."
+    author: "John Gall"
+    book: "Systemantics"
+    themes: [systems_thinking, architecture]
+
+  - text: "The system will always defeat the strategy."
+    author: "Donella Meadows"
+    book: "Thinking in Systems"
+    themes: [systems_thinking]
+
+  - text: "Every system is perfectly designed to get the results it gets."
+    author: "W. Edwards Deming"
+    book: "Out of the Crisis"
+    themes: [systems_thinking, discipline]
+
+  - text: "You don't rise to the level of your goals. You fall to the level of your systems."
+    author: "James Clear"
+    book: "Atomic Habits"
+    themes: [systems_thinking, discipline]
+
+  # THEME: improvement
+  - text: "Make it work, make it right, make it fast."
+    author: "Kent Beck"
+    book: "Test-Driven Development: By Example"
+    themes: [improvement, quality]
+
+  - text: "Simplicity is the soul of efficiency."
+    author: "Austin Freeman"
+    book: "The Eye of Osiris"
+    themes: [improvement]
+
+  - text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
+    author: "Martin Fowler"
+    book: "Refactoring"
+    themes: [improvement, quality]
+
+  - text: "The best code is no code at all."
+    author: "Jeff Atwood"
+    book: "Coding Horror"
+    themes: [improvement]
+
+  # THEME: architecture
+  - text: "Good architecture makes the system easy to understand, easy to develop, easy to maintain, and easy to deploy."
+    author: "Robert C. Martin"
+    book: "Clean Architecture"
+    themes: [architecture]
+
+  - text: "Architecture is the art of how to waste space."
+    author: "Philip Johnson"
+    book: "Philip Johnson: Life and Work"
+    themes: [architecture]
+
+  - text: "Design is not just what it looks like and feels like. Design is how it works."
+    author: "Steve Jobs"
+    book: "The Innovation Secrets of Steve Jobs"
+    themes: [architecture, improvement]
+
+  - text: "The purpose of software architecture is to minimize the human resources required to build and maintain the required system."
+    author: "Robert C. Martin"
+    book: "Clean Architecture"
+    themes: [architecture, strategy]
+
+  # THEME: discipline
+  - text: "Discipline equals freedom."
+    author: "Jocko Willink"
+    book: "Discipline Equals Freedom: Field Manual"
+    themes: [discipline]
+
+  - text: "The strength of a team is each individual member. The strength of each member is the team."
+    author: "Phil Jackson"
+    book: "Sacred Hoops"
+    themes: [discipline, flow]
+
+  - text: "An ounce of prevention is worth a pound of cure."
+    author: "Benjamin Franklin"
+    book: "Pennsylvania Gazette"
+    themes: [discipline, security]
+
+  - text: "Excellence is never an accident. It is always the result of high intention, sincere effort, and intelligent execution."
+    author: "Aristotle"
+    book: "Nicomachean Ethics"
+    themes: [discipline, quality]
+
+  # THEME: strategy
+  - text: "Plans are nothing; planning is everything."
+    author: "Dwight D. Eisenhower"
+    book: "Mandate for Change"
+    themes: [strategy]
+
+  - text: "However beautiful the strategy, you should occasionally look at the results."
+    author: "Winston Churchill"
+    book: "War Memoirs"
+    themes: [strategy]
+
+  - text: "Give me six hours to chop down a tree and I will spend the first four sharpening the axe."
+    author: "Abraham Lincoln"
+    book: "Lincoln on Leadership"
+    themes: [strategy, discipline]
+
+  - text: "The essence of strategy is choosing what not to do."
+    author: "Michael Porter"
+    book: "What is Strategy?"
+    themes: [strategy]
+
+  # THEME: security
+  - text: "Security is not a product, but a process."
+    author: "Bruce Schneier"
+    book: "Secrets and Lies"
+    themes: [security]
+
+  - text: "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room."
+    author: "Gene Spafford"
+    book: "Practical Unix and Internet Security"
+    themes: [security]
+
+  # THEME: learning
+  - text: "Tell me and I forget. Teach me and I remember. Involve me and I learn."
+    author: "Benjamin Franklin"
+    book: "Poor Richard's Almanack"
+    themes: [learning]
+
+  - text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go."
+    author: "Dr. Seuss"
+    book: "I Can Read With My Eyes Shut!"
+    themes: [learning]
+
+  # THEME: flow
+  - text: "The best way to predict the future is to invent it."
+    author: "Alan Kay"
+    book: "Creative Think Symposium"
+    themes: [flow, strategy]
+
+  - text: "Flow is the state in which people are so involved in an activity that nothing else seems to matter."
+    author: "Mihaly Csikszentmihalyi"
+    book: "Flow: The Psychology of Optimal Experience"
+    themes: [flow]
+
+  # THEME: universal
+  - text: "Done is better than perfect."
+    author: "Sheryl Sandberg"
+    book: "Lean In"
+    themes: [universal]
+
+  - text: "The only way to do great work is to love what you do."
+    author: "Steve Jobs"
+    book: "Stanford Commencement Address"
+    themes: [universal]
+
+# ─── Validation Rules ─────────────────────────────────────────────────────────
+validation:
+  minimum_quotes: 32
+  required_fields_per_quote: [text, author, book, themes]
+  required_themes: [quality, systems_thinking, improvement, architecture, discipline, strategy, security, learning, flow, universal]
+  theme_coverage: "all 10 themes must have at least 1 quote"
+  no_fabricated_quotes: true
+  quote_selection: "deterministic — match theme_map[intent_type] then select by session context"

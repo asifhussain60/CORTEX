@@ -394,7 +394,7 @@ class BulkIngestionStats:
         return self.successful / self.total_entries
 
 
-class BulkIngestionPipeline:
+class BulkIngestionPipeline:  # CORE-035-scoped — domain-specific variant
     """Main bulk ingestion pipeline orchestrator.
 
     Manages adapters, filters, transformers, and coordinates batch processing

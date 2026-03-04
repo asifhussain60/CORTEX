@@ -12,7 +12,7 @@ from typing import Dict, List, Optional
 import hashlib
 
 
-class EmbeddingCache:
+class EmbeddingCache:  # CORE-035-scoped — domain-specific variant
     """Cache for text embeddings (vector representations).
 
     Stores embeddings keyed by a hash of the input text. Avoids repeated

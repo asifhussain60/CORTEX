@@ -12,12 +12,13 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 from cortex.templates.content_strategy import ContentPopulationStrategy
-from cortex.templates.knowledge_schema import KnowledgeBaseSchema, ValidationResult
+from cortex.templates.knowledge_schema import KnowledgeBaseSchema
+from cortex.models.shared.validation import ValidationResult  # canonical — CORE-035
 from cortex.templates.template_manager import TemplateManager
 
 
 @dataclass
-class ValidationReport:
+class ValidationReport:  # CORE-035-scoped — domain-specific variant
     """Validation report."""
     valid: bool
     templates_checked: int

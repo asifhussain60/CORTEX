@@ -54,7 +54,7 @@ class ValidationError:
 
 
 @dataclass
-class CanonicalIntent:
+class CanonicalIntent:  # CORE-035-scoped — domain-specific variant
     """Standardized intent representation (AC-VALIDATE-001)"""
     original_intent: str
     canonical_form: str

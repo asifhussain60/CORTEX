@@ -26,7 +26,7 @@ class SolutionFolder:
     guid: str
 
 
-class SolutionFileParser:
+class SolutionFileParser:  # CORE-035-scoped — domain-specific variant
     """Parse Visual Studio Solution (.sln) and Solution Filter (.slnf) files"""
 
     # GUID for C# project type

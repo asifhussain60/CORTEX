@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional
 
 
 @dataclass
-class DomainContext:
+class DomainContext:  # CORE-035-scoped — domain-specific variant
     """Domain execution context."""
     session_id: str
     domain: str

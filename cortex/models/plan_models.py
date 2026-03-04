@@ -124,7 +124,7 @@ class PlanClassification(BaseModel):
     rationale: str = Field(default="", description="Classification rationale")
 
 
-class Overview(BaseModel):
+class Overview(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Plan overview and success criteria."""
 
     vision: str = Field(..., description="Vision statement")
@@ -163,7 +163,7 @@ class Deliverable(BaseModel):
     templates: Optional[List[str]] = Field(None, description="Templates if applicable")
 
 
-class TestSpec(BaseModel):
+class TestSpec(BaseModel):  # CORE-035-scoped — domain-specific variant
     """Test specification for a stage."""
 
     file: str = Field(..., description="Test file path")

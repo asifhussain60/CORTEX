@@ -32,7 +32,7 @@ class IntentScope:
 
 
 @dataclass
-class CanonicalIntent:
+class CanonicalIntent:  # CORE-035-scoped — domain-specific variant
     """CanonicalIntent - Represents a canonicalized intent with structured information."""
 
     intent_type: str

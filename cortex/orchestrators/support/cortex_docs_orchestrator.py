@@ -57,7 +57,7 @@ class ContentSection:
 
 
 @dataclass
-class NavigationItem:
+class NavigationItem:  # CORE-035-scoped — domain-specific variant
     """Navigation item for site structure."""
 
     title: str

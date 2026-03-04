@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class ImportMapping:
+class ImportMapping:  # CORE-035-scoped — domain-specific variant
     """Import path mapping."""
     old_import: str
     new_import: str

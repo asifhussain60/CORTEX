@@ -51,7 +51,7 @@ class ConfidenceScore:
         return self.overall_score >= threshold
 
 
-class ConfidenceScorer:
+class ConfidenceScorer:  # CORE-035-scoped — domain-specific variant
     """Scores confidence of operations."""
 
     def __init__(self, db_path: Optional[str] = None) -> None:

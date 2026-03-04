@@ -30,7 +30,7 @@ from cortex.lens.models.polyglot_ast_result import (
 )
 
 
-class JavaScriptAdapter(LanguageAdapter):
+class JavaScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific variant
     """
     JavaScript language adapter using tree-sitter.
 

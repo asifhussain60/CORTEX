@@ -56,7 +56,7 @@ class Severity:  # CORE-035-scoped — domain-specific severity scale — contex
         return hash(self.value)
 
 
-class ChallengeSeverity:
+class ChallengeSeverity:  # CORE-035-scoped — domain-specific variant
     """Severity level constants."""
 
     CRITICAL: Severity = Severity("CRITICAL")

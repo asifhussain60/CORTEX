@@ -91,7 +91,7 @@ def _export_spans_otlp(spans: list, service_name: str) -> None:
     except Exception as exc:  # noqa: BLE001
         _logger.debug("OTLP export failed (non-fatal): %s", exc)
 
-class SpanKind(Enum):
+class SpanKind(Enum):  # CORE-035-scoped — domain-specific variant
     """OpenTelemetry span kinds."""
     INTERNAL = "INTERNAL"
     SERVER = "SERVER"
@@ -99,7 +99,7 @@ class SpanKind(Enum):
     PRODUCER = "PRODUCER"
     CONSUMER = "CONSUMER"
 
-class SpanStatus(Enum):
+class SpanStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """OpenTelemetry span status."""
     UNSET = "UNSET"
     OK = "OK"

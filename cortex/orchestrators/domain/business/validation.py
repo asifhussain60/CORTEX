@@ -23,7 +23,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
 
 
 @dataclass
-class ValidationRule:
+class ValidationRule:  # CORE-035-scoped — domain-specific variant
     """Domain validation rule."""
     rule_id: str
     domain: str

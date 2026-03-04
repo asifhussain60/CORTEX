@@ -114,7 +114,7 @@ class RefinementRule(Protocol):
         raise NotImplementedError("refine not yet implemented")
 
 
-class OutputFormatter(Protocol):
+class OutputFormatter(Protocol):  # CORE-035-scoped — domain-specific variant
     """Protocol for output formatters.
 
     Attributes:
@@ -156,7 +156,7 @@ class Validator(Protocol):
         raise NotImplementedError("validate not yet implemented")
 
 
-class BulkIngestionPipeline:
+class BulkIngestionPipeline:  # CORE-035-scoped — domain-specific variant
     """Extensible bulk ingestion pipeline with registry pattern.
 
     Attributes:

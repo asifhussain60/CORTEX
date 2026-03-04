@@ -94,7 +94,7 @@ class DebugInjection:
 
 
 @dataclass
-class DebugSession:
+class DebugSession:  # CORE-035-scoped — domain-specific variant
     """Represents a debug session"""
     session_id: str
     base_path: str
@@ -176,7 +176,7 @@ class StackDetector:
         return TechnologyStack.UNKNOWN
 
 
-class LanguageAdapter:
+class LanguageAdapter:  # CORE-035-scoped — domain-specific variant
     """Base class for language-specific adapters"""
 
     def __init__(self, session_id: str, base_path: Path) -> None:
@@ -209,7 +209,7 @@ class LanguageAdapter:
         return f"[{MARKER_PREFIX}{self.session_id}:{phase}:{file_name}:{line_num}] {message}"
 
 
-class JavaScriptAdapter(LanguageAdapter):
+class JavaScriptAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific variant
     """JavaScript/TypeScript adapter"""
 
     def __init__(self, session_id: str, base_path: Path) -> None:
@@ -327,7 +327,7 @@ class PythonAdapter(LanguageAdapter):
         return modified, removed
 
 
-class CSharpAdapter(LanguageAdapter):
+class CSharpAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific variant
     """C#/.NET adapter"""
 
     def __init__(self, session_id: str, base_path: Path) -> None:

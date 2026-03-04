@@ -23,7 +23,7 @@ from typing import Any, Dict, Optional
 logger = logging.getLogger(__name__)
 
 
-class EnvironmentType(Enum):
+class EnvironmentType(Enum):  # CORE-035-scoped — domain-specific variant
     """Enumeration of supported execution environments."""
 
     MCP_SERVER = "mcp_server"          # Production: MCP server mode

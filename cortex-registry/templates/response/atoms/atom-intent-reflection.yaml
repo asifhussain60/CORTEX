@@ -1,0 +1,96 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Intent Reflection
+# ID: atom-intent-reflection
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: First-person, business-language summary of what CORTEX understood
+# from the user's request. Appears BEFORE any work content.
+#
+# CUMULATIVE MODE: In multi-turn sessions, reflects ALL prior intents (up to
+# max_turns=5), not just the current turn. Oldest are trimmed beyond 5.
+#
+# Single-turn template (turn 1):
+#   "I'm reading this as: {intent_summary}"
+#
+# Cumulative template (turn 2+):
+#   "In this session: {turn_1_summary} → {turn_2_summary} → [current: {current_summary}]"
+#
+# SSOT: .github/templates/cortex-response-templates.md § 🪞 Intent Reflection
+# Phase: 120 (Sub-Phase A)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-intent-reflection
+type: atom
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: null
+  element: "paragraph text"
+  position: "After response header (after ---, before work content)"
+  zone: "body-top"
+  italic_summary: true
+  max_length_chars: 200
+  forbidden:
+    - "technical jargon (use business language)"
+    - "class names"
+    - "file paths in the summary"
+    - "bullet lists in the reflection"
+
+# ─── Cumulative Mode ──────────────────────────────────────────────────────────
+cumulative_mode: true
+max_turns: 5
+trim_strategy: "drop oldest when exceeding max_turns"
+current_turn_marker: "[current: {summary}]"
+chain_separator: " → "
+
+# ─── Templates ────────────────────────────────────────────────────────────────
+# {intent_summary} = business-language description of current intent
+# {turn_chain}     = " → " separated list of prior turn summaries (cumulative)
+# {current_summary} = current turn summary (in cumulative mode)
+
+template_single: |
+  *I'm reading this as: {intent_summary}*
+
+template_cumulative: |
+  *In this session: {turn_chain} → [current: {current_summary}]*
+
+# ─── Business Language Rules ──────────────────────────────────────────────────
+# Summaries must be in plain business language — not technical shorthand.
+business_language_examples:
+  good:
+    - "fix the broken header rendering in the response templates"
+    - "build a new registry for modular LEGO-style response blocks"
+    - "audit the workspace for governance violations and auto-fix"
+  bad:
+    - "FIX intent for cortex-response-templates.md L146"
+    - "IMPLEMENT atom-identity YAML with CORE-008 compliance"
+    - "run VacuumOrchestrator 8-stage pipeline"
+
+# ─── Intent Summary Generation Rules ─────────────────────────────────────────
+summary_generation:
+  max_words: 20
+  start_with_verb: true
+  no_technical_jargon: true
+  no_file_paths: true
+  no_class_names: true
+  must_be_specific: true
+  must_be_actionable: true
+
+# ─── Session State ────────────────────────────────────────────────────────────
+session_state:
+  storage: "in-memory per conversation turn"
+  persistence: "not persisted across sessions"
+  reset_on: "new VS Code Copilot Chat session"
+
+# ─── Validation Rules ─────────────────────────────────────────────────────────
+validation:
+  cumulative_mode_required: true
+  max_turns_value: 5
+  template_single_required: true
+  template_cumulative_required: true
+  no_bullet_lists: true
+  business_language: true

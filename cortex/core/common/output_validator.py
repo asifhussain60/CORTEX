@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ValidationViolation:
+class ValidationViolation:  # CORE-035-scoped — domain-specific variant
     """A single validation rule violation."""
     rule: str
     severity: ValidationSeverity
@@ -35,7 +35,7 @@ class ValidationResult:  # CORE-035-scoped — domain-specific ValidationResult 
     metadata: Dict[str, Any]
 
 
-class LLMOutputValidator:
+class LLMOutputValidator:  # CORE-035-scoped — domain-specific variant
     """Validates LLM responses against safety and format rules."""
 
     # Token count (approximate words)

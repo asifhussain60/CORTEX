@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 # - Reference: cortex-registry/core/governance/response-header-enforcement.yaml
 # ================================================================================
 
-class ResponseHeaderEnforcer:
+class ResponseHeaderEnforcer:  # CORE-035-scoped — domain-specific variant
     """Enforces CORE-029 response header formatting on all agent outputs."""
 
     @staticmethod

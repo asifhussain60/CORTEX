@@ -38,7 +38,7 @@ dashboard_debug, log_dashboard_debug, log_dashboard_schema_validation = _get_deb
 
 
 @dataclass
-class RepoMetadata:
+class RepoMetadata:  # CORE-035-scoped — domain-specific variant
     """
     Repository metadata section.
 
@@ -258,7 +258,7 @@ class SecuritySection:
 
 
 @dataclass
-class PackageDependency:
+class PackageDependency:  # CORE-035-scoped — domain-specific variant
     """
     Package dependency information.
 
@@ -474,7 +474,7 @@ class RefactoringSection:
 
 
 @dataclass
-class ArchitectureSection:
+class ArchitectureSection:  # CORE-035-scoped — domain-specific variant
     """
     Architecture analysis section (NEW - Tab 9).
 

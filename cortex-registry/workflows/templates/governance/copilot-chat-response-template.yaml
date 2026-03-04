@@ -1,3 +1,14 @@
+# ⚠️  DEPRECATED — Phase 120 (Response Template System v3)
+# deprecated: true
+# deprecated_phase: "120"
+# deprecated_date: "2026-03-03"
+# ssot_pointer: "cortex-registry/templates/response/_registry.yaml"
+# reason: >
+#   Superseded by the 3-Tier LEGO architecture (Atoms → Blocks → Compositions).
+#   Copilot Chat rendering rules now live in cortex-registry/templates/response/ atoms.
+#   This file is retained for historical reference only — do NOT edit or extend.
+# ─────────────────────────────────────────────────────────────────────────────
+
 # =============================================================================
 # WORKFLOW TEMPLATE: VSCode Copilot Chat Response Template Rendering
 # =============================================================================

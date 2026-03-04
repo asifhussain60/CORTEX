@@ -21,7 +21,7 @@ class ResolutionTier(str, Enum):
     ESCALATED = "escalated"
 
 
-class ReviewStatus(Enum):
+class ReviewStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Conflict review status."""
     PENDING = "pending"
     APPROVED = "approved"
@@ -30,7 +30,7 @@ class ReviewStatus(Enum):
 
 
 @dataclass
-class Resolution:
+class Resolution:  # CORE-035-scoped — domain-specific variant
     """Resolution result with full tracking.
 
     Attributes:

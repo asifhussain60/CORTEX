@@ -20,7 +20,7 @@ from cortex.core.response_optimizer import ResponseOptimizer
 logger = logging.getLogger(__name__)
 
 
-class IntegrationError(Exception):
+class IntegrationError(Exception):  # CORE-035-scoped — domain-specific variant
     """Base exception for integration errors."""
     pass
 
@@ -33,7 +33,7 @@ class EnforcementLevel(Enum):  # CORE-035-scoped — domain-specific enforcement
 
 
 @dataclass
-class IntegrationResult:
+class IntegrationResult:  # CORE-035-scoped — domain-specific variant
     """
     Integration processing result.
 

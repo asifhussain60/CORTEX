@@ -63,7 +63,7 @@ class KnowledgeVersion:
         }
 
 
-class VersionHistory:
+class VersionHistory:  # CORE-035-scoped — domain-specific variant
     """Manages version history for a single backend."""
 
     def __init__(self, backend_name: str) -> None:

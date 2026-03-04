@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class CacheStats:
+class CacheStats:  # CORE-035-scoped — orchestrator context cache variant with current_entries/current_size_bytes/hit_rate fields
     """Cache statistics for monitoring."""
 
     hits: int
@@ -42,7 +42,7 @@ class CacheStats:
     hit_rate: float
 
 
-class ContextCacheLayer:
+class ContextCacheLayer:  # CORE-035-scoped — domain-specific variant
     """
     LRU cache with TTL for synthesized context.
 

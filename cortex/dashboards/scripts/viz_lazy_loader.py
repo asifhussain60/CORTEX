@@ -99,7 +99,7 @@ TAB_MODULE_REQUIREMENTS: Dict[str, List[str]] = {
 }
 
 
-class LazyModuleLoader:
+class LazyModuleLoader:  # CORE-035-scoped — domain-specific variant
     """
     Manages lazy loading of dashboard modules.
 

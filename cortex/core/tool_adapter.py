@@ -64,7 +64,7 @@ class DuplicateResult:
 
 
 @dataclass
-class GitHistoryResult:
+class GitHistoryResult:  # CORE-035-scoped — domain-specific variant
     """Result from git history tool."""
 
     lookback_hours: int

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ImportMapping:
+class ImportMapping:  # CORE-035-scoped — domain-specific variant
     """Mapping from import name to knowledge categories."""
 
     import_name: str

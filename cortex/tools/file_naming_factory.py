@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class FileType(Enum):
+class FileType(Enum):  # CORE-035-scoped — domain-specific variant
     """Supported file types with naming conventions."""
 
     DOCUMENTATION = "markdown"      # .md

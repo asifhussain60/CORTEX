@@ -22,7 +22,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
 
 @dataclass
-class PerformanceMetrics:
+class PerformanceMetrics:  # CORE-035-scoped — domain-specific variant
     """Performance metrics snapshot."""
     test_execution_time_p50: float
     test_execution_time_p95: float

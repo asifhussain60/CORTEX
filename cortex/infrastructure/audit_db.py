@@ -16,7 +16,7 @@ from enum import Enum
 import logging
 
 
-class EventType(Enum):
+class EventType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of audit events."""
 
     ORCHESTRATOR_START = "orchestrator_start"

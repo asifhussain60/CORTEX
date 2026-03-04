@@ -14,7 +14,7 @@ import json
 from cortex.intelligence.learning.digest.digest_models import DigestResult
 
 
-class OutputFormatter:
+class OutputFormatter:  # CORE-035-scoped — domain-specific variant
     """
     Format DIGEST results for output.
 

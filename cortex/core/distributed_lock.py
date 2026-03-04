@@ -26,7 +26,7 @@ from cortex.infrastructure.database import DatabaseManager
 
 
 @dataclass
-class LockInfo:
+class LockInfo:  # CORE-035-scoped — domain-specific variant
     """Information about an acquired lock."""
     lock_id: int
     resource: str

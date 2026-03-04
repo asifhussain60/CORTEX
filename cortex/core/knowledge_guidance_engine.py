@@ -46,7 +46,7 @@ import yaml
 # ENUMERATIONS & CONSTANTS
 # =============================================================================
 
-class TierLevel(Enum):
+class TierLevel(Enum):  # CORE-035-scoped — domain-specific variant
     """Governance tier levels (highest to lowest precedence)."""
 
     DOMAIN_OVERRIDE = 0    # Company domain-specific (highest precedence)

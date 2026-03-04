@@ -193,7 +193,7 @@ After fix-plan generation, the debug pipeline enters a convergence gate: rescan 
 | Debug MCP Tools | `cortex/mcp/tools/debug_tools.py` |
 | CortexVision (Vision API) | `cortex/mcp/tools/utilities.py` |
 | Workflow Template | `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` |
-| Phase Spec | `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` |
+| Phase Spec | `cortex-registry/_cortex-master/phases/completed/phase-86-multi-stack-debug-pipeline.yaml` |
 | Node.js CLI (company) | `cortex-registry/company/dashboards/spa/tools/cortex-debug/` |
 
 ---
@@ -279,7 +279,7 @@ Agent Response:
 | `../../prompts/cortex-architect.prompt.md` (load explicitly when needed) | DESIGN/AUDIT/EXEC modes |
 | `../../prompts/CORTEX.prompt.md` (load explicitly when needed) | Master prompt |
 | `../../copilot-instructions.md` (load explicitly when needed) | Quick command reference |
-| Phase 86 Spec | `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` |
+| Phase 86 Spec | `cortex-registry/_cortex-master/phases/completed/phase-86-multi-stack-debug-pipeline.yaml` |
 
 ---
 

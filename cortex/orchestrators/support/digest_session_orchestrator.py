@@ -21,7 +21,7 @@ from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # P
 
 
 @dataclass
-class DigestResult:
+class DigestResult:  # CORE-035-scoped — domain-specific variant
     """Result of digesting a single session file."""
 
     success: bool = False

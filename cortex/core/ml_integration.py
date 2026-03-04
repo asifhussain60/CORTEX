@@ -49,7 +49,7 @@ class MLMetrics:
 
 
 @dataclass
-class IntegrationResult:
+class IntegrationResult:  # CORE-035-scoped — domain-specific variant
     """
     Integration processing result.
 

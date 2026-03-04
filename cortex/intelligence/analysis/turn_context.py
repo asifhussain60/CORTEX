@@ -34,7 +34,7 @@ class TurnEntry:
     violations: List[str] = field(default_factory=list)
 
 
-class TurnContext:
+class TurnContext:  # CORE-035-scoped — domain-specific variant
     """
     Session-scoped intelligence accumulator.
 

@@ -137,7 +137,7 @@ class Pattern:
 
 
 @dataclass
-class DiscoveryResult:
+class DiscoveryResult:  # CORE-035-scoped — domain-specific variant
     """Output of a discovery query.
 
     Attributes:

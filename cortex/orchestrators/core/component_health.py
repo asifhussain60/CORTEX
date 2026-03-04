@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 
-class ComponentType(Enum):
+class ComponentType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type classification for system components."""
     CRITICAL = "CRITICAL"      # System cannot function without this
     ESSENTIAL = "ESSENTIAL"    # System degraded without this

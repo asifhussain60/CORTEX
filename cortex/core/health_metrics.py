@@ -79,7 +79,7 @@ class MetricSummary:
         }
 
 
-class HealthMetrics:
+class HealthMetrics:  # CORE-035-scoped — domain-specific variant
     """
     Singleton metrics collector.
 

@@ -26,7 +26,7 @@ from cortex.orchestrators.health.vacuum_orchestrator import (
 )
 
 
-class VacuumOrchestrator(_HealthVacuumOrchestrator):
+class VacuumOrchestrator(_HealthVacuumOrchestrator):  # CORE-035-scoped — domain-specific variant
     """Support-tier adapter for VacuumOrchestrator.
 
     Inherits the full standalone + companion remediation engine from

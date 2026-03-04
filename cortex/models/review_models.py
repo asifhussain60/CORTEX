@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Any, Dict, List
 
 
-class ReviewStatus(str, Enum):
+class ReviewStatus(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Status of a phase review."""
     PASS = "PASS"
     FAIL = "FAIL"
@@ -64,7 +64,7 @@ class PhaseReviewResult:
 
 
 @dataclass
-class GateDecision:
+class GateDecision:  # CORE-035-scoped — domain-specific variant
     """Decision about whether to proceed to next phase.
 
     Attributes:

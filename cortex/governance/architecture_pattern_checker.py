@@ -19,7 +19,7 @@ import ast
 
 
 @dataclass
-class PatternViolation:
+class PatternViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a violation of an architecture pattern."""
 
     pattern_name: str

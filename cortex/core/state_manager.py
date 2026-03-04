@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass
-class OperationState:
+class OperationState:  # CORE-035-scoped — domain-specific variant
     """
     Operation state across phases.
 

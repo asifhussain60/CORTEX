@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Dict, List
 
 
-class DiagramType(Enum):
+class DiagramType(Enum):  # CORE-035-scoped — domain-specific variant
     """Diagram types."""
 
     ORCHESTRATOR = "orchestrator"

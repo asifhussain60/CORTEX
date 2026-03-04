@@ -132,7 +132,7 @@ class ContextEdge:
 
 
 @dataclass
-class KnowledgeGraph:
+class KnowledgeGraph:  # CORE-035-scoped — domain-specific variant
     """Knowledge graph for LENS context."""
     nodes: Dict[str, ContextNode] = field(default_factory=dict)
     edges: List[ContextEdge] = field(default_factory=list)

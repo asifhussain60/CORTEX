@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PROMPT INTRO: CORTEX Architect
+# ID: prompt-cortex-architect
+# Tier: Prompt (intro block for cortex-architect.prompt.md)
+#
+# PURPOSE: Intro block for DESIGN / PLAN responses when
+# cortex-architect.prompt.md is active. Product title changes to
+# "🛠️ CORTEX Architect" — the icon is fixed (never 🧠 when Architect is active).
+#
+# Phase: 120 (Sub-Phase D)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: prompt-cortex-architect
+type: prompt_intro
+version: "3.0"
+phase: "120"
+prompt_file: ".github/prompts/cortex-architect.prompt.md"
+product_title: "🛠️ CORTEX Architect"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  product_icon: "🛠️"
+  icon_fixed: true
+  heading_level: H1
+  note: "Icon is 🛠️ — never 🧠 when cortex-architect.prompt.md is active. Swapping is a P1 violation."
+
+# ─── Intent → Composition Routing ────────────────────────────────────────────
+intent_to_composition:
+  DESIGN: comp-query
+  PLAN: comp-query
+  IMPLEMENT: comp-implement-fix
+  AUDIT: comp-audit-fix
+  REFACTOR: comp-refactor
+  DEFAULT: comp-query
+
+# ─── Template Override ────────────────────────────────────────────────────────
+# Override atom-identity product_title when this prompt is active
+atom_identity_override:
+  product_title: "🛠️ CORTEX Architect"
+  icon: "🛠️"
+
+# ─── Rules ────────────────────────────────────────────────────────────────────
+rules:
+  - "Use '🛠️ CORTEX Architect' not '🧠 CORTEX' — different prompt, different identity"
+  - "🧭 Orchestration: in Zone 1 of the header (omit for single-hop)"
+  - "No **Orchestrator:** field"
+  - "Product icon 🛠️ is fixed for this prompt"

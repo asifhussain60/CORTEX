@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 @dataclass
-class TechnicalDecision:
+class TechnicalDecision:  # CORE-035-scoped — domain-specific variant
     """Represents a technical decision made during the phase"""
     decision: str
     rationale: str
@@ -32,7 +32,7 @@ class TechnicalDecision:
 
 
 @dataclass
-class StoryContext:
+class StoryContext:  # CORE-035-scoped — domain-specific variant
     """Context for creating narrative flow between phases"""
     previous_phase: Optional[Dict[str, Any]] = None
     next_phase: Optional[Dict[str, Any]] = None

@@ -17,7 +17,7 @@ from typing import Any
 
 
 @dataclass
-class Author:
+class Author:  # CORE-035-scoped — domain-specific variant
     """Represents an author in the collaboration network."""
 
     name: str

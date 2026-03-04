@@ -79,7 +79,7 @@ class TestValueScore:
             return "P3-LOW"
 
 
-class TestValueScorer:
+class TestValueScorer:  # CORE-035-scoped — domain-specific variant
     """
     Calculate test value scores for test candidates.
 

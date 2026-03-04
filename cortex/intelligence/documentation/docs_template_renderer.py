@@ -46,7 +46,7 @@ class BreadcrumbItem:
 
 
 @dataclass
-class NavigationItem:
+class NavigationItem:  # CORE-035-scoped — domain-specific variant
     """Navigation menu item."""
 
     title: str

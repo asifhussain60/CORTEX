@@ -16,7 +16,7 @@ from enum import Enum
 from typing import Any, Callable, Dict
 
 
-class MergeStrategy(Enum):
+class MergeStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Conflict resolution strategies."""
     FAIL_ON_CONFLICT = "fail"  # Raise error on any conflict
     LAST_WRITE_WINS = "last_write"  # Always accept new changes
@@ -55,7 +55,7 @@ class OptimisticLockMetrics:
         }
 
 
-class ConflictError(Exception):
+class ConflictError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when optimistic lock conflict detected."""
     pass
 
@@ -65,12 +65,12 @@ class StaleDataError(Exception):
     pass
 
 
-class NotFoundError(Exception):
+class NotFoundError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when entity not found."""
     pass
 
 
-class OptimisticLockManager:
+class OptimisticLockManager:  # CORE-035-scoped — domain-specific variant
     """
     Optimistic locking manager for concurrent database access.
 

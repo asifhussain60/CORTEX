@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class OrchestratorMetadata:
+class OrchestratorMetadata:  # CORE-035-scoped — domain-specific variant
     """
     Canonical orchestrator metadata for runtime registration.
 

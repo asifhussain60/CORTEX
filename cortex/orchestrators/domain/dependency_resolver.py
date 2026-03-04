@@ -15,7 +15,7 @@ import re
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class ResolutionStatus(Enum):
+class ResolutionStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Status of dependency resolution"""
     SUCCESS = "success"
     CIRCULAR_DEPENDENCY = "circular_dependency"
@@ -107,7 +107,7 @@ class VersionConflict:
 
 
 @dataclass
-class ResolutionStrategy:
+class ResolutionStrategy:  # CORE-035-scoped — domain-specific variant
     """Suggested resolution for a set of conflicts."""
 
     package: str

@@ -20,7 +20,7 @@ from cortex.infrastructure.deployment.monitor import DeploymentMonitor
 logger = logging.getLogger(__name__)
 
 
-class DashboardAPI:
+class DashboardAPI:  # CORE-035-scoped — domain-specific variant
     """REST API for deployment analytics dashboard.
 
     Provides endpoints for metrics, trends, and health status.

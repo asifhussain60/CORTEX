@@ -1,0 +1,70 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPOSITION: Audit Fix Pipeline
+# ID: comp-audit-fix
+# Tier: 3 (Composition — terminal-ready assembly)
+#
+# PURPOSE: Response header for /audit fix — 9-stage pipeline.
+# Via chain: Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer
+#
+# Rendering: VS Code Copilot Chat 3-zone layout (300-500px panel)
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase B)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: comp-audit-fix
+type: composition
+version: "3.0"
+phase: "120"
+trigger: "/audit fix"
+intent: AUDIT
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  zone_count: 3
+  zone_separator: "---"
+  max_heading_levels: 3
+  single_h1: true
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML except details/summary"
+    - "raw URLs"
+    - "tables with more than 4 columns"
+
+# ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    zone: 1
+    params:
+      product_title: "🧠 CORTEX"
+      mode: "Auditing"
+  - id: atom-orchestration
+    zone: 1
+    params:
+      chain: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
+  - id: atom-quote
+    zone: 2
+    params:
+      theme: discipline
+  - id: atom-intent-reflection
+    zone: body
+  - id: atom-status-footer
+    zone: footer
+
+# ─── Rendered Template ────────────────────────────────────────────────────────
+template: |
+  # 🧠 CORTEX Auditing
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  🧭 Orchestration: Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+# ─── Pre-built Via Chain ──────────────────────────────────────────────────────
+orchestration_chain: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
+stage_count: 9
+workflow_template: "cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml"

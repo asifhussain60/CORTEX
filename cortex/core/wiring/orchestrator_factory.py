@@ -42,7 +42,7 @@ class OrchestrationSpec:
 
 
 @dataclass
-class OrchestrationContext:
+class OrchestrationContext:  # CORE-035-scoped — domain-specific variant
     """Runtime context for orchestrator instantiation"""
     event_bus: Optional[Any] = None
     orchestrators: Dict[str, Any] = field(default_factory=dict)

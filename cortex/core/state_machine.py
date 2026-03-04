@@ -50,7 +50,7 @@ class TransitionType(Enum):
 
 
 @dataclass
-class StateTransition:
+class StateTransition:  # CORE-035-scoped — domain-specific variant
     """Records a state transition in the history."""
     timestamp: str
     from_state: str
@@ -64,7 +64,7 @@ class StateTransition:
 
 
 @dataclass
-class StateSnapshot:
+class StateSnapshot:  # CORE-035-scoped — domain-specific variant
     """Snapshot of current state."""
     current_state: str
     previous_state: Optional[str]

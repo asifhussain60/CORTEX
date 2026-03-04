@@ -338,6 +338,109 @@ Processing Banner replaced by:
 
 ---
 
+## VS Code Copilot Chat Rendering Rules
+
+**Authority:** Phase 120 (fetched 2026-03-04 from official VS Code + GitHub Copilot documentation)
+**Scope:** ALL templates, atoms, blocks, and compositions in the CORTEX Response Template System v3
+**SSOT atom:** `cortex-registry/templates/response/atoms/` — all atoms declare `rendering_rules.copilot_chat_compatible: true`
+
+VS Code GitHub Copilot Chat renders responses in a **narrow panel (300–500px)**. Templates must be
+designed for this constraint — not for full-width browser or IDE editors.
+
+### 3-Zone Header Layout
+
+The response header uses three zones separated by `---` (Markdown HR). This renders as a full-width
+horizontal line in VS Code — use it as a visual zone separator, never blank lines alone.
+
+```
+Zone 1:  # 🧠 CORTEX {mode}
+         **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+         🧭 Orchestration: {DisplayName} → {DisplayName}
+---
+Zone 2:  > *"{quote}"*
+         > — {Author}, **{Book}**
+---
+Zone 3:  [Work content begins here]
+```
+
+### Supported Elements
+
+| Element | VS Code Rendering | Usage |
+|---|---|---|
+| `# H1` | Large bold heading | ONE per response — identity block only |
+| `## H2` | Medium bold heading | Section headers |
+| `### H3` | Small bold heading | Sub-sections |
+| ` ``` code block ``` ` | Syntax-highlighted block | Code samples |
+| `> blockquote` | Blue left-accent bar | Quote atom (Zone 2) |
+| `**bold**` | Bold text | Labels, emphasis |
+| `*italic*` | Italic text | Intent reflection, captions |
+| `---` | Full-width horizontal line | Zone separator |
+| `[text](url)` | Clickable link | All URL references |
+| `<details>/<summary>` | Collapsible block | Timelines and verbose logs ONLY |
+| Tables (≤4 columns) | Grid layout | Data comparison |
+
+### Forbidden or Degraded Elements
+
+| Element | Problem | Alternative |
+|---|---|---|
+| `├─ └─ │` tree chars | Collapse to broken boxes in dark themes | Use `-` bullets or indentation |
+| `H4` (`####`) and deeper | Renders flat — visually same as H3 | Restructure to H3 max |
+| `<div>`, `<span>`, `<br>` | Stripped silently | Use Markdown equivalents |
+| Raw URLs (`https://...`) | No fallback label — broken UX | Use `[display text](url)` |
+| Tables with 5+ columns | Overflow horizontally in 300-500px panel | Split into ≤4 column tables |
+| Nested lists (2+ levels) | Collapse and become hard to read | Flatten to single level |
+| Multiple H1s | Navigation context breaks | ONE H1 per response only |
+| `<hr>` HTML tag | May not render | Use `---` (Markdown HR) |
+
+### 10 Design Principles (P1–P10)
+
+**P1 — Narrow Panel First:** Design for 300–500px panel width. Every table, list, and block must
+be readable without horizontal scrolling.
+
+**P2 — One H1 Per Response:** The H1 is the product identity heading. VS Code uses it for
+navigation context. Multiple H1s confuse the structure.
+
+**P3 — HR as Zone Separator:** Use `---` (Markdown HR) to visually separate the 3 header zones.
+It renders as a full-width line in VS Code — more visually definitive than blank lines.
+
+**P4 — Blockquote for Quotes:** The `>` blockquote renders with a blue left-accent bar in VS Code.
+Use it for the quote atom (Zone 2) — it is distinctive and scannable.
+
+**P5 — Ban Tree Characters:** `├─ └─ │ ╔ ╗` collapse in VS Code dark themes → broken box
+characters. Use `-` bullets or plain indentation instead.
+
+**P6 — Details/Summary for Collapsibles:** `<details>/<summary>` is the ONLY HTML that renders
+correctly in VS Code Copilot Chat. Use it for engagement timelines and verbose logs only.
+
+**P7 — Max 4 Table Columns:** Tables with 5+ columns overflow horizontally in the narrow panel.
+If more columns are needed, split into multiple tables or use a different format.
+
+**P8 — No Raw URLs:** Raw URLs have no label — they break UX and accessibility. Always use
+`[display text](url)` format.
+
+**P9 — Flatten List Nesting:** Nested lists beyond 1 level collapse and become hard to read in the
+narrow panel. Restructure to single-level lists.
+
+**P10 — copilot-instructions.md Conciseness:** The `copilot-instructions.md` file is auto-loaded
+every request. Keep it concise — every line consumes context window. Prefer pointer-references to
+detail sections rather than inline duplication.
+
+### Rendering Validation Checklist
+
+Before publishing any template, atom, block, or composition — verify:
+
+- [ ] No tree characters (`├─ └─ │ ╔ ╗`) in any template string
+- [ ] No HTML except `<details>/<summary>`
+- [ ] No raw URLs — all links use `[text](url)` format
+- [ ] Tables have ≤4 columns
+- [ ] Exactly ONE H1 per response template
+- [ ] `---` (HR) used for zone separation, not `<hr>`
+- [ ] Nested lists ≤1 level deep
+- [ ] Heading levels: H1, H2, H3 only (no H4+)
+- [ ] `rendering_rules.copilot_chat_compatible: true` declared in YAML
+
+---
+
 ## 🎯 USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)
 
 **Authority:** CORE-050 User Response Format Standard
@@ -710,12 +813,15 @@ That's everything! Let me know if you need anything else.
 - The CORTEX title uses **H1** (`#`) — it is the primary product identity heading for every response.
 - Using `CORTEX Architect` when only `CORTEX.prompt.md` is active — or vice versa — is a **P1 governance violation** (Check #14, meta-audit).
 
-#### Full canonical template
+#### Full canonical template — 3-Zone Layout
+
+The header uses three zones separated by `---` (Markdown HR) — see § VS Code Copilot Chat Rendering Rules § 3-Zone Header Layout.
 
 ```markdown
 # 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
+---
 
 > *"{quote}"*
 > — {Author}, **{Book}**
@@ -734,10 +840,10 @@ That's everything! Let me know if you need anything else.
 | `{mode}` | Plain-language verb phrase, not an enum name | `Building`, `Auditing`, `Fixing` |
 | `**Author:**` | Always `Asif Hussain` — never omit | `**Author:** Asif Hussain` |
 | `© 2025–2026 CORTEX Framework. All rights reserved.` | Fixed copyright string — verbatim, never paraphrased | — |
-| `**Via:**` | Plain-language orchestrator chain (display names, not class names) — omit on single-hop | `**Via:** Classifier → TDD Builder` |
+| `🧭 Orchestration:` | Plain-language orchestrator chain (display names, not class names) — omit on single-hop | `🧭 Orchestration: Classifier → TDD Builder` |
 | `> *"{quote}"*` | Teachable business/engineering principle — selected by intent theme (see BLOCK-QUOTE-LIBRARY below) | One blank line after author line, before `---` |
 | `> — {Author}, **{Book}**` | Attribution on second blockquote line — same blockquote block as quote | Renders as a unified left-accent callout in Copilot Chat |
-| `---` | Markdown HR (never `<hr>` — Copilot Chat rendering Rule 2) | `---` |
+| `---` | Markdown HR (never `<hr>` — VS Code rendering rule P3) | `---` |
 
 #### Quote selection rules
 
@@ -2857,31 +2963,25 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 
 ### Response Header (Canonical — Every First Response)
 
-**Applies to:** ALL responses across ALL prompts, agents, and LLMs — this is the universal standard.
+**SSOT:** See § Response Header — Canonical Spec (§ VS Code Copilot Chat Rendering Rules for the full 3-zone layout spec).
 
-**SSOT for this section:** § Response Header — Canonical Spec (above in this document).
+This section is a pointer-reference only — the full canonical template with 3-zone layout (Zone 1: H1 identity, Zone 2: blockquote, Zone 3: work content) is defined above.
+
+**Quick reference:**
 
 ```markdown
 # 🧠 CORTEX {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
+---
+
+> *"{quote}"*
+> — {Author}, **{Book}**
 
 ---
 ```
 
-*Use `# 🛠️ CORTEX Architect {mode}` when `cortex-architect.prompt.md` is active. Product icon (🧠 / 🛠️) is fixed — never replaced by a mode icon.*
-
-**Rules:**
-- ✅ Render ONCE — at the very top of the first response only, never repeated
-- ✅ **Product icon is fixed**: 🧠 for CORTEX · 🛠️ for CORTEX Architect — never a mode-specific icon
-- ✅ `**Author:**` and copyright on the same line, pipe-separated — verbatim
-- ✅ `**Via:**` line included when routing chain is 2+ hops; omitted for simple single-orchestrator responses
-- ✅ `{mode}` is a plain-language verb phrase — not an enum (`Building`, not `IMPLEMENT`)
-- ✅ Use `🛠️ CORTEX Architect` when `cortex-architect.prompt.md` is active; use `🧠 CORTEX` otherwise
-- ✅ Followed immediately by `---` separator (Markdown HR — never `<hr>`)
-- ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H1 heading
-- ❌ NO secondary title headings inside the body — the H1 is the only title
-- ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `**Via:**` breadcrumb only
+*Use `# 🛠️ CORTEX Architect {mode}` when `cortex-architect.prompt.md` is active.*
 - ❌ DO NOT skip or omit — this is a P0 governance rule (Check #14 + Check #26, meta-audit)
 - ❌ DO NOT show during silent autonomous execution (progress bars only, no header repetition)
 

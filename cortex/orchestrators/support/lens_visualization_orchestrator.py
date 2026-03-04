@@ -14,7 +14,7 @@ from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # P
 
 
 @dataclass
-class DashboardData:
+class DashboardData:  # CORE-035-scoped — domain-specific variant
     """Structured data for a LENS dashboard."""
     repo: str
     metrics: dict[str, Any] = field(default_factory=dict)

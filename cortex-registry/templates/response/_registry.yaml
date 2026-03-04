@@ -1,0 +1,182 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CORTEX Response Template System v3 — Master Block Registry
+# Phase 120: Modular LEGO Architecture (Atoms → Blocks → Compositions)
+#
+# SSOT: .github/templates/cortex-response-templates.md
+# Architecture:
+#   Tier 1 — Atoms:        Smallest renderable units (identity, quote, orchestration...)
+#   Tier 2 — Blocks:       Composed from atoms (processing banner, session identity...)
+#   Tier 3 — Compositions: Terminal-ready assemblies (comp-audit-fix, comp-implement...)
+#
+# Rendering Contract: Designed for VS Code GitHub Copilot Chat (300-500px panel)
+# Fetched: 2026-03-04 from https://code.visualstudio.com/docs/copilot/copilot-chat
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: 3
+schema_version: "1.0"
+created: "2026-03-04"
+ssot: ".github/templates/cortex-response-templates.md"
+
+# ─── Rendering Contract (inherited by all entries) ────────────────────────────
+rendering_contract:
+  platform: "VS Code GitHub Copilot Chat"
+  panel_width_px: "300-500 (narrow)"
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502 U+2554 U+2557 U+255A U+255D) — box-drawing chars that collapse in VS Code dark themes"
+    - "raw HTML (except details/summary)"
+    - "raw URLs (use [text](url) format)"
+    - "tables with >4 columns"
+    - "nested lists >1 level"
+    - "multiple H1 headings per response"
+  permitted_html:
+    - "<details>"
+    - "<summary>"
+  zone_separator: "--- (HR, full-width line in VS Code)"
+  heading_levels: "H1, H2, H3 only (H4+ renders flat)"
+
+# ─── Tier 1: Atoms ────────────────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    file: atoms/atom-identity.yaml
+    description: "H1 identity block — product icon + mode + author + copyright"
+    rendering_element: "H1 (exactly one per response)"
+    status: ACTIVE
+
+  - id: atom-quote
+    file: atoms/atom-quote.yaml
+    description: "Thematic quote library — 32 quotes across 10 theme categories"
+    rendering_element: "blockquote (blue left accent bar in VS Code)"
+    status: ACTIVE
+
+  - id: atom-orchestration
+    file: atoms/atom-orchestration.yaml
+    description: "Orchestration breadcrumb — routing chain with display name map"
+    rendering_element: "bold label + plain text chain"
+    status: ACTIVE
+
+  - id: atom-intent-reflection
+    file: atoms/atom-intent-reflection.yaml
+    description: "Intent reflection — first-person business language, cumulative mode"
+    rendering_element: "paragraph text"
+    status: ACTIVE
+
+  - id: atom-status-footer
+    file: atoms/atom-status-footer.yaml
+    description: "Single-line status footer — phase/mode/metrics after final ---"
+    rendering_element: "single line after HR separator"
+    status: ACTIVE
+
+# ─── Tier 2: Blocks ───────────────────────────────────────────────────────────
+blocks:
+  - id: block-processing-banner
+    file: blocks/block-processing-banner.yaml
+    description: "Immediate status pulse — lightweight spinner during tool execution"
+    rendering_element: "emoji + bold text (no HR)"
+    status: PLANNED
+
+  - id: block-session-identity
+    file: blocks/block-session-identity.yaml
+    description: "Session identity — once per session, first turn only"
+    rendering_element: "H2 block"
+    status: PLANNED
+
+  - id: block-request-echo-dod
+    file: blocks/block-request-echo-dod.yaml
+    description: "Request echo + Definition of Done — multi-turn sessions only"
+    rendering_element: "H3 block + table (≤4 columns)"
+    status: PLANNED
+
+  - id: block-engagement-timeline
+    file: blocks/block-engagement-timeline.yaml
+    description: "Collapsible per-orchestrator timing (3+ step operations)"
+    rendering_element: "<details>/<summary> (only permitted HTML)"
+    status: PLANNED
+
+  - id: block-metrics-dashboard
+    file: blocks/block-metrics-dashboard.yaml
+    description: "Post-completion metrics — IMPLEMENT/FIX/REFACTOR only"
+    rendering_element: "table (max 4 columns)"
+    status: PLANNED
+
+# ─── Tier 3: Compositions ─────────────────────────────────────────────────────
+compositions:
+  - id: comp-audit-fix
+    file: compositions/comp-audit-fix.yaml
+    description: "Audit Fix pipeline header — 9-stage audit + governance enforcer"
+    via: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
+    status: PLANNED
+
+  - id: comp-implement-fix
+    file: compositions/comp-implement-fix.yaml
+    description: "Implement/Fix pipeline header — TDD builder flow"
+    via: "Classifier → TDD Builder"
+    status: PLANNED
+
+  - id: comp-refactor
+    file: compositions/comp-refactor.yaml
+    description: "Refactor pipeline header — Code Improver + Workflow Composer"
+    via: "Classifier → Code Improver → Workflow Composer"
+    status: PLANNED
+
+  - id: comp-health
+    file: compositions/comp-health.yaml
+    description: "Health check header — 22 orchestrator health endpoints"
+    via: "Classifier → Health Monitor"
+    status: PLANNED
+
+  - id: comp-vacuum
+    file: compositions/comp-vacuum.yaml
+    description: "Vacuum pipeline header — 8-stage workspace cleaner"
+    via: "Classifier → Workspace Cleaner"
+    status: PLANNED
+
+  - id: comp-debug
+    file: compositions/comp-debug.yaml
+    description: "Debug pipeline header — 8 injection strategies"
+    via: "Classifier → Debug Tracer → Debug Injector"
+    status: PLANNED
+
+  - id: comp-query
+    file: compositions/comp-query.yaml
+    description: "Simple query header — direct answer, minimal blocks"
+    via: "Classifier"
+    status: PLANNED
+
+  - id: comp-introduce
+    file: compositions/comp-introduce.yaml
+    description: "Introduction header — onboarding, CORTEX overview"
+    via: "Classifier → Mission Control"
+    status: PLANNED
+
+# ─── Prompts ──────────────────────────────────────────────────────────────────
+prompts:
+  - id: prompt-cortex-main
+    file: prompts/prompt-cortex-main.yaml
+    description: "CORTEX.prompt.md intro block — IMPLEMENT/FIX/REFACTOR/AUDIT"
+    status: PLANNED
+
+  - id: prompt-cortex-architect
+    file: prompts/prompt-cortex-architect.yaml
+    description: "cortex-architect.prompt.md intro block — design/plan requests"
+    status: PLANNED
+
+  - id: prompt-cortex-audit
+    file: prompts/prompt-cortex-audit.yaml
+    description: "cortex-audit.prompt.md intro block"
+    status: PLANNED
+
+  - id: prompt-cortex-debug
+    file: prompts/prompt-cortex-debug.yaml
+    description: "cortex-debugger.prompt.md intro block"
+    status: PLANNED
+
+  - id: prompt-cortex-sync
+    file: prompts/prompt-cortex-sync.yaml
+    description: "cortex-sync.prompt.md intro block — fixes forbidden **Orchestrator:** format"
+    status: PLANNED
+
+  - id: prompt-cortex-totalrecall
+    file: prompts/prompt-cortex-totalrecall.yaml
+    description: "cortex-total-recall.prompt.md intro block — adds missing 🧭 Orchestration: field"
+    status: PLANNED

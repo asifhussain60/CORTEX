@@ -2,7 +2,7 @@ id: "phase-111c"
 title: "Phase 111-C — Benign 2x Triage: Domain-Scoped vs True CORE-035 Violations"
 version: "1.0"
 created: "2026-03-03"
-status: PLANNED
+status: COMPLETE
 priority: P2
 parent_phase: "phase-111"
 governance_authority:

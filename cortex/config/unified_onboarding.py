@@ -26,7 +26,7 @@ from cortex.core.common.core_progress_reporter import (
 # DATA MODELS (unified from all components)
 # ================================================================================
 
-class JourneyState(str, Enum):
+class JourneyState(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Onboarding journey states."""
     NEW = "new"
     IN_PROGRESS = "in_progress"
@@ -44,7 +44,7 @@ class OnboardingConfig:
 
 
 @dataclass
-class Journey:
+class Journey:  # CORE-035-scoped — domain-specific variant
     """Journey tracking data."""
     journey_id: str
     user_id: str

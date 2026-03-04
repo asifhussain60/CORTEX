@@ -21,11 +21,11 @@ class PermissionError(StorageError):
     pass
 
 
-class NotFoundError(StorageError):
+class NotFoundError(StorageError):  # CORE-035-scoped — domain-specific variant
     """Raised when a requested path is not found in storage."""
     pass
 
 
-class ConfigurationError(StorageError):
+class ConfigurationError(StorageError):  # CORE-035-scoped — domain-specific variant
     """Raised when storage provider configuration is invalid."""
     pass

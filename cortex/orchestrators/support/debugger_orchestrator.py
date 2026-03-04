@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class DebugSession:
+class DebugSession:  # CORE-035-scoped — domain-specific variant
     """Represents an active debug session."""
     session_id: str
     trigger_event: str

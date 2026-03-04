@@ -40,7 +40,7 @@ class InjectionPattern:
 
 
 @dataclass
-class SanitizationResult:
+class SanitizationResult:  # CORE-035-scoped — domain-specific variant
     """Sanitization result."""
     original_input: str
     sanitized_input: str

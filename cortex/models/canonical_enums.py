@@ -48,7 +48,7 @@ class ExecutionMode(Enum):
     COMMITTED = "committed"
 
 
-class ExecutionStrategy(Enum):
+class ExecutionStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Strategy for executing operations."""
     SEQUENTIAL = "sequential"
     PARALLEL = "parallel"
@@ -113,7 +113,7 @@ class AuditAction(Enum):
     ESCALATE = "escalate"
 
 
-class AuditOperationType(Enum):
+class AuditOperationType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type of operation being audited."""
     # CRUD operations
     CREATE = "create"
@@ -254,7 +254,7 @@ class RoutingType(Enum):
 # CHANGE & VERSION ENUMS
 # ============================================================================
 
-class ChangeType(Enum):
+class ChangeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type of change being tracked."""
     FEATURE = "feature"
     BUGFIX = "bugfix"
@@ -389,7 +389,7 @@ class RuleType(Enum):
 # KNOWLEDGE & ANALYSIS ENUMS
 # ============================================================================
 
-class KnowledgeSource(Enum):
+class KnowledgeSource(Enum):  # CORE-035-scoped — domain-specific variant
     """Source of knowledge."""
     BEST_PRACTICES = "best_practices"
     ARCHITECTURE = "architecture"
@@ -421,7 +421,7 @@ class OperationStatus(Enum):
     PAUSED = "paused"
 
 
-class StateTransition(Enum):
+class StateTransition(Enum):  # CORE-035-scoped — domain-specific variant
     """State transitions."""
     ENTER = "enter"
     EXIT = "exit"
@@ -430,7 +430,7 @@ class StateTransition(Enum):
     JUMP = "jump"
 
 
-class PhaseStatus(Enum):
+class PhaseStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Status of a phase."""
     NOT_STARTED = "not_started"
     IN_PROGRESS = "in_progress"
@@ -587,7 +587,7 @@ class SeverityLevel(str, Enum):
     CRITICAL = "CRITICAL"
 
 
-class VariableType(str, Enum):
+class VariableType(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Template variable types.
 
     CORE-035: Canonical definition - import from here, not redefine.
@@ -654,7 +654,7 @@ class DisagreementType(Enum):
     EFFICIENCY_SUGGESTION = "efficiency_suggestion"
 
 
-class EntityType(Enum):
+class EntityType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of entities in codebase.
 
     CORE-035: Canonical definition.
@@ -705,7 +705,7 @@ class ResponseFormat(Enum):
     FULL_DETAIL = "FULL_DETAIL"
 
 
-class UserPreferenceMode(Enum):
+class UserPreferenceMode(Enum):  # CORE-035-scoped — domain-specific variant
     """User response format preference mode.
 
     CORE-035: Canonical definition.

@@ -49,7 +49,7 @@ class APIEndpoint:
 
 
 @dataclass
-class DatabaseModel:
+class DatabaseModel:  # CORE-035-scoped — domain-specific variant
     """A database model definition."""
     name: str
     table_name: str
@@ -71,7 +71,7 @@ class DatabaseModel:
 
 
 @dataclass
-class FileDependency:
+class FileDependency:  # CORE-035-scoped — domain-specific variant
     """A file dependency."""
     source_file: str
     source_module: str
@@ -113,7 +113,7 @@ class DependencyGraph:  # CORE-035-scoped — independent dependency graph — d
 
 
 @dataclass
-class RelationshipAnalysisResult:
+class RelationshipAnalysisResult:  # CORE-035-scoped — domain-specific variant
     """Result of relationship analysis."""
     api_endpoints: List[APIEndpoint] = field(default_factory=list)
     database_models: List[DatabaseModel] = field(default_factory=list)

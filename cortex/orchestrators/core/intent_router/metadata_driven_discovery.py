@@ -36,7 +36,7 @@ class AgentToolMapping:
         """Check if agent has specific tool."""
         return tool_name in self.mcp_tools
 
-class MetadataDrivenDiscovery:
+class MetadataDrivenDiscovery:  # CORE-035-scoped — domain-specific variant
     """
     Metadata-driven MCP tool discovery system.
 

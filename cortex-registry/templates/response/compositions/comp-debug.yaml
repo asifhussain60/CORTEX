@@ -1,0 +1,79 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPOSITION: Debug Pipeline
+# ID: comp-debug
+# Tier: 3 (Composition — terminal-ready assembly)
+#
+# PURPOSE: Response header for /debug — 8 injection strategies, 5 phases.
+# Via chain: Classifier → Debug Tracer → Debug Injector
+#
+# Rendering: VS Code Copilot Chat 3-zone layout (300-500px panel)
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase B)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: comp-debug
+type: composition
+version: "3.0"
+phase: "120"
+trigger: "/debug | /debug-inject | /debug-cleanup"
+intent: DEBUG
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  zone_count: 3
+  zone_separator: "---"
+  max_heading_levels: 3
+  single_h1: true
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML except details/summary"
+    - "raw URLs"
+    - "tables with more than 4 columns"
+
+# ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    zone: 1
+    params:
+      product_title: "🧠 CORTEX"
+      mode: "Debugging"
+  - id: atom-orchestration
+    zone: 1
+    params:
+      chain: "Classifier → Debug Tracer → Debug Injector"
+  - id: atom-quote
+    zone: 2
+    params:
+      theme: systems_thinking
+  - id: atom-intent-reflection
+    zone: body
+  - id: atom-status-footer
+    zone: footer
+
+# ─── Rendered Template ────────────────────────────────────────────────────────
+template: |
+  # 🧠 CORTEX Debugging
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  🧭 Orchestration: Classifier → Debug Tracer → Debug Injector
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+# ─── Pre-built Via Chain ──────────────────────────────────────────────────────
+orchestration_chain: "Classifier → Debug Tracer → Debug Injector"
+injection_strategies: 8
+strategy_names:
+  - TestFailureStrategy
+  - RefactorRegressionStrategy
+  - GovernanceViolationStrategy
+  - FrontendConsoleStrategy
+  - HtmlVisionMappingStrategy
+  - ApiTraceStrategy
+  - SqlTraceStrategy
+  - DotNetTraceStrategy
+workflow_template: "cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml"

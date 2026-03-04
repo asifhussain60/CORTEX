@@ -593,13 +593,16 @@ class TestSSOTConsistency:
 
     def test_ssot_does_not_use_route_keyword_in_spec(self) -> None:
         content = _ssot()
-        # The canonical spec now says **Via:** — find the header spec section
+        # The canonical spec now says 🧭 Orchestration: (Phase 120 rename from **Via:**)
+        # Find the header spec section
         idx = content.find("### Response Header — Canonical Spec")
         assert idx >= 0, "Response Header canonical spec section missing from SSOT"
         snippet = content[idx: idx + 1500]
-        # **Via:** must appear; **Route:** must not appear as a positive spec
-        assert "Via:" in snippet, (
-            "SSOT canonical spec must define **Via:** field (not **Route:**)"
+        # 🧭 Orchestration: or Via: must appear; **Route:** must not appear as a positive spec
+        # Phase 120 renamed **Via:** → 🧭 Orchestration: for clarity
+        assert "Orchestration:" in snippet or "Via:" in snippet, (
+            "SSOT canonical spec must define the orchestration breadcrumb field "
+            "('🧭 Orchestration:' or '**Via:**') — **Route:** is the forbidden old name"
         )
 
     def test_ssot_engagement_breadcrumb_block_uses_via_not_route(self) -> None:

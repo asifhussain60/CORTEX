@@ -20,7 +20,7 @@ import ast
 import re
 
 @dataclass
-class PatternViolation:
+class PatternViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a detected anti-pattern violation."""
     pattern_id: str
     pattern_name: str
@@ -32,7 +32,7 @@ class PatternViolation:
     fix_suggestion: str
     confidence: float  # 0.0-1.0
 
-class PatternDetector:
+class PatternDetector:  # CORE-035-scoped — domain-specific variant
     """Detects STS anti-patterns in code."""
 
     def __init__(self) -> None:
@@ -269,7 +269,7 @@ class PatternDetector:
         finally:
             conn.close()
 
-class MetricsCalculator:
+class MetricsCalculator:  # CORE-035-scoped — domain-specific variant
     """Calculates transformation metrics from violations."""
 
     def calculate_security_score(self, violations: List[PatternViolation]) -> float:

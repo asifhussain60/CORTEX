@@ -1,0 +1,113 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Identity Block
+# ID: atom-identity
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: The H1 identity block that opens every CORTEX response.
+# Renders as a single H1 heading. Exactly ONE per response — VS Code Copilot
+# Chat becomes confused with multiple H1s (nav and structure break down).
+#
+# 3-Zone Layout (--- HR is the zone separator in VS Code):
+#   Zone 1: H1 identity  ← this atom
+#   ---
+#   Zone 2: > blockquote (quote atom)
+#   ---
+#   Zone 3: 🧭 Orchestration: ... (orchestration atom)
+#
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase A)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-identity
+type: atom
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules (VS Code Copilot Chat contract) ──────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: H1
+  max_per_response: 1
+  position: "first block of every first response"
+  zone: 1
+  zone_separator_after: "--- (HR)"
+  panel_width: "300-500px (narrow)"
+  forbidden_in_content:
+    - "tree characters (U+251C U+2514 U+2502 — box-drawing chars that collapse in VS Code dark themes)"
+    - "raw URLs"
+    - "nested lists"
+  note: "H1 is the product + mode identifier. Only one H1 per response — VS Code
+    Copilot Chat uses the H1 for navigation context. All subsequent sections use H2/H3."
+
+# ─── Icon Definitions ─────────────────────────────────────────────────────────
+icons:
+  cortex_main: "🧠"
+  cortex_architect: "🛠️"
+  cortex_default: "🧠"
+
+# ─── Mode Phrases (plain-language verb phrases) ───────────────────────────────
+# Used to populate {mode} in the template.
+# Selection logic: map intent_type from canonical_enums.py → mode phrase
+mode_phrases:
+  IMPLEMENT: "Building"
+  FIX: "Fixing"
+  AUDIT: "Auditing"
+  QUERY: "Answering"
+  DESIGN: "Designing"
+  PLAN: "Planning"
+  DEBUG: "Debugging"
+  INVESTIGATE: "Investigating"
+  VACUUM: "Cleaning"
+  INTRODUCE: "Introducing"
+  REFACTOR: "Improving"
+  HEALTH: "Checking"
+  TOTALRECALL: "Recalling"
+  SYNC: "Syncing"
+  DIGEST: "Ingesting"
+  SECURITY_AUDIT: "Auditing"
+  META_AUDIT: "Meta-Auditing"
+  ONBOARD: "Onboarding"
+  DEFAULT: "Working"
+
+# ─── Product Title Variants ───────────────────────────────────────────────────
+product_titles:
+  cortex_main: "🧠 CORTEX"
+  cortex_architect: "🛠️ CORTEX Architect"
+
+# ─── Templates ────────────────────────────────────────────────────────────────
+# {product_title} = "🧠 CORTEX" or "🛠️ CORTEX Architect"
+# {mode}          = plain-language verb phrase from mode_phrases above
+# {author_line}   = "**Author:** Asif Hussain | © 2025-2026 CORTEX Framework. All rights reserved."
+# {via_line}      = "**Via:** {chain}" — omitted for single-hop responses
+#
+# LAYOUT RULE: author_line and via_line on SEPARATE lines within the H1 block
+# (not inside the H1 heading itself — they sit below in the same zone before the first ---)
+
+template: |
+  # {product_title} {mode}
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  {via_line}
+
+# Template variant when via_line is omitted (single-hop, simple responses)
+template_single_hop: |
+  # {product_title} {mode}
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+# ─── Via Line Format ──────────────────────────────────────────────────────────
+via_line_format: "**Via:** {chain}"
+via_line_separator: " → "
+via_line_omit_condition: "single_hop == true"
+
+# ─── Author Line ──────────────────────────────────────────────────────────────
+author_line: "**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved."
+copyright_year_range: "2025-2026"
+
+# ─── Validation Rules ─────────────────────────────────────────────────────────
+validation:
+  must_appear_first: true
+  must_not_repeat: true
+  must_not_appear_mid_response: true
+  must_not_appear_after_proceed: true
+  mode_must_be_verb_phrase: true
+  via_line_must_use_display_names: true

@@ -52,7 +52,7 @@ class SynthesisResult:  # CORE-035-scoped — domain-specific synthesis result s
 # CONTEXT SYNTHESIZER
 # ═══════════════════════════════════════════════════════════════════════════════
 
-class ContextSynthesizer:
+class ContextSynthesizer:  # CORE-035-scoped — domain-specific variant
     """
     Intelligent content synthesizer with per-type compression strategies.
 

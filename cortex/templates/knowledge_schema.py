@@ -16,7 +16,7 @@ class ValidationResult(NamedTuple):  # CORE-035-scoped — domain-specific Valid
     warnings: List[str]
 
 
-class VariableType(Enum):
+class VariableType(Enum):  # CORE-035-scoped — domain-specific variant
     """Template variable types."""
     STRING = "string"
     INTEGER = "integer"

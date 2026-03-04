@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ValidationReport:
+class ValidationReport:  # CORE-035-scoped — domain-specific variant
     """Report from intelligence validation."""
 
     orchestrators_tested: Set[str] = field(default_factory=set)

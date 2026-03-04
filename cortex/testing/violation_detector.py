@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Violation:
+class Violation:  # CORE-035-scoped — domain-specific variant
     """Represents a code violation"""
     violation_id: str
     file_path: str

@@ -120,7 +120,7 @@ class LensArtifact(BaseModel):
     nodes: List[Dict[str, Any]] = []
     edges: List[Dict[str, Any]] = []
 
-    class Config:
+    class Config:  # noqa: CORE-035 — pydantic inner class
         """Pydantic model configuration."""
         json_schema_extra = {
             "example": {

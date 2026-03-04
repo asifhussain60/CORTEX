@@ -114,7 +114,7 @@ class RoutingDecision:  # CORE-035-scoped — domain-specific routing decision m
 
 
 @dataclass
-class RoutingContext:
+class RoutingContext:  # CORE-035-scoped — domain-specific variant
     """Represents the full context for a routing decision.
 
     Attributes:

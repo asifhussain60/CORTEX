@@ -18,7 +18,7 @@ from difflib import SequenceMatcher
 logger = logging.getLogger(__name__)
 
 @dataclass
-class RoutingContext:
+class RoutingContext:  # CORE-035-scoped — domain-specific variant
     """Context for intelligent routing decisions.
 
     Attributes:

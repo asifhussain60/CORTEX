@@ -20,7 +20,7 @@ from cortex.intelligence.intent_classifier import (
 
 
 @dataclass
-class ConversationContext:
+class ConversationContext:  # CORE-035-scoped — domain-specific variant
     """
     Accumulated context from conversation history.
 

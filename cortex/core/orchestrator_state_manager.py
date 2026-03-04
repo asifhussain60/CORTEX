@@ -30,7 +30,7 @@ from cortex.core.file_factory import get_file_factory  # noqa: F401
 
 
 @dataclass
-class StateSnapshot:
+class StateSnapshot:  # CORE-035-scoped — domain-specific variant
     """Represents a brain state snapshot.
 
     Attributes:

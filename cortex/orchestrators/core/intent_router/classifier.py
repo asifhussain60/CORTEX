@@ -14,7 +14,7 @@ from enum import Enum
 from typing import Any, Dict, List, Set, Tuple
 
 
-class IntentCategory(str, Enum):
+class IntentCategory(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Intent categories for development operations."""
     CREATE = "create"
     FIX = "fix"

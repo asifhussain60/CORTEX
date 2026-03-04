@@ -48,7 +48,7 @@ class OverviewData:
 
 
 @dataclass
-class MetricsData:
+class MetricsData:  # CORE-035-scoped — domain-specific variant
     """Metrics tab data with time series."""
     code_quality: float = 0.0
     test_coverage: float = 0.0

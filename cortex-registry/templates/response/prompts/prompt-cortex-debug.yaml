@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PROMPT INTRO: CORTEX Debugger
+# ID: prompt-cortex-debug
+# Tier: Prompt (intro block for cortex-debugger.prompt.md)
+#
+# PURPOSE: Intro block for DEBUG responses — 8 injection strategies,
+# 5-phase pipeline. Routes to comp-debug composition.
+#
+# Phase: 120 (Sub-Phase D)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: prompt-cortex-debug
+type: prompt_intro
+version: "3.0"
+phase: "120"
+prompt_file: ".github/agents/support/cortex-debugger.md"
+product_title: "🧠 CORTEX"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  product_icon: "🧠"
+  icon_fixed: true
+  heading_level: H1
+
+# ─── Intent → Composition Routing ────────────────────────────────────────────
+intent_to_composition:
+  DEBUG: comp-debug
+  FIX: comp-implement-fix
+  DEFAULT: comp-debug
+
+# ─── Default Chain ────────────────────────────────────────────────────────────
+default_orchestration_chain: "Classifier → Debug Tracer → Debug Injector"
+injection_strategies: 8

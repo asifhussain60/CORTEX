@@ -11,7 +11,7 @@ from enum import Enum
 from typing import Any, Dict, List
 
 
-class GateDecision(Enum):
+class GateDecision(Enum):  # CORE-035-scoped — domain-specific variant
     """Gate decision outcomes."""
 
     ALLOW = "allow"

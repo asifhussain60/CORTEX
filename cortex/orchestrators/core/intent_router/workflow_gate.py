@@ -21,14 +21,14 @@ class ComplexityThreshold(Enum):
     COMPLEX = 0.75      # Workflow template (mandatory gates)
 
 
-class RoutingStrategy(Enum):
+class RoutingStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Routing strategies for task execution."""
     DIRECT_ORCHESTRATOR = "direct_orchestrator"
     WORKFLOW_TEMPLATE = "workflow_template"
 
 
 @dataclass
-class Intent:
+class Intent:  # CORE-035-scoped — domain-specific variant
     """Parsed user intent for complexity analysis."""
     operation_type: str
     target_files: List[str] = None  # type: ignore[assignment]

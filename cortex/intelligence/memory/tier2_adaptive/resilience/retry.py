@@ -15,7 +15,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 logger = logging.getLogger(__name__)
 
 
-class RetryPolicy:
+class RetryPolicy:  # CORE-035-scoped — domain-specific variant
     """Configuration for retry behavior with exponential backoff."""
 
     def __init__(
@@ -92,7 +92,7 @@ class RetryPolicyBuilder:
         )
 
 
-class RetryResult:
+class RetryResult:  # CORE-035-scoped — domain-specific variant
     """Result of a retry operation."""
 
     def __init__(

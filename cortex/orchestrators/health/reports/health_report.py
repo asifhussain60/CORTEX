@@ -18,7 +18,7 @@ from ..agents.base_agent import HealthCheckResult, HealthIssueSeverity
 
 
 @dataclass
-class HealthMetrics:
+class HealthMetrics:  # CORE-035-scoped — domain-specific variant
     """Aggregated health metrics across all agents.
 
     Attributes:
@@ -85,7 +85,7 @@ class HealthMetrics:
 
 
 @dataclass
-class HealthReport:
+class HealthReport:  # CORE-035-scoped — domain-specific variant
     """Comprehensive health report.
 
     Attributes:

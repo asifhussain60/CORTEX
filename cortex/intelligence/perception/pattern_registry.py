@@ -70,7 +70,7 @@ class PatternMatch:
         }
 
 
-class PatternRegistry:
+class PatternRegistry:  # CORE-035-scoped — domain-specific variant
     """
     Brain perception layer pattern registry.
 

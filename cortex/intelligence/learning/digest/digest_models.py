@@ -15,7 +15,7 @@ from typing import Any, Dict
 from pydantic import BaseModel, Field
 
 
-class DigestResult(BaseModel):
+class DigestResult(BaseModel):  # CORE-035-scoped — domain-specific variant
     """
     Structured result from DIGEST session analysis.
 

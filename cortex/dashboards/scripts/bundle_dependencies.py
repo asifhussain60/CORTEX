@@ -83,7 +83,7 @@ DEPENDENCIES: List[DependencyAsset] = [
 ]
 
 
-class DependencyBundler:
+class DependencyBundler:  # CORE-035-scoped — domain-specific variant
     """
     Downloads and bundles external dependencies for offline dashboard operation.
 

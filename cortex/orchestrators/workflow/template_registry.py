@@ -32,7 +32,7 @@ from cortex.orchestrators.workflow.template_composer import TemplateComposer
 # Description: WorkflowTemplateRegistry with convergence gates
 
 
-class TemplateNotFoundError(Exception):
+class TemplateNotFoundError(Exception):  # CORE-035-scoped — domain-specific variant
     """Raised when template not found in registry."""
 
     pass

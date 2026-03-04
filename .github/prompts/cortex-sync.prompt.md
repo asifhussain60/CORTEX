@@ -19,7 +19,7 @@ token_cost_estimate: 2800
 
 # CORTEX Sync Prompt
 
-**Author:** Asif Hussain | **Orchestrator:** SyncSessionOrchestrator ✅  
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 **Updated:** 2026-02-25 | **Authority:** `.github/prompts/cortex-sync.prompt.md`  
 **Agent:** `.github/agents/core/cortex-sync-agent.md`
 

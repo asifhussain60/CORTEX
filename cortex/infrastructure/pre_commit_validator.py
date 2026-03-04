@@ -97,7 +97,7 @@ def get_staged_markdown_files() -> List[str]:
         return []
 
 
-class DecisionType(Enum):
+class DecisionType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of hybrid gate decisions"""
     FAST_PATH = "FAST_PATH"  # Health check passed, allow immediately
     FALLBACK_PATH = "FALLBACK_PATH"  # Health check failed, ran Stage 2

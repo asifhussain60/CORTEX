@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 @dataclass
-class EventSubscription:
+class EventSubscription:  # CORE-035-scoped — domain-specific variant
     """Represents an event subscription"""
     orchestrator_name: str
     event_type: str

@@ -1,0 +1,71 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOCK: Request Echo and Definition of Done
+# ID: block-request-echo-dod
+# Tier: 2 (Block — composed unit)
+#
+# PURPOSE: In multi-turn sessions, echoes all prior requests and shows a
+# Definition of Done card for the current request. Helps maintain session
+# context across long conversations.
+#
+# Multi-turn only: shown from turn 2+ when there is prior session context.
+# Single-turn: omitted.
+#
+# Table constraint: max 4 columns (VS Code narrow panel — 300-500px).
+# DoD table: 3 columns (Criterion, Status, Notes) — within limit.
+#
+# SSOT: .github/templates/cortex-response-templates.md § Request Echo & DoD
+# Phase: 120 (Sub-Phase C)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: block-request-echo-dod
+type: block
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: H3
+  element: "H3 block + table (3 columns max)"
+  max_table_columns: 3
+  position: "after response header and intent reflection, before work content"
+  frequency: "multi-turn sessions only (turn 2+)"
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML"
+    - "tables with more than 4 columns"
+  show_when:
+    - "turn 2 or later in same session"
+    - "prior requests exist in session memory"
+  skip_when:
+    - "first turn (no prior context)"
+    - "silent autonomous execution (after proceed)"
+
+# ─── Request Echo Template ─────────────────────────────────────────────────────
+# Shows all prior requests as a numbered list (max 5, oldest trimmed)
+request_echo_template: |
+  ### 📋 Session Context
+  *Prior requests: {request_1} → {request_2} → [current: {current_request}]*
+
+# ─── Definition of Done Table ────────────────────────────────────────────────
+# 3-column table: Criterion | Status | Notes
+# Status values: ⬜ Pending | 🔄 In Progress | ✅ Done | ❌ Blocked
+dod_template: |
+  ### ✅ Definition of Done
+  | Criterion | Status | Notes |
+  |---|---|---|
+  {dod_rows}
+
+dod_row_format: "| {criterion} | {status} | {notes} |"
+dod_status_values:
+  pending: "⬜ Pending"
+  in_progress: "🔄 In Progress"
+  done: "✅ Done"
+  blocked: "❌ Blocked"
+
+# ─── Session Memory ───────────────────────────────────────────────────────────
+session_memory:
+  max_requests_shown: 5
+  trim_strategy: "drop oldest when exceeding max"
+  storage: "in-memory per conversation"

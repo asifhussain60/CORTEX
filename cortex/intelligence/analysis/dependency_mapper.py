@@ -30,7 +30,7 @@ STDLIB_MODULES = {
 
 
 @dataclass
-class DependencyInfo:
+class DependencyInfo:  # CORE-035-scoped — domain-specific variant
     """Information about a single dependency.
 
     Attributes:

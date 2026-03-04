@@ -52,7 +52,7 @@ class MetricsConfig:
     enable_performance_metrics: bool = True
 
 
-class RequestMetrics:
+class RequestMetrics:  # CORE-035-scoped — domain-specific variant
     """HTTP request metrics following RED (Rate, Errors, Duration) method.
 
     Metrics:

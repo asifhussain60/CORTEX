@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class DomainCapability:
+class DomainCapability:  # CORE-035-scoped — domain-specific variant
     """Represents a domain capability."""
 
     name: str

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
-class DegradationLevel(Enum):
+class DegradationLevel(Enum):  # CORE-035-scoped — domain-specific variant
     """Levels of service degradation."""
     FULL = "FULL"           # Full functionality
     DEGRADED = "DEGRADED"   # Reduced functionality

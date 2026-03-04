@@ -32,7 +32,7 @@ class SLAResult:
 
 
 @dataclass
-class OperationResult:
+class OperationResult:  # CORE-035-scoped — domain-specific variant
     """Result wrapper for operation recording.
 
     Attributes:

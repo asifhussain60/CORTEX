@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPOSITION: Simple Query
+# ID: comp-query
+# Tier: 3 (Composition — terminal-ready assembly)
+#
+# PURPOSE: Minimal response header for simple queries — direct answer, no
+# multi-step pipeline. Single-hop routing (Classifier only).
+# Via line: omitted (single-hop rule)
+#
+# Rendering: VS Code Copilot Chat 3-zone layout (300-500px panel)
+# SSOT: .github/templates/cortex-response-templates.md § Response Header
+# Phase: 120 (Sub-Phase B)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: comp-query
+type: composition
+version: "3.0"
+phase: "120"
+trigger: "simple questions, lookups, explanations"
+intent: QUERY
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  zone_count: 2
+  zone_separator: "---"
+  max_heading_levels: 3
+  single_h1: true
+  omit_orchestration: true
+  note: "Single-hop — 🧭 Orchestration: line is omitted per atom-orchestration omit_if_single_hop rule"
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "raw HTML except details/summary"
+    - "raw URLs"
+    - "tables with more than 4 columns"
+
+# ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+atoms:
+  - id: atom-identity
+    zone: 1
+    params:
+      product_title: "🧠 CORTEX"
+      mode: "Answering"
+  - id: atom-quote
+    zone: 2
+    params:
+      theme: universal
+  - id: atom-status-footer
+    zone: footer
+
+# ─── Rendered Template ────────────────────────────────────────────────────────
+# Note: no 🧭 Orchestration: line — single-hop omit rule applies
+template: |
+  # 🧠 CORTEX Answering
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+# ─── Chain Info ───────────────────────────────────────────────────────────────
+orchestration_chain: null
+single_hop: true
+omit_via_line: true

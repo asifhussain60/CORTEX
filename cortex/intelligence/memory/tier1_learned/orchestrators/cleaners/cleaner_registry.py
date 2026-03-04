@@ -19,7 +19,7 @@ from typing import Dict, List
 from .base import CleanerInterface
 
 
-class CleanerRegistry:
+class CleanerRegistry:  # CORE-035-scoped — domain-specific variant
     """
     Registry for vacuum cleaner plugins.
 

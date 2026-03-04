@@ -47,7 +47,7 @@ class AgentRankings:
     confidence: float  # Overall confidence in selection
     reasoning: str
 
-class CapabilityMatcher:
+class CapabilityMatcher:  # CORE-035-scoped — domain-specific variant
     """Match user requirements to agents based on capabilities."""
 
     # Intent to required capabilities mapping

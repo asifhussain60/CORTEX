@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PROMPT INTRO: CORTEX Audit
+# ID: prompt-cortex-audit
+# Tier: Prompt (intro block for cortex-audit.prompt.md)
+#
+# PURPOSE: Intro block for AUDIT responses. Always routes to comp-audit-fix
+# composition — 9-stage pipeline, full governance chain.
+#
+# Phase: 120 (Sub-Phase D)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: prompt-cortex-audit
+type: prompt_intro
+version: "3.0"
+phase: "120"
+prompt_file: ".github/prompts/cortex-audit.prompt.md"
+product_title: "🧠 CORTEX"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  product_icon: "🧠"
+  icon_fixed: true
+  heading_level: H1
+
+# ─── Intent → Composition Routing ────────────────────────────────────────────
+intent_to_composition:
+  AUDIT: comp-audit-fix
+  SECURITY_AUDIT: comp-audit-fix
+  HEALTH: comp-health
+  DEFAULT: comp-audit-fix
+
+# ─── Default Chain ────────────────────────────────────────────────────────────
+default_orchestration_chain: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"

@@ -13,7 +13,7 @@ from typing import Any
 
 
 @dataclass
-class RepoMetadata:
+class RepoMetadata:  # CORE-035-scoped — domain-specific variant
     """Repository metadata model."""
     name: str
     url: str

@@ -63,7 +63,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 # ENUMS
 # =============================================================================
 
-class NodeType(Enum):
+class NodeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of nodes in the knowledge graph."""
 
     # Code Structure
@@ -96,7 +96,7 @@ class NodeType(Enum):
     ANTIPATTERN = "antipattern"
 
 
-class EdgeType(Enum):
+class EdgeType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of relationships between nodes."""
 
     # Code Flow
@@ -271,7 +271,7 @@ class GraphMetadata:
 # KNOWLEDGE GRAPH
 # =============================================================================
 
-class KnowledgeGraph:
+class KnowledgeGraph:  # CORE-035-scoped — domain-specific variant
     """
     Unified knowledge graph aggregating intelligence from multiple sources.
 

@@ -7,10 +7,10 @@ Author: CORTEX Framework
 
 from typing import Any, Dict, List
 
-from cortex.core.common.validators import ValidationResult
+from cortex.models.shared.validation import ValidationResult  # canonical — CORE-035
 
 
-class ConsistencyValidator:
+class ConsistencyValidator:  # CORE-035-scoped — domain-specific variant
     """Validates domain consistency and integrity.
 
     Ensures domains meet structural and semantic requirements.

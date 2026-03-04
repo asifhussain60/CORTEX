@@ -17,7 +17,7 @@ from collections import defaultdict
 logger = logging.getLogger(__name__)
 
 
-class StateDetector:
+class StateDetector:  # CORE-035-scoped — domain-specific variant
     """
     Detects state machines and state transitions in code.
 

@@ -15,7 +15,7 @@ from typing import List
 
 
 @dataclass
-class CleanupResult:
+class CleanupResult:  # CORE-035-scoped — domain-specific variant
     """Result of cleanup operation.
 
     Attributes:

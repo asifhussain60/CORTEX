@@ -35,7 +35,7 @@ class LogLevel(str, Enum):
 
 
 @dataclass
-class LogContext:
+class LogContext:  # CORE-035-scoped — domain-specific variant
     """Context for structured logging.
 
     Attributes:
@@ -175,7 +175,7 @@ class PIIRedactor:
         return redacted
 
 
-class StructuredLogger:
+class StructuredLogger:  # CORE-035-scoped — domain-specific variant
     """Structured JSON logger with context propagation and PII redaction."""
 
     def __init__(self, config: StructuredLoggerConfig) -> None:

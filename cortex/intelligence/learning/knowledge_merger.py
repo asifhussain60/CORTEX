@@ -34,7 +34,7 @@ from cortex.core.result import Err, Ok, Result
 logger = logging.getLogger(__name__)
 
 
-class MergeStrategy(Enum):
+class MergeStrategy(Enum):  # CORE-035-scoped — domain-specific variant
     """Strategy for merging learnings."""
 
     APPEND = auto()      # Append to existing list

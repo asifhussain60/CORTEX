@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class OnboardingResult:
+class OnboardingResult:  # CORE-035-scoped — domain-specific variant
     """Result from repository onboarding operation."""
 
     status: str

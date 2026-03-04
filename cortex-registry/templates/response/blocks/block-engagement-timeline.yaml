@@ -1,0 +1,64 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOCK: Engagement Timeline
+# ID: block-engagement-timeline
+# Tier: 2 (Block — composed unit)
+#
+# PURPOSE: Collapsible per-orchestrator timing block for 3+ step operations.
+# Shows which orchestrators ran, in what order, and how long each took.
+#
+# HTML ELEMENT: Uses <details>/<summary> — the ONLY HTML permitted in VS Code
+# Copilot Chat. Everything else is stripped silently.
+#
+# Rendering: <details> renders as a native collapsible in VS Code Copilot Chat.
+# Default: collapsed (user expands if they want timing detail).
+# Threshold: only shown for operations with 3+ orchestrator steps.
+#
+# SSOT: .github/templates/cortex-response-templates.md § Engagement Timeline
+# Phase: 120 (Sub-Phase C)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: block-engagement-timeline
+type: block
+version: "3.0"
+phase: "120"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  html_element: details
+  summary_element: summary
+  default_state: collapsed
+  position: "after work content, before metrics dashboard"
+  min_steps_to_show: 3
+  forbidden:
+    - "tree characters (U+251C U+2514 U+2502)"
+    - "any HTML except details/summary"
+    - "raw URLs"
+  show_when:
+    - "operation has 3 or more orchestrator steps"
+    - "timing data is available"
+  skip_when:
+    - "simple query (fewer than 3 steps)"
+    - "silent autonomous execution (after proceed) — use progress bars instead"
+  note: "details/summary is the ONLY permitted HTML in VS Code Copilot Chat. All
+    other HTML is stripped silently. Use this block only for timing and verbose logs."
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+# {total_ms}    = total operation time in milliseconds
+# {timeline_rows} = per-orchestrator rows (name | time_ms)
+template: |
+  <details>
+  <summary>⏱️ Engagement Timeline ({total_ms}ms total)</summary>
+
+  | Orchestrator | Time |
+  |---|---|
+  {timeline_rows}
+
+  </details>
+
+timeline_row_format: "| {display_name} | {time_ms}ms |"
+
+# ─── Table Constraint ─────────────────────────────────────────────────────────
+# 2-column table: Orchestrator | Time — within the 4-column VS Code limit
+max_table_columns: 2

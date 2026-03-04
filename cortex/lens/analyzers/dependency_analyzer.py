@@ -19,7 +19,7 @@ from typing import Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class DependencyType(Enum):
+class DependencyType(Enum):  # CORE-035-scoped — domain-specific variant
     """Type of dependency."""
     PYTHON = "python"
     NODEJS = "nodejs"

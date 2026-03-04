@@ -42,7 +42,7 @@ class ComponentHealth:  # CORE-035-scoped — domain-specific component health m
 
 
 @dataclass
-class HealthCheckResponse:
+class HealthCheckResponse:  # CORE-035-scoped — domain-specific variant
     """Complete health check response.
 
     Args:

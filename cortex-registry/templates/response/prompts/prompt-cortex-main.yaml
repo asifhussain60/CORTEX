@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PROMPT INTRO: CORTEX Main
+# ID: prompt-cortex-main
+# Tier: Prompt (intro block for CORTEX.prompt.md)
+#
+# PURPOSE: Canonical intro block for IMPLEMENT / FIX / REFACTOR / AUDIT
+# responses when CORTEX.prompt.md is active. Provides the composition spec
+# that maps intent → composition → rendered header.
+#
+# Drift fix applied: L146 contradiction resolved — 🧭 Orchestration: is now
+# explicitly in Zone 1 of the header (not "never in the header").
+#
+# Phase: 120 (Sub-Phase D)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: prompt-cortex-main
+type: prompt_intro
+version: "3.0"
+phase: "120"
+prompt_file: ".github/prompts/CORTEX.prompt.md"
+product_title: "🧠 CORTEX"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  product_icon: "🧠"
+  icon_fixed: true
+  heading_level: H1
+
+# ─── Intent → Composition Routing ────────────────────────────────────────────
+intent_to_composition:
+  IMPLEMENT: comp-implement-fix
+  FIX: comp-implement-fix
+  AUDIT: comp-audit-fix
+  REFACTOR: comp-refactor
+  HEALTH: comp-health
+  VACUUM: comp-vacuum
+  DEBUG: comp-debug
+  QUERY: comp-query
+  INTRODUCE: comp-introduce
+  PLAN: comp-query
+  DESIGN: comp-query
+  TOTALRECALL: comp-audit-fix
+  DEFAULT: comp-query
+
+# ─── Rules ────────────────────────────────────────────────────────────────────
+rules:
+  - "ONE H1 per response — the identity block only"
+  - "🧭 Orchestration: in Zone 1 of the header (omit for single-hop)"
+  - "No **Orchestrator:** field — use 🧭 Orchestration: chain"
+  - "No separate italic breadcrumb after --- (duplication P1 violation)"
+  - "Product icon 🧠 is fixed — never swapped for mode icon"

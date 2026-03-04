@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ValidationViolation:
+class ValidationViolation:  # CORE-035-scoped — domain-specific variant
     """Represents a validation violation."""
     violation_type: str
     entity_id: Optional[str]

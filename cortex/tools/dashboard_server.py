@@ -24,7 +24,7 @@ from typing import Dict, List, Optional, Tuple
 import requests
 
 
-class DashboardStatus(Enum):
+class DashboardStatus(Enum):  # CORE-035-scoped — domain-specific variant
     """Dashboard health status."""
     HEALTHY = "healthy"
     DEGRADED = "degraded"

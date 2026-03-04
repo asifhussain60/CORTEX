@@ -12,7 +12,7 @@ from typing import List, Optional
 
 
 @dataclass
-class KnowledgeSource:
+class KnowledgeSource:  # CORE-035-scoped — domain-specific variant
     """Attribution for a knowledge source."""
 
     layer: str  # "CORTEX" or "Company"

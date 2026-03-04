@@ -52,7 +52,7 @@ class LockAcquisitionError(OperationLockError):
 
 
 @dataclass
-class LockInfo:
+class LockInfo:  # CORE-035-scoped — domain-specific variant
     """
     Information about a held lock.
 

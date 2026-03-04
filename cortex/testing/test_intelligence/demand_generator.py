@@ -15,7 +15,7 @@ import yaml
 
 
 @dataclass
-class TestDemand:
+class TestDemand:  # CORE-035-scoped — domain-specific variant
     """Represents a test demand for an orchestrator."""
 
     orchestrator_name: str

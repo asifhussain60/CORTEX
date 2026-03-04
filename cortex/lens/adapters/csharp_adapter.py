@@ -31,7 +31,7 @@ from cortex.lens.models.polyglot_ast_result import (
 )
 
 
-class CSharpAdapter(LanguageAdapter):
+class CSharpAdapter(LanguageAdapter):  # CORE-035-scoped — domain-specific variant
     """
     C# language adapter using tree-sitter.
 

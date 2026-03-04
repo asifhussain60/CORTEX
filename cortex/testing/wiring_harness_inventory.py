@@ -30,7 +30,7 @@ class ComponentCategory(str, Enum):
     INTEGRATION = "integration"
 
 
-class IntegrationStatus(str, Enum):
+class IntegrationStatus(str, Enum):  # CORE-035-scoped — domain-specific variant
     """Status of component wiring."""
     UNWIRED = "unwired"
     PARTIAL = "partial"

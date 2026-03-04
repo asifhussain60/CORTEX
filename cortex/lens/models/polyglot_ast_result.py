@@ -61,7 +61,7 @@ class LanguageType(Enum):
 
 
 @dataclass
-class ImportInfo:
+class ImportInfo:  # CORE-035-scoped — domain-specific variant
     """
     Represents an import/using/include statement.
 

@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 # Exceptions
 # ==============================================================================
 
-class TemplateNotFoundError(Exception):
+class TemplateNotFoundError(Exception):  # CORE-035-scoped — domain-specific variant
     """Template file not found."""
     pass
 

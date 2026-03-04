@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 import uuid
 
 
-class DecisionType(Enum):
+class DecisionType(Enum):  # CORE-035-scoped — domain-specific variant
     """Types of decisions tracked"""
     RESOLUTION = "resolution"
     VALIDATION = "validation"

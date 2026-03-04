@@ -27,7 +27,7 @@ class ToolResult:
 
 
 @dataclass
-class HealthReport:
+class HealthReport:  # CORE-035-scoped — domain-specific variant
     """Aggregated toolchain health report."""
 
     tools: List[ToolResult] = field(default_factory=list)

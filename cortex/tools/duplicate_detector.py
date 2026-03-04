@@ -29,7 +29,7 @@ class DuplicateViolation:
     remediation: str
 
 
-class DuplicateDetector:
+class DuplicateDetector:  # CORE-035-scoped — domain-specific variant
     """Detects duplicate implementations across CORTEX codebase."""
 
     def __init__(self, workspace_root: Path) -> None:

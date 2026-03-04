@@ -13,7 +13,7 @@ from cortex.infrastructure.infrastructure_scanner import (
 )
 
 @dataclass
-class CapabilityGap:
+class CapabilityGap:  # CORE-035-scoped — domain-specific variant
     """Capability gap between environments."""
     capability_type: str  # "api", "tool", "service"
     name: str

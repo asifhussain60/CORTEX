@@ -24,7 +24,7 @@ class CircuitBreakerOpen(Exception):
         super().__init__(f"Circuit breaker is OPEN for {component_name}")
 
 
-class CircuitBreakerMetrics:
+class CircuitBreakerMetrics:  # CORE-035-scoped — domain-specific variant
     """Metrics for circuit breaker."""
 
     def __init__(self) -> None:
@@ -44,7 +44,7 @@ class CircuitBreakerMetrics:
         self.last_error_message = ""
 
 
-class CircuitBreakerConfig:
+class CircuitBreakerConfig:  # CORE-035-scoped — domain-specific variant
     """Configuration for circuit breaker."""
 
     def __init__(

@@ -732,7 +732,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 ```
 # 🛠️ CORTEX Architect {mode}
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Via:** {DisplayName} → {DisplayName}  ← omit if single-hop
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
 
 > *"{quote}"*
 > — {Author}, **{Book}**
@@ -773,10 +773,10 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ **Templates are composable sections** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
 - ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
 - ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
-- ✅ `**Via:**` line in the response header IS the orchestrator breadcrumb — shows the routing chain (e.g. `**Via:** Classifier → TDD Builder`) — omit on single-hop responses
+- ✅ `🧭 Orchestration:` line in the response header IS the orchestrator breadcrumb — shows the routing chain (e.g. `🧭 Orchestration: Classifier → TDD Builder`) — omit on single-hop responses
 - ❌ NO mode-specific icon in the H1 heading — 🛠️ is the only valid icon for this prompt
-- ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in `**Via:**` only
-- ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — that duplicates the `**Via:**` chain and makes the Classifier appear twice (P1 duplication violation)
+- ❌ NO `**Orchestrator:** {Name} ✅` in the header — orchestrators appear in `🧭 Orchestration:` only
+- ❌ NO separate `*🧭 Classifier → ...*` italic block after `---` — that duplicates the `🧭 Orchestration:` chain and makes the Classifier appear twice (P1 duplication violation)
 - ❌ NO secondary title headings inside the response body — the H1 is the only title
 - ❌ NO narration ("I'll now search...", "Let me check...")
 - ❌ NO proceed bullets inside `## 🎯 Next Steps` — that section ends at "Later:" bullets; proceed gate is always a separate final block
