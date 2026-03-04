@@ -157,20 +157,21 @@ class TestDirectoryConvergence:
     """Convergence gate tests for Sub-Phase D completion."""
 
     def test_intelligence_subdir_count(self) -> None:
-        """Top-level intelligence subdirectories must be ≤26.
+        """Top-level intelligence subdirectories must be ≤27.
 
         Starting point: 28 subdirs.
         Target after Sub-Phase D: ≤25 (removed releases/, sensory/, state/).
         Phase 117-c added analysis/ (+1) → new cap: ≤26.
+        Phase 107 Sub-Phase A+B+D added audit/ (+1) → new cap: ≤27.
         Final target after full Phase 107: ≤15 (Sub-Phase C merges remaining).
         """
         subdirs = [
             d for d in INTELLIGENCE_DIR.iterdir()
             if d.is_dir() and d.name != "__pycache__"
         ]
-        assert len(subdirs) <= 26, (
+        assert len(subdirs) <= 27, (
             f"Convergence: {len(subdirs)} top-level intelligence subdirs "
-            f"(target ≤26 after Phase 117-c). Current:\n  "
+            f"(target ≤27 after Phase 107 Sub-Phase A+B+D). Current:\n  "
             + "\n  ".join(sorted(d.name for d in subdirs))
         )
 

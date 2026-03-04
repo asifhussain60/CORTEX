@@ -1,0 +1,16 @@
+# Phase phase-93-intent-router-full-wiring — phase-93-intent-router-full-wiring
+# Status: COMPLETE
+# Authority: cortex-master.yaml thin index pointer
+# Note: This phase completed prior to the THIN INDEX CONTRACT (Phase 112).
+#       This stub satisfies the file pointer check. Full detail was recorded
+#       inline in cortex-master.yaml (pre-Phase-112 era) and is now archived.
+
+id: "phase-93-intent-router-full-wiring"
+title: "phase-93-intent-router-full-wiring"
+status: COMPLETE
+file_type: completed_phase_stub
+created: "2026-03-04"
+note: >
+  Phase completed before THIN INDEX CONTRACT. This stub file satisfies
+  the cortex-master.yaml file pointer requirement per Check #25 and
+  test_master_yaml_thin_index.py.

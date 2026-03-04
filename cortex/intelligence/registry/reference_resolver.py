@@ -15,7 +15,7 @@ Reference types supported:
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from cortex.intelligence.registry.models.base import BaseRegistryModel
 

@@ -603,10 +603,10 @@ class TestMetricsAccuracy:
     """
 
     def test_orchestrator_count_is_186(self, html: str, golden_log: logging.Logger) -> None:
-        """Orchestrator count displayed must be 186 (canonical per copilot-instructions.md)."""
+        """Orchestrator count displayed must be 290 (canonical per refresh_prompt_suite.py)."""
         golden_log.info(f"AC_START  {AC_PREFIX}-008a  metric_orchestrator_count")
-        # Accept 186 as the valid count
-        has_186 = "186" in html
+        # Accept 290 as the valid count
+        has_186 = "290" in html
         # Ensure old stale count 259 is NOT present
         has_stale = "259" in html
         golden_log.info(
@@ -614,26 +614,26 @@ class TestMetricsAccuracy:
             f"{'✅' if has_186 and not has_stale else '❌'}  "
             f"has_186={has_186}  has_stale_259={has_stale}"
         )
-        assert has_186, "Orchestrator count '186' not found in business-leader.html."
+        assert has_186, "Orchestrator count '290' not found in business-leader.html."
         assert not has_stale, (
             "Stale orchestrator count '259' still present. "
-            "Update to the canonical count: 186."
+            "Update to the canonical count: 290."
         )
 
     def test_test_count_is_17735(self, html: str, golden_log: logging.Logger) -> None:
-        """Test count displayed must be 17,735 (canonical per copilot-instructions.md)."""
+        """Test count displayed must be 19,612 (canonical per refresh_prompt_suite.py)."""
         golden_log.info(f"AC_START  {AC_PREFIX}-008b  metric_test_count")
-        has_count = "17,735" in html or "17735" in html
+        has_count = "19,612" in html or "19612" in html
         has_stale = "7,581" in html or "7581" in html
         golden_log.info(
             f"AC_COMPLETE  {AC_PREFIX}-008b  "
             f"{'✅' if has_count and not has_stale else '❌'}  "
             f"has_17735={has_count}  has_stale_7581={has_stale}"
         )
-        assert has_count, "Test count '17,735' not found in business-leader.html."
+        assert has_count, "Test count '19,612' not found in business-leader.html."
         assert not has_stale, (
             "Stale test count '7,581' still present. "
-            "Update to the canonical count: 17,735."
+            "Update to the canonical count: 19,612."
         )
 
     def test_governance_yaml_count_is_32(self, html: str, golden_log: logging.Logger) -> None:
