@@ -52,7 +52,15 @@ sweep_catalogue:
       no dry-run CI gate validates Windows runtime startup without manual steps.
       No check validates python -m cortex --help on Windows path conventions.
     action_ref: "phase-126-a"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    closed_by: "phase-126-a TDD cycle (RED→GREEN→REFACTOR)"
+    evidence_of_closure: |
+      - tests/preflight/test_windows_boot_wiring.py: 8 tests GREEN
+      - tests/preflight/test_drift_lock_check_30.py: permanent CI drift lock (6 tests)
+      - cortex-registry/governance/drift-locks/check-30-windows-boot-lock.yaml: drift lock YAML
+      - scripts/setup-mcp.py: --dry-run flag added, sys.executable as primary resolver
+      - Smoke gate: 2596 passed (baseline 2582)
 
   - id: "GAP-126-02"
     title: "Architecture runtime connectivity unproven (components importable but not proven live-connected)"
@@ -64,7 +72,14 @@ sweep_catalogue:
       cortex-registry YAML chain returns live non-stub data end-to-end.
       architecture-integrity-agent.md: L1 structural only; no runtime call chain proof.
     action_ref: "phase-126-b"
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-03-04"
+    evidence: |
+      phase-126-b COMPLETE. 15 tests GREEN in test_architecture_runtime_connectivity.py.
+      9 drift lock tests GREEN in test_drift_lock_check_31.py.
+      drift lock YAML: cortex-registry/governance/drift-locks/check-31-arch-connectivity-lock.yaml
+      Preflight gate: 297 passed, 9 skipped, 0 regressions.
+      Smoke gate: 2620 passed (baseline 2596, +24).
 
   - id: "GAP-126-03"
     title: "Stub/Mock/Blank Object eradication scan absent"
@@ -210,7 +225,8 @@ phases:
   - id: "phase-126-a"
     title: "Windows Out-of-Box Boot Wiring Verification (Check #30)"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-04"
     gap_refs: ["GAP-126-01"]
     governance_authority: "CORE-008, CORE-011, CORE-028"
     duration_estimate: "2 hours"
@@ -261,7 +277,8 @@ phases:
   - id: "phase-126-b"
     title: "Full Architecture Wiring Map Runtime Check (Check #31)"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-04"
     gap_refs: ["GAP-126-02"]
     governance_authority: "CORE-008, CORE-064, CORE-068"
     duration_estimate: "3 hours"

@@ -1,0 +1,75 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Check #30 — Windows Boot Wiring Drift Lock
+# ─────────────────────────────────────────────────────────────────────────────
+# Permanent CI guardrail: prevents the Windows boot wiring gap (GAP-126-01)
+# from silently re-entering the codebase after phase-126-a closes it.
+#
+# Authority: CORE-064 (Sweep Completeness), CORE-068 (Convergence Gate)
+# Gap ref:   GAP-126-01
+# Phase ref: phase-126-a
+# Created:   2026-03-04
+# Status:    ACTIVE
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: "check-30-windows-boot-lock"
+title: "Windows Out-of-Box Boot Wiring — Permanent Drift Lock"
+check_number: 30
+gap_ref: "GAP-126-01"
+phase_ref: "phase-126-a"
+created: "2026-03-04"
+status: ACTIVE
+severity: P1
+
+description: |
+  Enforces that CORTEX can boot cleanly on Windows without manual path
+  corrections. The drift lock fires CI-blocking tests if any of the
+  following regressions are introduced:
+    1. setup-mcp.py stops using sys.executable as the primary Python resolver
+    2. setup-mcp.py loses the --dry-run flag
+    3. python -m cortex --help stops exiting 0
+    4. New unguarded os.path.* calls appear in cortex/ outside the allowlist
+    5. New bare os.system() calls appear in cortex/ production source
+
+test_file: "tests/preflight/test_drift_lock_check_30.py"
+primary_test_file: "tests/preflight/test_windows_boot_wiring.py"
+
+enforced_invariants:
+  - id: "INV-30-01"
+    description: "setup-mcp.py must contain sys.executable reference"
+    test: "test_drift_lock_setup_mcp_uses_sys_executable"
+
+  - id: "INV-30-02"
+    description: "setup-mcp.py must support --dry-run (CI gate)"
+    test: "test_drift_lock_setup_mcp_has_dry_run"
+
+  - id: "INV-30-03"
+    description: "python -m cortex --help must exit 0"
+    test: "test_drift_lock_cortex_help_exits_zero"
+
+  - id: "INV-30-04"
+    description: "No new unguarded os.path calls beyond catalogued allowlist"
+    test: "test_drift_lock_no_new_posix_paths"
+
+  - id: "INV-30-05"
+    description: "No bare os.system() calls in production cortex/ source"
+    test: "test_drift_lock_no_os_system_calls"
+
+regression_categories:
+  - "Windows path convention violations (backslash vs forward slash)"
+  - "POSIX-only Python interpreter references (/usr/bin/python3)"
+  - "Missing CI-safe --dry-run flag on setup scripts"
+  - "New os.path calls without pathlib guard"
+  - "Shell-injection-risk os.system() usage"
+
+remediation:
+  on_failure: |
+    1. Run: python scripts/setup-mcp.py --dry-run
+    2. Check: grep -n 'sys.executable' scripts/setup-mcp.py
+    3. Check: grep -n 'dry.run' scripts/setup-mcp.py
+    4. For os.path violations: use pathlib.Path or add to allowlist with justification
+    5. For os.system violations: replace with subprocess.run(platform-aware args)
+
+ci_commands:
+  validate: "python3 -m pytest tests/preflight/test_drift_lock_check_30.py -v"
+  full: "python3 -m pytest tests/preflight/test_windows_boot_wiring.py tests/preflight/test_drift_lock_check_30.py -v"
+  dry_run: "python3 scripts/setup-mcp.py --dry-run"

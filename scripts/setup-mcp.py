@@ -7,8 +7,14 @@ Auto-detects OS and configures appropriate Python executable path.
 
 Authority: ENH-066 - MCP Setup Validation
 Platform: macOS / Linux / Windows (cross-platform)
+Phase: 126-a (Check #30 — Windows Boot Wiring Verification)
+
+Usage:
+    python setup-mcp.py             # write .vscode/settings.json
+    python setup-mcp.py --dry-run   # validate without writing any files (CI safe)
 """
 
+import argparse
 import json
 import logging
 import platform
@@ -43,9 +49,19 @@ def _setup_logging(log_dir: Path) -> logging.Logger:
 def _detect_python_executable() -> str:
     """Detect the appropriate Python executable for the current platform.
 
+    Prefers sys.executable (the interpreter running this script) so that the
+    MCP server always uses the same Python that set it up — critical on Windows
+    where 'python3' may not exist on PATH and on virtual-env setups where the
+    venv interpreter must be used.
+
     Returns:
         str: Full path or command name for the Python executable.
     """
+    # sys.executable is the most reliable source — it is the exact interpreter
+    # that is currently running this script, guaranteed to exist on all platforms.
+    if sys.executable:
+        return sys.executable
+
     os_name = platform.system()
 
     if os_name == "Windows":
@@ -149,9 +165,30 @@ def _write_vscode_settings(workspace_root: Path, settings: dict, logger: logging
 def main() -> int:
     """Run cross-platform MCP setup.
 
+    Args supported (via argparse):
+        --dry-run: Validate configuration without writing any files.
+                   Exits 0 on success. Safe to run in CI on any platform.
+
     Returns:
         int: Exit code (0 = success, 1 = error).
     """
+    parser = argparse.ArgumentParser(
+        description="CORTEX MCP Setup — Cross-Platform Pylance-Style Configuration",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Examples:\n"
+            "  python setup-mcp.py             # write .vscode/settings.json\n"
+            "  python setup-mcp.py --dry-run   # validate only (CI safe, no file writes)\n"
+        ),
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        dest="dry_run",
+        help="Validate configuration without writing any files (CI safe).",
+    )
+    args = parser.parse_args()
+
     workspace_root = Path(__file__).parent.parent.resolve()
     log_dir = workspace_root / ".cortex-runtime" / "logs"
 
@@ -159,21 +196,38 @@ def main() -> int:
     logger.info(f"CORTEX MCP Setup — platform={platform.system()}, python={sys.version}")
     logger.info(f"Workspace root: {workspace_root}")
 
+    if args.dry_run:
+        logger.info("--dry-run mode: validation only, no files will be written")
+
     # Detect platform
     os_name = platform.system()
     logger.info(f"Operating system: {os_name}")
 
     if os_name == "Windows":
-        logger.info("Windows detected — using 'python' executable")
+        logger.info("Windows detected — using sys.executable path")
     elif os_name == "Darwin":
-        logger.info("macOS (Darwin) detected — using 'python3' executable")
+        logger.info("macOS (Darwin) detected — using sys.executable path")
     elif os_name == "Linux":
-        logger.info("Linux detected — using 'python3' executable")
+        logger.info("Linux detected — using sys.executable path")
     else:
-        logger.info(f"posix-like OS detected ({os_name}) — using 'python3' fallback")
+        logger.info(f"posix-like OS detected ({os_name}) — using sys.executable path")
 
     python_cmd = _detect_python_executable()
     logger.info(f"Python executable: {python_cmd}")
+
+    if args.dry_run:
+        # Dry-run: validate that we can compute the settings without writing them
+        settings = _build_vscode_settings(workspace_root, python_cmd)
+        mcp_config = settings.get("github.copilot.chat.mcpServers", {}).get("cortex", {})
+        if not mcp_config.get("command") or not mcp_config.get("args"):
+            logger.error("❌ Dry-run validation failed: MCP config block is incomplete")
+            return 1
+        logger.info("✅ Dry-run validation passed — MCP configuration is valid")
+        logger.info(f"  command: {mcp_config['command']}")
+        logger.info(f"  args: {mcp_config['args']}")
+        logger.info(f"  transport: {mcp_config.get('transport', 'stdio')}")
+        logger.info("  (no files written)")
+        return 0
 
     # Build and write VS Code settings
     settings = _build_vscode_settings(workspace_root, python_cmd)

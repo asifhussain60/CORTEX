@@ -1,0 +1,90 @@
+---
+# CORTEX Drift-Lock — Check #31: Architecture Runtime Connectivity
+# Governs: GAP-126-02 — All 5 major runtime components must be importable and functional
+# Phase: 126-b
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-31-arch-connectivity-lock"
+title: "Architecture Runtime Connectivity"
+check_number: 31
+phase: "phase-126-b"
+gap_id: "GAP-126-02"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P1"
+test_file: "tests/preflight/test_drift_lock_check_31.py"
+primary_test_file: "tests/preflight/test_architecture_runtime_connectivity.py"
+
+description: >
+  Enforces that all five major architectural runtime components are importable,
+  healthy, and mutually connected without stubs or mocks. Prevents silent
+  regression of any runtime link in the chain: IO → LENS → Intelligence →
+  Registry → Workflow.
+
+invariants:
+  - id: "INV-31-01"
+    title: "InteractionOrchestrator health_check returns healthy"
+    description: >
+      InteractionOrchestrator must be importable and its health_check() method
+      must return a dict with status == "healthy".
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_interaction_orchestrator_health_returns_healthy"
+
+  - id: "INV-31-02"
+    title: "ASTAnalyzer.analyze_file(Path) returns success=True"
+    description: >
+      ASTAnalyzer must be importable and analyze_file(Path) must return an
+      ASTAnalysisResult dataclass with success=True and at least one non-empty
+      function or class list when analysing a real cortex source file.
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_lens_analyzers_return_non_empty_analysis"
+
+  - id: "INV-31-03"
+    title: "IntelligenceFacade.analyze() returns dict with 'status' key"
+    description: >
+      get_intelligence_facade() must return a singleton and analyze() must
+      return a non-None dict containing the 'status' key.
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_intelligence_facade_analyze_returns_live_data"
+
+  - id: "INV-31-04"
+    title: "cortex-registry governance YAMLs are parseable"
+    description: >
+      The primary governance YAML (cortex-registry/governance/core-rules.yaml)
+      and audit checklist YAML must exist on disk and be parseable by
+      yaml.safe_load without error.
+    enforcement: "HARD — file existence + yaml.safe_load"
+    test_method: "test_governance_yaml_parseable"
+
+  - id: "INV-31-05"
+    title: "IMPLEMENT workflow template exists and is parseable"
+    description: >
+      cortex-registry/workflows/templates/sdlc/implement-workflow.yaml must
+      exist on disk and be parseable by yaml.safe_load.
+    enforcement: "HARD — file existence + yaml.safe_load"
+    test_method: "test_implement_template_parseable"
+
+  - id: "INV-31-06"
+    title: "WorkflowComposer.execute_from_template resolves IMPLEMENT template"
+    description: >
+      WorkflowComposer must be importable and execute_from_template("sdlc/implement-workflow")
+      must return a non-None result without raising ImportError or FileNotFoundError.
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_workflow_composer_resolves_implement_template"
+
+governance:
+  rule_refs:
+    - "CORE-048"   # Holistic validation gate
+    - "CORE-064"   # Sweep Completeness Contract
+    - "CORE-068"   # Universal Convergence Gate
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P1"
+
+evidence:
+  gap_closed: "GAP-126-02"
+  tests_created: 15
+  test_classes: 6
+  green_date: "2026-03-04"
+  refactor_suite: "288 passed, 9 skipped"
