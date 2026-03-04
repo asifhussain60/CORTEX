@@ -521,7 +521,3 @@ rollback:
 # VERSION HISTORY
 # ============================================================================
 version_history:
-  - version: '1.0.0'
-    date: '2026-02-16'
-    changes: 'Initial release from Phase 99 migration'
-    author: 'CORTEX Architecture Team'

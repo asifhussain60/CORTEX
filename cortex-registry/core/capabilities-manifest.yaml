@@ -8,7 +8,6 @@
 auto_generated: true
 generated_at: '2026-03-03T19:47:41.391764+00:00'
 generated_by: cortex.intelligence.capability_registry_builder.CapabilityRegistryBuilder
-manifest_version: '1.0'
 orchestrators:
   total: 31
   tiers:

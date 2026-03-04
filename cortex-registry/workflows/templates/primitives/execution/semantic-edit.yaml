@@ -41,10 +41,8 @@ cortex_tooling:
   
   external_dependencies:
     - name: 'beautifulsoup4'
-      version: '>=4.12.0'
     
     - name: 'lxml'
-      version: '>=4.9.0'
 
 # ============================================================================
 # PARAMETERS

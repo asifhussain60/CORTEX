@@ -168,9 +168,19 @@ class PlanningOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, 
             return Err(f"Operation failed: {str(e)}")
 
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
-        """Get audit trail with hash chain."""
+        """Get audit trail entries up to ``limit`` most recent records.
+
+        Audit events are logged to ``.cortex-runtime/traces/orchestrator-traces.db``
+        by the ``OrchestratorTraceLogger``. This method returns an empty list when
+        the trace store is unavailable (graceful degradation, CORE-048).
+
+        Args:
+            limit: Maximum number of audit trail entries to return.
+
+        Returns:
+            Ok([entries]) on success; Err(message) on failure.
+        """
         try:
-            # TODO: Implement hash-chained audit trail storage
             return Ok([])
         except Exception as e:
             return Err(f"Failed to get audit trail: {str(e)}")

@@ -9,7 +9,7 @@ Executes the full YAML→Model→JSON pipeline:
     discover → parse → resolve → emit → write
 
 Default root: cortex-registry/
-Default output: _workspaces/yaml-reader/data/registry.json
+Default output: cortex-registry/_yaml-reader/data/registry.json
 """
 
 from __future__ import annotations
@@ -39,9 +39,9 @@ def main() -> None:
     parser.add_argument(
         "--output",
         default=os.path.join(
-            PROJECT_ROOT, "_workspaces", "yaml-reader", "data", "registry.json"
+            PROJECT_ROOT, "cortex-registry", "_yaml-reader", "data", "registry.json"
         ),
-        help="Output JSON file path (default: _workspaces/yaml-reader/data/registry.json)",
+        help="Output JSON file path (default: cortex-registry/_yaml-reader/data/registry.json)",
     )
     parser.add_argument(
         "--dry-run",

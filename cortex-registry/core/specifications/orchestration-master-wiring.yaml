@@ -8,19 +8,15 @@ description: |
 
 dependencies:
   - name: intent_router
-    version: ">=1.0.0"
     required: true
     internal: false  # External until wiring spec created
   - name: governance_registry
-    version: ">=1.0.0"
     required: true
     internal: false
   - name: state_manager
-    version: ">=1.0.0"
     required: true
     internal: false
   - name: audit_logger
-    version: ">=1.0.0"
     required: true
     internal: false
 

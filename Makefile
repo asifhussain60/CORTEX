@@ -37,7 +37,7 @@ help:
 
 # Run production readiness verification
 verify:
-	@PYTHONPATH=. python3 _workspaces/docker-plan/verify_prod_ready.py --skip-docker
+	@PYTHONPATH=. python3 scripts/validate-production.py
 
 # Validate wiring.yaml accuracy (Phase 76 S1 T6)
 validate-wiring:

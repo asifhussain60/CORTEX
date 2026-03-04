@@ -8,7 +8,6 @@
 # Usage: copy this template, fill in project-specific values, commit to
 #        cortex-registry/planning/phases/{project-id}-sts.yaml
 
-registry_version: "1.0"
 template_type: "sts-refactoring"
 target_audience: "CORTEX Architect + RefactoringOrchestrator"
 

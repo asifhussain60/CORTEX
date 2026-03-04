@@ -65,13 +65,6 @@ metadata:
   author: 'CORTEX Architecture'
   created: '2026-02-23'
   version_history:
-    - version: '1.0.0'
-      date: '2026-02-23'
-      note: 'Canonical primitive — extracted from health-vacuum and audit-fix patterns; includes SQLite per-cycle logging, retention-based cleanup, bloat prevention'
-
-# ============================================================================
-# CORTEX TOOLING
-# ============================================================================
 cortex_tooling:
   orchestrators:
     - name: 'EnforcementOrchestrator'

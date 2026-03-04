@@ -9,6 +9,7 @@ AC-NFR-002-01: Graceful degradation on component failure
 """
 
 import logging
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -42,17 +43,29 @@ class FallbackResult:
             self.timestamp = datetime.utcnow()
 
 
-class FallbackStrategy:  # CORE-035-scoped — domain-specific fallback strategy model
-    """Base class for fallback strategies."""
+class FallbackStrategy(ABC):  # CORE-035-scoped — domain-specific fallback strategy model
+    """Abstract base class for fallback strategies.
+
+    Subclassers must implement ``execute()`` to define the concrete fallback
+    behaviour for a given degradation scenario.
+    """
 
     def __init__(self, name: str, degradation_level: DegradationLevel) -> None:
         """Initialise FallbackStrategy."""
         self.name = name
         self.degradation_level = degradation_level
 
-    def execute(self, *args, **kwargs) -> FallbackResult:
-        """Execute the fallback strategy."""
-        raise NotImplementedError
+    @abstractmethod
+    def execute(self, *args: Any, **kwargs: Any) -> "FallbackResult":
+        """Execute the fallback strategy.
+
+        Args:
+            *args: Strategy-specific positional arguments.
+            **kwargs: Strategy-specific keyword arguments.
+
+        Returns:
+            FallbackResult describing the outcome of the fallback.
+        """
 
 
 class CacheFallbackStrategy(FallbackStrategy):

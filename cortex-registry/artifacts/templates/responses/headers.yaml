@@ -153,24 +153,13 @@ domain_overrides:
 # ENFORCEMENT RULES
 # =============================================================================
 
+
 enforcement:
   require_on_all_responses: true
   audit_missing_headers: true
   log_header_injection: false  # Set to true for debugging
   validate_all_variables: true
   fail_on_missing_variable: false  # Log warning but don't fail render
-
-# =============================================================================
-# VERSIONING & EVOLUTION
-# =============================================================================
-
-versioning:
-  current_version: "1.0"
-  compatibility:
-    min_engine_version: "1.0"
-    max_engine_version: "1.0"
-  breaking_changes: []
-  future_versions: {}
 
 # =============================================================================
 # AUDIT & GOVERNANCE TRACKING
@@ -180,11 +169,4 @@ audit:
   rule_id: "CORE-009-EXTENDED"  # References governance rule
   requires_approval: true
   approval_required_for: ["author", "copyright.notice", "author.repository"]
-  changelog:
-    - version: "1.0"
-      date: "2026-01-15"
-      author: "System"
-      changes:
-        - "Initial implementation from CORTEX-4.0 branch"
-        - "Implements copyright header across all response templates"
-        - "Provides single source of truth for global header"
+

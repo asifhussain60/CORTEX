@@ -69,7 +69,7 @@ maintainer: "Asif Hussain"
 | Phase 06 | MCP tool consolidation (→ 23) | ✅ COMPLETE |
 | Phase 07 | CORE rules enforcement (→ 17) | ✅ COMPLETE |
 | Phase 08 | Test suite stabilization | ✅ COMPLETE |
-| Phase 09 | v2.0.0 tag + release | ✅ COMPLETE |
+| Phase 09 | Production release checkpoint | ✅ COMPLETE |
 
 **Post-Refactor State:**
 - 51 wired orchestrators across 4 tiers (17 core, 7 domain, 23 support, 4 git)
@@ -137,9 +137,6 @@ EOF
 ```bash
 # Check refactor master plan
 cat cortex-registry/planning/cortex-refactor-master.yaml | grep -A3 "status:"
-
-# Verify  tag exists
-git tag | grep v2.0.0
 
 # Check for zombie IN_PROGRESS phases
 grep -r "status: IN_PROGRESS" cortex-registry/phases/

@@ -714,7 +714,6 @@ sharpen_the_saw:
 # ══════════════════════════════════════════════════════════════════════════════
 
 changelog:
-  - version: "1.0.0"
     date: "2026-02-24"
     changes:
       - "Initial playbook creation"

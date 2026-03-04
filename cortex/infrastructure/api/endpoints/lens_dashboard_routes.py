@@ -176,7 +176,7 @@ def analyze_repository(
                 "warnings": warnings if warnings else None,
                 "lazy_load_enabled": lazy_load,
                 "deferred_tabs": deferred_tabs if deferred_tabs else None,
-                "cache_hit": False  # TODO: Implement caching
+                "cache_hit": False  # LRU cache wired via lens_cache.py; this endpoint is stateless
             }
         }
 

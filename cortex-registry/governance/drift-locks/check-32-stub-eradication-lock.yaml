@@ -1,0 +1,120 @@
+---
+# CORTEX Drift-Lock — Check #32: Stub/Mock/Blank Object Eradication
+# Governs: GAP-126-03 — Production cortex/ must contain no unresolved stubs
+# Phase: 126-c
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# Created: 2026-03-04
+
+id: "check-32-stub-eradication-lock"
+title: "Stub/Mock/Blank Object Eradication"
+check_number: 32
+phase: "phase-126-c"
+gap_id: "GAP-126-03"
+status: "ACTIVE"
+created_date: "2026-03-04"
+enforcement_tier: "P0"
+test_file: "tests/preflight/test_drift_lock_check_32.py"
+primary_test_file: "tests/preflight/test_stub_eradication.py"
+
+description: >
+  Enforces that production cortex/ source contains no unresolved TODO/FIXME markers,
+  no NotImplementedError in non-abstract concrete classes, no class-level
+  feature-flag-disabled wiring constants, and that critical production paths
+  (IntelligenceFacade.analyze, WorkflowComposer.execute_from_template) return
+  non-empty live data. Prevents stub-disguised production paths from regressing
+  silently between phases.
+
+invariants:
+  - id: "INV-32-01"
+    title: "No TODO/FIXME markers in production cortex/ source"
+    description: >
+      cortex/ Python files (excluding analysis tool allowlist and quarantine)
+      must not contain TODO or FIXME stub comments. These signal unfinished work
+      that has not been tracked or resolved.
+    enforcement: "HARD — grep + allowlist filter, zero-match assertion"
+    test_method: "test_no_todo_fixme_in_production_cortex_source"
+
+  - id: "INV-32-02"
+    title: "No NotImplementedError in non-abstract concrete classes"
+    description: >
+      Concrete classes (not inheriting from ABC/Protocol/Abstract) must not raise
+      NotImplementedError in their methods without @abstractmethod. Allowed
+      exceptions: LanguageAdapter (debug extension point), ImportStrategy (callable
+      protocol), ADOWorkItemProvider (ADO integration not yet deployed).
+    enforcement: "HARD — AST scan, allowlist, zero-violation assertion"
+    test_method: "test_no_notimplementederror_in_non_abstract_classes"
+
+  - id: "INV-32-03"
+    title: "No class-level feature-flag wiring constants set to False"
+    description: >
+      Class-level constants matching PHASE*_GATEWAY_ENABLED or *_ENABLED that are
+      set to False unconditionally disable wiring for all instances. Such constants
+      must not appear in cortex/orchestrators/. Instance attributes set via self.*
+      inside methods are not governed by this invariant.
+    enforcement: "HARD — regex scan, zero-match assertion"
+    test_method: "test_no_feature_flag_disabled_wiring"
+
+  - id: "INV-32-04"
+    title: "IntelligenceFacade.analyze() returns non-empty live data"
+    description: >
+      IntelligenceFacade.analyze() called on a real cortex source file must return
+      a dict with status='ok' and a non-empty 'analysis' dict containing at least
+      one function in ast_analysis. An empty result indicates LENS is returning
+      stub data.
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_intelligence_facade_analyze_returns_non_empty"
+
+  - id: "INV-32-05"
+    title: "WorkflowComposer.execute_from_template() returns non-None result"
+    description: >
+      WorkflowComposer.execute_from_template() called with the IMPLEMENT workflow
+      template ID must return a non-None WorkflowExecutionResult. A None return
+      indicates the composer's execution path is stubbed.
+    enforcement: "HARD — import + runtime assertion"
+    test_method: "test_workflow_composer_execute_returns_non_empty"
+
+  - id: "INV-32-06"
+    title: "No orchestrator public methods returning bare empty dict"
+    description: >
+      Public methods (no leading underscore) in cortex/orchestrators/ whose entire
+      body (after docstring) is a single 'return {}' statement are blank-output
+      stubs. Zero such methods are allowed.
+    enforcement: "HARD — AST scan, zero-violation assertion"
+    test_method: "test_no_return_empty_dict_in_orchestrator_public_methods"
+
+governance:
+  rule_refs:
+    - "CORE-008"   # TDD mandatory
+    - "CORE-035"   # Single canonical implementation — no duplicates
+    - "CORE-064"   # Sweep Completeness Contract
+  pre_commit: true
+  ci_gate: true
+  alert_on_failure: "P0"
+
+remediation:
+  on_todo_fixme_violation: >
+    Resolve the stub: implement the feature, or add the file to
+    _TODO_FIXME_ANALYSIS_ALLOWLIST in test_stub_eradication.py with
+    a documented justification (analysis tool, not a stub).
+  on_notimpl_violation: >
+    Either make the class abstract (inherit from ABC or Protocol),
+    add @abstractmethod to the method, or add the (rel_path, class_name)
+    pair to _NOTIMPL_ALLOWED_CONCRETE with a documented extension-point justification.
+  on_disabled_wiring_violation: >
+    Remove the class-level False constant and implement the wiring,
+    or restructure to an instance-level toggle (set via __init__ parameter).
+  on_empty_facade_violation: >
+    Trace IntelligenceFacade.analyze() → provider.get_lens_analysis()
+    → ASTAnalyzer.analyze_file(). Fix the first disconnected link.
+  on_empty_composer_violation: >
+    Trace WorkflowComposer.execute_from_template() → _load_template()
+    → _execute_steps(). Verify template file exists and steps list is non-empty.
+
+evidence:
+  gap_closed: "GAP-126-03"
+  tests_created: 6
+  test_classes: 6
+  stubs_fixed: 8
+  green_date: "2026-03-04"
+  refactor_suite: "303 passed, 9 skipped"
+  baseline_smoke: 2620

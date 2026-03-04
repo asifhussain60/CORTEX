@@ -266,12 +266,12 @@ phases:
     duration_estimate: "2 days"
     depends_on: ["phase-125-e"]
     deliverables:
-      - "_workspaces/yaml-reader/renderers/governance-renderer.js"
-      - "_workspaces/yaml-reader/renderers/workflow-renderer.js"
-      - "_workspaces/yaml-reader/renderers/pattern-renderer.js"
-      - "_workspaces/yaml-reader/renderers/plan-renderer.js"
-      - "_workspaces/yaml-reader/renderers/generic-renderer.js"
-      - "_workspaces/yaml-reader/renderers/context-chip.js"
+      - "cortex-registry/_yaml-reader/renderers/governance-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/workflow-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/pattern-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/plan-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/generic-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/context-chip.js"
 
   - id: "phase-125-g"
     title: "D3 graph explorer + diff viewer + integrity dashboard"
@@ -282,9 +282,9 @@ phases:
     duration_estimate: "2 days"
     depends_on: ["phase-125-f"]
     deliverables:
-      - "_workspaces/yaml-reader/renderers/graph-renderer.js"
-      - "_workspaces/yaml-reader/renderers/diff-renderer.js"
-      - "_workspaces/yaml-reader/renderers/integrity-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/graph-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/diff-renderer.js"
+      - "cortex-registry/_yaml-reader/renderers/integrity-renderer.js"
       - "Updated index.html with 4 tabs + context chip"
 
   - id: "phase-125-h"

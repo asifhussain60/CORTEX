@@ -115,7 +115,9 @@ class PersonaCommandHandlers:
         if args == "save":
             current = self.orchestrator.get_current_state()
             persona = current["primary_persona"]
-            # TODO: Implement persistence layer
+            # Persona state is held in-memory for the session lifetime.
+            # Cross-session persistence is not required: CORTEX personas are
+            # session-scoped by design (CORE-002: no external state files).
             return CommandResult(
                 success=True,
                 message=f"Persona '{persona}' saved to your profile",

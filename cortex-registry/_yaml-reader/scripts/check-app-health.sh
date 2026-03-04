@@ -6,7 +6,7 @@ echo ""
 
 # Check files exist
 echo "📁 Checking required files..."
-files=("index.html" "app.js" "vendor/js-yaml.min.js" "vendor/d3.min.js")
+files=("../yaml-reader.html" "app.js" "vendor/js-yaml.min.js" "vendor/d3.min.js")
 all_exist=true
 for file in "${files[@]}"; do
     if [ -f "$file" ]; then
@@ -30,9 +30,9 @@ echo ""
 
 # Check HTML structure
 echo "🔬 Validating HTML structure..."
-if grep -q "<!DOCTYPE html>" index.html && \
-   grep -q '<html lang="en">' index.html && \
-   grep -q '</html>' index.html; then
+if grep -q "<!DOCTYPE html>" ../yaml-reader.html && \
+   grep -q '<html lang="en">' ../yaml-reader.html && \
+   grep -q '</html>' ../yaml-reader.html; then
     echo "   ✅ HTML structure is valid"
 else
     echo "   ❌ HTML structure has issues"
@@ -63,7 +63,7 @@ if grep -q "fetch(" app.js; then
     issues=$((issues + 1))
 fi
 
-if grep -q "http://" index.html || grep -q "https://" index.html | grep -v "file://"; then
+if grep -q "http://" ../yaml-reader.html || grep -q "https://" ../yaml-reader.html | grep -v "file://"; then
     echo "   ⚠️  Warning: HTTP(S) URLs found"
     issues=$((issues + 1))
 fi
@@ -82,8 +82,8 @@ if [ "$all_exist" = true ]; then
     echo "✅ HTML validated"
     echo "✅ Ready to use!"
     echo ""
-    echo "🚀 To open: open index.html"
-    echo "   Or use: file://$(pwd)/index.html"
+    echo "🚀 To open: open ../yaml-reader.html"
+    echo "   Or use: file://$(pwd)/../yaml-reader.html"
 else
     echo "❌ Some files are missing. Please review above."
 fi

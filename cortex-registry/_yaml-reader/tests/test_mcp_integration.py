@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-APP_JS = Path(__file__).parents[3] / "_workspaces" / "yaml-reader" / "app.js"
+APP_JS = Path(__file__).parents[2] / "app.js"
 
 
 @pytest.fixture(scope="module")

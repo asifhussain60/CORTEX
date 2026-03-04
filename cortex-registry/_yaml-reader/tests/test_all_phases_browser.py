@@ -12,7 +12,7 @@ def test_all_phase_yamls():
     """Test that all phase YAML files in _cortex-master load successfully."""
     
     registry_path = Path(__file__).parent.parent.parent
-    index_html = registry_path / ".yaml-reader" / "index.html"
+    index_html = registry_path / "yaml-reader.html"
     phases_dir = registry_path / "_cortex-master" / "phases"
     
     print("="*70)

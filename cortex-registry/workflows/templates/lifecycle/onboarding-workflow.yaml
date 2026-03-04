@@ -21,7 +21,6 @@ workflow:
   # Output Schema
   # ---------------------------------------------------------------------------
   output:
-    schema_version: "1.0.0"
     base_path: "cortex-registry/company/repos/{repo_name}/"
     tabs:
       - id: "01_overview"

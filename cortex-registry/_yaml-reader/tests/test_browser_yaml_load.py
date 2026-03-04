@@ -13,7 +13,7 @@ def test_yaml_reader_in_browser():
     """Test YAML Reader loads cortex-master.yaml successfully in browser."""
     
     registry_path = Path(__file__).parent.parent.parent
-    index_html = registry_path / ".yaml-reader" / "index.html"
+    index_html = registry_path / "yaml-reader.html"
     cortex_master = registry_path / "cortex-master.yaml"
     
     print("="*70)
@@ -107,7 +107,7 @@ def test_yaml_reader_in_browser():
                         print(f"   {line.strip()}")
                 
                 # Take screenshot
-                screenshot_path = registry_path / ".yaml-reader" / "tests" / "error-screenshot.png"
+                screenshot_path = registry_path / "_yaml-reader" / "tests" / "error-screenshot.png"
                 page.screenshot(path=str(screenshot_path))
                 print(f"\n📸 Screenshot saved: {screenshot_path}")
                 
@@ -197,7 +197,7 @@ def test_yaml_reader_in_browser():
                     print(f"   - {err['text'][:100]}")
             
             # Take success screenshot
-            screenshot_path = registry_path / ".yaml-reader" / "tests" / "success-screenshot.png"
+            screenshot_path = registry_path / "_yaml-reader" / "tests" / "success-screenshot.png"
             page.screenshot(path=str(screenshot_path))
             print(f"\n📸 Screenshot saved: {screenshot_path}")
             
@@ -234,7 +234,7 @@ def test_yaml_reader_in_browser():
             
             # Take error screenshot
             try:
-                screenshot_path = registry_path / ".yaml-reader" / "tests" / "test-error-screenshot.png"
+                screenshot_path = registry_path / "_yaml-reader" / "tests" / "test-error-screenshot.png"
                 page.screenshot(path=str(screenshot_path))
                 print(f"📸 Error screenshot saved: {screenshot_path}")
             except:

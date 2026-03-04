@@ -47,11 +47,9 @@ cortex_tooling:
   
   external_dependencies:
     - name: 'beautifulsoup4'
-      version: '>=4.12.0'
       purpose: 'HTML parsing'
     
     - name: 'lxml'
-      version: '>=4.9.0'
       purpose: 'Fast XML/HTML parser backend'
 
 # ============================================================================

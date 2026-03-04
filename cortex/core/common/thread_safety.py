@@ -139,7 +139,7 @@ def scan_file_for_bare_joins(filepath: Path) -> list:
 
 if __name__ == "__main__":
     # Example: Scan all Python files in cortex directory
-    cortex_root = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex")
+    cortex_root = Path(__file__).parent.parent.parent  # resolves to <project_root>/cortex
 
     all_issues = {}
     for py_file in cortex_root.rglob("*.py"):

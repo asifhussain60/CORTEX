@@ -56,16 +56,6 @@ metadata:
   created: '2026-02-28'
   phase: 'Phase 91 — Workflow Composer Mandatory Gateway Completion'
   version_history:
-    - version: '1.0.0'
-      date: '2026-02-28'
-      note: |
-        New primitive — closes GAP-5 (audit-fix reads workflow_runs) and
-        GAP-6 (no dedicated activity-log reader). Single canonical reader
-        replacing inline SQL patterns in audit-fix-pipeline and prompts.
-
-# ============================================================================
-# PARAMETERS
-# ============================================================================
 parameters:
   required: []
   optional:

@@ -491,17 +491,3 @@ orchestrator_metadata:
     PlanOrchestrator: "PHASE→STAGE→TASK | Checkpoint-Driven"
     EnforcementOrchestrator: "7-Agent Validation | P0 Blocking"
     MasterOrchestrator: "Intelligent Routing | Context-Aware"
-
-# ============================================================================
-# VERSION HISTORY
-# ============================================================================
-
-changelog:
-  - version: "1.0"
-    date: "2026-02-15"
-    changes:
-      - "Initial release"
-      - "5 template categories (completion, challenge, progress, query, list)"
-      - "Rendering rules for VS Code Copilot Chat"
-      - "Customization options"
-      - "Validation rules"

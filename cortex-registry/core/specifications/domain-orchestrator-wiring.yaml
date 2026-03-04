@@ -7,17 +7,14 @@ description: "Domain orchestrators: Refactoring, Planning, Domain, Coherence, Up
 
 dependencies:
   - name: core_orchestrators
-    version: ">=1.0.0"
     required: true
     internal: true
     
   - name: governance_registry
-    version: ">=1.0.0"
     required: true
     internal: false
     
   - name: business_knowledge_repository
-    version: ">=1.0.0"
     required: true
     internal: false
 

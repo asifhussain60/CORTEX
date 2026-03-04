@@ -7,17 +7,14 @@ description: "Support orchestrators: Onboarding, Upgrade, Rollback, Setup, Healt
 
 dependencies:
   - name: core_orchestrators
-    version: ">=1.0.0"
     required: true
     internal: true
     
   - name: governance_registry
-    version: ">=1.0.0"
     required: true
     internal: false
     
   - name: documentation_system
-    version: ">=1.0.0"
     required: false
     internal: false
 

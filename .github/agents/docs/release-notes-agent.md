@@ -152,14 +152,14 @@ A change is **breaking** if:
 
 ### Version Tagging
 
-Release notes are versioned to match the phase they document:
+Release notes are identified by the phase they document:
 
 ```
-Phase 107 → version "Phase 107"
-Phase 108 → version "Phase 108"
+Phase 107 → identifier "Phase 107"
+Phase 108 → identifier "Phase 108"
 ```
 
-If Git tags exist (e.g., `v2.0.0`), use semver format instead.
+Do not use semver tags or release numbers. Phase identifiers are the canonical release reference.
 
 ---
 

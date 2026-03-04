@@ -57,7 +57,7 @@ design_system:
     accent_business: "#7b61ff"
     accent_product: "#00d4ff"
     accent_engineering: "#10b981"
-  d3_version: "7.9.0"
+  d3_library_pin: "7.9.0"  # CDN pin — not a CORTEX version identifier
   d3_cdn: "https://d3js.org/d3.v7.min.js"
 
 # ── DIAGRAM STRATEGY (per role) ────────────────────────────────────────────────

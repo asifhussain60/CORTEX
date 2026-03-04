@@ -120,7 +120,6 @@ class CoreRulesLoader(BaseYAMLLoader):
         # Build meta from metadata
         metadata = raw.get("metadata", {})
         meta = {
-            "version": metadata.get("version", "1.0"),
             "updated": metadata.get("last_update", ""),
             "author": metadata.get("author", ""),
         }

@@ -12,6 +12,8 @@ Features:
 """
 
 import json
+import os
+import platform
 import re
 import subprocess
 import sys
@@ -47,7 +49,8 @@ class DashboardServerTool:
     def __init__(self) -> None:
         """Initialize instance."""
         self.dashboards_dir = Path(__file__).parent.parent.parent / "company" / "dashboards"
-        self.log_file = Path("/tmp/dashboard_server.log")
+        # Use a temp path that is cross-platform (Windows/macOS/Linux)
+        self.log_file = Path(os.environ.get("TEMP", "/tmp")) / "dashboard_server.log"
         self.server_pid: Optional[int] = None
         self.port = 8080
 
@@ -55,38 +58,57 @@ class DashboardServerTool:
         """
         Kill all HTTP processes on specified ports.
 
+        Uses platform-safe commands: netstat/taskkill on Windows, lsof/kill on POSIX.
+
         Args:
-            ports: List of ports to kill processes on (default: [8080, 8888, 8888])
+            ports: List of ports to kill processes on (default: [8080, 8888])
 
         Returns:
             (success: bool, message: str)
         """
         if ports is None:
-            ports = [8080, 8888, 8888]
+            ports = [8080, 8888]
 
         killed_count = 0
         errors = []
+        is_windows = platform.system() == "Windows"
 
         for port in ports:
             try:
-                # Find processes on port
-                result = subprocess.run(
-                    f"lsof -i :{port} | grep -v COMMAND | awk '{{print $2}}' | xargs kill -9 2>/dev/null || true",
-                    shell=True,
-                    capture_output=True,
-                    timeout=5
-                )
-
-                # Count killed (approximate)
-                lsof_result = subprocess.run(
-                    f"lsof -i :{port}",
-                    shell=True,
-                    capture_output=True,
-                    timeout=5
-                )
-
-                if lsof_result.returncode != 0:
-                    killed_count += 1
+                if is_windows:
+                    # Windows: netstat + taskkill (no lsof/kill available)
+                    find_cmd = ["netstat", "-ano"]
+                    result = subprocess.run(
+                        find_cmd, capture_output=True, text=True, timeout=5
+                    )
+                    pids = set()
+                    for line in result.stdout.splitlines():
+                        if f":{port} " in line and "LISTENING" in line:
+                            parts = line.split()
+                            if parts:
+                                pids.add(parts[-1])
+                    for pid in pids:
+                        subprocess.run(
+                            ["taskkill", "/PID", pid, "/F"],
+                            capture_output=True, timeout=5
+                        )
+                    if pids:
+                        killed_count += 1
+                else:
+                    # POSIX (macOS/Linux): use lsof + kill
+                    lsof_result = subprocess.run(
+                        ["lsof", "-ti", f":{port}"],
+                        capture_output=True, text=True, timeout=5
+                    )
+                    pids = lsof_result.stdout.strip().split()
+                    for pid in pids:
+                        if pid.isdigit():
+                            subprocess.run(
+                                ["kill", "-9", pid],
+                                capture_output=True, timeout=5
+                            )
+                    if pids:
+                        killed_count += 1
 
             except subprocess.TimeoutExpired:
                 errors.append(f"Timeout killing port {port}")
@@ -96,13 +118,19 @@ class DashboardServerTool:
         time.sleep(1)  # Let processes terminate
 
         success = len(errors) == 0
-        message = f"✅ Killed processes on {killed_count} ports" if success else f"⚠️ Errors: {', '.join(errors)}"
+        message = (
+            f"✅ Killed processes on {killed_count} ports"
+            if success
+            else f"⚠️ Errors: {', '.join(errors)}"
+        )
 
         return success, message
 
     def start_server(self) -> Tuple[bool, str, int]:
         """
         Start HTTP server on port 8080.
+
+        Uses cross-platform process launching — no preexec_fn or shell=True.
 
         Returns:
             (success: bool, message: str, pid: int)
@@ -115,13 +143,16 @@ class DashboardServerTool:
             # Clear old log
             self.log_file.write_text("")
 
-            # Start server in background
+            # Detect python executable cross-platform
+            python_exe = sys.executable or "python3"
+
+            # Start server in background — no shell=True, no preexec_fn (Windows-safe)
+            log_handle = open(str(self.log_file), "a")
             proc = subprocess.Popen(
-                ["python3", "-m", "http.server", str(self.port)],
+                [python_exe, "-m", "http.server", str(self.port)],
                 cwd=str(self.dashboards_dir),
-                stdout=open(str(self.log_file), "a"),
+                stdout=log_handle,
                 stderr=subprocess.STDOUT,
-                preexec_fn=lambda: None  # Allow process to detach
             )
 
             self.server_pid = proc.pid
@@ -129,14 +160,8 @@ class DashboardServerTool:
             # Wait for startup
             time.sleep(2)
 
-            # Verify it's running
-            ps_result = subprocess.run(
-                f"ps -p {proc.pid} > /dev/null",
-                shell=True,
-                capture_output=True
-            )
-
-            if ps_result.returncode == 0:
+            # Verify it's running (cross-platform: poll())
+            if proc.poll() is None:
                 return True, f"✅ Server started on port {self.port} (PID: {proc.pid})", proc.pid
             else:
                 return False, "❌ Server failed to start", 0

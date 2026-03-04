@@ -12,7 +12,6 @@ mcp_health_check_interval_seconds: 30
 mcp_timeout_seconds: 10
 
 # Version Management
-min_hub_version: "1.0.0"
 
 # Governance Configuration
 governance_enabled: true
@@ -24,7 +23,6 @@ offline_mode_enabled: false
 offline_queue_max_items: 1000
 
 # Feature Flags
-enable_version_negotiation: true
 enable_cross_repo_access: false
 
 # Metadata

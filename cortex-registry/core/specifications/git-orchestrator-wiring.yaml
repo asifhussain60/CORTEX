@@ -9,7 +9,6 @@ description: "Git orchestrators: commit/push/PR, pre-commit enforcement, sanitiz
 
 dependencies:
   - name: core_orchestrators
-    version: ">=1.0.0"
     required: true
     internal: true
 
@@ -84,6 +83,3 @@ provides:
     phase_added: "62-G"
 
 changelog:
-  - version: "1.0.0"
-    date: "2026-02-25"
-    change_summary: "Phase 77-B: Initial git-orchestrator-wiring.yaml — 4 git orchestrators registered (GitOrchestrator, GitPublishOrchestrator, PreCommitEnforcementOrchestrator, SanitizationOrchestrator). Extracted from support-orchestrator-wiring.yaml where they were co-mingled (GAP-77-B-03)."

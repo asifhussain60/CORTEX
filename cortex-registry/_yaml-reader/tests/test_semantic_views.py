@@ -12,8 +12,8 @@ def test_semantic_yaml_reader():
     
     # Paths
     yaml_reader_dir = Path(__file__).parent.parent
-    index_path = yaml_reader_dir / "index.html"
-    cortex_master_path = yaml_reader_dir.parent / "cortex-master.yaml"
+    index_path = yaml_reader_dir.parent / "yaml-reader.html"
+    cortex_master_path = yaml_reader_dir.parent.parent / "cortex-registry" / "cortex-master.yaml"
     screenshots_dir = yaml_reader_dir / "tests" / "screenshots"
     screenshots_dir.mkdir(exist_ok=True)
     

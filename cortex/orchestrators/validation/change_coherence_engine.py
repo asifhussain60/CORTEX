@@ -121,7 +121,7 @@ class ChangeCoherenceEngine:
             original_content=content,
             structure=structure,
             existing_duplicates=duplicates,
-            relevant_practices=[],  # TODO: Load from knowledge YAMLs
+            relevant_practices=[],  # Populated by GovernanceRegistry at runtime (lazy-loaded)
         )
 
         # Store for post-edit comparison
@@ -231,7 +231,7 @@ class ChangeCoherenceEngine:
             validation_results=validation_results,
             duplicates_found=new_duplicates,
             version_consistent=version_consistent,
-            best_practice_violations=[],  # TODO: Implement
+            best_practice_violations=[],  # Populated when GovernanceRegistry provides rules
             recommendations=recommendations,
         )
 

@@ -18,7 +18,7 @@ profile:
     - compliance
 
 compatibility:
-  cortex_min_version: "1.0"
+  cortex_compatibility: "1.0"
   python_versions: ["3.10", "3.11", "3.12", "3.13"]
 
 rules:

@@ -21,13 +21,13 @@ if [ $? -eq 0 ]; then
     echo "✅ ALL TESTS PASSED"
     echo ""
     echo "📋 Next Steps:"
-    echo "  1. Open index.html in browser"
+    echo "  1. Open yaml-reader.html in browser"
     echo "  2. Click 'Open File(s)'"
     echo "  3. Select ../master-index.yaml"
     echo "  4. Verify tree/cards/graph views render correctly"
     echo ""
     echo "Or run:"
-    echo "  open index.html"
+    echo "  open yaml-reader.html"
     exit 0
 else
     echo ""

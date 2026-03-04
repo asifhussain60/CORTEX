@@ -26,7 +26,7 @@ background: |
       WorkflowTemplateRegistry, PatternRegistry — all isolated, none cross-wired
     - IntelligenceFacade (Phase 107): already consolidates LENS + KnowledgeRegistryProxy;
       GovernanceRegistry, WorkflowTemplateRegistry, PatternRegistry NOT yet wired
-    - _workspaces/yaml-reader/: browser-only JS app, zero MCP/Python integration
+    - cortex-registry/_yaml-reader/: browser-only JS app, zero MCP/Python integration
   Git prerequisite: CORTEX branch, phase-122 COMPLETE
   Architecture decision: Extend IntelligenceFacade (CORE-035 compliant) rather than
     create a 5th parallel YAML reader — delegates to existing validated loaders.
@@ -100,11 +100,11 @@ sweep_catalogue:
     status: CLOSED
 
   - id: "GAP-123-07"
-    title: "_workspaces/yaml-reader/ has zero Python/MCP integration — browser-only"
+    title: "cortex-registry/_yaml-reader/ has zero Python/MCP integration — browser-only"
     severity: P2
     source: "_workspaces/recommendations/copilot-review.md audit"
     evidence: |
-      _workspaces/yaml-reader/app.js uses file:// drag-drop with js-yaml.
+      cortex-registry/_yaml-reader/app.js uses file:// drag-drop with js-yaml.
       No fetch() to MCP. No calls to cortex_registry tool. Standalone viewer only.
       Should become a thin visualization client over the MCP backend.
     action_ref: "phase-123-e"
@@ -399,7 +399,7 @@ phases:
       blocks_next_sub_phase: true
 
   - id: "phase-123-e"
-    title: "Wire _workspaces/yaml-reader/ as MCP visualization client"
+    title: "Wire cortex-registry/_yaml-reader/ as MCP visualization client"
     priority: P2
     status: COMPLETE
     gap_refs: ["GAP-123-07"]
@@ -411,16 +411,16 @@ phases:
 
     tdd_cycle:
       red:
-        action: "Write failing Python golden tests in _workspaces/yaml-reader/tests/test_mcp_integration.py"
-        gate: "python3 _workspaces/yaml-reader/tests/test_mcp_integration.py — all assertions FAIL"
+        action: "Write failing Python golden tests in cortex-registry/_yaml-reader/tests/test_mcp_integration.py"
+        gate: "python3 cortex-registry/_yaml-reader/tests/test_mcp_integration.py — all assertions FAIL"
         blocker: "Do NOT modify app.js until tests fail"
       green:
         action: "Add fetchFromMCP(op, params) function to app.js; update model.js SchemaInference to prefer MCP data"
-        gate: "python3 _workspaces/yaml-reader/tests/test_mcp_integration.py — all assertions PASS"
+        gate: "python3 cortex-registry/_yaml-reader/tests/test_mcp_integration.py — all assertions PASS"
         blocker: "Do NOT begin REFACTOR until every test passes"
       refactor:
         action: "Document MCP integration in app.js header comments; ensure fallback to file:// mode when MCP unavailable"
-        gate: "No regression in existing _workspaces/yaml-reader/tests/"
+        gate: "No regression in existing cortex-registry/_yaml-reader/tests/"
         blocker: "Do NOT mark sub-phase COMPLETE until fallback verified"
 
     convergence_gate:
@@ -454,7 +454,7 @@ phases:
       - "MCP_MODE defaults to false — existing file:// workflow 100% preserved"
       - "fetchFromMCP() constructs correct cortex_registry MCP op calls"
       - "model.js SchemaInference.infer() accepts mcpData override parameter"
-      - "All _workspaces/yaml-reader/tests/ pass (no regressions)"
+      - "All cortex-registry/_yaml-reader/tests/ pass (no regressions)"
       - "All tdd_sequence.red tests GREEN"
 
     completion_gate:
@@ -494,7 +494,7 @@ phases:
       - "cortex/intelligence/facade.py has load_governance(), load_workflows(), load_patterns(), load_plans(), registry_index()"
       - "cortex/mcp/tools/cortex_registry_tool.py exists with CortexRegistry tool (5 ops)"
       - "cortex_registry registered in cortex/mcp/mcp_registry.py"
-      - "_workspaces/yaml-reader/app.js has fetchFromMCP() and MCP_MODE flag"
+      - "cortex-registry/_yaml-reader/app.js has fetchFromMCP() and MCP_MODE flag"
       - "phase-123 detail file moved: planned/ → completed/"
       - "cortex-master.yaml entry updated to status: COMPLETE"
       - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"

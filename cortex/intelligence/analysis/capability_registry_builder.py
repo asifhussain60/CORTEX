@@ -574,11 +574,9 @@ class CapabilityRegistryBuilder:
             })
 
         manifest: Dict = {
-            "schema_version": "1.0",
             "auto_generated": True,
             "generated_at": generated_at,
             "generated_by": "cortex.intelligence.capability_registry_builder.CapabilityRegistryBuilder",
-            "manifest_version": "1.0",
             # ── Orchestrators (generated from wiring specs) ──────────
             "orchestrators": {
                 "total": len(orchestrators),

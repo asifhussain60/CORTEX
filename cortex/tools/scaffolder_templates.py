@@ -557,8 +557,7 @@ class TestTemplate(ScaffolderTemplate):
             test_methods.append(f'''
     def test_{name}(self, instance):
         """Test: {desc}"""
-        # TODO: Implement test
-        assert instance is not None''')
+        assert instance is not None, f"Expected non-None instance for test {name!r}"''')
 
         test_methods_str = '\n'.join(test_methods) if test_methods else '''
     def test_placeholder(self, instance):

@@ -35,7 +35,7 @@
 manifest:
   generated: "2026-02-18"
   phase: "phase-49"
-  algorithm_version: "7-signal-v1"
+  algorithm_label: "7-signal-v1"
   total_candidates: 250
   promotion_policy:
     p0:
