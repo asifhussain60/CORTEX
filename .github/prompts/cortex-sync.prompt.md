@@ -2,272 +2,305 @@
 scope: non-production-admin
 prompt_id: cortex-sync
 status: active
-mode: DESIGN
+mode: SYNC
 author: Asif Hussain
-updated: 2026-02-25
+updated: 2026-03-04
+phase: 127
 agent: cortex-sync-agent.md
-orchestrators_used:
-  - GitOrchestrator (cortex/orchestrators/git/git_orchestrator.py)
-  - SanitizationOrchestrator (cortex/orchestrators/git/sanitization_orchestrator.py)
-  - GitPublishOrchestrator (cortex/orchestrators/git/git_publish_orchestrator.py)
+engine: cortex/tools/cortex_sync.py
+workflow: cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml
 mcp_tools:
   - cortex_validate
-  - cortex_governance
-  - cortex_git
-token_cost_estimate: 2800
-production_files:
-  # These files ARE production-core — NEVER excluded from sync targets
-  - ".github/prompts/CORTEX.prompt.md"
-  - ".github/prompts/cortex-architect.prompt.md"
-  - ".github/agents/core/CORTEX.md"
-  - ".github/agents/core/cortex-executor.md"
-  - ".github/agents/core/cortex-architect.md"
-  - ".github/copilot-instructions.md"
+  - cortex_workflow
+token_cost_estimate: 3200
 ---
 
-# CORTEX Sync Prompt
+# 🛠️ CORTEX Architect Sync Prompt — Phase 127 Redesign
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-02-25 | **Authority:** `.github/prompts/cortex-sync.prompt.md`  
-**Agent:** `.github/agents/core/cortex-sync-agent.md`
+**Updated:** 2026-03-04 | **Phase:** 127 | **Authority:** `.github/prompts/cortex-sync.prompt.md`
+**Agent:** `.github/agents/core/cortex-sync-agent.md` | **Engine:** `cortex/tools/cortex_sync.py`
 
 ---
 
 ## 🎯 Purpose
 
-One-way intelligent sync from the **CORTEX** repository (upstream, personal) into a
-**target company folder** (downstream, write-only from CORTEX's perspective). No code
-ever flows back from the company folder into CORTEX.
+One-way **deterministic, safe, Windows-first** sync from the **CORTEX repo root** into a
+user-provided **target path**. No code ever flows back. No file is blindly overwritten.
+The same inputs always produce the same outputs (deterministic). Running twice with no
+upstream changes makes no changes the second time (idempotent). Target-side security
+hardening (Veracode fixes, local patches) is preserved by design (non-destructive).
 
-**Privacy guarantee:** Every file passes through `SanitizationOrchestrator` before
-it crosses the CORTEX → Company boundary. PII, secrets, and proprietary patterns are
-stripped or morphed before copy.
-
-**Merge guarantee:** Files already edited in the company folder are never blindly
-overwritten. A 3-way merge (base = last sync SHA, ours = company edits, theirs = new
-CORTEX version) is performed. Conflicts surface inline in Copilot Chat — you decide.
+**Engine:** `cortex/tools/cortex_sync.py` — a prebuilt, parameterised CLI tool.
+The prompt and agent orchestrate the engine; they never generate ad-hoc scripts.
 
 ---
 
 ## 🔌 Activation
 
-Invoke from Copilot Chat:
-
 ```
-/sync target=<absolute_path_to_company_folder>
+/sync target=<absolute_path_to_target_folder>
 ```
 
 **Examples:**
+
 ```
-/sync target=/Users/asif/work/Cortex.Company
-/sync target=~/projects/company-cortex
-/sync target=/c/dev/CompanyCortex          (Windows WSL)
+/sync target=C:\dev\CompanyCortex                  (Windows)
+/sync target=/Users/asif/work/Cortex.Company       (macOS)
+/sync target=/home/asif/company-cortex             (Linux)
+/sync dry-run target=C:\dev\CompanyCortex          (preview — no writes)
 ```
 
-> The `target` parameter is the only required input. It replaces the `Cortex.Company`
-> placeholder throughout the agent pipeline. The path must be an absolute path to the
-> locally cloned company repository folder.
+The `target` parameter is the only required input. All other parameters use safe defaults.
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
 ```
 User: /sync target=<path>
     ↓
-cortex-sync.prompt.md          ← You are here (session driver)
+cortex-sync.prompt.md          ← Session driver (you are here)
     ↓
-cortex-sync-agent.md           ← 4-gate pipeline executor
+cortex-sync-agent.md           ← 6-stage pipeline orchestrator
     ↓
-  Gate 1: PULL         git pull origin/CORTEX (CORTEX local branch only)
-  Gate 2: DIFF         git diff HEAD@{1}..HEAD --name-only (changed files only)
-  Gate 3: SANITIZE     SanitizationOrchestrator (strip PII/secrets per pattern registry)
-  Gate 4: MERGE        3-way merge (base=last-sync-SHA, ours=company, theirs=CORTEX)
+cortex/tools/cortex_sync.py    ← Prebuilt deterministic engine (single implementation)
     ↓
-<target>/.cortex-sync-state.yaml  ← State file updated per-file with synced commit SHA
-<target>/<file>                   ← Merged output written (conflict-free or surfaced)
+  Stage 1: Scan      — Enumerate eligible files via SSOT allow/deny policy
+  Stage 2: Plan      — Per-file decision: copy/update/merge/conflict/skip/danger
+  Stage 3: Validate  — Security danger scan; block downgrade-risk files
+  Stage 4: Apply     — Write files (dry-run skips this)
+  Stage 5: Verify    — Re-checksum written files; confirm manifest written
+  Stage 6: Report    — Render SYNC Response Template inline in Copilot Chat
+    ↓
+<target>/.cortex-sync/manifest.json    ← Proof artifact (checksums + decision log)
+<target>/.cortex-sync/baselines/       ← Per-file baseline for three-way merge
+<target>/.cortex-sync/patches/         ← Conflict + danger proposals for review
 ```
 
 ---
 
-## 📋 Pre-Flight Requirements
+## 🔒 SSOT Allow/Deny Policy
 
-Before the agent runs Gate 1, the following must be true:
+**Single source of truth:** `cortex/tools/cortex_sync.py::SYNC_POLICY`
+**Mirror (documentation only):** `cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml § policy_mirror`
 
-| Check | Validation | Blocking |
-|-------|-----------|---------|
-| CORTEX workspace open | VS Code workspace = `/PROJECTS/CORTEX` | ✅ P0 |
-| Target path exists | `os.path.isdir(target)` | ✅ P0 |
-| CORTEX branch clean or stashable | `git status --porcelain` | ✅ P0 |
-| No open conflicts in target | No `<<<<<<` markers in target files | ✅ P0 |
-| `SanitizationOrchestrator` importable | `from cortex.orchestrators.git.sanitization_orchestrator import SanitizationOrchestrator` | ✅ P0 |
-| `cortex_validate` MCP tool active | `cortex_verify` op=`mcp` responds | 🟡 P1 warn |
+### Default Action: `allow`
 
----
+All repo root files and directories are synced **unless** explicitly denied below.
 
-## 🔄 Session Flow
+### Explicit Deny Rules (P0 — never synced)
 
-### Step 1 — Session Init
+| Pattern | Reason |
+|---|---|
+| `_workspaces/**` | Private workspaces — architecturally excluded |
+| `cortex-registry/company/repos/**` | Company-private repo artifacts |
+| `cortex-registry/company/dashboards/repos/**` | Company-private dashboard artifacts |
+| `cortex-docs/**` | **Default-deny all of cortex-docs** — sub-paths re-allowed below |
+| `.cortex-runtime/**` | Runtime data — never sync |
+| `.git/**` | Git internals |
+| `**/__pycache__/**`, `**/*.pyc`, `**/*.pyo` | Python bytecode |
+| `.env`, `.env.*` | Secrets |
+| `.vscode/settings.json`, `.vscode/extensions.json` | Personal MCP config |
+| `**/*.db`, `**/*.log` | Runtime artefacts |
+| `**/.DS_Store`, `**/Thumbs.db` | OS artefacts |
+| `.cortex-sync/**` | Sync-tool state — never round-trip |
 
-```
-AC_START: AC-SYNC-{TIMESTAMP}
-Load: .cortex-sync-state.yaml from <target> (or create empty if first run)
-Display: sync state summary (last sync SHA, file count, pending conflicts)
-```
+### Allow Override (re-allows inside denied subtrees)
 
-### Step 2 — Gate Execution (via cortex-sync-agent.md)
+| Pattern | What It Permits |
+|---|---|
+| `cortex-docs/.content/**` | **Only** the `.content/` subdirectory from cortex-docs |
 
-Agent runs 4 gates sequentially. Each gate must PASS before the next opens.
-See `cortex-sync-agent.md` for full gate specifications.
+> ⛔ **Root `index.html` and all other cortex-docs web artifacts are NOT synced.**
+> Only `cortex-docs/.content/**` is eligible.
 
-### Step 3 — Conflict Resolution
+### .github Allowlist (production-critical prompts only)
 
-If Gate 4 produces merge conflicts:
-- Each conflicted file is shown inline with 3-way diff
-- User decides per file: **accept CORTEX version** | **keep Company version** | **manual merge**
-- No file is written until user resolves all conflicts
+Admin prompts and tools under `.github/**` are **excluded by default**.
+Only these paths are eligible:
 
-### Step 4 — State Update + AC_COMPLETE
-
-```
-Write: <target>/.cortex-sync-state.yaml (update per-file SHA map)
-Emit:  AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms
-       Files synced: N | Sanitized: N | Conflicts resolved: N | Skipped: N
-```
-
----
-
-## 🔒 Privacy Boundary Rules
-
-These rules are P0 — enforced by `SanitizationOrchestrator` in Gate 3:
-
-| Category | Patterns Stripped | Replacement |
-|----------|-----------------|-------------|
-| Secrets | API keys, tokens, `.env` values | `<REDACTED>` |
-| PII | Names, emails, internal user IDs | `<ANONYMIZED>` |
-| Proprietary | Internal hostnames, internal service names | `<INTERNAL>` |
-| CORTEX-specific | Personal git config, personal SSH config | Excluded from sync entirely |
-
-**Files excluded from sync unconditionally:**
-```
-.git/
-.cortex-runtime/
-*.log
-*.db
-.env*
-cortex_brain/state/
-.vscode/settings.json    ← personal MCP config — never synced
-```
-
----
-
-## 📁 State File Schema
-
-Location: `<target>/.cortex-sync-state.yaml`  
-Owner: Sync agent writes it; gitignore it in the company repo.
+- `.github/prompts/CORTEX.prompt.md`
+- `.github/prompts/cortex-architect.prompt.md`
+- `.github/agents/core/CORTEX.md`
+- `.github/agents/core/cortex-executor.md`
+- `.github/agents/core/cortex-auditor.md`
+- `.github/agents/core/cortex-interactive.md`
+- `.github/agents/core/cortex-debugger.md`
+- `.github/agents/core/cortex-vacuum.md`
+- `.github/copilot-instructions.md`
 
 ```yaml
-# CORTEX Sync State — DO NOT EDIT MANUALLY
-# Generated by cortex-sync-agent
-cortex_sync_state:
-  last_sync_at: "2026-02-25T14:30:00Z"
-  last_sync_sha: "abc123def456..."
-  cortex_branch: "CORTEX"
-  cortex_remote: "origin"
-  target_path: "/absolute/path/to/company/folder"
-  files:
-    cortex/orchestrators/core/master_orchestrator.py:
-      synced_sha: "abc123..."
-      synced_at: "2026-02-25T14:30:00Z"
-      status: "clean"          # clean | conflict | skipped | excluded
-    cortex/mcp/tools/sync_tool.py:
-      synced_sha: "def456..."
-      synced_at: "2026-02-25T14:30:00Z"
-      status: "clean"
+# production_files: — files that MUST be synced to every target (never excluded)
+production_files:
+  - ".github/prompts/CORTEX.prompt.md"
+  - ".github/prompts/cortex-architect.prompt.md"
+  - ".github/agents/core/CORTEX.md"
+  - ".github/agents/core/cortex-executor.md"
+  - ".github/agents/core/cortex-auditor.md"
+  - ".github/agents/core/cortex-interactive.md"
+  - ".github/copilot-instructions.md"
 ```
 
----
-
-## ⚡ Quick Reference — Common Scenarios
-
-| Scenario | What Happens |
-|----------|-------------|
-| First sync (no state file) | All CORTEX files copied after sanitization; state file created |
-| Routine sync (company unchanged) | Only diff'd files copied; fast path |
-| Company edited a file CORTEX also changed | 3-way merge surfaced inline for human decision |
-| Company edited a file CORTEX did NOT change | File is left untouched — not in diff set |
-| File deleted in CORTEX | Deletion is NOT propagated to company (safe default) |
-| New file added in CORTEX | Copied after sanitization |
-
-> **Deletion safety:** CORTEX deletions are flagged inline but not auto-propagated.
-> You explicitly confirm any deletion to apply in the company folder.
+**Guardrail:** `cortex-sync.prompt.md`, `cortex-sync-agent.md`, total-recall, trainer,
+and all other admin-only prompts/agents are **never synced** — they cannot be used to
+smuggle non-production tools into a downstream runtime.
 
 ---
 
-## 🚦 Command Reference
+## 🔀 Sync Strategy — Three-Way Merge with Tracked Baseline
+
+### Problem
+
+Target teams fix security/compliance issues (e.g., Veracode findings). A naive overwrite
+would reintroduce those fixes. Standard `rsync` has no concept of "local edits vs upstream changes".
+
+### Solution: Three-Way Merge + CORTEX Baseline
+
+For each file, the engine computes:
+
+```
+A = Baseline checksum (last successful sync — stored in .cortex-sync/baselines/)
+B = Current source checksum (upstream CORTEX repo)
+C = Current target checksum (downstream file)
+```
+
+| Scenario | Decision |
+|---|---|
+| B == C | Skip — idempotent, nothing to do |
+| A is missing + C exists | Skip + report — cannot safely merge without baseline |
+| C == A (target unchanged since baseline) | Safe overwrite — target was not locally modified |
+| C ≠ A (target was locally modified) | Three-way merge: base=A, ours=C, theirs=B |
+| Three-way merge clean | Write merged result; update baseline |
+| Three-way merge conflicts | Stage patch proposal in `.cortex-sync/patches/`; do NOT write |
+| Security danger patterns detected in B | Block copy; stage patch proposal; require explicit approval |
+
+### Non-Destructive Guarantees
+
+- ✅ **Never silently clobber** — if target has local edits, merge or skip; never overwrite directly
+- ✅ **Never delete target files** by default — upstream deletions are reported but not applied
+- ✅ **Never propagate security downgrade patterns** — danger scan runs before apply
+- ✅ **Never auto-merge conflicts** — conflicts produce patch proposals, not silent overwrites
+
+---
+
+## 🪟 Windows-First Considerations
+
+The engine handles all of the following automatically:
+
+| Complexity | Handling |
+|---|---|
+| Path separators | All internal logic uses forward-slash; OS paths normalised at boundaries |
+| Long paths (>260 chars) | `\\?\` prefix auto-applied on Windows |
+| Line endings | Text files: CRLF on Windows, LF on macOS/Linux |
+| File locks | OSError on write → decision=SKIP with reason logged |
+| Binary files | Detected via null bytes; line-ending logic skipped |
+| Executable bits | Not propagated (Windows has no POSIX exec bit) |
+| Symlinks | `followlinks=False` — symlinks to directories are not traversed |
+
+---
+
+## 🛡️ Security Danger Scan
+
+Before any file is copied, its source content is scanned for patterns known to trigger
+security scanners. If a match is found:
+
+1. File decision is set to `DANGER` — it is **not** copied
+2. A patch proposal is staged in `<target>/.cortex-sync/patches/<rel_path>.patch`
+3. The SYNC Response Template shows the file in the **Conflicts/Warnings** section
+4. User must explicitly `approve` with evidence before the file is accepted
+
+**Danger patterns (examples):**
+
+- Hardcoded credentials: `password = "..."`, `api_key = "..."`, `bearer <token>`
+- AWS key patterns: `AKIA[0-9A-Z]{16}`
+- Private key headers: `-----BEGIN RSA PRIVATE KEY-----`
+
+---
+
+## 📋 Proof Artifacts
+
+Every sync run (apply mode) produces:
+
+| Artifact | Location | Contents |
+|---|---|---|
+| `manifest.json` | `<target>/.cortex-sync/manifest.json` | All file decisions, checksums, sync metadata |
+| Baseline records | `<repo-root>/.cortex-sync/baselines/` | Per-file baseline checksums for future three-way merge |
+| Patch proposals | `<target>/.cortex-sync/patches/` | Conflict and danger-flagged files staged for review |
+
+---
+
+## 🚦 CLI Reference
+
+```bash
+# Preview — no writes
+python3 -m cortex.tools.cortex_sync --target /path/to/target --dry-run
+
+# Apply with manifest + safe merge
+python3 -m cortex.tools.cortex_sync --target /path/to/target --apply --write-manifest --safe-merge
+
+# Custom deny/allow overrides
+python3 -m cortex.tools.cortex_sync --target /path/to/target --apply \
+    --denylist "cortex/internal/**,scripts/personal/**" \
+    --allowlist "cortex-docs/.content/extra/**"
+
+# Override baseline directory
+python3 -m cortex.tools.cortex_sync --target /path/to/target --apply \
+    --baseline-dir /path/to/baselines
+```
+
+**Exit codes:**
+
+| Code | Meaning |
+|---|---|
+| 0 | Success — no conflicts, no danger |
+| 1 | Invocation error (missing required arg, bad path) |
+| 2 | Sync completed with conflicts or danger-flagged files requiring resolution |
+
+---
+
+## ⚡ Command Reference (Copilot Chat)
 
 | Command | Effect |
-|---------|--------|
-| `/sync target=<path>` | Run full 4-gate sync session |
-| `/sync status target=<path>` | Show state file summary, pending conflicts, last SHA |
-| `/sync dry-run target=<path>` | Run Gates 1–3, show diff + sanitization preview — no writes |
-| `/sync resolve target=<path>` | Resume interrupted sync, show remaining conflicts |
-| `/sync reset-state target=<path>` | ⚠️ Clears state file — next run treats everything as first sync |
+|---|---|
+| `/sync target=<path>` | Full 6-stage sync (interactive — renders plan before apply) |
+| `/sync dry-run target=<path>` | Preview plan only — no files written |
+| `/sync status target=<path>` | Show manifest summary: last sync, file decisions, pending |
+| `/sync resolve target=<path>` | Re-display patch proposals, guide user through conflict resolution |
+| `/sync reset-baseline target=<path>` | ⚠️ Clear baselines — next sync treats everything as new |
 
 ---
 
-## 🔗 Related Components
+## 🔗 Component Map
 
 | Component | Path | Role |
-|-----------|------|------|
-| `SanitizationOrchestrator` | `cortex/orchestrators/git/sanitization_orchestrator.py` | Gate 3 privacy engine |
-| `GitOrchestrator` | `cortex/orchestrators/git/git_orchestrator.py` | Gate 1 pull pipeline |
-| `GitPublishOrchestrator` | `cortex/orchestrators/git/git_publish_orchestrator.py` | Git operations base |
-| `cortex-sync-agent.md` | `.github/agents/core/cortex-sync-agent.md` | Gate spec + merge logic |
-| CORTEX registry pattern | `cortex-registry/core/` | Sanitization pattern registry |
-| `.cortex-runtime/traces/` | `.cortex-runtime/traces/orchestrator-traces.db` | AC marker persistence |
+|---|---|---|
+| Sync engine | `cortex/tools/cortex_sync.py` | Deterministic CLI — all file operations |
+| Sync agent | `.github/agents/core/cortex-sync-agent.md` | 6-stage pipeline orchestrator |
+| Sync workflow | `cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml` | Declarative stage definition |
+| SYNC Response Template | `.github/templates/cortex-response-templates.md § 🔄 SYNC Mode` | Chat rendering |
+| Phase plan | `cortex-registry/planning/phases/planned/phase-127-deterministic-sync-engine.yaml` | Implementation plan |
 
 ---
 
 ## ⛔ What This Is NOT
 
-- ❌ Not a two-way sync — CORTEX ← Company flow is architecturally blocked
+- ❌ Not a two-way sync — CORTEX ← target flow is architecturally blocked
 - ❌ Not a CI/CD pipeline — runs interactively in Copilot Chat on demand
-- ❌ Not a shell script — no terminal automation; human-in-the-loop on conflicts
-- ❌ Not a git submodule — no git history entanglement between repos
-- ❌ Not a fork sync — does not use GitHub's fork/PR mechanism (privacy boundary)
+- ❌ Not a generated script — the engine is prebuilt and versioned, never invented per-session
+- ❌ Not a git submodule or fork sync — no git history entanglement
+- ❌ Not a blind file copy — every file goes through policy + danger scan + merge logic
 
 ---
 
-## 🔒 Prompt Classification — Production vs Administrative
+## ✅ Governance Compliance
 
-During synchronization, the sync agent copies **only production-critical prompts**
-to the target runtime path.  All other prompts and agents are classified as
-**non-production administrative tools** and remain in the source repository for
-maintenance workflows but are **never** copied to the deployed runtime.
-
-### Production Prompts (copied to `<target>`)
-
-| Prompt / Agent | Path |
+| Rule | Status |
 |---|---|
-| `CORTEX.prompt.md` | `.github/prompts/CORTEX.prompt.md` |
-| `cortex-architect.prompt.md` | `.github/prompts/cortex-architect.prompt.md` |
-| Core agents used by Architect | `.github/agents/core/cortex-executor.md`, `cortex-auditor.md`, `cortex-interactive.md`, `cortex-debugger.md`, `cortex-vacuum.md` |
-
-### Administrative Prompts (NOT copied — maintenance-only)
-
-| Prompt / Agent | Reason |
-|---|---|
-| `cortex-sync.prompt.md` | Sync infrastructure — not needed at target |
-| `cortex-total-recall.prompt.md` | Certification pipeline — source-only |
-| `cortex-trainer.prompt.md` | Training pipeline — source-only |
-| `cortex-doc.prompt.md` | Documentation generation — source-only |
-| All agents under `.github/agents/docs/` | Documentation tooling — source-only |
-| All agents under `.github/agents/certification/` | Certification — source-only |
-| All agents under `.github/agents/education/` | Education — source-only |
-| `MCP-SETUP-GUIDE.md`, `MCP-ORCHESTRATOR-MAPPING.md` | Setup references — source-only |
-| `phase-creation-standards.md`, `master-planner.md` | Planning tools — source-only |
-
-**Gate 3 enforcement:** `SanitizationOrchestrator` skips any file path matching the
-administrative prompt patterns above.  This ensures the deployed runtime contains
-only production-critical prompts with zero maintenance overhead.
+| CORE-002 | ✅ All output inline — no .md/.txt report files created |
+| CORE-011 | ✅ Type hints on all engine functions |
+| CORE-012 | ✅ Docstrings on all public APIs |
+| CORE-028 | ✅ snake_case file naming (cortex_sync.py) |
+| CORE-035 | ✅ Single canonical sync implementation — no duplicates |
+| CORE-049 | ✅ Progress bars in Chat; no terminal narration |
+| CORE-064 | ✅ Sync session BLOCKED from AC_COMPLETE while conflicts remain |

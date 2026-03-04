@@ -1,29 +1,75 @@
 # ============================================================================
-# MODE WORKFLOW: SYNC — Privacy-Safe Cross-Repo Sync
+# MODE WORKFLOW: SYNC — Deterministic, Safe, Windows-First Cross-Folder Sync
 # ============================================================================
-# Authority: cortex-sync.prompt.md, cortex-sync-agent.md
-# Trigger: "/sync target={path}", "sync to company folder"
-# Orchestrator: GitOrchestrator + WorkflowOrchestrator
-# Agent: cortex-sync-agent.md
+# Authority : cortex-sync.prompt.md (Phase 127 redesign)
+# Trigger   : "/sync target={path}", "sync to company folder"
+# Engine    : cortex/tools/cortex_sync.py (prebuilt, parameterised CLI)
+# Agent     : .github/agents/core/cortex-sync-agent.md
+# Phase     : 127
 #
-# Replaces: Inline 4-gate pipeline in cortex-sync.prompt.md
+# Pipeline  : Scan → Plan → Validate → Apply → Verify → Report
+# Policy    : SSOT in cortex_sync.py::SYNC_POLICY (mirrored below)
 # ============================================================================
 
 workflow:
   id: 'lifecycle/sync-workflow'
-  name: 'SYNC — Privacy-Safe Cross-Repo Sync'
+  name: 'SYNC — Deterministic Safe Cross-Folder Sync'
   category: 'lifecycle'
   status: 'active'
+  spec_version: '2.0'
 
   metadata:
     author: 'CORTEX Architecture'
-    created: '2026-02-28'
+    created: '2026-03-04'
     modes_served: ['SYNC']
-    trigger_keywords: ['sync', 'sync to company', 'privacy-safe copy', 'push to work repo']
-    orchestrators_used:
-      - GitOrchestrator
-      - WorkflowOrchestrator
-    direction: 'one-way: CORTEX → company folder'
+    trigger_keywords:
+      - 'sync'
+      - 'sync to company'
+      - 'privacy-safe copy'
+      - 'push to work repo'
+    engine: 'cortex/tools/cortex_sync.py'
+    response_template: 'SYNC Response Template (cortex-response-templates.md)'
+    direction: 'one-way: CORTEX repo root → target folder (never reversed)'
+    idempotent: true
+    deterministic: true
+    non_destructive: true
+
+  # ── SSOT ALLOW/DENY POLICY MIRROR (authoritative copy in cortex_sync.py::SYNC_POLICY)
+  policy_mirror:
+    spec_version: '2.0'
+    default_action: 'allow'
+    deny:
+      - '_workspaces/**'
+      - 'cortex-registry/company/repos/**'
+      - 'cortex-registry/company/dashboards/repos/**'
+      - 'cortex-docs/**'
+      - '.cortex-runtime/**'
+      - '.git/**'
+      - '**/__pycache__/**'
+      - '**/*.pyc'
+      - '**/*.pyo'
+      - '**/*.pyd'
+      - '.env'
+      - '.env.*'
+      - '.vscode/settings.json'
+      - '.vscode/extensions.json'
+      - '**/*.db'
+      - '**/*.log'
+      - '**/.DS_Store'
+      - '**/Thumbs.db'
+      - '.cortex-sync/**'
+    allow_override:
+      - 'cortex-docs/.content/**'
+    github_allowlist:
+      - '.github/prompts/CORTEX.prompt.md'
+      - '.github/prompts/cortex-architect.prompt.md'
+      - '.github/agents/core/CORTEX.md'
+      - '.github/agents/core/cortex-executor.md'
+      - '.github/agents/core/cortex-auditor.md'
+      - '.github/agents/core/cortex-interactive.md'
+      - '.github/agents/core/cortex-debugger.md'
+      - '.github/agents/core/cortex-vacuum.md'
+      - '.github/copilot-instructions.md'
 
   steps:
     - id: ac_start
@@ -31,67 +77,68 @@ workflow:
       inputs: { domain: 'SYNC', session_id: '{{session_id}}' }
       step_filter: 'ac_start'
 
-    # Gate 1: PULL — Ensure CORTEX repo is up-to-date
-    - id: gate_pull
-      name: 'Gate 1: PULL — ensure CORTEX is up-to-date'
+    - id: preflight
+      name: 'Pre-flight: validate inputs and environment'
       depends_on: ['ac_start']
-      action: 'command'
-      command: 'git pull origin main --ff-only'
-      on_failure:
-        action: 'abort'
-        message: 'Cannot sync — CORTEX repo has unpulled changes or conflicts'
+      action: 'validate'
+      checks:
+        - { id: repo_root_exists, command: 'python3 -c "import os; assert os.path.isdir(\"{{repo_root}}\")"', on_failure: abort }
+        - { id: target_exists, command: 'python3 -c "import os; assert os.path.isdir(\"{{target_path}}\")"', on_failure: abort }
+        - { id: no_circular_path, command: 'python3 -c "from pathlib import Path; t=Path(\"{{target_path}}\").resolve(); r=Path(\"{{repo_root}}\").resolve(); assert not str(t).startswith(str(r))"', on_failure: abort }
+        - { id: engine_importable, command: 'python3 -c "from cortex.tools.cortex_sync import run_sync, SYNC_POLICY"', on_failure: abort }
 
-    # Gate 2: DIFF — Identify changes to sync
-    - id: gate_diff
-      name: 'Gate 2: DIFF — identify syncable changes'
-      depends_on: ['gate_pull']
-      orchestrator: 'GitOrchestrator'
-      action: 'diff_analysis'
-      params:
-        source: '{{workspace_root}}'
-        target: '{{target_path}}'
-        exclude_patterns:
-          - '.cortex-runtime/**'
-          - '.github/prompts/**'
-          - '.github/agents/**'
-          - 'cortex-registry/**'
-          - '_workspaces/**'
-          - '*.db'
-          - '*.log'
-      outputs: ['diff_manifest', 'file_list']
+    - id: stage_scan
+      name: 'Stage 1 — Scan: enumerate eligible files'
+      depends_on: ['preflight']
+      action: 'invoke_engine'
+      command: 'python3 -m cortex.tools.cortex_sync --repo-root "{{repo_root}}" --target "{{target_path}}" --dry-run --write-manifest --baseline-dir "{{baseline_dir}}"'
+      outputs: [files_scanned, files_planned]
 
-    # Gate 3: SANITIZE — Strip CORTEX-internal metadata
-    - id: gate_sanitize
-      name: 'Gate 3: SANITIZE — strip internal metadata'
-      depends_on: ['gate_diff']
-      orchestrator: 'WorkflowOrchestrator'
-      action: 'sanitize'
-      params:
-        file_list: '{{gate_diff.file_list}}'
-        strip_patterns:
-          - 'AC_START: AC-*'
-          - 'AC_COMPLETE: AC-*'
-          - 'CORTEX_DEBUG_*'
-          - '# Phase \\d+ —'
-          - 'sweep_id: SWEEP-*'
-      outputs: ['sanitized_files']
+    - id: stage_plan
+      name: 'Stage 2 — Plan: display decision log'
+      depends_on: ['stage_scan']
+      action: 'display'
+      display:
+        format: 'sync_plan_table'
+        fields: ['relative_path', 'decision', 'reason']
 
-    # Gate 4: MERGE — Copy to target
-    - id: gate_merge
-      name: 'Gate 4: MERGE — copy sanitized files to target'
-      depends_on: ['gate_sanitize']
+    - id: stage_validate
+      name: 'Stage 3 — Validate: security danger scan'
+      depends_on: ['stage_plan']
+      action: 'validate'
+      checks:
+        - { id: policy_version, command: 'python3 -c "from cortex.tools.cortex_sync import SYNC_POLICY; assert SYNC_POLICY[\"version\"]==\"2.0\""', on_failure: abort }
+
+    - id: user_approval
+      name: 'User approval gate'
+      depends_on: ['stage_validate']
       action: 'user_approval'
       display:
-        summary: 'Syncing {{gate_diff.file_list|length}} files to {{target_path}}'
-        files: '{{gate_diff.file_list}}'
-      on_approval:
-        action: 'file_copy'
-        source_files: '{{gate_sanitize.sanitized_files}}'
-        target_base: '{{target_path}}'
-        preserve_structure: true
+        prompt: 'Type `proceed` to apply, or `cancel` to abort.'
+      skip_if: '{{auto_approve}} == true'
+
+    - id: stage_apply
+      name: 'Stage 4 — Apply: write files to target'
+      depends_on: ['user_approval']
+      action: 'invoke_engine'
+      command: 'python3 -m cortex.tools.cortex_sync --repo-root "{{repo_root}}" --target "{{target_path}}" --apply --write-manifest --baseline-dir "{{baseline_dir}}" --safe-merge'
+      outputs: [files_copied, files_updated, files_merged, files_skipped, files_conflicted, files_danger, manifest_path]
+
+    - id: stage_verify
+      name: 'Stage 5 — Verify: re-checksum and manifest check'
+      depends_on: ['stage_apply']
+      action: 'validate'
+      checks:
+        - { id: manifest_written, command: 'python3 -c "import os; assert os.path.exists(\"{{target_path}}/.cortex-sync/manifest.json\")"', on_failure: warn }
+
+    - id: stage_report
+      name: 'Stage 6 — Report: render Sync Response Template'
+      depends_on: ['stage_verify']
+      action: 'render_template'
+      template: 'SYNC Response Template'
 
     - id: ac_complete
-      depends_on: ['gate_merge']
+      depends_on: ['stage_report']
       template_ref: 'primitives/execution/ac-marker-emit'
       inputs: { domain: 'SYNC', session_id: '{{session_id}}' }
       step_filter: 'ac_complete_success'

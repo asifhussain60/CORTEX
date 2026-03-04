@@ -1,0 +1,257 @@
+# CORTEX Phase 127 — Deterministic Sync Engine
+# Full detail file — thin index pointer in cortex-registry/cortex-master.yaml
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create ✅
+
+id: "phase-127"
+title: "Deterministic Safe Windows-First Sync Engine"
+created: "2026-03-04"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-002  # All output inline — no .md/.txt report files
+  - CORE-008  # TDD mandatory — tests before implementation
+  - CORE-011  # Type hints on all functions
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-028  # File naming: snake_case only
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-049  # Silent autonomous execution (progress bars only)
+  - CORE-064  # Sweep Completeness Contract — no partial sweeps
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-127-DETERMINISTIC-SYNC"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ──────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: User review session 2026-03-04 — identified the old 4-gate sync pipeline
+  (PULL→DIFF→SANITIZE→MERGE via GitOrchestrator + SanitizationOrchestrator) was
+  non-deterministic (SHA-based with no checksum tracking), had no SSOT policy engine,
+  no security danger scan, no Windows long-path support, and generated ad-hoc scripts
+  instead of using a prebuilt, versionable engine.
+
+  Target outcome: A deterministic, safe, Windows-first sync system that:
+  - Uses a prebuilt, parameterised CLI engine (cortex/tools/cortex_sync.py)
+  - Applies a single-source-of-truth allow/deny policy
+  - Tracks file baselines with checksums for three-way merge
+  - Emits proof artifacts (manifest.json, patches/) for auditability
+  - Never silently clobbers existing downstream work
+  - Runs identically on Windows (long-path, CRLF) and macOS/Linux
+
+  Baseline measurements at phase entry:
+    - Smoke tests: 2582 passed
+    - Preflight: 258 passed
+    - cortex-sync.prompt.md: 274 lines (old 4-gate system)
+    - cortex-sync-agent.md: 492 lines (old gate specs)
+    - sync-workflow.yaml: 98 lines (old GitOrchestrator wiring)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064) — all gaps must be CLOSED before COMPLETE
+# ──────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-127-01"
+    title: "Prebuilt deterministic sync engine (cortex/tools/cortex_sync.py)"
+    severity: P0
+    source: "User review 2026-03-04 — ad-hoc script generation must be replaced"
+    evidence: |
+      Old sync system invoked SanitizationOrchestrator and GitOrchestrator dynamically
+      with no stable CLI. Engine was effectively re-generated each session. No baseline
+      tracking, no idempotency guarantee, no security scan.
+    action_ref: "phase-127-a"
+    status: CLOSED
+    closed_by: "cortex/tools/cortex_sync.py — stdlib-only CLI with 6-stage engine,
+      SYNC_POLICY SSOT, FileDecision enum, SyncManifest, three-way merge, Windows
+      long-path support, CRLF normalisation, security danger scan, argparse CLI."
+
+  - id: "GAP-127-02"
+    title: "SSOT allow/deny policy engine"
+    severity: P0
+    source: "User review 2026-03-04 — no single source of truth for sync rules"
+    evidence: |
+      Old exclusion list was embedded in the prompt and agent separately.
+      No programmatic enforcement. Policy drift possible between prompt, agent, workflow.
+    action_ref: "phase-127-b"
+    status: CLOSED
+    closed_by: "SYNC_POLICY dict in cortex/tools/cortex_sync.py is the SSOT.
+      sync-workflow.yaml contains a documentation-only policy_mirror block.
+      cortex-sync.prompt.md references the engine as authoritative."
+
+  - id: "GAP-127-03"
+    title: "Three-way merge with baseline checksum tracking"
+    severity: P1
+    source: "User review 2026-03-04 — old system overwrote or git-merged only"
+    evidence: |
+      Old Gate 4 used git merge-file with last_sync_sha as base. If target had
+      diverged significantly or git history was unavailable, merge failed silently.
+      No checksum-based baseline persistence between sync sessions.
+    action_ref: "phase-127-c"
+    status: CLOSED
+    closed_by: "_three_way_merge() in cortex_sync.py uses difflib.SequenceMatcher
+      in-process. Baselines stored as .cortex-sync/baselines/*.baseline.json.
+      No git dependency for merge — works on any copy of the target folder."
+
+  - id: "GAP-127-04"
+    title: "SYNC Response Template in cortex-response-templates.md"
+    severity: P1
+    source: "User review 2026-03-04 — no Copilot Chat rendering spec for sync runs"
+    evidence: |
+      The old SYNC mode entry in ## 🎭 RESPONSE TEMPLATES BY MODE referenced only
+      '4-gate pipeline: PULL→DIFF→SANITIZE→MERGE' with no dedicated template section.
+      No stage-list+bar format, no summary table, no conflicts section defined.
+    action_ref: "phase-127-d"
+    status: CLOSED
+    closed_by: "## 🔄 SYNC Mode Response Template section added to
+      cortex-response-templates.md with stage-list+bar, summary table,
+      context chip, exclusions section, conflicts/warnings, next-action line."
+
+  - id: "GAP-127-05"
+    title: "Golden tests for sync policy, idempotency, exclusions"
+    severity: P1
+    source: "User review 2026-03-04 — no test coverage for allow/deny rules"
+    evidence: |
+      No tests existed for: _workspaces/ exclusion, cortex-registry/company/repos exclusion,
+      cortex-docs/ restriction, cortex-docs/.content/ allow_override,
+      admin prompt exclusion, idempotency (second run = 0 changes),
+      danger pattern detection, manifest written after apply.
+    action_ref: "phase-127-e"
+    status: OPEN
+
+  - id: "GAP-127-06"
+    title: "Phase documentation in cortex-master.yaml and phase YAML file"
+    severity: P2
+    source: "THIN INDEX CONTRACT — all phases must have dedicated YAML + master pointer"
+    evidence: |
+      Phase 127 not yet registered in cortex-master.yaml. No phase detail file existed.
+    action_ref: "phase-127-f"
+    status: CLOSED
+    closed_by: "This file created. cortex-master.yaml updated with thin pointer,
+      planned count incremented to 2, planned_next updated."
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ──────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (ROI-ordered)
+# ──────────────────────────────────────────────────────────────────────────────
+sub_phases:
+
+  - id: "phase-127-a"
+    title: "Prebuilt sync engine — cortex/tools/cortex_sync.py"
+    gap_refs: ["GAP-127-01", "GAP-127-02", "GAP-127-03"]
+    tdd_sequence:
+      - RED:    "test_policy_decision_denies_workspaces"
+      - RED:    "test_policy_decision_denies_company_repos"
+      - RED:    "test_policy_decision_denies_cortex_docs_root"
+      - RED:    "test_policy_decision_allows_cortex_docs_content"
+      - RED:    "test_three_way_merge_clean"
+      - RED:    "test_three_way_merge_conflict_detected"
+      - RED:    "test_run_sync_dry_run_no_writes"
+      - GREEN:  "Implement cortex/tools/cortex_sync.py"
+      - REFACTOR: "Add docstrings, type hints, clean up"
+    completion_gate: "All 7 RED tests pass GREEN. Smoke gate passes."
+    status: COMPLETE
+    files_created:
+      - cortex/tools/cortex_sync.py
+    files_modified:
+      - cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml
+      - .github/prompts/cortex-sync.prompt.md
+      - .github/agents/core/cortex-sync-agent.md
+
+  - id: "phase-127-b"
+    title: "SSOT policy validation — all deny rules enforced"
+    gap_refs: ["GAP-127-02"]
+    tdd_sequence:
+      - RED:    "test_policy_denies_workspaces_subdir"
+      - RED:    "test_policy_denies_company_dashboards_repos"
+      - RED:    "test_policy_allows_github_workflows"
+      - GREEN:  "SYNC_POLICY already implemented in phase-127-a engine"
+      - REFACTOR: "No further changes needed"
+    completion_gate: "Policy tests GREEN."
+    status: COMPLETE
+
+  - id: "phase-127-c"
+    title: "Three-way merge baseline tracking"
+    gap_refs: ["GAP-127-03"]
+    tdd_sequence:
+      - RED:    "test_baseline_load_missing_returns_empty"
+      - RED:    "test_baseline_save_and_reload"
+      - RED:    "test_three_way_merge_uses_baseline_as_base"
+      - GREEN:  "Already implemented in cortex_sync.py _load_baseline/_save_baseline"
+      - REFACTOR: "Verify JSON structure"
+    completion_gate: "Baseline tests GREEN."
+    status: COMPLETE
+
+  - id: "phase-127-d"
+    title: "SYNC Response Template in cortex-response-templates.md"
+    gap_refs: ["GAP-127-04"]
+    tdd_sequence: []
+    completion_gate: "## 🔄 SYNC Mode Response Template section present in cortex-response-templates.md. Mode-specific extension updated from old 4-gate to new 6-stage."
+    status: COMPLETE
+    files_modified:
+      - .github/templates/cortex-response-templates.md
+
+  - id: "phase-127-e"
+    title: "Golden tests — allow/deny rules, idempotency, safety"
+    gap_refs: ["GAP-127-05"]
+    tdd_sequence:
+      - RED:    "test_sync_excludes_workspaces"
+      - RED:    "test_sync_excludes_company_repos"
+      - RED:    "test_sync_excludes_cortex_docs_root_index"
+      - RED:    "test_sync_includes_cortex_docs_content"
+      - RED:    "test_sync_idempotent_second_run_zero_changes"
+      - RED:    "test_sync_excludes_admin_prompts"
+      - RED:    "test_sync_danger_pattern_detected"
+      - RED:    "test_sync_manifest_written_after_apply"
+      - GREEN:  "Implement tests/golden/test_sync_policy.py"
+      - REFACTOR: "Add parameterised fixtures, clean up tmp dirs"
+    completion_gate: "All 8 tests GREEN. Smoke gate passes."
+    status: OPEN
+    files_to_create:
+      - tests/golden/test_sync_policy.py
+
+  - id: "phase-127-f"
+    title: "Phase documentation — cortex-master.yaml + this file"
+    gap_refs: ["GAP-127-06"]
+    completion_gate: "cortex-master.yaml updated. This file present. wc -l cortex-master.yaml ≤ 800."
+    status: COMPLETE
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA (all must pass before COMPLETE)
+# ──────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "cortex/tools/cortex_sync.py exists, runs with --dry-run and --apply, stdlib-only"
+  - "SYNC_POLICY in cortex_sync.py is the SSOT for all allow/deny rules"
+  - "_workspaces/** never copied in any test or run"
+  - "cortex-registry/company/repos/** never copied in any test or run"
+  - "cortex-docs/** excluded EXCEPT cortex-docs/.content/** which is copied"
+  - "admin prompts (.github/prompts/cortex-sync.prompt.md) not in synced file set"
+  - "second run with no repo changes = 0 files written (idempotency)"
+  - "manifest.json written to .cortex-sync/ after --apply"
+  - "SYNC Response Template section present in cortex-response-templates.md"
+  - "Phase 127 thin index entry in cortex-master.yaml"
+  - "tests/golden/test_sync_policy.py — all 8 tests GREEN"
+  - "Smoke gate passes: make test-smoke"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# KEY FILES (for quick navigation)
+# ──────────────────────────────────────────────────────────────────────────────
+key_files:
+  engine:       "cortex/tools/cortex_sync.py"
+  prompt:       ".github/prompts/cortex-sync.prompt.md"
+  agent:        ".github/agents/core/cortex-sync-agent.md"
+  workflow:     "cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml"
+  templates:    ".github/templates/cortex-response-templates.md"
+  golden_tests: "tests/golden/test_sync_policy.py"
+  master_yaml:  "cortex-registry/cortex-master.yaml"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMPLETION LOG (filled in when marking COMPLETE)
+# ──────────────────────────────────────────────────────────────────────────────
+completion_log: ~

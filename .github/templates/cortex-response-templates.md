@@ -2471,7 +2471,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **DEBUG** | `🐛 CORTEX DEBUG` | Summary + Analysis (8 strategies, stack detection) + Error Recovery | Full |
 | **HEALTH** | `🩺 CORTEX HEALTH` | Summary + Analysis (orchestrator status table, 22 endpoints) | Concise |
 | **VACUUM** | `🧹 CORTEX VACUUM` | Summary + Analysis (files archived/deleted, root clutter) | Concise |
-| **SYNC** | `🔄 CORTEX SYNC` | Summary + Analysis (4-gate pipeline: PULL→DIFF→SANITIZE→MERGE) | Medium |
+| **SYNC** | `🔄 CORTEX SYNC` | Summary + Analysis (6-stage engine: SCAN→PLAN→VALIDATE→APPLY→VERIFY→REPORT) | Medium |
 | **TRAIN** | `🎓 CORTEX TRAIN` | Summary + Analysis + Recommendation (template evolution proposals) | Full |
 | **TOTALRECALL** | `🔁 CORTEX TOTALRECALL` | All 5 sections (10-phase pipeline: DELTA→DRIFT→REGRESSION→OPTIMIZE→WIRE→MEMORY→VACUUM→SQLITE→HARDEN→CERTIFY) | Full |
 | **RCA** | `🧠 CORTEX RCA` | Summary + Analysis (methodology, cause chain, prevention rule) + Recommendation | Full |
@@ -2508,7 +2508,11 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 - `### Cleanup Manifest` — files archived | files deleted | root clutter removed | .md sprawl reduced
 
 **SYNC mode** — add under Analysis:
-- `### Gate Results` — PULL ✅ | DIFF ✅ | SANITIZE ✅ | MERGE ✅ (or ❌ with reason per gate)
+- `### Stage Results` — 6-stage pipeline status: SCAN ✅ | PLAN ✅ | VALIDATE ✅ | APPLY ✅ | VERIFY ✅ | REPORT ✅ (or ❌ with reason per stage)
+- `### File Summary` — table: planned | copied | updated | merged | skipped | conflicts | excluded
+- `### Exclusions Applied` — deny rules fired: `_workspaces/`, `cortex-registry/company/repos/**`, `cortex-docs/**` (not `.content/`)
+- `### Conflicts / Warnings` — per-file: path | decision | reason | resolution (use [A]/[K]/[M] keys)
+- `### Proof Artifacts` — manifest path, baseline dir, patch dir (if any patches generated)
 
 **TRAIN mode** — add under Recommendation:
 - `### Template Evolution Proposals` — numbered list of template changes with gap→solution→effort
@@ -3071,7 +3075,105 @@ Before sending any response, verify:
 
 ---
 
-## 🔬 Analysis Template
+## � SYNC Mode Response Template
+
+> **Canonical ID:** `BLOCK-SYNC-RESPONSE` — Phase 127 deterministic sync engine
+> **Engine:** `cortex/tools/cortex_sync.py` | **Workflow:** `sync-workflow.yaml`
+> **Renders when:** `/sync target=<path>` · `/sync dry-run target=<path>` · `/sync status target=<path>`
+
+### Context Chip (always first line of response body)
+
+```
+🔄 SYNC  OS={Windows|macOS|Linux}  Target={absolute/path/to/company}  Mode={dry-run|apply}
+```
+
+### Stage Progress (phase-list+bar format — CORE-049 mandatory)
+
+```
+Stages
+  - ✅ Stage 1: SCAN    — {N} files walked, {N} policy-allowed
+  - ✅ Stage 2: PLAN    — {N} copy, {N} update, {N} skip, {N} conflict, {N} danger
+  - ✅ Stage 3: VALIDATE — all paths safe, no traversal, no locked files
+  - ⏳ Stage 4: APPLY   — writing {N} files…
+  - ⬜ Stage 5: VERIFY  — checksum post-write
+  - ⬜ Stage 6: REPORT  — manifest + baseline saved
+
+[████████░░░░░░░░░░░░] 40% — Applying changes
+```
+
+Use `✅` (done) · `⏳` (active) · `❌` (failed) · `⬜` (pending). Bar updates per stage.
+
+### Summary Table (always rendered after APPLY or dry-run)
+
+| Metric | Count |
+|--------|-------|
+| Files scanned | N |
+| Files planned (allowed) | N |
+| Files copied (new) | N |
+| Files updated (changed) | N |
+| Files merged (3-way) | N |
+| Files skipped (unchanged) | N |
+| Conflicts (pending) | N |
+| Danger patterns flagged | N |
+| Files excluded (policy) | N |
+
+### Exclusions Applied
+
+List each deny rule fired:
+```
+Excluded by policy:
+  _workspaces/**                              — N files
+  cortex-registry/company/repos/**            — N files
+  cortex-registry/company/dashboards/repos/** — N files
+  cortex-docs/** (except .content/)           — N files
+  .github/prompts/** (admin prompts)          — N files
+```
+
+### Conflicts / Warnings (render only if conflicts > 0 or danger > 0)
+
+```
+⚠️ CONFLICTS — {N} file(s) require resolution
+
+  cortex/orchestrators/core/master_orchestrator.py
+  Decision: CONFLICT  Reason: target diverged from baseline
+  Resolution: [A] Accept CORTEX  [K] Keep target  [M] Merge manually
+
+⚠️ DANGER — {N} file(s) flagged (not written)
+  <path>  Pattern: AWS_SECRET_ACCESS_KEY
+  Patch saved: .cortex-sync/patches/<path>.patch
+```
+
+### Proof Artifacts
+
+```
+✅ Manifest:  <target>/.cortex-sync/manifest.json
+✅ Baselines: <target>/.cortex-sync/baselines/
+✅ Patches:   <target>/.cortex-sync/patches/   (N patch files)
+```
+
+### Next Action Line (always last line)
+
+```
+# dry-run: no files written — review plan above then:
+/sync target=<path>
+
+# apply complete:
+✅ Sync complete — {N} files written, {N} merged, {N} skipped, {N} conflicts pending
+```
+
+### Anti-Pattern Rules (CORE-049 + Copilot Chat rendering)
+
+- ✅ Use bullet lists (`-`) for stage items — tree chars (`├─ └─`) collapse in Chat
+- ✅ Max 5 columns in Summary Table — wider tables wrap badly in Chat
+- ✅ Bar format: `[████░░░░░░] N%` — never percentage-only without bar
+- ✅ Conflicts section: only rendered if conflicts > 0
+- ✅ Proof Artifacts: always rendered after --apply, never during --dry-run
+- ❌ Never render inline file content in Chat — use patch path reference only
+- ❌ Never create `.md`/`.txt` report files (CORE-002) — all output inline
+
+---
+
+## �🔬 Analysis Template
 
 > **Canonical ID:** `BLOCK-ANALYSIS` — referenced by SDLCWorkflowOrchestrator and YAML registry
 

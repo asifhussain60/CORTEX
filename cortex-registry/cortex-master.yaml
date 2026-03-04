@@ -20,7 +20,7 @@ metadata:
   active: 0
   completed: 104
   in_progress: 0
-  planned: 1
+  planned: 2
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -32,12 +32,13 @@ metadata:
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed: "phase-126 (Production Hardening Checklist Engine — COMPLETE: 12 GAPs CLOSED, 41 checks, 12 drift locks), phase-125 (Registry-Aware Documentation Viewer), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
-  planned_next: "phase-127 — TBD"
+  planned_next: "phase-127 — Deterministic Sync Engine (prebuilt cortex_sync.py, SSOT policy, three-way merge, SYNC Response Template, golden tests)"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-127, status: PLANNED, priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/planned/phase-127-deterministic-sync-engine.yaml", note: "Deterministic safe Windows-first sync engine: prebuilt cortex/tools/cortex_sync.py, SSOT allow/deny policy, three-way merge with baseline tracking, SYNC Response Template in cortex-response-templates.md, golden tests." }
   - { id: phase-126, status: COMPLETE, completed_date: "2026-03-04", priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (#30-#41), 12 drift locks, all 12 GAPs CLOSED." }
   - { id: phase-125, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml" }
   - { id: phase-124, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-124-principle-block-library.yaml" }

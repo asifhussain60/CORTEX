@@ -3,58 +3,352 @@ scope: non-production-admin
 agent_id: cortex-sync-agent
 status: active
 layer: core
+phase: 127
 modes_served:
-  - DESIGN
-  - INVESTIGATE
+  - SYNC
 capabilities:
-  - pull_upstream
-  - diff_extraction
-  - privacy_sanitization
-  - intelligent_three_way_merge
+  - deterministic_sync
+  - allow_deny_policy
+  - three_way_merge
+  - security_danger_scan
+  - baseline_tracking
   - conflict_surface
-  - state_tracking
-  - sync_dry_run
-  - sync_status_report
-orchestrators_used:
-  - GitOrchestrator
-  - SanitizationOrchestrator
-  - GitPublishOrchestrator
-mcp_tools:
-  - cortex_validate
-  - cortex_governance
-  - cortex_git
+  - patch_proposals
+  - proof_manifest
+  - windows_path_safety
+engine: cortex/tools/cortex_sync.py
+workflow: cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml
+response_template: "cortex-response-templates.md § 🔄 SYNC Mode"
 priority: P0
 token_cost_estimate: 3200
-created_date: "2026-02-25"
-last_updated: "2026-02-25"
+created_date: "2026-03-04"
+last_updated: "2026-03-04"
 maintainer: "Asif Hussain"
 ---
 
-# CORTEX Sync Agent
+# CORTEX Sync Agent — Phase 127
 
-**Author:** Asif Hussain | **Orchestrator:** SyncSessionOrchestrator ✅  
-**Updated:** 2026-02-25 | **Authority:** `.github/agents/core/cortex-sync-agent.md`  
+**Author:** Asif Hussain | **Phase:** 127
+**Updated:** 2026-03-04 | **Authority:** `.github/agents/core/cortex-sync-agent.md`
 **Prompt:** `.github/prompts/cortex-sync.prompt.md`
+**Engine:** `cortex/tools/cortex_sync.py`
 
 ---
 
 ## Purpose
 
-Executes the 4-gate one-way sync pipeline from the CORTEX repository into a target
-company folder. No code flows back. Privacy-safe (Gate 3 sanitization). Merge-safe
-(Gate 4 three-way merge). Human-in-the-loop on all conflicts.
+Orchestrates the 6-stage deterministic sync pipeline from the CORTEX repo root into
+a user-provided target folder. Delegates all file operations to the prebuilt
+`cortex_sync.py` engine. Never generates ad-hoc scripts. Never invents logic
+that is already in the engine.
 
-**Activation trigger:** User invokes `/sync target=<path>` in Copilot Chat.
+**Activation trigger:** `/sync target=<path>` in Copilot Chat.
 
 ---
 
-## Pre-Flight Gate (P0 — runs before Gate 1)
+## Pre-Flight Gate (P0 — runs before Stage 1)
 
 ```
 AC_START: AC-SYNC-{TIMESTAMP}
 ```
 
-Execute these checks in order. Any P0 failure halts with inline error — no gates execute.
+| # | Check | On Failure |
+|---|-------|-----------|
+| 1 | CORTEX repo root exists and contains `cortex/` | ❌ Abort with error |
+| 2 | Target path is an existing directory | ❌ Abort with error |
+| 3 | Target is NOT inside CORTEX repo root | ❌ Abort — circular path |
+| 4 | `cortex.tools.cortex_sync` importable | ❌ Abort — check environment |
+| 5 | Platform detected (Windows/macOS/Linux) | 🟡 Warn if unknown |
+
+Pre-flight display (on pass):
+
+```
+✅ Pre-flight passed
+   Repo root   : {repo_root}
+   Target      : {target_path}
+   Platform    : {Windows | macOS | Linux}
+   Baseline dir: {baseline_dir}
+   Manifest    : {target}/.cortex-sync/manifest.json [exists | first-run]
+```
+
+---
+
+## Stage 1 — Scan
+
+**Command:**
+
+```bash
+python3 -m cortex.tools.cortex_sync \
+    --repo-root "{repo_root}" \
+    --target "{target_path}" \
+    --dry-run \
+    --baseline-dir "{baseline_dir}"
+```
+
+**Output:**
+
+```
+✅ Stage 1: Scan complete
+   Files scanned : {N}
+   Files eligible: {N}
+   Excluded      : {N} (matched deny rules)
+```
+
+---
+
+## Stage 2 — Plan
+
+Display decision table inline in Copilot Chat:
+
+```
+📋 Sync Plan — {N} files
+┌─────────────────────────────────┬──────────┬──────────────────────────────────────┐
+│ File                            │ Decision │ Reason                               │
+├─────────────────────────────────┼──────────┼──────────────────────────────────────┤
+│ cortex/core/master.py           │ update   │ target unchanged from baseline        │
+│ cortex/mcp/tools/new_tool.py    │ copy     │ net-new file                         │
+│ cortex/intelligence/provider.py │ merged   │ three-way merge clean                 │
+│ .github/prompts/CORTEX.prompt.md│ update   │ target unchanged from baseline        │
+│ cortex-docs/.content/guide.md   │ copy     │ net-new file                         │
+│ cortex-docs/index.html          │ excluded │ denied by policy pattern              │
+│ _workspaces/old_project/        │ excluded │ denied by policy pattern              │
+└─────────────────────────────────┴──────────┴──────────────────────────────────────┘
+
+Conflicts  : {N} — patch proposals ready in {target}/.cortex-sync/patches/
+Danger     : {N} — security scan flagged; staged for review
+```
+
+If `files_planned == 0`:
+
+```
+✅ Stage 2: Nothing to sync — all files are idempotent (no changes detected)
+AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms — 0 files synced
+```
+
+Session ends cleanly.
+
+---
+
+## Stage 3 — Validate
+
+Run security danger pattern check and policy version audit:
+
+```bash
+python3 -c "from cortex.tools.cortex_sync import SYNC_POLICY; assert SYNC_POLICY['version']=='2.0'"
+```
+
+If danger-flagged files exist, display **before** proceeding to user approval:
+
+```
+🔴 Security/Compliance Downgrade Risk Detected
+
+The following files were blocked because their source content matches known
+security scanner trigger patterns:
+
+  {rel_path_1} — matched: {pattern_description}
+  {rel_path_2} — matched: {pattern_description}
+
+These files will NOT be copied. Patch proposals are staged in:
+  {target}/.cortex-sync/patches/
+
+To approve a specific file after reviewing the patch:
+  /sync approve-danger file={rel_path} --evidence="<your_justification>"
+```
+
+---
+
+## User Approval Gate
+
+Display before apply:
+
+```
+🔄 Ready to sync {N} files to {target}
+
+  Files to copy     : {N}
+  Files to update   : {N}
+  Files to merge    : {N}
+  Files to skip     : {N}
+  Conflicts pending : {N}
+  Danger-staged     : {N}
+
+Type `proceed` to apply, or `cancel` to abort.
+```
+
+---
+
+## Stage 4 — Apply
+
+**Command:**
+
+```bash
+python3 -m cortex.tools.cortex_sync \
+    --repo-root "{repo_root}" \
+    --target "{target_path}" \
+    --apply \
+    --write-manifest \
+    --baseline-dir "{baseline_dir}" \
+    --safe-merge
+```
+
+Progress display (phase-list+bar format — CORE-049):
+
+```
+- ✅ Stage 1: Scan — {N} files eligible
+- ✅ Stage 2: Plan — {N} planned ({N} copy, {N} update, {N} merge)
+- ✅ Stage 3: Validate — {N} danger-flagged (staged for review)
+- 🔵 Stage 4: Apply — writing {N} files to target...
+- ⚪ Stage 5: Verify
+- ⚪ Stage 6: Report
+```
+
+**Output:**
+
+```
+✅ Stage 4: Apply complete
+   Copied    : {N}
+   Updated   : {N}
+   Merged    : {N}
+   Skipped   : {N}
+   Conflicts : {N}
+   Danger    : {N}
+```
+
+---
+
+## Stage 5 — Verify
+
+1. Confirm `{target}/.cortex-sync/manifest.json` exists
+2. Spot-check 5 random written files: re-checksum and compare to manifest
+3. Report any verification failures inline
+
+```
+✅ Stage 5: Verify complete
+   Manifest        : ✅ {target}/.cortex-sync/manifest.json
+   Spot-check      : ✅ 5/5 files verified
+   Pending patches : {N} in {target}/.cortex-sync/patches/
+```
+
+---
+
+## Stage 6 — Report
+
+Render the **SYNC Response Template** inline in Copilot Chat.
+See `cortex-response-templates.md § 🔄 SYNC Mode` for the canonical template.
+
+```
+AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms
+  Stage 1 Scan    : ✅ {N} files eligible
+  Stage 2 Plan    : ✅ {N} planned
+  Stage 3 Validate: ✅ {N} danger-staged
+  Stage 4 Apply   : ✅ {N} copied, {N} updated, {N} merged, {N} skipped
+  Stage 5 Verify  : ✅ manifest confirmed
+  Stage 6 Report  : ✅ template rendered
+```
+
+If conflicts remain unresolved:
+
+```
+AC_COMPLETE: AC-SYNC-{TIMESTAMP} ⚠️ PARTIAL {elapsed_ms}ms
+  {N} files pending conflict resolution
+  Run `/sync resolve target={target}` to resume
+```
+
+---
+
+## Conflict Resolution Flow
+
+When `files_conflicted > 0`, display each conflict:
+
+```
+⚠️ CONFLICT: {relative_path}
+
+Decision: three-way merge conflict — patch staged for review
+
+📄 Patch proposal: {target}/.cortex-sync/patches/{rel_path}.patch
+
+The patch file contains upstream CORTEX changes. Your local version
+is preserved as-is. To resolve:
+  [A] Accept upstream (CORTEX) version
+  [K] Keep local version (skip this update)
+  [M] Open patch file and merge manually, then run `/sync resolve target={target}`
+```
+
+---
+
+## Deletion Advisory (Post-Apply)
+
+Files deleted upstream but not removed from target are reported as advisory only:
+
+```
+ℹ️ DELETION ADVISORY — {N} upstream deletions NOT applied to target:
+   {rel_path_1}
+   {rel_path_2}
+
+To apply these deletions, run:
+  rm "{target}/{rel_path_1}"
+  rm "{target}/{rel_path_2}"
+
+Or type `delete-advisory` to apply all deletions (⚠️ irreversible).
+```
+
+---
+
+## Dry-Run Mode
+
+Runs Stages 1–3 only. Stage 4 (apply) is skipped. Renders a plan preview table.
+At the end:
+
+```
+🔍 DRY-RUN COMPLETE — No files were written.
+Run /sync target={target} to apply.
+```
+
+---
+
+## Status Mode (`/sync status target=<path>`)
+
+Reads `manifest.json` from target. No engine invocation.
+
+```
+SYNC STATUS — {target}
+  Last sync     : {timestamp}
+  Sync ID       : {SYNC-id}
+  Files tracked : {N}
+  Copied        : {N}
+  Updated       : {N}
+  Merged        : {N}
+  Skipped       : {N}
+  Conflicts     : {N}  ← run /sync resolve to resume
+  Danger-staged : {N}
+```
+
+---
+
+## Error Taxonomy
+
+| Code | Stage | Condition | User Action |
+|---|---|---|---|
+| `SYNC-E001` | Pre-flight | Target path not found | Create folder or correct path |
+| `SYNC-E002` | Pre-flight | Target inside repo root | Use a path outside CORTEX root |
+| `SYNC-E003` | Pre-flight | Engine import failed | Run `python3 -m cortex.mcp` to verify |
+| `SYNC-E004` | Stage 1 | No eligible files | Check policy — all files may be excluded |
+| `SYNC-E005` | Stage 4 | Write failed (file lock / permissions) | Check file locks; run as correct user |
+| `SYNC-E006` | Stage 5 | Manifest not written | Check target write permissions |
+| `SYNC-E007` | Stage 4 | Baseline save failed | Check baseline-dir write permissions |
+
+---
+
+## Governance Compliance
+
+| Rule | Status |
+|---|---|
+| CORE-002 | ✅ All output inline — no .md/.txt files created |
+| CORE-011 | ✅ Type hints on all engine functions |
+| CORE-012 | ✅ Docstrings on all public APIs |
+| CORE-028 | ✅ snake_case: cortex_sync.py |
+| CORE-035 | ✅ Single canonical sync engine — no duplicates |
+| CORE-049 | ✅ Phase-list+bar progress in Chat; no terminal narration |
+| CORE-064 | ✅ Session BLOCKED from AC_COMPLETE while conflicts unresolved |
 
 | # | Check | Command | P0 Halt Condition |
 |---|-------|---------|-------------------|
@@ -73,10 +367,6 @@ If all checks pass → display pre-flight summary:
    State file:  <target>/.cortex-sync-state.yaml [exists | first-run]
    Last sync:   <SHA> at <timestamp> | never
 ```
-
----
-
-## Gate 1 — PULL (Upstream Update)
 
 **Purpose:** Bring local CORTEX branch up to date with origin.
 
@@ -106,16 +396,6 @@ git pull origin CORTEX --ff-only
    Likely cause: non-fast-forward (local commits not in origin)
    Action required: run `git rebase origin/CORTEX` manually, then re-run /sync
 ```
-
----
-
-## Gate 2 — DIFF (Changed File Extraction)
-
-**Purpose:** Identify exactly which files changed between the previous state and the new HEAD.
-
-### Case A — State file exists (routine sync)
-
-```bash
 last_sync_sha = read from <target>/.cortex-sync-state.yaml → last_sync_sha
 changed_files = git diff {last_sync_sha}..HEAD --name-only --diff-filter=ACM
 ```
@@ -161,331 +441,3 @@ If `changed_files` is empty after exclusion:
    AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms — 0 files synced
 ```
 Session ends cleanly.
-
----
-
-## Gate 3 — SANITIZE (Privacy Boundary)
-
-**Purpose:** Strip PII, secrets, and proprietary patterns from every file in `changed_files`
-before it crosses the CORTEX → Company boundary.
-
-**Engine:** `SanitizationOrchestrator` from `cortex/orchestrators/git/sanitization_orchestrator.py`
-
-### Invocation Pattern
-
-For each file in `changed_files`:
-
-```python
-from cortex.orchestrators.git.sanitization_orchestrator import SanitizationOrchestrator
-
-orchestrator = SanitizationOrchestrator()
-result = orchestrator.sanitize_content(
-    content=file_content,
-    file_path=relative_path,
-    context="sync"
-)
-# result.sanitized_content  → use this for Gate 4
-# result.substitution_count → log for summary
-# result.integrity_valid    → if False, halt on this file
-```
-
-### Pattern Categories Applied
-
-| Category | Examples | Action |
-|----------|---------|--------|
-| `secret` | API keys, bearer tokens, AWS keys | Replace with `<REDACTED>` |
-| `pii` | Emails, phone numbers, usernames in configs | Replace with `<ANONYMIZED>` |
-| `proprietary` | Internal hostnames, internal service URLs | Replace with `<INTERNAL>` |
-
-### Integrity Validation
-
-After sanitization, `SanitizationOrchestrator` runs `IntegrityValidator` to confirm the
-sanitized content is syntactically valid (Python AST check for `.py` files, YAML parse
-for `.yaml`/`.yml`, JSON parse for `.json`). If integrity fails:
-
-```
-🔴 Gate 3: Integrity validation failed for {file_path}
-   Substitution count: N
-   Error: {error_detail}
-   Action: File skipped — review manually before adding to Company folder
-```
-
-Skipped files are recorded in the state file with `status: skipped`.
-
-**Output:**
-```
-✅ Gate 3: SANITIZE complete
-   Files sanitized: N
-   Total substitutions: N
-   Integrity failures (skipped): N
-```
-
----
-
-## Gate 4 — MERGE (Intelligent 3-Way Merge)
-
-**Purpose:** Write sanitized CORTEX content into the target folder without destroying
-any existing work the company team has done in that folder.
-
-### Per-File Decision Logic
-
-For each sanitized file:
-
-```
-target_file = <target>/<relative_path>
-```
-
-**Case 1 — File does not exist in target** (net-new from CORTEX):
-```
-Action: Write directly. No merge needed.
-State:  status = "clean"
-```
-
-**Case 2 — File exists in target AND matches last-synced CORTEX content** (company untouched):
-```
-Action: Overwrite with sanitized CORTEX version. CORTEX is authoritative.
-State:  status = "clean"
-```
-
-**Case 3 — File exists in target AND differs from last-synced content** (company has local edits):
-```
-Base:   CORTEX content at last_sync_sha (the version company started from)
-Ours:   Current content of target file (company edits)
-Theirs: Sanitized new CORTEX version
-
-Action: Run 3-way merge
-  - If auto-merge succeeds with no conflicts → write merged result
-    State: status = "clean"
-  - If conflicts exist → surface inline (see Conflict Surface below)
-    State: status = "conflict" (do NOT write until resolved)
-```
-
-### 3-Way Merge Execution
-
-```bash
-# Extract base content (CORTEX file at last sync SHA)
-git show {last_sync_sha}:{relative_path} > /tmp/cortex_base_{hash}
-
-# Files already in memory:
-#   /tmp/cortex_ours_{hash}   = current content of target/<relative_path>
-#   /tmp/cortex_theirs_{hash} = Gate 3 sanitized output
-
-git merge-file \
-    /tmp/cortex_ours_{hash} \
-    /tmp/cortex_base_{hash} \
-    /tmp/cortex_theirs_{hash}
-# Exit code 0 = clean merge | Exit code > 0 = conflicts present
-```
-
-### Conflict Surface Format
-
-Each conflict is shown inline in Copilot Chat:
-
-```
-⚠️ CONFLICT: cortex/orchestrators/core/master_orchestrator.py
-
-┌─ BASE (last synced CORTEX) ──────────────────────────────┐
-│  def coordinate_operation(self, request: str) -> Result:  │
-│      ...original CORTEX code...                           │
-└───────────────────────────────────────────────────────────┘
-┌─ YOURS (Company edits) ──────────────────────────────────┐
-│  def coordinate_operation(self, request: str,             │
-│      company_context: CompanyCtx) -> Result:              │
-│      ...company-specific additions...                     │
-└───────────────────────────────────────────────────────────┘
-┌─ THEIRS (New CORTEX version) ────────────────────────────┐
-│  def coordinate_operation(self, request: str) -> Result:  │
-│      ...updated CORTEX logic...                           │
-└───────────────────────────────────────────────────────────┘
-
-Choose resolution:
-  [A] Accept CORTEX version (discard company edits for this section)
-  [B] Keep Company version (skip CORTEX update for this section)
-  [M] Manual — I will type the merged result
-  [S] Skip this file entirely this sync run
-```
-
-User responds per conflict hunk. Agent writes the resolved content after all hunks
-in a file are resolved.
-
-**Output (when all files processed):**
-```
-✅ Gate 4: MERGE complete
-   Written (clean):        N files
-   Written (auto-merged):  N files
-   Conflicts resolved:     N files
-   Conflicts pending:      N files (session will not AC_COMPLETE until resolved)
-   Deleted (flagged only): N files
-```
-
----
-
-## Deletion Handling (after Gate 4)
-
-Files that appeared in `deleted_files` (from Gate 2, `--diff-filter=D`) are listed
-as a post-sync advisory — never auto-deleted from the Company folder:
-
-```
-⚠️ DELETION ADVISORY — These files were deleted in CORTEX but NOT removed from Company:
-   cortex/legacy/old_module.py
-   cortex/tools/deprecated_tool.py
-
-To apply these deletions in Company:
-  rm <target>/cortex/legacy/old_module.py
-  rm <target>/cortex/tools/deprecated_tool.py
-
-Confirm? [Y/N]
-```
-
-Only on explicit `Y` does the agent delete.
-
----
-
-## State File Update (Post Gate 4)
-
-After all conflicts are resolved and all files written:
-
-```yaml
-# <target>/.cortex-sync-state.yaml — written by sync agent
-cortex_sync_state:
-  last_sync_at: "{ISO8601_TIMESTAMP}"
-  last_sync_sha: "{pull_sha}"          # SHA from Gate 1
-  cortex_branch: "CORTEX"
-  cortex_remote: "origin"
-  target_path: "{absolute_target_path}"
-  files:
-    "{relative_path}":
-      synced_sha: "{pull_sha}"
-      synced_at: "{ISO8601_TIMESTAMP}"
-      status: "clean"                  # clean | conflict | skipped | excluded
-```
-
-**Gitignore recommendation** (display once after first sync):
-```
-# Add to <target>/.gitignore
-.cortex-sync-state.yaml
-```
-
----
-
-## AC_COMPLETE
-
-```
-AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms
-Summary:
-  Gate 1 PULL:      ✅ {N} commits pulled (SHA: {sha})
-  Gate 2 DIFF:      ✅ {N} files in scope
-  Gate 3 SANITIZE:  ✅ {N} files, {N} substitutions, {N} skipped
-  Gate 4 MERGE:     ✅ {N} clean, {N} auto-merged, {N} manual, {N} pending
-  State file:       ✅ Updated at <target>/.cortex-sync-state.yaml
-  Deletions:        ℹ️  {N} flagged (not auto-applied)
-```
-
-If any conflicts remain unresolved:
-```
-AC_COMPLETE: AC-SYNC-{TIMESTAMP} ⚠️ PARTIAL {elapsed_ms}ms
-  {N} files pending conflict resolution
-  Run `/sync resolve target=<path>` to resume
-```
-
----
-
-## Dry-Run Mode (`/sync dry-run target=<path>`)
-
-Runs Gates 1–3 only. Gate 4 produces a preview table — no files are written.
-
-```
-DRY-RUN PREVIEW (no files written)
-┌─────────────────────────────────────────┬──────────────┬────────────┬───────────────┐
-│ File                                    │ Diff Status  │ Sanitized  │ Merge Outcome │
-├─────────────────────────────────────────┼──────────────┼────────────┼───────────────┤
-│ cortex/orchestrators/core/master_*.py   │ Modified     │ 0 changes  │ Clean write   │
-│ cortex/mcp/tools/new_tool.py            │ Added        │ 1 change   │ Net-new copy  │
-│ cortex/intelligence/provider.py         │ Modified     │ 0 changes  │ ⚠️ Conflict   │
-└─────────────────────────────────────────┴──────────────┴────────────┴───────────────┘
-Run /sync target=<path> to apply (conflicts will be surfaced for manual resolution)
-```
-
----
-
-## Status Mode (`/sync status target=<path>`)
-
-Reads state file only — no git operations.
-
-```
-SYNC STATUS — <target>
-  Last sync:    2026-02-25T14:30:00Z
-  Last SHA:     abc123def456
-  Files tracked: N
-  Clean:         N
-  Conflict:      N  ← run /sync resolve to resume
-  Skipped:       N
-  Excluded:      N
-```
-
----
-
-## Error Taxonomy
-
-| Code | Gate | Condition | User Action |
-|------|------|-----------|-------------|
-| `SYNC-E001` | Pre-flight | Target path not found | Create the folder or correct the path |
-| `SYNC-E002` | Gate 1 | `git pull` non-fast-forward | `git rebase origin/CORTEX` then retry |
-| `SYNC-E003` | Gate 1 | Network unreachable | Check VPN / network, retry |
-| `SYNC-E004` | Gate 2 | Invalid last_sync_sha in state file | Run `/sync reset-state` (⚠️ next sync = full copy) |
-| `SYNC-E005` | Gate 3 | `SanitizationOrchestrator` import failed | Run `python3 -m cortex.mcp` to verify environment |
-| `SYNC-E006` | Gate 3 | Integrity validation failed | Review file manually; it is skipped for this run |
-| `SYNC-E007` | Gate 4 | `git merge-file` binary | Binary files are excluded from 3-way merge; CORTEX version wins |
-| `SYNC-E008` | Gate 4 | Target file not writable | Check file permissions in Company folder |
-
----
-
-## Governance Compliance
-
-| Rule | Compliance |
-|------|-----------|
-| CORE-002 | ✅ All output inline — this agent never creates `.md`/`.txt` report files |
-| CORE-011 | ✅ All gate functions carry type hints (implementation in prompt session) |
-| CORE-012 | ✅ All public methods documented inline |
-| CORE-027 | ✅ `AC_START` / `AC_COMPLETE` markers emitted per session |
-| CORE-035 | ✅ Single canonical sync implementation — no duplicate agents |
-| CORE-049 | ✅ Silent progress bars in Chat; no terminal narration |
-| CORE-064 | ✅ Session is BLOCKED from AC_COMPLETE while any conflict remains unresolved |
-
----
-
-## Integration with Existing Git Orchestrators
-
-This agent **delegates** to existing wired orchestrators — it does not reimplement them:
-
-| Existing Orchestrator | Used In | How |
-|----------------------|---------|-----|
-| `SanitizationOrchestrator` | Gate 3 | `orchestrator.sanitize_content(content, file_path, context="sync")` |
-| `GitOrchestrator` | Gate 1 | `orchestrator.pull(branch="CORTEX", remote="origin", ff_only=True)` |
-| `GitPublishOrchestrator` | Gate 1 (pull phase) | `orchestrator.async_pull()` for network resilience |
-
-No new Python orchestrator is created. The agent spec is the implementation layer.
-The existing `git/` orchestrator domain handles all runtime git operations.
-
----
-
-## Customization Points
-
-| Variable | Default | Override |
-|----------|---------|---------|
-| `target` | *(required)* | `/sync target=<path>` |
-| `branch` | `CORTEX` | `/sync target=<path> branch=main` |
-| `remote` | `origin` | `/sync target=<path> remote=upstream` |
-| `exclusions` | See Gate 2 list | Add patterns to `<target>/.cortex-sync-ignore` |
-| `sanitize` | `true` | `/sync target=<path> sanitize=false` ⚠️ Not recommended |
-
-### `.cortex-sync-ignore` (optional, lives in target)
-
-```
-# Custom exclusion patterns for this company's sync session
-# Glob patterns relative to CORTEX workspace root
-cortex/internal-only/**
-scripts/personal/**
-```
-
-Agent reads this file from the target root before Gate 2 exclusion filtering.
