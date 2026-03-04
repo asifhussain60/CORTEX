@@ -104,49 +104,49 @@ compositions:
   - id: comp-audit-fix
     file: compositions/comp-audit-fix.yaml
     description: "Audit Fix pipeline header — 9-stage audit + governance enforcer"
-    via: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
+    orchestration_chain: "Classifier → Audit Coordinator → Health Monitor → Workspace Cleaner → Governance Enforcer"
     status: PLANNED
 
   - id: comp-implement-fix
     file: compositions/comp-implement-fix.yaml
     description: "Implement/Fix pipeline header — TDD builder flow"
-    via: "Classifier → TDD Builder"
+    orchestration_chain: "Classifier → TDD Builder"
     status: PLANNED
 
   - id: comp-refactor
     file: compositions/comp-refactor.yaml
     description: "Refactor pipeline header — Code Improver + Workflow Composer"
-    via: "Classifier → Code Improver → Workflow Composer"
+    orchestration_chain: "Classifier → Code Improver → Workflow Composer"
     status: PLANNED
 
   - id: comp-health
     file: compositions/comp-health.yaml
     description: "Health check header — 22 orchestrator health endpoints"
-    via: "Classifier → Health Monitor"
+    orchestration_chain: "Classifier → Health Monitor"
     status: PLANNED
 
   - id: comp-vacuum
     file: compositions/comp-vacuum.yaml
     description: "Vacuum pipeline header — 8-stage workspace cleaner"
-    via: "Classifier → Workspace Cleaner"
+    orchestration_chain: "Classifier → Workspace Cleaner"
     status: PLANNED
 
   - id: comp-debug
     file: compositions/comp-debug.yaml
     description: "Debug pipeline header — 8 injection strategies"
-    via: "Classifier → Debug Tracer → Debug Injector"
+    orchestration_chain: "Classifier → Debug Tracer → Debug Injector"
     status: PLANNED
 
   - id: comp-query
     file: compositions/comp-query.yaml
     description: "Simple query header — direct answer, minimal blocks"
-    via: "Classifier"
+    orchestration_chain: "Classifier"
     status: PLANNED
 
   - id: comp-introduce
     file: compositions/comp-introduce.yaml
     description: "Introduction header — onboarding, CORTEX overview"
-    via: "Classifier → Mission Control"
+    orchestration_chain: "Classifier → Mission Control"
     status: PLANNED
 
 # ─── Prompts ──────────────────────────────────────────────────────────────────

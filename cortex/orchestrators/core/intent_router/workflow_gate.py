@@ -75,13 +75,22 @@ class WorkflowComplexityRouter:
     """
 
     # Thresholds aligned with CONF-GATE rules (CORE-046)
+    # Phase 122: MODERATE lowered from 0.60 → 0.40 so meaningful multi-file operations
+    # (5+ file implement/refactor) reach the workflow template path. Analysis:
+    #   1-file fix (LOW):             score ≈ 0.17 → DIRECT_ORCHESTRATOR ✅
+    #   3-file implement (MEDIUM):    score ≈ 0.34 → DIRECT_ORCHESTRATOR ✅
+    #   5-file implement (MEDIUM):    score ≈ 0.40 → WORKFLOW_TEMPLATE   ✅
+    #   3-file refactor+2deps (MED):  score ≈ 0.46 → WORKFLOW_TEMPLATE   ✅
+    # See cortex-registry/_cortex-master/phases/phase-122-workflow-composer-activation.yaml
     TRIVIAL_THRESHOLD = ComplexityThreshold.TRIVIAL.value
     SIMPLE_THRESHOLD = ComplexityThreshold.SIMPLE.value
-    MODERATE_THRESHOLD = ComplexityThreshold.MODERATE.value
+    MODERATE_THRESHOLD = 0.39  # Phase 122: was ComplexityThreshold.MODERATE.value (0.60)
     COMPLEX_THRESHOLD = ComplexityThreshold.COMPLEX.value
 
     # Operation type complexity scores (40% weight)
+    # Phase 122: "implement" added explicitly (was falling back to 0.5 undocumented default)
     OPERATION_SCORES = {
+        "implement": 0.5,   # Phase 122: explicit — TDD cycle, multi-file, meaningful scope
         "create": 0.4,
         "refactor": 0.6,
         "migrate": 0.8,

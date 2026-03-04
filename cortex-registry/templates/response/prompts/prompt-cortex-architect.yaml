@@ -44,6 +44,7 @@ atom_identity_override:
 # ─── Rules ────────────────────────────────────────────────────────────────────
 rules:
   - "Use '🛠️ CORTEX Architect' not '🧠 CORTEX' — different prompt, different identity"
-  - "🧭 Orchestration: in Zone 1 of the header (omit for single-hop)"
+  - "🧭 Orchestration: in Zone 3 of the header — AFTER the quote blockquote, after the second --- separator (omit for single-hop)"
+  - "NEVER place 🧭 Orchestration: in Zone 1 alongside Author — the quote must come first (chat01.md requirement)"
   - "No **Orchestrator:** field"
   - "Product icon 🛠️ is fixed for this prompt"

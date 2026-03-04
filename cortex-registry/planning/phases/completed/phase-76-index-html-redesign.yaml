@@ -1,0 +1,10 @@
+id: phase-76
+title: "Index HTML Redesign"
+status: COMPLETE
+priority: P1
+sweep_id: SWEEP-076-INDEX-HTML
+completed_date: "2025"
+gaps: 0
+note: >
+  COMPLETE — cortex-docs/index.html redesigned. All inline styles extracted to
+  external CSS. cortex-docs/assets/ structure established. Golden tests GREEN.

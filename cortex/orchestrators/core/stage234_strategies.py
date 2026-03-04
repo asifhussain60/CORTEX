@@ -312,8 +312,18 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                         "risk_level": context.parameters.get("risk_level", "MEDIUM"),
                     }
                     template_override = master._check_for_workflow_template(template_context)
-                except Exception:
+                except Exception as _wf_exc:  # Phase 122 GAP-122-04: log instead of swallow
                     template_override = None  # Non-blocking — fall through to direct delegation
+                    try:
+                        import logging as _logging
+                        _logging.getLogger("cortex.workflow_gate").warning(
+                            "ROUTING_ERROR: WorkflowComplexityRouter raised %s(%s); "
+                            "falling back to direct orchestrator delegation.",
+                            type(_wf_exc).__name__,
+                            _wf_exc,
+                        )
+                    except Exception:
+                        pass  # Absolute last resort — never block user request
 
             if template_override and template_override.get("use_autonomous_workflow"):
                 # Route through workflow template — EXECUTE it, not just log

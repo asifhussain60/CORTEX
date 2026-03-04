@@ -427,6 +427,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
 | `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies: 3 Python + 5 multi-stack) | INJECT |
 | `/debug-cleanup` | Remove all CORTEX_DEBUG markers across all languages | CLEANUP |
+| `cortex_workflow` MCP | Execute a workflow template with convergence loop directly — `op=execute`, `template_id=sdlc/implement-workflow` | MCP tool |
 
 **Phase 85 — Response Format (canonical):** Every progress display uses the **phase-list+bar** format (not bar-only). SSOT: `.github/templates/cortex-response-templates.md`. Engagement blocks: `BLOCK-ENGAGEMENT-BREADCRUMB` (routing chain, always rendered), `BLOCK-ENGAGEMENT-TIMELINE` (collapsible timing), `BLOCK-PHASE-ROADMAP` (full journey at operation start).
 

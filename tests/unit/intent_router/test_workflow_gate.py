@@ -17,9 +17,130 @@ from cortex.orchestrators.core.intent_router.workflow_gate import (
 )
 
 
+class TestPhase122WorkflowActivation:
+    """Phase 122 — Workflow Composer Activation: MCP-First Surgical Fix.
+
+    RED tests written before implementation per CORE-008.
+    These tests validate the two surgical fixes:
+      GAP-122-01: target_files extracted from request description text
+      GAP-122-02: MODERATE threshold lowered to 0.40 so 5-file implement routes correctly
+    """
+
+    def test_five_file_implement_routes_to_workflow_template(self):
+        """GAP-122-02: 5-file IMPLEMENT must route to WORKFLOW_TEMPLATE (not DIRECT)."""
+        router = WorkflowComplexityRouter()
+        intent = Intent(
+            operation_type="implement",
+            target_files=["a.py", "b.py", "c.py", "d.py", "e.py"],
+            dependencies=[],
+            risk_level="MEDIUM",
+        )
+        decision = router.route(intent)
+        assert decision.route == RoutingStrategy.WORKFLOW_TEMPLATE, (
+            f"5-file implement scored {router.score_task_complexity(intent):.3f} "
+            f"but routed to {decision.route.value} — MODERATE_THRESHOLD too high"
+        )
+
+    def test_one_file_fix_stays_on_direct_orchestrator(self):
+        """GAP-122-02: 1-file FIX must NOT route to WORKFLOW_TEMPLATE (no regression)."""
+        router = WorkflowComplexityRouter()
+        intent = Intent(
+            operation_type="fix",
+            target_files=["buggy.py"],
+            dependencies=[],
+            risk_level="LOW",
+        )
+        decision = router.route(intent)
+        assert decision.route == RoutingStrategy.DIRECT_ORCHESTRATOR, (
+            f"1-file fix should be DIRECT_ORCHESTRATOR, got {decision.route.value}"
+        )
+
+    def test_three_file_refactor_with_deps_routes_to_template(self):
+        """GAP-122-02: 3-file REFACTOR + 2 deps must route to WORKFLOW_TEMPLATE."""
+        router = WorkflowComplexityRouter()
+        intent = Intent(
+            operation_type="refactor",
+            target_files=["module_a.py", "module_b.py", "module_c.py"],
+            dependencies=["shared_utils.py", "config.py"],
+            risk_level="MEDIUM",
+        )
+        decision = router.route(intent)
+        assert decision.route == RoutingStrategy.WORKFLOW_TEMPLATE, (
+            f"3-file refactor+2deps scored {router.score_task_complexity(intent):.3f} "
+            f"but routed to {decision.route.value}"
+        )
+
+    def test_implement_in_operation_scores(self):
+        """GAP-122-01: 'implement' must be in OPERATION_SCORES (not fall back to 0.5)."""
+        router = WorkflowComplexityRouter()
+        assert "implement" in router.OPERATION_SCORES, (
+            "'implement' is missing from OPERATION_SCORES — falls back to 0.5 which is correct "
+            "but undocumented. Must be explicit for clarity and testability."
+        )
+
+    def test_moderate_threshold_is_0_40(self):
+        """GAP-122-02: MODERATE_THRESHOLD must be ≤0.40 (was 0.60 — unreachable)."""
+        router = WorkflowComplexityRouter()
+        assert router.MODERATE_THRESHOLD <= 0.40, (
+            f"MODERATE_THRESHOLD is {router.MODERATE_THRESHOLD}, expected ≤0.40"
+        )
+
+    def test_five_file_implement_score_reaches_threshold(self):
+        """GAP-122-02: Score for 5-file implement with MEDIUM risk must be >= MODERATE_THRESHOLD."""
+        router = WorkflowComplexityRouter()
+        intent = Intent(
+            operation_type="implement",
+            target_files=["a.py", "b.py", "c.py", "d.py", "e.py"],
+            dependencies=[],
+            risk_level="MEDIUM",
+        )
+        score = router.score_task_complexity(intent)
+        assert score >= router.MODERATE_THRESHOLD, (
+            f"5-file implement scored {score:.4f} which is below "
+            f"MODERATE_THRESHOLD={router.MODERATE_THRESHOLD}"
+        )
+
+    def test_check_for_workflow_template_extracts_files_from_description(self):
+        """GAP-122-01: _check_for_workflow_template must count .py refs in description text."""
+        from unittest.mock import MagicMock
+        from cortex.orchestrators.core.master_orchestrator_request_mixin import (
+            MasterOrchestratorRequestMixin,
+        )
+
+        mixin = MasterOrchestratorRequestMixin.__new__(MasterOrchestratorRequestMixin)
+        # Provide the minimal logger stub the method needs
+        mock_logger = MagicMock()
+        mock_logger.log_operation_complete = MagicMock()
+        mixin.logger = mock_logger
+
+        # Pass a description with 5 .py file references but empty target_files
+        context = {
+            "operation": "implement new authentication module",
+            "description": (
+                "implement cortex/auth/authenticator.py "
+                "cortex/auth/token_manager.py "
+                "cortex/auth/session_store.py "
+                "cortex/auth/middleware.py "
+                "cortex/auth/validators.py"
+            ),
+            "target_files": [],  # Empty — as produced today
+            "dependencies": [],
+            "risk_level": "MEDIUM",
+        }
+        result = mixin._check_for_workflow_template(context)
+        # With 5 .py refs in description and threshold=0.40, must trigger WORKFLOW_TEMPLATE
+        assert result is not None, (
+            "_check_for_workflow_template returned None for 5-file description — "
+            "file extraction from description text not implemented"
+        )
+        assert result.get("use_autonomous_workflow") is True, (
+            f"Expected use_autonomous_workflow=True, got: {result}"
+        )
+
+
 class TestComplexityScoring:
     """Test complexity scoring dimensions."""
-    
+
     def test_trivial_single_file_fix(self):
         """Test trivial operation: fix 1 file, 0 deps, LOW risk."""
         router = WorkflowComplexityRouter()

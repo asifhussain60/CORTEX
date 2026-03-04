@@ -939,7 +939,19 @@ class MasterOrchestratorRequestMixin:
                 operation_type = "security"
 
             # Extract files and dependencies
-            target_files = context.get("target_files", [])
+            # Phase 122 GAP-122-01: Augment target_files from description text.
+            # context.parameters never contains target_files for normal Copilot Chat
+            # requests, so parse Python file references from the description to give
+            # the complexity router real signal instead of always scoring 0 on the
+            # file-count dimension. Falls back to empty list if description is absent.
+            import re as _re
+            target_files: list = list(context.get("target_files", []))
+            if not target_files:
+                description_text = context.get("description", "") or context.get("operation", "")
+                # Match bare .py/.ts/.cs/.js/.html/.css file references in description
+                _extracted = _re.findall(r"\S+\.(?:py|ts|tsx|js|jsx|cs|html|css|scss)\b", description_text)
+                if _extracted:
+                    target_files = _extracted
             dependencies = context.get("dependencies", [])
             risk_level = context.get("risk_level", "MEDIUM")
 

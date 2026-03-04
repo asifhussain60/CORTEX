@@ -18,9 +18,9 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-04T00:00:00Z'
-  total_phases: 103
+  total_phases: 104
   active: 0
-  completed: 100
+  completed: 101
   in_progress: 0
   planned: 0
   playbooks: 1
@@ -33,12 +33,14 @@ metadata:
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-121 (AI Context Intelligence), phase-120 (Response Template LEGO), phase-119 (Class Consolidation CORE-035), phase-47 (Memory Tier Migration)."
+  recent_completed: "phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence), phase-120 (Response Template LEGO), phase-119 (Class Consolidation CORE-035)."
+  planned_next: "TBD"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-122, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml" }
   - { id: phase-120, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-120-response-template-modular-lego.yaml" }
   - { id: phase-119, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-119-class-consolidation.yaml" }
   - { id: phase-47,  status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-47-memory-tier-architecture-migration.yaml" }
@@ -115,16 +117,17 @@ verification:
   last_verified: '2026-03-04T00:00:00Z'
 
 summary:
-  total_phases: 103
-  completed: 100
+  total_phases: 104
+  completed: 101
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
-  completion_percentage: 100
-  consolidation_summary: "v56.0: 2026-03-04 — Phase 47 registered (Memory Tier Migration, completed 2026-02-28, previously unregistered). Detail file created. Phase 119 + 120 COMPLETE. planned: 0. Smoke: 2,388. Preflight: 258."
+  completion_percentage: 97
+  consolidation_summary: "v58.0: 2026-03-04 — Phase 122 COMPLETE (Workflow Composer Activation, 5/5 GAPs CLOSED). Phase 121 COMPLETE (AI Context Intelligence). Phase 120 COMPLETE (Response Template LEGO). Smoke: 2,395. Preflight: 258."
   active_phases:
+    phase-122: "COMPLETE 2026-03-04 — Workflow Composer Activation: 5/5 GAPs CLOSED. target_files extraction (regex), threshold 0.60→0.39, 'implement' OPERATION_SCORES, cortex_workflow MCP documented, exception swallowing→structured logging. V1-V6 holistic verification PASSED. Smoke: 2395 ✅"
     phase-47: "COMPLETE 2026-02-28 — Memory Tier Architecture Migration: 3 stages, 4 GAPs CLOSED. tier1_learned/tier2_adaptive/scratch_space dirs created. BrainTierPusher TIER_PATHS wired. Golden tests GREEN. Previously unregistered in master — registered 2026-03-04."
     phase-120: "COMPLETE 2026-03-04 — Response Template System v3 LEGO: 15/15 GAPs CLOSED. 3-Tier architecture (Atoms→Blocks→Compositions). 26 YAMLs, 8 terminal compositions, 5 content blocks, 6 prompt intros. 49 golden tests GREEN. Smoke: 2388 ✅"
     phase-119: "COMPLETE 2026-03-04 — Class Consolidation CORE-035: 4/4 GAPs CLOSED. 266 classes audited: Config×19 pydantic-nested (intentional), 9 high-severity canonical shared types verified, 191 2-location domain variants confirmed intentional. Preflight: 258 ✅ Smoke: 2388 ✅"
@@ -378,6 +381,17 @@ phases:
     sub_phases: 7
     file: "cortex-registry/planning/phases/completed/phase-120-response-template-modular-lego.yaml"
     note: "COMPLETE 2026-03-04. 3-Tier LEGO architecture (Atoms→Blocks→Compositions). 26 new YAMLs under cortex-registry/templates/response/. 8 terminal compositions, 5 new content blocks, status footer, cumulative reflection, 6 prompt intros. Migrates 6 legacy YAMLs (2,029L). Fixes 3 drifted prompts. 49 golden tests (40 functional + 9 rendering contract). Smoke: 2388 GREEN. Golden: 279 PASS."
+
+  # ── PLANNED ───────────────────────────────────────────────────────────────
+  - id: phase-122
+    title: "Workflow Composer Activation — MCP-First Surgical Fix"
+    status: COMPLETE
+    priority: P1
+    sweep_id: SWEEP-122-WORKFLOW-ACTIVATION
+    gaps: 5
+    sub_phases: 6
+    file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml"
+    note: "COMPLETE 2026-03-04. 5/5 GAPs CLOSED. (1) target_files extracted via regex from description text — router now receives meaningful inputs. (2) MODERATE threshold 0.60→0.39; 'implement' added to OPERATION_SCORES. (3) cortex_workflow MCP documented in copilot-instructions.md. (4) Exception swallowing → structured logging. (5) V1-V6 holistic verification PASSED. Smoke: 2395 GREEN."
 
   # ── COMPLETE ──────────────────────────────────────────────────────────────
   - id: phase-121

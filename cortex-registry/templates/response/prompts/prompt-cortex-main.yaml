@@ -8,7 +8,8 @@
 # that maps intent → composition → rendered header.
 #
 # Drift fix applied: L146 contradiction resolved — 🧭 Orchestration: is now
-# explicitly in Zone 1 of the header (not "never in the header").
+# correctly in Zone 3 of the header (AFTER the quote blockquote, after the
+# second --- separator). NEVER in Zone 1 alongside Author.
 #
 # Phase: 120 (Sub-Phase D)
 # Author: Asif Hussain | © 2025-2026 CORTEX Framework
@@ -47,7 +48,8 @@ intent_to_composition:
 # ─── Rules ────────────────────────────────────────────────────────────────────
 rules:
   - "ONE H1 per response — the identity block only"
-  - "🧭 Orchestration: in Zone 1 of the header (omit for single-hop)"
+  - "🧭 Orchestration: in Zone 3 of the header — AFTER the quote blockquote, after the second --- separator (omit for single-hop)"
+  - "NEVER place 🧭 Orchestration: in Zone 1 alongside Author — the quote must come first (chat01.md requirement)"
   - "No **Orchestrator:** field — use 🧭 Orchestration: chain"
   - "No separate italic breadcrumb after --- (duplication P1 violation)"
   - "Product icon 🧠 is fixed — never swapped for mode icon"
