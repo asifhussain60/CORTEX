@@ -1,0 +1,322 @@
+# CORTEX Phase Plan: Registry-Aware Documentation Viewer
+# Full design: _workspaces/.chats/chat01.md § "Architecture Design: Registry-Aware Documentation Viewer"
+
+id: "phase-125"
+title: "Registry-Aware Documentation Viewer — YAML→Model→JSON→HTML Pipeline + D3.js Interactive Visualizations"
+version: "1.0"
+created: "2026-03-04"
+completed: "2026-03-04"
+status: COMPLETE
+priority: P1
+governance_authority:
+  - CORE-002   # All output inline — no .md/.txt report files
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-125-REGISTRY-DOC-VIEWER"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: _workspaces/.chats/chat01.md — user request for end-to-end YAML→HTML pipeline
+  Score at entry: 4.0 / 10 (YAML reader exists but has no registry awareness, no typed parsing, no dependency graph, no diff tracking, no integrity dashboard)
+  Target score: 9.0 / 10
+  Baseline measurements:
+    - Smoke tests: 2582 passed
+    - Existing YAML reader: 5 JS files (app.js, model.js, renderers.js, diagrams.js, index.html)
+    - Phase 123 foundation: IntelligenceFacade with load_governance/load_workflows/load_patterns/load_plans/registry_index + CortexRegistry MCP tool
+    - Registry YAMLs: ~70+ files across governance/ core/ workflows/ patterns/ planning/ templates/ knowledge/ playbooks/
+  Git prerequisite: Phase 123 COMPLETE, smoke green
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-125-01"
+    title: "No typed model parsers for registry YAML categories"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "model.js has generic SchemaInference but no GovernanceRuleModel, WorkflowModel, PatternModel, PlanModel — all YAML treated as generic objects"
+    action_ref: "phase-125-a"
+    status: OPEN
+
+  - id: "GAP-125-02"
+    title: "No parser registration mechanism for extensibility"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "No PARSER_REGISTRY dict or @register_parser decorator — adding new YAML types requires modifying core logic"
+    action_ref: "phase-125-a"
+    status: OPEN
+
+  - id: "GAP-125-03"
+    title: "No cross-file reference resolution"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "file: pointers, depends_on lists, core_rules refs, and workflow primitives paths are not resolved — graph edges cannot be built from raw YAML"
+    action_ref: "phase-125-c"
+    status: OPEN
+
+  - id: "GAP-125-04"
+    title: "No global dependency graph emitter"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "model.js buildDependencyGraph works on single-file entities only — no cross-file dependency DAG"
+    action_ref: "phase-125-c"
+    status: OPEN
+
+  - id: "GAP-125-05"
+    title: "No normalized stable JSON view-model per artifact"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "YAML reader passes raw parsed YAML to renderers — no deterministic JSON with sorted keys, stable hashes, or consistent schema"
+    action_ref: "phase-125-e"
+    status: OPEN
+
+  - id: "GAP-125-06"
+    title: "No integrity/health dashboard"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "No broken ref detection, no duplicate SSOT check, no schema validation report, no governance breach surfacing"
+    action_ref: "phase-125-d"
+    status: OPEN
+
+  - id: "GAP-125-07"
+    title: "No diff-aware change tracking"
+    severity: P2
+    source: "chat01.md design review"
+    evidence: "No history-index.json, no hash comparison between builds, no gold-border highlights for changed artifacts"
+    action_ref: "phase-125-d"
+    status: OPEN
+
+  - id: "GAP-125-08"
+    title: "No Business Lens layer"
+    severity: P2
+    source: "chat01.md design review"
+    evidence: "No LLM-synthesized executive summaries per artifact — NarrativeGenerator produces only deterministic text, not business-context summaries"
+    action_ref: "phase-125-h"
+    status: OPEN
+
+  - id: "GAP-125-09"
+    title: "No Registry Graph Explorer tab in viewer"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "diagrams.js has force-directed graph but only for single-file entities — no cross-registry graph explorer with filters by type/tier/severity"
+    action_ref: "phase-125-g"
+    status: OPEN
+
+  - id: "GAP-125-10"
+    title: "No per-type artifact detail renderers in HTML"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "renderers.js has generic renderEntityCard — no governance-specific, workflow-specific, or pattern-specific detail panels with H2/H3/H4 hierarchy"
+    action_ref: "phase-125-f"
+    status: OPEN
+
+  - id: "GAP-125-11"
+    title: "No context chip UX (LENS/Registry/Domain/DoR status bar)"
+    severity: P2
+    source: "chat01.md design review"
+    evidence: "No always-visible intelligence bar showing registry health, deterministic next-action, or evidence tags"
+    action_ref: "phase-125-f"
+    status: OPEN
+
+  - id: "GAP-125-12"
+    title: "No build script for YAML→JSON pipeline"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "No scripts/build-registry-docs.py to automate the full indexer→parser→resolver→emitter pipeline"
+    action_ref: "phase-125-e"
+    status: OPEN
+
+  - id: "GAP-125-13"
+    title: "No golden tests for deterministic YAML→model→JSON→HTML rendering"
+    severity: P1
+    source: "chat01.md design review"
+    evidence: "Existing test_yaml_loader.py tests only raw YAML parsing — no model→JSON stability tests, no HTML render tests, no parser registration tests"
+    action_ref: "phase-125-a"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — 8 sub-phases, TDD-gated, strict sequential
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-125-a"
+    title: "Base models + parser registry + GenericParser"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-125-01", "GAP-125-02", "GAP-125-13"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
+    duration_estimate: "1 day"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2582 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+    deliverables:
+      - "cortex/intelligence/registry/__init__.py"
+      - "cortex/intelligence/registry/models/base.py (BaseRegistryModel)"
+      - "cortex/intelligence/registry/models/generic.py (GenericModel)"
+      - "cortex/intelligence/registry/parsers/__init__.py (PARSER_REGISTRY + @register_parser)"
+      - "cortex/intelligence/registry/parsers/generic_parser.py"
+      - "tests/intelligence/registry/__init__.py"
+      - "tests/intelligence/registry/test_parser_registry.py"
+      - "tests/intelligence/registry/test_generic_fallback.py"
+    tdd_cycle:
+      red:
+        action: "Write failing tests for BaseRegistryModel, PARSER_REGISTRY, @register_parser, GenericParser"
+        gate: "All listed tests must FAIL (import errors count)"
+      green:
+        action: "Implement models and parser registry — minimum code to pass"
+        gate: "All tests must PASS"
+      refactor:
+        action: "Add type hints, docstrings, deduplication"
+        gate: "Zero regressions in tests/intelligence/"
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + ruff check"
+      fix_step: "Fix any issues found"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+
+  - id: "phase-125-b"
+    title: "Typed parsers (governance, workflow, pattern, plan, template, config, knowledge)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-125-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 days"
+    depends_on: ["phase-125-a"]
+    deliverables:
+      - "cortex/intelligence/registry/models/governance.py"
+      - "cortex/intelligence/registry/models/workflow.py"
+      - "cortex/intelligence/registry/models/pattern.py"
+      - "cortex/intelligence/registry/models/plan.py"
+      - "cortex/intelligence/registry/models/response_template.py"
+      - "cortex/intelligence/registry/models/config.py"
+      - "cortex/intelligence/registry/models/knowledge.py"
+      - "cortex/intelligence/registry/parsers/governance_parser.py"
+      - "cortex/intelligence/registry/parsers/workflow_parser.py"
+      - "cortex/intelligence/registry/parsers/pattern_parser.py"
+      - "cortex/intelligence/registry/parsers/plan_parser.py"
+      - "cortex/intelligence/registry/parsers/template_parser.py"
+      - "cortex/intelligence/registry/parsers/config_parser.py"
+      - "cortex/intelligence/registry/parsers/knowledge_parser.py"
+      - "tests/intelligence/registry/test_governance_parser.py"
+      - "tests/intelligence/registry/test_workflow_parser.py"
+      - "tests/intelligence/registry/test_json_stability.py"
+
+  - id: "phase-125-c"
+    title: "Reference resolver + dependency graph builder"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-125-03", "GAP-125-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-125-b"]
+    deliverables:
+      - "cortex/intelligence/registry/reference_resolver.py"
+      - "cortex/intelligence/registry/dependency_graph.py"
+      - "tests/intelligence/registry/test_reference_resolver.py"
+      - "tests/intelligence/registry/test_dependency_graph.py"
+
+  - id: "phase-125-d"
+    title: "Integrity checker + history tracker"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-125-06", "GAP-125-07"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "1 day"
+    depends_on: ["phase-125-c"]
+    deliverables:
+      - "cortex/intelligence/registry/integrity_checker.py"
+      - "cortex/intelligence/registry/history_tracker.py"
+      - "tests/intelligence/registry/test_integrity.py"
+      - "tests/intelligence/registry/test_history_index.py"
+
+  - id: "phase-125-e"
+    title: "JSON emitter + build script"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-125-05", "GAP-125-12"]
+    governance_authority: "CORE-008, CORE-028, CORE-035"
+    duration_estimate: "1 day"
+    depends_on: ["phase-125-d"]
+    deliverables:
+      - "cortex/intelligence/registry/indexer.py (RegistryIndexer — full pipeline)"
+      - "scripts/build-registry-docs.py"
+
+  - id: "phase-125-f"
+    title: "HTML renderers (per-type detail panels + context chip)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-125-10", "GAP-125-11"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "2 days"
+    depends_on: ["phase-125-e"]
+    deliverables:
+      - "_workspaces/yaml-reader/renderers/governance-renderer.js"
+      - "_workspaces/yaml-reader/renderers/workflow-renderer.js"
+      - "_workspaces/yaml-reader/renderers/pattern-renderer.js"
+      - "_workspaces/yaml-reader/renderers/plan-renderer.js"
+      - "_workspaces/yaml-reader/renderers/generic-renderer.js"
+      - "_workspaces/yaml-reader/renderers/context-chip.js"
+
+  - id: "phase-125-g"
+    title: "D3 graph explorer + diff viewer + integrity dashboard"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-125-09"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "2 days"
+    depends_on: ["phase-125-f"]
+    deliverables:
+      - "_workspaces/yaml-reader/renderers/graph-renderer.js"
+      - "_workspaces/yaml-reader/renderers/diff-renderer.js"
+      - "_workspaces/yaml-reader/renderers/integrity-renderer.js"
+      - "Updated index.html with 4 tabs + context chip"
+
+  - id: "phase-125-h"
+    title: "Business Lens writer + LLM integration"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-125-08"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "1 day"
+    depends_on: ["phase-125-g"]
+    deliverables:
+      - "cortex/intelligence/registry/business_lens_writer.py"
+      - "tests/intelligence/registry/test_business_lens.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "All 13 GAPs CLOSED"
+  - "8 typed parsers registered via @register_parser decorator"
+  - "Cross-file references resolved (4 reference styles)"
+  - "Global dependency graph emitted as registry-graph.json"
+  - "Deterministic JSON: same YAML input → identical JSON output (byte-for-byte)"
+  - "Integrity report generated with broken refs, duplicate SSOTs, schema violations"
+  - "History index tracks up to 50 snapshots with hash-based diff detection"
+  - "4 HTML viewer tabs: Graph Explorer, Artifact Detail, Change Tracker, Health Dashboard"
+  - "Per-type renderers: governance, workflow, pattern, plan, generic fallback"
+  - "Generic fallback shows schema warning — never blank"
+  - "Context chip visible with LENS/Registry/Domain/DoR status"
+  - "Business Lens: LLM summaries respect character limits, stored as derived JSON"
+  - "All paths use forward-slash POSIX format — Windows file:///C:/ compatible"
+  - "scripts/build-registry-docs.py runs full pipeline end-to-end"
+  - "50+ golden tests GREEN"
+  - "Smoke baseline maintained (≥2582)"

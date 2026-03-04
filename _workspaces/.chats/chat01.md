@@ -830,3 +830,544 @@ Run /audit to identify P0/P1 candidates for the next phase — cortex-master.yam
 ```
 
 Made changes.
+
+---
+
+asifhussain60: Follow the instructions in `cortex-architect.prompt.md` and design the end-to-end mechanism by which **updates to any `cortex-registry` YAML automatically render into the HTML/D3.js documentation view** using the enhanced registry-aware YAML Reader: implement a registry indexer that categorizes YAML by type (patterns, governance rules, workflows, response templates, plans), parses them into typed models, resolves cross-file references/inheritance, and emits a **normalized, stable JSON view-model** per artifact plus a global dependency graph; then build an **offline-friendly static HTML viewer** (works via `file://` and Windows paths) that loads these JSON view-models and renders interactive D3 visualizations (no server required) including (1) a **Registry Graph Explorer** (nodes = YAMLs/models, edges = references/inheritance/dependencies, with filters by type/tier/severity/workflow stage), (2) **Artifact Detail Panels** that show the YAML-derived structured fields (metadata, rules, stages, anti-patterns, references) with consistent H2/H3/H4 layout and one-line list items, (3) **Diff-aware updates** where the viewer highlights what changed between versions (by hashing normalized models and storing a lightweight history index), and (4) **Integrity/Health dashboards** that surface broken refs, duplicate SSOT definitions, schema violations, and governance breaches; add a "Business Lens" layer synthesized via LLM that consumes the normalized view-models (never raw YAML directly), produces concise executive summaries per artifact (purpose, business impact, risk, key constraints, operational readiness), and writes them back as **separate derived JSON fields** (not modifying source YAML) with strict brevity limits and optional learn-more links; recommend UX patterns that make CORTEX feel subtly "smarter than Copilot" (a one-line context chip showing LENS/Registry/Domain/DoR status, evidence tags, and deterministic next-action), and ensure performance budgets by caching parsed models, precomputing graph layouts where possible, lazy-loading heavy D3 components, and keeping the JSON payloads small; finally, define golden tests that prove YAML→model→JSON→HTML renders deterministically (including graph edges, section headings, and rule/workflow ordering), validate that the viewer never breaks when new schema types are added (parser registration), and document the implementation plan in `cortex-master.yaml` with a Windows-first path strategy, no root-folder pollution, and zero stubbed/blank render states (every YAML type must have a real renderer or a safe generic fallback with schema warnings).
+
+GitHub Copilot: # 🛠️ CORTEX Architect Designing
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+---
+
+> *"Make it work, make it right, make it fast."*
+> — Kent Beck, **Extreme Programming Explained**
+
+---
+
+🧭 Orchestration: Classifier → Stage 1 Comprehension → Architect → Roadmap Planner
+
+---
+
+## 🪞 Intent Reflection — Understanding Your Request
+
+1. **Registry-Aware Indexer** — Build a Python-side indexer that walks `cortex-registry/`, categorizes every YAML by type (governance rules, patterns, workflows, response templates, plans), parses each into a typed model, resolves cross-file `$ref`/`inherits`/`depends_on` references, and emits normalized JSON view-models per artifact plus a global dependency graph.
+2. **Static HTML Viewer (offline, `file://`, Windows-safe)** — Extend the existing YAML Reader in `_workspaces/yaml-reader/` into a full registry documentation viewer that loads the JSON view-models and renders 4 interactive D3.js visualizations: (a) Registry Graph Explorer, (b) Artifact Detail Panels, (c) Diff-aware change highlights, (d) Integrity/Health dashboards.
+3. **Business Lens Layer** — Add an LLM-synthesized executive summary layer that consumes normalized models (never raw YAML), produces concise business-language summaries per artifact, and stores them as derived JSON fields separate from source YAML.
+4. **"Smarter than Copilot" UX** — Design context-chip UI patterns (LENS status, Registry status, Domain, DoR, evidence tags, deterministic next-action) that surface intelligence without overwhelming the user.
+5. **Performance Budgets** — Cached parsed models, precomputed graph layouts, lazy D3 loading, small JSON payloads.
+6. **Golden Tests** — Deterministic YAML→model→JSON→HTML render tests, parser registration extensibility tests, zero-blank-state guarantee.
+7. **Phase Plan** — Document in `cortex-master.yaml` as a thin index entry with full detail in a dedicated phase YAML.
+
+**Confidence:** 95% — this is a DESIGN + PLAN intent (not code-touching yet). The existing Phase 123 `IntelligenceFacade` + `CortexRegistry` MCP tool provides the Python-side foundation. The YAML Reader in `_workspaces/yaml-reader/` provides the HTML/D3.js foundation. This design connects and extends both.
+
+---
+
+## Architecture Design: Registry-Aware Documentation Viewer
+
+### 1. System Overview — Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         BUILD-TIME PIPELINE                            │
+│                                                                        │
+│  cortex-registry/**/*.yaml                                             │
+│         │                                                              │
+│         ▼                                                              │
+│  ┌──────────────────────┐    ┌──────────────────────┐                  │
+│  │  RegistryIndexer     │───▶│  TypedModelParser    │                  │
+│  │  (walk + categorize) │    │  (per-type parsers)  │                  │
+│  └──────────────────────┘    └──────────────────────┘                  │
+│         │                           │                                  │
+│         ▼                           ▼                                  │
+│  ┌──────────────────────┐    ┌──────────────────────┐                  │
+│  │  ReferenceResolver   │    │  NormalizedModel     │                  │
+│  │  ($ref, inherits,    │───▶│  (stable JSON per    │                  │
+│  │   depends_on)        │    │   artifact)          │                  │
+│  └──────────────────────┘    └──────────────────────┘                  │
+│         │                           │                                  │
+│         ▼                           ▼                                  │
+│  ┌──────────────────────┐    ┌──────────────────────┐                  │
+│  │  DependencyGraph     │    │  BusinessLensWriter  │                  │
+│  │  (global DAG:        │    │  (LLM summaries →    │                  │
+│  │   nodes + edges)     │    │   derived JSON)      │                  │
+│  └──────────────────────┘    └──────────────────────┘                  │
+│         │                           │                                  │
+│         ▼                           ▼                                  │
+│  ┌──────────────────────────────────────────────────────────┐          │
+│  │  _workspaces/yaml-reader/data/                          │          │
+│  │    ├── registry-graph.json     (global dependency DAG)  │          │
+│  │    ├── governance/             (one JSON per rule file)  │          │
+│  │    ├── workflows/              (one JSON per workflow)   │          │
+│  │    ├── patterns/               (one JSON per pattern)    │          │
+│  │    ├── plans/                  (one JSON per phase)      │          │
+│  │    ├── templates/              (one JSON per template)   │          │
+│  │    ├── integrity-report.json   (health dashboard data)  │          │
+│  │    ├── history-index.json      (hash-based diff index)  │          │
+│  │    └── business-lens.json      (LLM executive summaries)│          │
+│  └──────────────────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         VIEWER (STATIC HTML)                           │
+│                                                                        │
+│  _workspaces/yaml-reader/index.html (file:// protocol)                │
+│         │                                                              │
+│         ├── Tab 1: Registry Graph Explorer (D3 force-directed)         │
+│         │     • Nodes = YAML artifacts (colored by type)               │
+│         │     • Edges = references/inheritance/depends_on              │
+│         │     • Filters: type, tier, severity, workflow stage          │
+│         │                                                              │
+│         ├── Tab 2: Artifact Detail Panels                              │
+│         │     • Consistent H2/H3/H4 hierarchy                         │
+│         │     • Metadata, rules, stages, anti-patterns, refs           │
+│         │     • One-line list items, collapsible sections              │
+│         │                                                              │
+│         ├── Tab 3: Change Tracker (diff-aware)                         │
+│         │     • Hash-based version comparison                          │
+│         │     • Highlighted additions/removals/modifications           │
+│         │     • Timeline of changes per artifact                       │
+│         │                                                              │
+│         ├── Tab 4: Integrity Dashboard                                 │
+│         │     • Broken refs, duplicate SSOTs, schema violations        │
+│         │     • Governance breach surface                              │
+│         │     • Health score per registry domain                       │
+│         │                                                              │
+│         └── Context Chip (always visible)                              │
+│               • LENS status | Registry health | Domain | DoR           │
+│               • Evidence tags | Deterministic next-action              │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 2. Registry Indexer — Python-Side Pipeline
+
+#### 2.1 Type Detection & Categorization
+
+The indexer walks `cortex-registry/` and classifies each YAML by **directory convention + schema fingerprinting**:
+
+| Registry Type | Directory Pattern | Schema Fingerprint | Model Class |
+|---|---|---|---|
+| **Governance Rules** | `governance/*.yaml`, `core/*.yaml` | `rules:` array, `severity:`, `blocking:` | `GovernanceRuleModel` |
+| **Workflow Templates** | `workflows/templates/**/*.yaml` | `workflow:` with `steps:` or `stages:` | `WorkflowModel` |
+| **Patterns** | `patterns/*.yaml` | `pattern:` or `participants:` or `use_when:` | `PatternModel` |
+| **Plans** | `planning/phases/**/*.yaml` | `sweep_catalogue:`, `phases:` array | `PlanModel` |
+| **Response Templates** | `templates/response/*.yaml` | `blocks:` or `sections:` | `ResponseTemplateModel` |
+| **Config** | `config/*.yaml` | Catch-all with `settings:` or `config:` | `ConfigModel` |
+| **Knowledge** | `knowledge/*.yaml` | `entries:` or `domain:` with `guidance:` | `KnowledgeModel` |
+| **Playbooks** | `playbooks/*.yaml` | `playbook:` with `steps:` | `PlaybookModel` |
+
+**Fallback:** Every YAML that doesn't match a known fingerprint gets a `GenericModel` with the full parsed dict and a schema warning flag — **never a blank render**.
+
+**Parser Registration Pattern:**
+```python
+# cortex/intelligence/registry/parsers/__init__.py
+PARSER_REGISTRY: dict[str, type[BaseRegistryParser]] = {}
+
+def register_parser(schema_type: str):
+    """Decorator to register a parser for a schema type."""
+    def decorator(cls):
+        PARSER_REGISTRY[schema_type] = cls
+        return cls
+    return decorator
+
+@register_parser("governance")
+class GovernanceParser(BaseRegistryParser):
+    ...
+
+@register_parser("workflow")
+class WorkflowParser(BaseRegistryParser):
+    ...
+```
+
+Adding a new YAML schema type = (1) create parser class, (2) apply `@register_parser` decorator. No other files need modification.
+
+#### 2.2 Reference Resolution
+
+Cross-file references appear in 4 forms in `cortex-registry/`:
+
+| Reference Style | Example | Resolution Strategy |
+|---|---|---|
+| `file:` pointer | `file: "planning/phases/completed/phase-123.yaml"` | Path resolve relative to `cortex-registry/` |
+| `depends_on:` list | `depends_on: [phase-121, phase-120]` | ID lookup in global index |
+| `core_rules:` list | `core_rules: ['CORE-008', 'CORE-064']` | ID lookup in governance models |
+| Workflow `primitives:` | `primitives/governance/holistic-validation-gate.yaml` | Path resolve in `workflows/templates/` |
+
+The `ReferenceResolver` builds a two-pass pipeline:
+1. **Pass 1 (Index):** Build global `id → file_path` map from all parsed models
+2. **Pass 2 (Resolve):** Walk each model's reference fields, replace IDs with resolved pointers, emit unresolvable refs as integrity violations
+
+#### 2.3 Normalized JSON View-Model
+
+Each artifact emits a stable JSON structure:
+
+```json
+{
+  "id": "CORE-008",
+  "type": "governance-rule",
+  "source_file": "cortex-registry/core/tier0-skull/tdd-enforcement.yaml",
+  "source_hash": "sha256:a1b2c3...",
+  "title": "TDD Mandatory",
+  "metadata": { "severity": "P0", "blocking": true, "tier": "tier0" },
+  "content": { /* type-specific structured fields */ },
+  "references": {
+    "outgoing": [{ "target_id": "CORE-064", "type": "depends_on" }],
+    "incoming": [{ "source_id": "implement-workflow", "type": "uses" }]
+  },
+  "business_lens": {
+    "purpose": "Ensures code quality through mandatory test-first development",
+    "business_impact": "Reduces production bugs by enforcing test coverage before code",
+    "risk": "Low — well-established pattern, 100+ phases use this rule",
+    "constraints": "All code-modifying operations must write failing test first",
+    "readiness": "PRODUCTION",
+    "generated_at": "2026-03-04T12:00:00Z"
+  },
+  "integrity": {
+    "all_refs_resolved": true,
+    "schema_valid": true,
+    "warnings": []
+  }
+}
+```
+
+**Stability contract:** JSON keys are alphabetically ordered, arrays are deterministically sorted (by `id` or `name`), floating-point values are rounded to 2 decimals. This ensures `sha256(json.dumps(model, sort_keys=True))` produces stable hashes for diff detection.
+
+#### 2.4 Global Dependency Graph
+
+```json
+{
+  "nodes": [
+    { "id": "CORE-008", "type": "governance-rule", "label": "TDD Mandatory", "tier": "P0" },
+    { "id": "implement-workflow", "type": "workflow", "label": "IMPLEMENT", "category": "sdlc" }
+  ],
+  "edges": [
+    { "source": "implement-workflow", "target": "CORE-008", "type": "enforces", "weight": 1.0 },
+    { "source": "implement-workflow", "target": "holistic-validation-gate", "type": "composes", "weight": 0.8 }
+  ],
+  "clusters": {
+    "governance": ["CORE-008", "CORE-064", "CORE-068", "..."],
+    "sdlc": ["implement-workflow", "fix-workflow", "..."],
+    "maintenance": ["vacuum-workflow", "health-check-workflow"]
+  }
+}
+```
+
+### 3. Static HTML Viewer — 4 Interactive Views
+
+#### 3.1 Registry Graph Explorer
+
+**D3 Force-Directed Graph** with:
+- **Node shapes:** Circles (governance), Rectangles (workflows), Diamonds (patterns), Hexagons (plans)
+- **Node colors:** Status-based (green=active, blue=planned, gray=archived)
+- **Edge types:** Solid (depends_on), Dashed (references), Dotted (inherits)
+- **Filters sidebar:** Checkboxes for type, severity tier, workflow stage, cluster
+- **Search:** Type-ahead filter that highlights matching nodes and dims non-matches
+- **Zoom + Pan:** D3 zoom behavior (already implemented in `diagrams.js`)
+- **Click-to-detail:** Clicking a node opens the Artifact Detail Panel for that artifact
+
+**Performance:** Precompute initial layout coordinates via a headless D3 simulation at build time. Store `x,y` in `registry-graph.json`. The viewer loads pre-positioned nodes (instant render) and only activates simulation on user drag.
+
+#### 3.2 Artifact Detail Panels
+
+**Consistent layout for ALL artifact types:**
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ H2: {artifact.title}                              [type]    │
+│ ────────────────────────────────────────────────────────────│
+│ H3: Metadata                                                │
+│   • ID: CORE-008                                            │
+│   • Source: core/tier0-skull/tdd-enforcement.yaml            │
+│   • Severity: P0 🔴                                         │
+│   • Tier: tier0-skull                                       │
+│                                                              │
+│ H3: Business Summary                                        │
+│   Purpose: {one-line}                                       │
+│   Impact: {one-line}                                        │
+│   Risk: {badge}                                             │
+│   Readiness: {badge}                                        │
+│                                                              │
+│ H3: Content (type-specific)                                 │
+│   H4: Rules (governance)                                    │
+│     • COMP-001 — Audit Trail [critical]                     │
+│     • COMP-002 — Data Retention [high]                      │
+│   H4: Steps (workflow)                                      │
+│     1. Holistic Validation Gate                             │
+│     2. TDD RED Phase                                        │
+│   H4: Participants (pattern)                                │
+│     • Factory, Product, ConcreteFactory                     │
+│                                                              │
+│ H3: References                                              │
+│   Outgoing: CORE-064, CORE-068                              │
+│   Incoming: implement-workflow, fix-workflow                 │
+│                                                              │
+│ H3: Integrity                                               │
+│   ✅ All refs resolved                                       │
+│   ✅ Schema valid                                            │
+│   ⚠️ 1 warning: deprecated field 'v1_compat'               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**Renderer registration** mirrors parser registration:
+```javascript
+const RENDERERS = {};
+function registerRenderer(type, renderFn) {
+    RENDERERS[type] = renderFn;
+}
+registerRenderer('governance-rule', renderGovernanceDetail);
+registerRenderer('workflow', renderWorkflowDetail);
+// Fallback:
+function renderArtifactDetail(artifact) {
+    const renderer = RENDERERS[artifact.type] || renderGenericDetail;
+    return renderer(artifact);
+}
+```
+
+**Generic fallback** renders all JSON fields as a structured key-value table with a ⚠️ banner: "This artifact uses a schema type without a dedicated renderer. Showing raw structured view."
+
+#### 3.3 Diff-Aware Change Tracker
+
+**Mechanism:**
+1. Build pipeline generates `history-index.json`:
+   ```json
+   {
+     "snapshots": [
+       {
+         "timestamp": "2026-03-04T12:00:00Z",
+         "commit": "abc1234",
+         "artifacts": {
+           "CORE-008": "sha256:a1b2c3...",
+           "implement-workflow": "sha256:d4e5f6..."
+         }
+       }
+     ]
+   }
+   ```
+2. On each build, the indexer compares current hashes against the last snapshot
+3. Changed artifacts get a `diff` field in their view-model:
+   ```json
+   {
+     "changed_fields": ["metadata.severity", "content.rules[2].description"],
+     "added_fields": ["content.rules[5]"],
+     "removed_fields": [],
+     "previous_hash": "sha256:old...",
+     "current_hash": "sha256:new..."
+   }
+   ```
+4. The viewer renders changed fields with a subtle gold left-border and a "Changed in latest build" timestamp badge
+
+**Storage:** `history-index.json` is append-only, capped at 50 snapshots (rolling window). Each snapshot stores only hashes (~2KB per 100 artifacts).
+
+#### 3.4 Integrity/Health Dashboard
+
+**Data source:** `integrity-report.json` generated by the indexer at build time.
+
+| Health Check | Source | Display |
+|---|---|---|
+| **Broken refs** | `ReferenceResolver` unresolved targets | Red badge + list with file:line |
+| **Duplicate SSOTs** | Same `id` defined in >1 file | Amber badge + file comparison |
+| **Schema violations** | Parser validation failures | Red/amber by severity |
+| **Governance breaches** | Rules with `status: DEFINED` but no enforcement wiring | Amber warning |
+| **Orphaned artifacts** | YAMLs with 0 incoming references | Gray info badge |
+| **Overall health score** | `(total - violations) / total * 100` | Circular gauge (D3 arc) |
+
+### 4. Business Lens Layer
+
+**Architecture principle:** The LLM never sees raw YAML. It consumes the normalized JSON view-model.
+
+**Pipeline:**
+```
+NormalizedModel (JSON) → LLM prompt template → LLM API → BusinessLensSummary → business-lens.json
+```
+
+**Prompt template per artifact type:**
+```
+Given this {type} artifact from the CORTEX governance framework:
+- ID: {id}
+- Title: {title}
+- Metadata: {metadata_json}
+- Content summary: {content_summary_max_200_chars}
+
+Generate an executive summary with EXACTLY these fields:
+- purpose (≤80 chars): What this artifact does in business terms
+- business_impact (≤120 chars): How this affects development velocity/quality/risk
+- risk (one of: LOW | MEDIUM | HIGH | CRITICAL): Current risk assessment
+- constraints (≤100 chars): Key operating constraints
+- readiness (one of: PRODUCTION | BETA | DRAFT | DEPRECATED): Operational status
+```
+
+**Guardrails:**
+- Business Lens is a **derived artifact** — stored in `business-lens.json`, never written back to YAML
+- Summaries are regenerated only when the source model hash changes (idempotent)
+- Strict character limits enforced by the writer (truncate + "…" if LLM exceeds)
+- `learn_more_url` field points to the Artifact Detail Panel for drill-down
+- If LLM is unavailable, the field defaults to `"purpose": "Summary generation pending"` — never blank
+
+### 5. "Smarter than Copilot" UX Patterns
+
+#### 5.1 Context Chip (always visible, single line)
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ 🔬 LENS: 8/8 analyzers  │  📚 Registry: 36 rules · 16 workflows     │
+│ 🏷️ Domain: governance   │  📋 DoR: ✅ ready  │  ▶ Next: Run /audit   │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+**Design principles:**
+- **One line, always visible** at the top of the content panel
+- **Deterministic next-action** — based on current state, not probabilistic. If integrity has issues → "Next: Fix 3 broken refs". If all clean → "Next: Review Business Lens summaries"
+- **Evidence tags** — each metric links to its data source (click "36 rules" → scrolls to governance section)
+- **Pulse animation** on the "Next" action when there's something actionable (subtle glow, not distracting)
+
+#### 5.2 Intelligence Signals
+
+| Signal | What It Shows | Why It's "Smarter" |
+|---|---|---|
+| **Ref count badge** on graph nodes | "12 references" | Shows impact before user asks |
+| **Health halo** on artifact cards | Green/amber/red ring | Integrity status at a glance |
+| **Dependency depth** in detail panel | "3 levels deep in chain" | Warns about deep coupling |
+| **Staleness indicator** | "Last modified 47 days ago" | Surfaces drift before it's a problem |
+| **Cross-domain impact** | "Used by 4 workflows across 2 domains" | Shows blast radius of changes |
+
+### 6. Performance Budget
+
+| Metric | Budget | Strategy |
+|---|---|---|
+| **Initial load** | < 500ms | Pre-positioned graph nodes, lazy D3 import, CSS-only skeleton |
+| **Graph render (100 nodes)** | < 200ms | Precomputed `x,y` in JSON, simulation only on drag |
+| **Graph render (500 nodes)** | < 1s | Canvas fallback for >200 nodes, WebWorker simulation |
+| **JSON total payload** | < 500KB | Per-artifact files lazy-loaded on demand, not a single monolith |
+| **Detail panel open** | < 100ms | Pre-parsed model, template-literal rendering (no framework) |
+| **Diff computation** | < 50ms | Hash comparison only, no full-text diff at load time |
+| **D3 library** | Lazy-loaded | `<script async>` for d3.min.js, graph tab shows skeleton until loaded |
+| **Business Lens** | Cached | Only regenerated when source hash changes |
+
+**Caching strategy:**
+- **Python side:** `@lru_cache` on parsed models keyed by `(file_path, file_mtime)` — cache invalidates on YAML file modification
+- **Browser side:** `localStorage` for last-loaded graph positions (survives page reloads)
+- **Build side:** `history-index.json` stores hashes — unchanged artifacts skip JSON regeneration
+
+### 7. Golden Tests
+
+| Test | What It Proves | File |
+|---|---|---|
+| `test_governance_yaml_to_model` | Governance YAML → `GovernanceRuleModel` with correct fields | `tests/intelligence/registry/test_governance_parser.py` |
+| `test_workflow_yaml_to_model` | Workflow YAML → `WorkflowModel` with steps in order | `tests/intelligence/registry/test_workflow_parser.py` |
+| `test_model_to_json_deterministic` | Same YAML input → identical JSON output (byte-for-byte) | `tests/intelligence/registry/test_json_stability.py` |
+| `test_graph_edges_complete` | All `depends_on`/`core_rules` refs appear as edges in graph | `tests/intelligence/registry/test_dependency_graph.py` |
+| `test_reference_resolution` | Cross-file `$ref` resolves to correct target model | `tests/intelligence/registry/test_reference_resolver.py` |
+| `test_broken_ref_detection` | Invalid ref → appears in `integrity-report.json` | `tests/intelligence/registry/test_integrity.py` |
+| `test_unknown_schema_fallback` | Unrecognized YAML → `GenericModel` (not blank, not error) | `tests/intelligence/registry/test_generic_fallback.py` |
+| `test_parser_registration` | New parser added via decorator → indexer uses it automatically | `tests/intelligence/registry/test_parser_registry.py` |
+| `test_html_render_governance` | Governance JSON → HTML has correct H2/H3/H4 hierarchy | `tests/yaml_reader/test_governance_renderer.js` |
+| `test_html_render_workflow` | Workflow JSON → HTML has steps in order with correct icons | `tests/yaml_reader/test_workflow_renderer.js` |
+| `test_html_render_generic_fallback` | Unknown type JSON → HTML has warning banner + structured view | `tests/yaml_reader/test_generic_renderer.js` |
+| `test_diff_highlight` | Changed artifact → HTML has gold border + timestamp badge | `tests/yaml_reader/test_diff_renderer.js` |
+| `test_graph_precomputed_positions` | Pre-positioned nodes render without D3 simulation | `tests/yaml_reader/test_graph_perf.js` |
+| `test_windows_path_file_protocol` | `file:///C:/Users/...` paths work for all asset loads | `tests/yaml_reader/test_windows_compat.js` |
+| `test_business_lens_brevity` | All LLM summaries respect character limits | `tests/intelligence/registry/test_business_lens.py` |
+| `test_history_index_append_cap` | History index never exceeds 50 snapshots | `tests/intelligence/registry/test_history_index.py` |
+
+### 8. File Organization (Windows-First, No Root Pollution)
+
+All new files live under existing canonical directories — **zero root-folder additions**:
+
+```
+cortex/intelligence/registry/           ← NEW: Python indexer + parsers
+    __init__.py
+    indexer.py                          ← RegistryIndexer (walk + categorize)
+    reference_resolver.py               ← ReferenceResolver (2-pass)
+    dependency_graph.py                 ← DependencyGraphBuilder
+    integrity_checker.py                ← IntegrityChecker
+    business_lens_writer.py             ← BusinessLensWriter (LLM → JSON)
+    history_tracker.py                  ← HistoryTracker (hash-based)
+    models/
+        __init__.py
+        base.py                         ← BaseRegistryModel
+        governance.py                   ← GovernanceRuleModel
+        workflow.py                     ← WorkflowModel
+        pattern.py                      ← PatternModel
+        plan.py                         ← PlanModel
+        response_template.py            ← ResponseTemplateModel
+        config.py                       ← ConfigModel
+        knowledge.py                    ← KnowledgeModel
+        generic.py                      ← GenericModel (fallback)
+    parsers/
+        __init__.py                     ← PARSER_REGISTRY + @register_parser
+        governance_parser.py
+        workflow_parser.py
+        pattern_parser.py
+        plan_parser.py
+        template_parser.py
+        config_parser.py
+        knowledge_parser.py
+        generic_parser.py               ← Always matches, lowest priority
+
+_workspaces/yaml-reader/                ← EXISTING: extend viewer
+    data/                               ← NEW: generated JSON view-models
+        registry-graph.json
+        integrity-report.json
+        history-index.json
+        business-lens.json
+        governance/                     ← one JSON per governance file
+        workflows/                      ← one JSON per workflow
+        patterns/                       ← one JSON per pattern
+        plans/                          ← one JSON per phase plan
+        templates/                      ← one JSON per response template
+    renderers/                          ← NEW: per-type HTML renderers
+        governance-renderer.js
+        workflow-renderer.js
+        pattern-renderer.js
+        plan-renderer.js
+        generic-renderer.js            ← fallback with schema warning
+        graph-renderer.js              ← Registry Graph Explorer
+        diff-renderer.js               ← Change Tracker
+        integrity-renderer.js          ← Health Dashboard
+        context-chip.js                ← Intelligence context bar
+    index.html                          ← EXISTING: add new tabs + context chip
+
+tests/intelligence/registry/            ← NEW: golden tests
+    __init__.py
+    test_governance_parser.py
+    test_workflow_parser.py
+    test_json_stability.py
+    test_dependency_graph.py
+    test_reference_resolver.py
+    test_integrity.py
+    test_generic_fallback.py
+    test_parser_registry.py
+    test_business_lens.py
+    test_history_index.py
+```
+
+**Windows path strategy:** All file references in JSON use forward-slash POSIX paths relative to workspace root. The viewer's asset loader normalizes paths via:
+```javascript
+function normalizePath(p) {
+    return p.replace(/\\/g, '/');
+}
+```
+`file://` protocol detection already exists in `app.js` — extended to handle `file:///C:/` prefixes.
+
+### 9. Implementation Plan — Phase 125
+
+**Decomposition into 8 sub-phases (strict sequential, TDD-gated):**
+
+| Sub-Phase | Title | Deliverable | Effort |
+|---|---|---|---|
+| **S1** | Base models + parser registry | `BaseRegistryModel`, `PARSER_REGISTRY`, `@register_parser` decorator, `GenericParser` | 1 day |
+| **S2** | Typed parsers (governance, workflow, pattern, plan) | 4 parsers + golden tests per type | 2 days |
+| **S3** | Reference resolver + dependency graph | `ReferenceResolver`, `DependencyGraphBuilder`, edge tests | 1 day |
+| **S4** | Integrity checker + history tracker | `IntegrityChecker`, `HistoryTracker`, hash stability tests | 1 day |
+| **S5** | JSON emitter + build script | `scripts/build-registry-docs.py` that runs full pipeline → `data/` | 1 day |
+| **S6** | HTML renderers (4 types + generic fallback) | JS renderer modules, artifact detail panels, context chip | 2 days |
+| **S7** | D3 graph explorer + diff viewer + integrity dashboard | 3 new viewer tabs, precomputed layout, lazy loading | 2 days |
+| **S8** | Business Lens writer + LLM integration | `BusinessLensWriter`, prompt templates, brevity tests | 1 day |
+
+**Total: ~11 engineering days. 8 sub-phases. ~50+ golden tests.**
+
+### ⚡ If you say `proceed`, I will:
+
+1. Create the Phase 125 plan file at `cortex-registry/planning/phases/planned/phase-125-registry-documentation-viewer.yaml` with full sweep catalogue, TDD sequences, and acceptance criteria
+2. Add a thin reference entry to `cortex-master.yaml`
+3. Begin TDD on S1: `BaseRegistryModel`, `PARSER_REGISTRY`, `@register_parser`, `GenericParser` + failing tests first
+4. Execute all 8 sub-phases sequentially with convergence gates between each

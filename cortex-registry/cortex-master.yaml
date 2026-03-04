@@ -18,11 +18,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-03-04T00:00:00Z'
-  total_phases: 107
+  total_phases: 108
   active: 0
   completed: 104
   in_progress: 0
-  planned: 0
+  planned: 1
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -33,13 +33,14 @@ metadata:
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-123 (Registry Intelligence Engine), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
-  planned_next: "next phase TBD — run /audit to identify P0/P1 candidates"
+  recent_completed: "phase-125 (Registry-Aware Documentation Viewer), phase-123 (Registry Intelligence Engine), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
+  planned_next: "none — all phases complete"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-125, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml" }
   - { id: phase-124, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-124-principle-block-library.yaml" }
   - { id: phase-123, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-123-principle-of-the-moment.yaml" }
   - { id: phase-122, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml" }
@@ -119,11 +120,11 @@ verification:
   last_verified: '2026-03-04T00:00:00Z'
 
 summary:
-  total_phases: 107
+  total_phases: 108
   completed: 104
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   archived: 4
   playbooks: 1
   completion_percentage: 97
@@ -423,6 +424,15 @@ phases:
     note: "COMPLETE 2026-03-04. 5/5 GAPs CLOSED. (1) target_files extracted via regex from description text — router now receives meaningful inputs. (2) MODERATE threshold 0.60→0.39; 'implement' added to OPERATION_SCORES. (3) cortex_workflow MCP documented in copilot-instructions.md. (4) Exception swallowing → structured logging. (5) V1-V6 holistic verification PASSED. Smoke: 2395 GREEN."
 
   # ── PLANNED ───────────────────────────────────────────────────────────────
+  - id: phase-125
+    title: "Registry-Aware Documentation Viewer — YAML→Model→JSON→HTML Pipeline + D3.js Interactive Visualizations"
+    status: COMPLETE
+    priority: P1
+    sweep_id: SWEEP-125-REGISTRY-DOC-VIEWER
+    gaps: 13
+    sub_phases: 8
+    file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml"
+    note: "COMPLETE 2026-03-04. 13/13 GAPs CLOSED. 8 sub-phases delivered: (a) Base models + parser registry + GenericParser (b) 8 typed parsers (governance, workflow, pattern, plan, config, knowledge, template) (c) ReferenceResolver + DependencyGraphBuilder (d) IntegrityChecker + HistoryTracker (e) RegistryIndexer full pipeline + build-registry-docs.py (f) 6 HTML renderers (g) D3 graph explorer + diff viewer + integrity dashboard (h) BusinessLensWriter. 195 registry tests GREEN. Smoke: 2582."
 
   # ── COMPLETE ──────────────────────────────────────────────────────────────
   - id: phase-123
