@@ -1,0 +1,11 @@
+id: phase-50
+title: "Health & Vacuum Orchestrator Consolidation"
+status: COMPLETE
+priority: P1
+sweep_id: SWEEP-050-HEALTH-VACUUM
+completed_date: "2025"
+gaps: 0
+note: >
+  COMPLETE — HealthOrchestrator consolidated to cortex/orchestrators/health/.
+  VacuumOrchestrator canonical path established. 8-stage vacuum pipeline implemented.
+  All golden tests GREEN.

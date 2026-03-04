@@ -1,0 +1,725 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Playbook — PB-STS-002: Documentation Site Refresh
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: cortex-architect.prompt.md § DESIGN MODE + cortex-doc.prompt.md
+# Remediation Plan: _workspaces/docgen/docgen-plan.md § REMEDIATION PLAN
+# CORE Rules: CORE-002 (no .md sprawl), CORE-035 (no duplication), CORE-049 (silent),
+#             CORE-064 (sweep completeness)
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# MCP EXECUTION POLICY — NON-NEGOTIABLE
+# ──────────────────────────────────────
+# All playbook stages MUST execute via MCP tools. No direct file writes,
+# no manual HTML edits, no script bypasses. This playbook exercises the
+# documentation refresh workflow via MCP exclusively.
+#
+# ── SHARPEN-THE-SAW INTEGRATION
+# ────────────────────────────
+# This playbook surfaces gaps in MCP documentation tooling:
+# - Content extraction from .content/ markdown files
+# - HTML generation with role-based filtering
+# - CSS consolidation and validation
+# - Diagram loading pattern unification
+# - JSON schema validation
+#
+# Gaps discovered → documented in:
+#   cortex-registry/_cortex-master/playbooks/sharpen-the-saw/mcp-compatibility-gaps.yaml
+#
+# ══════════════════════════════════════════════════════════════════════════════
+
+playbook:
+  id: "pb-sts-002"
+  title: "Documentation Site Refresh — Repeatable Content & Diagram Sync"
+  version: "1.0.0"
+  category: "sts"
+  repeatable: true
+  status: "ready"
+  created: "2026-02-24"
+  priority: P1
+  risk: low
+
+  description: |
+    Repeatable playbook for refreshing cortex-docs site from source content in
+    cortex-docs/.content/ and knowledge YAMLs in cortex-registry/knowledge/.
+    
+    ⚠️ CORTEX ADMIN FEATURE — NOT FOR PRODUCTION DEPLOYMENT
+    This playbook is for internal CORTEX documentation maintenance only.
+    Must be run manually by CORTEX administrators on-demand.
+    
+    Purpose:
+    - Auto-discover changes in markdown content and knowledge artifacts
+    - Regenerate JSON catalogs (content.json, knowledge-catalog.json, learning-paths.json)
+    - Unify diagram loading patterns (Mermaid + D3.js)
+    - Eliminate inline styles (extract to semantic CSS classes)
+    - Validate role-based content mapping completeness
+    - Deploy updated site with zero regression risk
+    
+    Use Cases (Admin Only):
+    - Content author updates .content/ markdown → admin runs playbook → site reflects changes
+    - New knowledge YAML added to registry → admin runs playbook → learning path updated
+    - Role filtering broken → admin runs playbook → validation catches + fixes gaps
+    - Preparing for demo/release → admin runs playbook → site audit clean
+
+  # ── TARGET LOCATIONS ───────────────────────────────────────────────────────
+  target:
+    source_content: "cortex-docs/.content"
+    source_knowledge: "cortex-registry/knowledge"
+    output_site: "cortex-docs"
+    data_layer: "cortex-docs/data"
+    
+    tech_stack:
+      html: "Static HTML5 with semantic structure"
+      css: "Glassmorphism theme + responsive grid (CSS Grid + Flexbox)"
+      js: "Vanilla JavaScript (ES6+) with content-loader + diagram-loader"
+      diagrams: "Mermaid.js + D3.js"
+      fonts: "Google Fonts (Inter, Space Grotesk, JetBrains Mono)"
+    
+    issue_count: 7  # From chat01.md remediation plan
+    issue_breakdown:
+      p0: 2  # Role fragmentation, inline styles
+      p1: 2  # Diagram loading, content.json gaps
+      p2: 3  # Learning paths, navigation, glassmorphism
+
+  # ── LINKED TEMPLATES ───────────────────────────────────────────────────────
+  templates:
+    workflow: "cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml"
+    remediation: "_workspaces/docgen/docgen-plan.md"
+    phase_completed: "cortex-registry/_cortex-master/phases/completed/phase-22-cortex-docs-refresh.yaml"
+
+  # ── REPEATABILITY ──────────────────────────────────────────────────────────
+  repeatability:
+    enabled: true
+    isolation: "operates on cortex-docs/ in-place (no workspace copy needed)"
+    run_id_format: "PB-STS-002-RUN-{YYYYMMDD}-{sequence}"
+    max_concurrent_runs: 1
+    reset_strategy: "git stash → run playbook → git stash pop (if needed)"
+    access_level: "admin"
+    trigger_modes:
+      manual: "/doc-refresh (admin only)"
+      mcp: "cortex_doc_discover (admin only)"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# STAGE DEFINITIONS
+# ══════════════════════════════════════════════════════════════════════════════
+
+stages:
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 0: DISCOVERY
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-0"
+    name: "Discovery — Content & Knowledge Gap Analysis"
+    orchestrator: "DocumentationOrchestrator"
+    mcp_tools:
+      - "cortex_doc_discover(scan_sources=['git', 'registry', 'live'])"
+      - "cortex_git(operation='history', since='90 days')"
+      - "cortex_knowledge(operation='search', domain='all')"
+    
+    inputs:
+      - path: "cortex-docs/.content"
+        type: "markdown_source"
+        purpose: "Extract content updates since last run"
+      - path: "cortex-registry/knowledge"
+        type: "yaml_artifacts"
+        purpose: "Scan for new/updated knowledge files"
+      - path: "cortex-master.yaml"
+        type: "master_plan"
+        purpose: "Extract completed phases needing documentation"
+      - path: "cortex/orchestrators"
+        type: "live_code"
+        purpose: "Compare docstrings vs published docs"
+    
+    outputs:
+      - path: ".cortex-runtime/doc-discovery/git-features.json"
+        description: "Features added in last 90 days"
+      - path: ".cortex-runtime/doc-discovery/knowledge-inventory.json"
+        description: "All knowledge YAMLs with metadata"
+      - path: ".cortex-runtime/doc-discovery/completed-phases.json"
+        description: "Phases marked COMPLETE since last refresh"
+      - path: ".cortex-runtime/doc-discovery/gaps.json"
+        description: "Documentation gaps (missing/stale content)"
+    
+    validation:
+      - check: "All 4 discovery JSON files generated"
+        expect: "file_exists == true"
+      - check: "Gap count logged"
+        expect: "gaps.json contains gap_count field"
+    
+    ac_markers:
+      start: "AC_DOCGEN_DISCOVERY_START"
+      complete: "AC_DOCGEN_DISCOVERY_COMPLETE"
+    
+    failure_handling:
+      - condition: "cortex_doc_discover unavailable"
+        action: "fallback to manual git log + find commands"
+        gap_id: "GAP-DOC-001"
+        backlog: "ENH-MCP-DOC-DISCOVER"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 1: GENERATION
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-1"
+    name: "Generation — Transform Sources to JSON Catalogs"
+    orchestrator: "KnowledgeSynthesisEngine"
+    mcp_tools:
+      - "cortex_knowledge(operation='catalog', output='knowledge-catalog.json')"
+    
+    dependencies:
+      - "stage-0"  # Requires discovery outputs
+    
+    inputs:
+      - path: ".cortex-runtime/doc-discovery/knowledge-inventory.json"
+      - path: "cortex-registry/knowledge/**/*.yaml"
+      - path: "cortex/orchestrators/**/*.py"  # For metadata extraction
+      - path: "cortex/mcp/tools/**/*.py"  # For tool catalog
+    
+    transformations:
+      - name: "knowledge_yaml_to_json"
+        script: "cortex-docs/pipeline/generate-knowledge-catalog.py"
+        input: ".cortex-runtime/doc-discovery/knowledge-inventory.json"
+        output: "cortex-docs/data/knowledge-catalog.json"
+      
+      - name: "learning_paths_generation"
+        script: "cortex-docs/pipeline/generate-learning-paths.py"
+        input: "cortex-docs/data/knowledge-catalog.json"
+        output: "cortex-docs/data/learning-paths.json"
+      
+      - name: "orchestrator_metadata"
+        method: "OrchestratorMetadataExtractor.extract()"
+        output: "cortex-docs/data/orchestrators.json"
+      
+      - name: "mcp_tool_catalog"
+        method: "MCPToolCatalogGenerator.generate()"
+        output: "cortex-docs/data/mcp-tools.json"
+      
+      - name: "content_json_enhancement"
+        script: "cortex-docs/pipeline/extract-json.py"
+        input: "cortex-docs/.content/**/*.md"
+        output: "cortex-docs/data/content.json"
+    
+    outputs:
+      - path: "cortex-docs/data/knowledge-catalog.json"
+        schema: ".github/schemas/knowledge-catalog.schema.json"
+      - path: "cortex-docs/data/learning-paths.json"
+        schema: ".github/schemas/learning-paths.schema.json"
+      - path: "cortex-docs/data/orchestrators.json"
+        schema: ".github/schemas/orchestrators.schema.json"
+      - path: "cortex-docs/data/mcp-tools.json"
+        schema: ".github/schemas/mcp-tools.schema.json"
+      - path: "cortex-docs/data/content.json"
+        schema: ".github/schemas/content.schema.json"
+    
+    validation:
+      - check: "All 5 JSON files generated"
+        expect: "file_exists == true"
+      - check: "JSON schema validation"
+        tool: "cortex_validate(operation='json_schema', files='cortex-docs/data/*.json')"
+        expect: "all_valid == true"
+      - check: "Knowledge catalog entry count"
+        expect: "knowledge-catalog.json contains >= 30 entries"
+    
+    ac_markers:
+      start: "AC_DOCGEN_GENERATION_START"
+      complete: "AC_DOCGEN_GENERATION_COMPLETE"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 2: P0 REMEDIATION — Critical Fixes
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-2-p0"
+    name: "P0 Remediation — Role Normalization + Inline Style Elimination"
+    orchestrator: "EnforcementOrchestrator"
+    
+    dependencies:
+      - "stage-1"
+    
+    fixes:
+      # ─────────────────────────────────────────────────────────────────────
+      # FIX 1: Role System Normalization
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "fix-role-normalization"
+        severity: "P0"
+        description: "Standardize role identifiers across HTML, JS, JSON"
+        
+        steps:
+          - action: "Rename curious-learner.html → learner.html"
+            tool: "git mv"
+            path: "cortex-docs/views/curious-learner.html"
+            target: "cortex-docs/views/learner.html"
+          
+          - action: "Update role-filter.js role array"
+            tool: "cortex_refactor"
+            file: "cortex-docs/assets/js/role-filter.js"
+            pattern: "['business', 'product', 'engineering', 'learner']"
+          
+          - action: "Normalize content.json role names"
+            tool: "cortex_refactor"
+            file: "cortex-docs/data/content.json"
+            find: '"Business Leader"|"Product Owner"|"Software Engineer"|"Curious Learner"'
+            replace: '"business"|"product"|"engineering"|"learner"'
+          
+          - action: "Add legacy name fallback in role-filter.js"
+            tool: "cortex_refactor"
+            file: "cortex-docs/assets/js/role-filter.js"
+            patch: |
+              const LEGACY_ROLE_MAP = {
+                'Business Leader': 'business',
+                'Product Owner': 'product',
+                'Software Engineer': 'engineering',
+                'Curious Learner': 'learner'
+              };
+              const normalizedRole = LEGACY_ROLE_MAP[userRole] || userRole;
+        
+        validation:
+          - check: "Zero legacy role name references"
+            command: "grep -r 'Business Leader|Product Owner|Software Engineer|Curious Learner' cortex-docs/"
+            expect: "0 matches"
+          - check: "learner.html exists"
+            command: "Test-Path cortex-docs/views/learner.html"
+            expect: "True"
+      
+      # ─────────────────────────────────────────────────────────────────────
+      # FIX 2: Inline Style Elimination
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "fix-inline-styles"
+        severity: "P0"
+        description: "Extract 37 inline styles to semantic CSS classes"
+        
+        steps:
+          - action: "Create layout-utilities.css"
+            tool: "cortex_refactor"
+            target: "cortex-docs/assets/css/components/layout-utilities.css"
+            content: |
+              /* Layout Utility Classes */
+              .section-divider { margin-top: 2rem; opacity: 0.7; }
+              .flex-center { display: flex; align-items: center; }
+              .card-grid { display: grid; gap: 2rem; }
+              .heading-primary { color: white; margin: 0; }
+              .icon-lg { font-size: 2rem; }
+          
+          - action: "Extract inline styles from HTML files"
+            tool: "cortex_refactor"
+            operation: "extract_inline_styles"
+            files: "cortex-docs/**/*.html"
+            output: "cortex-docs/assets/css/components/layout-utilities.css"
+          
+          - action: "Extract <style> block from index.html"
+            tool: "cortex_refactor"
+            file: "cortex-docs/index.html"
+            extract_to: "cortex-docs/assets/css/layouts/index-page.css"
+        
+        validation:
+          - check: "Zero inline style attributes"
+            command: "grep -r 'style=' cortex-docs/**/*.html"
+            expect: "0 matches"
+          - check: "Zero inline <style> blocks"
+            command: "grep -r '<style>' cortex-docs/**/*.html"
+            expect: "0 matches (excluding <link rel='stylesheet'>)"
+    
+    ac_markers:
+      start: "AC_DOCGEN_P0_REMEDIATION_START"
+      complete: "AC_DOCGEN_P0_REMEDIATION_COMPLETE"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 3: P1 REMEDIATION — High Priority Fixes
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-3-p1"
+    name: "P1 Remediation — Diagram Unification + Content.json Completion"
+    orchestrator: "EnforcementOrchestrator"
+    
+    dependencies:
+      - "stage-2-p0"
+    
+    fixes:
+      # ─────────────────────────────────────────────────────────────────────
+      # FIX 3: Diagram Loading Unification
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "fix-diagram-loading"
+        severity: "P1"
+        description: "Unify 24 files with 3 patterns into single diagram-loader.js"
+        
+        steps:
+          - action: "Create unified diagram-loader.js"
+            tool: "cortex_refactor"
+            target: "cortex-docs/assets/js/modules/diagram-loader.js"
+            content: |
+              // Unified Mermaid + D3 initialization with lazy loading
+              document.addEventListener('DOMContentLoaded', () => {
+                mermaid.initialize({ theme: 'dark', startOnLoad: false });
+                const observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                      mermaid.init(undefined, entry.target);
+                      observer.unobserve(entry.target);
+                    }
+                  });
+                });
+                document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
+              });
+          
+          - action: "Remove scattered initializeMermaid calls"
+            tool: "cortex_refactor"
+            operation: "remove_pattern"
+            files: "cortex-docs/**/*.html"
+            pattern: "initializeMermaid\\(\\)|mermaid\\.initialize"
+          
+          - action: "Add diagram-loader.js to all HTML files with diagrams"
+            tool: "cortex_refactor"
+            operation: "add_script_reference"
+            files: "cortex-docs/**/*.html"
+            script: '<script src="assets/js/modules/diagram-loader.js" defer></script>'
+        
+        validation:
+          - check: "Only diagram-loader.js contains initialization"
+            command: "grep -r 'mermaid.initialize' cortex-docs/"
+            expect: "1 match (diagram-loader.js only)"
+          - check: "All HTML files with diagrams reference diagram-loader.js"
+            command: "grep -r 'diagram-loader.js' cortex-docs/**/*.html | wc -l"
+            expect: "24 matches"
+      
+      # ─────────────────────────────────────────────────────────────────────
+      # FIX 4: Content.json Role Mapping Completion
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "fix-content-json-roles"
+        severity: "P1"
+        description: "Complete 8 missing role mappings + fix 2 empty arrays"
+        
+        steps:
+          - action: "Add missing roles key to 8 entries"
+            tool: "cortex_refactor"
+            file: "cortex-docs/data/content.json"
+            operation: "add_missing_roles_key"
+            default_value: '["all"]'
+          
+          - action: "Normalize role names to lowercase singular"
+            tool: "cortex_refactor"
+            file: "cortex-docs/data/content.json"
+            find: '"Business Leader"|"Product Owner"|"Software Engineer"|"Curious Learner"'
+            replace: '"business"|"product"|"engineering"|"learner"'
+          
+          - action: "Fix empty roles arrays"
+            tool: "cortex_refactor"
+            file: "cortex-docs/data/content.json"
+            find: '"roles": []'
+            replace: '"roles": ["all"]'
+          
+          - action: "Create JSON schema for content.json"
+            tool: "cortex_refactor"
+            target: ".github/schemas/content.schema.json"
+            schema_type: "content_catalog"
+        
+        validation:
+          - check: "All entries have roles key"
+            command: "jq '.categories[].files[] | select(.roles == null)' cortex-docs/data/content.json | wc -l"
+            expect: "0"
+          - check: "No uppercase role names"
+            command: "grep -r '\"Business Leader\"|\"Product Owner\"' cortex-docs/data/content.json"
+            expect: "no matches"
+    
+    ac_markers:
+      start: "AC_DOCGEN_P1_REMEDIATION_START"
+      complete: "AC_DOCGEN_P1_REMEDIATION_COMPLETE"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 4: P2 ENHANCEMENTS — Learning Paths + Navigation + Theme
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-4-p2"
+    name: "P2 Enhancements — Learning Paths + Navigation + Glassmorphism"
+    orchestrator: "DocumentationOrchestrator"
+    
+    dependencies:
+      - "stage-3-p1"
+    
+    enhancements:
+      # ─────────────────────────────────────────────────────────────────────
+      # ENHANCEMENT 1: Learning Path Structure
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "enhance-learning-paths"
+        severity: "P2"
+        description: "Scaffold 45 modules across beginner/intermediate/advanced"
+        
+        steps:
+          - action: "Create learning directory structure"
+            command: "mkdir -p cortex-docs/learning/{beginner,intermediate,advanced}/modules"
+          
+          - action: "Generate module HTML stubs from learning-paths.json"
+            tool: "cortex_refactor"
+            operation: "generate_module_pages"
+            input: "cortex-docs/data/learning-paths.json"
+            output_dir: "cortex-docs/learning"
+          
+          - action: "Create progress tracker JavaScript"
+            tool: "cortex_refactor"
+            target: "cortex-docs/assets/js/modules/progress-tracker.js"
+      
+      # ─────────────────────────────────────────────────────────────────────
+      # ENHANCEMENT 2: Navigation Consolidation
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "enhance-navigation"
+        severity: "P2"
+        description: "Consolidate 5 entry points to 1 unified index.html"
+        
+        steps:
+          - action: "Merge index-role-selector.html into index.html"
+            tool: "cortex_refactor"
+            operation: "merge_html_files"
+            source: "cortex-docs/index-role-selector.html"
+            target: "cortex-docs/index.html"
+          
+          - action: "Add breadcrumb component to all role pages"
+            tool: "cortex_refactor"
+            operation: "add_breadcrumbs"
+            files: "cortex-docs/roles/**/*.html"
+          
+          - action: "Deprecate old entry points"
+            command: "echo 'DEPRECATED - use cortex-docs/index.html' > cortex-docs/business/.deprecated"
+      
+      # ─────────────────────────────────────────────────────────────────────
+      # ENHANCEMENT 3: Glassmorphism Theme Standardization
+      # ─────────────────────────────────────────────────────────────────────
+      - id: "enhance-glassmorphism"
+        severity: "P2"
+        description: "Standardize 10 CSS files with CSS custom properties"
+        
+        steps:
+          - action: "Create glass-variables.css"
+            tool: "cortex_refactor"
+            target: "cortex-docs/assets/css/core/glass-variables.css"
+            content: |
+              :root {
+                --glass-blur: 10px;
+                --glass-shadow: 0 8px 32px rgba(13, 110, 253, 0.15);
+                --glass-border: 15px;
+                --glass-bg-primary: rgba(17, 25, 40, 0.75);
+              }
+          
+          - action: "Update all glass CSS files to use variables"
+            tool: "cortex_refactor"
+            operation: "replace_hardcoded_values"
+            files: "cortex-docs/assets/css/**/*.css"
+            replacements:
+              - find: "blur\\(10px\\)|blur\\(15px\\)"
+                replace: "var(--glass-blur)"
+              - find: "0 8px 32px rgba\\([^)]+\\)"
+                replace: "var(--glass-shadow)"
+    
+    ac_markers:
+      start: "AC_DOCGEN_P2_ENHANCEMENTS_START"
+      complete: "AC_DOCGEN_P2_ENHANCEMENTS_COMPLETE"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 5: VALIDATION
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-5"
+    name: "Validation — Enforce Quality Gates"
+    orchestrator: "EnforcementOrchestrator"
+    
+    dependencies:
+      - "stage-4-p2"
+    
+    quality_gates:
+      - name: "Zero Inline Styles"
+        check: "grep -r 'style=' cortex-docs/**/*.html | wc -l"
+        expect: 0
+        severity: "P0"
+      
+      - name: "Role Naming Consistency"
+        check: "grep -r 'Business Leader|Product Owner' cortex-docs/"
+        expect: "0 matches"
+        severity: "P0"
+      
+      - name: "JSON Schema Validation"
+        tool: "cortex_validate"
+        operation: "json_schema"
+        files: "cortex-docs/data/*.json"
+        expect: "all_valid == true"
+        severity: "P1"
+      
+      - name: "Link Validation"
+        tool: "cortex_validate"
+        operation: "check_links"
+        root: "cortex-docs/"
+        expect: "0 broken links"
+        severity: "P1"
+      
+      - name: "Responsive Validation"
+        tool: "cortex_validate"
+        operation: "responsive_test"
+        viewports: [320, 768, 1024, 1440]
+        expect: "no_horizontal_scroll == true"
+        severity: "P2"
+      
+      - name: "Diagram Rendering"
+        check: "grep -r 'mermaid.initialize' cortex-docs/ | wc -l"
+        expect: 1
+        severity: "P1"
+      
+      - name: "Content.json Completeness"
+        check: "jq '.categories[].files[] | select(.roles == null)' cortex-docs/data/content.json | wc -l"
+        expect: 0
+        severity: "P1"
+    
+    exit_conditions:
+      - "P0 violations == 0"
+      - "P1 violations == 0"
+    
+    ac_markers:
+      start: "AC_DOCGEN_VALIDATION_START"
+      complete: "AC_DOCGEN_VALIDATION_COMPLETE"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # STAGE 6: DEPLOYMENT
+  # ════════════════════════════════════════════════════════════════════════════
+  - id: "stage-6"
+    name: "Deployment — Commit & Push Changes"
+    orchestrator: "GitOrchestrator"
+    
+    dependencies:
+      - "stage-5"
+    
+    steps:
+      - action: "Git add updated files"
+        command: "git add cortex-docs/data/*.json cortex-docs/assets/css/ cortex-docs/assets/js/ cortex-docs/learning/"
+      
+      - action: "Git commit with AC markers"
+        command: |
+          git commit -m "docs(refresh): auto-refresh from docgen playbook PB-STS-002
+          
+          - P0: Normalize role system (3 variants → 1 canonical)
+          - P0: Eliminate 37 inline style violations
+          - P1: Unify diagram loading (24 files → 1 pattern)
+          - P1: Complete content.json role mappings (8 missing → 0)
+          - P2: Scaffold learning path structure (45 modules)
+          - P2: Consolidate navigation (5 entry points → 1)
+          - P2: Standardize glassmorphism (CSS variables)
+          
+          Playbook: PB-STS-002-RUN-$(Get-Date -Format 'yyyyMMdd')-1
+          AC: AC-DOCGEN-REFRESH-$(Get-Date -Format 'yyyyMMddHHmmss') ✅"
+      
+      - action: "Git push to origin/main"
+        command: "git push origin main"
+    
+    outputs:
+      - path: ".cortex-runtime/traces/docgen-refresh.log"
+        description: "Full playbook execution log"
+      - path: ".cortex-runtime/traces/orchestrator-traces.db"
+        description: "AC marker activity log"
+    
+    ac_markers:
+      start: "AC_DOCGEN_DEPLOYMENT_START"
+      complete: "AC_DOCGEN_DEPLOYMENT_COMPLETE"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# EXECUTION METADATA
+# ══════════════════════════════════════════════════════════════════════════════
+
+execution:
+  estimated_duration: "15 minutes"
+  prerequisites:
+    - "cortex-docs/.content/ has markdown files"
+    - "cortex-registry/knowledge/ has YAML artifacts"
+    - "Git working directory clean"
+    - "MCP server active (cortex_verify op=mcp)"
+  
+  environment:
+    required_tools:
+      - "cortex_doc_discover"
+      - "cortex_knowledge"
+      - "cortex_refactor"
+      - "cortex_validate"
+      - "cortex_git"
+    
+    optional_tools:
+      - "cortex_query_opj"  # For pattern learning from previous runs
+  
+  success_criteria:
+    - "All 6 stages complete with AC_COMPLETE markers"
+    - "Zero P0/P1 violations in Stage 5 validation"
+    - "Git commit successful with proper AC markers"
+    - "All 5 JSON files in cortex-docs/data/ updated"
+    - "Zero inline styles remain"
+    - "Zero legacy role name references"
+  
+  rollback_strategy:
+    - "Git stash changes if validation fails"
+    - "Restore previous cortex-docs/data/*.json from git history"
+    - "Report failure to .cortex-runtime/traces/docgen-refresh.log"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TRIGGER INTEGRATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+triggers:
+  manual:
+    command: "/doc-refresh"
+    description: "Run playbook manually from Copilot Chat (CORTEX admin only)"
+    usage: "Type /doc-refresh in Copilot Chat"
+    access: "admin"
+  
+  mcp:
+    tool: "cortex_doc_discover"
+    operation: "full"
+    description: "Trigger via MCP tool invocation (CORTEX admin only)"
+    access: "admin"
+  
+  # ── AUTOMATION DISABLED ──────────────────────────────────────────────────
+  # This is a CORTEX admin feature for internal documentation maintenance.
+  # NOT exposed to production deployments or CI/CD pipelines.
+  # Run manually on-demand only.
+  # ─────────────────────────────────────────────────────────────────────────
+  
+  # automated:  # DISABLED - admin feature only
+  #   github_action: ".github/workflows/docs-auto-refresh.yml"
+  #   on_push:
+  #     - "cortex-registry/knowledge/**/*.yaml"
+  #     - "cortex-docs/.content/**/*.md"
+  #   schedule:
+  #     cron: "0 2 * * 0"  # Weekly Sunday 2 AM
+  
+  # ci_cd:  # DISABLED - admin feature only
+  #   pre_deployment: false
+  #   description: "Admin-triggered only, not part of CI/CD pipeline"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHARPEN-THE-SAW INTEGRATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+sharpen_the_saw:
+  gap_tracking: "cortex-registry/_cortex-master/playbooks/sharpen-the-saw/mcp-compatibility-gaps.yaml"
+  
+  known_gaps:
+    - id: "GAP-DOC-001"
+      description: "cortex_doc_discover MCP tool not yet implemented"
+      workaround: "Use manual git log + grep commands for discovery"
+      backlog: "ENH-MCP-DOC-DISCOVER"
+      status: "open"
+    
+    - id: "GAP-DOC-002"
+      description: "cortex_refactor cannot extract inline styles automatically"
+      workaround: "Manual regex search-replace + CSS file creation"
+      backlog: "ENH-MCP-REFACTOR-CSS"
+      status: "open"
+    
+    - id: "GAP-DOC-003"
+      description: "No cortex_validate responsive_test operation"
+      workaround: "Manual browser testing across viewports"
+      backlog: "ENH-MCP-VALIDATE-RESPONSIVE"
+      status: "open"
+  
+  enhancement_proposals:
+    - "Add cortex_doc_discover MCP tool for content gap analysis"
+    - "Extend cortex_refactor with CSS extraction capabilities"
+    - "Add cortex_validate responsive testing operation"
+    - "Create cortex_diagram_validate for Mermaid/D3 syntax checking"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VERSIONING & CHANGELOG
+# ══════════════════════════════════════════════════════════════════════════════
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-02-24"
+    changes:
+      - "Initial playbook creation"
+      - "7 architectural gaps from chat01.md remediation plan"
+      - "6-stage pipeline (Discovery → Generation → P0/P1/P2 → Validation → Deployment)"
+      - "MCP-first execution policy"
+      - "Repeatable with zero data loss guarantee"

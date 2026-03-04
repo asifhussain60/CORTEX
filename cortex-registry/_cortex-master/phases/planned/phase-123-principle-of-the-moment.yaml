@@ -1,0 +1,342 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CORTEX Phase Plan — Phase 123
+# Principle of the Moment: Anti-Repetition Quote Selection with Telemetry
+#
+# Source: _workspaces/recommendations/copilot-review.md (DIGEST 2026-03-04)
+# Architect: Asif Hussain | © 2025–2026 CORTEX Framework
+# SSOT: cortex-registry/templates/response/atoms/atom-quote.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: "phase-123"
+title: "Principle of the Moment — Anti-Repetition Quote Selection with Telemetry"
+version: "1.0"
+created: "2026-03-04"
+status: PLANNED
+priority: P2
+governance_authority:
+  - CORE-008   # TDD mandatory — tests before implementation
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # snake_case file naming
+  - CORE-035   # Single canonical implementation — no duplicates
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-123-PRINCIPLE-OF-THE-MOMENT"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: _workspaces/recommendations/copilot-review.md — 11-phase proposal digested
+  and challenged against live architecture (2026-03-04). Of the 11 proposed phases,
+  8 address systems already completed in Phases 85–122. The only genuine gap is:
+  the quote/principle selection in atom-quote.yaml is DETERMINISTIC (first-match),
+  which means the same quote can repeat across consecutive responses in the same
+  intent category. There is no anti-repetition memory, no weighted entropy, and no
+  telemetry on selection latency or repetition avoidance.
+
+  Architecture fit: The fix is ADDITIVE to the existing LEGO atom. No orchestrator
+  wiring changes. No composition changes. No regression risk to the 2,395 green tests.
+
+  Baseline at entry:
+    - Smoke tests: 2,395 passed (Phase 122 baseline)
+    - Preflight: 258 passed
+    - atom-quote.yaml: 32 quotes, 10 themes, deterministic first-match selection
+    - No dedup_key field, no memory ring buffer, no telemetry
+    - cortex-master.yaml: 406 lines (well under 800 ceiling)
+
+  Git prerequisite: branch CORTEX, all Phase 122 changes committed.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064 — all must be CLOSED before COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-123-01"
+    title: "Deterministic first-match selection causes quote repetition within a session"
+    severity: P2
+    source: "DIGEST _workspaces/recommendations/copilot-review.md Phase 3 analysis"
+    evidence: |
+      atom-quote.yaml line 50–70: theme_map maps intent → theme (correct).
+      atom-quote.yaml validation.quote_selection = "deterministic — match theme_map[intent_type]
+      then select by session context". No dedup_key, no ring buffer, no weighted random.
+      Result: IMPLEMENT intent always resolves to theme 'quality', which has 4 quotes —
+      first-match always returns "Quality is not an act, it is a habit." (Aristotle).
+      In a session with repeated IMPLEMENT turns, same quote appears every time.
+    action_ref: "phase-123-a"
+    status: OPEN
+
+  - id: "GAP-123-02"
+    title: "No anti-repetition memory — dedup_key and ring buffer absent"
+    severity: P2
+    source: "DIGEST _workspaces/recommendations/copilot-review.md Phase 3 analysis"
+    evidence: |
+      PrincipleSelector (does not yet exist) needs:
+        - dedup_key per quote (unique string id — e.g. "aristotle-quality-habit")
+        - in-memory ring buffer of last N=10 used dedup_keys
+        - Selection MUST skip quotes whose dedup_key is in the ring buffer
+        - Weighted random within theme-filtered, dedup-filtered candidates
+      Currently: no PrincipleSelector class exists. Selection logic is implicit
+      (described in YAML validation field only — not enforced in code).
+    action_ref: "phase-123-a"
+    status: OPEN
+
+  - id: "GAP-123-03"
+    title: "No telemetry on quote selection latency or repetition avoidance rate"
+    severity: P2
+    source: "DIGEST _workspaces/recommendations/copilot-review.md Phase 3 analysis"
+    evidence: |
+      Proposal requires:
+        - quote_selection_latency_ms: p95 ≤ 3ms, p99 ≤ 8ms
+        - quote_repeat_avoided_count: monotonic counter per session
+      No instrumentation exists. cortex_capture_metrics MCP tool is available as
+      the emission target (already registered in mcp_registry.py).
+      SSOT for metric emission: cortex/mcp/tools/ (cortex_capture_metrics).
+    action_ref: "phase-123-b"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── Sub-Phase A: PrincipleSelector — anti-repetition core ────────────────
+  - id: "phase-123-a"
+    title: "PrincipleSelector — weighted random selection with anti-repetition ring buffer"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-123-01", "GAP-123-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "2-3 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2395 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_principle_selector.py BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_selector.py — ALL tests must FAIL (ImportError counts as FAIL)"
+        blocker: "Do NOT write PrincipleSelector implementation until every listed test fails"
+      green:
+        action: "Implement cortex/intelligence/principle_selector.py with minimum code to pass all RED tests"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_selector.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Add docstrings (CORE-012), type hints (CORE-011), confirm single canonical implementation (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + python3 -m ruff check cortex/intelligence/principle_selector.py"
+      fix_step: "Apply targeted fixes for any ruff violations or test regressions"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues with WONT-FIX justification"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_select_quote_returns_quote_for_known_intent — PrincipleSelector('IMPLEMENT').select() returns a dict with keys [text, author, book, themes]"
+        - "test_select_quote_matches_theme — IMPLEMENT intent returns quote with 'quality' in themes"
+        - "test_anti_repetition_skips_recent — after selecting a quote 10 times, 11th call returns different dedup_key"
+        - "test_ring_buffer_size_is_10 — ring buffer never exceeds 10 entries"
+        - "test_ring_buffer_evicts_oldest — entry at position 0 is evicted when buffer reaches capacity"
+        - "test_unknown_intent_falls_back_to_universal — PrincipleSelector('UNKNOWN_XYZ').select() returns quote with 'universal' in themes"
+        - "test_all_quotes_have_dedup_key — every quote in atom-quote.yaml has a non-empty dedup_key field"
+        - "test_select_is_not_always_first_match — across 50 IMPLEMENT calls, at least 2 distinct quotes returned"
+      green:
+        - "Create cortex/intelligence/principle_selector.py with class PrincipleSelector"
+        - "Add __init__(self, intent_type: str) — loads atom-quote.yaml once at import (lazy singleton)"
+        - "Add select(self) -> dict — implements weighted random within theme-filtered pool"
+        - "Add _ring_buffer: deque[str] (maxlen=10) as class-level shared state"
+        - "Add dedup_key field to all 32 quotes in atom-quote.yaml (format: '{author_slug}-{theme}-{word1}')"
+        - "Filter candidates: exclude quotes whose dedup_key is in _ring_buffer"
+        - "Fallback: if all theme candidates are in ring buffer, clear oldest 5 entries and retry"
+      refactor:
+        - "Add module docstring explaining the selection algorithm"
+        - "Add type hints to all public methods (CORE-011)"
+        - "Add docstrings to PrincipleSelector class and all public methods (CORE-012)"
+        - "Confirm principle_selector.py is the sole implementation (CORE-035)"
+        - "Run ruff check — zero violations"
+
+    acceptance_criteria:
+      - "PrincipleSelector class exists at cortex/intelligence/principle_selector.py"
+      - "select() returns a dict with keys: text, author, book, themes, dedup_key"
+      - "Anti-repetition: across 11 consecutive calls with same intent, at least 2 distinct dedup_keys returned"
+      - "Ring buffer max size = 10 (deque maxlen=10)"
+      - "Unknown intent falls back to 'universal' theme"
+      - "All 32 quotes in atom-quote.yaml have a non-empty dedup_key"
+      - "All tests in test_principle_selector.py GREEN"
+      - "ruff check on principle_selector.py — zero violations"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase B: Telemetry — latency + repetition avoidance metrics ───────
+  - id: "phase-123-b"
+    title: "Telemetry — selection latency instrumentation via cortex_capture_metrics MCP"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-123-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "1-2 hours"
+    depends_on: ["phase-123-a"]
+    prerequisite: "phase-123-a completion_gate PASSED (all_gap_refs_closed: true)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_principle_selector_telemetry.py BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_selector_telemetry.py — ALL tests must FAIL"
+        blocker: "Do NOT add telemetry code until every listed test fails"
+      green:
+        action: "Add timing instrumentation to PrincipleSelector.select() using time.perf_counter_ns()"
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_principle_selector_telemetry.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Clean up: ensure telemetry does not leak into test assertions; docstrings updated"
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      fix_step: "Apply targeted fixes for any regressions"
+      success_predicate: "p0_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues inline"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_select_latency_under_3ms — 100 calls to select(), assert p95 latency < 3ms (time.perf_counter_ns)"
+        - "test_repeat_avoided_counter_increments — after selecting same dedup_key twice in sequence, repeat_avoided_count == 1"
+        - "test_latency_metrics_emitted — PrincipleSelector.select() calls emit_metric('quote_selection_latency_ms', value) when metrics_enabled=True"
+        - "test_metrics_disabled_by_default — PrincipleSelector().select() does NOT call emit_metric without metrics_enabled=True"
+      green:
+        - "Add metrics_enabled: bool = False parameter to PrincipleSelector.__init__"
+        - "Wrap select() body with time.perf_counter_ns() before/after, compute latency_ms"
+        - "Add repeat_avoided_count: int = 0 counter — increment when a dedup_key candidate was skipped"
+        - "When metrics_enabled=True, call _emit_metrics(latency_ms, repeat_avoided_count)"
+        - "Implement _emit_metrics using cortex_capture_metrics tool interface (fire-and-forget, no blocking)"
+      refactor:
+        - "Confirm _emit_metrics has type hints and docstring"
+        - "Ensure metrics path is isolated — a failed emit MUST NOT raise or affect select() return value"
+        - "Run ruff check cortex/intelligence/principle_selector.py — zero violations"
+
+    acceptance_criteria:
+      - "p95 latency across 100 select() calls < 3ms (enforced in test)"
+      - "repeat_avoided_count increments correctly when a candidate is skipped"
+      - "emit_metric call is guarded behind metrics_enabled=True flag"
+      - "A failed emit does not raise — select() always returns a quote"
+      - "All tests in test_principle_selector_telemetry.py GREEN"
+      - "ruff check clean"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-Phase Final: Smoke Gate + YAML schema update + registration ───────
+  - id: "phase-123-final"
+    title: "Smoke Gate + atom-quote.yaml schema update + cortex-master.yaml registration"
+    priority: P2
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-123-b"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2395 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2395 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: |
+          1. Update atom-quote.yaml: add 'dedup_key' to validation.required_fields_per_quote
+          2. Update atom-quote.yaml: change quote_selection from 'deterministic' to 'weighted-random-anti-repeat'
+          3. Move phase-123 YAML: planned/ → completed/
+          4. Update cortex-master.yaml: status PLANNED → COMPLETE, add thin entry
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 3 sweep_catalogue GAPs (GAP-123-01, GAP-123-02, GAP-123-03) have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥2395 tests, zero new failures"
+      - "atom-quote.yaml validation.required_fields_per_quote includes 'dedup_key'"
+      - "atom-quote.yaml validation.quote_selection = 'weighted-random-anti-repeat'"
+      - "All 32 quotes in atom-quote.yaml have non-empty dedup_key fields"
+      - "phase-123 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤800 lines (THIN INDEX CONTRACT)"
+      - "PrincipleSelector importable: python3 -c 'from cortex.intelligence.principle_selector import PrincipleSelector; print(PrincipleSelector(\"IMPLEMENT\").select()[\"text\"])'"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2395
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-P123-001"
+  complete: "AC_COMPLETE: AC-P123-001 ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURE NOTES — for implementer reference
+# ─────────────────────────────────────────────────────────────────────────────
+architecture_notes:
+  key_files:
+    - path: "cortex/intelligence/principle_selector.py"
+      role: "NEW — PrincipleSelector class, canonical single implementation"
+    - path: "tests/intelligence/test_principle_selector.py"
+      role: "NEW — 8 RED→GREEN tests for sub-phase A"
+    - path: "tests/intelligence/test_principle_selector_telemetry.py"
+      role: "NEW — 4 RED→GREEN tests for sub-phase B"
+    - path: "cortex-registry/templates/response/atoms/atom-quote.yaml"
+      role: "MODIFY — add dedup_key to all 32 quotes + update validation schema"
+  no_new_files_except:
+    - "cortex/intelligence/principle_selector.py"
+    - "tests/intelligence/test_principle_selector.py"
+    - "tests/intelligence/test_principle_selector_telemetry.py"
+  no_orchestrator_changes: true
+  no_composition_changes: true
+  no_wiring_changes: true
+  regression_risk: ZERO
+  performance_budget:
+    p95_max_ms: 3
+    p99_max_ms: 8
+    implementation_note: |
+      32-entry list fits in ~2KB. Theme filter is O(n) where n ≤ 32.
+      Ring buffer lookup is O(1) via Python deque. No filesystem I/O at
+      select() time (YAML loaded once at import). Target actual latency: <1ms.
+  dedup_key_format: "{author_slug}-{theme}-{first_word}"
+  ring_buffer_size: 10
+  fallback_behavior: "if all theme candidates exhausted by ring buffer, evict oldest 5 entries and retry once"
+  metrics_emit_target: "cortex_capture_metrics MCP tool (fire-and-forget, disabled by default)"

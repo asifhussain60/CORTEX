@@ -1,0 +1,630 @@
+# CORTEX Documentation Playbook
+# Authority: cortex-doc.prompt.md + cortex-documentation-architect.md + cortex-gitpages-builder.md
+# Created: 2026-02-25
+# Status: ACTIVE
+
+playbook_id: cortex-docs-playbook
+title: "CORTEX Documentation - Site Design, Content, & Maintenance"
+version: "1.0.0"
+status: ACTIVE
+authority:
+  - ".github/prompts/cortex-doc.prompt.md"
+  - ".github/agents/core/cortex-documentation-architect.md"
+  - ".github/agents/core/cortex-gitpages-builder.md"
+owner: "Asif Hussain"
+last_updated: "2026-02-25"
+
+# ============================================
+# PURPOSE & SCOPE
+# ============================================
+
+purpose: |
+  This playbook governs ALL CORTEX documentation work including:
+  - GitHub Pages site design (cortex-docs/)
+  - HTML/CSS/JS front-end architecture
+  - Content generation pipelines
+  - Automated refresh workflows
+  - Phase-based planning for doc improvements
+  - Agent coordination (DocumentationOrchestrator, PlanningCoordinator, VacuumOrchestrator)
+
+scope:
+  in_scope:
+    - "cortex-docs/ directory structure and files"
+    - "HTML views (index.html, roles/*.html, learning/**/*.html)"
+    - "CSS design system (glassmorphism v4.0)"
+    - "JavaScript interactivity (content-loader.js, index.js)"
+    - "Documentation agents coordination"
+    - "Phase planning in cortex-registry/planning/phases/"
+    - "Content pipelines (discovery, generation, validation)"
+    - "Site deployment to GitHub Pages"
+  
+  out_of_scope:
+    - "Python source code documentation (handled by docstrings in cortex/)"
+    - "API reference generation (separate tooling)"
+    - "Test documentation (handled in tests/ directory)"
+    - "CORTEX framework implementation (use cortex-architect.prompt.md)"
+
+# ============================================
+# CANONICAL PATHS & STRUCTURE
+# ============================================
+
+canonical_paths:
+  playbook: "cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml"
+  
+  planning:
+    phases_planned: "cortex-registry/planning/phases/planned/"
+    phases_completed: "cortex-registry/planning/phases/completed/"
+    phase_template: "cortex-registry/planning/phases/_template.yaml"
+    lifecycle_workflow: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+  
+  site_structure:
+    root: "cortex-docs/"
+    entry_point: "cortex-docs/index.html"
+    roles: "cortex-docs/roles/"
+    learning: "cortex-docs/learning/"
+    assets: "cortex-docs/assets/"
+    data: "cortex-docs/assets/data/"
+    pipeline: "cortex-docs/pipeline/"
+  
+  agents:
+    documentation_architect: ".github/agents/core/cortex-documentation-architect.md"
+    gitpages_builder: ".github/agents/core/cortex-gitpages-builder.md"
+  
+  prompts:
+    main: ".github/prompts/cortex-doc.prompt.md"
+  
+  workflows:
+    refresh_pipeline: "cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml"
+
+# ============================================
+# ACTIVE PHASES
+# ============================================
+
+active_phases:
+  - id: "phase-index-html-redesign"
+    title: "index.html TDD Redesign - Modern Glassmorphism UI"
+    priority: P1
+    status: PLANNED
+    file: "cortex-registry/planning/phases/planned/phase-index-html-redesign.yaml"
+    created: "2026-02-25"
+    objectives:
+      - "Consolidate all inline <style> blocks to external CSS"
+      - "Integrate Google Fonts (Inter, Space Grotesk, JetBrains Mono)"
+      - "Redesign navigation section with card-based layout"
+      - "Standardize header sizes via CSS variables"
+      - "Add visual enhancements (icons, diagrams, animations)"
+      - "Validate WCAG 2.1 Level AA compliance"
+    deliverables:
+      - "tests/cortex_docs/test_index_redesign.py"
+      - "cortex-docs/index.html (zero inline styles)"
+      - "cortex-docs/assets/css/ (5 updated files)"
+      - "cortex-docs/roles/*.html (updated headers)"
+      - "cortex-docs/learning/**/*.html (updated headers)"
+
+# ============================================
+# PLANNING WORKFLOW
+# ============================================
+
+planning_workflow:
+  step_1_identify:
+    title: "Identify Documentation Need"
+    triggers:
+      - "User request for site improvement"
+      - "Vision API analysis of existing design"
+      - "Accessibility audit finding"
+      - "Performance issue"
+      - "New content type requirement"
+    outputs:
+      - "Problem statement"
+      - "Initial scope estimate"
+      - "Priority assignment (P0-P2)"
+  
+  step_2_create_phase:
+    title: "Create Phase Plan"
+    location: "cortex-registry/planning/phases/planned/<phase-id>.yaml"
+    template: "cortex-registry/planning/phases/_template.yaml"
+    required_sections:
+      - "vision & objectives"
+      - "vision_api_preserved_sections (if applicable)"
+      - "redesign_requirements"
+      - "css_consolidation (if applicable)"
+      - "google_fonts_integration (if typography work)"
+      - "tdd_tests (test specifications)"
+      - "acceptance_criteria"
+      - "implementation_sequence (RED-GREEN-REFACTOR)"
+      - "deliverables"
+      - "risks & mitigations"
+      - "success_metrics"
+    validation:
+      - "Use phase template as scaffold"
+      - "Write ALL detail in phase file (no inline in cortex-master.yaml)"
+      - "Follow THIN INDEX CONTRACT"
+      - "Validate YAML syntax"
+  
+  step_3_register_playbook:
+    title: "Register in Playbook"
+    action: "Add phase entry to active_phases section of this playbook"
+    fields:
+      - "id"
+      - "title"
+      - "priority"
+      - "status"
+      - "file"
+      - "created"
+      - "objectives"
+      - "deliverables"
+  
+  step_4_tdd_execution:
+    title: "Execute TDD Sequence"
+    sequence:
+      - "RED: Write failing tests (test_index_redesign.py)"
+      - "GREEN: Implement minimum code to pass"
+      - "REFACTOR: Clean up with all tests passing"
+      - "VALIDATE: Run test suite + accessibility audit"
+    enforcement: "CORE-008 mandatory"
+  
+  step_5_validation:
+    title: "Validate Deliverables"
+    checks:
+      - "All tests passing (pytest)"
+      - "Zero inline styles (if CSS work)"
+      - "WCAG 2.1 Level AA (Lighthouse ≥90)"
+      - "Performance (Lighthouse ≥85)"
+      - "Cross-browser compatibility"
+      - "Mobile responsive design"
+      - "All acceptance criteria met"
+  
+  step_6_completion:
+    title: "Mark Phase Complete"
+    actions:
+      - "Update phase status to COMPLETE in phase file"
+      - "Move phase file: planned/ → completed/"
+      - "Update playbook active_phases entry"
+      - "Document lessons learned"
+      - "Commit with conventional message"
+
+# ============================================
+# DESIGN SYSTEM AUTHORITY
+# ============================================
+
+design_system:
+  version: "1.0.0"
+  standard: "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
+  
+  theme:
+    name: "Glassmorphism"
+    primary_colors:
+      cyan: "#00d4ff"
+      purple: "#7b61ff"
+      emerald: "#10b981"
+    background:
+      primary: "#0a0e27"
+      secondary: "#1a1f3a"
+    glass:
+      background: "rgba(26, 31, 58, 0.7)"
+      border: "rgba(255, 255, 255, 0.1)"
+      blur: "blur(20px)"
+  
+  typography:
+    fonts:
+      heading: "Space Grotesk"
+      body: "Inter"
+      mono: "JetBrains Mono"
+    cdn: "https://fonts.googleapis.com"
+    weights:
+      inter: [400, 500, 600, 700]
+      space_grotesk: [500, 700]
+      jetbrains_mono: [400, 500]
+  
+  icons:
+    library: "Font Awesome 6.5.1"
+    cdn: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  
+  design_tokens:
+    location: "cortex-docs/assets/css/glass-design-tokens.css"
+    includes:
+      - "Blur values (3 tiers: 10px, 20px, 30px)"
+      - "Background colors (glass-bg-*)"
+      - "Accent colors (glass-accent-*)"
+      - "Header sizes (--heading-h1-size through --heading-h6-size)"
+      - "Spacing scale"
+      - "Border radius scale"
+      - "Transition timings"
+  
+  components:
+    location: "cortex-docs/assets/css/glass-ui-components.css"
+    includes:
+      - "Page loading overlay"
+      - "Navigation components"
+      - "Card components"
+      - "Tab components"
+      - "Button components"
+  
+  animations:
+    location: "cortex-docs/assets/css/glass-animations.css"
+    principles:
+      - "Subtle, professional animations only"
+      - "Duration: 200-300ms for interactions"
+      - "Easing: ease-out for entry, ease-in-out for loops"
+      - "Respect prefers-reduced-motion"
+
+# ============================================
+# CONTENT ARCHITECTURE
+# ============================================
+
+content_architecture:
+  source_of_truth: "cortex-docs/.content/"
+  
+  content_structure:
+    - path: ".content/index.md"
+      purpose: "Site homepage content"
+    - path: ".content/glossary.md"
+      purpose: "Term definitions"
+    - path: ".content/00-getting-started/"
+      purpose: "Onboarding content (5 files)"
+    - path: ".content/01-capabilities/"
+      purpose: "Platform capabilities (8 files)"
+    - path: ".content/02-lens/"
+      purpose: "CORTEX LENS documentation (6 files)"
+    - path: ".content/03-orchestration/"
+      purpose: "Orchestrator documentation (10 files)"
+    - path: ".content/04-mcp/"
+      purpose: "MCP tools catalog (6 files)"
+    - path: ".content/05-infrastructure/"
+      purpose: "Infrastructure & deployment (7 files)"
+    - path: ".content/07-diagrams/"
+      purpose: "Diagram specifications (9 files)"
+    - path: ".content/flat-files/"
+      purpose: "Derived mirror (auto-generated, never edited)"
+  
+  data_layer:
+    location: "cortex-docs/assets/data/"
+    files:
+      - "content.json - Extracted from .content/"
+      - "knowledge-catalog.json - From cortex-registry/knowledge/"
+      - "learning-paths.json - Learning module metadata"
+      - "orchestrators.json - 27 orchestrator cards"
+      - "mcp-tools.json - 26 MCP tool catalog"
+  
+  views:
+    entry: "cortex-docs/index.html"
+    roles:
+      - "business-leader.html"
+      - "product-owner.html"
+      - "software-engineer.html"
+      - "learner.html"
+    learning:
+      - "index.html - Track selector"
+      - "beginner/index.html - 8 weeks · 12 modules"
+      - "intermediate/index.html - 10 weeks · 15 modules"
+      - "advanced/index.html - 12 weeks · 18 modules"
+
+# ============================================
+# AGENTS & ORCHESTRATORS
+# ============================================
+
+agents:
+  documentation_architect:
+    file: ".github/agents/core/cortex-documentation-architect.md"
+    role: "Content extraction, Diátaxis framework, role narratives"
+    responsibilities:
+      - "Extract content from cortex-registry/"
+      - "Apply Diátaxis taxonomy (Tutorial/How-To/Reference/Explanation)"
+      - "Generate 3-role perspective content"
+      - "Create C4 Model diagrams"
+      - "Maintain flat-file output layer"
+      - "Ensure content philosophy (rendering-ready only)"
+    outputs:
+      - "cortex-docs/.content/*.md files"
+      - "Mermaid diagram specifications"
+      - "Role-specific narratives"
+  
+  gitpages_builder:
+    file: ".github/agents/core/cortex-gitpages-builder.md"
+    role: "HTML site generation & deployment"
+    responsibilities:
+      - "Read cortex-docs/.content/*.md"
+      - "Run pipeline/extract-json.py → content.json"
+      - "Apply glassmorphism templates"
+      - "Generate role landing pages"
+      - "Embed D3.js visualizations"
+      - "Optimize assets (minify)"
+      - "GitHub Pages deployment"
+    outputs:
+      - "cortex-docs/index.html"
+      - "cortex-docs/roles/*.html"
+      - "cortex-docs/learning/**/*.html"
+      - "cortex-docs/assets/data/*.json"
+
+orchestrators:
+  documentation_orchestrator:
+    location: "cortex/orchestrators/domain/documentation_orchestrator.py"
+    mcp_tools:
+      - "cortex_doc_refresh - Full refresh pipeline"
+      - "cortex_doc_generate_content - Extract from registry"
+      - "cortex_doc_validate - Completeness & accuracy"
+      - "cortex_doc_generate_bluf - Business guides"
+      - "cortex_doc_qualify_claims - Evidence-backed metrics"
+  
+  planning_coordinator:
+    location: "cortex/orchestrators/core/planning_orchestrator.py"
+    responsibilities:
+      - "Phase plan creation from templates"
+      - "DoR validation before planning"
+      - "Gap analysis and phase breakdown"
+      - "Registry update orchestration"
+  
+  vacuum_orchestrator:
+    location: "cortex/orchestrators/health/vacuum_orchestrator.py"
+    responsibilities:
+      - "Markdown sprawl cleanup"
+      - "Root directory clutter removal"
+      - "Deprecated file archival"
+
+# ============================================
+# WORKFLOWS
+# ============================================
+
+workflows:
+  documentation_refresh:
+    id: "DOC-REFRESH-001"
+    file: "cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml"
+    
+    stages:
+      stage_0:
+        name: "Pre-Flight Governance Check"
+        orchestrator: "EnforcementOrchestrator"
+        trigger: "Always"
+      
+      stage_1:
+        name: "Discovery"
+        orchestrator: "DocumentationOrchestrator"
+        trigger: "full, discovery"
+        actions:
+          - "Scan codebase for components"
+          - "Detect git/registry/live code gaps"
+          - "Extract component metadata"
+      
+      stage_2:
+        name: "Generation"
+        orchestrator: "DocumentationOrchestrator"
+        trigger: "full, generation"
+        actions:
+          - "Extract content to .content/"
+          - "Generate JSON catalogs"
+          - "Apply Diátaxis framework"
+          - "Render HTML templates"
+      
+      stage_3:
+        name: "Validation"
+        orchestrator: "EnforcementOrchestrator"
+        trigger: "full, validation"
+        actions:
+          - "CSS zero-inline check"
+          - "Link integrity validation"
+          - "WCAG 2.1 AA compliance"
+          - "Responsive design test"
+      
+      stage_4:
+        name: "Deployment"
+        orchestrator: "GitOrchestrator"
+        trigger: "full only"
+        actions:
+          - "Commit changes"
+          - "Push to GitHub"
+          - "Trigger GitHub Pages build"
+    
+    triggers:
+      manual:
+        - "/doc-refresh command"
+        - "cortex_doc_refresh MCP tool"
+      
+      automated:
+        - "Push to cortex-registry/knowledge/**"
+        - "Push to cortex-registry/cortex-master.yaml"
+        - "Push to cortex/**/*.py"
+      
+      cron:
+        - "Weekly Sunday 02:00 UTC"
+  
+  phase_execution:
+    template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    
+    checkpoints:
+      checkpoint_create:
+        when: "Before adding phase to playbook"
+        checks:
+          - "Dedicated file created at cortex-registry/planning/phases/planned/<phase-id>.yaml"
+          - "Used _template.yaml as scaffold"
+          - "All detail written in dedicated file (not playbook)"
+          - "Playbook entry is thin reference only"
+          - "YAML syntax validated"
+      
+      checkpoint_complete:
+        when: "Before marking phase COMPLETE"
+        checks:
+          - "All acceptance criteria met with ✅"
+          - "All test specifications implemented and passing"
+          - "All deliverables produced"
+          - "Documentation updated"
+          - "Phase file moved: planned/ → completed/"
+          - "Playbook updated with completion status"
+          - "Conventional commit made"
+
+# ============================================
+# GOVERNANCE RULES
+# ============================================
+
+governance:
+  core_rules_applicable:
+    - rule: "CORE-002"
+      description: "All output inline — never create .md/.txt report files"
+      enforcement: "No documentation artifacts outside cortex-docs/"
+    
+    - rule: "CORE-008"
+      description: "TDD mandatory — RED → GREEN → REFACTOR"
+      enforcement: "All HTML/CSS/JS changes must have tests in tests/cortex_docs/"
+    
+    - rule: "CORE-028"
+      description: "File naming: snake_case only"
+      enforcement: "All Python pipeline scripts use snake_case"
+    
+    - rule: "CORE-049"
+      description: "Silent autonomous execution (progress bars only)"
+      enforcement: "Documentation refresh runs silently with progress indicators"
+    
+    - rule: "CORE-064"
+      description: "Sweep Completeness Contract"
+      enforcement: "All related CSS/HTML issues fixed together, not piecemeal"
+  
+  documentation_specific:
+    - rule: "DOC-001"
+      description: "Zero inline styles in HTML files"
+      enforcement: "All styles in external CSS files (glass-*.css, main.css)"
+      validation: "grep '<style>' cortex-docs/*.html returns no matches"
+    
+    - rule: "DOC-002"
+      description: "WCAG 2.1 Level AA compliance mandatory"
+      enforcement: "Lighthouse accessibility score ≥90"
+      validation: "npm run lighthouse -- --accessibility"
+    
+    - rule: "DOC-003"
+      description: "Glassmorphism design system consistency"
+      enforcement: "All components use glass-design-tokens.css variables"
+      validation: "No hardcoded rgba() or blur values in component CSS"
+    
+    - rule: "DOC-004"
+      description: "Content philosophy - rendering-ready only"
+      enforcement: ".content/*.md contains user-facing content only, no implementation details"
+      validation: "Manual review + agent guidance"
+    
+    - rule: "DOC-005"
+      description: "Phase planning via dedicated files"
+      enforcement: "All phases in cortex-registry/planning/phases/, thin playbook references only"
+      validation: "Playbook ≤500 lines, no inline phase detail"
+
+# ============================================
+# SUCCESS METRICS
+# ============================================
+
+success_metrics:
+  site_quality:
+    - metric: "Lighthouse Accessibility Score"
+      target: "≥90"
+      measurement: "Lighthouse CLI"
+    
+    - metric: "Lighthouse Performance Score"
+      target: "≥85"
+      measurement: "Lighthouse CLI"
+    
+    - metric: "First Contentful Paint"
+      target: "≤3s"
+      measurement: "Chrome DevTools"
+    
+    - metric: "Inline Styles"
+      target: "0 <style> blocks"
+      measurement: "grep count"
+  
+  content_quality:
+    - metric: "Content Coverage"
+      target: "100% of 27 orchestrators documented"
+      measurement: "Manual audit"
+    
+    - metric: "Content Freshness"
+      target: "Auto-refresh weekly"
+      measurement: "GitHub Actions runs"
+    
+    - metric: "Broken Links"
+      target: "0"
+      measurement: "Link checker tool"
+  
+  development_velocity:
+    - metric: "Phase Completion Rate"
+      target: "≥1 phase per 2 weeks"
+      measurement: "Phase status tracking"
+    
+    - metric: "Test Coverage"
+      target: "≥85% for cortex-docs tests"
+      measurement: "pytest --cov"
+    
+    - metric: "CSS File Size"
+      target: "≤50KB total (minified)"
+      measurement: "File size check"
+
+# ============================================
+# MAINTENANCE SCHEDULE
+# ============================================
+
+maintenance:
+  weekly:
+    - "Automated refresh pipeline runs (Sunday 02:00 UTC)"
+    - "Broken link check"
+    - "Lighthouse audit"
+  
+  monthly:
+    - "Phase plan review (active vs completed)"
+    - "Design system audit (consistency check)"
+    - "Content freshness audit"
+  
+  quarterly:
+    - "Full accessibility audit"
+    - "Performance optimization review"
+    - "User feedback analysis"
+  
+  annual:
+    - "Design system major version update"
+    - "Content architecture review"
+    - "Agent capability expansion"
+
+# ============================================
+# REFERENCES
+# ============================================
+
+references:
+  architecture:
+    - "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
+    - "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+  
+  design:
+    - "cortex-docs/assets/css/glass-design-tokens.css"
+    - "cortex-docs/assets/css/glassmorphism.css"
+  
+  workflows:
+    - "cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml"
+    - "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+  
+  agents:
+    - ".github/agents/core/cortex-documentation-architect.md"
+    - ".github/agents/core/cortex-gitpages-builder.md"
+    - ".github/agents/AGENT-INDEX.md"
+  
+  prompts:
+    - ".github/prompts/cortex-doc.prompt.md"
+    - ".github/prompts/cortex-architect.prompt.md"
+  
+  templates:
+    - "cortex-registry/planning/phases/_template.yaml"
+    - ".github/templates/cortex-response-templates.md"
+
+# ============================================
+# NOTES
+# ============================================
+
+notes: |
+  This playbook follows CORTEX governance standards:
+  - THIN INDEX CONTRACT: Phase detail in dedicated files, not inline
+  - TDD-First: All HTML/CSS/JS changes require tests
+  - Sweep Completeness: Fix all related issues together (CORE-064)
+  - Silent Autonomous: Refresh pipeline runs without manual intervention (CORE-049)
+  - Design System Authority: Glassmorphism v4.0 standard enforced
+  
+  Coordination with other playbooks:
+  - Audit playbook: Documentation quality gates
+  - Onboarding playbook: Learning path integration
+  - STS playbook: Sample application documentation
+  
+  Future expansions:
+  - Interactive diagram generation (D3.js)
+  - Real-time preview server
+  - AI-assisted content suggestions
+  - Multi-language support

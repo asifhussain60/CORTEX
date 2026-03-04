@@ -5,6 +5,7 @@ Implements TTL-based LRU eviction with multi-layer caching.
 """
 
 import hashlib
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, Optional
@@ -38,8 +39,12 @@ class CacheKey:
         return hashlib.sha256(combined.encode()).hexdigest()
 
 
-class LENSCache:
-    """Main cache manager interface."""
+class LENSCache(ABC):
+    """Abstract base cache manager interface.
+
+    Subclasses must implement get(), set(), and invalidate().
+    Concrete backends: MemoryBackend, RedisBackend.
+    """
 
     def __init__(self, backend_type: str = "memory", **kwargs) -> None:
         """Initialize cache with specified backend.
@@ -57,6 +62,7 @@ class LENSCache:
             "get_operations": 0
         }
 
+    @abstractmethod
     def get(self, key: str) -> Optional[Any]:
         """Retrieve value from cache.
 
@@ -67,8 +73,8 @@ class LENSCache:
             Cached value if found and not expired, else None
         """
         self._statistics["get_operations"] += 1
-        raise NotImplementedError("Implement in subclass")
 
+    @abstractmethod
     def set(self, key: str, value: Any, ttl: int = 300) -> None:
         """Store value in cache with TTL.
 
@@ -78,15 +84,14 @@ class LENSCache:
             ttl: Time-to-live in seconds (default: 5 minutes)
         """
         self._statistics["set_operations"] += 1
-        raise NotImplementedError("Implement in subclass")
 
+    @abstractmethod
     def invalidate(self, pattern: str = "*") -> None:
         """Invalidate cache entries matching pattern.
 
         Args:
             pattern: Glob pattern (default: "*" = all)
         """
-        raise NotImplementedError("Implement in subclass")
 
     def get_statistics(self) -> Dict[str, int]:
         """Get cache hit/miss statistics."""

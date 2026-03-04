@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-03-03 (Total Recall — Phase 117 Production Truth Reconciliation) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
+**Updated:** 2026-03-04 (Production Readiness Audit) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 ---
 
@@ -191,7 +191,7 @@ Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for 
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **320 Orchestrator files** across 15 domains (`core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 _top_level:3 response:3 registry:2 synthesis:2 tools:2 strategies:1`) — all satisfy IOrchestrator protocol
+- **322 Orchestrator files** across 15 domains (`core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 response:5 _top_level:3 registry:2 synthesis:2 tools:2 strategies:1`) — all satisfy IOrchestrator protocol
 - **30 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 54 tool files in `cortex/mcp/tools/`
 - **36 Governance YAMLs** across `cortex-registry/core/` (23) and `cortex-registry/governance/` (13) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
@@ -213,14 +213,14 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrator files | 320 across 15 domains in `cortex/orchestrators/` |
+| Orchestrator files | 322 across 15 domains in `cortex/orchestrators/` |
 | MCP Tools | 30 registered in `mcp_registry.py`; 54 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 21 under `cortex/` |
 | Governance YAMLs | 36 across `cortex-registry/core/` (23) and `cortex-registry/governance/` (13) |
-| Test Suite | ~18,874 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
+| Test Suite | ~19,021 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 | Phases | 97 completed, 5 planned |
-| Master YAML | 348/800 lines (THIN INDEX CONTRACT) |
+| Master YAML | 419/800 lines (THIN INDEX CONTRACT) |
 | Intent Types | 29 (see `cortex/models/canonical_enums.py`) |
 | SQLite Databases | 7 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 | **Intelligence Facade** | `cortex/intelligence/facade.py` — `IntelligenceFacade` canonical entry (Phase 107) |
@@ -341,7 +341,7 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (21 dirs)
-  orchestrators/     ← 320 orchestrator files across 15 domains (core:139 domain:33 support:55 health:31 intelligence:17 +more)
+  orchestrators/     ← 322 orchestrator files across 15 domains (core:139 domain:33 support:55 health:31 intelligence:17 +more)
   mcp/tools/         ← 30 registered MCP tools (54 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate

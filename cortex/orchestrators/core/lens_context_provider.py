@@ -19,8 +19,13 @@ class CacheEntry:  # CORE-035-scoped — independent cache implementation — no
     data: dict[str, Any] = field(default_factory=dict)
 
 
-class LENSCache:
-    """Simple in-memory LENS result cache."""
+class SimpleLENSContextCache:
+    """Simple in-memory LENS result cache for orchestrator context lookups.
+
+    This is a lightweight, non-TTL cache distinct from the full LENSCache ABC
+    in cortex.lens.cache.lens_cache. It lives here because it serves a
+    different purpose: process-lifetime caching for orchestrator LENS context.
+    """
 
     def __init__(self) -> None:
         """Initialise with empty cache."""
@@ -52,7 +57,7 @@ class LENSContextProvider:
 
     def __init__(self) -> None:
         """Initialise with a fresh LENS cache."""
-        self.cache = LENSCache()
+        self.cache = SimpleLENSContextCache()
 
     def get_context(self, path: str) -> dict[str, Any]:
         """Retrieve LENS context for a workspace path, with caching.

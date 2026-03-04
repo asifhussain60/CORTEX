@@ -1,0 +1,36 @@
+id: phase-120
+title: "Response Template System v3 — Modular LEGO Architecture with Terminal Compositions"
+status: COMPLETE
+priority: P1
+sweep_id: SWEEP-120-RESPONSE-TEMPLATE-V3
+completed_date: "2026-03-04"
+gaps: 15
+note: >
+  COMPLETE 2026-03-04. 3-Tier LEGO architecture (Atoms→Blocks→Compositions).
+  26 new YAMLs under cortex-registry/templates/response/. 8 terminal compositions,
+  5 new content blocks, status footer, cumulative reflection, 6 prompt intros.
+  Migrates 6 legacy YAMLs (2,029L). Fixes 3 drifted prompts. 49 golden tests
+  (40 functional + 9 rendering contract). Smoke: 2388 GREEN. Golden: 279 PASS.
+
+phases:
+  - id: "120-A"
+    title: "Tier-1 Atom Library — Identity, Quote, Status Footer"
+    status: COMPLETE
+  - id: "120-B"
+    title: "Tier-2 Block Library — Engagement, Metrics, Proceed Gate, Completion State"
+    status: COMPLETE
+  - id: "120-C"
+    title: "Tier-3 Terminal Compositions — 8 canonical end-states"
+    status: COMPLETE
+  - id: "120-D"
+    title: "Content Block Migration — 5 blocks from legacy cortex-response-templates.md"
+    status: COMPLETE
+  - id: "120-E"
+    title: "Prompt Intro Library — 6 intent-matched openers"
+    status: COMPLETE
+  - id: "120-F"
+    title: "Registry + Rendering Rules — _registry.yaml, copilot_chat_compatible flags"
+    status: COMPLETE
+  - id: "120-G"
+    title: "Golden Test Suite — 49 tests (40 functional + 9 rendering contract) + certification"
+    status: COMPLETE

@@ -10,15 +10,16 @@ Available Plugins:
 Authority: CORE-035 (Consolidation)
 """
 
+from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 
-class DiscoveryPlugin:
+class DiscoveryPlugin(ABC):
     """Base interface for discovery plugins."""
 
+    @abstractmethod
     def discover(self, repo_path: Any) -> Dict[str, Any]:
         """Discover topology information from repository."""
-        raise NotImplementedError("Discovery plugins must implement discover()")
 
 
 class TopologyMap:

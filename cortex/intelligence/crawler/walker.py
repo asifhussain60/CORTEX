@@ -160,11 +160,14 @@ class RepositoryWalker(AsyncRepositoryCrawler):
         """
         Handle discovered file (override in subclasses).
 
+        Default implementation is a no-op. Subclasses should override
+        to process discovered files (e.g. index, analyze, collect).
+
         Args:
             file_path: Path to discovered file
             metadata: File metadata
         """
-        raise NotImplementedError("on_file_discovered not yet implemented")
+        # Default no-op — subclasses override to handle discovered files
 
 # AC_COMPLETE: AC-PHASE58-S1-003 ✅
 # Implementation: RepositoryWalker with filtering
