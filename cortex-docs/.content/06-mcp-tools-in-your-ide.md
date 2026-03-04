@@ -4,7 +4,7 @@
 title: MCP Gateway — 30 CORTEX Capabilities Accessible Directly in Your Coding Assistant
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-04
 order: 6
 ---
 
@@ -87,7 +87,13 @@ The principle is not selected at random. The same intent classification that rou
 
 This appears on every CORTEX response — not as decoration, but as a visible expression of the governance philosophy being applied. For teams new to structured engineering practices, it creates a learning moment on every interaction. For experienced engineers, it provides a shared vocabulary that connects daily tool use to the principles that shaped the discipline.
 
-The quote library contains 32 entries across 9 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in `.github/templates/cortex-response-templates.md § BLOCK-QUOTE-LIBRARY`.
+### Intelligent Quote and Principle Selection (Phase 123-124)
+
+CORTEX implements anti-repetition quote selection with a ring buffer (n=10) that ensures the same quote never appears twice in consecutive responses. Selection is weighted-random within theme-filtered candidates, with telemetry tracking selection latency (p95 ≤ 3ms) and repetition avoidance.
+
+Beyond quotes, CORTEX maintains a curated library of 30 SDLC principles across 10 domains — including Azure Architecture, 12-Factor App, SOLID, Domain-Driven Design, and security-by-design axioms. These principles are injected into analysis and design responses (QUERY, INVESTIGATE intents) but suppressed during operational execution (IMPLEMENT, FIX, REFACTOR) to maintain focus.
+
+The quote library contains 32 entries across 9 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in the LEGO atom system at `cortex-registry/templates/response/atoms/atom-quote.yaml`.
 
 ### Planning and Audit
 
@@ -176,4 +182,4 @@ For business leaders, work item integration means delivery metrics are grounded 
 
 ---
 
-*Tool catalog verified against live MCP registry (30 tools) · Integration patterns verified against live configuration · Last verified: 2026-03-02*
+*Tool catalog verified against live MCP registry (30 tools) · Integration patterns verified against live configuration · Last verified: 2026-03-04*

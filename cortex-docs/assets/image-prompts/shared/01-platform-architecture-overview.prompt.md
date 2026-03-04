@@ -13,12 +13,12 @@ CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimu
 The architecture should show:
 - FOUR horizontal tiers stacked vertically with glassmorphism panels:
   1. TOP — "Interaction Layer" (cyan border): MCP Tools, CLI, VS Code Copilot Chat — user touch points
-  2. MIDDLE-TOP — "Intelligence Layer" (purple border): LENS Analysis, Intent Router, Knowledge Synthesis — AI brain
-  3. MIDDLE-BOTTOM — "Orchestration Layer" (emerald border): 259 Orchestrators across 9 domains, TDD, Debug, Health — execution
-  4. BOTTOM — "Governance Layer" (amber border): 32 CORE Rules, Enforcement, Audit Logs, SQLite Persistence — compliance
+  2. MIDDLE-TOP — "Intelligence Layer" (purple border): LENS Analysis, Intent Router, Knowledge Synthesis, PrincipleSelector — AI brain
+  3. MIDDLE-BOTTOM — "Orchestration Layer" (emerald border): 322 Orchestrators across 15 domains, TDD, Debug, Health — execution
+  4. BOTTOM — "Governance Layer" (amber border): 36 CORE Rules, Enforcement, Audit Logs, SQLite Persistence — compliance
 - Vertical arrows flowing between tiers showing request/response patterns
 - Small icons within each tier representing key components
-- A side panel showing "9 Domains" with colored dots
+- A side panel showing "15 Domains" with colored dots
 - Clean, authoritative, suitable as THE definitive architecture reference
 - No photographic elements — pure architectural diagram
 - Generous spacing, readable at 600px width

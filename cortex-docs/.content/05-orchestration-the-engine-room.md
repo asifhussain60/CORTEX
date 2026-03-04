@@ -1,14 +1,14 @@
 # Orchestration — The Engine Room
 
 ---
-title: Orchestration — How CORTEX Coordinates 259+ Specialised Engines
+title: Orchestration — How CORTEX Coordinates 322 Specialised Engines
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-04
 order: 5
 ---
 
-> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 259 specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds.
+> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 322 specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds.
 
 ---
 
@@ -28,13 +28,13 @@ The governance step runs before execution on every orchestrator, every time. The
 
 ---
 
-## The Architecture — Four Tiers
+## The Architecture — Fifteen Domains
 
-259 orchestrators are organised into four tiers based on their role in the system.
+322 orchestrators are organised across 15 specialised domains based on their role in the system.
 
-### Core — The Command Layer
+### Core — The Command Layer (139 orchestrators)
 
-The core tier contains 17 orchestrators responsible for coordination, routing, enforcement, and the central workflows. This is the intelligence hub of CORTEX.
+The core tier contains orchestrators responsible for coordination, routing, enforcement, and the central workflows. This is the intelligence hub of CORTEX.
 
 | Orchestrator | What It Does |
 |---|---|
@@ -47,9 +47,9 @@ The core tier contains 17 orchestrators responsible for coordination, routing, e
 | **Audit Orchestrator** | Coordinates the comprehensive nine-stage production readiness audit |
 | **Conversation Manager** | Maintains multi-turn session state so context is preserved across interactions |
 
-### Domain — The Specialist Layer
+### Domain — The Specialist Layer (33 orchestrators)
 
-The domain tier contains seven orchestrators with deep expertise in specific engineering disciplines.
+The domain tier contains orchestrators with deep expertise in specific engineering disciplines.
 
 | Orchestrator | What It Does |
 |---|---|
@@ -61,13 +61,21 @@ The domain tier contains seven orchestrators with deep expertise in specific eng
 | **Domain Intelligence** | Applies domain-specific knowledge and governance to requests in specialised business verticals |
 | **Service Decomposer** | Analyses monolithic codebases and produces structured decomposition plans |
 
-### Support — The Operations Layer
+### Support — The Operations Layer (55 orchestrators)
 
 The support tier handles operational concerns — health monitoring, cleanup, onboarding, debugging, and the infrastructure that keeps everything running.
 
 Key support orchestrators include the health monitor (checks all systems and reports status), the cleanup engine (removes accumulated documentation sprawl and stale files), the debugging pipeline (multi-strategy debugging for Python, TypeScript, C#, SQL, and REST APIs), the onboarding engine (analyses a new repository and produces a complete intelligence profile), the upgrade manager (handles CORTEX version updates and dependency resolution), and the sync engine (one-way synchronisation between private and shared repositories with automatic privacy protection).
 
-### Git — The Version Control Layer
+### Health — System Wellness (31 orchestrators)
+
+A dedicated health domain monitors system wellness with 31 orchestrators covering preflight checks, dependency validation, environment verification, and continuous health reporting.
+
+### Intelligence — The Learning Layer (17 orchestrators)
+
+The intelligence tier powers CORTEX's learning capabilities including the RCA Memory Engine (4 methodologies), the Unified Reinforcement Signal, knowledge synthesis, and the PrincipleSelector for contextual wisdom injection.
+
+### Git — The Version Control Layer (5 orchestrators)
 
 Four dedicated orchestrators handle all interactions with version control: standard git operations (commit, branch, merge, diff), structured publishing (conventional commits, branch management), security sanitisation before commit (secret scanning, PII removal, branch hygiene), and pre-commit governance enforcement (blocking non-compliant changes at the commit boundary).
 

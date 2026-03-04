@@ -4,7 +4,7 @@
 title: CORTEX — The AI Engineering Partner That Thinks, Governs, and Learns
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-02
+last_verified: 2026-03-04
 order: 1
 ---
 
@@ -40,13 +40,16 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **259+ orchestration engines** | Specialised processing engines across 9 domains — each an expert at one category of engineering work |
+| **322 orchestration engines** | Specialised processing engines across 15 domains — each an expert at one category of engineering work |
 | **30 IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
-| **32 governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
+| **36 governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
 | **29 intent types** | CORTEX understands and routes 29 distinct categories of engineering request |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
+| **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
+| **30 curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — Azure, 12-Factor, SOLID, DDD, security-by-design |
+| **AI context intelligence** | 8-vendor AI artifact scanning with PII guard, automatic knowledge dissemination to registry hierarchy |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated from live analysis |
 | **Repository onboarding** | Any new codebase analysed, profiled, and brought under governance within minutes — no manual configuration required |
 | **Single package** | One canonical Python package — no fragmented modules, no parallel implementations, no version alignment problems |

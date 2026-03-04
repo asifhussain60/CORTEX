@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-28
+last_verified: 2026-03-04
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -21,11 +21,25 @@ order: 99
 
 **ADOWorkItemProvider** — Concrete implementation of the `WorkItemProvider` Protocol for Azure DevOps. Exposes `fetch_user_stories`, `fetch_by_id`, and `health_check` methods backed by ADO REST API calls. Companies fill in the stub method bodies with their HTTP client and field mapping logic. Location: `cortex/repositories/ado/ado_provider.py`.
 
+**AI Context Intelligence** — Phase 121 capability that scans, classifies, PII-guards, and disseminates AI artifacts (copilot-instructions.md, .cursorrules, etc.) from external repositories into the CORTEX registry hierarchy. Supports 8 vendors: GitHub Copilot, Cursor, Claude, Windsurf, Cline, Continue, Tabnine, OpenAI. Modules: `AIContextScanner`, `AIContentClassifier`, `AIPIIGuard`, `AIContextDisseminator`. Location: `cortex/infrastructure/repositories/`.
+
+**AIContextDisseminator** — Routes classified AI context to 5 registry destinations: knowledge/, governance/, config/, patterns/, and metrics/. Part of AI Context Intelligence pipeline. Location: `cortex/infrastructure/repositories/ai_context_disseminator.py`.
+
+**AIContextScanner** — Multi-vendor AI artifact detection supporting 8 vendors via YAML-driven configuration. Detects copilot-instructions.md, .cursorrules, .continue/config.json, and similar AI tooling artifacts. Location: `cortex/infrastructure/repositories/ai_context_scanner.py`.
+
+**AIPIIGuard** — PII protection layer that strips author names, emails, API keys, and internal hostnames from AI context before registry storage. Location: `cortex/infrastructure/repositories/ai_pii_guard.py`.
+
+**Anti-Repetition Ring Buffer** — Deque-based memory (n=10) that prevents the same quote or principle from appearing in consecutive CORTEX responses. Part of PrincipleSelector. Module: `cortex/intelligence/principle_selector.py`.
+
+**Atom (Response Template)** — Tier 1 building block in the 3-tier LEGO response template system. Smallest reusable units: identity, quote, principle, intent-reflection, status-footer. Location: `cortex-registry/templates/response/atoms/`.
+
 **Audit Database (CortexAuditDB)** — SQLite WAL database storing all operation records with hash-chain integrity. Location: `.cortex-runtime/`. Module: `cortex/infrastructure/audit_db.py`.
 
 **Audit Hash Chain** — Cryptographic chain linking each audit entry to the previous one, creating a tamper-evident log. Module: `cortex/infrastructure/audit_hash_chain.py`.
 
 ## B
+
+**Block (Response Template)** — Tier 2 building block in the 3-tier LEGO response template system. Assembled from atoms: engagement, metrics, proceed-gate, completion-state, content. Location: `cortex-registry/templates/response/blocks/`.
 
 **Brain Tiers** — Three-layer intelligence architecture: Perception → Reasoning → Action. Located at `cortex/intelligence/{perception,reasoning,action}/`.
 
@@ -38,6 +52,8 @@ order: 99
 **Circuit Breaker** — Resilience pattern that stops calls to failing services. States: Closed → Open → Half-Open. Module: `cortex/infrastructure/circuit_breaker.py`.
 
 **Cohesive Brain Refactor** — Multi-phase architectural transformation that unified multiple packages into the single `cortex` package.
+
+**Composition (Response Template)** — Tier 3 building block in the 3-tier LEGO response template system. Terminal outputs assembled from blocks: implement, fix, refactor, debug, audit-fix, health, vacuum, educational. Location: `cortex-registry/templates/response/compositions/`.
 
 **Confidence Score** — Numerical value (0.0–1.0) produced by IntentRouter indicating certainty of intent classification. Higher scores route to primary orchestrators.
 
@@ -101,6 +117,8 @@ order: 99
 
 ## L
 
+**LEGO Architecture (Response Templates)** — 3-tier modular system for composing CORTEX responses. Tier 1: Atoms (5 primitives). Tier 2: Blocks (5 composites). Tier 3: Compositions (8 terminal formats). Enables consistent, reusable response structures. Phase 120 delivery. Location: `cortex-registry/templates/response/`.
+
 **LENS** — **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Code intelligence system with multiple parallel analyzers producing unified analysis. Location: `cortex/lens/`.
 
 **LENS Analyzers** — Parallel analyzers including: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain, and more.
@@ -125,9 +143,17 @@ order: 99
 
 **Pre-Commit Validator** — Validates code against governance rules before commit. Module: `cortex/infrastructure/pre_commit_validator.py`.
 
+**Principle Block Library** — Curated collection of 30 SDLC principles across 10 domains: Azure Architecture, 12-Factor App, SOLID, Domain-Driven Design, security-by-design, clean-architecture, devops, resilience, testing, and observability. Injected into analysis/design responses via PrincipleSelector. Phase 124 delivery. Location: `cortex-registry/knowledge/sdlc/high-value-principles.yaml`.
+
+**PrincipleSelector** — Intelligence component that selects contextually relevant quotes and principles with anti-repetition guarantees. Uses weighted-random selection within theme-filtered candidates, ring buffer (n=10) for deduplication, and telemetry (p95 ≤ 3ms). Phases 123-124 delivery. Module: `cortex/intelligence/principle_selector.py`.
+
 **Pylance-style MCP** — CORTEX's MCP server auto-starts when VS Code opens the workspace — same pattern as the Pylance language server. No manual startup required.
 
 **pytest-xdist** — pytest plugin for parallel test execution. Used with `-n auto --dist loadscope` for unit tests and `-n 4 --dist loadfile` for integration tests.
+
+## Q
+
+**Quote Library** — Curated collection of 32 literary quotes across 9 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning) sourced from engineering and business literature. Provides contextual wisdom in response headers. Location: `cortex-registry/templates/response/atoms/atom-quote.yaml`.
 
 ## R
 

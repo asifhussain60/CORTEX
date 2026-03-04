@@ -4,7 +4,7 @@
 title: Code Intelligence — LENS, the Brain, and Three Tiers of Reasoning
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-03
+last_verified: 2026-03-04
 order: 2
 ---
 
