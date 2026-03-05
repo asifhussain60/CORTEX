@@ -229,6 +229,26 @@ The engine handles all of the following automatically:
 | Binary files | Detected via null bytes; line-ending logic skipped |
 | Executable bits | Not propagated (Windows has no POSIX exec bit) |
 | Symlinks | `followlinks=False` — symlinks to directories are not traversed |
+| **stdout encoding** | `sys.stdout.reconfigure(utf-8)` at startup — box-drawing chars safe on cp1252 |
+
+---
+
+## 📊 Real-Time Terminal Progress (Stage 4 Apply)
+
+During `--apply` mode the engine emits a live progress bar directly to the VS Code terminal
+so the session never appears hung during large syncs (3,000+ files):
+
+```
+  Writing 3807 files to C:\PROJECTS\Foundations.Cortex ...
+  [####################]  100%  3807/3807  tests/unit/toolkit/test_validation.py
+```
+
+**Behaviour:**
+- Printed to `stdout` using `\r` (carriage-return overwrite) — stays on a single terminal line
+- Updated after every file write with `sys.stdout.flush()` — no buffering delay
+- Shows: filled bar (20 chars, `#` per 5%) · percentage · `written/total` counter · current filename (truncated to 50 chars)
+- Closes with `\n` before the summary table so output is clean
+- **Dry-run mode**: no progress bar (no writes occur; planning stage is fast)
 
 ---
 
