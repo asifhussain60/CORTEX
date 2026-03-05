@@ -179,6 +179,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | `/refactor` | Semantic code improvement |
 | `/debug {path}` | Multi-stack debug pipeline |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) |
+| `/distill {file}` | Chat transcript distillation → executable prompt |
 | `/onboard {repo}` | LENS analysis + dashboard |
 | `/plan` | Roadmap planning with governed phases |
 | `/rca` | Root cause analysis (4 methodologies) |

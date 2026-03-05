@@ -90,6 +90,7 @@ display_name_map:
   RefactoringOrchestrator: "Code Improver"
   DebuggerOrchestrator: "Debug Tracer"
   DigestSessionOrchestrator: "Content Ingestor"
+  DistillationOrchestrator: "Distillation Engine"
   DesignCoordinator: "Architect"
   PlanningOrchestrator: "Roadmap Planner"
   WorkflowComposer: "Workflow Composer"
@@ -110,6 +111,7 @@ pre_built_chains:
   totalrecall: "Classifier → Mission Control → Audit Coordinator → Code Improver"
   rca: "Classifier → Learning Engine → Root Cause Analyst"
   sync: "Classifier → Git Manager → Workflow Composer"
+  distill: "Classifier → Distillation Engine"
 
 # ─── Omit Conditions ──────────────────────────────────────────────────────────
 omit_when:

@@ -8,7 +8,7 @@ CORE-011: type hints | CORE-012: docstrings
 """
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any, List, Optional
 
 from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
@@ -64,6 +64,16 @@ class CortexDistill(ConsolidatedTool):
                 required=True,
             ),
             ToolParameter(
+                name="file_path",
+                type="string",
+                description=(
+                    "Optional path to the source file. When provided, the file is "
+                    "overwritten in place with the compressed distilled content."
+                ),
+                required=False,
+                default=None,
+            ),
+            ToolParameter(
                 name="orchestrator_context",
                 type="string",
                 description="Optional orchestrator context for governance routing.",
@@ -97,6 +107,7 @@ class CortexDistill(ConsolidatedTool):
             validate_orchestrator_context(orchestrator_context)
 
         conversation: str = kwargs.get("conversation", "")
+        file_path: Optional[str] = kwargs.get("file_path") or None
 
         if not isinstance(conversation, str) or not conversation.strip():
             return ToolResult(
@@ -109,7 +120,7 @@ class CortexDistill(ConsolidatedTool):
                 DistillationOrchestrator,
             )
             orch = DistillationOrchestrator()
-            result = orch.distill(conversation=conversation)
+            result = orch.distill(conversation=conversation, file_path=file_path)
 
             if not result.success:
                 return ToolResult(
@@ -158,6 +169,7 @@ class CortexDistill(ConsolidatedTool):
             validate_orchestrator_context(orchestrator_context)
 
         conversation: str = kwargs.get("conversation", "")
+        file_path: Optional[str] = kwargs.get("file_path") or None
 
         if not isinstance(conversation, str) or not conversation.strip():
             return ToolResult(
@@ -170,7 +182,7 @@ class CortexDistill(ConsolidatedTool):
                 DistillationOrchestrator,
             )
             orch = DistillationOrchestrator()
-            result = orch.distill(conversation=conversation)
+            result = orch.distill(conversation=conversation, file_path=file_path)
 
             if not result.success:
                 return ToolResult(

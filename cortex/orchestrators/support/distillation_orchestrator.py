@@ -87,62 +87,176 @@ class DistillationResult:
 # ---------------------------------------------------------------------------
 
 class _ConversationSegmenter:
-    """Stage 1: Classify each turn of the conversation."""
+    """Stage 1: Role-aware turn extraction.
 
-    _GOAL_PATTERNS = re.compile(
-        r"\b(want to|need to|goal is|objective|build|create|implement|add|"
-        r"develop|design|make|set up|establish)\b",
+    Strategy (accuracy-first, BUG-DISTILL-003/004):
+    - **User turns** (asifhussain60 / User / Human): full text → classify for
+      GOAL / CONSTRAINT / DECISION.  Nothing truncated.
+    - **Copilot turns** (GitHub Copilot / Agent / Assistant): strip all header
+      / narration / tool lines; extract only confirmed outcome sentences.
+    - Generic turns (no role prefix): keyword-classify as before.
+    """
+
+    # Role-prefix detection
+    _USER_ROLE = re.compile(
+        r"^(asifhussain60|user|human)\s*:",
         re.I,
     )
-    _DECISION_PATTERNS = re.compile(
-        r"\b(yes|agreed|decided|let'?s (use|go with|do)|confirmed|we will|"
-        r"shall|we'?re going|chosen|picked|selected)\b",
+    _COPILOT_ROLE = re.compile(
+        r"^(github copilot|agent|assistant)\s*:",
         re.I,
     )
-    _CONSTRAINT_PATTERNS = re.compile(
-        r"\b(must|must not|should not|cannot|no |never|always|required|"
-        r"mandatory|only|except|limit|maximum|minimum|not allowed|forbidden)\b",
+
+    # CORTEX response header patterns — strip these lines from Copilot turns
+    _HEADER_NOISE = re.compile(
+        r"^(#\s*[🧠🛠️]?\s*CORTEX\b"          # # 🧠 CORTEX Building
+        r"|>\s*\*[\"\']"                        # > *"quote"*
+        r"|\*\*Author:\*\*"                     # **Author:** Asif Hussain
+        r"|©\s*20"                              # © 2025
+        r"|🧭\s*Orchestration:"                 # 🧭 Orchestration:
+        r"|[-─]{3,}"                            # --- separator
+        r"|\s*```"                              # code fence
+        r"|\s*\|"                               # table row
+        r"|Ran terminal command:"               # tool lines
+        r"|Read \["
+        r"|Searched"
+        r"|Created \["
+        r"|Made changes\."
+        r"|Using \""
+        r"|Summarized"
+        r"|!\[)"                               # image ref
+        ,
+        re.M,
+    )
+
+    # Outcome lines in Copilot turns that carry real signal
+    _OUTCOME_LINE = re.compile(
+        r"(✅|❌|committed|pushed|merged|tests? (pass|fail|green|red)"
+        r"|phase \w+ complete|all \d+ tests?|fixed|closed|rewritten"
+        r"|\d+ (pass|fail|error)|AC_COMPLETE|AC_START)",
         re.I,
     )
-    _CONTEXT_PATTERNS = re.compile(
-        r"\b(because|background|currently|existing|already|the system|"
-        r"we have|we use|the project|repo|codebase|environment)\b",
+
+    # Goal / constraint / decision classifiers for user turns
+    _GOAL_RE = re.compile(
+        r"\b(want|need|build|create|implement|add|develop|design|make|set up"
+        r"|establish|use|apply|goal|objective|would like)\b",
         re.I,
+    )
+    _CONSTRAINT_RE = re.compile(
+        r"\b(must|must not|should not|cannot|no |never|always|required"
+        r"|mandatory|only|except|limit|maximum|minimum|not allowed|forbidden"
+        r"|do not|don'?t)\b",
+        re.I,
+    )
+    _DECISION_RE = re.compile(
+        r"\b(yes|agreed|decided|let'?s|confirmed|we will|shall|chosen"
+        r"|picked|selected|commit|pushed|applied|fixed|closed|go with|done)\b",
+        re.I,
+    )
+
+    # Turn-boundary split — CORTEX and generic chat formats
+    _TURN_SPLIT = re.compile(
+        r"\n(?=(?:asifhussain60|GitHub Copilot|User|Agent|Human|Assistant)\s*:)",
+        re.M,
     )
 
     def segment(self, conversation: str) -> List[ConversationSegment]:
         """Split *conversation* into classified :class:`ConversationSegment` objects."""
         segments: List[ConversationSegment] = []
-        # Split on turn boundaries (blank lines or "User:"/"Agent:" prefixes)
-        turns = re.split(r"\n(?=(?:User|Agent|Human|Assistant)\s*:|\s*\n)", conversation)
-        for idx, turn in enumerate(turns):
-            text = turn.strip()
-            if not text:
+
+        if self._TURN_SPLIT.search(conversation):
+            turns = self._TURN_SPLIT.split(conversation)
+        else:
+            # Generic: split on blank lines
+            turns = [t for t in re.split(r"\n{2,}", conversation) if t.strip()]
+
+        for idx, raw_turn in enumerate(turns):
+            raw_turn = raw_turn.strip()
+            if not raw_turn:
                 continue
-            seg_type, confidence = self._classify(text)
-            segments.append(ConversationSegment(
-                text=text,
-                segment_type=seg_type,
-                confidence=confidence,
-                turn_index=idx,
-            ))
+
+            if self._USER_ROLE.match(raw_turn):
+                # User turn — strip the role label, keep full text, classify
+                body = self._USER_ROLE.sub("", raw_turn, count=1).strip()
+                if not body:
+                    continue
+                seg_type, conf = self._classify_user_turn(body)
+                segments.append(ConversationSegment(
+                    text=body,
+                    segment_type=seg_type,
+                    confidence=conf,
+                    turn_index=idx,
+                ))
+
+            elif self._COPILOT_ROLE.match(raw_turn):
+                # Copilot turn — extract outcome lines only; skip narration
+                body = self._COPILOT_ROLE.sub("", raw_turn, count=1).strip()
+                outcome = self._extract_outcomes(body)
+                if outcome:
+                    segments.append(ConversationSegment(
+                        text=outcome,
+                        segment_type=SegmentType.DECISION,
+                        confidence=0.7,
+                        turn_index=idx,
+                    ))
+                # else: pure narration — silently drop (noise)
+
+            else:
+                # Generic turn — legacy keyword classification
+                cleaned = self._strip_header_noise(raw_turn).strip()
+                if not cleaned:
+                    continue
+                seg_type, conf = self._classify_user_turn(cleaned)
+                segments.append(ConversationSegment(
+                    text=cleaned,
+                    segment_type=seg_type,
+                    confidence=conf,
+                    turn_index=idx,
+                ))
+
         return segments
 
-    def _classify(self, text: str):
-        """Return (SegmentType, confidence) for a single turn."""
-        scores: Dict[SegmentType, int] = {
-            SegmentType.GOAL: len(self._GOAL_PATTERNS.findall(text)),
-            SegmentType.DECISION: len(self._DECISION_PATTERNS.findall(text)),
-            SegmentType.CONSTRAINT: len(self._CONSTRAINT_PATTERNS.findall(text)),
-            SegmentType.CONTEXT: len(self._CONTEXT_PATTERNS.findall(text)),
-        }
-        best_type = max(scores, key=lambda k: scores[k])
-        best_score = scores[best_type]
-        if best_score == 0:
-            return SegmentType.NOISE, 0.5
-        # Simple confidence: normalised hit count
-        confidence = min(1.0, 0.5 + (best_score * 0.15))
-        return best_type, confidence
+    def _extract_outcomes(self, copilot_body: str) -> str:
+        """Return only outcome/result lines from a Copilot response; empty string if none."""
+        lines = copilot_body.splitlines()
+        outcome_lines = []
+        for line in lines:
+            # Skip header/noise lines
+            if self._HEADER_NOISE.match(line.strip()):
+                continue
+            # Keep outcome lines that signal a confirmed result
+            if self._OUTCOME_LINE.search(line):
+                outcome_lines.append(line.strip())
+        return "\n".join(outcome_lines)
+
+    def _classify_user_turn(self, text: str):
+        """Classify a user turn as GOAL / CONSTRAINT / DECISION / CONTEXT."""
+        g = len(self._GOAL_RE.findall(text))
+        c = len(self._CONSTRAINT_RE.findall(text))
+        d = len(self._DECISION_RE.findall(text))
+        if c >= g and c > 0:
+            return SegmentType.CONSTRAINT, min(1.0, 0.6 + c * 0.1)
+        if d >= g and d > 0:
+            return SegmentType.DECISION, min(1.0, 0.6 + d * 0.1)
+        if g > 0:
+            return SegmentType.GOAL, min(1.0, 0.6 + g * 0.1)
+        return SegmentType.CONTEXT, 0.5
+
+    @staticmethod
+    def _strip_header_noise(text: str) -> str:
+        """Remove CORTEX header and tool-execution lines from generic turns."""
+        lines = text.splitlines()
+        kept = [
+            line for line in lines
+            if not re.match(
+                r"^\s*(#\s*[🧠🛠️]?\s*CORTEX\b|>\s*\*[\"\']|\*\*Author:\*\*|©\s*20"
+                r"|🧭|[-─]{3,}|```|!\[|Ran terminal command:|Read \[|Searched"
+                r"|Created \[|Made changes\.|Using \"|Summarized)",
+                line,
+            )
+        ]
+        return "\n".join(kept)
 
 
 class _IntentGraphReconstructor:
@@ -170,8 +284,13 @@ class _IntentGraphReconstructor:
 
     @staticmethod
     def _strip_prefix(text: str) -> str:
-        """Remove 'User:' / 'Agent:' prefixes from turn text."""
-        return re.sub(r"^(?:User|Agent|Human|Assistant)\s*:\s*", "", text, flags=re.I).strip()
+        """Remove role prefixes from turn text (User:, Agent:, asifhussain60:, etc.)."""
+        return re.sub(
+            r"^(?:asifhussain60|github copilot|user|agent|human|assistant)\s*:\s*",
+            "",
+            text,
+            flags=re.I,
+        ).strip()
 
 
 class _StateReconciler:
@@ -199,29 +318,38 @@ class _StateReconciler:
 
 
 class _PromptSynthesiser:
-    """Stage 4: Compress IntentGraph into an executable prompt string."""
+    """Stage 4: Compress IntentGraph into a dense, token-efficient signal block.
+
+    Format contract (BUG-DISTILL-002/003):
+    - No verbose markdown section headers (## Goals, ## Decisions Made, etc.)
+    - No preamble / "Generated by" header
+    - Inline label prefixes: G: D: C: CTX: — single line per item
+    - Full item text preserved — NO truncation (accuracy > compression, BUG-DISTILL-003)
+    - Compact, paste-ready as a continuation prompt
+    """
+
+    # Prefix tokens for each signal type — short, unambiguous
+    _PREFIX = {
+        "goal": "G:",
+        "decision": "D:",
+        "constraint": "C:",
+        "context": "CTX:",
+    }
 
     def synthesise(self, graph: IntentGraph) -> str:
-        """Convert an :class:`IntentGraph` into a structured prompt."""
-        parts: List[str] = []
+        """Convert an :class:`IntentGraph` into a dense signal block."""
+        lines: List[str] = []
 
-        if graph.goals:
-            parts.append("## Goals\n" + "\n".join(f"- {g}" for g in graph.goals))
+        for item in graph.goals:
+            lines.append(f"{self._PREFIX['goal']} {item.strip()}")
+        for item in graph.constraints:
+            lines.append(f"{self._PREFIX['constraint']} {item.strip()}")
+        for item in graph.decisions:
+            lines.append(f"{self._PREFIX['decision']} {item.strip()}")
+        for item in graph.context_items:
+            lines.append(f"{self._PREFIX['context']} {item.strip()}")
 
-        if graph.constraints:
-            parts.append("## Constraints\n" + "\n".join(f"- {c}" for c in graph.constraints))
-
-        if graph.decisions:
-            parts.append("## Decisions Made\n" + "\n".join(f"- {d}" for d in graph.decisions))
-
-        if graph.context_items:
-            parts.append("## Context\n" + "\n".join(f"- {c}" for c in graph.context_items))
-
-        if not parts:
-            return ""
-
-        header = "# Distilled Prompt\n_Generated by CORTEX DistillationOrchestrator — Phase 129_\n"
-        return header + "\n\n".join(parts)
+        return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -255,15 +383,19 @@ class DistillationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
     # Public API
     # ------------------------------------------------------------------
 
-    def distill(self, conversation: str) -> DistillationResult:
+    def distill(self, conversation: str, file_path: Optional[str] = None) -> DistillationResult:
         """
         Distil *conversation* into an executable, context-dense prompt.
 
         Args:
             conversation: Raw multi-turn conversation text.
+            file_path:    Optional path to the source file. When provided the
+                          file is **overwritten in place** with the compressed
+                          content (BUG-DISTILL-001 fix).
 
         Returns:
             :class:`DistillationResult` with ``distilled_prompt`` on success.
+            ``metadata['file_written']`` is ``True`` when the file was rewritten.
         """
         _ac_id = f"AC-P129-DISTILL-{int(time.time() * 1000) % 100_000:05d}"
         # AC_START: {_ac_id}
@@ -306,6 +438,23 @@ class DistillationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
             # Stage 5 — Token-optimise via RequestRephraseOrchestrator (best-effort)
             final_prompt = self._stage5_compress(raw_prompt)
 
+            # In-place rewrite — BUG-DISTILL-001 fix
+            file_written = False
+            if file_path:
+                try:
+                    with open(file_path, "w", encoding="utf-8") as fh:
+                        fh.write(final_prompt)
+                    file_written = True
+                except OSError as exc:
+                    # Non-fatal: log in metadata, return result without failing
+                    return DistillationResult(
+                        success=False,
+                        error_message=f"Distillation succeeded but file write failed: {exc}",
+                        distilled_prompt=final_prompt,
+                        segment_count=len(segments),
+                        noise_ratio=graph.noise_ratio,
+                    )
+
             # AC_COMPLETE: {_ac_id} ✅
             return DistillationResult(
                 success=True,
@@ -317,6 +466,8 @@ class DistillationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMix
                     "decisions": len(graph.decisions),
                     "constraints": len(graph.constraints),
                     "context_items": len(graph.context_items),
+                    "file_written": file_written,
+                    "file_path": file_path,
                 },
             )
 

@@ -64,6 +64,7 @@ mode_phrases:
   TOTALRECALL: "Recalling"
   SYNC: "Syncing"
   DIGEST: "Ingesting"
+  DISTILL: "Distilling"
   SECURITY_AUDIT: "Auditing"
   META_AUDIT: "Meta-Auditing"
   ONBOARD: "Onboarding"

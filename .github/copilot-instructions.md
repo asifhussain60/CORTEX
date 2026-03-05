@@ -164,6 +164,7 @@ This gives users a real-time signal showing which orchestrator is responding and
 | RefactoringOrchestrator | Code Improver |
 | DebuggerOrchestrator | Debug Tracer |
 | DigestSessionOrchestrator | Content Ingestor |
+| DistillationOrchestrator | Distillation Engine |
 | DesignCoordinator | Architect |
 | PlanningOrchestrator | Roadmap Planner |
 | WorkflowComposer | Workflow Composer |
@@ -186,6 +187,7 @@ This gives users a real-time signal showing which orchestrator is responding and
 | `/totalrecall` | `Classifier → Mission Control → Audit Coordinator → Code Improver` |
 | `/rca` | `Classifier → Learning Engine → Root Cause Analyst` |
 | `/sync` | `Classifier → Git Manager → Workflow Engine` |
+| `/distill {file}` | `Classifier → Distillation Engine` |
 
 ### ⏱️ Engagement Timeline (collapsible, 3+ step operations)
 
@@ -341,6 +343,7 @@ enforcing routing in production (where context is always supplied).
 | HEALTH | `maintenance/health-check-workflow.yaml` | — |
 | DEBUG | `debugging/multi-stack-debug-pipeline.yaml` | — |
 | DIGEST | `lifecycle/digest-workflow.yaml` | — |
+| DISTILL | `lifecycle/distill-workflow.yaml` | — |
 | TOTALRECALL | `lifecycle/totalrecall-workflow.yaml` | — |
 | SYNC | `lifecycle/sync-workflow.yaml` | — |
 | TRAIN | `lifecycle/train-workflow.yaml` | — |
@@ -452,6 +455,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/healthcheck` | Full test suite (all tiers, parallel) | On-demand |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
+| `/distill {file}` | Chat transcript distillation → synthesised executable prompt | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/totalrecall` | Production certification — 10-phase autonomous pipeline (delta→drift→regression→optimize→wire→memory→vacuum→db→harden→certify) | 10 phases |
