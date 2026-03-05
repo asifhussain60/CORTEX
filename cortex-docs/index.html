@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert. 258 orchestrators, 30 MCP tools, 32 CORE governance rules, and 18,116 tests. Transform GitHub Copilot into a fully governed AI delivery engine." name="description"/>
+<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert. 258 orchestrators, 30 MCP tools, 32 CORE governance rules, and 18,116 tests. Transform GitHub Copilot into a fully governed AI delivery framework." name="description"/>
 <meta content="CORTEX, MCP tools, AI development, TDD, Planning System, GitHub Copilot, orchestrators, GitBackedRegistry" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
 
@@ -13,9 +12,6 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
 <!-- Security Headers -->
-<!-- Security Policy: frame-ancestors and X-Frame-Options MUST be HTTP headers -->
-<!-- For local dev (Python http.server): warnings expected - add headers in production -->
-<!-- Production deployment: See deployment/nginx.conf for HTTP header configuration -->
 <meta http-equiv="Content-Security-Policy" 
       content="default-src 'self'; 
                script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com; 
@@ -35,18 +31,18 @@
 <meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert" property="og:site_name" />
 <meta content="en_US" property="og:locale" />
 <meta content="2026-03-02T00:00:00Z" property="og:updated_time" />
+<meta content="website" property="og:type"/>
+<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert" property="og:title"/>
+<meta content="A comprehensive orchestrator ecosystem, a growing library of MCP Tools, CORE Governance Rules, and TDD execution. Elevate your development workflow." property="og:description"/>
+<meta content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" property="og:image"/>
+<meta content="https://asifhussain60.github.io/CORTEX/" property="og:url"/>
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert" />
-<meta name="twitter:description" content="A comprehensive orchestrator ecosystem, a growing library of MCP Tools, CORE Governance Rules, and TDD Mastery. Transform your development workflow." />
+<meta name="twitter:description" content="A comprehensive orchestrator ecosystem, a growing library of MCP Tools, CORE Governance Rules, and TDD execution. Elevate your development workflow." />
 <meta name="twitter:image" content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" />
 
-<meta content="website" property="og:type"/>
-<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert" property="og:title"/>
-<meta content="A comprehensive orchestrator ecosystem, a growing library of MCP Tools, CORE Governance Rules, and TDD Mastery. Transform your development workflow." property="og:description"/>
-<meta content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" property="og:image"/>
-<meta content="https://asifhussain60.github.io/CORTEX/" property="og:url"/>
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
@@ -55,956 +51,1028 @@
 
 <!-- Resource Preloading for Performance -->
 <link as="image" href="assets/images/cortex-logo-512.png" rel="preload"/>
-<!-- Awakening-200.png removed: below fold, fetchpriority="high" sufficient -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<link rel="preload" href="assets/css/cortex-grid-system.css" as="style">
-<link rel="preload" href="assets/css/main.css" as="style">
-<link rel="preload" href="assets/css/index-multipanel.css?v=4.0.5" as="style">
-<link rel="preload" href="assets/js/index.js" as="script">
 
+<!-- FontAwesome Icons -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
       rel="stylesheet" 
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+      xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
-<link href="assets/css/cortex-grid-system.css" rel="stylesheet"/>
-<link href="assets/css/glass-design-tokens.css" rel="stylesheet"/>
-<link href="assets/css/glass-ui-components.css" rel="stylesheet"/>
-<link href="assets/css/main.css" rel="stylesheet"/>
-<link href="assets/css/index-multipanel.css?v=4.0.5" rel="stylesheet"/>
-<link href="assets/css/generated-classes.css" rel="stylesheet"/>
-<link href="assets/css/intentional-classes.css" rel="stylesheet"/>
-<link href="assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
-<link href="assets/css/dogfood-panel.css" rel="stylesheet"/>
 
-<!-- JSON-LD Structured Data for SEO -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "CORTEX",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Cross-platform",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "description": "Cognitive Orchestration Real-Time Execution eXpert — 258 orchestrators via OrchestratorProtocolMixin, 32 CORE governance rules, TDD-first development, and 30 MCP tools registered for autonomous execution.",
-  "author": {
-    "@type": "Person",
-    "name": "Asif Hussain"
-  },
-  "featureList": [
-    "A comprehensive orchestrator ecosystem across Core, Domain, Support, and Git tiers",
-    "CORE Governance Rules (+ AC rules) enforced at pre-commit, CI, and runtime",
-    "MCP-First Architecture with a growing library of registered tools",
-    "OrchestratorProtocolMixin for Wiring",
-    "TDD Master (RED-GREEN-REFACTOR)",
-    "CORTEX LENS (AST + Git + Security Patterns)",
-    "Vision API for Screenshot Analysis",
-    "Evidence Bundles with Hash-Chain Audit",
-    "Token Optimization with significant cost savings",
-    "Prometheus Observability"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "1"
-  }
-}
-</script>
+<!-- 
+  =============================================================================
+  CORTEX DESIGN SYSTEM: INLINE CSS ARCHITECTURE
+  Fluid, Organic Glassmorphism
+  =============================================================================
+-->
+<style>
+    /* --- CSS TOKENS (Variables) --- */
+    :root {
+        /* Color Palette */
+        --bg-canvas: #080b14;
+        --bg-canvas-alt: #0d111d;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1; 
+        --text-tertiary: #94a3b8;  
+        
+        --accent-cyan: #00d4ff;
+        --accent-purple: #7b61ff;
+        --accent-magenta: #ba55d3;
+        --accent-emerald: #10b981;
+        --accent-rose: #f43f5e;
+        --accent-amber: #f59e0b;
+        
+        /* Soft Glass/Surface Tokens */
+        --surface-base: rgba(30, 41, 59, 0.35); 
+        --surface-hover: rgba(45, 55, 72, 0.45); 
+        --surface-active: rgba(30, 41, 59, 0.6);
+        --surface-light: rgba(255, 255, 255, 0.04);
+        --border-base: rgba(255, 255, 255, 0.06);
+        --border-highlight: rgba(255, 255, 255, 0.12);
+        --shadow-glass: 0 10px 30px -10px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.04);
+        --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.1);
+        --blur-glass: blur(32px);
 
-<!-- Web Vitals Monitoring for Performance -->
-<script type="module">
-  import {onCLS, onFID, onLCP, onTTFB, onINP} from 'https://unpkg.com/web-vitals@3?module';
-  
-  function sendToAnalytics({name, value, rating, id}) {
-    // Log to console (can later send to analytics endpoint)
-    console.log(`[Web Vital] ${name}:`, {
-      value: Math.round(value),
-      rating,
-      id
-    });
-    
-    // Visual indicator for dev
-    if (rating === 'poor') {
-      console.warn(`⚠️ ${name} needs improvement: ${Math.round(value)}ms`);
+        /* Typography */
+        --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+        --font-display: 'Space Grotesk', var(--font-sans);
+        
+        /* Fluid Spacing Scale */
+        --spacing-1: 0.25rem;
+        --spacing-2: 0.5rem;
+        --spacing-3: 0.75rem;
+        --spacing-4: 1rem;
+        --spacing-6: 1.5rem;
+        --spacing-8: 2rem;
+        --spacing-10: 2.5rem;
+        --spacing-12: 3rem;
+        --spacing-16: 4rem;
+        --spacing-24: 6rem;
+        
+        /* Radii */
+        --radius-md: 0.75rem;
+        --radius-lg: 1rem;
+        --radius-xl: 1.5rem;
+        --radius-2xl: 2rem;
     }
-  }
-  
-  onCLS(sendToAnalytics);
-  onFID(sendToAnalytics);
-  onLCP(sendToAnalytics);
-  onTTFB(sendToAnalytics);
-  onINP(sendToAnalytics);
-</script>
+
+    /* --- RESET & BASE --- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    @media (min-width: 1024px) { html { font-size: 18px; } }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-canvas);
+        background-image: 
+            radial-gradient(circle at 15% 50%, rgba(123, 97, 255, 0.04), transparent 30%),
+            radial-gradient(circle at 85% 30%, rgba(0, 212, 255, 0.04), transparent 30%);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        line-height: 1.65;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    p { margin: 0 0 var(--spacing-4) 0; }
+    h1, h2, h3, h4, h5, h6 { margin: 0 0 var(--spacing-4) 0; font-family: var(--font-display); line-height: 1.2; color: var(--text-primary); }
+    ul { margin: 0; padding: 0; list-style: none; }
+
+    /* Accessibility */
+    .skip-link {
+        position: absolute; top: -40px; left: 0; background: var(--accent-cyan); color: #000; padding: 8px; z-index: 100; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    /* --- AMBIENT CANVAS BACKGROUND --- */
+    .ambient-canvas { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .ambient-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.2; animation: floatOrb 25s infinite ease-in-out alternate; }
+    .orb-purple { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(123, 97, 255, 0.2); }
+    .orb-cyan { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(0, 212, 255, 0.1); animation-delay: -5s; }
+    .orb-orchid { top: 40%; left: 60%; width: 40vw; height: 40vw; background: rgba(186, 85, 211, 0.1); animation-delay: -12s; }
+    @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(8%, 12%) scale(1.1); } }
+
+    /* --- LOADING OVERLAY --- */
+    .page-loading-overlay { display: none; }
+
+    /* --- LAYOUT UTILITIES --- */
+    .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 var(--spacing-6); }
+    .container-narrow { max-width: 1024px; }
+    .section { padding: var(--spacing-16) 0; }
+    .section-lg { padding: var(--spacing-24) 0; }
+    .mt-8 { margin-top: var(--spacing-8); }
+    .mb-8 { margin-bottom: var(--spacing-8); }
+    .mb-12 { margin-bottom: var(--spacing-12); }
+    .mb-16 { margin-bottom: var(--spacing-16); }
+    .flex { display: flex; }
+    .flex-col { display: flex; flex-direction: column; }
+    .items-center { align-items: center; }
+    .items-start { align-items: flex-start; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: var(--spacing-2); }
+    .gap-4 { gap: var(--spacing-4); }
+    .gap-5 { gap: 1.25rem; }
+    .gap-6 { gap: var(--spacing-6); }
+    .gap-8 { gap: var(--spacing-8); }
+    .gap-12 { gap: var(--spacing-12); }
+    .shrink-0 { flex-shrink: 0; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: var(--spacing-8); }
+    @media(min-width: 768px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+    
+    .grid-4 { display: grid; grid-template-columns: 1fr; gap: var(--spacing-6); }
+    @media(min-width: 640px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width: 1024px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+
+    .bento-grid { display: grid; grid-template-columns: 1fr; gap: var(--spacing-6); }
+    @media (min-width: 768px) {
+        .bento-grid { grid-template-columns: repeat(12, 1fr); }
+        .md-col-8 { grid-column: span 8; }
+        .md-col-6 { grid-column: span 6; }
+        .md-col-4 { grid-column: span 4; }
+        .md-col-12 { grid-column: span 12; }
+    }
+
+    /* --- TYPOGRAPHY UTILITIES --- */
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-secondary); }
+    .text-sm { font-size: 0.875rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-3xl { font-size: 2rem; }
+    .text-4xl { font-size: 2.5rem; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .uppercase { text-transform: uppercase; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    
+    .text-gradient {
+        background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .text-cyan { color: var(--accent-cyan); }
+    .text-purple { color: var(--accent-purple); }
+    .text-magenta { color: var(--accent-magenta); }
+    .text-emerald { color: var(--accent-emerald); }
+
+    /* --- MODERN GLASS CARDS & PANELS --- */
+    .glass-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+        border: 1px solid var(--border-base);
+        border-top: 1px solid var(--border-highlight);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-xl);
+        backdrop-filter: var(--blur-glass);
+        -webkit-backdrop-filter: var(--blur-glass);
+        box-shadow: var(--shadow-glass);
+        padding: var(--spacing-8);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    /* Super Panel for combined domains */
+    .glass-card-super {
+        background: linear-gradient(145deg, rgba(20, 28, 48, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-2xl);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+        padding: var(--spacing-8);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    @media(min-width: 768px) {
+        .glass-card-super { padding: var(--spacing-12); }
+    }
+
+    .bento-item {
+        background: rgba(255, 255, 255, 0.015);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    /* Subtle Watermark Icon for Bento Items */
+    .bento-icon-watermark {
+        position: absolute; right: -5%; bottom: -15%;
+        font-size: 10rem; opacity: 0.02; z-index: -1;
+        transform: rotate(-15deg); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        color: #fff;
+    }
+    .bento-item:hover .bento-icon-watermark {
+        opacity: 0.06; transform: rotate(0deg) scale(1.1);
+    }
+    .bento-item:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+    }
+    
+    .glass-card.interactive:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.15);
+        border-top-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .glass-divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        margin: var(--spacing-6) 0;
+    }
+
+    .glass-pill {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 9999px;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: 0.85rem; font-weight: 600; color: var(--text-primary);
+        backdrop-filter: blur(10px);
+        box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+    }
+
+    /* Gradient Ambient Corner Glows for Cards */
+    .glow-corner::before {
+        content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; 
+        filter: blur(50px); opacity: 0.12; border-radius: 50%; z-index: -1; transition: opacity 0.3s;
+    }
+    .glass-card.interactive:hover.glow-corner::before { opacity: 0.25; }
+    .glow-cyan::before { background: var(--accent-cyan); }
+    .glow-purple::before { background: var(--accent-purple); }
+    .glow-magenta::before { background: var(--accent-magenta); }
+    .glow-emerald::before { background: var(--accent-emerald); }
+
+    /* Circular Icon Wrappers */
+    .icon-box {
+        width: 56px; height: 56px; border-radius: var(--radius-md);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem; margin-bottom: var(--spacing-6);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+        flex-shrink: 0;
+    }
+    .icon-box.lg { width: 72px; height: 72px; border-radius: var(--radius-lg); font-size: 2rem; }
+    .icon-box.sm { width: 40px; height: 40px; font-size: 1.1rem; margin-bottom: 0; }
+    
+    .icon-cyan { color: var(--accent-cyan); border-color: rgba(0, 212, 255, 0.2); background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), transparent); }
+    .icon-purple { color: var(--accent-purple); border-color: rgba(123, 97, 255, 0.2); background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), transparent); }
+    .icon-magenta { color: var(--accent-magenta); border-color: rgba(186, 85, 211, 0.2); background: linear-gradient(135deg, rgba(186, 85, 211, 0.1), transparent); }
+    .icon-emerald { color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.2); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); }
+
+    /* --- HERO SECTION (Preserved exact styling functionality) --- */
+    .site-header { position: relative; z-index: 10; padding-top: var(--spacing-16); }
+    .hero { display: flex; flex-direction: column; align-items: center; }
+    .logo-container { margin-bottom: var(--spacing-6); }
+    .hero-logo { width: 100%; max-width: 400px; height: auto; display: block; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.2)); }
+    .hero-acronym { 
+        font-size: 1.15rem; font-weight: 500; color: var(--text-secondary); text-align: center; max-width: 800px; margin-bottom: var(--spacing-12);
+    }
+    .hero-acronym strong { color: var(--text-primary); font-weight: 700; }
+    .hero-stats-bar {
+        display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--spacing-6);
+        background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-base); border-radius: 100px;
+        padding: var(--spacing-4) var(--spacing-12); backdrop-filter: blur(24px); box-shadow: var(--shadow-glass);
+        margin-bottom: var(--spacing-16);
+    }
+    .hero-stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .hero-stat-value { font-size: 2rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.25rem; font-family: var(--font-display); }
+    .hero-stat-value.highlight { color: var(--accent-cyan); }
+    .hero-stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-tertiary); font-weight: 600; }
+    .hero-stat-divider { width: 1px; height: 32px; background: var(--border-highlight); }
+    @media(max-width: 768px) {
+        .hero-stats-bar { border-radius: var(--radius-xl); padding: var(--spacing-6); gap: var(--spacing-4); }
+        .hero-stat-divider { display: none; }
+        .hero-stat-item { width: 45%; }
+    }
+
+    /* --- AWAKENING CINEMATIC CARD --- */
+    .awakening-card {
+        display: flex; align-items: center; gap: var(--spacing-8); padding: 0;
+        background: linear-gradient(135deg, #0f172a, #020617);
+        text-decoration: none; overflow: hidden; border-radius: var(--radius-2xl);
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+    }
+    .awakening-card::before {
+        content: ''; position: absolute; inset: 0;
+        background: radial-gradient(circle at 80% 50%, rgba(123, 97, 255, 0.15) 0%, transparent 60%);
+        z-index: 0; pointer-events: none;
+    }
+    .awakening-image-wrapper { flex-shrink: 0; width: 300px; height: 100%; position: relative; z-index: 1; }
+    .awakening-image-wrapper::after {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(to right, transparent, #0f172a);
+    }
+    .awakening-image { width: 100%; height: 100%; object-fit: cover; min-height: 250px; }
+    .awakening-content { flex: 1; padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) 0; z-index: 2; }
+    .awakening-cta { 
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+        background: var(--text-primary); color: #000; font-weight: 600; padding: 0.75rem 1.5rem;
+        border-radius: 100px; margin-top: var(--spacing-4); transition: transform 0.2s, background 0.2s;
+    }
+    .awakening-card:hover .awakening-cta { transform: scale(1.05); background: var(--accent-cyan); }
+    @media(max-width: 768px) {
+        .awakening-card { flex-direction: column; text-align: center; }
+        .awakening-image-wrapper { width: 100%; height: 200px; }
+        .awakening-image-wrapper::after { background: linear-gradient(to bottom, transparent, #0f172a); }
+        .awakening-content { padding: var(--spacing-6); }
+    }
+
+    /* --- STATS PILL --- */
+    .stats-pill {
+        display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center;
+        background: linear-gradient(90deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+        border: 1px solid var(--border-base); border-top: 1px solid var(--border-highlight);
+        border-radius: 100px; padding: clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 5vw, 3rem); gap: clamp(1rem, 2vw, 3rem);
+        overflow-x: auto; scrollbar-width: none; box-shadow: var(--shadow-glass);
+    }
+    .stats-pill::-webkit-scrollbar { display: none; }
+    .stats-item { display: flex; align-items: center; gap: clamp(0.75rem, 1.5vw, 1.25rem); flex: 1; min-width: max-content; justify-content: center; }
+    .stats-divider { width: 1px; height: clamp(30px, 4vw, 40px); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.15), transparent); flex-shrink: 0; }
+    .stats-val { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--text-primary); line-height: 1; font-family: var(--font-display); }
+    .stats-lbl { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; margin-top: 0.25rem; }
+
+    /* --- FEATURE BLOCKS (For Roles Section) --- */
+    .feature-block {
+        display: flex; flex-direction: column; gap: var(--spacing-6);
+        padding: var(--spacing-8); border-radius: var(--radius-xl);
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    @media(min-width: 768px) {
+        .feature-block { flex-direction: row; align-items: center; gap: var(--spacing-12); padding: var(--spacing-10); }
+    }
+    
+    .feature-block:hover {
+        background: rgba(255,255,255,0.04);
+        transform: translateX(8px);
+        border-color: rgba(255,255,255,0.1);
+        box-shadow: -10px 10px 30px -10px rgba(0,0,0,0.3);
+    }
+    
+    .feature-block-content { flex: 1; }
+    .feature-block-list { flex: 1; min-width: 300px; }
+    
+    .feature-list { display: grid; gap: 0.75rem; }
+    .feature-list li { 
+        display: flex; align-items: flex-start; gap: 0.75rem; 
+        font-size: 1rem; color: var(--text-secondary); line-height: 1.5;
+        padding: 0.75rem 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);
+        border: 1px solid transparent; transition: border-color 0.2s, background 0.2s;
+    }
+    .feature-block:hover .feature-list li { border-color: rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); }
+    .feature-list li i { font-size: 1rem; margin-top: 0.15rem; }
+
+    /* Feature Block Specific Accents */
+    .feature-purple .feature-list li i { color: var(--accent-purple); }
+    .feature-magenta .feature-list li i { color: var(--accent-magenta); }
+    .feature-cyan .feature-list li i { color: var(--accent-cyan); }
+    
+    .feature-block::before {
+        content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+        border-radius: 4px 0 0 4px; transition: width 0.3s ease; opacity: 0.8;
+    }
+    .feature-block:hover::before { width: 8px; opacity: 1; }
+    .feature-purple::before { background: var(--accent-purple); box-shadow: 0 0 15px var(--accent-purple); }
+    .feature-magenta::before { background: var(--accent-magenta); box-shadow: 0 0 15px var(--accent-magenta); }
+    .feature-cyan::before { background: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-cyan); }
+
+    /* --- TAB SYSTEM --- */
+    .tab-layout { display: flex; flex-direction: column; gap: var(--spacing-8); }
+    @media(min-width: 768px) { .tab-layout { flex-direction: row; } }
+    
+    .tab-sidebar { display: flex; flex-direction: row; overflow-x: auto; gap: var(--spacing-2); padding-bottom: var(--spacing-2); scrollbar-width: none; }
+    .tab-sidebar::-webkit-scrollbar { display: none; }
+    @media(min-width: 768px) { .tab-sidebar { flex-direction: column; width: 280px; flex-shrink: 0; padding-bottom: 0; border-right: 1px solid var(--border-base); padding-right: var(--spacing-6); } }
+
+    .cortex-tab {
+        background: transparent; border: none; color: var(--text-secondary);
+        text-align: left; padding: 1rem 1.25rem; border-radius: var(--radius-lg);
+        cursor: pointer; font-weight: 600; font-size: 1rem; font-family: var(--font-sans);
+        transition: all 0.2s ease; display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; white-space: nowrap;
+        border: 1px solid transparent;
+    }
+    @media(min-width: 768px) { .cortex-tab { white-space: normal; } }
+    
+    .cortex-tab:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
+    .cortex-tab:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
+    
+    .cortex-tab.active {
+        background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), transparent);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        color: var(--text-primary);
+        position: relative;
+    }
+    .cortex-tab.active::before {
+        content: ''; position: absolute; left: -1px; top: 10%; bottom: 10%; width: 3px;
+        background: var(--accent-cyan); border-radius: 3px; box-shadow: 0 0 10px var(--accent-cyan);
+    }
+    .cortex-tab.active i { color: var(--accent-cyan); }
+
+    .tab-content-area { flex-grow: 1; background: rgba(0,0,0,0.2); border-radius: var(--radius-xl); padding: var(--spacing-8); border: 1px solid inset rgba(255,255,255,0.05); }
+    .cortex-tab-panel { display: none; animation: fadeIn 0.4s ease-out forwards; }
+    .cortex-tab-panel.active { display: block; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Tags */
+    .cortex-tag {
+        display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; 
+        background: rgba(255,255,255,0.05); border: 1px solid var(--border-base); 
+        border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); 
+    }
+
+    /* --- DEMO VIDEO PLACEHOLDERS --- */
+    .demo-placeholder {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; min-height: 350px; padding: var(--spacing-8);
+        background: radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 1));
+        border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.05);
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.5); position: relative; overflow: hidden;
+    }
+    .demo-placeholder::after {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    }
+
+    /* --- FOOTER --- */
+    .page-footer { padding: var(--spacing-8) 0; border-top: 1px solid var(--border-base); margin-top: var(--spacing-16); background: rgba(0,0,0,0.3); }
+    .footer-content { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: var(--spacing-4); }
+    @media(min-width: 768px) { .footer-content { flex-direction: row; text-align: left; } }
+</style>
 
 </head>
+
 <body>
-<!-- Skip to Main Content Link for Accessibility (WCAG 2.4.1) -->
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<!-- Main Content Wrapper (WCAG 2.1 Level AA Requirement) -->
-<main id="main-content" role="main">
-
-<!-- Page Loading Overlay -->
-<div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite" aria-label="Page is loading">
-<span class="sr-only">Loading CORTEX page content, please wait...</span>
-<div class="loading-spinner-container">
-<div class="search-results-loading">
-<div class="loading-spinner-ring"></div>
-<img alt="Loading" aria-hidden="true" src="assets/images/cortex-logo-128.png"/>
-</div>
-<div class="search-results-loading">
-<div>Loading</div>
-<div class="search-results-loading" id="loadingDestination">CORTEX</div>
-<div class="search-results-loading">
-<span></span>
-<span></span>
-<span></span>
-</div>
-</div>
-</div>
-<!-- Governance & Audit Panel (Tabbed) -->
-<section class="key-features-section" id="governance-audit-panel">
-    <div class="glass-card-display main-panel-wrapper animation-t3">
-        <div class="panel-header-centered z-layer-2">
-            <h2 class="panel-title-main">
-                <span>🏛️</span>
-                <span>GOVERNANCE & AUDIT</span>
-            </h2>
-            <p class="panel-subtitle-main">32 immutable CORE rules · hash-chain audit · GitBackedRegistry · cryptographic Evidence Bundles · zero-trust enforcement at pre-commit, CI, and runtime</p>
-        </div>
-        <div class="cortex-tabs z-layer-2" role="tablist" aria-label="Governance and audit capabilities">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="ga-tab-governance" data-target="ga-tab-governance">🧾 4-Tier Governance</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-audit" data-target="ga-tab-audit">🔗 Hash-Chain Audit</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-state" data-target="ga-tab-state">💾 State Manager</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-lifecycle" data-target="ga-tab-lifecycle">🔁 7-State Lifecycle</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-evidence" data-target="ga-tab-evidence">📑 Evidence Bundles</button>
-        </div>
-        <div class="cortex-tab-panels z-layer-2">
-            <div id="ga-tab-governance" class="cortex-tab-panel active" role="tabpanel">
-                <div class="category-subpanel animation-t1 z-layer-2">
-                    <div class="category-icon-wrapper"><span class="category-icon">🧾</span></div>
-                    <h3 class="category-title">4‑Tier Governance via GitBackedRegistry</h3>
-                    <p class="category-description">Merge Tier 0 SKULL (immutable), Tier 1 Business, Tier 2 Engineering, and Tier 3 Learned rules with precedence resolution (Tier 0 wins). EnforcementOrchestrator validates and blocks violations in real-time.</p>
-                </div>
-            </div>
-            <div id="ga-tab-audit" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔗</span></div>
-                    <h3 class="category-title">Hash‑Chain Audit with Tamper Detection</h3>
-                    <p class="category-description">EnhancedAuditLogger (WAL‑backed SQLite) records categories (GOVERNANCE, ORCHESTRATOR, VALIDATION) with cryptographic hash‑chain integrity. Prometheus metrics for audit_entries_total and tamper_alerts.</p>
-                </div>
-            </div>
-            <div id="ga-tab-state" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">💾</span></div>
-                    <h3 class="category-title">Atomic State Management</h3>
-                    <p class="category-description">Atomic state transitions with rollback, file locking, and cross‑platform compatibility. TodoManager persists progress with evidence of integrity and correlation chains.</p>
-                </div>
-            </div>
-            <div id="ga-tab-lifecycle" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔁</span></div>
-                    <h3 class="category-title">7‑State Lifecycle with Auto‑Quarantine</h3>
-                    <p class="category-description">IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED. Enforces entry/exit criteria and auto‑quarantine on violations with full audit trail for compliance.</p>
-                </div>
-            </div>
-            <div id="ga-tab-evidence" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">📑</span></div>
-                    <h3 class="category-title">Evidence Bundles for Provenance</h3>
-                    <p class="category-description">3‑file bundles (manifest.yaml, test_results.json, audit_trace.jsonl) with validation gates: ≥80% tests, 100% audit, 100% governance. Stored in brain for traceability and compliance proof.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Discovery & TOOLKIT Panel (Tabbed) -->
-<section class="key-features-section" id="discovery-toolkit-panel">
-    <div class="glass-card-display main-panel-wrapper animation-t3">
-        <div class="panel-header-centered z-layer-2">
-            <h2 class="panel-title-main">
-                <span>🔍</span>
-                <span>DISCOVERY & TOOLKIT</span>
-            </h2>
-            <p class="panel-subtitle-main">LENS pipeline · AST across 6+ languages · Git history · Vision API · 6 CWE security patterns · 30 MCP tools auto-detected via Pylance-style stdio</p>
-        </div>
-        <div class="cortex-tabs" role="tablist" aria-label="Discovery and toolkit">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="dt-tab-lens" data-target="dt-tab-lens">🔍 CORTEX LENS</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="dt-tab-toolkit" data-target="dt-tab-toolkit">🧰 CORTEX TOOLKIT</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="dt-tab-mcp" data-target="dt-tab-mcp">🔌 MCP TOOLS</button>
-        </div>
-        <div class="cortex-tab-panels">
-            <!-- CORTEX LENS -->
-            <div id="dt-tab-lens" class="cortex-tab-panel active" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔍</span></div>
-                    <h3 class="category-title">Universal Code Intelligence</h3>
-                    <p class="category-description">AST analysis across 6+ languages, GitHistoryAnalyzer for commit patterns, SecurityThreatAnalyzer detecting 6 CWE patterns, Vision API for screenshot analysis, and Knowledge Graph generation with MCP exposure.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>LENS Overview</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🧠" href="coming-soon.html"><span>4 Analyzers</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🖼️" href="coming-soon.html"><span>Vision API</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🛡️" href="coming-soon.html"><span>6 CWE Patterns</span><sup class="badge-soon">soon</sup></a>
-                    </div>
-                </div>
-            </div>
-            <!-- TOOLKIT -->
-            <div id="dt-tab-toolkit" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🧰</span></div>
-                    <h3 class="category-title">HTML View Generators & Visualizations</h3>
-                    <p class="category-description">Epic Plan Viewer, Knowledge Graph Visualizer, Architecture Diagram Generator, Duplication Dashboard, Glassmorphism Compliance, Modern Tabs, Mermaid/D3 integration.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Toolkit Overview</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🧭" href="coming-soon.html"><span>Plan Viewer</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🧩" href="coming-soon.html"><span>D3.js Charts</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe Dashboard</span><sup class="badge-soon">soon</sup></a>
-                    </div>
-                </div>
-            </div>
-            <!-- MCP TOOLS -->
-            <div id="dt-tab-mcp" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔌</span></div>
-                    <h3 class="category-title">MCP Tools via /tools Endpoint</h3>
-                    <p class="category-description">cortex_challenge, cortex_validate, cortex_verify, cortex_total_recall, cortex_git, cortex_onboard, cortex_refactor, cortex_tools_catalog, and more.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>challenge</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="✅" href="coming-soon.html"><span>validate</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>verify</span><sup class="badge-soon">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>All Tools</span><sup class="badge-soon">soon</sup></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- Ambient Background for Deep Glassmorphism Effect -->
+<div class="ambient-canvas" aria-hidden="true">
+    <div class="ambient-orb orb-purple"></div>
+    <div class="ambient-orb orb-cyan"></div>
+    <div class="ambient-orb orb-orchid"></div>
 </div>
 
-<!-- Hero Section as Site Header (Semantic HTML5) -->
-<header role="banner" class="site-header">
-<section class="hero level0-hero-section" id="hero-section">
-<div class="logo-container animation-t3">
-<img alt="CORTEX Logo" class="hero-logo" loading="eager" fetchpriority="high" height="500" id="heroLogo" src="assets/images/cortex-logo-512.png" width="500"/>
-</div>
-<p class="hero-acronym">
-<strong>C</strong>ognitive <strong>O</strong>rchestration <strong>R</strong>eal-<strong>T</strong>ime <strong>E</strong>xecution e<strong>X</strong>pert
+<!-- Header / Hero Section (Kept exactly as-is per instructions, restyled purely via new inline CSS) -->
+<header role="banner" class="site-header container">
+    <section class="hero" id="hero-section">
+        <div class="logo-container">
+            <img alt="CORTEX Logo" class="hero-logo" fetchpriority="high" src="assets/images/cortex-logo-512.png" width="500" height="500"/>
+        </div>
+        <p class="hero-acronym text-muted">
+            <strong>C</strong>ognitive <strong>O</strong>rchestration <strong>R</strong>eal-<strong>T</strong>ime <strong>E</strong>xecution e<strong>X</strong>pert
         </p>
 
-<!-- Hero Stats Bar -->
-<div class="hero-stats-bar">
-    <div class="hero-stat-item">
-        <span class="hero-stat-value">258</span>
-        <span class="hero-stat-label">Orchestrators</span>
-    </div>
-    <div class="hero-stat-divider"></div>
-    <div class="hero-stat-item">
-        <span class="hero-stat-value">30</span>
-        <span class="hero-stat-label">MCP Tools</span>
-    </div>
-    <div class="hero-stat-divider"></div>
-    <div class="hero-stat-item">
-        <span class="hero-stat-value">32</span>
-        <span class="hero-stat-label">CORE Rules</span>
-    </div>
-    <div class="hero-stat-divider"></div>
-    <div class="hero-stat-item">
-        <span class="hero-stat-value">18,116</span>
-        <span class="hero-stat-label">Tests</span>
-    </div>
-    <div class="hero-stat-divider"></div>
-    <div class="hero-stat-item">
-        <span class="hero-stat-value">25</span>
-        <span class="hero-stat-label">Phases Complete</span>
-    </div>
-</div>
-
-<!-- Two-Panel Layout: What Is CORTEX + Vision -->
-<div class="level0-container">
-<div class="feature-grid-2 level0-feature-grid">
-<!-- Left Panel: What Is CORTEX? -->
-<article class="glass-card-clickable level0-content-card animation-t3 flex-column">
-<div class="level0-card-header">
-<span class="level0-card-icon">🧠</span>
-<h2 class="level0-card-title">What is CORTEX?</h2>
-</div>
-<div class="flex-1 z-layer-2">
-<p class="level0-card-text">
-                        CORTEX is your <strong class="level0-highlight-primary">AI co-pilot with a conscience</strong> — it supercharges GitHub Copilot with the discipline, standards, and institutional memory that most teams only develop after years of painful mistakes. Every suggestion is governed, every decision is recorded.
-                    </p>
-<hr class="level0-card-divider"/>
-<p class="level0-card-text">
-                        Think of it as a <strong class="level0-highlight-primary">tireless senior engineer embedded in your IDE</strong>. It catches problems before they reach production, enforces your team's coding standards automatically, and builds an ever-growing knowledge base of what works in your specific codebase — so the same mistakes never happen twice.
-                    </p>
-<hr class="level0-card-divider"/>
-<p class="level0-card-text">
-                        Whether you are a solo developer or a team of fifty, CORTEX transforms your AI assistant from a <em>suggestion engine</em> into a <strong class="level0-highlight-primary">fully governed delivery partner</strong> that learns, enforces, and improves alongside you.
-                    </p>
-</div>
-</article>
-<!-- Right Panel: The CORTEX Vision -->
-<article class="glass-card-clickable level0-content-card level0-card-text--secondary animation-t3 flex-column">
-<div class="level0-card-header">
-<span class="level0-card-icon">🚀</span>
-<h2 class="level0-card-title level0-card-title--secondary">The CORTEX Vision</h2>
-</div>
-<div class="flex-1 z-layer-2">
-<p class="level0-card-text level0-card-text--secondary">
-                        Great engineering teams are not held back by talent — they are held back by the same preventable failures repeating endlessly: broken builds nobody owns, missing tests nobody wrote, standards nobody enforces. CORTEX was built to <strong class="level0-highlight-secondary">break that cycle permanently</strong>.
-                    </p>
-<hr class="level0-card-divider level0-card-divider--secondary"/>
-<p class="level0-card-text level0-card-text--secondary">
-                        The vision is <strong class="level0-highlight-secondary">software delivery without guesswork</strong>. Every task follows a proven, repeatable process. Every failure is analysed to find its true root cause — not just patched over. Your AI assistant remembers what went wrong, why it went wrong, and stops it happening again.
-                    </p>
-<hr class="level0-card-divider level0-card-divider--secondary"/>
-<p class="level0-card-text level0-card-text--secondary">
-                        CORTEX grows smarter the more your team uses it. It learns your patterns, adapts to your standards, and becomes <strong class="level0-highlight-secondary">the institutional memory your team never had</strong> — so onboarding new developers takes days, not months.
-                    </p>
-</div>
-</article>
-</div>
-</div>
-</section>
-<!-- End Hero/Header Section -->
+        <!-- Hero Stats Bar -->
+        <div class="hero-stats-bar">
+            <div class="hero-stat-item">
+                <span class="hero-stat-value">258</span>
+                <span class="hero-stat-label">Orchestrators</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat-item">
+                <span class="hero-stat-value">30</span>
+                <span class="hero-stat-label">MCP Tools</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat-item">
+                <span class="hero-stat-value">32</span>
+                <span class="hero-stat-label">CORE Rules</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat-item">
+                <span class="hero-stat-value highlight">18k+</span>
+                <span class="hero-stat-label">Tests Passing</span>
+            </div>
+        </div>
+    </section>
 </header>
 
-<!-- BUILT WITH CORTEX — Dogfood Panel (v3) -->
-<div class="level0-container level0-container--narrow">
-<div class="built-with-cortex-panel">
+<main id="main-content" role="main">
 
-    <!-- Ambient animated background (existing classes — kept) -->
-    <div class="bwc-bg-grid" aria-hidden="true"></div>
-    <div class="bwc-glow" aria-hidden="true"></div>
-    <div class="bwc-glow-secondary" aria-hidden="true"></div>
-    <div class="bwc-scan-line" aria-hidden="true"></div>
-
-    <!-- All new content uses df-* classes from dogfood-panel.css -->
-    <div class="df-panel">
-
-        <!-- ── HOOK ── -->
-        <div class="df-hook">
-            <div class="df-hook-badge">
-                <span class="df-hook-badge-dot" aria-hidden="true"></span>
-                <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                The Big Reveal
-            </div>
-            <h3 class="df-hook-question">
-                Did you know what <span class="df-hook-word">Dogfooding</span> means?
-            </h3>
-            <p class="df-hook-sub">We thought you might ask. Here is the short version — and the proof.</p>
-        </div>
-
-        <!-- ── DEFINITION ── -->
-        <div class="df-def-card" role="note" aria-label="Definition: dogfooding">
-            <p class="df-def-eyebrow">Definition</p>
-            <h4 class="df-def-term">Dogfooding</h4>
-            <p class="df-def-body">
-                <strong>Dogfooding</strong> — short for <em>"eating your own dog food"</em> — means
-                <strong>using your own product to build itself</strong>.
-                If a tool is good enough to sell to others, it should be good enough for its creators to rely on every single day.
-                It is the ultimate confidence test: you are not just claiming it works — you are <strong>proving it</strong> under the most demanding conditions possible.
-            </p>
-            <div class="df-def-example">
-                <span class="df-def-example-icon" aria-hidden="true">💡</span>
-                <p>
-                    <strong>Classic example:</strong> Microsoft's Windows team famously ran their own unreleased builds of Windows as their daily OS.
-                    Every crash they hit, their users would never see. That is dogfooding in action.
+    <!-- Value Proposition -->
+    <section class="section container">
+        <div class="grid-2">
+            <!-- Left Panel -->
+            <article class="glass-card flex-col glow-corner glow-cyan">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="icon-box icon-cyan m-0"><i class="fas fa-brain"></i></div>
+                    <h2 class="text-2xl m-0 font-bold text-primary">Intelligent AI Engineering</h2>
+                </div>
+                <p class="text-muted text-lg">
+                    CORTEX operates as an <strong class="text-cyan">advanced AI co-pilot</strong>. It builds upon GitHub Copilot by introducing structured discipline, architectural awareness, and automated quality standards designed to help software teams scale their delivery reliably.
                 </p>
-            </div>
-        </div>
-
-        <!-- ── HOW CORTEX DOES IT ── -->
-        <div class="df-flow">
-            <p class="df-section-label">How CORTEX does it</p>
-            <div class="df-flow-strip" role="list" aria-label="CORTEX self-development cycle">
-
-                <div class="df-step" role="listitem">
-                    <div class="df-step-num" aria-hidden="true">01</div>
-                    <span class="df-step-icon animate-1" aria-hidden="true">🧠</span>
-                    <p class="df-step-label">CORTEX Plans</p>
-                    <p class="df-step-desc">Every new feature starts with CORTEX's own Planning System — requirements broken into governed, test-first tasks with DoR/DoD validation.</p>
-                </div>
-
-                <div class="df-connector" aria-hidden="true">
-                    <span class="df-connector-arrow">&#8594;</span>
-                </div>
-
-                <div class="df-step" role="listitem">
-                    <div class="df-step-num" aria-hidden="true">02</div>
-                    <span class="df-step-icon animate-2" aria-hidden="true">⚡</span>
-                    <p class="df-step-label">CORTEX Builds</p>
-                    <p class="df-step-desc">TDD-first. Governance-enforced. Every orchestrator, MCP tool, and rule was implemented by CORTEX guiding its own development — using the same commands you use.</p>
-                </div>
-
-                <div class="df-connector" aria-hidden="true">
-                    <span class="df-connector-arrow">&#8594;</span>
-                </div>
-
-                <div class="df-step" role="listitem">
-                    <div class="df-step-num" aria-hidden="true">03</div>
-                    <span class="df-step-icon animate-3" aria-hidden="true">🛡️</span>
-                    <p class="df-step-label">CORTEX Governs</p>
-                    <p class="df-step-desc">36 governance YAMLs. 19,021 tests. Pre-commit hooks. CORTEX enforces its own CORE rules against its own codebase — zero exceptions, ever.</p>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ── WHAT WAS BUILT ── -->
-        <p class="df-built-label">What was built with it</p>
-        <div class="df-dual">
-
-            <!-- Platform Card -->
-            <div class="df-card">
-                <div class="df-card-shimmer" aria-hidden="true"></div>
-                <div class="df-card-header">
-                    <span class="df-card-icon"><i class="fas fa-code-branch pulse-glow-glass--fast" aria-hidden="true"></i></span>
-                    <h4 class="df-card-title">The CORTEX Platform</h4>
-                </div>
-                <p class="df-card-badge">Built by CORTEX</p>
-                <p class="df-card-body">
-                    The entire CORTEX platform — every orchestrator, every tool, every governance rule — was built using CORTEX itself.
-                    Every feature was written test-first, reviewed by automated governance, and shipped only once every quality check passed.
-                    <strong>No shortcuts. No exceptions.</strong>
+                <hr class="glass-divider"/>
+                <p class="text-muted text-lg">
+                    Functioning seamlessly within your IDE, it analyzes intent, enforces your team's established coding standards, and acts as a sophisticated partner that assists in catching structural issues early in the development lifecycle.
                 </p>
-                <div class="df-card-stats">
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">322</span>
-                        <span class="df-mini-lbl">Orchestrators</span>
-                    </div>
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">30</span>
-                        <span class="df-mini-lbl">MCP Tools</span>
-                    </div>
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">36</span>
-                        <span class="df-mini-lbl">Gov. YAMLs</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Docs Card -->
-            <div class="df-card df-card--secondary">
-                <div class="df-card-shimmer" aria-hidden="true"></div>
-                <div class="df-card-header">
-                    <span class="df-card-icon"><i class="fas fa-globe pulse-glow-glass--fast" aria-hidden="true"></i></span>
-                    <h4 class="df-card-title">Documentation Site</h4>
-                </div>
-                <p class="df-card-badge">Designed by CORTEX</p>
-                <p class="df-card-body">
-                    This entire website — every page, every component, every design decision — was designed and generated by CORTEX.
-                    It is a live demonstration of what the framework produces: structured, consistent, professional output held to the same standards it enforces on your team.
-                    <strong>What you see is what CORTEX does for you.</strong>
+                <hr class="glass-divider"/>
+                <p class="text-muted text-lg mb-0">
+                    Whether operating as a solo developer or within a large enterprise, CORTEX helps transform standard AI assistance into a <strong class="text-cyan">governed delivery workflow</strong> that evolves alongside your engineering practices.
                 </p>
-                <div class="df-card-stats">
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">40+</span>
-                        <span class="df-mini-lbl">Pages</span>
+            </article>
+
+            <!-- Right Panel -->
+            <article class="glass-card flex-col glow-corner glow-purple">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="icon-box icon-purple m-0"><i class="fas fa-rocket"></i></div>
+                    <h2 class="text-2xl m-0 font-bold text-primary">The CORTEX Vision</h2>
+                </div>
+                <p class="text-muted text-lg">
+                    Modern engineering teams face challenges maintaining consistent quality under rapid delivery pressures. CORTEX aims to address this by introducing a framework where <strong class="text-primary">quality checks are infrastructure, not afterthoughts.</strong>
+                </p>
+                <hr class="glass-divider"/>
+                <p class="text-muted text-lg">
+                    Our vision is to facilitate software delivery with enhanced predictability. By analyzing execution patterns and managing context strategically, CORTEX helps teams build an <strong class="text-primary">institutional memory</strong> that assists in onboarding and knowledge retention.
+                </p>
+                <hr class="glass-divider"/>
+                <p class="text-muted text-lg mb-0">
+                    As your team interacts with the platform, it continuously adapts, ensuring that your architectural decisions and security postures remain consistently applied across all new implementations.
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <!-- The Awakening Of CORTEX (Cinematic Widescreen) -->
+    <section class="container section pt-0" aria-labelledby="awakening-heading-top">
+        <a href="awakening-of-cortex/index.html" class="awakening-card" role="article">
+            <div class="awakening-image-wrapper">
+                <img alt="The Awakening of CORTEX" class="awakening-image" fetchpriority="low" loading="lazy" src="assets/images/Awakening-200.png?v=4.0.1" onerror="this.style.display='none'"/>
+            </div>
+            <div class="awakening-content">
+                <p class="text-sm uppercase tracking-widest text-purple font-bold mb-2">Explore the origins...</p>
+                <h2 class="text-3xl text-primary font-bold" id="awakening-heading-top">The Awakening Of CORTEX</h2>
+                <p class="text-muted text-lg mb-6 max-w-3xl">Discover how an ambitious goal transformed into a reliable, structured engineering framework.</p>
+                <span class="awakening-cta"><i class="fas fa-play mr-1"></i> Read the story</span>
+            </div>
+        </a>
+    </section>
+    
+    <!-- Dogfood Panel -->
+    <section class="container section" aria-labelledby="dogfood-heading">
+        <div class="text-center mb-16">
+            <div class="glass-pill mb-6 text-cyan border-cyan" style="background: rgba(0,212,255,0.05);"><i class="fas fa-code-branch mr-2"></i> Built With CORTEX</div>
+            <h3 id="dogfood-heading" class="text-4xl text-gradient font-bold">Engineered Using Its Own Standards</h3>
+            <p class="text-muted text-xl max-w-3xl mx-auto">Discover how CORTEX utilizes its own capabilities to maintain high structural integrity.</p>
+        </div>
+
+        <!-- Process Cards (2x2 Grid) -->
+        <div class="grid-2 mb-16">
+            <div class="glass-card interactive glow-corner glow-cyan">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-brain"></i></div>
+                    <h4 class="text-xl m-0">Intelligent Planning</h4>
+                </div>
+                <p class="text-muted mb-0">Features begin within the CORTEX Planning System—breaking requirements into manageable, governed tasks with clear Definitions of Ready and Done.</p>
+            </div>
+            <div class="glass-card interactive glow-corner glow-purple">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-bolt"></i></div>
+                    <h4 class="text-xl m-0">TDD Execution</h4>
+                </div>
+                <p class="text-muted mb-0">Emphasizing a Test-Driven Development approach. Orchestrators, tools, and rules were developed utilizing the same guided methodologies available to your team.</p>
+            </div>
+            <div class="glass-card interactive glow-corner glow-emerald">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="icon-box sm icon-emerald m-0 shrink-0"><i class="fas fa-shield-alt"></i></div>
+                    <h4 class="text-xl m-0">Governance</h4>
+                </div>
+                <p class="text-muted mb-0">Enforced by a robust suite of governance policies, CORTEX continuously validates its own codebase to maintain security and architectural alignment.</p>
+            </div>
+            <div class="glass-card interactive glow-corner glow-magenta">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="icon-box sm icon-magenta m-0 shrink-0"><i class="fas fa-dna"></i></div>
+                    <h4 class="text-xl m-0">Institutional Memory</h4>
+                </div>
+                <p class="text-muted mb-0">Analyzes execution patterns and stores historical context, ensuring architectural decisions remain consistently applied and mistakes aren't repeated.</p>
+            </div>
+        </div>
+
+        <!-- Platform Achievements -->
+        <div class="glass-card mb-16" style="padding: var(--spacing-12);">
+            <div class="flex items-center justify-between flex-wrap gap-8">
+                
+                <div class="flex-1 min-w-[300px]">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-server"></i></div>
+                        <h5 class="text-2xl m-0">The Core Platform</h5>
                     </div>
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">98</span>
-                        <span class="df-mini-lbl">Phases Done</span>
-                    </div>
-                    <div class="df-mini-stat">
-                        <span class="df-mini-val">100%</span>
-                        <span class="df-mini-lbl">AI Governed</span>
+                    <p class="text-muted text-lg mb-6">The orchestrators and governance rules operate via an automated quality lifecycle designed to ensure comprehensive testing before deployment.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="cortex-tag m-0"><i class="fas fa-network-wired text-purple"></i> 322 Orchestrators</span>
+                        <span class="cortex-tag m-0"><i class="fas fa-plug text-magenta"></i> 30 MCP Tools</span>
+                        <span class="cortex-tag m-0"><i class="fas fa-shield-alt text-emerald"></i> 36 Gov. Policies</span>
                     </div>
                 </div>
-            </div>
 
-        </div>
+                <div class="glass-divider md:hidden w-full m-0"></div>
 
-        <!-- ── STATS GRID ── -->
-        <div class="df-stats" aria-label="CORTEX live statistics">
-            <div class="df-stat">
-                <div class="df-stat-icon"><i class="fas fa-vial" aria-hidden="true"></i></div>
-                <span class="df-stat-val">19,021</span>
-                <span class="df-stat-lbl">Tests Green</span>
-                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
-            </div>
-            <div class="df-stat">
-                <div class="df-stat-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
-                <span class="df-stat-val">322</span>
-                <span class="df-stat-lbl">Orchestrators</span>
-                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
-            </div>
-            <div class="df-stat">
-                <div class="df-stat-icon"><i class="fas fa-plug" aria-hidden="true"></i></div>
-                <span class="df-stat-val">30</span>
-                <span class="df-stat-lbl">MCP Tools Live</span>
-                <div class="df-stat-bar"><div class="df-stat-fill" style="width:85%"></div></div>
-            </div>
-            <div class="df-stat">
-                <div class="df-stat-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
-                <span class="df-stat-val">36</span>
-                <span class="df-stat-lbl">Gov. YAMLs</span>
-                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
+                <div class="flex-1 min-w-[300px]">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="icon-box sm icon-magenta m-0 shrink-0"><i class="fas fa-book-open"></i></div>
+                        <h5 class="text-2xl m-0">Documentation Ecosystem</h5>
+                    </div>
+                    <p class="text-muted text-lg mb-6">Our structured, consistent documentation pages were generated with the assistance of the CORTEX platform, showcasing reliable presentation output.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="cortex-tag m-0"><i class="fas fa-file-alt text-cyan"></i> 40+ Structured Pages</span>
+                        <span class="cortex-tag m-0"><i class="fas fa-project-diagram text-purple"></i> Detailed Traceability</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- ── CLOSING ── -->
-        <div class="df-closing">
-            <p>
-                The framework that governs your code?
-                <span class="df-closing-highlight">It governs its own.</span>
-                That is not a claim — it is a commit history.
-            </p>
-        </div>
-
-    </div><!-- end .df-panel -->
-</div><!-- end .built-with-cortex-panel -->
-</div>
-
-<!-- The Awakening Of CORTEX - Feature Panel -->
-<div class="level0-container level0-container--narrow">
-<a class="awakening-panel animation-t3" href="awakening-of-cortex/index.html" aria-labelledby="awakening-heading" role="article">
-<!-- Animated background effects -->
-<div class="awakening-panel-glow"></div>
-<div class="awakening-panel-scan-line"></div>
-<!-- Content -->
-<div class="awakening-panel-content">
-<div class="awakening-panel-image-wrapper">
-<img alt="The Awakening of CORTEX — A frantic developer, a skeptical manager, and a confused AI" class="awakening-panel-image" fetchpriority="high" loading="eager" src="assets/images/Awakening-200.png?v=4.0.1"/>
-</div>
-<h2 class="awakening-panel-title" id="awakening-heading">The Awakening Of CORTEX</h2>
-<p class="awakening-panel-hook">Where it all began...</p>
-<p class="awakening-panel-caption">A frantic developer, a skeptical manager, a confused AI — and the birth of something extraordinary.</p>
-<span class="awakening-panel-cta">Read the story <i class="fas fa-arrow-right"></i></span>
-</div>
-</a>
-</div>
-<!-- Persona Tiles -->
-<section class="key-features-section persona-wrapper-section" id="who-is-cortex-for" aria-labelledby="persona-section-heading">
-<div class="glass-card-display main-panel-wrapper animation-t3">
-    <div class="panel-header-centered z-layer-2">
-        <h2 class="panel-title-main" id="persona-section-heading">
-            <span>👥</span>
-            <span>WHO IS CORTEX FOR?</span>
-        </h2>
-        <p class="panel-subtitle-main">Choose your role and discover what CORTEX can do for you</p>
-    </div>
-    <div class="persona-section z-layer-2">
-<div class="persona-tiles-grid">
-
-  <!-- Card 1: Business Leadership -->
-  <a href="roles/business-leader.html" class="persona-tile persona-tile-leadership" aria-label="Business Leadership — Ship Faster, Ship Better">
-    <div class="persona-tile-accent"></div>
-    <div class="persona-card-header">
-      <span class="persona-icon">👔</span>
-      <div class="persona-card-meta">
-        <h3 class="persona-title font-display">Business Leadership</h3>
-        <p class="persona-tagline font-body">Ship Faster, Ship Better</p>
-      </div>
-    </div>
-    <ul class="persona-benefits font-body">
-      <li>Measurable reduction in AI overhead and running costs</li>
-      <li>Delivery metrics and audit trails in one place</li>
-      <li>Governance guardrails enforced automatically, not manually</li>
-      <li>Documented compliance evidence at every delivery stage</li>
-    </ul>
-  </a>
-
-  <!-- Card 2: Product Owners -->
-  <a href="roles/product-owner.html" class="persona-tile persona-tile-product" aria-label="Product Owners — From Backlog to Done">
-    <div class="persona-tile-accent"></div>
-    <div class="persona-card-header">
-      <span class="persona-icon">📋</span>
-      <div class="persona-card-meta">
-        <h3 class="persona-title font-display">Product Owners</h3>
-        <p class="persona-tagline font-body">From Backlog to Done</p>
-      </div>
-    </div>
-    <ul class="persona-benefits font-body">
-      <li>Automated readiness checks before any code is written</li>
-      <li>Azure DevOps keeps work items in sync automatically</li>
-      <li>Evidence bundles confirm a feature is genuinely complete</li>
-      <li>Structured lifecycle tracking from first idea to delivery</li>
-    </ul>
-  </a>
-
-  <!-- Card 3: Software Engineers -->
-  <a href="roles/software-engineer.html" class="persona-tile persona-tile-engineer" aria-label="Software Engineers — Your AI Pair Programmer">
-    <div class="persona-tile-accent"></div>
-    <div class="persona-card-header">
-      <span class="persona-icon">💻</span>
-      <div class="persona-card-meta">
-        <h3 class="persona-title font-display">Software Engineers</h3>
-        <p class="persona-tagline font-body">Your AI Pair Programmer</p>
-      </div>
-    </div>
-    <ul class="persona-benefits font-body">
-      <li>Enforced TDD — tests before implementation, every time</li>
-      <li>Code intelligence: AST analysis, Git history, security scans</li>
-      <li>Orchestrators accessible via MCP tools directly in VS Code</li>
-      <li>Intelligent refactoring with built-in duplication detection</li>
-    </ul>
-  </a>
-
-  <!-- Card 4: Curious Learner -->
-  <a href="roles/learner.html" class="persona-tile persona-tile-visitor" aria-label="Curious Learner — Explore Best Practices with CORTEX">
-    <div class="persona-tile-accent"></div>
-    <div class="persona-card-header">
-      <span class="persona-icon">🎓</span>
-      <div class="persona-card-meta">
-        <h3 class="persona-title font-display">Curious Learner</h3>
-        <p class="persona-tagline font-body">Explore Best Practices with CORTEX</p>
-      </div>
-    </div>
-    <ul class="persona-benefits font-body">
-      <li>See how teams apply TDD, SOLID, and clean code in practice</li>
-      <li>Learn how governance rules are defined, enforced, and audited</li>
-      <li>Explore how AI tooling fits into responsible engineering</li>
-      <li>Every concept explained — no prior knowledge assumed</li>
-    </ul>
-  </a>
-
-</div>
-    </div><!-- end .persona-section -->
-</div><!-- end .main-panel-wrapper -->
-</section><!-- end .persona-wrapper-section -->
-</div>
-<!-- CORTEX Key Features Panel -->
-<div class="level0-container hidden-panel">
-<div class="glass-card level0-section-panel animation-t3">
-<div class="level0-panel-header">
-<span class="level0-panel-icon">⭐</span>
-<h2 class="level0-panel-title">KEY FEATURES</h2>
-</div>
-<div class="hero-cta-grid">
-<a class="btn-hero btn-hero-warning animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🚀</span>
-<span class="btn-hero-text">Get Started <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">5-Minute Setup • MCP Configuration</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🧠</span>
-<span class="btn-hero-text">Architecture <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">4-Tier Brain • GitBackedRegistry • MCP-First</span>
-</a>
-<a class="btn-hero btn-hero-knowledge animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">📚</span>
-<span class="btn-hero-text">Knowledge Base <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">45+ Knowledge YAMLs • Industry Standards</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🔌</span>
-<span class="btn-hero-text">MCP Tools <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">MCP Tools • cortex_validate</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon"><i class="fas fa-search-plus pulse-glow-glass--fast"></i></span>
-<span class="btn-hero-text">CORTEX LENS <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">AST + Git + Security Patterns • Vision API</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">✅</span>
-<span class="btn-hero-text">TDD‑Master <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">RED → GREEN → REFACTOR Gates</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">💰</span>
-<span class="btn-hero-text">Token Optimization <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">Significant Reduction • Annual Savings</span>
-</a>
-<a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🛠️</span>
-<span class="btn-hero-text">CORTEX TOOLKIT <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">HTML View Generators • MCP Server</span>
-</a>
-<a class="btn-hero btn-hero-knowledge animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🎓</span>
-<span class="btn-hero-text">Learning Paths <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">Interactive Journeys • Code Playgrounds</span>
-</a>
-<a class="btn-hero btn-hero-warning animation-t2" href="coming-soon.html">
-<span class="btn-hero-icon">🛡️</span>
-<span class="btn-hero-text">Security First <sup class="badge-soon-small">SOON</sup></span>
-<span class="btn-hero-caption">OWASP Top 10 • 6 CWE Patterns • STRIDE Modeling</span>
-</a>
-</div>
-</div>
-</div>
-<!-- Orchestrators Panel (Card Grid) [HIDDEN] -->
-<section class="key-features-section hidden-panel" id="orchestrators-panel">
-    <div class="main-panel-wrapper animation-t3 main-panel-wrapper-no-padding">
-        <div class="panel-header-centered">
-            <h2 class="panel-title-main">
-                <span>🎯</span>
-                <span>ORCHESTRATORS</span>
-            </h2>
-            <p class="panel-subtitle-main">Core • Domain • Support — All wired via GitBackedRegistry with health checks</p>
-        </div>
-        <!-- Orchestrator Cards Grid - 3 Column -->
-        <div class="orchestrator-cards-grid">
-            <!-- Core Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card planning-card animation-t1 orch-category-core">
-                <div class="card-header z-layer-2">
-                    <div class="card-icon">🧠</div>
-                    <h3 class="card-title">Core</h3>
-                </div>
-                <p class="card-description flex-1 z-layer-2">MasterOrchestrator coordination, InteractionOrchestrator for LENS, IntentRouter for classification, TDDOrchestrator, WorkflowOrchestrator, LENSSynthesis, EnforcementOrchestrator.</p>
-                <div class="category-tags z-layer-2">
-                    <a class="category-tag animation-t2" data-icon="🎯" href="coming-soon.html"><span>Master</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>LENS</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="✅" href="coming-soon.html"><span>TDD</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🛡️" href="coming-soon.html"><span>Enforce</span><sup class="badge-soon">soon</sup></a>
+        <!-- Single Row Stats Pill -->
+        <div class="stats-pill">
+            <div class="stats-item">
+                <div class="icon-box sm icon-cyan m-0 shrink-0 rounded-full"><i class="fas fa-vial"></i></div>
+                <div>
+                    <div class="stats-val text-cyan">19k+</div>
+                    <div class="stats-lbl">Tests Passing</div>
                 </div>
             </div>
-            <!-- Domain Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card execution-card animation-t2 orch-category-domain">
-                <div class="card-header z-layer-2">
-                    <div class="card-icon">⚙️</div>
-                    <h3 class="card-title">Domain</h3>
-                </div>
-                <p class="card-description flex-1 z-layer-2">RefactoringOrchestrator for code improvement, PlanningOrchestrator for DoR/DoD, DocumentationOrchestrator, ConversationOrchestrator, DomainOrchestrator, ChallengeEngine.</p>
-                <div class="category-tags z-layer-2">
-                    <a class="category-tag animation-t2" data-icon="✨" href="coming-soon.html"><span>Refactor</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Planning</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>Docs</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>Challenge</span><sup class="badge-soon">soon</sup></a>
+            <div class="stats-divider"></div>
+            <div class="stats-item">
+                <div class="icon-box sm icon-purple m-0 shrink-0 rounded-full"><i class="fas fa-network-wired"></i></div>
+                <div>
+                    <div class="stats-val text-purple">322</div>
+                    <div class="stats-lbl">Orchestrators</div>
                 </div>
             </div>
-            <!-- Support Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card system-card animation-t3 orch-category-support">
-                <div class="card-header z-layer-2">
-                    <div class="card-icon">🔧</div>
-                    <h3 class="card-title">Support</h3>
-                </div>
-                <p class="card-description flex-1 z-layer-2">OnboardingOrchestrator, ToolDiscoveryOrchestrator, DuplicationDetector, GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor, RecommendationEngine, and GitBackedRegistry wiring.</p>
-                <div class="category-tags z-layer-2">
-                    <a class="category-tag animation-t2" data-icon="🎓" href="coming-soon.html"><span>Onboard</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>Tools</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe</span><sup class="badge-soon">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="⚙️" href="coming-soon.html"><span>Wiring</span><sup class="badge-soon">soon</sup></a>
+            <div class="stats-divider"></div>
+            <div class="stats-item">
+                <div class="icon-box sm icon-magenta m-0 shrink-0 rounded-full"><i class="fas fa-plug"></i></div>
+                <div>
+                    <div class="stats-val text-magenta">30</div>
+                    <div class="stats-lbl">MCP Tools</div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Sharpen The Saw Panel (Single Unified Panel) -->
-<section class="key-features-section" id="sts-panel">
-<div class="main-panel-wrapper animation-t3 main-panel-wrapper-no-padding">
-<div class="panel-header-centered">
-<h2 class="panel-title-main">
-<span>🔧</span>
-<span>SHARPEN THE SAW</span>
-</h2>
-<p class="panel-subtitle-main">45+ knowledge YAMLs · SOLID · Clean Code · 12-Factor · TDD · OWASP · ADR — continuously learned, registry-persisted, enforced at runtime</p>
-</div>
-<!-- Single Unified STS Panel - 3 Column -->
-<div class="sts-unified-panel main-panel-wrapper-no-padding">
-<div class="sts-categories-row">
-<!-- Security -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">🛡️</span>
-</div>
-<h3 class="sts-category-title">Security</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">OWASP + CWE <sup class="badge-soon">soon</sup></a>
-</div>
-<!-- SOLID -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">🏛️</span>
-</div>
-<h3 class="sts-category-title">SOLID</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">5 Principles <sup class="badge-soon">soon</sup></a>
-</div>
-<!-- Clean Code -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">✨</span>
-</div>
-<h3 class="sts-category-title">Clean Code</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">Best Practices <sup class="badge-soon">soon</sup></a>
-</div>
-<!-- 12-Factor -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">⚡</span>
-</div>
-<h3 class="sts-category-title">12-Factor</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">Cloud-Native <sup class="badge-soon">soon</sup></a>
-</div>
-<!-- Testing -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">🧪</span>
-</div>
-<h3 class="sts-category-title">Testing</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">TDD + Coverage <sup class="badge-soon">soon</sup></a>
-</div>
-<!-- Documentation -->
-<div class="sts-category-item animation-t1 flex-column">
-<div class="sts-category-icon-wrapper">
-<span class="sts-category-icon">📚</span>
-</div>
-<h3 class="sts-category-title">Documentation</h3>
-<a class="sts-category-link animation-t2 margin-top-auto" href="coming-soon.html">ADR + Docs <sup class="badge-soon">soon</sup></a>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- CORTEX Demo Videos - Tabbed Section -->
-<div class="demo-showcase-container">
-<div class="glass-card demo-showcase-card">
-<div class="demo-showcase-header">
-<span class="demo-showcase-icon">🎬</span>
-<div>
-<h2 class="demo-showcase-title">CORTEX IN ACTION</h2>
-<p class="demo-showcase-subtitle">Watch CORTEX transform your development workflow</p>
-</div>
-</div>
-<div class="demo-showcase-layout">
-<!-- Left Side: Vertical Tab Navigation + Info -->
-<div class="demo-sidebar">
-<div aria-label="Demo video categories" class="demo-tabs-vertical" role="tablist">
-<button aria-controls="tab-e2e" aria-selected="true" class="demo-tab-v active" data-tab="e2e" role="tab">
-<span class="demo-tab-v-icon">⚡</span>
-<div class="demo-tab-v-content">
-<span class="demo-tab-v-label">E2E Execution</span>
-<span class="demo-tab-v-desc">Full autonomous workflow</span>
-</div>
-</button>
-<button aria-controls="tab-planning" aria-selected="false" class="demo-tab-v" data-tab="planning" role="tab">
-<span class="demo-tab-v-icon">🎯</span>
-<div class="demo-tab-v-content">
-<span class="demo-tab-v-label">Planning System</span>
-<span class="demo-tab-v-desc">Strategic task breakdown</span>
-</div>
-</button>
-<button aria-controls="tab-tdd" aria-selected="false" class="demo-tab-v" data-tab="tdd" role="tab">
-<span class="demo-tab-v-icon">✅</span>
-<div class="demo-tab-v-content">
-<span class="demo-tab-v-label">TDD Workflow</span>
-<span class="demo-tab-v-desc">RED→GREEN→REFACTOR</span>
-</div>
-</button>
-<button aria-controls="tab-lens" aria-selected="false" class="demo-tab-v" data-tab="lens" role="tab">
-<span class="demo-tab-v-icon">🔍</span>
-<div class="demo-tab-v-content">
-<span class="demo-tab-v-label">CORTEX Lens</span>
-<span class="demo-tab-v-desc">Code intelligence &amp; AST</span>
-</div>
-</button>
-</div>
-<!-- Video Info (shows below tabs on desktop) -->
-<div class="demo-info-panel">
-<div class="demo-info-content" data-for="e2e">
-<h3>End-to-End Autonomous Execution</h3>
-<p>Watch CORTEX autonomously execute a complete development workflow—from requirement analysis through implementation, testing, and deployment.</p>
-<div class="demo-video-tags">
-<span class="demo-tag">Autonomous</span>
-<span class="demo-tag">Multi-Feature</span>
-<span class="demo-tag">Error Recovery</span>
-</div>
-</div>
-<div class="demo-info-content hidden" data-for="planning">
-<h3>Strategic Planning System</h3>
-<p>Transform vague requirements into executable plans with DoR/DoD validation, auto-complexity detection, and TDD integration.</p>
-<div class="demo-video-tags">
-<span class="demo-tag">DoR/DoD</span>
-<span class="demo-tag">Complexity Analysis</span>
-<span class="demo-tag">Task Breakdown</span>
-</div>
-</div>
-<div class="demo-info-content hidden" data-for="tdd">
-<h3>TDD RED→GREEN→REFACTOR</h3>
-<p>Experience enforced test-driven development with per-layer coverage tracking and automatic test generation.</p>
-<div class="demo-video-tags">
-<span class="demo-tag">RED Feature</span>
-<span class="demo-tag">GREEN Feature</span>
-<span class="demo-tag">REFACTOR Feature</span>
-</div>
-</div>
-<div class="demo-info-content hidden" data-for="lens">
-<h3>Deep Code Intelligence</h3>
-<p>Explore AST analysis, dependency mapping, and reverse engineering. Transform source code into actionable insights.</p>
-<div class="demo-video-tags">
-<span class="demo-tag">AST Analysis</span>
-<span class="demo-tag">Dependency Graph</span>
-<span class="demo-tag">Code Insights</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Side: Video Player -->
-<div class="demo-video-area">
-<div aria-labelledby="e2e" class="demo-tab-panel active" id="tab-e2e" role="tabpanel">
-<div class="demo-video-wrapper demo-placeholder">
-<div class="e2e-demo-placeholder">
-<svg class="e2e-demo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-</svg>
-<h3 class="e2e-demo-title">E2E Execution Demo</h3>
-<p class="e2e-demo-description">
-Watch CORTEX orchestrate end-to-end development workflows with intelligent automation.
-</p>
-<p class="e2e-demo-note">
-📹 Video coming soon • Export from Cortex Intoduction.mepj
-</p>
-</div>
-</div>
-</div>
-<div aria-labelledby="planning" class="demo-tab-panel" id="tab-planning" role="tabpanel">
-<div class="demo-video-wrapper demo-placeholder">
-<div class="demo-coming-soon">
-<span class="coming-soon-icon">🎯</span>
-<h4>Planning System Demo</h4>
-<p>Coming Soon</p>
-</div>
-</div>
-</div>
-<div aria-labelledby="tdd" class="demo-tab-panel" id="tab-tdd" role="tabpanel">
-<div class="demo-video-wrapper demo-placeholder">
-<div class="demo-coming-soon">
-<span class="coming-soon-icon">✅</span>
-<h4>TDD Mastery Demo</h4>
-<p>Coming Soon</p>
-</div>
-</div>
-</div>
-<div aria-labelledby="lens" class="demo-tab-panel" id="tab-lens" role="tabpanel">
-<div class="demo-video-wrapper demo-placeholder">
-<div class="demo-coming-soon">
-<span class="coming-soon-icon">🔍</span>
-<h4>CORTEX Lens Demo</h4>
-<p>Coming Soon</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+    </section>
+
+    <!-- Redesigned Persona Section (Horizontal Feature Blocks) -->
+    <section class="container section" id="who-is-cortex-for" aria-labelledby="persona-section-heading">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl text-gradient font-bold" id="persona-section-heading">Who is CORTEX For?</h2>
+            <p class="text-muted text-xl max-w-2xl mx-auto">Tailored experiences designed to support diverse technical and leadership roles.</p>
+        </div>
+        
+        <div class="flex-col gap-6">
+            <!-- Business Leadership -->
+            <a href="roles/business-leader.html" class="feature-block feature-purple">
+                <div class="feature-block-content">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="icon-box lg icon-purple m-0 shrink-0"><i class="fas fa-user-tie"></i></div>
+                        <div>
+                            <h3 class="text-2xl m-0 font-bold text-primary">Business Leadership</h3>
+                            <p class="text-sm font-semibold text-purple uppercase tracking-widest m-0">Predictable, Governed Delivery</p>
+                        </div>
+                    </div>
+                    <p class="text-muted text-lg mb-0 mt-4 max-w-2xl">
+                        Eliminate the invisible costs of ungoverned AI. Gain immediate access to delivery metrics, automated compliance evidence, and verifiable audit trails without burdening your engineering teams.
+                    </p>
+                </div>
+                <div class="feature-block-list">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-chart-line"></i> <span>Optimize and track AI resource utilization</span></li>
+                        <li><i class="fas fa-shield-check"></i> <span>Automate standard governance checks</span></li>
+                        <li><i class="fas fa-file-contract"></i> <span>Facilitate instant compliance evidence collection</span></li>
+                    </ul>
+                </div>
+            </a>
+            
+            <!-- Product Owners -->
+            <a href="roles/product-owner.html" class="feature-block feature-magenta">
+                <div class="feature-block-content">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="icon-box lg icon-magenta m-0 shrink-0"><i class="fas fa-clipboard-list"></i></div>
+                        <div>
+                            <h3 class="text-2xl m-0 font-bold text-primary">Product Owners</h3>
+                            <p class="text-sm font-semibold text-magenta uppercase tracking-widest m-0">Backlog to Implementation</p>
+                        </div>
+                    </div>
+                    <p class="text-muted text-lg mb-0 mt-4 max-w-2xl">
+                        Close the loop between the planning board and the codebase. Automatically validate task readiness and ensure every feature delivered is backed by structured verification.
+                    </p>
+                </div>
+                <div class="feature-block-list">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-tasks"></i> <span>Automated readiness validation for planned tasks</span></li>
+                        <li><i class="fas fa-project-diagram"></i> <span>Native integration with Azure DevOps</span></li>
+                        <li><i class="fas fa-box-open"></i> <span>Structured evidence bundles for feature sign-off</span></li>
+                    </ul>
+                </div>
+            </a>
+
+            <!-- Software Engineers -->
+            <a href="roles/software-engineer.html" class="feature-block feature-cyan">
+                <div class="feature-block-content">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="icon-box lg icon-cyan m-0 shrink-0"><i class="fas fa-laptop-code"></i></div>
+                        <div>
+                            <h3 class="text-2xl m-0 font-bold text-primary">Software Engineers</h3>
+                            <p class="text-sm font-semibold text-cyan uppercase tracking-widest m-0">Intelligent Pair Programming</p>
+                        </div>
+                    </div>
+                    <p class="text-muted text-lg mb-0 mt-4 max-w-2xl">
+                        Focus on creative problem-solving while CORTEX handles the scaffolding. Access deep architectural analysis, automated TDD enforcement, and safe refactoring tools directly from your IDE.
+                    </p>
+                </div>
+                <div class="feature-block-list">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-vial"></i> <span>Encourages TDD by establishing test frameworks early</span></li>
+                        <li><i class="fas fa-search-location"></i> <span>Deep AST analysis and security pattern recognition</span></li>
+                        <li><i class="fas fa-terminal"></i> <span>Seamless orchestrator access via MCP in VS Code</span></li>
+                    </ul>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Combined Capabilities Segment (Softened Dark Glassmorphism) -->
+    <section class="container section pt-0" id="platform-capabilities">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl text-gradient font-bold">Platform Capabilities</h2>
+            <p class="text-muted text-xl max-w-3xl mx-auto">A unified framework providing strict governance and deep codebase intelligence.</p>
+        </div>
+
+        <!-- Super Panel -->
+        <div class="glass-card-super">
+            
+            <!-- Governance Domain -->
+            <div class="mb-12">
+                <div class="flex items-start gap-5 mb-8">
+                    <div class="icon-box lg icon-cyan m-0 shrink-0" style="margin-top: 4px;"><i class="fas fa-shield-alt"></i></div>
+                    <div>
+                        <h3 class="text-3xl text-primary m-0 mb-2">Governance & Audit</h3>
+                        <p class="text-muted text-lg m-0 max-w-3xl">Designed around strict CORE rules, cryptographic evidence hashing, and GitBackedRegistry for confident enforcement.</p>
+                    </div>
+                </div>
+                
+                <!-- Bento Grid (5 Items) -->
+                <div class="bento-grid">
+                    <!-- Spans 8 cols on desktop -->
+                    <div class="bento-item md-col-8">
+                        <i class="fas fa-receipt bento-icon-watermark text-cyan"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-receipt"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">Multi-Tier Architecture</h4>
+                        </div>
+                        <p class="text-muted mb-0">Structured to merge overarching SKULL rules with business and engineering constraints. The EnforcementOrchestrator prevents violations during code changes.</p>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-link bento-icon-watermark text-cyan"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-link"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">Hash-Chain Trails</h4>
+                        </div>
+                        <p class="text-muted mb-0">EnhancedAuditLogger records sensitive operations using a tamper-evident design.</p>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-save bento-icon-watermark text-cyan"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-save"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">State Management</h4>
+                        </div>
+                        <p class="text-muted mb-0">Designed for safe transitions, file locking, and safe rollback capabilities.</p>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-sync bento-icon-watermark text-cyan"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-sync"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">Lifecycle Flow</h4>
+                        </div>
+                        <p class="text-muted mb-0">Progressing from IDLE to ACTIVE states while enforcing specific entry criteria.</p>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-file-contract bento-icon-watermark text-cyan"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-file-contract"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">Evidence Bundles</h4>
+                        </div>
+                        <p class="text-muted mb-0">Compiles execution data into structured bundles for historical traceability.</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="glass-divider my-12" style="opacity: 0.5;" />
+
+            <!-- Discovery Domain -->
+            <div>
+                <div class="flex items-start gap-5 mb-8">
+                    <div class="icon-box lg icon-purple m-0 shrink-0" style="margin-top: 4px;"><i class="fas fa-search"></i></div>
+                    <div>
+                        <h3 class="text-3xl text-primary m-0 mb-2">Discovery & Toolkit</h3>
+                        <p class="text-muted text-lg m-0 max-w-3xl">Code intelligence via AST, Git history analysis, and seamless MCP integration mapped directly to your IDE.</p>
+                    </div>
+                </div>
+                
+                <!-- Bento Grid (3 Items) -->
+                <div class="bento-grid">
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-code bento-icon-watermark text-purple"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-code"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">CORTEX LENS</h4>
+                        </div>
+                        <p class="text-muted mb-4 flex-grow">Utilizes language parsing, commit insights, and security modeling to help surface structural context.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">AST</span>
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Vision API</span>
+                        </div>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-toolbox bento-icon-watermark text-purple"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-toolbox"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">Reporting</h4>
+                        </div>
+                        <p class="text-muted mb-4 flex-grow">Generates readable Epic Plans, Architecture Diagrams, and Duplication Dashboards.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Plan Viewer</span>
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">D3.js Charts</span>
+                        </div>
+                    </div>
+                    <!-- Spans 4 cols on desktop -->
+                    <div class="bento-item md-col-4">
+                        <i class="fas fa-plug bento-icon-watermark text-purple"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-plug"></i></div>
+                            <h4 class="text-xl m-0 font-semibold text-primary">IDE Execution</h4>
+                        </div>
+                        <p class="text-muted mb-4 flex-grow">Directly access validation, git, and refactor tools without leaving your editor via MCP.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Verify</span>
+                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Refactor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CORTEX Demo Videos -->
+    <section class="container section mb-16 pt-0">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl text-gradient font-bold">Experience CORTEX</h2>
+            <p class="text-muted text-xl">See the workflow execution in a practical environment</p>
+        </div>
+
+        <div class="glass-card p-0 overflow-hidden border-none" style="background: rgba(255,255,255,0.02);">
+            <div class="tab-layout gap-0">
+                <div class="tab-sidebar p-6" role="tablist" aria-label="Demo video categories" style="background: rgba(0,0,0,0.2);">
+                    <button aria-controls="tab-e2e" aria-selected="true" class="cortex-tab active" data-target="tab-e2e" role="tab">
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-bolt"></i></span> E2E Execution
+                    </button>
+                    <button aria-controls="tab-planning" aria-selected="false" class="cortex-tab" data-target="tab-planning" role="tab">
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-bullseye"></i></span> Planning System
+                    </button>
+                    <button aria-controls="tab-tdd" aria-selected="false" class="cortex-tab" data-target="tab-tdd" role="tab">
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-check-circle"></i></span> TDD Execution
+                    </button>
+                    <button aria-controls="tab-lens" aria-selected="false" class="cortex-tab" data-target="tab-lens" role="tab">
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-search"></i></span> CORTEX Lens
+                    </button>
+                </div>
+                
+                <div class="tab-content-area bg-transparent border-0 rounded-none p-8 md:p-12 flex items-center">
+                    <div aria-labelledby="e2e" class="cortex-tab-panel active w-full" id="tab-e2e" role="tabpanel">
+                        <div class="demo-placeholder">
+                            <i class="fas fa-play bento-icon-watermark text-cyan"></i>
+                            <div class="icon-box lg icon-cyan m-0 mb-6 shrink-0"><i class="fas fa-play"></i></div>
+                            <h3 class="text-3xl font-bold mb-4">E2E Execution Demo</h3>
+                            <p class="text-muted text-lg mb-8 max-w-xl mx-auto">Observe the orchestration process handling an end-to-end development cycle.</p>
+                            <span class="glass-pill text-cyan border-cyan"><i class="fas fa-video mr-2"></i> Video preparation in progress</span>
+                        </div>
+                    </div>
+                    <div aria-labelledby="planning" class="cortex-tab-panel w-full" id="tab-planning" role="tabpanel">
+                        <div class="demo-placeholder">
+                            <div class="icon-box lg m-0 mb-6 shrink-0" style="color: var(--text-tertiary);"><i class="fas fa-bullseye"></i></div>
+                            <h3 class="text-3xl font-bold mb-4">Planning System Demo</h3>
+                            <p class="text-muted text-lg">Coming Soon</p>
+                        </div>
+                    </div>
+                    <div aria-labelledby="tdd" class="cortex-tab-panel w-full" id="tab-tdd" role="tabpanel">
+                        <div class="demo-placeholder">
+                            <div class="icon-box lg m-0 mb-6 shrink-0" style="color: var(--text-tertiary);"><i class="fas fa-check-circle"></i></div>
+                            <h3 class="text-3xl font-bold mb-4">TDD Mastery Demo</h3>
+                            <p class="text-muted text-lg">Coming Soon</p>
+                        </div>
+                    </div>
+                    <div aria-labelledby="lens" class="cortex-tab-panel w-full" id="tab-lens" role="tabpanel">
+                        <div class="demo-placeholder">
+                            <div class="icon-box lg m-0 mb-6 shrink-0" style="color: var(--text-tertiary);"><i class="fas fa-search"></i></div>
+                            <h3 class="text-3xl font-bold mb-4">CORTEX Lens Demo</h3>
+                            <p class="text-muted text-lg">Coming Soon</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
-<!-- End Main Content -->
 
-<!-- Footer with Page Metadata (Semantic HTML5) -->
+<!-- Footer with Page Metadata -->
 <footer role="contentinfo" class="page-footer">
-  <div class="footer-content">
-    <p class="footer-text">
-      <span class="footer-brand">CORTEX</span> — <em>Cognitive Orchestration Real-Time Execution eXpert</em>
-    </p>
-    <p class="footer-meta">
-      Built with <span aria-label="accessibility">♿</span> WCAG 2.1 Level AA compliance |
-      Performance optimized | 
-      <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </p>
+  <div class="container footer-content">
+    <div class="mb-6 md:mb-0">
+        <p class="font-bold text-xl mb-2 text-primary font-display">
+          CORTEX <span class="text-muted font-normal text-lg font-sans">— <em>Cognitive Orchestration Real-Time Execution eXpert</em></span>
+        </p>
+        <p class="text-sm text-muted">
+          Built with <span aria-label="accessibility" class="text-cyan">♿</span> WCAG 2.1 Level AA compliance | Performance optimized
+        </p>
+    </div>
+    <div>
+        <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="glass-pill hover:text-white transition-colors border-none" style="background: rgba(255,255,255,0.05); padding: 0.75rem 1.5rem;">
+            <i class="fab fa-github mr-2"></i> View on GitHub
+        </a>
+    </div>
   </div>
 </footer>
 
-<!-- External JavaScript for Performance -->
-<script src="assets/js/index.js" defer></script>
-<!-- CORTEX CSS Layout Validator -->
-<script src="assets/js/css-layout-validator.js"></script>
+<script>
+    // Pure Vanilla JS for Keyboard-Accessible Tabs (Demo Video Section)
+    document.addEventListener('DOMContentLoaded', () => {
+        // Find all tab containers
+        const tabGroups = [
+            { btns: document.querySelectorAll('.tab-sidebar .cortex-tab'), panels: document.querySelectorAll('.tab-content-area .cortex-tab-panel') }
+        ];
+
+        tabGroups.forEach(group => {
+            if (!group.btns.length) return; // skip if not found
+            
+            group.btns.forEach((btn, index) => {
+                
+                // Click interaction
+                btn.addEventListener('click', () => {
+                    // Deactivate all
+                    group.btns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+                    group.panels.forEach(p => { p.classList.remove('active'); });
+                    
+                    // Activate target
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    
+                    const targetId = btn.getAttribute('data-target');
+                    const panel = document.getElementById(targetId);
+                    if (panel) { panel.classList.add('active'); }
+                });
+
+                // Keyboard Navigation (Arrow Keys)
+                btn.addEventListener('keydown', (e) => {
+                    let newIndex = index;
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        newIndex = (index + 1) % group.btns.length;
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        newIndex = (index - 1 + group.btns.length) % group.btns.length;
+                        e.preventDefault();
+                    }
+                    if (newIndex !== index) {
+                        group.btns[newIndex].focus();
+                        group.btns[newIndex].click();
+                    }
+                });
+            });
+        });
+    });
+</script>
 </body>
 </html>
