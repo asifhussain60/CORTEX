@@ -7,13 +7,18 @@
 #   Windows:     python scripts\run_tests.py <mode>  (make unavailable)
 # =============================================================================
 
-.PHONY: verify test test-all test-fast test-smoke test-batch test-changed test-parallel test-preflight test-healthcheck help validate-wiring
+.PHONY: verify test test-all test-fast test-smoke test-batch test-changed test-parallel test-preflight test-healthcheck help validate-wiring setup-env setup-env-clean setup-env-verify
 
 # Default target
 help:
 	@echo ""
 	@echo "🧠 CORTEX Development Commands"
 	@echo "════════════════════════════════════════════════════════════════════"
+	@echo ""
+	@echo "First-Time Setup (run once after cloning):"
+	@echo "  make setup-env        Initialize all databases + directories (<3s)"
+	@echo "  make setup-env-clean  Delete old environment and rebuild from scratch"
+	@echo "  make setup-env-verify Check environment without modifying anything"
 	@echo ""
 	@echo "  make verify           Run production readiness verification"
 	@echo "  make validate-wiring  Validate wiring.yaml accuracy (--strict mode)"
@@ -34,6 +39,26 @@ help:
 	@echo "  CORTEX_DISABLE_PARALLEL=true make test Force sequential (any mode)"
 	@echo "  CORTEX_DISABLE_TESTMON=true make test-changed  Skip testmon DB"
 	@echo ""
+
+# =============================================================================
+# ENVIRONMENT SETUP (first-time + audit-fix Stage -2)
+# =============================================================================
+
+# Initialize all .cortex-runtime/ databases and directories (idempotent, <3s)
+setup-env:
+	@python3 scripts/setup_env.py
+
+# Delete all databases and rebuild from scratch (destructive)
+setup-env-clean:
+	@python3 scripts/setup_env.py --clean
+
+# Verify environment without modifying anything
+setup-env-verify:
+	@python3 scripts/setup_env.py --verify
+
+# =============================================================================
+# PRODUCTION VERIFICATION
+# =============================================================================
 
 # Run production readiness verification
 verify:

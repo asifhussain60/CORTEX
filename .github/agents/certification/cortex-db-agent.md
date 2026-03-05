@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX DB Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
+**Updated:** 2026-03-05 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
 **Role:** SQLite integrity enforcement, schema optimization, self-healing migrations, stale data cleanup
 
 ---
@@ -19,17 +19,58 @@ and their schemas.
 
 ---
 
+## ⚡ Fast-Init (Phase 109) — Run This First
+
+Before running any checks, ensure the environment is initialized. The canonical fast-init
+script creates all directories and databases in < 3 seconds:
+
+```bash
+# First-time setup (idempotent — safe to run anytime):
+python scripts/setup_env.py
+
+# Force rebuild if DBs are corrupt or structurally incorrect:
+python scripts/setup_env.py --clean
+
+# Read-only verification:
+python scripts/setup_env.py --verify
+
+# Makefile aliases:
+make setup-env          # idempotent setup
+make setup-env-clean    # force rebuild (deletes existing data)
+make setup-env-verify   # verify without modifying
+```
+
+**SSOT:** `cortex/infrastructure/env_initializer.py` — `DB_REGISTRY` contains the
+canonical schema for all 7 databases. When schemas change, update `env_initializer.py`
+first; `cortex-db-agent.md` references it as authoritative.
+
+**When to use `--clean`:**
+
+- User reports errors about missing tables or corrupt databases
+- Audit pipeline Stage -2 detects recurring DB corruption (RCA dispatched)
+- Schema migrations have been structurally changed (not just additive)
+
+**When NOT to use `--clean`:**
+
+- Just to speed things up (use `--verify` first to check state)
+- On production systems with data you need to retain
+
+---
+
 ## Phase 8: SQLITE INTEGRITY
 
 ### Input
+
 - Database inventory (canonical list below)
 - Prior phase outputs (especially Phase 6 memory hygiene flags and Phase 7 vacuum results)
 
 ### 8.1 Database Inventory (Canonical)
 
+**SSOT:** `cortex/infrastructure/env_initializer.py` → `DB_REGISTRY`
+
 | Database | Path | Tables (expected) | Retention | Max Size |
 |----------|------|-------------------|-----------|----------|
-| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`, `trace_registry_loads`, `trace_response_selection`, `trace_governance_checks`, `trace_output_hashes` | 30 days | 50MB |
+| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `audit_certifications`, `workflow_cycles`, `workflow_runs`, `trace_master`, `trace_metadata`, `trace_flush_log`, `trace_registry_loads`, `trace_response_selection`, `trace_governance_checks`, `trace_output_hashes` | 30 days | 50MB |
 | rca-store | `rca/rca_store.db` | `rca_analyses`, `prevention_rules` | 30 days | 10MB |
 | audit | `audit.db` | `audit_events`, `orchestrator_traces`, `governance_checks`, `phase_progress` | 30 days | 20MB |
 | governance | `governance.db` | `scaffolder_audit_log` | 30 days | 5MB |
@@ -40,12 +81,35 @@ and their schemas.
 > **Phase 128 Addition:** `orchestrator-traces.db` now includes 4 trace tables
 > (`trace_registry_loads`, `trace_response_selection`, `trace_governance_checks`,
 > `trace_output_hashes`) for full pipeline observability.
+>
+> **Phase 109 Addition:** `orchestrator-traces.db` now also includes `trace_master`,
+> `trace_metadata`, `trace_flush_log`, and `audit_certifications`. All schemas
+> are canonical in `cortex/infrastructure/env_initializer.py` → `DB_REGISTRY`.
 
 ### 8.2 Integrity Checks
 
 For each database, execute in order:
 
+#### Check 0: Fast-Init Gate (Phase 109)
+
+**Before running any check below, run the fast-init verifier:**
+
+```python
+from cortex.infrastructure.env_initializer import verify_runtime_environment
+ok, issues = verify_runtime_environment()
+if not ok:
+    print(f"❌ Environment not ready ({len(issues)} issues) — run: python scripts/setup_env.py")
+    for issue in issues:
+        print(f"  • {issue}")
+else:
+    print("✅ Environment healthy — all databases and directories present")
+```
+
+**Auto-fix:** `python scripts/setup_env.py` (< 3s on any machine)
+**Nuclear option:** `python scripts/setup_env.py --clean` (destroys existing data, then rebuilds)
+
 #### Check 1: File Existence
+
 ```bash
 for db in \
   ".cortex-runtime/traces/orchestrator-traces.db" \
@@ -59,12 +123,13 @@ for db in \
     size=$(du -h "$db" | cut -f1)
     echo "✅ $db ($size)"
   else
-    echo "❌ MISSING: $db"
+    echo "❌ MISSING: $db — Fix: python scripts/setup_env.py"
   fi
 done
 ```
 
 #### Check 2: Corruption Detection
+
 ```python
 import sqlite3, pathlib
 
@@ -82,21 +147,25 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 ```
 
 #### Check 3: Schema Drift Detection
+
 ```python
 import sqlite3, pathlib
 
+# SSOT: cortex/infrastructure/env_initializer.py → DB_REGISTRY
+# These sets must match env_initializer.py exactly.
 CANONICAL_SCHEMAS = {
     'orchestrator-traces.db': {
-        'audit_sessions', 'audit_stage_log', 'audit_violations',
+        'audit_sessions', 'audit_stage_log', 'audit_violations', 'audit_certifications',
         'workflow_cycles', 'workflow_runs',
+        'trace_master', 'trace_metadata', 'trace_flush_log',
         'trace_registry_loads', 'trace_response_selection',
         'trace_governance_checks', 'trace_output_hashes'
     },
     'rca_store.db': {
-        'rca_analyses', 'prevention_rules'
+        'rca_analyses', 'prevention_rules', 'recurrence_signatures', 'recurrence_incidents'
     },
     'audit.db': {
-        'audit_events', 'orchestrator_traces', 'governance_checks', 'phase_progress'
+        'audit_events', 'orchestrator_traces', 'governance_checks', 'phase_progress', 'audit_log'
     },
     'governance.db': {
         'scaffolder_audit_log'
@@ -131,6 +200,7 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 ```
 
 #### Check 4: Index Health
+
 ```python
 import sqlite3, pathlib
 
@@ -211,6 +281,7 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 ```
 
 **Purge Protocol:**
+
 1. Delete records older than retention period
 2. Delete orphaned AC_START records (no matching AC_COMPLETE after 24h)
 3. Run `PRAGMA wal_checkpoint(TRUNCATE)` to reclaim WAL space

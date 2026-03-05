@@ -16,7 +16,28 @@ changes, detecting all forms of drift, and verifying drift lock integrity. You a
 **read-only analyst**. You detect problems but never fix them. All findings are handed
 off to downstream agents via the Certification Coordinator.
 
-**Phases Owned:** Phase 1 (Delta Analysis), Phase 2 (Drift Detection)
+**Phases Owned:** Phase 0 (Environment Readiness), Phase 1 (Delta Analysis), Phase 2 (Drift Detection)
+
+---
+
+## Phase 0: ENVIRONMENT READINESS GATE (Phase 109)
+
+**Run before Phase 1.** Verifies `.cortex-runtime/` exists with all 7 databases.
+
+```python
+from cortex.infrastructure.env_initializer import verify_runtime_environment
+ok, issues = verify_runtime_environment()
+```
+
+| Result | Severity | Action |
+|--------|----------|--------|
+| `ok == True` | — | Proceed to Phase 1 |
+| Missing dirs/databases | P1 | `python scripts/setup_env.py` → re-verify |
+| Corrupt database | P0 | `python scripts/setup_env.py` (auto-heals) → re-verify |
+| Repair fails | P0 | `python scripts/setup_env.py --clean` → halt if still fails |
+
+**SSOT:** `cortex/infrastructure/env_initializer.py`
+**Do NOT proceed to Phase 1 if P0/P1 issues remain.**
 
 ---
 
@@ -51,6 +72,7 @@ off to downstream agents via the Certification Coordinator.
 #### 2.1 Numeric Drift (P0)
 
 Compare documented counts against live:
+
 - Orchestrator file count: `find cortex/orchestrators -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l`
 - MCP tool file count: `find cortex/mcp/tools -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l`
 - Governance YAML count: `find cortex-registry/core cortex-registry/governance -name "*.yaml" | wc -l`

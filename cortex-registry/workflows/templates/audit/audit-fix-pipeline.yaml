@@ -250,6 +250,126 @@ workflow:
   stages:
 
     # -------------------------------------------------------------------------
+    # Stage -2: Runtime Environment Fast-Init (Phase 109)
+    # NEW: Runs before all other stages. Creates .cortex-runtime/ directories
+    # and all 7 SQLite databases in a single idempotent pass (<3s).
+    # Detects corrupt DBs and rebuilds them. On new machines, this is the
+    # only gate needed before the full audit pipeline can run.
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_minus_2'
+      stage_num: -2
+      name: 'Stage -2 — Runtime Environment Fast-Init (Phase 109)'
+      orchestrator: 'EnvironmentInitializer'
+      python_module: 'cortex.infrastructure.env_initializer'
+      entry_point: 'initialize_runtime_environment()'
+      script: 'scripts/setup_env.py'
+      guard: 'CORTEX_SKIP_ENV_INIT != "true"'
+      description: |
+        Idempotent environment bootstrap — safe on any machine in any state.
+
+        Actions:
+          1. Create .cortex-runtime/ and all 9 subdirectories (traces/, rca/,
+             state/, wiring/, intelligence/, logs/, baselines/, certification/,
+             lens-dashboard/) — skips existing dirs.
+          2. Initialize 7 canonical SQLite databases if missing:
+               traces/orchestrator-traces.db  — primary trace store (18 tables+indexes)
+               rca/rca_store.db               — RCA engine (4 tables)
+               audit.db                       — shared audit trail (5 tables)
+               governance.db                  — scaffolder audit (1 table + 2 indexes)
+               state/conversations.db         — session state (2 tables + 3 indexes)
+               wiring/contract_validation_audit.db  — wiring contracts (2 tables)
+               intelligence/intelligence_audit.db   — intelligence traces (1 table)
+          3. Apply additive schema migrations (ALTER TABLE ADD COLUMN) for any
+             columns missing from existing tables — never drops data.
+          4. PRAGMA integrity_check on all existing DBs — corrupt DBs are
+             rebuilt automatically (data sacrificed to restore pipeline health).
+
+        Conflict detection:
+          - CORRUPT DB → delete + rebuild (P0 auto-fix, no user prompt required)
+          - MISSING TABLES → CREATE TABLE IF NOT EXISTS (additive)
+          - MISSING COLUMNS → ALTER TABLE ADD COLUMN (additive)
+          - CONFLICTING OLD ENV → use --clean flag to force full rebuild
+
+        Fast paths:
+          - All databases already healthy → < 50ms (integrity_check only)
+          - First-time setup (all DBs missing) → 300–800ms
+          - Partial init (some DBs present) → proportional
+
+        Never blocks:
+          - Missing .venv or pip packages do NOT block this stage
+          - Network unavailable does NOT block this stage
+          - All operations use pure Python stdlib (sqlite3, pathlib)
+
+        CLI equivalent (for manual or CI use):
+          python scripts/setup_env.py          # idempotent setup
+          python scripts/setup_env.py --clean  # force rebuild
+          python scripts/setup_env.py --verify # read-only check
+          make setup-env                       # Makefile alias
+          make setup-env-clean                 # with --clean
+          make setup-env-verify                # with --verify
+
+      steps:
+        - id: 'verify_existing'
+          action: 'verify_runtime_environment()'
+          on_result: |
+            If all_ok: skip_to_stage_minus_1 (fast path — < 50ms)
+            If issues_found: continue to init steps
+
+        - id: 'create_dirs'
+          action: 'initialize_runtime_environment()'
+          params:
+            clean: false
+          on_success: 'continue'
+          on_failure: |
+            Emit P0: "Runtime environment init failed: {error}"
+            Halt pipeline with diagnostic.
+
+        - id: 'verify_post_init'
+          action: 'verify_runtime_environment()'
+          on_result: |
+            If all_ok: emit AC_STAGE_MINUS_2_COMPLETE → continue
+            If issues_remain: emit P0 with specific missing items → halt
+
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
+        label: 'env-fast-init'
+        detect_step:
+          action: 'verify_runtime_environment'
+          success_predicate: 'all_ok == True'
+        fix_step:
+          action: 'initialize_runtime_environment'
+          params:
+            clean: false
+        max_cycles: 2
+        silent_on_clean: true
+
+      learning:
+        description: |
+          Pattern learning from environment issues (Phase 109 RCA integration).
+          If the same DB is rebuilt corrupt more than twice in 7 days,
+          dispatch RCAEngine.analyze() to identify the root cause.
+        trigger: 'was_corrupt == True AND recurrence_count >= 2'
+        action: 'cortex_learning(op=rca, rca_action=analyze, failure_id=db_name)'
+        emit_inline: |
+          🔬 RCA dispatched for recurring corrupt DB: {db_name}
+          → Prevention rule written to rca_store.db
+
+      ac_markers:
+        start: 'AC_STAGE_MINUS_2_START: AC-ENV-INIT-{timestamp}'
+        complete: 'AC_STAGE_MINUS_2_COMPLETE: Runtime Environment Fast-Init ✅ ({duration_ms}ms)'
+        failure: 'AC_STAGE_MINUS_2_COMPLETE: Runtime Environment Fast-Init ❌ ({error})'
+        fast_path: 'AC_STAGE_MINUS_2_SKIP: Environment healthy — fast path taken'
+
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'env-fast-init'
+        note: |
+          Bootstrapping note: this stage may run before orchestrator-traces.db exists.
+          The stage creates the DB as part of initialization, then writes its
+          own row. This is intentional and correct — no chicken-and-egg issue
+          because initialize_runtime_environment() is called before logging.
+
+    # -------------------------------------------------------------------------
     # Stage -1: Environment Readiness (Preflight)
     # -------------------------------------------------------------------------
     - stage_id: 'stage_minus_1'
