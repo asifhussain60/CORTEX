@@ -123,11 +123,11 @@ verification:
   last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 109
+  total_phases: 110
   completed: 107
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   archived: 4
   playbooks: 1
   completion_percentage: 98
@@ -459,6 +459,17 @@ phases:
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-121-ai-context-intelligence.yaml"
     note: "COMPLETE 2026. 13/13 GAPs CLOSED. AIContextScanner (8 vendors, YAML-driven), AIContentClassifier, AIPIIGuard, AIContextDisseminator (5 destinations). 10-tab dashboard (Tab 10 = AI Context). KnowledgeGuidanceEngine AI override tier. VERSION SUFFIX CLEANUP: 4 files renamed, cortex_onboard_repository_v3 removed from 6 files, phase-103c-v2 duplicate removed, VacuumOrchestrator.run_version_suffix_cleanup() added. 5 new source files, 5 test files, 1 config YAML, 1 knowledge YAML."
+
+  # ── PHASE 129: DISTILLATION MODE (2026-03-05 — PLANNED) ─────────────────────
+  - id: phase-129
+    title: "Distillation Mode — Conversational Entropy Reduction to Executable Prompt"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-129-DISTILLATION-MODE
+    gaps: 6
+    sub_phases: 7
+    file: "cortex-registry/planning/phases/planned/phase-129-distillation-mode.yaml"
+    note: "DISTILL intent (IntentType.DISTILL), DistillationOrchestrator (5-stage pipeline), cortex_distill MCP tool (#31), IntentRouter wiring across 5 files, distill-workflow.yaml, copilot-instructions update. 6 GAPs, sub-phases 129-a through 129-f + 129-final."
 
 # ── PRODUCTION HARDENING (2026-03-04 + 2026-03-05 DEEP AUDIT) ────────────────
 # Windows zero-config + versioning sweep + registry intelligence verification.
