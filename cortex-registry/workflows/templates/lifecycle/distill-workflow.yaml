@@ -1,0 +1,133 @@
+# =============================================================================
+# MODE WORKFLOW: DISTILL — Conversation Entropy Reduction to Executable Prompt
+# =============================================================================
+# Authority: cortex-registry/planning/phases/planned/phase-129-distillation-mode.yaml
+# Trigger:   "distill", "/distill", "distill this", "distill conversation",
+#            "compress conversation", "reduce to prompt", "conversation to prompt"
+# Orchestrator: DistillationOrchestrator
+# MCP Tool:     cortex_distill
+# Phase: 129
+#
+# 5-Stage Pipeline:
+#   Stage 1 — Segment:           Classify each turn → SegmentType
+#   Stage 2 — Reconstruct:       Build IntentGraph from signal segments
+#   Stage 3 — Reconcile state:   Resolve contradictions / superseded decisions
+#   Stage 4 — Synthesise prompt: Compress graph into terse executable prompt
+#   Stage 5 — Compress:          Token-optimise via RequestRephraseOrchestrator
+# =============================================================================
+
+id: "lifecycle/distill-workflow"
+workflow:
+  id: 'lifecycle/distill-workflow'
+  name: 'DISTILL — Conversation Entropy Reduction'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-03-05'
+    phase: 129
+    modes_served: ['DISTILL']
+    trigger_keywords:
+      - 'distill'
+      - '/distill'
+      - 'distill this'
+      - 'distill session'
+      - 'distill conversation'
+      - 'compress conversation'
+      - 'reduce to prompt'
+      - 'conversation to prompt'
+      - 'chat to prompt'
+    orchestrators_used:
+      - DistillationOrchestrator
+    mcp_tools:
+      - cortex_distill
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'DISTILL', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Stage 1 — Segment the conversation
+    - id: stage_segment
+      name: 'Stage 1 — Classify each conversation turn into SegmentType'
+      depends_on: ['ac_start']
+      orchestrator: 'DistillationOrchestrator'
+      action: '_segmenter.segment'
+      params:
+        conversation: '{{conversation}}'
+      outputs:
+        - segments
+
+    # Stage 2 — Reconstruct intent graph
+    - id: stage_reconstruct
+      name: 'Stage 2 — Build IntentGraph from signal segments'
+      depends_on: ['stage_segment']
+      orchestrator: 'DistillationOrchestrator'
+      action: '_reconstructor.reconstruct'
+      params:
+        segments: '{{segments}}'
+      outputs:
+        - intent_graph
+
+    # Stage 3 — Reconcile state (resolve contradictions)
+    - id: stage_reconcile
+      name: 'Stage 3 — Resolve superseded decisions and contradictions'
+      depends_on: ['stage_reconstruct']
+      orchestrator: 'DistillationOrchestrator'
+      action: '_reconciler.reconcile'
+      params:
+        graph: '{{intent_graph}}'
+      outputs:
+        - reconciled_graph
+
+    # Stage 4 — Synthesise executable prompt
+    - id: stage_synthesise
+      name: 'Stage 4 — Compress IntentGraph into executable prompt'
+      depends_on: ['stage_reconcile']
+      orchestrator: 'DistillationOrchestrator'
+      action: '_synthesiser.synthesise'
+      params:
+        graph: '{{reconciled_graph}}'
+      outputs:
+        - raw_prompt
+
+    # Stage 5 — Token-optimise (best-effort via RequestRephraseOrchestrator)
+    - id: stage_compress
+      name: 'Stage 5 — Token-optimise via RequestRephraseOrchestrator (best-effort)'
+      depends_on: ['stage_synthesise']
+      orchestrator: 'DistillationOrchestrator'
+      action: '_stage5_compress'
+      params:
+        prompt: '{{raw_prompt}}'
+      on_failure: 'continue'   # Stage 5 is best-effort — never blocks distillation
+      outputs:
+        - distilled_prompt
+
+    # Completion marker
+    - id: ac_complete
+      template_ref: 'primitives/execution/ac-marker-emit'
+      depends_on: ['stage_compress']
+      inputs:
+        domain: 'DISTILL'
+        session_id: '{{session_id}}'
+        status: 'complete'
+        distilled_prompt: '{{distilled_prompt}}'
+      step_filter: 'ac_complete'
+
+  outputs:
+    distilled_prompt: '{{distilled_prompt}}'
+    segment_count: '{{segments | length}}'
+    noise_ratio: '{{intent_graph.noise_ratio}}'
+
+  error_handling:
+    on_empty_conversation:
+      action: 'return_error'
+      message: 'Empty conversation — nothing to distill.'
+    on_all_noise:
+      action: 'return_error'
+      message: 'Conversation appears to be all noise — no goals, decisions, or constraints found.'
+    on_stage5_failure:
+      action: 'continue_with_raw'
+      message: 'Stage 5 compression unavailable — returning Stage 4 synthesised prompt.'

@@ -238,6 +238,7 @@ class IntentType(Enum):
     TOTALRECALL = "totalrecall"    # Holistic production readiness refactor (7-phase)
     RCA = "rca"                    # Root cause analysis (4 methodologies)
     INTRODUCE = "introduce"        # Interactive onboarding + role-based introduction
+    DISTILL = "distill"            # Conversational entropy reduction to executable prompt
     UNKNOWN = "unknown"
 
 

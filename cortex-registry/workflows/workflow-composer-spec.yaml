@@ -188,6 +188,7 @@ tiers:
         - train-workflow.yaml               # TRAIN mode — intent_routing: TRAIN
         - investigate-workflow.yaml         # INVESTIGATE mode — intent_routing: INVESTIGATE
         - onboarding-workflow.yaml          # ONBOARD mode — intent_routing: ONBOARD
+        - distill-workflow.yaml             # DISTILL mode — intent_routing: DISTILL (Phase 129)
         - legacy-rescue.yaml                # composed_by: lifecycle/migration-modernize
         - migration-modernize.yaml          # composed_by: lifecycle/service-decomposition-workflow
         - service-decomposition-workflow.yaml  # DECOMPOSE mode — intent_routing: DECOMPOSE
@@ -436,6 +437,21 @@ intent_routing:
     workflow_ref: 'lifecycle/onboarding-workflow'
     agent: 'cortex-architect.md'
     triggers: ['onboard', '/onboard', 'onboard repository', 'LENS analysis repo']
+
+  # ── DISTILL: conversation entropy reduction → executable prompt ───────────
+  DISTILL:
+    workflow_ref: 'lifecycle/distill-workflow'
+    agent: 'cortex-architect.md'
+    triggers:
+      - 'distill'
+      - '/distill'
+      - 'distill this'
+      - 'distill session'
+      - 'distill conversation'
+      - 'compress conversation'
+      - 'reduce to prompt'
+      - 'conversation to prompt'
+      - 'chat to prompt'
 
   # ── DECOMPOSE: service decomposition ─────────────────────────────────────
   DECOMPOSE:

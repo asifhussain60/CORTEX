@@ -220,6 +220,17 @@ class IntentKeywordRegistry:
         "show me around", "tour", "welcome",
     ]
 
+    DISTILL_KEYWORDS: List[str] = [
+        "distill", "/distill", "distill this", "distill session",
+        "distill conversation", "distill chat", "compress conversation",
+        "compress session", "compress this chat", "reduce to prompt",
+        "convert to prompt", "make executable prompt", "extract intent",
+        "extract goals", "rebuild prompt", "reconstruct prompt",
+        "conversation to prompt", "chat to prompt", "session to prompt",
+        "entropy reduction", "conversation entropy", "what did we decide",
+        "what have we agreed", "summarise to prompt", "summarize to prompt",
+    ]
+
     # ------------------------------------------------------------------
     # Factory
     # ------------------------------------------------------------------
@@ -260,4 +271,5 @@ class IntentKeywordRegistry:
             IntentType.VALIDATE: cls.VALIDATE_KEYWORDS,
             IntentType.MIGRATE: cls.MIGRATE_KEYWORDS,
             IntentType.INTRODUCE: cls.INTRODUCE_KEYWORDS,
+            IntentType.DISTILL: cls.DISTILL_KEYWORDS,
         }

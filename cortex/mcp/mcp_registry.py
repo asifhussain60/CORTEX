@@ -438,6 +438,21 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["emit", "history", "decay", "promote", "quarantine", "metrics", "rca"],
     },
+    "cortex_distill": {
+        "description": (
+            "Distil a multi-turn conversation into an executable, context-dense prompt. "
+            "Runs a 5-stage pipeline: segment → reconstruct → reconcile → synthesise → compress. "
+            "Eliminates noise, preserves goals, decisions, and constraints. Phase 129."
+        ),
+        "category": ToolCategory.UTILITIES,
+        "parameters": [
+            {"name": "conversation", "type": "string", "required": True,
+             "description": "Raw multi-turn conversation text to distil."},
+            {"name": "orchestrator_context", "type": "string", "required": False,
+             "description": "Optional orchestrator context for governance routing."},
+        ],
+        "operations": ["distill"],
+    },
 }
 
 

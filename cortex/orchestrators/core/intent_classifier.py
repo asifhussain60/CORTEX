@@ -244,6 +244,16 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "new here", "first time", "walk me through", "show me around", "tour",
         "welcome", "onboard me",
     ],
+    IntentType.DISTILL: [
+        "distill", "/distill", "distill this", "distill session",
+        "distill conversation", "distill chat", "compress conversation",
+        "compress session", "reduce to prompt", "convert to prompt",
+        "make executable prompt", "extract intent", "extract goals",
+        "rebuild prompt", "reconstruct prompt", "conversation to prompt",
+        "chat to prompt", "session to prompt", "entropy reduction",
+        "conversation entropy", "what did we decide", "summarise to prompt",
+        "summarize to prompt",
+    ],
 }
 
 # ---------------------------------------------------------------------------
@@ -253,7 +263,7 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
 _LLM_SYSTEM_PROMPT = """\
 You are an intent classifier for a software engineering AI assistant.
 Classify the user request into exactly ONE of these intent labels:
-IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, WORKFLOW_COMPOSE, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM, INTRODUCE
+IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, WORKFLOW_COMPOSE, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM, INTRODUCE, DISTILL
 
 Reply with ONLY the label — no punctuation, no explanation.\
 """
@@ -490,6 +500,8 @@ class IntentClassifier:
             "vacuum": IntentType.VACUUM,
             # INTRODUCE: interactive onboarding
             "introduce": IntentType.INTRODUCE,
+            # DISTILL: conversational entropy reduction
+            "distill": IntentType.DISTILL,
         }
         return _EXACT.get(operation.strip().lower())
 

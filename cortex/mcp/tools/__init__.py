@@ -128,6 +128,9 @@ from cortex.mcp.tools.cortex_context import CortexContext
 # Phase 123 — Registry Intelligence Engine (GAP-123-06)
 from cortex.mcp.tools.cortex_registry_tool import CortexRegistry
 
+# Phase 129 — Distillation Mode (conversation → executable prompt)
+from cortex.mcp.tools.cortex_distill_tool import CortexDistill
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -188,6 +191,8 @@ ALL_TOOLS = [
     CortexContext,
     # Registry Intelligence (1) - Phase 123 GAP-123-06
     CortexRegistry,
+    # Distillation (1) - Phase 129 — conversation → executable prompt
+    CortexDistill,
 ]
 
 
@@ -318,6 +323,10 @@ __all__ = [
     "CortexLearning",
     # Context (Phase 113)
     "CortexContext",
+    # Registry Intelligence (Phase 123)
+    "CortexRegistry",
+    # Distillation (Phase 129)
+    "CortexDistill",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",
