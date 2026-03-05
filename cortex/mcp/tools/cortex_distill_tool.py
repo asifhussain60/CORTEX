@@ -78,12 +78,12 @@ class CortexDistill(ConsolidatedTool):
         return ["distill"]
 
     # ------------------------------------------------------------------
-    # Execution
+    # Execution (async variant — kept for future async MCP framework use)
     # ------------------------------------------------------------------
 
-    async def execute(self, **kwargs: Any) -> ToolResult:
+    async def execute_async(self, **kwargs: Any) -> ToolResult:
         """
-        Execute the distillation pipeline.
+        Execute the distillation pipeline asynchronously.
 
         Args:
             conversation: Raw multi-turn conversation text.
@@ -135,10 +135,10 @@ class CortexDistill(ConsolidatedTool):
             )
 
     # ------------------------------------------------------------------
-    # Synchronous shim — used by tests that call execute() directly
+    # Synchronous execute — canonical entry point for MCP and tests
     # ------------------------------------------------------------------
 
-    def execute(self, params: dict, **kwargs: Any) -> ToolResult:  # type: ignore[override]
+    def execute(self, params: dict, **kwargs: Any) -> ToolResult:
         """
         Synchronous shim for test compatibility.
 

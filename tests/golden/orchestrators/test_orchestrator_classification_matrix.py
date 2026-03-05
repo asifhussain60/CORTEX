@@ -115,7 +115,7 @@ COMPOSITION_MATRIX = {
 def _load_comp(filename: str) -> dict:
     path = COMPOSITIONS_DIR / filename
     assert path.exists(), f"{filename} not found at {path}"
-    return yaml.safe_load(path.read_text())
+    return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 
 def _atom_ids(comp: dict) -> list[str]:
@@ -145,7 +145,7 @@ class TestOrchestratorInventory:
         path = COMPOSITIONS_DIR / filename
         assert path.exists(), f"{filename} not found"
         try:
-            data = yaml.safe_load(path.read_text())
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
         except yaml.YAMLError as e:
             pytest.fail(f"{filename} YAML parse error: {e}")
         assert isinstance(data, dict), f"{filename} must parse to a dict, got {type(data)}"
@@ -175,7 +175,7 @@ class TestOrchestratorClassification:
         assert TRIGGER_POLICY_PATH.exists(), (
             f"principle-trigger-policy.yaml not found at {TRIGGER_POLICY_PATH}"
         )
-        return yaml.safe_load(TRIGGER_POLICY_PATH.read_text())
+        return yaml.safe_load(TRIGGER_POLICY_PATH.read_text(encoding="utf-8"))
 
     @pytest.mark.parametrize("filename,spec", list(COMPOSITION_MATRIX.items()))
     def test_composition_intents_match_policy_category(

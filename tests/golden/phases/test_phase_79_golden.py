@@ -58,7 +58,7 @@ class TestPhase79KnowledgeLayer:
         """Each knowledge YAML must exist and have required keys."""
         path = KNOWLEDGE_SDLC / filename
         assert path.exists(), f"Missing SDLC knowledge YAML: {path}"
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         assert isinstance(data, dict), f"{filename} must parse to dict"
         for key in ("overview", "best_practices", "company_context"):
             assert key in data, f"{filename} missing required key '{key}'"
@@ -68,14 +68,14 @@ class TestPhase79KnowledgeLayer:
         """Each stack-specific YAML must exist with stack_overrides key."""
         path = KNOWLEDGE_SDLC / filename
         assert path.exists(), f"Missing stack-specific YAML: {path}"
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         assert isinstance(data, dict), f"{filename} must parse to dict"
         assert "stack_overrides" in data, f"{filename} missing 'stack_overrides' key"
 
     def test_index_yaml_has_sdlc_domain(self) -> None:
         """INDEX.yaml must have 'sdlc' domain with ≥6 entries."""
         assert INDEX_YAML.exists(), f"INDEX.yaml not found at {INDEX_YAML}"
-        data = yaml.safe_load(INDEX_YAML.read_text())
+        data = yaml.safe_load(INDEX_YAML.read_text(encoding="utf-8"))
         assert "sdlc" in data, "INDEX.yaml must have 'sdlc' domain"
         guides = data["sdlc"].get("guides", [])
         assert len(guides) >= 6, f"sdlc domain must have ≥6 entries, got {len(guides)}"
@@ -102,7 +102,7 @@ class TestPhase79WorkflowLayer:
         """Each workflow template must exist with workflow and knowledge_context keys."""
         path = WORKFLOW_SDLC / filename
         assert path.exists(), f"Missing SDLC workflow template: {path}"
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         assert isinstance(data, dict), f"{filename} must parse to dict"
         assert "workflow" in data, f"{filename} missing 'workflow' key"
         assert "knowledge_context" in data, f"{filename} missing 'knowledge_context' key"
@@ -111,7 +111,7 @@ class TestPhase79WorkflowLayer:
         """implementation-execution.yaml must NOT contain 'git push' (safety)."""
         path = WORKFLOW_SDLC / "implementation-execution.yaml"
         assert path.exists()
-        content = path.read_text()
+        content = path.read_text(encoding="utf-8")
         assert "git push" not in content.lower(), (
             "implementation-execution.yaml must NOT contain 'git push'"
         )
@@ -135,7 +135,7 @@ class TestPhase79ResponseBlocks:
     def test_response_block_exists(self, block_id: str) -> None:
         """Each response block must be present in the SSOT templates file."""
         assert RESPONSE_TEMPLATES.exists()
-        content = RESPONSE_TEMPLATES.read_text()
+        content = RESPONSE_TEMPLATES.read_text(encoding="utf-8")
         assert block_id in content, (
             f"Response block '{block_id}' not found in cortex-response-templates.md"
         )
@@ -212,7 +212,7 @@ class TestPhase79SDLCOrchestratorE2E:
         """workflow_tools.py must support execute and list_sdlc operations."""
         try:
             mod = importlib.import_module("cortex.mcp.tools.workflow_tools")
-            src = Path(mod.__file__).read_text()
+            src = Path(mod.__file__).read_text(encoding="utf-8")
             assert "execute" in src, "workflow_tools.py missing 'execute' operation"
             assert "list_sdlc" in src, "workflow_tools.py missing 'list_sdlc' operation"
         except ImportError:
@@ -233,7 +233,7 @@ class TestPhase79DomainWiringAndMetadata:
             / "domain-orchestrator-wiring.yaml"
         )
         assert domain_wiring.exists()
-        content = domain_wiring.read_text()
+        content = domain_wiring.read_text(encoding="utf-8")
         assert "SDLCWorkflowOrchestrator" in content, (
             "SDLCWorkflowOrchestrator not found in domain-orchestrator-wiring.yaml"
         )
@@ -241,7 +241,7 @@ class TestPhase79DomainWiringAndMetadata:
     def test_cortex_master_marks_phase_79_complete(self) -> None:
         """cortex-master.yaml must show phase-79 status: COMPLETE."""
         master = CORTEX_ROOT / "cortex-registry" / "cortex-master.yaml"
-        data = yaml.safe_load(master.read_text())
+        data = yaml.safe_load(master.read_text(encoding="utf-8"))
         phases = data.get("phase_detail_files", [])
         ph79 = next((p for p in phases if p.get("id") == "phase-79"), None)
         assert ph79 is not None, "phase-79 not found in cortex-master.yaml"

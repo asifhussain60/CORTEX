@@ -10,7 +10,7 @@ Exclusions (intentionally version-like patterns):
   - git rev/tag references in CI config
   - D3.js CDN URLs (e.g. d3.v7.min.js — library reference, not CORTEX version)
   - Historical phase-history YAML files under cortex-registry/planning/phases/
-  - file-naming-rules.yaml (defines the _v\d+ forbidden pattern — meta-reference)
+  - file-naming-rules.yaml (defines the _v\\d+ forbidden pattern — meta-reference)
   - Descriptions/evidence text that mentions versioning as a concept to prohibit
 
 Gap ref: GAP-126-05

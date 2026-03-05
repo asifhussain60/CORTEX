@@ -72,7 +72,7 @@ class TestSubPhaseARegistryStructure:
     def test_registry_yaml_loads(self) -> None:
         """A-03: _registry.yaml must exist and be valid YAML with required keys."""
         assert REGISTRY_YAML.exists(), f"Registry YAML not found: {REGISTRY_YAML}"
-        data: dict[str, Any] = yaml.safe_load(REGISTRY_YAML.read_text())
+        data: dict[str, Any] = yaml.safe_load(REGISTRY_YAML.read_text(encoding="utf-8"))
         assert data is not None, "_registry.yaml parsed as None"
         required_keys = {"atoms", "blocks", "compositions"}
         missing = required_keys - set(data.keys())
@@ -80,7 +80,7 @@ class TestSubPhaseARegistryStructure:
 
     def test_registry_lists_all_five_atoms(self) -> None:
         """A-04: _registry.yaml must list all 5 atom IDs."""
-        data: dict[str, Any] = yaml.safe_load(REGISTRY_YAML.read_text())
+        data: dict[str, Any] = yaml.safe_load(REGISTRY_YAML.read_text(encoding="utf-8"))
         atoms = {a["id"] for a in data.get("atoms", [])}
         required = {
             "atom-identity",
@@ -98,7 +98,7 @@ class TestSubPhaseAAtomSchemas:
 
     def _load_atom(self, path: Path) -> dict[str, Any]:
         assert path.exists(), f"Atom YAML not found: {path}"
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         assert data is not None, f"Atom YAML parsed as None: {path}"
         return data
 
@@ -214,7 +214,7 @@ class TestVSCodeRenderingContract:
             ATOM_INTENT_REFLECTION, ATOM_STATUS_FOOTER
         ]:
             if atom_path.exists():
-                content_parts.append(atom_path.read_text())
+                content_parts.append(atom_path.read_text(encoding="utf-8"))
         return "\n".join(content_parts)
 
     def test_no_tree_chars_in_any_atom(self) -> None:
@@ -245,7 +245,7 @@ class TestVSCodeRenderingContract:
         ]:
             if not atom_path.exists():
                 continue
-            data = yaml.safe_load(atom_path.read_text())
+            data = yaml.safe_load(atom_path.read_text(encoding="utf-8"))
             # Extract template string values for URL scanning
             for key in ["template", "template_single", "template_cumulative"]:
                 tmpl = data.get(key, "")
@@ -260,7 +260,7 @@ class TestVSCodeRenderingContract:
         """RC-04: atom-identity must declare exactly ONE H1 (max_per_response=1)."""
         if not ATOM_IDENTITY.exists():
             pytest.skip("atom-identity.yaml not yet created")
-        data = yaml.safe_load(ATOM_IDENTITY.read_text())
+        data = yaml.safe_load(ATOM_IDENTITY.read_text(encoding="utf-8"))
         rr = data.get("rendering_rules", {})
         assert rr.get("max_per_response") == 1, (
             "atom-identity rendering_rules.max_per_response must be 1.\n"
@@ -271,7 +271,7 @@ class TestVSCodeRenderingContract:
         """RC-05: Status footer must be single-line — not multi-line block."""
         if not ATOM_STATUS_FOOTER.exists():
             pytest.skip("atom-status-footer.yaml not yet created")
-        data = yaml.safe_load(ATOM_STATUS_FOOTER.read_text())
+        data = yaml.safe_load(ATOM_STATUS_FOOTER.read_text(encoding="utf-8"))
         rr = data.get("rendering_rules", {})
         assert rr.get("single_line") is True, (
             "atom-status-footer must enforce single_line=true.\n"
@@ -288,7 +288,7 @@ class TestVSCodeRenderingContract:
         for path in atoms:
             if not path.exists():
                 continue
-            data = yaml.safe_load(path.read_text())
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
             if "rendering_rules" not in data:
                 missing_rr.append(path.name)
         assert not missing_rr, (
@@ -310,7 +310,7 @@ class TestSSOTUpdate:
 
     def _ssot_text(self) -> str:
         assert SSOT_PATH.exists(), f"SSOT not found: {SSOT_PATH}"
-        return SSOT_PATH.read_text()
+        return SSOT_PATH.read_text(encoding="utf-8")
 
     def test_ssot_has_vscode_rendering_rules_section(self) -> None:
         """SSOT-01: SSOT must have a § VS Code Copilot Chat Rendering Rules section."""
@@ -389,7 +389,7 @@ class TestSubPhaseBCompositions:
             path = COMPOSITIONS_DIR / fname
             if not path.exists():
                 continue
-            data = yaml.safe_load(path.read_text())
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
             missing = required_keys - set(data.keys())
             assert not missing, (
                 f"{fname} missing required keys: {missing}"
@@ -404,7 +404,7 @@ class TestSubPhaseBCompositions:
             path = COMPOSITIONS_DIR / fname
             if not path.exists():
                 continue
-            content = path.read_text()
+            content = path.read_text(encoding="utf-8")
             found = [c for c in TREE_CHARS if c in content]
             assert not found, (
                 f"Forbidden tree characters in {fname}: {found}"
@@ -421,7 +421,7 @@ class TestSubPhaseBCompositions:
             path = COMPOSITIONS_DIR / fname
             if not path.exists():
                 continue
-            data = yaml.safe_load(path.read_text())
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
             atom_refs = data.get("atoms", [])
             for ref in atom_refs:
                 atom_id = ref if isinstance(ref, str) else ref.get("id", "")
@@ -463,7 +463,7 @@ class TestSubPhaseCBlocks:
             path = BLOCKS_DIR / fname
             if not path.exists():
                 continue
-            data = yaml.safe_load(path.read_text())
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
             missing = required_keys - set(data.keys())
             assert not missing, f"{fname} missing required keys: {missing}"
             assert data["type"] == "block", (
@@ -475,7 +475,7 @@ class TestSubPhaseCBlocks:
         path = BLOCKS_DIR / "block-engagement-timeline.yaml"
         if not path.exists():
             pytest.skip("block-engagement-timeline.yaml not yet created")
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         rr = data.get("rendering_rules", {})
         assert rr.get("html_element") in ("details", "<details>"), (
             "block-engagement-timeline must declare html_element: details\n"
@@ -488,7 +488,7 @@ class TestSubPhaseCBlocks:
             path = BLOCKS_DIR / fname
             if not path.exists():
                 continue
-            content = path.read_text()
+            content = path.read_text(encoding="utf-8")
             found = [c for c in TREE_CHARS if c in content]
             assert not found, f"Forbidden tree characters in {fname}: {found}"
 
@@ -497,7 +497,7 @@ class TestSubPhaseCBlocks:
         path = BLOCKS_DIR / "block-metrics-dashboard.yaml"
         if not path.exists():
             pytest.skip("block-metrics-dashboard.yaml not yet created")
-        data = yaml.safe_load(path.read_text())
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
         rr = data.get("rendering_rules", {})
         max_cols = rr.get("max_table_columns", 99)
         assert max_cols <= 4, (
@@ -518,7 +518,7 @@ class TestSubPhaseGCertification:
         """G-01: _registry.yaml must NOT contain a version field (timeless architecture)."""
         if not REGISTRY_YAML.exists():
             pytest.skip("_registry.yaml not yet created")
-        data = yaml.safe_load(REGISTRY_YAML.read_text())
+        data = yaml.safe_load(REGISTRY_YAML.read_text(encoding="utf-8"))
         assert "version" not in data, (
             "_registry.yaml must not contain a 'version' field (timeless architecture)"
         )
@@ -527,7 +527,7 @@ class TestSubPhaseGCertification:
         """G-02: Registry must list ≥26 YAML entries (5 atoms + 5 blocks + 8 compositions + 6 prompts + registry)."""
         if not REGISTRY_YAML.exists():
             pytest.skip("_registry.yaml not yet created")
-        data = yaml.safe_load(REGISTRY_YAML.read_text())
+        data = yaml.safe_load(REGISTRY_YAML.read_text(encoding="utf-8"))
         total = (
             len(data.get("atoms", []))
             + len(data.get("blocks", []))
@@ -542,7 +542,7 @@ class TestSubPhaseGCertification:
         """G-03: SSOT must have VS Code Copilot Chat Rendering Rules section."""
         if not SSOT_PATH.exists():
             pytest.skip("SSOT file not found")
-        text = SSOT_PATH.read_text()
+        text = SSOT_PATH.read_text(encoding="utf-8")
         assert "VS Code Copilot Chat Rendering" in text, (
             "SSOT must contain § VS Code Copilot Chat Rendering Rules"
         )
@@ -557,7 +557,7 @@ class TestSubPhaseGCertification:
                 failures.append(f"MISSING: {path.name}")
                 continue
             try:
-                data = yaml.safe_load(path.read_text())
+                data = yaml.safe_load(path.read_text(encoding="utf-8"))
                 if data is None:
                     failures.append(f"EMPTY: {path.name}")
             except yaml.YAMLError as e:
@@ -570,7 +570,7 @@ class TestSubPhaseGCertification:
             pytest.skip("Registry root not yet created")
         violations = []
         for yaml_file in REGISTRY_ROOT.rglob("*.yaml"):
-            content = yaml_file.read_text()
+            content = yaml_file.read_text(encoding="utf-8")
             found = [c for c in TREE_CHARS if c in content]
             if found:
                 violations.append(f"{yaml_file.name}: {found}")
@@ -585,7 +585,7 @@ class TestSubPhaseGCertification:
             pytest.skip("Registry root not yet created")
         violations = []
         for yaml_file in REGISTRY_ROOT.rglob("*.yaml"):
-            content = yaml_file.read_text()
+            content = yaml_file.read_text(encoding="utf-8")
             matches = FORBIDDEN_HTML_PATTERN.findall(content)
             if matches:
                 violations.append(f"{yaml_file.name}: {matches[:3]}")
@@ -600,7 +600,7 @@ class TestSubPhaseGCertification:
             pytest.skip("Registry root not yet created")
         missing_flag = []
         for yaml_file in list(ATOMS_DIR.glob("*.yaml")) + list(BLOCKS_DIR.glob("*.yaml")):
-            data = yaml.safe_load(yaml_file.read_text())
+            data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
             if not data:
                 continue
             rr = data.get("rendering_rules", {})
@@ -646,7 +646,7 @@ class TestSubPhaseGCertification:
             )
         assert phase_yaml.exists(), f"Phase 120 YAML not found in completed/ or planned/: {phase_yaml}"
         try:
-            data = yaml.safe_load(phase_yaml.read_text())
+            data = yaml.safe_load(phase_yaml.read_text(encoding="utf-8"))
         except yaml.YAMLError as exc:
             # Pre-existing inline-comment syntax in this file uses `value# comment`
             # (no space before #) with comments that contain `:`, which breaks the YAML
@@ -667,7 +667,7 @@ class TestSubPhaseGCertification:
         """G-09: cortex-master.yaml must have a valid thin index entry for phase-120."""
         master_yaml = WORKSPACE / "cortex-registry" / "cortex-master.yaml"
         assert master_yaml.exists(), "cortex-master.yaml not found"
-        data = yaml.safe_load(master_yaml.read_text())
+        data = yaml.safe_load(master_yaml.read_text(encoding="utf-8"))
         # Find phase-120 in the phases list
         phases = data.get("phases", [])
         phase_120 = next(

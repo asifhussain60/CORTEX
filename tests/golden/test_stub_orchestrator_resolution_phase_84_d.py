@@ -31,7 +31,7 @@ class TestNoStubLabeledOrchestrators:
         support_dir = ORCHESTRATORS / "support"
         stub_files = []
         for py_file in support_dir.glob("*.py"):
-            source = py_file.read_text()
+            source = py_file.read_text(encoding="utf-8")
             if "— stub" in source[:500] or "stub." in source[:200]:
                 stub_files.append(py_file.name)
         assert not stub_files, (
@@ -46,7 +46,7 @@ class TestNoStubLabeledOrchestrators:
         domain_dir = ORCHESTRATORS / "domain"
         stub_files = []
         for py_file in domain_dir.glob("*.py"):
-            source = py_file.read_text()
+            source = py_file.read_text(encoding="utf-8")
             if "— stub" in source[:500] or "stub." in source[:200]:
                 stub_files.append(py_file.name)
         assert not stub_files, (
@@ -61,7 +61,7 @@ class TestNoStubLabeledOrchestrators:
         intel_dir = ORCHESTRATORS / "intelligence"
         stub_files = []
         for py_file in intel_dir.glob("*.py"):
-            source = py_file.read_text()
+            source = py_file.read_text(encoding="utf-8")
             if "— stub" in source[:500] or "stub." in source[:200]:
                 stub_files.append(py_file.name)
         assert not stub_files, (
@@ -76,7 +76,7 @@ class TestNoStubLabeledOrchestrators:
         core_dir = ORCHESTRATORS / "core"
         stub_files = []
         for py_file in core_dir.glob("*.py"):
-            source = py_file.read_text()
+            source = py_file.read_text(encoding="utf-8")
             if "— stub" in source[:500] or "stub." in source[:200]:
                 stub_files.append(py_file.name)
         assert not stub_files, (
@@ -101,7 +101,7 @@ class TestNoStubLabeledOrchestrators:
         for py_file in ORCHESTRATORS.rglob("*.py"):
             if "__pycache__" in str(py_file) or py_file.name.startswith("test_"):
                 continue
-            source = py_file.read_text()
+            source = py_file.read_text(encoding="utf-8")
             if "OrchestratorProtocolMixin" not in source and "OrchestratorBase" not in source:
                 continue
             for pattern in trivial_patterns:
@@ -116,7 +116,7 @@ class TestNoStubLabeledOrchestrators:
         """
         Orchestrator count claimed in prompts must match actual non-stub implementations.
         """
-        instructions = (PROJECT_ROOT / ".github" / "copilot-instructions.md").read_text()
+        instructions = (PROJECT_ROOT / ".github" / "copilot-instructions.md").read_text(encoding="utf-8")
         # The instructions should not claim more orchestrators than actually exist
         import re as _re
         match = _re.search(r"(\d+)\s+[Ww]ired\s+[Oo]rchestrators", instructions)
@@ -126,7 +126,7 @@ class TestNoStubLabeledOrchestrators:
             actual = sum(
                 1 for f in ORCHESTRATORS.rglob("*.py")
                 if "__pycache__" not in str(f)
-                and "OrchestratorProtocolMixin" in f.read_text()
+                and "OrchestratorProtocolMixin" in f.read_text(encoding="utf-8")
             )
             # Claimed count must not exceed actual non-stub count by more than 5
             assert claimed <= actual + 5, (

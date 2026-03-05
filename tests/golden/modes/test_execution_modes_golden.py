@@ -327,6 +327,8 @@ INTENT_TRIGGER_MAP = [
     (IntentType.WORKFLOW_COMPOSE, "compose a workflow template for C# refactoring using LENS"),
     # GAP-INTRODUCE: Interactive onboarding + role-based introduction
     (IntentType.INTRODUCE, "introduce yourself and explain what CORTEX can do"),
+    # GAP-DISTILL: Conversational entropy reduction to executable prompt
+    (IntentType.DISTILL, "distill this conversation into a single executable prompt"),
 ]
 
 # Intents reliably routed by EnhancedIntentRouter (empirically verified)

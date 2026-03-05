@@ -153,7 +153,7 @@ class TestCompanyKnowledgeLENSWiring:
         # Check at least one LENS file imports CompanyKnowledgeProvider
         found = False
         for candidate in lens_engine_candidates:
-            content = candidate.read_text()
+            content = candidate.read_text(encoding="utf-8")
             if "CompanyKnowledgeProvider" in content or "company_domain_loader" in content:
                 found = True
                 break
