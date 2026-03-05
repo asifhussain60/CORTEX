@@ -97,8 +97,31 @@ brevity:
 #   4. context_hints['is_complex'] == True (caller override) → inject
 #   5. All other cases → suppress (return None — caller omits the block)
 #
-# Maximum per response: 1 (enforced by atom-principle.yaml max_per_response: 1)
-complexity_gate:
+# ─── Render Position (Phase 127 — canonical) ─────────────────────────────────
+# The principle block renders INSIDE the ## 🔍 Analysis section of the
+# 5-Section Golden Format — NOT in Zone 3 of the response header.
+# It is part of analysis feedback, not page furniture.
+#
+# Render format (blockquote — produces left-accent bar matching the header quote):
+#
+#   ## 🔍 Analysis
+#
+#   > 💡 **Principle: {title}**
+#   > {body}
+#
+#   {rest of analysis…}
+#
+# The previous H3 format (### 💡 Principle: {title}) has been RETIRED.
+# H3 headings do not render with a left-accent bar in VS Code Copilot Chat.
+# Blockquote (> ) achieves the same visual weight as the Zone 2 book quote.
+render_position:
+  location: "inside_analysis_section"   # ## 🔍 Analysis — first element
+  zone: "analysis_section"             # NOT zone 3 of the response header
+  element: "blockquote"               # > prefix — left-accent bar in VS Code
+  retired_element: "h3_plus_paragraph" # ### 💡 Principle: — RETIRED Phase 127
+  rationale: "Principles are analysis content, not header furniture. Blockquote rendering matches the visual weight of the header quote."
+
+
   enabled: true
   implementation: "cortex/intelligence/principle_selector.py::is_complex_request"
   max_principles_per_response: 1

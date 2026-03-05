@@ -435,7 +435,7 @@ phases:
     note: "COMPLETE 2026-03-04. 13/13 GAPs CLOSED. 8 sub-phases delivered: (a) Base models + parser registry + GenericParser (b) 8 typed parsers (governance, workflow, pattern, plan, config, knowledge, template) (c) ReferenceResolver + DependencyGraphBuilder (d) IntegrityChecker + HistoryTracker (e) RegistryIndexer full pipeline + build-registry-docs.py (f) 6 HTML renderers (g) D3 graph explorer + diff viewer + integrity dashboard (h) BusinessLensWriter. 195 registry tests GREEN. Smoke: 2582."
 
   # ── COMPLETE ──────────────────────────────────────────────────────────────
-  - id: phase-123
+  - id: phase-123b
     title: "Registry Intelligence Engine — Unified YAML Registry via IntelligenceFacade + MCP Tool"
     status: COMPLETE
     priority: P1
@@ -444,7 +444,7 @@ phases:
     gaps_closed: 7
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-123-registry-intelligence-engine.yaml"
-    note: "COMPLETE 2026-03-04. 7/7 GAPs CLOSED. 5 new IntelligenceFacade methods (load_governance, load_workflows, load_patterns, load_plans, registry_index). 2 new model files (MasterPlanIndex, RegistryIndexEntry). CortexRegistry MCP tool (cortex_registry, 5 ops). YAML reader MCP wiring (MCP_MODE flag, fetchFromMCP, loadFromMCP). 26 facade tests + 17 MCP tests + 12 YAML reader tests = 55 GREEN. Smoke: 2582 ✅"
+    note: "COMPLETE 2026-03-04. 7/7 GAPs CLOSED. ID renumbered from phase-123 to phase-123b (collision with Principle of the Moment). 5 new IntelligenceFacade methods (load_governance, load_workflows, load_patterns, load_plans, registry_index). 2 new model files (MasterPlanIndex, RegistryIndexEntry). CortexRegistry MCP tool (cortex_registry, 5 ops). YAML reader MCP wiring (MCP_MODE flag, fetchFromMCP, loadFromMCP). 26 facade tests + 17 MCP tests + 12 YAML reader tests = 55 GREEN. Smoke: 2582 ✅"
 
   - id: phase-121
     title: "AI Context Intelligence — Scan, Classify, and Disseminate Production Repo AI Artifacts into Registry YAML Hierarchy"
@@ -457,19 +457,14 @@ phases:
     file: "cortex-registry/planning/phases/completed/phase-121-ai-context-intelligence.yaml"
     note: "COMPLETE 2026. 13/13 GAPs CLOSED. AIContextScanner (8 vendors, YAML-driven), AIContentClassifier, AIPIIGuard, AIContextDisseminator (5 destinations). 10-tab dashboard (Tab 10 = AI Context). KnowledgeGuidanceEngine AI override tier. VERSION SUFFIX CLEANUP: 4 files renamed, cortex_onboard_repository_v3 removed from 6 files, phase-103c-v2 duplicate removed, VacuumOrchestrator.run_version_suffix_cleanup() added. 5 new source files, 5 test files, 1 config YAML, 1 knowledge YAML."
 
-# ── PRODUCTION HARDENING ─────────────────────────────────────────────────────
-# Windows out-of-the-box compatibility + versioning governance audit (2026-03-04)
-# Completed inline — no new phase required. See cortex-master.yaml note below.
-# Hardening actions applied:
-#   1. thread_safety.py — hardcoded /Users/asifhussain path → Path(__file__).parent chain
-#   2. dashboard_server.py — lsof/kill/preexec_fn/shell=True → cross-platform port management
-#   3. Makefile verify target — broken _workspaces/docker-plan path → scripts/validate-production.py
-#   4. cortex-registry versioning sweep — removed version:/schema_version:/manifest_version:
-#      from headers.yaml, response-templates.yaml, 5 wiring specs, 7 knowledge profiles,
-#      3 roadmap templates, capabilities-manifest.yaml, system-configuration.yaml, owasp-top10.yaml
-#   5. capability_registry_builder.py — stop emitting schema_version/manifest_version keys
-#   6. yaml_loaders.py — removed version default injection in _adapt_skull_rules()
-#   7. scripts/PHASE4-METHODS-IMPLEMENTATION-REFERENCE.py — removed (sandbox artifact)
-#   8. cortex-master-plan-auditor.md — removed v2.0.0 git tag reference
-#   9. release-notes-agent.md — removed semver guidance; phase identifiers are canonical
-#  10. Preflight: 259 PASSED (5.31s) — zero regressions ✅
+# ── PRODUCTION HARDENING (2026-03-04 + 2026-03-05 DEEP AUDIT) ────────────────
+# Windows zero-config + versioning sweep + registry intelligence verification.
+# 2026-03-04: thread_safety/dashboard_server cross-platform fix, version: field
+#   sweep (27 files), sandbox artifact removal. Preflight: 259 PASSED ✅
+# 2026-03-05: YAML Reader (8 parsers, RegistryIndexer, DependencyGraph, IntegrityChecker),
+#   Windows pathlib verified, session-identity {version} removed, sync admin classification,
+#   InteractionOrchestrator full wiring confirmed, WorkflowComposer operational,
+#   SQLite 7-db cleanup with 30-day retention, _cortex-master mirror removed (18 dupes→2),
+#   phase-123b renumber, phase-126 planned/ stale copy removed, content-blocks dupe removed.
+#   Added test_session_identity_no_version.py (5 tests). Registry: 336 models, 0 broken refs.
+#   Smoke: 2775 ✅ | Preflight: 425 ✅ | Registry Intelligence: 195 ✅

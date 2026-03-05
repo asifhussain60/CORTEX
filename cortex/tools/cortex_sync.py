@@ -58,6 +58,14 @@ SYNC_POLICY: dict = {
     "deny": [
         # Private workspaces — never sync
         "_workspaces/**",
+        # Master plan index and all planning/phase artefacts — never sync (CORE-035)
+        # cortex-registry/cortex-master.yaml is an internal admin plan index — not a
+        # runtime artefact. Targets should never receive phase plans, gap catalogues,
+        # or implementation plans. All work uses prebuilt tools in the CORTEX toolkit.
+        "cortex-registry/cortex-master.yaml",
+        "cortex-registry/planning/**",
+        "cortex-registry/plans/**",
+        "cortex-registry/artifacts/**",
         # Company-private repo/dashboard artifacts — never sync
         "cortex-registry/company/repos/**",
         "cortex-registry/company/dashboards/repos/**",

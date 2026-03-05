@@ -46,7 +46,7 @@ atoms:
     params:
       theme: universal
   - id: atom-principle
-    zone: 3
+    zone: analysis_section      # Inside ## 🔍 Analysis — FIRST element (not Zone 3 header)
     params:
       intent_type: QUERY
   - id: atom-status-footer
@@ -64,8 +64,17 @@ template: |
 
   ---
 
-  ### 💡 Principle: {principle_title}
-  {principle_body}
+  ## 📋 Summary
+  {summary}
+
+  ---
+
+  ## 🔍 Analysis
+
+  > 💡 **Principle: {principle_title}**
+  > {principle_body}
+
+  {analysis_content}
 
 # ─── Chain Info ───────────────────────────────────────────────────────────────
 orchestration_chain: null

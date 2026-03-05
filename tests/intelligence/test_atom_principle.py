@@ -89,10 +89,18 @@ class TestAtomPrincipleStructure:
         missing = REQUIRED_ATOM_FIELDS - set(atom_principle.keys())
         assert not missing, f"atom-principle.yaml missing fields: {missing}"
 
-    def test_atom_zone_is_3(self, atom_principle):
-        """Principle atom belongs in Zone 3 (after orchestration breadcrumb)."""
+    def test_atom_zone_is_analysis_section(self, atom_principle):
+        """Principle atom belongs inside the Analysis section (not Zone 3 header).
+
+        Phase 127: position was changed from zone=3 (response header Zone 3) to
+        zone=analysis_section (inside ## 🔍 Analysis — first element).
+        Principles are analysis content, not header furniture.
+        """
         zone = atom_principle.get("rendering_rules", {}).get("zone")
-        assert zone == 3, f"Expected zone=3, got zone={zone}"
+        assert zone == "analysis_section", (
+            f"Expected zone='analysis_section' (Phase 127 canonical position), got zone={zone!r}. "
+            "Principle blocks must render inside ## 🔍 Analysis, not in Zone 3 of the response header."
+        )
 
     def test_atom_has_theme_map(self, atom_principle):
         """Atom must contain a theme_map with at least QUERY and DESIGN mappings."""
@@ -101,10 +109,19 @@ class TestAtomPrincipleStructure:
         assert "DESIGN" in theme_map, "theme_map must have DESIGN entry"
 
     def test_atom_template_has_principle_placeholders(self, atom_principle):
-        """Template must contain {title} and {body} placeholders."""
+        """Template must contain {title} and {body} placeholders in blockquote format.
+
+        Phase 127: template changed from '### 💡 Principle: {title}\\n{body}'
+        to '> 💡 **Principle: {title}**\\n> {body}' (blockquote — left-accent bar).
+        """
         template = atom_principle.get("template", "")
         assert "{title}" in template, "Template must contain {title} placeholder"
         assert "{body}" in template, "Template must contain {body} placeholder"
+        # Phase 127: blockquote format enforced — H3 format retired
+        assert template.strip().startswith(">"), (
+            "atom-principle template must use blockquote format (> prefix) for left-accent bar rendering. "
+            "H3 format (### 💡 Principle:) was retired in Phase 127."
+        )
 
 
 class TestCompQueryPrincipleInjection:
@@ -116,13 +133,17 @@ class TestCompQueryPrincipleInjection:
             f"comp-query.yaml atoms missing atom-principle; found: {atom_ids}"
         )
 
-    def test_comp_query_atom_principle_is_zone_3(self, comp_query):
-        """atom-principle entry in comp-query must be assigned to zone 3."""
+    def test_comp_query_atom_principle_is_analysis_section(self, comp_query):
+        """atom-principle entry in comp-query must be in analysis_section (not zone 3).
+
+        Phase 127: position changed from zone=3 to zone=analysis_section.
+        """
         atoms = comp_query.get("atoms", [])
         principle_atoms = [a for a in atoms if a.get("id") == "atom-principle"]
         assert principle_atoms, "atom-principle not in comp-query atoms"
-        assert principle_atoms[0].get("zone") == 3, (
-            "atom-principle in comp-query must be zone=3"
+        assert principle_atoms[0].get("zone") == "analysis_section", (
+            "atom-principle in comp-query must be zone=analysis_section (Phase 127). "
+            "Principle blocks render inside ## 🔍 Analysis, not in Zone 3 of the response header."
         )
 
     def test_comp_query_template_has_principle_section(self, comp_query):

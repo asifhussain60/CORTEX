@@ -3,38 +3,43 @@
 # ID: atom-principle
 # Tier: 1 (Atom — smallest renderable unit)
 #
-# PURPOSE: Injects a curated SDLC engineering principle into Zone 3 of the
-# response — specifically for QUERY and DESIGN responses via comp-query.yaml.
+# PURPOSE: Injects a curated SDLC engineering principle inside the ## 🔍 Analysis
+# section of the 5-Section Golden Format — specifically for QUERY, DESIGN, PLAN,
+# INVESTIGATE, ONBOARD, INTRODUCE responses.
 # Principles are drawn from cortex-registry/knowledge/sdlc/high-value-principles.yaml
 # and selected by PrincipleSelector (pool='principles').
 #
-# Rendering: H3 subheading + body paragraph — lightweight, scannable in
-# VS Code Copilot Chat narrow panel.
+# Position: Inside ## 🔍 Analysis — FIRST element, before analysis prose or tables.
+# NOT in Zone 3 of the response header (that was the retired Phase 124 position).
 #
-# Template:
-#   ### 💡 Principle: {title}
-#   {body}
+# Rendering: blockquote (> prefix) — renders with VS Code left-accent bar,
+# matching the visual weight of the book quote in Zone 2. H3 was retired (Phase 127)
+# because H3 headings do not render with a left-accent bar.
 #
-# Position: Zone 3 — after the Zone 3 opening line (🧭 Orchestration or direct content)
+# Template (verbatim):
+#   > 💡 **Principle: {title}**
+#   > {body}
+#
 # Selection: PrincipleSelector(intent_type, pool='principles').select()
 #
-# SSOT: cortex-registry/knowledge/sdlc/high-value-principles.yaml
-# Phase: 124 (Sub-Phase B)
+# SSOT: cortex-registry/knowledge/sdlc/high-value-principles.yaml (90 principles)
+# Phase: 124 (created) | 127 (position + format update — blockquote, inside Analysis)
 # Author: Asif Hussain | © 2025-2026 CORTEX Framework
 # ─────────────────────────────────────────────────────────────────────────────
 
 id: atom-principle
 type: atom
-phase: "124"
+version: "2.0"       # Phase 127: blockquote format + Analysis section position (retired H3 + Zone 3)
+phase: "127"
 
 # ─── Rendering Rules ──────────────────────────────────────────────────────────
 rendering_rules:
   copilot_chat_compatible: true
-  element: h3_plus_paragraph
-  heading_level: 3
-  heading_prefix: "💡 Principle:"
-  position: "Zone 3 — after orchestration breadcrumb (if present), before main content"
-  zone: 3
+  element: blockquote          # blockquote renders with VS Code left-accent bar — same as the header quote
+  heading_level: null          # no H3 — blockquote format only (H3 does NOT render with left-accent bar)
+  heading_prefix: null
+  position: "Inside ## 🔍 Analysis — FIRST element, before any analysis prose or tables"
+  zone: analysis_section       # not a header zone — this is inside the 5-section body
   max_per_response: 1
   body_max_chars: 200
   body_max_lines: 2
@@ -52,6 +57,7 @@ rendering_rules:
     - "intent is HEALTH (execution-focused — use comp-health which omits atom-principle)"
     - "intent is VACUUM (execution-focused — use comp-vacuum which omits atom-principle)"
     - "silent autonomous execution mode (CORE-049)"
+    - "request is ≤8 words with no analytical signal (complexity gate)"
   render_only_for:
     - "QUERY (analysis — default analysis/question response)"
     - "DESIGN (design — architecture and interface design responses)"
@@ -61,9 +67,12 @@ rendering_rules:
     - "INTRODUCE (design-adjacent — capability introduction)"
 
 # ─── Template ─────────────────────────────────────────────────────────────────
+# Render as blockquote (> prefix) — this produces a left-accent bar in VS Code
+# Copilot Chat, matching the visual weight of the header quote in Zone 2.
+# Do NOT use ### h3 — that renders as a plain heading with no visual distinction.
 template: |
-  ### 💡 Principle: {title}
-  {body}
+  > 💡 **Principle: {title}**
+  > {body}
 
 # ─── Theme Map (intent_type → domain filter) ─────────────────────────────────
 # Maps CORTEX intent_type to a preferred principle domain.

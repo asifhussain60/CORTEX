@@ -478,6 +478,13 @@ Every non-autonomous response MUST follow this structure:
 
 ---
 
+> *"{quote}"*
+> — {Author}, **{Book}**
+
+---
+
+🧭 Orchestration: {DisplayName} → {DisplayName}  ← omit if single-hop
+
 ## 📋 Summary
 
 {1-2 sentences. State the request and the bottom-line answer immediately.}
@@ -485,6 +492,11 @@ Every non-autonomous response MUST follow this structure:
 ---
 
 ## 🔍 Analysis
+
+> 💡 **Principle: {title}**
+> {body — ≤200 chars, drawn from cortex-registry/knowledge/sdlc/high-value-principles.yaml}
+
+↑ Principle block: ONLY for QUERY/DESIGN/PLAN/INVESTIGATE/ONBOARD/INTRODUCE. Omit for all others.
 
 {Present the core finding in a formatted panel. Include engineering analysis,
 risk assessment, or trade-off summary. Use comparison tables for alternatives.}
@@ -919,162 +931,65 @@ The header uses three zones separated by `---` (Markdown HR) — see § VS Code 
 
 ---
 
-## 📚 Quote Library — Intent-Aligned Business & Engineering Quotes
+## 📚 Quote Library — SSOT Pointer
 
-**Authority:** VBP-013 (Business Book Anchoring) + `skull-rules.yaml` `book_reference` fields
-**SSOT:** This section is the single source of all approved response header quotes.
-**Selection rule:** Match quote `themes` to the user's active intent keywords. When multiple quotes match, prefer the one not used in the previous response turn. Fall back to `themes: [universal]` if no theme match.
+**SSOT (single source — 120 quotes, 10 themes, 12 per theme):** `cortex-registry/templates/response/atoms/atom-quote.yaml`
+**Selection engine:** `cortex/intelligence/principle_selector.py` — `PrincipleSelector(intent_type, pool='quotes')`
 
-### Theme → Intent Mapping
+> ⛔ **No inline quote list exists in this file.** The 32-quote block that previously lived here has been removed (Phase 127 — competing-YAML elimination). `atom-quote.yaml` is the ONE and ONLY approved source. Any additions go there first and ONLY there.
 
-| User Intent / Keywords | Theme Tag to Match |
-|---|---|
-| TDD, test, testing, red-green, coverage, assertion | `quality` |
-| Refactor, improve, optimize, clean, simplify, dead code | `improvement` |
-| Security, auth, vulnerability, hardening, trust, compliance | `security` |
-| Architecture, design, structure, pattern, boundary, DDD | `architecture` |
-| Audit, governance, standards, rules, discipline, culture | `discipline` |
-| Fix, bug, debug, trace, root cause, failure, crash | `systems-thinking` |
-| Plan, roadmap, phase, OKR, strategy, priority, focus | `strategy` |
-| Team, collaboration, flow, bottleneck, process, DevOps | `flow` |
-| Learn, digest, onboard, knowledge, understand | `learning` |
-| Anything else | `universal` |
+### Theme → Intent Mapping (for quote selection)
 
-### Quote Library (32 quotes — mode-aware, teachable)
+| User Intent / Keywords | Theme Tag | Authors to rotate through |
+|---|---|---|
+| TDD, test, testing, coverage | `quality` | Aristotle, Beck, Fowler, Deming, Hoare, Kernighan, Dijkstra, Martin |
+| Refactor, improve, clean, simplify | `improvement` | Poppendieck, Kim, Collins, Fowler, Feathers |
+| Security, auth, vulnerability, hardening | `security` | Beyer, Nygard, Dalio, Kim/Humble/Debois/Willis |
+| Architecture, design, structure, DDD | `architecture` | Fowler, Evans, Newman, Ford/Parsons/Kua |
+| Audit, governance, discipline, culture | `discipline` | Collins, Gawande, Covey, Doerr |
+| Fix, bug, debug, root cause, crash | `systems-thinking` | Deming, Goldratt, Nygard, Fowler, Kernighan |
+| Plan, roadmap, OKR, strategy | `strategy` | Collins, Doerr, Covey |
+| Team, collaboration, flow, DevOps | `flow` | Kim/Humble/Debois/Willis, Pink, Humble/Farley, Drucker |
+| Learn, digest, onboard, knowledge | `learning` | Welch, Ries |
+| Anything else | `universal` | Dijkstra, Hoare, Hopper, Gates, Torvalds, Einstein, Brooks, Perlis, Carlson, Mandela, Jobs, Sandberg |
 
-#### 🎯 Theme: `quality`
-> *"It is not enough to do your best; you must know what to do, and then do your best."*
-> — W. Edwards Deming, **Out of the Crisis**
-
-> *"Don't leave 'broken windows' unfixed. Neglect accelerates software rot faster than any single bad decision."*
-> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
-
-> *"Make it work, make it right, make it fast — in that order. Skipping 'right' is how technical debt compounds."*
-> — Kent Beck, **Test-Driven Development: By Example**
-
-> *"The only way to go fast is to go well. Cutting quality to meet a deadline creates a debt you pay with interest."*
-> — Robert C. Martin, **Clean Code**
-
-#### ♻️ Theme: `improvement`
-> *"Waste is anything that does not add value to the customer. In software: unused code, redundant processes, and waiting."*
-> — Mary & Tom Poppendieck, **Lean Software Development**
-
-> *"Improving daily work is even more important than doing daily work. Failing to improve is how technical debt becomes system failure."*
-> — Gene Kim, **The Phoenix Project**
-
-> *"Good is the enemy of great. Most teams never become great precisely because most settle for good enough."*
-> — Jim Collins, **Good to Great**
-
-> *"Refactoring is not a luxury — it is the discipline of keeping the design of the system aligned with the needs of the present."*
-> — Martin Fowler, **Refactoring: Improving the Design of Existing Code**
-
-#### 🔒 Theme: `security`
-> *"Hope is not a strategy. In production systems, every assumption you do not verify becomes a vulnerability you did not plan for."*
-> — Betsy Beyer et al., **Site Reliability Engineering**
-
-> *"Design for failure. Plan for recovery. A system that cannot degrade gracefully will eventually fail catastrophically."*
-> — Michael Nygard, **Release It!: Design and Deploy Production-Ready Software**
-
-> *"Transparency and radical open-mindedness are the two most important tools for protecting any system — technical or organizational."*
-> — Ray Dalio, **Principles: Life and Work**
-
-> *"The most dangerous phrase in engineering is 'we've always done it this way.' Security is not a state — it is a discipline."*
-> — Gene Kim, Jez Humble, Patrick Debois & John Willis, **The DevOps Handbook**
-
-#### 🏗️ Theme: `architecture`
-> *"Architecture is the decisions that are hard to change — the earlier you make them, the longer you live with the consequences."*
-> — Martin Fowler, **Building Evolutionary Architectures**
-
-> *"A well-designed model is the heart of the software. Everything else follows from the clarity of its domain boundaries."*
-> — Eric Evans, **Domain-Driven Design**
-
-> *"Services must be independently deployable. If you cannot change one without changing another, you do not have microservices — you have a distributed monolith."*
-> — Sam Newman, **Building Microservices**
-
-> *"The fitness function of a system is its ability to evolve without breaking what it has already proven. Design for change first."*
-> — Neal Ford, Rebecca Parsons & Patrick Kua, **Building Evolutionary Architectures**
-
-#### 🛡️ Theme: `discipline`
-> *"Culture of discipline — when you combine a culture of discipline with an ethic of entrepreneurship, you get great performance."*
-> — Jim Collins, **Good to Great**
-
-> *"Checklists seem lowly and trivial — and yet they save lives. The volume and complexity of what we know has exceeded any one person's ability to hold reliably."*
-> — Atul Gawande, **The Checklist Manifesto**
-
-> *"Begin with the end in mind. Working without a clear definition of done is the single largest source of rework in software teams."*
-> — Stephen R. Covey, **The 7 Habits of Highly Effective People**
-
-> *"What gets measured gets managed — and what gets ignored becomes the next emergency."*
-> — John Doerr, **Measure What Matters**
-
-#### 🔧 Theme: `systems-thinking`
-> *"Every system is perfectly designed to get the results it gets. To change the output, you must change the system."*
-> — W. Edwards Deming, cited in **The Phoenix Project** (Gene Kim)
-
-> *"The constraint determines the throughput of the entire system. Until you identify and manage the bottleneck, all other improvements are illusions."*
-> — Eliyahu M. Goldratt, **The Goal**
-
-> *"In complex systems, local fixes that ignore the whole create new failures faster than they resolve old ones."*
-> — Michael Nygard, **Release It!: Design and Deploy Production-Ready Software**
-
-> *"Technical debt is not just slow code or messy files — it is the gap between your system's current design and the design it needs to do its job well."*
-> — Martin Fowler, **Refactoring: Improving the Design of Existing Code**
-
-#### 📋 Theme: `strategy`
-> *"The Hedgehog Concept: know the one thing you can be best in the world at, be deeply passionate about it, and measure it relentlessly."*
-> — Jim Collins, **Good to Great**
-
-> *"OKRs make it possible for the whole organization to move in the same direction at the same time — if leadership is willing to commit publicly."*
-> — John Doerr, **Measure What Matters**
-
-> *"Put first things first. The urgent will always crowd out the important unless you protect time for work that changes the trajectory."*
-> — Stephen R. Covey, **The 7 Habits of Highly Effective People**
-
-#### 🔄 Theme: `flow`
-> *"The Three Ways: optimize for flow, amplify feedback loops, and foster a culture of experimentation. Everything else is tactics."*
-> — Gene Kim, Jez Humble, Patrick Debois & John Willis, **The DevOps Handbook**
-
-> *"Autonomy, Mastery, Purpose — teams with all three consistently outperform teams managed through carrots and sticks."*
-> — Daniel H. Pink, **Drive: The Surprising Truth About What Motivates Us**
-
-> *"Small batches, fast feedback. The longer work sits unreleased, the more assumptions it contains that reality has already disproved."*
-> — Jez Humble & David Farley, **Continuous Delivery**
-
-#### 📖 Theme: `learning`
-> *"An organization's ability to learn, and translate that learning into action rapidly, is the ultimate competitive advantage."*
-> — Jack Welch, cited in **Measure What Matters** (John Doerr)
-
-> *"The build-measure-learn loop is not optional — it is the only honest way to find out if what you built solves a real problem."*
-> — Eric Ries, **The Lean Startup**
-
-#### 🌐 Theme: `universal`
-> *"Good is the enemy of great. Most teams never become great precisely because they settle for good."*
-> — Jim Collins, **Good to Great**
-
-> *"Don't assume — prove. Every assumption that goes untested in software becomes a defect that arrives at the worst possible moment."*
-> — Andrew Hunt & David Thomas, **The Pragmatic Programmer**
+**Anti-repetition rule (P1 — enforced):** Never use the same quote in consecutive responses. Rotate across the full 120-quote pool. Do NOT default to the same 3–4 training-data quotes (Jim Collins / Pragmatic Programmer bias is a known LLM failure mode — actively avoid it).
 
 ---
 
-## � Principle Library — SDLC Engineering Principles for QUERY/DESIGN Responses
+## 💡 Principle Library — SSOT Pointer
 
-**Authority:** Phase 124 (Principle Block Library & Injection System)
-**SSOT (full library — 90 principles):** `cortex-registry/knowledge/sdlc/high-value-principles.yaml`
+**SSOT (single source — 90 principles, 10 domains):** `cortex-registry/knowledge/sdlc/high-value-principles.yaml`
 **Selection engine:** `cortex/intelligence/principle_selector.py` — `PrincipleSelector(intent_type, pool='principles')`
-**Render template (verbatim — use in Zone 3 before main content):**
+
+> ⛔ **No inline principle list exists in this file.** The 12-principle sub-library that previously lived here has been removed (Phase 127 — competing-YAML elimination). `high-value-principles.yaml` is the ONE and ONLY approved source. Any additions go there first and ONLY there.
+
+### Render Position — Inside `## 🔍 Analysis` (MANDATORY)
+
+The principle block renders **inside the `## 🔍 Analysis` section** of the 5-Section Golden Format — NOT in the response header Zone 3. It is part of the analysis feedback, not part of the page furniture.
+
+**Render format (verbatim — blockquote style, matching the Orchestration breadcrumb style):**
 
 ```markdown
-### 💡 Principle: {title}
-{body}
+## 🔍 Analysis
+
+> 💡 **Principle: {title}**
+> {body}
+
+{rest of analysis content…}
 ```
 
-**Rules:**
-- ✅ Render for QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE only
-- ✅ One principle per response — Zone 3 position, after `🧭 Orchestration:` if present
+**Why blockquote:** The principle block must render with the same visual weight as the book quote in the header — a left-accent bar, distinctive and scannable in VS Code Copilot Chat's narrow panel. Using `> ` achieves this. A plain `### h3` heading does NOT render with a left-accent bar and is visually indistinguishable from regular content.
+
+### Injection Rules (CORE-PRINCIPLE-TRIGGER)
+
+- ✅ Render for: **QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE** — as the FIRST element inside `## 🔍 Analysis`
+- ✅ One principle per response maximum — anti-repetition enforced by ring buffer (n=20)
 - ✅ Body ≤200 characters — trim at word boundary
-- ✅ Prefer principles not used in previous response turn (anti-repetition)
-- ✅ Match domain to intent: QUERY→universal, DESIGN→architecture, PLAN→devops, INVESTIGATE→code_quality
-- ❌ Never for IMPLEMENT / FIX / REFACTOR / DEBUG / AUDIT / HEALTH / VACUUM
+- ✅ Match domain to intent: QUERY→universal, DESIGN→architecture, PLAN→devops, INVESTIGATE→code_quality, ONBOARD/INTRODUCE→documentation
+- ✅ Complexity gate: suppress for requests ≤8 words with no analytical signal (returns None — omit entirely)
+- ❌ **Never** in Zone 3 of the response header — principles are analysis content, not header furniture
+- ❌ Never for: IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, HEALTH, VACUUM
 - ❌ Never during silent autonomous execution (after `proceed`)
 - ❌ Never for simple one-line queries (≤8 words, no analytical signal)
 
@@ -1088,39 +1003,6 @@ The header uses three zones separated by `---` (Markdown HR) — see § VS Code 
 | INVESTIGATE | code_quality |
 | ONBOARD | documentation |
 | INTRODUCE | documentation |
-
-### Principle Library (12 curated — LLM-visible subset of full 90-principle YAML)
-
-> **Note:** This is the LLM-visible subset for Copilot Chat rendering. The complete library lives in `cortex-registry/knowledge/sdlc/high-value-principles.yaml`. Add new principles there first, then reflect here.
-
-#### 🧪 Domain: `tdd`
-**Red–Green–Refactor** — Write a failing test (Red), write minimum code to pass (Green), then improve without changing behaviour (Refactor). Keeps confidence high and change sets small.
-
-**Tests Are the First Client of Your API** — If your tests are hard to write, your API is hard to use. Difficult test setup reveals coupling and missing abstractions before any real consumer encounters them.
-
-**Failing Tests Are Information, Not Failure** — A red test is a machine-verified specification of missing behaviour. The absence of failing tests is the danger signal.
-
-#### ♻️ Domain: `refactoring`
-**Refactor Under Green** — Refactoring must only happen when all tests are GREEN. Changing behaviour and structure simultaneously is rewriting without a safety net.
-
-**Boy Scout Rule** — Always leave the code a little cleaner than you found it. Small, continuous improvements prevent entropy accumulation without scheduled refactoring sprints.
-
-**Rename Until the Comment Disappears** — If you add a comment to explain what something does, the name is wrong. Rename until the comment is redundant, then delete it.
-
-#### 🏛️ Domain: `architecture`
-**Invert Dependencies Toward Stability** — High-level policy should not depend on low-level detail. Both should depend on abstractions. Coupling to volatility amplifies the blast radius of every change.
-
-**Design for the Seam First** — Before implementing a behaviour, define the boundary at which it can be replaced or tested in isolation. The seam is the design; the implementation is secondary.
-
-**Bounded Context Over Shared Schema** — Each domain owns its data model. Sharing a database table across domain boundaries couples schema changes to all consumers simultaneously.
-
-#### 🔁 Domain: `devops`
-**Ship the Smallest Thing That Can Be Tested in Production** — Small releases reduce blast radius, accelerate feedback, and make rollback trivial. Batch size is the primary risk lever in delivery.
-
-**Observability Is a First-Class Feature** — If you cannot query the state of a running system without SSH access, you cannot operate it. Logs, metrics, and traces are not optional.
-
-#### 🌐 Domain: `universal`
-**Make the Implicit Explicit** — Assumptions, invariants, and constraints embedded in developer memory are future bugs. Encode them as types, tests, or documentation — in that order of preference.
 
 ---
 

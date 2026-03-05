@@ -94,6 +94,10 @@ All repo root files and directories are synced **unless** explicitly denied belo
 | Pattern | Reason |
 |---|---|
 | `_workspaces/**` | Private workspaces — architecturally excluded |
+| `cortex-registry/cortex-master.yaml` | **Master plan index** — admin-only; targets use prebuilt toolkit, never the plan index |
+| `cortex-registry/planning/**` | Phase plans, gap catalogues, TDD sequences — admin-only |
+| `cortex-registry/plans/**` | Legacy plan artefacts — admin-only |
+| `cortex-registry/artifacts/**` | Build/release artefacts — admin-only |
 | `cortex-registry/company/repos/**` | Company-private repo artifacts |
 | `cortex-registry/company/dashboards/repos/**` | Company-private dashboard artifacts |
 | `cortex-docs/**` | **Default-deny all of cortex-docs** — sub-paths re-allowed below |
@@ -105,6 +109,11 @@ All repo root files and directories are synced **unless** explicitly denied belo
 | `**/*.db`, `**/*.log` | Runtime artefacts |
 | `**/.DS_Store`, `**/Thumbs.db` | OS artefacts |
 | `.cortex-sync/**` | Sync-tool state — never round-trip |
+
+> ⛔ **`cortex-registry/cortex-master.yaml` is NEVER synced.** It is an internal admin plan index
+> containing phase plans, gap catalogues, and implementation sequences. Target environments
+> consume the CORTEX runtime via prebuilt tools in the toolkit — they do not receive the
+> master plan. This is enforced in `SYNC_POLICY.deny` in `cortex/tools/cortex_sync.py` (SSOT).
 
 ### Allow Override (re-allows inside denied subtrees)
 
@@ -118,7 +127,7 @@ All repo root files and directories are synced **unless** explicitly denied belo
 ### .github Allowlist (production-critical prompts only)
 
 Admin prompts and tools under `.github/**` are **excluded by default**.
-Only these paths are eligible:
+Only these paths are eligible for sync to target runtime:
 
 - `.github/prompts/CORTEX.prompt.md`
 - `.github/prompts/cortex-architect.prompt.md`
@@ -141,6 +150,29 @@ production_files:
   - ".github/agents/core/cortex-interactive.md"
   - ".github/copilot-instructions.md"
 ```
+
+### Non-Production Admin Prompts (never synced)
+
+All prompts and agents **except** those listed above are classified as
+**non-production administrative tools**. They remain in the CORTEX source
+repository for maintenance workflows but are **never** copied to any
+target runtime path during `/sync`. This includes but is not limited to:
+
+| Prompt / Agent | Classification |
+|---|---|
+| `cortex-sync.prompt.md` | Admin — sync tooling |
+| `cortex-sync-agent.md` | Admin — sync agent |
+| `cortex-total-recall.prompt.md` | Admin — production certification |
+| `cortex-trainer.prompt.md` | Admin — learning engine |
+| `cortex-meta-auditor.md` | Admin — meta-audit tooling |
+| `cortex-master-plan-auditor.md` | Admin — plan governance |
+| `release-notes-agent.md` | Admin — release management |
+| `diagram-regeneration-agent.md` | Admin — docs tooling |
+| All agents under `.github/agents/docs/` | Admin — documentation |
+| All agents under `.github/agents/support/` | Admin — support tooling |
+
+**Enforcement:** The sync engine's `SYNC_POLICY` allowlist is the SSOT.
+Any prompt/agent not in `production_files` is implicitly denied.
 
 **Guardrail:** `cortex-sync.prompt.md`, `cortex-sync-agent.md`, total-recall, trainer,
 and all other admin-only prompts/agents are **never synced** — they cannot be used to

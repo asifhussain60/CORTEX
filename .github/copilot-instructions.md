@@ -42,6 +42,7 @@ Every **first response** to a user request MUST begin with this exact header blo
 - ✅ Quote selected from `📚 Quote Library` in `cortex-response-templates.md` — match `themes` to user intent (TDD/testing → `quality`, security → `security`, refactor → `improvement`, architecture → `architecture`, audit/governance → `discipline`, fix/debug → `systems-thinking`, plan/roadmap → `strategy`, team/process → `flow`, learn/digest → `learning`, default → `universal`)
 - ✅ Both quote and attribution inside the same `>` blockquote block — renders as one unified left-accent callout
 - ✅ `🧭 Orchestration:` is the first line of Zone 3 — rendered AFTER the quote, not before it
+- ✅ **ANTI-REPETITION (P1 — enforced):** Never use the same quote in consecutive responses. The full approved quote pool has 120 quotes across 10 themes (SSOT: `cortex-registry/templates/response/atoms/atom-quote.yaml`). Rotate across the full pool — do NOT default to the same 3–4 training-data quotes. When the `universal` theme is needed, choose from: Dijkstra, Hoare, Hopper, Gates, Torvalds, Einstein, Brooks, Perlis, Carlson, Mandela, Jobs, Sandberg — not only Jim Collins / Pragmatic Programmer. When the `quality` theme is needed, choose from: Aristotle, Beck, Fowler, Deming, Hoare, Kernighan, Dijkstra, Martin, Coplien — rotate widely.
 - ❌ NO mode-specific icon (⚡ 🔧 ♻️ etc.) in the H1 heading — 🧠 / 🛠️ are the only valid leading icons
 - ❌ NO `**Via:**` label — renamed to `🧭 Orchestration:` (Phase 120)
 - ❌ NO `**Orchestrator:** {Name} ✅` field — replaced by `🧭 Orchestration:` in Zone 3
@@ -72,9 +73,9 @@ Every response is assembled from composable sections. The following rules are **
 → Response Header:
      Zone 1: # 🧠 CORTEX {mode} + Author line
      ---
-     Zone 2: > quote blockquote
+     Zone 2: > quote blockquote  (SSOT: cortex-registry/templates/response/atoms/atom-quote.yaml — 120 quotes)
      ---
-     Zone 3: 🧭 Orchestration: {chain} (omit single-hop) + work content
+     Zone 3: 🧭 Orchestration: {chain} (omit single-hop) + work content begins
    ↳ 🧭 Orchestration: IS the breadcrumb — the *🧭 ...* italic block MUST NOT repeat it
 → 🪞 Intent Reflection (before any work — first-person, business language)
 → 📋 Request Echo & DoD (multi-turn sessions only — synthesized prior requests + Definition of Done card)
@@ -82,7 +83,12 @@ Every response is assembled from composable sections. The following rules are **
    ↳ Non-trivial QUERY/DESIGN/PLAN/AUDIT/IMPLEMENT/FIX/REFACTOR: use all 5 sections — Summary → Analysis → Recommendation → Benefits & Risks → Next Steps
    ↳ Simple one-line QUERY: answer directly — skip the 5-section structure
    ↳ After `proceed`: Silent Autonomous progress bars only — NO educational sections
-→ 💡 Principle Block (QUERY/DESIGN/INVESTIGATE only — `### 💡 Principle: {title}\n{body}` — Zone 3, after orchestration line, before main content)
+→ 💡 Principle Block — rendered as FIRST element inside `## 🔍 Analysis` section (NOT in Zone 3 header)
+   Format: > 💡 **Principle: {title}**  (blockquote — same visual accent bar as the header quote)
+           > {body}
+   Triggers: QUERY/DESIGN/PLAN/INVESTIGATE/ONBOARD/INTRODUCE with complexity ≥8 words or analytical signal
+   SSOT: cortex-registry/knowledge/sdlc/high-value-principles.yaml (90 principles, 10 domains)
+   ❌ NEVER in Zone 3 of the response header — principles are analysis content, not header furniture
 → ⏱️ Engagement Timeline (collapsible, 3+ step operations only)
 → 📈 Metrics Dashboard (IMPLEMENT/FIX/REFACTOR completions only)
 → 🎯 Next Steps (educational responses only — Immediate + Later bullets, NO proceed content)
@@ -278,17 +284,24 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 
 **Principle Injection Policy (CORE-PRINCIPLE-TRIGGER — SSOT: `cortex-registry/core/principle-trigger-policy.yaml`):**
 - ✅ Principles render **only** for: QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE intents
-- ✅ One principle per response maximum — placed in Zone 3, after the `🧭 Orchestration:` line (if present), before main content
-- ✅ Render template (verbatim — fill `{title}` and `{body}`):
+- ✅ One principle per response maximum — rendered as **FIRST element inside `## 🔍 Analysis`** (NOT in Zone 3 of the response header)
+- ✅ Render template (verbatim — blockquote format so it renders with the same left-accent bar as the header quote):
   ```
-  ### 💡 Principle: {title}
-  {body}
+  ## 🔍 Analysis
+
+  > 💡 **Principle: {title}**
+  > {body}
+
+  {rest of analysis…}
   ```
 - ✅ Body ≤200 characters — trim at word boundary if needed
-- ✅ Select from the **§ 💡 Principle Library** in `cortex-response-templates.md` — match domain to intent; prefer unused principles across consecutive responses
+- ✅ Select from **`cortex-registry/knowledge/sdlc/high-value-principles.yaml`** (90 principles, 10 domains) — match domain to intent; prefer unused principles across consecutive responses (ring buffer n=20)
+- ✅ Complexity gate: suppress for requests ≤8 words with no analytical signal
+- ❌ Principles **never** in Zone 3 of the response header — they are analysis content, not page furniture
 - ❌ Principles **never** render for: IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, HEALTH, VACUUM
 - ❌ Principles **never** render during silent autonomous execution (CORE-049)
 - ❌ Principles **never** render for simple one-line queries (≤8 words, no analytical signal)
+- ❌ **No inline principle list in `cortex-response-templates.md`** — the 12-principle sub-library has been removed. `high-value-principles.yaml` is the ONE approved source.
 - 🔒 Audit check P2-004 detects operational composition drift; drift-lock tests in `tests/intelligence/test_principle_drift_locks.py`
 
 **MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that

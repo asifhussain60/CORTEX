@@ -67,8 +67,8 @@ atoms:
 
   - id: atom-principle
     file: atoms/atom-principle.yaml
-    description: "SDLC engineering principle — Zone 3, curated 30-principle library, anti-repetition ring buffer"
-    rendering_element: "H3 + paragraph (### 💡 Principle: {title})"
+    description: "SDLC engineering principle — inside ## 🔍 Analysis section (first element), 90-principle library, anti-repetition ring buffer"
+    rendering_element: "blockquote (> 💡 **Principle: {title}** / > {body}) — left-accent bar, inside Analysis section"
     status: ACTIVE
 
 # ─── Tier 2: Blocks ───────────────────────────────────────────────────────────

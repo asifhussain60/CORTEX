@@ -48,7 +48,7 @@ atoms:
     params:
       theme: universal
   - id: atom-principle
-    zone: 3
+    zone: analysis_section      # Inside ## 🔍 Analysis — first element (not Zone 3 header)
     params:
       intent_type: INTRODUCE
   - id: atom-intent-reflection
@@ -68,8 +68,9 @@ template: |
 
   ---
 
-  ### 💡 Principle: {title}
-  {body}
+  ### 💡 Principle: {title}    ← RETIRED — use blockquote format below
+  > 💡 **Principle: {title}**
+  > {body}
 
 # ─── Pre-built Via Chain ──────────────────────────────────────────────────────
 orchestration_chain: "Classifier → Mission Control"

@@ -4,8 +4,8 @@
 # Tier: 2 (Block — composed unit)
 #
 # PURPOSE: Session-level identity block shown ONCE per session on the very
-# first turn. Orients the user to the CORTEX context — product version, mode,
-# active prompt. Not shown on subsequent turns in the same session.
+# first turn. Orients the user to the CORTEX context — active prompt and mode.
+# Not shown on subsequent turns in the same session.
 #
 # Position: After the response header (atom-identity), before work content.
 # Frequency: First turn of a new VS Code Copilot Chat session only.
@@ -38,12 +38,13 @@ rendering_rules:
     - "silent autonomous execution (after proceed)"
 
 # ─── Template ─────────────────────────────────────────────────────────────────
-# {version}       = CORTEX framework version
 # {active_prompt} = active .prompt.md filename
 # {phase}         = current phase being executed (if any)
+# NOTE: No version number rendered — CORTEX uses date-stamped governance,
+#       not semantic versioning (Check #34 — no-versioning-anywhere).
 template: |
   ## 🧠 Session Started
-  **Framework:** CORTEX v{version} · **Prompt:** `{active_prompt}`
+  **Framework:** CORTEX · **Prompt:** `{active_prompt}`
 
 # ─── Metadata ─────────────────────────────────────────────────────────────────
 session_tracking:
