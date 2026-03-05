@@ -55,7 +55,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-<!-- FontAwesome Icons -->
+<!-- FontAwesome Icons (FIXED INTEGRITY TYPO) -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
       rel="stylesheet" 
       xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
@@ -189,6 +189,10 @@
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: var(--spacing-8); }
     @media(min-width: 768px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
     
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: var(--spacing-6); }
+    @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width: 1024px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
     .grid-4 { display: grid; grid-template-columns: 1fr; gap: var(--spacing-6); }
     @media(min-width: 640px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
     @media(min-width: 1024px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
@@ -339,13 +343,46 @@
         box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
         flex-shrink: 0;
     }
-    .icon-box.lg { width: 72px; height: 72px; border-radius: var(--radius-lg); font-size: 2rem; }
+    .icon-box.lg { width: 72px; height: 72px; border-radius: var(--radius-lg); font-size: 2rem; animation: subtleFloat 6s ease-in-out infinite; }
     .icon-box.sm { width: 40px; height: 40px; font-size: 1.1rem; margin-bottom: 0; }
+    
+    /* Elegant XL Squircle Icons specifically designed for Domain Headers */
+    .icon-box.xl {
+        width: 88px; height: 88px; border-radius: 24px; font-size: 2.75rem; margin-bottom: 0;
+        box-shadow: 0 15px 30px -5px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.15);
+        position: relative;
+        animation: subtleFloat 6s ease-in-out infinite;
+    }
+    .icon-cyan.xl { 
+        border-color: rgba(0, 212, 255, 0.4); 
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.05)); 
+        box-shadow: 0 15px 30px -5px rgba(0, 212, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2); 
+    }
+    .icon-purple.xl { 
+        border-color: rgba(123, 97, 255, 0.4); 
+        background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(123, 97, 255, 0.05)); 
+        box-shadow: 0 15px 30px -5px rgba(123, 97, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2); 
+    }
     
     .icon-cyan { color: var(--accent-cyan); border-color: rgba(0, 212, 255, 0.2); background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), transparent); }
     .icon-purple { color: var(--accent-purple); border-color: rgba(123, 97, 255, 0.2); background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), transparent); }
     .icon-magenta { color: var(--accent-magenta); border-color: rgba(186, 85, 211, 0.2); background: linear-gradient(135deg, rgba(186, 85, 211, 0.1), transparent); }
     .icon-emerald { color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.2); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); }
+
+    /* Domain Header Flex Layout */
+    .domain-header-flex {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    @media(min-width: 768px) {
+        .domain-header-flex {
+            flex-direction: row;
+            align-items: center;
+        }
+    }
 
     /* --- HERO SECTION (Preserved exact styling functionality) --- */
     .site-header { position: relative; z-index: 10; padding-top: var(--spacing-16); }
@@ -376,20 +413,20 @@
     /* --- AWAKENING CINEMATIC CARD --- */
     .awakening-card {
         display: flex; align-items: center; gap: var(--spacing-8); padding: 0;
-        background: linear-gradient(135deg, #0f172a, #020617);
+        background: linear-gradient(135deg, rgba(45, 35, 75, 0.8), rgba(15, 20, 35, 0.9));
         text-decoration: none; overflow: hidden; border-radius: var(--radius-2xl);
-        border: 1px solid rgba(255,255,255,0.1);
-        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     }
     .awakening-card::before {
         content: ''; position: absolute; inset: 0;
-        background: radial-gradient(circle at 80% 50%, rgba(123, 97, 255, 0.15) 0%, transparent 60%);
+        background: radial-gradient(circle at 80% 50%, rgba(123, 97, 255, 0.2) 0%, transparent 60%);
         z-index: 0; pointer-events: none;
     }
     .awakening-image-wrapper { flex-shrink: 0; width: 300px; height: 100%; position: relative; z-index: 1; }
     .awakening-image-wrapper::after {
         content: ''; position: absolute; inset: 0;
-        background: linear-gradient(to right, transparent, #0f172a);
+        background: linear-gradient(to right, transparent, rgba(45, 35, 75, 0.8));
     }
     .awakening-image { width: 100%; height: 100%; object-fit: cover; min-height: 250px; }
     .awakening-content { flex: 1; padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) 0; z-index: 2; }
@@ -402,29 +439,109 @@
     @media(max-width: 768px) {
         .awakening-card { flex-direction: column; text-align: center; }
         .awakening-image-wrapper { width: 100%; height: 200px; }
-        .awakening-image-wrapper::after { background: linear-gradient(to bottom, transparent, #0f172a); }
+        .awakening-image-wrapper::after { background: linear-gradient(to bottom, transparent, rgba(45, 35, 75, 0.8)); }
         .awakening-content { padding: var(--spacing-6); }
     }
 
     /* --- STATS PILL --- */
     .stats-pill {
         display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center;
-        background: linear-gradient(90deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+        background: linear-gradient(90deg, rgba(40, 30, 70, 0.5), rgba(15, 23, 42, 0.6));
         border: 1px solid var(--border-base); border-top: 1px solid var(--border-highlight);
         border-radius: 100px; padding: clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 5vw, 3rem); gap: clamp(1rem, 2vw, 3rem);
         overflow-x: auto; scrollbar-width: none; box-shadow: var(--shadow-glass);
     }
     .stats-pill::-webkit-scrollbar { display: none; }
     .stats-item { display: flex; align-items: center; gap: clamp(0.75rem, 1.5vw, 1.25rem); flex: 1; min-width: max-content; justify-content: center; }
-    .stats-divider { width: 1px; height: clamp(30px, 4vw, 40px); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.15), transparent); flex-shrink: 0; }
+    .stats-divider { width: 1px; height: clamp(30px, 4vw, 40px); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.2), transparent); flex-shrink: 0; }
     .stats-val { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--text-primary); line-height: 1; font-family: var(--font-display); }
     .stats-lbl { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; margin-top: 0.25rem; }
 
-    /* --- FEATURE BLOCKS (For Roles Section) --- */
+    /* --- DICTIONARY CARD --- */
+    .dictionary-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid var(--accent-cyan);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-6) var(--spacing-8);
+        margin: 0 auto var(--spacing-16) auto;
+        max-width: 800px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    .dictionary-card::before {
+        content: '\f02d'; /* Book icon */
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 8rem;
+        color: rgba(255, 255, 255, 0.02);
+        z-index: 0;
+        pointer-events: none;
+    }
+    .dictionary-header {
+        display: flex;
+        align-items: baseline;
+        gap: var(--spacing-4);
+        margin-bottom: var(--spacing-2);
+        position: relative;
+        z-index: 1;
+    }
+    .dictionary-word {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: var(--font-display);
+        color: var(--text-primary);
+        margin: 0;
+    }
+    .dictionary-phonetic {
+        font-size: 1.1rem;
+        color: var(--accent-cyan);
+        font-family: var(--font-mono);
+        opacity: 0.8;
+    }
+    .dictionary-part-of-speech {
+        font-style: italic;
+        color: var(--text-secondary);
+        font-size: 1rem;
+        margin-bottom: var(--spacing-4);
+        position: relative;
+        z-index: 1;
+    }
+    .dictionary-definition {
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-4);
+        position: relative;
+        z-index: 1;
+    }
+    .dictionary-context {
+        background: rgba(0, 212, 255, 0.05);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-4);
+        border: 1px solid rgba(0, 212, 255, 0.1);
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        position: relative;
+        z-index: 1;
+    }
+    .dictionary-context strong {
+        color: var(--accent-cyan);
+    }
+
+    /* --- FEATURE BLOCKS (For Roles Section - Lightened) --- */
     .feature-block {
         display: flex; flex-direction: column; gap: var(--spacing-6);
         padding: var(--spacing-8); border-radius: var(--radius-xl);
-        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+        background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+        border: 1px solid rgba(255,255,255,0.08); border-top: 1px solid rgba(255,255,255,0.12);
         transition: all 0.3s ease; position: relative; overflow: hidden;
     }
     @media(min-width: 768px) {
@@ -432,10 +549,9 @@
     }
     
     .feature-block:hover {
-        background: rgba(255,255,255,0.04);
         transform: translateX(8px);
-        border-color: rgba(255,255,255,0.1);
-        box-shadow: -10px 10px 30px -10px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.2);
+        box-shadow: -10px 10px 30px -10px rgba(0,0,0,0.4);
     }
     
     .feature-block-content { flex: 1; }
@@ -445,15 +561,18 @@
     .feature-list li { 
         display: flex; align-items: flex-start; gap: 0.75rem; 
         font-size: 1rem; color: var(--text-secondary); line-height: 1.5;
-        padding: 0.75rem 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);
+        padding: 0.75rem 1rem; background: rgba(0,0,0,0.15); border-radius: var(--radius-md);
         border: 1px solid transparent; transition: border-color 0.2s, background 0.2s;
     }
-    .feature-block:hover .feature-list li { border-color: rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); }
+    .feature-block:hover .feature-list li { border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.25); }
     .feature-list li i { font-size: 1rem; margin-top: 0.15rem; }
 
     /* Feature Block Specific Accents */
+    .feature-purple { background: linear-gradient(90deg, rgba(123, 97, 255, 0.12), rgba(255,255,255,0.02)); }
     .feature-purple .feature-list li i { color: var(--accent-purple); }
+    .feature-magenta { background: linear-gradient(90deg, rgba(186, 85, 211, 0.12), rgba(255,255,255,0.02)); }
     .feature-magenta .feature-list li i { color: var(--accent-magenta); }
+    .feature-cyan { background: linear-gradient(90deg, rgba(0, 212, 255, 0.12), rgba(255,255,255,0.02)); }
     .feature-cyan .feature-list li i { color: var(--accent-cyan); }
     
     .feature-block::before {
@@ -486,8 +605,8 @@
     .cortex-tab:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
     
     .cortex-tab.active {
-        background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), transparent);
-        border: 1px solid rgba(0, 212, 255, 0.2);
+        background: linear-gradient(90deg, rgba(0, 212, 255, 0.15), transparent);
+        border: 1px solid rgba(0, 212, 255, 0.3);
         color: var(--text-primary);
         position: relative;
     }
@@ -638,10 +757,24 @@
     
     <!-- Dogfood Panel -->
     <section class="container section" aria-labelledby="dogfood-heading">
-        <div class="text-center mb-16">
-            <div class="glass-pill mb-6 text-cyan border-cyan" style="background: rgba(0,212,255,0.05);"><i class="fas fa-code-branch mr-2"></i> Built With CORTEX</div>
+        <div class="text-center mb-10">
             <h3 id="dogfood-heading" class="text-4xl text-gradient font-bold">Engineered Using Its Own Standards</h3>
-            <p class="text-muted text-xl max-w-3xl mx-auto">Discover how CORTEX utilizes its own capabilities to maintain high structural integrity.</p>
+            <p class="text-muted text-xl max-w-3xl mx-auto mb-10">Discover how CORTEX utilizes its own capabilities to maintain high structural integrity.</p>
+        </div>
+
+        <!-- Dictionary Definition Card for Dogfooding -->
+        <div class="dictionary-card">
+            <div class="dictionary-header">
+                <h4 class="dictionary-word">dogfooding</h4>
+                <span class="dictionary-phonetic">/ˈdôɡˌfuːdiNG/</span>
+            </div>
+            <div class="dictionary-part-of-speech">noun (software engineering)</div>
+            <div class="dictionary-definition">
+                The practice of an organization using its own product during development to test and improve it. By "eating your own dog food," creators directly experience the realities, flaws, and capabilities of their software before users do.
+            </div>
+            <div class="dictionary-context">
+                <strong>In Context:</strong> CORTEX isn't just a platform; it was built <em>using</em> itself. The orchestrators, governance rules, and core logic you see were architected, tested, and validated by CORTEX's own internal systems, proving its reliability at scale.
+            </div>
         </div>
 
         <!-- Process Cards (2x2 Grid) -->
@@ -829,27 +962,27 @@
             
             <!-- Governance Domain -->
             <div class="mb-12">
-                <div class="flex items-start gap-5 mb-8">
-                    <div class="icon-box lg icon-cyan m-0 shrink-0" style="margin-top: 4px;"><i class="fas fa-shield-alt"></i></div>
+                <div class="domain-header-flex">
+                    <div class="icon-box xl icon-cyan shrink-0">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
                     <div>
                         <h3 class="text-3xl text-primary m-0 mb-2">Governance & Audit</h3>
                         <p class="text-muted text-lg m-0 max-w-3xl">Designed around strict CORE rules, cryptographic evidence hashing, and GitBackedRegistry for confident enforcement.</p>
                     </div>
                 </div>
                 
-                <!-- Bento Grid (5 Items) -->
-                <div class="bento-grid">
-                    <!-- Spans 8 cols on desktop -->
-                    <div class="bento-item md-col-8">
+                <!-- Bento Grid (3-column layout) -->
+                <div class="grid-3">
+                    <div class="bento-item">
                         <i class="fas fa-receipt bento-icon-watermark text-cyan"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-receipt"></i></div>
                             <h4 class="text-xl m-0 font-semibold text-primary">Multi-Tier Architecture</h4>
                         </div>
-                        <p class="text-muted mb-0">Structured to merge overarching SKULL rules with business and engineering constraints. The EnforcementOrchestrator prevents violations during code changes.</p>
+                        <p class="text-muted mb-0">Structured to merge overarching SKULL rules with business and engineering constraints.</p>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-link bento-icon-watermark text-cyan"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-link"></i></div>
@@ -857,8 +990,7 @@
                         </div>
                         <p class="text-muted mb-0">EnhancedAuditLogger records sensitive operations using a tamper-evident design.</p>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-save bento-icon-watermark text-cyan"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-save"></i></div>
@@ -866,8 +998,7 @@
                         </div>
                         <p class="text-muted mb-0">Designed for safe transitions, file locking, and safe rollback capabilities.</p>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-sync bento-icon-watermark text-cyan"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-sync"></i></div>
@@ -875,8 +1006,7 @@
                         </div>
                         <p class="text-muted mb-0">Progressing from IDLE to ACTIVE states while enforcing specific entry criteria.</p>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-file-contract bento-icon-watermark text-cyan"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0"><i class="fas fa-file-contract"></i></div>
@@ -891,18 +1021,19 @@
 
             <!-- Discovery Domain -->
             <div>
-                <div class="flex items-start gap-5 mb-8">
-                    <div class="icon-box lg icon-purple m-0 shrink-0" style="margin-top: 4px;"><i class="fas fa-search"></i></div>
+                <div class="domain-header-flex">
+                    <div class="icon-box xl icon-purple shrink-0">
+                        <i class="fas fa-search"></i>
+                    </div>
                     <div>
                         <h3 class="text-3xl text-primary m-0 mb-2">Discovery & Toolkit</h3>
                         <p class="text-muted text-lg m-0 max-w-3xl">Code intelligence via AST, Git history analysis, and seamless MCP integration mapped directly to your IDE.</p>
                     </div>
                 </div>
                 
-                <!-- Bento Grid (3 Items) -->
-                <div class="bento-grid">
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                <!-- Bento Grid (3-column layout) -->
+                <div class="grid-3">
+                    <div class="bento-item">
                         <i class="fas fa-code bento-icon-watermark text-purple"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-code"></i></div>
@@ -910,12 +1041,11 @@
                         </div>
                         <p class="text-muted mb-4 flex-grow">Utilizes language parsing, commit insights, and security modeling to help surface structural context.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">AST</span>
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Vision API</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">AST</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">Vision API</span>
                         </div>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-toolbox bento-icon-watermark text-purple"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-toolbox"></i></div>
@@ -923,12 +1053,11 @@
                         </div>
                         <p class="text-muted mb-4 flex-grow">Generates readable Epic Plans, Architecture Diagrams, and Duplication Dashboards.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Plan Viewer</span>
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">D3.js Charts</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">Plan Viewer</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">D3.js Charts</span>
                         </div>
                     </div>
-                    <!-- Spans 4 cols on desktop -->
-                    <div class="bento-item md-col-4">
+                    <div class="bento-item">
                         <i class="fas fa-plug bento-icon-watermark text-purple"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-purple m-0 shrink-0"><i class="fas fa-plug"></i></div>
@@ -936,8 +1065,8 @@
                         </div>
                         <p class="text-muted mb-4 flex-grow">Directly access validation, git, and refactor tools without leaving your editor via MCP.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Verify</span>
-                            <span class="cortex-tag m-0 text-xs border-none bg-canvas">Refactor</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">Verify</span>
+                            <span class="cortex-tag m-0 text-xs border-none" style="background: rgba(255,255,255,0.08);">Refactor</span>
                         </div>
                     </div>
                 </div>
@@ -955,25 +1084,24 @@
 
         <div class="glass-card p-0 overflow-hidden border-none" style="background: rgba(255,255,255,0.02);">
             <div class="tab-layout gap-0">
-                <div class="tab-sidebar p-6" role="tablist" aria-label="Demo video categories" style="background: rgba(0,0,0,0.2);">
+                <div class="tab-sidebar p-6" role="tablist" aria-label="Demo video categories" style="background: rgba(10,15,30,0.4);">
                     <button aria-controls="tab-e2e" aria-selected="true" class="cortex-tab active" data-target="tab-e2e" role="tab">
-                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-bolt"></i></span> E2E Execution
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0" style="background: transparent;"><i class="fas fa-bolt"></i></span> E2E Execution
                     </button>
                     <button aria-controls="tab-planning" aria-selected="false" class="cortex-tab" data-target="tab-planning" role="tab">
-                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-bullseye"></i></span> Planning System
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0" style="background: transparent;"><i class="fas fa-bullseye"></i></span> Planning System
                     </button>
                     <button aria-controls="tab-tdd" aria-selected="false" class="cortex-tab" data-target="tab-tdd" role="tab">
-                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-check-circle"></i></span> TDD Execution
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0" style="background: transparent;"><i class="fas fa-check-circle"></i></span> TDD Execution
                     </button>
                     <button aria-controls="tab-lens" aria-selected="false" class="cortex-tab" data-target="tab-lens" role="tab">
-                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0"><i class="fas fa-search"></i></span> CORTEX Lens
+                        <span class="icon-box sm border-none bg-canvas m-0 shadow-none shrink-0" style="background: transparent;"><i class="fas fa-search"></i></span> CORTEX Lens
                     </button>
                 </div>
                 
-                <div class="tab-content-area bg-transparent border-0 rounded-none p-8 md:p-12 flex items-center">
+                <div class="tab-content-area border-0 rounded-none p-8 md:p-12 flex items-center">
                     <div aria-labelledby="e2e" class="cortex-tab-panel active w-full" id="tab-e2e" role="tabpanel">
                         <div class="demo-placeholder">
-                            <i class="fas fa-play bento-icon-watermark text-cyan"></i>
                             <div class="icon-box lg icon-cyan m-0 mb-6 shrink-0"><i class="fas fa-play"></i></div>
                             <h3 class="text-3xl font-bold mb-4">E2E Execution Demo</h3>
                             <p class="text-muted text-lg mb-8 max-w-xl mx-auto">Observe the orchestration process handling an end-to-end development cycle.</p>
@@ -1020,7 +1148,7 @@
         </p>
     </div>
     <div>
-        <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="glass-pill hover:text-white transition-colors border-none" style="background: rgba(255,255,255,0.05); padding: 0.75rem 1.5rem;">
+        <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="glass-pill hover:text-white transition-colors border-none" style="background: rgba(255,255,255,0.08); padding: 0.75rem 1.5rem;">
             <i class="fab fa-github mr-2"></i> View on GitHub
         </a>
     </div>
