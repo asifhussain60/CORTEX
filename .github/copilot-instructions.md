@@ -78,7 +78,11 @@ Every response is assembled from composable sections. The following rules are **
    ↳ 🧭 Orchestration: IS the breadcrumb — the *🧭 ...* italic block MUST NOT repeat it
 → 🪞 Intent Reflection (before any work — first-person, business language)
 → 📋 Request Echo & DoD (multi-turn sessions only — synthesized prior requests + Definition of Done card)
-→ [Work content: 5-Section Golden Format OR Silent Autonomous progress bars]
+→ [Work content: **5-Section Golden Format** (§ below) OR Silent Autonomous progress bars]
+   ↳ Non-trivial QUERY/DESIGN/PLAN/AUDIT/IMPLEMENT/FIX/REFACTOR: use all 5 sections — Summary → Analysis → Recommendation → Benefits & Risks → Next Steps
+   ↳ Simple one-line QUERY: answer directly — skip the 5-section structure
+   ↳ After `proceed`: Silent Autonomous progress bars only — NO educational sections
+→ 💡 Principle Block (QUERY/DESIGN/INVESTIGATE only — `### 💡 Principle: {title}\n{body}` — Zone 3, after orchestration line, before main content)
 → ⏱️ Engagement Timeline (collapsible, 3+ step operations only)
 → 📈 Metrics Dashboard (IMPLEMENT/FIX/REFACTOR completions only)
 → 🎯 Next Steps (educational responses only — Immediate + Later bullets, NO proceed content)
@@ -273,11 +277,19 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
 
 **Principle Injection Policy (CORE-PRINCIPLE-TRIGGER — SSOT: `cortex-registry/core/principle-trigger-policy.yaml`):**
-- ✅ Principles render **only** in `analysis` and `design` compositions: `comp-query.yaml` (QUERY, INVESTIGATE) and any future `comp-design.yaml`
-- ❌ Principles **never** render in operational compositions: `comp-implement-fix`, `comp-refactor`, `comp-debug`, `comp-audit-fix`, `comp-health`, `comp-vacuum`
+- ✅ Principles render **only** for: QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE intents
+- ✅ One principle per response maximum — placed in Zone 3, after the `🧭 Orchestration:` line (if present), before main content
+- ✅ Render template (verbatim — fill `{title}` and `{body}`):
+  ```
+  ### 💡 Principle: {title}
+  {body}
+  ```
+- ✅ Body ≤200 characters — trim at word boundary if needed
+- ✅ Select from the **§ 💡 Principle Library** in `cortex-response-templates.md` — match domain to intent; prefer unused principles across consecutive responses
+- ❌ Principles **never** render for: IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, HEALTH, VACUUM
 - ❌ Principles **never** render during silent autonomous execution (CORE-049)
-- 📏 Body enforced at **≤200 characters** at `PrincipleSelector.select()` render time
-- 🔒 Audit check P2-004 detects any operational composition drift; drift-lock tests in `tests/intelligence/test_principle_drift_locks.py`
+- ❌ Principles **never** render for simple one-line queries (≤8 words, no analytical signal)
+- 🔒 Audit check P2-004 detects operational composition drift; drift-lock tests in `tests/intelligence/test_principle_drift_locks.py`
 
 **MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
 call `validate_orchestrator_context(orchestrator_context)` must guard the call:

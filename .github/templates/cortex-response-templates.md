@@ -1056,7 +1056,75 @@ The header uses three zones separated by `---` (Markdown HR) — see § VS Code 
 
 ---
 
-## 📦 Composable Content Sections
+## � Principle Library — SDLC Engineering Principles for QUERY/DESIGN Responses
+
+**Authority:** Phase 124 (Principle Block Library & Injection System)
+**SSOT (full library — 90 principles):** `cortex-registry/knowledge/sdlc/high-value-principles.yaml`
+**Selection engine:** `cortex/intelligence/principle_selector.py` — `PrincipleSelector(intent_type, pool='principles')`
+**Render template (verbatim — use in Zone 3 before main content):**
+
+```markdown
+### 💡 Principle: {title}
+{body}
+```
+
+**Rules:**
+- ✅ Render for QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE only
+- ✅ One principle per response — Zone 3 position, after `🧭 Orchestration:` if present
+- ✅ Body ≤200 characters — trim at word boundary
+- ✅ Prefer principles not used in previous response turn (anti-repetition)
+- ✅ Match domain to intent: QUERY→universal, DESIGN→architecture, PLAN→devops, INVESTIGATE→code_quality
+- ❌ Never for IMPLEMENT / FIX / REFACTOR / DEBUG / AUDIT / HEALTH / VACUUM
+- ❌ Never during silent autonomous execution (after `proceed`)
+- ❌ Never for simple one-line queries (≤8 words, no analytical signal)
+
+### Domain → Intent Routing
+
+| Intent | Preferred Domain |
+|---|---|
+| QUERY | universal |
+| DESIGN | architecture |
+| PLAN | devops |
+| INVESTIGATE | code_quality |
+| ONBOARD | documentation |
+| INTRODUCE | documentation |
+
+### Principle Library (12 curated — LLM-visible subset of full 90-principle YAML)
+
+> **Note:** This is the LLM-visible subset for Copilot Chat rendering. The complete library lives in `cortex-registry/knowledge/sdlc/high-value-principles.yaml`. Add new principles there first, then reflect here.
+
+#### 🧪 Domain: `tdd`
+**Red–Green–Refactor** — Write a failing test (Red), write minimum code to pass (Green), then improve without changing behaviour (Refactor). Keeps confidence high and change sets small.
+
+**Tests Are the First Client of Your API** — If your tests are hard to write, your API is hard to use. Difficult test setup reveals coupling and missing abstractions before any real consumer encounters them.
+
+**Failing Tests Are Information, Not Failure** — A red test is a machine-verified specification of missing behaviour. The absence of failing tests is the danger signal.
+
+#### ♻️ Domain: `refactoring`
+**Refactor Under Green** — Refactoring must only happen when all tests are GREEN. Changing behaviour and structure simultaneously is rewriting without a safety net.
+
+**Boy Scout Rule** — Always leave the code a little cleaner than you found it. Small, continuous improvements prevent entropy accumulation without scheduled refactoring sprints.
+
+**Rename Until the Comment Disappears** — If you add a comment to explain what something does, the name is wrong. Rename until the comment is redundant, then delete it.
+
+#### 🏛️ Domain: `architecture`
+**Invert Dependencies Toward Stability** — High-level policy should not depend on low-level detail. Both should depend on abstractions. Coupling to volatility amplifies the blast radius of every change.
+
+**Design for the Seam First** — Before implementing a behaviour, define the boundary at which it can be replaced or tested in isolation. The seam is the design; the implementation is secondary.
+
+**Bounded Context Over Shared Schema** — Each domain owns its data model. Sharing a database table across domain boundaries couples schema changes to all consumers simultaneously.
+
+#### 🔁 Domain: `devops`
+**Ship the Smallest Thing That Can Be Tested in Production** — Small releases reduce blast radius, accelerate feedback, and make rollback trivial. Batch size is the primary risk lever in delivery.
+
+**Observability Is a First-Class Feature** — If you cannot query the state of a running system without SSH access, you cannot operate it. Logs, metrics, and traces are not optional.
+
+#### 🌐 Domain: `universal`
+**Make the Implicit Explicit** — Assumptions, invariants, and constraints embedded in developer memory are future bugs. Encode them as types, tests, or documentation — in that order of preference.
+
+---
+
+## �📦 Composable Content Sections
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml
 ### Purpose

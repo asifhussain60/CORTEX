@@ -172,19 +172,21 @@
 (function() {
   'use strict';
 
+  // alignA/alignB: contextual float placement for the two story images per chapter.
+  // Pattern alternates per chapter so consecutive chapters never share the same lead side.
   const CHAPTERS = [
-    { id: '01', file: 'chapters/01-Deep-in-the-Basement.md',                      title: 'Deep in the Basement',                    wave: 0, imageA: 'images/ch-01-a.png', imageB: 'images/ch-01-b.png' },
-    { id: '02', file: 'chapters/02-The-Hotel-Receptionist.md',                    title: 'The Hotel Receptionist',                  wave: 0, imageA: 'images/ch-02-a.png', imageB: 'images/ch-02-b.png' },
-    { id: '03', file: 'chapters/03-The-Sacred-Rules.md',                          title: 'The Sacred Rules',                        wave: 0, imageA: 'images/ch-03-a.png', imageB: 'images/ch-03-b.png' },
-    { id: '04', file: 'chapters/04-The-Conductor-and-the-Tool-Belt.md',           title: 'The Conductor and the Tool Belt',          wave: 0, imageA: 'images/ch-04-a.png', imageB: 'images/ch-04-b.png' },
-    { id: '05', file: 'chapters/05-The-Four-Walls.md',                            title: 'The Four Walls',                          wave: 1, imageA: 'images/ch-05-a.png', imageB: 'images/ch-05-b.png' },
-    { id: '06', file: 'chapters/06-The-Crystal-Ball-and-the-Ghost-Registry.md',   title: 'The Crystal Ball and the Ghost Registry',  wave: 1, imageA: 'images/ch-06-a.png', imageB: 'images/ch-06-b.png' },
-    { id: '07', file: 'chapters/07-When-Everything-Broke.md',                     title: 'When Everything Broke',                   wave: 2, imageA: 'images/ch-07-a.png', imageB: 'images/ch-07-b.png' },
-    { id: '08', file: 'chapters/08-The-Reckoning.md',                             title: 'The Reckoning',                           wave: 2, imageA: 'images/ch-08-a.png', imageB: 'images/ch-08-b.png' },
-    { id: '09', file: 'chapters/09-The-Great-Pruning.md',                         title: 'The Great Pruning',                       wave: 3, imageA: 'images/ch-09-a.png', imageB: 'images/ch-09-b.png' },
-    { id: '10', file: 'chapters/10-The-Pylance-Epiphany.md',                      title: 'The Pylance Epiphany',                    wave: 3, imageA: 'images/ch-10-a.png', imageB: 'images/ch-10-b.png' },
-    { id: '11', file: 'chapters/11-The-3AM-Healer.md',                            title: 'The 3 AM Healer',                         wave: 3, imageA: 'images/ch-11-a.png', imageB: 'images/ch-11-b.png' },
-    { id: '12', file: 'chapters/12-The-Enterprise-Brain.md',                      title: 'The Enterprise Brain',                    wave: 4, imageA: 'images/ch-12-a.png', imageB: 'images/ch-12-b.png' },
+    { id: '01', file: 'chapters/01-Deep-in-the-Basement.md',                      title: 'Deep in the Basement',                    wave: 0, imageA: 'images/ch-01-a.png', imageB: 'images/ch-01-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '02', file: 'chapters/02-The-Hotel-Receptionist.md',                    title: 'The Hotel Receptionist',                  wave: 0, imageA: 'images/ch-02-a.png', imageB: 'images/ch-02-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '03', file: 'chapters/03-The-Sacred-Rules.md',                          title: 'The Sacred Rules',                        wave: 0, imageA: 'images/ch-03-a.png', imageB: 'images/ch-03-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '04', file: 'chapters/04-The-Conductor-and-the-Tool-Belt.md',           title: 'The Conductor and the Tool Belt',          wave: 0, imageA: 'images/ch-04-a.png', imageB: 'images/ch-04-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '05', file: 'chapters/05-The-Four-Walls.md',                            title: 'The Four Walls',                          wave: 1, imageA: 'images/ch-05-a.png', imageB: 'images/ch-05-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '06', file: 'chapters/06-The-Crystal-Ball-and-the-Ghost-Registry.md',   title: 'The Crystal Ball and the Ghost Registry',  wave: 1, imageA: 'images/ch-06-a.png', imageB: 'images/ch-06-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '07', file: 'chapters/07-When-Everything-Broke.md',                     title: 'When Everything Broke',                   wave: 2, imageA: 'images/ch-07-a.png', imageB: 'images/ch-07-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '08', file: 'chapters/08-The-Reckoning.md',                             title: 'The Reckoning',                           wave: 2, imageA: 'images/ch-08-a.png', imageB: 'images/ch-08-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '09', file: 'chapters/09-The-Great-Pruning.md',                         title: 'The Great Pruning',                       wave: 3, imageA: 'images/ch-09-a.png', imageB: 'images/ch-09-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '10', file: 'chapters/10-The-Pylance-Epiphany.md',                      title: 'The Pylance Epiphany',                    wave: 3, imageA: 'images/ch-10-a.png', imageB: 'images/ch-10-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '11', file: 'chapters/11-The-3AM-Healer.md',                            title: 'The 3 AM Healer',                         wave: 3, imageA: 'images/ch-11-a.png', imageB: 'images/ch-11-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '12', file: 'chapters/12-The-Enterprise-Brain.md',                      title: 'The Enterprise Brain',                    wave: 4, imageA: 'images/ch-12-a.png', imageB: 'images/ch-12-b.png', alignA: 'right',  alignB: 'left'   },
   ];
 
   const WAVE_LABELS = ['Origin', 'Structure', 'Resilience', 'Autonomy', 'Vision'];
@@ -200,6 +202,9 @@
 
   let currentIdx = 0;
   const cache = {};
+  // Cache-bust version — frozen at page load so all chapters share the same
+  // version token within a session, but a hard-refresh always hits disk fresh.
+  const CACHE_V = '?v=' + Date.now();
 
   /* ── Markdown Processing ─────────────────────────────────── */
   function stripFrontmatter(md) {
@@ -216,8 +221,8 @@
   }
 
   /* ── Story Image Injection ───────────────────────────────── */
-  function buildStoryImg(src, wave, slot) {
-    return '<figure class="ch-story-img" data-wave="' + wave + '" data-slot="' + slot + '">' +
+  function buildStoryImg(src, wave, slot, align) {
+    return '<figure class="ch-story-img" data-wave="' + wave + '" data-slot="' + slot + '" data-align="' + align + '">' +
       '<img src="' + src + '" alt="" loading="lazy" decoding="async"/>' +
     '</figure>';
   }
@@ -231,8 +236,8 @@
     const posA = Math.max(1, Math.floor(total * 0.33));
     const posB = Math.max(posA + 1, Math.floor(total * 0.67));
     // Insert B first (higher index) so posA index is unaffected
-    parts.splice(posB, 0, buildStoryImg(ch.imageB, ch.wave, 'b'));
-    parts.splice(posA, 0, buildStoryImg(ch.imageA, ch.wave, 'a'));
+    parts.splice(posB, 0, buildStoryImg(ch.imageB, ch.wave, 'b', ch.alignB));
+    parts.splice(posA, 0, buildStoryImg(ch.imageA, ch.wave, 'a', ch.alignA));
     return parts.join('');
   }
 
@@ -263,7 +268,7 @@
 
     try {
       if (!cache[ch.id]) {
-        const r = await fetch(ch.file);
+        const r = await fetch(ch.file + CACHE_V);
         if (!r.ok) throw new Error('HTTP ' + r.status);
         cache[ch.id] = await r.text();
       }

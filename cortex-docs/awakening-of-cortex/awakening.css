@@ -530,8 +530,8 @@ body {
 /* ── Story Image Panels (contextual ch-NN-a / ch-NN-b injections) ── */
 .ch-story-img {
   display: block;
-  width: 100%;
-  margin: 2.25rem 0;
+  width: 42%;
+  margin: 0.5rem 0 1.75rem 0;
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.09);
@@ -539,6 +539,25 @@ body {
   background: rgba(10,14,39,0.6);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   position: relative;
+  clear: none;
+}
+/* Float: left — text wraps on the right */
+.ch-story-img[data-align="left"] {
+  float: left;
+  margin-right: 1.75rem;
+  margin-left: 0;
+}
+/* Float: right — text wraps on the left */
+.ch-story-img[data-align="right"] {
+  float: right;
+  margin-left: 1.75rem;
+  margin-right: 0;
+}
+/* Clearfix after each .ch-body to contain floats */
+.ch-body::after {
+  content: '';
+  display: table;
+  clear: both;
 }
 .ch-story-img:hover {
   transform: translateY(-2px);
@@ -742,14 +761,22 @@ body {
   }
   .chapter-nav-counter { font-size: 0.68rem; }
 
-  /* Images inside chapters */
+  /* Images inside chapters — collapse floats to full-width on mobile */
   .ch-body img {
     border-radius: 8px;
     margin: 1rem auto;
   }
   .ch-story-img {
+    float: none;
+    width: 100%;
     margin: 1.5rem 0;
     border-radius: 10px;
+  }
+  .ch-story-img[data-align="left"],
+  .ch-story-img[data-align="right"] {
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   /* Footer */
