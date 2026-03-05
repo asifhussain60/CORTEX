@@ -87,7 +87,8 @@ class TestGetRepoStateHash:
     def test_returns_valid_hash_format(self) -> None:
         """get_repo_state_hash() should return 32-char hex string."""
         # Use actual CORTEX repo
-        hash_val = get_repo_state_hash("str(REPO_ROOT)")
+        _repo_root = str(Path(__file__).resolve().parents[4])
+        hash_val = get_repo_state_hash(_repo_root)
         
         assert isinstance(hash_val, str)
         assert len(hash_val) == 32  # First 32 chars of SHA256
@@ -266,7 +267,7 @@ class TestIntegration:
 
     def test_full_workflow_same_repo_state(self) -> None:
         """Full workflow: same repo → same cache key."""
-        repo = "str(REPO_ROOT)"
+        repo = str(Path(__file__).resolve().parents[4])
         request = "analyze cortex.py"
         
         # First request
@@ -279,7 +280,7 @@ class TestIntegration:
 
     def test_version_invalidation(self) -> None:
         """Different LENS versions should invalidate cache."""
-        repo = "str(REPO_ROOT)"
+        repo = str(Path(__file__).resolve().parents[4])
         request = "analyze cortex.py"
         
         key_v2_0 = build_cache_key(request, repo, "2.0")

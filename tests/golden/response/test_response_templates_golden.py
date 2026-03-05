@@ -35,13 +35,10 @@ import yaml
 # Paths
 # =============================================================================
 
-GOVERNANCE_TEMPLATES = Path(
-    "str(REPO_ROOT)/cortex-registry/workflows/templates/governance"
-)
+REPO_ROOT = Path(__file__).resolve().parents[3]
+GOVERNANCE_TEMPLATES = REPO_ROOT / "cortex-registry/workflows/templates/governance"
 RESPONSE_TEMPLATE_YAML = GOVERNANCE_TEMPLATES / "copilot-chat-response-template.yaml"
-RESPONSE_TEMPLATES_SSOT = Path(
-    "str(REPO_ROOT)/.github/templates/cortex-response-templates.md"
-)
+RESPONSE_TEMPLATES_SSOT = REPO_ROOT / ".github/templates/cortex-response-templates.md"
 
 
 # =============================================================================

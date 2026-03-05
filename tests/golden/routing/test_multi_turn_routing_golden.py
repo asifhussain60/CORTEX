@@ -662,7 +662,7 @@ class TestContextCrystallizationPersistence:
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not Path(__file__).resolve().parents[3] / "cortex/mcp/tools".exists(),
+    not (Path(__file__).resolve().parents[3] / "cortex/mcp/tools").exists(),
     reason="MCP tools not available"
 )
 class TestMCPIntegrationRouting:

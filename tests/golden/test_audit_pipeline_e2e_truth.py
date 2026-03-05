@@ -385,28 +385,31 @@ class TestACEmissionInfrastructure:
                 logger.record_trace(entry)
 
                 conn = sqlite3.connect(str(test_db_path))
-                tables = [r[0] for r in conn.execute(
-                    "SELECT name FROM sqlite_master WHERE type='table'"
-                ).fetchall()]
-                # record_trace writes to a per-orchestrator table (trace_{class})
-                # OR to trace_master — verify the DB has at least one trace table
-                trace_tables = [t for t in tables if t.startswith("trace_")]
-                assert len(trace_tables) >= 1, (
-                    f"No trace tables found after record_trace(). Tables: {tables}"
-                )
-                # Verify the AC_START entry landed in whichever table was used
-                total_ac_rows = 0
-                for tbl in trace_tables:
-                    try:
-                        n = conn.execute(
-                            f"SELECT COUNT(*) FROM {tbl} WHERE action = 'AC_START'"
-                        ).fetchone()[0]
-                        total_ac_rows += n
-                    except sqlite3.OperationalError:
-                        pass
-                assert total_ac_rows >= 1, (
-                    f"AC_START not found in any trace table {trace_tables} after record_trace()"
-                )
+                try:
+                    tables = [r[0] for r in conn.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'"
+                    ).fetchall()]
+                    # record_trace writes to a per-orchestrator table (trace_{class})
+                    # OR to trace_master — verify the DB has at least one trace table
+                    trace_tables = [t for t in tables if t.startswith("trace_")]
+                    assert len(trace_tables) >= 1, (
+                        f"No trace tables found after record_trace(). Tables: {tables}"
+                    )
+                    # Verify the AC_START entry landed in whichever table was used
+                    total_ac_rows = 0
+                    for tbl in trace_tables:
+                        try:
+                            n = conn.execute(
+                                f"SELECT COUNT(*) FROM {tbl} WHERE action = 'AC_START'"
+                            ).fetchone()[0]
+                            total_ac_rows += n
+                        except sqlite3.OperationalError:
+                            pass
+                    assert total_ac_rows >= 1, (
+                        f"AC_START not found in any trace table {trace_tables} after record_trace()"
+                    )
+                finally:
+                    conn.close()  # must close before TemporaryDirectory cleanup on Windows
 
             finally:
                 OrchestratorLogger._instance = None

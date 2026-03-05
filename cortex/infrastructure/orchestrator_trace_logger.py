@@ -196,6 +196,65 @@ class OrchestratorTraceLogger:
                     """
                 )
 
+                # audit_stage_log — records per-stage execution for 9-stage audit pipeline
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS audit_stage_log (
+                        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                        session_id  TEXT NOT NULL,
+                        stage       INTEGER NOT NULL,
+                        stage_name  TEXT NOT NULL,
+                        started_at  TEXT NOT NULL,
+                        completed_at TEXT,
+                        status      TEXT NOT NULL DEFAULT 'RUNNING',
+                        p0_count    INTEGER DEFAULT 0,
+                        p1_count    INTEGER DEFAULT 0,
+                        duration_ms REAL,
+                        notes       TEXT
+                    )
+                    """
+                )
+
+                conn.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_audit_stage_session
+                    ON audit_stage_log(session_id, stage)
+                    """
+                )
+
+                # workflow_cycles — CORE-068 convergence loop tracing (detect→fix→rescan)
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS workflow_cycles (
+                        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                        run_id          TEXT NOT NULL,
+                        template_id     TEXT NOT NULL,
+                        label           TEXT NOT NULL,
+                        cycle_num       INTEGER NOT NULL,
+                        p0_before       INTEGER NOT NULL DEFAULT 0,
+                        p1_before       INTEGER NOT NULL DEFAULT 0,
+                        p0_after        INTEGER NOT NULL DEFAULT 0,
+                        p1_after        INTEGER NOT NULL DEFAULT 0,
+                        issues_before   INTEGER NOT NULL DEFAULT 0,
+                        issues_after    INTEGER NOT NULL DEFAULT 0,
+                        issues_fixed    INTEGER NOT NULL DEFAULT 0,
+                        predicate_result INTEGER NOT NULL DEFAULT 0,
+                        fix_log_json    TEXT,
+                        scan_errors     INTEGER DEFAULT 0,
+                        fix_errors      INTEGER DEFAULT 0,
+                        duration_ms     INTEGER NOT NULL DEFAULT 0,
+                        timestamp       TEXT NOT NULL
+                    )
+                    """
+                )
+
+                conn.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_workflow_cycles_run
+                    ON workflow_cycles(run_id, cycle_num)
+                    """
+                )
+
                 # Store schema version in metadata
                 conn.execute(
                     """
