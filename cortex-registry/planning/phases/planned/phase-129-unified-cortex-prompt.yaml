@@ -1,0 +1,627 @@
+# Phase 129 — Unified CORTEX Prompt Consolidation
+# Single /CORTEX prompt with embedded repo-context detection (Architect Mode auto-activation)
+# SSOT: cortex-registry/planning/phases/planned/phase-129-unified-cortex-prompt.yaml
+# Thin index pointer: cortex-master.yaml → phase-129
+
+id: "phase-129"
+title: "Unified CORTEX Prompt — Repo-Context Detection & Architect Mode Auto-Activation"
+created: "2026-03-05"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-002  # All output inline — no report files
+  - CORE-035  # Single canonical implementation — eliminates split SSOT
+  - CORE-049  # Silent autonomous execution
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-129-UNIFIED-PROMPT"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: User design session 2026-03-05 — request to consolidate CORTEX.prompt.md
+  and cortex-architect.prompt.md into a single /CORTEX prompt.
+
+  Current state (pre-phase-129):
+    - CORTEX.prompt.md (~1.5K tokens) — thin routing layer; EXPLICITLY DELEGATES
+      mode detail to cortex-architect.prompt.md (§ CORTEX.prompt.md line ~50:
+      "defined exclusively in cortex-architect.prompt.md")
+    - cortex-architect.prompt.md (~2.7K tokens) — full architect detail, all 29-point
+      audit checks, 21 execution modes, drift locks, Thin Index Contract, agent loading map
+    - This VIOLATES CORE-035: two user-facing files constitute a split SSOT.
+      Users must remember to attach BOTH files for full capability.
+    - Check #14 in /audit fix has DUAL-ICON logic tied to two separate files —
+      fragile, hard to maintain.
+
+  Target state (post-phase-129):
+    - ONE file: .github/prompts/CORTEX.prompt.md  ← single user attachment
+    - Embedded REPO-CONTEXT DETECTION: if CORTEX workspace detected → Architect Mode
+      activates transparently (no user action required)
+    - cortex-architect.prompt.md → RETIRED as user-facing prompt → demoted to
+      .github/agents/core/cortex-architect-internal.md (lazy-loaded for DESIGN/AUDIT)
+    - Agents remain lazy-loaded per AGENT-INDEX.md protocol (unchanged)
+    - Check #14 updated to single-file dual-icon logic
+
+  Token budget analysis:
+    - Unified prompt: ~3,800 tokens (vs 1,500 + 2,700 = 4,200 when both attached)
+    - Net saving: ~400 tokens per session (+ eliminates user confusion overhead)
+    - Agents still lazy-loaded — no regression in context efficiency
+
+  Smoke baseline: 2,775 | Preflight baseline: 424
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DESIGN DECISION — REPO-CONTEXT DETECTION MECHANISM
+# ─────────────────────────────────────────────────────────────────────────────
+design_decisions:
+  repo_context_detection:
+    description: |
+      The unified prompt embeds a REPO-CONTEXT GATE in its header section.
+      This gate is evaluated BEFORE Stage 0 on every request.
+
+    detection_signals:
+      primary:
+        - "cortex-master.yaml present at workspace root"
+        - "cortex/orchestrators/ directory exists"
+        - "cortex-registry/ directory exists"
+      secondary:
+        - "cortex/mcp/tools/ directory exists"
+        - "cortex-registry/core/ directory exists (governance YAMLs)"
+      confidence_threshold: "2 of 3 primary signals → Architect Mode ON"
+
+    mode_switch_behavior:
+      architect_mode_active:
+        response_header_icon: "🛠️"
+        product_title: "CORTEX Architect"
+        capabilities_added:
+          - "29-point production readiness audit (#1-#50)"
+          - "Drift Lock Protocol (Check #41)"
+          - "Thin Index Contract enforcement (Check #25)"
+          - "Phase lifecycle governance (PLAN MODE full spec)"
+          - "Wiring contract validation (L1/L2/L3)"
+          - "Sequential Execution Contract on all authored phases"
+          - "Meta-audit (26 checks via cortex-meta-auditor.md)"
+      standard_mode_active:
+        response_header_icon: "🧠"
+        product_title: "CORTEX"
+        capabilities_added:
+          - "Standard 21 execution modes (IMPLEMENT/FIX/REFACTOR/etc.)"
+          - "MCP tooling (30 registered tools)"
+          - "LENS analysis pipeline"
+          - "Lazy agent loading per AGENT-INDEX.md"
+
+  cortex_architect_demotion:
+    description: |
+      cortex-architect.prompt.md is RETIRED as a user-facing prompt.
+      Its unique content is absorbed into the unified CORTEX.prompt.md.
+      The file is demoted to an INTERNAL agent:
+        .github/agents/core/cortex-architect-internal.md
+      This agent is lazy-loaded for DESIGN, INVESTIGATE, RCA, WORKFLOW_COMPOSE intents.
+      It is NOT surfaced to users as an attachment option.
+    migration_map:
+      "cortex-architect.prompt.md § IDENTITY" → "unified CORTEX.prompt.md § IDENTITY"
+      "cortex-architect.prompt.md § SILENT AUTONOMOUS" → "unified prompt § SILENT AUTONOMOUS"
+      "cortex-architect.prompt.md § CORE RULES" → "unified prompt § CORE RULES (deduped)"
+      "cortex-architect.prompt.md § EXECUTION MODES table" → "unified prompt § EXECUTION MODES"
+      "cortex-architect.prompt.md § AGENT LOADING MAP" → "unified prompt § AGENT LOADING MAP"
+      "cortex-architect.prompt.md § RESPONSE FORMAT" → "unified prompt § RESPONSE FORMAT (conditional)"
+      "cortex-architect.prompt.md § MCP TOOLS" → "unified prompt § MCP TOOLS"
+      "cortex-architect.prompt.md § PLAN MODE detail" → "cortex-phase-resolver.md agent"
+      "cortex-architect.prompt.md § DEBUG MODE detail" → "cortex-debugger.md agent"
+      "cortex-architect.prompt.md § AUDIT 29-point table" → "cortex-auditor.md agent"
+      "cortex-architect.prompt.md § IMPLEMENT/FIX/REFACTOR detail" → "cortex-executor.md agent"
+
+  agent_wiring:
+    description: |
+      All agents remain lazy-loaded per AGENT-INDEX.md protocol.
+      No bulk-loading. No regression in agent loading behavior.
+      The unified prompt includes the full AGENT LOADING MAP (currently only in architect prompt).
+    new_wiring:
+      - "REPO-CONTEXT DETECTION → activates Architect Mode flag (internal)"
+      - "Architect Mode flag → unlocks audit checks #1-#50, drift lock protocol"
+      - "Architect Mode flag → adds cortex-phase-resolver.md to PLAN intent loading"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064 — all must be CLOSED before phase-129 is COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-129-01"
+    title: "Two user-facing prompts create dual-attachment cognitive overhead"
+    severity: P1
+    source: "Design session 2026-03-05 — user explicitly requested single prompt"
+    evidence: |
+      CORTEX.prompt.md line ~50: "defined exclusively in cortex-architect.prompt.md"
+      AGENT-INDEX.md Intent→Agent mapping lists BOTH as loadable entries.
+      Users must manually attach 2 files for AUDIT/DESIGN/PLAN capability.
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-02"
+    title: "Split SSOT between CORTEX.prompt.md and cortex-architect.prompt.md (CORE-035)"
+    severity: P1
+    source: "CORE-035 audit — CORTEX.prompt.md explicitly delegates mode detail"
+    evidence: |
+      CORTEX.prompt.md § REQUEST ROUTING: "defined exclusively in cortex-architect.prompt.md"
+      CORTEX.prompt.md § AUDIT MODE: "defined in cortex-architect.prompt.md § AUDIT MODE"
+      CORTEX.prompt.md § FIX MODE: "defined in cortex-architect.prompt.md § FIX MODE"
+      Three cross-references = split SSOT = CORE-035 violation.
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-03"
+    title: "Check #14 dual-icon logic tied to two separate files — fragile"
+    severity: P2
+    source: "cortex-architect.prompt.md § 29-Point Production Readiness Audit Check #14"
+    evidence: |
+      Check #14 requires: 🧠 in CORTEX.prompt.md, 🛠️ in cortex-architect.prompt.md.
+      After unification, this check must handle conditional logic within ONE file.
+      Current grep pattern: grep -n "Author.*Asif" .github/prompts/*.prompt.md
+      Post-unification: check that CORTEX.prompt.md contains BOTH icon definitions
+      as conditional rules (not hardcoded to one).
+    action_ref: "phase-129-d"
+    status: OPEN
+
+  - id: "GAP-129-04"
+    title: "No embedded repo-context detection — Architect Mode requires manual prompt swap"
+    severity: P1
+    source: "Design session 2026-03-05 — core feature request"
+    evidence: |
+      Currently there is no mechanism for the prompt to self-detect CORTEX workspace.
+      Architect capabilities (29-point audit, drift locks, Thin Index Contract) are
+      locked behind a SEPARATE FILE that users must remember to attach.
+      Target: detection logic embedded in unified prompt header, zero user action.
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-05"
+    title: "copilot-instructions.md references two prompts in § References table"
+    severity: P2
+    source: "copilot-instructions.md § References section"
+    evidence: |
+      Current entry: "Architect Prompt: .github/prompts/cortex-architect.prompt.md"
+      Post-unification: this entry must be removed (prompt no longer exists as user artifact).
+      copilot-instructions.md § RESPONSE HEADER also documents dual-icon logic that
+      must be updated to reflect conditional (context-aware) icon selection.
+    action_ref: "phase-129-c"
+    status: OPEN
+
+  - id: "GAP-129-06"
+    title: "AGENT-INDEX.md lists cortex-architect.prompt.md in intent→agent mapping"
+    severity: P2
+    source: "AGENT-INDEX.md § Intent → Agent Mapping"
+    evidence: |
+      AGENT-INDEX.md Intent→Agent map references "cortex-architect.prompt.md"
+      as a loadable artifact for PLAN, RCA, WORKFLOW_COMPOSE, INVESTIGATE intents.
+      Post-unification: these entries must reference "cortex-architect-internal.md"
+      (the demoted internal agent) instead.
+    action_ref: "phase-129-d"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (5 — ROI-ordered, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── 129-a: Create unified CORTEX.prompt.md ─────────────────────────────────
+  - id: "phase-129-a"
+    title: "Create Unified CORTEX.prompt.md with Repo-Context Detection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-01", "GAP-129-02", "GAP-129-04"]
+    governance_authority: "CORE-035, CORE-002, CORE-049"
+    duration_estimate: "2-3 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2775 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      - |
+        .github/prompts/CORTEX.prompt.md (UNIFIED — replaces both existing files)
+
+        STRUCTURE of the unified prompt:
+        1. # CORTEX / CORTEX Architect — Unified Prompt (with version/date metadata)
+        2. ## 🔍 REPO-CONTEXT GATE (auto-applied before Stage 0)
+           - Detection signals (3 primary, 2 secondary)
+           - Confidence threshold: 2/3 primary → Architect Mode ON
+           - Mode behavior table: Standard Mode vs Architect Mode
+        3. ## 🎯 IDENTITY (merged from both prompts — de-duped)
+        4. ## 🔌 MCP (P0 — MANDATORY) — unchanged
+        5. ## 🚦 STAGE 0 — SYNCHRONOUS GOVERNANCE AUDIT
+        6. ## 🤖 SILENT AUTONOMOUS EXECUTION (CORE-049)
+        7. ## 🛡️ CORE RULES (P0 — IMMUTABLE) — de-duped (was in BOTH prompts)
+        8. ## 🎯 EXECUTION MODES table (from architect prompt)
+        9. ## 🔄 REQUEST ROUTING
+        10. ## 📋 INTERACTION PROTOCOL (DoR Display, INTRODUCE intent)
+        11. ## 🧭 INTENTROUTER — Confidence Thresholds
+        12. ## 🏗️ RESPONSE FORMAT (CONDITIONAL — icon/title based on repo-context)
+        13. ## 📁 FILE PLACEMENT
+        14. ## ⚡ MCP TOOLS (30 registered)
+        15. ## 🔗 AGENT LOADING MAP (lazy-load map — from architect prompt)
+        16. ## ✅ COMPLETION CHECKLIST
+        17. ## 🔧 QUICK COMMANDS (merged command tables)
+
+        CONDITIONAL RESPONSE FORMAT section:
+        | Mode | Icon | H1 Title |
+        |---|---|---|
+        | Standard (non-CORTEX repo) | 🧠 | CORTEX {mode} |
+        | Architect (CORTEX repo detected) | 🛠️ | CORTEX Architect {mode} |
+
+    tdd_cycle:
+      red:
+        action: |
+          Write test_unified_prompt_structure.py before creating the unified prompt.
+          Tests must FAIL because the unified prompt does not yet exist.
+          Tests to write:
+            - test_single_cortex_prompt_file_exists() — CORTEX.prompt.md exists
+            - test_repo_context_gate_section_present() — § REPO-CONTEXT GATE in file
+            - test_detection_signals_defined() — 3 primary signals documented
+            - test_conditional_icons_both_present() — both 🧠 and 🛠️ in file
+            - test_agent_loading_map_present() — agent loading map section exists
+            - test_no_cross_references_to_architect_prompt() — no "cortex-architect.prompt.md" refs
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_unified_prompt_structure.py — ALL FAIL"
+        blocker: "Do NOT create unified prompt until RED gate confirmed"
+      green:
+        action: |
+          Create the unified .github/prompts/CORTEX.prompt.md by merging:
+          - All unique content from CORTEX.prompt.md (current thin router)
+          - All unique content from cortex-architect.prompt.md (architect detail)
+          - Add REPO-CONTEXT GATE section (new — per design decisions above)
+          - Add conditional RESPONSE FORMAT section
+          - De-duplicate CORE RULES (identical in both — keep one copy)
+          Token target: ≤4,000 tokens
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_unified_prompt_structure.py — ALL PASS"
+        blocker: "Do NOT proceed to REFACTOR until all 6 tests pass"
+      refactor:
+        action: |
+          Review unified prompt for:
+          - Token efficiency (can any section be compressed without losing fidelity?)
+          - Heading hierarchy (H2/H3/H4 — no inversions)
+          - CORE-002 compliance (no .md/.txt report file instructions)
+          - CORE-035 compliance (no remaining cross-references to cortex-architect.prompt.md)
+        gate: "python3 scripts/run_tests.py dir tests/preflight/ — zero regressions"
+        blocker: "Do NOT mark 129-a COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_single_cortex_prompt_file_exists"
+        - "test_repo_context_gate_section_present"
+        - "test_detection_signals_defined"
+        - "test_conditional_icons_both_present"
+        - "test_agent_loading_map_present"
+        - "test_no_cross_references_to_architect_prompt"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/preflight/test_unified_prompt_structure.py"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: false  # GAP-129-01, 02, 04 closed in this sub-phase
+      blocks_next_sub_phase: true
+
+  # ── 129-b: Retire cortex-architect.prompt.md → internal agent ──────────────
+  - id: "phase-129-b"
+    title: "Retire cortex-architect.prompt.md — Demote to Internal Agent"
+    priority: P1
+    status: PLANNED
+    gap_refs: []
+    governance_authority: "CORE-035, CORE-002"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-129-a"]
+    prerequisite: "phase-129-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      - |
+        RENAME: .github/prompts/cortex-architect.prompt.md
+             → .github/agents/core/cortex-architect-internal.md
+
+        Content reduction: Strip the full mode detail (already absorbed into unified prompt).
+        Retain ONLY the supplemental detail that is LAZILY LOADED for specific intents:
+          - DESIGN MODE detail (challenge-first approach, design pillars)
+          - INVESTIGATE MODE sequence (scope→evidence→hypothesize→verify→report)
+          - RCA MODE detail (4 methodologies, cortex_learning tool)
+          - WORKFLOW COMPOSE MODE (convergence mode, toolchain table)
+          - Extended PLAN MODE: Sequential Execution Contract schema, sub-phase template
+
+        File header comment: "INTERNAL AGENT — not user-attachable. Loaded by unified
+        CORTEX.prompt.md for DESIGN/INVESTIGATE/RCA/WORKFLOW_COMPOSE intents."
+
+    tdd_cycle:
+      red:
+        action: "Write test_architect_prompt_retired.py — tests FAIL (file still at old path)"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_architect_prompt_retired.py — ALL FAIL"
+        blocker: "Do NOT move file until RED gate confirmed"
+      green:
+        action: |
+          1. git mv .github/prompts/cortex-architect.prompt.md .github/agents/core/cortex-architect-internal.md
+          2. Trim content to supplemental-only (remove sections now in unified prompt)
+          3. Add internal agent header comment
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_architect_prompt_retired.py — ALL PASS"
+        blocker: "Do NOT proceed to REFACTOR until all tests pass"
+      refactor:
+        action: "Verify no broken references to old path in any file under .github/"
+        gate: |
+          grep -rn "cortex-architect.prompt.md" .github/ cortex-registry/ --include="*.md" --include="*.yaml"
+          Must return 0 matches (all references updated in sub-phases 129-c and 129-d).
+        blocker: "Do NOT mark 129-b COMPLETE until grep returns 0"
+
+    tdd_sequence:
+      red:
+        - "test_old_architect_prompt_path_gone"
+        - "test_internal_agent_exists_at_new_path"
+        - "test_internal_agent_has_header_comment"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/preflight/test_architect_prompt_retired.py"
+      min_tests_pass: 3
+      zero_new_failures: true
+      all_gap_refs_closed: false
+      blocks_next_sub_phase: true
+
+  # ── 129-c: Update copilot-instructions.md ──────────────────────────────────
+  - id: "phase-129-c"
+    title: "Update copilot-instructions.md — Unified Prompt Header Rules + References"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-05"]
+    governance_authority: "CORE-035, CORE-002"
+    duration_estimate: "45 minutes"
+    depends_on: ["phase-129-b"]
+    prerequisite: "phase-129-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py preflight — zero new failures"
+
+    deliverables:
+      - |
+        .github/copilot-instructions.md updates:
+
+        § RESPONSE HEADER — MANDATORY:
+          UPDATE: "Product icon is fixed: 🧠 for CORTEX.prompt.md · 🛠️ for cortex-architect.prompt.md"
+          TO:     "Product icon is context-aware: 🧠 for standard mode (non-CORTEX repo) ·
+                  🛠️ for Architect Mode (CORTEX repo auto-detected via repo-context gate)"
+
+        § References table:
+          REMOVE: "Architect Prompt: .github/prompts/cortex-architect.prompt.md"
+          ADD:    "Internal Architect Agent: .github/agents/core/cortex-architect-internal.md
+                  (lazy-loaded — not user-attachable)"
+
+        § Meta-audit check #14:
+          UPDATE detect command and pass criteria to reflect unified prompt icon logic.
+
+    tdd_cycle:
+      red:
+        action: "Write test_copilot_instructions_updated.py — tests FAIL (old content still present)"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_copilot_instructions_updated.py — ALL FAIL"
+        blocker: "Do NOT edit copilot-instructions.md until RED gate confirmed"
+      green:
+        action: |
+          Apply 3 targeted edits to .github/copilot-instructions.md:
+          1. Update RESPONSE HEADER icon rule (context-aware, not file-tied)
+          2. Remove architect prompt from References table
+          3. Update meta-audit Check #14 detect command
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_copilot_instructions_updated.py — ALL PASS"
+        blocker: "Do NOT proceed to REFACTOR until all tests pass"
+      refactor:
+        action: "Verify copilot-instructions.md has no remaining references to cortex-architect.prompt.md"
+        gate: |
+          grep -n "cortex-architect.prompt.md" .github/copilot-instructions.md — must return 0 lines
+        blocker: "Do NOT mark 129-c COMPLETE until grep returns 0"
+
+    tdd_sequence:
+      red:
+        - "test_response_header_icon_rule_context_aware"
+        - "test_architect_prompt_removed_from_references"
+        - "test_check_14_updated_for_unified_prompt"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/preflight/test_copilot_instructions_updated.py"
+      min_tests_pass: 3
+      zero_new_failures: true
+      all_gap_refs_closed: true  # GAP-129-05 CLOSED
+      blocks_next_sub_phase: true
+
+  # ── 129-d: Update AGENT-INDEX.md + Check #14 ───────────────────────────────
+  - id: "phase-129-d"
+    title: "Update AGENT-INDEX.md + Meta-Auditor Check #14 for Unified Prompt"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-03", "GAP-129-06"]
+    governance_authority: "CORE-035"
+    duration_estimate: "45 minutes"
+    depends_on: ["phase-129-c"]
+    prerequisite: "phase-129-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py preflight — zero new failures"
+
+    deliverables:
+      - |
+        .github/agents/AGENT-INDEX.md updates:
+          § Intent → Agent Mapping:
+            UPDATE entries that reference "cortex-architect.prompt.md":
+              PLAN intent: "cortex-architect.prompt.md" → "cortex-architect-internal.md"
+              RCA intent: "cortex-architect.prompt.md + cortex_learning op=rca" →
+                          "cortex-architect-internal.md + cortex_learning op=rca"
+              WORKFLOW_COMPOSE: → "cortex-architect-internal.md"
+              INVESTIGATE: → "cortex-architect-internal.md"
+            UPDATE § Agent Loading Cost table accordingly.
+
+          § Core Agents table:
+            UPDATE/REMOVE "cortex-architect.md" entry — now "cortex-architect-internal.md (internal)"
+
+        cortex-architect.prompt.md meta-audit check (Check #14):
+          UPDATE detect logic in cortex-auditor.md / meta-auditor:
+            OLD: grep for distinct 🧠 in CORTEX.prompt.md AND 🛠️ in cortex-architect.prompt.md
+            NEW: grep for BOTH 🧠 AND 🛠️ in CORTEX.prompt.md, verify they appear in
+                 conditional context (REPO-CONTEXT GATE section), and verify
+                 cortex-architect.prompt.md NO LONGER EXISTS at .github/prompts/
+
+    tdd_cycle:
+      red:
+        action: "Write test_agent_index_updated.py — tests FAIL (old references present)"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_agent_index_updated.py — ALL FAIL"
+        blocker: "Do NOT edit AGENT-INDEX.md until RED gate confirmed"
+      green:
+        action: |
+          1. Apply 4 targeted edits to AGENT-INDEX.md (intent mapping entries)
+          2. Update Check #14 logic in cortex-meta-auditor.md
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_agent_index_updated.py — ALL PASS"
+        blocker: "Do NOT proceed to REFACTOR until all tests pass"
+      refactor:
+        action: |
+          Verify no remaining references to cortex-architect.prompt.md across .github/:
+          grep -rn "cortex-architect.prompt.md" .github/ — must return 0 lines
+        gate: "grep returns 0 lines"
+        blocker: "Do NOT mark 129-d COMPLETE until clean"
+
+    tdd_sequence:
+      red:
+        - "test_agent_index_no_architect_prompt_refs"
+        - "test_check_14_single_file_dual_icon_logic"
+        - "test_architect_internal_agent_in_index"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/preflight/test_agent_index_updated.py"
+      min_tests_pass: 3
+      zero_new_failures: true
+      all_gap_refs_closed: true  # GAP-129-03, GAP-129-06 CLOSED
+      blocks_next_sub_phase: true
+
+  # ── 129-e: Smoke gate + drift lock emit ────────────────────────────────────
+  - id: "phase-129-final"
+    title: "Smoke Gate + Drift Lock Emit + cortex-master.yaml COMPLETE"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    governance_authority: "CORE-064, CORE-068"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-129-d"]
+    prerequisite: "ALL sweep_catalogue gaps CLOSED (GAP-129-01 through GAP-129-06)"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥2775 tests, zero new failures"
+
+    deliverables:
+      - |
+        DRIFT LOCK — emit per Check #41 protocol:
+        File: cortex-registry/governance/drift-locks/check-129-unified-prompt-lock.yaml
+        Content:
+          lock_id: "LOCK-129-2026-03-05"
+          check_id: "check-129"
+          domain: "unified-prompt"
+          detect_command: |
+            grep -rn "cortex-architect.prompt.md" .github/prompts/ .github/agents/AGENT-INDEX.md
+            .github/copilot-instructions.md -- must return 0 matches
+          pass_criteria: "0 matches"
+          severity: P1
+          ci_gate: true
+          auto_fix: "Remove stale references; update to cortex-architect-internal.md"
+          created: "2026-03-05"
+          source_gap: "GAP-129-01 through GAP-129-06"
+
+        Test: tests/preflight/test_drift_lock_check_129.py
+          - test_no_user_facing_architect_prompt()
+          - test_unified_prompt_exists()
+          - test_internal_agent_exists()
+          - test_check_14_updated()
+
+        cortex-master.yaml:
+          UPDATE: phase-129 status → COMPLETE
+          UPDATE: file pointer → completed/phase-129-unified-cortex-prompt.yaml
+          MOVE: this file from planned/ → completed/
+
+        refresh_prompt_suite.py:
+          Run: python3 scripts/refresh_prompt_suite.py --counts-only
+          Verify: orchestrator count unchanged, prompt list updated
+
+    tdd_cycle:
+      red:
+        action: "Write test_drift_lock_check_129.py — tests FAIL (lock not yet emitted)"
+        gate: "ALL listed tests FAIL (lock file missing)"
+        blocker: "Do NOT emit drift lock until RED gate confirmed"
+      green:
+        action: "Emit drift lock YAML + emit preflight test"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_drift_lock_check_129.py — ALL PASS"
+        blocker: "Do NOT mark COMPLETE until all tests pass"
+      refactor:
+        action: |
+          Run full smoke gate: python3 scripts/run_tests.py smoke
+          Run preflight gate: python3 scripts/run_tests.py preflight
+          Run refresh: python3 scripts/refresh_prompt_suite.py --counts-only
+          Verify cortex-master.yaml ≤800 lines and YAML-valid
+        gate: |
+          smoke: ≥2775 GREEN
+          preflight: ≥424 GREEN
+          wc -l cortex-registry/cortex-master.yaml: ≤800
+          python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml')); print('YAML valid')"
+        blocker: "Do NOT mark phase-129 COMPLETE until all gates pass"
+
+    tdd_sequence:
+      red:
+        - "test_no_user_facing_architect_prompt"
+        - "test_unified_prompt_exists"
+        - "test_internal_agent_exists"
+        - "test_check_14_updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2775
+      zero_new_failures: true
+      all_gap_refs_closed: true  # ALL 6 GAPs CLOSED
+      blocks_next_sub_phase: false  # final sub-phase — nothing to unblock
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA (phase-level — verified at phase-129-final)
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "[ ] Single .github/prompts/CORTEX.prompt.md file serves all modes"
+  - "[ ] REPO-CONTEXT GATE section present and correctly defines detection signals"
+  - "[ ] Both 🧠 and 🛠️ icons defined conditionally within unified prompt"
+  - "[ ] cortex-architect.prompt.md does NOT exist at .github/prompts/"
+  - "[ ] cortex-architect-internal.md exists at .github/agents/core/"
+  - "[ ] AGENT-INDEX.md intent→agent mapping references cortex-architect-internal.md"
+  - "[ ] copilot-instructions.md: no references to cortex-architect.prompt.md"
+  - "[ ] Check #14 logic updated for unified single-file dual-icon assertion"
+  - "[ ] Drift lock check-129 emitted (YAML + preflight test)"
+  - "[ ] Smoke: ≥2775 GREEN | Preflight: ≥424 GREEN"
+  - "[ ] cortex-master.yaml ≤800 lines and YAML-valid"
+  - "[ ] refresh_prompt_suite.py --counts-only shows updated prompt list"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# RISK REGISTER
+# ─────────────────────────────────────────────────────────────────────────────
+risks:
+  - id: "RISK-129-01"
+    title: "Token budget creep — unified prompt exceeds 4,000 tokens"
+    probability: MEDIUM
+    impact: LOW
+    mitigation: |
+      Strict token budget gate: unified prompt MUST be ≤4,000 tokens.
+      Compress via: remove inline examples (leave in agents), remove redundant
+      cross-references, ensure mode detail stays in specialist agents (not unified prompt).
+      If >4,000 tokens after REFACTOR: extract EXECUTION MODES detail to
+      cortex-architect-internal.md and replace with a mode routing table only.
+
+  - id: "RISK-129-02"
+    title: "Check #14 meta-audit breaks during transition (129-a complete, 129-d pending)"
+    probability: HIGH
+    impact: MEDIUM
+    mitigation: |
+      Run /audit fix AFTER phase-129-d (all checks updated) — not between sub-phases.
+      If Check #14 fires during transition: suppress with explicit override noting
+      "Phase 129 in progress — Check #14 transitional state expected".
+      Do NOT create a partial fix that satisfies old logic (would need reverting).
+
+  - id: "RISK-129-03"
+    title: "Repo-context detection false positive on non-CORTEX repos with similar structure"
+    probability: LOW
+    impact: LOW
+    mitigation: |
+      Use 3-signal AND gate (not OR) for primary detection:
+        ALL of: cortex-master.yaml + cortex/orchestrators/ + cortex-registry/ must be present.
+      Likelihood of false positive with all 3: negligible (CORTEX-specific directory names).
+      Add negative signal: if workspace has no Python files under cortex/ → Standard Mode.
