@@ -1,1 +1,20 @@
-../core/tier0-skull/skull-rules.yaml
+# ==============================================================================
+# CORTEX CORE RULES — Governance Entry Point
+# ==============================================================================
+# Purpose: Canonical governance rules entry point for cortex-registry/governance/
+# SSOT:    cortex-registry/core/tier0-skull/skull-rules.yaml (Tier 0 — immutable)
+# Status:  ACTIVE
+# ==============================================================================
+
+id: "core-rules"
+governance_tier: 0
+category: CORTEX_CORE
+precedence: HIGHEST
+canonical_source: "cortex-registry/core/tier0-skull/skull-rules.yaml"
+
+metadata:
+  description: "CORTEX Core Governance Rules — entry point delegating to Tier 0 skull-rules"
+  authority: "cortex-architect.prompt.md | CORE-064 | CORE-068"
+  last_updated: "2026-03-05"
+  status: "ACTIVE"
+  note: "All rule detail lives in canonical_source above. This file is the governance/core-rules.yaml entry point required by orchestrator rule-loading."
