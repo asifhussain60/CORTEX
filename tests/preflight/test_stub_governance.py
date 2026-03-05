@@ -24,6 +24,7 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/intelligence/execution_sandbox.py",
     "cortex/intelligence/memory/tier1_learned/orchestrators/cleaners/base.py",
     "cortex/intelligence/memory/tier1_learned/orchestrators/cleaners/interface.py",
+    "cortex/intelligence/principle_selector.py",
     "cortex/lens/core.py",
     "cortex/orchestrators/documentation.py",
     "cortex/orchestrators/health/constants.py",

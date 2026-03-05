@@ -29,6 +29,7 @@
 #   CORE-049: Silent if no results found
 # ============================================================================
 
+id: "primitives/intelligence/activity-log-query"
 template_id: 'primitives/intelligence/activity-log-query'
 name: 'Activity Log Query — SQLite Workflow History Reader'
 tier: 'primitive'

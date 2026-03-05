@@ -1,3 +1,4 @@
+domain: "repositories"
 analysis: &id001
   architecture_type: unknown
   patterns_detected: []

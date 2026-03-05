@@ -21,6 +21,7 @@
 #   CORE-064: Full sweep — pipeline never exits with unresolved P0/P1
 # ============================================================================
 
+id: "audit/audit-fix-pipeline"
 workflow:
   id: 'audit/audit-fix-pipeline'
   name: '/audit fix — 9-Stage Production Readiness Pipeline (28-Point Audit)'

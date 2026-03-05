@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "sdlc"
 overview: |
   Automated code review criteria covering correctness, DRY/SOLID principles,
   security, performance, and API contract conformance. Severity classification

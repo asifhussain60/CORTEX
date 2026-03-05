@@ -1,3 +1,4 @@
+id: "lifecycle/legacy-rescue"
 workflow:
   name: "Legacy Rescue"
   description: |

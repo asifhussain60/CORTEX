@@ -42,6 +42,7 @@
 #   NO EDIT — flat-files/ is NEVER edited directly; always edit source first
 # =============================================================================
 
+id: "maintenance/doc-flat-file-sync"
 workflow:
   id: "maintenance/doc-flat-file-sync"
   name: "Documentation Flat-File Sync"

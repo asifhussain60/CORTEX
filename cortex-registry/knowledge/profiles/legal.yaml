@@ -3,6 +3,7 @@
 # Category: Legal, Compliance, Document Management
 # Target: Legal tech applications, contract management, compliance systems
 
+domain: "profiles"
 profile:
   id: legal-v1.0
   name: Legal Tech

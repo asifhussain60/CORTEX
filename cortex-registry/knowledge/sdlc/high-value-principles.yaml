@@ -3,8 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # Injected by: PrincipleSelector (cortex/intelligence/principle_selector.py) via pool='principles'
 # Atom: cortex-registry/templates/response/atoms/atom-principle.yaml (Zone 3, comp-query.yaml)
-# No version field — append-only YAML standard (CORE-002)
-
+domain: "sdlc"
 description: >
   Curated library of 90 high-value SDLC engineering principles spanning 10 domains.
   Selected for relevance to analysis, design, implementation, and review responses.

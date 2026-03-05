@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # Incremental migration from legacy to modern patterns
 
+id: "lifecycle/migration-modernize"
 workflow:
   id: "migration/modernize"
   name: "Legacy Modernization Workflow"

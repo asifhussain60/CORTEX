@@ -21,6 +21,7 @@
 #   agent #11) validates its presence before execution is permitted.
 # ============================================================================
 
+id: "primitives/governance/sweep-catalogue-open"
 template_id: 'primitives/governance/sweep-catalogue-open'
 name: 'Sweep Catalogue Open'
 tier: 'primitive'

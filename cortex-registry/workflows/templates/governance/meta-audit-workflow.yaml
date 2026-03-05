@@ -9,6 +9,7 @@
 # Replaces: Inline 25-check table in cortex-meta-auditor.md
 # ============================================================================
 
+id: "governance/meta-audit-workflow"
 workflow:
   id: 'governance/meta-audit-workflow'
   name: 'META-AUDIT — Prompt/Agent Coherence Validation'

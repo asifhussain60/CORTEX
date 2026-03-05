@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "stack-specific"
 stack: python
 detection_patterns:
   files: ["requirements.txt", "pyproject.toml", "setup.py", "Pipfile"]

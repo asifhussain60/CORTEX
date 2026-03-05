@@ -6,6 +6,7 @@
 # Phase: impl-security-orchestrator
 # AC-ID: AC-SECURITY-KB-003
 
+domain: "security"
 metadata:
   name: "CI/CD Security Hardening"
   source: "OWASP CI/CD Security Guidelines, GitHub Security Best Practices"

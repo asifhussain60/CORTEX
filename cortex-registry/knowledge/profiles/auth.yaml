@@ -3,6 +3,7 @@
 # Category: Security, Identity, Access Control
 # Target: Auth services, IAM systems, SSO providers
 
+domain: "profiles"
 profile:
   id: auth-v1.0
   name: Authentication & Authorization

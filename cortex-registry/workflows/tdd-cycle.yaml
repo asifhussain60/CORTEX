@@ -7,6 +7,7 @@
 # Created: 2026-02-17
 # ============================================================================
 
+id: "tdd-cycle"
 workflow:
   id: "cortex/tdd-cycle"
   name: "TDD Cycle (RED → GREEN → REFACTOR)"

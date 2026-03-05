@@ -8,6 +8,7 @@
 # This document provides:
 # 1. Complete rule registry (36 existing + 6 new CORE rules)
 # 2. Rule-to-orchestrator enforcement mapping
+id: "governance-inventory"
 # 3. Governance compliance checklist
 # 4. Tier structure verification
 # 5. Rule dependency graph

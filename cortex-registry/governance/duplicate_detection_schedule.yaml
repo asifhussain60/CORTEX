@@ -4,6 +4,7 @@
 # Author: Asif Hussain
 # Date: 2026-02-12
 
+id: "duplicate-detection-schedule"
 enabled: true
 
 schedule:

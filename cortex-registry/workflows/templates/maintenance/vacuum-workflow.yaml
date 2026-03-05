@@ -10,6 +10,7 @@
 #           Inline VACUUM section in cortex-architect.prompt.md
 # ============================================================================
 
+id: "maintenance/vacuum-workflow"
 workflow:
   id: 'maintenance/vacuum-workflow'
   name: 'VACUUM — Markdown Sprawl + Root Clutter Cleanup'

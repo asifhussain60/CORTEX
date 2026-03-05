@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # Detect and remove duplicate code using LENS + CORE-035
 
+id: "maintenance/cleanup-deduplication"
 workflow:
   id: "cleanup/deduplication"
   name: "Code Deduplication Workflow"

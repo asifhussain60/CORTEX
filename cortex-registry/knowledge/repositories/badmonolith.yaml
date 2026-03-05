@@ -1,3 +1,4 @@
+domain: "repositories"
 analysis:
   architecture_type: unknown
   patterns_detected: []

@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "stack-specific"
 stack: typescript
 detection_patterns:
   files: ["tsconfig.json", "package.json", "vite.config.ts", "next.config.js"]

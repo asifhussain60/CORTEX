@@ -40,7 +40,7 @@ REGISTRY_PATH = (
     / "_registry.yaml"
 )
 
-REQUIRED_ATOM_FIELDS = {"id", "type", "version", "phase", "rendering_rules", "template", "theme_map"}
+REQUIRED_ATOM_FIELDS = {"id", "type", "phase", "rendering_rules", "template", "theme_map"}
 
 
 @pytest.fixture(scope="module")

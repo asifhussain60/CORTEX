@@ -12,6 +12,7 @@
 #             explicitly excluded — this is ONLY for cortex.* internal imports.
 # =============================================================================
 
+id: "primitives/governance/dependency-guard-migration"
 primitive:
   id: "primitives/governance/dependency-guard-migration"
   name: "Dependency Guard Migration"

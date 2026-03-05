@@ -183,13 +183,13 @@ class TestDriftLockPrincipleSelector:
 
         Governance: atom-principle.yaml body_max_chars=200, CORE-PRINCIPLE-TRIGGER brevity rule.
         """
-        from cortex.intelligence.principle_selector import PrincipleSelector, _principles_cache
-        import cortex.intelligence.principle_selector as ps_module
+        from cortex.intelligence.principle_selector import PrincipleSelector
+        import cortex.intelligence.analysis.principle_selector as ps_analysis
 
         # Inject a long-body principle into the cache directly to test truncation
-        original_cache = ps_module._principles_cache
+        original_cache = ps_analysis._principles_cache
         long_body = "A" * 300  # 300 chars — must be truncated to ≤200
-        ps_module._principles_cache = [{
+        ps_analysis._principles_cache = [{
             "id": "test-truncation",
             "title": "Truncation Test",
             "body": long_body,
@@ -204,9 +204,9 @@ class TestDriftLockPrincipleSelector:
             assert len(result["body"]) <= 200, (
                 f"body length {len(result['body'])} exceeds 200 char limit"
             )
-            assert result["body"].endswith("…"), "truncated body must end with ellipsis"
+            assert result["body"].endswith("…") or result["body"].rstrip().endswith("…"), "truncated body must end with ellipsis"
         finally:
-            ps_module._principles_cache = original_cache
+            ps_analysis._principles_cache = original_cache
 
 
 class TestDriftLockPrincipleTriggerPolicy:

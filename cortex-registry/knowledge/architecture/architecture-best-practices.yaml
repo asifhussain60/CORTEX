@@ -3,6 +3,7 @@
 # Consumer: KnowledgeSynthesisEngine._load_architecture_patterns() for IMPLEMENT/DESIGN intents
 # Updated: 2026-02-21
 
+domain: "architecture"
 metadata:
   created_at: "2026-02-21T00:00:00Z"
   updated_at: "2026-02-21T00:00:00Z"

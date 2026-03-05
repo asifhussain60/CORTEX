@@ -6,6 +6,7 @@
 # Reused by: csharp-refactor, csharp-security, typescript-refactor, dead-code-removal
 # ============================================================================
 
+id: "primitives/analysis/lens-ast-scan"
 template_id: 'primitives/analysis/lens-ast-scan'
 name: 'LENS AST Scan Primitive'
 tier: 'primitive'

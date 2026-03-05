@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # Comprehensive security and compliance audit with auto-remediation
 
+id: "security/security-compliance-audit"
 workflow:
   id: "security/compliance-audit"
   name: "Security Compliance Audit Workflow"

@@ -3,6 +3,7 @@
 # Category: Healthcare, Medical, HIPAA Compliance
 # Target: Healthcare applications, EHR systems, medical data processing
 
+domain: "profiles"
 profile:
   id: healthcare-v1.0
   name: Healthcare & HIPAA

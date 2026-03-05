@@ -6,6 +6,7 @@
 # Reused by: html-refactor, css-extraction
 # ============================================================================
 
+id: "primitives/execution/semantic-edit"
 template_id: 'primitives/execution/semantic-edit'
 name: 'Semantic Edit Primitive'
 tier: 'primitive'

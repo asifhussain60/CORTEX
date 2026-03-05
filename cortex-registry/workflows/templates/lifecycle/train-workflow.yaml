@@ -9,6 +9,7 @@
 # Replaces: Inline training protocol in cortex-trainer.md
 # ============================================================================
 
+id: "lifecycle/train-workflow"
 workflow:
   id: 'lifecycle/train-workflow'
   name: 'TRAIN — Gap-Driven Template Evolution'

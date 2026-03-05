@@ -25,8 +25,8 @@ class TestOPJWriter:
     def tmp_registry(self, tmp_path: Path) -> Path:
         """Provide a temporary cortex-registry root."""
         registry = tmp_path / "cortex-registry"
-        (registry / "integration" / "patterns" / "success").mkdir(parents=True)
-        (registry / "integration" / "patterns" / "failure").mkdir(parents=True)
+        (registry / "patterns" / "success").mkdir(parents=True)
+        (registry / "patterns" / "failure").mkdir(parents=True)
         return registry
 
     @pytest.fixture()
@@ -47,7 +47,7 @@ class TestOPJWriter:
             resolution="chunked into 3 sections, confidence 0.92",
             confidence=0.92,
         )
-        target = tmp_registry / "integration" / "patterns" / "success" / "digest_session_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "success" / "digest_session_orchestrator.yaml"
         assert target.exists(), "YAML file must be created for orchestrator"
 
     def test_record_success_entry_has_required_fields(self, writer: OPJWriter, tmp_registry: Path) -> None:
@@ -59,7 +59,7 @@ class TestOPJWriter:
             resolution="test written, implementation pending",
             confidence=0.88,
         )
-        target = tmp_registry / "integration" / "patterns" / "success" / "tdd_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "success" / "tdd_orchestrator.yaml"
         data = yaml.safe_load(target.read_text())
         entries = data["entries"]
         assert len(entries) == 1
@@ -82,7 +82,7 @@ class TestOPJWriter:
                 resolution=f"rule CORE-{i:03d} passed",
                 confidence=0.9,
             )
-        target = tmp_registry / "integration" / "patterns" / "success" / "enforcement_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "success" / "enforcement_orchestrator.yaml"
         data = yaml.safe_load(target.read_text())
         assert len(data["entries"]) == 3
 
@@ -99,7 +99,7 @@ class TestOPJWriter:
             attempted_fix="skip binary, retry with encoding='latin-1'",
             confidence=0.75,
         )
-        target = tmp_registry / "integration" / "patterns" / "failure" / "digest_session_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "failure" / "digest_session_orchestrator.yaml"
         assert target.exists()
 
     def test_record_failure_entry_has_required_fields(self, writer: OPJWriter, tmp_registry: Path) -> None:
@@ -111,7 +111,7 @@ class TestOPJWriter:
             attempted_fix="skipped restricted paths, logged warning",
             confidence=0.6,
         )
-        target = tmp_registry / "integration" / "patterns" / "failure" / "bulk_digest_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "failure" / "bulk_digest_orchestrator.yaml"
         data = yaml.safe_load(target.read_text())
         entry = data["entries"][0]
         assert entry["outcome"] == "failure"
@@ -133,7 +133,7 @@ class TestOPJWriter:
             resolution="all tests green",
             confidence=0.95,
         )
-        registry_index = tmp_registry / "integration" / "patterns" / "_registry.yaml"
+        registry_index = tmp_registry / "patterns" / "_registry.yaml"
         assert registry_index.exists(), "_registry.yaml must exist after first write"
         data = yaml.safe_load(registry_index.read_text())
         assert "entries" in data
@@ -148,7 +148,7 @@ class TestOPJWriter:
             attempted_fix="deferred to next cycle",
             confidence=0.5,
         )
-        registry_index = tmp_registry / "integration" / "patterns" / "_registry.yaml"
+        registry_index = tmp_registry / "patterns" / "_registry.yaml"
         data = yaml.safe_load(registry_index.read_text())
         entry = data["entries"][0]
         assert "pattern_id" in entry
@@ -189,7 +189,7 @@ class TestOPJWriter:
                 resolution="ok",
                 confidence=0.9,
             )
-        target = tmp_registry / "integration" / "patterns" / "success" / "test_orchestrator.yaml"
+        target = tmp_registry / "patterns" / "success" / "test_orchestrator.yaml"
         data = yaml.safe_load(target.read_text())
         for entry in data["entries"]:
             ids.add(entry["pattern_id"])

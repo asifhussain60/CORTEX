@@ -67,6 +67,7 @@
 # Golden tests: tests/golden/workflow/test_holistic_file_review_golden.py
 # =============================================================================
 
+id: "governance/holistic-file-review-gate"
 workflow:
   id: "governance/holistic-file-review-gate"
   name: "Holistic File Review Gate"

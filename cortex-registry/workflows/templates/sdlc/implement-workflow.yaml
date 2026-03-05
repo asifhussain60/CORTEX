@@ -21,6 +21,7 @@
 #   - primitives/governance/sweep-catalogue-close.yaml
 # ============================================================================
 
+id: "sdlc/implement-workflow"
 workflow:
   id: 'sdlc/implement-workflow'
   name: 'IMPLEMENT — TDD-First Development'

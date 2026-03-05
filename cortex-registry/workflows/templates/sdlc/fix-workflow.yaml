@@ -14,6 +14,7 @@
 #   - SWEEP GATE scans for same issue class across codebase (CORE-064)
 # ============================================================================
 
+id: "sdlc/fix-workflow"
 workflow:
   id: 'sdlc/fix-workflow'
   name: 'FIX — Bug Resolution via TDD'

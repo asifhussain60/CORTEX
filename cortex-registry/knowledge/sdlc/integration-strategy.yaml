@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "sdlc"
 overview: |
   Integration test design patterns covering contract testing, consumer-driven
   contracts, service virtualization, and test double hierarchy. Maps to company

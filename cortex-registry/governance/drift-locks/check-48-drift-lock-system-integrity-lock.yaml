@@ -1,0 +1,48 @@
+id: "check-48-drift-lock-system-integrity-lock"
+check_number: 48
+phase: "phase-128-g"
+gap_id: "GAP-128-07"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Drift Lock System Integrity — The Meta-Lock"
+description: |
+  The drift lock registry (cortex-registry/governance/drift-locks/) must remain
+  internally consistent at all times. This is the meta-lock: the lock that locks
+  the locks. It enforces:
+  - Every file is parseable YAML and is a mapping (not a list or scalar)
+  - Every lock has the minimum required fields: id, check_number, status,
+    enforcement_tier, title, test_file
+  - check_number in each file matches the numeric prefix in its filename
+  - No two drift locks share the same check_number (no duplicates)
+  - test_file and primary_test_file (when present) resolve to real files
+  - status is one of: ACTIVE | DEPRECATED | SUPERSEDED
+  - enforcement_tier is one of: P0 | P1 | P2 | P3
+  - ci_gate is boolean when present (not a string "true"/"false")
+  - Locks with check_number >= 39 declare ci_gate and detect_command
+  - No sequential gaps in check numbers (deleted locks must be DEPRECATED, not removed)
+  - id field matches the filename stem (without .yaml extension)
+  - Total lock count never drops below the established baseline (16)
+test_file: "tests/governance/test_drift_lock_system_integrity.py"
+detect_command: "python3 -m pytest tests/governance/test_drift_lock_system_integrity.py -q"
+pass_criteria: "14 passed, 0 failed"
+baseline_report:
+  total_locks: 19
+  modern_locks_with_ci_gate: 10
+  legacy_locks_without_ci_gate: 6
+  minimum_count_floor: 16
+  modern_threshold: 39
+  all_ids_match_filenames: true
+  sequential_gaps: []
+ci_gate: true
+auto_fix: |
+  For YAML parse errors: Fix the YAML syntax in the failing drift lock file.
+  For missing required fields: Add the missing field(s) to the drift lock.
+  For check_number/filename mismatch: Correct the check_number field to match the filename prefix.
+  For duplicate check numbers: Renumber the offending lock to the next available number.
+  For missing test files: Create the test file or correct the test_file path.
+  For invalid status/tier: Use one of the canonical values listed in the description.
+  For non-boolean ci_gate: Change to True or False (no quotes).
+  For gaps in sequential numbers: A lock was deleted — restore it or rename it DEPRECATED.
+  For id/filename mismatch: Correct the id field to match the filename stem exactly.
+created: "2026-03-05"
+source_gap: "GAP-128-07"

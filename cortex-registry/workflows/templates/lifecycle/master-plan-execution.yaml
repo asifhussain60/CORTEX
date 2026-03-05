@@ -14,6 +14,7 @@
 # Response: Silent autonomous execution with ━━━ + [████] + ├─/└─ progress format
 # =============================================================================
 
+id: "lifecycle/master-plan-execution"
 workflow:
   name: master_plan_execution
   description: >

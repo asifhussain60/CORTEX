@@ -40,6 +40,7 @@
 #   CORE-049: Silent on no-finding (progress bar only during scan)
 # ============================================================================
 
+id: "lifecycle/investigate-workflow"
 template_id: 'lifecycle/investigate-workflow'
 
 workflow:

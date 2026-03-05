@@ -1,3 +1,4 @@
+id: "internal/documentation-refresh-pipeline"
 metadata:
   id: DOC-REFRESH-001
   name: Documentation Discovery & Regeneration Pipeline

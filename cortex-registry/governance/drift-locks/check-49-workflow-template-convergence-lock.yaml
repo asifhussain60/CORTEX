@@ -1,0 +1,52 @@
+id: "check-49-workflow-template-convergence-lock"
+check_number: 49
+phase: "phase-128-h"
+gap_id: "GAP-128-08"
+status: "ACTIVE"
+enforcement_tier: "P1"
+title: "Workflow Template Convergence — Structural Consistency Across 85 Templates"
+
+description: >
+  Locks the structural integrity of all 85 workflow templates (61 non-primitive + 24 primitives)
+  in cortex-registry/workflows/templates/. Enforces: (1) every template has a canonical id field,
+  (2) templates with steps have identity fields on each step, (3) all primitive references resolve
+  or are catalogued as known-unresolvable, (4) routing table templates and universal primitives
+  all exist, (5) count baselines are stable, (6) no empty primitive files.
+
+test_file: "tests/governance/test_workflow_template_convergence.py"
+test_count: 11
+
+detect_command: >
+  python3 -m pytest tests/governance/test_workflow_template_convergence.py -q
+
+pass_criteria:
+  - "11 passed, 0 failed"
+  - "All 85 templates parseable as valid YAML"
+  - "All 61 non-primitive templates have top-level id or workflow.id"
+  - "All 24 primitives have top-level id"
+  - "All 20 routing table templates exist on disk"
+  - "All 8 universal primitives exist on disk"
+  - "No unregistered broken primitive refs (17 known-unresolvable are catalogued)"
+  - "Template count: 61 non-primitive (±5 tolerance), 24 primitives (±3 tolerance)"
+
+baseline_report:
+  total_templates: 85
+  non_primitive_count: 61
+  primitive_count: 24
+  routing_table_templates: 20
+  universal_primitives: 8
+  known_unresolvable_refs: 17
+  violations_found_and_fixed:
+    - "frontend-tdd-workflow.yaml: used template_id instead of id (fixed: added id field)"
+    - "23 primitives missing id field (fixed: injected id derived from relative path)"
+
+ci_gate: true
+
+auto_fix:
+  available: false
+  notes: >
+    Missing id fields can be injected with a targeted script (see Phase 128-h fix),
+    but new unregistered broken refs require manual cataloguing in _KNOWN_UNRESOLVABLE_REFS.
+
+created: "2026-03-05"
+created_by: "Phase 128-h — Workflow Template Convergence"

@@ -339,10 +339,22 @@ class CapabilityRegistryBuilder:
 
         try:
             content = ssot_path.read_text(encoding="utf-8")
+            seen: set[str] = set()
             for line in content.splitlines():
+                # Match explicit ## BLOCK-* headings
                 match = re.match(r"^##\s+(BLOCK-[A-Z0-9_-]+)", line)
                 if match:
-                    blocks.append(match.group(1))
+                    name = match.group(1)
+                    if name not in seen:
+                        seen.add(name)
+                        blocks.append(name)
+                    continue
+                # Also extract inline BLOCK-* references (backtick-wrapped or bare)
+                inline = re.findall(r"`?(BLOCK-[A-Z0-9_-]+)`?", line)
+                for name in inline:
+                    if name not in seen:
+                        seen.add(name)
+                        blocks.append(name)
         except Exception:
             pass
 
@@ -575,6 +587,7 @@ class CapabilityRegistryBuilder:
 
         manifest: Dict = {
             "auto_generated": True,
+            "schema_version": "1.0",
             "generated_at": generated_at,
             "generated_by": "cortex.intelligence.capability_registry_builder.CapabilityRegistryBuilder",
             # ── Orchestrators (generated from wiring specs) ──────────

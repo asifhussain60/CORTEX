@@ -1,9 +1,9 @@
----
 # Service Decomposition Workflow Template
 # FileFactory-validated: service-decomposition-workflow.yaml (CORE-028 ✅)
 # Authority: CORE-008 (TDD-first) · CORE-035 (no duplication) · CCL security-first
 # Composes: security-hardening · tdd-api-service · tdd-frontend-visual · migration-modernize · refactor-holistic-sweep
 
+id: "lifecycle/service-decomposition-workflow"
 workflow:
   id: "lifecycle/service-decomposition-workflow"
   name: "Service Decomposition Workflow"

@@ -9,6 +9,7 @@
 # Replaces: Inline health check protocol in cortex-architect.prompt.md
 # ============================================================================
 
+id: "maintenance/health-check-workflow"
 workflow:
   id: 'maintenance/health-check-workflow'
   name: 'HEALTH — Orchestrator Health Check'

@@ -9,6 +9,7 @@
 # Replaces: Inline 7-phase protocol in cortex-total-recall.prompt.md
 # ============================================================================
 
+id: "lifecycle/totalrecall-workflow"
 workflow:
   id: 'lifecycle/totalrecall-workflow'
   name: 'TOTALRECALL — Holistic Production Readiness'

@@ -7,6 +7,7 @@
 # Created: 2026-02-17
 # ============================================================================
 
+id: "refactor-holistic"
 workflow:
   id: "cortex/refactor-holistic"
   name: "Holistic Refactoring Sweep"

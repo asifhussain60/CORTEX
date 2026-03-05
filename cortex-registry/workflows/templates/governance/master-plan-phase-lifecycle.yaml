@@ -18,6 +18,7 @@
 # Checks: Run at phase CREATION, ACTIVE execution, and COMPLETION (3 checkpoints)
 # =============================================================================
 
+id: "governance/master-plan-phase-lifecycle"
 workflow:
   name: master_plan_phase_lifecycle
   description: >

@@ -23,6 +23,7 @@
 #   permitted.
 # ============================================================================
 
+id: "primitives/governance/sweep-catalogue-close"
 template_id: 'primitives/governance/sweep-catalogue-close'
 name: 'Sweep Catalogue Assert Exhausted'
 tier: 'primitive'

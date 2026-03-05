@@ -6,6 +6,7 @@
 # Reused by: html-refactor, css-extraction, frontend-tdd
 # ============================================================================
 
+id: "primitives/validation/css-zero-inline"
 template_id: 'primitives/validation/css-zero-inline'
 name: 'CSS Zero Inline Validation Primitive'
 tier: 'primitive'

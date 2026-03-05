@@ -18,6 +18,7 @@
 #   - lifecycle/design-workflow.yaml (always-on for DESIGN mode)
 # ============================================================================
 
+id: "primitives/governance/challenge-gate"
 template_id: 'primitives/governance/challenge-gate'
 name: 'Challenge Gate'
 tier: 'primitive'

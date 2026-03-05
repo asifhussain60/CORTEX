@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # API endpoint TDD with contract validation and security scanning
 
+id: "tdd/tdd-api-service"
 workflow:
   id: "tdd/api-service"
   name: "API Service TDD Workflow"

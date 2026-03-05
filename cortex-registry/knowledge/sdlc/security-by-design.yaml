@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "sdlc"
 overview: |
   Shift-left security patterns integrating threat modeling at design phase.
   Uses STRIDE/DREAD analysis templates, security requirements traceability,

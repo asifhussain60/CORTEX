@@ -43,7 +43,7 @@ class TestOPJMixin:
             resolution="worked",
             confidence=0.9,
         )
-        shard = tmp_path / "integration" / "patterns" / "success" / "my_orchestrator.yaml"
+        shard = tmp_path / "patterns" / "success" / "my_orchestrator.yaml"
         assert shard.exists()
 
     def test_mixin_record_failure_writes_entry(self, tmp_path: Path) -> None:
@@ -61,7 +61,7 @@ class TestOPJMixin:
             attempted_fix="tried Y",
             confidence=0.7,
         )
-        shard = tmp_path / "integration" / "patterns" / "failure" / "my_orchestrator.yaml"
+        shard = tmp_path / "patterns" / "failure" / "my_orchestrator.yaml"
         assert shard.exists()
 
     def test_mixin_does_not_change_base_class(self) -> None:
@@ -105,7 +105,7 @@ class TestOPJMixin:
             resolution="ok",
             confidence=0.8,
         )
-        shard = tmp_path / "integration" / "patterns" / "success" / "nameless_orchestrator.yaml"
+        shard = tmp_path / "patterns" / "success" / "nameless_orchestrator.yaml"
         assert shard.exists()
         data = yaml.safe_load(shard.read_text())
         assert data["entries"][0]["orchestrator"] == "NamelessOrchestrator"

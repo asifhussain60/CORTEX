@@ -10,6 +10,7 @@
 #           Inline pipeline architecture in cortex-digest.md
 # ============================================================================
 
+id: "lifecycle/digest-workflow"
 workflow:
   id: 'lifecycle/digest-workflow'
   name: 'DIGEST — Intelligent Content Ingestion'

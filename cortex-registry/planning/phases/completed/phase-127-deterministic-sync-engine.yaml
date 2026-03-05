@@ -5,7 +5,8 @@
 id: "phase-127"
 title: "Deterministic Safe Windows-First Sync Engine"
 created: "2026-03-04"
-status: PLANNED
+status: COMPLETE
+completed_date: "2026-03-05"
 priority: P1
 governance_authority:
   - CORE-002  # All output inline — no .md/.txt report files
@@ -113,7 +114,12 @@ sweep_catalogue:
       admin prompt exclusion, idempotency (second run = 0 changes),
       danger pattern detection, manifest written after apply.
     action_ref: "phase-127-e"
-    status: OPEN
+    status: CLOSED
+    closed_by: "tests/golden/test_sync_policy.py — 23 tests GREEN covering all 8
+      scenarios: _workspaces exclusion, company/repos exclusion, cortex-docs root
+      denied/.content allowed, admin prompt exclusion, idempotency (second run=0),
+      danger pattern detection (AWS key + RSA private key), manifest written after
+      apply, SYNC_POLICY SSOT completeness."
 
   - id: "GAP-127-06"
     title: "Phase documentation in cortex-master.yaml and phase YAML file"
@@ -212,8 +218,9 @@ sub_phases:
       - GREEN:  "Implement tests/golden/test_sync_policy.py"
       - REFACTOR: "Add parameterised fixtures, clean up tmp dirs"
     completion_gate: "All 8 tests GREEN. Smoke gate passes."
-    status: OPEN
-    files_to_create:
+    status: COMPLETE
+    files_to_create: []
+    files_created:
       - tests/golden/test_sync_policy.py
 
   - id: "phase-127-f"
@@ -254,4 +261,15 @@ key_files:
 # ──────────────────────────────────────────────────────────────────────────────
 # COMPLETION LOG (filled in when marking COMPLETE)
 # ──────────────────────────────────────────────────────────────────────────────
-completion_log: ~
+completion_log:
+  completed_date: "2026-03-05"
+  completed_by: "Phase 127-e execution — 23 golden tests GREEN"
+  gaps_closed: ["GAP-127-01", "GAP-127-02", "GAP-127-03", "GAP-127-04", "GAP-127-05", "GAP-127-06"]
+  acceptance_criteria_met: true
+  preflight_baseline: 424
+  smoke_baseline: 2780
+  notes: >
+    All 6 gaps closed. Engine (cortex/tools/cortex_sync.py) implements stdlib-only
+    deterministic sync with SSOT policy, three-way merge, baseline tracking, Windows
+    long-path support, danger pattern detection, and manifest proof artifacts.
+    23 golden tests cover all 8 GAP-127-05 scenarios.

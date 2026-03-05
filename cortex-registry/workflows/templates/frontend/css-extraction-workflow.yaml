@@ -1,0 +1,36 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CSS Extraction Workflow — Extract Inline Styles to External CSS
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Extract inline style="" attributes into external CSS class rules.
+# Authority: CORE-073 (CSS Zero Inline), ADR-009 (3-Layer Architecture)
+# Phase: 128-b (empty YAML remediation)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/css-extraction-workflow
+name: CSS Extraction — Inline Styles to External CSS
+category: frontend
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: "2026-03-05"
+  updated: "2026-03-05"
+  technologies: [html, css]
+  rollback_on_failure: true
+
+steps:
+  - id: scan-inline-styles
+    name: Scan for Inline Styles
+    description: "Find all style='' attributes in HTML/Jinja templates"
+    command: "grep -rn 'style=' {{target_html_files}}"
+
+  - id: extract-to-css
+    name: Extract to CSS Classes
+    description: "Convert inline styles to named CSS classes"
+    requires: [scan-inline-styles]
+
+  - id: validate-extraction
+    name: Validate No Inline Styles Remain
+    description: "Confirm zero style='' attributes remain"
+    requires: [extract-to-css]
+    gate: "inline_style_count == 0"

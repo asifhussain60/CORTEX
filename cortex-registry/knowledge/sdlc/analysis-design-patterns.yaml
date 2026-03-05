@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "sdlc"
 overview: |
   Requirements analysis and architecture decision patterns for systematic
   problem decomposition, domain modeling, and architectural trade-off analysis.

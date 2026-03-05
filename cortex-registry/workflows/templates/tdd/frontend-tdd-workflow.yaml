@@ -7,6 +7,7 @@
 # Status: PRODUCTION READY
 # ============================================================================
 
+id: 'tdd/frontend-tdd-workflow'
 template_id: 'tdd/frontend-tdd-workflow'
 name: 'Frontend TDD Workflow with Vision API Integration'
 category: 'tdd'

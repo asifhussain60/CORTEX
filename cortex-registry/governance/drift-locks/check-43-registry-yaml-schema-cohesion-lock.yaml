@@ -1,0 +1,36 @@
+id: "check-43-registry-yaml-schema-cohesion-lock"
+check_number: 43
+phase: "phase-128-b"
+gap_id: "GAP-128-B-01"
+status: "ACTIVE"
+enforcement_tier: "P1"
+title: "Registry YAML Schema Cohesion — all YAMLs must follow conventions"
+description: |
+  Validates that all YAML files in cortex-registry follow schema conventions:
+  - All YAMLs must be parseable (no syntax errors)
+  - Governance YAMLs must have 'id' field
+  - Drift locks must have id, check_number, status, test_file
+  - Workflow templates must have 'id' or 'name'
+  - No empty YAML files
+  - Knowledge YAMLs must have domain/category/type field
+  
+  Phase 128-b sweep completed 2026-03-05:
+  - governance_missing_id: 6 → 0 (FIXED)
+  - workflow_missing_id_or_name: 41 → 0 (FIXED)
+  - empty_yaml_files: 1 → 0 (FIXED)
+  - knowledge_missing_domain: 26 → 0 (FIXED)
+  Total violations eradicated: 74
+test_file: "tests/governance/test_registry_yaml_schema_cohesion.py"
+detect_command: "python3 -m pytest tests/governance/test_registry_yaml_schema_cohesion.py -q"
+pass_criteria: "6 passed"
+baseline_report: "cortex-registry/planning/phases/planned/phase-128-b-drift-report.yaml"
+ci_gate: true
+auto_fix: |
+  MANUAL — add missing fields to YAML files:
+    1. governance YAMLs: add 'id: <filename-without-extension>'
+    2. workflow templates: add 'id: <category/workflow-name>'
+    3. empty YAMLs: populate with minimal valid content or delete
+    4. knowledge YAMLs: add 'domain: <parent-directory-name>'
+created: "2026-03-04"
+updated: "2026-03-05"
+source_gap: "GAP-128-B-01"

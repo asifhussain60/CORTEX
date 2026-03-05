@@ -9,6 +9,7 @@
 #           Inline logic in STAGE-0-GOVERNANCE-AUDIT-SPEC.md
 # ============================================================================
 
+id: "governance/stage0-preflight-workflow"
 workflow:
   id: 'governance/stage0-preflight-workflow'
   name: 'STAGE 0 — Synchronous Governance Pre-Flight'

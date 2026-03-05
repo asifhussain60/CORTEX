@@ -1,3 +1,4 @@
+id: "audit-checklist"
 metadata:
   description: "CORTEX Audit Checklist - Priority-Based Governance Validation"
   authority: "cortex-architect.prompt.md | CORE-008 (tests before code)"

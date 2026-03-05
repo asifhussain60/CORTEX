@@ -1,0 +1,37 @@
+id: "check-46-governance-rule-coverage-lock"
+check_number: 46
+phase: "phase-128-e"
+gap_id: "GAP-128-05"
+status: "ACTIVE"
+enforcement_tier: "P1"
+title: "Governance Rule Coverage — CORE-XXX Citations vs core-rules.yaml"
+description: |
+  Every CORE-XXX rule cited in production source (cortex/, cortex-registry/,
+  .github/, scripts/) must either exist in cortex-registry/governance/core-rules.yaml
+  or be listed in the acknowledged-gaps registry with a rationale comment.
+  Conversely, every rule defined in core-rules.yaml must be cited at least once
+  in the project — no orphan / dead rules allowed.
+  Sentinel values (CORE-000, CORE-999) used exclusively in tests are excluded.
+test_file: "tests/governance/test_governance_rule_coverage.py"
+detect_command: "python3 -m pytest tests/governance/test_governance_rule_coverage.py -q"
+pass_criteria: "10 passed, 0 failed"
+baseline_report:
+  yaml_rule_count: 39
+  production_cited_count: 65
+  acknowledged_gaps: 26
+  unacknowledged_gaps: 0
+  orphan_yaml_rules: 0
+  sentinel_rules_excluded: ["CORE-000", "CORE-999"]
+ci_gate: true
+auto_fix: |
+  For rules cited in production but missing from YAML:
+    1. Add the rule to cortex-registry/governance/core-rules.yaml
+    OR
+    2. Add the rule_id to _ACKNOWLEDGED_GAPS in test_governance_rule_coverage.py
+       with a comment explaining why it is defined elsewhere (e.g., copilot-instructions.md).
+  For orphan YAML rules (defined but never cited):
+    1. Add a citation in the relevant orchestrator / workflow YAML
+    OR
+    2. Remove the rule from core-rules.yaml if it is genuinely obsolete.
+created: "2026-03-05"
+source_gap: "GAP-128-05"

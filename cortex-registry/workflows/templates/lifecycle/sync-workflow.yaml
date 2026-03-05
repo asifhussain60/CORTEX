@@ -11,6 +11,7 @@
 # Policy    : SSOT in cortex_sync.py::SYNC_POLICY (mirrored below)
 # ============================================================================
 
+id: "lifecycle/sync-workflow"
 workflow:
   id: 'lifecycle/sync-workflow'
   name: 'SYNC — Deterministic Safe Cross-Folder Sync'

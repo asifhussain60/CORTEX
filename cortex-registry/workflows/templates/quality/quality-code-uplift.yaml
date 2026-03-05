@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # Systematic code quality improvement with convergence gates
 
+id: "quality/quality-code-uplift"
 workflow:
   id: "quality/code-uplift"
   name: "Code Quality Uplift Workflow"

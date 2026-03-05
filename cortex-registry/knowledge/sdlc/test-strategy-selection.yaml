@@ -3,6 +3,7 @@
 # Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
 # No version field — append-only YAML standard (CORE-002)
 
+domain: "sdlc"
 overview: |
   Decision framework for selecting the right test types based on feature type,
   risk profile, and change scope. References TDD best practices for RED/GREEN/

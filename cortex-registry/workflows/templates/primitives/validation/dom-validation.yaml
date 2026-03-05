@@ -6,6 +6,7 @@
 # Reused by: html-refactor, css-extraction
 # ============================================================================
 
+id: "primitives/validation/dom-validation"
 template_id: 'primitives/validation/dom-validation'
 name: 'DOM Validation Primitive'
 tier: 'primitive'

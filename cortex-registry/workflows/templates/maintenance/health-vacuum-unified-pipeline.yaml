@@ -16,6 +16,7 @@
 #   Pipeline coordinates the full lifecycle with convergence gating.
 # =============================================================================
 
+id: "maintenance/health-vacuum-unified-pipeline"
 workflow:
   id: "maintenance/health-vacuum-unified-pipeline"
   name: "Health-Vacuum Unified Pipeline"

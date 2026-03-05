@@ -11,6 +11,7 @@
 # Populated by: AIContextDisseminator (cortex/infrastructure/repositories/)
 # ─────────────────────────────────────────────────────────────────────────────
 
+domain: "ai-context"
 metadata:
   title: "AI-Augmented Development Practices"
   phase: 121

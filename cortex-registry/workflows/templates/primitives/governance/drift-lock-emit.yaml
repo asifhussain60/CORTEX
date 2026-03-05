@@ -7,6 +7,7 @@
 # Both are CI-first — the test fails the build if the regression reappears.
 # Wired into: /audit fix Stage 8 (auto-fix convergence), invoked once per GAP closed.
 
+id: "primitives/governance/drift-lock-emit"
 primitive_id: "drift-lock-emit"
 primitive_type: "governance"
 version_free: true  # CORE-NO-VERSION: this primitive carries no version field

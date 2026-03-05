@@ -6,6 +6,7 @@
 # Updated: 2026-02-18
 # =============================================================================
 
+id: "lifecycle/onboarding-workflow"
 workflow:
   name: repository_onboarding
   description: >

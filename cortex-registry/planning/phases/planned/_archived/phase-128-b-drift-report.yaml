@@ -1,0 +1,78 @@
+# Phase 128-b Registry Schema Drift Report
+# Generated: 2026-03-04
+# Status: DISCOVERED (to be fixed in Phase 128-b sweep)
+
+summary:
+  total_violations: 74
+  governance_missing_id: 6
+  workflow_missing_id_or_name: 41
+  empty_yaml_files: 1
+  knowledge_missing_domain: 26
+
+governance_missing_id:
+  - cortex-registry/governance/test-promotion-manifest.yaml
+  - cortex-registry/governance/audit-checklist.yaml
+  - cortex-registry/governance/mcp-enforcement.yaml
+  - cortex-registry/governance/duplicate_detection_schedule.yaml
+  - cortex-registry/governance/violation_patterns.yaml
+  - cortex-registry/governance/inventory.yaml
+
+workflow_missing_id_or_name:
+  - cortex-registry/workflows/refactor-holistic.yaml
+  - cortex-registry/workflows/phase-execution.yaml
+  - cortex-registry/workflows/tdd-cycle.yaml
+  - cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml
+  - cortex-registry/workflows/templates/quality/quality-uplift.yaml
+  - cortex-registry/workflows/templates/quality/quality-code-uplift.yaml
+  - cortex-registry/workflows/templates/quality/refactor-workflow.yaml
+  - cortex-registry/workflows/templates/security/security-hardening.yaml
+  - cortex-registry/workflows/templates/security/security-compliance-audit.yaml
+  - cortex-registry/workflows/templates/internal/cortex-site-validation.yaml
+  - cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml
+  - cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml
+  - cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml
+  - cortex-registry/workflows/templates/lifecycle/digest-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/legacy-rescue.yaml
+  - cortex-registry/workflows/templates/lifecycle/investigate-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/migration-modernize.yaml
+  - cortex-registry/workflows/templates/lifecycle/onboarding-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/totalrecall-workflow.yaml
+  - cortex-registry/workflows/templates/lifecycle/composite-execution-pipeline.yaml
+  - cortex-registry/workflows/templates/lifecycle/train-workflow.yaml
+  - cortex-registry/workflows/templates/testing/test-tier-manifest.yaml
+  - cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml
+  - cortex-registry/workflows/templates/governance/request-execution-plan-gate.yaml
+  - cortex-registry/workflows/templates/governance/stage0-preflight-workflow.yaml
+  - cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml
+  - cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml
+  - cortex-registry/workflows/templates/governance/meta-audit-workflow.yaml
+  - cortex-registry/workflows/templates/governance/holistic-file-review-gate.yaml
+  - cortex-registry/workflows/templates/maintenance/doc-flat-file-sync.yaml
+  - cortex-registry/workflows/templates/maintenance/cleanup-deduplication.yaml
+  - cortex-registry/workflows/templates/maintenance/health-check-workflow.yaml
+  - cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml
+  - cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml
+  - cortex-registry/workflows/templates/sdlc/implement-workflow.yaml
+  - cortex-registry/workflows/templates/sdlc/fix-workflow.yaml
+  - cortex-registry/workflows/templates/tdd/tdd-api-service.yaml
+  - cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml
+  - cortex-registry/workflows/templates/tdd/tdd-workflow.yaml
+
+empty_yaml_files:
+  - cortex-registry/workflows/templates/frontend/css-extraction-workflow.yaml
+
+knowledge_missing_domain:
+  - cortex-registry/knowledge/security/secrets-patterns.yaml
+  - cortex-registry/knowledge/security/cicd-hardening.yaml
+  - cortex-registry/knowledge/security/owasp-top10.yaml
+  - cortex-registry/knowledge/repositories/ksessions.yaml
+  - cortex-registry/knowledge/repositories/cortex.yaml
+  - cortex-registry/knowledge/repositories/badmonolith.yaml
+  - cortex-registry/knowledge/architecture/architecture-best-practices.yaml
+  - cortex-registry/knowledge/sdlc/analysis-design-patterns.yaml
+  - cortex-registry/knowledge/sdlc/documentation-strategy.yaml
+  - cortex-registry/knowledge/sdlc/security-by-design.yaml
+  - cortex-registry/knowledge/sdlc/integration-strategy.yaml
+  # Note: 15 more discovered (see full test output)

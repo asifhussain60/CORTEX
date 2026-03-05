@@ -4,6 +4,7 @@
 # Target: Security operations centres, SIEM consumers, threat detection pipelines
 # Created: 2026-02-21 (Phase 19 Sub-Phase C — Registry Expansion)
 
+domain: "profiles"
 profile:
   id: security-ops-v1.0
   name: Security Operations

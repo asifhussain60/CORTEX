@@ -6,6 +6,7 @@
 # Reused by: html-refactor, css-extraction, frontend-tdd
 # ============================================================================
 
+id: "primitives/analysis/lens-vision-scan"
 template_id: 'primitives/analysis/lens-vision-scan'
 name: 'LENS Vision Scan Primitive'
 tier: 'primitive'

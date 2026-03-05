@@ -2,6 +2,7 @@
 # Phase 100 Stage 5
 # Full RED→GREEN→REFACTOR TDD cycle for any feature
 
+id: "tdd/tdd-feature-implementation"
 workflow:
   id: "tdd/feature-implementation"
   name: "Feature Implementation TDD Workflow"

@@ -1,0 +1,32 @@
+id: "check-45-orchestrator-wiring-integrity-lock"
+check_number: 45
+phase: "phase-128-d"
+gap_id: "GAP-128-D-01"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Orchestrator Wiring Integrity — entry_points resolve, protocol implemented"
+description: |
+  Validates that the orchestrator wiring YAML contracts are internally consistent:
+  - All wiring YAML files (core/domain/support) are parseable
+  - Every 'provides' entry has an entry_point in 'module.path:ClassName' format
+  - No duplicate entry_points across wiring files
+  - All 31 wired entry_points resolve to importable Python modules + classes
+  - All wired *Orchestrator classes implement IOrchestrator or OrchestratorProtocolMixin
+    (including via backward-compatibility shim imports)
+  - AC marker coverage ≥50% of wired orchestrators
+  
+  Sub-package aware: TDDOrchestrator (tdd_orchestrator/), EnforcementOrchestrator
+  (enforcement_orchestrator/) and shims (brain_health_orchestrator.py,
+  central_brain_orchestrator.py) all handled correctly.
+test_file: "tests/governance/test_orchestrator_wiring_integrity.py"
+detect_command: "python3 -m pytest tests/governance/test_orchestrator_wiring_integrity.py -q"
+pass_criteria: "38 passed"
+ci_gate: true
+auto_fix: |
+  MANUAL options:
+    1. Broken import: fix module path in wiring YAML entry_point
+    2. Missing class: create the class or update entry_point to correct class name
+    3. Missing protocol: add OrchestratorProtocolMixin to class inheritance
+    4. Duplicate entry_point: remove duplicate from secondary wiring file
+created: "2026-03-05"
+source_gap: "GAP-128-D-01"

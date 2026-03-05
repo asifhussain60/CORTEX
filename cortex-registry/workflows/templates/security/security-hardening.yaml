@@ -1,3 +1,4 @@
+id: "security/security-hardening"
 workflow:
   name: "Security Hardening"
   description: |

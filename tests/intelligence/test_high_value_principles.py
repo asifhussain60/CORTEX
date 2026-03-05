@@ -35,7 +35,7 @@ REQUIRED_DOMAINS = {
 }
 
 REQUIRED_PRINCIPLE_FIELDS = {"id", "title", "body", "domain", "tags", "intent_types"}
-REQUIRED_META_FIELDS = {"version", "description", "principles"}
+REQUIRED_META_FIELDS = {"description", "principles"}
 
 
 @pytest.fixture(scope="module")

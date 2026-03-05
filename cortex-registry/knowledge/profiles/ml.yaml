@@ -3,6 +3,7 @@
 # Category: Data Science, AI, Machine Learning
 # Target: ML pipelines, model training, inference services
 
+domain: "profiles"
 profile:
   id: ml-v1.0
   name: Machine Learning

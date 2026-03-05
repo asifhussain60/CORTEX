@@ -15,6 +15,7 @@
 #   - Weighted scorecard (Architecture 25%, Security 25%, Testing 20%, etc.)
 # ============================================================================
 
+id: "quality/refactor-workflow"
 workflow:
   id: 'quality/refactor-workflow'
   name: 'REFACTOR — Safe Code Improvement'

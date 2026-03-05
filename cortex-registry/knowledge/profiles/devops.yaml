@@ -3,6 +3,7 @@
 # Category: Infrastructure, CI/CD, Platform Engineering
 # Target: CI/CD pipelines, infrastructure code, deployment automation
 
+domain: "profiles"
 profile:
   id: devops-v1.0
   name: DevOps & Infrastructure

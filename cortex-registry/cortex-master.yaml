@@ -1,4 +1,4 @@
-updated: '2026-03-04'
+updated: '2026-03-05'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -15,30 +15,32 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  last_updated: '2026-03-04T00:00:00Z'
-  total_phases: 108
+  last_updated: '2026-03-05T00:00:00Z'
+  total_phases: 109
   active: 0
-  completed: 104
+  completed: 107
   in_progress: 0
-  planned: 2
+  planned: 0
   playbooks: 1
   governance_rules_total: 37
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 2582
-    preflight: 258
+    smoke: 2775
+    preflight: 424
+    governance: 197
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  recent_completed: "phase-126 (Production Hardening Checklist Engine — COMPLETE: 12 GAPs CLOSED, 41 checks, 12 drift locks), phase-125 (Registry-Aware Documentation Viewer), phase-124 (Principle Block Library), phase-123 (Principle of the Moment), phase-122 (Workflow Composer Activation), phase-121 (AI Context Intelligence)."
-  planned_next: "phase-127 — Deterministic Sync Engine (prebuilt cortex_sync.py, SSOT policy, three-way merge, SYNC Response Template, golden tests)"
+  recent_completed: "phase-127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs closed, 23 golden tests, stdlib-only engine), phase-128 COMPLETE (Conflict & Drift Eradication — 9/9 sub-phases, 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49), phase-126 (Production Hardening Checklist Engine — 12 drift locks), phase-125 (Registry-Aware Documentation Viewer)."
+  planned_next: "No planned phases — Phase 127 and 128 complete"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
-  - { id: phase-127, status: PLANNED, priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/planned/phase-127-deterministic-sync-engine.yaml", note: "Deterministic safe Windows-first sync engine: prebuilt cortex/tools/cortex_sync.py, SSOT allow/deny policy, three-way merge with baseline tracking, SYNC Response Template in cortex-response-templates.md, golden tests." }
+  - { id: phase-128, status: COMPLETE, completed_date: "2026-03-05", priority: P0, sweep_id: SWEEP-128-CONFLICT-DRIFT-ERADICATION, gaps: 24, sub_phases: 9, completed_sub_phases: 9, file: "cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml", note: "Conflict & Drift Eradication: 9/9 sub-phases complete (128-a through 128-i), 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49." }
+  - { id: phase-127, status: COMPLETE, completed_date: "2026-03-05", priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/completed/phase-127-deterministic-sync-engine.yaml", note: "Deterministic Safe Windows-First Sync Engine: 6/6 GAPs CLOSED. cortex/tools/cortex_sync.py (stdlib-only), SSOT policy, three-way merge, baseline tracking, danger scan, 23 golden tests GREEN." }
   - { id: phase-126, status: COMPLETE, completed_date: "2026-03-04", priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (#30-#41), 12 drift locks, all 12 GAPs CLOSED." }
   - { id: phase-125, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml" }
   - { id: phase-124, status: COMPLETE, file: "cortex-registry/planning/phases/completed/phase-124-principle-block-library.yaml" }
@@ -117,18 +119,18 @@ production_readiness:
 
 verification:
   method: git_history + code_inspection + test_verification + live_checks
-  last_verified: '2026-03-04T00:00:00Z'
+  last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 108
-  completed: 104
+  total_phases: 109
+  completed: 107
   active: 0
   in_progress: 0
-  planned: 1
+  planned: 0
   archived: 4
   playbooks: 1
-  completion_percentage: 97
-  consolidation_summary: "2026-03-04 — Phase 125 COMPLETE (Registry-Aware Documentation Viewer). YAML Reader architecture: 8 typed parsers, registry indexer, dependency graph, integrity checker, history tracker. 195 registry tests GREEN. Smoke: 2,582."
+  completion_percentage: 98
+  consolidation_summary: "2026-03-05 — Phase 128 COMPLETE (Conflict & Drift Eradication — 25/25 gaps CLOSED, 9/9 sub-phases, 140 new tests, 8 drift locks #42-#49). Phase 127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs, 23 golden tests). knowledge-base/ stale dir removed. planned/ cleared. Governance: 197. Preflight: 424. Smoke: 2780+."
   active_phases:
     phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (90 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
     phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 120 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"

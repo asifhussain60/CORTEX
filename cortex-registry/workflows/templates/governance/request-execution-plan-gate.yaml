@@ -15,6 +15,7 @@
 # Golden tests: tests/golden/orchestrators/plan_gate/test_plan_gate_golden.py
 # =============================================================================
 
+id: "governance/request-execution-plan-gate"
 workflow:
   id: "request-execution/plan-gate"
   name: "Request Execution with Plan Gate & Intelligent LENS"

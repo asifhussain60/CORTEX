@@ -1,3 +1,4 @@
+id: "quality/quality-uplift"
 workflow:
   name: "Quality Uplift"
   description: |

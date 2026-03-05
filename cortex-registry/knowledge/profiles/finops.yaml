@@ -3,6 +3,7 @@
 # Category: Finance, Cost Management, Budgeting
 # Target: Financial applications, cost management systems, billing services
 
+domain: "profiles"
 profile:
   id: finops-v1.0
   name: Financial Operations

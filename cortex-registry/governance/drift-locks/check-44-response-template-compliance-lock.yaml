@@ -1,0 +1,30 @@
+id: "check-44-response-template-compliance-lock"
+check_number: 44
+phase: "phase-128-c"
+gap_id: "GAP-128-C-01"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Response Template Compliance — quote library, atoms, CORE-RESP-001"
+description: |
+  Validates that the response template ecosystem is internally consistent:
+  - atom-quote.yaml: exactly 120 quotes, required fields, canonical themes, no duplicates
+  - All 10 canonical themes represented (quality, security, improvement, architecture,
+    discipline, systems-thinking, strategy, flow, learning, universal)
+  - All response atom YAMLs (atom-*.yaml) are parseable with id and type fields
+  - cortex-response-templates.md references CORE-RESP-001, Proceed Gate,
+    Completion State, atom-quote.yaml, and 5-Section Golden Format
+  
+  Phase 128-c fix: Corrected 23 'systems_thinking' (underscore) entries to
+  canonical 'systems-thinking' (hyphen) in atom-quote.yaml.
+test_file: "tests/governance/test_response_template_compliance.py"
+detect_command: "python3 -m pytest tests/governance/test_response_template_compliance.py -q"
+pass_criteria: "16 passed"
+ci_gate: true
+auto_fix: |
+  MANUAL options:
+    1. atom-quote.yaml theme drift: rename theme keys to canonical set
+    2. Missing quotes: add to atom-quote.yaml (not copilot-instructions.md)
+    3. Missing atoms: create atom-*.yaml in cortex-registry/templates/response/atoms/
+    4. Template anchors: restore CORE-RESP-001, Proceed Gate etc. to response template
+created: "2026-03-05"
+source_gap: "GAP-128-C-01"

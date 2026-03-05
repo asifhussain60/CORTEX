@@ -1,0 +1,42 @@
+id: "check-47-production-purity-lock"
+check_number: 47
+phase: "phase-128-f"
+gap_id: "GAP-128-06"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Production Purity Sweep — No Debug Leakage in cortex/ Source"
+description: |
+  The cortex/ production source must contain no environment-hostile patterns:
+  - import pdb / pdb.set_trace() — interactive debugger must never ship
+  - breakpoint() — Python 3.7+ debug hook must never ship
+  - __import__('pdb') — dynamic pdb invocation must never ship
+  - Hardcoded /Users/<name>/ developer machine paths — breaks non-macOS environments
+  - Literal DEBUG = True assignments — must come from environment variables or config
+  This check complements test_stub_eradication.py (check-32) which covers
+  TODO/FIXME/NotImplementedError markers. They are non-overlapping domains.
+test_file: "tests/governance/test_production_purity_sweep.py"
+detect_command: "python3 -m pytest tests/governance/test_production_purity_sweep.py -q"
+pass_criteria: "7 passed, 0 failed"
+baseline_report:
+  pdb_imports: 0
+  pdb_set_trace_calls: 0
+  pdb_dynamic_imports: 0
+  breakpoint_calls: 0
+  hardcoded_user_paths: 0
+  debug_true_assignments: 0
+  source_files_scanned_minimum: 300
+  allowlisted_files:
+    - "cortex/orchestrators/validation/pre_implementation_checklist.py"
+    - "cortex/orchestrators/core/security_orchestrator.py"
+    - "cortex/intelligence/memory/tier2_adaptive/security/__init__.py"
+    - "cortex/intelligence/analysis/security_auditor.py"
+ci_gate: true
+auto_fix: |
+  For pdb/breakpoint: Remove the debug statement from production code.
+  For hardcoded /Users/<name>/ paths: Replace with Path(__file__).parents[N]
+    or os.environ.get('CORTEX_ROOT') or similar environment-driven resolution.
+  For DEBUG = True: Replace with bool(os.environ.get('CORTEX_DEBUG', 'false').lower() == 'true')
+  If the file is a legitimate scanner/analyzer of these patterns (not an actual user),
+    add it to _PURITY_ALLOWLIST in test_production_purity_sweep.py with a comment.
+created: "2026-03-05"
+source_gap: "GAP-128-06"

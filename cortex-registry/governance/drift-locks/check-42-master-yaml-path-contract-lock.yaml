@@ -1,0 +1,22 @@
+id: "check-42-master-yaml-path-contract-lock"
+check_number: 42
+phase: "phase-128-a"
+gap_id: "GAP-128-A-01"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Master YAML Path Contracts — file: pointers must resolve"
+description: |
+  Validates that all file: pointers in cortex-master.yaml resolve to actual files.
+  Covers: phase_detail_files, playbooks, phases sections.
+  Also validates COMPLETE phases point to completed/ and PLANNED to planned/.
+test_file: "tests/governance/test_master_yaml_path_contracts.py"
+detect_command: "python3 -m pytest tests/governance/test_master_yaml_path_contracts.py -q"
+pass_criteria: "6 passed"
+ci_gate: true
+auto_fix: |
+  MANUAL — options:
+    1. Create the missing file at the path
+    2. Remove the stale file: pointer from cortex-master.yaml
+    3. Update the file: pointer to the correct location
+created: "2026-03-04"
+source_gap: "GAP-128-A-01"

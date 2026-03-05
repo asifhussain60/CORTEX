@@ -6,6 +6,7 @@
 # Phase: impl-security-orchestrator
 # AC-ID: AC-SECURITY-KB-001
 
+domain: "security"
 metadata:
   name: "OWASP Top 10 2021"
   edition: "2021"

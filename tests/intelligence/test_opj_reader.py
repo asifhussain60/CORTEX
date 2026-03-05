@@ -25,7 +25,7 @@ def _snake_test(name: str) -> str:
 def _seed_entry(root: Path, outcome: str, orchestrator: str, operation: str, **kwargs) -> None:
     """Helper: write a minimal OPJ YAML entry directly (bypasses OPJWriter)."""
     snake = _snake_test(orchestrator)
-    shard_dir = root / "integration" / "patterns" / outcome
+    shard_dir = root / "patterns" / outcome
     shard_dir.mkdir(parents=True, exist_ok=True)
     shard = shard_dir / f"{snake}.yaml"
 

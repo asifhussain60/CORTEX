@@ -48,10 +48,10 @@ template: |
 # Selection: match request intent → theme → pick quote from matching theme pool
 theme_map:
   IMPLEMENT: quality
-  FIX: systems_thinking
+  FIX: systems-thinking
   REFACTOR: improvement
   AUDIT: discipline
-  DEBUG: systems_thinking
+  DEBUG: systems-thinking
   DESIGN: architecture
   PLAN: strategy
   HEALTH: discipline
@@ -155,88 +155,88 @@ quotes:
     dedup_key: "martin-quality-clean"
     relevance_weight: 0.85
 
-  # ── THEME: systems_thinking (12) ─────────────────────────────────────────
+  # ── THEME: systems-thinking (12) ─────────────────────────────────────────
   - text: "A complex system that works is invariably found to have evolved from a simple system that worked."
     author: "John Gall"
     book: "Systemantics"
-    themes: [systems_thinking, architecture]
+    themes: [systems-thinking, architecture]
     dedup_key: "gall-systems-complex"
     relevance_weight: 0.9
 
   - text: "Every system is perfectly designed to get the results it gets."
     author: "W. Edwards Deming"
     book: "Out of the Crisis"
-    themes: [systems_thinking, discipline]
+    themes: [systems-thinking, discipline]
     dedup_key: "deming-systems-designed"
     relevance_weight: 0.9
 
   - text: "You don't rise to the level of your goals. You fall to the level of your systems."
     author: "James Clear"
     book: "Atomic Habits"
-    themes: [systems_thinking, discipline]
+    themes: [systems-thinking, discipline]
     dedup_key: "clear-systems-fall"
     relevance_weight: 0.85
 
   - text: "The system will always defeat the strategy."
     author: "Donella Meadows"
     book: "Thinking in Systems"
-    themes: [systems_thinking]
+    themes: [systems-thinking]
     dedup_key: "meadows-systems-defeat"
     relevance_weight: 0.8
 
   - text: "Problems cannot be solved at the same level of awareness that created them."
     author: "Albert Einstein"
     book: "Ideas and Opinions"
-    themes: [systems_thinking]
+    themes: [systems-thinking]
     dedup_key: "einstein-systems-awareness"
     relevance_weight: 0.9
 
   - text: "The structure of a software system will reflect the communication structure of the organisation that built it."
     author: "Melvin Conway"
     book: "How Do Committees Invent?"
-    themes: [systems_thinking, architecture]
+    themes: [systems-thinking, architecture]
     dedup_key: "conway-systems-structure"
     relevance_weight: 0.9
 
   - text: "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
     author: "Brian Kernighan"
     book: "The Elements of Programming Style"
-    themes: [systems_thinking, quality]
+    themes: [systems-thinking, quality]
     dedup_key: "kernighan-systems-debug"
     relevance_weight: 0.9
 
   - text: "The map is not the territory."
     author: "Alfred Korzybski"
     book: "Science and Sanity"
-    themes: [systems_thinking]
+    themes: [systems-thinking]
     dedup_key: "korzybski-systems-map"
     relevance_weight: 0.8
 
   - text: "All models are wrong, but some are useful."
     author: "George E. P. Box"
     book: "Empirical Model-Building and Response Surfaces"
-    themes: [systems_thinking, strategy]
+    themes: [systems-thinking, strategy]
     dedup_key: "box-systems-models"
     relevance_weight: 0.85
 
   - text: "Fix the cause, not the symptom."
     author: "Steve Maguire"
     book: "Writing Solid Code"
-    themes: [systems_thinking]
+    themes: [systems-thinking]
     dedup_key: "maguire-systems-cause"
     relevance_weight: 0.85
 
   - text: "First, solve the problem. Then, write the code."
     author: "John Johnson"
     book: "Programmers at Work"
-    themes: [systems_thinking, strategy]
+    themes: [systems-thinking, strategy]
     dedup_key: "johnson-systems-solve-first"
     relevance_weight: 0.85
 
   - text: "The most dangerous kind of waste is the waste we do not recognise."
     author: "Shigeo Shingo"
     book: "A Study of the Toyota Production System"
-    themes: [systems_thinking, improvement]
+    themes: [systems-thinking, improvement]
     dedup_key: "shingo-systems-waste"
     relevance_weight: 0.8
 
@@ -484,7 +484,7 @@ quotes:
   - text: "Automation applied to an inefficient operation will magnify the inefficiency."
     author: "Bill Gates"
     book: "Business @ the Speed of Thought"
-    themes: [discipline, systems_thinking]
+    themes: [discipline, systems-thinking]
     dedup_key: "gates-discipline-automation"
     relevance_weight: 0.85
 
@@ -562,7 +562,7 @@ quotes:
   - text: "The most effective debugging tool is still careful thought, coupled with judiciously placed print statements."
     author: "Brian Kernighan"
     book: "Unix for Beginners"
-    themes: [strategy, systems_thinking]
+    themes: [strategy, systems-thinking]
     dedup_key: "kernighan-strategy-debugging"
     relevance_weight: 0.8
 
@@ -612,7 +612,7 @@ quotes:
   - text: "A system is only as secure as its weakest link."
     author: "Bruce Schneier"
     book: "Beyond Fear"
-    themes: [security, systems_thinking]
+    themes: [security, systems-thinking]
     dedup_key: "schneier-security-weakest-link"
     relevance_weight: 0.9
 
@@ -654,7 +654,7 @@ quotes:
   - text: "Every program has at least one bug and can be shortened by at least one instruction — by induction, any program can be reduced to a single instruction that does not work."
     author: "Anonymous"
     book: "Programming Folklore"
-    themes: [security, systems_thinking]
+    themes: [security, systems-thinking]
     dedup_key: "anon-security-bug"
     relevance_weight: 0.7
 
@@ -690,7 +690,7 @@ quotes:
   - text: "In theory there is no difference between theory and practice. In practice there is."
     author: "Yogi Berra"
     book: "The Yogi Book"
-    themes: [learning, systems_thinking]
+    themes: [learning, systems-thinking]
     dedup_key: "berra-learning-theory"
     relevance_weight: 0.85
 
@@ -746,7 +746,7 @@ quotes:
   - text: "Debugging is like being the detective in a crime movie where you are also the murderer."
     author: "Filipe Fortes"
     book: "Twitter / Social Media"
-    themes: [learning, systems_thinking]
+    themes: [learning, systems-thinking]
     dedup_key: "fortes-learning-debugging"
     relevance_weight: 0.8
 
@@ -782,7 +782,7 @@ quotes:
   - text: "The whole is other than the sum of its parts."
     author: "Kurt Koffka"
     book: "Principles of Gestalt Psychology"
-    themes: [flow, systems_thinking]
+    themes: [flow, systems-thinking]
     dedup_key: "koffka-flow-whole"
     relevance_weight: 0.8
 
@@ -924,7 +924,7 @@ quotes:
 validation:
   minimum_quotes: 120
   required_fields_per_quote: [text, author, book, themes, dedup_key]
-  required_themes: [quality, systems_thinking, improvement, architecture, discipline, strategy, security, learning, flow, universal]
+  required_themes: [quality, systems-thinking, improvement, architecture, discipline, strategy, security, learning, flow, universal]
   theme_coverage: "all 10 themes must have at least 1 quote"
   no_fabricated_quotes: true
   quote_selection: "weighted-random-anti-repeat — PrincipleSelector filters by theme_map[intent_type], excludes ring_buffer dedup_keys, weighted random on remaining pool"

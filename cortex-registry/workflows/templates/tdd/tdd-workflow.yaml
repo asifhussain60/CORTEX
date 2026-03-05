@@ -28,6 +28,7 @@
 #   - primitives/execution/review-and-cleanup.yaml (universal final step)
 # ============================================================================
 
+id: "tdd/tdd-workflow"
 workflow:
   id: 'tdd/tdd-workflow'
   name: 'TDD — Mode-Dispatching Composite'

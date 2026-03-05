@@ -17,6 +17,7 @@
 #          resolved at runtime by WorkflowTemplateRegistry.
 # ==============================================================================
 
+id: "lifecycle/composite-execution-pipeline"
 workflow:
   id: "lifecycle/composite-execution-pipeline"
   name: "Composite Execution Pipeline"
