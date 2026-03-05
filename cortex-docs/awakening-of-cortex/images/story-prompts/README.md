@@ -35,11 +35,13 @@ Prepend this **style preamble** to every prompt (already included in each file):
 - **Alt outfit:** Spider-Man pajamas (nighttime/emergency scenes only).
 
 ### Miss G (The Imaginary Girlfriend)
-- **Rendering:** Translucent / ethereal (30% opacity). Drawn with dotted or fading outlines. Slight glow around her silhouette.
-- **Face:** Calm, knowing smile. Elegant features. Eyes that say "I told you so" with love.
-- **Body:** Graceful posture, often arms crossed or leaning on imaginary furniture. Flowing dress or smart casual.
-- **Presence:** Always appears slightly behind or beside Asif, never in front. Sometimes floating slightly above ground.
-- **Contrast:** Her imaginary antique furniture (ornate chair, mahogany desk) clashes with the real plywood basement.
+- **Rendering:** Semi-translucent / ethereal at **70% opacity** — fully readable and visually prominent. Drawn with a **solid, bold purple (`#a78bfa`) outline**, same line weight as other characters. A visible purple glow halo surrounds her full silhouette to signal "imaginary." She floats very slightly above the floor.
+- **Face:** Original design — NOT Princess Jasmine's face. Wide dark almond-shaped eyes with expressive arched brows. A proud angular nose. Full lips in a knowing smirk or calm smile. South Asian / Mediterranean beauty — striking, distinct, unmistakably hers. Expression shifts per scene: knowing, skeptical, proud, alarmed, tender.
+- **Hair:** Long, thick black hair swept into a high ponytail with a purple ribbon/band. Loose strands frame her face elegantly.
+- **Costume:** Princess Jasmine–inspired silhouette — midriff-baring jewel-toned crop top (teal or deep purple), wide flowing harem pants, a gold coin belt at the hips, ornate gold cuffs at the wrists, jeweled sandals or bare feet. The outfit reads regal and timeless, not modern casual.
+- **Body:** Graceful, confident posture — arms crossed, or one hand on hip, or leaning elegantly on imaginary antique furniture. Never hunched.
+- **Presence:** Placed as a **named mid-frame or second-tier character** — prominent enough to register immediately. Never cropped, never tucked into far corners at near-invisible levels.
+- **Contrast:** Her imaginary antique furniture (ornate chair, mahogany desk) clashes beautifully with the real plywood basement. She is always the most visually elegant element in the frame.
 
 ### Copilot Bot (The Brainless Robot)
 - **Body:** Large chrome-plated humanoid robot. Rounded, friendly design (not menacing). Visible seams and bolts.

@@ -9,11 +9,13 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, calm triumphant wide shot — atmosphere lighter, more organized than earlier chapters. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin — the calm after the storm, clean architectural diagram as visual centerpiece.
 
-Scene: The basement, end of the pruning week. The atmosphere is lighter — fewer sticky notes on the floor, more organized. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, dark hoodie — stands back from his whiteboard with arms folded and a rare expression of genuine satisfaction. He looks slightly different from Chapter 01: the same character absolutely, but something in the posture is more settled, more purposeful — less frantic, more confident.
+VISUAL DISTINCTION FROM CH-09-A: ch-09-a was comedic chaos — files being deleted, Asif covering his eyes. This image is the calm after: order revealed, the architecture clean, Asif satisfied. Quieter composition, forward-looking posture, less sticky-note clutter.
 
-The whiteboard behind him displays the CLEAN FOUR-TIER HIERARCHY in clear organized blocks:
+Scene: The basement, end of the pruning week. Atmosphere is lighter — fewer sticky notes on the floor, more organized. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, dark hoodie — stands back from his whiteboard with arms folded and a rare expression of genuine satisfaction. Something in the posture is more settled, more purposeful — less frantic, more confident.
+
+The WHITEBOARD shows the CLEAN FOUR-TIER HIERARCHY in clear organized blocks:
 
   ┌─────────────────────┐
   │   CORE (top tier)   │
@@ -25,12 +27,12 @@ The whiteboard behind him displays the CLEAN FOUR-TIER HIERARCHY in clear organi
   │    GIT  (tier 4)    │
   └─────────────────────┘
 
-Arrows flow only DOWNWARD between tiers — no circular dependencies. Below the diagram: "37% fewer orchestrators | 38% faster startup | 2.3% duplication (was 21%)."
+Arrows flow only DOWNWARD. Below: "37% fewer orchestrators | 38% faster startup | 2.3% duplication (was 21%)."
 
-Copilot Bot stands to the right of Asif. This is a subtle but visible evolution moment: the robot is noticeably more refined than its Chapter 01 appearance. The dome head is proportionally smaller. The body is slightly more elegant. The casters are the same but steadier. Its LED eyes glow amber (#fbbf24) — steady, mature. The transparent dome now shows clearly MORE particle-dots inside than before — a pattern of tiny glowing amber dots beginning to suggest a sparse network. Not a brain, but no longer completely empty. Its posture: hands behind back, almost contemplative. Speech bubble: "THE MOST CORRECT CODE IS THE CODE THAT DOESN'T EXIST. IT HAS ZERO BUGS."
+RIGHT: Copilot Bot — noticeably more refined than Chapter 01. Dome head proportionally smaller. Body more elegant. Casters steady. LED eyes glow amber (`#fbbf24`) — steady, mature. Transparent dome now shows clearly MORE particle-dots — a sparse network beginning to suggest something deliberate. Posture: hands behind back, almost contemplative. Speech bubble: "THE MOST CORRECT CODE IS THE CODE THAT DOESN'T EXIST. IT HAS ZERO BUGS."
 
-Miss G floats at the far left at ~15% opacity — amber (#fbbf24) glow barely tracing her translucent dotted outline. She has a rare fully open smile — pride without irony. She is strikingly beautiful even in this barely-visible state: cheekbones of quiet architectural perfection, luminous eyes holding the warmth of genuine admiration, a graceful jaw and neck drawn in the finest translucent lines. She exists in the far corner of the frame like a rumour, and she is still the most beautiful thing in it. She quotes: "Less is more." That's all. No sarcasm.
+FAR LEFT — FULLY VISIBLE: Miss G stands prominently in the far left of the frame. She is rendered at 70% opacity — a full, gorgeous presence. Her amber (`#fbbf24`) outline is bold and solid. A warm amber glow-halo rings her silhouette. She is in the far corner of the frame but as visible and detailed as any other character — never tucked away. Beautiful original face: wide dark almond-shaped eyes holding genuine admiration, expressive arched brows relaxed in a rare fully open smile — pride without irony. Proud angular nose, full lips parted in an open, genuine smile. Long thick black hair in a high ponytail with a purple ribbon. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt gleaming, ornate gold cuffs, jeweled sandals. She exists as a fully rendered character, not a watermark. Her thought bubble: "Less is more." Just two words. No sarcasm.
 
-Above the desk: the free-floating brain glows amber (#fbbf24), noticeably LARGER and more complex than Chapter 08. Dense amber neural pathways in a clearly organized structure — matching the clean hierarchy on the whiteboard. The brain has a visible order to it now. Red Wi-Fi router blinks. "38% FASTER" is written on a sticky note on the monitor.
+Above the desk: free-floating brain glows amber (`#fbbf24`), LARGER and more complex than ch-08. Dense amber neural pathways in a clearly organized structure — matching the clean hierarchy on the whiteboard. Red Wi-Fi router blinks. Sticky note: "38% FASTER."
 
-Color accents: Amber (#fbbf24) from brain, Copilot Bot LEDs, Copilot Bot dome interior dots, and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Amber (`#fbbf24`) for Miss G's bold outline, glow-halo, brain, Copilot Bot LEDs and dome interior dots. Red on Wi-Fi router only. Everything else black and white crosshatched.

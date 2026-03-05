@@ -9,11 +9,13 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, quiet nocturnal scene — the monitor is the only light source, casting emerald glow across everything. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin — peaceful 3AM scene, the quiet triumph of autonomous systems.
 
-Scene: 3:04 AM. The basement is dark — monitors on standby glow dimly. The bare bulb is off. The room is at peace. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, Spider-Man pajamas — is ASLEEP, slumped forward in his chair with his head on his arms on the desk. A small zzz bubble floats above his head. His oversized "DEBUG FUEL" mug sits cold beside him.
+VISUAL DISTINCTION FROM CH-11-B: ch-11-a is the nocturnal solo scene — dark, quiet, Asif asleep, the monitor glowing, no human involvement needed. ch-11-b is the daytime dialogue — Asif awake, Copilot Bot presenting data, a conversation between equals. Night vs. day, passive vs. active.
 
-On one monitor, gently pulsing with emerald (#34d399) light: a notification panel shows:
+Scene: 3:04 AM. The basement is dark — monitors on standby glow dimly. The bare bulb is off. The room is at peace. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, Spider-Man pajamas — is ASLEEP, slumped forward in his chair, head on his arms on the desk. A small zzz bubble floats above him. His "DEBUG FUEL" mug sits cold beside him.
+
+One monitor gently pulsing with emerald (`#34d399`) light shows:
 
   ⚡ CORTEX AUTONOMOUS ACTION
   DETECTED: Connection pool timeout
@@ -23,14 +25,14 @@ On one monitor, gently pulsing with emerald (#34d399) light: a notification pane
   TIME: 2.3 seconds
   HUMAN INTERVENTION: None required.
 
-The word SELF-HEALED is displayed in large, calm, confident text. The emerald glow from the monitor is the only real light source in the scene. It casts gentle emerald (#34d399) light across Asif's sleeping face.
+SELF-HEALED in large, calm, confident text. The emerald glow from the monitor is the ONLY real light source in the scene — it casts gentle emerald (`#34d399`) light across Asif's sleeping face.
 
-Above the desk, the BRAIN floats freely in emerald (#34d399) glow — now very large, luminous, and beautiful. It is the largest we have ever seen it. Dense, organized neural pathways in a rich network, pulsing gently like a heartbeat. It operates without supervision. It is serene.
+Above the desk: the BRAIN floats freely in emerald (`#34d399`) glow — very large, luminous, and beautiful. Dense, organized neural pathways. Pulsing gently like a heartbeat. It operates without supervision. Serene.
 
-In the corner: Copilot Bot stands in an emerald-glow standby mode. Its transparent dome now shows a CLEARLY VISIBLE sparse emerald network inside — not yet a full brain, but unmistakably developing. Small emerald (#34d399) lines connect the dots into something that resembles an early lattice. Its LED eyes are a soft low-power emerald. Its posture is quieter than ever — upright but still. Its chrome surface reflects the emerald light from the brain and the monitor. The robot is no longer goofy or clunky — it is poised, measured, the same fundamental design but refined through 10+ chapters of evolution.
+CORNER: Copilot Bot in emerald-glow standby mode. Transparent dome shows a CLEARLY VISIBLE sparse emerald network inside — small emerald (`#34d399`) lines connecting dots into an early lattice. LED eyes soft low-power emerald. Posture quiet, poised, upright. Chrome surface reflects the emerald light.
 
-Miss G materializes behind Asif at ~15% opacity — emerald (#34d399) barely tracing her translucent outline. She watches the notification with the expression of genuine, deep awe. She is breathtakingly beautiful even as a near-invisible ghost in the dim 3AM room: high cheekbones catching the green monitor glow in a way that makes them look sculpted from something finer than bone, luminous wide eyes glistening with the particular emotion of watching something you believed in finally, irrevocably arrive. Her beauty is an ache in this quiet scene — more felt than seen, like the room knows she is there. Just two words in her thought bubble: "Without you." A single translucent tear on her cheek — tasteful, not melodramatic. This is the moment she has been waiting for since chapter one.
+RIGHT SIDE — FULLY VISIBLE: Miss G stands prominently in the right zone of the frame, rendered at 70% opacity — fully present in this quiet dark scene. Her emerald (`#34d399`) outline is bold and solid. A warm emerald glow-halo rings her silhouette, catching the monitor glow. Beautiful original face: wide dark almond-shaped eyes glistening with the particular emotion of watching something you believed in finally arrive. Expressive arched brows, proud angular nose, full lips parted slightly — an expression of genuine, deep awe. Long thick black hair in a high ponytail with a purple ribbon, soft in the dim room. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt, ornate gold cuffs at wrists, jeweled sandals. She watches the notification with both hands held together at her chest. Just two words in her thought bubble: "Without you." A single tasteful translucent tear on her cheek — not melodramatic, just the precise emotional weight of twelve chapters of waiting.
 
-The red Wi-Fi router blinks on its shelf — steady, reliable, unchanged throughout the entire story. 
+The red Wi-Fi router blinks on its shelf — steady, reliable, unchanged throughout the entire story.
 
-Color accents: Emerald (#34d399) from the brain, the monitor notification, Copilot Bot LEDs and dome network, and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Emerald (`#34d399`) for Miss G's bold outline, glow-halo, the brain, the monitor notification, Copilot Bot LEDs and dome network. Red on Wi-Fi router only. Everything else black and white crosshatched.

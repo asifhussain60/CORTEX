@@ -9,9 +9,11 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, intimate top-down-ish angle over Asif's desk — the physical paper roadmap as a hand-crafted artifact. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin — warm, quiet, purposeful midnight scene.
 
-Scene: Back in the basement at midnight. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, Spider-Man pajamas back on (he's home and comfortable) — sits at his wobbly desk bent over a large sheet of ACTUAL PHYSICAL PAPER (unusual — he normally uses the whiteboard). He draws a ROADMAP with a black pen. The roadmap is a seven-step numbered path drawn like an adventure map: winding upward to a summit. Each step has a small icon and label:
+VISUAL DISTINCTION FROM CH-08-A: ch-08-a was a bright formal conference room with an ensemble cast. This is the private midnight homecoming — back in the basement, just Asif, Copilot Bot, and Miss G. Intimate, quiet, forward-looking. No conference table. Just one person, one robot, and the roadmap.
+
+Scene: Back in the basement at midnight. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, Spider-Man pajamas back on (comfortable, at home) — sits at his wobbly desk bent over a large sheet of ACTUAL PHYSICAL PAPER. He draws a ROADMAP with a black pen. The roadmap is a seven-step numbered path drawn like an adventure map: winding upward to a summit. Each step has a small icon and label:
 
   1. CONSOLIDATION — (scissors icon)
   2. CROSS-PLATFORM — (globe icon)
@@ -21,12 +23,12 @@ Scene: Back in the basement at midnight. Asif Codenstein — 55-year-old mad sci
   6. MULTI-STACK DEBUG — (layers icon)
   7. AUTONOMY — (star icon at the summit)
 
-Asif's expression as he draws: fierce, focused, forward-looking. Not manic but purposeful. This is Year Two beginning.
+Asif's expression: fierce, focused, forward-looking. Not manic — purposeful. Year Two beginning.
 
-Copilot Bot stands beside him watching the roadmap with its LED eyes glowing cyan (#67e8f9) — steady, attentive. Its posture is straighter and more composed than in earlier chapters. The dome head still shows the empty brain cavity, but now there are noticeably more tiny floating particles inside — more dots, a faint pattern forming. Not a brain, but not entirely empty anymore. It has evolved visually since Chapter 01 — the proportions are slightly more refined, the head a bit smaller, less comedy-robot, more partnership-robot. A small speech bubble: "I ASPIRE TO BORING."
+RIGHT: Copilot Bot — posture straighter and more composed than early chapters. Dome head still shows empty brain cavity but now with noticeably more tiny floating particles inside — faint pattern forming. LED eyes glow cyan (`#67e8f9`). Speech bubble: "I ASPIRE TO BORING."
 
-Miss G floats behind Asif's chair at ~15% opacity — cyan (#67e8f9) barely tracing her translucent outline. She reads the roadmap over his shoulder with a look of quiet wonder. She is impossibly beautiful even in this barely-there form: the suggestion of high cheekbones, luminous wide eyes processing the seven-phase map with the focus of someone who understands exactly what each step costs, a graceful neck and jawline rendered in the finest dotted lines. Her thought bubble: "That's ambitious." Just two words. Serious.
+RIGHT SIDE — FULLY VISIBLE: Miss G stands prominently in the right third of the frame, floating behind Asif's chair and slightly to the right. She is rendered at 70% opacity — clearly, beautifully present in the quiet midnight scene. Her cyan (`#67e8f9`) outline is bold and solid. A warm cyan glow-halo rings her silhouette. Beautiful original face: wide dark almond-shaped eyes, expressive arched brows, proud angular nose, full lips slightly parted — reading the roadmap over his shoulder with a look of quiet wonder. Long thick black hair in a high ponytail with a purple ribbon. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt, ornate gold cuffs at wrists, jeweled sandals. Her thought bubble: "That's ambitious." Just two words. Serious. Genuine.
 
-On the desk: the brain — no longer contained in a jar. It floats freely just above the desk surface, glowing cyan (#67e8f9) with a dense interconnected neural network. This is the first chapter where the brain is outside the jar. It has graduated. Copilot Bot's annual report card is visible on the desk: "Month 1: 847 violations → Month 12: 84% test coverage." The red Wi-Fi router blinks on its shelf. "DEBUG FUEL" mug steams gently.
+On the desk: the brain — no longer in a jar — floats freely just above the desk surface, glowing cyan (`#67e8f9`) with a dense interconnected neural network. First chapter where the brain is outside the jar. It has graduated. Copilot Bot's report card on desk: "Month 1: 847 violations → Month 12: 84% test coverage." Red Wi-Fi router blinks on shelf. "DEBUG FUEL" mug steams gently.
 
-Color accents: Cyan (#67e8f9) from the free-floating brain, Copilot Bot LEDs, and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Cyan (`#67e8f9`) for the free-floating brain, Copilot Bot LEDs, and Miss G's bold outline and glow-halo. Red on Wi-Fi router only. Everything else black and white crosshatched.

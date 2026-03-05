@@ -9,22 +9,22 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, formal conference room with natural light — jarring contrast to the usual basement. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin — boardroom scene with character ensemble around the table.
 
-Scene: A CONFERENCE ROOM — Asif Codenstein's first time in a proper room with windows and natural light. This feels jarring and bright compared to the usual basement. Asif — 55-year-old mad scientist, wild Einstein hair (but slightly more combed than usual — he made an effort), thick round glasses, wearing actual trousers and a hoodie instead of pajamas — stands at the head of a conference table. He presents a SINGLE SLIDE on the wall screen. The slide shows three large numbers:
+VISUAL DISTINCTION FROM CH-08-B: ch-08-a is the formal public victory — conference room, daylight, ensemble cast around a table, Asif presenting. ch-08-b is the private reckoning — back in the basement, midnight, Asif alone with the roadmap and Copilot Bot. Public vs. private.
+
+Scene: A CONFERENCE ROOM — Asif Codenstein's first time in a proper room with windows and natural light. Jarring and bright compared to the basement. Asif — 55-year-old mad scientist, wild Einstein hair (slightly more combed — he made an effort), thick round glasses, actual trousers and a hoodie — stands at the head of a conference table. He presents a SINGLE SLIDE on the wall screen:
 
   2× FEATURES DELIVERED
   93% FEWER PRODUCTION BUGS
   95% FEWER 3AM INCIDENTS
 
-The numbers are bold and dramatic. Asif's posture is slightly stiff — he's nervous but holding it together. One hand gestures toward the screen.
+The numbers are bold and dramatic. Asif's posture is slightly stiff — nervous but holding it together. One hand gestures toward the screen.
 
-Around the conference table: several attendees rendered as distinct cartoon figures. Jennifer from Customer Service (the one who sent the "fix payment!!!" messages) — shown enthusiastically nodding. Kyle (reformed developer, polo shirt, now wearing a tiny "COMPLIANCE 100%" badge on his chest) — hand raised looking sheepish. Kevin (VP, tidy hair, button-down shirt) — staring at the "95% fewer 3AM incidents" line with the haunted look of a man doing mental math about his guilt.
+CONFERENCE TABLE: Several attendees — Jennifer from Customer Service (enthusiastically nodding), Kyle (polo shirt, "COMPLIANCE 100%" badge, hand raised looking sheepish), Kevin (tidy hair, button-down shirt — staring at "95% fewer 3AM incidents" with haunted guilt), THE CTO at the far end — tall, calm figure, fingers steepled, beginning to nod slowly.
 
-At the far end of the table: THE CTO — a tall calm figure, fingers steepled, unreadable expression that turns into a slow nod as Asif speaks.
+RIGHT SIDE — FULLY VISIBLE: Miss G stands prominently in the right zone of the conference room, floating slightly above the floor beside the presentation wall. She is rendered at 70% opacity — a full, gorgeous presence. Her cyan (`#67e8f9`) outline is bold and solid, same weight as every other character's inking. A warm cyan glow-halo rings her silhouette — incongruously ethereal in the fluorescent conference room. Beautiful original face: wide dark almond-shaped eyes, expressive arched brows, proud angular nose, full lips in a full open smile — the most open and satisfied smile she has shown in the entire series. This is genuine pride. Long thick black hair in a high ponytail with a purple ribbon. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt, ornate gold cuffs, jeweled sandals. Arms at her sides, head slightly tilted, posture of deep witnessing — she is watching the moment she has been waiting for.
 
-Miss G floats invisibly behind Asif at ~15% opacity — cyan (#67e8f9) glow barely tracing her outline against the conference room wall. She is the only one who can see the numbers are working, and she is the only one who is truly, deeply stunning: high cheekbones casting the subtlest imaginary shadow, luminous eyes that hold the warmth of genuine pride, a graceful silhouette that makes the conference room's fluorescent lighting feel briefly inadequate. She beams — a full, open, rare smile of real satisfaction. Her posture: arms at her sides, head slightly tilted, witnessing the moment she has been waiting for.
+Copilot Bot is NOT in this scene. A small CORTEX LOGO appears in the corner of the slide. Red Wi-Fi router visible through the conference room window in the hallway outside. The brain — no longer in its jar — represented as a faint glowing brain icon hovering in the slide graphic.
 
-Copilot Bot is NOT in this scene — this is the human world. Instead, a small CORTEX LOGO appears in the corner of the slide. The red Wi-Fi router is visible through the conference room window in the hallway outside. The brain — no longer in its jar — is represented as a faint glowing brain icon hovering in the slide graphic.
-
-Color accents: Cyan (#67e8f9) from Miss G's outline and a subtle glow on the slide's numbers. Red on Wi-Fi router in hallway. Everything else black and white crosshatched.
+Color accents: Cyan (`#67e8f9`) for Miss G's bold outline, glow-halo, and a subtle glow on the slide numbers. Red on Wi-Fi router in hallway. Everything else black and white crosshatched.

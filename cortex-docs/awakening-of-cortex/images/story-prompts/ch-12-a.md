@@ -9,28 +9,27 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, wide establishing shot — Asif as protagonist, the whiteboard as his canvas, the brain as a cosmic presence above. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin meets Studio Ghibli background art — grand revelation energy, the world expanding beyond the basement walls.
+
+VISUAL DISTINCTION FROM CH-12-B: ch-12-a is the grand vision — Asif at the whiteboard presenting a NEW idea, the massive brain as cosmic entity above, an outward-facing revelation. ch-12-b is the quiet homecoming — Copilot Bot as protagonist holding a diploma, the brain already inside the dome, an intimate celebration. Different protagonist, different scale, different emotional register.
 
 Scene: Sunday morning. The basement. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair (freshly frenzied), thick glasses, Spider-Man pajamas — stands before the whiteboard holding a red marker, arm extended, having just finished drawing the ENTERPRISE BRAIN diagram. His posture radiates dangerous Sunday-morning inspiration. His expression is the widest-eyed, most alive we have ever seen him — the face of someone who just saw the whole game change.
 
 The whiteboard shows a LARGE CIRCLE labeled BRAIN at the center, with five concentric ring layers labeled (outward from center):
-
   1. INTENT ENGINE
-  2. GOVERNANCE FABRIC  
+  2. GOVERNANCE FABRIC
   3. ORCHESTRATION MESH
   4. LEARNING LOOP
   5. HEALING CORE
 
-Below the diagram: "26 MILLION DEVELOPERS. ALL OF THEM HAVE AT LEAST ONE KYLE."
+Below the diagram: "26 MILLION DEVELOPERS. ALL OF THEM HAVE AT LEAST ONE KYLE." To the right: a quick sketch of three "external company basements" — tiny copies of Asif's basement, connected to the central BRAIN by arrows labeled "ANY COMPANY → PLUG IN → GOVERNED."
 
-To the right on the whiteboard: a quick sketch of three "external company basements" — tiny copies of Asif's basement, all connected to the central BRAIN circle by arrows labeled "ANY COMPANY → PLUG IN → GOVERNED."
+RIGHT SIDE — FULLY VISIBLE: Miss G stands prominently in the right zone of the frame. She is rendered at 70% opacity — the closest to solid she has ever appeared, a single step short of real. Her violet (`#8b5cf6`) outline is bold and solid, same line weight as all other characters. A warm violet glow-halo rings her silhouette. Beautiful original face: wide dark almond-shaped eyes with an expression entirely unprecedented — no skepticism, no sarcasm, genuine openness. Expressive arched brows raised in true surprise. Proud angular nose. Full lips parted in unguarded wonder. Long thick black hair in a high ponytail with a purple ribbon. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt, ornate gold cuffs at wrists, jeweled sandals. She stands unusually still — arms relaxed at her sides rather than crossed. Thought bubble: a single word — "Oh." Just that. Unprecedented in twelve chapters.
 
-Miss G — violet (#8b5cf6) glow barely tracing her translucent outline at ~15% opacity — stands unusually still to the right. This is the first time we see her truly PAUSE. She is more beautiful than ever and more almost-solid than ever — the violet light seems to give her the faintest suggestion of real presence, though she remains translucent. High cheekbones, luminous wide eyes, an expression of uncharacteristic openness: not skeptical, not sarcastic. Just: "Oh." Her thought bubble contains a single word: "Oh." This is unprecedented.
+Copilot Bot stands to the left — most evolved non-final state. Same chrome dome, transparent head panel, casters — proportions now fully refined. Dome interior shows a clear organized network of violet (`#8b5cf6`) nodes — more complex, more deliberate than any prior chapter. LED eyes glow deep violet (`#8b5cf6`). Posture: both hands raised in genuine wonder at the whiteboard, truly moved. Speech bubble: "ONE BRAIN. MILLIONS OF DEVELOPERS."
 
-Copilot Bot stands to the left, and this is the robot at its MOST EVOLVED non-final state. Same fundamental design — chrome dome, transparent head panel, casters — but now the proportions are fully refined. The dome interior shows a clear organized network of violet (#8b5cf6) nodes — more complex, more deliberate than any prior chapter. The robot looks like it belongs in this scene. Its LED eyes glow deep violet (#8b5cf6). Its posture: standing with both hands raised in genuine wonder at the whiteboard, not eager-to-volunteer, but actually moved. A speech bubble: "ONE BRAIN. MILLIONS OF DEVELOPERS."
-
-Above everything: the BRAIN itself — the CORTEX brain — floats at the apex of the image, massive and radiant, violet (#8b5cf6), casting light down onto the whiteboard, Asif, and the room below. It has outgrown the basement entirely. Dense, complex, luminous neural lightning in violet. This is the largest, most powerful the brain has ever appeared.
+Above everything: the CORTEX BRAIN — massive and radiant, violet (`#8b5cf6`), at the apex of the image, casting light down onto the whiteboard, Asif, and the room. Dense, complex, luminous violet neural lightning. The largest, most powerful the brain has ever appeared. It has outgrown the basement entirely.
 
 The red Wi-Fi router blinks on its shelf — steady as always.
 
-Color accents: Violet (#8b5cf6) from the massive brain (dominant), Copilot Bot LEDs and dome network, and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Violet (`#8b5cf6`) for the massive brain (dominant), Copilot Bot LEDs and dome network, Miss G's bold outline and glow-halo. Red on Wi-Fi router only. Everything else black and white crosshatched.

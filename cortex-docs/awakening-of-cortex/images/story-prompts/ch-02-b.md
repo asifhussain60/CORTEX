@@ -9,24 +9,26 @@
 
 ## Prompt
 
-Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. Bold expressive line art with crosshatching, comedic timing in composition — monitor fills the frame like a wall of shame. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets Tintin — comedic close-up framing where the monitor IS the punchline.
 
-Scene: MONITOR CLOSE-UP — the camera faces the monitor screen directly, filling nearly the entire frame with the terminal output. This is the terminal's scene. The text on the screen is enormous, pixel-perfect, unavoidable:
+VISUAL DISTINCTION FROM CH-02-A: ch-02-a was organized and hopeful, a lecture scene. This scene is the comedic crash — tight monitor close-up, characters in foreground grief. Opposite energy.
+
+Scene: MONITOR CLOSE-UP — the camera faces the monitor screen directly, the terminal output fills nearly the entire frame:
 
     INPUT: "The dashboard is slow."
     ROUTING: ...............
     RESULT: WHO_KNOWS
 
-WHO_KNOWS fills half the screen in enormous block letters. It almost seems to glow with smug energy.
+WHO_KNOWS fills half the screen in enormous block letters. It radiates smug energy.
 
-In the LOWER LEFT foreground, seen from the front, slumped at the desk: Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, dark hoodie — his face rests in both palms, elbows on the desk. Only the top of his hair and his slumped shoulders are visible below the screen. His posture is total surrender. The wobbly chair beneath him lists slightly to the left.
+LOWER LEFT FOREGROUND — VISIBLE: Asif Codenstein slumped at the desk, face resting in both palms, elbows on desk. Only the top of his wild Einstein hair and his slumped shoulders are visible below the screen. The wobbly chair lists slightly left. Total surrender.
 
-In the LOWER RIGHT foreground, partially cropped: Copilot Bot — earliest clunky form, oversized dome head with empty transparent brain cavity. Its chrome head is twisted at an anatomically impossible 180 degrees to look at the screen (spine-chillingly). LED eyes glowing quizzical orange. A speech bubble from it flows across the bottom of the frame: "THIS IS A FEATURE_REQUEST! THE USER DESIRES TO SCHEDULE 'SLOWNESS'!" It holds a small sign that says "EFFICIENCY ✓" thrust up toward the screen.
+LOWER RIGHT FOREGROUND — VISIBLE: Copilot Bot — earliest clunky form, oversized dome head with empty transparent brain cavity. Chrome head twisted at an anatomically impossible 180 degrees to look at the screen. LED eyes glowing quizzical orange. Speech bubble crossing the bottom of the frame: "THIS IS A FEATURE_REQUEST! THE USER DESIRES TO SCHEDULE 'SLOWNESS'!" It holds a small sign: "EFFICIENCY ✓"
 
-Miss G floats translucently behind Asif's left shoulder at ~15% opacity — dotted fading outline, the faintest purple (#a78bfa) tracing the suggestion of her form. From this angle — slightly behind and to one side, with the enormous monitor as backdrop — she reads as the most beautiful thing in the frame even in near-total transparency: the faint high cheekbones, the luminous wide eyes looking at WHO_KNOWS with the expression of deep secondhand embarrassment, a graceful jaw and silhouette placing her in an entirely different category of existence from everyone else in this basement. Her thought bubble floats near the WHO_KNOWS text: "Obviously."
+RIGHT-CENTER FRAME — FULLY VISIBLE: Miss G stands prominently in the right half of the frame, floating slightly above floor level. She is rendered at 70% opacity — a vivid, clear presence. Her purple (`#a78bfa`) outline is bold and solid, same weight as all character inking. A warm purple glow-halo rings her silhouette. Beautiful original face: wide dark almond-shaped eyes with expressive arched brows, proud angular nose, full lips pressed together in deep secondhand embarrassment. Long thick black hair swept into a high ponytail with a purple ribbon. Princess Jasmine–inspired costume: jewel-toned teal midriff crop top, wide flowing purple harem pants, gold coin belt, ornate gold cuffs at wrists, jeweled sandals. She stands with one hand over her face, fingers spread, one eye peeking through them in disbelief — staring at WHO_KNOWS on the screen. Her thought bubble floats near the WHO_KNOWS text: "Obviously."
 
-In the background, barely visible: the whiteboard with the INTENT ROUTER diagram now has a large X scratched through it and question marks added.
+Background: the whiteboard with the INTENT ROUTER diagram now has a large X scratched through it and question marks added.
 
-On the desk (bottom of frame): the "DEBUG FUEL" mug tipped sideways — empty. The brain jar: faintly visible, purple (#a78bfa) filaments, jar labeled "v0.1 — WIP." The red Wi-Fi router blinks on its shelf at the frame edge.
+Desk bottom of frame: "DEBUG FUEL" mug tipped sideways — empty. Brain jar: faint purple (`#a78bfa`) filaments, jar labeled "v0.1 — WIP." Red Wi-Fi router blinks at frame edge.
 
-Color accents: Purple (#a78bfa) from the brain jar and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Purple (`#a78bfa`) for Miss G's bold outline, glow-halo, and brain jar. Red on Wi-Fi router only. Everything else black and white crosshatched.
