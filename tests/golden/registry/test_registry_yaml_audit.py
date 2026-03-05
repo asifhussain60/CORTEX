@@ -185,7 +185,7 @@ class TestNoDeletedPathReferences:
                 continue
             for pattern in DELETED_PATH_PATTERNS:
                 if _has_deleted_path(content, pattern):
-                    key = str(yaml_file.relative_to(ROOT))
+                    key = yaml_file.relative_to(ROOT).as_posix()
                     violations.setdefault(key, []).append(pattern)
 
         if violations:

@@ -19,6 +19,7 @@ Week 4: MasterOrchestrator execution wired (RED → GREEN transition)
 """
 
 import json
+import os
 import sqlite3
 import sys
 import tempfile
@@ -217,145 +218,147 @@ class HolisticIntegrationHarness(GoldenTestHarness):
                     mock_gov_registry.initialize.return_value = Ok(None)
                     mock_gov_registry.should_proceed.return_value = Ok(True)
                     with patch('cortex.orchestrators.core.master_orchestrator.GovernanceRegistry.instance', return_value=mock_gov_registry):
-                        try:
-                            # Initialize MasterOrchestrator
-                            print_progress("Loading MasterOrchestrator...", scenario_id)
-                            master = MasterOrchestrator.instance()
+                        # CORE-050: MCP is unavailable in CI/test — mock as available so gate passes
+                        with patch('cortex.governance.enforcement.native_tool_interceptor.MCPDetector.is_mcp_available', return_value=True):
+                            try:
+                                # Initialize MasterOrchestrator
+                                print_progress("Loading MasterOrchestrator...", scenario_id)
+                                master = MasterOrchestrator.instance()
                             
-                            # Prepare parameters for execute_operation (4-stage pipeline)
-                            parameters = {
-                                "user_request": scenario.user_request,
-                                "intent": scenario.intent,
-                                "correlation_id": correlation_id,
-                                "test_mode": True,
-                                "scenario_id": scenario.id,
-                                "complexity": scenario.complexity,
-                                "expected_components": scenario.expected_components
-                            }
+                                # Prepare parameters for execute_operation (4-stage pipeline)
+                                parameters = {
+                                    "user_request": scenario.user_request,
+                                    "intent": scenario.intent,
+                                    "correlation_id": correlation_id,
+                                    "test_mode": True,
+                                    "scenario_id": scenario.id,
+                                    "complexity": scenario.complexity,
+                                    "expected_components": scenario.expected_components
+                                }
                             
-                            # Track CCL pre-warming time
-                            ccl_start = time.time()
+                                # Track CCL pre-warming time
+                                ccl_start = time.time()
                             
-                            # Execute through 4-stage pipeline (Stage1-4 with real orchestrator engagement)
-                            print_progress("Executing 4-stage pipeline (Comprehension → Intent → Compliance → Execution)...", scenario_id)
-                            operation_start = time.time()
-                            result = master.execute_operation(
-                                operation_name=scenario.user_request,  # Natural language request
-                                parameters=parameters
-                            )
-                            operation_end = time.time()
+                                # Execute through 4-stage pipeline (Stage1-4 with real orchestrator engagement)
+                                print_progress("Executing 4-stage pipeline (Comprehension → Intent → Compliance → Execution)...", scenario_id)
+                                operation_start = time.time()
+                                result = master.execute_operation(
+                                    operation_name=scenario.user_request,  # Natural language request
+                                    parameters=parameters
+                                )
+                                operation_end = time.time()
                             
-                            # Calculate performance metrics
-                            perf_metrics.total_duration = operation_end - operation_start
-                            perf_metrics.ccl_prewarming_duration = time.time() - ccl_start
+                                # Calculate performance metrics
+                                perf_metrics.total_duration = operation_end - operation_start
+                                perf_metrics.ccl_prewarming_duration = time.time() - ccl_start
                             
-                            print_progress(f"Pipeline completed in {perf_metrics.total_duration:.2f}s", scenario_id)
+                                print_progress(f"Pipeline completed in {perf_metrics.total_duration:.2f}s", scenario_id)
                             
-                            # Check if operation succeeded
-                            if result.is_ok():
-                                execution_completed = True
-                                result_data = result.unwrap()
+                                # Check if operation succeeded
+                                if result.is_ok():
+                                    execution_completed = True
+                                    result_data = result.unwrap()
                                 
-                                print_progress("Extracting orchestrator engagement...", scenario_id)
+                                    print_progress("Extracting orchestrator engagement...", scenario_id)
                                 
-                                # execute_operation() returns the final result with metadata
-                                # Need to extract from stage metadata if available
-                                components_engaged.add('MasterOrchestrator')
+                                    # execute_operation() returns the final result with metadata
+                                    # Need to extract from stage metadata if available
+                                    components_engaged.add('MasterOrchestrator')
                                 
-                                # Extract component engagement from result structure
-                                if isinstance(result_data, dict):
-                                    # NEW: Use orchestrators_engaged from MasterOrchestrator
-                                    if 'orchestrators_engaged' in result_data:
-                                        components_engaged.update(result_data['orchestrators_engaged'])
-                                        print_progress(f"Detected {len(components_engaged)} orchestrators", scenario_id)
+                                    # Extract component engagement from result structure
+                                    if isinstance(result_data, dict):
+                                        # NEW: Use orchestrators_engaged from MasterOrchestrator
+                                        if 'orchestrators_engaged' in result_data:
+                                            components_engaged.update(result_data['orchestrators_engaged'])
+                                            print_progress(f"Detected {len(components_engaged)} orchestrators", scenario_id)
                                     
-                                    # Check if stages or metadata key exists (4-stage pipeline result)
-                                    if 'stages' in result_data:
-                                        components_engaged.add('Stage1-Comprehension')
-                                        components_engaged.add('Stage2-IntentClassification')
-                                        components_engaged.add('Stage3-Compliance')
-                                        components_engaged.add('Stage4-Execution')
+                                        # Check if stages or metadata key exists (4-stage pipeline result)
+                                        if 'stages' in result_data:
+                                            components_engaged.add('Stage1-Comprehension')
+                                            components_engaged.add('Stage2-IntentClassification')
+                                            components_engaged.add('Stage3-Compliance')
+                                            components_engaged.add('Stage4-Execution')
                                     
-                                    # Check stage_metadata for detailed orchestrator extraction
-                                    if 'stage_metadata' in result_data:
-                                        stage_meta = result_data['stage_metadata']
+                                        # Check stage_metadata for detailed orchestrator extraction
+                                        if 'stage_metadata' in result_data:
+                                            stage_meta = result_data['stage_metadata']
                                         
-                                        # Stage 1: Comprehension
-                                        if 'stage1' in stage_meta:
-                                            s1 = stage_meta['stage1']
-                                            if s1.get('lens_engaged') or s1.get('lens_analysis'):
-                                                components_engaged.add('LENSOrchestrator')
-                                            if s1.get('ccl_engaged') or s1.get('ccl_prewarmed'):
-                                                components_engaged.add('CCL')
+                                            # Stage 1: Comprehension
+                                            if 'stage1' in stage_meta:
+                                                s1 = stage_meta['stage1']
+                                                if s1.get('lens_engaged') or s1.get('lens_analysis'):
+                                                    components_engaged.add('LENSOrchestrator')
+                                                if s1.get('ccl_engaged') or s1.get('ccl_prewarmed'):
+                                                    components_engaged.add('CCL')
+                                                    ccl_prewarmed = True
+                                                if s1.get('company_knowledge_loaded'):
+                                                    components_engaged.add('CompanyKnowledgeLoader')
+                                        
+                                            # Stage 2: Intent Classification
+                                            if 'stage2' in stage_meta:
+                                                components_engaged.add('RequestRephraseOrchestrator')
+                                                components_engaged.add('IntentRouter')
+                                        
+                                            # Stage 3: Compliance
+                                            if 'stage3' in stage_meta:
+                                                s3 = stage_meta['stage3']
+                                                if s3.get('holistic_validation_performed'):
+                                                    components_engaged.add('HolisticValidationOrchestrator')
+                                                if s3.get('threat_modeling_performed'):
+                                                    components_engaged.add('ThreatModelingEngine')
+                                        
+                                            # Stage 4: Execution
+                                            if 'stage4' in stage_meta:
+                                                s4 = stage_meta['stage4']
+                                                target_orch = s4.get('orchestrator') or s4.get('target_orchestrator')
+                                                if target_orch:
+                                                    components_engaged.add(target_orch)
+                                    
+                                        # Check for orchestrator in result
+                                        if 'orchestrator' in result_data:
+                                            components_engaged.add(result_data['orchestrator'])
+                                    
+                                        # Check for target_orchestrator (from intent classification)
+                                        if 'target_orchestrator' in result_data:
+                                            components_engaged.add(result_data['target_orchestrator'])
+                                    
+                                        # Check for knowledge context
+                                        if 'knowledge_context' in result_data:
+                                            kc = result_data['knowledge_context']
+                                            if kc.get('knowledge_evaluated', False):
                                                 ccl_prewarmed = True
-                                            if s1.get('company_knowledge_loaded'):
-                                                components_engaged.add('CompanyKnowledgeLoader')
-                                        
-                                        # Stage 2: Intent Classification
-                                        if 'stage2' in stage_meta:
-                                            components_engaged.add('RequestRephraseOrchestrator')
-                                            components_engaged.add('IntentRouter')
-                                        
-                                        # Stage 3: Compliance
-                                        if 'stage3' in stage_meta:
-                                            s3 = stage_meta['stage3']
-                                            if s3.get('holistic_validation_performed'):
-                                                components_engaged.add('HolisticValidationOrchestrator')
-                                            if s3.get('threat_modeling_performed'):
-                                                components_engaged.add('ThreatModelingEngine')
-                                        
-                                        # Stage 4: Execution
-                                        if 'stage4' in stage_meta:
-                                            s4 = stage_meta['stage4']
-                                            target_orch = s4.get('orchestrator') or s4.get('target_orchestrator')
-                                            if target_orch:
-                                                components_engaged.add(target_orch)
                                     
-                                    # Check for orchestrator in result
-                                    if 'orchestrator' in result_data:
-                                        components_engaged.add(result_data['orchestrator'])
+                                        # Check for company YAMLs
+                                        if 'business_knowledge_context' in result_data:
+                                            bk_context = result_data['business_knowledge_context']
+                                            if bk_context.get('business_knowledge_evaluated', False):
+                                                company_yamls.extend(bk_context.get('yaml_files', []))
                                     
-                                    # Check for target_orchestrator (from intent classification)
-                                    if 'target_orchestrator' in result_data:
-                                        components_engaged.add(result_data['target_orchestrator'])
+                                        # Check for governance validation
+                                        if result_data.get('governance_validated', False):
+                                            governance_rules.append('CORE-017')
+                                            governance_rules.append('CORE-019')
                                     
-                                    # Check for knowledge context
-                                    if 'knowledge_context' in result_data:
-                                        kc = result_data['knowledge_context']
-                                        if kc.get('knowledge_evaluated', False):
-                                            ccl_prewarmed = True
-                                    
-                                    # Check for company YAMLs
-                                    if 'business_knowledge_context' in result_data:
-                                        bk_context = result_data['business_knowledge_context']
-                                        if bk_context.get('business_knowledge_evaluated', False):
-                                            company_yamls.extend(bk_context.get('yaml_files', []))
-                                    
-                                    # Check for governance validation
-                                    if result_data.get('governance_validated', False):
-                                        governance_rules.append('CORE-017')
-                                        governance_rules.append('CORE-019')
-                                    
-                                    # Capture LLM output
-                                    if 'synthesized_instructions' in result_data and result_data['synthesized_instructions']:
-                                        llm_snapshot = self.capture_llm_snapshot(result_data['synthesized_instructions'])
+                                        # Capture LLM output
+                                        if 'synthesized_instructions' in result_data and result_data['synthesized_instructions']:
+                                            llm_snapshot = self.capture_llm_snapshot(result_data['synthesized_instructions'])
                                 
-                                print_progress(f"Validation complete - {len(components_engaged)} components engaged", scenario_id)
-                            else:
-                                # Operation failed - check if it's an expected failure (S08, S20)
-                                error_msg = result.error
-                                if scenario.id in ['S08', 'S20']:
-                                    # Expected blocking scenarios - mark as "completed" (blocked intentionally)
-                                    execution_completed = False  # Blocked as expected
-                                    governance_rules = ['CORE-002'] if 'S08' in scenario.id else ['CORE-008']
-                                    components_engaged.add('EnforcementOrchestrator')
+                                    print_progress(f"Validation complete - {len(components_engaged)} components engaged", scenario_id)
                                 else:
-                                    execution_completed = False
-                        except Exception as e:
-                            # Handle unexpected errors
-                            execution_completed = False
-                            error_msg = str(e)
-                            self.logger.error(f"MasterOrchestrator execution failed: {e}")
+                                    # Operation failed - check if it's an expected failure (S08, S20)
+                                    error_msg = result.error
+                                    if scenario.id in ['S08', 'S20']:
+                                        # Expected blocking scenarios - mark as "completed" (blocked intentionally)
+                                        execution_completed = False  # Blocked as expected
+                                        governance_rules = ['CORE-002'] if 'S08' in scenario.id else ['CORE-008']
+                                        components_engaged.add('EnforcementOrchestrator')
+                                    else:
+                                        execution_completed = False
+                            except Exception as e:
+                                # Handle unexpected errors
+                                execution_completed = False
+                                error_msg = str(e)
+                                self.logger.error(f"MasterOrchestrator execution failed: {e}")
         
         # ════════════════════════════════════════════════════════════════════
         # Post-execution: Enrich result from scenario declarations
@@ -493,6 +496,7 @@ class HolisticIntegrationHarness(GoldenTestHarness):
         # Create temp database for isolated testing
         if self._temp_db is None:
             temp_fd, temp_path = tempfile.mkstemp(suffix='.db')
+            os.close(temp_fd)  # Close fd immediately — Windows cannot unlink an open fd
             self._temp_db = Path(temp_path)
             self.db_path = self._temp_db
         

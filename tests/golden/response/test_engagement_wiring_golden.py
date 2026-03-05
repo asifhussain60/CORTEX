@@ -106,10 +106,12 @@ class TestMasterOrchestratorEngagementWiring:
         from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 
         m = self._make_master()
-        result = m.execute_operation(
-            operation_name="implement",
-            parameters={"request": "add a new feature"},
-        )
+        # CORE-050: MCP unavailable in CI — mock as available so gate passes
+        with patch('cortex.governance.enforcement.native_tool_interceptor.MCPDetector.is_mcp_available', return_value=True):
+            result = m.execute_operation(
+                operation_name="implement",
+                parameters={"request": "add a new feature"},
+            )
         assert result.is_ok()
         breadcrumb = result.unwrap().get("engagement", {}).get("breadcrumb", None)
         assert isinstance(breadcrumb, str), (
@@ -121,10 +123,12 @@ class TestMasterOrchestratorEngagementWiring:
         from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 
         m = self._make_master()
-        result = m.execute_operation(
-            operation_name="audit",
-            parameters={"request": "audit all"},
-        )
+        # CORE-050: MCP unavailable in CI — mock as available so gate passes
+        with patch('cortex.governance.enforcement.native_tool_interceptor.MCPDetector.is_mcp_available', return_value=True):
+            result = m.execute_operation(
+                operation_name="audit",
+                parameters={"request": "audit all"},
+            )
         assert result.is_ok()
         engagement = result.unwrap().get("engagement", {})
         for key in ("breadcrumb", "stage_pulse", "timeline"):
