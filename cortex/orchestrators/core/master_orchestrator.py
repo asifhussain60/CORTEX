@@ -97,6 +97,7 @@ class MasterOrchestrator(MasterOrchestratorE2EMixin, MasterOrchestratorRegistryM
 
     # Phase 95 — advisory: MasterOrchestrator receives raw user requests as operation_name
     # (freeform strings, not mode keys). The gateway requires a structured mode string
+    # CORTEX_DEBUG TEST_FAILURE test=test_example | time=
     # (e.g. "IMPLEMENT"). MasterOrchestrator IS the initiator that resolves mode → gateway;
     # self-gating at execute_operation would break the raw-request entry point.
     # @enforce_gateway intentionally NOT applied here.
