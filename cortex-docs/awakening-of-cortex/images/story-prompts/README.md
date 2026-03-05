@@ -1,9 +1,12 @@
 # Story Prompts — The Awakening of CORTEX
 
-**Generator:** DALL·E 3 (via ChatGPT / GPT-4o)  
-**Reason:** Superior character consistency across a series, better comic/illustration style adherence, reliable text-on-object rendering, and precise compositional control from detailed prompts.
+**Generator:** Gemini Imagen 2 (via Google AI Studio / Gemini API)  
+**Reason:** High-fidelity character consistency across a series, excellent comic/illustration style adherence, precise compositional control from detailed prompts, and strong black-and-white graphic novel rendering.
 
-Image generation prompts for each chapter illustration. Copy each prompt file's content directly into DALL·E 3.
+**Structure:** 2 image prompts per chapter × 12 chapters = 24 total prompt files.  
+File naming: `ch-{NN}-a.md` (scene A) and `ch-{NN}-b.md` (scene B) per chapter.
+
+Image generation prompts for each chapter illustration. Copy each prompt file's content directly into Gemini Imagen 2.
 
 ---
 
@@ -67,22 +70,20 @@ Prepend this **style preamble** to every prompt (already included in each file):
 
 ## Prompt Files
 
-| Chapter | File | Wave Color |
-|---------|------|------------|
-| 01 — Deep in the Basement | `ch-01-prologue.md` | Purple |
-| 02 — The Hotel Receptionist | `ch-02-hotel-receptionist.md` | Purple |
-| 03 — The Sacred Rules | `ch-03-sacred-rules.md` | Purple |
-| 04 — The Conductor's Baton | `ch-04-conductors-baton.md` | Purple |
-| 05 — Opening the Doors | `ch-05-opening-doors.md` | Cyan |
-| 06 — The Four Walls | `ch-06-four-walls.md` | Cyan |
-| 07 — The Crystal Ball | `ch-07-crystal-ball.md` | Cyan |
-| 08 — The Battle for Truth | `ch-08-battle-for-truth.md` | Cyan |
-| 09 — When Everything Broke | `ch-09-everything-broke.md` | Amber |
-| 10 — The Reckoning | `ch-10-reckoning.md` | Amber |
-| 11 — The Great Pruning | `ch-11-great-pruning.md` | Emerald |
-| 12 — The Pylance Epiphany | `ch-12-pylance-epiphany.md` | Emerald |
-| 13 — The 3 AM Healer | `ch-13-3am-healer.md` | Emerald |
-| 14 — The Enterprise Brain | `ch-14-enterprise-brain.md` | Emerald |
+| Chapter | File A | File B | Wave Color |
+|---------|--------|--------|------------|
+| 01 — Deep in the Basement | `ch-01-a.md` — The Jenga-lith | `ch-01-b.md` — The CORTEX Vision | Purple |
+| 02 — The Hotel Receptionist | `ch-02-a.md` — The Hotel Analogy | `ch-02-b.md` — WHO_KNOWS | Purple |
+| 03 — The Sacred Rules | `ch-03-a.md` — Kyle's 847-Line Grenade | `ch-03-b.md` — The Governance Verdict | Purple |
+| 04 — The Conductor and the Tool Belt | `ch-04-a.md` — The Orchestra | `ch-04-b.md` — Tool Belt Awakening | Purple |
+| 05 — The Four Walls | `ch-05-a.md` — The Crash at 2AM | `ch-05-b.md` — The Chaos Tests | Cyan |
+| 06 — The Crystal Ball and the Ghost Registry | `ch-06-a.md` — TDD Crystal Ball | `ch-06-b.md` — The Ghost Registry | Cyan |
+| 07 — When Everything Broke | `ch-07-a.md` — Kevin's Override | `ch-07-b.md` — The NaN Apocalypse | Cyan |
+| 08 — The Reckoning | `ch-08-a.md` — The Metrics Presentation | `ch-08-b.md` — The Seven-Phase Roadmap | Cyan |
+| 09 — The Great Pruning | `ch-09-a.md` — 383 Files Deleted | `ch-09-b.md` — The Four-Tier Architecture | Amber |
+| 10 — The Pylance Epiphany | `ch-10-a.md` — The Pylance Epiphany | `ch-10-b.md` — The Eight Immune Cells | Amber |
+| 11 — The 3AM Healer | `ch-11-a.md` — SELF-HEALED | `ch-11-b.md` — 847 Data Points | Emerald |
+| 12 — The Enterprise Brain | `ch-12-a.md` — Enterprise Brain Blueprint | `ch-12-b.md` — The Scarecrow Gets a Brain | Emerald |
 
 ---
 
@@ -90,5 +91,5 @@ Prepend this **style preamble** to every prompt (already included in each file):
 - **Size:** 1200×630px (16:9 ratio, social-media friendly)
 - **Format:** PNG
 - **Max file size:** ~500KB
-- **Generator:** DALL·E 3 (ChatGPT Plus / API)
-- **Instructions:** Copy each `.md` file's DALL·E 3 prompt text into ChatGPT with "generate this image" or use the API with `model: "dall-e-3"`, `size: "1792x1024"` (closest 16:9 option), `quality: "hd"`.
+- **Generator:** Gemini Imagen 2 (Google AI Studio / API)
+- **Instructions:** Copy each `.md` file's prompt text into Gemini Imagen 2 with "generate this image." PNG stubs are pre-created in `cortex-docs/awakening-of-cortex/images/` at filenames `ch-{NN}-a.png` and `ch-{NN}-b.png` — replace stubs with generated images.

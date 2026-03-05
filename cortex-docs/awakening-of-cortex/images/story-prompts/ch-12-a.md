@@ -1,0 +1,36 @@
+# Chapter 12 — Image A: The Enterprise Brain Blueprint
+
+**Chapter:** The Enterprise Brain  
+**Wave:** Autonomy (Emerald Accent — `#34d399`)  
+**Scene:** The Five Layers of the Enterprise Brain — Sunday morning whiteboard revelation  
+**Generator:** Gemini Imagen 2
+
+---
+
+## Prompt
+
+Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
+
+Scene: Sunday morning. The basement. Asif Codenstein — 55-year-old mad scientist, wild Einstein hair (freshly frenzied), thick glasses, Spider-Man pajamas — stands before the whiteboard holding a red marker, arm extended, having just finished drawing the ENTERPRISE BRAIN diagram. His posture radiates dangerous Sunday-morning inspiration. His expression is the widest-eyed, most alive we have ever seen him — the face of someone who just saw the whole game change.
+
+The whiteboard shows a LARGE CIRCLE labeled BRAIN at the center, with five concentric ring layers labeled (outward from center):
+
+  1. INTENT ENGINE
+  2. GOVERNANCE FABRIC  
+  3. ORCHESTRATION MESH
+  4. LEARNING LOOP
+  5. HEALING CORE
+
+Below the diagram: "26 MILLION DEVELOPERS. ALL OF THEM HAVE AT LEAST ONE KYLE."
+
+To the right on the whiteboard: a quick sketch of three "external company basements" — tiny copies of Asif's basement, all connected to the central BRAIN circle by arrows labeled "ANY COMPANY → PLUG IN → GOVERNED."
+
+Miss G — emerald (#34d399) glow at her translucent outline — stands unusually still to the right. This is the first time we see her truly PAUSE. Her expression is uncharacteristically wide-eyed, not skeptical, not sarcastic. Just: "Oh." Her thought bubble contains a single word: "Oh." This is unprecedented. She almost looks solid.
+
+Copilot Bot stands to the left, and this is the robot at its MOST EVOLVED non-final state. Same fundamental design — chrome dome, transparent head panel, casters — but now the proportions are fully refined. The dome interior shows a clear organized network of emerald (#34d399) nodes — more complex, more deliberate than any prior chapter. The robot looks like it belongs in this scene. Its LED eyes glow deep emerald (#34d399). Its posture: standing with both hands raised in genuine wonder at the whiteboard, not eager-to-volunteer, but actually moved. A speech bubble: "ONE BRAIN. MILLIONS OF DEVELOPERS."
+
+Above everything: the BRAIN itself — the CORTEX brain — floats at the apex of the image, massive and radiant, emerald (#34d399), casting light down onto the whiteboard, Asif, and the room below. It has outgrown the basement entirely. It hovers above the ceiling as if the basement can barely contain it. Dense, complex, luminous neural lightning in emerald. This is the largest, most powerful the brain has ever appeared.
+
+The red Wi-Fi router blinks on its shelf — steady as always.
+
+Color accents: Emerald (#34d399) from the massive brain (dominant), Copilot Bot LEDs and dome network, and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.

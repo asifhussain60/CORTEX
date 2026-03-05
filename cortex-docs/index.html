@@ -77,6 +77,7 @@
 <link href="assets/css/generated-classes.css" rel="stylesheet"/>
 <link href="assets/css/intentional-classes.css" rel="stylesheet"/>
 <link href="assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
+<link href="assets/css/dogfood-panel.css" rel="stylesheet"/>
 
 <!-- JSON-LD Structured Data for SEO -->
 <script type="application/ld+json">
@@ -373,106 +374,193 @@
 <!-- End Hero/Header Section -->
 </header>
 
-<!-- BUILT WITH CORTEX - Meta Achievement Panel -->
+<!-- BUILT WITH CORTEX — Dogfood Panel (v3) -->
 <div class="level0-container level0-container--narrow">
 <div class="built-with-cortex-panel">
-<!-- Animated background layers -->
-<div class="bwc-bg-grid"></div>
-<div class="bwc-glow"></div>
-<div class="bwc-glow-secondary"></div>
-<div class="bwc-scan-line"></div>
-<div class="bwc-content">
-<div class="bwc-main">
-<div class="bwc-text">
-<h3 class="bwc-title">
-<span class="bwc-title-highlight">Wondering What CORTEX Can Do?</span>
-</h3>
+
+    <!-- Ambient animated background (existing classes — kept) -->
+    <div class="bwc-bg-grid" aria-hidden="true"></div>
+    <div class="bwc-glow" aria-hidden="true"></div>
+    <div class="bwc-glow-secondary" aria-hidden="true"></div>
+    <div class="bwc-scan-line" aria-hidden="true"></div>
+
+    <!-- All new content uses df-* classes from dogfood-panel.css -->
+    <div class="df-panel">
+
+        <!-- ── HOOK ── -->
+        <div class="df-hook">
+            <div class="df-hook-badge">
+                <span class="df-hook-badge-dot" aria-hidden="true"></span>
+                <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                The Big Reveal
+            </div>
+            <h3 class="df-hook-question">
+                Did you know what <span class="df-hook-word">Dogfooding</span> means?
+            </h3>
+            <p class="df-hook-sub">We thought you might ask. Here is the short version — and the proof.</p>
+        </div>
+
+        <!-- ── DEFINITION ── -->
+        <div class="df-def-card" role="note" aria-label="Definition: dogfooding">
+            <p class="df-def-eyebrow">Definition</p>
+            <h4 class="df-def-term">Dogfooding</h4>
+            <p class="df-def-body">
+                <strong>Dogfooding</strong> — short for <em>"eating your own dog food"</em> — means
+                <strong>using your own product to build itself</strong>.
+                If a tool is good enough to sell to others, it should be good enough for its creators to rely on every single day.
+                It is the ultimate confidence test: you are not just claiming it works — you are <strong>proving it</strong> under the most demanding conditions possible.
+            </p>
+            <div class="df-def-example">
+                <span class="df-def-example-icon" aria-hidden="true">💡</span>
+                <p>
+                    <strong>Classic example:</strong> Microsoft's Windows team famously ran their own unreleased builds of Windows as their daily OS.
+                    Every crash they hit, their users would never see. That is dogfooding in action.
+                </p>
+            </div>
+        </div>
+
+        <!-- ── HOW CORTEX DOES IT ── -->
+        <div class="df-flow">
+            <p class="df-section-label">How CORTEX does it</p>
+            <div class="df-flow-strip" role="list" aria-label="CORTEX self-development cycle">
+
+                <div class="df-step" role="listitem">
+                    <div class="df-step-num" aria-hidden="true">01</div>
+                    <span class="df-step-icon animate-1" aria-hidden="true">🧠</span>
+                    <p class="df-step-label">CORTEX Plans</p>
+                    <p class="df-step-desc">Every new feature starts with CORTEX's own Planning System — requirements broken into governed, test-first tasks with DoR/DoD validation.</p>
+                </div>
+
+                <div class="df-connector" aria-hidden="true">
+                    <span class="df-connector-arrow">&#8594;</span>
+                </div>
+
+                <div class="df-step" role="listitem">
+                    <div class="df-step-num" aria-hidden="true">02</div>
+                    <span class="df-step-icon animate-2" aria-hidden="true">⚡</span>
+                    <p class="df-step-label">CORTEX Builds</p>
+                    <p class="df-step-desc">TDD-first. Governance-enforced. Every orchestrator, MCP tool, and rule was implemented by CORTEX guiding its own development — using the same commands you use.</p>
+                </div>
+
+                <div class="df-connector" aria-hidden="true">
+                    <span class="df-connector-arrow">&#8594;</span>
+                </div>
+
+                <div class="df-step" role="listitem">
+                    <div class="df-step-num" aria-hidden="true">03</div>
+                    <span class="df-step-icon animate-3" aria-hidden="true">🛡️</span>
+                    <p class="df-step-label">CORTEX Governs</p>
+                    <p class="df-step-desc">36 governance YAMLs. 19,021 tests. Pre-commit hooks. CORTEX enforces its own CORE rules against its own codebase — zero exceptions, ever.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── WHAT WAS BUILT ── -->
+        <p class="df-built-label">What was built with it</p>
+        <div class="df-dual">
+
+            <!-- Platform Card -->
+            <div class="df-card">
+                <div class="df-card-shimmer" aria-hidden="true"></div>
+                <div class="df-card-header">
+                    <span class="df-card-icon"><i class="fas fa-code-branch pulse-glow-glass--fast" aria-hidden="true"></i></span>
+                    <h4 class="df-card-title">The CORTEX Platform</h4>
+                </div>
+                <p class="df-card-badge">Built by CORTEX</p>
+                <p class="df-card-body">
+                    The entire CORTEX platform — every orchestrator, every tool, every governance rule — was built using CORTEX itself.
+                    Every feature was written test-first, reviewed by automated governance, and shipped only once every quality check passed.
+                    <strong>No shortcuts. No exceptions.</strong>
+                </p>
+                <div class="df-card-stats">
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">322</span>
+                        <span class="df-mini-lbl">Orchestrators</span>
+                    </div>
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">30</span>
+                        <span class="df-mini-lbl">MCP Tools</span>
+                    </div>
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">36</span>
+                        <span class="df-mini-lbl">Gov. YAMLs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docs Card -->
+            <div class="df-card df-card--secondary">
+                <div class="df-card-shimmer" aria-hidden="true"></div>
+                <div class="df-card-header">
+                    <span class="df-card-icon"><i class="fas fa-globe pulse-glow-glass--fast" aria-hidden="true"></i></span>
+                    <h4 class="df-card-title">Documentation Site</h4>
+                </div>
+                <p class="df-card-badge">Designed by CORTEX</p>
+                <p class="df-card-body">
+                    This entire website — every page, every component, every design decision — was designed and generated by CORTEX.
+                    It is a live demonstration of what the framework produces: structured, consistent, professional output held to the same standards it enforces on your team.
+                    <strong>What you see is what CORTEX does for you.</strong>
+                </p>
+                <div class="df-card-stats">
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">40+</span>
+                        <span class="df-mini-lbl">Pages</span>
+                    </div>
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">98</span>
+                        <span class="df-mini-lbl">Phases Done</span>
+                    </div>
+                    <div class="df-mini-stat">
+                        <span class="df-mini-val">100%</span>
+                        <span class="df-mini-lbl">AI Governed</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── STATS GRID ── -->
+        <div class="df-stats" aria-label="CORTEX live statistics">
+            <div class="df-stat">
+                <div class="df-stat-icon"><i class="fas fa-vial" aria-hidden="true"></i></div>
+                <span class="df-stat-val">19,021</span>
+                <span class="df-stat-lbl">Tests Green</span>
+                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
+            </div>
+            <div class="df-stat">
+                <div class="df-stat-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
+                <span class="df-stat-val">322</span>
+                <span class="df-stat-lbl">Orchestrators</span>
+                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
+            </div>
+            <div class="df-stat">
+                <div class="df-stat-icon"><i class="fas fa-plug" aria-hidden="true"></i></div>
+                <span class="df-stat-val">30</span>
+                <span class="df-stat-lbl">MCP Tools Live</span>
+                <div class="df-stat-bar"><div class="df-stat-fill" style="width:85%"></div></div>
+            </div>
+            <div class="df-stat">
+                <div class="df-stat-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                <span class="df-stat-val">36</span>
+                <span class="df-stat-lbl">Gov. YAMLs</span>
+                <div class="df-stat-bar"><div class="df-stat-fill" style="width:100%"></div></div>
+            </div>
+        </div>
+
+        <!-- ── CLOSING ── -->
+        <div class="df-closing">
+            <p>
+                The framework that governs your code?
+                <span class="df-closing-highlight">It governs its own.</span>
+                That is not a claim — it is a commit history.
+            </p>
+        </div>
+
+    </div><!-- end .df-panel -->
+</div><!-- end .built-with-cortex-panel -->
 </div>
-</div>
-<!-- Two Side-by-Side Achievement Panels -->
-<div class="bwc-dual-panels">
-<!-- Panel 1: CORTEX Codebase Built by CORTEX -->
-<div class="bwc-achievement-panel flex-column-stretch">
-<div class="bwc-panel-scan-line"></div>
-<div class="bwc-panel-header">
-<span class="bwc-panel-icon"><i class="fas fa-code-branch pulse-glow-glass--fast"></i></span>
-<h4 class="bwc-panel-title">The CORTEX Platform</h4>
-</div>
-<p class="bwc-panel-subtitle text-center">Built by CORTEX</p>
-<p class="bwc-panel-description flex-1">
-                                The entire CORTEX platform — every orchestrator, every tool, every rule — was built using CORTEX itself. Every feature was written test-first, reviewed by automated governance, and only shipped once every single quality check passed. <strong>No shortcuts. No exceptions.</strong> The platform enforces on itself exactly what it enforces on your team.
-                            </p>
-<div class="bwc-panel-stats margin-top-auto">
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">258</span>
-<span class="bwc-mini-label">Orchestrators</span>
-</div>
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">30</span>
-<span class="bwc-mini-label">MCP Tools</span>
-</div>
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">32</span>
-<span class="bwc-mini-label">CORE Rules</span>
-</div>
-</div>
-</div>
-<!-- Panel 2: Documentation Site Built by CORTEX -->
-<div class="bwc-achievement-panel bwc-achievement-panel-secondary flex-column-stretch">
-<div class="bwc-panel-scan-line bwc-panel-scan-line-secondary"></div>
-<div class="bwc-panel-header">
-<span class="bwc-panel-icon"><i class="fas fa-globe pulse-glow-glass--fast"></i></span>
-<h4 class="bwc-panel-title">Documentation Site</h4>
-</div>
-<p class="bwc-panel-subtitle text-center">Designed by CORTEX</p>
-<p class="bwc-panel-description flex-1">
-                                This entire website — every page, every component, every design decision — was designed and generated by CORTEX. It is a live demonstration of what the framework produces: structured, consistent, professional output built to the same high standards it holds your own projects to. <strong>What you see here is what CORTEX does for you.</strong>
-                            </p>
-<div class="bwc-panel-stats margin-top-auto">
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">40+</span>
-<span class="bwc-mini-label">Pages</span>
-</div>
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">87</span>
-<span class="bwc-mini-label">Phases</span>
-</div>
-<div class="bwc-mini-stat">
-<span class="bwc-mini-value">100%</span>
-<span class="bwc-mini-label">AI Governed</span>
-</div>
-</div>
-</div>
-</div>
-<div class="bwc-stats">
-<div class="bwc-stat flex-column" data-stat="pages">
-<div class="bwc-stat-icon"><i class="fas fa-file-code pulse-glow-glass--fast"></i></div>
-<div class="bwc-stat-value" data-value="40">40+</div>
-<div class="bwc-stat-label">Pages Created</div>
-<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="90"></div></div>
-</div>
-<div class="bwc-stat flex-column" data-stat="tests">
-<div class="bwc-stat-icon"><i class="fas fa-vial pulse-glow-glass--fast"></i></div>
-<div class="bwc-stat-value" data-value="18116">18,116</div>
-<div class="bwc-stat-label">Tests Green</div>
-<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="100"></div></div>
-</div>
-<div class="bwc-stat flex-column" data-stat="orchestrators">
-<div class="bwc-stat-icon"><i class="fas fa-network-wired pulse-glow-glass--fast"></i></div>
-<div class="bwc-stat-value" data-value="258">258</div>
-<div class="bwc-stat-label">Orchestrators Wired</div>
-<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="100"></div></div>
-</div>
-<div class="bwc-stat flex-column" data-stat="mcp">
-<div class="bwc-stat-icon"><i class="fas fa-plug pulse-glow-glass--fast"></i></div>
-<div class="bwc-stat-value" data-value="30">30</div>
-<div class="bwc-stat-label">MCP Tools Live</div>
-<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="85"></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
+
 <!-- The Awakening Of CORTEX - Feature Panel -->
 <div class="level0-container level0-container--narrow">
 <a class="awakening-panel animation-t3" href="awakening-of-cortex/index.html" aria-labelledby="awakening-heading" role="article">
