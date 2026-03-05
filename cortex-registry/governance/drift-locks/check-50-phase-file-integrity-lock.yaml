@@ -1,0 +1,60 @@
+id: "check-50-phase-file-integrity-lock"
+check_number: 50
+phase: "investigation-2026-03-05"
+gap_id: "GAP-INTEGRITY-001"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Phase File Integrity — cortex-master.yaml file: pointers must resolve on disk"
+description: |
+  Every entry in cortex-registry/cortex-master.yaml with a `file:` key pointing
+  to cortex-registry/planning/phases/ MUST exist as a real file on disk.
+  This drift lock prevents the silent loss of phase YAML files through:
+  - VacuumOrchestrator phase lifecycle housekeeping deleting planned/ contents
+  - Registry consolidation commits that delete _cortex-master/ shadow copies
+  - Phase lifecycle moves (planned/ → completed/) that forget to update file: pointers
+  - THIN INDEX CONTRACT violations where file: pointer is stale after a move
+
+  Root cause (2026-03-05): User noticed cortex-registry/planning/phases/planned/
+  appeared empty. Investigation confirmed _cortex-master/ was an intentional
+  DUPLICATE that was correctly deleted in Phase 127 (commit 1b7b49b43). All canonical
+  phase YAMLs exist in planning/phases/completed/. planned/ is intentionally empty
+  (cortex-master.yaml: planned: 0). No restore required.
+
+  This lock prevents future confusion by ensuring file: references never go stale.
+
+detect_command: |
+  python3 -c "
+  import yaml, pathlib, sys
+  root = pathlib.Path('.')
+  master = yaml.safe_load((root / 'cortex-registry/cortex-master.yaml').read_text())
+  phases = master.get('phases', [])
+  broken = []
+  for p in phases:
+      if isinstance(p, dict) and 'file' in p:
+          fp = root / p['file']
+          if not fp.exists():
+              broken.append(f\"{p.get('id','?')} -> {p['file']}\")
+  if broken:
+      print('BROKEN_REFS=' + str(len(broken)))
+      for b in broken: print(' ', b)
+      sys.exit(1)
+  else:
+      print('PHASE_FILE_INTEGRITY=OK')
+  "
+pass_criteria: "PHASE_FILE_INTEGRITY=OK"
+ci_gate: true
+auto_fix: |
+  1. For planned phases: verify file was moved to completed/ and update file: pointer in cortex-master.yaml
+  2. For completed phases: restore from git: git show <commit>:<original_path> > <new_path>
+  3. Run: python3 scripts/refresh_prompt_suite.py to resync counts
+created: "2026-03-05"
+source_gap: "GAP-INTEGRITY-001"
+test_file: "tests/preflight/test_drift_lock_check_50.py"
+related_governance:
+  - "THIN INDEX CONTRACT (cortex-master.yaml must stay ≤800 lines)"
+  - "CORE-064: Sweep Completeness — no partial moves"
+  - "master-plan-phase-lifecycle.yaml checkpoint_complete step 3: update file: pointer"
+protected_paths:
+  - "cortex-registry/planning/phases/completed/"
+  - "cortex-registry/planning/phases/planned/"
+  - "cortex-registry/planning/phases/deferred/"

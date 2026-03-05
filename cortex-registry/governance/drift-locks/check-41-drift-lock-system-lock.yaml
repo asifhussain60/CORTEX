@@ -6,16 +6,20 @@ status: "ACTIVE"
 enforcement_tier: "P0"
 title: "Drift Lock System — Permanent CI Guardrail Completeness"
 description: |
-  Validates that every production hardening check (#30–#40) has a corresponding
-  drift lock YAML in cortex-registry/governance/drift-locks/ and a corresponding
-  preflight test in tests/preflight/test_drift_lock_check_{N}.py.
+  Validates that every production hardening check (#30–#41) and investigation
+  checks (#42–#50) have a corresponding drift lock YAML in
+  cortex-registry/governance/drift-locks/ and a corresponding preflight test in
+  tests/preflight/test_drift_lock_check_{N}.py.
   This lock is self-referential — it guards the drift lock system itself.
+  Check #50 added 2026-03-05: phase file integrity guard (prevents stale file:
+  pointers in cortex-master.yaml after phase lifecycle moves or vacuum cleanup).
 test_file: "tests/preflight/test_drift_lock_check_41.py"
 primary_test_file: "tests/preflight/test_drift_lock_system.py"
 detect_command: "python3 -m pytest tests/preflight/test_drift_lock_system.py -q"
 pass_criteria: "6 passed, 1 skipped"
-required_checks: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
+required_checks: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
 ci_gate: true
 auto_fix: "MANUAL — restore missing lock YAML or test file for the indicated check"
 created: "2026-03-04"
+updated: "2026-03-05"
 source_gap: "GAP-126-12"

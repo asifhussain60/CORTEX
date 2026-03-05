@@ -17,7 +17,7 @@ CORTEX_ROOT = pathlib.Path(__file__).parents[2]
 DRIFT_LOCKS_DIR = CORTEX_ROOT / "cortex-registry" / "governance" / "drift-locks"
 LOCK_FILE = DRIFT_LOCKS_DIR / "check-41-drift-lock-system-lock.yaml"
 
-_REQUIRED_CHECK_NUMBERS = list(range(30, 42))  # 30–41 inclusive (including self)
+_REQUIRED_CHECK_NUMBERS = list(range(30, 51))  # 30–50 inclusive (30–41 production hardening, 42–50 integrity checks)
 
 
 class TestDriftLockCheck41:
@@ -51,8 +51,8 @@ class TestDriftLockCheck41:
         )
 
     def test_minimum_lock_count_maintained(self) -> None:
-        """At least 12 drift lock YAMLs must exist (checks #30–#41)."""
+        """At least 21 drift lock YAMLs must exist (checks #30–#50)."""
         lock_files = list(DRIFT_LOCKS_DIR.glob("check-*.yaml"))
-        assert len(lock_files) >= 12, (
-            f"Only {len(lock_files)} drift lock YAMLs found — minimum is 12 (checks #30–#41)."
+        assert len(lock_files) >= 21, (
+            f"Only {len(lock_files)} drift lock YAMLs found — minimum is 21 (checks #30–#50)."
         )
