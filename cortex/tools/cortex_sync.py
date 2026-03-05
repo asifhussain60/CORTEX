@@ -501,6 +501,15 @@ def scan_repo(repo_root: Path, policy: dict, extra_deny: List[str]) -> List[str]
             )
             if has_override_descendant:
                 continue  # must walk into this directory — override patterns live inside
+            # Check if any github_allowlist entry lives inside this directory —
+            # if so, keep the directory so per-file policy_decision can evaluate it
+            has_github_allowlist_descendant = any(
+                _normalize(p).startswith(rel_d_slash.rstrip("/") + "/")
+                or _normalize(p).startswith(rel_d_slash)
+                for p in extended_policy.get("github_allowlist", [])
+            )
+            if has_github_allowlist_descendant:
+                continue  # must walk into this directory — github allowlist entries live inside
             allowed, _ = policy_decision(rel_d_slash, extended_policy)
             if not allowed:
                 pruned.append(d)
@@ -730,6 +739,18 @@ def run_sync(
     files_danger = 0
     files_patched = 0
 
+    # Pre-compute write-eligible count so we can show a live progress bar.
+    # This prevents the terminal from appearing hung during large syncs.
+    _total_write = sum(
+        1 for r in records
+        if r.decision in (FileDecision.COPY, FileDecision.UPDATE, FileDecision.MERGED)
+    )
+    _write_idx = 0
+    _progress_active = _total_write > 0 and not dry_run
+    if _progress_active:
+        sys.stdout.write(f"  Writing {_total_write} files to {target} ...\n")
+        sys.stdout.flush()
+
     for rec in records:
         if rec.decision == FileDecision.EXCLUDED:
             files_excluded += 1
@@ -797,10 +818,27 @@ def run_sync(
             elif rec.decision == FileDecision.MERGED:
                 files_merged += 1
 
+            # Real-time progress bar — keeps terminal alive during large syncs
+            _write_idx += 1
+            if _progress_active:
+                pct = int(_write_idx * 100 / _total_write)
+                bar_n = pct // 5  # 20-char bar block (5% per block)
+                bar_str = "#" * bar_n + "-" * (20 - bar_n)
+                dp = rec.relative_path
+                if len(dp) > 50:
+                    dp = "..." + dp[-47:]
+                sys.stdout.write(f"\r  [{bar_str}] {pct:3d}%  {_write_idx:4d}/{_total_write}  {dp:<50}")
+                sys.stdout.flush()
+
         except OSError as e:
             rec.decision = FileDecision.SKIP
             rec.reason = f"write failed: {e}"
             files_skipped += 1
+
+    # Close the progress line with a newline so the summary prints cleanly below it
+    if _progress_active:
+        sys.stdout.write("\n")
+        sys.stdout.flush()
 
     # ── Stage 6: Report ───────────────────────────────────────────────────────
     manifest = SyncManifest(
@@ -851,6 +889,12 @@ def _detect_repo_root() -> Path:
 
 def main(argv: Optional[List[str]] = None) -> int:
     """CLI entry point for cortex_sync."""
+    # Reconfigure stdout/stderr to UTF-8 so box-drawing chars work on Windows cp1252
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[attr-defined]
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[attr-defined]
+
     parser = argparse.ArgumentParser(
         description="CORTEX deterministic sync engine — Phase 127",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -892,8 +936,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 1
 
     if not target.exists():
-        log.error(f"Target path does not exist: {target}")
-        return 1
+        log.info(f"Target path does not exist — creating: {target}")
+        target.mkdir(parents=True, exist_ok=True)
 
     # Guard: target must not be inside repo root
     try:

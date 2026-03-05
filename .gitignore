@@ -24,6 +24,9 @@
 # Local CORTEX dev artifacts (ephemeral, per-developer — never source-controlled)
 .cortex-runtime/
 
+# Sync engine state — baselines live here; never source-controlled
+.cortex-sync/
+
 # VS Code personal preferences
 .favorites.json
 
