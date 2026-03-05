@@ -1,1040 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="CORTEX for Business Leaders — ROI dashboard, token optimisation, development velocity, cost avoidance, and AI governance at enterprise scale." name="description"/>
-<meta content="CORTEX, business leader, ROI, cost savings, AI governance, development velocity, token optimisation, enterprise AI, engineering efficiency" name="keywords"/>
-<meta content="Asif Hussain" name="author"/>
-<title>CORTEX — Business Leader View | ROI · Velocity · Governance at Scale</title>
-<link href="../assets/images/cortex-logo-64.png" rel="icon" type="image/png"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX | Strategic Executive Command</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #00d4ff;
+            --accent-emerald: #10b981;
+            --accent-violet: #8b5cf6;
+            --text-main: #e2e8f0;
+        }
 
-<!-- Open Graph -->
-<meta content="CORTEX — Business Leader View" property="og:title"/>
-<meta content="Quantified ROI: faster delivery, fewer defects, lower token costs — AI governance that pays for itself." property="og:description"/>
-<meta content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" property="og:image"/>
-<meta content="website" property="og:type"/>
+        body {
+            background-color: #030712;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+        /* Hero Wrapper Styles - Preserved as requested */
+        .hero-section-wrapper {
+            position: relative;
+            padding-top: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-robot-container {
+            position: relative;
+            z-index: 10;
+            margin-bottom: -1px;
+        }
+        .hero-divider-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1) 50%, transparent);
+        }
 
-<!-- Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      rel="stylesheet"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"/>
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<!-- D3.js v7 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" crossorigin="anonymous"></script>
+        @media (hover: hover) {
+            .glass-card:hover {
+                border-color: rgba(0, 212, 255, 0.3);
+                transform: translateY(-5px);
+                box-shadow: 0 12px 48px 0 rgba(0, 212, 255, 0.15);
+            }
+        }
 
-<!-- Mermaid -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: rotate(45deg);
+            animation: shine 15s infinite linear;
+            pointer-events: none;
+        }
 
-<!-- Design System -->
-<link href="../assets/css/glassmorphism.css" rel="stylesheet"/>
-<link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
-<link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
-<link href="../assets/css/glass-ui-components.css" rel="stylesheet"/>
-<link href="../assets/css/main.css" rel="stylesheet"/>
-<link href="../assets/css/index-multipanel.css" rel="stylesheet"/>
-<link href="../assets/css/generated-classes.css" rel="stylesheet"/>
-<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
-<link href="../assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
-<link href="../assets/css/layouts/role-landing.css" rel="stylesheet"/>
-<link href="../assets/css/layouts/business-leader.css" rel="stylesheet"/>
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .hero-robot-head {
+            width: 140px;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+            transition: filter 0.5s ease;
+        }
+
+        .stat-glow {
+            text-shadow: 0 0 15px currentColor;
+        }
+
+        .intelligence-diamond {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+        }
+
+        .diamond-node {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--glass-border);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 640px) {
+            .intelligence-diamond {
+                transform: scale(0.8);
+            }
+        }
+
+        .nav-blur {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .chart-container svg {
+            overflow: visible;
+        }
+
+        .token-ring {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: ring-progress 2s ease-out forwards;
+        }
+
+        @keyframes ring-progress {
+            to { stroke-dashoffset: 17; } /* 94% progress */
+        }
+        
+        .analyzer-tag {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #00d4ff;
+        }
+
+        /* Mobile specific layout fixes */
+        @media (max-width: 768px) {
+            .hero-robot-head {
+                width: 100px;
+            }
+            .glass-card {
+                border-radius: 1rem;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen">
 
-<!-- Skip link (WCAG 2.4.1) -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-<!-- Sticky back bar -->
-<nav class="role-back-bar" aria-label="Site navigation">
-    <a class="back-link" href="../index.html">
-        <i class="fas fa-arrow-left"></i> Back to CORTEX
-    </a>
-    <span class="role-badge">💼 Business Leader View</span>
-</nav>
-
-<!-- ══════════════════════════════════════════════════════════
-     MAIN
-     ══════════════════════════════════════════════════════════ -->
-<main class="container" id="main-content" role="main">
-
-    <!-- ── Hero ── -->
-    <div class="hero-section-wrapper">
-        <div class="hero-robot-container">
-            <a href="../index.html" title="Back to CORTEX Home">
-                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high"
-                     src="../assets/images/cortex-logo-200.png"/>
-            </a>
+    <nav class="nav-blur sticky top-0 z-50 px-4 md:px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 md:gap-3">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center font-bold text-black text-xs">CX</div>
+            <span class="font-bold tracking-tight text-lg md:text-xl">CORTEX</span>
         </div>
-        <div class="hero-divider-line"></div>
-    </div>
-
-    <!-- Page title card -->
-    <section class="glass-card-display hero-introduction" id="hero-section">
-        <div class="card-header-centered">
-            <h2>CORTEX — Business Leader View</h2>
+        <div class="flex gap-4">
+            <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] md:text-xs font-semibold flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-3 h-3"></i>
+                <span class="hidden sm:inline tracking-widest uppercase">Strategic Command</span>
+                <span class="sm:hidden">EXECUTIVE</span>
+            </span>
         </div>
-        <p class="hero-description">
-            AI-powered engineering governance that <strong>pays for itself</strong>.
-            CORTEX eliminates rework, prevents defects before they ship, optimises LLM token spend,
-            and delivers measurable velocity gains — turning your engineering investment into
-            predictable, auditable output, sprint after sprint.
-        </p>
-        <div class="hero-stats">
-            <span class="stat-pill">4× Faster Root Cause Resolution</span>
-            <span class="stat-pill">Precision LLM Token Use</span>
-            <span class="stat-pill">Zero Governance Violations in Production</span>
-        </div>
-    </section>
+    </nav>
 
-    <!-- ══════════════════════════════════════════════════════════
-         CONTENT
-         ══════════════════════════════════════════════════════════ -->
-    <div class="role-content-wrapper">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-16 md:space-y-24">
 
-        <!-- ════════════════════════════════════════════════
-             SECTION 1 — BOTTOM LINE
-             One punchy statement before any numbers.
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <div class="bl-bottom-line">
-                <h3 class="bl-bottom-line-heading">Every engineering defect found in production costs 10–100× more to fix than one caught at commit. CORTEX makes catching it at commit the default — automatically, on every change, without slowing your team down.</h3>
-                <p class="bl-bottom-line-body">
-                    CORTEX is a production-grade AI Engineering Framework that enforces quality governance at the source.
-                    <strong>99 consecutive delivery phases.</strong>
-                    <strong>32 governance rules</strong> enforced automatically across 8 pipeline stages — no manual review gates, no spreadsheet compliance.
-                    The result: predictable velocity, observable quality, and audit-ready compliance from day one.
-                    This page builds your understanding systematically: <strong>Problem → Solution → Proof → Strategic Value</strong>.
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="hero-section-wrapper">
+                <div class="hero-robot-container">
+                    <a href="../index.html" title="Back to CORTEX Home">
+                        <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high"
+                             src="../assets/images/cortex-logo-200.png"/>
+                    </a>
+                </div>
+                <div class="hero-divider-line"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500 leading-[1.1] md:leading-tight">
+                    Strategic Engineering Governance at Scale
+                </h1>
+                <p class="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-4">
+                    CORTEX transforms software engineering from an ad-hoc process into a <span class="text-cyan-400 font-semibold uppercase tracking-tight">Governed Development Lifecycle</span>. We ensure institutional integrity through automated cognitive checkpoints.
                 </p>
             </div>
-        </div><!-- /.bl-section-panel: Bottom Line -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 2 — THE PROBLEM: Cost of Unmanaged AI
-             D3 bar chart comparing defect discovery costs
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-exclamation-triangle"></i> The Problem: Defects Get Exponentially More Expensive</h2>
-
-            <p class="bl-tab-desc">Every stage a defect travels through your pipeline multiplies the cost to fix it. AI tooling without governance accelerates defect <em>velocity</em>, not just feature velocity. The chart below shows why catching issues earlier is a financial imperative, not a quality preference.</p>
-
-            <!-- D3.js: Cost-of-defect bar chart -->
-            <div class="bl-d3-panel" id="defect-cost-chart" role="img" aria-label="Bar chart showing relative cost of defect discovery by stage">
-                <div class="bl-d3-title">Relative Cost of Defect Discovery by Stage</div>
-                <div class="bl-d3-subtitle">Index: 1× = caught at commit · Higher = more expensive to fix · Reference: NIST, IBM Systems Sciences Institute</div>
-                <div class="bl-d3-canvas" id="defect-cost-canvas"></div>
-                <div class="bl-d3-legend">
-                    <span class="bl-d3-legend-item bl-d3-legend--green"><span class="bl-d3-legend-dot"></span>CORTEX blocks here (pre-commit)</span>
-                    <span class="bl-d3-legend-item bl-d3-legend--amber"><span class="bl-d3-legend-dot"></span>Internal discovery</span>
-                    <span class="bl-d3-legend-item bl-d3-legend--red"><span class="bl-d3-legend-dot"></span>Production exposure</span>
+            
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6 pt-4 px-2">
+                <div class="glass-card px-4 md:px-8 py-4 md:py-6 text-center w-[calc(50%-1rem)] md:w-48">
+                    <div class="text-xl md:text-3xl font-black text-emerald-400 mb-1">99 / 99</div>
+                    <div class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-widest font-bold">Success Cycles</div>
+                </div>
+                <div class="glass-card px-4 md:px-8 py-4 md:py-6 text-center w-[calc(50%-1rem)] md:w-48 border-cyan-500/30">
+                    <div class="text-xl md:text-3xl font-black text-cyan-400 mb-1">94%</div>
+                    <div class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-widest font-bold">Token Savings</div>
+                </div>
+                <div class="glass-card px-4 md:px-8 py-4 md:py-6 text-center w-full md:w-48">
+                    <div class="text-xl md:text-3xl font-black text-violet-400 mb-1">Zero</div>
+                    <div class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-widest font-bold">Regressions</div>
                 </div>
             </div>
+        </section>
 
-            <div class="bl-insight-row">
-                <div class="bl-insight-card bl-insight-card--green">
-                    <div class="bl-insight-icon"><i class="fas fa-shield-alt"></i></div>
-                    <div class="bl-insight-text"><strong>CORTEX blocks defects at commit</strong> — before they enter the review cycle. The enforcement gate runs in &lt;10 seconds on every change, coordinated by 10 specialised agents.</div>
-                </div>
-                <div class="bl-insight-card bl-insight-card--red">
-                    <div class="bl-insight-icon"><i class="fas fa-fire"></i></div>
-                    <div class="bl-insight-text"><strong>Without governance</strong>, AI-generated code compounds the problem — higher feature velocity into a higher defect rate at the same late-stage discovery cost.</div>
-                </div>
-            </div>
-        </div><!-- /.bl-section-panel: The Problem -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 3 — THE SOLUTION: How CORTEX Works
-             Mermaid: request flow pipeline
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-cogs"></i> How CORTEX Works: The 8-Stage Pipeline</h2>
-
-            <p class="bl-tab-desc">Every engineering action — from a code change to a debug request — flows through 8 automated stages. No human gates required. Governance is infrastructure, not process.</p>
-
-            <!-- Mermaid: pipeline flow -->
-            <div class="bl-mermaid-panel" aria-label="CORTEX 8-stage governance pipeline diagram">
-                <div class="bl-mermaid-title"><i class="fas fa-project-diagram"></i> Request → Quality-Assured Output</div>
-                <div class="bl-mermaid-canvas">
-                    <pre class="mermaid">
-flowchart LR
-    A["🔧 Code Change\nor AI Request"] --> B["⚡ Request\nEnrichment\nStage -1"]
-    B --> C["🌐 MCP\nGateway\nStage 0"]
-    C --> D["🎯 Intent\nClassifier\n29 Types"]
-    D --> E["🔬 LENS\nAnalysis\n300-800ms"]
-    E --> F["🧠 Brain\nIntelligence\n50-200ms"]
-    F --> G{"🛡️ Governance\nGate\n10 Agents"}
-    G -->|"✅ PASS"| H["⚙️ TDD\nExecution\nRED→GREEN"]
-    G -->|"🚫 BLOCKED"| I["❌ Rejected\nNo tokens\nspent"]
-    H --> J["📊 SQLite\nAudit Trail\nAC markers"]
-
-    classDef stage fill:#0d1b3e,stroke:#00d4ff,stroke-width:1.5px,color:#e2e8f0
-    classDef gate fill:#0d2b1e,stroke:#34d399,stroke-width:2px,color:#34d399
-    classDef block fill:#2d0f0f,stroke:#fb7185,stroke-width:1.5px,color:#fb7185
-    classDef audit fill:#1a0d3d,stroke:#7b61ff,stroke-width:1.5px,color:#a78bfa
-    classDef input fill:#1a1a2e,stroke:#a0a6c0,stroke-width:1.5px,color:#e2e8f0
-
-    class A input
-    class B,C,D,E,F stage
-    class G gate
-    class H stage
-    class I block
-    class J audit
-                    </pre>
-                </div>
-                <p class="bl-mermaid-caption">Every change is enriched, classified, analysed, and governance-gated before execution. Blocked requests consume zero engineering time and zero LLM tokens.</p>
+        <!-- Section 1: The 9 LENS Analyzers (Sensory System) -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4 px-4">
+                <div class="text-cyan-400 font-bold tracking-widest text-[10px] uppercase">Automated Perception</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">Real-Time Intelligence: The LENS System</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-lg font-light">
+                    CORTEX employs 9 parallel analyzers to achieve sub-second situational awareness of your entire engineering environment.
+                </p>
             </div>
 
-            <!-- Pipeline detail cards -->
-            <div class="bl-section-divider">
-                <div class="bl-section-divider-line"></div>
-                <span class="bl-section-divider-label">8-Stage Detail</span>
-                <div class="bl-section-divider-line"></div>
-            </div>
-            <div class="bl-pipeline-grid">
-
-                <div class="bl-pipeline-card bl-pipeline-card--cyan">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">−1</span>
-                        <i class="fas fa-filter bl-pipeline-icon bl-pipeline-icon--cyan"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Request Enrichment</div>
-                    <div class="bl-pipeline-card-desc">Silent pre-processing adds governance context, breaking-risk assessment, and design pillar considerations before the request reaches any orchestrator.</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Structure</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Functional mapping of classes and interfaces.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--cyan">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">0</span>
-                        <i class="fas fa-network-wired bl-pipeline-icon bl-pipeline-icon--cyan"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">MCP Gateway</div>
-                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 30 registered tools, and enforces rate limiting.</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">History</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Identifies high-churn, high-risk components.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--violet">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">1</span>
-                        <i class="fas fa-crosshairs bl-pipeline-icon bl-pipeline-icon--violet"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Intent Classification</div>
-                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 29 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Dependencies</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Maps architecture coupling and risk.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--violet">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">2</span>
-                        <i class="fas fa-microscope bl-pipeline-icon bl-pipeline-icon--violet"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">LENS Analysis</div>
-                    <div class="bl-pipeline-card-desc">Parallel analyzers scan AST structure, Git history, security vulnerabilities, architecture patterns, and complexity metrics simultaneously — sub-second.</div>
-                    <div class="bl-pipeline-card-timing">300–800 ms</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Security</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Instant scan for patterns and vulnerabilities.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--emerald">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">3</span>
-                        <i class="fas fa-brain bl-pipeline-icon bl-pipeline-icon--emerald"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Brain Intelligence</div>
-                    <div class="bl-pipeline-card-desc">Perception recognises patterns, Reasoning selects strategies by historical success rate, Action builds a TDD-gated execution plan with rollback points.</div>
-                    <div class="bl-pipeline-card-timing">50–200 ms</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Patterns</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Detects architectural drift from standards.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--emerald">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">4</span>
-                        <i class="fas fa-shield-alt bl-pipeline-icon bl-pipeline-icon--emerald"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Governance Gate</div>
-                    <div class="bl-pipeline-card-desc">EnforcementOrchestrator coordinates 10 specialised agents — GovernanceAgent, SecurityAgent, ComplianceAgent, FileNamingAgent, ArchitectureIntegrityAgent, and 5 more.</div>
-                    <div class="bl-pipeline-card-result">
-                        <span class="bl-pipeline-result bl-pipeline-result--pass">PASS</span>
-                        <span class="bl-pipeline-result bl-pipeline-result--warn">WARNING</span>
-                        <span class="bl-pipeline-result bl-pipeline-result--block">BLOCKED</span>
-                    </div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Complexity</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Per-module maintainability health scores.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--amber">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--amber">5</span>
-                        <i class="fas fa-vial bl-pipeline-icon bl-pipeline-icon--amber"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">TDD Execution</div>
-                    <div class="bl-pipeline-card-desc">TDDOrchestrator writes failing tests first, then minimum implementation, then improves quality — all tests must stay green. CORE-008 is architecturally mandated.</div>
-                    <div class="bl-pipeline-card-tdd">
-                        <span class="bl-tdd-badge bl-tdd-red">RED</span>
-                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
-                        <span class="bl-tdd-badge bl-tdd-green">GREEN</span>
-                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
-                        <span class="bl-tdd-badge bl-tdd-blue">REFACTOR</span>
-                    </div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Documentation</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Tracks knowledge retention and health.</p>
                 </div>
-
-                <div class="bl-pipeline-card bl-pipeline-card--rose">
-                    <div class="bl-pipeline-card-header">
-                        <span class="bl-pipeline-badge bl-pipeline-badge--rose">6</span>
-                        <i class="fas fa-database bl-pipeline-icon bl-pipeline-icon--rose"></i>
-                    </div>
-                    <div class="bl-pipeline-card-title">Audit Trail — SQLite WAL</div>
-                    <div class="bl-pipeline-card-desc">Every action logs AC_START and AC_COMPLETE timestamps to CortexAuditDB with hash-chain integrity. Auditors get queryable evidence — not spreadsheet archaeology.</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Domain</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Regulatory and business rule awareness.</p>
                 </div>
-
-            </div>
-        </div><!-- /.bl-section-panel: How CORTEX Works -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 4 — QUANTIFIED IMPACT (ROI Grid)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-chart-line"></i> Proof: Quantified Business Impact</h2>
-
-            <p class="bl-tab-desc">These outcomes are observable in this codebase today — not projections. Every metric is backed by 99 consecutive delivery phases with a full queryable audit trail.</p>
-            <div class="roi-grid">
-                <div class="roi-card">
-                    <div class="roi-icon">🧪</div>
-                    <div class="roi-value">Shift Left</div>
-                    <div class="roi-label">Defect Detection</div>
-                    <div class="roi-detail">Governance gates block non-compliant code at commit — before review, before merge</div>
+                <div class="glass-card p-4 space-y-2 border-white/5">
+                    <span class="analyzer-tag">Stack</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-500">Environment and build-tool validation.</p>
                 </div>
-                <div class="roi-card roi-card--emerald">
-                    <div class="roi-icon">⚡</div>
-                    <div class="roi-value">Minutes</div>
-                    <div class="roi-label">Root Cause Analysis</div>
-                    <div class="roi-detail">RCA Engine applies 4 structured methodologies — not manual log archaeology</div>
-                </div>
-                <div class="roi-card roi-card--emerald">
-                    <div class="roi-icon">🎯</div>
-                    <div class="roi-value">Precision</div>
-                    <div class="roi-label">LLM Token Use</div>
-                    <div class="roi-detail">LENS context caching and intent routing eliminate redundant LLM calls</div>
-                </div>
-                <div class="roi-card roi-card--amber">
-                    <div class="roi-icon">🛡️</div>
-                    <div class="roi-value">0</div>
-                    <div class="roi-label">Production Violations</div>
-                    <div class="roi-detail">32 CORE rules enforced pre-commit across 99 consecutive phases</div>
+                <div class="glass-card p-4 space-y-2 border-emerald-500/20 bg-emerald-500/5">
+                    <span class="analyzer-tag !text-emerald-400 !border-emerald-400">Synthesis</span>
+                    <p class="text-[10px] md:text-[11px] text-slate-400">Unified strategic reporting for leadership.</p>
                 </div>
             </div>
-            <div class="roi-grid">
-                <div class="roi-card">
-                    <div class="roi-icon">🚀</div>
-                    <div class="roi-value">99</div>
-                    <div class="roi-label">Consecutive Phases Shipped</div>
-                    <div class="roi-detail">Every phase TDD-validated and governance-checked</div>
-                </div>
-                <div class="roi-card">
-                    <div class="roi-icon">🧪</div>
-                    <div class="roi-value">19,612</div>
-                    <div class="roi-label">Automated Tests</div>
-                    <div class="roi-detail">Regression protection that grows with every feature</div>
-                </div>
-                <div class="roi-card roi-card--emerald">
-                    <div class="roi-icon">🤖</div>
-                    <div class="roi-value">290</div>
-                    <div class="roi-label">Orchestrator Files</div>
-                    <div class="roi-detail">Autonomous workflow execution across 15 domains</div>
-                </div>
-                <div class="roi-card roi-card--amber">
-                    <div class="roi-icon">📊</div>
-                    <div class="roi-value">30</div>
-                    <div class="roi-label">MCP Tools</div>
-                    <div class="roi-detail">Machine-callable quality gates and intelligence APIs</div>
-                </div>
-            </div>
+        </section>
 
-            <!-- D3.js: Engineering time allocation before vs after -->
-            <div class="bl-d3-panel" id="value-flow-chart" role="img" aria-label="Engineering time allocation before and after CORTEX">
-                <div class="bl-d3-title">Engineering Time Allocation: Before vs. After CORTEX</div>
-                <div class="bl-d3-subtitle">Illustrative — actual results scale with your team's baseline defect rate and sprint cost</div>
-                <div class="bl-d3-canvas" id="value-flow-canvas"></div>
-            </div>
-
-        </div><!-- /.bl-section-panel: Quantified Impact -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 5 — ENGINEERING EFFICIENCY (Tabbed)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-sliders-h"></i> Engineering Efficiency — How CORTEX Changes the Work</h2>
-
-            <div class="bl-tab-layout">
-                <div class="bl-tabs" role="tablist" aria-label="Engineering efficiency tabs">
-                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-token-opt"><i class="fas fa-coins"></i>Token Optimisation</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-velocity"><i class="fas fa-rocket"></i>Delivery Velocity</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-debug"><i class="fas fa-bug"></i>Incident Response</button>
-                </div>
-                <div class="bl-tab-content">
-
-                    <!-- Tab 1: Token Optimisation -->
-                    <div class="bl-tab-panel active" id="tab-token-opt" role="tabpanel">
-                        <p class="bl-tab-desc">CORTEX reduces LLM token consumption through intelligent caching, context scoping, and pre-execution filtering. The mechanisms are architectural — they apply on every request without manual tuning.</p>
-                        <table class="cost-table">
-                            <thead>
-                                <tr><th>Mechanism</th><th>How It Works</th><th>Effect</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>LENS context caching</td><td>Codebase analysis computed once and reused across turns in the same session</td><td class="highlight">Fewer redundant input tokens</td></tr>
-                                <tr><td>Intent routing</td><td>IntentRouter loads only the orchestrator context relevant to the classified intent</td><td class="highlight">Smaller per-request context window</td></tr>
-                                <tr><td>Governance pre-filtering</td><td>Invalid or non-compliant requests are blocked before reaching the model</td><td class="highlight">Wasted calls eliminated at source</td></tr>
-                                <tr><td>Structured response templates</td><td>Consistent output format reduces clarification loops and re-prompting</td><td class="highlight">Fewer correction turns</td></tr>
-                                <tr><td>RCA prevention rules</td><td>Known failure patterns resolved from the registry — no model call needed</td><td class="highlight">Recurring issues resolved offline</td></tr>
-                            </tbody>
-                        </table>
+        <!-- The Intelligence Diamond (Logic & Immune) -->
+        <section class="glass-card p-6 md:p-12 overflow-visible">
+            <div class="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
+                <div class="space-y-8 md:space-y-10">
+                    <div class="space-y-2">
+                        <div class="text-cyan-400 font-bold tracking-widest text-[10px] uppercase">Corporate Resilience</div>
+                        <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight">The Intelligence Diamond</h2>
                     </div>
-
-                    <!-- Tab 2: Delivery Velocity -->
-                    <div class="bl-tab-panel" id="tab-velocity" role="tabpanel">
-                        <p class="bl-tab-desc">99 consecutive delivery phases demonstrate that governance and velocity are not in tension — when quality is enforced by infrastructure, teams ship faster because rework disappears.</p>
-                        <div class="bl-velocity-grid">
-                            <div class="roi-card">
-                                <div class="roi-icon">📈</div>
-                                <div class="roi-value">99</div>
-                                <div class="roi-label">Phases Shipped</div>
-                                <div class="roi-detail">Every phase TDD-validated — zero regressions across the full history</div>
+                    <p class="text-sm md:text-lg font-light text-slate-400 leading-relaxed">
+                        CORTEX organizes 186 expert orchestrators into a four-pillar defense system, ensuring engineering quality is an immutable invariant.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="shrink-0 w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black transition-all">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
                             </div>
-                            <div class="roi-card roi-card--emerald">
-                                <div class="roi-icon">⏱️</div>
-                                <div class="roi-value">3.2×</div>
-                                <div class="roi-label">Test Execution Speed</div>
-                                <div class="roi-detail">Parallel pytest-xdist across 10 cores — measured on this codebase</div>
+                            <div>
+                                <h4 class="text-sm md:text-md font-bold">LENS (Sensory System)</h4>
+                                <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Eliminates technical blind spots through deep codebase awareness before execution.</p>
                             </div>
-                            <div class="roi-card roi-card--amber">
-                                <div class="roi-icon">🔄</div>
-                                <div class="roi-value">&lt;10s</div>
-                                <div class="roi-label">Preflight Gate</div>
-                                <div class="roi-detail">Critical wiring checks run in under 10 seconds before every commit</div>
+                        </div>
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                                <i data-lucide="brain" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm md:text-md font-bold">REASONING (Strategy Selection)</h4>
+                                <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Matches task complexity to three tiers of intelligence (Quick, Targeted, Full).</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="shrink-0 w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400 group-hover:bg-violet-500 group-hover:text-black transition-all">
+                                <i data-lucide="activity" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm md:text-md font-bold">ORCHESTRATION (The Execution Motor)</h4>
+                                <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Coordinates 186 specialized engines with structural Test-Driven Development.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="shrink-0 w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 group-hover:bg-red-500 group-hover:text-black transition-all">
+                                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm md:text-md font-bold">GOVERNANCE (The Immune System)</h4>
+                                <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Automatic enforcement of 32 CORE rules across 5 discrete security layers.</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Tab 3: Incident Response -->
-                    <div class="bl-tab-panel" id="tab-debug" role="tabpanel">
-                        <p class="bl-tab-desc">CORTEX's multi-stack debug pipeline and RCA Memory Engine restructure incident response — from unstructured manual investigation to a repeatable, documented, and learnable process.</p>
-                        <table class="cost-table">
-                            <thead>
-                                <tr><th>Activity</th><th>Traditional Approach</th><th>With CORTEX</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Bug triage</td><td class="cost-old">Unstructured — depends on who is available</td><td class="highlight">Structured 8-strategy debug pipeline, language-aware</td></tr>
-                                <tr><td>Root cause analysis</td><td class="cost-old">Ad hoc — varies by engineer experience</td><td class="highlight">RCA Engine: 4 methodologies, auto-selected by failure category</td></tr>
-                                <tr><td>Multi-stack debugging</td><td class="cost-old">Separate tools per layer — context switching overhead</td><td class="highlight">Unified pipeline: Python, JS/TS, C#, SQL, API, HTML</td></tr>
-                                <tr><td>Recurring failure</td><td class="cost-old">Same investigation repeated from scratch</td><td class="highlight">Prevention rule in registry — matched on next occurrence</td></tr>
-                                <tr><td>Debug marker cleanup</td><td class="cost-old">Manual find/replace — easy to miss across stacks</td><td class="highlight">Automated cleanup across all 6 supported language stacks</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div><!-- /.bl-tab-content -->
-            </div><!-- /.bl-tab-layout -->
-        </div><!-- /.bl-section-panel: Engineering Efficiency -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 6 — WHERE REWORK IS ELIMINATED
-             Mermaid: rework avoidance mindmap
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-hand-holding-usd"></i> Where Rework Is Eliminated</h2>
-
-            <!-- Mermaid: rework categories -->
-            <div class="bl-mermaid-panel" aria-label="Five categories of rework eliminated by CORTEX governance">
-                <div class="bl-mermaid-title"><i class="fas fa-sitemap"></i> Five Structural Rework Eliminations — Enforced Architecturally, Not by Process</div>
-                <div class="bl-mermaid-canvas">
-                    <pre class="mermaid">
-mindmap
-  root(("🛡️ CORTEX\nRework\nElimination"))
-    ("🧪 Non-Compliant Code")
-      ["Blocked at commit by 10 enforcement agents"]
-      ["Never reaches a human reviewer"]
-    ("📋 Vague Acceptance Criteria")
-      ["DoR enforcement requires testable definition first"]
-      ["Work starts only when criteria are executable"]
-    ("🔐 Security Issues Post-Ship")
-      ["LENS scans CVEs and PHI/PII at planning stage"]
-      ["Security classified at story level, not after incident"]
-    ("🔄 Recurring Failures")
-      ["RCA prevention rules written to governance registry"]
-      ["Same root cause cannot silently recur"]
-    ("📊 Audit Overhead")
-      ["32 CORE rules enforced automatically at every commit"]
-      ["SQLite audit trail — queryable, not spreadsheet"]
-                    </pre>
                 </div>
-                <p class="bl-mermaid-caption">Each elimination is structural — enforced by CORTEX infrastructure, not dependent on individual engineer discipline.</p>
+
+                <div class="flex justify-center py-6 md:py-10">
+                    <div class="intelligence-diamond">
+                        <svg width="320" height="320" class="absolute inset-0">
+                            <path d="M160 40 L280 160 L160 280 L40 160 Z" fill="none" stroke="rgba(0, 212, 255, 0.1)" stroke-width="1" />
+                            <line x1="160" y1="40" x2="160" y2="280" stroke="rgba(0, 212, 255, 0.05)" stroke-width="1" />
+                            <line x1="40" y1="160" x2="280" y2="160" stroke="rgba(0, 212, 255, 0.05)" stroke-width="1" />
+                        </svg>
+                        
+                        <div class="diamond-node top-0 left-1/2 -translate-x-1/2 -mt-8 border-cyan-500/50 shadow-[0_0_30px_rgba(0,212,255,0.2)]">
+                            <i data-lucide="eye" class="text-cyan-400 mb-1 w-5 h-5"></i>
+                            <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Sensory</span>
+                        </div>
+                        <div class="diamond-node top-1/2 right-0 -translate-y-1/2 -mr-8 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                            <i data-lucide="brain" class="text-emerald-400 mb-1 w-5 h-5"></i>
+                            <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Logic</span>
+                        </div>
+                        <div class="diamond-node bottom-0 left-1/2 -translate-x-1/2 -mb-8 border-violet-500/50 shadow-[0_0_30px_rgba(139,92,246,0.2)]">
+                            <i data-lucide="activity" class="text-violet-400 mb-1 w-5 h-5"></i>
+                            <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Motor</span>
+                        </div>
+                        <div class="diamond-node top-1/2 left-0 -translate-y-1/2 -ml-8 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                            <i data-lucide="shield-alert" class="text-red-400 mb-1 w-5 h-5"></i>
+                            <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Immune</span>
+                        </div>
+
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-20 h-20 rounded-full bg-slate-900 border-2 border-cyan-500/30 flex items-center justify-center shadow-[0_0_50px_rgba(0,212,255,0.15)]">
+                                <span class="text-cyan-400 font-black text-lg tracking-tighter">CORE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROI & Efficiency: The 3-Tier Loading Model -->
+        <section class="grid lg:grid-cols-2 gap-8 md:gap-12 px-2 md:px-0">
+            <div class="glass-card p-6 md:p-10 space-y-8">
+                <div class="flex items-center justify-between">
+                    <div class="max-w-[60%] md:max-w-none">
+                        <h3 class="text-xl md:text-2xl font-black mb-2 tracking-tight">Token Bio-Metrics</h3>
+                        <p class="text-slate-500 text-xs md:text-sm">Cognition management for session ROI.</p>
+                    </div>
+                    <div class="relative w-16 h-16 md:w-24 md:h-24 shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-90">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(0,212,255,0.05)" stroke-width="8"></circle>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#00d4ff" stroke-width="8" stroke-linecap="round" class="token-ring"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-sm md:text-lg font-black text-cyan-400">94%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="p-3 md:p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-[10px] md:text-xs font-bold text-slate-300">T0: Automated Orientation</span>
+                            <span class="text-[8px] md:text-[10px] text-cyan-400 font-black">3k Tokens</span>
+                        </div>
+                        <p class="text-[9px] md:text-[10px] text-slate-500">Silent bootstrapping for request classification.</p>
+                    </div>
+                    <div class="p-3 md:p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-[10px] md:text-xs font-bold text-slate-300">T1: Contextual Specialist</span>
+                            <span class="text-[8px] md:text-[10px] text-cyan-400 font-black">Task Only</span>
+                        </div>
+                        <p class="text-[9px] md:text-[10px] text-slate-500">Lazy loading for specific engineering domains.</p>
+                    </div>
+                    <div class="p-3 md:p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-[10px] md:text-xs font-bold text-slate-300">T2: Agent-Level Intelligence</span>
+                            <span class="text-[8px] md:text-[10px] text-cyan-400 font-black">File Specific</span>
+                        </div>
+                        <p class="text-[9px] md:text-[10px] text-slate-500">Targeted module analysis for large-scale codebases.</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="bl-image-context bl-image-context--amber bl-context-inline">
-                <div class="bl-context-stat bl-context-stat--block">
-                    <span class="bl-context-stat-value bl-context-stat-value--amber">5</span>
-                    <span class="bl-context-stat-label">categories of rework eliminated by design</span>
+            <div class="glass-card p-6 md:p-10 space-y-6 md:space-y-8">
+                <h3 class="text-xl md:text-2xl font-black tracking-tight">The 5-Layer Immune System</h3>
+                <p class="text-slate-500 text-xs md:text-sm">Security infrastructure catching risk at the source.</p>
+                
+                <div class="space-y-2 md:space-y-3">
+                    <div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 bg-red-500/5 border border-red-500/10 rounded-lg">
+                        <div class="w-6 h-6 md:w-8 md:h-8 shrink-0 rounded bg-red-500/20 flex items-center justify-center text-red-400 text-[8px] md:text-[10px] font-black">L1</div>
+                        <div class="flex-1">
+                            <div class="text-[10px] md:text-xs font-bold">Pre-Commit Sanitization</div>
+                            <p class="hidden sm:block text-[9px] text-slate-500 uppercase tracking-tighter">Blocks secrets and PII leakage.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 bg-orange-500/5 border border-orange-500/10 rounded-lg">
+                        <div class="w-6 h-6 md:w-8 md:h-8 shrink-0 rounded bg-orange-500/20 flex items-center justify-center text-orange-400 text-[8px] md:text-[10px] font-black">L2</div>
+                        <div class="flex-1">
+                            <div class="text-[10px] md:text-xs font-bold">Governance Integrity</div>
+                            <p class="hidden sm:block text-[9px] text-slate-500 uppercase tracking-tighter">Mandatory explicit error logic.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 bg-amber-500/5 border border-amber-500/10 rounded-lg">
+                        <div class="w-6 h-6 md:w-8 md:h-8 shrink-0 rounded bg-amber-500/20 flex items-center justify-center text-amber-400 text-[8px] md:text-[10px] font-black">L3</div>
+                        <div class="flex-1">
+                            <div class="text-[10px] md:text-xs font-bold">LENS Intelligence Scan</div>
+                            <p class="hidden sm:block text-[9px] text-slate-500 uppercase tracking-tighter">Detects injection/XSS patterns.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-lg">
+                        <div class="w-6 h-6 md:w-8 md:h-8 shrink-0 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-[8px] md:text-[10px] font-black">L4</div>
+                        <div class="flex-1">
+                            <div class="text-[10px] md:text-xs font-bold">Static CVE Analysis</div>
+                            <p class="hidden sm:block text-[9px] text-slate-500 uppercase tracking-tighter">Third-party dependency validation.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 bg-cyan-500/5 border border-cyan-500/10 rounded-lg">
+                        <div class="w-6 h-6 md:w-8 md:h-8 shrink-0 rounded bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-[8px] md:text-[10px] font-black">L5</div>
+                        <div class="flex-1">
+                            <div class="text-[10px] md:text-xs font-bold">Release Certification</div>
+                            <p class="hidden sm:block text-[9px] text-slate-500 uppercase tracking-tighter">Final OWASP assessment gate.</p>
+                        </div>
+                    </div>
                 </div>
-                <p class="bl-context-narrative">
-                    <strong>Defects from non-compliant code</strong> — blocked at commit by 10 enforcement agents before they reach a reviewer. <strong>Rework from vague acceptance criteria</strong> — DoR enforcement requires a testable definition before any work begins. <strong>Security issues discovered post-ship</strong> — LENS scans for CVEs, insecure patterns, and PHI/PII exposure during planning, not after deployment. <strong>Recurring failures</strong> — RCA prevention rules written to the governance registry mean the same root cause cannot silently recur. <strong>Governance audit overhead</strong> — 32 CORE rules enforced automatically at pre-commit and CI, with a queryable SQLite audit trail, eliminating manual compliance reviews. The magnitude of savings depends on your team's baseline defect rate, sprint cost, and audit cadence — CORTEX provides the mechanisms; the return scales with your context.
+            </div>
+        </section>
+
+        <!-- Institutional Memory & RCA Engine -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4 px-4">
+                <div class="text-violet-400 font-bold tracking-widest text-[10px] uppercase">Corporate Memory</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">Institutional Muscle Memory</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-lg font-light leading-relaxed">
+                    CORTEX ensures failures are never repeated. Every root cause is converted into a permanent, automated prevention rule shared across your entire organization.
                 </p>
             </div>
-        </div><!-- /.bl-section-panel: Rework Elimination -->
 
-        <!-- ════════════════════════════════════════════════
-             SECTION 7 — GOVERNANCE DEEP DIVE
-             D3 donut + governance rule list
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-shield-alt"></i> Governance in Depth: 32 Rules, 5 Domains</h2>
-
-            <div class="bl-arch-grid">
-                <!-- D3 donut governance chart -->
-                <div class="bl-d3-panel bl-d3-panel--half" id="governance-chart" role="img" aria-label="Donut chart showing CORTEX governance rule distribution">
-                    <div class="bl-d3-title">Governance Rule Distribution</div>
-                    <div class="bl-d3-subtitle">Hover a segment to see domain count</div>
-                    <div class="bl-d3-canvas" id="governance-canvas"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 px-2 md:px-0">
+                <div class="glass-card p-6 text-center space-y-3">
+                    <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400">
+                        <i data-lucide="git-merge" class="w-5 h-5"></i>
+                    </div>
+                    <div class="font-bold text-xs md:text-sm uppercase tracking-tighter">Five-Whys Chain</div>
+                    <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Linear root cause tracing for core logic failures.</p>
                 </div>
-
-                <!-- Governance narrative + rule list -->
-                <div class="bl-governance-narrative">
-                    <div class="bl-image-context--emerald bl-image-context">
-                        <div class="bl-context-stat">
-                            <span class="bl-context-stat-value bl-context-stat-value--emerald">32</span>
-                            <span class="bl-context-stat-label">CORE rules · zero manual gates</span>
-                        </div>
-                        <p class="bl-context-narrative">
-                            Every CORE rule is a <strong>YAML file in Git</strong> — version-controlled, peer-reviewable, and auditable. At Stage 4, the <strong>EnforcementOrchestrator coordinates 10 specialised agents</strong>. A gate result is <strong>PASS, WARNING, or BLOCKED</strong>. BLOCKED operations halt immediately: no files changed, no LLM tokens spent.
+                <div class="glass-card p-6 text-center space-y-3">
+                    <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400">
+                        <i data-lucide="network" class="w-5 h-5"></i>
+                    </div>
+                    <div class="font-bold text-xs md:text-sm uppercase tracking-tighter">Fishbone Matrix</div>
+                    <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Categorization across People, Process, and Tech.</p>
+                </div>
+                <div class="glass-card p-6 text-center space-y-3">
+                    <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400">
+                        <i data-lucide="git-pull-request" class="w-5 h-5"></i>
+                    </div>
+                    <div class="font-bold text-xs md:text-sm uppercase tracking-tighter">Fault Tree Logic</div>
+                    <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Surfaces single points of failure via probability.</p>
+                </div>
+                <div class="glass-card p-6 text-center space-y-3">
+                    <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400">
+                        <i data-lucide="history" class="w-5 h-5"></i>
+                    </div>
+                    <div class="font-bold text-xs md:text-sm uppercase tracking-tighter">Temporal Chain</div>
+                    <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Correlation of events pinpointing trigger conditions.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 md:p-12 bg-gradient-to-br from-violet-900/10 to-transparent">
+                <div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
+                    <div class="lg:w-1/3 space-y-4 text-center lg:text-left">
+                        <h4 class="text-2xl md:text-3xl font-black tracking-tight">Reinforcement Learning</h4>
+                        <p class="text-slate-400 text-xs md:text-sm font-light leading-relaxed">
+                            CORTEX rewards successful engineering patterns with higher confidence scores, while recurring defects trigger automated 'Prevention Advisories'.
                         </p>
+                        <div class="flex justify-center lg:justify-start gap-6">
+                            <div class="text-center">
+                                <div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div>
+                                <div class="text-[8px] text-slate-500 uppercase tracking-widest">Reward</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl md:text-2xl font-black text-red-400">-1.0</div>
+                                <div class="text-[8px] text-slate-500 uppercase tracking-widest">Penalty</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bl-governance-rule-list">
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-002</span>
-                            <span class="bl-gov-rule-desc">All output inline — never create .md/.txt report files in production</span>
+                    <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                        <div class="p-6 bg-slate-900/80 rounded-2xl border border-violet-500/20 flex flex-col justify-center">
+                            <div class="text-[10px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
+                            <p class="text-[11px] text-slate-400">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire company portfolio.</p>
                         </div>
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-008</span>
-                            <span class="bl-gov-rule-desc">TDD mandatory — write failing test first, then implement. No exceptions.</span>
-                        </div>
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-028</span>
-                            <span class="bl-gov-rule-desc">File naming: snake_case only — enforced on every new file created</span>
-                        </div>
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-048</span>
-                            <span class="bl-gov-rule-desc">Holistic validation gate before IMPLEMENT/FIX/REFACTOR — no skipping</span>
-                        </div>
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-064</span>
-                            <span class="bl-gov-rule-desc">Sweep Completeness — every audit exhausts its full issue catalogue</span>
-                        </div>
-                        <div class="bl-gov-rule">
-                            <span class="bl-gov-rule-code">CORE-068</span>
-                            <span class="bl-gov-rule-desc">Universal Convergence Gate — detect→fix→rescan until zero P0/P1 violations</span>
+                        <div class="p-6 bg-slate-900/80 rounded-2xl border border-violet-500/20 flex flex-col justify-center">
+                            <div class="text-[10px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
+                            <p class="text-[11px] text-slate-400">All learning and enforcement is recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div><!-- /.bl-section-panel: Governance Depth -->
+        </section>
 
-        <!-- ════════════════════════════════════════════════
-             SECTION 8 — STRATEGIC VALUE (Tabbed Pillars)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-star"></i> Strategic Value Proposition</h2>
-
-            <div class="bl-tab-layout">
-                <div class="bl-tabs" role="tablist" aria-label="Strategic value tabs">
-                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-build-right"><i class="fas fa-check-double"></i>Build Right First</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-governance"><i class="fas fa-shield-alt"></i>Governance</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-scale"><i class="fas fa-expand-arrows-alt"></i>Scale</button>
+        <!-- Operational ROI Chart -->
+        <section class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center px-2 md:px-0">
+            <div class="glass-card p-6 md:p-8 order-2 lg:order-1">
+                <div id="roi-chart" class="h-48 md:h-64 w-full"></div>
+            </div>
+            <div class="space-y-6 order-1 lg:order-2 px-2 md:px-0">
+                <div class="text-cyan-400 font-bold tracking-widest text-[10px] uppercase">Measurable Impact</div>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter">The Shift-Left Dividend</h2>
+                <p class="text-slate-400 text-sm md:text-lg font-light leading-relaxed">
+                    By catching 94% of engineering defects at the keyboard boundary, CORTEX reclaims lost productivity, redirecting capital from maintenance to innovation.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="text-emerald-400 font-black text-xl md:text-2xl">4.2×</div>
+                        <div class="text-[8px] md:text-[9px] text-slate-500 uppercase font-bold tracking-widest">Velocity Multiplier</div>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="text-cyan-400 font-black text-xl md:text-2xl">60%</div>
+                        <div class="text-[8px] md:text-[9px] text-slate-500 uppercase font-bold tracking-widest">Innovation focus</div>
+                    </div>
                 </div>
-                <div class="bl-tab-content">
-
-                    <!-- Tab: Build Right First Time -->
-                    <div class="bl-tab-panel active" id="tab-build-right" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🧪</div>
-                                <div>
-                                    <div class="pillar-title">TDD-First: Zero Rework at Source</div>
-                                    <div class="pillar-text">CORE-008 mandates tests before code — every feature. Acceptance criteria become executable tests before implementation begins. Defects never enter the codebase, saving 4–8× the cost of post-production fixes.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🔮</div>
-                                <div>
-                                    <div class="pillar-title">LENS: Risks Surfaced Before Sprint Start</div>
-                                    <div class="pillar-text">LENS pipeline scans the entire codebase for security gaps, architecture drift, and dependency risks — during planning, not after deployment. Prevention is 10× cheaper than remediation.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🔄</div>
-                                <div>
-                                    <div class="pillar-title">RCA Engine: Learn From Every Failure</div>
-                                    <div class="pillar-text">Four structured methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) identify root causes in minutes and write prevention rules to the governance registry — the same mistake cannot recur.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">📋</div>
-                                <div>
-                                    <div class="pillar-title">Audit Trail: Compliance on Demand</div>
-                                    <div class="pillar-text">Every feature ships with AC_START/AC_COMPLETE timestamps in SQLite, test results, and governance sign-off. Auditors get queryable evidence, not spreadsheet archaeology.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab: Enterprise Governance -->
-                    <div class="bl-tab-panel" id="tab-governance" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🛡️</div>
-                                <div>
-                                    <div class="pillar-title">32 CORE Rules — Enforced, Not Suggested</div>
-                                    <div class="pillar-text">Type safety, documentation, security classification, naming conventions, and architecture boundaries are enforced at pre-commit. Non-compliant code is blocked before it reaches a human reviewer.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🤖</div>
-                                <div>
-                                    <div class="pillar-title">AI-Assisted, Governance-Guarded</div>
-                                    <div class="pillar-text">CORTEX orchestrates GitHub Copilot through 32 governance gates. AI suggestions that violate quality standards are blocked automatically — you get AI speed without AI risk.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">📊</div>
-                                <div>
-                                    <div class="pillar-title">Observable Engineering</div>
-                                    <div class="pillar-text">Prometheus metrics, SQLite activity traces, and health orchestrator endpoints give real-time visibility into engineering throughput, quality, and compliance status — dashboards, not guesswork.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🔐</div>
-                                <div>
-                                    <div class="pillar-title">Security by Design</div>
-                                    <div class="pillar-text">LENS scans for CVEs, insecure patterns, and PHI/PII exposure at every commit. Security classification is enforced at the story level — before code is written, not after an incident report.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab: Scale with Confidence -->
-                    <div class="bl-tab-panel" id="tab-scale" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">📈</div>
-                                <div>
-                                    <div class="pillar-title">Velocity That Compounds</div>
-                                    <div class="pillar-text">99 consecutive phases demonstrate CORTEX velocity is repeatable, not a one-sprint anomaly. As governance rules and test suites grow, delivery speed increases — the opposite of technical debt accumulation.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🌐</div>
-                                <div>
-                                    <div class="pillar-title">Multi-Stack Support</div>
-                                    <div class="pillar-text">8 debug strategies across Python, JavaScript/TypeScript, C#/.NET, SQL, and HTML/CSS — plus REST/GraphQL/gRPC API tracing. CORTEX works where your team works.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🧠</div>
-                                <div>
-                                    <div class="pillar-title">Institutional Knowledge Retention</div>
-                                    <div class="pillar-text">RCA prevention rules, LENS analysis history, and governance registries capture engineering decisions as queryable data. When team members change, the knowledge stays.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">🏗️</div>
-                                <div>
-                                    <div class="pillar-title">Predictable Roadmap Delivery</div>
-                                    <div class="pillar-text">Engineering commitments are backed by velocity data, not estimates. Executive conversations become evidence-based — 99 of 99 planned phases shipped is a harder argument to question.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- /.bl-tab-content -->
-            </div><!-- /.bl-tab-layout -->
-        </div><!-- /.bl-section-panel: Strategic Value -->
-
-        <!-- ════════════════════════════════════════════════
-             SECTION 9 — PLATFORM CAPABILITIES
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-check-double"></i> Platform Capabilities</h2>
-            <div class="bl-badge-row">
-                <span class="bl-badge"><i class="fas fa-vial"></i> TDD-First Development</span>
-                <span class="bl-badge"><i class="fas fa-balance-scale"></i> 32 CORE Governance Rules</span>
-                <span class="bl-badge bl-badge--emerald"><i class="fas fa-search"></i> LENS Code Intelligence</span>
-                <span class="bl-badge bl-badge--emerald"><i class="fas fa-brain"></i> RCA Memory Engine</span>
-                <span class="bl-badge bl-badge--emerald"><i class="fas fa-database"></i> SQLite Audit Trail</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-plug"></i> 30 MCP Tools</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-layer-group"></i> 290 Orchestrators · 15 Domains</span>
-                <span class="bl-badge bl-badge--violet"><i class="fas fa-bug"></i> Multi-Stack Debug (8 Strategies)</span>
-                <span class="bl-badge bl-badge--amber"><i class="fas fa-heartbeat"></i> Health Monitoring</span>
-                <span class="bl-badge bl-badge--amber"><i class="fas fa-chart-bar"></i> Prometheus Metrics</span>
-                <span class="bl-badge bl-badge--amber"><i class="fas fa-lock"></i> Security by Design</span>
-                <span class="bl-badge bl-badge--amber"><i class="fas fa-sync"></i> CI/CD Integration</span>
             </div>
-        </div><!-- /.bl-section-panel: Capabilities -->
+        </section>
 
-        <!-- ════════════════════════════════════════════════
-             SECTION 10 — EXPLORE FURTHER (CTAs)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-compass"></i> Explore Further</h2>
-            <div class="role-cta-row">
-                <a class="role-cta role-cta--primary" href="../index.html#hero-section">
-                    <i class="fas fa-home"></i>
-                    <span>Platform Overview</span>
-                </a>
-                <a class="role-cta role-cta--primary" href="product-owner.html">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Product Owner View</span>
-                </a>
-                <a class="role-cta role-cta--secondary" href="software-engineer.html">
-                    <i class="fas fa-code"></i>
-                    <span>Engineer View</span>
-                </a>
-                <a class="role-cta role-cta--secondary" href="../index.html">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Governance Rules</span>
-                </a>
-                <a class="role-cta role-cta--ghost" href="../index.html">
-                    <i class="fas fa-users"></i>
-                    <span>Switch Role View</span>
-                </a>
+        <!-- Final Strategic CTA -->
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
+            <div class="glass-card p-8 md:p-16 space-y-8 md:space-y-10 relative overflow-visible border-cyan-500/30">
+                <div class="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-cyan-500 rounded-2xl md:rounded-3xl rotate-45 flex items-center justify-center shadow-[0_0_50px_rgba(0,212,255,0.4)]">
+                    <i data-lucide="rocket" class="w-8 h-8 md:w-10 md:h-10 text-black -rotate-45"></i>
+                </div>
+                <h3 class="text-2xl md:text-4xl font-black tracking-tighter pt-4 md:pt-0">Ready for Command?</h3>
+                <p class="text-slate-400 max-w-2xl mx-auto font-light text-sm md:text-xl">
+                    Establishing a framework that governs, learns, and delivers. Schedule an executive technical audit today.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="px-6 md:px-10 py-4 md:py-5 bg-cyan-500 text-black font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white hover:scale-105 transition-all">
+                        Schedule executive Briefing
+                    </button>
+                    <button class="px-6 md:px-10 py-4 md:py-5 glass-card font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white/10 transition-all">
+                        Request Capability Audit
+                    </button>
+                </div>
             </div>
-        </div><!-- /.bl-section-panel: CTAs -->
+        </section>
 
-    </div><!-- /.role-content-wrapper -->
-</main>
+    </main>
 
-<!-- ══════════════════════════════════════════════════════════
-     SCRIPTS: Tab switching + Mermaid init + D3.js charts
-     ══════════════════════════════════════════════════════════ -->
-<script>
-/* ── Tab switching ── */
-(function () {
-    'use strict';
-    document.querySelectorAll('.bl-tab').forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            var layout = this.closest('.bl-tab-layout');
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="flex justify-center gap-6 md:gap-8 text-slate-500">
+            <i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="shield" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+        </div>
+        <div class="text-[9px] md:text-[10px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | THE AI ENGINEERING FRAMEWORK | STRATEGIC COMMAND VIEW 4.2
+        </div>
+    </footer>
 
-            // Deactivate all tabs in this group
-            layout.querySelectorAll('.bl-tab').forEach(function (t) {
-                t.classList.remove('active');
-                t.setAttribute('aria-selected', 'false');
-            });
+    <script>
+        window.onload = function() {
+            lucide.createIcons();
+            initCharts();
+        };
 
-            // Deactivate all panels in this group
-            layout.querySelectorAll('.bl-tab-panel').forEach(function (p) {
-                p.classList.remove('active');
-            });
+        function initCharts() {
+            // Shift-Left ROI Chart (Cost of Defects)
+            const roiData = [
+                { stage: 'Keyboard', cost: 1, color: '#10b981' },
+                { stage: 'Review', cost: 4, color: '#00d4ff' },
+                { stage: 'QA', cost: 15, color: '#8b5cf6' },
+                { stage: 'UAT', cost: 40, color: '#f59e0b' },
+                { stage: 'Prod', cost: 100, color: '#ef4444' }
+            ];
 
-            // Activate clicked tab + target panel
-            this.classList.add('active');
-            this.setAttribute('aria-selected', 'true');
-            var target = document.getElementById(this.dataset.target);
-            if (target) target.classList.add('active');
+            const chartId = '#roi-chart';
+            const container = d3.select(chartId);
+            if (container.empty()) return;
+
+            const margin = {top: 20, right: 20, bottom: 40, left: 30};
+            const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
+            const height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+            const svg = container
+                .append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand()
+                .range([0, width])
+                .domain(roiData.map(d => d.stage))
+                .padding(0.4);
+
+            const y = d3.scaleLinear()
+                .domain([0, 100])
+                .range([height, 0]);
+
+            // Grid lines
+            svg.append("g")
+                .attr("class", "grid")
+                .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(""));
+
+            svg.selectAll(".grid line").attr("stroke", "rgba(255,255,255,0.05)");
+            svg.select(".grid path").remove();
+
+            // Bars
+            svg.selectAll(".bar")
+                .data(roiData)
+                .enter()
+                .append("rect")
+                .attr("x", d => x(d.stage))
+                .attr("width", x.bandwidth())
+                .attr("fill", d => d.color)
+                .attr("rx", 4)
+                .attr("y", height)
+                .attr("height", 0)
+                .transition()
+                .duration(1500)
+                .attr("y", d => y(d.cost))
+                .attr("height", d => height - y(d.cost));
+
+            // Labels
+            svg.selectAll(".label")
+                .data(roiData)
+                .enter()
+                .append("text")
+                .attr("x", d => x(d.stage) + x.bandwidth() / 2)
+                .attr("y", d => y(d.cost) - 8)
+                .attr("text-anchor", "middle")
+                .attr("fill", d => d.color)
+                .attr("font-size", "9px")
+                .attr("font-weight", "black")
+                .text(d => d.cost + "×");
+
+            // X-axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x).tickSize(0))
+                .selectAll("text")
+                .attr("fill", "#64748b")
+                .attr("font-size", "8px")
+                .attr("font-weight", "bold")
+                .attr("dy", "1.2em");
+                
+            svg.selectAll(".domain").remove();
+        }
+
+        // Handle resize for charts
+        window.addEventListener('resize', () => {
+            const chart = document.getElementById('roi-chart');
+            if (chart) {
+                chart.innerHTML = '';
+                initCharts();
+            }
         });
-    });
-})();
-</script>
-
-<script>
-/* ── Mermaid init — dark glassmorphism theme ── */
-if (typeof mermaid !== 'undefined') {
-    mermaid.initialize({
-        startOnLoad: true,
-        theme: 'base',
-        themeVariables: {
-            background: '#0a0e27',
-            primaryColor: '#0d1b3e',
-            primaryTextColor: '#e2e8f0',
-            primaryBorderColor: '#00d4ff',
-            lineColor: '#3a4060',
-            secondaryColor: '#1a1f44',
-            tertiaryColor: '#12162e',
-            edgeLabelBackground: '#0a0e27',
-            fontSize: '14px',
-            nodeBorder: '#00d4ff',
-            clusterBkg: '#0d1120',
-            titleColor: '#e2e8f0'
-        },
-        flowchart: { curve: 'basis', htmlLabels: true },
-        mindmap: { padding: 20 }
-    });
-}
-</script>
-
-<script>
-/* ── D3.js Chart 1: Defect Cost Bar Chart ── */
-(function () {
-    'use strict';
-    if (typeof d3 === 'undefined') return;
-    var container = document.getElementById('defect-cost-canvas');
-    if (!container) return;
-
-    var stages = [
-        { label: 'Commit\n(CORTEX Gate)', cost: 1,   color: '#34d399' },
-        { label: 'Code Review',           cost: 4,   color: '#38bdf8' },
-        { label: 'QA / Testing',          cost: 15,  color: '#f59e0b' },
-        { label: 'UAT / Staging',         cost: 40,  color: '#fb923c' },
-        { label: 'Production',            cost: 100, color: '#fb7185' }
-    ];
-
-    var margin = { top: 24, right: 40, bottom: 68, left: 64 };
-    var totalW = Math.max(container.offsetWidth || 0, 480);
-    var totalH = 420; /* d3_min_height_400 gate — html-view-lifecycle.yaml § asset_validation */
-    var w = totalW - margin.left - margin.right;
-    var h = totalH - margin.top - margin.bottom;
-
-    var svg = d3.select(container)
-        .append('svg')
-        .attr('width', '100%')
-        .attr('height', totalH)
-        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
-        .attr('preserveAspectRatio', 'xMidYMid meet');
-
-    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-    var x = d3.scaleBand().domain(stages.map(function(d){ return d.label; })).range([0, w]).padding(0.38);
-    var y = d3.scaleLinear().domain([0, 115]).range([h, 0]);
-
-    /* Grid */
-    g.append('g')
-        .attr('class', 'bl-d3-grid-lines')
-        .call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
-        .call(function(s){ s.select('.domain').remove(); s.selectAll('line').attr('stroke', 'rgba(255,255,255,0.05)'); });
-
-    /* Bars with gradient fill per colour */
-    var defs = svg.append('defs');
-    stages.forEach(function(d, i) {
-        var grad = defs.append('linearGradient').attr('id', 'bar-grad-' + i).attr('x1','0').attr('y1','0').attr('x2','0').attr('y2','1');
-        grad.append('stop').attr('offset','0%').attr('stop-color', d.color).attr('stop-opacity', 0.95);
-        grad.append('stop').attr('offset','100%').attr('stop-color', d.color).attr('stop-opacity', 0.55);
-    });
-
-    var bars = g.selectAll('.bar').data(stages).enter().append('g');
-
-    bars.append('rect')
-        .attr('x', function(d){ return x(d.label); })
-        .attr('y', function(d){ return y(d.cost); })
-        .attr('width', x.bandwidth())
-        .attr('height', function(d){ return h - y(d.cost); })
-        .attr('fill', function(d, i){ return 'url(#bar-grad-' + i + ')'; })
-        .attr('rx', 6)
-        .attr('stroke', function(d){ return d.color; })
-        .attr('stroke-width', 1)
-        .attr('stroke-opacity', 0.4);
-
-    /* Value labels */
-    bars.append('text')
-        .attr('x', function(d){ return x(d.label) + x.bandwidth() / 2; })
-        .attr('y', function(d){ return y(d.cost) - 7; })
-        .attr('text-anchor', 'middle')
-        .attr('fill', function(d){ return d.color; })
-        .attr('font-size', '13px')
-        .attr('font-weight', '800')
-        .attr('font-family', 'Inter, sans-serif')
-        .text(function(d){ return d.cost + 'x'; });
-
-    /* X axis */
-    var xAxis = g.append('g')
-        .attr('transform', 'translate(0,' + h + ')')
-        .call(d3.axisBottom(x).tickSize(0));
-    xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.08)');
-    xAxis.selectAll('text')
-        .attr('fill', '#a0a6c0')
-        .attr('font-size', '11px')
-        .attr('font-family', 'Inter, sans-serif')
-        .each(function(d) {
-            var el = d3.select(this);
-            var parts = d.split('\n');
-            el.text('');
-            parts.forEach(function(p, i) {
-                el.append('tspan').attr('x', 0).attr('dy', i === 0 ? '1.1em' : '1.2em').text(p);
-            });
-        });
-
-    /* Y axis */
-    var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function(d){ return d + 'x'; }));
-    yAxis.select('.domain').remove();
-    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
-    yAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
-
-    /* CORTEX annotation */
-    g.append('text')
-        .attr('x', x(stages[0].label) + x.bandwidth() / 2)
-        .attr('y', h + 55)
-        .attr('text-anchor', 'middle')
-        .attr('fill', '#34d399')
-        .attr('font-size', '10px')
-        .attr('font-weight', '700')
-        .attr('font-family', 'Inter, sans-serif')
-        .text('🛡️ CORTEX blocks here');
-})();
-</script>
-
-<script>
-/* ── D3.js Chart 2: Engineering Time Allocation Before vs After ── */
-(function () {
-    'use strict';
-    if (typeof d3 === 'undefined') return;
-    var container = document.getElementById('value-flow-canvas');
-    if (!container) return;
-
-    var categories = [
-        { label: 'Feature Development', before: 35, after: 60, color: '#00d4ff' },
-        { label: 'Bug Fixing & Rework',  before: 30, after: 10, color: '#fb7185' },
-        { label: 'Code Review',          before: 15, after: 10, color: '#f59e0b' },
-        { label: 'Compliance & Audit',   before: 12, after: 5,  color: '#a78bfa' },
-        { label: 'Incident Response',    before: 8,  after: 15, color: '#34d399' }
-    ];
-
-    var margin = { top: 40, right: 100, bottom: 24, left: 175 };
-    var totalW = Math.max(container.offsetWidth || 0, 540);
-    var barH = 22;
-    var gap = 8;
-    var groupH = barH * 2 + gap;
-    var totalH = margin.top + margin.bottom + categories.length * (groupH + 14) + 10;
-    var w = totalW - margin.left - margin.right;
-
-    var svg = d3.select(container)
-        .append('svg')
-        .attr('width', '100%')
-        .attr('height', totalH)
-        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
-        .attr('preserveAspectRatio', 'xMidYMid meet');
-
-    /* Legend */
-    var lg = svg.append('g').attr('transform', 'translate(' + margin.left + ',12)');
-    lg.append('rect').attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', 'rgba(160,166,192,0.25)').attr('stroke', 'rgba(255,255,255,0.15)').attr('stroke-width', 1);
-    lg.append('text').attr('x', 19).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text('Before CORTEX');
-    lg.append('rect').attr('x', 130).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', '#00d4ff').attr('opacity', 0.75);
-    lg.append('text').attr('x', 148).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text('After CORTEX');
-
-    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-    var x = d3.scaleLinear().domain([0, 100]).range([0, w]);
-
-    categories.forEach(function(d, i) {
-        var yBase = i * (groupH + 14);
-
-        /* Label */
-        g.append('text')
-            .attr('x', -10).attr('y', yBase + barH - 3)
-            .attr('text-anchor', 'end')
-            .attr('fill', '#e2e8f0').attr('font-size', '12px').attr('font-weight', '600')
-            .attr('font-family', 'Inter, sans-serif').text(d.label);
-
-        /* Before bar */
-        g.append('rect')
-            .attr('x', 0).attr('y', yBase)
-            .attr('width', x(d.before)).attr('height', barH)
-            .attr('rx', 5)
-            .attr('fill', 'rgba(160,166,192,0.18)')
-            .attr('stroke', 'rgba(255,255,255,0.1)').attr('stroke-width', 1);
-        g.append('text')
-            .attr('x', x(d.before) + 6).attr('y', yBase + barH / 2 + 4)
-            .attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
-            .text(d.before + '%');
-
-        /* After bar */
-        g.append('rect')
-            .attr('x', 0).attr('y', yBase + barH + gap)
-            .attr('width', x(d.after)).attr('height', barH)
-            .attr('rx', 5)
-            .attr('fill', d.color).attr('opacity', 0.75);
-        g.append('text')
-            .attr('x', x(d.after) + 6).attr('y', yBase + barH + gap + barH / 2 + 4)
-            .attr('fill', d.color).attr('font-size', '11px').attr('font-weight', '700')
-            .attr('font-family', 'Inter, sans-serif').text(d.after + '%');
-    });
-})();
-</script>
-
-<script>
-/* ── D3.js Chart 3: Governance Rule Donut Chart ── */
-(function () {
-    'use strict';
-    if (typeof d3 === 'undefined') return;
-    var container = document.getElementById('governance-canvas');
-    if (!container) return;
-
-    var domains = [
-        { label: 'Core / General',   count: 14, color: '#00d4ff' },
-        { label: 'TDD / Quality',    count: 6,  color: '#34d399' },
-        { label: 'Security',         count: 4,  color: '#fb7185' },
-        { label: 'Architecture',     count: 4,  color: '#a78bfa' },
-        { label: 'Naming / Docs',    count: 4,  color: '#f59e0b' }
-    ];
-
-    var size = Math.min(Math.max(container.offsetWidth || 0, 280), 340);
-    var radius = size / 2 - 22;
-    var innerR = radius * 0.56;
-
-    var svg = d3.select(container)
-        .append('svg')
-        .attr('width', '100%')
-        .attr('height', size)
-        .attr('viewBox', '0 0 ' + size + ' ' + size)
-        .attr('preserveAspectRatio', 'xMidYMid meet');
-
-    var g = svg.append('g').attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')');
-
-    var pie = d3.pie().value(function(d){ return d.count; }).sort(null).padAngle(0.03);
-    var arc = d3.arc().innerRadius(innerR).outerRadius(radius).cornerRadius(4);
-    var arcHover = d3.arc().innerRadius(innerR).outerRadius(radius + 10).cornerRadius(4);
-
-    /* Glow filter */
-    var defs = svg.append('defs');
-    var filter = defs.append('filter').attr('id', 'donut-glow').attr('x', '-30%').attr('y', '-30%').attr('width', '160%').attr('height', '160%');
-    filter.append('feGaussianBlur').attr('in', 'SourceGraphic').attr('stdDeviation', '4').attr('result', 'blur');
-    var feMerge = filter.append('feMerge');
-    feMerge.append('feMergeNode').attr('in', 'blur');
-    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-    var arcs = g.selectAll('.arc').data(pie(domains)).enter().append('g');
-
-    arcs.append('path')
-        .attr('d', arc)
-        .attr('fill', function(d){ return d.data.color; })
-        .attr('opacity', 0.82)
-        .attr('filter', 'url(#donut-glow)')
-        .on('mouseenter', function(event, d) {
-            d3.select(this).transition().duration(160).attr('d', arcHover).attr('opacity', 1);
-            cLabel.text(d.data.count);
-            cSub.text(d.data.label);
-        })
-        .on('mouseleave', function() {
-            d3.select(this).transition().duration(160).attr('d', arc).attr('opacity', 0.82);
-            cLabel.text('32');
-            cSub.text('CORE Rules');
-        });
-
-    var cLabel = g.append('text')
-        .attr('text-anchor', 'middle').attr('dy', '0.25em')
-        .attr('fill', '#ffffff').attr('font-size', '2rem').attr('font-weight', '800')
-        .attr('font-family', 'Inter, sans-serif').text('32');
-
-    var cSub = g.append('text')
-        .attr('text-anchor', 'middle').attr('dy', '1.9em')
-        .attr('fill', '#a0a6c0').attr('font-size', '0.68rem').attr('font-weight', '600')
-        .attr('letter-spacing', '0.06em').attr('font-family', 'Inter, sans-serif').text('CORE Rules');
-
-    /* Legend below donut */
-    var legendY = size / 2 + radius + 18;
-    if (legendY + domains.length * 20 <= size) {
-        var legendG = svg.append('g').attr('transform', 'translate(16,' + legendY + ')');
-        domains.forEach(function(d, i) {
-            var row = legendG.append('g').attr('transform', 'translate(0,' + (i * 20) + ')');
-            row.append('rect').attr('width', 11).attr('height', 11).attr('rx', 3).attr('fill', d.color).attr('opacity', 0.85);
-            row.append('text').attr('x', 16).attr('y', 9).attr('fill', '#a0a6c0').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif').text(d.label + ' (' + d.count + ')');
-        });
-    }
-})();
-</script>
-
-<script src="../assets/js/content-loader.js"></script>
-<script>
-    window.cortexLoader = new ContentLoader('../data/content.json');
-</script>
-
+    </script>
 </body>
 </html>
