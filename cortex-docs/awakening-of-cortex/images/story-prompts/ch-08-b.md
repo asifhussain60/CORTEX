@@ -13,7 +13,7 @@ Cinematic 2D cartoon illustration in a clean comic book / graphic novel style. B
 
 VISUAL DISTINCTION FROM CH-08-A: ch-08-a was a bright formal conference room with an ensemble cast. This is the private midnight homecoming — back in the basement, just Asif, Copilot Bot, and Miss G. Intimate, quiet, forward-looking. No conference table. Just one person, one robot, and the roadmap.
 
-Scene: Back in the basement at midnight. Asif Codenstein — 55-year-old mad scientist, wild Einstein-meets-Chaplin hair restored to full anarchic glory now that the office performance is over (one massive curl has re-expanded to its natural diameter, the comb track from earlier completely obliterated), thick glasses, Spider-Man pajamas back on (comfortable, at home — the knee tear now has a small Band-Aid sticker on it, which doesn't help) — sits at his wobbly desk bent over a large sheet of ACTUAL PHYSICAL PAPER. He draws a ROADMAP with a black pen. The roadmap is a seven-step numbered path drawn like an adventure map: winding upward to a summit. Each step has a small icon and label:
+Scene: Back in the basement at midnight. Asif Codenstein — 54-year-old eccentric mad scientist, plump and youthful, wild Einstein-meets-Chaplin hair restored to full anarchic glory now that the office performance is over (one massive curl has re-expanded to its natural diameter, the comb track from earlier completely obliterated — the hair has clearly been waiting all day to do this), thick glasses, Spider-Man pajamas back on (comfortable, at home — the knee tear now has a small Band-Aid sticker on it, which doesn't help, and the pajama waistband sits comfortably beneath his soft belly) — sits at his wobbly desk bent over a large sheet of ACTUAL PHYSICAL PAPER. He draws a ROADMAP with a black pen. The roadmap is a seven-step numbered path drawn like an adventure map: winding upward to a summit. Each step has a small icon and label:
 
   1. CONSOLIDATION — (scissors icon)
   2. CROSS-PLATFORM — (globe icon)
@@ -23,7 +23,7 @@ Scene: Back in the basement at midnight. Asif Codenstein — 55-year-old mad sci
   6. MULTI-STACK DEBUG — (layers icon)
   7. AUTONOMY — (star icon at the summit)
 
-Asif's expression: fierce, focused, forward-looking. Not manic — purposeful. Year Two beginning. His "DEBUG FUEL" mug is at his elbow, steaming gently.
+Asif's expression: fierce, focused, forward-looking — round cheeks set with determination. Not manic — purposeful. Year Two beginning. His "DEBUG FUEL" mug is at his elbow, steaming gently.
 
 RIGHT: Copilot Bot — posture straighter and more composed than early chapters. Dome head still shows empty brain cavity but now with noticeably more tiny floating particles inside — faint pattern forming. LED eyes glow cyan (`#67e8f9`). Speech bubble: "I ASPIRE TO BORING."
 

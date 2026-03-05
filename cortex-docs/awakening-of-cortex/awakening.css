@@ -341,6 +341,12 @@ body {
   font-size: 1.18rem;
   line-height: 1.9;
   color: #d0d4e8;
+  display: flow-root; /* establish BFC so floated story images are contained */
+}
+/* Reset browser UA margins on <figure> so floats aren't offset by 40px gutters */
+.ch-body figure {
+  margin: 0;
+  padding: 0;
 }
 .ch-body h1 {
   font-family: 'Space Grotesk', sans-serif;
@@ -540,20 +546,22 @@ body {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   position: relative;
   clear: none;
+  /* Ensure float renders above text, not collapsed */
+  min-height: 1px;
 }
 /* Float: left — text wraps on the right */
 .ch-story-img[data-align="left"] {
   float: left;
-  margin-right: 1.75rem;
+  margin-right: 2rem;
   margin-left: 0;
 }
 /* Float: right — text wraps on the left */
 .ch-story-img[data-align="right"] {
   float: right;
-  margin-left: 1.75rem;
+  margin-left: 2rem;
   margin-right: 0;
 }
-/* Clearfix after each .ch-body to contain floats */
+/* Clearfix — belt-and-suspenders alongside display:flow-root on .ch-body */
 .ch-body::after {
   content: '';
   display: table;

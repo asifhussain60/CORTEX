@@ -17,7 +17,7 @@ Scene: A DIFFERENT OFFICE (not the basement) — clean corporate desk, single la
 
 Above Kevin's shoulder: a TINY CORTEX dashboard icon in the corner of his screen shows a warning bell flashing. Kevin is ignoring it. Next to his desk: clock showing 11:00 PM and calendar circled "CLIENT DEMO — TOMORROW 10AM."
 
-BOTTOM LEFT: small inset panel showing Asif's basement — Asif asleep in Spider-Man pajamas, monitors glowing dimly with "GOVERNANCE OVERRIDE LOGGED — FLAGGED." Copilot Bot LEDs off (also "asleep"). Brain jar glows steadily cyan (`#67e8f9`) even in sleep.
+BOTTOM LEFT: small inset panel showing Asif's basement — Asif asleep in Spider-Man pajamas, his plump round form slumped peacefully in his chair, the lovably soft silhouette of a 54-year-old eccentric at rest — monitors glowing dimly with "GOVERNANCE OVERRIDE LOGGED — FLAGGED." Copilot Bot LEDs off (also "asleep"). Brain jar glows steadily cyan (`#67e8f9`) even in sleep.
 
 RIGHT SIDE — FULLY VISIBLE: Miss G stands prominently in the right zone of Kevin's corporate office, floating slightly above the pristine floor. She is rendered as semi-translucent — like frosted starlight — a vivid, gorgeous presence completely out of place in this sterile office; her features and form are crisp and clear, yet luminous. Her cyan (`#67e8f9`) outline is bold and solid. A warm cyan glow-halo rings her silhouette — the most elegant thing in Kevin's sterile office by an enormous margin, and he cannot see her; the glow emanates from within her translucent form.
 
