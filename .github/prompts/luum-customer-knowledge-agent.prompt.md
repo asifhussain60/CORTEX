@@ -1,4 +1,5 @@
 ````prompt
+scope: non-production-admin
 # Luum Customer Knowledge Agent
 **Version:** 1.0.0 | **Updated:** 2026-02-26 | **Scope:** Luum Payroll Platform — Customer Intelligence
 scope: non-production-admin

@@ -27,11 +27,11 @@ COPILOT = REPO / ".github" / "copilot-instructions.md"
 
 
 def _ssot() -> str:
-    return SSOT.read_text()
+    return SSOT.read_text(encoding="utf-8")
 
 
 def _yaml_reg() -> str:
-    return YAML_REG.read_text()
+    return YAML_REG.read_text(encoding="utf-8")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -148,13 +148,13 @@ class TestTemplateConsolidation:
     """Phase 85-C: Inline progress bar definitions removed from prompts."""
 
     def test_no_inline_exact_10_blocks_in_architect_prompt(self) -> None:
-        content = ARCHITECT.read_text()
+        content = ARCHITECT.read_text(encoding="utf-8")
         assert "exactly 10 blocks" not in content, (
             "cortex-architect.prompt.md must not define 'exactly 10 blocks' inline — use SSOT pointer"
         )
 
     def test_architect_prompt_references_ssot(self) -> None:
-        content = ARCHITECT.read_text()
+        content = ARCHITECT.read_text(encoding="utf-8")
         assert "cortex-response-templates.md" in content or "templates SSOT" in content, (
             "cortex-architect.prompt.md must reference templates SSOT for progress bar format"
         )
@@ -167,7 +167,7 @@ class TestCopilotInstructionsSSoT:
     """Phase 85-C: copilot-instructions must reference templates SSOT."""
 
     def test_copilot_instructions_phase_list_reference(self) -> None:
-        content = COPILOT.read_text()
+        content = COPILOT.read_text(encoding="utf-8")
         assert "phase-list" in content or "cortex-response-templates" in content, (
             "copilot-instructions.md must reference phase-list format or templates SSOT"
         )
@@ -221,7 +221,7 @@ class TestNoPastedImageRefs:
             for f in scan_dir.rglob("*"):
                 if f.suffix in (".md", ".yaml", ".py") and f.is_file():
                     try:
-                        text = f.read_text()
+                        text = f.read_text(encoding="utf-8")
                         for pat in patterns:
                             if pat.lower() in text.lower():
                                 results.append(str(f))

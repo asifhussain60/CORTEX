@@ -59,7 +59,7 @@ def test_gp50_002_health_orchestrator_has_file_context() -> None:
     assert hasattr(FileContext, "build")
     # Phase-51 HealthOrchestrator delegates walk to FileContext.build()
     import cortex.orchestrators.health.health_orchestrator as mod
-    src = Path(mod.__file__).read_text()
+    src = Path(mod.__file__).read_text(encoding="utf-8")
     assert "FileContext" in src
 
 
@@ -210,10 +210,10 @@ def test_gp50_013_master_orchestrator_plan_intent_routing() -> None:
     """
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
     import cortex.orchestrators.core.master_orchestrator as mod
-    src = Path(mod.__file__).read_text()
+    src = Path(mod.__file__).read_text(encoding="utf-8")
     # Also check the request mixin where PLAN routing was extracted (Phase 103-a)
     mixin_path = Path(mod.__file__).parent / "master_orchestrator_request_mixin.py"
-    mixin_src = mixin_path.read_text() if mixin_path.exists() else ""
+    mixin_src = mixin_path.read_text(encoding="utf-8") if mixin_path.exists() else ""
     combined = src + mixin_src
     assert (
         "CortexMasterPlanOrchestrator" in combined
@@ -238,7 +238,7 @@ def test_gp50_014_domain_coherence_validator_canonical_alias() -> None:
     # domain one validates Python↔JS; coherence/ one validates post-edit structure
     domain_src = Path(
         sys.modules["cortex.orchestrators.domain.coherence_validator"].__file__
-    ).read_text()
+    ).read_text(encoding="utf-8")
     assert "javascript" in domain_src.lower() or "camel" in domain_src.lower(), (
         "Domain CoherenceValidator must handle Python↔JS coherence"
     )
@@ -321,7 +321,7 @@ def test_gp50_018_health_init_exports_health_orchestrator() -> None:
 def test_gp50_019_vacuum_orchestrator_canonical_in_health() -> None:
     """GP50-019: VacuumOrchestrator canonical location is health/ package."""
     import cortex.orchestrators.health.vacuum_orchestrator as mod
-    src = Path(mod.__file__).read_text()
+    src = Path(mod.__file__).read_text(encoding="utf-8")
     # Must define VacuumOrchestrator at canonical location
     assert "class VacuumOrchestrator" in src, (
         "VacuumOrchestrator must be defined in health/vacuum_orchestrator.py"

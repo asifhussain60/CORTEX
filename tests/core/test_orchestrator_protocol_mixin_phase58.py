@@ -278,7 +278,7 @@ class TestActivateCrossCuttingHooks:
                 if fname.startswith("_") or not fname.endswith(".py"):
                     continue
                 fpath = os.path.join(root, fname)
-                src = open(fpath).read()
+                src = open(fpath, encoding="utf-8").read()
                 if "OrchestratorProtocolMixin" not in src:
                     continue
                 rel = fpath.replace(ORCH_DIR + "/", "")
@@ -302,7 +302,7 @@ class TestActivateCrossCuttingHooks:
         for candidate in candidates:
             p = pathlib.Path(candidate)
             if p.exists():
-                src = p.read_text()
+                src = p.read_text(encoding="utf-8")
                 break
         assert src, "EnforcementOrchestrator coordinator file not found in any expected location"
         assert "_extract_lens_context" in src, "Must use _extract_lens_context for LENS dimension"

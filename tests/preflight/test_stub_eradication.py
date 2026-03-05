@@ -473,7 +473,7 @@ class TestNoReturnEmptyDictInOrchestratorPublicMethods:
                 if (
                     body
                     and isinstance(body[0], ast.Expr)
-                    and isinstance(body[0].value, (ast.Constant, ast.Str))
+                    and isinstance(body[0].value, ast.Constant)
                 ):
                     body = body[1:]
 
