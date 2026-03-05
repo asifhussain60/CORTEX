@@ -19,7 +19,15 @@ Asif is NOT in this scene. His presence is felt only through the WHITEBOARD visi
 
 Copilot Bot stands DIRECTLY BEHIND Kyle, slightly to Kyle's right, looking at the same laptop screen. Clunky early version — oversized dome, empty brain cavity, LED eyes amber-puzzled. Speech bubble: "I HAVE COMPUTED 847 REASONS THIS IS CORRECT." Chrome arms spread wide in digital bewilderment.
 
-LEFT SIDE — FULLY VISIBLE: Miss G stands prominently in the left zone of the hallway, floating slightly above the floor, facing Kyle at a slight angle. She is rendered as semi-translucent — like frosted starlight — a fully present, gorgeous figure; her features are crisp and clear. Her purple (`#a78bfa`) outline is bold and solid, same weight as all character inking. A warm purple glow-halo surrounds her silhouette — incongruously elegant in this sterile corporate hallway; the glow emanates from within her translucent form. Beautiful original face: wide dark almond-shaped eyes, expressive arched brows, proud angular nose, full lips curved in patient detachment. Long thick black hair in a high ponytail with a purple ribbon. She wears elegant flowing luminous robes — semi-translucent like frosted starlight, draped in layered folds that shimmer with the purple (`#a78bfa`) glow, a simple sash at the waist, bare feet. She stands tilted slightly at a calm angle, watching Kyle's screen from above with the serene detachment of someone watching weather. One thought bubble: "He'll learn." Pure patience. No mockery.
+LEFT SIDE — FULLY VISIBLE: Miss G stands prominently in the left zone of the hallway, floating slightly above the floor, facing Kyle at a slight angle. She is rendered as semi-translucent — like frosted starlight — a fully present, gorgeous figure; her features are crisp and clear. Her purple (`#a78bfa`) outline is bold and solid, same weight as all character inking. A warm purple glow-halo surrounds her silhouette — incongruously elegant in this sterile corporate hallway; the glow emanates from within her translucent form.
+
+**CANONICAL MISS G FACE:** Indian-Asian beauty — warm honey-brown skin, wide luminous dark eyes with a natural double lid, softly arched expressive brows, a delicately rounded nose with a slight upturn, full defined lips with a cupid's bow, a gentle heart-shaped face. Expression for this scene: patient detachment. One thought bubble: "He'll learn." Pure patience. No mockery.
+
+**CH-03-B HAIR:** Naturally curly voluminous black ringlets, below-shoulder length. A loose romantic chignon — curls gathered softly at the nape, deliberately imprecise, with generous spiralling tendrils escaping at the temples and jaw on both sides.
+
+**CH-03-B OUTFIT (Turkey — Ottoman-inspired):** A floor-length entari-style coat-dress with wide decorative cuffs and a fitted bodice, soft geometric embroidery at the border panels. A sash belt in a contrasting tone. Rendered semi-translucent, glowing with the purple (`#a78bfa`) accent. Modest, regal, effortlessly authoritative. Bare feet.
+
+She stands tilted slightly at a calm angle, watching Kyle's screen from above with the serene detachment of someone watching weather.
 
 On the wall beside Kyle: a printed DEPLOYMENT CHECKLIST with a CORTEX stamp — most boxes unchecked. Red Wi-Fi router visible at the far end of the hallway.
 

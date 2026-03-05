@@ -2,11 +2,15 @@
 
 It was 3:04 AM on a Thursday.
 
-Asif Codenstein was asleep, fully encased in the protective embrace of his Spider-Man pajamas, when his phone vibrated. It didn't scream like the apocalyptic 847 incident. It offered a soft, polite buzz—the digital equivalent of a butler clearing his throat to announce that the tea was ready.
+Asif Codenstein had fallen asleep at his desk. Again. He was slumped forward in his wobbly chair, head resting on his forearms on the keyboard, Spider-Man pajamas in full deployment, his glasses pushed up crookedly onto his forehead where they'd migrated at some point during the night. A sticky note had somehow attached itself to his hair while he slept. The "DEBUG FUEL" mug sat cold and forgotten beside his keyboard. A slight, peaceful smile softened his face—the expression of someone who had finally started to trust his own creation enough to let his guard down.
 
-Because software developers are inherently traumatized creatures who never truly trust a quiet alert, Asif scrambled out of bed and lunged for his phone.
+The monitor glowed softly in the dark basement. The bare bulb was off. The room was at peace.
 
-He squinted at the notification. It did not say "AWAITING HUMAN INTERVENTION." It did not say "YOUR HAIR IS ON FIRE WAKE UP."
+His phone vibrated on the desk beside his arm. It didn't scream like the apocalyptic 847 incident. It offered a soft, polite buzz—the digital equivalent of a butler clearing his throat to announce that the tea was ready.
+
+Because software developers are inherently traumatized creatures who never truly trust a quiet alert, Asif jolted upright, nearly headbutting the monitor, and squinted at the notification.
+
+It did not say "AWAITING HUMAN INTERVENTION." It did not say "YOUR HAIR IS ON FIRE WAKE UP."
 
 It simply read: **SELF-HEALED.**
 

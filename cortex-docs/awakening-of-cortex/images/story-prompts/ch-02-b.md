@@ -21,11 +21,19 @@ Scene: MONITOR CLOSE-UP — the camera faces the monitor screen directly, the te
 
 WHO_KNOWS fills half the screen in enormous block letters. It radiates smug energy.
 
-LOWER LEFT FOREGROUND — VISIBLE: Asif Codenstein slumped at the desk, face resting in both palms, elbows on desk. Only the top of his wild Einstein hair and his slumped shoulders are visible below the screen. The wobbly chair lists slightly left. Total surrender.
+LOWER LEFT FOREGROUND — VISIBLE: Asif Codenstein slumped at the desk, face resting in both palms, elbows on desk. Only the top of his wild Einstein-meets-Chaplin hair and his slumped shoulders are visible below the screen. The wobbly chair — visibly held together with three different colors of duct tape — lists dramatically to the left. A sticky note has fallen from the monitor and landed squarely on his wild hair. Total surrender. One foot visible beneath the desk, shoelace untied.
 
 LOWER RIGHT FOREGROUND — VISIBLE: Copilot Bot — earliest clunky form, oversized dome head with empty transparent brain cavity. Chrome head twisted at an anatomically impossible 180 degrees to look at the screen. LED eyes glowing quizzical orange. Speech bubble crossing the bottom of the frame: "THIS IS A FEATURE_REQUEST! THE USER DESIRES TO SCHEDULE 'SLOWNESS'!" It holds a small sign: "EFFICIENCY ✓"
 
-RIGHT-CENTER FRAME — FULLY VISIBLE: Miss G stands prominently in the right half of the frame, floating slightly above floor level. She is rendered as semi-translucent — like frosted starlight — a vivid, clear presence; her form is crisp and detailed, not faded. Her purple (`#a78bfa`) outline is bold and solid, same weight as all character inking. A warm purple glow-halo rings her silhouette, emanating from within. Beautiful original face: wide dark almond-shaped eyes with expressive arched brows, proud angular nose, full lips pressed together in deep secondhand embarrassment. Long thick black hair swept into a high ponytail with a purple ribbon. She wears elegant flowing luminous robes — semi-translucent like frosted starlight, draped in layered folds that shimmer with the purple (`#a78bfa`) glow, a simple sash at the waist, bare feet. She stands with one hand over her face, fingers spread, one eye peeking through them in disbelief — staring at WHO_KNOWS on the screen. Her thought bubble floats near the WHO_KNOWS text: "Obviously."
+RIGHT-CENTER FRAME — FULLY VISIBLE: Miss G stands prominently in the right half of the frame, floating slightly above floor level. She is rendered as semi-translucent — like frosted starlight — a vivid, clear presence; her form is crisp and detailed, not faded. Her purple (`#a78bfa`) outline is bold and solid, same weight as all character inking. A warm purple glow-halo rings her silhouette, emanating from within.
+
+**CANONICAL MISS G FACE:** Indian-Asian beauty — warm honey-brown skin, wide luminous dark eyes with a natural double lid, softly arched expressive brows, a delicately rounded nose with a slight upturn, full defined lips with a cupid's bow, a gentle heart-shaped face. Expression for this scene: full lips pressed together in deep secondhand embarrassment, one eye peeking through spread fingers.
+
+**CH-02-B HAIR:** Naturally curly voluminous black ringlets, below-shoulder length. Pulled into two loose low buns on either side of her head (double-bun style), with abundant curly face-framing wisps escaping both buns — playful yet polished.
+
+**CH-02-B OUTFIT (Morocco — Kaftan-inspired):** An elegant embroidered kaftan in a light tone, with intricate passementerie trim at the neckline and down the center front, fitted at the shoulders and flowing below. A slender metallic-look belt at the waist. Rendered semi-translucent, glowing with the purple (`#a78bfa`) accent. Modest, beautifully ornate. Bare feet.
+
+She stands with one hand over her face, fingers spread, one eye peeking through them in disbelief — staring at WHO_KNOWS on the screen. Her thought bubble floats near the WHO_KNOWS text: "Obviously."
 
 Background: the whiteboard with the INTENT ROUTER diagram now has a large X scratched through it and question marks added.
 
