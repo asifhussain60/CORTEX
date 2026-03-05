@@ -17,7 +17,7 @@ LEFT SIDE: Asif Codenstein — 55-year-old mad scientist, thick glasses, wild Ei
 
 RIGHT SIDE: The same desk but moments later — the ghost registry is cleaned up. The monitor now shows a success dashboard: a large stylized banner: "CANARY DEPLOYMENT: 847 REQUESTS — 100% SUCCESS." The number 847 is prominent. Asif's posture on the right side is one of disbelief and wonder — he leans back, arms slightly raised, expression between "I can't believe that worked" and "I absolutely knew that would work."
 
-Miss G floats at the center between the two sides, cyan (#67e8f9) glow at her translucent edges. She looks from the ghost side (eyes narrowed in disgust) to the success side (gentle smile). Her posture perfectly bridges the two moods.
+Miss G floats at the center between the two sides at ~15% opacity — cyan (#67e8f9) barely tracing her translucent outline. She is strikingly, impossibly beautiful even as a near-invisible presence: cheekbones of refined elegance, luminous eyes that process both sides of the scene simultaneously, a graceful bearing that makes her role as emotional bridge between ghost-chaos and canary-triumph feel entirely natural. She looks from the ghost side (eyes narrowed in disgust) to the success side (gentle smile). Her posture perfectly bridges the two moods.
 
 Copilot Bot on the right side: LED eyes glow a warm AMBER — for the first time showing something like triumph. Its posture is slightly more upright than the left side. It displays a tiny banner it's holding that reads "WE ARE REAL!"
 

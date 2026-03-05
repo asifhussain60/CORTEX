@@ -11,18 +11,16 @@
 
 Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
 
-Scene: The basement at 7:30 AM — emergency mode. Asif Codenstein — 55-year-old mad scientist, still in Spider-Man pajamas (he just woke up), wild Einstein hair even more explosive than usual, thick glasses slightly askew — stands before his monitors with both hands pressed to his cheeks in horror. The monitors blaze with catastrophe: one shows "847 FAILED TRANSACTIONS," another shows "214 ACCOUNTS LOCKED — FRAUD DETECTION," a third shows a diagram of the NaN cascade with arrows:
+Scene: The basement at 7:30 AM — emergency mode. WIDE LOW ANGLE — camera positioned near floor level looking up, making the monitors and the crisis feel enormous and overwhelming. This is the opposite of ch-07-a's crisp professional office: pure chaos.
 
-NULL → NaN → $0.00 CHARGE → FRAUD FLAG → ACCOUNT LOCK
+DOMINATING THE FRAME: THREE MONITORS form a wall of disaster. Left monitor: "847 FAILED TRANSACTIONS." Center monitor: a cascade diagram — NULL → NaN → $0.00 CHARGE → FRAUD FLAG → ACCOUNT LOCK — each arrow bigger and more dramatic than the last. Right monitor: "214 ACCOUNTS LOCKED — FRAUD DETECTION." The number 847 burns large.
 
-The cascade diagram is drawn cartoon-style with each arrow getting progressively more dramatic. "$0.00" has a cartoonish explosion effect. The number 847 appears prominently on the screen.
+FOREGROUND: Asif Codenstein — 55-year-old mad scientist, Spider-Man pajamas, wild Einstein hair explosively dishevelled, thick glasses knocked sideways on his face — sits SLUMPED FORWARD with his forehead pressed to the desk, both arms spread flat to either side in total defeat. He is not standing. He is horizontal grief. One hand loosely holds an empty "DEBUG FUEL" mug that has tipped slightly.
 
-On the whiteboard to the left: Asif has hastily written a POST-MORTEM timeline — "11PM: Kevin overrides | 6AM: East Coast wakes | 6:47AM: Fraud triggers | 7:15AM: Phones screaming | 7:30AM: I wake up." The last line has two exclamation marks and a small crying face sketch.
+To the right: Copilot Bot in an unusually small posture — slightly hunched, LED eyes dim cyan (#67e8f9), almost withdrawn. Its transparent dome shows one or two faint floating dots. No speech bubble. For the first time the robot is just: silent. It looks at the back of Asif's head. Something almost like concern in its LED expression.
 
-Copilot Bot stands next to Asif, unusually STILL and QUIET. Its LED eyes are dim — not off, but subdued, a muted cyan (#67e8f9). Its transparent dome shows the empty brain cavity with perhaps one or two tiny glowing dots, as if deep in thought. No speech bubble — the robot is uncharacteristically silent. Its posture is slightly hunched and reflective. This is the first time the robot looks affected by consequences.
+Miss G appears JUST BEHIND Asif, floating at shoulder level — but she is placed at the FAR RIGHT edge of the frame, her form trailing off into the panel border. She is at ~15% opacity: barely there, just the most delicate cyan (#67e8f9) tracing the shape of her. Even in this barely-visible ghost state she reads as achingly beautiful — the line of her profile catching the monitor glow, a quality in her silhouette that suggests someone quite literally out of this world. She does not reach toward Asif. She watches. Her single thought bubble drifts into the scene: "The system worked. The human didn't."
 
-Miss G materializes clearly next to Asif, cyan (#67e8f9) glow at her translucent edges. She looks at the monitors, then at Asif, expression grim but steady. No "I told you so" — just solidarity. Her hand almost touches Asif's shoulder (translucent, never quite touching).
+The whiteboard to one side shows a post-mortem timeline: "11PM: Kevin overrides | 6AM: East Coast wakes | 6:47AM: Fraud triggers." The red Wi-Fi router blinks rapid-fire on its shelf. A crumpled sticky note reads "GOVERNANCE WORKS — IF HUMANS LET IT."
 
-On the desk: the brain jar is intact and glowing cyan (#67e8f9) — the brain itself is fine, it tried to stop Kevin. But next to the jar is a crumpled sticky note: "GOVERNANCE WORKS. ONLY IF HUMANS LET IT." The "DEBUG FUEL" mug is full. The red Wi-Fi router on the shelf blinks at crisis speed. Coffee mug number two is empty and on its side.
-
-Color accents: Cyan (#67e8f9) from brain jar, Miss G's outline, and Copilot Bot's dim LED eyes. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Cyan (#67e8f9) from brain jar glow, Miss G's faint outline, and Copilot Bot's dim LED eyes. Red on Wi-Fi router only. Everything else black and white crosshatched.

@@ -23,7 +23,7 @@ Around the conference table: several attendees rendered as distinct cartoon figu
 
 At the far end of the table: THE CTO — a tall calm figure, fingers steepled, unreadable expression that turns into a slow nod as Asif speaks.
 
-Miss G floats invisibly behind Asif, cyan (#67e8f9) glow at her translucent edges. She is the only one who can see the numbers are working. She is fully beaming — genuine pride. Her posture: arms at her sides, head slightly tilted in satisfaction.
+Miss G floats invisibly behind Asif at ~15% opacity — cyan (#67e8f9) glow barely tracing her outline against the conference room wall. She is the only one who can see the numbers are working, and she is the only one who is truly, deeply stunning: high cheekbones casting the subtlest imaginary shadow, luminous eyes that hold the warmth of genuine pride, a graceful silhouette that makes the conference room's fluorescent lighting feel briefly inadequate. She beams — a full, open, rare smile of real satisfaction. Her posture: arms at her sides, head slightly tilted, witnessing the moment she has been waiting for.
 
 Copilot Bot is NOT in this scene — this is the human world. Instead, a small CORTEX LOGO appears in the corner of the slide. The red Wi-Fi router is visible through the conference room window in the hallway outside. The brain — no longer in its jar — is represented as a faint glowing brain icon hovering in the slide graphic.
 

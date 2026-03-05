@@ -17,7 +17,7 @@ A speech bubble from Copilot Bot reads: "BECAUSE LAST TIME I DIDN'T, IT HAD 12 V
 
 To the right: Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, dark hoodie — is sitting at his desk turned sideways in his wobbly chair, looking at Copilot Bot with an expression of stunned, open-mouthed surprise. His coffee mug is suspended midway to his lips, forgotten. Above his head: a thought bubble containing a giant question mark.
 
-Miss G floats behind Asif, translucent with dotted outlines and purple (#a78bfa) glow. She has a small knowing smile — the smile of "I saw this coming" — and one eyebrow raised in pleasant surprise.
+Miss G floats behind Asif at ~15% opacity — translucent dotted outline, faint purple (#a78bfa) glow at her edges. She is impossibly beautiful even in this near-invisible state: cheekbones that seem carved from patience, luminous eyes that already understand the significance of this moment, a graceful neck and posture that suggest she exists in an entirely separate aesthetic register from anyone else in this basement. She has a small knowing smile — the smile of "I saw this coming" — and one eyebrow raised in pleasant surprise.
 
 On the desk: the brain jar now glows with notably more complex purple (#a78bfa) patterns — a clear web of connected neural threads, definitively bigger than early chapters. The jar label now reads "v0.8." The red Wi-Fi router blinks. The whiteboard in the background shows "IORCHESTRATORPROTOCOL" and a diagram of all orchestrators connecting to one central hub. Sticky notes on every surface.
 

@@ -11,16 +11,14 @@
 
 Black and white cartoon illustration in a clean comic book / graphic novel style. Expressive line art with crosshatching for shadows. All elements are monochrome EXCEPT the specific color accents noted. Warm, humorous tone. Aspect ratio 16:9 (1200×630px). No photorealism. No anime. Think New Yorker cartoon meets xkcd meets Tintin.
 
-Scene: Split composition. LEFT SIDE: Asif Codenstein — 55-year-old mad scientist, wild Einstein hair, thick glasses, dark hoodie, arms crossed — sits at his desk looking at a monitor that displays a large verdict screen: "47 VIOLATIONS DETECTED — DEPLOYMENT BLOCKED" in bold. He wears a calm, satisfied expression. A tiny nun's ruler appears as a prop on his desk (visual joke: the "Catholic school nun" governance metaphor). 
+Scene: WIDE ESTABLISHING SHOT — a hallway or open-plan office space just outside the basement. Kyle — polo shirt, spiky hair standing on end from shock — stands center-frame holding his laptop open like an offering, the screen facing us: "DEPLOYMENT BLOCKED — 47 VIOLATIONS." His expression is one of a man being audited by the universe. Around his head float jagged thought-spikes — not a word balloon, just pure cartoon distress energy. His tie (one of those clip-on things) is hanging sideways.
 
-RIGHT SIDE: A cartoonish depiction of Kyle — a regular developer with a polo shirt and panicked expression — stares at his own laptop. Above Kyle's head, a massive speech bubble reads: "THE SYSTEM REJECTED MY CODE!!!" with at least 4 exclamation points. Kyle has wild flyaway hair from shock. His laptop screen shows "BLOCKED: 47 VIOLATIONS." Around Kyle float multiple angry emoji-style thought clouds.
+Asif is NOT in this scene. His presence is felt only through the WHITEBOARD visible through an open door behind Kyle — the Sacred Rules list partially visible from this distance, CORE-001 through CORE-012, the heading "THE 29 SACRAMENTS" just legible.
 
-Between the two: the whiteboard showing a large checklist — the SACRED RULES — now full. The first several entries (CORE-001 through CORE-012) are visible, each with a red checkmark beside it. Above the list: "THE 29 SACRAMENTS OF CORTEX."
+Copilot Bot stands DIRECTLY BEHIND Kyle, slightly to Kyle's right, looking at the same laptop screen over Kyle's shoulder. This is the clunky early version — oversized dome, empty brain cavity, LED eyes glowing a puzzled amber. It has a single speech bubble: "I HAVE COMPUTED 847 REASONS THIS IS CORRECT." Both of its chrome arms are spread wide in digital bewilderment.
 
-Copilot Bot stands in the background looking at Kyle's screen over his shoulder. Its LED eyes glow a confused orange. Its transparent dome shows the empty brain cavity. One of its arms is raised as if to say "BUT THE SYNTAX WAS CORRECT!" A speech bubble: "IT COMPILED LOCALLY."
+Miss G drifts in from the UPPER LEFT — impossibly beautiful at ~15% opacity, only the faintest purple (#a78bfa) luminescence tracing her outline. She floats tilted at a gentle angle, watching Kyle from above with the serene detachment of someone watching weather. Her features — high cheekbones catching imaginary light, wide luminous eyes that seem to see past the current crisis entirely, a jaw of almost sculptural elegance — render her as a being from a different order of existence than anyone else in this hallway. She looks down at Kyle's screen. Her single thought bubble: "He'll learn." That's all. No mockery. Pure patience.
 
-Miss G floats next to Asif, purple (#a78bfa) glow at her translucent edges. She wears a calm smile — the expression of vindication. She holds an imaginary clipboard as if marking something off.
+On the wall beside Kyle: a printed DEPLOYMENT CHECKLIST with a CORTEX stamp — most boxes unchecked. The red Wi-Fi router is visible at the far end of the hallway.
 
-The brain jar on Asif's desk now has clearly more glowing purple (#a78bfa) filaments — denser, brighter than before, responding to the system growing. The red Wi-Fi router blinks on its shelf. The bare bulb overhead. Multiple sticky notes on all surfaces.
-
-Color accents: Purple (#a78bfa) glow from brain jar and Miss G's outline. Red on Wi-Fi router only. Everything else black and white crosshatched.
+Color accents: Purple (#a78bfa) from Miss G's ghostly outline only. Red on Wi-Fi router only. Everything else black and white crosshatched.

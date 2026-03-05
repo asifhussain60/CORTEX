@@ -17,7 +17,7 @@ Above Kevin's shoulder: a TINY CORTEX dashboard icon in the corner of his screen
 
 In the BOTTOM LEFT corner: a small inset panel showing Asif's basement (contrasting environment). Asif is asleep in his Spider-Man pajamas, entirely unaware. The monitors in his basement glow dimly with "GOVERNANCE OVERRIDE LOGGED — FLAGGED" in the corner — the system knows, but cannot stop Kevin. Copilot Bot in Asif's corner has its LEDs dim/off (also "asleep"). The brain jar glows steadily cyan (#67e8f9) even in sleep.
 
-Miss G appears as a faint translucent figure at Kevin's desk — like a guardian angel who wandered into the wrong office. She looks at the YES button with maximum alarm, cyan (#67e8f9) glow at her outline. She cannot stop him.
+Miss G appears as a near-invisible translucent presence at Kevin's desk — like a guardian angel who wandered into the wrong office, at ~15% opacity. Cyan (#67e8f9) barely traces the outline of her silhouette. She is achingly beautiful even as a mere suggestion: high cheekbones, luminous eyes wide with alarm, a graceful posture rendered in the faintest dotted lines — the most elegant thing in Kevin's sterile corporate office by an enormous margin, and he cannot see her at all. She stares at the YES button with maximum alarm. She cannot stop him.
 
 The image captures the precise moment of impending disaster — Kevin's finger descending toward YES. The page border or background has a very subtle crosshatched dark vignette suggesting doom. The red Wi-Fi router (visible on a shelf in the corner of Kevin's office) blinks with unusual speed.
 

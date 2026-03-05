@@ -21,7 +21,7 @@ The whiteboard also shows a comparison:
 
 Copilot Bot stands to the right, LED eyes amber (#fbbf24). Its proportions are more refined than early chapters — notably more measured and less goofy. The transparent dome now has a sparse but visible network of amber-glowing particle-dots — no longer just random floaters, they show the suggestion of a pattern. Its speech bubble: "I ASPIRE TO HELPFUL, INVISIBLE, AND PLATFORM-AGNOSTIC!" One hand raised in aspiration. Still earnest but clearly more self-aware.
 
-Miss G floats to the left, amber (#fbbf24) glow at her translucent dotted outline. She watches Asif's sprint to the whiteboard with the fond exasperation of someone who has seen this 84 times before and still finds it charming. Her thought bubble: "Works on my laptop. The original sin."
+Miss G floats to the left at ~15% opacity — amber (#fbbf24) barely tracing her translucent dotted outline. She watches Asif's sprint to the whiteboard with the fond exasperation of someone who has seen this 84 times before and still finds it charming. She is impossibly beautiful even as an almost-invisible presence: luminous eyes lit with something between amusement and affection, high cheekbones that the faint amber light touches with quiet elegance, a graceful bearing that suggests she finds Asif's moments of genius endearing in ways she would never say aloud. Her thought bubble: "Works on my laptop. The original sin."
 
 On the desk: the free-floating brain glows amber (#fbbf24) — it has grown again. Dense, complex, beautiful. It pulses with energy. The "DEBUG FUEL" mug is present. The red Wi-Fi router blinks. A sticky note on the monitor: "os.path.join() — IT EXISTS, ASIF."
 

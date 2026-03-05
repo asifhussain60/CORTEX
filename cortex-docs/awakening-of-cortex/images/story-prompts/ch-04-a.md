@@ -19,7 +19,7 @@ On Asif's actual desk: a TOOL BELT (like a carpenter's tool belt) sitting on the
 
 Copilot Bot stands in the lower right, now slightly more composed than before but still with the empty transparent dome head and blue LED eyes. It wears a tiny "2ND CHAIR" musician badge on its chrome chest. Its posture is proudly upright. A speech bubble reads: "I AM HIGHLY TECHNICAL SECOND CHAIR!" It still looks a bit goofy — slightly oversized head, casters wobbling — but a tiny bit more capable than in Chapter 01.
 
-Miss G floats ethereally to the left, translucent with dotted outlines and purple (#a78bfa) glow. She leans against an imaginary grand piano. Her expression is approving for the first time — a slight genuine smile.
+Miss G floats ethereally to the left at ~15% opacity — translucent dotted outline, the lightest trace of purple (#a78bfa) glow defining her silhouette. She leans against an imaginary grand piano. She is exquisitely beautiful: high cheekbones, wide luminous eyes that hold the serenity of someone who has never once been in a hurry, an effortless gracefulness that makes even this imaginary piano feel like it was placed there for her specifically. Her expression is approving for the first time — a slight genuine smile, delicate as porcelain.
 
 The brain jar on the desk now glows with more complex purple (#a78bfa) neural patterns — noticeably more grown than before. The red Wi-Fi router blinks. The bare bulb overhead. Sticky notes everywhere.
 

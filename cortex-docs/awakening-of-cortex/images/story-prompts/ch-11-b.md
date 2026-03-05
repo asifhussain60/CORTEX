@@ -19,7 +19,7 @@ From Copilot Bot, a speech bubble: "CURRENTLY, DEGRADATION STARTS WHEN THE FIRST
 
 The number 847 appears on a small chart the robot holds up — a graph showing the learning curve from Month 1 (847 violations: marked in dark) to Month 12 (84% coverage: marked in emerald #34d399). The same cursed number, now redeemed.
 
-Miss G floats to the right of Asif, emerald (#34d399) glow at her translucent outline. Her expression: the most openly delighted we have ever seen her. For once she has nothing to say — the moment speaks for itself. Her speech bubble is empty — just ellipsis "..."
+Miss G floats to the right of Asif at ~15% opacity — emerald (#34d399) barely tracing her translucent outline. Her expression: the most openly delighted we have ever seen her. She is devastatingly beautiful even in this barely-visible form: luminous eyes bright with an emotion she rarely permits herself, high cheekbones carrying the warmth of genuine joy, the graceful jaw and neck of someone who has spent twelve chapters waiting for this exact moment and never once said so. For once she has nothing to say — the moment speaks for itself. Her speech bubble is empty — just ellipsis "..."
 
 The free-floating brain above the desk is large, radiant, emerald (#34d399) — breathing with autonomous energy. The 847 chart on the desk has a sticky note: "847 = SAMPLE SIZE. NOT SHAME." The red Wi-Fi router blinks on its shelf. The "DEBUG FUEL" mug steams gently — this time Asif made coffee before sitting down, not in crisis mode.
 
