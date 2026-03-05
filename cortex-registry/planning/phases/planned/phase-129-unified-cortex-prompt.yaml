@@ -99,17 +99,17 @@ design_decisions:
       This agent is lazy-loaded for DESIGN, INVESTIGATE, RCA, WORKFLOW_COMPOSE intents.
       It is NOT surfaced to users as an attachment option.
     migration_map:
-      "cortex-architect.prompt.md § IDENTITY" → "unified CORTEX.prompt.md § IDENTITY"
-      "cortex-architect.prompt.md § SILENT AUTONOMOUS" → "unified prompt § SILENT AUTONOMOUS"
-      "cortex-architect.prompt.md § CORE RULES" → "unified prompt § CORE RULES (deduped)"
-      "cortex-architect.prompt.md § EXECUTION MODES table" → "unified prompt § EXECUTION MODES"
-      "cortex-architect.prompt.md § AGENT LOADING MAP" → "unified prompt § AGENT LOADING MAP"
-      "cortex-architect.prompt.md § RESPONSE FORMAT" → "unified prompt § RESPONSE FORMAT (conditional)"
-      "cortex-architect.prompt.md § MCP TOOLS" → "unified prompt § MCP TOOLS"
-      "cortex-architect.prompt.md § PLAN MODE detail" → "cortex-phase-resolver.md agent"
-      "cortex-architect.prompt.md § DEBUG MODE detail" → "cortex-debugger.md agent"
-      "cortex-architect.prompt.md § AUDIT 29-point table" → "cortex-auditor.md agent"
-      "cortex-architect.prompt.md § IMPLEMENT/FIX/REFACTOR detail" → "cortex-executor.md agent"
+      - "cortex-architect.prompt.md § IDENTITY -> unified CORTEX.prompt.md § IDENTITY"
+      - "cortex-architect.prompt.md § SILENT AUTONOMOUS -> unified prompt § SILENT AUTONOMOUS"
+      - "cortex-architect.prompt.md § CORE RULES -> unified prompt § CORE RULES (deduped)"
+      - "cortex-architect.prompt.md § EXECUTION MODES table -> unified prompt § EXECUTION MODES"
+      - "cortex-architect.prompt.md § AGENT LOADING MAP -> unified prompt § AGENT LOADING MAP"
+      - "cortex-architect.prompt.md § RESPONSE FORMAT -> unified prompt § RESPONSE FORMAT (conditional)"
+      - "cortex-architect.prompt.md § MCP TOOLS -> unified prompt § MCP TOOLS"
+      - "cortex-architect.prompt.md § PLAN MODE detail -> cortex-phase-resolver.md agent"
+      - "cortex-architect.prompt.md § DEBUG MODE detail -> cortex-debugger.md agent"
+      - "cortex-architect.prompt.md § AUDIT 29-point table -> cortex-auditor.md agent"
+      - "cortex-architect.prompt.md § IMPLEMENT/FIX/REFACTOR detail -> cortex-executor.md agent"
 
   agent_wiring:
     description: |

@@ -15,12 +15,12 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  last_updated: '2026-03-05T12:00:00Z'
-  total_phases: 110
+  last_updated: '2026-03-05T00:00:00Z'
+  total_phases: 109
   active: 0
   completed: 107
   in_progress: 0
-  planned: 1
+  planned: 0
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -33,13 +33,12 @@ metadata:
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed: "phase-127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs closed, 23 golden tests, stdlib-only engine), phase-128 COMPLETE (Conflict & Drift Eradication — 9/9 sub-phases, 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49), phase-126 (Production Hardening Checklist Engine — 12 drift locks), phase-125 (Registry-Aware Documentation Viewer)."
-  planned_next: "Phase 129 — Distillation Mode (DISTILL intent, DistillationOrchestrator 5-stage pipeline, cortex_distill MCP tool #31, IntentRouter wiring, distill-workflow.yaml)"
+  planned_next: "No planned phases — Phase 127 and 128 complete"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
-  - { id: phase-129, status: PLANNED, priority: P1, sweep_id: SWEEP-129-DISTILLATION-MODE, gaps: 6, sub_phases: 7, file: "cortex-registry/planning/phases/planned/phase-129-distillation-mode.yaml", note: "Distillation Mode: DISTILL intent, DistillationOrchestrator (5-stage pipeline), cortex_distill MCP tool (#31), IntentRouter wiring, distill-workflow.yaml, copilot-instructions update. 6 GAPs, 7 sub-phases (129-a through 129-f + 129-final)." }
   - { id: phase-128, status: COMPLETE, completed_date: "2026-03-05", priority: P0, sweep_id: SWEEP-128-CONFLICT-DRIFT-ERADICATION, gaps: 24, sub_phases: 9, completed_sub_phases: 9, file: "cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml", note: "Conflict & Drift Eradication: 9/9 sub-phases complete (128-a through 128-i), 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49." }
   - { id: phase-127, status: COMPLETE, completed_date: "2026-03-05", priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/completed/phase-127-deterministic-sync-engine.yaml", note: "Deterministic Safe Windows-First Sync Engine: 6/6 GAPs CLOSED. cortex/tools/cortex_sync.py (stdlib-only), SSOT policy, three-way merge, baseline tracking, danger scan, 23 golden tests GREEN." }
   - { id: phase-126, status: COMPLETE, completed_date: "2026-03-04", priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (#30-#41), 12 drift locks, all 12 GAPs CLOSED." }
@@ -99,17 +98,15 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phases 127 + 128 COMPLETE (2026-03-05). Phase 129 PLANNED (Distillation Mode). Smoke: 2,775. Preflight: 424."
+  status: "✅ Phase 47 registered (Memory Tier Migration — completed 2026-02-28, previously unregistered in master). Phase 120 + 119 COMPLETE. planned: 0. Smoke: 2,388. Preflight: 258."
   overall_score: 97%
-  deployment_date: '2026-03-05'
+  deployment_date: '2026-03-04'
   score_evidence: |
-    Post Phase 127 + 128 completion evidence (2026-03-05):
-    - Smoke: 2,775 passed (phase-128 certified baseline)
-    - Preflight: 424 passed, 9 skipped
-    - Phase 127: 6/6 GAPs CLOSED — Deterministic Sync Engine, stdlib-only, 23 golden tests GREEN
-    - Phase 128: 9/9 sub-phases CLOSED — 97+ violations fixed, 42 new tests, 8 drift locks #42-#49
-    - Governance: 197 checks GREEN
-    - Registry Intelligence: 195 models, 0 broken refs
+    Post Phase 119 + Phase 120 completion evidence (2026-03-04):
+    - Smoke: 2,388 passed (phase-120 certified baseline)
+    - Preflight: 258 passed, 9 skipped in 5.37s
+    - Phase 119: 4/4 GAPs CLOSED — AST audit complete, all 266 class duplicates triaged
+    - Phase 120: 3-Tier LEGO architecture, 26 YAMLs, 49 golden tests, 8 terminal compositions
     - F811 duplicate methods: All checks passed (ruff)
     - F401 unused imports: All checks passed (ruff)
     - Intelligence layer: IntelligenceFacade.analyze/synthesize/query OK
@@ -117,18 +114,19 @@ production_readiness:
     - OS artifacts: 0 .DS_Store, 0 bin/obj
     - SQLite AC markers: AC_START=1,657 WF_RUNS=1,420 — paired OK
     - CLI entry point: python -m cortex works with full command menu
-    - planned phases: 1 (phase-129 Distillation Mode)
+    - planned phases: 0 — all phases COMPLETE
+    - phase-111a/111b/111c sub-phase files: moved planned/→completed/
 
 verification:
   method: git_history + code_inspection + test_verification + live_checks
   last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 110
+  total_phases: 109
   completed: 107
   active: 0
   in_progress: 0
-  planned: 1
+  planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 98
@@ -460,17 +458,6 @@ phases:
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-121-ai-context-intelligence.yaml"
     note: "COMPLETE 2026. 13/13 GAPs CLOSED. AIContextScanner (8 vendors, YAML-driven), AIContentClassifier, AIPIIGuard, AIContextDisseminator (5 destinations). 10-tab dashboard (Tab 10 = AI Context). KnowledgeGuidanceEngine AI override tier. VERSION SUFFIX CLEANUP: 4 files renamed, cortex_onboard_repository_v3 removed from 6 files, phase-103c-v2 duplicate removed, VacuumOrchestrator.run_version_suffix_cleanup() added. 5 new source files, 5 test files, 1 config YAML, 1 knowledge YAML."
-
-  # ── PHASE 129: DISTILLATION MODE (2026-03-05 — PLANNED) ─────────────────────
-  - id: phase-129
-    title: "Distillation Mode — Conversational Entropy Reduction to Executable Prompt"
-    priority: P1
-    status: PLANNED
-    sweep_id: SWEEP-129-DISTILLATION-MODE
-    gaps: 6
-    sub_phases: 7
-    file: "cortex-registry/planning/phases/planned/phase-129-distillation-mode.yaml"
-    note: "DISTILL intent (IntentType.DISTILL), DistillationOrchestrator (5-stage pipeline), cortex_distill MCP tool (#31), IntentRouter wiring across 5 files, distill-workflow.yaml, copilot-instructions update. 6 GAPs, sub-phases 129-a through 129-f + 129-final."
 
 # ── PRODUCTION HARDENING (2026-03-04 + 2026-03-05 DEEP AUDIT) ────────────────
 # Windows zero-config + versioning sweep + registry intelligence verification.

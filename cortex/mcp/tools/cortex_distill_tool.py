@@ -59,16 +59,19 @@ class CortexDistill(ConsolidatedTool):
                 type="string",
                 description=(
                     "Raw multi-turn conversation text to distil. "
-                    "Supports 'User: / Agent:' prefix format or plain prose."
+                    "Supports 'User: / Agent:' prefix format or plain prose. "
+                    "If omitted, 'file_path' must be provided — the tool will read the file."
                 ),
-                required=True,
+                required=False,
+                default=None,
             ),
             ToolParameter(
                 name="file_path",
                 type="string",
                 description=(
-                    "Optional path to the source file. When provided, the file is "
-                    "overwritten in place with the compressed distilled content."
+                    "Absolute path to the source file. Used for BOTH reading (when "
+                    "'conversation' is not provided) and writing (always — the distilled "
+                    "prompt overwrites the file in place)."
                 ),
                 required=False,
                 default=None,
@@ -106,13 +109,24 @@ class CortexDistill(ConsolidatedTool):
         if orchestrator_context is not None:
             validate_orchestrator_context(orchestrator_context)
 
-        conversation: str = kwargs.get("conversation", "")
+        conversation: Optional[str] = kwargs.get("conversation") or None
         file_path: Optional[str] = kwargs.get("file_path") or None
+
+        # Self-read: when conversation is omitted, read from file_path
+        if not conversation and file_path:
+            try:
+                with open(file_path, "r", encoding="utf-8") as fh:
+                    conversation = fh.read()
+            except OSError as exc:
+                return ToolResult(
+                    success=False,
+                    error=f"Cannot read source file '{file_path}': {exc}",
+                )
 
         if not isinstance(conversation, str) or not conversation.strip():
             return ToolResult(
                 success=False,
-                error="Parameter 'conversation' is required and must be a non-empty string.",
+                error="Either 'conversation' text or a readable 'file_path' must be provided.",
             )
 
         try:
@@ -168,13 +182,24 @@ class CortexDistill(ConsolidatedTool):
         if orchestrator_context is not None:
             validate_orchestrator_context(orchestrator_context)
 
-        conversation: str = kwargs.get("conversation", "")
+        conversation: Optional[str] = kwargs.get("conversation") or None
         file_path: Optional[str] = kwargs.get("file_path") or None
+
+        # Self-read: when conversation is omitted, read from file_path
+        if not conversation and file_path:
+            try:
+                with open(file_path, "r", encoding="utf-8") as fh:
+                    conversation = fh.read()
+            except OSError as exc:
+                return ToolResult(
+                    success=False,
+                    error=f"Cannot read source file '{file_path}': {exc}",
+                )
 
         if not isinstance(conversation, str) or not conversation.strip():
             return ToolResult(
                 success=False,
-                error="Parameter 'conversation' is required and must be a non-empty string.",
+                error="Either 'conversation' text or a readable 'file_path' must be provided.",
             )
 
         try:

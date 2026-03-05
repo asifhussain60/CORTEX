@@ -49,6 +49,23 @@ workflow:
       inputs: { domain: 'DISTILL', session_id: '{{session_id}}' }
       step_filter: 'ac_start'
 
+    # Pre-Stage — Read the source file into memory (when file_path is provided)
+    # This is the ONLY step that touches the filesystem for reading.
+    # After this step, {{conversation}} is populated with the full raw file text.
+    # The LLM must NOT perform additional ad-hoc file reads — this step owns I/O.
+    - id: read_source_file
+      name: 'Pre-Stage — Read source file into conversation buffer'
+      depends_on: ['ac_start']
+      condition: '{{file_path}} is defined and not empty'
+      action: 'read_file_to_string'
+      params:
+        path: '{{file_path}}'
+        encoding: 'utf-8'
+      outputs:
+        - conversation   # populates {{conversation}} for all downstream stages
+      on_failure: 'abort'
+      failure_message: 'Cannot read source file {{file_path}} — distillation aborted.'
+
     # Stage 1 — Segment the conversation
     - id: stage_segment
       name: 'Stage 1 — Classify each conversation turn into SegmentType'

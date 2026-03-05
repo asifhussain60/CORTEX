@@ -127,6 +127,28 @@ The full TDD sequence (RED → GREEN → REFACTOR), sweep completeness contract 
 
 ---
 
+## 🗜️ DISTILL MODE
+
+**Trigger:** `/distill {file}`, "distill this", "distill session", "compress transcript"
+
+**Contract (non-negotiable — no ad-hoc deviation):**
+
+1. **Read the file** — read the full content of `{file}` into memory. This is the ONLY file read. Do NOT open any other file, run any terminal command, or call any other tool.
+2. **Call `cortex_distill`** — pass: `conversation = <full file content>`, `file_path = <absolute path to {file}>`.  
+   The MCP tool runs the full 5-stage pipeline internally (segment → reconstruct → reconcile → synthesise → compress).
+3. **Overwrite the file** — the tool writes the distilled prompt back to `file_path` in place. No separate write step needed.
+4. **Report inline** — emit a single inline summary: file path, segment count, noise ratio, token estimate. No headers, no analysis sections, no test runs.
+5. **Stop** — distillation is complete. Do NOT run tests, do NOT scan the repo, do NOT open unrelated files.
+
+**Hard stops (P0):**
+- ❌ NO terminal commands during distillation
+- ❌ NO reading files other than the target `{file}`
+- ❌ NO running tests or audit scans
+- ❌ NO opening unrelated workspace files
+- ❌ NO multi-step reading loops (read lines 1-100, then 100-400, etc.) — read the file once in full
+
+---
+
 ## 🏗️ RESPONSE FORMAT
 
 **SSOT:** `.github/templates/cortex-response-templates.md`

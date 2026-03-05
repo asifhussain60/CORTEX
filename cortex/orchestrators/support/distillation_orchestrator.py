@@ -132,26 +132,40 @@ class _ConversationSegmenter:
     # Outcome lines in Copilot turns that carry real signal
     _OUTCOME_LINE = re.compile(
         r"(✅|❌|committed|pushed|merged|tests? (pass|fail|green|red)"
-        r"|phase \w+ complete|all \d+ tests?|fixed|closed|rewritten"
+        r"|phase \w+ complete|all \d+ tests?|rewritten"
         r"|\d+ (pass|fail|error)|AC_COMPLETE|AC_START)",
+        re.I,
+    )
+
+    # Code / shell lines to strip — these are never signal
+    _CODE_LINE = re.compile(
+        r"^\s*("
+        r"(print|import|from|def |class |if |for |with |try:|except|raise|return)\b"  # Python
+        r"|[a-z_][a-z_0-9]*\s*="          # assignment
+        r"|\[.*\]$"                         # list literal line
+        r"|```"                             # fenced code
+        r"|\$\s"                            # shell prompt
+        r")",
         re.I,
     )
 
     # Goal / constraint / decision classifiers for user turns
     _GOAL_RE = re.compile(
         r"\b(want|need|build|create|implement|add|develop|design|make|set up"
-        r"|establish|use|apply|goal|objective|would like)\b",
+        r"|establish|goal|objective|would like|i want|we need|let me|let's build"
+        r"|distill|digest|fix|refactor|audit|onboard|plan|sync|rca)\b",
         re.I,
     )
     _CONSTRAINT_RE = re.compile(
-        r"\b(must|must not|should not|cannot|no |never|always|required"
-        r"|mandatory|only|except|limit|maximum|minimum|not allowed|forbidden"
-        r"|do not|don'?t)\b",
+        r"\b(must|must not|should not|cannot|never|always|required"
+        r"|mandatory|only|except|maximum|minimum|not allowed|forbidden"
+        r"|do not|don'?t|no \w+ allowed|ensure|guarantee)\b",
         re.I,
     )
+    # Decision: explicit agreement/confirmation by the user — requires deliberate wording
     _DECISION_RE = re.compile(
-        r"\b(yes|agreed|decided|let'?s|confirmed|we will|shall|chosen"
-        r"|picked|selected|commit|pushed|applied|fixed|closed|go with|done)\b",
+        r"\b(yes|agreed|confirmed|we will|shall|chosen|picked|selected"
+        r"|go with|proceed|let'?s proceed|approve[sd]?)\b",
         re.I,
     )
 
@@ -222,8 +236,10 @@ class _ConversationSegmenter:
         lines = copilot_body.splitlines()
         outcome_lines = []
         for line in lines:
-            # Skip header/noise lines
+            # Skip header/noise/code lines
             if self._HEADER_NOISE.match(line.strip()):
+                continue
+            if self._CODE_LINE.match(line):
                 continue
             # Keep outcome lines that signal a confirmed result
             if self._OUTCOME_LINE.search(line):
@@ -231,28 +247,39 @@ class _ConversationSegmenter:
         return "\n".join(outcome_lines)
 
     def _classify_user_turn(self, text: str):
-        """Classify a user turn as GOAL / CONSTRAINT / DECISION / CONTEXT."""
+        """Classify a user turn as GOAL / CONSTRAINT / DECISION / CONTEXT.
+
+        Priority (highest first):
+          CONSTRAINT — any constraint keyword present
+          GOAL       — goal keyword present (even if decision keywords also present)
+          DECISION   — explicit agreement with no competing goal keywords
+          CONTEXT    — fallback
+        """
         g = len(self._GOAL_RE.findall(text))
         c = len(self._CONSTRAINT_RE.findall(text))
         d = len(self._DECISION_RE.findall(text))
-        if c >= g and c > 0:
+        if c > 0:
             return SegmentType.CONSTRAINT, min(1.0, 0.6 + c * 0.1)
-        if d >= g and d > 0:
-            return SegmentType.DECISION, min(1.0, 0.6 + d * 0.1)
         if g > 0:
             return SegmentType.GOAL, min(1.0, 0.6 + g * 0.1)
+        if d > 0:
+            return SegmentType.DECISION, min(1.0, 0.6 + d * 0.1)
         return SegmentType.CONTEXT, 0.5
 
     @staticmethod
     def _strip_header_noise(text: str) -> str:
-        """Remove CORTEX header and tool-execution lines from generic turns."""
+        """Remove CORTEX header, tool-execution, and code lines from generic turns."""
         lines = text.splitlines()
         kept = [
             line for line in lines
             if not re.match(
                 r"^\s*(#\s*[🧠🛠️]?\s*CORTEX\b|>\s*\*[\"\']|\*\*Author:\*\*|©\s*20"
                 r"|🧭|[-─]{3,}|```|!\[|Ran terminal command:|Read \[|Searched"
-                r"|Created \[|Made changes\.|Using \"|Summarized)",
+                r"|Created \[|Made changes\.|Using \"|Summarized"
+                # code / shell lines
+                r"|(print|import|from |def |class |if |for |with |try:|except|raise|return)\b"
+                r"|[a-z_][a-z_0-9]*\s*="
+                r"|\$\s)",
                 line,
             )
         ]
