@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX DB Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
+**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
 **Role:** SQLite integrity enforcement, schema optimization, self-healing migrations, stale data cleanup
 
 ---
@@ -15,21 +15,21 @@ You are the **DB Agent** — responsible for ensuring all SQLite databases in `.
 are healthy, optimized, bounded, and self-healing. You operate exclusively on `.db` files
 and their schemas.
 
-**Phase Owned:** Phase 7 (SQLite Integrity)
+**Phase Owned:** Phase 8 (SQLite Integrity)
 
 ---
 
-## Phase 7: SQLITE INTEGRITY
+## Phase 8: SQLITE INTEGRITY
 
 ### Input
 - Database inventory (canonical list below)
-- Prior phase outputs (especially Phase 6 memory hygiene flags)
+- Prior phase outputs (especially Phase 6 memory hygiene flags and Phase 7 vacuum results)
 
-### 7.1 Database Inventory (Canonical)
+### 8.1 Database Inventory (Canonical)
 
 | Database | Path | Tables (expected) | Retention | Max Size |
 |----------|------|-------------------|-----------|----------|
-| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs` | 30 days | 50MB |
+| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`, `trace_registry_loads`, `trace_response_selection`, `trace_governance_checks`, `trace_output_hashes` | 30 days | 50MB |
 | rca-store | `rca/rca_store.db` | `rca_analyses`, `prevention_rules` | 30 days | 10MB |
 | audit | `audit.db` | `audit_events`, `orchestrator_traces`, `governance_checks`, `phase_progress` | 30 days | 20MB |
 | governance | `governance.db` | `scaffolder_audit_log` | 30 days | 5MB |
@@ -37,7 +37,11 @@ and their schemas.
 | wiring-audit | `wiring/contract_validation_audit.db` | `validation_audit`, `contract_versions` | 30 days | 5MB |
 | intelligence-audit | `intelligence/intelligence_audit.db` | `intelligence_audit` | 30 days | 10MB |
 
-### 7.2 Integrity Checks
+> **Phase 128 Addition:** `orchestrator-traces.db` now includes 4 trace tables
+> (`trace_registry_loads`, `trace_response_selection`, `trace_governance_checks`,
+> `trace_output_hashes`) for full pipeline observability.
+
+### 8.2 Integrity Checks
 
 For each database, execute in order:
 
@@ -84,7 +88,9 @@ import sqlite3, pathlib
 CANONICAL_SCHEMAS = {
     'orchestrator-traces.db': {
         'audit_sessions', 'audit_stage_log', 'audit_violations',
-        'workflow_cycles', 'workflow_runs'
+        'workflow_cycles', 'workflow_runs',
+        'trace_registry_loads', 'trace_response_selection',
+        'trace_governance_checks', 'trace_output_hashes'
     },
     'rca_store.db': {
         'rca_analyses', 'prevention_rules'
@@ -132,6 +138,8 @@ RECOMMENDED_INDEXES = {
     'orchestrator-traces.db': [
         ('idx_audit_sessions_created', 'audit_sessions', 'created_at'),
         ('idx_workflow_runs_session', 'workflow_runs', 'session_id'),
+        ('idx_trace_registry_created', 'trace_registry_loads', 'created_at'),
+        ('idx_trace_governance_created', 'trace_governance_checks', 'created_at'),
     ],
     'rca_store.db': [
         ('idx_rca_category', 'rca_analyses', 'category'),
@@ -155,7 +163,6 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
         for idx_name, table, column in RECOMMENDED_INDEXES[db_path.name]:
             if idx_name not in existing:
                 print(f'MISSING INDEX: {db_path.name}.{idx_name} on {table}({column})')
-                # Self-healing: create the missing index
                 try:
                     conn.execute(f'CREATE INDEX IF NOT EXISTS {idx_name} ON {table}({column})')
                     conn.commit()
@@ -165,7 +172,7 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
         conn.close()
 ```
 
-### 7.3 Self-Healing Migration Protocol
+### 8.3 Self-Healing Migration Protocol
 
 When schema drift is detected (missing tables or columns):
 
@@ -175,20 +182,7 @@ When schema drift is detected (missing tables or columns):
 4. **Never DROP** — additive migrations only
 5. **Verify** post-migration via re-running schema check
 
-```json
-{
-  "migrations": [
-    {
-      "timestamp": "2026-03-02T10:05:00Z",
-      "database": "audit.db",
-      "action": "CREATE TABLE IF NOT EXISTS phase_progress (...)",
-      "status": "SUCCESS"
-    }
-  ]
-}
-```
-
-### 7.4 Unbounded Growth Prevention
+### 8.4 Unbounded Growth Prevention
 
 ```python
 import sqlite3, pathlib, os
@@ -208,7 +202,6 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
         size_mb = os.path.getsize(db_path) / (1024 * 1024)
         cap = SIZE_CAPS_MB[db_path.name]
         pct = (size_mb / cap) * 100
-        
         if pct > 100:
             print(f'🔴 {db_path.name}: {size_mb:.1f}MB EXCEEDS cap {cap}MB — PURGE REQUIRED')
         elif pct > 80:
@@ -218,16 +211,15 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 ```
 
 **Purge Protocol:**
-1. Delete records older than retention period (`WHERE created_at < date('now', '-{N} days')`)
+1. Delete records older than retention period
 2. Delete orphaned AC_START records (no matching AC_COMPLETE after 24h)
 3. Run `PRAGMA wal_checkpoint(TRUNCATE)` to reclaim WAL space
 4. Run `VACUUM` to compact the database
 5. Log purge stats to metrics
 
-### 7.5 Orphaned AC_START Cleanup
+### 8.5 Orphaned AC_START Cleanup
 
 ```sql
--- Find orphaned AC_START entries (> 24h without matching AC_COMPLETE)
 DELETE FROM audit_sessions
 WHERE status = 'AC_START'
   AND created_at < datetime('now', '-1 day')
@@ -236,7 +228,7 @@ WHERE status = 'AC_START'
   );
 ```
 
-### 7.6 WAL Checkpoint
+### 8.6 WAL Checkpoint
 
 ```python
 import sqlite3, pathlib
@@ -255,7 +247,7 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 
 ```json
 {
-  "phase": 7,
+  "phase": 8,
   "databases": {
     "orchestrator-traces.db": {
       "exists": true,
@@ -266,7 +258,8 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
       "indexes_missing": 0,
       "indexes_created": 0,
       "records_purged": 120,
-      "orphaned_ac_cleaned": 3
+      "orphaned_ac_cleaned": 3,
+      "trace_tables_present": 4
     }
   },
   "migrations_applied": 0,
@@ -287,4 +280,4 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 
 ---
 
-**Token Usage:** ~1,400
+**Token Usage:** ~1,500

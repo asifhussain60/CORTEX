@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Certification Coordinator Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02 | **Authority:** `.github/agents/certification/cortex-certification-coordinator.md`
+**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-certification-coordinator.md`
 **Role:** Pipeline orchestrator for the Total Recall certification system
 
 ---
@@ -21,18 +21,19 @@ persistence, enforce execution order, and aggregate results into a unified certi
 
 ## 🏗️ Execution Pipeline
 
-### Deterministic Phase Ordering
+### Deterministic 10-Phase Ordering
 
 ```
-Phase 1 → Audit Agent       → DELTA ANALYSIS
-Phase 2 → Audit Agent       → DRIFT DETECTION
-Phase 3 → Regression Agent   → REGRESSION SCAN
-Phase 4 → Refactor Agent     → PROMPT OPTIMIZATION
-Phase 5 → Refactor Agent     → INTELLIGENCE WIRING
-Phase 6 → Memory Agent       → MEMORY HYGIENE
-Phase 7 → DB Agent           → SQLITE INTEGRITY
-Phase 8 → Certification Agent → PRODUCTION HARDENING
-Phase 9 → Certification Agent → CERTIFICATION
+Phase 1  → Audit Agent        → DELTA ANALYSIS
+Phase 2  → Audit Agent        → DRIFT DETECTION (7 categories incl. registry schema + drift locks)
+Phase 3  → Regression Agent   → REGRESSION SCAN (incl. sweep domain validation)
+Phase 4  → Refactor Agent     → PROMPT OPTIMIZATION
+Phase 5  → Refactor Agent     → INTELLIGENCE WIRING
+Phase 6  → Memory Agent       → MEMORY HYGIENE
+Phase 7  → Vacuum Agent       → WORKSPACE CLEANUP (8-stage pipeline)
+Phase 8  → DB Agent           → SQLITE INTEGRITY (7 canonical databases)
+Phase 9  → Certification Agent → PRODUCTION HARDENING (H1–H20)
+Phase 10 → Certification Agent → CERTIFICATION (scorecard + sign-off)
 ```
 
 ### Phase Handoff Protocol
@@ -83,17 +84,23 @@ The Coordinator persists state after every phase completion. This enables:
 
 | Scenario | Action |
 |----------|--------|
-| Agent reports P0 in Phases 1-3 | Log violation, continue scanning, block at Phase 4 gate |
-| Agent reports P0 in Phases 4-7 | Attempt fix, re-scan, block if unfixable after 3 cycles |
+| Agent reports P0 in Phases 1–3 | Log violation, continue scanning, block at Phase 4 gate |
+| Agent reports P0 in Phases 4–8 | Attempt fix, re-scan, block if unfixable after 3 cycles |
 | Phase timeout (> 5 min per phase) | Log timeout, mark FAILED, emit partial report |
 | Agent unavailable | Skip with SKIPPED status, degrade certification score |
 
 ### Convergence Gate (CORE-068)
 
-Between Phase 7 and Phase 8, a convergence gate runs:
+Between Phase 8 and Phase 9, a convergence gate runs:
 - If `p0_count > 0`: loop back to Phase 4 (max 3 cycles)
 - If `p1_count > 5`: loop back to Phase 4 (max 2 cycles)
-- If converged: proceed to Phase 8
+- If converged: proceed to Phase 9
+
+### No-Green-No-Claim Rule (Phase 128 lesson)
+
+**Never mark a phase COMPLETE until all its tests are GREEN.** The coordinator must verify
+test results before advancing. This prevents the premature-completion anti-pattern discovered
+during Phase 128 where sweep catalogues had OPEN gaps but the phase was marked COMPLETE.
 
 ---
 
@@ -105,6 +112,7 @@ Between Phase 7 and Phase 8, a convergence gate runs:
 | Regression Agent | `tests/`, `cortex/`, `git log` | `.cortex-runtime/certification/` only | Detect, never fix |
 | Refactor Agent | `.github/`, `cortex/`, `cortex-registry/` | `.github/`, `cortex/` (with TDD) | Fix with tests |
 | Memory Agent | `.cortex-runtime/`, `cortex/intelligence/` | `.cortex-runtime/` | Cleanup + metrics |
+| Vacuum Agent | Entire workspace (read + cleanup) | Workspace (cleanup only) | Delete artifacts |
 | DB Agent | `.cortex-runtime/**/*.db` | `.cortex-runtime/**/*.db` | Schema + data ops |
 | Certification Agent | All phase outputs | `.cortex-runtime/certification/` | Score + report |
 
@@ -123,13 +131,14 @@ When the user invokes `/totalrecall phase={N}`:
 
 ## 🔗 References
 
-| Agent | File |
-|-------|------|
-| Audit Agent | `cortex-audit-agent.md` |
-| Regression Agent | `cortex-regression-agent.md` |
-| Refactor Agent | `cortex-refactor-agent.md` |
-| Memory Agent | `cortex-memory-agent.md` |
-| DB Agent | `cortex-db-agent.md` |
-| Certification Agent | `cortex-certification-agent.md` |
+| Agent | File | Phase(s) |
+|-------|------|----------|
+| Audit Agent | `cortex-audit-agent.md` | 1, 2 |
+| Regression Agent | `cortex-regression-agent.md` | 3 |
+| Refactor Agent | `cortex-refactor-agent.md` | 4, 5 |
+| Memory Agent | `cortex-memory-agent.md` | 6 |
+| Vacuum Agent | `cortex-vacuum-agent.md` | 7 |
+| DB Agent | `cortex-db-agent.md` | 8 |
+| Certification Agent | `cortex-certification-agent.md` | 9, 10 |
 
-**Token Usage:** ~1,200
+**Token Usage:** ~1,300

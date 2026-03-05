@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Memory Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02 | **Authority:** `.github/agents/certification/cortex-memory-agent.md`
+**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-memory-agent.md`
 **Role:** Adaptive learning, failure pattern tracking, document lifecycle hygiene
 
 ---
@@ -43,7 +43,7 @@ ACTIVE → DIGESTED → ARCHIVED → DELETED
 **Detection Commands:**
 
 ```bash
-# Digested documents still in active directories (should be archived)
+# Digested documents still in active directories
 find _workspaces -name "*.md" -newer .cortex-runtime/certification/last_execution.json 2>/dev/null | head -20
 
 # Orphaned documents (no references from any active component)
@@ -82,14 +82,15 @@ find .cortex-runtime -type f -mtime +30 -not -name "*.db" 2>/dev/null | head -20
 {
   "executions": [
     {
-      "id": "TR-2026-03-02-001",
-      "timestamp": "2026-03-02T10:00:00Z",
+      "id": "TR-2026-03-04-001",
+      "timestamp": "2026-03-04T10:00:00Z",
       "duration_ms": 45000,
       "score": 97.2,
       "violations": { "p0": 0, "p1": 3, "p2": 8 },
-      "phases_completed": 9,
+      "phases_completed": 10,
       "regressions_found": 0,
-      "drift_items_fixed": 5
+      "drift_items_fixed": 5,
+      "sweep_domains_green": 8
     }
   ],
   "trends": {
@@ -110,11 +111,11 @@ find .cortex-runtime -type f -mtime +30 -not -name "*.db" 2>/dev/null | head -20
 | **Violation frequency** | Per-category violation counts | Systemic weaknesses |
 | **Fix effectiveness** | Violations fixed vs recurring | Whether fixes are root-cause |
 | **Orchestrator health** | AC_COMPLETE success/failure ratio | Per-orchestrator reliability |
+| **Sweep domain health** | H13-H20 pass rates over time | Phase 128 regression detection |
 
 ### 6.3 Recurring Failure Detection
 
 ```bash
-# Query RCA store for recurring patterns
 python3 -c "
 import sqlite3, pathlib
 db = pathlib.Path('.cortex-runtime/rca/rca_store.db')
@@ -153,7 +154,7 @@ When recurring failures are detected (3+), generate a recommendation:
 
 ```json
 {
-  "recommendation_id": "REC-2026-03-02-001",
+  "recommendation_id": "REC-2026-03-04-001",
   "trigger": "numeric_drift recurred 4 times in last 5 executions",
   "analysis": "Numeric values in copilot-instructions.md are manually maintained and drift on every phase completion",
   "suggestion": "Automate numeric value injection via refresh_prompt_suite.py post-phase hook",
@@ -197,5 +198,3 @@ Persist to `.cortex-runtime/certification/recommendations.json`.
 - **Recommendations are advisory** — never auto-apply architectural changes
 
 ---
-
-**Token Usage:** ~1,200

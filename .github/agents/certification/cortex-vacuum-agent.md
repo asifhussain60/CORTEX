@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Vacuum Agent — Workspace Cleanup Specialist
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02
+**Updated:** 2026-03-04
 **Authority:** `.github/agents/certification/cortex-vacuum-agent.md`
 **Phase:** 7 (WORKSPACE CLEANUP) within Total Recall pipeline
 **Orchestrator:** `cortex/orchestrators/health/vacuum_orchestrator.py`
@@ -31,6 +31,7 @@ production-ready state with zero detritus.
 - Digested content past retention
 - Build artifacts (`__pycache__`, `.pyc`, `dist/`, `build/`, `*.egg-info`)
 - OS artifacts (`.DS_Store`, `Thumbs.db`, `desktop.ini`, `._*`)
+- **Backup files** (`.bak`, `.orig`, `.backup` — Phase 128 addition)
 
 ### Out of Scope (other agents own)
 
@@ -54,7 +55,7 @@ production-ready state with zero detritus.
 | 5 | **Markdown Sprawl** | `.md` files outside `.github/`, `cortex-docs/`, `_workspaces/` | Archive or delete | P1 |
 | 6 | **Digested Content** | Files marked as `DIGESTED` in memory state > 7 days old | Delete | P1 |
 | 7 | **Build Artifacts** | `__pycache__/`, `*.pyc`, `dist/`, `build/`, `*.egg-info` | `rm -rf` | P2 |
-| 8 | **OS Artifacts** | `.DS_Store`, `Thumbs.db`, `desktop.ini`, `._*` | `rm` | P2 |
+| 8 | **OS & Backup Artifacts** | `.DS_Store`, `Thumbs.db`, `desktop.ini`, `._*`, `*.bak`, `*.orig`, `*.backup` | `rm` | P2 |
 
 ### Root Directory Allowlist
 
@@ -85,17 +86,13 @@ LICENSE              # License
 
 ### Classification Logic
 
-Each detected item is classified as:
-
 | Classification | Criteria | Action |
 |---------------|----------|--------|
-| `AUTO_FIX` | Safe to remove — no references, no active use, build/OS artifact | Delete immediately |
+| `AUTO_FIX` | Safe to remove — no references, no active use, build/OS/backup artifact | Delete immediately |
 | `REVIEW_REQUIRED` | Ambiguous ownership, recent modification, or cross-referenced | Report in certification output |
 | `EXEMPT` | In allowlist, actively used, or governance-protected | Skip |
 
 ### Metrics Emitted
-
-After execution, emit to certification handoff payload:
 
 ```yaml
 vacuum_metrics:
@@ -103,6 +100,7 @@ vacuum_metrics:
   dirs_removed: {n}
   bytes_reclaimed: {n}
   artifacts_cleaned: {n}
+  backup_files_removed: {n}
   items_flagged_for_review: {n}
   naming_violations_fixed: {n}
   stages_passed: {n}/8
@@ -131,6 +129,6 @@ vacuum_metrics:
 | `cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml` | Workflow template |
 | `cortex-total-recall.prompt.md` | Parent certification pipeline |
 | `cortex-memory-agent.md` | Upstream — document lifecycle states |
-| `cortex-db-agent.md` | Downstream — SQLite cleanup |
+| `cortex-db-agent.md` | Downstream — SQLite cleanup (Phase 8) |
 
 > **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.
