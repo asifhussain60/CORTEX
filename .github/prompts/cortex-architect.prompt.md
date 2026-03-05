@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-04 (Production Readiness Audit) | **Architecture:** 322 Orchestrator files · 30 MCP Tools · 36 Governance YAMLs · 29 Intent Types · 1 Package  
+**Updated:** 2026-03-05 | **Architecture:** 323 Orchestrator files · 30 MCP Tools · 37 Governance YAMLs · 29 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
@@ -889,7 +889,7 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-## ⚡ MCP TOOLS (30 registered, 39 target)
+## ⚡ MCP TOOLS (30 registered)
 
 **Verification:** Call `cortex_verify` (operation: `mcp`). If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -923,8 +923,8 @@ Progress bar + stage bullet list. See templates SSOT.
 
 | Type | Location |
 |------|----------|
-| Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (30 registered, 39 target) | `cortex/mcp/tools/` |
+| Orchestrators (323 files) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (30 registered) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure — excludes dissolved packages: `cortex_brain`, `cortex_intelligence`, `cortex_lens`) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
