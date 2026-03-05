@@ -13,8 +13,12 @@ precedence: HIGHEST
 canonical_source: "cortex-registry/core/tier0-skull/skull-rules.yaml"
 
 metadata:
-  description: "CORTEX Core Governance Rules — entry point delegating to Tier 0 skull-rules"
-  authority: "cortex-architect.prompt.md | CORE-064 | CORE-068"
-  last_updated: "2026-03-05"
-  status: "ACTIVE"
-  note: "All rule detail lives in canonical_source above. This file is the governance/core-rules.yaml entry point required by orchestrator rule-loading."
+  description: >
+    Entry-point reference for CORTEX governance rules.
+    The canonical SSOT is cortex-registry/core/tier0-skull/skull-rules.yaml.
+    This file provides the governance tier 0 registration for the
+    cortex-registry/governance/ directory.
+  author: "Asif Hussain"
+  copyright: "© 2025–2026 Asif Hussain. All rights reserved."
+  phase: 109
+  fixed_in: "Phase 109 pull — broken symlink replaced with proper YAML"
