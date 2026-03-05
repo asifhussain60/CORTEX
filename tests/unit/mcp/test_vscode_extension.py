@@ -26,7 +26,7 @@ class TestExtensionPackageJson:
 
     def test_extension_package_json_exists(self):
         """package.json should exist in extension root."""
-        ext_path = Path("/Users/asifhussain/PROJECTS/CORTEX/extensions/vscode-cortex")
+        ext_path = Path(__file__).resolve().parents[3] / "extensions/vscode-cortex"
         package_json = ext_path / "package.json"
         
         # If extension directory exists, package.json should be there
@@ -35,7 +35,7 @@ class TestExtensionPackageJson:
 
     def test_extension_identifies_itself_as_cortex(self):
         """Extension should have proper publisher and name."""
-        ext_path = Path("/Users/asifhussain/PROJECTS/CORTEX/extensions/vscode-cortex")
+        ext_path = Path(__file__).resolve().parents[3] / "extensions/vscode-cortex"
         package_json = ext_path / "package.json"
         
         if package_json.exists():
@@ -48,7 +48,7 @@ class TestExtensionPackageJson:
 
     def test_extension_contributes_commands(self):
         """Extension should register required commands."""
-        ext_path = Path("/Users/asifhussain/PROJECTS/CORTEX/extensions/vscode-cortex")
+        ext_path = Path(__file__).resolve().parents[3] / "extensions/vscode-cortex"
         package_json = ext_path / "package.json"
         
         if package_json.exists():
@@ -70,7 +70,7 @@ class TestExtensionPackageJson:
 
     def test_extension_contributes_views(self):
         """Extension should register sidebar views."""
-        ext_path = Path("/Users/asifhussain/PROJECTS/CORTEX/extensions/vscode-cortex")
+        ext_path = Path(__file__).resolve().parents[3] / "extensions/vscode-cortex"
         package_json = ext_path / "package.json"
         
         if package_json.exists():
@@ -142,7 +142,7 @@ class TestIntegrationCompleteness:
 
     def test_extension_structure_complete(self):
         """Extension should have all required files and structure."""
-        ext_path = Path("/Users/asifhussain/PROJECTS/CORTEX/extensions/vscode-cortex")
+        ext_path = Path(__file__).resolve().parents[3] / "extensions/vscode-cortex"
         
         if ext_path.exists():
             required_files = [

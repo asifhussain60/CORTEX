@@ -30,12 +30,12 @@ class CortexFeatures:
     Detected CORTEX-specific features in a repository.
 
     Attributes:
-        has_cortex_intelligence: Whether cortex/intelligence/ directory exists
+        has_intelligence: Whether cortex/intelligence/ directory exists
         has_orchestrators: Whether cortex/orchestrators/ directory exists
         has_prompt_file: Whether .github/prompts/CORTEX.prompt.md exists
         has_wiring: Whether cortex/wiring/specifications/wiring.yaml exists
     """
-    has_cortex_intelligence: bool
+    has_intelligence: bool
     has_orchestrators: bool
     has_prompt_file: bool
     has_wiring: bool
@@ -101,7 +101,7 @@ class RepositoryDetector:
         markers = self.get_cortex_markers()
 
         return CortexFeatures(
-            has_cortex_intelligence=markers[0].exists(),      # cortex/intelligence/
+            has_intelligence=markers[0].exists(),      # cortex/intelligence/
             has_orchestrators=markers[1].exists(),     # cortex/orchestrators/
             has_prompt_file=markers[2].exists(),       # CORTEX.prompt.md
             has_wiring=markers[3].exists(),            # wiring.yaml

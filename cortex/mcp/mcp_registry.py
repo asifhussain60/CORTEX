@@ -9,7 +9,7 @@ Tool Count Strategy:
     - Removed deprecated tools: cortex_process_request, cortex_lens
     - Removed cortex_check (ops absorbed into cortex_verify)
     - Removed cortex_total_recall (ops absorbed into cortex_tools_catalog)
-    - Added cortex_scaffold_files, cortex_master_plan, cortex_brain_query (formerly orphans)
+    - Added cortex_scaffold_files, cortex_master_plan, cortex_brain_query (wired from orphan status)
     - Consolidation by business capability
     - Operation parameters instead of separate tools
     - Removal of dev-only tools

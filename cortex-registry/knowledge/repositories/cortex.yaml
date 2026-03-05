@@ -2,7 +2,7 @@ domain: "repositories"
 analysis: &id001
   architecture_type: unknown
   patterns_detected: []
-  repository_path: /Users/asifhussain/PROJECTS/CORTEX
+  repository_path: .
   status: success
 metadata:
   brain_enhancement:
@@ -40,10 +40,10 @@ metadata:
     by_orchestrator:
       OnboardingOrchestrator: 1
     cache_keys:
-    - OnboardingOrchestrator:onboarding:/Users/asifhussain/PROJECTS/CORTEX
+    - OnboardingOrchestrator:onboarding:.
     cached_learnings: 1
     total_learnings: 1
 repository:
   name: CORTEX
   onboarded_at: '2026-02-18T14:19:43.956384'
-  path: /Users/asifhussain/PROJECTS/CORTEX
+  path: .

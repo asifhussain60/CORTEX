@@ -40,7 +40,7 @@ class TestRepoContext:
         """Test creating CORTEX repo context."""
         ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
             git_remote="github.com/asifhussain60/CORTEX",
             detection_confidence=0.98,
@@ -68,7 +68,7 @@ class TestRepoContext:
         """Test is_cortex_repo() convenience method."""
         cortex_ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
         )
         
@@ -98,7 +98,7 @@ class TestRepoContext:
         """Test detection signals are tracked."""
         ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
             detection_signals={
                 "keyword_match": True,
@@ -159,7 +159,7 @@ class TestAssembledContext:
         """Test creating assembled context for CORTEX question."""
         repo_ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
         )
         
@@ -222,7 +222,7 @@ class TestAssembledContext:
         """Test confidence threshold methods."""
         repo_ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
         )
         
@@ -247,7 +247,7 @@ class TestAssembledContext:
         """Test serialization to cacheable dictionary."""
         repo_ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
         )
         
@@ -301,7 +301,7 @@ class TestAssembledContext:
         
         repo_ctx = RepoContext(
             repo_type=RepoType.CORTEX,
-            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_path=Path(__file__).resolve().parents[2],
             repo_name="CORTEX",
         )
         

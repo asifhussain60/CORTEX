@@ -22,7 +22,7 @@ PRIMITIVES_ROOT = TEMPLATES_ROOT / "primitives"
 
 def _load_yaml_safe(path: Path) -> dict | None:
     try:
-        with path.open() as fh:
+        with path.open(encoding="utf-8") as fh:
             return yaml.safe_load(fh)
     except (yaml.YAMLError, OSError):
         return None
@@ -90,7 +90,7 @@ class TestAllPrimitivesReferencedByAtLeastOneWorkflow:
         for yaml_file in TEMPLATES_ROOT.rglob("*.yaml"):
             if "primitives" not in str(yaml_file):
                 try:
-                    workflow_content_parts.append(yaml_file.read_text(errors="replace"))
+                    workflow_content_parts.append(yaml_file.read_text(encoding="utf-8", errors="replace"))
                 except OSError:
                     pass
         all_workflow_content = "\n".join(workflow_content_parts)

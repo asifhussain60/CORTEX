@@ -23,7 +23,7 @@ import yaml
 @pytest.fixture(scope="module")
 def wiring_spec() -> Dict[str, Any]:
     """Load the wiring specification."""
-    with open("cortex/core/wiring/specifications/wiring.yaml") as f:
+    with open("cortex/core/wiring/specifications/wiring.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 

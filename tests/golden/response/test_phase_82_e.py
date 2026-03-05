@@ -51,7 +51,7 @@ import pytest
 # Paths
 # =============================================================================
 
-ROOT = Path("/Users/asifhussain/PROJECTS/CORTEX")
+ROOT = Path(__file__).resolve().parents[3]
 CORTEX_PROMPT = ROOT / ".github" / "prompts" / "CORTEX.prompt.md"
 EXECUTOR_MD = ROOT / ".github" / "agents" / "core" / "cortex-executor.md"
 SSOT = ROOT / ".github" / "templates" / "cortex-response-templates.md"

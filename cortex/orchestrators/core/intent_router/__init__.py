@@ -8,6 +8,7 @@ where IntentRouter was aliased to WorkflowComplexityRouter.
 """
 
 import logging
+import importlib
 
 from cortex.orchestrators.core.intent_router.workflow_gate import (
     WorkflowComplexityRouter,
@@ -17,32 +18,46 @@ from cortex.orchestrators.core.intent_router.workflow_gate import (
     ComplexityThreshold,
 )
 
-# Import the REAL IntentRouter from the renamed implementation file
-try:
-    from ..intent_router_impl import (
-        IntentRouter,
-        IntentType,
-        RoutingDecision,
-    )
-except ImportError:
-    # Fallback: if intent_router_impl doesn't exist, use WorkflowComplexityRouter.
-    # CORE-035: ensure RoutingDecision and IntentType are always exported so that
-    # callers (e.g. health_check_service) don't fail with NameError/ImportError.
-    logging.getLogger(__name__).error(
-        "CRITICAL: cortex.orchestrators.core.intent_router_impl not found — "
-        "IntentRouter will be degraded to WorkflowComplexityRouter"
-    )
-    IntentRouter = WorkflowComplexityRouter  # type: ignore[assignment,misc]
-    # Re-export WorkflowRoutingDecision as RoutingDecision so the name is always available
-    RoutingDecision = WorkflowRoutingDecision  # type: ignore[assignment,misc]
-    # Provide a minimal IntentType enum stub so imports never fail
-    from enum import Enum
-    class IntentType(str, Enum):  # type: ignore[no-redef]  # CORE-035-scoped — fallback stub when impl unavailable
-        """Fallback IntentType when intent_router_impl is unavailable."""
-        UNKNOWN = "UNKNOWN"
+# Lazy resolution for IntentRouter, IntentType, RoutingDecision.
+# intent_router_impl imports from this package (circular), so we defer
+# the reverse import until first attribute access (PEP 562).
+_LAZY_NAMES = {"IntentRouter", "IntentType", "RoutingDecision", "EnhancedIntentRouter"}
+_resolved = False
 
-# EnhancedIntentRouter is the same as IntentRouter (backward compat)
-EnhancedIntentRouter = IntentRouter  # type: ignore[assignment,misc]
+
+def _resolve_impl() -> None:
+    """One-shot resolution of intent_router_impl exports."""
+    global _resolved  # noqa: PLW0603
+    if _resolved:
+        return
+    _resolved = True
+    try:
+        _mod = importlib.import_module("cortex.orchestrators.core.intent_router_impl")
+        globals()["IntentRouter"] = getattr(_mod, "IntentRouter", WorkflowComplexityRouter)
+        globals()["IntentType"] = getattr(_mod, "IntentType", None)
+        globals()["RoutingDecision"] = getattr(_mod, "RoutingDecision", WorkflowRoutingDecision)
+        globals()["EnhancedIntentRouter"] = globals()["IntentRouter"]
+    except ImportError:
+        logging.getLogger(__name__).error(
+            "CRITICAL: cortex.orchestrators.core.intent_router_impl not found — "
+            "IntentRouter will be degraded to WorkflowComplexityRouter"
+        )
+        globals()["IntentRouter"] = WorkflowComplexityRouter
+        globals()["RoutingDecision"] = WorkflowRoutingDecision
+        globals()["EnhancedIntentRouter"] = WorkflowComplexityRouter
+        from enum import Enum
+        class _FallbackIntentType(str, Enum):
+            UNKNOWN = "UNKNOWN"
+        globals()["IntentType"] = _FallbackIntentType
+
+
+def __getattr__(name: str):
+    """PEP 562 lazy attribute resolution for circular-import-safe re-exports."""
+    if name in _LAZY_NAMES:
+        _resolve_impl()
+        if name in globals():
+            return globals()[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 # GAP-57-09: Wire StrategySelector into IntentRouter for routing confidence (Phase 57-f)
 try:

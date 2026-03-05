@@ -39,7 +39,7 @@ import yaml
 # Paths
 # =============================================================================
 
-ROOT = Path("/Users/asifhussain/PROJECTS/CORTEX")
+ROOT = Path(__file__).resolve().parents[3]
 SSOT = ROOT / ".github" / "templates" / "cortex-response-templates.md"
 YAML_REGISTRY = ROOT / "cortex-registry" / "artifacts" / "templates" / "responses" / "response-templates.yaml"
 PHASE_TEMPLATE = ROOT / "cortex-registry" / "planning" / "phases" / "_template.yaml"

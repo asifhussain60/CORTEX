@@ -15,8 +15,30 @@ Author: Asif Hussain
 """
 
 import os
+import sys
 import pytest
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# UTF-8 Default Encoding (Windows cp1252 workaround)
+# ---------------------------------------------------------------------------
+# CORTEX files are all UTF-8.  On Windows the default codec is cp1252 which
+# breaks on em-dashes, smart-quotes etc.  PEP 540 provides the built-in fix:
+# set PYTHONUTF8=1 *before* the interpreter starts (env var or -X utf8).
+#
+# Guard: If someone forgets the env var, force it and warn.  The env-var
+# approach is simpler and more reliable than runtime monkeypatching of open()
+# and Path.read_text(), which can be defeated by import ordering.
+# ---------------------------------------------------------------------------
+if sys.platform == "win32" and not sys.flags.utf8_mode:
+    os.environ["PYTHONUTF8"] = "1"  # Takes effect for child processes
+    import warnings
+    warnings.warn(
+        "PYTHONUTF8=1 was not set. Add it to your environment or use "
+        "'python -X utf8 -m pytest'. Setting it now for child processes.",
+        stacklevel=1,
+    )
+
 from cortex.infrastructure.trace_integration import enable_trace_for_tests, disable_trace_for_production
 from cortex.infrastructure.orchestrator_trace_logger import get_trace_logger, TraceFlushReason
 

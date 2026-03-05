@@ -30,7 +30,7 @@ from cortex.mcp.tools.onboard_repository import (
 # Constants — repo-agnostic; paths resolved at runtime
 # ============================================================================
 
-CORTEX_PATH = Path("/Users/asifhussain/PROJECTS/CORTEX")
+CORTEX_PATH = Path(__file__).resolve().parents[3]
 CORTEX_REGISTRY_PATH = CORTEX_PATH / "cortex-registry"
 KSESSIONS_PATH = Path("/Users/asifhussain/PROJECTS/KSESSIONS")
 

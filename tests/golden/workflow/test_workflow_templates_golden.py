@@ -20,7 +20,7 @@ import yaml
 
 # ── GOLDEN TEST CONFIGURATION ────────────────────────────────────────────────────
 
-TEMPLATES_ROOT = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/workflows/templates")
+TEMPLATES_ROOT = Path(__file__).resolve().parents[3] / "cortex-registry/workflows/templates"
 
 # Phase 22 deliverables D11-D18
 PHASE_22_TEMPLATES = [

@@ -27,7 +27,7 @@ import yaml
 # Paths
 # ---------------------------------------------------------------------------
 CORTEX_ROOT = Path(__file__).parents[2]
-CORE_RULES_YAML = CORTEX_ROOT / "cortex-registry" / "governance" / "core-rules.yaml"
+CORE_RULES_YAML = CORTEX_ROOT / "cortex-registry" / "core" / "tier0-skull" / "skull-rules.yaml"
 
 # Production scopes — these are AUTHORITATIVE. Rules cited here MUST be in YAML.
 _PRODUCTION_DIRS = [
@@ -104,7 +104,7 @@ def _collect_cited_rules(dirs: list[Path]) -> set[str]:
             if f.suffix not in _PRODUCTION_EXTENSIONS:
                 continue
             try:
-                text = f.read_text(errors="ignore")
+                text = f.read_text(encoding="utf-8", errors="ignore")
                 found.update(pattern.findall(text))
             except OSError:
                 pass
@@ -113,7 +113,7 @@ def _collect_cited_rules(dirs: list[Path]) -> set[str]:
 
 def _load_yaml_rule_ids() -> set[str]:
     """Return all CORE-XXX rule_ids defined in core-rules.yaml."""
-    content = yaml.safe_load(CORE_RULES_YAML.read_text())
+    content = yaml.safe_load(CORE_RULES_YAML.read_text(encoding="utf-8"))
     rules = content.get("rules", [])
     ids: set[str] = set()
     for rule in rules:
@@ -157,7 +157,7 @@ def test_core_rules_yaml_exists():
 
 def test_core_rules_yaml_is_parseable():
     """core-rules.yaml must be valid YAML with a 'rules' list."""
-    content = yaml.safe_load(CORE_RULES_YAML.read_text())
+    content = yaml.safe_load(CORE_RULES_YAML.read_text(encoding="utf-8"))
     assert isinstance(content, dict), "core-rules.yaml must be a mapping"
     assert "rules" in content, "core-rules.yaml must have a 'rules' key"
     assert isinstance(content["rules"], list), "'rules' must be a list"
@@ -166,7 +166,7 @@ def test_core_rules_yaml_is_parseable():
 
 def test_every_yaml_rule_has_rule_id(yaml_rule_ids):
     """Every rule entry in core-rules.yaml must have a valid CORE-XXX rule_id."""
-    content = yaml.safe_load(CORE_RULES_YAML.read_text())
+    content = yaml.safe_load(CORE_RULES_YAML.read_text(encoding="utf-8"))
     rules = content["rules"]
     missing_id = [r for r in rules if not r.get("rule_id")]
     assert missing_id == [], (
@@ -177,7 +177,7 @@ def test_every_yaml_rule_has_rule_id(yaml_rule_ids):
 
 def test_every_yaml_rule_has_severity(yaml_rule_ids):
     """Every rule entry must have a severity field."""
-    content = yaml.safe_load(CORE_RULES_YAML.read_text())
+    content = yaml.safe_load(CORE_RULES_YAML.read_text(encoding="utf-8"))
     rules = content["rules"]
     missing = [r.get("rule_id", "?") for r in rules if not r.get("severity")]
     assert missing == [], f"Rules missing severity: {missing}"
@@ -194,7 +194,7 @@ def test_no_sentinel_rules_in_yaml(yaml_rule_ids):
 
 def test_no_duplicate_rule_ids_in_yaml():
     """core-rules.yaml must not contain duplicate rule_id values."""
-    content = yaml.safe_load(CORE_RULES_YAML.read_text())
+    content = yaml.safe_load(CORE_RULES_YAML.read_text(encoding="utf-8"))
     rule_ids = [r.get("rule_id", "") for r in content["rules"]]
     seen: set[str] = set()
     dupes: list[str] = []

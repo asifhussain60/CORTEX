@@ -662,7 +662,7 @@ class TestContextCrystallizationPersistence:
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/mcp/tools").exists(),
+    not Path(__file__).resolve().parents[3] / "cortex/mcp/tools".exists(),
     reason="MCP tools not available"
 )
 class TestMCPIntegrationRouting:
@@ -677,7 +677,7 @@ class TestMCPIntegrationRouting:
         from cortex.mcp.tools.onboard_repository import onboard_repository_tool
         
         # Use CORTEX itself as test repository
-        test_repo = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        test_repo = Path(__file__).resolve().parents[3]
         
         if not test_repo.exists():
             pytest.skip("Test repository not available")

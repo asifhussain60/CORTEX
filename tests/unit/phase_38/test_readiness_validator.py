@@ -24,7 +24,7 @@ class TestPhase38ReadinessValidator:
         """Test validator initialization."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         assert validator.workspace_root == workspace
@@ -34,7 +34,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of Phase 34 completion."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_phase_34_completion()
@@ -47,7 +47,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of test collection status."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_test_collection()
@@ -60,7 +60,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of orchestrator inventory report."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_orchestrator_inventory()
@@ -73,7 +73,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of baseline metrics report."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_baseline_metrics()
@@ -86,7 +86,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of test suite baseline."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_test_suite_baseline()
@@ -99,7 +99,7 @@ class TestPhase38ReadinessValidator:
         """Test validation of Phase 38 index status."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         result = validator.check_phase_38_index()
@@ -112,7 +112,7 @@ class TestPhase38ReadinessValidator:
         """Test running all validation checks."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         results = validator.run_all_checks()
@@ -126,7 +126,7 @@ class TestPhase38ReadinessValidator:
         """Test calculation of readiness score."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         results = validator.run_all_checks()
@@ -139,7 +139,7 @@ class TestPhase38ReadinessValidator:
         """Test generation of readiness validation report."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         report_path = validator.generate_readiness_report()
@@ -160,7 +160,7 @@ class TestPhase38ReadinessValidator:
         """Test that report includes recommendations for failed checks."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         report_path = validator.generate_readiness_report()
@@ -176,7 +176,7 @@ class TestPhase38ReadinessValidator:
         """Test that validator returns proper exit code."""
         from cortex.orchestrators.validation.readiness_validator import Phase38ReadinessValidator
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         validator = Phase38ReadinessValidator(workspace_root=workspace)
         
         exit_code = validator.validate_and_exit()

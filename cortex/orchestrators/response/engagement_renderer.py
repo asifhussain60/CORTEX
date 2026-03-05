@@ -131,7 +131,7 @@ class EngagementRenderer:
         """Translate a tool key to its readable label.
 
         Args:
-            tool_key: Tool identifier (e.g. ``"cortex_lens"``), or ``None``.
+            tool_key: Tool identifier (e.g. ``"cortex_verify"``), or ``None``.
 
         Returns:
             Readable label, or empty string for None.

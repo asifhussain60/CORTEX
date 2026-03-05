@@ -27,7 +27,7 @@ from cortex.mcp.tools.onboard_repository import (
 # Constants
 # ============================================================================
 
-CORTEX_PATH = Path("/Users/asifhussain/PROJECTS/CORTEX")
+CORTEX_PATH = Path(__file__).resolve().parents[3]
 EXTERNAL_KSESSIONS_PATH = Path("/Users/asifhussain/PROJECTS/KSESSIONS")
 GOVERNANCE_DB_PATH = CORTEX_PATH / ".cortex-runtime" / "state" / "governance.db"
 

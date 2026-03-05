@@ -7,7 +7,7 @@ budget. This test enforces the budget and prevents silent accumulation.
 Drift lock: check-47-production-purity-lock.yaml
 """
 
-import subprocess
+import re
 from pathlib import Path
 
 import pytest
@@ -25,19 +25,23 @@ XXX_BUDGET = 10
 
 
 def _count_marker(marker: str) -> list[str]:
-    """Return lines matching `marker` in cortex/ production Python files."""
-    result = subprocess.run(
-        ["grep", "-rn", marker, str(SRC_ROOT), "--include=*.py"],
-        capture_output=True,
-        text=True,
-    )
-    lines = result.stdout.strip().split("\n") if result.stdout.strip() else []
-    # Exclude test files and comment-only lines explaining the marker
-    return [
-        ln
-        for ln in lines
-        if ln and "test_" not in ln.split(":")[0]
-    ]
+    """Return lines matching `marker` in cortex/ production Python files.
+
+    Uses pure-Python scanning for Windows portability (no grep dependency).
+    """
+    pattern = re.compile(marker)
+    hits: list[str] = []
+    for py_file in SRC_ROOT.rglob("*.py"):
+        if "__pycache__" in str(py_file) or "test_" in py_file.name:
+            continue
+        try:
+            content = py_file.read_text(encoding="utf-8", errors="ignore")
+            for i, line in enumerate(content.splitlines(), 1):
+                if pattern.search(line):
+                    hits.append(f"{py_file}:{i}: {line.strip()[:120]}")
+        except OSError:
+            continue
+    return hits
 
 
 class TestTodoBudget:

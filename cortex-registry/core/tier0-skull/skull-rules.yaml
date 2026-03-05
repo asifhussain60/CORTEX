@@ -126,7 +126,7 @@ rules:
       
       Business Principle: Build for portability from day one.
       
-      WRONG: /Users/asifhussain/PROJECTS/CORTEX
+      WRONG: /absolute/path
       RIGHT: get_project_root() / "cortex" / "intelligence"
     validation:
       - No /Users/... paths

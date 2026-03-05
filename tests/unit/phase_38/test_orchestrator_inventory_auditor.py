@@ -22,7 +22,7 @@ class TestOrchestratorInventoryAuditor:
         """Test auditor initialization with workspace paths."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         assert auditor.workspace_root == workspace
@@ -33,7 +33,7 @@ class TestOrchestratorInventoryAuditor:
         """Test discovery of all Python files in orchestrators directory."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         files = auditor.discover_orchestrator_files()
@@ -49,7 +49,7 @@ class TestOrchestratorInventoryAuditor:
         """Test categorization of files into orchestrators vs support."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         categories = auditor.categorize_files()
@@ -67,7 +67,7 @@ class TestOrchestratorInventoryAuditor:
         """Test loading and parsing of wiring.yaml."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         wiring_data = auditor.load_wiring_yaml()
@@ -79,7 +79,7 @@ class TestOrchestratorInventoryAuditor:
         """Test cross-referencing discovered orchestrators with wiring.yaml."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         cross_ref = auditor.cross_reference_wiring()
@@ -96,7 +96,7 @@ class TestOrchestratorInventoryAuditor:
         """Test generation of JSON inventory report."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         report_path = auditor.generate_report()
@@ -120,7 +120,7 @@ class TestOrchestratorInventoryAuditor:
         """Test that report contains expected minimum orchestrator count."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         report_path = auditor.generate_report()
@@ -135,7 +135,7 @@ class TestOrchestratorInventoryAuditor:
         """Test that report contains expected minimum support file count."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         report_path = auditor.generate_report()
@@ -150,7 +150,7 @@ class TestOrchestratorInventoryAuditor:
         """Test that total file count matches sum of orchestrators + support."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         report_path = auditor.generate_report()
@@ -165,7 +165,7 @@ class TestOrchestratorInventoryAuditor:
         """Test that report is saved to cortex-registry/_cortex-master/reports/."""
         from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         auditor = OrchestratorInventoryAuditor(workspace_root=workspace)
         
         report_path = auditor.generate_report()

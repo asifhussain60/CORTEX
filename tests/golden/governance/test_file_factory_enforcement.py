@@ -326,7 +326,7 @@ class TestNoRawFileCreation:
                 continue
             if self._is_exempted(py_file):
                 continue
-            source = py_file.read_text(errors="replace")
+            source = py_file.read_text(encoding="utf-8", errors="replace")
             raw_writes = self._find_raw_writes(source)
             if raw_writes and not self._has_file_factory_import(source):
                 rel = str(py_file.relative_to(CORTEX_ROOT))
@@ -350,7 +350,7 @@ class TestNoRawFileCreation:
                 continue
             if self._is_exempted(py_file):
                 continue
-            source = py_file.read_text(errors="replace")
+            source = py_file.read_text(encoding="utf-8", errors="replace")
             raw_writes = self._find_raw_writes(source)
             if raw_writes and not self._has_file_factory_import(source):
                 rel = str(py_file.relative_to(CORTEX_ROOT))
@@ -374,7 +374,7 @@ class TestNoRawFileCreation:
                 continue
             if self._is_exempted(py_file):
                 continue
-            source = py_file.read_text(errors="replace")
+            source = py_file.read_text(encoding="utf-8", errors="replace")
             raw_writes = self._find_raw_writes(source)
             if raw_writes and not self._has_file_factory_import(source):
                 rel = str(py_file.relative_to(CORTEX_ROOT))
@@ -403,7 +403,7 @@ class TestNamingRulesYaml:
         """All CORTEX-internal terms must be in prohibited_patterns."""
         import yaml
         config_path = CORTEX_ROOT / "cortex-registry/config/file-naming-rules.yaml"
-        data = yaml.safe_load(config_path.read_text())
+        data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
         patterns = data.get("prohibited_patterns", [])
         pattern_str = " ".join(str(p) for p in patterns)
 
@@ -417,7 +417,7 @@ class TestNamingRulesYaml:
         """Enforcement level must be 'strict'."""
         import yaml
         config_path = CORTEX_ROOT / "cortex-registry/config/file-naming-rules.yaml"
-        data = yaml.safe_load(config_path.read_text())
+        data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
         enforcement = data.get("enforcement", {})
         assert enforcement.get("level") == "strict"
 

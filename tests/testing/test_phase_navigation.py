@@ -26,13 +26,13 @@ pytestmark = pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not
 @pytest.fixture
 def dashboard_url():
     """URL to master dashboard."""
-    return "file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/metrics/dashboards/index.html"
+    return "file://str(REPO_ROOT)/cortex-registry/metrics/dashboards/index.html"
 
 
 @pytest.fixture
 def phase_detail_url():
     """Base URL for phase detail pages."""
-    return "file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/metrics/dashboards/phases"
+    return "file://str(REPO_ROOT)/cortex-registry/metrics/dashboards/phases"
 
 
 class TestPhaseCardNavigation:

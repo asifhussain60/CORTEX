@@ -67,7 +67,7 @@ def _collect_stub_files() -> list[str]:
     ]
 
     for py_file in py_files:
-        rel = str(py_file.relative_to(REPO_ROOT))
+        rel = str(py_file.relative_to(REPO_ROOT)).replace("\\", "/")
         if rel in KNOWN_ABSTRACT_FILES or rel in REVIEWED_STUBS:
             continue
 

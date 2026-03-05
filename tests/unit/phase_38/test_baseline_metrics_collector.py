@@ -23,7 +23,7 @@ class TestBaselineMetricsCollector:
         """Test collector initialization."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         assert collector.workspace_root == workspace
@@ -33,7 +33,7 @@ class TestBaselineMetricsCollector:
         """Test capturing test suite execution metrics."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         metrics = collector.capture_test_metrics()
@@ -48,7 +48,7 @@ class TestBaselineMetricsCollector:
         """Test capturing memory usage metrics."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         metrics = collector.capture_memory_metrics()
@@ -63,7 +63,7 @@ class TestBaselineMetricsCollector:
         """Test measuring import latency for key modules."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         latencies = collector.capture_import_latency()
@@ -77,7 +77,7 @@ class TestBaselineMetricsCollector:
         """Test capturing repository file statistics."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         metrics = collector.capture_file_metrics()
@@ -92,7 +92,7 @@ class TestBaselineMetricsCollector:
         """Test generation of complete baseline report."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         report_path = collector.generate_baseline_report()
@@ -115,7 +115,7 @@ class TestBaselineMetricsCollector:
         """Test that baseline report is saved to correct location."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         report_path = collector.generate_baseline_report()
@@ -128,7 +128,7 @@ class TestBaselineMetricsCollector:
         """Test that report includes Phase 38.0 metadata."""
         from cortex.phase_38.baseline_metrics_collector import BaselineMetricsCollector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         collector = BaselineMetricsCollector(workspace_root=workspace)
         
         report_path = collector.generate_baseline_report()
@@ -147,7 +147,7 @@ class TestRegressionDetector:
         """Test loading existing baseline report."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         # First generate a baseline
@@ -165,7 +165,7 @@ class TestRegressionDetector:
         """Test comparing test execution metrics."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         baseline = {
@@ -193,7 +193,7 @@ class TestRegressionDetector:
         """Test identification of performance regressions."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         # Simulate 50% slowdown (regression)
@@ -209,7 +209,7 @@ class TestRegressionDetector:
         """Test that minor variations don't trigger false positives."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         # Simulate 5% variation (acceptable)
@@ -225,7 +225,7 @@ class TestRegressionDetector:
         """Test generation of regression comparison report."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         baseline = {
@@ -254,7 +254,7 @@ class TestRegressionDetector:
         """Test calculation of percentage changes."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         baseline_value = 100.0
@@ -268,7 +268,7 @@ class TestRegressionDetector:
         """Test handling of zero values in baseline."""
         from cortex.phase_38.baseline_metrics_collector import RegressionDetector
         
-        workspace = Path("/Users/asifhussain/PROJECTS/CORTEX")
+        workspace = Path(__file__).resolve().parents[3]
         detector = RegressionDetector(workspace_root=workspace)
         
         baseline_value = 0.0

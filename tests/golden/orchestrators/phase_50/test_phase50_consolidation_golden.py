@@ -258,7 +258,7 @@ def test_gp50_015_cortex_master_yaml_phase50_path() -> None:
         f"At least one phase-50 YAML must exist under {planning_root} (phase-50 is COMPLETE)"
     )
     for phase50_file in phase50_files:
-        file_path = str(phase50_file)
+        file_path = str(phase50_file).replace("\\", "/")
         assert "_cortex-master" not in file_path, (
             f"phase-50 file path must not use _cortex-master legacy path: {file_path}"
         )

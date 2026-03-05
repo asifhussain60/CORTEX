@@ -14,7 +14,7 @@ import pytest
 REPO_ROOT = Path(__file__).parent.parent.parent
 GITHUB_DIR = REPO_ROOT / ".github"
 INSTRUCTIONS_FILE = GITHUB_DIR / "copilot-instructions.md"
-CORE_RULES_YAML = REPO_ROOT / "cortex-registry" / "governance" / "core-rules.yaml"
+CORE_RULES_YAML = REPO_ROOT / "cortex-registry" / "core" / "tier0-skull" / "skull-rules.yaml"
 ORCHESTRATORS_DIR = REPO_ROOT / "cortex" / "orchestrators"
 MCP_REGISTRY = REPO_ROOT / "cortex" / "mcp" / "mcp_registry.py"
 AGENTS_DIR = GITHUB_DIR / "agents"

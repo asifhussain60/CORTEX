@@ -1166,9 +1166,9 @@ interface ArchitectureIntegrityMetrics {
 
 - **Phase 70:** Implementation Alignment Remediation
 - **CORE-035:** Single Canonical Implementation
-- **wiring.yaml:** `/Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/specifications/wiring.yaml`
-- **Validation Scripts:** `/Users/asifhussain/PROJECTS/CORTEX/scripts/ci/`
-- **Audit Reports:** `/Users/asifhussain/PROJECTS/CORTEX/docs/audit/`
+- **wiring.yaml:** `./cortex/wiring/specifications/wiring.yaml`
+- **Validation Scripts:** `./scripts/ci/`
+- **Audit Reports:** `./docs/audit/`
 - **Dashboard:** `http://localhost:5000/dashboard`
 
 ---

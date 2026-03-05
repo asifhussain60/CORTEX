@@ -101,7 +101,7 @@ class TestRepositoryDetector:
         features = detector.detect_cortex_features()
         
         # Assert
-        assert features.has_cortex_intelligence is True
+        assert features.has_intelligence is True
         assert features.has_orchestrators is True
         assert features.has_prompt_file is False
         assert features.has_wiring is False
@@ -157,14 +157,14 @@ class TestRepositoryDetector:
         """Test CortexFeatures dataclass creation."""
         # Act
         features = CortexFeatures(
-            has_cortex_intelligence=True,
+            has_intelligence=True,
             has_orchestrators=True,
             has_prompt_file=False,
             has_wiring=False,
         )
         
         # Assert
-        assert features.has_cortex_intelligence is True
+        assert features.has_intelligence is True
         assert features.has_orchestrators is True
         assert features.has_prompt_file is False
         assert features.has_wiring is False

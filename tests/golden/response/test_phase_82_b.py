@@ -34,7 +34,7 @@ import yaml
 # Paths
 # =============================================================================
 
-ROOT = Path("/Users/asifhussain/PROJECTS/CORTEX")
+ROOT = Path(__file__).resolve().parents[3]
 SSOT = ROOT / ".github" / "templates" / "cortex-response-templates.md"
 GOVERNANCE_TEMPLATE = ROOT / "cortex-registry" / "workflows" / "templates" / "governance" / "copilot-chat-response-template.yaml"
 

@@ -258,7 +258,7 @@ def test_all_templates_are_parseable(all_templates):
     errors = []
     for f in all_templates:
         try:
-            content = yaml.safe_load(f.read_text())
+            content = yaml.safe_load(f.read_text(encoding="utf-8"))
             if not isinstance(content, dict):
                 errors.append(f"{f.name}: not a YAML mapping (got {type(content).__name__})")
         except yaml.YAMLError as e:
@@ -274,7 +274,7 @@ def test_non_primitive_templates_have_id(non_primitive_templates):
     missing = []
     for f in non_primitive_templates:
         try:
-            content = yaml.safe_load(f.read_text())
+            content = yaml.safe_load(f.read_text(encoding="utf-8"))
             if not isinstance(content, dict):
                 continue
             top_id = content.get("id")
@@ -299,7 +299,7 @@ def test_templates_with_steps_have_identified_steps(non_primitive_templates):
     violations = []
     for f in non_primitive_templates:
         try:
-            content = yaml.safe_load(f.read_text())
+            content = yaml.safe_load(f.read_text(encoding="utf-8"))
             if not isinstance(content, dict):
                 continue
             steps = _get_steps(content)
@@ -333,7 +333,7 @@ def test_no_unregistered_broken_primitive_refs(non_primitive_templates):
     new_broken: list[tuple[str, str]] = []
     for f in non_primitive_templates:
         try:
-            content = yaml.safe_load(f.read_text())
+            content = yaml.safe_load(f.read_text(encoding="utf-8"))
             if not isinstance(content, dict):
                 continue
             for ref in _collect_step_refs(content):
@@ -379,7 +379,7 @@ def test_all_primitives_have_id(primitive_templates):
     missing = []
     for f in primitive_templates:
         try:
-            content = yaml.safe_load(f.read_text())
+            content = yaml.safe_load(f.read_text(encoding="utf-8"))
             if not isinstance(content, dict):
                 continue
             if not content.get("id"):
@@ -397,7 +397,7 @@ def test_no_empty_primitive_files(primitive_templates):
     empty = [
         str(f.relative_to(CORTEX_ROOT))
         for f in primitive_templates
-        if not f.read_text().strip()
+        if not f.read_text(encoding="utf-8").strip()
     ]
     assert empty == [], (
         f"{len(empty)} primitive files are empty:\n"

@@ -221,7 +221,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/governance/filename-factory.py"),
+            path=Path(__file__).resolve().parents[3] / "cortex/governance/filename-factory.py",
             file_type="py"
         )
         
@@ -232,7 +232,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/docs/guides/filename-policy.md"),
+            path=Path(__file__).resolve().parents[3] / "docs/guides/filename-policy.md",
             file_type="md"
         )
         
@@ -243,7 +243,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/governance/test-filename-factory.py"),
+            path=Path(__file__).resolve().parents[3] / "tests/unit/governance/test-filename-factory.py",
             file_type="py"
         )
         
@@ -255,14 +255,14 @@ class TestFilePathEnforcer:
         
         # Valid: in subfolder
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/reports/governance/filename-policy-enforcement.md"),
+            path=Path(__file__).resolve().parents[3] / "reports/governance/filename-policy-enforcement.md",
             file_type="md"
         )
         assert result.is_valid
         
         # Invalid: at reports root
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/reports/filename-policy.md"),
+            path=Path(__file__).resolve().parents[3] / "reports/filename-policy.md",
             file_type="md"
         )
         assert not result.is_valid
@@ -273,7 +273,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/ANALYSIS.md"),
+            path=Path(__file__).resolve().parents[3] / "ANALYSIS.md",
             file_type="md"
         )
         
@@ -285,7 +285,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/my-module.py"),
+            path=Path(__file__).resolve().parents[3] / "cortex/my-module.py",
             file_type="py"
         )
         
@@ -297,7 +297,7 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         result = enforcer.validate_path(
-            path=Path("/Users/asifhussain/PROJECTS/CORTEX/docs/some-guide.md"),
+            path=Path(__file__).resolve().parents[3] / "docs/some-guide.md",
             file_type="md"
         )
         
@@ -309,9 +309,9 @@ class TestFilePathEnforcer:
         enforcer = FilePathEnforcer()
         
         whitelist = [
-            Path("/Users/asifhussain/PROJECTS/CORTEX/README.md"),
-            Path("/Users/asifhussain/PROJECTS/CORTEX/requirements.txt"),
-            Path("/Users/asifhussain/PROJECTS/CORTEX/pyrightconfig.json"),
+            Path(__file__).resolve().parents[3] / "README.md",
+            Path(__file__).resolve().parents[3] / "requirements.txt",
+            Path(__file__).resolve().parents[3] / "pyrightconfig.json",
         ]
         
         for path in whitelist:
@@ -336,7 +336,7 @@ class TestIntegrationFilenameFactoryEndToEnd:
         assert filename_result.success
         
         # Construct full path
-        full_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/governance") / filename_result.filename
+        full_path = Path(__file__).resolve().parents[3] / "cortex/governance" / filename_result.filename
         
         # Validate path
         path_result = enforcer.validate_path(path=full_path, file_type="py")
@@ -362,7 +362,7 @@ class TestIntegrationFilenameFactoryEndToEnd:
         assert validate_result.is_valid
         
         # Construct full path
-        full_path = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/governance") / filename_result.filename
+        full_path = Path(__file__).resolve().parents[3] / "tests/unit/governance" / filename_result.filename
         
         # Validate path
         path_result = enforcer.validate_path(path=full_path, file_type="py")
@@ -382,7 +382,7 @@ class TestIntegrationFilenameFactoryEndToEnd:
         assert filename_result.success
         
         # Construct full path in reports subfolder
-        full_path = Path("/Users/asifhussain/PROJECTS/CORTEX/reports/governance") / filename_result.filename
+        full_path = Path(__file__).resolve().parents[3] / "reports/governance" / filename_result.filename
         
         # Validate path
         path_result = enforcer.validate_path(path=full_path, file_type="md")

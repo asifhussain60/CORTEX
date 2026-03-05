@@ -279,7 +279,7 @@ class TestCore064RegisteredInSkullRules:
         principle matching 'Sweep Completeness'.
         AC_COMPLETE: AC-P16-010 ✅"""
         assert SKULL_RULES.exists(), f"skull-rules.yaml not found at {SKULL_RULES}"
-        data = yaml.safe_load(SKULL_RULES.read_text())
+        data = yaml.safe_load(SKULL_RULES.read_text(encoding="utf-8"))
         rules = data.get("rules", [])
         core_064 = next((r for r in rules if r.get("rule_id") == "CORE-064"), None)
         assert core_064 is not None, "CORE-064 not found in skull-rules.yaml"
@@ -504,7 +504,7 @@ class TestSweepCatalogueOrchestratorWiredAtPriority155:
         with priority 155.
         AC_COMPLETE: AC-P16-019 ✅"""
         assert SUPPORT_WIRING.exists(), f"support-orchestrator-wiring.yaml not found at {SUPPORT_WIRING}"
-        data = yaml.safe_load(SUPPORT_WIRING.read_text())
+        data = yaml.safe_load(SUPPORT_WIRING.read_text(encoding="utf-8"))
         # Wiring spec uses 'provides' list (not 'orchestrators')
         orchestrators = data.get("provides", data.get("orchestrators", []))
         if isinstance(orchestrators, dict):
