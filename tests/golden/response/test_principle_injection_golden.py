@@ -89,16 +89,16 @@ class TestAnalysisDesignCompositionsInjectPrinciple:
         )
 
     @pytest.mark.parametrize("filename,label", list(_ANALYSIS_DESIGN_COMPS.items()))
-    def test_atom_principle_is_in_zone_3(self, filename: str, label: str) -> None:
-        """GOLDEN: atom-principle must be declared in Zone 3 of analysis/design compositions."""
+    def test_atom_principle_is_in_analysis_section(self, filename: str, label: str) -> None:
+        """GOLDEN: atom-principle must be in analysis_section (not Zone 3 header)."""
         path = COMPOSITIONS_DIR / filename
         assert path.exists(), f"{filename} not found"
         comp = yaml.safe_load(path.read_text())
         for atom in comp.get("atoms", []):
             if isinstance(atom, dict) and atom.get("id") == "atom-principle":
                 zone = atom.get("zone", atom.get("params", {}).get("zone"))
-                assert zone == 3, (
-                    f"{filename}: atom-principle must be in Zone 3, got zone={zone}"
+                assert zone == "analysis_section", (
+                    f"{filename}: atom-principle must be in 'analysis_section', got zone={zone}"
                 )
                 return
         pytest.fail(f"{filename}: atom-principle not found in atoms list")
@@ -163,11 +163,16 @@ class TestCompQueryTemplateSnapshot:
         return yaml.safe_load(path.read_text())
 
     def test_comp_query_template_has_principle_placeholder(self) -> None:
-        """GOLDEN: comp-query.yaml template must include ### 💡 Principle: rendering marker."""
+        """GOLDEN: comp-query.yaml template must include > 💡 **Principle: rendering marker (blockquote format)."""
         comp = self._load_comp_query()
         template = comp.get("template", "")
-        assert "### 💡 Principle:" in template, (
-            "comp-query.yaml template missing '### 💡 Principle:' placeholder.\n"
+        # Phase 127: blockquote format replaces H3 format
+        # Accept either: > 💡 **Principle: or ### 💡 Principle: (backward compat)
+        has_blockquote = "> 💡 **Principle:" in template
+        has_h3 = "### 💡 Principle:" in template
+        assert has_blockquote or has_h3, (
+            "comp-query.yaml template missing principle placeholder.\n"
+            "Expected: '> 💡 **Principle:' (blockquote) or '### 💡 Principle:' (legacy H3).\n"
             "atom-principle is declared in atoms list but the rendered template "
             "does not include the injection marker — wiring gap between atom declaration "
             "and template synthesis."

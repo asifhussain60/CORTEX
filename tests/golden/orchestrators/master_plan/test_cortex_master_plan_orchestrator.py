@@ -40,13 +40,14 @@ from cortex.orchestrators.core.master_plan_orchestrator import (
 
 @pytest.fixture
 def tmp_registry(tmp_path: Path) -> Path:
-    """Build a minimal cortex-master.yaml + _cortex-master folder structure."""
+    """Build a minimal cortex-master.yaml + planning/phases folder structure."""
     registry_dir = tmp_path / "cortex-registry"
     registry_dir.mkdir()
-    master_dir = tmp_path / "cortex-registry" / "_cortex-master" / "phases"
-    (master_dir / "planned").mkdir(parents=True)
-    (master_dir / "completed").mkdir(parents=True)
-    (master_dir / "deferred").mkdir(parents=True)
+    # SSOT: phases live at cortex-registry/planning/phases/ per copilot-instructions.md
+    phases_dir = tmp_path / "cortex-registry" / "planning" / "phases"
+    (phases_dir / "planned").mkdir(parents=True)
+    (phases_dir / "completed").mkdir(parents=True)
+    (phases_dir / "deferred").mkdir(parents=True)
 
     # Create lifecycle workflow templates folder with both required templates
     template_dir = tmp_path / "cortex-registry" / "workflows" / "templates" / "lifecycle"
@@ -136,7 +137,8 @@ def orchestrator_with_planned(tmp_registry: Path) -> CortexMasterPlanOrchestrato
     (registry_dir / "cortex-master.yaml").write_text(yaml.dump(master_yaml))
 
     # Place phase-04 in planned/ (should be in completed/)
-    planned_dir = tmp_registry / "cortex-registry" / "_cortex-master" / "phases" / "planned"
+    # SSOT: phases live at cortex-registry/planning/phases/
+    planned_dir = tmp_registry / "cortex-registry" / "planning" / "phases" / "planned"
     (planned_dir / "phase-04-health-pipeline.yaml").write_text("phase_id: phase-04\nstatus: complete\n")
     (planned_dir / "phase-100-anomolous-phase.yaml").write_text("phase_id: phase-100\nstatus: planned\n")
 
@@ -391,9 +393,10 @@ class TestNegativeCases:
         registry_dir.mkdir()
         # Use a YAML tab-indentation error which yaml.safe_load raises YAMLError on
         (registry_dir / "cortex-master.yaml").write_text("metadata:\n\t bad_tab_key: broken")
-        (tmp_path / "cortex-registry" / "_cortex-master" / "phases" / "planned").mkdir(parents=True)
-        (tmp_path / "cortex-registry" / "_cortex-master" / "phases" / "completed").mkdir(parents=True)
-        (tmp_path / "cortex-registry" / "_cortex-master" / "phases" / "deferred").mkdir(parents=True)
+        # SSOT: phases live at cortex-registry/planning/phases/
+        (tmp_path / "cortex-registry" / "planning" / "phases" / "planned").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "planning" / "phases" / "completed").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "planning" / "phases" / "deferred").mkdir(parents=True)
         template_dir = tmp_path / "cortex-registry" / "workflows" / "templates" / "lifecycle"
         template_dir.mkdir(parents=True)
         with pytest.raises(PhaseLifecycleError, match="corrupt"):

@@ -121,7 +121,7 @@ class TestSubPhaseAAtomSchemas:
         )
 
     def test_atom_quote_yaml_schema(self) -> None:
-        """A-06: atom-quote.yaml must use blockquote element and have ≥32 quotes."""
+        """A-06: atom-quote.yaml must use blockquote element and have ≥120 quotes."""
         data = self._load_atom(ATOM_QUOTE)
         assert data.get("id") == "atom-quote", "id must be 'atom-quote'"
         rr = data.get("rendering_rules", {})
@@ -129,8 +129,8 @@ class TestSubPhaseAAtomSchemas:
             "rendering_rules.element must be 'blockquote' (renders as blue accent bar in VS Code)"
         )
         quotes = data.get("quotes", [])
-        assert len(quotes) >= 32, (
-            f"atom-quote.yaml must have ≥32 quotes, found {len(quotes)}"
+        assert len(quotes) >= 120, (
+            f"atom-quote.yaml must have ≥120 quotes, found {len(quotes)}"
         )
         # Validate quote structure
         required_fields = {"text", "author", "book", "themes"}

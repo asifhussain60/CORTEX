@@ -130,8 +130,8 @@ summary:
   completion_percentage: 97
   consolidation_summary: "2026-03-04 — Phase 125 COMPLETE (Registry-Aware Documentation Viewer). YAML Reader architecture: 8 typed parsers, registry indexer, dependency graph, integrity checker, history tracker. 195 registry tests GREEN. Smoke: 2,582."
   active_phases:
-    phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (30 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
-    phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 32 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"
+    phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (90 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
+    phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 120 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"
     phase-122: "COMPLETE 2026-03-04 — Workflow Composer Activation: 5/5 GAPs CLOSED. target_files extraction (regex), threshold 0.60→0.39, 'implement' OPERATION_SCORES, cortex_workflow MCP documented, exception swallowing→structured logging. V1-V6 holistic verification PASSED. Smoke: 2395 ✅"
     phase-47: "COMPLETE 2026-02-28 — Memory Tier Architecture Migration: 3 stages, 4 GAPs CLOSED. tier1_learned/tier2_adaptive/scratch_space dirs created. BrainTierPusher TIER_PATHS wired. Golden tests GREEN. Previously unregistered in master — registered 2026-03-04."
     phase-120: "COMPLETE 2026-03-04 — Response Template System v3 LEGO: 15/15 GAPs CLOSED. 3-Tier architecture (Atoms→Blocks→Compositions). 26 YAMLs, 8 terminal compositions, 5 content blocks, 6 prompt intros. 49 golden tests GREEN. Smoke: 2388 ✅"
@@ -162,7 +162,7 @@ phases:
     gaps_closed: 5
     sub_phases: 5
     file: "cortex-registry/planning/phases/completed/phase-124-principle-block-library.yaml"
-    note: "COMPLETE 2026-03-04. Curated SDLC library (30 principles, 10 domains), atom-principle Lego atom (Zone 3, comp-query.yaml), PrincipleSelector pool='principles' extension, 44 TDD tests + 13 drift locks GREEN. Golden test updated. Smoke: 2395."
+    note: "COMPLETE 2026-03-04. Curated SDLC library (90 principles, 10 domains), atom-principle Lego atom (Zone 3, comp-query.yaml), PrincipleSelector pool='principles' extension, 44 TDD tests + 13 drift locks GREEN. Golden test updated. Smoke: 2395."
 
   # ── PHASE 123: PRINCIPLE OF THE MOMENT (2026-03-04) ──────────────────────────
   - id: phase-123
@@ -174,7 +174,7 @@ phases:
     gaps_closed: 3
     sub_phases: 3
     file: "cortex-registry/planning/phases/completed/phase-123-principle-of-the-moment.yaml"
-    note: "COMPLETE 2026-03-04. PrincipleSelector (cortex/intelligence/principle_selector.py), ring buffer n=10, weighted random, p95 ≤ 3ms. atom-quote.yaml: dedup_key + relevance_weight on all 32 quotes. 12 TDD tests GREEN. Smoke: 2395."
+    note: "COMPLETE 2026-03-04. PrincipleSelector (cortex/intelligence/principle_selector.py), ring buffer n=10, weighted random, p95 ≤ 3ms. atom-quote.yaml: dedup_key + relevance_weight on all 120 quotes. 12 TDD tests GREEN. Smoke: 2395."
 
   # ── PHASE 117: INTELLIGENCE DIAMOND COMPLETION (2026-03-03) ─────────────────
   - id: phase-117

@@ -57,7 +57,7 @@ class TestPrincipleSelectorPoolExtension:
             if key in seen:
                 duplicates += 1
             seen.add(key)
-        # With 30 principles and a ring buffer of 10, duplicates in 10 draws should be 0
+        # With 90 principles and a ring buffer of 10, duplicates in 10 draws should be 0
         assert duplicates == 0, (
             f"Got {duplicates} immediate repeats in 10 selections from principles pool"
         )

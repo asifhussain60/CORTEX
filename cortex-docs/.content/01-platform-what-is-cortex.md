@@ -48,7 +48,7 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
-| **30 curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — Azure, 12-Factor, SOLID, DDD, security-by-design |
+| **90 curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — TDD, architecture, security, devops, code quality, testing |
 | **AI context intelligence** | 8-vendor AI artifact scanning with PII guard, automatic knowledge dissemination to registry hierarchy |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated from live analysis |
 | **Repository onboarding** | Any new codebase analysed, profiled, and brought under governance within minutes — no manual configuration required |
@@ -118,7 +118,7 @@ The principle is not chosen at random. CORTEX reads the intent behind each reque
 
 This appears as a formatted callout at the top of every CORTEX response. For business leaders, it is the visible expression of the framework's philosophy: CORTEX does not just enforce standards — it understands why they exist, and it makes that understanding part of every interaction.
 
-The full library contains 32 quotes across 9 themes, maintained as a single source of truth in `.github/templates/cortex-response-templates.md`. The same books are referenced in CORTEX's governance rule definitions — connecting the framework's enforcement logic directly to the intellectual tradition it is built on.
+The full library contains 120 quotes across 10 themes, maintained as a single source of truth in `cortex-registry/templates/response/atoms/atom-quote.yaml`. The same books are referenced in CORTEX's governance rule definitions — connecting the framework's enforcement logic directly to the intellectual tradition it is built on.
 
 ---
 

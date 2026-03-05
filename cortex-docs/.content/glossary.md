@@ -143,7 +143,7 @@ order: 99
 
 **Pre-Commit Validator** — Validates code against governance rules before commit. Module: `cortex/infrastructure/pre_commit_validator.py`.
 
-**Principle Block Library** — Curated collection of 30 SDLC principles across 10 domains: Azure Architecture, 12-Factor App, SOLID, Domain-Driven Design, security-by-design, clean-architecture, devops, resilience, testing, and observability. Injected into analysis/design responses via PrincipleSelector. Phase 124 delivery. Location: `cortex-registry/knowledge/sdlc/high-value-principles.yaml`.
+**Principle Block Library** — Curated collection of 90 SDLC principles across 10 domains: TDD, refactoring, architecture, security, API design, testing, observability, code quality, documentation, and devops. Injected into analysis/design responses via PrincipleSelector. Phase 124 delivery (initial 30), expanded post-Phase 125. Location: `cortex-registry/knowledge/sdlc/high-value-principles.yaml`.
 
 **PrincipleSelector** — Intelligence component that selects contextually relevant quotes and principles with anti-repetition guarantees. Uses weighted-random selection within theme-filtered candidates, ring buffer (n=10) for deduplication, and telemetry (p95 ≤ 3ms). Phases 123-124 delivery. Module: `cortex/intelligence/principle_selector.py`.
 
@@ -153,7 +153,7 @@ order: 99
 
 ## Q
 
-**Quote Library** — Curated collection of 32 literary quotes across 9 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning) sourced from engineering and business literature. Provides contextual wisdom in response headers. Location: `cortex-registry/templates/response/atoms/atom-quote.yaml`.
+**Quote Library** — Curated collection of 120 literary quotes across 10 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal) sourced from engineering and business literature. Provides contextual wisdom in response headers. Location: `cortex-registry/templates/response/atoms/atom-quote.yaml`.
 
 ## R
 

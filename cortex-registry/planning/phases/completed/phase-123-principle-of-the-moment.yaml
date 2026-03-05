@@ -41,7 +41,7 @@ background: |
   Baseline at entry:
     - Smoke tests: 2,395 passed (Phase 122 baseline)
     - Preflight: 258 passed
-    - atom-quote.yaml: 32 quotes, 10 themes, deterministic first-match selection
+    - atom-quote.yaml: 120 quotes, 10 themes, deterministic first-match selection
     - No dedup_key field, no memory ring buffer, no telemetry
     - cortex-master.yaml: 406 lines (well under 800 ceiling)
 
@@ -160,7 +160,7 @@ phases:
         - "Add __init__(self, intent_type: str) — loads atom-quote.yaml once at import (lazy singleton)"
         - "Add select(self) -> dict — implements weighted random within theme-filtered pool"
         - "Add _ring_buffer: deque[str] (maxlen=10) as class-level shared state"
-        - "Add dedup_key field to all 32 quotes in atom-quote.yaml (format: '{author_slug}-{theme}-{word1}')"
+        - "Add dedup_key field to all quotes in atom-quote.yaml (format: '{author_slug}-{theme}-{word1}') — baseline 32 at Phase 123, expanded to 120 post-Phase 125"
         - "Filter candidates: exclude quotes whose dedup_key is in _ring_buffer"
         - "Fallback: if all theme candidates are in ring buffer, clear oldest 5 entries and retry"
       refactor:
@@ -176,7 +176,7 @@ phases:
       - "Anti-repetition: across 11 consecutive calls with same intent, at least 2 distinct dedup_keys returned"
       - "Ring buffer max size = 10 (deque maxlen=10)"
       - "Unknown intent falls back to 'universal' theme"
-      - "All 32 quotes in atom-quote.yaml have a non-empty dedup_key"
+      - "All quotes in atom-quote.yaml have a non-empty dedup_key (baseline 32 at Phase 123, expanded to 120 post-Phase 125)"
       - "All tests in test_principle_selector.py GREEN"
       - "ruff check on principle_selector.py — zero violations"
 
@@ -288,7 +288,7 @@ phases:
       - "python3 scripts/run_tests.py smoke passes ≥2395 tests, zero new failures"
       - "atom-quote.yaml validation.required_fields_per_quote includes 'dedup_key'"
       - "atom-quote.yaml validation.quote_selection = 'weighted-random-anti-repeat'"
-      - "All 32 quotes in atom-quote.yaml have non-empty dedup_key fields"
+      - "All quotes in atom-quote.yaml have non-empty dedup_key fields (baseline 32 at Phase 123, expanded to 120 post-Phase 125)"
       - "phase-123 detail file moved: planned/ → completed/"
       - "cortex-master.yaml entry updated to status: COMPLETE"
       - "cortex-master.yaml remains ≤800 lines (THIN INDEX CONTRACT)"
@@ -320,7 +320,7 @@ architecture_notes:
     - path: "tests/intelligence/test_principle_selector_telemetry.py"
       role: "NEW — 4 RED→GREEN tests for sub-phase B"
     - path: "cortex-registry/templates/response/atoms/atom-quote.yaml"
-      role: "MODIFY — add dedup_key to all 32 quotes + update validation schema"
+      role: "MODIFY — add dedup_key to all quotes + update validation schema (baseline 32 at Phase 123, expanded to 120 post-Phase 125)"
   no_new_files_except:
     - "cortex/intelligence/principle_selector.py"
     - "tests/intelligence/test_principle_selector.py"

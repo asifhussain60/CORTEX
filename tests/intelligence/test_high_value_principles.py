@@ -2,7 +2,7 @@
 Phase 124-A: Tests for high-value-principles.yaml SDLC principles library.
 
 RED gate: All tests must fail (FileNotFoundError) before the YAML is created.
-GREEN gate: All tests pass once the YAML has been created with 30 principles.
+GREEN gate: All tests pass once the YAML has been created with 90 principles.
 
 Governance: CORE-008 (TDD mandatory), CORE-002 (no .md report files).
 """
@@ -66,7 +66,7 @@ class TestHighValuePrinciplesStructure:
             "principles must be a YAML list"
         )
 
-    def test_exactly_30_principles(self, principles_yaml):
+    def test_exactly_90_principles(self, principles_yaml):
         """Catalogue must have exactly 90 principles (expanded in Phase 125)."""
         count = len(principles_yaml["principles"])
         assert count == 90, f"Expected 90 principles, got {count}"

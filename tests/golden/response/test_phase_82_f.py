@@ -43,8 +43,9 @@ ROOT = Path("/Users/asifhussain/PROJECTS/CORTEX")
 SSOT = ROOT / ".github" / "templates" / "cortex-response-templates.md"
 YAML_REGISTRY = ROOT / "cortex-registry" / "artifacts" / "templates" / "responses" / "response-templates.yaml"
 PHASE_TEMPLATE = ROOT / "cortex-registry" / "planning" / "phases" / "_template.yaml"
-PHASE_82_F_SPEC = ROOT / "cortex-registry" / "_cortex-master" / "phases" / "completed" / "phase-82-response-template-engine.yaml"
-_PHASE_82_F_SPEC_V2_LEGACY = ROOT / "cortex-registry" / "_cortex-master" / "phases" / "completed" / "phase-82-response-template-engine-v2.yaml"
+# SSOT: phases live at cortex-registry/planning/phases/ not cortex-registry/_cortex-master/phases/
+PHASE_82_F_SPEC = ROOT / "cortex-registry" / "planning" / "phases" / "completed" / "phase-82-response-template-engine.yaml"
+_PHASE_82_F_SPEC_V2_LEGACY = ROOT / "cortex-registry" / "planning" / "phases" / "completed" / "phase-82-response-template-engine-v2.yaml"
 
 
 # =============================================================================

@@ -74,7 +74,7 @@ class EngagementRenderer:
         "FIX": "🔧",
         "REFACTOR": "♻️",
         "AUDIT": "🔎",
-        "QUERY": "📖",
+        "QUERY": "�",  # SSOT: cortex-response-templates.md §Intent-Mode Selection Matrix
         "DESIGN": "🎨",
         "PLAN": "📋",
         "DIGEST": "📚",

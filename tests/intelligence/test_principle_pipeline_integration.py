@@ -254,14 +254,14 @@ class TestPrincipleSelectorRepetitionControl:
     and keep repeat rate ≤ 20% across N=25 consecutive renders.
 
     Threshold rationale:
-      - 30 principles in pool, ring buffer = 10 → at least 20 unique before repeat forced
+      - 90 principles in pool, ring buffer = 10 → at least 80 unique before repeat forced
       - In 25 draws: ≤ 5 repeats (20%) is a generous upper bound; in practice ~0
       - No two consecutive draws should return the same id (immediate repeat = ring buffer bug)
     """
 
     _N = 25
     _MAX_CONSECUTIVE_REPEAT = 2   # allow up to 2 back-to-back repeats (universal pool may be small)
-    _MAX_REPEAT_RATE = 0.60       # 60% repeat rate cap (30 principles vs 8 universal quotes)
+    _MAX_REPEAT_RATE = 0.60       # 60% repeat rate cap (90 principles vs 12 universal quotes)
 
     @pytest.fixture(autouse=True)
     def clear_ring_buffer(self):

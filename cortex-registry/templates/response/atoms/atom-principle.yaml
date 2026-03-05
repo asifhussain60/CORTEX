@@ -29,8 +29,7 @@
 
 id: atom-principle
 type: atom
-version: "2.0"       # Phase 127: blockquote format + Analysis section position (retired H3 + Zone 3)
-phase: "127"
+phase: "127"         # Phase 127: blockquote format + Analysis section position (retired H3 + Zone 3)
 
 # ─── Rendering Rules ──────────────────────────────────────────────────────────
 rendering_rules:

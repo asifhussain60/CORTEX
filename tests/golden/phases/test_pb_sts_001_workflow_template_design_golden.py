@@ -30,10 +30,10 @@ import yaml
 
 CORTEX_ROOT = Path(__file__).resolve().parents[3]
 
+# SSOT: playbooks live at cortex-registry/playbooks/ not cortex-registry/_cortex-master/playbooks/
 PLAYBOOK_PATH = (
     CORTEX_ROOT
     / "cortex-registry"
-    / "_cortex-master"
     / "playbooks"
     / "sharpen-the-saw"
     / "pb-sts-001-badmonolith-refactoring.yaml"

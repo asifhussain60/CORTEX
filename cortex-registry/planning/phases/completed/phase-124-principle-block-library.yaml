@@ -72,7 +72,7 @@ background: |
     - Smoke tests: ≥2395 passed (Phase 123 baseline, expected to grow)
     - Preflight: ≥258 passed
     - PrincipleSelector: operational with anti-repetition ring buffer
-    - atom-quote.yaml: 32 quotes with dedup_key fields (added by Phase 123)
+    - atom-quote.yaml: 120 quotes with dedup_key fields (added by Phase 123)
     - cortex-master.yaml: ~425 lines (well under 800 ceiling)
 
   Git prerequisite: branch CORTEX, Phase 123 COMPLETE, all changes committed.

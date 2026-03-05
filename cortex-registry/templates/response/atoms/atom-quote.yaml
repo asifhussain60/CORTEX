@@ -14,7 +14,7 @@
 #   > *"{text}"*
 #   > — {author}, **{book}**
 #
-# SSOT: .github/templates/cortex-response-templates.md § 📚 Quote Library
+# SSOT: This file (atom-quote.yaml) IS the single source of truth for quotes.
 # Phase: 120 (Sub-Phase A)
 # Author: Asif Hussain | © 2025-2026 CORTEX Framework
 # ─────────────────────────────────────────────────────────────────────────────

@@ -164,7 +164,8 @@ class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
 
         self._root = Path(registry_root)
         self._registry_path = self._root / "cortex-registry" / "cortex-master.yaml"
-        self._phases_dir = self._root / "cortex-registry" / "_cortex-master" / "phases"
+        # SSOT: copilot-instructions.md § Master Plan Decomposition
+        self._phases_dir = self._root / "cortex-registry" / "planning" / "phases"
         self._workflow_template_dir = self._root / _WORKFLOW_TEMPLATE_DIR
 
         self._validate_structure()
@@ -206,7 +207,7 @@ class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcemen
             if not folder_path.exists():
                 raise PhaseLifecycleError(
                     f"required phase folder missing: {folder_path}. "
-                    "Run: mkdir -p cortex-registry/_cortex-master/phases/{planned,completed,deferred}"
+                    "Run: mkdir -p cortex-registry/planning/phases/{planned,completed,deferred}"
                 )
 
     # -------------------------------------------------------------------------

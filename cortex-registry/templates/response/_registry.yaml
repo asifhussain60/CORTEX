@@ -43,7 +43,7 @@ atoms:
 
   - id: atom-quote
     file: atoms/atom-quote.yaml
-    description: "Thematic quote library — 32 quotes across 10 theme categories"
+    description: "Thematic quote library — 120 quotes across 10 theme categories"
     rendering_element: "blockquote (blue left accent bar in VS Code)"
     status: ACTIVE
 

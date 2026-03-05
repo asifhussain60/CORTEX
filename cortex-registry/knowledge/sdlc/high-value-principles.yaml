@@ -6,17 +6,12 @@
 # No version field — append-only YAML standard (CORE-002)
 
 description: >
-  Curated library of 30 high-value SDLC engineering principles spanning 10 domains.
-  Selected for relevance to analysis, design, implementation, and review responses.
-  Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
-  ring buffer (n=10) and weighted random selection.
-
-description: >
   Curated library of 90 high-value SDLC engineering principles spanning 10 domains.
   Selected for relevance to analysis, design, implementation, and review responses.
   Injected into CORTEX responses via the PrincipleSelector engine with anti-repetition
   ring buffer (n=20) and weighted random selection. ONE principle per response, only
   when the request is complex (analysis or design category intents only).
+  Initial library: 30 principles at Phase 124. Expanded to 90 post-Phase 125.
 
 principles:
 

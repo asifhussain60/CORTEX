@@ -91,9 +91,9 @@ This appears on every CORTEX response — not as decoration, but as a visible ex
 
 CORTEX implements anti-repetition quote selection with a ring buffer (n=10) that ensures the same quote never appears twice in consecutive responses. Selection is weighted-random within theme-filtered candidates, with telemetry tracking selection latency (p95 ≤ 3ms) and repetition avoidance.
 
-Beyond quotes, CORTEX maintains a curated library of 30 SDLC principles across 10 domains — including Azure Architecture, 12-Factor App, SOLID, Domain-Driven Design, and security-by-design axioms. These principles are injected into analysis and design responses (QUERY, INVESTIGATE intents) but suppressed during operational execution (IMPLEMENT, FIX, REFACTOR) to maintain focus.
+Beyond quotes, CORTEX maintains a curated library of 90 SDLC principles across 10 domains — including TDD, architecture, security, devops, code quality, and observability axioms. These principles are injected into analysis and design responses (QUERY, INVESTIGATE intents) but suppressed during operational execution (IMPLEMENT, FIX, REFACTOR) to maintain focus.
 
-The quote library contains 32 entries across 9 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in the LEGO atom system at `cortex-registry/templates/response/atoms/atom-quote.yaml`.
+The quote library contains 120 entries across 10 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`, `universal`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in the LEGO atom system at `cortex-registry/templates/response/atoms/atom-quote.yaml`.
 
 ### Planning and Audit
 

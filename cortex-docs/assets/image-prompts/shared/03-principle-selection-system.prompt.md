@@ -14,8 +14,8 @@ CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimu
 
 The image should show:
 - LEFT SIDE — "Libraries" (two stacked glassmorphism panels):
-  1. "Quote Library" (cyan glow): A grid of 32 small quote icons organized by 9 theme colors (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning)
-  2. "Principle Library" (purple glow): A grid of 30 principle icons organized by 10 domain colors (Azure, 12-Factor, SOLID, DDD, security-by-design, clean-architecture, devops, resilience, testing, observability)
+  1. "Quote Library" (cyan glow): A grid of 120 small quote icons organized by 10 theme colors (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal)
+  2. "Principle Library" (purple glow): A grid of 90 principle icons organized by 10 domain colors (tdd, code_quality, architecture, devops, security, resilience, testing, observability, documentation, universal)
 - CENTER — "PrincipleSelector Engine" (emerald glow): A central processor icon showing:
   - Intent input arrow from top (QUERY, IMPLEMENT, FIX, etc.)
   - Ring buffer visualization (circular buffer with 10 slots showing recent selections)
@@ -26,7 +26,7 @@ The image should show:
   - A principle callout below
   - Timing annotation: "p95 ≤ 3ms"
 - Flow arrows showing: Libraries → Selector → Output
-- Small legend: "32 Quotes × 9 Themes | 30 Principles × 10 Domains"
+- Small legend: "120 Quotes × 10 Themes | 90 Principles × 10 Domains"
 - Clean, technical, illustrating intelligent selection with variety
 - No photographic elements — pure conceptual / algorithm visualization
 - No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
