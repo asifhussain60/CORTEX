@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX AI Framework | Documentation</title>
+    <style>
+        /* CSS Variables for Glassmorphism & Theming */
+        :root {
+            /* Colors */
+            --bg-deep: #050914;
+            --bg-ambient: radial-gradient(circle at 15% 50%, rgba(20, 30, 80, 0.4), transparent 50%),
+                          radial-gradient(circle at 85% 30%, rgba(40, 15, 60, 0.3), transparent 50%);
+            
+            --glass-bg: rgba(15, 22, 40, 0.55);
+            --glass-bg-hover: rgba(22, 32, 55, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(79, 172, 254, 0.4);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-start: #00f2fe;
+            --accent-end: #4facfe;
+            --accent-purple: #a18cd1;
+            
+            --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 12px 40px 0 rgba(79, 172, 254, 0.15);
+            
+            /* Structural */
+            --blur-intensity: blur(12px);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Global Resets & Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-deep);
+            background-image: var(--bg-ambient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        .text-gradient-purple {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p { color: var(--text-secondary); margin-bottom: 1rem; }
+        small { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* Core Layout Architecture */
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        aside.sidebar {
+            width: 280px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 2rem;
+            border-right: 1px solid var(--glass-border);
+            background: rgba(5, 9, 20, 0.6);
+            backdrop-filter: var(--blur-intensity);
+            -webkit-backdrop-filter: var(--blur-intensity);
+            z-index: 50;
+        }
+
+        /* Navigation Link Styles */
+        .nav-link {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+            background: rgba(0, 242, 254, 0.1);
+            border-left: 3px solid var(--accent-start);
+            font-weight: 500;
+            box-shadow: inset 20px 0 20px -20px rgba(0, 242, 254, 0.2);
+        }
+
+        main.content-area {
+            flex: 1;
+            padding: 2rem 3rem;
+            max-width: calc(100% - 280px);
+        }
+
+        header.top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        /* Tab Content Styles */
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-intensity);
+            -webkit-backdrop-filter: var(--blur-intensity);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* Micro-interactions */
+        .glass-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .glass-card:hover::before {
+            left: 150%;
+        }
+
+        /* Strict CSS Grids */
+        .grid-max-3 {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        @media (min-width: 1024px) {
+            .grid-max-3 { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .grid-max-5 {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 1024px) {
+            .grid-max-5 { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1400px) {
+            .grid-max-5 { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        .grid-max-8 {
+            display: grid;
+            gap: 0.75rem;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 768px) {
+            .grid-max-8 { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (min-width: 1200px) {
+            .grid-max-8 { grid-template-columns: repeat(8, 1fr); }
+        }
+
+        /* Visualisation & Integration Hint Zones */
+        .viz-placeholder {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--accent-end);
+            border-radius: var(--radius-md);
+            padding: 3rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .viz-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, rgba(79, 172, 254, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hint-text {
+            color: var(--accent-start);
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            background: rgba(0, 242, 254, 0.1);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            margin-top: 1rem;
+        }
+
+        .mermaid-container {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            background: rgba(10, 15, 30, 0.8);
+            border-left: 4px solid var(--accent-purple);
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            color: #e2e8f0;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Glassmorphism Table */
+        .glass-table-wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-intensity);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 22, 40, 0.9);
+            backdrop-filter: blur(16px);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 10;
+        }
+
+        tbody tr {
+            transition: var(--transition-smooth);
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* HTML5 Semantics Styling */
+        dl {
+            display: grid;
+            grid-template-columns: minmax(150px, max-content) 1fr;
+            gap: 1rem 2rem;
+            align-items: baseline;
+        }
+
+        dt {
+            font-weight: 600;
+            color: var(--accent-start);
+        }
+
+        dd {
+            color: var(--text-secondary);
+            margin: 0;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-end);
+            padding: 1rem 1.5rem;
+            background: linear-gradient(90deg, rgba(79, 172, 254, 0.1) 0%, transparent 100%);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-style: italic;
+            color: var(--text-primary);
+            margin: 2rem 0;
+        }
+
+        /* Keyframe Animations */
+        .animate-fade-up {
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Status Pills */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .pill.active {
+            background: rgba(0, 242, 254, 0.15);
+            color: var(--accent-start);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+        .pill.blocking {
+            background: rgba(244, 63, 94, 0.15);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar animate-fade-up">
+        <h2 class="text-gradient" style="margin-bottom: 2rem;">CORTEX UI</h2>
+        <nav>
+            <ul style="list-style: none; padding: 0;">
+                <li><a class="nav-link active" onclick="switchTab('overview')">Overview</a></li>
+                <li><a class="nav-link" onclick="switchTab('lens')">Intelligence (LENS)</a></li>
+                <li><a class="nav-link" onclick="switchTab('governance')">Governance Gates</a></li>
+                <li><a class="nav-link" onclick="switchTab('tdd')">TDD Flywheel</a></li>
+                <li><a class="nav-link" onclick="switchTab('mcp')">MCP Gateway</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+        
+        <header class="top-nav animate-fade-up">
+            <div>
+                <small id="nav-breadcrumbs">Documentation / Overview</small>
+                <h1 style="margin-top: 0.5rem;" id="nav-title">System Topology & Integrations</h1>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span class="pill active">System Status: Optimal</span>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    C
+                </div>
+            </div>
+        </header>
+
+        <!-- TAB CONTENT: OVERVIEW -->
+        <div id="overview" class="tab-pane active">
+            <!-- Small Metric Cards (Max 8 columns) -->
+            <section>
+                <header class="section-header">
+                    <h3>Platform Scale Metrics</h3>
+                    <p>Real-time orchestrator distribution and performance baselines.</p>
+                </header>
+                <div class="grid-max-8">
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">324</h2>
+                        <small>Orchestrators</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">15</h2>
+                        <small>Domains</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">32</h2>
+                        <small>MCP Tools</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">37</h2>
+                        <small>Active Rules</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">6</h2>
+                        <small>Languages</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient">29</h2>
+                        <small>Intent Types</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient-purple"><40ms</h2>
+                        <small>Routing Time</small>
+                    </div>
+                    <div class="glass-card" style="padding: 1rem; text-align: center;">
+                        <h2 class="text-gradient-purple">4</h2>
+                        <small>RCA Methods</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Large Concept Cards (Max 3 columns) -->
+            <section>
+                <header class="section-header">
+                    <h3>Core Architectural Pillars</h3>
+                    <p>The three interconnected systems working in concert to govern AI engineering.</p>
+                </header>
+                <div class="grid-max-3">
+                    <article class="glass-card">
+                        <h4 style="margin-bottom: 0.75rem;">MCP Gateway</h4>
+                        <p style="font-size: 0.95rem;">Exposes 32 tools directly in your coding assistant, providing the interface through which every request enters the system with zero context switching.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 style="margin-bottom: 0.75rem;">Orchestration Layer</h4>
+                        <p style="font-size: 0.95rem;">Routes requests through 324 specialised processing engines across 15 domains, from core coordination to domain specialists and operational support.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 style="margin-bottom: 0.75rem;">Intelligence (LENS)</h4>
+                        <p style="font-size: 0.95rem;">Combines code analysis, three tiers of reasoning (Perception, Reasoning, Action), and a continuous learning system that improves with every interaction.</p>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB CONTENT: LENS -->
+        <div id="lens" class="tab-pane">
+            <section>
+                <header class="section-header">
+                    <h3>Intelligence Matrix Topology</h3>
+                    <p>Documentation integration zones for dynamic architecture rendering.</p>
+                </header>
+                
+                <div class="grid-max-3">
+                    <!-- D3.js Placeholder -->
+                    <div class="glass-card" style="padding: 0;">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid var(--glass-border);">
+                            <h4>Capability Mapping</h4>
+                            <small>Interactive capability-to-operation mapping.</small>
+                        </div>
+                        
+                        <div class="viz-placeholder">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" style="margin-bottom: 1rem;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <p style="margin: 0;">Interactive Graph Rendering Zone</p>
+                            
+                            <!-- CRITICAL DOCUMENTATION HINT -->
+                            <div class="hint-text">
+                                &lt;!-- To embed D3.js here, target the `#cortex-d3-topology` ID and ensure the SVG viewBox is set to 100%. --&gt;
+                                <br><br>
+                                &lt;div id="cortex-d3-topology"&gt;&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Medium Feature Cards (Max 5 columns) -->
+            <section>
+                <header class="section-header">
+                    <h3>Root Cause Methodologies</h3>
+                    <p>Structured failure analysis preventing recurrence via institutional memory.</p>
+                </header>
+                <div class="grid-max-5">
+                    <div class="glass-card">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;" class="text-gradient">The Five Whys</h4>
+                        <p style="font-size: 0.85rem; margin: 0;">Linear cause chain tracking for sequential failures.</p>
+                    </div>
+                    <div class="glass-card">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;" class="text-gradient">Fishbone</h4>
+                        <p style="font-size: 0.85rem; margin: 0;">People, Process, Tech, Data factor analysis.</p>
+                    </div>
+                    <div class="glass-card">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;" class="text-gradient">Fault Tree</h4>
+                        <p style="font-size: 0.85rem; margin: 0;">Probability-weighted logic (AND/OR gates) for complex systems.</p>
+                    </div>
+                    <div class="glass-card">
+                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;" class="text-gradient">Causal Chain</h4>
+                        <p style="font-size: 0.85rem; margin: 0;">Temporal sequence mapping for time-delayed regressions.</p>
+                    </div>
+                    <div class="glass-card" style="border-style: dashed; justify-content: center; align-items: center; text-align: center;">
+                        <span style="color: var(--accent-start); font-size: 1.5rem; line-height: 1;">+</span>
+                        <small style="margin-top: 0.5rem;">Add Method</small>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB CONTENT: GOVERNANCE -->
+        <div id="governance" class="tab-pane">
+            <section>
+                <header class="section-header">
+                    <h3>Governance & Vocabulary</h3>
+                    <p>Strict structural definitions and active rule sets within the CORTEX environment.</p>
+                </header>
+
+                <article class="glass-card" style="margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">Core Terminology</h3>
+                    
+                    <dl>
+                        <dt>Convergence Gate</dt>
+                        <dd>A mandatory detect→fix→rescan loop applied to code-modifying operations, ensuring zero critical violations remain before completion.</dd>
+                        
+                        <dt>Golden Tests</dt>
+                        <dd>The highest-priority behaviours that must never break. Serial execution ensures deterministic, blocking validation on every commit.</dd>
+                        
+                        <dt>Thin Index Contract</dt>
+                        <dd>Governance rule requiring master plan files to remain a reference index only (≤500 lines) to prevent token context exhaustion.</dd>
+                    </dl>
+
+                    <blockquote>
+                        "Don't leave broken windows unfixed. Fix each one as soon as it is discovered."<br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-style: normal; margin-top: 0.5rem; display: block;">— Andrew Hunt & David Thomas, The Pragmatic Programmer (CORTEX Principle Atom)</span>
+                    </blockquote>
+                </article>
+
+                <!-- Data Table -->
+                <div class="glass-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rule ID</th>
+                                <th>Enforcement Agent</th>
+                                <th>Constraint Protocol</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-start);">CORE-008</td>
+                                <td>TDDOrchestrator</td>
+                                <td>Mandatory Test-First Cycle (Red/Green/Refactor)</td>
+                                <td><span class="pill active">Enforced</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-start);">CORE-064</td>
+                                <td>SweepCatalogueOrchestrator</td>
+                                <td>Complete Sweep Resolution (No partial fixes allowed)</td>
+                                <td><span class="pill active">Enforced</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-start);">CORE-055</td>
+                                <td>Golden Test Runner</td>
+                                <td>Zero Golden Regressions permitted on commit boundary</td>
+                                <td><span class="pill blocking">Blocking</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-start);">CORE-049</td>
+                                <td>Output Suppression Agent</td>
+                                <td>Silent Execution (No markdown report file sprawl)</td>
+                                <td><span class="pill active">Enforced</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB CONTENT: TDD -->
+        <div id="tdd" class="tab-pane">
+            <section>
+                <header class="section-header">
+                    <h3>TDD Flywheel Execution</h3>
+                    <p>Standard MasterOrchestrator pipeline definitions illustrating the mandatory RED -> GREEN -> REFACTOR stages.</p>
+                </header>
+                
+                <div class="grid-max-3">
+                    <!-- Mermaid.js Flowchart -->
+                    <div class="glass-card" style="padding: 0;">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid var(--glass-border);">
+                            <h4>Request Lifecycle Flow</h4>
+                            <small>Enforced structurally, not by policy.</small>
+                        </div>
+                        
+                        <div style="padding: 1.5rem;">
+                            <!-- CRITICAL DOCUMENTATION HINT FOR MERMAID -->
+                            <div class="mermaid-container">
+<pre style="margin:0;"><code>%% Render via Mermaid.js parser %%
+graph TD;
+    A[Incoming Request] --> B{Intent Classifier}
+    B -- "< 40ms" --> C[LENS Analysis]
+    C --> D(Governance Gate)
+    D -- Pass --> E[Test Generation]
+    D -- Block --> F[Remediation Hint]
+    E --> G[Execution]
+    G --> H((Convergence Check))
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB CONTENT: MCP GATEWAY -->
+        <div id="mcp" class="tab-pane">
+            <section>
+                <header class="section-header">
+                    <h3>MCP Gateway Tools</h3>
+                    <p>A selection of the 32 capabilities available directly in your coding assistant via the Model Context Protocol.</p>
+                </header>
+                <div class="grid-max-3">
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_classify</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Classifies a request into one of 29 intent types and returns the routing decision in under 40 milliseconds.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_validate</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Checks code or a proposed operation against active governance rules before any execution begins.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_refactor</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Performs semantic refactoring across Python, C#, and TypeScript with full before-and-after analysis and governance validation.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_learning</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Emits reinforcement signals, queries the learning history, and accesses root cause analysis with structured methodologies.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_generate_tests</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Generates failing tests from a feature specification, ready for the implementation phase.</p>
+                    </article>
+                    <article class="glass-card">
+                        <h4 class="text-gradient">cortex_git</h4>
+                        <p style="font-size: 0.95rem; margin-top: 0.5rem;">Executes git operations—branching, committing, conflict resolution—through the governance-aware git layer.</p>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.875rem;">
+            <span>CORTEX Architecture Documentation</span>
+            <span>Version: Current (March 2026) · Verification: Live Codebase</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- JavaScript for Tab Functionality -->
+<script>
+    function switchTab(tabId) {
+        // Hide all tab panes
+        document.querySelectorAll('.tab-pane').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Remove active class from all nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        // Show the selected tab pane
+        const targetTab = document.getElementById(tabId);
+        if(targetTab) {
+            targetTab.classList.add('active');
+        }
+
+        // Highlight the selected nav link
+        const targetLink = document.querySelector(`.nav-link[onclick="switchTab('${tabId}')"]`);
+        if(targetLink) {
+            targetLink.classList.add('active');
+        }
+
+        // Dynamically update the breadcrumb/title to reflect navigation
+        const navTitle = document.getElementById('nav-title');
+        const navBreadcrumbs = document.getElementById('nav-breadcrumbs');
+        
+        const titles = {
+            'overview': 'System Topology & Integrations',
+            'lens': 'Intelligence & Perception (LENS)',
+            'governance': 'Governance & Rule Enforcement',
+            'tdd': 'TDD Flywheel & Quality Cycles',
+            'mcp': 'MCP Gateway Tool Registry'
+        };
+
+        const breadcrumbs = {
+            'overview': 'Documentation / Overview',
+            'lens': 'Documentation / Intelligence (LENS)',
+            'governance': 'Documentation / Governance Gates',
+            'tdd': 'Documentation / TDD Flywheel',
+            'mcp': 'Documentation / MCP Gateway'
+        };
+
+        if(navTitle && titles[tabId]) navTitle.textContent = titles[tabId];
+        if(navBreadcrumbs && breadcrumbs[tabId]) navBreadcrumbs.textContent = breadcrumbs[tabId];
+    }
+</script>
+
+</body>
+</html>
