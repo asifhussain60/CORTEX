@@ -1,0 +1,230 @@
+# CORTEX Phase Plan — Phase 129
+# Content Library Facade + AI Adoption Sparks + Library Expansion
+# Governance: CORE-008 (TDD), CORE-064 (Sweep), CORE-068 (Convergence)
+
+id: "phase-129"
+title: "Content Library Facade — AI Spark Pool + Epoch Shuffle + Library Expansion (300/200/150)"
+created: "2026-03-06"
+status: ACTIVE
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-129-CONTENT-LIBRARY-FACADE"
+
+background: |
+  Source: User design session 2026-03-06 — enhance quote/principle injection system.
+  Current state: 120 quotes (atom-quote.yaml) + 90 principles (high-value-principles.yaml)
+  Gap: No AI adoption library, no unified facade, ring buffer (n=20) insufficient for 500+ items,
+       two incompatible rendering formats, no cross-library selection, technical audience only.
+  Target: ContentLibraryFacade + ai_spark pool + Epoch Shuffle algorithm
+  Smoke baseline: 2775 passed
+
+sweep_catalogue:
+  - id: "GAP-129-01"
+    title: "No ContentLibraryFacade — PrincipleSelector is the only entry point"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "cortex/intelligence/analysis/principle_selector.py — no facade layer"
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-02"
+    title: "No AI Adoption library (ai_spark pool)"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "cortex-registry/knowledge/ has no ai/ directory or ai-adoption-sparks.yaml"
+    action_ref: "phase-129-b"
+    status: OPEN
+
+  - id: "GAP-129-03"
+    title: "Ring buffer (n=20) insufficient for 500+ item corpus"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "cortex/intelligence/analysis/principle_selector.py — _ring_buffer deque(maxlen=20)"
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-04"
+    title: "Epoch Shuffle algorithm missing — no full-corpus traversal guarantee"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "PrincipleSelector uses per-call weighted random, not epoch-based shuffle"
+    action_ref: "phase-129-a"
+    status: OPEN
+
+  - id: "GAP-129-05"
+    title: "Quote library needs expansion to 300+ items with category + audience fields"
+    severity: P2
+    source: "Design session 2026-03-06"
+    evidence: "atom-quote.yaml has 120 quotes; target 300+"
+    action_ref: "phase-129-c"
+    status: OPEN
+
+  - id: "GAP-129-06"
+    title: "Principles library needs expansion to 200+ items with audience field"
+    severity: P2
+    source: "Design session 2026-03-06"
+    evidence: "high-value-principles.yaml has 90 principles; target 200+"
+    action_ref: "phase-129-d"
+    status: OPEN
+
+  - id: "GAP-129-07"
+    title: "Unified rendering atom missing — two incompatible blockquote formats"
+    severity: P2
+    source: "Design session 2026-03-06"
+    evidence: "atom-quote.yaml uses plain > blockquote; atom-principle.yaml uses > 💡 **Principle:**"
+    action_ref: "phase-129-e"
+    status: OPEN
+
+  - id: "GAP-129-08"
+    title: "atom-ai-spark.yaml rendering atom missing"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "cortex-registry/templates/response/atoms/ has no atom-ai-spark.yaml"
+    action_ref: "phase-129-e"
+    status: OPEN
+
+  - id: "GAP-129-09"
+    title: "comp-query.yaml does not include ai_spark atom"
+    severity: P2
+    source: "Design session 2026-03-06"
+    evidence: "comp-query.yaml atoms list: atom-identity, atom-quote, atom-principle, atom-status-footer"
+    action_ref: "phase-129-f"
+    status: OPEN
+
+  - id: "GAP-129-10"
+    title: "Drift locks not updated for new facade + library counts"
+    severity: P1
+    source: "Design session 2026-03-06"
+    evidence: "test_principle_drift_locks.py checks counts 120/90 — will fail at 300/200/150"
+    action_ref: "phase-129-g"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sub_phases:
+
+  # ── SUB-PHASE A: ContentLibraryFacade + Epoch Shuffle ─────────────────────
+  - id: "phase-129-a"
+    title: "ContentLibraryFacade + EpochShuffler — TDD implementation"
+    gaps_closed: [GAP-129-01, GAP-129-03, GAP-129-04]
+    tdd_sequence:
+      red:
+        - "Create tests/intelligence/test_content_library_facade.py — all tests FAIL"
+        - "Tests cover: select(pool=), select_across(), EpochShuffler, backward-compat"
+      green:
+        - "Create cortex/intelligence/analysis/content_library_facade.py"
+        - "Implement ContentLibraryFacade with select() + select_across() + EpochShuffler"
+        - "EpochShuffler: Fisher-Yates shuffle → epoch deque → pop O(1) → reshuffle on exhaust"
+        - "Backward compat: PrincipleSelector.select() delegates to facade internally"
+      refactor:
+        - "Type hints, docstrings, CORE-011, CORE-012 compliance"
+    completion_gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero failures"
+
+  # ── SUB-PHASE B: ai-adoption-sparks.yaml ──────────────────────────────────
+  - id: "phase-129-b"
+    title: "AI Adoption Sparks library (150+ verified items, 8 categories)"
+    gaps_closed: [GAP-129-02]
+    tdd_sequence:
+      red:
+        - "Create tests/intelligence/test_ai_spark_library.py — schema + quality tests FAIL"
+      green:
+        - "Create cortex-registry/knowledge/ai/ai-adoption-sparks.yaml"
+        - "150+ items, 8 categories, all verified + attributed, audience: universal"
+      refactor:
+        - "Validate all sources, trim bodies to ≤200 chars, ensure dedup_key uniqueness"
+    completion_gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero failures"
+
+  # ── SUB-PHASE C: Expand atom-quote.yaml to 300+ ────────────────────────────
+  - id: "phase-129-c"
+    title: "Expand quote library to 300+ (add category + audience fields)"
+    gaps_closed: [GAP-129-05]
+    tdd_sequence:
+      red:
+        - "Update test_principle_drift_locks.py: minimum_quotes assertion → 300"
+      green:
+        - "Add 180+ new quotes to atom-quote.yaml across all 10 themes"
+        - "Add category and audience fields to all existing + new quotes"
+      refactor:
+        - "Verify all quotes are attributable, non-fabricated, ≤200 chars"
+    completion_gate: "grep -c 'dedup_key:' atom-quote.yaml | awk '$1>=300'"
+
+  # ── SUB-PHASE D: Expand high-value-principles.yaml to 200+ ────────────────
+  - id: "phase-129-d"
+    title: "Expand principles library to 200+ (add audience field)"
+    gaps_closed: [GAP-129-06]
+    tdd_sequence:
+      red:
+        - "Update test_principle_drift_locks.py: minimum_principles assertion → 200"
+      green:
+        - "Add 110+ new principles to high-value-principles.yaml"
+        - "Add audience field to all existing + new principles"
+      refactor:
+        - "Verify all principles are domain-tagged, intent-typed, body ≤200 chars"
+    completion_gate: "grep -c '^  - id:' high-value-principles.yaml | awk '$1>=200'"
+
+  # ── SUB-PHASE E: atom-ai-spark.yaml + unified rendering ───────────────────
+  - id: "phase-129-e"
+    title: "atom-ai-spark.yaml rendering atom + unified blockquote frame"
+    gaps_closed: [GAP-129-07, GAP-129-08]
+    tdd_sequence:
+      red:
+        - "Create tests/golden/response/test_ai_spark_atom_golden.py — schema tests FAIL"
+      green:
+        - "Create cortex-registry/templates/response/atoms/atom-ai-spark.yaml"
+        - "Unified rendering: > 💡 **{label}:** {body} / > — {author}, {source}"
+      refactor:
+        - "Verify rendering_rules match atom-principle.yaml contract"
+    completion_gate: "python3 scripts/run_tests.py dir tests/golden/ — zero failures"
+
+  # ── SUB-PHASE F: Wire ai_spark into comp-query.yaml ───────────────────────
+  - id: "phase-129-f"
+    title: "Wire atom-ai-spark into comp-query.yaml + eligible compositions"
+    gaps_closed: [GAP-129-09]
+    tdd_sequence:
+      red:
+        - "Update test_principle_drift_locks.py: comp-query must contain atom-ai-spark"
+      green:
+        - "Add atom-ai-spark to comp-query.yaml atoms list (zone: analysis_section)"
+        - "ContentLibraryFacade selects from ai_spark pool for INTRODUCE intent"
+      refactor:
+        - "Verify comp-implement-fix, comp-refactor still exclude atom-ai-spark"
+    completion_gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero failures"
+
+  # ── SUB-PHASE G: Drift locks + smoke suite ────────────────────────────────
+  - id: "phase-129-g"
+    title: "Update drift locks + run convergence gate"
+    gaps_closed: [GAP-129-10]
+    tdd_sequence:
+      green:
+        - "Update all count assertions in test_principle_drift_locks.py"
+        - "Add facade-specific drift locks for ContentLibraryFacade"
+        - "Run make test-smoke — all tests must pass"
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      governance: "CORE-068"
+    completion_gate: "make test-smoke — zero failures, zero regressions"
+
+acceptance_criteria:
+  - "ContentLibraryFacade.select(intent, pool='quotes'|'principles'|'ai_spark') returns valid item"
+  - "ContentLibraryFacade.select_across(intent) rotates across all three pools fairly"
+  - "EpochShuffler guarantees full-corpus traversal before any repeat"
+  - "ai-adoption-sparks.yaml contains ≥150 verified, attributed items across 8 categories"
+  - "atom-quote.yaml contains ≥300 quotes with category + audience fields"
+  - "high-value-principles.yaml contains ≥200 principles with audience field"
+  - "atom-ai-spark.yaml exists with unified blockquote rendering template"
+  - "comp-query.yaml includes atom-ai-spark in atoms list"
+  - "All existing PrincipleSelector tests pass unchanged (zero breaking changes)"
+  - "p95 latency ≤ 5ms for any pool at 650+ total items"
+  - "make test-smoke passes with zero regressions"

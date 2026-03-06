@@ -416,6 +416,7 @@ class TestSubPhaseBCompositions:
             "atom-identity", "atom-quote", "atom-orchestration",
             "atom-intent-reflection", "atom-status-footer",
             "atom-principle",  # Phase 124: SDLC principle atom (Zone 3, comp-query)
+            "atom-ai-spark",  # Phase 129: AI adoption spark atom (analysis_section)
         }
         for fname in self.EXPECTED_COMPOSITIONS:
             path = COMPOSITIONS_DIR / fname

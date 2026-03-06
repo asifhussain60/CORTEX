@@ -9,13 +9,13 @@
 #
 # Rendering: VS Code Copilot Chat 3-zone layout (300-500px panel)
 # SSOT: .github/templates/cortex-response-templates.md § Response Header
-# Phase: 120 (Sub-Phase B)
+# Phase: 129 (Phase 129-F: atom-ai-spark wired in)
 # Author: Asif Hussain | © 2025-2026 CORTEX Framework
 # ─────────────────────────────────────────────────────────────────────────────
 
 id: comp-query
 type: composition
-phase: "120"
+phase: "129"
 trigger: "simple questions, lookups, explanations"
 intent: QUERY
 
@@ -35,6 +35,8 @@ rendering_rules:
     - "tables with more than 4 columns"
 
 # ─── Atom Assembly (ordered) ──────────────────────────────────────────────────
+# Phase 129-F: atom-ai-spark added. ContentLibraryFacade.select_across() rotates
+# between atom-principle and atom-ai-spark per response — only ONE renders per turn.
 atoms:
   - id: atom-identity
     zone: 1
@@ -46,14 +48,22 @@ atoms:
     params:
       theme: universal
   - id: atom-principle
-    zone: analysis_section      # Inside ## 🔍 Analysis — FIRST element (not Zone 3 header)
+    zone: analysis_section
     params:
       intent_type: QUERY
+  - id: atom-ai-spark
+    zone: analysis_section
+    params:
+      intent_type: QUERY
+      pool: ai_spark
+      rotate_with: [atom-principle]
   - id: atom-status-footer
     zone: footer
 
-# ─── Rendered Template ────────────────────────────────────────────────────────
+# ─── Rendered Template (Principle variant — default) ──────────────────────────
 # Note: no 🧭 Orchestration: line — single-hop omit rule applies
+# Note: Analysis block shows EITHER atom-principle OR atom-ai-spark per response.
+#       ContentLibraryFacade.select_across() governs which pool renders.
 template: |
   # 🧠 CORTEX Answering
   **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
@@ -73,6 +83,28 @@ template: |
 
   > 💡 **Principle: {principle_title}**
   > {principle_body}
+
+  {analysis_content}
+
+template_ai_spark_variant: |
+  # 🧠 CORTEX Answering
+  **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+  ---
+
+  > *"{quote}"*
+  > — {author}, **{book}**
+
+  ---
+
+  ## 📋 Summary
+  {summary}
+
+  ---
+
+  ## 🔍 Analysis
+
+  > 💡 **AI Spark:** {spark_body}
+  > — {spark_author}, *{spark_source}*
 
   {analysis_content}
 

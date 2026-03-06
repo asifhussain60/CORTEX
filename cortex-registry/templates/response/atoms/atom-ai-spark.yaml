@@ -1,0 +1,139 @@
+# Rendering Atom: AI Spark
+# Phase: 129 | Sub-Phase: 129-E
+# SSOT for AI Spark block rendering in CORTEX responses
+#
+# PURPOSE: Define how the ai_spark pool content is rendered in Copilot Chat
+#          responses — parallel to atom-principle.yaml and atom-quote.yaml.
+#
+# INJECTION: ContentLibraryFacade.select(intent_type, pool='ai_spark')
+#            returns result['render_header'] which is the pre-built blockquote.
+#
+# CONSUMER:  comp-query.yaml (Phase 129-F wires this atom in)
+#            PrincipleSelector backwards-compatible shim (unchanged)
+
+atom_id: "atom-ai-spark"
+version: "1.0.0"
+description: >
+  AI Spark rendering atom — presents an AI adoption insight as a blockquote
+  callout inside the Analysis section of qualifying responses. Encourages
+  engineers to embrace AI as a force multiplier, using verified quotes from
+  industry leaders. Non-technical and universal audience.
+
+# ─── Rendering Spec ──────────────────────────────────────────────────────────
+
+render:
+  position: "analysis_section"
+  section_anchor: "## 🔍 Analysis"
+  placement: "first_element_in_section"
+  format: |
+    > 💡 **AI Spark:** {body}
+    > — {author}, *{source}*
+  example: |
+    > 💡 **AI Spark:** AI won't replace engineers. Engineers who use AI will
+    > replace engineers who don't.
+    > — Jensen Huang, *NVIDIA GTC Keynote, 2024*
+  label: "AI Spark"
+  icon: "💡"
+
+# ─── Trigger Policy ──────────────────────────────────────────────────────────
+
+trigger_policy:
+  render_for_intents:
+    - QUERY
+    - DESIGN
+    - PLAN
+    - INTRODUCE
+    - ONBOARD
+    - INVESTIGATE
+  omit_for_intents:
+    - IMPLEMENT
+    - FIX
+    - REFACTOR
+    - DEBUG
+    - AUDIT
+    - HEALTH
+    - VACUUM
+    - SYNC
+    - DIGEST
+    - DISTILL
+  complexity_gate:
+    min_request_words: 8
+    analytical_signal_required: false   # AI Spark always renders for qualifying intents
+  frequency: "per_response"
+  max_per_response: 1
+
+# ─── Selection Rules ─────────────────────────────────────────────────────────
+
+selection:
+  source_library: "cortex-registry/knowledge/ai/ai-adoption-sparks.yaml"
+  top_level_key: "sparks"
+  selector_class: "ContentLibraryFacade"
+  pool_name: "ai_spark"
+  strategy: "EpochShuffler"
+  strategy_notes: >
+    EpochShuffler performs a Fisher-Yates shuffle of the full corpus with
+    weight bias (high-weight items front-loaded into first 30% of epoch).
+    Guarantees full-corpus traversal before any item repeats.
+    Cross-library rotation prevents same category appearing consecutively.
+  anti_repetition:
+    epoch_size: 150         # full corpus size — no repeats until all 150 shown
+    cross_library_ring: 5   # ring buffer prevents same library in last 5 calls
+
+# ─── Rendering Variants ──────────────────────────────────────────────────────
+
+variants:
+  standard:
+    description: "Full blockquote with attribution"
+    format: |
+      > 💡 **AI Spark:** {body}
+      > — {author}, *{source}*
+
+  inline:
+    description: "Compact single-line (for constrained response budgets)"
+    format: "> 💡 **AI Spark:** {body} — *{author}*"
+
+  with_category:
+    description: "Includes category badge for learning contexts"
+    format: |
+      > 💡 **AI Spark** `{category}`: {body}
+      > — {author}, *{source}*
+
+# ─── Governance ──────────────────────────────────────────────────────────────
+
+governance:
+  content_rule: "no_fabricated_quotes"
+  audience_rule: "universal_only"
+  body_max_chars: 200
+  verification_required: true
+  verification_note: >
+    Every quote must have a verifiable source (book, talk, keynote, article,
+    interview). No AI-generated or paraphrased attributions. Author must be
+    a real, named person or institution.
+  drift_lock_test: "tests/intelligence/test_principle_drift_locks.py::TestDriftLocks::test_lock_ai_spark_atom_exists"
+  phase: "129"
+  sweep_id: "SWEEP-129-CONTENT-LIBRARY-FACADE"
+
+# ─── Rendering Rules (Copilot Chat compatibility) ────────────────────────────
+
+rendering_rules:
+  copilot_chat_compatible: true
+  markdown_safe: true
+  notes: >
+    Blockquote format renders correctly in VS Code Copilot Chat.
+    No HTML tags used. Safe for all supported Copilot Chat markdown renderers.
+
+# ─── Position in Atom Registry ───────────────────────────────────────────────
+
+atom_registry:
+  index: 7   # Atom #7 — after atom-principle (6 existing atoms + this one)
+  siblings:
+    - atom-header.yaml          # response header block
+    - atom-quote.yaml           # book quote callout (quotes pool)
+    - atom-principle.yaml       # SDLC principle callout (principles pool)
+    - atom-breadcrumb.yaml      # orchestration chain
+    - atom-proceed-gate.yaml    # proceed gate
+    - atom-completion.yaml      # completion state
+  pool_peers:
+    quotes: "atom-quote.yaml"
+    principles: "atom-principle.yaml"
+    ai_spark: "atom-ai-spark.yaml"   # this file
