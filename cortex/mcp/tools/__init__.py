@@ -131,6 +131,9 @@ from cortex.mcp.tools.cortex_registry_tool import CortexRegistry
 # Phase 129 — Distillation Mode (conversation → executable prompt)
 from cortex.mcp.tools.cortex_distill_tool import CortexDistill
 
+# Phase 130 — Content Optimization Mode (multi-file batch optimization)
+from cortex.mcp.tools.cortex_optimize_tool import CortexOptimize
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -193,6 +196,8 @@ ALL_TOOLS = [
     CortexRegistry,
     # Distillation (1) - Phase 129 — conversation → executable prompt
     CortexDistill,
+    # Content Optimization (1) - Phase 130 — multi-file batch optimization
+    CortexOptimize,
 ]
 
 
@@ -327,6 +332,8 @@ __all__ = [
     "CortexRegistry",
     # Distillation (Phase 129)
     "CortexDistill",
+    # Content Optimization (Phase 130)
+    "CortexOptimize",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

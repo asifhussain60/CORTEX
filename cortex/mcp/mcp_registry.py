@@ -453,6 +453,21 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["distill"],
     },
+    "cortex_optimize": {
+        "description": (
+            "Optimize arrays of files (HTML, Markdown, YAML, JSON, TXT, chat transcripts) "
+            "by removing noise and compressing content. Runs a 5-stage pipeline: "
+            "classify → read → optimize → validate → write. Overwrites files in-place. Phase 130."
+        ),
+        "category": ToolCategory.UTILITIES,
+        "parameters": [
+            {"name": "file_paths", "type": "array", "required": True,
+             "description": "Array of absolute file paths to optimize. Files are overwritten in-place."},
+            {"name": "orchestrator_context", "type": "string", "required": False,
+             "description": "Optional orchestrator context for governance routing."},
+        ],
+        "operations": ["optimize"],
+    },
 }
 
 

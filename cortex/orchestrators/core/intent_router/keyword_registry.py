@@ -231,6 +231,17 @@ class IntentKeywordRegistry:
         "what have we agreed", "summarise to prompt", "summarize to prompt",
     ]
 
+    OPTIMIZE_KEYWORDS: List[str] = [
+        "optimize", "/optimize", "optimize files", "compress files",
+        "optimize content", "compress content", "reduce files",
+        "optimize this", "compress this", "make smaller", "shrink files",
+        "remove noise", "strip noise", "clean files", "minify",
+        "optimize array", "batch optimize", "multi-file optimize",
+        "optimize html", "optimize markdown", "optimize yaml", "optimize json",
+        "content optimization", "file optimization", "in-place optimization",
+        "overwrite with optimized", "rewrite optimized",
+    ]
+
     # ------------------------------------------------------------------
     # Factory
     # ------------------------------------------------------------------
@@ -272,4 +283,5 @@ class IntentKeywordRegistry:
             IntentType.MIGRATE: cls.MIGRATE_KEYWORDS,
             IntentType.INTRODUCE: cls.INTRODUCE_KEYWORDS,
             IntentType.DISTILL: cls.DISTILL_KEYWORDS,
+            IntentType.OPTIMIZE: cls.OPTIMIZE_KEYWORDS,
         }

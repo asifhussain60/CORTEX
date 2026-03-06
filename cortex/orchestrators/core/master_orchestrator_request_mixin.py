@@ -430,6 +430,8 @@ class MasterOrchestratorRequestMixin:
                 "governance_registry": self._governance_registry,
                 "domain_orchestrators": self.domain_orchestrators,
                 "tdd_orchestrator": getattr(self, "tdd_orchestrator", None),
+                "distillationorchestrator": getattr(self, "_distillation_orchestrator", None),
+                "contentoptimizationorchestrator": getattr(self, "_content_optimization_orchestrator", None),
                 "logger": self.logger,
                 # G1/G6 Fix: expose self so Stage4 can call _check_for_workflow_template
                 "master_orchestrator": self,

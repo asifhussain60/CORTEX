@@ -78,6 +78,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-sync-agent.md** | 4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder | `/sync target=<path>` — cross-repo privacy-safe sync |
 | **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
+| **cortex-content-optimizer.md** | Multi-file content optimization — batch noise removal, compression, in-place rewrite | `/optimize`, "compress files", "batch optimize" (Phase 130) |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
 | **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
 ### Documentation Agents

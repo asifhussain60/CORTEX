@@ -239,6 +239,7 @@ class IntentType(Enum):
     RCA = "rca"                    # Root cause analysis (4 methodologies)
     INTRODUCE = "introduce"        # Interactive onboarding + role-based introduction
     DISTILL = "distill"            # Conversational entropy reduction to executable prompt
+    OPTIMIZE = "optimize"          # Multi-file content optimization and compression
     UNKNOWN = "unknown"
 
 

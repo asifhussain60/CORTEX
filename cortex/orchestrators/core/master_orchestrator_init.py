@@ -605,6 +605,48 @@ class MasterOrchestratorInitialiser:
                 details={"error": str(e)},
             )
 
+        # Phase 129: DistillationOrchestrator
+        h._distillation_orchestrator = None
+        try:
+            from cortex.orchestrators.support.distillation_orchestrator import (
+                DistillationOrchestrator,
+            )
+            h._distillation_orchestrator = DistillationOrchestrator()
+            h.logger.log_operation_complete(
+                ac_id="AC-PHASE-129-001",
+                operation="DISTILLATION_ORCHESTRATOR_INIT",
+                success=True,
+                details={"status": "DistillationOrchestrator initialized for /distill routing"},
+            )
+        except Exception as e:
+            h.logger.log_operation_complete(
+                ac_id="AC-PHASE-129-001",
+                operation="DISTILLATION_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": str(e)},
+            )
+
+        # Phase 130: ContentOptimizationOrchestrator
+        h._content_optimization_orchestrator = None
+        try:
+            from cortex.orchestrators.support.content_optimization_orchestrator import (
+                ContentOptimizationOrchestrator,
+            )
+            h._content_optimization_orchestrator = ContentOptimizationOrchestrator()
+            h.logger.log_operation_complete(
+                ac_id="AC-PHASE-130-001",
+                operation="CONTENT_OPTIMIZATION_ORCHESTRATOR_INIT",
+                success=True,
+                details={"status": "ContentOptimizationOrchestrator initialized for /optimize routing"},
+            )
+        except Exception as e:
+            h.logger.log_operation_complete(
+                ac_id="AC-PHASE-130-001",
+                operation="CONTENT_OPTIMIZATION_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": str(e)},
+            )
+
         # AC-PHASE-90-STAGE-4-001: ContextAwareSynthesisGateway
         h.synthesis_gateway = None
         try:

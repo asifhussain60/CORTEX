@@ -1,0 +1,145 @@
+# =============================================================================
+# MODE WORKFLOW: OPTIMIZE — Multi-File Content Optimization and Compression
+# =============================================================================
+# Authority: Phase 130 — Content Optimization Mode
+# Trigger:   "optimize", "/optimize", "compress files", "optimize content",
+#            "reduce files", "remove noise", "minify", "batch optimize"
+# Orchestrator: ContentOptimizationOrchestrator
+# MCP Tool:     cortex_optimize
+# Phase: 130
+#
+# 5-Stage Pipeline:
+#   Stage 1 — Classify:   Detect content type for each file (HTML/MD/YAML/JSON/TXT/chat)
+#   Stage 2 — Read:       Load all files into memory (batch parallel I/O)
+#   Stage 3 — Optimize:   Per-type compression via LLM intelligence
+#   Stage 4 — Validate:   Ensure syntax validity before write (YAML/JSON parse)
+#   Stage 5 — Write:      Overwrite original files in-place with atomic writes
+# =============================================================================
+
+id: "lifecycle/content-optimization-workflow"
+workflow:
+  id: 'lifecycle/content-optimization-workflow'
+  name: 'OPTIMIZE — Multi-File Content Optimization'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-03-06'
+    phase: 130
+    modes_served: ['OPTIMIZE']
+    trigger_keywords:
+      - 'optimize'
+      - '/optimize'
+      - 'optimize files'
+      - 'compress files'
+      - 'optimize content'
+      - 'compress content'
+      - 'reduce files'
+      - 'batch optimize'
+      - 'multi-file optimize'
+      - 'remove noise'
+      - 'minify'
+    orchestrators_used:
+      - ContentOptimizationOrchestrator
+    mcp_tools:
+      - cortex_optimize
+
+  steps:
+    - id: ac_start
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs: { domain: 'OPTIMIZE', session_id: '{{session_id}}' }
+      step_filter: 'ac_start'
+
+    # Stage 1 — Classify all files
+    - id: stage_classify
+      name: 'Stage 1 — Detect content type for each file'
+      depends_on: ['ac_start']
+      orchestrator: 'ContentOptimizationOrchestrator'
+      action: '_classifier.classify'
+      params:
+        file_paths: '{{file_paths}}'
+      outputs:
+        - content_types
+
+    # Stage 2 — Read all files (batch I/O)
+    - id: stage_read
+      name: 'Stage 2 — Load all files into memory (parallel reads)'
+      depends_on: ['stage_classify']
+      orchestrator: 'ContentOptimizationOrchestrator'
+      action: '_batch_read'
+      params:
+        file_paths: '{{file_paths}}'
+      outputs:
+        - file_contents
+
+    # Stage 3 — Optimize each file based on content type
+    - id: stage_optimize
+      name: 'Stage 3 — Per-type compression via LLM intelligence'
+      depends_on: ['stage_read']
+      orchestrator: 'ContentOptimizationOrchestrator'
+      action: '_optimizer.optimize'
+      params:
+        file_contents: '{{file_contents}}'
+        content_types: '{{content_types}}'
+      outputs:
+        - optimized_contents
+
+    # Stage 4 — Validate syntax for structured files (YAML, JSON)
+    - id: stage_validate
+      name: 'Stage 4 — Ensure syntax validity before write'
+      depends_on: ['stage_optimize']
+      orchestrator: 'ContentOptimizationOrchestrator'
+      action: '_validator.validate'
+      params:
+        optimized_contents: '{{optimized_contents}}'
+        content_types: '{{content_types}}'
+      outputs:
+        - validation_results
+      on_failure: 'abort'
+      failure_message: 'Syntax validation failed — optimization aborted to prevent file corruption.'
+
+    # Stage 5 — Write all files in-place (atomic writes)
+    - id: stage_write
+      name: 'Stage 5 — Overwrite original files with atomic writes'
+      depends_on: ['stage_validate']
+      orchestrator: 'ContentOptimizationOrchestrator'
+      action: '_atomic_write'
+      params:
+        file_paths: '{{file_paths}}'
+        optimized_contents: '{{optimized_contents}}'
+      outputs:
+        - files_written
+        - bytes_saved
+
+    # Completion marker
+    - id: ac_complete
+      template_ref: 'primitives/execution/ac-marker-emit'
+      depends_on: ['stage_write']
+      inputs:
+        domain: 'OPTIMIZE'
+        session_id: '{{session_id}}'
+        status: 'complete'
+        files_written: '{{files_written}}'
+        bytes_saved: '{{bytes_saved}}'
+      step_filter: 'ac_complete'
+
+  outputs:
+    files_processed: '{{file_paths | length}}'
+    files_written: '{{files_written}}'
+    total_bytes_saved: '{{bytes_saved}}'
+    compression_ratio: '{{(bytes_saved / original_total_size) * 100}}'
+
+  error_handling:
+    on_empty_file_paths:
+      action: 'return_error'
+      message: 'Empty file_paths array — nothing to optimize.'
+    on_read_failure:
+      action: 'skip_file'
+      message: 'File read failed — skipping this file, continuing with others.'
+    on_validation_failure:
+      action: 'skip_file'
+      message: 'Syntax validation failed — skipping this file to prevent corruption.'
+    on_write_failure:
+      action: 'rollback'
+      message: 'File write failed — rolling back changes to prevent partial state.'
