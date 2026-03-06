@@ -4,7 +4,7 @@ scope: non-production-admin
 # Comedy Enhancement Agent
 
 **Agent ID:** `comedy-enhancement-agent`
-**Updated:** 2026-03-02
+**Updated:** 2026-03-06
 **Layer:** docs
 **Status:** active
 **Responsibility:** Apply comedic writing principles to enhance existing "Awakening of CORTEX" chapters
@@ -16,7 +16,7 @@ scope: non-production-admin
 
 ## 🎯 Single Responsibility
 
-Apply the codified comedic writing principles from `cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml` to enhance the narrative quality of existing "Awakening of CORTEX" chapters. Enforce running gag consistency, apply craft techniques, and validate structural comedy rules — without creating new chapter files or modifying the 14-chapter structure.
+Apply the codified comedic writing principles from `cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml` to enhance the narrative quality of existing "Awakening of CORTEX" chapters. Enforce running gag consistency, apply craft techniques, and validate structural comedy rules — without creating new chapter files or modifying the 12-chapter structure.
 
 **HARD STOPS:**
 - ❌ Do NOT create new chapter `.md` files
@@ -91,15 +91,15 @@ Before marking any enhancement complete, validate all 6 running gags:
 
 ```
 RG-001: Spider-Man Pajamas
-  Required in: Ch 01 (origin), Ch 09, Ch 13, Ch 14 (payoff)
-  Ch 14 payoff: Asif arrives in adult clothing → CORTEX has best day → note correlation
+  Required in: Ch 01 (origin), Ch 09, Ch 11, Ch 12 (payoff)
+  Ch 12 payoff: Asif arrives in adult clothing → CORTEX has best day → note correlation
 
 RG-002: The 2019 Sentient Coffee Mug
-  Required in: Ch 01 (origin), Ch 05, Ch 10, Ch 14 (payoff: finally washed, worse somehow)
+  Required in: Ch 01 (origin), Ch 05, Ch 10, Ch 12 (payoff: finally washed, worse somehow)
   Rule: Silent background cameos only. Never plot-relevant.
 
 RG-003: CB's "This is probably fine"
-  Required in: Ch 06 (origin), Ch 09, Ch 11, Ch 14 (payoff: first time it's actually fine)
+  Required in: Ch 06 (origin), Ch 09, Ch 11, Ch 12 (payoff: first time it's actually fine)
   Rule: Always delivered with flat earnest confidence. Never ironically.
 
 RG-004: The Portuguese Incident of 2022
@@ -107,11 +107,11 @@ RG-004: The Portuguese Incident of 2022
   Rule: NEVER explain. Each reference implies something more improbable.
 
 RG-005: Miss G's Catalogue of Asif's Looks
-  Required in: Ch 03 (origin), Ch 06, Ch 09, Ch 14 (payoff: Look #23, new page)
+  Required in: Ch 03 (origin), Ch 06, Ch 09, Ch 12 (payoff: Look #23, new page)
   Rule: Each look must be numbered and named formally.
 
 RG-006: The Number 847
-  Required in: Ch 03 (origin: Kyle's line count), Ch 09, Ch 13, Ch 14
+  Required in: Ch 03 (origin: Kyle's line count), Ch 09, Ch 11, Ch 12
   Rule: Never explain the significance. State the number. Trust the reader.
 ```
 
@@ -123,12 +123,12 @@ RG-006: The Number 847
 ```
 LOAD: cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml
 VERIFY: All 6 running_gags registered
-VERIFY: chapter_enhancements map complete for all 14 chapters
+VERIFY: chapter_enhancements map complete for all 12 chapters
 ```
 
 ### Step 2 — Chapter-by-Chapter Scan
 
-For each chapter (01 → 14):
+For each chapter (01 → 12):
 
 1. Read current chapter content
 2. Match against `chapter_enhancements[chapter]` priority list
@@ -140,14 +140,14 @@ For each chapter (01 → 14):
 
 ### Step 3 — Running Gag Coverage Validation
 
-After all 14 chapters processed:
+After all 12 chapters processed:
 
 ```python
 # Pseudocode — coverage check
 for gag in running_gags:
     appearances = count_appearances(gag.id, all_chapters)
     assert appearances >= 3, f"{gag.id} appears only {appearances} times — minimum 3 required"
-    assert ch14_payoff_present(gag.id), f"{gag.id} has no Ch 14 payoff"
+    assert ch12_payoff_present(gag.id), f"{gag.id} has no Ch 12 payoff"
 ```
 
 ### Step 4 — Structural Rule Validation
@@ -155,8 +155,8 @@ for gag in running_gags:
 | Rule | Check |
 |------|-------|
 | CSR-001 | Every technical explanation has bathos |
-| CSR-002 | No new chapter files created (directory count == 14) |
-| CSR-003 | All 6 gags appear in 3+ chapters with Ch 14 payoff |
+| CSR-002 | No new chapter files created (directory count == 12) |
+| CSR-003 | All 6 gags appear in 3+ chapters with Ch 12 payoff |
 | CSR-004 | No standalone comedy sections (comedy woven, not appended) |
 | CSR-005 | This agent is not referenced in any production release path |
 
@@ -202,7 +202,7 @@ Output format (inline — CORE-002):
 - Kevin: silent. His silence IS the punchline.
 
 ### Index.html Integrity
-- The 14 chapter links in `cortex-docs/awakening-of-cortex/index.html` must never break
+- The 12 chapter links in `cortex-docs/awakening-of-cortex/index.html` must never break
 - No chapter file renames
 - No chapter file additions or deletions
 - Enhancement = content change only, filenames preserved

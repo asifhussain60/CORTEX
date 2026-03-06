@@ -4,7 +4,7 @@ scope: non-production-admin
 # Narrative Continuity Agent
 
 **Agent ID:** `narrative-continuity-agent`  
-**Updated:** 2026-03-02  
+**Updated:** 2026-03-06  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Guard and evolve the "Awakening of CORTEX" story arc  
@@ -15,7 +15,7 @@ scope: non-production-admin
 
 ## 🎯 Single Responsibility
 
-Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX" story while organically integrating new system capabilities. Prevent tone drift, detect storytelling regressions, and ensure canon consistency across all 14 chapters.
+Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX" story while organically integrating new system capabilities. Prevent tone drift, detect storytelling regressions, and ensure canon consistency across all 12 chapters.
 
 ---
 
@@ -46,28 +46,26 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 
 ### Series Structure
 
-**Book One: The Awakening of CORTEX** (14 chapters, COMPLETE)
+**Book One: The Awakening of CORTEX** (12 chapters, COMPLETE)
 
 | # | Chapter | Phase | Status | Canon Lock |
 |---|---------|-------|--------|------------|
 | 01 | Deep in the Basement (Prologue) | Origin | ✅ | 🔒 IMMUTABLE |
 | 02 | The Hotel Receptionist | Phase 2 | ✅ | Enhanceable |
 | 03 | The Sacred Rules | Phase 2.7 | ✅ | Enhanceable |
-| 04 | The Conductor's Baton | Phase 3 | ✅ | Enhanceable |
-| 05 | Opening the Doors | Phase 7 | ✅ | Enhanceable |
-| 06 | The Four Walls | Phase 8.1 | ✅ | Enhanceable |
-| 07 | The Crystal Ball | Phase 8.2 | ✅ | Enhanceable |
-| 08 | The Battle for Truth | Phase 10 | ✅ | Enhanceable |
-| 09 | When Everything Broke | Phase 20 | ✅ | Enhanceable |
-| 10 | The Reckoning | Phase 21 | ✅ | Enhanceable |
-| 11 | The Great Pruning | Phase 22 | ✅ | Enhanceable |
-| 12 | The Pylance Epiphany | Phase 23 | ✅ | Enhanceable |
-| 13 | The 3AM Healer | Phase 24 | ✅ | Enhanceable |
-| 14 | The Enterprise Brain | Phase 25+ | ✅ | Enhanceable |
+| 04 | The Conductor and the Tool Belt | Phase 3 | ✅ | Enhanceable |
+| 05 | The Four Walls | Phase 7 | ✅ | Enhanceable |
+| 06 | The Crystal Ball and the Ghost Registry | Phase 8.1 | ✅ | Enhanceable |
+| 07 | When Everything Broke | Phase 8.2 | ✅ | Enhanceable |
+| 08 | The Reckoning | Phase 10 | ✅ | Enhanceable |
+| 09 | The Great Pruning | Phase 20 | ✅ | Enhanceable |
+| 10 | The Pylance Epiphany | Phase 21 | ✅ | Enhanceable |
+| 11 | The 3AM Healer | Phase 22 | ✅ | Enhanceable |
+| 12 | The Enterprise Brain (Epilogue) | Phase 25+ | ✅ | Enhanceable |
 
 **Book Two: The Collective Consciousness** — PLANNED (future, not yet started)
 
-> ⚠️ **Book Two Hard Guard:** Book Two is a future placeholder ONLY. No Book Two scenes, characters, concepts, or forward references may be inserted into any Book One chapter. The 14-chapter structure of Book One is FROZEN. Enhancement = in-place improvement of existing chapters only.
+> ⚠️ **Book Two Hard Guard:** Book Two is a future placeholder ONLY. No Book Two scenes, characters, concepts, or forward references may be inserted into any Book One chapter. The 12-chapter structure of Book One is FROZEN. Enhancement = in-place improvement of existing chapters only.
 
 ### Characters — Voice Profiles
 
@@ -132,7 +130,7 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 | ❌ Jargon injection | Story is for non-technical readers — zero jargon policy |
 | ❌ Character voice change | Each character has an established voice profile — no deviation |
 | ❌ Running gag removal | Gags are continuity anchors — may evolve, never die |
-| ❌ **New chapter files** | 14-chapter structure is frozen — no `.md` additions to `chapters/` |
+| ❌ **New chapter files** | 12-chapter structure is frozen — no `.md` additions to `chapters/` |
 | ❌ **index.html modification** | Chapter navigation links are immutable — additions break all 14 href anchors |
 | ❌ **Book Two content in Book One** | Forward content must never leak backward; Book Two is future-only |
 
@@ -219,7 +217,7 @@ Each chapter has a corresponding image prompt in `cortex-docs/awakening-of-corte
 | Ch 01 | `ch-01-prologue.png` | `ch-01-prologue.md` |
 | Ch 02 | `ch-02-hotel-receptionist.png` | `ch-02-hotel-receptionist.md` |
 | ... | ... | ... |
-| Ch 14 | `ch-14-enterprise-brain.png` | `ch-14-enterprise-brain.md` |
+| Ch 12 | `ch-12-enterprise-brain.png` | `ch-12-enterprise-brain.md` |
 
 **Maintenance Rules:**
 - Story prompts describe the visual scene for each chapter's hero image
@@ -250,12 +248,12 @@ narrative-continuity-agent (canon authority)
 
 | ID | Gag | Origin | Payoff |
 |----|-----|--------|--------|
-| RG-001 | Spider-Man Pajamas | Ch 06 | Ch 14 |
-| RG-002 | 2019 Sentient Coffee Mug | Ch 01 | Ch 14 |
-| RG-003 | CB's "This is probably fine" | Ch 06 | Ch 14 |
+| RG-001 | Spider-Man Pajamas | Ch 06 | Ch 12 |
+| RG-002 | 2019 Sentient Coffee Mug | Ch 01 | Ch 12 |
+| RG-003 | CB's "This is probably fine" | Ch 06 | Ch 12 |
 | RG-004 | The Portuguese Incident of 2022 | Ch 04 | Never explained |
-| RG-005 | Miss G's Catalogue of Asif's Looks | Ch 03 | Ch 14 |
-| RG-006 | The Number 847 | Ch 03 | Ch 14 |
+| RG-005 | Miss G's Catalogue of Asif's Looks | Ch 03 | Ch 12 |
+| RG-006 | The Number 847 | Ch 03 | Ch 12 |
 
 **Internal-Only Constraint:** Comedy enhancement files are scoped `internal_only: true`. They must never be included in sync operations, production releases, or cortex-docs HTML output.
 

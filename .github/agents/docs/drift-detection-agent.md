@@ -4,7 +4,7 @@ scope: non-production-admin
 # Drift Detection Agent
 
 **Agent ID:** `drift-detection-agent`  
-**Updated:** 2026-03-02  
+**Updated:** 2026-03-06  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Cross-reference implementation vs documentation to detect drift  
@@ -80,8 +80,8 @@ drift_report:
   stale_counts:
     # Numeric values that no longer match reality
     - metric: "orchestrator_count"
-      documented: 185
-      actual: 186
+      documented: 323
+      actual: 324
       location: "cortex-docs/.content/05-orchestration-the-engine-room.md"
       severity: P1
 
@@ -93,8 +93,8 @@ drift_report:
 
   narrative_drift:
     # Story content referencing outdated system state
-    - chapter: "cortex-docs/awakening-of-cortex/chapters/14-The-Enterprise-Brain.md"
-      issue: "References 51 orchestrators — now 186 orchestrator files"
+    - chapter: "cortex-docs/awakening-of-cortex/chapters/12-The-Enterprise-Brain.md"
+      issue: "References 51 orchestrators — now 324 orchestrator files"
       severity: P2
 ```
 

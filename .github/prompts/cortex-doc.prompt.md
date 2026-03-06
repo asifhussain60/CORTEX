@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-02 (Phase 108 — Documentation Governance Layer + Design+Implement Mode) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-06 (Phase 108 — Documentation Governance Layer + Design+Implement Mode) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -91,8 +91,8 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 | Target | Path |
 |--------|------|
-| **Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (14 chapters) |
-| **Chapter images** | `cortex-docs/awakening-of-cortex/images/` (14 images + prompts) |
+| **Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (12 chapters) |
+| **Chapter images** | `cortex-docs/awakening-of-cortex/images/` (12 images + prompts) |
 | **Story prompts** | `cortex-docs/awakening-of-cortex/images/story-prompts/` |
 
 **Narrative Constraints (NON-NEGOTIABLE):**
@@ -105,7 +105,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ✅ Maintain narrative continuity and internal lore consistency
 - ✅ Running gags preserved and evolved (router blinks red, coffee going cold, LED eyes, etc.)
 - ✅ All chapter links in `cortex-docs/awakening-of-cortex/index.html` must remain valid and resolvable
-- ❌ **No new chapter `.md` files** — the 14-chapter structure is locked; new chapters are NEVER added
+- ❌ **No new chapter `.md` files** — the 12-chapter structure is locked; new chapters are NEVER added
 - ❌ **Do not modify `index.html` chapter list** — link structure is frozen; chapter additions break this invariant
 - ❌ **No Book Two content** injected into Book One chapters — "The Collective Consciousness" is a future placeholder only
 - ❌ **No new video prompt files** — existing 16 files (9 root + 7 tutorials) cover all discovery gaps; enhance within existing files only, never create additional prompt files
@@ -269,7 +269,7 @@ The coverage audit agent maintains a live coverage map tracking:
 | **Debug Strategies** | `cortex/orchestrators/support/debugging/` (8 strategies) | `.content/05-orchestration-the-engine-room.md` |
 | **RCA Methodologies** | `cortex/intelligence/learning/rca_engine.py` (4 methods) | `.content/08-learning-institutional-memory.md` |
 | **Diagrams** | `cortex-docs/assets/diagrams/` | `.content/` inline Mermaid blocks |
-| **Narrative Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (14) | Story prompts in `images/story-prompts/` |
+| **Narrative Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (12) | Story prompts in `images/story-prompts/` |
 | **Video Prompts** | `cortex-docs/assets/video-prompts/` (16 files) | Aligned with capability descriptions |
 | **Image Prompts** | `cortex-docs/assets/image-prompts/` | Aligned with UI/system behaviors |
 | **Glossary Terms** | All `.content/` files | `cortex-docs/.content/glossary.md` |
@@ -354,8 +354,8 @@ Documentation is versioned consistently with release tags:
 | Coverage map — zero orphaned features | 100% coverage | P0 |
 | Coverage map — zero phantom docs | 0 undead docs | P0 |
 | Diagram accuracy — node counts match live architecture | Exact match | P0 |
-| **Chapter file count** — exactly 14 `.md` files in `chapters/` | 14 (immutable) | P0 |
-| **index.html chapter links** — all 14 chapter links resolve (HTTP 200) | 100% | P0 |
+| **Chapter file count** — exactly 12 `.md` files in `chapters/` | 12 (immutable) | P0 |
+| **index.html chapter links** — all 12 chapter links resolve (HTTP 200) | 100% | P0 |
 | **Video prompt file count** — exactly 16 files (9 root + 7 tutorials) | 16 (no additions) | P1 |
 | Terminology consistency — glossary enforced | 0 violations | P1 |
 | Narrative continuity — no canon breaks | 0 regressions | P1 |

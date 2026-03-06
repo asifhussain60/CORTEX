@@ -4,7 +4,7 @@ scope: non-production-admin
 # Coverage Audit Agent
 
 **Agent ID:** `coverage-audit-agent`  
-**Updated:** 2026-03-02  
+**Updated:** 2026-03-06  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Validate documentation completeness, accuracy, and produce certification verdicts  
@@ -245,12 +245,12 @@ coverage_map:
     doc_target: ".content/05-orchestration-the-engine-room.md"
 
   narrative_chapters:
-    total: 14
-    with_images: 14
-    with_story_prompts: 14
+    total: 12
+    with_images: 12
+    with_story_prompts: 12
     coverage: 100%
-    file_count_gate: "FROZEN — must equal exactly 14; additions or deletions are P0 violations"
-    index_html_gate: "All 14 chapter links in awakening-of-cortex/index.html must resolve HTTP 200"
+    file_count_gate: "FROZEN — must equal exactly 12; additions or deletions are P0 violations"
+    index_html_gate: "All 12 chapter links in awakening-of-cortex/index.html must resolve HTTP 200"
 
   video_prompts:
     total: 16
@@ -278,8 +278,8 @@ coverage_map:
 chapter_count = count(cortex-docs/awakening-of-cortex/chapters/*.md)
 video_prompt_count = count(cortex-docs/assets/video-prompts/*.md) + count(cortex-docs/assets/video-prompts/videos/tutorials/*.md)
 
-if chapter_count != 14:
-  P0 FAIL: "Chapter file count is {chapter_count} — must be exactly 14"
+if chapter_count != 12:
+  P0 FAIL: "Chapter file count is {chapter_count} — must be exactly 12"
 
 if video_prompt_count != 16:
   P0 FAIL: "Video prompt file count is {video_prompt_count} — must be exactly 16 (9 root + 7 tutorials)"
