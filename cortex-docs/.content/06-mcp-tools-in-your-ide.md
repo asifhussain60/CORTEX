@@ -1,14 +1,14 @@
 # Tools in Your IDE — The MCP Gateway
 
 ---
-title: MCP Gateway — 30 CORTEX Capabilities Accessible Directly in Your Coding Assistant
+title: MCP Gateway — 32 CORTEX Capabilities Accessible Directly in Your Coding Assistant
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-04
+last_verified: 2026-03-06
 order: 6
 ---
 
-> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 30 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 32 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
 
 ---
 
@@ -62,6 +62,7 @@ These tools expose the governance layer — rule checking, compliance validation
 | **cortex_load** | Loads governance rules, audit checklists, execution modes, and response format standards |
 | **cortex_validate** | Checks code or a proposed operation against active governance rules |
 | **cortex_validate_request** | Runs a governance gate check on a request before execution begins |
+| **cortex_registry** | Queries the CORTEX registry for governance rules, workflow templates, patterns, and plans — providing programmatic access to the full `cortex-registry/` index |
 
 ### Intelligence and Code Analysis
 
@@ -133,6 +134,7 @@ These tools connect CORTEX to project planning and repository assessment workflo
 | **cortex_enrich** | Adds metadata and context to structured data for downstream processing |
 | **cortex_batch_transform** | Batch-processes collections of items with configurable triggers (size or timeout) and selectable transformation operations |
 | **cortex_scaffold_files** | Writes new files from templates, checks for existing artefacts, and lists all scaffolded files — the gateway for creating new modules from canonical templates |
+| **cortex_distill** | Distils a multi-turn conversation into an executable, context-dense prompt via a 5-stage pipeline: segment → reconstruct → reconcile → synthesise → compress. Eliminates noise while preserving goals, decisions, and constraints (Phase 129) |
 
 ### Maintenance
 
@@ -182,4 +184,4 @@ For business leaders, work item integration means delivery metrics are grounded 
 
 ---
 
-*Tool catalog verified against live MCP registry (30 tools) · Integration patterns verified against live configuration · Last verified: 2026-03-04*
+*Tool catalog verified against live MCP registry (32 tools) · Integration patterns verified against live configuration · Last verified: 2026-03-06*

@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-03-04
+last_verified: 2026-03-06
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -75,6 +75,8 @@ order: 99
 
 **Definition of Ready (DoR)** — Checklist presented in MasterOrchestrator Stage 1. Ensures scope, acceptance criteria, and dependencies are clear before execution.
 
+**Distill / DISTILL Intent** — A CORTEX intent type (Phase 129) that reduces a multi-turn conversation to an executable, context-dense prompt. The 5-stage pipeline (segment → reconstruct → reconcile → synthesise → compress) eliminates noise while preserving all goals, decisions, and constraints. Exposed as the `cortex_distill` MCP tool.
+
 **Domain Brain** — Domain-specific knowledge module that provides context for business logic decisions. Location: `cortex/intelligence/domain_brain/`.
 
 ## E
@@ -104,6 +106,8 @@ order: 99
 ## I
 
 **IntentRouter** — Orchestrator that classifies requests into multiple intent types (IMPLEMENT, FIX, REFACTOR, etc.) and routes to appropriate domain orchestrators. Location: `cortex/orchestrators/core/intent_router.py`.
+
+**Introduce / INTRODUCE Intent** — A CORTEX intent type for interactive, role-based onboarding. When triggered, CORTEX presents tailored capability overviews for the detected role (Business Leader, Product Owner, Software Engineer, or Curious Learner) and invites exploration through guided prompts.
 
 ## J
 
