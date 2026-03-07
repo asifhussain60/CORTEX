@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting + Count Floor-Approximation Policy) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting + Count Floor-Approximation Policy + WCAG Font Size Floor Rules) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -233,6 +233,54 @@ Exempt: Discovery-only, Drift-detection, Certification (read-only operations)
 
 - ❌ **NEVER** use `Plus Jakarta Sans` for headings — proven to cause word-fusion at display sizes
 - ❌ **NEVER** introduce additional font families — the three above are locked (`design_system.yaml`)
+
+### WCAG Font Size Floor Rules (IMMUTABLE — P0 a11y gate)
+
+**Authority:** WCAG 2.2 Level AA + LearnUI Design accessibility research. Codified from Phase 108 audit where generated HTML had unreadable `8px–12px` text across all role pages.
+
+**Lesson learned:** LLMs default to compact, information-dense layouts with tiny font sizes optimised for screenshots — not for real-user readability. Every HTML generation pass MUST enforce these floors BEFORE emitting any markup.
+
+| Element | Minimum Size | Recommended | Anti-Pattern (NEVER) |
+|---------|-------------|-------------|---------------------|
+| **Body text / paragraphs** | `16px` (`1rem`) | `16–20px` | `text-[12px]`, `text-[13px]`, `text-[14px]`, `0.75rem`, `0.8rem`, `0.875rem` for body |
+| **Card titles / h3–h4** | `18px` (`1.125rem`) | `18–24px` | `text-[14px]`, `text-[16px]`, `1rem` for titles |
+| **Section headings / h2** | `24px` (`1.5rem`) | `24–36px` | `text-[18px]`, `text-[20px]` for section heads |
+| **Hero titles / h1** | `36px` (`2.25rem`) | `36–56px` | `text-[24px]`, `text-[28px]` for hero |
+| **Secondary/muted text** | `14px` (`0.875rem`) | `14–16px` | `text-[11px]`, `text-[12px]`, `0.7rem`, `0.75rem` |
+| **Code blocks (monospace)** | `13px` (`0.8125rem`) | `13–15px` | `text-[10px]`, `text-[11px]`, `0.65rem`, `0.7rem` |
+| **Badge/pill labels** | `11px` (`0.6875rem`) | `11–13px` | `text-[8px]`, `text-[9px]`, `text-[10px]` |
+| **Stat counters (large)** | `28px` (`1.75rem`) | `28–48px` | `text-[18px]`, `text-[20px]` for stat numbers |
+| **Stat sub-labels** | `11px` (`0.6875rem`) | `11–13px` | `text-[8px]`, `text-[9px]`, `text-[10px]` |
+| **Step numbers** | `14px` (`0.875rem`) | `14–18px` | `0.6rem` (9.6px), `0.65rem` |
+| **Checklist / list items** | `14px` (`0.875rem`) | `14–16px` | `0.75rem`, `0.8rem`, `text-[11px]` |
+| **Icon sizing in card titles** | `1.25em` relative to title | Match title height | `w-4 h-4` next to `text-xl` title |
+| **Line height (all text)** | `1.5` (WCAG SC 1.4.12) | `1.5–1.75` | `leading-none`, `leading-tight` for body |
+
+**Icon–Title Ratio Rule:** Icons adjacent to card titles MUST be sized proportionally. When a card title is `text-lg` (`18px`), the icon must be at minimum `w-5 h-5` (`20px`). When a title is `text-xl` (`20px`+), use `w-6 h-6` (`24px`). Mismatched tiny icons next to large titles signal visual hierarchy failure.
+
+**Tailwind class mapping for floors:**
+
+| Floor | Tailwind Utility | CSS `font-size` |
+|-------|-----------------|----------------|
+| 11px | `text-[11px]` | `0.6875rem` |
+| 13px | `text-[13px]` | `0.8125rem` |
+| 14px | `text-sm` | `0.875rem` |
+| 16px | `text-base` | `1rem` |
+| 18px | `text-lg` | `1.125rem` |
+| 20px | `text-xl` | `1.25rem` |
+| 24px | `text-2xl` | `1.5rem` |
+| 36px | `text-4xl` | `2.25rem` |
+
+**Enforcement rules:**
+- ✅ Every HTML generation pass MUST self-audit against this table before final output
+- ✅ Card titles MUST be visibly larger than card body text (minimum 2px / 0.125rem gap)
+- ✅ Use `rem` units (not `px`) for all font sizes — enables user zoom scaling
+- ✅ Prefer Tailwind utility classes over inline `font-size` where the page uses Tailwind
+- ✅ `-webkit-background-clip: text` MUST always be paired with standard `background-clip: text`
+- ❌ **NEVER** generate `text-[8px]`, `text-[9px]`, `text-[10px]` for ANY visible text — these are below WCAG floors
+- ❌ **NEVER** use `text-xs` (`12px`) for body copy or descriptions — only for non-essential decorative labels
+- ❌ **NEVER** set `font-size` below `0.6875rem` (`11px`) for any visible element
+- ❌ **NEVER** assume "compact looks professional" — readability on dark backgrounds requires LARGER sizes than light themes
 
 ### Visualisation Rules (MANDATORY)
 

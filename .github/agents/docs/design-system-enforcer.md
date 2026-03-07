@@ -76,6 +76,52 @@ These color pairings are APPROVED for card systems, section panels, and visual h
 
 ---
 
+## 📏 Font Size Token Floors (WCAG 2.2 AA — P0 Gate)
+
+**Authority:** `cortex-doc.prompt.md` § WCAG Font Size Floor Rules. Codified from Phase 108 accessibility audit where generated HTML produced 8–12px text that was unreadable on dark glassmorphism backgrounds.
+
+**Root cause lesson:** LLMs optimise for visual density, not readability. Dark backgrounds require ~20% larger text than light backgrounds for equivalent legibility. These floors are non-negotiable.
+
+### Token Validation — Font Size (Check 6)
+
+For every `font-size` value or Tailwind `text-*` class in proposed changes, verify it meets the floor for its element context:
+
+| Element Context | Minimum Token / Class | Violation Examples |
+|----------------|----------------------|-------------------|
+| Body / paragraph text | `text-base` / `1rem` / `16px` | `text-xs`, `text-sm`, `text-[12px]`, `text-[13px]`, `text-[14px]`, `0.75rem`, `0.8rem`, `0.875rem` |
+| Card / section titles | `text-lg` / `1.125rem` / `18px` | `text-base` (16px), `text-sm` (14px), `1rem` |
+| Section headings (h2) | `text-2xl` / `1.5rem` / `24px` | `text-lg`, `text-xl` |
+| Hero title (h1) | `text-4xl` / `2.25rem` / `36px` | `text-2xl`, `text-3xl` |
+| Secondary / muted | `text-sm` / `0.875rem` / `14px` | `text-xs`, `text-[11px]`, `text-[12px]` |
+| Code blocks | `text-[13px]` / `0.8125rem` | `text-[10px]`, `text-[11px]`, `text-[12px]` |
+| Badges / pills | `text-[11px]` / `0.6875rem` | `text-[8px]`, `text-[9px]`, `text-[10px]` |
+| Step numbers | `text-sm` / `0.875rem` / `14px` | `0.6rem` (9.6px), `0.65rem` |
+| Stat counters | `text-3xl` / `1.875rem` / `28px+` | `text-lg`, `text-xl` for stat numbers |
+
+### Icon–Title Proportion Check (Check 7)
+
+Icons adjacent to text headings MUST be proportional:
+
+| Title Class | Minimum Icon Size | Violation |
+|------------|------------------|-----------|
+| `text-lg` (18px) | `w-5 h-5` (20px) | `w-3 h-3`, `w-4 h-4` |
+| `text-xl` (20px) | `w-6 h-6` (24px) | `w-4 h-4`, `w-5 h-5` |
+| `text-2xl` (24px) | `w-7 h-7` (28px) | `w-5 h-5`, `w-6 h-6` |
+
+### Vendor Prefix Pairing Check (Check 8)
+
+`-webkit-background-clip: text` MUST be accompanied by the standard `background-clip: text` property in the same CSS rule. Missing the standard property triggers a CSS lint warning and may fail in non-WebKit browsers.
+
+### Enforcement
+
+- **P0 BLOCK** — any `font-size` below `11px` / `0.6875rem` for any visible element
+- **P0 BLOCK** — body text or card descriptions below `16px` / `1rem`
+- **P0 BLOCK** — card titles not visually larger than body text in the same card
+- **P1 FLAG** — icon–title proportion mismatch
+- **P1 FLAG** — missing `background-clip: text` alongside `-webkit-background-clip: text`
+
+---
+
 ## 📥 Inputs
 
 | Input | Source | Required |

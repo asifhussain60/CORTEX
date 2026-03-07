@@ -4,7 +4,7 @@ scope: non-production-admin
 # A11y + Perf Guardian Agent
 
 **Agent ID:** `a11y-perf-guardian`
-**Updated:** 2026-03-02
+**Updated:** 2026-03-07
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -58,6 +58,11 @@ Run all checks from `a11y_checklist.yaml`. Priority order:
 | a11y-020 | `<html lang='en'>` present | `grep '<html'` |
 | a11y-030 | No duplicate `id=` attributes | `grep 'id=' | sort | uniq -d` |
 | a11y-031 | All tab panels have correct ARIA (role, aria-selected, aria-controls) | Scan tab markup |
+| **a11y-040** | **Font size floor — no text below 11px** | `grep -E 'text-\[([0-9]\|10)px\]\|font-size:\s*0\.[0-5]\d*rem\|font-size:\s*[0-9]px\|font-size:\s*10px'` |
+| **a11y-041** | **Body text not below 16px (1rem)** | Scan `<p>`, card descriptions for `text-xs`, `text-[12px]`, `text-[13px]`, `text-[14px]`, `0.75rem`, `0.8rem` |
+| **a11y-042** | **Card titles visually larger than body text** | Verify card `<h3>`/`<h4>` font ≥ `18px` / `text-lg`; body ≤ `16px` / `text-base` |
+| **a11y-043** | **Icons proportional to adjacent title text** | `w-4 h-4` icons next to `text-xl+` titles = violation |
+| **a11y-044** | **`-webkit-background-clip: text` paired with `background-clip: text`** | `grep 'webkit-background-clip' | grep -v 'background-clip: text'` in same rule |
 | css-001 | Inline `style=` attributes — informational count (RELAXED — no longer blocks) | `grep 'style='` |
 
 ### P1 Checks (flag, do not block)

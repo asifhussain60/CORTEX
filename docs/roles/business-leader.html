@@ -141,14 +141,14 @@
             background: rgba(16,185,129,0.06);
             flex: 1;
         }
-        .ccp-id { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; display: block; margin-bottom: 0.35rem; }
+        .ccp-id { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; display: block; margin-bottom: 0.35rem; }
         .ccp-card-before .ccp-id { color: #f87171; }
         .ccp-card-after  .ccp-id { color: #34d399; }
-        .ccp-card-before p { color: #fca5a5; font-size: 0.78rem; line-height: 1.5; margin: 0; }
-        .ccp-card-after  p { color: #6ee7b7; font-size: 0.78rem; line-height: 1.5; margin: 0; }
+        .ccp-card-before p { color: #fca5a5; font-size: 0.875rem; line-height: 1.5; margin: 0; }
+        .ccp-card-after  p { color: #6ee7b7; font-size: 0.875rem; line-height: 1.5; margin: 0; }
         .ccp-divider { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.2); }
         .ccp-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
-        .ccp-divider-arrow { font-size: 0.65rem; color: rgba(255,255,255,0.2); font-weight: 900; }
+        .ccp-divider-arrow { font-size: 0.8125rem; color: rgba(255,255,255,0.2); font-weight: 900; }
 
         /* SDLC Pipeline — 2-row grid */
         .sdlc-pipeline {
@@ -169,8 +169,8 @@
         .sdlc-phase:hover { transform: translateY(-4px); box-shadow: 0 12px 32px -6px var(--phase-glow, rgba(0,0,0,0.3)); border-color: var(--phase-color, rgba(255,255,255,0.12)); }
         .sdlc-phase--certified { border-color: rgba(16,185,129,0.35); background: linear-gradient(160deg, rgba(16,185,129,0.08), rgba(16,185,129,0.03)); }
         .sdlc-icon  { font-size: 2.25rem; line-height: 1; }
-        .sdlc-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--phase-color, #e2e8f0); }
-        .sdlc-gate  { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: #94a3b8; white-space: nowrap; }
+        .sdlc-label { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--phase-color, #e2e8f0); }
+        .sdlc-gate  { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: #94a3b8; white-space: nowrap; }
         .sdlc-gate--dor  { border-color: rgba(0,212,255,0.25);   color: #67e8f9; }
         .sdlc-gate--arch { border-color: rgba(167,139,250,0.25); color: #c4b5fd; }
         .sdlc-gate--tdd  { border-color: rgba(139,92,246,0.3);   color: #a78bfa; }
@@ -178,7 +178,7 @@
         .sdlc-gate--lens { border-color: rgba(52,211,153,0.25);  color: #6ee7b7; }
         .sdlc-gate--sec  { border-color: rgba(248,113,113,0.3);  color: #fca5a5; }
         .sdlc-gate--dod  { border-color: rgba(16,185,129,0.35);  color: #34d399; background: rgba(16,185,129,0.08); }
-        .sdlc-desc { font-size: 0.72rem; color: #64748b; line-height: 1.5; margin-top: 0.1rem; }
+        .sdlc-desc { font-size: 0.8125rem; color: #64748b; line-height: 1.5; margin-top: 0.1rem; }
 
         /* Domain Bubbles */
         .domain-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
@@ -234,7 +234,7 @@
             </div>
 
             <div class="space-y-4 md:space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
                     <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></div>
                     AI Engineering Orchestration Framework
                 </div>
@@ -251,21 +251,21 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/30 to-teal-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 to-slate-900/90 hover:border-cyan-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-cyan-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(0,212,255,0.6)]">100×</div>
-                        <div class="text-[9px] md:text-[10px] text-cyan-300/80 uppercase tracking-widest font-bold">Defect Cost Ratio: Keyboard vs Production</div>
+                        <div class="text-[11px] md:text-[12px] text-cyan-300/80 uppercase tracking-widest font-bold">Defect Cost Ratio: Keyboard vs Production</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-teal-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 hover:border-emerald-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-emerald-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">94%</div>
-                        <div class="text-[9px] md:text-[10px] text-emerald-300/80 uppercase tracking-widest font-bold">Defects Caught at Keyboard</div>
+                        <div class="text-[11px] md:text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">Defects Caught at Keyboard</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 hover:border-violet-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">Zero</div>
-                        <div class="text-[9px] md:text-[10px] text-violet-300/80 uppercase tracking-widest font-bold">Governance Violations in Production</div>
+                        <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">Governance Violations in Production</div>
                     </div>
                 </div>
             </div>
@@ -277,7 +277,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> The Problem Space
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The Cost of Ungoverned AI</h2>
@@ -288,11 +288,11 @@
 
                 <div class="glass-card p-5 md:p-8">
                     <div class="flex justify-between items-center mb-5 pb-4 border-b border-white/5">
-                        <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-400">
+                        <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-red-400">
                             <span class="text-base">❌</span> Without CORTEX
                         </div>
-                        <div class="text-[9px] font-black uppercase tracking-widest text-slate-600">8 failure modes</div>
-                        <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-slate-600">8 failure modes</div>
+                        <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-400">
                             With CORTEX <span class="text-base">✅</span>
                         </div>
                     </div>
@@ -345,7 +345,7 @@
         <!-- SECTION 3: The Governed SDLC Pipeline -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> End-to-End Governance
                 </div>
                 <h2 class="section-title font-black tracking-tighter">The Governed SDLC Pipeline</h2>
@@ -403,16 +403,16 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold tracking-widest uppercase">Definition of Ready</div>
-                    <p class="text-xs text-slate-400 leading-relaxed">No work begins until acceptance criteria, security scope, and test plan are formally captured — not assumed.</p>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[11px] font-bold tracking-widest uppercase">Definition of Ready</div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">No work begins until acceptance criteria, security scope, and test plan are formally captured — not assumed.</p>
                 </div>
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold tracking-widest uppercase">Convergence Gate</div>
-                    <p class="text-xs text-slate-400 leading-relaxed">CORE-068 enforces detect → fix → rescan loops until zero P0/P1 violations remain — max 3 autonomous cycles per operation.</p>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[11px] font-bold tracking-widest uppercase">Convergence Gate</div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">CORE-068 enforces detect → fix → rescan loops until zero P0/P1 violations remain — max 3 autonomous cycles per operation.</p>
                 </div>
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-widest uppercase">Definition of Done</div>
-                    <p class="text-xs text-slate-400 leading-relaxed">Release certified only after all gates pass, audit trail is hash-linked, and DoD checklist is fully closed.</p>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold tracking-widest uppercase">Definition of Done</div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">Release certified only after all gates pass, audit trail is hash-linked, and DoD checklist is fully closed.</p>
                 </div>
             </div>
         </section>
@@ -423,7 +423,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Shift-Left Economics
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The Shift-Left Dividend</h2>
@@ -436,9 +436,9 @@
                     <div class="relative group">
                         <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-600/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="glass-card p-6 md:p-8 relative border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 to-slate-900/80 hover:border-cyan-400/50 transition-all">
-                            <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Cost Multiplier: Defect Escape by Stage</div>
+                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Cost Multiplier: Defect Escape by Stage</div>
                             <div id="roi-chart" class="h-52 md:h-64 w-full"></div>
-                            <div class="text-center text-[8px] text-emerald-400 font-bold uppercase tracking-widest mt-3">← CORTEX designed to catch 94% at the keyboard</div>
+                            <div class="text-center text-[11px] text-emerald-400 font-bold uppercase tracking-widest mt-3">← CORTEX designed to catch 94% at the keyboard</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -446,28 +446,28 @@
                             <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-teal-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900/80 hover:border-emerald-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-emerald-400 mb-2">4.2×</div>
-                                <div class="text-[9px] text-emerald-300/80 uppercase tracking-widest font-bold">Velocity Multiplier</div>
+                                <div class="text-[11px] text-emerald-300/80 uppercase tracking-widest font-bold">Velocity Multiplier</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-blue-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 to-slate-900/80 hover:border-cyan-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-cyan-400 mb-2">60%</div>
-                                <div class="text-[9px] text-cyan-300/80 uppercase tracking-widest font-bold">Innovation Focus</div>
+                                <div class="text-[11px] text-cyan-300/80 uppercase tracking-widest font-bold">Innovation Focus</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-violet-400 mb-2">40%</div>
-                                <div class="text-[9px] text-violet-300/80 uppercase tracking-widest font-bold">Cost Reduction / Feature</div>
+                                <div class="text-[11px] text-violet-300/80 uppercase tracking-widest font-bold">Cost Reduction / Feature</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-amber-400 mb-2">Day 1</div>
-                                <div class="text-[9px] text-amber-300/80 uppercase tracking-widest font-bold">Audit-Ready Compliance</div>
+                                <div class="text-[11px] text-amber-300/80 uppercase tracking-widest font-bold">Audit-Ready Compliance</div>
                             </div>
                         </div>
                     </div>
@@ -478,7 +478,7 @@
         <!-- SECTION 5: Architecture Proof -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="database" class="w-3.5 h-3.5"></i> Proven at Scale
                 </div>
                 <h2 class="section-title font-black tracking-tighter">The Architecture Behind the Promise</h2>
@@ -490,51 +490,51 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <div class="glass-card p-6 text-center space-y-2 border-cyan-500/20 transition-all hover:border-cyan-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-cyan-400">323</div>
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Orchestrator Files</div>
-                    <div class="text-[8px] text-slate-600">across 15 domains</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Orchestrator Files</div>
+                    <div class="text-[13px] text-slate-600">across 15 domains</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-violet-500/20 transition-all hover:border-violet-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-violet-400">30</div>
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
-                    <div class="text-[8px] text-slate-600">registered &amp; live</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
+                    <div class="text-[13px] text-slate-600">registered &amp; live</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-amber-500/20 transition-all hover:border-amber-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-amber-400">37</div>
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
-                    <div class="text-[8px] text-slate-600">enforced automatically</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
+                    <div class="text-[13px] text-slate-600">enforced automatically</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-emerald-500/20 transition-all hover:border-emerald-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-emerald-400">19k+</div>
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Tests Collected</div>
-                    <div class="text-[8px] text-slate-600">parallel execution</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Tests Collected</div>
+                    <div class="text-[13px] text-slate-600">parallel execution</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-red-500/20 transition-all hover:border-red-400/40 hover:-translate-y-1 col-span-2 md:col-span-1">
                     <div class="text-3xl md:text-4xl font-black text-red-400">9</div>
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
-                    <div class="text-[8px] text-slate-600">converging to zero violations</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
+                    <div class="text-[13px] text-slate-600">converging to zero violations</div>
                 </div>
             </div>
 
             <!-- Domain Bubble Grid -->
             <div class="glass-card p-6 md:p-8 space-y-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains</span>
-                    <span class="text-[10px] font-bold text-cyan-400">15 domains · 323 files</span>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains</span>
+                    <span class="text-[11px] font-bold text-cyan-400">15 domains · 323 files</span>
                 </div>
                 <div class="domain-grid">
-                    <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.25);width:110px;height:110px;background:rgba(0,212,255,0.07)"><span class="db-count" style="font-size:2rem">139</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">core</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#8b5cf6;--bubble-glow:rgba(139,92,246,0.25);width:90px;height:90px;background:rgba(139,92,246,0.07)"><span class="db-count" style="font-size:1.6rem">55</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">support</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#f59e0b;--bubble-glow:rgba(245,158,11,0.25);width:82px;height:82px;background:rgba(245,158,11,0.07)"><span class="db-count" style="font-size:1.4rem">33</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">domain</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">31</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">health</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2);width:68px;height:68px;background:rgba(167,139,250,0.06)"><span class="db-count" style="font-size:1.1rem">17</span><span class="db-name" style="font-size:0.52rem;margin-top:0.15rem">intelligence</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">13</span><span class="db-name" style="font-size:0.52rem;margin-top:0.15rem">validation</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">persona</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">workflow</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">response</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">git</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#94a3b8;--bubble-glow:rgba(148,163,184,0.15);width:45px;height:45px;background:rgba(148,163,184,0.04)"><span class="db-count" style="font-size:0.85rem">2</span><span class="db-name" style="font-size:0.46rem;margin-top:0.1rem">registry</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.25);width:110px;height:110px;background:rgba(0,212,255,0.07)"><span class="db-count" style="font-size:2rem">139</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">core</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#8b5cf6;--bubble-glow:rgba(139,92,246,0.25);width:90px;height:90px;background:rgba(139,92,246,0.07)"><span class="db-count" style="font-size:1.6rem">55</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">support</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#f59e0b;--bubble-glow:rgba(245,158,11,0.25);width:82px;height:82px;background:rgba(245,158,11,0.07)"><span class="db-count" style="font-size:1.4rem">33</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">domain</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">31</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">health</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2);width:68px;height:68px;background:rgba(167,139,250,0.06)"><span class="db-count" style="font-size:1.1rem">17</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.15rem">intelligence</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">13</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.15rem">validation</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">persona</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">workflow</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">response</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">git</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#94a3b8;--bubble-glow:rgba(148,163,184,0.15);width:45px;height:45px;background:rgba(148,163,184,0.04)"><span class="db-count" style="font-size:0.85rem">2</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">registry</span></div>
                 </div>
-                <p class="text-center text-[9px] text-slate-600 font-medium">Bubble size proportional to file count.</p>
+                <p class="text-center text-[13px] text-slate-600 font-medium">Bubble size proportional to file count.</p>
             </div>
         </section>
 
@@ -546,7 +546,7 @@
                 <div class="grid lg:grid-cols-2 gap-8 md:gap-16 items-center py-4">
                     <div class="space-y-8 md:space-y-10">
                         <div class="space-y-2">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                                 <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Corporate Resilience
                             </div>
                             <h2 class="section-title font-black tracking-tighter">The Intelligence Diamond</h2>
@@ -561,7 +561,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">LENS — Sensory System</h4>
-                                    <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Eliminates technical blind spots through deep codebase awareness before every execution.</p>
+                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Eliminates technical blind spots through deep codebase awareness before every execution.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -570,7 +570,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">REASONING — Strategy Selection</h4>
-                                    <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Matches task complexity to three tiers of intelligence: Quick, Targeted, Full.</p>
+                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Matches task complexity to three tiers of intelligence: Quick, Targeted, Full.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -579,7 +579,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">ORCHESTRATION — Execution Motor</h4>
-                                    <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Coordinates 323 specialised engines with structural Test-Driven Development.</p>
+                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Coordinates 323 specialised engines with structural Test-Driven Development.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -588,7 +588,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">GOVERNANCE — The Immune System</h4>
-                                    <p class="text-[11px] md:text-xs text-slate-500 leading-relaxed">Automatic enforcement of 37 CORE rules across 5 discrete security layers.</p>
+                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Automatic enforcement of 37 CORE rules across 5 discrete security layers.</p>
                                 </div>
                             </div>
                         </div>
@@ -602,19 +602,19 @@
                             </svg>
                             <div class="diamond-node top-0 left-1/2 -translate-x-1/2 -mt-8 border-cyan-500/50 shadow-[0_0_30px_rgba(0,212,255,0.2)]">
                                 <i data-lucide="eye" class="text-cyan-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Sensory</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Sensory</span>
                             </div>
                             <div class="diamond-node top-1/2 right-0 -translate-y-1/2 -mr-8 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                                 <i data-lucide="brain" class="text-emerald-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Logic</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Logic</span>
                             </div>
                             <div class="diamond-node bottom-0 left-1/2 -translate-x-1/2 -mb-8 border-violet-500/50 shadow-[0_0_30px_rgba(139,92,246,0.2)]">
                                 <i data-lucide="activity" class="text-violet-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Motor</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Motor</span>
                             </div>
                             <div class="diamond-node top-1/2 left-0 -translate-y-1/2 -ml-8 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
                                 <i data-lucide="shield-alert" class="text-red-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Immune</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Immune</span>
                             </div>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-20 h-20 rounded-full bg-slate-900 border-2 border-cyan-500/30 flex items-center justify-center shadow-[0_0_50px_rgba(0,212,255,0.15)]">
@@ -630,7 +630,7 @@
         <!-- SECTION 7: Institutional Memory & RCA -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Corporate Memory
                 </div>
                 <h2 class="section-title font-black tracking-tighter">Institutional Muscle Memory</h2>
@@ -645,7 +645,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys Chain</div>
-                        <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Linear root cause tracing for core logic failures across technology domains.</p>
+                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Linear root cause tracing for core logic failures across technology domains.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -653,7 +653,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone Matrix</div>
-                        <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Categorization across People, Process, and Technology failure axes.</p>
+                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Categorization across People, Process, and Technology failure axes.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -661,7 +661,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree Logic</div>
-                        <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Surfaces single points of failure via probability mapping across layers.</p>
+                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Surfaces single points of failure via probability mapping across layers.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -669,7 +669,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Temporal Chain</div>
-                        <p class="text-[10px] md:text-[11px] text-slate-500 leading-normal">Correlation of events pinpointing trigger conditions across time horizons.</p>
+                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Correlation of events pinpointing trigger conditions across time horizons.</p>
                     </div>
                 </div>
             </div>
@@ -682,18 +682,18 @@
                             CORTEX rewards successful patterns with higher confidence scores. Recurring defects trigger automated Prevention Advisories that prevent recurrence organisation-wide.
                         </p>
                         <div class="flex justify-center lg:justify-start gap-6">
-                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[8px] text-slate-500 uppercase tracking-widest">Reward</div></div>
-                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[8px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
+                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Reward</div></div>
+                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
                         </div>
                     </div>
                     <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20">
-                            <div class="text-[10px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
-                            <p class="text-[11px] text-slate-400 leading-relaxed">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire portfolio.</p>
+                            <div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
+                            <p class="text-[13px] text-slate-400 leading-relaxed">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire portfolio.</p>
                         </div>
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20">
-                            <div class="text-[10px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
-                            <p class="text-[11px] text-slate-400 leading-relaxed">All learning and enforcement recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
+                            <div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
+                            <p class="text-[13px] text-slate-400 leading-relaxed">All learning and enforcement recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
                         </div>
                     </div>
                 </div>
@@ -706,7 +706,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="users" class="w-3.5 h-3.5"></i> Role-Based Value
                     </div>
                     <h2 class="section-title font-black tracking-tighter">What CORTEX Delivers — By Role</h2>
@@ -722,7 +722,7 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">🎯</span>
                                 <div>
-                                    <div class="text-[8px] font-black uppercase tracking-widest text-cyan-400">Business Leadership</div>
+                                    <div class="text-[11px] font-black uppercase tracking-widest text-cyan-400">Business Leadership</div>
                                     <h4 class="text-base font-black tracking-tight">Governance Without Reports</h4>
                                 </div>
                             </div>
@@ -735,7 +735,7 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">🗺</span>
                                 <div>
-                                    <div class="text-[8px] font-black uppercase tracking-widest text-violet-400">Product Owners</div>
+                                    <div class="text-[11px] font-black uppercase tracking-widest text-violet-400">Product Owners</div>
                                     <h4 class="text-base font-black tracking-tight">Intent to Delivery</h4>
                                 </div>
                             </div>
@@ -748,7 +748,7 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">⚡</span>
                                 <div>
-                                    <div class="text-[8px] font-black uppercase tracking-widest text-emerald-400">Software Engineers</div>
+                                    <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">Software Engineers</div>
                                     <h4 class="text-base font-black tracking-tight">The Senior Engineer Who Never Sleeps</h4>
                                 </div>
                             </div>
@@ -761,7 +761,7 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-2xl">��</span>
                                 <div>
-                                    <div class="text-[8px] font-black uppercase tracking-widest text-amber-400">Curious Learners</div>
+                                    <div class="text-[11px] font-black uppercase tracking-widest text-amber-400">Curious Learners</div>
                                     <h4 class="text-base font-black tracking-tight">Living Reference</h4>
                                 </div>
                             </div>
@@ -770,47 +770,6 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- SECTION 8b: Architecture Deep Dive CTA — earns its place after the full picture is built -->
-        <section>
-            <a href="../architecture.html" class="block group" style="text-decoration:none;color:inherit;">
-                <div class="relative overflow-hidden rounded-3xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all duration-500" style="background:linear-gradient(135deg,rgba(0,212,255,0.06) 0%,rgba(139,92,246,0.06) 50%,rgba(16,185,129,0.06) 100%);">
-                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-violet-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-400/20 to-transparent"></div>
-                    <div class="relative flex flex-col lg:flex-row items-center gap-6 lg:gap-10 p-6 md:p-10 lg:p-12">
-                        <!-- Left: Icon cluster -->
-                        <div class="shrink-0 relative">
-                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-violet-500/20 flex items-center justify-center border border-cyan-500/20 group-hover:border-cyan-400/40 group-hover:shadow-[0_0_40px_rgba(0,212,255,0.2)] transition-all duration-500">
-                                <i data-lucide="cpu" class="w-10 h-10 md:w-12 md:h-12 text-cyan-400 group-hover:scale-110 transition-transform duration-300"></i>
-                            </div>
-                            <div class="absolute -top-2 -right-2 w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
-                                <i data-lucide="brain" class="w-4 h-4 text-violet-400"></i>
-                            </div>
-                            <div class="absolute -bottom-2 -left-2 w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-                            </div>
-                        </div>
-                        <!-- Center: Copy -->
-                        <div class="flex-1 text-center lg:text-left space-y-3">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[9px] md:text-[10px] font-bold tracking-widest uppercase">
-                                <i data-lucide="layers" class="w-3 h-3"></i> 7-Tab Interactive Deep Dive
-                            </div>
-                            <h3 class="text-xl md:text-2xl lg:text-3xl font-black tracking-tighter" style="font-family:'Space Grotesk',sans-serif;">
-                                Explore the <span class="gradient-text-cyan">CORTEX Brain Architecture</span>
-                            </h3>
-                            <p class="text-sm md:text-base text-slate-400 font-light leading-relaxed max-w-2xl">
-                                Understand the Intelligence Diamond behind your delivery pipeline — how 323 orchestrators, the LENS sensory system, and 37 governance rules enforce quality from intent to deployment.
-                            </p>
-                        </div>
-                        <!-- Right: Arrow -->
-                        <div class="shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center group-hover:bg-cyan-500/20 group-hover:border-cyan-400/40 group-hover:shadow-[0_0_24px_rgba(0,212,255,0.25)] transition-all duration-300">
-                            <i data-lucide="arrow-right" class="w-5 h-5 md:w-6 md:h-6 text-cyan-400 group-hover:translate-x-1 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </a>
         </section>
 
         <!-- SECTION 9: Strategic CTA -->
@@ -824,10 +783,10 @@
                     Establishing a framework that governs, learns, and delivers. Schedule an executive technical audit today.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button class="px-6 md:px-10 py-4 md:py-5 bg-cyan-500 text-black font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white hover:scale-105 transition-all">
+                    <button class="px-6 md:px-10 py-4 md:py-5 bg-cyan-500 text-black font-black uppercase tracking-widest text-[11px] md:text-xs rounded-full hover:bg-white hover:scale-105 transition-all">
                         Schedule Executive Briefing
                     </button>
-                    <button class="px-6 md:px-10 py-4 md:py-5 glass-card font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white/10 transition-all">
+                    <button class="px-6 md:px-10 py-4 md:py-5 glass-card font-black uppercase tracking-widest text-[11px] md:text-xs rounded-full hover:bg-white/10 transition-all">
                         Request Capability Audit
                     </button>
                 </div>
@@ -842,7 +801,7 @@
             <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
             <i data-lucide="shield" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
         </div>
-        <div class="text-[9px] md:text-[10px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
             &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Strategic Executive Command
         </div>
     </footer>

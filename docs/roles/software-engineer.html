@@ -60,7 +60,7 @@
         @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(20,184,166,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(20,184,166,0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(20,184,166,0); } }
 
         .analyzer-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-        .analyzer-tag { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.875rem; border-radius: 0.625rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: #94a3b8; transition: all 0.2s ease; cursor: default; }
+        .analyzer-tag { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.875rem; border-radius: 0.625rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 600; color: #94a3b8; transition: all 0.2s ease; cursor: default; }
         .analyzer-tag:hover { border-color: var(--tag-color, rgba(20,184,166,0.4)); color: var(--tag-color, #14b8a6); background: rgba(20,184,166,0.05); transform: translateY(-1px); }
         .analyzer-tag .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tag-color, #14b8a6); flex-shrink: 0; }
 
@@ -74,14 +74,14 @@
         .tdd-phase--green:hover { transform: translateY(-4px); box-shadow: 0 12px 30px -6px rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); }
         .tdd-phase--blue:hover  { transform: translateY(-4px); box-shadow: 0 12px 30px -6px rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); }
         .tdd-phase-icon  { font-size: 2.75rem; line-height: 1; }
-        .tdd-phase-label { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
-        .tdd-phase-desc  { font-size: 0.8rem; color: #64748b; line-height: 1.6; max-width: 22ch; }
+        .tdd-phase-label { font-size: 0.8125rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+        .tdd-phase-desc  { font-size: 0.875rem; color: #64748b; line-height: 1.6; max-width: 22ch; }
 
         .mcp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 0.625rem; }
         .mcp-tool { padding: 0.75rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.35rem; transition: all 0.2s ease; cursor: default; }
         .mcp-tool:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.05); transform: translateY(-2px); }
-        .mcp-tool-name { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; color: #14b8a6; }
-        .mcp-tool-desc { font-size: 0.62rem; color: #475569; line-height: 1.4; }
+        .mcp-tool-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #14b8a6; }
+        .mcp-tool-desc { font-size: 0.8125rem; color: #475569; line-height: 1.4; }
 
         .domain-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
         .domain-bubble { display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: default; flex-shrink: 0; }
@@ -89,7 +89,7 @@
         .domain-bubble .db-count { font-weight: 900; color: var(--bubble-color); line-height: 1; }
         .domain-bubble .db-name  { font-family: 'JetBrains Mono', monospace; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.06em; text-align: center; }
 
-        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw  { color: #f472b6; }
         .code-fn  { color: #60a5fa; }
         .code-str { color: #34d399; }
@@ -100,14 +100,14 @@
         .gov-layers { display: flex; flex-direction: column; gap: 0.5rem; }
         .gov-layer { padding: 0.875rem 1.25rem; border-radius: 0.75rem; border-left: 3px solid var(--layer-color, #14b8a6); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 1rem; transition: background 0.2s ease; }
         .gov-layer:hover { background: rgba(20,184,166,0.04); }
-        .gov-layer-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700; color: var(--layer-color, #14b8a6); white-space: nowrap; }
-        .gov-layer-desc  { font-size: 0.8rem; color: #94a3b8; }
+        .gov-layer-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: var(--layer-color, #14b8a6); white-space: nowrap; }
+        .gov-layer-desc  { font-size: 0.875rem; color: #94a3b8; }
 
         .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.875rem; }
         .agent-card { padding: 1rem 1.125rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.5rem; transition: all 0.2s ease; cursor: default; }
         .agent-card:hover { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.05); transform: translateY(-2px); }
-        .agent-name { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; color: #a78bfa; }
-        .agent-role { font-size: 0.62rem; color: #475569; line-height: 1.4; }
+        .agent-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #a78bfa; }
+        .agent-role { font-size: 0.8125rem; color: #475569; line-height: 1.4; }
 
         .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
 
@@ -139,7 +139,7 @@
                 <div class="hero-divider-line"></div>
             </div>
             <div class="space-y-4 md:space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
                     <div class="w-1.5 h-1.5 rounded-full bg-teal-400 pulse-dot"></div>
                     AI Engineering Orchestration Framework
                 </div>
@@ -155,21 +155,21 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-teal-600/30 to-emerald-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-teal-500/40 bg-gradient-to-br from-teal-950/80 to-slate-900/90 hover:border-teal-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-teal-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(20,184,166,0.6)]">9</div>
-                        <div class="text-[9px] md:text-[10px] text-teal-300/80 uppercase tracking-widest font-bold">LENS Analyzers — Parallel, Sub-1s</div>
+                        <div class="text-[11px] md:text-[12px] text-teal-300/80 uppercase tracking-widest font-bold">LENS Analyzers — Parallel, Sub-1s</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-green-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 hover:border-emerald-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-emerald-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">30+</div>
-                        <div class="text-[9px] md:text-[10px] text-emerald-300/80 uppercase tracking-widest font-bold">MCP Tools in Copilot Chat</div>
+                        <div class="text-[11px] md:text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">MCP Tools in Copilot Chat</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 hover:border-violet-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">290+</div>
-                        <div class="text-[9px] md:text-[10px] text-violet-300/80 uppercase tracking-widest font-bold">Orchestrators Across 14 Domains</div>
+                        <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">Orchestrators Across 14 Domains</div>
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="eye" class="w-3.5 h-3.5"></i> The Sensory System
                     </div>
                     <h2 class="section-title font-black tracking-tighter">LENS — Language · Examination · Navigation · Synthesis</h2>
@@ -203,34 +203,34 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="zap" class="w-5 h-5"></i></div>
-                        <div class="text-[8px] font-black uppercase tracking-widest text-teal-500">Tier 1</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Tier 1</div>
                         <h4 class="font-bold text-sm tracking-tighter text-teal-300">Quick — &lt;200ms</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Cached governance rules and framework knowledge. Used for simple queries, definitions, and rule lookups — the smallest footprint for the simplest requests.</p>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">Cached governance rules and framework knowledge. Used for simple queries, definitions, and rule lookups — the smallest footprint for the simplest requests.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900/80 hover:border-emerald-400/50 transition-all">
                         <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="crosshair" class="w-5 h-5"></i></div>
-                        <div class="text-[8px] font-black uppercase tracking-widest text-emerald-500">Tier 2</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 2</div>
                         <h4 class="font-bold text-sm tracking-tighter text-emerald-300">Targeted — &lt;2s</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">LENS analysis of relevant files plus domain knowledge. The daily workflow: build, fix, refactor. Cross-file changes with your actual naming conventions and patterns applied.</p>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">LENS analysis of relevant files plus domain knowledge. The daily workflow: build, fix, refactor. Cross-file changes with your actual naming conventions and patterns applied.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                         <div class="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="layers" class="w-5 h-5"></i></div>
-                        <div class="text-[8px] font-black uppercase tracking-widest text-violet-500">Tier 3</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 3</div>
                         <h4 class="font-bold text-sm tracking-tighter text-violet-300">Full — &lt;10s</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">All 9 analyzers plus work item context plus deep cross-domain synthesis. Audits, investigations, architecture changes, production readiness certification.</p>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">All 9 analyzers plus work item context plus deep cross-domain synthesis. Audits, investigations, architecture changes, production readiness certification.</p>
                     </div>
                 </div>
                 <div class="glass-card p-5 md:p-7 space-y-3 border-teal-500/20">
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">Session Context Chain — LENS Remembers Every Turn</div>
-                    <p class="text-xs text-slate-400 leading-relaxed max-w-4xl">CORTEX injects the prior five requests from your session into each LENS run — so when you say "now add rate limiting," CORTEX already understands the auth module, service patterns, and security constraints established earlier. Every request is persisted to SQLite with a SHA-256 hash, parent ID, status transitions, and full routing chain.</p>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Session Context Chain — LENS Remembers Every Turn</div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed max-w-4xl">CORTEX injects the prior five requests from your session into each LENS run — so when you say "now add rate limiting," CORTEX already understands the auth module, service patterns, and security constraints established earlier. Every request is persisted to SQLite with a SHA-256 hash, parent ID, status transitions, and full routing chain.</p>
                     <div class="flex flex-wrap gap-2 items-center mt-2">
-                        <div class="px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-[9px] uppercase tracking-widest">RECEIVED</div>
+                        <div class="px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-[11px] uppercase tracking-widest">RECEIVED</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-[9px] uppercase tracking-widest">PROCESSING</div>
+                        <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-[11px] uppercase tracking-widest">PROCESSING</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold text-[9px] uppercase tracking-widest">LENS Enriched</div>
+                        <div class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold text-[11px] uppercase tracking-widest">LENS Enriched</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px] uppercase tracking-widest">COMPLETED ✅</div>
+                        <div class="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[11px] uppercase tracking-widest">COMPLETED ✅</div>
                     </div>
                 </div>
             </div>
@@ -239,7 +239,7 @@
         <!-- BRAIN -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="brain" class="w-3.5 h-3.5"></i> Intelligence Architecture
                 </div>
                 <h2 class="section-title font-black tracking-tighter">Perception → Reasoning → Action</h2>
@@ -249,10 +249,10 @@
                 <div class="glass-card p-6 md:p-8 space-y-4 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
-                        <div><div class="text-[8px] font-black uppercase tracking-widest text-teal-500">Tier 1</div><h4 class="font-black text-base tracking-tighter">Perception</h4></div>
+                        <div><div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Tier 1</div><h4 class="font-black text-base tracking-tighter">Perception</h4></div>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">LENS scans 9 dimensions simultaneously. Matches your codebase against canonical architectural patterns with confidence scores 0–1.0. If your code uses Repository at 0.92, CORTEX follows that pattern — not an incompatible alternative.</p>
-                    <div class="code-block text-[10px]"><span class="code-cmt"># Before every execution:</span>
+                    <p class="text-[14px] text-slate-500 leading-relaxed">LENS scans 9 dimensions simultaneously. Matches your codebase against canonical architectural patterns with confidence scores 0–1.0. If your code uses Repository at 0.92, CORTEX follows that pattern — not an incompatible alternative.</p>
+                    <div class="code-block text-[13px]"><span class="code-cmt"># Before every execution:</span>
 <span class="code-fn">lens.scan</span>(<span class="code-str">"structural"</span>)
 <span class="code-fn">lens.scan</span>(<span class="code-str">"security"</span>)
 <span class="code-fn">lens.scan</span>(<span class="code-str">"history"</span>)
@@ -261,10 +261,10 @@
                 <div class="glass-card p-6 md:p-8 space-y-4 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900/80 hover:border-emerald-400/50 transition-all">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                        <div><div class="text-[8px] font-black uppercase tracking-widest text-emerald-500">Tier 2</div><h4 class="font-black text-base tracking-tighter">Reasoning</h4></div>
+                        <div><div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 2</div><h4 class="font-black text-base tracking-tighter">Reasoning</h4></div>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">IntelligenceFacade selects Quick, Targeted, or Full strategy based on request complexity. Each strategy carries a historical success rate that updates after every execution — CORTEX learns what works for your team.</p>
-                    <div class="code-block text-[10px]"><span class="code-cls">IntelligenceFacade</span>
+                    <p class="text-[14px] text-slate-500 leading-relaxed">IntelligenceFacade selects Quick, Targeted, or Full strategy based on request complexity. Each strategy carries a historical success rate that updates after every execution — CORTEX learns what works for your team.</p>
+                    <div class="code-block text-[13px]"><span class="code-cls">IntelligenceFacade</span>
   .<span class="code-fn">select_strategy</span>(ctx)
 <span class="code-cmt"># → QUICK | TARGETED | FULL</span>
   .<span class="code-fn">check_rca_history</span>()
@@ -273,10 +273,10 @@
                 <div class="glass-card p-6 md:p-8 space-y-4 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
-                        <div><div class="text-[8px] font-black uppercase tracking-widest text-violet-500">Tier 3</div><h4 class="font-black text-base tracking-tighter">Action</h4></div>
+                        <div><div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 3</div><h4 class="font-black text-base tracking-tighter">Action</h4></div>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">MasterOrchestrator routes to intent-specialised orchestrators. AC markers emitted at entry and exit. Enforcement gates fire. Convergence loops rescan until zero P0/P1 violations — not a single pass. Every step has a rollback point.</p>
-                    <div class="code-block text-[10px]"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
+                    <p class="text-[14px] text-slate-500 leading-relaxed">MasterOrchestrator routes to intent-specialised orchestrators. AC markers emitted at entry and exit. Enforcement gates fire. Convergence loops rescan until zero P0/P1 violations — not a single pass. Every step has a rollback point.</p>
+                    <div class="code-block text-[13px]"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
 <span class="code-cls">MasterOrchestrator</span>
   .<span class="code-fn">route</span>(IMPLEMENT)
 <span class="code-fn">enforce</span>() <span class="code-cmt"># P0/P1 gate</span>
@@ -291,7 +291,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> CORE-008 — Immutable Contract
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The TDD Quality Flywheel</h2>
@@ -316,32 +316,32 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="glass-card p-5 space-y-2 border-red-500/20">
-                        <div class="text-[9px] font-black uppercase tracking-widest text-red-400">Test Quality Scoring</div>
-                        <p class="text-xs text-slate-400 leading-relaxed">Every test scored across 5 dimensions: Impact, Likelihood, Detection, Efficiency, Maintenance. Top-tier tests promoted to the Golden suite. Low-quality tests flagged for removal — false confidence is worse than no test.</p>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-red-400">Test Quality Scoring</div>
+                        <p class="text-[14px] text-slate-400 leading-relaxed">Every test scored across 5 dimensions: Impact, Likelihood, Detection, Efficiency, Maintenance. Top-tier tests promoted to the Golden suite. Low-quality tests flagged for removal — false confidence is worse than no test.</p>
                     </div>
                     <div class="glass-card p-5 space-y-2 border-violet-500/20">
-                        <div class="text-[9px] font-black uppercase tracking-widest text-violet-400">Golden Tests — Never Break</div>
-                        <p class="text-xs text-slate-400 leading-relaxed">A curated set of high-scoring tests covering critical end-to-end behaviours. Promoted by quality scores. Contract is absolute: they must always pass with zero regressions. A golden test failure is production-blocking.</p>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-400">Golden Tests — Never Break</div>
+                        <p class="text-[14px] text-slate-400 leading-relaxed">A curated set of high-scoring tests covering critical end-to-end behaviours. Promoted by quality scores. Contract is absolute: they must always pass with zero regressions. A golden test failure is production-blocking.</p>
                     </div>
                     <div class="glass-card p-5 space-y-2 border-emerald-500/20">
-                        <div class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Sweep Completeness (CORE-064)</div>
-                        <p class="text-xs text-slate-400 leading-relaxed">When one instance of an issue is found, CORTEX scans the entire codebase and fixes every occurrence. The sweep is not complete until the catalogue is empty — no partial fixes allowed.</p>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">Sweep Completeness (CORE-064)</div>
+                        <p class="text-[14px] text-slate-400 leading-relaxed">When one instance of an issue is found, CORTEX scans the entire codebase and fixes every occurrence. The sweep is not complete until the catalogue is empty — no partial fixes allowed.</p>
                     </div>
                 </div>
                 <div class="glass-card p-6 md:p-7 space-y-4 border-violet-500/20">
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-2">TDD Enforcement Chain — CORE-008</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-2">TDD Enforcement Chain — CORE-008</div>
                     <div class="flex flex-wrap gap-2 items-center">
-                        <div class="px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold text-[9px] uppercase tracking-widest">No test? BLOCKED</div>
+                        <div class="px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold text-[11px] uppercase tracking-widest">No test? BLOCKED</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold text-[9px] uppercase tracking-widest">Write RED test</div>
+                        <div class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold text-[11px] uppercase tracking-widest">Write RED test</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-[9px] uppercase tracking-widest">Implement minimum</div>
+                        <div class="px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-[11px] uppercase tracking-widest">Implement minimum</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-[9px] uppercase tracking-widest">GREEN passes</div>
+                        <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-[11px] uppercase tracking-widest">GREEN passes</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px] uppercase tracking-widest">REFACTOR + rescan</div>
+                        <div class="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[11px] uppercase tracking-widest">REFACTOR + rescan</div>
                         <span class="text-slate-600">→</span>
-                        <div class="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 font-bold text-[9px] uppercase tracking-widest">DoD Certified ✅</div>
+                        <div class="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 font-bold text-[11px] uppercase tracking-widest">DoD Certified ✅</div>
                     </div>
                 </div>
             </div>
@@ -350,7 +350,7 @@
         <!-- ORCHESTRATOR ARCHITECTURE -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="network" class="w-3.5 h-3.5"></i> Orchestrator Architecture
                 </div>
                 <h2 class="section-title font-black tracking-tighter">290+ Orchestrators — 14 Domains</h2>
@@ -358,31 +358,31 @@
             </div>
             <div class="glass-card p-6 md:p-8 space-y-5">
                 <div class="flex items-center justify-between flex-wrap gap-2">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains by File Count</span>
-                    <span class="text-[10px] font-bold text-teal-400">14 domains · 290+ files</span>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains by File Count</span>
+                    <span class="text-[11px] font-bold text-teal-400">14 domains · 290+ files</span>
                 </div>
                 <div class="domain-grid">
-                    <div class="domain-bubble" style="--bubble-color:#14b8a6;--bubble-glow:rgba(20,184,166,0.25);width:110px;height:110px;background:rgba(20,184,166,0.07)"><span class="db-count" style="font-size:2rem">130+</span><span class="db-name" style="font-size:0.52rem;margin-top:0.2rem">core</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#8b5cf6;--bubble-glow:rgba(139,92,246,0.25);width:90px;height:90px;background:rgba(139,92,246,0.07)"><span class="db-count" style="font-size:1.6rem">50+</span><span class="db-name" style="font-size:0.52rem;margin-top:0.2rem">support</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#f59e0b;--bubble-glow:rgba(245,158,11,0.25);width:82px;height:82px;background:rgba(245,158,11,0.07)"><span class="db-count" style="font-size:1.4rem">25+</span><span class="db-name" style="font-size:0.52rem;margin-top:0.2rem">domain</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">25+</span><span class="db-name" style="font-size:0.52rem;margin-top:0.2rem">health</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2);width:68px;height:68px;background:rgba(167,139,250,0.06)"><span class="db-count" style="font-size:1.1rem">15+</span><span class="db-name" style="font-size:0.5rem;margin-top:0.15rem">intelligence</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">13</span><span class="db-name" style="font-size:0.5rem;margin-top:0.15rem">validation</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">persona</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">workflow</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.46rem;margin-top:0.1rem">response</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.46rem;margin-top:0.1rem">git</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#14b8a6;--bubble-glow:rgba(20,184,166,0.25);width:110px;height:110px;background:rgba(20,184,166,0.07)"><span class="db-count" style="font-size:2rem">130+</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">core</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#8b5cf6;--bubble-glow:rgba(139,92,246,0.25);width:90px;height:90px;background:rgba(139,92,246,0.07)"><span class="db-count" style="font-size:1.6rem">50+</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">support</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#f59e0b;--bubble-glow:rgba(245,158,11,0.25);width:82px;height:82px;background:rgba(245,158,11,0.07)"><span class="db-count" style="font-size:1.4rem">25+</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">domain</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">25+</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">health</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2);width:68px;height:68px;background:rgba(167,139,250,0.06)"><span class="db-count" style="font-size:1.1rem">15+</span><span class="db-name" style="font-size:0.625rem;margin-top:0.15rem">intelligence</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">13</span><span class="db-name" style="font-size:0.625rem;margin-top:0.15rem">validation</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">persona</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">workflow</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">response</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">git</span></div>
                 </div>
             </div>
             <div class="glass-card p-6 md:p-8 space-y-4 border-teal-500/20">
-                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Intent → Orchestrator Routing (30+ types · classified in &lt;40ms)</div>
+                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Intent → Orchestrator Routing (30+ types · classified in &lt;40ms)</div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-teal-500/5 border border-teal-500/15"><div class="font-mono text-[9px] font-bold text-teal-400 bg-teal-950/80 px-2 py-1 rounded-md shrink-0">IMPLEMENT</div><span class="text-[10px] text-slate-500">→ TDDOrchestrator + holistic-validation-gate</span></div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/15"><div class="font-mono text-[9px] font-bold text-red-400 bg-red-950/80 px-2 py-1 rounded-md shrink-0">DEBUG</div><span class="text-[10px] text-slate-500">→ DebuggerOrchestrator + MarkerInjectionEngine</span></div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-violet-500/5 border border-violet-500/15"><div class="font-mono text-[9px] font-bold text-violet-400 bg-violet-950/80 px-2 py-1 rounded-md shrink-0">REFACTOR</div><span class="text-[10px] text-slate-500">→ RefactoringOrchestrator + WorkflowComposer</span></div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/15"><div class="font-mono text-[9px] font-bold text-amber-400 bg-amber-950/80 px-2 py-1 rounded-md shrink-0">AUDIT</div><span class="text-[10px] text-slate-500">→ AuditCoordinator → HealthMonitor → Enforcer</span></div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/15"><div class="font-mono text-[9px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-1 rounded-md shrink-0">FIX</div><span class="text-[10px] text-slate-500">→ TDDOrchestrator + detect-fix-rescan-loop</span></div>
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15"><div class="font-mono text-[9px] font-bold text-blue-400 bg-blue-950/80 px-2 py-1 rounded-md shrink-0">VACUUM</div><span class="text-[10px] text-slate-500">→ VacuumOrchestrator (8-stage cleanup pipeline)</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-teal-500/5 border border-teal-500/15"><div class="font-mono text-[11px] font-bold text-teal-400 bg-teal-950/80 px-2 py-1 rounded-md shrink-0">IMPLEMENT</div><span class="text-[12px] text-slate-500">→ TDDOrchestrator + holistic-validation-gate</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/15"><div class="font-mono text-[11px] font-bold text-red-400 bg-red-950/80 px-2 py-1 rounded-md shrink-0">DEBUG</div><span class="text-[12px] text-slate-500">→ DebuggerOrchestrator + MarkerInjectionEngine</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-violet-500/5 border border-violet-500/15"><div class="font-mono text-[11px] font-bold text-violet-400 bg-violet-950/80 px-2 py-1 rounded-md shrink-0">REFACTOR</div><span class="text-[12px] text-slate-500">→ RefactoringOrchestrator + WorkflowComposer</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/15"><div class="font-mono text-[11px] font-bold text-amber-400 bg-amber-950/80 px-2 py-1 rounded-md shrink-0">AUDIT</div><span class="text-[12px] text-slate-500">→ AuditCoordinator → HealthMonitor → Enforcer</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/15"><div class="font-mono text-[11px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-1 rounded-md shrink-0">FIX</div><span class="text-[12px] text-slate-500">→ TDDOrchestrator + detect-fix-rescan-loop</span></div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15"><div class="font-mono text-[11px] font-bold text-blue-400 bg-blue-950/80 px-2 py-1 rounded-md shrink-0">VACUUM</div><span class="text-[12px] text-slate-500">→ VacuumOrchestrator (8-stage cleanup pipeline)</span></div>
                 </div>
             </div>
         </section>
@@ -393,7 +393,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Governance as Code
                     </div>
                     <h2 class="section-title font-black tracking-tighter">Governance as Infrastructure</h2>
@@ -403,7 +403,7 @@
                     <div class="glass-card p-6 space-y-4 border-2 border-red-500/25 bg-gradient-to-br from-red-950/30 to-slate-900/80 hover:border-red-400/40 transition-all">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center text-red-400"><i data-lucide="git-commit-horizontal" class="w-4 h-4"></i></div>
-                            <div class="text-[8px] font-black uppercase tracking-widest text-red-400">Layer 1 — Pre-Commit</div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-red-400">Layer 1 — Pre-Commit</div>
                         </div>
                         <div class="gov-layers">
                             <div class="gov-layer" style="--layer-color:#f87171"><div class="gov-layer-badge">CORE-011</div><div class="gov-layer-desc">Type hints on all functions — no exceptions</div></div>
@@ -415,7 +415,7 @@
                     <div class="glass-card p-6 space-y-4 border-2 border-amber-500/25 bg-gradient-to-br from-amber-950/30 to-slate-900/80 hover:border-amber-400/40 transition-all">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="settings" class="w-4 h-4"></i></div>
-                            <div class="text-[8px] font-black uppercase tracking-widest text-amber-400">Layer 2 — CI Pipeline</div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-amber-400">Layer 2 — CI Pipeline</div>
                         </div>
                         <div class="gov-layers">
                             <div class="gov-layer" style="--layer-color:#fbbf24"><div class="gov-layer-badge">CORE-008</div><div class="gov-layer-desc">TDD mandatory — test must pre-exist implementation</div></div>
@@ -427,7 +427,7 @@
                     <div class="glass-card p-6 space-y-4 border-2 border-teal-500/25 bg-gradient-to-br from-teal-950/30 to-slate-900/80 hover:border-teal-400/40 transition-all">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="radio" class="w-4 h-4"></i></div>
-                            <div class="text-[8px] font-black uppercase tracking-widest text-teal-400">Layer 3 — Runtime</div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-teal-400">Layer 3 — Runtime</div>
                         </div>
                         <div class="gov-layers">
                             <div class="gov-layer" style="--layer-color:#14b8a6"><div class="gov-layer-badge">AC Markers</div><div class="gov-layer-desc">AC_START / AC_COMPLETE on every public method</div></div>
@@ -440,9 +440,9 @@
                 <div class="glass-card p-6 space-y-3 border-emerald-500/20 bg-gradient-to-br from-emerald-950/20 to-transparent">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
-                        <div class="text-[9px] font-black uppercase tracking-widest text-emerald-400">The Convergence Gate — No Operation Completes Half-Done (CORE-068)</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">The Convergence Gate — No Operation Completes Half-Done (CORE-068)</div>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed max-w-4xl">An audit does not complete because CORTEX ran through the checklist. It completes because the items are resolved. An implementation does not complete when tests pass — it completes when tests pass <em>and</em> no new governance violations were introduced. The detect→fix→rescan loop repeats up to 3 autonomous cycles until zero P0/P1 violations remain.</p>
+                    <p class="text-[14px] text-slate-400 leading-relaxed max-w-4xl">An audit does not complete because CORTEX ran through the checklist. It completes because the items are resolved. An implementation does not complete when tests pass — it completes when tests pass <em>and</em> no new governance violations were introduced. The detect→fix→rescan loop repeats up to 3 autonomous cycles until zero P0/P1 violations remain.</p>
                 </div>
             </div>
         </section>
@@ -453,7 +453,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="terminal" class="w-3.5 h-3.5"></i> In Your IDE — Pylance-Style Auto-Start
                     </div>
                     <h2 class="section-title font-black tracking-tighter">30+ MCP Tools — Zero Configuration</h2>
@@ -482,7 +482,7 @@
                     <div class="mcp-tool"><div class="mcp-tool-name">cortex_tools_catalog</div><div class="mcp-tool-desc">Live list of all registered tools with descriptions</div></div>
                 </div>
                 <div class="glass-card p-6 space-y-3 border-emerald-500/20">
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">MCP Configuration — auto-detected by VS Code Copilot Chat</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">MCP Configuration — auto-detected by VS Code Copilot Chat</div>
                     <div class="code-block"><span class="code-cmt">// .vscode/settings.json — already present in this workspace</span>
 {
   <span class="code-str">"github.copilot.chat.mcpServers"</span>: {
@@ -504,7 +504,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="bot" class="w-3.5 h-3.5"></i> Agent Authoring — You Can Build This
                     </div>
                     <h2 class="section-title font-black tracking-tighter">Build Your Own Agents</h2>
@@ -517,16 +517,16 @@
                         <div class="glass-card p-6 space-y-4 border-violet-500/20">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400 shrink-0"><i data-lucide="puzzle" class="w-4 h-4"></i></div>
-                                <div class="text-[9px] font-black uppercase tracking-widest text-violet-400">What an Agent Is</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-violet-400">What an Agent Is</div>
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">An agent is a Markdown prompt file placed in <code class="font-mono text-violet-300 text-[10px]">.github/agents/</code>. It declares its scope, its governing rules, its orchestration chain, and its output contract. CORTEX auto-discovers agents, registers them in the orchestration layer, and routes relevant intents to them — no manual wiring and no Python required to get started.</p>
+                            <p class="text-[14px] text-slate-400 leading-relaxed">An agent is a Markdown prompt file placed in <code class="font-mono text-violet-300 text-[13px]">.github/agents/</code>. It declares its scope, its governing rules, its orchestration chain, and its output contract. CORTEX auto-discovers agents, registers them in the orchestration layer, and routes relevant intents to them — no manual wiring and no Python required to get started.</p>
                         </div>
                         <div class="glass-card p-6 space-y-4 border-emerald-500/20">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 shrink-0"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
-                                <div class="text-[9px] font-black uppercase tracking-widest text-emerald-400">What You Get for Free</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">What You Get for Free</div>
                             </div>
-                            <ul class="space-y-2 text-xs text-slate-400">
+                            <ul class="space-y-2 text-[14px] text-slate-400">
                                 <li class="flex gap-2"><span class="text-emerald-400 mt-0.5">•</span>Automatic governance enforcement — your agent inherits all CORE rules without extra config</li>
                                 <li class="flex gap-2"><span class="text-emerald-400 mt-0.5">•</span>RCA memory integration — PLIP-001 consults prior failures before every run automatically</li>
                                 <li class="flex gap-2"><span class="text-emerald-400 mt-0.5">•</span>SQLite audit trail — every invocation recorded with AC markers and full routing chain</li>
@@ -537,8 +537,8 @@
                     </div>
                     <div class="space-y-5">
                         <div class="glass-card p-6 space-y-3 border-violet-500/20">
-                            <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Agent Scaffold — <code class="text-violet-300">.github/agents/my-team-agent.md</code></div>
-                            <div class="code-block text-[10px]"><span class="code-dec">---</span>
+                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Agent Scaffold — <code class="text-violet-300">.github/agents/my-team-agent.md</code></div>
+                            <div class="code-block text-[13px]"><span class="code-dec">---</span>
 <span class="code-str">scope</span>: <span class="code-str">my-domain</span>
 <span class="code-str">intent</span>: [IMPLEMENT, FIX, REFACTOR]
 <span class="code-str">orchestration</span>: Classifier → My Agent
@@ -559,7 +559,7 @@ Gate: holistic-validation-gate.yaml
 <span class="code-cmt"># No Python. No wiring. Just declare.</span></div>
                         </div>
                         <div class="glass-card p-5 space-y-3 border-violet-500/20">
-                            <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Built-in Agents to Learn From</div>
+                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Built-in Agents to Learn From</div>
                             <div class="agent-grid">
                                 <div class="agent-card"><div class="agent-name">cortex-debugger.md</div><div class="agent-role">Multi-stack debug: inject → analyse → fix plan across 8 strategies</div></div>
                                 <div class="agent-card"><div class="agent-name">cortex-auditor.md</div><div class="agent-role">9-stage production readiness audit with autonomous fix</div></div>
@@ -572,23 +572,23 @@ Gate: holistic-validation-gate.yaml
                     </div>
                 </div>
                 <div class="glass-card p-5 md:p-7 space-y-4 border-violet-500/20 bg-gradient-to-br from-violet-950/20 to-transparent">
-                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Quick Start — Three Steps to Your First Agent</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Quick Start — Three Steps to Your First Agent</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="flex gap-3 items-start">
-                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[9px] font-black text-violet-400 mt-0.5">1</div>
-                            <div class="code-block text-[10px] flex-1"><span class="code-cmt"># Copy the scaffold</span>
+                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[11px] font-black text-violet-400 mt-0.5">1</div>
+                            <div class="code-block text-[13px] flex-1"><span class="code-cmt"># Copy the scaffold</span>
 cp .github/agents/_template.md \
   .github/agents/my-agent.md</div>
                         </div>
                         <div class="flex gap-3 items-start">
-                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[9px] font-black text-violet-400 mt-0.5">2</div>
-                            <div class="code-block text-[10px] flex-1"><span class="code-cmt"># Declare scope + intent</span>
+                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[11px] font-black text-violet-400 mt-0.5">2</div>
+                            <div class="code-block text-[13px] flex-1"><span class="code-cmt"># Declare scope + intent</span>
 <span class="code-cmt"># Edit your agent.md</span>
 <span class="code-cmt"># No Python required</span></div>
                         </div>
                         <div class="flex gap-3 items-start">
-                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[9px] font-black text-violet-400 mt-0.5">3</div>
-                            <div class="code-block text-[10px] flex-1"><span class="code-cmt"># Verify in Copilot Chat</span>
+                            <div class="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0 text-[11px] font-black text-violet-400 mt-0.5">3</div>
+                            <div class="code-block text-[13px] flex-1"><span class="code-cmt"># Verify in Copilot Chat</span>
 cortex_verify op=agents
 <span class="code-cmt"># → agent listed ✅</span></div>
                         </div>
@@ -600,7 +600,7 @@ cortex_verify op=agents
         <!-- RCA MEMORY ENGINE -->
         <section class="space-y-10">
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[10px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Institutional Memory
                 </div>
                 <h2 class="section-title font-black tracking-tighter">RCA Memory — Failures Never Repeat</h2>
@@ -608,8 +608,8 @@ cortex_verify op=agents
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-card p-6 space-y-4 border-red-500/20">
-                    <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-400"><span class="text-base">❌</span> Without RCA Memory</div>
-                    <ul class="space-y-2 text-xs text-slate-400">
+                    <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-red-400"><span class="text-base">❌</span> Without RCA Memory</div>
+                    <ul class="space-y-2 text-[14px] text-slate-400">
                         <li class="flex gap-2"><span class="text-red-500 mt-0.5">•</span>Same bug fixed multiple times across different sessions — no shared memory, no awareness it happened before.</li>
                         <li class="flex gap-2"><span class="text-red-500 mt-0.5">•</span>Security gaps reintroduced by engineers who weren't in the original post-mortem.</li>
                         <li class="flex gap-2"><span class="text-red-500 mt-0.5">•</span>Post-mortems written, filed, and forgotten. Institutional knowledge leaves when engineers leave.</li>
@@ -617,8 +617,8 @@ cortex_verify op=agents
                     </ul>
                 </div>
                 <div class="glass-card p-6 space-y-4 border-emerald-500/20">
-                    <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400"><span class="text-base">✅</span> With RCA Memory</div>
-                    <ul class="space-y-2 text-xs text-slate-400">
+                    <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-400"><span class="text-base">✅</span> With RCA Memory</div>
+                    <ul class="space-y-2 text-[14px] text-slate-400">
                         <li class="flex gap-2"><span class="text-emerald-500 mt-0.5">•</span>Every fix converted into a named <code class="font-mono text-emerald-300">PreventionRule</code> with confidence scores that decay appropriately over time.</li>
                         <li class="flex gap-2"><span class="text-emerald-500 mt-0.5">•</span>PLIP-001: <code class="font-mono text-teal-300">cortex_learning op=history</code> consulted before every code-modifying operation — automatically.</li>
                         <li class="flex gap-2"><span class="text-emerald-500 mt-0.5">•</span>Three escalation levels: Advisory → Warning → Block (based on severity multiplied by recurrence count).</li>
@@ -630,22 +630,22 @@ cortex_verify op=agents
                 <div class="glass-card p-5 text-center space-y-2 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                     <div class="text-2xl">🔗</div>
                     <div class="font-bold text-xs uppercase tracking-tighter text-violet-300">Five-Whys</div>
-                    <p class="text-[9px] text-slate-500">Linear root cause chain. Auto-selected for TECHNOLOGY category — sequential cause/effect failures.</p>
+                    <p class="text-[13px] text-slate-500">Linear root cause chain. Auto-selected for TECHNOLOGY category — sequential cause/effect failures.</p>
                 </div>
                 <div class="glass-card p-5 text-center space-y-2 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all">
                     <div class="text-2xl">🐟</div>
                     <div class="font-bold text-xs uppercase tracking-tighter text-blue-300">Fishbone</div>
-                    <p class="text-[9px] text-slate-500">Causes across People, Process, Technology, Data. Auto-selected for PROCESS and PEOPLE categories.</p>
+                    <p class="text-[13px] text-slate-500">Causes across People, Process, Technology, Data. Auto-selected for PROCESS and PEOPLE categories.</p>
                 </div>
                 <div class="glass-card p-5 text-center space-y-2 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all">
                     <div class="text-2xl">🌲</div>
                     <div class="font-bold text-xs uppercase tracking-tighter text-teal-300">Fault Tree</div>
-                    <p class="text-[9px] text-slate-500">AND/OR probability gates. Best for concurrency, race conditions, and distributed system failures.</p>
+                    <p class="text-[13px] text-slate-500">AND/OR probability gates. Best for concurrency, race conditions, and distributed system failures.</p>
                 </div>
                 <div class="glass-card p-5 text-center space-y-2 border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all">
                     <div class="text-2xl">⏱</div>
                     <div class="font-bold text-xs uppercase tracking-tighter text-amber-300">Causal Chain</div>
-                    <p class="text-[9px] text-slate-500">Events in temporal order. Auto-selected for DATA — cascade failures and gradual degradation patterns.</p>
+                    <p class="text-[13px] text-slate-500">Events in temporal order. Auto-selected for DATA — cascade failures and gradual degradation patterns.</p>
                 </div>
             </div>
 
@@ -653,13 +653,13 @@ cortex_verify op=agents
             <div class="glass-card p-6 md:p-8 space-y-5 border-teal-500/20">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div class="space-y-1">
-                        <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Test Suite Tiers — Execution Time vs Coverage Breadth</div>
-                        <p class="text-xs text-slate-500">Smoke, Unit, and Full tiers run in parallel across all available CPU cores via pytest-xdist</p>
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Test Suite Tiers — Execution Time vs Coverage Breadth</div>
+                        <p class="text-[14px] text-slate-500">Smoke, Unit, and Full tiers run in parallel across all available CPU cores via pytest-xdist</p>
                     </div>
-                    <span class="text-[10px] font-bold text-teal-400 shrink-0">20,000+ tests · 4 tiers</span>
+                    <span class="text-[11px] font-bold text-teal-400 shrink-0">20,000+ tests · 4 tiers</span>
                 </div>
                 <div id="test-chart" class="h-56 md:h-72 w-full"></div>
-                <div class="flex flex-wrap gap-3 justify-center text-[9px]">
+                <div class="flex flex-wrap gap-3 justify-center text-[11px]">
                     <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>Smoke (&lt;60s)</span>
                     <span class="flex items-center gap-1.5 text-teal-400"><span class="w-3 h-3 rounded-sm bg-teal-500 inline-block"></span>Unit (&lt;5min)</span>
                     <span class="flex items-center gap-1.5 text-violet-400"><span class="w-3 h-3 rounded-sm bg-violet-500 inline-block"></span>Golden (sequential)</span>
@@ -687,7 +687,7 @@ cortex_verify op=agents
                             </div>
                         </div>
                         <div class="flex-1 text-center lg:text-left space-y-3">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[9px] md:text-[10px] font-bold tracking-widest uppercase">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] md:text-[12px] font-bold tracking-widest uppercase">
                                 <i data-lucide="layers" class="w-3 h-3"></i> Interactive Architecture Deep Dive
                             </div>
                             <h3 class="text-xl md:text-2xl lg:text-3xl font-black tracking-tighter" style="font-family:'Space Grotesk',sans-serif;">Explore the <span class="gradient-text-teal">CORTEX System Architecture</span></h3>
@@ -728,7 +728,7 @@ cortex_verify op=agents
             <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
             <i data-lucide="shield" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
         </div>
-        <div class="text-[9px] md:text-[10px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
             &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Software Engineer
         </div>
     </footer>

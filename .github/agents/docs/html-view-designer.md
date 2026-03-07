@@ -240,6 +240,27 @@ Present a structured proposal:
 - `<h3>` for subsection / card titles
 - Never skip levels (no H4 without H3)
 
+### Font Size Floor Rules (P0 — WCAG 2.2 AA)
+
+**Authority:** `cortex-doc.prompt.md` § WCAG Font Size Floor Rules. Codified from Phase 108 accessibility audit.
+
+**Lesson learned:** LLMs default to compact layouts with tiny text (8–12px). Dark glassmorphism backgrounds require LARGER font sizes than light themes for equivalent readability. Every HTML generation MUST enforce these minimums.
+
+| Element | Minimum | Tailwind Floor | Anti-Pattern |
+|---------|---------|---------------|-------------|
+| Body text | `16px` | `text-base` | `text-xs`, `text-[12px]`, `text-[13px]` |
+| Card titles (h3/h4) | `18px` | `text-lg` | `text-base` (16px) for titles |
+| Section headings (h2) | `24px` | `text-2xl` | `text-lg`, `text-xl` for section heads |
+| Hero titles (h1) | `36px` | `text-4xl` | `text-2xl`, `text-3xl` for hero |
+| Secondary/muted text | `14px` | `text-sm` | `text-[11px]`, `text-xs` |
+| Code blocks | `13px` | `text-[13px]` | `text-[10px]`, `text-[11px]` |
+| Badges/pills | `11px` | `text-[11px]` | `text-[8px]`, `text-[9px]` |
+| Step numbers | `14px` | `text-sm` | `0.6rem` (9.6px) |
+
+**Icon–Title Ratio:** Icons next to card titles MUST match title visual weight. `text-lg` title → `w-5 h-5` icon minimum. `text-xl` title → `w-6 h-6` minimum. Never pair `w-4 h-4` icons with `text-xl+` titles.
+
+**Self-audit rule:** Before emitting any HTML, scan all `font-size`, `text-[*]`, and `text-xs`/`text-sm` classes against this floor table. Fix violations before output — do NOT rely on downstream `a11y-perf-guardian` to catch them.
+
 ### ARIA Checklist (run before every HTML edit)
 
 - [ ] `<html lang='en'>` present

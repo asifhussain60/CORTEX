@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX — Getting Started | Zero to Governed AI in 5 Minutes</title>
+    <meta name="description" content="Get started with CORTEX — setup guide for VS Code (primary) and Visual Studio. Python environment, MCP configuration, first commands, and two usage paths: MCP-first or workspace folders."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+                    <!-- 11. Distill -->https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-amber: #f59e0b;
+            --accent-orange: #f97316;
+            --accent-emerald: #10b981;
+            --accent-violet: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            background-color: #020617;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; }
+        @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+
+        .hero-section-wrapper { position: relative; padding-top: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+        .hero-robot-container { position: relative; z-index: 10; margin-bottom: -1px; }
+        .hero-divider-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3) 50%, transparent); }
+        .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
+        .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(245, 158, 11, 0.65)); transform: scale(1.02); }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(245,158,11,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+
+        .gradient-text-amber {
+            background: linear-gradient(to right, #f59e0b, #f97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
+        .breadcrumb-nav a:hover { color: var(--accent-amber); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245,158,11,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245,158,11,0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245,158,11,0); } }
+
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-kw  { color: #f472b6; }
+        .code-fn  { color: #60a5fa; }
+        .code-str { color: #34d399; }
+        .code-cmt { color: #475569; font-style: italic; }
+        .code-cls { color: #facc15; }
+        .code-dec { color: #a78bfa; }
+
+        /* Step Pipeline */
+        .step-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 768px) { .step-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .step-grid { grid-template-columns: repeat(3, 1fr); } }
+        .step-card { padding: 1.75rem 1.5rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
+        .step-card:hover { border-color: var(--step-color, rgba(245,158,11,0.3)); background: rgba(245,158,11,0.04); transform: translateY(-3px); box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3); }
+        .step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--step-color, #f59e0b); }
+        .step-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+        .step-desc { font-size: 0.875rem; color: #64748b; line-height: 1.6; }
+
+        /* IDE Toggle */
+        .ide-toggle { display: flex; gap: 0.25rem; padding: 0.25rem; border-radius: 0.75rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); width: fit-content; margin: 0 auto; }
+        .ide-toggle-btn { padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-size: 0.8125rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; border: none; background: transparent; color: #64748b; display: flex; align-items: center; gap: 0.5rem; }
+        .ide-toggle-btn.active { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+        .ide-toggle-btn:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.03); }
+
+        .ide-panel { display: none; animation: fadePanel 0.35s ease; }
+        .ide-panel.active { display: block; }
+        @keyframes fadePanel { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Comparison Table */
+        .compare-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 768px) { .compare-grid { grid-template-columns: repeat(2, 1fr); } }
+        .compare-card { padding: 2rem 1.75rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 1rem; transition: all 0.2s ease; }
+        .compare-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3); }
+
+        /* Prereq tags */
+        .prereq-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+        .prereq-tag { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 600; color: #94a3b8; transition: all 0.2s ease; cursor: default; }
+        .prereq-tag:hover { border-color: var(--tag-color, rgba(245,158,11,0.4)); color: var(--tag-color, #f59e0b); background: rgba(245,158,11,0.05); transform: translateY(-1px); }
+        .prereq-tag .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tag-color, #f59e0b); flex-shrink: 0; }
+
+        /* Checklist */
+        .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+        .checklist li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; color: #94a3b8; line-height: 1.5; }
+        .checklist li .check-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 900; margin-top: 1px; }
+        .check-amber { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+        .check-emerald { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .check-violet { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.3); }
+
+        /* Command Centre */
+        .cmd-prompt-hero { font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; }
+        @media (min-width: 768px) { .cmd-prompt-hero { font-size: 4.5rem; } }
+        @media (min-width: 1024px) { .cmd-prompt-hero { font-size: 5.5rem; } }
+        .cmd-prompt-cursor { display: inline-block; width: 3px; height: 0.9em; background: #f59e0b; margin-left: 0.15em; animation: blink-cursor 1s steps(1) infinite; vertical-align: text-bottom; }
+        @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .cmd-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .cmd-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .cmd-grid { grid-template-columns: repeat(3, 1fr); } }
+        .cmd-card { padding: 1.5rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.25s ease; position: relative; overflow: hidden; }
+        .cmd-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 1.25rem 1.25rem 0 0; background: var(--cmd-color, #f59e0b); opacity: 0.6; transition: opacity 0.25s ease; }
+        .cmd-card:hover { border-color: var(--cmd-color, rgba(245,158,11,0.4)); background: rgba(245,158,11,0.03); transform: translateY(-3px); box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3); }
+        .cmd-card:hover::before { opacity: 1; }
+        .cmd-card.cmd-featured { border: 2px solid rgba(0,212,255,0.5); background: rgba(0,212,255,0.07); box-shadow: 0 0 20px rgba(0,212,255,0.15), 0 0 50px rgba(0,212,255,0.05); }
+        .cmd-card.cmd-featured::before { opacity: 1; height: 4px; background: linear-gradient(90deg, #00d4ff, #7b61ff, #00d4ff); background-size: 200% 100%; animation: featured-shimmer 3s linear infinite; }
+        .cmd-card.cmd-featured::after { content: '★ RECOMMENDED'; position: absolute; top: 14px; right: -32px; background: linear-gradient(90deg, #00d4ff, #6366f1); color: #000; font-size: 0.5625rem; font-weight: 900; letter-spacing: 0.1em; padding: 3px 40px; transform: rotate(45deg); z-index: 2; pointer-events: none; }
+        .cmd-card.cmd-featured:hover { border-color: rgba(0,212,255,0.7); background: rgba(0,212,255,0.1); transform: translateY(-3px); box-shadow: 0 0 30px rgba(0,212,255,0.25), 0 0 60px rgba(0,212,255,0.08), 0 12px 30px -6px rgba(0,0,0,0.3); }
+        @keyframes featured-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .cmd-name { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 800; color: var(--cmd-color, #f59e0b); display: flex; align-items: center; gap: 0.5rem; }
+        .cmd-card-title { font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc; }
+        .cmd-card-desc { font-size: 0.875rem; color: #94a3b8; line-height: 1.65; flex: 1; }
+        .cmd-example { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #64748b; background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.04); margin-top: auto; }
+        .cmd-example span { color: #34d399; }
+        .cmd-badge { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+        .cmd-badge-start { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+        .cmd-badge-power { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+        .cmd-badge-essential { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="index.html">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span>CORTEX</span>
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="index.html#who-is-cortex-for">Roles</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Getting Started</span>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+
+        <!-- ═══════════════════ HERO ═══════════════════ -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="hero-section-wrapper">
+                <div class="hero-robot-container">
+                    <a href="index.html" title="Back to CORTEX Home">
+                        <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high"
+                             src="assets/images/cortex-logo-512.png"/>
+                    </a>
+                </div>
+                <div class="hero-divider-line"></div>
+            </div>
+
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-dot"></div>
+                    Zero to Governed AI
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    Up and Running<br/><span class="gradient-text-amber">In Five Minutes.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    No Docker. No Kubernetes. No cloud accounts. CORTEX runs <span class="text-amber-400 font-semibold">entirely local</span> from a single Python package — with every capability accessible directly in your IDE through the Model Context Protocol.
+                </p>
+            </div>
+
+            <!-- Hero Stats -->
+            <div class="flex flex-wrap justify-center items-stretch gap-3 md:gap-6 pt-6">
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-600/30 to-orange-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/80 to-slate-900/90 hover:border-amber-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-amber-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">5 min</div>
+                        <div class="text-[11px] md:text-[12px] text-amber-300/80 uppercase tracking-widest font-bold">Clone to First Command</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-teal-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 hover:border-emerald-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-emerald-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">Zero</div>
+                        <div class="text-[11px] md:text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">Cloud Dependencies</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 hover:border-violet-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">30+</div>
+                        <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">MCP Tools Instantly Available</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ PREREQUISITES — Glass Panel ═══════════════════ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-orange-950/60 border border-amber-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-10 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Before You Begin
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Prerequisites</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        Everything runs locally. No infrastructure provisioning. No database server. Just these five things on your machine.
+                    </p>
+                </div>
+
+                <div class="prereq-grid">
+                    <div class="prereq-tag" style="--tag-color:#f59e0b"><span class="tag-dot"></span>Python 3.9+ (3.11 recommended)</div>
+                    <div class="prereq-tag" style="--tag-color:#10b981"><span class="tag-dot"></span>Git 2.30+</div>
+                    <div class="prereq-tag" style="--tag-color:#8b5cf6"><span class="tag-dot"></span>VS Code 1.85+ or Visual Studio 2022+</div>
+                    <div class="prereq-tag" style="--tag-color:#06b6d4"><span class="tag-dot"></span>GitHub Copilot (active subscription)</div>
+                    <div class="prereq-tag" style="--tag-color:#f97316"><span class="tag-dot"></span>~500 MB disk space</div>
+                </div>
+
+                <div class="glass-card p-5 md:p-7 space-y-3 border-amber-500/20">
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Why These Requirements?</div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed max-w-4xl">
+                        <strong class="text-amber-400">Python</strong> is CORTEX's runtime — all 290+ orchestrators and 30+ MCP tools are Python. 
+                        <strong class="text-amber-400">Git</strong> powers the audit trail, commit hooks, and governance enforcement. 
+                        <strong class="text-amber-400">GitHub Copilot</strong> is the AI engine — CORTEX orchestrates it, adding structure, memory, and governance that raw Copilot doesn't provide. 
+                        No Docker containers, no Kubernetes, no cloud databases. Period.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ IDE SELECTION ═══════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="monitor" class="w-3.5 h-3.5"></i> Choose Your IDE
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Two Paths, Same CORTEX</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    VS Code is the primary path with native MCP auto-discovery. Visual Studio 2022+ works via the GitHub Copilot extension with manual MCP configuration. Choose your IDE below — every step adapts.
+                </p>
+            </div>
+
+            <!-- IDE Toggle -->
+            <div class="ide-toggle" role="tablist" aria-label="IDE selection">
+                <button class="ide-toggle-btn active" role="tab" aria-selected="true" data-ide="vscode">
+                    <i data-lucide="code-2" class="w-4 h-4"></i> VS Code (Primary)
+                </button>
+                <button class="ide-toggle-btn" role="tab" aria-selected="false" data-ide="vs">
+                    <i data-lucide="layout" class="w-4 h-4"></i> Visual Studio 2022+
+                </button>
+            </div>
+
+            <!-- ═══ VS CODE PATH ═══ -->
+            <div id="panel-vscode" class="ide-panel active" role="tabpanel">
+                <div class="step-grid">
+                    <!-- Step 1 -->
+                    <div class="step-card" style="--step-color:#f59e0b">
+                        <div class="step-num">Step 1 — Clone</div>
+                        <div class="step-title">Clone the Repository</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">git clone</span> <span class="code-str">https://github.com/asifhussain60/CORTEX.git</span>
+<span class="code-fn">cd</span> CORTEX</div>
+                        <p class="step-desc">This is the only download step. The entire framework — orchestrators, tools, governance rules, and knowledge base — lives in one repository.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-card" style="--step-color:#10b981">
+                        <div class="step-num">Step 2 — Python Environment</div>
+                        <div class="step-title">Create a Virtual Environment</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">python3</span> -m venv .venv
+<span class="code-fn">source</span> .venv/bin/activate
+<span class="code-cmt"># Windows PowerShell:</span>
+<span class="code-cmt"># .venv\Scripts\activate</span></div>
+                        <p class="step-desc">Isolates CORTEX dependencies from your system Python. The <code>.venv</code> directory is gitignored and auto-detected by VS Code.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-card" style="--step-color:#06b6d4">
+                        <div class="step-num">Step 3 — Dependencies</div>
+                        <div class="step-title">Install Requirements</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">pip install</span> -r requirements.txt</div>
+                        <p class="step-desc">Installs all Python packages CORTEX needs — testing frameworks, MCP protocol libraries, and intelligence tooling. Takes about 60 seconds.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="step-card" style="--step-color:#8b5cf6">
+                        <div class="step-num">Step 4 — Open in VS Code</div>
+                        <div class="step-title">Launch the Workspace</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">code</span> .</div>
+                        <p class="step-desc">VS Code opens the workspace. The MCP server starts automatically via stdio transport — no manual startup, no exposed ports, no Docker.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="step-card" style="--step-color:#f97316">
+                        <div class="step-num">Step 5 — MCP Setup</div>
+                        <div class="step-title">Configure the AI Connection</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">python3</span> scripts/setup-mcp.py</div>
+                        <p class="step-desc">Auto-detects your OS (macOS/Linux/Windows), locates the correct Python executable, and writes the MCP configuration to <code>.vscode/settings.json</code>. One command. Cross-platform.</p>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="step-card" style="--step-color:#34d399">
+                        <div class="step-num">Step 6 — Verify</div>
+                        <div class="step-title">Confirm Everything Works</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">make</span> test-smoke
+<span class="code-cmt"># → All tests pass in &lt;60s</span></div>
+                        <p class="step-desc">Validates Python, dependencies, and the test suite. A passing smoke test means CORTEX is fully operational. On Windows: <code>python scripts\run_tests.py smoke</code>.</p>
+                    </div>
+                </div>
+
+                <!-- MCP Verification Callout -->
+                <div class="glass-card p-6 md:p-8 space-y-5 mt-8 border-amber-500/20">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="radio" class="w-6 h-6"></i></div>
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Final Check</div>
+                            <h4 class="font-black text-lg tracking-tighter">Verify the AI Connection</h4>
+                        </div>
+                    </div>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">1</span> Open Copilot Chat — <code class="text-amber-400 text-[13px]">Ctrl+Shift+I</code> (Windows) or <code class="text-amber-400 text-[13px]">Cmd+Shift+I</code> (macOS)</li>
+                        <li><span class="check-icon check-amber">2</span> Select <strong class="text-white">Agent</strong> mode in the chat mode dropdown (top of chat panel)</li>
+                        <li><span class="check-icon check-amber">3</span> Click the <strong class="text-white">Tools</strong> button — you should see CORTEX tools listed (cortex_verify, cortex_classify, etc.)</li>
+                        <li><span class="check-icon check-amber">4</span> Type: <code class="text-amber-400 text-[13px]">What is CORTEX?</code> — if it responds with the CORTEX header, you're connected</li>
+                    </ul>
+                    <div class="code-block text-[13px]"><span class="code-cmt"># If tools don't appear, run this and reload VS Code (Cmd+Shift+P → Reload Window):</span>
+<span class="code-fn">python3</span> scripts/setup-mcp.py</div>
+                </div>
+            </div>
+
+            <!-- ═══ VISUAL STUDIO PATH ═══ -->
+            <div id="panel-vs" class="ide-panel" role="tabpanel">
+                <div class="step-grid">
+                    <!-- Step 1 -->
+                    <div class="step-card" style="--step-color:#f59e0b">
+                        <div class="step-num">Step 1 — Clone</div>
+                        <div class="step-title">Clone the Repository</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">git clone</span> <span class="code-str">https://github.com/asifhussain60/CORTEX.git</span>
+<span class="code-fn">cd</span> CORTEX</div>
+                        <p class="step-desc">Use the Git command line, Visual Studio's built-in Git tools, or GitHub Desktop. Same repository for both IDEs.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-card" style="--step-color:#10b981">
+                        <div class="step-num">Step 2 — Python Environment</div>
+                        <div class="step-title">Create a Virtual Environment</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">python</span> -m venv .venv
+.venv\Scripts\activate</div>
+                        <p class="step-desc">Visual Studio auto-detects the <code>.venv</code> directory. If prompted, select it as the project's Python interpreter via <strong>Tools → Python → Python Environments</strong>.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-card" style="--step-color:#06b6d4">
+                        <div class="step-num">Step 3 — Dependencies</div>
+                        <div class="step-title">Install Requirements</div>
+                        <div class="code-block text-[13px]"><span class="code-fn">pip install</span> -r requirements.txt</div>
+                        <p class="step-desc">Run in the Developer PowerShell or Terminal window inside Visual Studio. Same requirements file — no separate dependencies.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="step-card" style="--step-color:#8b5cf6">
+                        <div class="step-num">Step 4 — Open as Folder</div>
+                        <div class="step-title">Open the Workspace</div>
+                        <div class="code-block text-[13px]"><span class="code-cmt"># File → Open Folder → select CORTEX/</span>
+<span class="code-cmt"># Or from Developer Command Prompt:</span>
+<span class="code-fn">devenv</span> .</div>
+                        <p class="step-desc">Visual Studio 2022+ supports "Open Folder" mode — no <code>.sln</code> file needed. CORTEX is a Python workspace, not a .NET solution.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="step-card" style="--step-color:#f97316">
+                        <div class="step-num">Step 5 — Copilot Extension</div>
+                        <div class="step-title">Install GitHub Copilot</div>
+                        <div class="code-block text-[13px]"><span class="code-cmt"># Extensions → Manage Extensions</span>
+<span class="code-cmt"># Search: "GitHub Copilot"</span>
+<span class="code-cmt"># Install both:</span>
+<span class="code-str">GitHub Copilot</span>
+<span class="code-str">GitHub Copilot Chat</span></div>
+                        <p class="step-desc">Both extensions are required. After installation, sign in with your GitHub account that has an active Copilot subscription.</p>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="step-card" style="--step-color:#34d399">
+                        <div class="step-num">Step 6 — MCP Configuration</div>
+                        <div class="step-title">Configure MCP Manually</div>
+                        <div class="code-block text-[13px]"><span class="code-cmt"># Create .vs/settings.json in workspace root:</span>
+{
+  <span class="code-str">"github.copilot.chat.mcpServers"</span>: {
+    <span class="code-str">"cortex"</span>: {
+      <span class="code-str">"command"</span>: <span class="code-str">"python"</span>,
+      <span class="code-str">"args"</span>: [<span class="code-str">"-m"</span>, <span class="code-str">"cortex.mcp"</span>],
+      <span class="code-str">"transport"</span>: <span class="code-str">"stdio"</span>
+    }
+  }
+}</div>
+                        <p class="step-desc">Visual Studio's MCP support reads from <code>.vs/settings.json</code>. The <code>python</code> command must resolve to your virtual environment's interpreter.</p>
+                    </div>
+                </div>
+
+                <!-- VS Verification Callout -->
+                <div class="glass-card p-6 md:p-8 space-y-5 mt-8 border-amber-500/20">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="radio" class="w-6 h-6"></i></div>
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Final Check</div>
+                            <h4 class="font-black text-lg tracking-tighter">Verify in Visual Studio</h4>
+                        </div>
+                    </div>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">1</span> Open GitHub Copilot Chat pane — <strong class="text-white">View → GitHub Copilot Chat</strong></li>
+                        <li><span class="check-icon check-amber">2</span> Verify the CORTEX MCP tools appear in the tools panel</li>
+                        <li><span class="check-icon check-amber">3</span> Type: <code class="text-amber-400 text-[13px]">What is CORTEX?</code> — if it responds, MCP is active</li>
+                        <li><span class="check-icon check-amber">4</span> Run tests from Developer PowerShell: <code class="text-amber-400 text-[13px]">python scripts\run_tests.py smoke</code></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ HOW TO USE CORTEX — Glass Panel ═══════════════════ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-amber-950/60 border border-emerald-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-10 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="git-fork" class="w-3.5 h-3.5"></i> Two Ways to Use CORTEX
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">MCP-First or Workspace Folders</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        CORTEX offers two usage patterns. Most users start with MCP — talking to CORTEX through Copilot Chat. Power users add their own project folders to the workspace for cross-repo governance.
+                    </p>
+                </div>
+
+                <div class="compare-grid">
+                    <!-- Path A: MCP-First -->
+                    <div class="compare-card border-amber-500/20 bg-gradient-to-br from-amber-950/40 to-slate-900/60">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="message-square" class="w-6 h-6"></i></div>
+                            <div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Recommended</div>
+                                <h4 class="font-black text-lg tracking-tighter text-amber-300">Path A — MCP via Copilot Chat</h4>
+                            </div>
+                        </div>
+                        <p class="text-[14px] text-slate-400 leading-relaxed">
+                            Open Copilot Chat and talk to CORTEX in natural language. Every capability — audits, TDD, debugging, governance — is available through 30+ MCP tools without ever leaving the chat panel.
+                        </p>
+                        <div class="code-block text-[13px]"><span class="code-cmt"># In Copilot Chat (Agent mode):</span>
+<span class="code-str">"Audit the codebase and fix all issues"</span>
+<span class="code-str">"Implement user email verification using TDD"</span>
+<span class="code-str">"Debug why the auth tests are failing"</span>
+<span class="code-str">"Run a security audit"</span></div>
+                        <ul class="checklist">
+                            <li><span class="check-icon check-amber">✓</span> Zero configuration beyond MCP setup</li>
+                            <li><span class="check-icon check-amber">✓</span> All 30+ tools available instantly</li>
+                            <li><span class="check-icon check-amber">✓</span> Natural language — no CLI commands to memorise</li>
+                            <li><span class="check-icon check-amber">✓</span> Governance enforced automatically on every request</li>
+                        </ul>
+                    </div>
+
+                    <!-- Path B: Workspace Folders -->
+                    <div class="compare-card border-emerald-500/20 bg-gradient-to-br from-emerald-950/40 to-slate-900/60">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i data-lucide="folder-tree" class="w-6 h-6"></i></div>
+                            <div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Power Users</div>
+                                <h4 class="font-black text-lg tracking-tighter text-emerald-300">Path B — Add Your Repo Folders</h4>
+                            </div>
+                        </div>
+                        <p class="text-[14px] text-slate-400 leading-relaxed">
+                            Add your own project folders to the VS Code workspace alongside CORTEX. This gives CORTEX direct file-system access to your repositories — enabling cross-repo analysis, workspace-wide audits, and persistent governance.
+                        </p>
+                        <div class="code-block text-[13px]"><span class="code-cmt"># File → Add Folder to Workspace…</span>
+<span class="code-cmt"># Select your project folder</span>
+<span class="code-cmt"># Workspace now contains:</span>
+📂 CORTEX/          <span class="code-cmt"># ← the framework</span>
+📂 my-api-project/  <span class="code-cmt"># ← your code</span>
+📂 my-frontend/     <span class="code-cmt"># ← more of your code</span></div>
+                        <ul class="checklist">
+                            <li><span class="check-icon check-emerald">✓</span> LENS analyses your actual codebase structure</li>
+                            <li><span class="check-icon check-emerald">✓</span> Cross-repo architecture and dependency analysis</li>
+                            <li><span class="check-icon check-emerald">✓</span> Governance rules apply to your project code</li>
+                            <li><span class="check-icon check-emerald">✓</span> Onboard any repo: <code class="text-emerald-400 text-[13px]">"Onboard my-api-project"</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ COMMAND CENTRE ═══════════════════ -->
+        <section class="space-y-12">
+            <!-- /CORTEX Hero Prompt Identity -->
+            <div class="text-center space-y-6">
+                <div class="relative inline-block">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-orange-500/15 to-violet-500/20 rounded-3xl blur-3xl opacity-60"></div>
+                    <div class="relative glass-card px-8 md:px-16 py-8 md:py-12 border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-violet-950/60">
+                        <div class="flex items-center justify-center gap-3 md:gap-4 mb-4">
+                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                                <i data-lucide="terminal" class="w-6 h-6 md:w-8 md:h-8 text-black"></i>
+                            </div>
+                            <div class="cmd-prompt-hero gradient-text-amber">/CORTEX</div>
+                            <span class="cmd-prompt-cursor"></span>
+                        </div>
+                        <p class="text-base md:text-lg text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
+                            Your AI-powered prompt in Copilot Chat. Type any command below in <strong class="text-white">Agent mode</strong> and CORTEX handles the rest — routing, governance, memory, and execution.
+                        </p>
+                        <div class="flex flex-wrap justify-center gap-3 mt-6">
+                            <div class="cmd-badge cmd-badge-start"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div> Start Here</div>
+                            <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                            <div class="cmd-badge cmd-badge-power"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div> Power User</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Command Card Grid -->
+            <div class="cmd-grid">
+
+                <!-- 1. Implement -->
+                <div class="cmd-card" style="--cmd-color:#10b981">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="hammer" class="w-5 h-5"></i> /implement</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">TDD-First Feature Development</div>
+                    <div class="cmd-card-desc">Builds features using Test-Driven Development — writes failing tests first, then implements code to pass them. Enforces clean architecture, type hints, and docstrings automatically.</div>
+                    <div class="cmd-example"><span>"Implement user email verification"</span></div>
+                </div>
+
+                <!-- 2. Fix -->
+                <div class="cmd-card" style="--cmd-color:#f97316">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="wrench" class="w-5 h-5"></i> /fix</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Targeted Bug Resolution</div>
+                    <div class="cmd-card-desc">Diagnoses and fixes specific bugs or test failures. CORTEX reads your error output, traces the root cause, writes a regression test, then applies the fix — ensuring the same bug never returns.</div>
+                    <div class="cmd-example"><span>"Fix the failing auth tests in user_service.py"</span></div>
+                </div>
+
+                <!-- 3. Debug -->
+                <div class="cmd-card" style="--cmd-color:#ef4444">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="bug" class="w-5 h-5"></i> /debug</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Multi-Stack Debug Pipeline</div>
+                    <div class="cmd-card-desc">Injects diagnostic markers into your code across 8 strategies (Python, JavaScript, C#, SQL, HTML, API), captures runtime state, analyses the data, then auto-cleans all markers when done.</div>
+                    <div class="cmd-example"><span>"Debug why the payment flow times out"</span></div>
+                </div>
+
+                <!-- 4. Refactor -->
+                <div class="cmd-card" style="--cmd-color:#8b5cf6">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="refresh-cw" class="w-5 h-5"></i> /refactor</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Safe Code Improvement</div>
+                    <div class="cmd-card-desc">Restructures your code to follow clean architecture, SOLID principles, and DRY patterns — while maintaining a full test safety net. Every refactoring step is verified by the test suite before proceeding.</div>
+                    <div class="cmd-example"><span>"Refactor the user module to clean architecture"</span></div>
+                </div>
+
+                <!-- 5. Review -->
+                <div class="cmd-card cmd-featured" style="--cmd-color:#0078d4">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="git-pull-request" class="w-5 h-5"></i> /review</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Azure DevOps PR Review</div>
+                    <div class="cmd-card-desc">Reviews an Azure DevOps Pull Request with a security-first and quality-first mindset. CORTEX uses LENS to build full context of the changed files, then analyses for vulnerabilities, SOLID violations, test coverage gaps, and governance compliance.</div>
+                    <div class="cmd-example"><span>"Review PR #1234 in my-api-project"</span></div>
+                </div>
+
+                <!-- 6. Onboard -->
+                <div class="cmd-card cmd-featured" style="--cmd-color:#06b6d4">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="compass" class="w-5 h-5"></i> /onboard</div>
+                        <div class="cmd-badge cmd-badge-start"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div> Start</div>
+                    </div>
+                    <div class="cmd-card-title">Repository Deep Analysis</div>
+                    <div class="cmd-card-desc">Add any repository to your workspace and ask CORTEX to onboard it. Runs LENS analysis to map the architecture, dependencies, patterns, and tech debt — giving you a complete understanding in minutes.</div>
+                    <div class="cmd-example"><span>"Onboard my-api-project"</span></div>
+                </div>
+
+                <!-- 7. Digest -->
+                <div class="cmd-card" style="--cmd-color:#14b8a6">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="book-open" class="w-5 h-5"></i> /digest</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Intelligent Content Ingestion</div>
+                    <div class="cmd-card-desc">Feed CORTEX any document, article, or chat transcript and it distills the content into structured, actionable knowledge — extracting key insights, patterns, and recommendations your team can use.</div>
+                    <div class="cmd-example"><span>"Digest docs/architecture-recommendation.md"</span></div>
+                </div>
+
+                <!-- 8. Rephrase -->
+                <div class="cmd-card" style="--cmd-color:#a855f7">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="sparkles" class="w-5 h-5"></i> /rephrase</div>
+                        <div class="cmd-badge cmd-badge-essential"><div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div> Essential</div>
+                    </div>
+                    <div class="cmd-card-title">Prompt Token Optimisation</div>
+                    <div class="cmd-card-desc">Takes verbose, sprawling prompts and compresses them into token-efficient instructions that convey the same intent in fewer tokens. Ideal for optimising system prompts and agent files.</div>
+                    <div class="cmd-example"><span>"Rephrase this prompt for token efficiency"</span></div>
+                </div>
+
+                <!-- 9. Vacuum -->
+                <div class="cmd-card" style="--cmd-color:#64748b">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="trash-2" class="w-5 h-5"></i> /vacuum</div>
+                        <div class="cmd-badge cmd-badge-power"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div> Power</div>
+                    </div>
+                    <div class="cmd-card-title">Workspace Cleanup</div>
+                    <div class="cmd-card-desc">8-stage cleanup pipeline that removes markdown sprawl, root clutter, empty directories, orphan files, build artifacts, and OS artifacts (.DS_Store, Thumbs.db) — keeping your workspace pristine.</div>
+                    <div class="cmd-example"><span>"Vacuum the workspace"</span></div>
+                </div>
+
+                <!-- 10. Distill -->
+                <div class="cmd-card" style="--cmd-color:#6366f1">
+                    <div class="flex items-center justify-between">
+                        <div class="cmd-name"><i data-lucide="flask-conical" class="w-5 h-5"></i> /distill</div>
+                        <div class="cmd-badge cmd-badge-power"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div> Power</div>
+                    </div>
+                    <div class="cmd-card-title">Chat-to-Prompt Distillation</div>
+                    <div class="cmd-card-desc">Converts a long Copilot Chat conversation into a synthesised, executable prompt file — extracting decisions, patterns, and instructions so the knowledge survives beyond the chat session.</div>
+                    <div class="cmd-example"><span>"Distill this chat into a reusable prompt"</span></div>
+                </div>
+
+            </div>
+
+            <!-- Tip callout -->
+            <div class="glass-card p-5 md:p-7 space-y-3 border-amber-500/20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="lightbulb" class="w-5 h-5"></i></div>
+                    <div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Pro Tip</div>
+                        <h4 class="font-bold text-base tracking-tight">You don't need to memorise these</h4>
+                    </div>
+                </div>
+                <p class="text-[14px] text-slate-400 leading-relaxed max-w-4xl">
+                    CORTEX understands natural language. Instead of typing <code class="text-amber-400">/implement</code>, you can say <code class="text-amber-400">"Build user email verification with TDD"</code> — the Intent Router classifies your request and routes it to the right orchestrator automatically. The commands above are shortcuts, not requirements.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ MCP CONFIG — Glass Panel ═══════════════════ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-amber-950/60 border border-violet-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-10 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="settings" class="w-3.5 h-3.5"></i> Under the Hood
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">The MCP Configuration</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        CORTEX uses <strong class="text-white">Pylance-style stdio transport</strong> — the same mechanism that powers language servers in modern IDEs. No network ports. No Docker. No cloud API keys. One JSON block is all it takes.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-6 space-y-3 border-violet-500/20">
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-violet-400 mb-1">VS Code — .vscode/settings.json</div>
+                        <div class="code-block text-[13px]">{
+  <span class="code-str">"github.copilot.chat.mcpServers"</span>: {
+    <span class="code-str">"cortex"</span>: {
+      <span class="code-str">"command"</span>: <span class="code-str">"python3"</span>,
+      <span class="code-str">"args"</span>: [<span class="code-str">"-m"</span>, <span class="code-str">"cortex.mcp"</span>],
+      <span class="code-str">"transport"</span>: <span class="code-str">"stdio"</span>,
+      <span class="code-str">"cwd"</span>: <span class="code-str">"${workspaceFolder}"</span>
+    }
+  }
+}</div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Auto-generated by <code>python3 scripts/setup-mcp.py</code>. Cross-platform — detects the correct Python path for macOS, Linux, and Windows.</p>
+                    </div>
+
+                    <div class="glass-card p-6 space-y-3 border-violet-500/20">
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-violet-400 mb-1">How It Works</div>
+                        <ul class="checklist">
+                            <li><span class="check-icon check-violet">→</span> <strong class="text-white">Auto-start:</strong> The MCP server launches when VS Code opens the workspace — no manual startup</li>
+                            <li><span class="check-icon check-violet">→</span> <strong class="text-white">stdio transport:</strong> Communication flows over standard input/output — no exposed network ports</li>
+                            <li><span class="check-icon check-violet">→</span> <strong class="text-white">Tool discovery:</strong> 30+ tools auto-register and appear in Copilot Chat's tool panel instantly</li>
+                            <li><span class="check-icon check-violet">→</span> <strong class="text-white">Process lifecycle:</strong> VS Code manages the server process — restarts automatically if needed</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 items-center mt-3">
+                            <div class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold text-[11px] uppercase tracking-widest">Workspace Opens</div>
+                            <span class="text-slate-600">→</span>
+                            <div class="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[11px] uppercase tracking-widest">MCP Spawns</div>
+                            <span class="text-slate-600">→</span>
+                            <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-[11px] uppercase tracking-widest">Tools Registered ✅</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ TEST COMMANDS ═══════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="test-tubes" class="w-3.5 h-3.5"></i> Quick Reference
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Running Tests</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    All test commands use the optimised runner. Never run <code>pytest</code> directly — CORTEX's runner adds parallel execution, smart change detection, and import-mode optimisation automatically.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="glass-card p-5 space-y-3 border-emerald-500/20">
+                    <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">After Saving a File</div>
+                    <h4 class="font-bold text-lg tracking-tighter">TDD Inner Loop</h4>
+                    <div class="code-block text-[13px]"><span class="code-fn">make</span> test-changed</div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Runs only tests covering changed files. Fastest feedback — ideal for TDD.</p>
+                </div>
+                <div class="glass-card p-5 space-y-3 border-amber-500/20">
+                    <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Before Committing</div>
+                    <h4 class="font-bold text-lg tracking-tighter">Quick Sanity</h4>
+                    <div class="code-block text-[13px]"><span class="code-fn">make</span> test-smoke</div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Under 60 seconds. Validates critical paths without running the full suite.</p>
+                </div>
+                <div class="glass-card p-5 space-y-3 border-violet-500/20">
+                    <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Full Suite</div>
+                    <h4 class="font-bold text-lg tracking-tighter">All Tests — Parallel</h4>
+                    <div class="code-block text-[13px]"><span class="code-fn">make</span> test-parallel</div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Uses all CPU cores via pytest-xdist. 3–4× faster than sequential. Pre-commit standard.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 md:p-7 space-y-3 border-amber-500/20">
+                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Windows Users</div>
+                <p class="text-[14px] text-slate-400 leading-relaxed">
+                    Replace <code class="text-amber-400">make test-*</code> with <code class="text-amber-400">python scripts\run_tests.py {mode}</code> in PowerShell. All commands also available as VS Code Tasks: <code class="text-amber-400">Ctrl+Shift+P → Run Task → CORTEX</code>.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ WORKSPACE STRUCTURE ═══════════════════ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/90 to-amber-950/60 border border-amber-500/15 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="folder-open" class="w-3.5 h-3.5"></i> Orientation
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">What Lives Where</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                        The workspace is organised into clear zones. You don't need to memorise this — CORTEX knows where everything is — but it helps to understand the layout.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card p-5 space-y-2 border-amber-500/15">
+                        <div class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-amber-400"></i><span class="font-bold text-sm">cortex/</span></div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">All CORTEX source code — the single canonical Python package. 290+ orchestrators, 30+ MCP tools, intelligence layer, governance engine.</p>
+                    </div>
+                    <div class="glass-card p-5 space-y-2 border-emerald-500/15">
+                        <div class="flex items-center gap-2"><i data-lucide="scroll" class="w-4 h-4 text-emerald-400"></i><span class="font-bold text-sm">cortex-registry/</span></div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Governance rules, workflow templates, knowledge base, and planning documents. All YAML — human-readable and auditable.</p>
+                    </div>
+                    <div class="glass-card p-5 space-y-2 border-violet-500/15">
+                        <div class="flex items-center gap-2"><i data-lucide="test-tubes" class="w-4 h-4 text-violet-400"></i><span class="font-bold text-sm">tests/</span></div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">The complete test suite — mirrors <code>cortex/</code> structure. 19,000+ tests covering every orchestrator, tool, and governance rule.</p>
+                    </div>
+                    <div class="glass-card p-5 space-y-2 border-cyan-500/15">
+                        <div class="flex items-center gap-2"><i data-lucide="database" class="w-4 h-4 text-cyan-400"></i><span class="font-bold text-sm">.cortex-runtime/</span></div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Runtime databases and logs — auto-created, gitignored. 7 SQLite databases that power the audit trail, learning engine, and RCA memory.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ TROUBLESHOOTING ═══════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="life-buoy" class="w-3.5 h-3.5"></i> Common Issues
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Troubleshooting</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="glass-card p-6 space-y-3 border-orange-500/20">
+                    <h4 class="font-bold text-lg tracking-tighter text-orange-300">MCP tools don't appear in Copilot Chat</h4>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">1</span> Run <code class="text-amber-400 text-[13px]">python3 scripts/setup-mcp.py</code> in the terminal</li>
+                        <li><span class="check-icon check-amber">2</span> Reload VS Code: <code class="text-amber-400 text-[13px]">Cmd+Shift+P → Reload Window</code></li>
+                        <li><span class="check-icon check-amber">3</span> Ensure you're in <strong class="text-white">Agent mode</strong> (not Ask or Edit mode)</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-orange-500/20">
+                    <h4 class="font-bold text-lg tracking-tighter text-orange-300">Python version issues</h4>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">1</span> Verify: <code class="text-amber-400 text-[13px]">python3 --version</code> (must be ≥3.9)</li>
+                        <li><span class="check-icon check-amber">2</span> Ensure the virtual environment is activated: <code class="text-amber-400 text-[13px]">which python3</code> should point to <code>.venv/</code></li>
+                        <li><span class="check-icon check-amber">3</span> Windows: use <code class="text-amber-400 text-[13px]">python</code> (not <code>python3</code>)</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-orange-500/20">
+                    <h4 class="font-bold text-lg tracking-tighter text-orange-300">Tests fail on first run</h4>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">1</span> Ensure all dependencies installed: <code class="text-amber-400 text-[13px]">pip install -r requirements.txt</code></li>
+                        <li><span class="check-icon check-amber">2</span> Run preflight first: <code class="text-amber-400 text-[13px]">make test-preflight</code></li>
+                        <li><span class="check-icon check-amber">3</span> Check for stale cache: <code class="text-amber-400 text-[13px]">CORTEX_DISABLE_TESTMON=true make test-smoke</code></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-orange-500/20">
+                    <h4 class="font-bold text-lg tracking-tighter text-orange-300">Need help inside CORTEX</h4>
+                    <ul class="checklist">
+                        <li><span class="check-icon check-amber">→</span> Ask in Copilot Chat: <code class="text-amber-400 text-[13px]">"What can CORTEX help me with?"</code></li>
+                        <li><span class="check-icon check-amber">→</span> Ask for explanation: <code class="text-amber-400 text-[13px]">"Why did CORTEX recommend X?"</code></li>
+                        <li><span class="check-icon check-amber">→</span> The audit trail stores reasoning behind every decision</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ ARCHITECTURE CTA ═══════════════════ -->
+        <section>
+            <a href="architecture.html" class="block group" style="text-decoration:none;color:inherit;">
+                <div class="relative overflow-hidden rounded-3xl border border-amber-500/20 hover:border-amber-400/40 transition-all duration-500" style="background:linear-gradient(135deg,rgba(245,158,11,0.06) 0%,rgba(249,115,22,0.06) 50%,rgba(139,92,246,0.06) 100%);">
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(135deg,rgba(245,158,11,0.10) 0%,rgba(249,115,22,0.10) 50%,rgba(139,92,246,0.10) 100%);"></div>
+                    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent"></div>
+                    <div class="relative flex flex-col lg:flex-row items-center gap-6 lg:gap-10 p-6 md:p-10 lg:p-12">
+                        <div class="shrink-0 relative">
+                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-amber-500/20 to-violet-500/20 flex items-center justify-center border border-amber-500/20 group-hover:border-amber-400/40 group-hover:shadow-[0_0_40px_rgba(245,158,11,0.2)] transition-all duration-500">
+                                <i data-lucide="cpu" class="w-10 h-10 md:w-12 md:h-12 text-amber-400 group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
+                                <i data-lucide="brain" class="w-4 h-4 text-violet-400"></i>
+                            </div>
+                            <div class="absolute -bottom-2 -left-2 w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 text-center lg:text-left space-y-3">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] md:text-[12px] font-bold tracking-widest uppercase">
+                                <i data-lucide="layers" class="w-3 h-3"></i> Deep Dive
+                            </div>
+                            <h3 class="text-xl md:text-2xl lg:text-3xl font-black tracking-tighter" style="font-family:'Space Grotesk',sans-serif;">Explore the <span class="gradient-text-amber">CORTEX Architecture</span></h3>
+                            <p class="text-sm md:text-base text-slate-400 font-light leading-relaxed max-w-2xl">290+ orchestrators, 30+ MCP tools, 55+ governance rules — the complete engineering blueprint. Understand how every layer connects.</p>
+                        </div>
+                        <div class="shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/20 group-hover:border-amber-400/40 group-hover:shadow-[0_0_24px_rgba(245,158,11,0.25)] transition-all duration-300">
+                            <i data-lucide="arrow-right" class="w-5 h-5 md:w-6 md:h-6 text-amber-400 group-hover:translate-x-1 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </section>
+
+
+        <!-- ═══════════════════ FINAL CTA ═══════════════════ -->
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
+            <div class="glass-card p-8 md:p-16 space-y-8 md:space-y-10 relative overflow-visible border-amber-500/30">
+                <div class="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-amber-500 rounded-2xl md:rounded-3xl rotate-45 flex items-center justify-center shadow-[0_0_50px_rgba(245,158,11,0.4)]">
+                    <i data-lucide="rocket" class="w-8 h-8 md:w-10 md:h-10 text-black -rotate-45"></i>
+                </div>
+                <h3 class="section-title font-black tracking-tighter pt-4 md:pt-0">Ready to Start?</h3>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Open Copilot Chat, select Agent mode, and type your first command. CORTEX is already listening.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Start with a question</span>
+<span class="code-str">"What is CORTEX?"</span></div>
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Build a feature</span>
+<span class="code-fn">/implement</span></div>
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Fix a bug</span>
+<span class="code-dec">/fix</span></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="flex justify-center gap-6 md:gap-8 text-slate-500">
+            <i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="shield" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+        </div>
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Getting Started
+        </div>
+    </footer>
+
+
+    <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+    <script>
+        window.onload = function () {
+            lucide.createIcons();
+            initIDEToggle();
+        };
+
+        function initIDEToggle() {
+            const btns = document.querySelectorAll('.ide-toggle-btn');
+            const panels = document.querySelectorAll('.ide-panel');
+
+            btns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    // Deactivate all
+                    btns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+                    panels.forEach(p => p.classList.remove('active'));
+
+                    // Activate selected
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    const ide = btn.getAttribute('data-ide');
+                    const panel = document.getElementById('panel-' + ide);
+                    if (panel) panel.classList.add('active');
+                });
+
+                // Keyboard navigation
+                btn.addEventListener('keydown', (e) => {
+                    let newIndex = index;
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { newIndex = (index + 1) % btns.length; e.preventDefault(); }
+                    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { newIndex = (index - 1 + btns.length) % btns.length; e.preventDefault(); }
+                    if (newIndex !== index) { btns[newIndex].focus(); btns[newIndex].click(); }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ scope: non-production-admin
 # Regression Sentinel Agent
 
 **Agent ID:** `regression-sentinel`
-**Updated:** 2026-03-02
+**Updated:** 2026-03-07
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -130,6 +130,27 @@ grep -cn 'style=' {proposed_html}
 # Report count as informational — P2 if excessive (>50 per file)
 ```
 
+### Check 8 — Font Size Floor Regression (P0)
+
+**Added:** 2026-03-07. Codified from Phase 108 audit where generated HTML had 8–12px text across all pages.
+
+Scan proposed HTML for any `font-size` or Tailwind `text-*` class that falls below WCAG floors:
+
+```bash
+# P0 violations — absolute floor breaches (any visible text below 11px)
+grep -En 'text-\[(([0-9]|10)px)\]|font-size:\s*0\.[0-5]\d*rem|font-size:\s*[0-9]px|font-size:\s*10px' {proposed_html}
+
+# P0 violations — body/description text below 16px
+# Scan <p>, .card-body, .step-desc for text-xs, text-sm, text-[12px], text-[13px], text-[14px], 0.75rem, 0.8rem
+grep -En 'card-body.*text-(xs|sm|\[1[2-4]px\])|step-desc.*text-(xs|sm|\[1[2-4]px\])|<p[^>]*class="[^"]*text-(xs|sm)"' {proposed_html}
+
+# P0 violations — card titles not larger than body
+# Card titles (.card-title, h3, h4 in cards) must be ≥ text-lg (18px)
+grep -En 'card-title.*text-(xs|sm|base|\[1[2-6]px\])' {proposed_html}
+```
+
+Any match → **P0 BLOCK** with the exact line number and recommended fix from `cortex-doc.prompt.md` § WCAG Font Size Floor Rules.
+
 ---
 
 ## 📊 Sentinel Report Format
@@ -150,6 +171,7 @@ Theme drift: {NONE | DETECTED}
 ARIA landmarks: {INTACT | REGRESSION}
 DOM hooks: {STABLE | BROKEN}
 Internal links: {OK | {n} broken}
+Font size floors: {OK | {n} violations}
 Inline styles: {count} (informational — allowed)
 
 {details if any regressions}
@@ -165,6 +187,6 @@ Verdict: {✅ CLEAR FOR MERGE | 🔴 BLOCKED | 🟡 FLAGGED}
 - ❌ Never clear a change that removes `id='main-content'` or skip link
 - ✅ Inline `style=` attributes are allowed — report count as informational only
 - ❌ Never clear a change that removes existing ARIA role attributes from landmarks
-- ✅ Always run ALL 7 checks before emitting verdict
+- ✅ Always run ALL 8 checks before emitting verdict
 - ✅ Always provide the exact line/file of each regression found
 - ✅ P0 blocks are absolute — no overrides without explicit user acknowledgment
