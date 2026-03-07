@@ -19,7 +19,7 @@ One monitor gently pulsing with emerald (`#34d399`) light shows:
 
   ⚡ CORTEX AUTONOMOUS ACTION
   DETECTED: Connection pool timeout
-  ROOT CAUSE: Configuration drift (Five-Whys)
+  ROOT CAUSE: Configuration drift
   ACTION: Pool recycled. Prevention rule added.
   STATUS: ✅ SELF-HEALED
   TIME: 2.3 seconds

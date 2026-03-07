@@ -3,8 +3,10 @@
 **Generator:** Gemini Imagen 2 (via Google AI Studio / Gemini API)  
 **Reason:** High-fidelity character consistency across a series, excellent comic/illustration style adherence, precise compositional control from detailed prompts, and strong black-and-white graphic novel rendering.
 
-**Structure:** 2 image prompts per chapter × 12 chapters = 24 total prompt files.  
-File naming: `ch-{NN}-a.md` (scene A) and `ch-{NN}-b.md` (scene B) per chapter.
+**Structure:** 2–3 image prompts per chapter × 12 chapters = 28 total prompt files.  
+File naming: `ch-{NN}-a.md` (scene A), `ch-{NN}-b.md` (scene B), `ch-{NN}-c.md` (scene C — stability-anchored supplementary scene, chapters 09–12 only).
+
+**Stability policy:** `-c` prompts are written to survive CORTEX evolution — they anchor to character comedy moments and permanent metaphors, never to capability counts or numbers that will grow.
 
 Image generation prompts for each chapter illustration. Copy each prompt file's content directly into Gemini Imagen 2.
 
@@ -76,20 +78,20 @@ Prepend this **style preamble** to every prompt (already included in each file):
 
 ## Prompt Files
 
-| Chapter | File A | File B | Wave Color |
-|---------|--------|--------|------------|
-| 01 — Deep in the Basement | `ch-01-a.md` — The Jenga-lith | `ch-01-b.md` — The CORTEX Vision | Purple |
-| 02 — The Hotel Receptionist | `ch-02-a.md` — The Hotel Analogy | `ch-02-b.md` — WHO_KNOWS | Purple |
-| 03 — The Sacred Rules | `ch-03-a.md` — Kyle's 847-Line Grenade | `ch-03-b.md` — The Governance Verdict | Purple |
-| 04 — The Conductor and the Tool Belt | `ch-04-a.md` — The Orchestra | `ch-04-b.md` — Tool Belt Awakening | Purple |
-| 05 — The Four Walls | `ch-05-a.md` — The Crash at 2AM | `ch-05-b.md` — The Chaos Tests | Cyan |
-| 06 — The Crystal Ball and the Ghost Registry | `ch-06-a.md` — TDD Crystal Ball | `ch-06-b.md` — The Ghost Registry | Cyan |
-| 07 — When Everything Broke | `ch-07-a.md` — Kevin's Override | `ch-07-b.md` — The NaN Apocalypse | Cyan |
-| 08 — The Reckoning | `ch-08-a.md` — The Metrics Presentation | `ch-08-b.md` — The Seven-Phase Roadmap | Cyan |
-| 09 — The Great Pruning | `ch-09-a.md` — 383 Files Deleted | `ch-09-b.md` — The Four-Tier Architecture | Amber |
-| 10 — The Pylance Epiphany | `ch-10-a.md` — The Pylance Epiphany | `ch-10-b.md` — The Eight Immune Cells | Amber |
-| 11 — The 3AM Healer | `ch-11-a.md` — SELF-HEALED | `ch-11-b.md` — 847 Data Points | Emerald |
-| 12 — The Enterprise Brain | `ch-12-a.md` — Enterprise Brain Blueprint | `ch-12-b.md` — The Scarecrow Gets a Brain | Violet |
+| Chapter | File A | File B | File C (Stable) | Wave Color |
+|---------|--------|--------|-----------------|------------|
+| 01 — Deep in the Basement | `ch-01-a.md` — The Jenga-lith | `ch-01-b.md` — The CORTEX Vision | — | Purple |
+| 02 — The Hotel Receptionist | `ch-02-a.md` — The Hotel Analogy | `ch-02-b.md` — WHO_KNOWS | — | Purple |
+| 03 — The Sacred Rules | `ch-03-a.md` — Kyle's 847-Line Grenade | `ch-03-b.md` — The Governance Verdict | — | Purple |
+| 04 — The Conductor and the Tool Belt | `ch-04-a.md` — The Orchestra | `ch-04-b.md` — Tool Belt Awakening | — | Purple |
+| 05 — The Four Walls | `ch-05-a.md` — The Crash at 2AM | `ch-05-b.md` — The Chaos Tests | — | Cyan |
+| 06 — The Crystal Ball and the Ghost Registry | `ch-06-a.md` — TDD Crystal Ball | `ch-06-b.md` — The Ghost Registry | — | Cyan |
+| 07 — When Everything Broke | `ch-07-a.md` — Kevin's Override | `ch-07-b.md` — The NaN Apocalypse | — | Cyan |
+| 08 — The Reckoning | `ch-08-a.md` — The Metrics Presentation | `ch-08-b.md` — The Seven-Phase Roadmap | — | Cyan |
+| 09 — The Great Pruning | `ch-09-a.md` — 383 Files Deleted | `ch-09-b.md` — The Four-Tier Architecture | `ch-09-c.md` — The Janitor Volunteers ✅ | Amber |
+| 10 — The Pylance Epiphany | `ch-10-a.md` — The Pylance Epiphany | `ch-10-b.md` — The Eight Immune Cells | `ch-10-c.md` — The Race Condition ✅ | Amber |
+| 11 — The 3AM Healer | `ch-11-a.md` — SELF-HEALED | `ch-11-b.md` — 847 Data Points | `ch-11-c.md` — Gold Stars and Quarantine ✅ | Emerald |
+| 12 — The Enterprise Brain | `ch-12-a.md` — Enterprise Brain Blueprint | `ch-12-b.md` — The Scarecrow Gets a Brain | `ch-12-c.md` — Receptionists All the Way Down ✅ | Violet |
 
 ---
 
@@ -115,12 +117,16 @@ Prepend this **style preamble** to every prompt (already included in each file):
 | `ch-08-b.md` | 🇬🇷 Greece | Modernised Grecian single-shoulder draped dress | Completely free loose natural ringlets |
 | `ch-09-a.md` | 🇲🇽 Mexico | Tehuana huipil + enagua skirt + woven sash | Low ponytail of curly mass with tendrils |
 | `ch-09-b.md` | 🇧🇷 Brazil | Festa Junina floral midi dress with eyelet trim | French braids merging into ringlet cascade |
+| `ch-09-c.md` | 🇲🇦 Morocco | Embroidered mid-length caftan with woven sash | Side-swept ringlets gathered loosely to one side |
 | `ch-10-a.md` | 🇸🇪 Sweden | Modernised folk dress with embroidered apron panel | High pompadour roll with loose ringlets below |
 | `ch-10-b.md` | 🇮🇳 India (Lucknow chikankari) | Chikankari Anarkali with stole | Full loose twist-out wide halo |
+| `ch-10-c.md` | 🇯🇵 Japan | Modernised kimono silhouette with obi sash | Sleek low bun with face-framing escaped ringlets |
 | `ch-11-a.md` | 🇵🇰 Pakistan | Phulkari kameez shalwar with dupatta | Completely free nocturnal ringlets |
 | `ch-11-b.md` | 🇵🇹 Portugal | Viana embroidered skirt + blouse + velvet jacket + apron | Big bouncy exuberant free ringlets with flower pin |
+| `ch-11-c.md` | 🇳🇬 Nigeria | Ankara print midi skirt + peplum top + head wrap | Relaxed two-strand twist-out loose spirals |
 | `ch-12-a.md` | 🇮🇳 India (Rajasthani lehenga) | Full zardozi lehenga choli with dupatta | Grand Frohawk curly updo |
 | `ch-12-b.md` | 🇱🇧 Lebanon | Floor-length jewel-tone kaftan with bell sleeves | Maximum-volume free halo ringlets |
+| `ch-12-c.md` | 🇹🇷 Turkey | Long Ottoman-style embroidered tunic dress with woven belt | Stacked half-up voluminous curls with free ringlets below |
 
 ---
 
