@@ -1,14 +1,14 @@
 # Tools in Your IDE — The MCP Gateway
 
 ---
-title: MCP Gateway — 32 CORTEX Capabilities Accessible Directly in Your Coding Assistant
+title: MCP Gateway — 35+ CORTEX Capabilities Accessible Directly in Your Coding Assistant
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-06
+last_verified: 2026-03-07
 order: 6
 ---
 
-> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes all 32 registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes 35+ registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
 
 ---
 
@@ -35,7 +35,7 @@ To verify CORTEX is running, a developer simply types `cortex_verify` in Copilot
 
 ---
 
-## The 30 Registered Tools — Organised by Purpose
+## The 35+ Registered Tools — Organised by Purpose
 
 All tools are registered in a central tool registry and discovered automatically by the IDE. Calling `cortex_tools_catalog` from your coding assistant returns a live list of all registered tools with descriptions.
 
@@ -45,7 +45,7 @@ These tools handle intent classification and request lifecycle management — th
 
 | Tool | What It Does |
 |---|---|
-| **cortex_classify** | Classifies a request into one of 29 intent types and returns the routing decision |
+| **cortex_classify** | Classifies a request into one of 30 intent types and returns the routing decision |
 | **cortex_orchestrator** | Routes a request directly to any of the wired orchestrators across all 9 domains |
 | **cortex_request_lifecycle** | Executes the complete request lifecycle — classify, plan, execute, validate — with full audit trail |
 | **cortex_challenge** | Generates two or more alternative approaches for a proposed change, with trade-off analysis |

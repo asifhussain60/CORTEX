@@ -4,7 +4,7 @@
 title: Frequently Asked Questions
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-06
+last_verified: 2026-03-07
 order: 14
 ---
 

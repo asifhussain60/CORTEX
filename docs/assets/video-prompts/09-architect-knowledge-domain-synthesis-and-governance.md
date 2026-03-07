@@ -19,7 +19,7 @@ This video explains three things:
 
 2. **How domain synthesis works** — when CORTEX processes a request, it does not apply a single global ruleset. It queries the knowledge registry for the relevant domain context — identifying which best practices, compliance rules, and architectural patterns apply to this file, this service, this team — and synthesises a precision governance context for that operation.
 
-3. **How governance rules are structured** — the 32 governance YAMLs in the registry define rules at four severity levels (critical, high, medium, low), specify enforcement mode (mandatory or recommended), and in many cases include auto-fix guidance. When a rule fires, it is not an opaque failure — it names the pattern, the violation, and the remediation.
+3. **How governance rules are structured** — the 55+ governance YAMLs in the registry define rules at four severity levels (critical, high, medium, low), specify enforcement mode (mandatory or recommended), and in many cases include auto-fix guidance. When a rule fires, it is not an opaque failure — it names the pattern, the violation, and the remediation.
 
 Teams that configure their domain profile invest once and benefit on every subsequent operation: every audit, every commit gate, every governance check reflects their actual compliance obligations — not a generic default.
 
@@ -56,7 +56,7 @@ Does NOT repeat: self-learning mechanics (Video 08), workflow template compositi
   - `rules[]` each with: `id`, `name`, `severity` (critical/high/medium/low), `description`, `pattern`, `enforcement` (mandatory/recommended), optional `auto_fix: true`
   - `compatibility`: minimum CORTEX version, Python version range
 - Onboard command: `cortex_onboard_repository` MCP tool — runs LENS analysis on a repository and produces a knowledge profile including business language summary and dashboard
-- 32 governance YAMLs in `cortex-registry/core/` — enforced at pre-commit, CI, and runtime
+- 55+ governance YAMLs in `cortex-registry/core/` — enforced at pre-commit, CI, and runtime
 - Domain synthesis: `KnowledgeSynthesizer` (`cortex/intelligence/learning/knowledge_synthesizer.py`) + `KnowledgeRegistryProxy` (`cortex/knowledge/registry_proxy.py`) — CORTEX queries the registry and assembles a precision context per operation
 - Do NOT use acronyms in narration: say "governance rule" not "CORE-XXX", say "domain profile" not "profile ID"
 - Claims permitted: "rules reflect your compliance obligations", "auto-fix available for common violations", "teams read and extend the YAML directly"
@@ -119,7 +119,7 @@ Visual: A developer submits a request — `/audit fix` on a financial services r
 A float-for-currency violation is detected: `FIN-002 — decimal-precision — HIGH — auto_fix: true`. Auto-fix applies. Rescan: 0 violations.
 
 Lower-third: `"Domain synthesis — governance that knows what your code is for"`
-Narrator: *"CORTEX does not apply all 32 governance rules to every codebase. It queries the knowledge registry for the domain profile that matches this repository, assembles the relevant rules and best practices, and delivers a precision governance context. A financial services repository gets financial services rules. A healthcare repository gets healthcare rules. The synthesis happens per-request — so as your domain profile evolves, every subsequent audit reflects the updated standard."*
+Narrator: *"CORTEX does not apply all 55+ governance rules to every codebase. It queries the knowledge registry for the domain profile that matches this repository, assembles the relevant rules and best practices, and delivers a precision governance context. A financial services repository gets financial services rules. A healthcare repository gets healthcare rules. The synthesis happens per-request — so as your domain profile evolves, every subsequent audit reflects the updated standard."*
 
 **SCENE 4 — "Onboarding Your Domain" [7:30–10:00]**
 Visual: The `/onboard` command executes on a new repository. LENS analysis runs — four rings illuminate (Language → Examination → Navigation → Synthesis). A new company repository profile card emerges: repository name, detected architecture patterns, inferred domain tags.
@@ -145,12 +145,12 @@ Lower-third: `"Your rules. Your domain. Version-controlled."`
 Narrator: *"Onboarding a repository takes a single command. CORTEX analyses the codebase with LENS, produces a knowledge profile with a plain-English business language summary, and creates a starting point for your domain configuration. Your team adds the rules that reflect your actual compliance obligations — in the same YAML format, in the same version-controlled registry. From that point forward, every governance operation on that repository reflects your standards."*
 
 **SCENE 5 — "Governance Rules: Readable, Enforceable, Auditable" [10:00–12:00]**
-Visual: The 32 governance YAML files from `cortex-registry/core/` materialise as a catalogued grid — 32 labelled cards, colour-coded by severity: critical (red border), high (amber border), medium (yellow border), low (grey border).
+Visual: The 55+ governance YAML files from `cortex-registry/core/` materialise as a catalogued grid — 55+ labelled cards, colour-coded by severity: critical (red border), high (amber border), medium (yellow border), low (grey border).
 Enforcement mode filter applied: mandatory (solid border) vs. recommended (dashed border). Auto-fix filter: rules with auto-fix highlighted with a green badge.
 
 A governance violation fires during a real audit run: type annotations missing. The rule card illuminates — name, severity, description, remediation guidance all visible. Auto-fix applies. The card dims to green: resolved.
 
-Lower-third: `"32 governance rules — enforced at pre-commit, continuous integration, and runtime"`
+Lower-third: `"55+ governance rules — enforced at pre-commit, continuous integration, and runtime"`
 Narrator: *"Governance rules in CORTEX are not a black box. Every rule has a name, a severity level, an enforcement point, and a description your team can read. When a rule fires, the violation output names the rule, describes the problem, and — where auto-fix is available — applies the remediation. Your team is never left with an opaque red mark and no guidance."*
 
 **SCENE 6 — "What This Gives the Architecture Lead" [12:00–End]**

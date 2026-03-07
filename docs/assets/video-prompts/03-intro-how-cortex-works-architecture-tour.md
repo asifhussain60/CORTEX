@@ -15,7 +15,7 @@ It proves the opposite by tracing a single request end-to-end:
 
 1. **MCP stdio transport** — how CORTEX auto-configures in VS Code without manual server startup, using the same Pylance-style mechanism engineers already trust.
 2. **Stage 0 governance pre-flight** — every request, without exception, passes three synchronous governance checks before any code is touched.
-3. **Intent routing over 29 intent types** — confidence-scored, not guessed; below threshold it asks for clarification rather than proceeding ambiguously.
+3. **Intent routing over 30 intent types** — confidence-scored, not guessed; below threshold it asks for clarification rather than proceeding ambiguously.
 4. **LENS context gathering** — 8 analyzers produce a precision context package in under 2 seconds; not a full codebase scan, exactly what the request needs.
 5. **Token budget enforcement** — every response passes through a context synthesis exit gate that caps each turn at 20,000 tokens, compresses redundant context, and caches repeated analysis so the LLM receives only what it needs, not everything CORTEX knows.
 6. **Workflow template execution** — every stage, gate, and convergence check is declared in inspectable, versionable YAML — not hardcoded in orchestrator logic.
@@ -40,7 +40,7 @@ Does NOT repeat: business identity (Video 01), lane comparison (Video 02), TDD l
 ## Steering Prompt
 *Paste into NotebookLM → Customize → Steering Prompt:*
 
-> "Select the Explainer format to create a 9–12 minute architecture walkthrough for staff engineers and technical leads. Trace a single request from the developer's chat message through Stage 0 governance audit, intent routing (29 intent types), LENS context gathering (Language → Examination → Navigation → Synthesis), workflow template execution, and convergence validation. Define every technical term on first use. Tone: senior architect delivering an internal design review — measured, exact, non-promotional. Use only the provided sources, and ensure all visual generation uses a 'request-journey' camera motif traversing a Dark-blue glassmorphism architectural stack."
+> "Select the Explainer format to create a 9–12 minute architecture walkthrough for staff engineers and technical leads. Trace a single request from the developer's chat message through Stage 0 governance audit, intent routing (30 intent types), LENS context gathering (Language → Examination → Navigation → Synthesis), workflow template execution, and convergence validation. Define every technical term on first use. Tone: senior architect delivering an internal design review — measured, exact, non-promotional. Use only the provided sources, and ensure all visual generation uses a 'request-journey' camera motif traversing a Dark-blue glassmorphism architectural stack."
 
 ---
 
@@ -48,7 +48,7 @@ Does NOT repeat: business identity (Video 01), lane comparison (Video 02), TDD l
 - Single canonical Python package: `cortex.*`
 - MCP server: Pylance-style stdio transport, auto-starts when VS Code opens the workspace (`.vscode/settings.json`)
 - 4-stage pipeline: Interaction → Intent → Intelligence → Execution
-- 29 intent types routed via IntentRouter (`cortex/orchestrators/core/intent_router.py`)
+- 30 intent types routed via IntentRouter (`cortex/orchestrators/core/intent_router.py`)
 - LENS: 8 analyzers — Language → Examination → Navigation → Synthesis
 - IntelligenceFacade: `cortex/intelligence/facade.py` — canonical single entry point for all intelligence operations (Phase 107)
 - Token budget: 20,000 tokens per turn, enforced by `ContextSynthesisGateway` (`cortex/orchestrators/core/context_synthesis_gateway.py`); cache hit rate target >50%; health-checked by `TokenOptimizationAgent`
@@ -63,7 +63,7 @@ Upload as PNG/JPG:
 2. `cortex-docs/assets/diagrams/08-diagram-architecture-package-and-directory-map.md` — package map (Scene 2)
 3. `cortex-docs/assets/diagrams/09-diagram-orchestration-request-sequence.md` — request sequence (Scene 3)
 4. `cortex-docs/assets/diagrams/10-diagram-workflow-template-engine.md` — template engine (Scene 4)
-5. `cortex-docs/assets/diagrams/13-diagram-orchestration-intent-classification-routing.md` — 29 intent types and confidence routing (Scene 2)
+5. `cortex-docs/assets/diagrams/13-diagram-orchestration-intent-classification-routing.md` — 30 intent types and confidence routing (Scene 2)
 
 **Cinematic treatment — "Request journey" camera:**
 The camera IS the request. It travels with the data from VS Code → MCP gateway → IntentRouter → LENS → orchestrator → output. Each architectural node the request enters becomes the focal point, with surrounding nodes dimming (VBP-009 signaling). This is the defining visual motif of this video — not used in any other video.
@@ -80,8 +80,8 @@ Stage 0 panel materialises: 3 governance checks flash green in sequence (MD file
 Narrator (female, architect-tone): *"Before any code is touched, every request passes a governance pre-flight. Stage 0 cannot be bypassed."*
 
 **SCENE 2 — "Intent Routing" [2:00–3:30]**
-Visual: IntentRouter node — 29 intent types fan out like a compass rose, each as a glassmorphic capsule. Camera zooms toward AUDIT intent as confidence score builds: 0.62 → 0.78 → 0.94.
-Lower-third: `"29 intent types · Confidence threshold: 0.85 for direct route"`
+Visual: IntentRouter node — 30 intent types fan out like a compass rose, each as a glassmorphic capsule. Camera zooms toward AUDIT intent as confidence score builds: 0.62 → 0.78 → 0.94.
+Lower-third: `"30 intent types · Confidence threshold: 0.85 for direct route"`
 The 27 other intents dim to 15% opacity. AUDIT capsule brightens to full cyan.
 Narrator: *"The IntentRouter doesn't guess. It builds confidence from the request semantics. At 0.85 or above, it routes directly. Below that threshold, it asks for clarification."*
 Orchestrator selection card materialises: `AuditCoordinator — cortex/orchestrators/core/`

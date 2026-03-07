@@ -4,7 +4,7 @@
 title: CORTEX — The AI Engineering Partner That Thinks, Governs, and Learns
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-06
+last_verified: 2026-03-07
 order: 1
 ---
 
@@ -40,11 +40,11 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **324 orchestration engines** | Specialised processing engines across 15 domains — each an expert at one category of engineering work |
-| **32 IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
-| **37 governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
+| **290+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
+| **35+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
+| **55+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
-| **29 intent types** | CORTEX understands and routes 29 distinct categories of engineering request |
+| **30 intent types** | CORTEX understands and routes 30 distinct categories of engineering request |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |

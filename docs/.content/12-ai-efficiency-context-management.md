@@ -4,7 +4,7 @@
 title: AI Efficiency — Context Management and Token Optimization
 type: explanation
 audience: [Product Owners, Business Leaders, Software Developers, Curious Learners]
-last_verified: 2026-03-03
+last_verified: 2026-03-07
 order: 12
 ---
 

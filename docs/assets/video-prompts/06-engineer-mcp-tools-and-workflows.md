@@ -10,7 +10,7 @@
 
 ## ⚠️ ZERO-OVERLAP DECLARATION
 This video exclusively owns:
-- MCP tool catalogue: 30 registered tools, how they're discovered, how they're called
+- MCP tool catalogue: 35+ registered tools, how they're discovered, how they're called
 - Registry architecture: `mcp_registry.py`, stdio transport, tool registration pattern
 - Workflow Composer internals: how the `WorkflowComposer`, `WorkflowGateway`, and `TemplateComposer` assemble mode workflows from YAML primitives at runtime
 - The cross-cutting intelligence pipeline: how every orchestrator operation feeds a learning loop that extracts patterns, scores them with a reinforcement signal, and refines future recommendations — with architecture-level description only (self-adaptation mechanics owned by Video 08)
@@ -23,7 +23,7 @@ Does NOT repeat: test-first mechanics (SE-01), business identity (Video 01), arc
 
 ## Problem Statement — Why This Video Exists
 
-Software and Platform Engineers who extend and operate AI-augmented systems face a recurring maintenance nightmare: every customisation requires forking core orchestrators, patching modules, and hoping upgrades don't break the fork. CORTEX solves this with three hard architectural guarantees — **30 MCP tools** exposed through the same stdio pipe that powers Pylance (zero server configuration), **workflow templates** dynamically composed from tested YAML primitives at runtime (zero core-module changes to add a new mode), and a **cross-cutting intelligence pipeline** where every operation automatically feeds a learning loop — so patterns detected today improve recommendations tomorrow, without manual tuning.
+Software and Platform Engineers who extend and operate AI-augmented systems face a recurring maintenance nightmare: every customisation requires forking core orchestrators, patching modules, and hoping upgrades don't break the fork. CORTEX solves this with three hard architectural guarantees — **35+ MCP tools** exposed through the same stdio pipe that powers Pylance (zero server configuration), **workflow templates** dynamically composed from tested YAML primitives at runtime (zero core-module changes to add a new mode), and a **cross-cutting intelligence pipeline** where every operation automatically feeds a learning loop — so patterns detected today improve recommendations tomorrow, without manual tuning.
 
 **Primary audience pain points addressed:**
 - "I need to add a new automation step — do I have to fork the orchestrator?"
@@ -36,12 +36,12 @@ Software and Platform Engineers who extend and operate AI-augmented systems face
 ## Steering Prompt
 *Select the **Explainer** format in NotebookLM, then paste into NotebookLM → Customize → Steering Prompt:*
 
-> "Select the Explainer format to create an 11–14 minute technical deep-dive for software and platform engineers. Cover: (1) how CORTEX exposes 30 MCP tools via Pylance-style stdio transport, (2) how tools are registered in mcp_registry.py and discovered by VS Code Copilot Chat, (3) how the Workflow Composer and Workflow Gateway assemble mode workflows from YAML primitives at runtime, (4) how the cross-cutting intelligence pipeline automatically captures patterns from every operation and feeds a reinforcement learning loop — described at architecture level only, not implementation detail, (5) how CORTEX's intent-aligned response headers surface a governance-anchored business or engineering principle on every interaction — selected by the same intent classification that routes tool calls (the BLOCK-QUOTE-LIBRARY, 120 quotes across 10 themes), and (6) how engineers extend the system by adding new tools or templates. Tone: senior engineer doing an architecture walkthrough — specific file paths, real module names, no abstractions. Use only the provided sources, and ensure all visual generation uses an 'X-ray / layer-reveal' motif with neon circuit tracing overlaid on a Dark-blue glassmorphism theme."
+> "Select the Explainer format to create an 11–14 minute technical deep-dive for software and platform engineers. Cover: (1) how CORTEX exposes 35+ MCP tools via Pylance-style stdio transport, (2) how tools are registered in mcp_registry.py and discovered by VS Code Copilot Chat, (3) how the Workflow Composer and Workflow Gateway assemble mode workflows from YAML primitives at runtime, (4) how the cross-cutting intelligence pipeline automatically captures patterns from every operation and feeds a reinforcement learning loop — described at architecture level only, not implementation detail, (5) how CORTEX's intent-aligned response headers surface a governance-anchored business or engineering principle on every interaction — selected by the same intent classification that routes tool calls (the BLOCK-QUOTE-LIBRARY, 120 quotes across 10 themes), and (6) how engineers extend the system by adding new tools or templates. Tone: senior engineer doing an architecture walkthrough — specific file paths, real module names, no abstractions. Use only the provided sources, and ensure all visual generation uses an 'X-ray / layer-reveal' motif with neon circuit tracing overlaid on a Dark-blue glassmorphism theme."
 
 ---
 
 ## Ground-truth constraints
-- 30 MCP tools registered in `cortex/mcp/mcp_registry.py`; 31 tool files in `cortex/mcp/tools/`
+- 35+ MCP tools registered in `cortex/mcp/mcp_registry.py`; 50 tool files in `cortex/mcp/tools/`
 - MCP transport: Pylance-style stdio, configured in `.vscode/settings.json`, auto-detected by VS Code
 - Tool calls use operation-based pattern: `cortex_validate(op="compliance")`, `cortex_load(op="rules")`
 - Workflow templates: YAML registry at `cortex-registry/workflows/templates/` (3-tier hierarchy: Primitives → Mode Workflows → Composite Pipelines)
