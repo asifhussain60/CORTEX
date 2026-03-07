@@ -1,0 +1,97 @@
+id: feedback-workflow
+name: Feedback Extraction Workflow
+phase: 133-b
+intent: FEEDBACK
+description: >
+  8-gate feedback extraction pipeline invoked by the FEEDBACK intent.
+  Extracts novel technical patterns from company codebases, applies
+  8-gate PII/IP sanitization, and writes sanitized backport instructions
+  to _workspaces/_feedback/ (G8 path restriction enforced).
+
+steps:
+  - id: feedback-stage-1-checkpoint
+    name: Git Checkpoint
+    template_ref: primitives/execution/git-checkpoint
+    description: Safe rollback point before feedback artefacts are written.
+
+  - id: feedback-stage-2-ac-start
+    name: AC Marker Start
+    template_ref: primitives/execution/ac-marker-emit
+    params:
+      event: AC_START
+      domain: FEEDBACK
+
+  - id: feedback-stage-3-g1-company
+    name: G1 — Company Name Redaction
+    orchestrator: FeedbackOrchestrator
+    action: sanitize_gate
+    params:
+      gate: G1
+    description: Replaces company name placeholders with [COMPANY].
+
+  - id: feedback-stage-4-g2-urls
+    name: G2 — Internal URL Redaction
+    orchestrator: FeedbackOrchestrator
+    action: sanitize_gate
+    params:
+      gate: G2
+    description: Replaces internal URLs with [INTERNAL_URL].
+
+  - id: feedback-stage-5-g3-credentials
+    name: G3 — Credential Redaction
+    orchestrator: FeedbackOrchestrator
+    action: sanitize_gate
+    params:
+      gate: G3
+    description: Replaces secrets, API keys, passwords with [REDACTED].
+
+  - id: feedback-stage-6-g4-g7
+    name: G4–G7 — PII and Proprietary Markers
+    orchestrator: FeedbackOrchestrator
+    action: sanitize_gates
+    params:
+      gates: [G4, G5, G6, G7]
+    description: >
+      G4: internal system references
+      G5: employee PII (emails → [EMAIL])
+      G6: proprietary algorithm markers → [PROPRIETARY_ALGO]
+      G7: internal architecture references
+
+  - id: feedback-stage-7-extract
+    name: Pattern Extraction
+    orchestrator: FeedbackOrchestrator
+    action: extract
+    description: >
+      Extracts generic technical patterns suitable for CORTEX backport.
+      Returns structured dict with 'patterns', 'sanitized': True,
+      and 'backport_instructions'.
+
+  - id: feedback-stage-8-g8-path-validation
+    name: G8 — Output Path Restriction
+    orchestrator: FeedbackOrchestrator
+    action: validate_output_path
+    params:
+      output_dir: _workspaces/_feedback/
+    description: >
+      Enforces G8: all output MUST be written to _workspaces/_feedback/.
+      Rejects any path outside this directory (P0 hard-stop).
+
+  - id: feedback-stage-9-ac-complete
+    name: AC Marker Complete
+    template_ref: primitives/execution/ac-marker-emit
+    params:
+      event: AC_COMPLETE
+      domain: FEEDBACK
+
+agent: cortex-feedback-agent.md
+agent_dir: .github/agents/support/
+scope: _workspaces/_feedback/
+triggers:
+  - feedback
+  - /feedback
+  - extract patterns
+  - backport
+  - what can cortex learn
+  - cross-repo
+  - company codebase
+  - sanitize and extract

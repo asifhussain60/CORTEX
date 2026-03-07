@@ -1,0 +1,101 @@
+# intent-keyword-registry.yaml — CORTEX Intent Keyword Routing Registry
+# Maps trigger keywords/phrases to IntentType values for routing.
+# Used by: IntentRouter, FeedbackOrchestrator tests
+# Phase: 133 (GAP-133-01)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+id: intent-keyword-registry
+description: "Canonical keyword → IntentType mapping for CORTEX intent routing"
+
+intents:
+
+  - intent: IMPLEMENT
+    keywords:
+      - "implement"
+      - "create"
+      - "build"
+      - "add feature"
+      - "develop"
+
+  - intent: FIX
+    keywords:
+      - "fix"
+      - "bug"
+      - "broken"
+      - "repair"
+      - "resolve"
+
+  - intent: REFACTOR
+    keywords:
+      - "refactor"
+      - "clean up"
+      - "reorganize"
+      - "restructure"
+      - "improve code"
+
+  - intent: AUDIT
+    keywords:
+      - "audit"
+      - "scan"
+      - "check compliance"
+      - "production readiness"
+
+  - intent: REVIEW
+    keywords:
+      - "review"
+      - "code review"
+      - "pr review"
+      - "pull request"
+      - "approve"
+      - "request changes"
+
+  - intent: FEEDBACK
+    keywords:
+      - "feedback"
+      - "extract patterns"
+      - "backport"
+      - "what can cortex learn"
+      - "cross-repo"
+      - "company codebase"
+      - "sanitize and extract"
+
+  - intent: DEBUG
+    keywords:
+      - "debug"
+      - "trace"
+      - "diagnose"
+      - "error"
+      - "exception"
+
+  - intent: HEALTH
+    keywords:
+      - "health"
+      - "healthcheck"
+      - "status"
+      - "orchestrator health"
+
+  - intent: VACUUM
+    keywords:
+      - "vacuum"
+      - "cleanup"
+      - "clean workspace"
+      - "remove clutter"
+
+  - intent: ONBOARD
+    keywords:
+      - "onboard"
+      - "explore repo"
+      - "understand codebase"
+
+  - intent: DISTILL
+    keywords:
+      - "distill"
+      - "summarize chat"
+      - "extract prompt"
+
+  - intent: QUERY
+    keywords:
+      - "what is"
+      - "how does"
+      - "explain"
+      - "describe"

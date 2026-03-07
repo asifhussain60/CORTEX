@@ -1,0 +1,87 @@
+# code-review-workflow.yaml — CORTEX Code Review Pipeline
+# Phase: 132-b (GAP-132-02)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+id: code-review-workflow
+description: "6-stage CORTEX code review pipeline — produces APPROVE / REQUEST_CHANGES / BLOCK verdict"
+intent: REVIEW
+plip_scope_lock: "code-review"
+
+stages:
+  - id: stage-1-pr-context
+    name: "PR Context Extraction"
+    description: |
+      Extract PR metadata: title, description, linked work items, author, branch target.
+      Identify changed files and classify by type (source, test, config, infra).
+    outputs:
+      - pr_context
+      - changed_file_list
+
+  - id: stage-2-intelligence-diamond
+    name: "Intelligence Diamond Analysis"
+    description: |
+      Run LENS analysis on all changed files. Surface archetype, bounded contexts, and
+      technology stack. Identify if this is a .NET / Angular / Python / mixed-stack PR.
+    depends_on: [stage-1-pr-context]
+    outputs:
+      - lens_analysis
+      - stack_classification
+
+  - id: stage-3-security-analysis
+    name: "Security Analysis (OWASP)"
+    description: |
+      Scan diff for OWASP Top 10 + API Security Top 10 patterns.
+      Each match classified P0 (BLOCK) or P1 (REQUEST_CHANGES).
+      Uses: cortex-registry/knowledge/security/owasp-top-10.yaml
+            cortex-registry/knowledge/security/owasp-api-security.yaml
+    depends_on: [stage-1-pr-context]
+    outputs:
+      - security_findings
+    p0_triggers:
+      - injection (A03 / API1)
+      - broken_auth (A07 / API2)
+      - ssrf (A10 / API7)
+      - access_control (A01)
+      - crypto (A02)
+
+  - id: stage-4-quality-analysis
+    name: "Quality Analysis"
+    description: |
+      Check for: missing tests for changed code, type-hint gaps (CORE-011),
+      docstring gaps (CORE-012), duplicate implementations (CORE-035),
+      magic numbers, hardcoded secrets (P1).
+    depends_on: [stage-2-intelligence-diamond]
+    outputs:
+      - quality_findings
+
+  - id: stage-5-rca-cross-reference
+    name: "RCA Cross-Reference"
+    description: |
+      Query cortex_learning op=history for prior failure patterns matching
+      the diff's file paths or domains. Surface any confidence ≥ 0.4 patterns
+      as advisory findings.
+    depends_on: [stage-3-security-analysis, stage-4-quality-analysis]
+    outputs:
+      - rca_findings
+
+  - id: stage-6-verdict
+    name: "Verdict Generation"
+    description: |
+      Aggregate all findings. Apply verdict rules:
+        BLOCK          — any P0 finding present
+        REQUEST_CHANGES — any P1 finding present (no P0)
+        APPROVE        — no P0, no P1 findings
+      Emit cortex_learning signal on completion.
+    depends_on: [stage-5-rca-cross-reference]
+    verdict_rules:
+      BLOCK: "p0_count > 0"
+      REQUEST_CHANGES: "p0_count == 0 and p1_count > 0"
+      APPROVE: "p0_count == 0 and p1_count == 0"
+    outputs:
+      - verdict
+      - review_report
+
+governance:
+  core_rules: [CORE-008, CORE-011, CORE-012, CORE-035, CORE-049]
+  plip_scope: "code-review"
+  tdd_applies: true

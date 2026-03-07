@@ -1,0 +1,100 @@
+# OWASP API Security Top 10 — 2023 Edition
+# Source: https://owasp.org/API-Security/
+# Used by: CodeReviewOrchestrator security analysis stage (phase-132-b)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+id: owasp-api-security
+version: "2023"
+description: "OWASP API Security Top 10 (2023 Edition)"
+
+risks:
+  - id: API1
+    name: "Broken Object Level Authorization"
+    severity: P0
+    cortex_signal: "bola"
+    patterns:
+      - "object-level authorization missing"
+      - "idor in api"
+    code_patterns:
+      - regex: "/api/.*\\{id\\}.*without.*auth"
+        description: "API endpoint with ID parameter lacking auth check"
+
+  - id: API2
+    name: "Broken Authentication"
+    severity: P0
+    cortex_signal: "broken_auth"
+    patterns:
+      - "jwt none algorithm"
+      - "weak api key"
+    code_patterns:
+      - regex: "algorithm\\s*=\\s*[\"']none[\"']"
+        description: "JWT 'none' algorithm — authentication bypass"
+
+  - id: API3
+    name: "Broken Object Property Level Authorization"
+    severity: P1
+    cortex_signal: "bopla"
+    patterns:
+      - "mass assignment"
+      - "over-posting"
+
+  - id: API4
+    name: "Unrestricted Resource Consumption"
+    severity: P1
+    cortex_signal: "resource_consumption"
+    patterns:
+      - "no rate limiting"
+      - "unbounded query"
+    code_patterns:
+      - regex: "LIMIT\\s+\\d{5,}|SELECT \\*"
+        description: "Large or unbounded SQL SELECT — resource exhaustion risk"
+
+  - id: API5
+    name: "Broken Function Level Authorization"
+    severity: P0
+    cortex_signal: "bfla"
+    patterns:
+      - "admin endpoint unprotected"
+      - "missing role check"
+
+  - id: API6
+    name: "Unrestricted Access to Sensitive Business Flows"
+    severity: P1
+    cortex_signal: "business_flow_abuse"
+    patterns:
+      - "no captcha"
+      - "bulk purchase bypass"
+
+  - id: API7
+    name: "Server Side Request Forgery"
+    severity: P0
+    cortex_signal: "api_ssrf"
+    patterns:
+      - "user-controlled url in api call"
+
+  - id: API8
+    name: "Security Misconfiguration"
+    severity: P1
+    cortex_signal: "api_misconfiguration"
+    patterns:
+      - "cors wildcard"
+      - "verbose error in api"
+    code_patterns:
+      - regex: "Access-Control-Allow-Origin.*\\*"
+        description: "CORS wildcard — allows any origin"
+
+  - id: API9
+    name: "Improper Inventory Management"
+    severity: P2
+    cortex_signal: "inventory_management"
+    patterns:
+      - "undocumented api endpoint"
+      - "shadow api"
+
+  - id: API10
+    name: "Unsafe Consumption of APIs"
+    severity: P1
+    cortex_signal: "unsafe_api_consumption"
+    patterns:
+      - "unvalidated third party api response"
+      - "blind redirect"

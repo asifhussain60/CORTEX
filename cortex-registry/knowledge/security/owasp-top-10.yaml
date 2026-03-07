@@ -1,0 +1,126 @@
+# OWASP Top 10 — 2021 Edition
+# Source: https://owasp.org/Top10/
+# Used by: CodeReviewOrchestrator security analysis stage (phase-132-b)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+id: owasp-top-10
+version: "2021"
+description: "OWASP Top 10 Web Application Security Risks (2021 Edition)"
+
+risks:
+  - id: A01
+    name: "Broken Access Control"
+    severity: P0
+    cortex_signal: "access_control"
+    patterns:
+      - "idor"
+      - "missing authorization"
+      - "privilege escalation"
+      - "path traversal"
+    code_patterns:
+      - regex: "SELECT.*WHERE.*user_input"
+        description: "Potential IDOR via unvalidated user input in query"
+      - regex: "request\\.params\\[|request\\.query\\["
+        description: "Unvalidated query parameter used directly"
+
+  - id: A02
+    name: "Cryptographic Failures"
+    severity: P0
+    cortex_signal: "crypto"
+    patterns:
+      - "md5"
+      - "sha1"
+      - "weak cipher"
+      - "plaintext password"
+    code_patterns:
+      - regex: "MD5\\s*\\(|hashlib\\.md5"
+        description: "MD5 hash — cryptographically broken"
+      - regex: "password\\s*=\\s*[\"'][^\"']{4,}"
+        description: "Hardcoded password literal (P1)"
+
+  - id: A03
+    name: "Injection"
+    severity: P0
+    cortex_signal: "injection"
+    patterns:
+      - "sql injection"
+      - "command injection"
+      - "ldap injection"
+    code_patterns:
+      - regex: "SELECT.*\\+\\s*\\w+|\\\"SELECT.*\\\"\\s*\\+|f\\\"SELECT"
+        description: "SQL injection — string concatenation in query"
+      - regex: "exec\\s*\\(|os\\.system\\s*\\(.*\\+"
+        description: "Command injection — dynamic shell execution"
+      - regex: "eval\\s*\\("
+        description: "eval() with dynamic input — code injection risk"
+
+  - id: A04
+    name: "Insecure Design"
+    severity: P1
+    cortex_signal: "insecure_design"
+    patterns:
+      - "missing rate limit"
+      - "no input validation"
+      - "business logic flaw"
+
+  - id: A05
+    name: "Security Misconfiguration"
+    severity: P1
+    cortex_signal: "misconfiguration"
+    patterns:
+      - "debug=true"
+      - "cors: *"
+      - "allow_all_origins"
+    code_patterns:
+      - regex: "DEBUG\\s*=\\s*True|debug\\s*=\\s*true"
+        description: "Debug mode enabled in production config"
+      - regex: "CORS_ALLOW_ALL_ORIGINS\\s*=\\s*True"
+        description: "CORS allow-all — wide-open cross-origin"
+
+  - id: A06
+    name: "Vulnerable and Outdated Components"
+    severity: P1
+    cortex_signal: "outdated_components"
+    patterns:
+      - "known cve"
+      - "outdated dependency"
+
+  - id: A07
+    name: "Identification and Authentication Failures"
+    severity: P0
+    cortex_signal: "auth_failure"
+    patterns:
+      - "weak password policy"
+      - "session fixation"
+      - "missing mfa"
+    code_patterns:
+      - regex: "password\\s*==\\s*[\"']|password\\s*!=\\s*[\"']"
+        description: "Plain-text password comparison"
+
+  - id: A08
+    name: "Software and Data Integrity Failures"
+    severity: P1
+    cortex_signal: "integrity_failure"
+    patterns:
+      - "unsigned package"
+      - "deserialization"
+      - "auto-update without verification"
+
+  - id: A09
+    name: "Security Logging and Monitoring Failures"
+    severity: P2
+    cortex_signal: "logging_failure"
+    patterns:
+      - "no audit log"
+      - "missing error logging"
+
+  - id: A10
+    name: "Server-Side Request Forgery (SSRF)"
+    severity: P0
+    cortex_signal: "ssrf"
+    patterns:
+      - "ssrf"
+      - "user-controlled url fetch"
+    code_patterns:
+      - regex: "requests\\.get\\s*\\(.*request\\.|urllib.*request\\."
+        description: "Potential SSRF — user-controlled URL passed to HTTP client"

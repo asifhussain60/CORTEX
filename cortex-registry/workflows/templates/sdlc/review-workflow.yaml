@@ -1,0 +1,71 @@
+id: review-workflow
+name: Code Review Workflow
+phase: 133-b
+intent: REVIEW
+description: >
+  6-stage code review pipeline invoked by the REVIEW intent.
+  Executes CodeReviewOrchestrator against the provided diff,
+  applies OWASP Top-10 + API security checks, quality rules,
+  and returns a structured verdict (APPROVE / REQUEST_CHANGES / BLOCK).
+
+pre_gate: primitives/governance/holistic-validation-gate
+convergence: primitives/validation/detect-fix-rescan-loop
+
+steps:
+  - id: review-stage-1-checkpoint
+    name: Git Checkpoint
+    template_ref: primitives/execution/git-checkpoint
+    description: Safe rollback point before review artefacts are written.
+
+  - id: review-stage-2-ac-start
+    name: AC Marker Start
+    template_ref: primitives/execution/ac-marker-emit
+    params:
+      event: AC_START
+      domain: REVIEW
+
+  - id: review-stage-3-security-scan
+    name: OWASP Security Scan
+    orchestrator: CodeReviewOrchestrator
+    action: scan_security
+    inputs:
+      owasp_yaml_root: cortex-registry/knowledge/security/
+    description: >
+      Scans diff for P0 patterns (SQL injection, eval, command injection,
+      JWT none algorithm) and P1 patterns (hardcoded secrets, MD5, DEBUG=True,
+      CORS wildcard). Any P0 finding forces BLOCK verdict.
+
+  - id: review-stage-4-quality-check
+    name: Quality Rules Check
+    orchestrator: CodeReviewOrchestrator
+    action: scan_quality
+    description: >
+      Checks for hardcoded API keys and unresolved work markers.
+      Findings contribute to REQUEST_CHANGES verdict.
+
+  - id: review-stage-5-verdict
+    name: Verdict Resolution
+    orchestrator: CodeReviewOrchestrator
+    action: resolve_verdict
+    description: >
+      Aggregates findings into final verdict:
+        BLOCK           — any P0 finding present
+        REQUEST_CHANGES — P1 or quality findings (no P0)
+        APPROVE         — no findings
+
+  - id: review-stage-6-ac-complete
+    name: AC Marker Complete
+    template_ref: primitives/execution/ac-marker-emit
+    params:
+      event: AC_COMPLETE
+      domain: REVIEW
+
+agent: cortex-executor.md
+triggers:
+  - review
+  - /review
+  - code review
+  - pr review
+  - pull request review
+  - diff review
+  - security review
