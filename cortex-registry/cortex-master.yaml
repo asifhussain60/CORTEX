@@ -15,12 +15,12 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  last_updated: '2026-03-05T00:00:00Z'
-  total_phases: 109
+  last_updated: '2026-03-07T00:00:00Z'
+  total_phases: 110
   active: 0
   completed: 107
   in_progress: 0
-  planned: 0
+  planned: 1
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -33,12 +33,13 @@ metadata:
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed: "phase-127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs closed, 23 golden tests, stdlib-only engine), phase-128 COMPLETE (Conflict & Drift Eradication — 9/9 sub-phases, 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49), phase-126 (Production Hardening Checklist Engine — 12 drift locks), phase-125 (Registry-Aware Documentation Viewer)."
-  planned_next: "No planned phases — Phase 127 and 128 complete"
+  planned_next: "phase-129 PLANNED — Product Owner Intelligence Suite: 13 GAPs, 13 sub-phases, SAFe/Scrum decision support, ROI calculator, change recommendation engine"
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
 phase_detail_files:
   # Thin pointers only — full detail in each phase's dedicated YAML file.
+  - { id: phase-129, status: PLANNED, priority: P1, sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE, gaps: 13, sub_phases: 13, file: "cortex-registry/planning/phases/planned/phase-129-product-owner-intelligence-suite.yaml", note: "Product Owner Intelligence Suite: SAFe/Scrum decision support, ROI calculator, change recommendation engine, training doc generator, work item integration foundation, PO metrics dashboard." }
   - { id: phase-128, status: COMPLETE, completed_date: "2026-03-05", priority: P0, sweep_id: SWEEP-128-CONFLICT-DRIFT-ERADICATION, gaps: 24, sub_phases: 9, completed_sub_phases: 9, file: "cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml", note: "Conflict & Drift Eradication: 9/9 sub-phases complete (128-a through 128-i), 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49." }
   - { id: phase-127, status: COMPLETE, completed_date: "2026-03-05", priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/completed/phase-127-deterministic-sync-engine.yaml", note: "Deterministic Safe Windows-First Sync Engine: 6/6 GAPs CLOSED. cortex/tools/cortex_sync.py (stdlib-only), SSOT policy, three-way merge, baseline tracking, danger scan, 23 golden tests GREEN." }
   - { id: phase-126, status: COMPLETE, completed_date: "2026-03-04", priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (#30-#41), 12 drift locks, all 12 GAPs CLOSED." }
@@ -122,11 +123,11 @@ verification:
   last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 109
+  total_phases: 110
   completed: 107
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   archived: 4
   playbooks: 1
   completion_percentage: 98
@@ -153,6 +154,17 @@ summary:
     phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
 
 phases:
+  # ── PHASE 129: PRODUCT OWNER INTELLIGENCE SUITE (2026-03-07) ─────────────────
+  - id: phase-129
+    title: "Product Owner Intelligence Suite — SAFe/Scrum Decision Support, ROI Calculator, Change Recommendation Engine"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE
+    gaps: 13
+    sub_phases: 13
+    file: "cortex-registry/planning/phases/planned/phase-129-product-owner-intelligence-suite.yaml"
+    note: "PLANNED 2026-03-07. 13 GAPs identified: Process Gap Analyzer, Requirements Engineer, Training Doc Generator, ROI Calculator, Change Recommendation Engine, SAFe/Scrum Vocabulary, Work Item Integration (ADO/Jira), PO Metrics Dashboard, Executive Summary Generator, Sprint Capacity Calculator, Feature Dependency Graph, Risk Register, HTML View Enhancement."
+
   # ── PHASE 124: PRINCIPLE BLOCK LIBRARY (2026-03-04) ──────────────────────────
   - id: phase-124
     title: "Principle Block Library & Injection System — Curated SDLC Principles for Analysis/Design Responses"

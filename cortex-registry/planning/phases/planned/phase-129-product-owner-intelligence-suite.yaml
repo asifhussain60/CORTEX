@@ -1,0 +1,592 @@
+# CORTEX Phase Plan — Phase 129: Product Owner Intelligence Suite
+# Purpose: Enhance CORTEX capabilities for Product Owners using SAFe/Scrum methodologies
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create
+
+id: "phase-129"
+title: "Product Owner Intelligence Suite — SAFe/Scrum Decision Support, ROI Calculator, Change Recommendation Engine"
+created: "2026-03-07"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-129-PO-INTELLIGENCE-SUITE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND — why this phase exists
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Product Owner HTML view enhancement request (2026-03-07 Copilot Chat session)
+  Score at entry: 6.0 / 10 (PO capabilities are partial — LENS/Challenge exist but no structured outputs)
+  Target score: 9.5 / 10 (full PO decision support suite with ROI, change impact, training docs)
+  
+  User requirements identified:
+  1. Document current application process vs. best practice changes
+  2. Accurate requirements derivation for desired outcomes
+  3. Convert changes into training documents
+  4. LOE → automated ROI report calculation
+  5. Change recommendation report with impact analysis
+  
+  Expanded scope (adjacent gaps):
+  6. SAFe/Scrum vocabulary integration (Epics, Features, PIs, ARTs)
+  7. Work item integration foundation (ADO/Jira API contracts)
+  8. PO metrics dashboard from live SQLite data
+  9. Executive summary generator
+  10. Sprint capacity calculator
+  11. Feature dependency graph for PO planning
+  12. Persistent risk register
+  
+  Baseline measurements:
+    - Smoke tests: 2775 passed
+    - Preflight: 425 passed
+    - Existing PO-adjacent tools: Challenge-First, DoR Gate, LENS, RCA Engine
+  
+  Git prerequisite: main branch clean, all phase-128 changes merged
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all open issues this phase addresses (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  # ── CORE PO CAPABILITIES (P1) ────────────────────────────────────────────────
+  - id: "GAP-129-01"
+    title: "Process Gap Analysis Engine — Current State vs. Best Practice Comparison"
+    severity: P1
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      No structured template or engine exists for comparing current application process
+      against best practices. LENS analyzes code but doesn't produce process-level
+      documentation. Challenge-First shows alternatives but not as a formal process gap report.
+      Missing: ProcessGapAnalyzer class, process_gap_template.yaml, MCP tool exposure
+    action_ref: "phase-129-a"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/process_gap_analyzer.py"
+      - "cortex-registry/templates/reports/process_gap_template.yaml"
+      - "cortex/mcp/tools/cortex_process_gap.py"
+      - "tests/orchestrators/domain/test_process_gap_analyzer.py"
+
+  - id: "GAP-129-02"
+    title: "Requirements Engineering Pipeline — Vague Idea → Testable ACs Workflow"
+    severity: P1
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      DoR Gate validates ACs but no pipeline exists to DERIVE accurate requirements
+      from vague user ideas. Missing: RequirementsEngineer class that uses LENS context
+      to suggest specific, testable ACs grounded in existing codebase patterns.
+      Should integrate with Challenge-First for alternative requirement framings.
+    action_ref: "phase-129-b"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/requirements_engineer.py"
+      - "cortex-registry/workflows/templates/sdlc/requirements-engineering-workflow.yaml"
+      - "cortex/mcp/tools/cortex_requirements.py"
+      - "tests/orchestrators/domain/test_requirements_engineer.py"
+
+  - id: "GAP-129-03"
+    title: "Training Document Generator — Session/Change → Structured Training Output"
+    severity: P1
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      `/distill` converts chat sessions to prompts but no template produces formal
+      training documents. Missing: TrainingDocGenerator that takes implementation
+      sessions and outputs step-by-step training materials with screenshots placeholders,
+      procedures, and validation checklists.
+    action_ref: "phase-129-c"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/training_doc_generator.py"
+      - "cortex-registry/templates/reports/training_document_template.yaml"
+      - "cortex/mcp/tools/cortex_training_doc.py"
+      - "tests/orchestrators/domain/test_training_doc_generator.py"
+
+  - id: "GAP-129-04"
+    title: "ROI Calculator Engine — LOE + Risk → Business Value Calculation"
+    severity: P1
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      Challenge-First provides effort/risk scores but no ROI formula or calculator.
+      Missing: ROICalculator class with configurable formulas (cost of delay, 
+      tech debt interest, feature value scoring), outputting structured ROI reports
+      with confidence intervals and sensitivity analysis.
+    action_ref: "phase-129-d"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/roi_calculator.py"
+      - "cortex-registry/templates/reports/roi_report_template.yaml"
+      - "cortex-registry/knowledge/sdlc/roi_formulas.yaml"
+      - "cortex/mcp/tools/cortex_roi.py"
+      - "tests/orchestrators/domain/test_roi_calculator.py"
+
+  - id: "GAP-129-05"
+    title: "Change Recommendation Engine — Impact Analysis with Alternatives"
+    severity: P1
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      LENS + RCA provide code/history analysis but no structured change recommendation
+      report. Missing: ChangeRecommendationEngine that compares current functionality
+      against requested changes, produces impact matrix, and ranks alternatives by
+      ROI, risk, and alignment with existing architecture.
+    action_ref: "phase-129-e"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/change_recommendation_engine.py"
+      - "cortex-registry/templates/reports/change_recommendation_template.yaml"
+      - "cortex/mcp/tools/cortex_change_impact.py"
+      - "tests/orchestrators/domain/test_change_recommendation_engine.py"
+
+  # ── KNOWLEDGE & VOCABULARY (P2) ──────────────────────────────────────────────
+  - id: "GAP-129-06"
+    title: "SAFe/Scrum Vocabulary Knowledge Base — Agile Artifact Mapping"
+    severity: P2
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      No knowledge YAML maps SAFe/Scrum concepts to CORTEX intents. Missing:
+      safe_scrum_vocabulary.yaml with Epics, Features, Stories, PIs, ARTs, Sprints,
+      mapped to CORTEX operations (IMPLEMENT→Story, PLAN→Epic, AUDIT→PI review).
+    action_ref: "phase-129-f"
+    status: OPEN
+    deliverables:
+      - "cortex-registry/knowledge/sdlc/safe_scrum_vocabulary.yaml"
+      - "cortex/intelligence/agile_vocabulary_mapper.py"
+      - "tests/intelligence/test_agile_vocabulary_mapper.py"
+
+  - id: "GAP-129-07"
+    title: "Work Item Integration Contracts — ADO/Jira API Foundation"
+    severity: P2
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      No API connectors exist for Azure DevOps or Jira. Missing: Abstract WorkItemProvider
+      interface with ADO and Jira implementations (read-only Phase 129, write in future).
+      Enables bidirectional sync of stories, ACs, and status.
+    action_ref: "phase-129-g"
+    status: OPEN
+    deliverables:
+      - "cortex/infrastructure/work_item_provider.py"
+      - "cortex/infrastructure/ado_provider.py"
+      - "cortex/infrastructure/jira_provider.py"
+      - "cortex-registry/config/work_item_providers.yaml"
+      - "tests/infrastructure/test_work_item_providers.py"
+
+  # ── VISUALIZATION & DASHBOARDS (P2) ──────────────────────────────────────────
+  - id: "GAP-129-08"
+    title: "PO Metrics Dashboard — Live SQLite Data Visualization"
+    severity: P2
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      product-owner.html is static. Missing: Dynamic dashboard fed by SQLite audit
+      data showing sprint velocity, AC completion rates, governance pass rates,
+      LOE accuracy tracking, and ROI realized vs. predicted.
+    action_ref: "phase-129-h"
+    status: OPEN
+    deliverables:
+      - "cortex-docs/roles/product-owner-dashboard.html"
+      - "cortex/dashboards/po_metrics_provider.py"
+      - "cortex-docs/assets/js/po-dashboard.js"
+      - "tests/dashboards/test_po_metrics_provider.py"
+
+  # ── EXTENDED CAPABILITIES (P2) ────────────────────────────────────────────────
+  - id: "GAP-129-09"
+    title: "Executive Summary Generator — Sprint/PI Data → Leadership Report"
+    severity: P2
+    source: "Adjacent gap discovery 2026-03-07"
+    evidence: |
+      No automated executive summary generation from sprint metrics. Missing:
+      ExecutiveSummaryGenerator that produces 1-page leadership reports with
+      KPIs, blockers, risks, and recommendations in business language.
+    action_ref: "phase-129-i"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/executive_summary_generator.py"
+      - "cortex-registry/templates/reports/executive_summary_template.yaml"
+      - "tests/orchestrators/domain/test_executive_summary_generator.py"
+
+  - id: "GAP-129-10"
+    title: "Sprint Capacity Calculator — Team Velocity + LOE → Commitment"
+    severity: P2
+    source: "Adjacent gap discovery 2026-03-07"
+    evidence: |
+      Challenge-First estimates LOE but no capacity calculator exists. Missing:
+      SprintCapacityCalculator that takes team velocity history, availability,
+      and LOE estimates to recommend sprint commitment with confidence bounds.
+    action_ref: "phase-129-j"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/sprint_capacity_calculator.py"
+      - "cortex-registry/knowledge/sdlc/velocity_formulas.yaml"
+      - "tests/orchestrators/domain/test_sprint_capacity_calculator.py"
+
+  - id: "GAP-129-11"
+    title: "Feature Dependency Graph — PO Planning Visualization"
+    severity: P2
+    source: "Adjacent gap discovery 2026-03-07"
+    evidence: |
+      LENS produces code dependency graphs but no feature-level dependency
+      visualization for PO planning. Missing: FeatureDependencyGraphBuilder
+      that maps features to code components and shows blocking relationships.
+    action_ref: "phase-129-k"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/feature_dependency_builder.py"
+      - "cortex-docs/assets/js/feature-dependency-graph.js"
+      - "tests/orchestrators/domain/test_feature_dependency_builder.py"
+
+  - id: "GAP-129-12"
+    title: "Persistent Risk Register — Challenge-First Risk Tracking"
+    severity: P2
+    source: "Adjacent gap discovery 2026-03-07"
+    evidence: |
+      Challenge-First surfaces risks but they're not persisted. Missing:
+      RiskRegister SQLite table and manager that tracks risks across sprints,
+      links to features, and shows risk trends over time.
+    action_ref: "phase-129-l"
+    status: OPEN
+    deliverables:
+      - "cortex/orchestrators/domain/risk_register_manager.py"
+      - "cortex-registry/templates/reports/risk_register_template.yaml"
+      - "tests/orchestrators/domain/test_risk_register_manager.py"
+
+  # ── DOCUMENTATION & HTML (P2) ─────────────────────────────────────────────────
+  - id: "GAP-129-13"
+    title: "Product Owner HTML View Enhancement — Rich Content & Visualization"
+    severity: P2
+    source: "PO enhancement request 2026-03-07"
+    evidence: |
+      product-owner.html needs typography fix (Plus Jakarta Sans → Inter),
+      5 new sections (Process Gap, Requirements, Training, ROI, Change Recommendation),
+      SAFe/Scrum vocabulary throughout, interactive D3 ROI calculator.
+    action_ref: "phase-129-m"
+    status: OPEN
+    deliverables:
+      - "cortex-docs/roles/product-owner.html (enhanced)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: true  # Large phase — may split into 129-a through 129-m
+  phase_atomic: false          # Sub-phases can be completed in separate sessions
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES — ROI-ordered, TDD-gated
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── SUB-PHASE A: Process Gap Analysis Engine ─────────────────────────────────
+  - id: "phase-129-a"
+    title: "Process Gap Analysis Engine — Current vs. Best Practice Comparison"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-01"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2775 baseline)"
+    regression_gate: "make test-smoke — zero new failures"
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for ProcessGapAnalyzer.analyze(), .compare(), .generate_report()"
+        gate: "pytest tests/orchestrators/domain/test_process_gap_analyzer.py — all tests FAIL"
+        blocker: "No implementation until tests fail"
+      green:
+        action: "Implement ProcessGapAnalyzer with LENS integration and template rendering"
+        gate: "pytest tests/orchestrators/domain/test_process_gap_analyzer.py — all tests PASS"
+        blocker: "No refactor until green"
+      refactor:
+        action: "Add type hints, docstrings, MCP tool registration"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Sub-phase not complete until refactor passes"
+    
+    convergence_gate:
+      detect_step: "make test-smoke + cortex_validate op=compliance"
+      fix_step: "Fix any P0/P1 violations"
+      success_predicate: "p0_count == 0 and p1_count == 0"
+      max_cycles: 3
+
+  # ── SUB-PHASE B: Requirements Engineering Pipeline ───────────────────────────
+  - id: "phase-129-b"
+    title: "Requirements Engineering Pipeline — Vague Idea → Testable ACs"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-02"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-a"]
+    prerequisite: "phase-129-a complete"
+    regression_gate: "make test-smoke — zero new failures"
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for RequirementsEngineer.derive_acs(), .validate_testability()"
+        gate: "pytest tests/orchestrators/domain/test_requirements_engineer.py — all tests FAIL"
+      green:
+        action: "Implement RequirementsEngineer with LENS context injection"
+        gate: "pytest tests/orchestrators/domain/test_requirements_engineer.py — all tests PASS"
+      refactor:
+        action: "Add workflow template, MCP tool, type hints"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE C: Training Document Generator ─────────────────────────────────
+  - id: "phase-129-c"
+    title: "Training Document Generator — Session → Training Materials"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-03"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-b"]
+    prerequisite: "phase-129-b complete"
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for TrainingDocGenerator.generate(), .format_procedures()"
+        gate: "pytest tests/orchestrators/domain/test_training_doc_generator.py — all tests FAIL"
+      green:
+        action: "Implement TrainingDocGenerator with template rendering"
+        gate: "pytest tests/orchestrators/domain/test_training_doc_generator.py — all tests PASS"
+      refactor:
+        action: "Add MCP tool, docstrings, type hints"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE D: ROI Calculator Engine ───────────────────────────────────────
+  - id: "phase-129-d"
+    title: "ROI Calculator Engine — LOE + Risk → Business Value"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-04"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "5 hours"
+    depends_on: ["phase-129-c"]
+    prerequisite: "phase-129-c complete"
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for ROICalculator.calculate(), .sensitivity_analysis()"
+        gate: "pytest tests/orchestrators/domain/test_roi_calculator.py — all tests FAIL"
+      green:
+        action: "Implement ROICalculator with configurable formulas from YAML"
+        gate: "pytest tests/orchestrators/domain/test_roi_calculator.py — all tests PASS"
+      refactor:
+        action: "Add MCP tool, report template, knowledge YAML"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE E: Change Recommendation Engine ────────────────────────────────
+  - id: "phase-129-e"
+    title: "Change Recommendation Engine — Impact Analysis with Alternatives"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-05"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "5 hours"
+    depends_on: ["phase-129-d"]
+    prerequisite: "phase-129-d complete"
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for ChangeRecommendationEngine.analyze(), .rank_alternatives()"
+        gate: "pytest tests/orchestrators/domain/test_change_recommendation_engine.py — all tests FAIL"
+      green:
+        action: "Implement engine with LENS + ROI integration"
+        gate: "pytest tests/orchestrators/domain/test_change_recommendation_engine.py — all tests PASS"
+      refactor:
+        action: "Add MCP tool, report template"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE F: SAFe/Scrum Vocabulary ───────────────────────────────────────
+  - id: "phase-129-f"
+    title: "SAFe/Scrum Vocabulary Knowledge Base"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-06"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-129-e"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for AgileVocabularyMapper.map_intent(), .get_artifact_type()"
+        gate: "pytest tests/intelligence/test_agile_vocabulary_mapper.py — all tests FAIL"
+      green:
+        action: "Create safe_scrum_vocabulary.yaml and mapper class"
+        gate: "pytest tests/intelligence/test_agile_vocabulary_mapper.py — all tests PASS"
+      refactor:
+        action: "Complete vocabulary coverage, add docstrings"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE G: Work Item Integration ───────────────────────────────────────
+  - id: "phase-129-g"
+    title: "Work Item Integration Contracts — ADO/Jira Foundation"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-07"]
+    governance_authority: "CORE-008, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-f"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for WorkItemProvider interface and mock implementations"
+        gate: "pytest tests/infrastructure/test_work_item_providers.py — all tests FAIL"
+      green:
+        action: "Implement abstract provider, ADO stub, Jira stub (read-only)"
+        gate: "pytest tests/infrastructure/test_work_item_providers.py — all tests PASS"
+      refactor:
+        action: "Add config YAML, docstrings"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE H: PO Metrics Dashboard ────────────────────────────────────────
+  - id: "phase-129-h"
+    title: "PO Metrics Dashboard — Live SQLite Visualization"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-08"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-g"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for POMetricsProvider.get_velocity(), .get_completion_rates()"
+        gate: "pytest tests/dashboards/test_po_metrics_provider.py — all tests FAIL"
+      green:
+        action: "Implement provider, create dashboard HTML with D3"
+        gate: "pytest tests/dashboards/test_po_metrics_provider.py — all tests PASS"
+      refactor:
+        action: "Add JavaScript interactivity, responsive design"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE I: Executive Summary Generator ─────────────────────────────────
+  - id: "phase-129-i"
+    title: "Executive Summary Generator"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-09"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-h"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for ExecutiveSummaryGenerator.generate()"
+        gate: "pytest tests/orchestrators/domain/test_executive_summary_generator.py — all tests FAIL"
+      green:
+        action: "Implement generator with template"
+        gate: "pytest tests/orchestrators/domain/test_executive_summary_generator.py — all tests PASS"
+      refactor:
+        action: "Add business language polishing"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE J: Sprint Capacity Calculator ──────────────────────────────────
+  - id: "phase-129-j"
+    title: "Sprint Capacity Calculator"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-10"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-i"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for SprintCapacityCalculator.calculate_commitment()"
+        gate: "pytest tests/orchestrators/domain/test_sprint_capacity_calculator.py — all tests FAIL"
+      green:
+        action: "Implement calculator with velocity formulas"
+        gate: "pytest tests/orchestrators/domain/test_sprint_capacity_calculator.py — all tests PASS"
+      refactor:
+        action: "Add confidence bounds, docstrings"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE K: Feature Dependency Graph ────────────────────────────────────
+  - id: "phase-129-k"
+    title: "Feature Dependency Graph Builder"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-11"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-j"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for FeatureDependencyBuilder.build_graph()"
+        gate: "pytest tests/orchestrators/domain/test_feature_dependency_builder.py — all tests FAIL"
+      green:
+        action: "Implement builder with D3 visualization"
+        gate: "pytest tests/orchestrators/domain/test_feature_dependency_builder.py — all tests PASS"
+      refactor:
+        action: "Add interactive JavaScript"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE L: Risk Register ───────────────────────────────────────────────
+  - id: "phase-129-l"
+    title: "Persistent Risk Register"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-12"]
+    governance_authority: "CORE-008, CORE-012, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-k"]
+    
+    tdd_cycle:
+      red:
+        action: "Write failing tests for RiskRegisterManager.add_risk(), .get_trends()"
+        gate: "pytest tests/orchestrators/domain/test_risk_register_manager.py — all tests FAIL"
+      green:
+        action: "Implement SQLite-backed risk register"
+        gate: "pytest tests/orchestrators/domain/test_risk_register_manager.py — all tests PASS"
+      refactor:
+        action: "Add trend visualization, template"
+        gate: "make test-smoke — zero regressions"
+
+  # ── SUB-PHASE M: HTML View Enhancement ───────────────────────────────────────
+  - id: "phase-129-m"
+    title: "Product Owner HTML View Enhancement"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-13"]
+    governance_authority: "CORE-002, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-l"]
+    
+    implementation:
+      actions:
+        - "Fix typography: Plus Jakarta Sans → Inter for headings"
+        - "Add Process Gap Analysis section with split card layout"
+        - "Add Requirements Engineering section with 4-step pipeline"
+        - "Add Training Documentation section with feature cards"
+        - "Add ROI Calculator section with D3 interactive visualization"
+        - "Add Change Recommendation section with before/after cards"
+        - "Integrate SAFe/Scrum vocabulary throughout"
+        - "Validate WCAG 2.1 AA compliance"
+      gate: "Visual review + a11y audit"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA — Phase 129 Complete When:
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "All 13 GAPs status: CLOSED"
+  - "5 new MCP tools registered: cortex_process_gap, cortex_requirements, cortex_training_doc, cortex_roi, cortex_change_impact"
+  - "6 new orchestrator classes in cortex/orchestrators/domain/"
+  - "4 new template YAMLs in cortex-registry/templates/reports/"
+  - "2 new knowledge YAMLs: safe_scrum_vocabulary.yaml, roi_formulas.yaml"
+  - "Product Owner HTML view enhanced with 5 new sections"
+  - "All tests GREEN: target +80 new tests"
+  - "Smoke baseline: ≥2855 passed"
+  - "Zero P0/P1 violations in final convergence gate"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION EVIDENCE (to be filled when complete)
+# ─────────────────────────────────────────────────────────────────────────────
+completion_evidence:
+  completed_date: null
+  smoke_count: null
+  new_tests_added: null
+  mcp_tools_registered: null
+  final_notes: null
