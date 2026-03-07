@@ -104,7 +104,7 @@ animation_classes:
 
 design_constraints:
   - "NEVER introduce light backgrounds — dark navy is the identity"
-  - "NEVER use inline style= — all values via CSS class and token"
+  - "Inline style= attributes are ALLOWED — prefer CSS classes for reusable patterns, inline for one-offs"
   - "NEVER add new font families — Inter + Space Grotesk + JetBrains Mono are locked"
   - "NEVER override blur with raw pixel values — use tier variables"
   - "ALL new components inherit from glass-design-tokens.css"

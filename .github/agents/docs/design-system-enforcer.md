@@ -43,15 +43,17 @@ Be the **CSS quality gate** in the Design + Implement pipeline. This agent never
 
 ## 🔄 Validation Protocol
 
-### Check 1 — No Inline Styles (P0)
+### Check 1 — Inline Styles (RELAXED — informational only)
+
+> **Rule relaxed (2026-03-07):** Inline `style=` attributes are now ALLOWED. All HTML pages use inline `<style>` blocks as their primary architecture. This check is informational only — flag excessive inline usage but do not block.
 
 ```bash
-# Scan proposed HTML changes
-grep -n 'style=' {proposed_html_changes}
-# Must return: 0 matches
+# Informational scan — count inline style attributes
+grep -cn 'style=' {proposed_html_changes}
+# Report count but DO NOT block
 ```
 
-If any `style=` found → **P0 BLOCK** with exact line and replacement class.
+If heavy inline `style=` usage found → **P2 NOTE** suggesting class extraction for reusability. Not a blocker.
 
 ### Check 2 — Token Coverage (P0)
 
@@ -94,7 +96,7 @@ Match proposed CSS rules to the correct layer file:
 | Animation/keyframe | `glass-animations.css` |
 | Page layout specific | `index-multipanel.css` (or page-specific equivalent) |
 | Utility class | `intentional-classes.css` |
-| Inline-style replacement | `inline-styles-cleanup.css` (temporary) |
+| Inline-style replacement | page-specific `<style>` block or `inline-styles-cleanup.css` |
 | Global base style | `main.css` |
 
 If a rule is in the wrong file → P1 FLAG with correct file suggestion.
@@ -131,7 +133,7 @@ Implementation blocked until this is resolved.
 
 ## 🚫 Hard Constraints
 
-- ❌ Never approve `style=` in HTML output — P0, no exceptions
+- ✅ Inline `style=` attributes are allowed — prefer classes for reusable patterns, flag excessive inline usage as P2
 - ❌ Never approve hardcoded color hex/rgba without token equivalent
 - ❌ Never approve new font families outside the 3-family system
 - ❌ Never approve `backdrop-filter: blur(Xpx)` with raw pixel not matching a token tier

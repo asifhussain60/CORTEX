@@ -261,16 +261,18 @@ Exempt: Discovery-only, Drift-detection, Certification (read-only operations)
 | **Mermaid.js** | ❌ BANNED in role views | Use hand-crafted CSS pipelines instead |
 | **Chart.js** | ⚪ Not used | No current need |
 
-### Architecture Detection (Software Engineer View)
+### Architecture Detection (Per-Page Styling)
 
-The `software-engineer.html` uses a **different architecture** from the other role views:
-- It loads content dynamically via `content-loader.js` from `cortex-docs/data/content.json`
-- It uses the external CSS design system (`glassmorphism.css`, `glass-design-tokens.css`, `glass-ui-components.css`, `main.css`, `role-landing.css`)
-- Other role views (`business-leader.html`, `product-owner.html`) use inline `<style>` blocks + Tailwind
+All HTML pages use inline `<style>` blocks as their primary styling mechanism. This is the accepted architecture:
+- `index.html` — inline `<style>` block (~624 lines) with its own tokens + Font Awesome
+- `roles/business-leader.html` — inline `<style>` block (~367 lines) + Tailwind CDN
+- `roles/product-owner.html` — inline `<style>` block (~121 lines) + Tailwind CDN
+- `roles/software-engineer.html` — external CSS design system (`glassmorphism.css`, `glass-design-tokens.css`, `glass-ui-components.css`, `main.css`, `role-landing.css`) + `content-loader.js`
+- `roles/learner.html` — external CSS design system (same as software-engineer)
 
-**When working on `software-engineer.html`:** Respect its dynamic loading architecture. Enhance the content source (`content.json` or the loader), or add sections that work alongside the dynamic content — do not replace the architecture with inline styles.
+**When working on any page:** Respect its existing architecture (inline or external). Inline `style=` attributes are allowed on all pages. Prefer CSS classes for patterns that repeat across pages — use inline styles for page-specific one-offs.
 
-**When working on `business-leader.html` or `product-owner.html`:** These use self-contained inline styles + Tailwind. Maintain this pattern for consistency within each file.
+**When working on `software-engineer.html`:** Respect its dynamic loading architecture. Enhance the content source (`content.json` or the loader), or add sections that work alongside the dynamic content.
 
 ---
 
@@ -279,14 +281,14 @@ The `software-engineer.html` uses a **different architecture** from the other ro
 **Trigger:** Any request to update, redesign, or improve an HTML view in `cortex-docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
 
 **Mode contract (non-negotiable):**
-- ❌ **NEVER** add `style=` inline attributes — all styling via CSS classes
+- ✅ Inline `style=` attributes are **ALLOWED** — prefer CSS classes for reusable patterns, but inline styles are permitted for one-off overrides, rapid prototyping, and page-scoped tweaks. This rule was relaxed because all HTML pages already use inline `<style>` blocks as their primary architecture.
 - ❌ **NEVER** introduce new CSS values without first checking `glass-design-tokens.css`
 - ❌ **NEVER** drift the dark blue glassmorphism theme — `design_system.yaml` is the identity contract
 - ❌ **NEVER** use Mermaid.js for SDLC pipelines — use hand-crafted CSS flexbox pipelines (§ Glassmorphism Design Intelligence)
 - ❌ **NEVER** use D3 horizontal bar charts for domain distributions — use proportional bubble grids
 - ❌ **NEVER** use `Plus Jakarta Sans` for headings — use `Inter` with `letter-spacing: -0.02em`
 - ❌ **NEVER** use 3-column table-row grids for before/after comparisons — use split card-pair layout
-- ✅ CSS changes → `cortex-docs/assets/css/` files only (matching the existing layer)
+- ✅ CSS changes → `cortex-docs/assets/css/` files OR inline `<style>` blocks (matching the page's existing architecture)
 - ✅ Read `cortex-docs/.content/knowledge/` before proposing any structural change
 - ✅ Validate against `a11y_checklist.yaml` and `performance_checklist.yaml`
 - ✅ All new components must reference entries in `components.yaml`
@@ -306,7 +308,7 @@ This step runs **automatically** whenever the target file is a role view or the 
    - `index.html` → Landing Page (all roles)
 2. **Load `.content` files** from the Role → Content Routing Table (§ Role-Aware Content Synthesis)
 3. **Extract role-specific content** — find `## For {Role}` sections, `audience:` frontmatter matches, and role-relevant propositions
-4. **Detect target architecture** — inline styles + Tailwind (business-leader, product-owner) vs external CSS + content-loader (software-engineer) vs landing page pattern (index.html)
+4. **Detect target architecture** — inline `<style>` block (index, business-leader, product-owner) vs external CSS + content-loader (software-engineer, learner)
 5. **Build content brief** — a structured list of sections to create/enhance, each mapped to a `.content` source, with the role-specific angle identified
 6. Pass the content brief to Step 1 as input context
 

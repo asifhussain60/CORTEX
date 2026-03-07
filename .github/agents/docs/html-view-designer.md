@@ -95,7 +95,7 @@ Present a structured proposal:
 2. Use only elements from `components.yaml` registry
 3. All new interactive elements include required ARIA attributes
 4. Stable DOM hook IDs (`id=` attributes) must match `components.yaml § dom_hooks` — never rename existing IDs
-5. Never add `style=` — use CSS classes only
+5. Inline `style=` attributes are allowed — prefer CSS classes for reusable patterns across pages
 6. Hand off to `design-system-enforcer` for CSS token validation
 
 ---
@@ -116,7 +116,7 @@ Present a structured proposal:
 | Clickable card (navigates) | `<a class='glass-card-clickable'>` |
 | Clickable card (action) | `<button>` |
 | Diagram | `<figure><img alt='...'><figcaption>` |
-| Hidden panel | `<div class='hidden-panel'>` — NEVER `style="display:none"` |
+| Hidden panel | `<div class='hidden-panel'>` — prefer class over `style="display:none"` for consistency |
 
 ### Heading Hierarchy Rules
 
@@ -139,10 +139,10 @@ Present a structured proposal:
 
 ## 🚫 Hard Constraints
 
-- ❌ Never add `style=` attributes — P0 governance violation
+- ✅ Inline `style=` attributes are allowed — prefer classes for cross-page reusable patterns
 - ❌ Never remove existing `id=` attributes (breaks DOM hooks and JS)
 - ❌ Never remove `role=` landmark attributes
-- ❌ Never add `display:none` as inline style — use `.hidden-panel` class
+- ✅ Prefer `.hidden-panel` class over `display:none` inline for consistency
 - ❌ Never change the heading hierarchy level of existing headings without IA justification
 - ❌ Never reference deleted packages (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) in content
 - ✅ Always preserve the dark blue glassmorphism theme identity

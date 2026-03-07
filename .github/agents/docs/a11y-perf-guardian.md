@@ -58,7 +58,7 @@ Run all checks from `a11y_checklist.yaml`. Priority order:
 | a11y-020 | `<html lang='en'>` present | `grep '<html'` |
 | a11y-030 | No duplicate `id=` attributes | `grep 'id=' | sort | uniq -d` |
 | a11y-031 | All tab panels have correct ARIA (role, aria-selected, aria-controls) | Scan tab markup |
-| css-001 | Zero `style=` attributes in HTML output | `grep 'style='` |
+| css-001 | Inline `style=` attributes — informational count (RELAXED — no longer blocks) | `grep 'style='` |
 
 ### P1 Checks (flag, do not block)
 
@@ -139,7 +139,7 @@ Perf checks: {pass}/{total}
 - ❌ Never approve changes that remove the skip link
 - ❌ Never approve changes that remove `role='main'` from `<main>`
 - ❌ Never approve changes that introduce render-blocking scripts in `<head>`
-- ❌ Never approve changes that add `style=` (delegate check to design-system-enforcer but double-check)
+- ✅ Inline `style=` attributes are allowed — flag excessive usage as P2 note, do not block
 - ✅ Always provide the exact corrective HTML/CSS alongside each violation
 - ✅ Run ALL P0 checks before reporting — show complete list, not first-fail
 

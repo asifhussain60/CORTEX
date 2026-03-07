@@ -103,8 +103,8 @@ css_architecture:
 
   rules:
     - id: css-001
-      rule: "Zero inline style= attributes — all styling via CSS classes"
-      severity: P0
+      rule: "Inline style= attributes allowed — prefer CSS classes for reusable patterns (RELAXED)"
+      severity: P2
     - id: css-002
       rule: "All custom properties must be defined in glass-design-tokens.css before use"
       severity: P0

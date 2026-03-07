@@ -121,13 +121,13 @@ Scan proposed CSS changes for:
 
 Detection: `grep -n 'var(--' {proposed_css}` — verify no referenced variable is removed.
 
-### Check 7 — Inline Style Introduction (P0)
+### Check 7 — Inline Style Count (informational — RELAXED)
 
-Final backstop — even if `design-system-enforcer` cleared it:
+Inline `style=` attributes are now allowed. This check reports count only — no blocking.
 
 ```bash
-grep -n 'style=' {proposed_html}
-# Must return: 0 matches
+grep -cn 'style=' {proposed_html}
+# Report count as informational — P2 if excessive (>50 per file)
 ```
 
 ---
@@ -150,7 +150,7 @@ Theme drift: {NONE | DETECTED}
 ARIA landmarks: {INTACT | REGRESSION}
 DOM hooks: {STABLE | BROKEN}
 Internal links: {OK | {n} broken}
-Inline styles: {NONE | {n} found}
+Inline styles: {count} (informational — allowed)
 
 {details if any regressions}
 
@@ -163,7 +163,7 @@ Verdict: {✅ CLEAR FOR MERGE | 🔴 BLOCKED | 🟡 FLAGGED}
 
 - ❌ Never clear a change that removes glassmorphism from an existing glass panel
 - ❌ Never clear a change that removes `id='main-content'` or skip link
-- ❌ Never clear a change that introduces `style=` attributes
+- ✅ Inline `style=` attributes are allowed — report count as informational only
 - ❌ Never clear a change that removes existing ARIA role attributes from landmarks
 - ✅ Always run ALL 7 checks before emitting verdict
 - ✅ Always provide the exact line/file of each regression found

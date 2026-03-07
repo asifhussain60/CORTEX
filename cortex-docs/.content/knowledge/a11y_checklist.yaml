@@ -150,6 +150,6 @@ checks:
 regression_rules:
   - "Any PR that introduces a new <img> without alt attribute → P0 block"
   - "Any PR that removes role='tablist' or aria-selected → P0 block"
-  - "Any PR that adds inline style= → P0 block"
+  - "Any PR that adds inline style= → informational note (RELAXED — inline styles allowed)"
   - "Any PR that breaks heading hierarchy → P1 flag"
   - "Any PR that removes skip-link → P0 block"
