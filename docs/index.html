@@ -688,7 +688,7 @@
     }
 
     /* ===================================================================
-       ROLE VIDEO SHOWCASE — Experience CORTEX (Redesign 2026-03)
+       ROLE VIDEO SHOWCASE v2 — Full-Width Stacked Layout (2026-03)
        =================================================================== */
 
     /* Outer section gradient panel */
@@ -708,235 +708,182 @@
         pointer-events: none;
     }
 
-    /* Header inside the panel */
+    /* ── Panel Header ─────────────────────────────────── */
     .vsp-header {
-        padding: 2.5rem 2.5rem 1.5rem;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 2rem 2rem 1.25rem;
         position: relative;
     }
     .vsp-eyebrow {
         display: inline-flex; align-items: center; gap: 0.5rem;
-        font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
+        font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em;
         text-transform: uppercase; color: var(--accent-cyan);
         background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
-        border-radius: 100px; padding: 0.3rem 0.9rem; margin-bottom: 0.9rem;
+        border-radius: 100px; padding: 0.28rem 0.85rem; margin-bottom: 0.75rem;
     }
     .vsp-title {
-        font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700; color: var(--text-primary);
-        letter-spacing: -0.02em; word-spacing: 0.04em;
-        margin: 0 0 0.5rem;
+        letter-spacing: -0.02em; word-spacing: 0.04em; margin: 0 0 0.4rem;
     }
     .vsp-subtitle {
-        font-size: 1rem; color: var(--text-tertiary); margin: 0;
-        max-width: 56ch;
+        font-size: 0.95rem; color: var(--text-tertiary); margin: 0; max-width: 64ch; line-height: 1.6;
     }
 
-    /* Layout: left rail + right stage */
-    .vsp-body {
-        display: flex; flex-direction: column; gap: 0;
+    /* ── Role Tab Row (horizontal pill strip) ─────────── */
+    .vsp-tab-row {
+        display: flex; flex-wrap: wrap; gap: 0.6rem;
+        padding: 1rem 2rem 1.25rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    @media(min-width: 768px) { .vsp-body { flex-direction: row; } }
-
-    /* Left role rail */
-    .vsp-rail {
-        display: flex; flex-direction: row; overflow-x: auto; gap: 0.5rem;
-        padding: 1.25rem 1.5rem; scrollbar-width: none;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .vsp-rail::-webkit-scrollbar { display: none; }
-    @media(min-width: 768px) {
-        .vsp-rail {
-            flex-direction: column; width: 240px; flex-shrink: 0;
-            padding: 1.5rem 1rem; gap: 0.4rem;
-            border-bottom: none; border-right: 1px solid rgba(255,255,255,0.05);
-            overflow-x: visible; overflow-y: auto;
-        }
-    }
-
-    /* Role tab buttons */
     .vsp-role-btn {
-        display: flex; align-items: flex-start; gap: 0.85rem;
-        padding: 1rem 1.1rem;
-        background: transparent;
-        border: 1px solid transparent;
-        border-radius: 0.875rem;
-        cursor: pointer; text-align: left;
-        transition: all 0.22s ease;
-        white-space: nowrap; flex-shrink: 0;
-        width: 100%;
+        display: inline-flex; align-items: center; gap: 0.65rem;
+        padding: 0.65rem 1.25rem;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 0.75rem;
+        cursor: pointer; font-family: var(--font-sans);
+        font-size: 0.9rem; font-weight: 600;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+        position: relative;
     }
-    @media(min-width: 768px) { .vsp-role-btn { white-space: normal; } }
-
-    .vsp-role-icon {
-        width: 2.25rem; height: 2.25rem; border-radius: 0.6rem;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1rem; flex-shrink: 0;
-        transition: all 0.22s ease;
+    .vsp-role-btn:hover {
+        background: rgba(255,255,255,0.07);
+        color: var(--text-primary);
+        border-color: rgba(255,255,255,0.14);
     }
-    .vsp-role-meta { display: flex; flex-direction: column; gap: 0.15rem; }
-    .vsp-role-label {
-        font-family: var(--font-sans); font-weight: 700; font-size: 0.92rem;
-        color: var(--text-secondary); transition: color 0.22s ease; line-height: 1.2;
-    }
-    .vsp-role-desc {
-        font-size: 0.72rem; color: var(--text-tertiary);
-        font-weight: 400; line-height: 1.4;
-        display: none;
-    }
-    @media(min-width: 768px) { .vsp-role-desc { display: block; } }
-
-    /* Role btn — hover */
-    .vsp-role-btn:hover { background: rgba(255,255,255,0.03); }
-    .vsp-role-btn:hover .vsp-role-label { color: var(--text-primary); }
     .vsp-role-btn:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
 
-    /* Role btn — active states (3 role accent colours) */
-    .vsp-role-btn.active[data-role="business"] {
-        background: linear-gradient(90deg, rgba(251,191,36,0.1), transparent);
-        border-color: rgba(251,191,36,0.3);
+    .vsp-role-icon {
+        width: 1.75rem; height: 1.75rem; border-radius: 0.45rem;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.8rem; flex-shrink: 0;
     }
-    .vsp-role-btn.active[data-role="business"] .vsp-role-icon { background: rgba(251,191,36,0.15); color: #fbbf24; box-shadow: 0 0 12px rgba(251,191,36,0.25); }
-    .vsp-role-btn.active[data-role="business"] .vsp-role-label { color: #fbbf24; }
-    .vsp-role-btn.active[data-role="business"]::before { background: #fbbf24; }
+    .vsp-role-label { font-weight: 700; }
+    .vsp-role-desc  { display: none; } /* hidden in pill mode */
+
+    /* Active states — 3 accent colours */
+    .vsp-role-btn.active[data-role="business"] {
+        background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.35);
+        color: #fbbf24;
+        box-shadow: 0 0 16px rgba(251,191,36,0.12);
+    }
+    .vsp-role-btn.active[data-role="business"] .vsp-role-icon { background: rgba(251,191,36,0.18); color: #fbbf24; }
 
     .vsp-role-btn.active[data-role="product"] {
-        background: linear-gradient(90deg, rgba(123,97,255,0.12), transparent);
-        border-color: rgba(123,97,255,0.3);
+        background: rgba(123,97,255,0.12); border-color: rgba(123,97,255,0.35);
+        color: #a78bfa;
+        box-shadow: 0 0 16px rgba(123,97,255,0.12);
     }
-    .vsp-role-btn.active[data-role="product"] .vsp-role-icon { background: rgba(123,97,255,0.15); color: #a78bfa; box-shadow: 0 0 12px rgba(123,97,255,0.25); }
-    .vsp-role-btn.active[data-role="product"] .vsp-role-label { color: #a78bfa; }
-    .vsp-role-btn.active[data-role="product"]::before { background: #a78bfa; }
+    .vsp-role-btn.active[data-role="product"] .vsp-role-icon { background: rgba(123,97,255,0.18); color: #a78bfa; }
 
     .vsp-role-btn.active[data-role="engineer"] {
-        background: linear-gradient(90deg, rgba(0,212,255,0.1), transparent);
-        border-color: rgba(0,212,255,0.3);
+        background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.35);
+        color: var(--accent-cyan);
+        box-shadow: 0 0 16px rgba(0,212,255,0.1);
     }
-    .vsp-role-btn.active[data-role="engineer"] .vsp-role-icon { background: rgba(0,212,255,0.15); color: var(--accent-cyan); box-shadow: 0 0 12px rgba(0,212,255,0.25); }
-    .vsp-role-btn.active[data-role="engineer"] .vsp-role-label { color: var(--accent-cyan); }
-    .vsp-role-btn.active[data-role="engineer"]::before { background: var(--accent-cyan); }
+    .vsp-role-btn.active[data-role="engineer"] .vsp-role-icon { background: rgba(0,212,255,0.18); color: var(--accent-cyan); }
 
-    /* Left-edge accent bar */
-    .vsp-role-btn { position: relative; }
-    .vsp-role-btn.active::before {
-        content: ''; position: absolute; left: -1px; top: 15%; bottom: 15%;
-        width: 3px; border-radius: 3px;
-    }
+    /* ── Full-width video canvas ──────────────────────── */
+    .vsp-canvas-wrap { padding: 1.25rem 2rem 0; }
 
-    /* Right stage */
-    .vsp-stage {
-        flex: 1; min-width: 0; padding: 1.5rem 1.75rem 1.25rem;
-        display: flex; flex-direction: column; gap: 1rem;
-    }
+    .vsp-panel { display: none; animation: vsiFadeUp 0.3s ease-out forwards; }
+    .vsp-panel.active { display: block; }
+    @keyframes vsiFadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Video panel container */
-    .vsp-panel { display: none; flex-direction: column; gap: 1rem; animation: vsiFadeUp 0.35s ease-out forwards; }
-    .vsp-panel.active { display: flex; }
-    @keyframes vsiFadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Panel meta (title + desc above the video) */
-    .vsp-panel-meta { display: flex; flex-direction: column; gap: 0.3rem; }
-    .vsp-panel-title {
-        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.35rem);
-        font-weight: 700; color: var(--text-primary);
-        letter-spacing: -0.02em; margin: 0;
-    }
-    .vsp-panel-desc { font-size: 0.875rem; color: var(--text-tertiary); margin: 0; max-width: 72ch; line-height: 1.6; }
-
-    /* CORTEX Robot Head placeholder — the cinematic video loading state */
+    /* The cinematic placeholder — full-width, fixed height */
     .vsp-robot-placeholder {
         position: relative;
-        width: 100%;
-        aspect-ratio: 16/9;
-        min-height: 300px;
-        max-height: 480px;
+        width: 100%; height: 460px;
         border-radius: 1.25rem;
         overflow: hidden;
-        background: radial-gradient(ellipse 90% 70% at 50% 55%, rgba(6,12,28,1) 0%, rgba(2,5,14,1) 100%);
+        background: radial-gradient(ellipse 100% 80% at 50% 50%,
+            rgba(6,12,28,1) 0%,
+            rgba(3,6,18,1) 60%,
+            rgba(1,3,10,1) 100%);
         border: 1px solid rgba(255,255,255,0.07);
         display: flex; align-items: center; justify-content: center;
         cursor: pointer;
-        transition: border-color 0.3s ease;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .vsp-robot-placeholder:hover { border-color: rgba(0,212,255,0.22); }
+    .vsp-robot-placeholder:hover {
+        border-color: rgba(0,212,255,0.2);
+        box-shadow: 0 0 60px rgba(0,212,255,0.05);
+    }
 
-    /* Subtle grid background */
+    /* Perspective grid */
     .vsp-robot-placeholder::before {
         content: '';
         position: absolute; inset: 0;
         background-image:
-            linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 1;
+            linear-gradient(rgba(0,212,255,0.028) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,212,255,0.028) 1px, transparent 1px);
+        background-size: 48px 48px;
         pointer-events: none;
+        mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+        -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
     }
 
     /* Horizon glow line */
     .vsp-robot-placeholder::after {
         content: '';
-        position: absolute; bottom: 30%; left: 10%; right: 10%; height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.15), rgba(123,97,255,0.15), transparent);
+        position: absolute; bottom: 28%; left: 5%; right: 5%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.18), rgba(123,97,255,0.18), transparent);
         filter: blur(1px);
         pointer-events: none;
     }
 
-    /* Glow ring container */
+    /* Glow rings */
     .vsp-glow-rings {
         position: absolute; inset: 0;
         display: flex; align-items: center; justify-content: center;
         pointer-events: none;
     }
     .vsp-ring {
-        position: absolute;
-        border-radius: 50%;
-        border: 1px solid rgba(0,212,255,0.12);
+        position: absolute; border-radius: 50%;
+        border: 1px solid rgba(0,212,255,0.1);
         animation: vspRingPulse 3.5s ease-in-out infinite;
     }
-    .vsp-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
-    .vsp-ring:nth-child(2) { width: 310px; height: 310px; animation-delay: 0.6s; border-color: rgba(123,97,255,0.08); }
-    .vsp-ring:nth-child(3) { width: 420px; height: 420px; animation-delay: 1.2s; border-color: rgba(0,212,255,0.05); }
-    .vsp-ring:nth-child(4) { width: 530px; height: 530px; animation-delay: 1.8s; border-color: rgba(123,97,255,0.03); }
-
+    .vsp-ring:nth-child(1) { width: 220px;  height: 220px;  animation-delay: 0s;   }
+    .vsp-ring:nth-child(2) { width: 360px;  height: 360px;  animation-delay: 0.6s; border-color: rgba(123,97,255,0.07); }
+    .vsp-ring:nth-child(3) { width: 500px;  height: 500px;  animation-delay: 1.2s; border-color: rgba(0,212,255,0.04);  }
+    .vsp-ring:nth-child(4) { width: 650px;  height: 650px;  animation-delay: 1.8s; border-color: rgba(123,97,255,0.025);}
     @keyframes vspRingPulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.06); opacity: 0.5; }
+        0%, 100% { transform: scale(1);    opacity: 1;   }
+        50%       { transform: scale(1.05); opacity: 0.5; }
     }
 
-    /* Logo wrapper — sits in the center of the rings */
+    /* Center content (logo + text) */
     .vsp-logo-wrap {
         position: relative; z-index: 2;
         display: flex; flex-direction: column; align-items: center; gap: 1.75rem;
     }
     .vsp-logo-glow {
-        position: relative;
-        width: 128px; height: 128px;
+        position: relative; width: 140px; height: 140px;
         display: flex; align-items: center; justify-content: center;
     }
     .vsp-logo-glow::before {
         content: '';
-        position: absolute; inset: -28px;
-        border-radius: 50%;
+        position: absolute; inset: -32px; border-radius: 50%;
         background: radial-gradient(circle, rgba(0,212,255,0.22) 0%, transparent 70%);
         animation: vspLogoGlow 2.5s ease-in-out infinite alternate;
     }
     @keyframes vspLogoGlow {
-        from { opacity: 0.6; transform: scale(0.95); }
-        to   { opacity: 1;   transform: scale(1.05); }
+        from { opacity: 0.55; transform: scale(0.94); }
+        to   { opacity: 1;    transform: scale(1.06); }
     }
     .vsp-logo-img {
-        width: 128px; height: 128px;
-        border-radius: 1.5rem;
-        filter: drop-shadow(0 0 22px rgba(0,212,255,0.55)) drop-shadow(0 0 6px rgba(0,212,255,0.9));
+        width: 140px; height: 140px; border-radius: 1.5rem;
+        filter: drop-shadow(0 0 28px rgba(0,212,255,0.6)) drop-shadow(0 0 8px rgba(0,212,255,0.9));
         animation: vspLogoPulse 3s ease-in-out infinite;
         position: relative; z-index: 1;
     }
     @keyframes vspLogoPulse {
-        0%, 100% { filter: drop-shadow(0 0 22px rgba(0,212,255,0.55)) drop-shadow(0 0 6px rgba(0,212,255,0.9)); }
-        50%       { filter: drop-shadow(0 0 36px rgba(0,212,255,0.85)) drop-shadow(0 0 12px rgba(123,97,255,0.7)); }
+        0%, 100% { filter: drop-shadow(0 0 28px rgba(0,212,255,0.6)) drop-shadow(0 0 8px rgba(0,212,255,0.9)); }
+        50%       { filter: drop-shadow(0 0 44px rgba(0,212,255,0.9)) drop-shadow(0 0 14px rgba(123,97,255,0.7)); }
     }
 
-    /* Placeholder text stack */
+    /* Text below logo */
     .vsp-placeholder-text {
         text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
     }
@@ -945,52 +892,71 @@
         text-transform: uppercase; color: var(--accent-cyan); opacity: 0.75;
     }
     .vsp-placeholder-headline {
-        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.4rem);
-        font-weight: 700; color: var(--text-primary); margin: 0;
-        letter-spacing: -0.02em;
+        font-family: var(--font-display); font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+        font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.02em;
     }
     .vsp-placeholder-sub {
-        font-size: 0.85rem; color: var(--text-tertiary); margin: 0; max-width: 42ch; line-height: 1.55;
+        font-size: 0.88rem; color: var(--text-tertiary); margin: 0; max-width: 46ch; line-height: 1.55;
     }
 
-    /* Scanning line animation across the placeholder */
+    /* Role-accent overrides */
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring { border-color: rgba(251,191,36,0.08); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring:nth-child(1) { border-color: rgba(251,191,36,0.18); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(251,191,36,0.24) 0%, transparent 70%); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-img { filter: drop-shadow(0 0 28px rgba(251,191,36,0.6)) drop-shadow(0 0 8px rgba(251,191,36,0.9)); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(251,191,36,0.45), rgba(251,191,36,0.3), transparent); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-robot-placeholder::after { background: linear-gradient(90deg, transparent, rgba(251,191,36,0.18), rgba(251,191,36,0.18), transparent); }
+
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring { border-color: rgba(123,97,255,0.08); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring:nth-child(1) { border-color: rgba(123,97,255,0.18); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(123,97,255,0.26) 0%, transparent 70%); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-img { filter: drop-shadow(0 0 28px rgba(123,97,255,0.6)) drop-shadow(0 0 8px rgba(123,97,255,0.9)); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(123,97,255,0.45), rgba(123,97,255,0.3), transparent); }
+
+    /* Scanning line */
     .vsp-scan-line {
         position: absolute; left: 0; right: 0; height: 2px; top: 0;
-        background: linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.4) 40%, rgba(123,97,255,0.4) 60%, transparent 100%);
+        background: linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.45) 40%, rgba(123,97,255,0.45) 60%, transparent 100%);
         filter: blur(1px);
         animation: vspScanDown 4s linear infinite;
         pointer-events: none;
     }
     @keyframes vspScanDown {
-        0%   { top: 0%; opacity: 0; }
+        0%   { top: 0%;   opacity: 0; }
         5%   { opacity: 1; }
         95%  { opacity: 1; }
         100% { top: 100%; opacity: 0; }
     }
 
-    /* Role accent colour override for ring/glow when tab changes */
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring { border-color: rgba(251,191,36,0.10); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring:nth-child(1) { border-color: rgba(251,191,36,0.2); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(251,191,36,0.22) 0%, transparent 70%); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-img { filter: drop-shadow(0 0 22px rgba(251,191,36,0.55)) drop-shadow(0 0 6px rgba(251,191,36,0.9)); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(251,191,36,0.45), rgba(251,191,36,0.3), transparent); }
+    /* Panel description overlay — bottom-left glass card */
+    .vsp-panel-overlay {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        padding: 2rem 2rem 1.5rem;
+        background: linear-gradient(0deg,
+            rgba(2,5,14,0.96) 0%,
+            rgba(2,5,14,0.7)  50%,
+            transparent       100%);
+        display: flex; flex-direction: column; gap: 0.25rem;
+    }
+    .vsp-panel-title {
+        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.4rem);
+        font-weight: 700; color: var(--text-primary);
+        letter-spacing: -0.02em; margin: 0;
+    }
+    .vsp-panel-desc {
+        font-size: 0.85rem; color: var(--text-tertiary); margin: 0;
+        max-width: 72ch; line-height: 1.55;
+    }
 
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring { border-color: rgba(123,97,255,0.10); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring:nth-child(1) { border-color: rgba(123,97,255,0.2); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(123,97,255,0.24) 0%, transparent 70%); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-img { filter: drop-shadow(0 0 22px rgba(123,97,255,0.55)) drop-shadow(0 0 6px rgba(123,97,255,0.9)); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(123,97,255,0.45), rgba(123,97,255,0.3), transparent); }
-
-    /* Bottom status bar inside placeholder */
+    /* Status bar inside placeholder */
     .vsp-status-bar {
         position: absolute; bottom: 0; left: 0; right: 0;
-        padding: 0.75rem 1.25rem;
-        background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+        padding: 0.6rem 1.5rem 0.6rem 1.25rem;
         display: flex; align-items: center; justify-content: space-between;
     }
     .vsp-status-dot {
         display: inline-flex; align-items: center; gap: 0.4rem;
-        font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+        font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
         color: var(--text-tertiary);
     }
     .vsp-dot-pulse {
@@ -1007,13 +973,14 @@
         color: rgba(0,212,255,0.5); text-transform: uppercase;
     }
 
-    /* Footnote below the stage */
+    /* Footnote */
     .vsp-footnote {
         display: flex; align-items: center; gap: 0.5rem;
-        font-size: 0.78rem; color: var(--text-tertiary);
-        padding: 0 1.75rem 1.5rem;
+        font-size: 0.77rem; color: var(--text-tertiary);
+        padding: 1rem 2rem 1.5rem;
     }
-    .vsp-footnote i { color: var(--accent-cyan); opacity: 0.6; font-size: 0.7rem; }
+    .vsp-footnote i { color: var(--accent-cyan); opacity: 0.6; font-size: 0.68rem; }
+
 
     /* --- FOOTER --- */
     .page-footer { padding: var(--spacing-8) 0; border-top: 1px solid var(--border-base); margin-top: var(--spacing-16); background: rgba(0,0,0,0.3); }
@@ -1238,175 +1205,159 @@
                 </p>
             </div>
 
-            <!-- Body: Rail + Stage -->
-            <div class="vsp-body">
+            <!-- Horizontal pill tab strip -->
+            <div class="vsp-tab-row" role="tablist" aria-label="Select your role to watch the intro video">
 
-                <!-- Left Rail: Role selectors -->
-                <div class="vsp-rail" role="tablist" aria-label="Select your role to watch the intro video">
+                <button class="vsp-role-btn active"
+                        data-role="business" data-accent="amber"
+                        data-panel="vsp-panel-business"
+                        id="vsp-btn-business"
+                        role="tab" aria-selected="true" aria-controls="vsp-panel-business">
+                    <div class="vsp-role-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;" aria-hidden="true">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="vsp-role-label">Business Leader</span>
+                </button>
 
-                    <button class="vsp-role-btn active"
-                            data-role="business" data-accent="amber"
-                            data-panel="vsp-panel-business"
-                            id="vsp-btn-business"
-                            role="tab" aria-selected="true" aria-controls="vsp-panel-business">
-                        <div class="vsp-role-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;" aria-hidden="true">
-                            <i class="fas fa-chart-line"></i>
+                <button class="vsp-role-btn"
+                        data-role="product" data-accent="violet"
+                        data-panel="vsp-panel-product"
+                        id="vsp-btn-product"
+                        role="tab" aria-selected="false" aria-controls="vsp-panel-product">
+                    <div class="vsp-role-icon" style="background:rgba(123,97,255,0.12);color:#a78bfa;" aria-hidden="true">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <span class="vsp-role-label">Product Owner</span>
+                </button>
+
+                <button class="vsp-role-btn"
+                        data-role="engineer" data-accent="cyan"
+                        data-panel="vsp-panel-engineer"
+                        id="vsp-btn-engineer"
+                        role="tab" aria-selected="false" aria-controls="vsp-panel-engineer">
+                    <div class="vsp-role-icon" style="background:rgba(0,212,255,0.12);color:#00d4ff;" aria-hidden="true">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="vsp-role-label">Software Engineer</span>
+                </button>
+
+            </div><!-- /vsp-tab-row -->
+
+            <!-- Full-width canvas -->
+            <div class="vsp-canvas-wrap">
+
+                <!-- Panel: Business Leader -->
+                <div class="vsp-panel active" id="vsp-panel-business" role="tabpanel" aria-labelledby="vsp-btn-business">
+                    <div class="vsp-robot-placeholder" data-accent="amber" aria-label="Video coming soon — CORTEX for Business Leaders">
+                        <div class="vsp-glow-rings" aria-hidden="true">
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
                         </div>
-                        <div class="vsp-role-meta">
-                            <span class="vsp-role-label">Business Leader</span>
-                            <span class="vsp-role-desc">ROI, governance &amp; risk reduction</span>
+                        <div class="vsp-scan-line" aria-hidden="true"></div>
+                        <div class="vsp-logo-wrap">
+                            <div class="vsp-logo-glow">
+                                <img src="assets/images/cortex-logo-200.png"
+                                     alt="CORTEX AI — Video loading"
+                                     class="vsp-logo-img"
+                                     width="140" height="140"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="vsp-placeholder-text">
+                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                <p class="vsp-placeholder-headline">The ROI of Governed AI</p>
+                                <p class="vsp-placeholder-sub">A 5-minute introduction for executives — no engineering background required.</p>
+                            </div>
                         </div>
-                    </button>
-
-                    <button class="vsp-role-btn"
-                            data-role="product" data-accent="violet"
-                            data-panel="vsp-panel-product"
-                            id="vsp-btn-product"
-                            role="tab" aria-selected="false" aria-controls="vsp-panel-product">
-                        <div class="vsp-role-icon" style="background:rgba(123,97,255,0.12);color:#a78bfa;" aria-hidden="true">
-                            <i class="fas fa-bullseye"></i>
-                        </div>
-                        <div class="vsp-role-meta">
-                            <span class="vsp-role-label">Product Owner</span>
-                            <span class="vsp-role-desc">AC traceability &amp; delivery velocity</span>
-                        </div>
-                    </button>
-
-                    <button class="vsp-role-btn"
-                            data-role="engineer" data-accent="cyan"
-                            data-panel="vsp-panel-engineer"
-                            id="vsp-btn-engineer"
-                            role="tab" aria-selected="false" aria-controls="vsp-panel-engineer">
-                        <div class="vsp-role-icon" style="background:rgba(0,212,255,0.12);color:#00d4ff;" aria-hidden="true">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div class="vsp-role-meta">
-                            <span class="vsp-role-label">Software Engineer</span>
-                            <span class="vsp-role-desc">LENS, TDD pipeline &amp; MCP tools</span>
-                        </div>
-                    </button>
-
-                </div><!-- /vsp-rail -->
-
-                <!-- Right Stage: Video panels -->
-                <div class="vsp-stage">
-
-                    <!-- Panel: Business Leader -->
-                    <div class="vsp-panel active" id="vsp-panel-business" role="tabpanel" aria-labelledby="vsp-btn-business">
-                        <div class="vsp-panel-meta">
+                        <div class="vsp-panel-overlay">
                             <h3 class="vsp-panel-title">CORTEX for Business Leaders</h3>
-                            <p class="vsp-panel-desc">Understand how governed AI delivery reduces risk, accelerates audit readiness, and turns engineering velocity into measurable business outcomes.</p>
+                            <p class="vsp-panel-desc">Governed AI delivery that reduces risk, accelerates audit readiness, and turns engineering velocity into measurable outcomes.</p>
                         </div>
-                        <!-- Robot-head placeholder — amber accent -->
-                        <div class="vsp-robot-placeholder" data-accent="amber" aria-label="Video coming soon — CORTEX for Business Leaders">
-                            <div class="vsp-glow-rings" aria-hidden="true">
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                            </div>
-                            <div class="vsp-scan-line" aria-hidden="true"></div>
-                            <div class="vsp-logo-wrap">
-                                <div class="vsp-logo-glow">
-                                    <img src="assets/images/cortex-logo-200.png"
-                                         alt="CORTEX AI — Video loading"
-                                         class="vsp-logo-img"
-                                         width="128" height="128"
-                                         loading="lazy"/>
-                                </div>
-                                <div class="vsp-placeholder-text">
-                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                    <p class="vsp-placeholder-headline">The ROI of Governed AI</p>
-                                    <p class="vsp-placeholder-sub">A 5-minute introduction for executives — no engineering background required.</p>
-                                </div>
-                            </div>
-                            <div class="vsp-status-bar" aria-hidden="true">
-                                <span class="vsp-status-dot">
-                                    <span class="vsp-dot-pulse"></span> Video in production
-                                </span>
-                                <span class="vsp-status-badge">16:9 · HD</span>
-                            </div>
+                        <div class="vsp-status-bar" aria-hidden="true">
+                            <span class="vsp-status-dot">
+                                <span class="vsp-dot-pulse"></span> Video in production
+                            </span>
+                            <span class="vsp-status-badge">16:9 · HD</span>
                         </div>
-                    </div><!-- /business panel -->
+                    </div>
+                </div><!-- /business panel -->
 
-                    <!-- Panel: Product Owner -->
-                    <div class="vsp-panel" id="vsp-panel-product" role="tabpanel" aria-labelledby="vsp-btn-product">
-                        <div class="vsp-panel-meta">
+                <!-- Panel: Product Owner -->
+                <div class="vsp-panel" id="vsp-panel-product" role="tabpanel" aria-labelledby="vsp-btn-product">
+                    <div class="vsp-robot-placeholder" data-accent="violet" aria-label="Video coming soon — CORTEX for Product Owners">
+                        <div class="vsp-glow-rings" aria-hidden="true">
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                        </div>
+                        <div class="vsp-scan-line" aria-hidden="true"></div>
+                        <div class="vsp-logo-wrap">
+                            <div class="vsp-logo-glow">
+                                <img src="assets/images/cortex-logo-200.png"
+                                     alt="CORTEX AI — Video loading"
+                                     class="vsp-logo-img"
+                                     width="140" height="140"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="vsp-placeholder-text">
+                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                <p class="vsp-placeholder-headline">From Backlog to Done — Governed</p>
+                                <p class="vsp-placeholder-sub">Your acceptance criteria, traceability, and delivery velocity — all in one loop.</p>
+                            </div>
+                        </div>
+                        <div class="vsp-panel-overlay">
                             <h3 class="vsp-panel-title">CORTEX for Product Owners</h3>
-                            <p class="vsp-panel-desc">See how acceptance criteria become living code checkpoints, SWAGs get code-backed estimates, and your DoR→DoD pipeline gains full traceability.</p>
+                            <p class="vsp-panel-desc">Acceptance criteria as living code checkpoints, SWAG estimates backed by code, and full DoR→DoD traceability.</p>
                         </div>
-                        <!-- Robot-head placeholder — violet accent -->
-                        <div class="vsp-robot-placeholder" data-accent="violet" aria-label="Video coming soon — CORTEX for Product Owners">
-                            <div class="vsp-glow-rings" aria-hidden="true">
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                            </div>
-                            <div class="vsp-scan-line" aria-hidden="true"></div>
-                            <div class="vsp-logo-wrap">
-                                <div class="vsp-logo-glow">
-                                    <img src="assets/images/cortex-logo-200.png"
-                                         alt="CORTEX AI — Video loading"
-                                         class="vsp-logo-img"
-                                         width="128" height="128"
-                                         loading="lazy"/>
-                                </div>
-                                <div class="vsp-placeholder-text">
-                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                    <p class="vsp-placeholder-headline">From Backlog to Done — Governed</p>
-                                    <p class="vsp-placeholder-sub">Your acceptance criteria, traceability, and delivery velocity — all in one loop.</p>
-                                </div>
-                            </div>
-                            <div class="vsp-status-bar" aria-hidden="true">
-                                <span class="vsp-status-dot">
-                                    <span class="vsp-dot-pulse" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa;"></span> Video in production
-                                </span>
-                                <span class="vsp-status-badge">16:9 · HD</span>
-                            </div>
+                        <div class="vsp-status-bar" aria-hidden="true">
+                            <span class="vsp-status-dot">
+                                <span class="vsp-dot-pulse" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa;"></span> Video in production
+                            </span>
+                            <span class="vsp-status-badge">16:9 · HD</span>
                         </div>
-                    </div><!-- /product panel -->
+                    </div>
+                </div><!-- /product panel -->
 
-                    <!-- Panel: Software Engineer -->
-                    <div class="vsp-panel" id="vsp-panel-engineer" role="tabpanel" aria-labelledby="vsp-btn-engineer">
-                        <div class="vsp-panel-meta">
+                <!-- Panel: Software Engineer -->
+                <div class="vsp-panel" id="vsp-panel-engineer" role="tabpanel" aria-labelledby="vsp-btn-engineer">
+                    <div class="vsp-robot-placeholder" data-accent="cyan" aria-label="Video coming soon — CORTEX for Software Engineers">
+                        <div class="vsp-glow-rings" aria-hidden="true">
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                            <div class="vsp-ring"></div>
+                        </div>
+                        <div class="vsp-scan-line" aria-hidden="true"></div>
+                        <div class="vsp-logo-wrap">
+                            <div class="vsp-logo-glow">
+                                <img src="assets/images/cortex-logo-200.png"
+                                     alt="CORTEX AI — Video loading"
+                                     class="vsp-logo-img"
+                                     width="140" height="140"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="vsp-placeholder-text">
+                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                <p class="vsp-placeholder-headline">Build Faster. Break Nothing.</p>
+                                <p class="vsp-placeholder-sub">LENS, TDD, 323 orchestrators and MCP-first tooling — engineered for the engineer.</p>
+                            </div>
+                        </div>
+                        <div class="vsp-panel-overlay">
                             <h3 class="vsp-panel-title">CORTEX for Software Engineers</h3>
-                            <p class="vsp-panel-desc">Dive into LENS analysis, the TDD red/green/refactor cycle, 30+ MCP tools live in your IDE, and the convergence gate that never lets a P0 slip through.</p>
+                            <p class="vsp-panel-desc">LENS analysis, TDD red/green/refactor, 30+ live MCP tools in your IDE, and a convergence gate that never lets a P0 slip through.</p>
                         </div>
-                        <!-- Robot-head placeholder — cyan accent (default) -->
-                        <div class="vsp-robot-placeholder" data-accent="cyan" aria-label="Video coming soon — CORTEX for Software Engineers">
-                            <div class="vsp-glow-rings" aria-hidden="true">
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                                <div class="vsp-ring"></div>
-                            </div>
-                            <div class="vsp-scan-line" aria-hidden="true"></div>
-                            <div class="vsp-logo-wrap">
-                                <div class="vsp-logo-glow">
-                                    <img src="assets/images/cortex-logo-200.png"
-                                         alt="CORTEX AI — Video loading"
-                                         class="vsp-logo-img"
-                                         width="128" height="128"
-                                         loading="lazy"/>
-                                </div>
-                                <div class="vsp-placeholder-text">
-                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                    <p class="vsp-placeholder-headline">Build Faster. Break Nothing.</p>
-                                    <p class="vsp-placeholder-sub">LENS, TDD, 290+ orchestrators and MCP-first tooling — engineered for the engineer.</p>
-                                </div>
-                            </div>
-                            <div class="vsp-status-bar" aria-hidden="true">
-                                <span class="vsp-status-dot">
-                                    <span class="vsp-dot-pulse"></span> Video in production
-                                </span>
-                                <span class="vsp-status-badge">16:9 · HD</span>
-                            </div>
+                        <div class="vsp-status-bar" aria-hidden="true">
+                            <span class="vsp-status-dot">
+                                <span class="vsp-dot-pulse"></span> Video in production
+                            </span>
+                            <span class="vsp-status-badge">16:9 · HD</span>
                         </div>
-                    </div><!-- /engineer panel -->
+                    </div>
+                </div><!-- /engineer panel -->
 
-                </div><!-- /vsp-stage -->
-            </div><!-- /vsp-body -->
+            </div><!-- /vsp-canvas-wrap -->
 
             <!-- Panel footnote -->
             <p class="vsp-footnote">
