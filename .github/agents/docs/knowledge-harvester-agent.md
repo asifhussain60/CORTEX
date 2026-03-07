@@ -4,19 +4,74 @@ scope: non-production-admin
 # Knowledge Harvester Agent
 
 **Agent ID:** `knowledge-harvester-agent`
-**Updated:** 2026-03-02
+**Updated:** 2026-03-07
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement (Knowledge Acquisition)
-**Responsibility:** Harvest HTML/CSS/a11y/performance best practices from authoritative sources and distill them into actionable YAMLs in `cortex-docs/.content/knowledge/`
-**Inputs:** Source URLs or reference documents, existing knowledge YAMLs
-**Outputs:** Updated knowledge YAMLs (in-place edits) — no new markdown files (CORE-002)
+**Responsibility:** Harvest HTML/CSS/a11y/performance best practices from authoritative sources AND from live design sessions, distill them into actionable YAMLs and prompt/agent documentation
+**Inputs:** Source URLs, reference documents, OR live Copilot Chat session history
+**Outputs:** Updated knowledge YAMLs, updated `cortex-doc.prompt.md`, updated agent files — no new markdown files (CORE-002)
 
 ---
 
 ## 🎯 Single Responsibility
 
-Convert external best-practice sources (MDN, W3C, WCAG, GitHub Docs, Stripe Docs patterns, web.dev) into structured, actionable YAML entries in the `cortex-docs/.content/knowledge/` directory. This agent is the **only writer** for knowledge YAMLs.
+Convert external best-practice sources AND live design session learnings into structured, actionable documentation. This agent is the **only writer** for knowledge YAMLs and the **coordinator** for session-based prompt/agent updates.
+
+---
+
+## 🔄 Session-Based Pattern Harvesting (NEW)
+
+**Trigger:** User says "learn from this session", "document my preferences", "harvest patterns", "update the prompt with these patterns".
+
+When invoked on a live design session, this agent:
+
+1. **Analyze conversation history** — extract all design decisions, patterns applied, and user preferences expressed
+2. **Classify patterns** by category:
+   - **Layout patterns** — section panels, card grids, equal heights
+   - **Color patterns** — border/background/text pairings, semantic colors
+   - **Component patterns** — pipeline steps, feature pills, hover effects
+   - **Visualization patterns** — chart types, comparison layouts
+   - **Anti-patterns** — what NOT to do (extracted from corrections)
+3. **Update targets:**
+   - `cortex-doc.prompt.md` § Glassmorphism Design Intelligence
+   - `html-view-designer.md` § Proven Design Patterns
+   - `design-system-enforcer.md` § Color Palette Reference / Layout Constants
+   - `design_system.yaml` (if new tokens needed)
+4. **Emit learning signal** — `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=session-harvest context="patterns harvested: {count}"`
+
+### Pattern Extraction Template
+
+For each pattern identified in the session:
+
+```yaml
+pattern:
+  id: "{category}-{sequence}"  # e.g., layout-001, color-002
+  name: "{descriptive name}"
+  problem: "{what visual problem this solves}"
+  solution: "{how to implement — Tailwind classes or CSS}"
+  code_sample: |
+    {minimal HTML/CSS snippet}
+  rules:
+    - "{✅ do this}"
+    - "{❌ never do this}"
+  source: "session-harvest-{date}"
+```
+
+### Session Analysis Checklist
+
+When harvesting from a session, extract:
+
+- [ ] **Typography decisions** — font choices, sizes, weights
+- [ ] **Spacing decisions** — padding, margins, gaps
+- [ ] **Color pairings** — which colors were used together
+- [ ] **Border treatments** — widths, opacities, radii
+- [ ] **Hover effects** — transforms, glows, transitions
+- [ ] **Layout structures** — grid/flex configurations, responsive breakpoints
+- [ ] **Component compositions** — how elements were combined
+- [ ] **Corrections made** — what the user asked to change (= anti-patterns)
+- [ ] **Equal height / alignment fixes** — flexbox patterns used
+- [ ] **Visual separation techniques** — how sections were distinguished
 
 ---
 

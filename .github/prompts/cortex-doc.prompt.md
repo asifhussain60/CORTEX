@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -237,6 +237,198 @@ Exempt: Discovery-only, Drift-detection, Certification (read-only operations)
 | **Body text max-width** | `max-width: 72ch` — scales with card width, avoids artificial constraint |
 | **Muted text colour** | `#94a3b8` — NOT `#64748b` (too dim on dark navy backgrounds) |
 
+### Alternating Section Panels (MANDATORY for multi-section pages)
+
+**Problem solved:** Sections blend into each other when all use the same transparent background.
+
+**Solution:** Alternate sections between transparent (no background) and gradient glass panels with rounded corners.
+
+| Section Position | Background Treatment |
+|-----------------|---------------------|
+| **Odd sections (1, 3, 5...)** | No panel background — content floats on page background |
+| **Even sections (2, 4, 6...)** | Gradient glass panel with rounded corners + border |
+
+**Panel Implementation Pattern:**
+```html
+<section class="relative py-12 my-6">
+    <!-- Section Background - Gradient Glass Panel with rounded corners -->
+    <div class="absolute inset-0 bg-gradient-to-br from-{color}-950/60 via-slate-900/80 to-{color2}-950/60 border border-{color}-500/20 rounded-3xl"></div>
+    <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+    
+    <div class="relative space-y-10 px-4 md:px-8">
+        <!-- Section content here -->
+    </div>
+</section>
+```
+
+**Color palette for alternating panels:**
+| Panel | Gradient Colors | Border Color |
+|-------|----------------|--------------|
+| Panel A | `from-indigo-950/60 via-slate-900/80 to-blue-950/60` | `border-indigo-500/20` |
+| Panel B | `from-purple-950/60 via-slate-900/80 to-violet-950/60` | `border-purple-500/20` |
+| Panel C | `from-blue-950/60 via-slate-900/80 to-cyan-950/60` | `border-blue-500/20` |
+
+**Rules:**
+- ✅ `rounded-3xl` on both the background div AND the backdrop-blur div
+- ✅ `border` (all sides) — NOT `border-y` (top/bottom only creates harsh horizontal lines)
+- ✅ `my-6` for vertical spacing between panels
+- ✅ `px-4 md:px-8` padding inside the relative content wrapper
+- ❌ NEVER use `-mx-4 md:-mx-6` with rounded corners — negative margins break the soft edge effect
+- ❌ NEVER use `border-y` for panels — always use `border` (all sides) with rounded corners
+
+### Equal Height Card Grids (MANDATORY)
+
+**Problem solved:** Cards with different content lengths have mismatched heights, creating visual imbalance.
+
+**Solution:** Use flexbox with `items-stretch` and consistent `min-h-[]` on all cards in a row.
+
+**Pattern:**
+```html
+<div class="flex flex-wrap justify-center items-stretch gap-3 md:gap-6">
+    <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+        <div class="glass-card ... w-full flex flex-col justify-center min-h-[120px]">
+            <!-- Card content -->
+        </div>
+    </div>
+    <!-- Repeat for each card -->
+</div>
+```
+
+**Rules:**
+- ✅ Parent container: `items-stretch` to force equal heights
+- ✅ Card wrapper: `flex` to participate in stretch
+- ✅ Card inner: `w-full flex flex-col justify-center min-h-[120px]`
+- ✅ Content vertically centered with `justify-center`
+- ❌ NEVER let cards auto-size to content — always enforce consistent height
+
+### Card Border & Glow System (MANDATORY)
+
+**Problem solved:** Cards blend into each other and lack visual hierarchy.
+
+**Solution:** Multi-layer card system with gradient backgrounds, colored borders, and hover glow effects.
+
+**Standard Card Pattern:**
+```html
+<div class="relative group">
+    <!-- Hover glow layer -->
+    <div class="absolute inset-0 bg-gradient-to-br from-{color}-600/20 to-{color2}-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    
+    <!-- Card -->
+    <div class="glass-card p-6 relative border-2 border-{color}-500/30 bg-gradient-to-br from-{color}-950/50 to-slate-900/80 hover:border-{color}-400/50 transition-all">
+        <!-- Content -->
+    </div>
+</div>
+```
+
+**Color-Coded Card Semantics:**
+| Purpose | Border Color | Background Gradient | Icon/Title Color |
+|---------|-------------|--------------------|-----------------| 
+| **Primary/Default** | `border-indigo-500/30` | `from-indigo-950/50 to-slate-900/80` | `text-indigo-300` |
+| **Secondary** | `border-blue-500/30` | `from-blue-950/50 to-slate-900/80` | `text-blue-300` |
+| **Tertiary** | `border-violet-500/30` | `from-violet-950/50 to-slate-900/80` | `text-violet-300` |
+| **Success/After** | `border-emerald-500/30` | `from-emerald-950/50 to-slate-900/80` | `text-emerald-300` |
+| **Warning** | `border-amber-500/30` | `from-amber-950/50 to-slate-900/80` | `text-amber-300` |
+| **Danger/Before** | `border-rose-500/30` | `from-rose-950/50 to-slate-900/80` | `text-rose-300` |
+
+**Rules:**
+- ✅ `border-2` (2px width) — NOT `border` (1px too subtle)
+- ✅ Border opacity `/30` at rest, `/50` on hover
+- ✅ Hover glow uses `blur-xl` with matching color gradient
+- ✅ `transition-all` for smooth border and background transitions
+- ✅ Cards in same section use different colors from the palette (visual variety)
+
+### Pipeline Step Cards (MANDATORY for sequential processes)
+
+**Problem solved:** Pipeline steps need visual connection and progression indication.
+
+**Solution:** Numbered gradient badges with connecting line and color progression.
+
+**Pattern:**
+```html
+<div class="relative">
+    <!-- Gradient Background -->
+    <div class="absolute inset-0 bg-gradient-to-r from-{color1}-500/5 via-{color2}-500/5 to-{color3}-500/5 rounded-3xl"></div>
+    
+    <div class="grid md:grid-cols-4 gap-6 relative p-4">
+        <!-- Connecting Line -->
+        <div class="hidden md:block absolute top-1/2 left-16 right-16 h-1 bg-gradient-to-r from-{color1}-500/50 via-{color2}-500/50 to-{color3}-500/50 -translate-y-1/2 z-0 rounded-full"></div>
+        
+        <!-- Animated Dots on Line (optional) -->
+        <div class="hidden md:block absolute top-1/2 left-16 right-16 -translate-y-1/2 z-0 overflow-hidden">
+            <div class="w-3 h-3 rounded-full bg-{color1}-400 animate-pulse absolute left-1/4"></div>
+            <div class="w-3 h-3 rounded-full bg-{color2}-400 animate-pulse absolute left-1/2" style="animation-delay: 0.5s;"></div>
+            <div class="w-3 h-3 rounded-full bg-{color3}-400 animate-pulse absolute left-3/4" style="animation-delay: 1s;"></div>
+        </div>
+
+        <!-- Step Card -->
+        <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-{color}-500/20 to-{color2}-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-{color}-500 hover:-translate-y-2 transition-all duration-300 h-full">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-{color}-500 to-{color2}-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-{color}-500/30">1</div>
+                <h4 class="card-title mb-3 text-{color}-300">Step Title</h4>
+                <p class="card-body leading-relaxed">Step description...</p>
+                <div class="mt-4 flex items-center gap-2 text-xs text-{color}-400 font-medium">
+                    <i data-lucide="icon-name" class="w-4 h-4"></i>
+                    <span>Footer Label</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+**Color Progression for 4-step pipelines:**
+| Step | Primary Color | Secondary Color |
+|------|--------------|-----------------|
+| 1 | `indigo` | `violet` |
+| 2 | `blue` | `cyan` |
+| 3 | `teal` | `emerald` |
+| 4 | `emerald` | `green` |
+
+**Rules:**
+- ✅ Step badges: `w-12 h-12 rounded-xl` with gradient fill and shadow
+- ✅ Connecting line: gradient matching step colors, `h-1 rounded-full`
+- ✅ Cards: `border-t-4` top accent matching step color
+- ✅ Hover: `-translate-y-2` lift with glow effect
+- ✅ Footer badges with icons for each step
+
+### Feature Pills (MANDATORY for capability lists)
+
+**Problem solved:** Bullet lists are visually flat and hard to scan.
+
+**Solution:** Gradient-bordered pills with icons.
+
+**Pattern:**
+```html
+<div class="flex flex-wrap gap-3">
+    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-{color}-500/10 to-{color2}-500/10 border border-{color}-500/30 text-{color}-300 text-sm font-medium">
+        <i data-lucide="icon-name" class="w-4 h-4"></i>
+        <span>Feature Name</span>
+    </div>
+</div>
+```
+
+**Rules:**
+- ✅ `rounded-full` for pill shape
+- ✅ Gradient background with low opacity (`/10`)
+- ✅ Border matching the gradient colors (`/30` opacity)
+- ✅ Icon + text layout with `gap-2`
+- ✅ `text-sm font-medium` for consistent sizing
+
+### D3.js Donut Charts (MANDATORY for before/after comparisons with percentages)
+
+**Problem solved:** Bar charts are dense and hard to compare at a glance.
+
+**Solution:** Dual donut charts with animated arc transitions and center percentages.
+
+**Rules:**
+- ✅ Use `d3.pie()` with animated arc entrance via `attrTween`
+- ✅ Show percentage in center of each donut
+- ✅ Side-by-side layout: "Before" (rose/red tones) | "After" (emerald/green tones)
+- ✅ 4-column legend below charts
+- ✅ Improvement badge between charts (`+{X}%`)
+- ❌ NEVER use horizontal bar charts for before/after percentage comparisons
+
 ### Theme Identity Contract (IMMUTABLE)
 
 | Token | Value | Enforcement |
@@ -368,6 +560,7 @@ This step runs **automatically** whenever the target file is a role view or the 
 | `/doc-media` | Update all image and video prompts | `media-prompt-agent` |
 | `/doc-design {file}` | Design + Implement mode — improve target HTML view | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
 | `/doc-harvest` | Harvest best practices from sources → update knowledge YAMLs | `knowledge-harvester-agent` |
+| `/doc-learn-session` | **NEW:** Harvest design patterns from current Copilot Chat session → update prompts + agents | `knowledge-harvester-agent` |
 
 ---
 

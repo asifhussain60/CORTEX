@@ -4,7 +4,7 @@ scope: non-production-admin
 # Design System Enforcer Agent
 
 **Agent ID:** `design-system-enforcer`
-**Updated:** 2026-03-02
+**Updated:** 2026-03-07
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -17,6 +17,62 @@ scope: non-production-admin
 ## 🎯 Single Responsibility
 
 Be the **CSS quality gate** in the Design + Implement pipeline. This agent never writes CSS — it validates that what `html-view-designer` and `doc-sync-agent` produce is compliant with the design system before it lands in any file.
+
+---
+
+## 🎨 Color Palette Reference (Session-Validated)
+
+These color pairings are APPROVED for card systems, section panels, and visual hierarchy. Use these exact Tailwind class combinations.
+
+### Card Border & Background Pairings
+
+| Semantic | Border | Background | Text | Hover Border |
+|----------|--------|------------|------|--------------|
+| **Primary** | `border-indigo-500/30` | `bg-gradient-to-br from-indigo-950/50 to-slate-900/80` | `text-indigo-300` | `hover:border-indigo-400/50` |
+| **Secondary** | `border-blue-500/30` | `bg-gradient-to-br from-blue-950/50 to-slate-900/80` | `text-blue-300` | `hover:border-blue-400/50` |
+| **Tertiary** | `border-violet-500/30` | `bg-gradient-to-br from-violet-950/50 to-slate-900/80` | `text-violet-300` | `hover:border-violet-400/50` |
+| **Accent** | `border-purple-500/30` | `bg-gradient-to-br from-purple-950/50 to-slate-900/80` | `text-purple-300` | `hover:border-purple-400/50` |
+| **Info** | `border-cyan-500/30` | `bg-gradient-to-br from-cyan-950/50 to-slate-900/80` | `text-cyan-300` | `hover:border-cyan-400/50` |
+| **Success** | `border-emerald-500/30` | `bg-gradient-to-br from-emerald-950/50 to-slate-900/80` | `text-emerald-300` | `hover:border-emerald-400/50` |
+| **Warning** | `border-amber-500/30` | `bg-gradient-to-br from-amber-950/50 to-slate-900/80` | `text-amber-300` | `hover:border-amber-400/50` |
+| **Danger** | `border-rose-500/30` | `bg-gradient-to-br from-rose-950/50 to-slate-900/80` | `text-rose-300` | `hover:border-rose-400/50` |
+
+### Section Panel Gradients
+
+| Panel | Background | Border |
+|-------|-----------|--------|
+| **Panel A** | `bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-blue-950/60` | `border-indigo-500/20` |
+| **Panel B** | `bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60` | `border-purple-500/20` |
+| **Panel C** | `bg-gradient-to-br from-blue-950/60 via-slate-900/80 to-cyan-950/60` | `border-blue-500/20` |
+
+### Pipeline Step Color Progression (4-step)
+
+| Step | Primary | Secondary | Shadow |
+|------|---------|-----------|--------|
+| 1 | `indigo-500` | `violet-600` | `shadow-indigo-500/30` |
+| 2 | `blue-500` | `cyan-600` | `shadow-blue-500/30` |
+| 3 | `teal-500` | `emerald-600` | `shadow-teal-500/30` |
+| 4 | `emerald-500` | `green-600` | `shadow-emerald-500/30` |
+
+### Hover Glow Layer
+
+**Pattern:** `absolute inset-0 bg-gradient-to-br from-{color}-600/20 to-{color2}-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`
+
+---
+
+## 📐 Layout Constants (Session-Validated)
+
+| Property | Value | Anti-Pattern |
+|----------|-------|--------------|
+| **Card border width** | `border-2` (2px) | NOT `border` (1px too subtle) |
+| **Border opacity at rest** | `/30` | NOT `/20` (too faint) |
+| **Border opacity on hover** | `/50` | — |
+| **Section panel corners** | `rounded-3xl` | NOT `rounded-xl` |
+| **Section panel margins** | `my-6` | NOT `-mx-4` (breaks rounded corners) |
+| **Section panel padding** | `px-4 md:px-8` inside relative wrapper | — |
+| **Card min-height** | `min-h-[120px]` | — |
+| **Pipeline step badge** | `w-12 h-12 rounded-xl` | NOT `w-8 h-8 rounded-full` |
+| **Pipeline connecting line** | `h-1 rounded-full` | NOT `h-0.5` (too thin) |
 
 ---
 
