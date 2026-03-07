@@ -259,6 +259,8 @@
     .text-magenta { color: var(--accent-magenta); }
     .text-emerald { color: var(--accent-emerald); }
     .text-amber { color: var(--accent-amber); }
+    .text-rose { color: var(--accent-rose); }
+    .text-teal { color: #2dd4bf; }
     
     .transition-colors { transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
     .hover\:text-white:hover { color: #ffffff !important; }
@@ -370,6 +372,8 @@
     .glow-magenta::before { background: var(--accent-magenta); }
     .glow-emerald::before { background: var(--accent-emerald); }
     .glow-amber::before { background: var(--accent-amber); }
+    .glow-rose::before { background: var(--accent-rose); }
+    .glow-teal::before { background: #2dd4bf; }
 
     /* Icons */
     .icon-box {
@@ -398,6 +402,8 @@
     .icon-magenta { color: var(--accent-magenta); border-color: rgba(186, 85, 211, 0.2); background: linear-gradient(135deg, rgba(186, 85, 211, 0.1), transparent); }
     .icon-emerald { color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.2); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); }
     .icon-amber { color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent); }
+    .icon-rose { color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.2); background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), transparent); }
+    .icon-teal { color: #2dd4bf; border-color: rgba(45, 212, 191, 0.2); background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), transparent); }
 
     .domain-header-flex {
         display: flex;
@@ -629,6 +635,183 @@
         margin-top: 0.25rem;
         font-size: 0.85rem;
     }
+
+    /* --- ROLE GRID (6-card 3×2 layout) --- */
+    .role-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-6);
+    }
+    @media(min-width: 640px) { .role-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width: 1024px) { .role-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .role-tile {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        padding: 1.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: var(--radius-xl);
+        background: var(--surface-base);
+        border: 1px solid var(--border-base);
+        backdrop-filter: var(--blur-glass);
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    .role-tile::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+    .role-tile:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-glow);
+    }
+    .role-tile:hover::before { opacity: 1; }
+    .role-tile-purple::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-magenta)); }
+    .role-tile-purple:hover { border-color: rgba(123, 97, 255, 0.3); }
+    .role-tile-magenta::before { background: linear-gradient(90deg, var(--accent-magenta), var(--accent-rose)); }
+    .role-tile-magenta:hover { border-color: rgba(186, 85, 211, 0.3); }
+    .role-tile-cyan::before { background: linear-gradient(90deg, var(--accent-cyan), #38bdf8); }
+    .role-tile-cyan:hover { border-color: rgba(0, 212, 255, 0.3); }
+    .role-tile-rose::before { background: linear-gradient(90deg, var(--accent-rose), #fb7185); }
+    .role-tile-rose:hover { border-color: rgba(244, 63, 94, 0.3); }
+    .role-tile-emerald::before { background: linear-gradient(90deg, var(--accent-emerald), #34d399); }
+    .role-tile-emerald:hover { border-color: rgba(16, 185, 129, 0.3); }
+    .role-tile-teal::before { background: linear-gradient(90deg, #2dd4bf, #5eead4); }
+    .role-tile-teal:hover { border-color: rgba(45, 212, 191, 0.3); }
+
+    .role-tile-icon {
+        width: 52px; height: 52px; min-width: 52px;
+        border-radius: var(--radius-md);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.4rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        flex-shrink: 0;
+        margin-top: 0.15rem;
+    }
+    .role-tile-body { flex: 1; min-width: 0; }
+    .role-tile-body h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0 0 0.15rem 0;
+        color: var(--text-primary);
+        font-family: var(--font-display);
+        line-height: 1.3;
+    }
+    .role-tile-body .role-tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+    .role-tile-body p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin: 0 0 0.75rem 0;
+    }
+    .role-tile-features {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0;
+        padding-top: 0.65rem;
+        margin-top: 0.65rem;
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .role-tile-features .role-feat {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-tertiary);
+        line-height: 1.4;
+        white-space: nowrap;
+        transition: color 0.2s;
+    }
+    .role-tile:hover .role-feat { color: var(--text-secondary); }
+    .role-feat i { font-size: 0.7rem; opacity: 0.8; }
+    .role-tile-features .role-dot {
+        display: inline-block;
+        width: 3px; height: 3px;
+        border-radius: 50%;
+        background: var(--text-tertiary);
+        opacity: 0.4;
+        margin: 0 0.55rem;
+        flex-shrink: 0;
+    }
+
+    /* --- GET STARTED CTA SECTION --- */
+    .get-started-cta {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 3rem 2rem;
+        border-radius: var(--radius-xl);
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(251, 191, 36, 0.03), rgba(245, 158, 11, 0.06));
+        border: 1px solid rgba(245, 158, 11, 0.15);
+        backdrop-filter: var(--blur-glass);
+        overflow: hidden;
+    }
+    .get-started-cta::before {
+        content: '';
+        position: absolute;
+        top: -80px; left: 50%; transform: translateX(-50%);
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 70%);
+        pointer-events: none;
+    }
+    .get-started-cta .cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.85rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: var(--font-display);
+        color: #000;
+        background: linear-gradient(135deg, var(--accent-amber), #fbbf24);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+    .get-started-cta .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+    }
+    .get-started-stats {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    .get-started-stats .gs-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    .get-started-stats .gs-stat i { color: var(--accent-amber); font-size: 0.85rem; }
 
     /* --- TAB SYSTEM --- */
     .tab-layout { display: flex; flex-direction: column; gap: var(--spacing-8); }
@@ -1830,81 +2013,135 @@
         </a>
     </section>
 
-    <!-- 7. Who is CORTEX For? -->
+    <!-- 7. Who is CORTEX For? — 6 Role Tiles (3×2 grid) -->
     <section class="container section" id="who-is-cortex-for" aria-labelledby="persona-section-heading">
         <div class="text-center mb-16">
             <h2 class="text-4xl text-gradient font-bold" id="persona-section-heading">Who is CORTEX For?</h2>
             <p class="text-muted text-xl max-w-2xl mx-auto">Tailored experiences designed to support diverse technical and leadership roles.</p>
         </div>
         
-        <div class="grid-4">
-            <!-- Business Leadership -->
-            <a href="roles/business-leader.html" class="glass-card interactive glow-corner glow-purple persona-card">
-                <div class="persona-card-content">
-                    <div class="icon-box lg icon-purple m-0 mb-6 shrink-0" aria-hidden="true"><i class="fas fa-user-tie"></i></div>
-                    <h3 class="text-2xl m-0 mb-1 font-bold text-primary">Business Leadership</h3>
-                    <p class="text-xs font-semibold text-purple uppercase tracking-widest m-0 mb-4">Predictable Delivery</p>
-                    <p class="text-muted text-sm mb-0">
-                        Eliminate the invisible costs of ungoverned AI. Gain immediate access to delivery metrics and compliance evidence.
-                    </p>
+        <div class="role-grid">
+            <!-- 1. Business Leadership -->
+            <a href="roles/business-leader.html" class="role-tile role-tile-purple" aria-label="CORTEX for Business Leadership">
+                <div class="role-tile-icon icon-purple" aria-hidden="true"><i class="fas fa-user-tie"></i></div>
+                <div class="role-tile-body">
+                    <h3>Business Leadership</h3>
+                    <span class="role-tag text-purple">Predictable Delivery</span>
+                    <p>Eliminate the invisible costs of ungoverned AI. Gain immediate access to delivery metrics and compliance evidence.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-chart-line text-purple" aria-hidden="true"></i> AI resource optimization</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-shield-check text-purple" aria-hidden="true"></i> Governance automation</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-file-contract text-purple" aria-hidden="true"></i> Compliance evidence</span>
+                    </div>
                 </div>
-                <ul class="persona-list">
-                    <li><i class="fas fa-chart-line text-purple" aria-hidden="true"></i> <span>Optimize AI resource utilization</span></li>
-                    <li><i class="fas fa-shield-check text-purple" aria-hidden="true"></i> <span>Automate governance checks</span></li>
-                    <li><i class="fas fa-file-contract text-purple" aria-hidden="true"></i> <span>Instant compliance evidence</span></li>
-                </ul>
             </a>
             
-            <!-- Product Owners -->
-            <a href="roles/product-owner.html" class="glass-card interactive glow-corner glow-magenta persona-card">
-                <div class="persona-card-content">
-                    <div class="icon-box lg icon-magenta m-0 mb-6 shrink-0" aria-hidden="true"><i class="fas fa-clipboard-list"></i></div>
-                    <h3 class="text-2xl m-0 mb-1 font-bold text-primary">Product Owners</h3>
-                    <p class="text-xs font-semibold text-magenta uppercase tracking-widest m-0 mb-4">Backlog to Code</p>
-                    <p class="text-muted text-sm mb-0">
-                        Close the loop between the planning board and the codebase. Automatically validate task readiness.
-                    </p>
+            <!-- 2. Product Owners -->
+            <a href="roles/product-owner.html" class="role-tile role-tile-magenta" aria-label="CORTEX for Product Owners">
+                <div class="role-tile-icon icon-magenta" aria-hidden="true"><i class="fas fa-clipboard-list"></i></div>
+                <div class="role-tile-body">
+                    <h3>Product Owners</h3>
+                    <span class="role-tag text-magenta">Backlog to Code</span>
+                    <p>Close the loop between the planning board and the codebase. Automatically validate task readiness.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-tasks text-magenta" aria-hidden="true"></i> Readiness validation</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-project-diagram text-magenta" aria-hidden="true"></i> Azure DevOps</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-box-open text-magenta" aria-hidden="true"></i> Evidence bundles</span>
+                    </div>
                 </div>
-                <ul class="persona-list">
-                    <li><i class="fas fa-tasks text-magenta" aria-hidden="true"></i> <span>Automated readiness validation</span></li>
-                    <li><i class="fas fa-project-diagram text-magenta" aria-hidden="true"></i> <span>Native Azure DevOps integration</span></li>
-                    <li><i class="fas fa-box-open text-magenta" aria-hidden="true"></i> <span>Structured evidence bundles</span></li>
-                </ul>
             </a>
 
-            <!-- Software Engineers -->
-            <a href="roles/software-engineer.html" class="glass-card interactive glow-corner glow-cyan persona-card">
-                <div class="persona-card-content">
-                    <div class="icon-box lg icon-cyan m-0 mb-6 shrink-0" aria-hidden="true"><i class="fas fa-laptop-code"></i></div>
-                    <h3 class="text-2xl m-0 mb-1 font-bold text-primary">Software Engineers</h3>
-                    <p class="text-xs font-semibold text-cyan uppercase tracking-widest m-0 mb-4">Smart Pair Programming</p>
-                    <p class="text-muted text-sm mb-0">
-                        Focus on problem-solving while CORTEX handles scaffolding, architectural analysis, and refactoring tools.
-                    </p>
+            <!-- 3. Software Engineers -->
+            <a href="roles/software-engineer.html" class="role-tile role-tile-cyan" aria-label="CORTEX for Software Engineers">
+                <div class="role-tile-icon icon-cyan" aria-hidden="true"><i class="fas fa-laptop-code"></i></div>
+                <div class="role-tile-body">
+                    <h3>Software Engineers</h3>
+                    <span class="role-tag text-cyan">Smart Pair Programming</span>
+                    <p>Focus on problem-solving while CORTEX handles scaffolding, architectural analysis, and refactoring tools.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-vial text-cyan" aria-hidden="true"></i> TDD automation</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-search-location text-cyan" aria-hidden="true"></i> AST analysis</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-terminal text-cyan" aria-hidden="true"></i> MCP tools</span>
+                    </div>
                 </div>
-                <ul class="persona-list">
-                    <li><i class="fas fa-vial text-cyan" aria-hidden="true"></i> <span>Encourages TDD automatically</span></li>
-                    <li><i class="fas fa-search-location text-cyan" aria-hidden="true"></i> <span>Deep AST & security analysis</span></li>
-                    <li><i class="fas fa-terminal text-cyan" aria-hidden="true"></i> <span>Seamless MCP tool access</span></li>
-                </ul>
             </a>
 
-            <!-- Get Started -->
-            <a href="getting-started.html" class="glass-card interactive glow-corner glow-amber persona-card">
-                <div class="persona-card-content">
-                    <div class="icon-box lg icon-amber m-0 mb-6 shrink-0" aria-hidden="true"><i class="fas fa-rocket"></i></div>
-                    <h3 class="text-2xl m-0 mb-1 font-bold text-primary">Get Started</h3>
-                    <p class="text-xs font-semibold text-amber uppercase tracking-widest m-0 mb-4">Zero to Governed AI</p>
-                    <p class="text-muted text-sm mb-0">
-                        Experience the framework in your own IDE. Install locally in 5 minutes with zero cloud dependencies.
-                    </p>
+            <!-- 4. Security Engineers -->
+            <a href="roles/software-engineer.html" class="role-tile role-tile-rose" aria-label="CORTEX for Security Engineers">
+                <div class="role-tile-icon icon-rose" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
+                <div class="role-tile-body">
+                    <h3>Security Engineers</h3>
+                    <span class="role-tag text-rose">Shift-Left Security</span>
+                    <p>Embed security into the SDLC from day one. Automated vulnerability scanning, threat modeling, and compliance gates.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-bug text-rose" aria-hidden="true"></i> Vuln scanning</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-lock text-rose" aria-hidden="true"></i> Threat modeling</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-gavel text-rose" aria-hidden="true"></i> Compliance gates</span>
+                    </div>
                 </div>
-                <ul class="persona-list">
-                    <li><i class="fas fa-bolt text-amber" aria-hidden="true"></i> <span>5-minute local installation</span></li>
-                    <li><i class="fas fa-robot text-amber" aria-hidden="true"></i> <span>Native Copilot Chat integration</span></li>
-                    <li><i class="fas fa-server text-amber" aria-hidden="true"></i> <span>No Docker or cloud accounts</span></li>
-                </ul>
             </a>
+
+            <!-- 5. Quality Engineers -->
+            <a href="roles/software-engineer.html" class="role-tile role-tile-emerald" aria-label="CORTEX for Quality Engineers">
+                <div class="role-tile-icon icon-emerald" aria-hidden="true"><i class="fas fa-microscope"></i></div>
+                <div class="role-tile-body">
+                    <h3>Quality Engineers</h3>
+                    <span class="role-tag text-emerald">Built-In Quality</span>
+                    <p>TDD-first workflows with automated test generation, coverage analysis, and convergence gates that enforce zero-defect delivery.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-check-double text-emerald" aria-hidden="true"></i> Test generation</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-chart-bar text-emerald" aria-hidden="true"></i> Coverage analysis</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-sync text-emerald" aria-hidden="true"></i> Convergence gates</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 6. Site Reliability Engineers -->
+            <a href="roles/software-engineer.html" class="role-tile role-tile-teal" aria-label="CORTEX for Site Reliability Engineers">
+                <div class="role-tile-icon icon-teal" aria-hidden="true"><i class="fas fa-heartbeat"></i></div>
+                <div class="role-tile-body">
+                    <h3>Site Reliability Engineers</h3>
+                    <span class="role-tag text-teal">Operational Intelligence</span>
+                    <p>Health monitoring, root cause analysis with 4 RCA methodologies, and self-healing diagnostics across your entire stack.</p>
+                    <div class="role-tile-features">
+                        <span class="role-feat"><i class="fas fa-stethoscope text-teal" aria-hidden="true"></i> Health monitors</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-search text-teal" aria-hidden="true"></i> RCA engine</span>
+                        <span class="role-dot"></span>
+                        <span class="role-feat"><i class="fas fa-wrench text-teal" aria-hidden="true"></i> Self-healing</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 8. Get Started — Standalone CTA Section -->
+    <section class="container section" id="get-started" aria-labelledby="get-started-heading">
+        <div class="get-started-cta">
+            <div class="icon-box lg icon-amber m-0 mb-6" aria-hidden="true" style="animation: subtleFloat 6s ease-in-out infinite;"><i class="fas fa-rocket"></i></div>
+            <h2 class="text-3xl text-gradient font-bold m-0 mb-2" id="get-started-heading" style="position:relative;z-index:1;">Get Started with CORTEX</h2>
+            <p class="text-xs font-semibold text-amber uppercase tracking-widest m-0 mb-4" style="position:relative;z-index:1;">Zero to Governed AI in 5 Minutes</p>
+            <p class="text-muted text-lg m-0 mb-8" style="max-width:560px;position:relative;z-index:1;">
+                Experience the framework in your own IDE. Install locally with zero cloud dependencies — no Docker, no accounts, just your editor.
+            </p>
+            <a href="getting-started.html" class="cta-btn">
+                <i class="fas fa-bolt" aria-hidden="true"></i> Start Building Now
+            </a>
+            <div class="get-started-stats">
+                <span class="gs-stat"><i class="fas fa-clock" aria-hidden="true"></i> 5-minute install</span>
+                <span class="gs-stat"><i class="fas fa-robot" aria-hidden="true"></i> Native Copilot Chat</span>
+                <span class="gs-stat"><i class="fas fa-cloud-slash" aria-hidden="true"></i> No cloud required</span>
+            </div>
         </div>
     </section>
     
