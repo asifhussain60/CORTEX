@@ -2,9 +2,11 @@
 REM ============================================
 REM CORTEX GitPages Local Server (Windows)
 REM Simple HTTP server for static files
-REM 
-REM Port: 8000 (HTTP) - Changed from 8080 to avoid conflicts
-REM Target: index.html in current directory
+REM
+REM Port: 8000 (HTTP)
+REM Serve root: docs/ (this script lives in docs/)
+REM   cd /d "%~dp0" always resolves to docs/ —
+REM   do NOT change to cortex-docs or any other path.
 REM ============================================
 
 setlocal enabledelayedexpansion
