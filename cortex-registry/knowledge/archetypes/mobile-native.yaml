@@ -1,0 +1,27 @@
+# Mobile Native Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: mobile-native
+archetype: MobileNative
+description: "Native mobile application — iOS (Swift), Android (Kotlin/Java), Flutter"
+phase: "131"
+
+knowledge_domains:
+  - mobile-ios
+  - mobile-android
+  - testing-validation
+
+best_practices:
+  - "Offline-first: design for intermittent connectivity"
+  - "Follow platform HIG (Human Interface Guidelines / Material Design)"
+  - "Background task budgets — respect battery and memory limits"
+  - "Deep link handling — every screen reachable via URI"
+  - "Accessibility: VoiceOver / TalkBack coverage on critical flows"
+
+common_pitfalls:
+  - "Main thread I/O causing ANR / watchdog kills"
+  - "Missing back stack handling on config changes"
+  - "Hardcoded API endpoints — use build flavours / schemes"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "security/security-compliance-audit.yaml"

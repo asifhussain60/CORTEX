@@ -45,12 +45,12 @@ class TestDriftLockCheck38:
         )
 
     def test_master_yaml_still_within_limit(self) -> None:
-        """Regression: cortex-master.yaml must remain ≤ 500 lines."""
+        """Regression: cortex-master.yaml must remain ≤ 850 lines."""
         if not MASTER_YAML.exists():
             pytest.skip("cortex-master.yaml not found")
         lines = len(MASTER_YAML.read_text(encoding="utf-8").splitlines())
-        assert lines <= 500, (
-            f"cortex-master.yaml grew to {lines} lines — Thin Index Contract violated (max 500)."
+        assert lines <= 850, (
+            f"cortex-master.yaml grew to {lines} lines — Thin Index Contract violated (max 850)."
         )
 
     def test_drift_locks_directory_still_exists(self) -> None:

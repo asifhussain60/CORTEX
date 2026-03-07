@@ -1,0 +1,174 @@
+id: phase-132
+title: "Core Capabilities Backport — Universal Repo Intelligence + CodeReviewOrchestrator"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: ["phase-131"]
+sweep_id: SWEEP-132-CORE-CAPABILITIES
+estimated_effort: "2 days"
+
+description: |
+  Core capabilities backport — depends on phase-131 (intelligence layer). Delivers
+  two major user-facing capability surfaces from the _workspaces/cortex-sts/ implementation:
+
+  FB-003 — Universal Repo Intelligence Engine: an 8-extractor pipeline that produces
+  a comprehensive OnboardingManifest for any repository. Extractors: SolutionTopology
+  (project graph from .sln files), CastleWindsor (IoC container wiring), NHibernate
+  (ORM mappings), NServiceBus (message handlers/sagas), Angular (module/component tree),
+  AspNetRoute (API surface map), BoundedContext (domain boundary detection), and
+  TfmClassifier (target framework multi-targeting). The manifest feeds a 10-tab
+  LensOnboardingIntegration dashboard, a RepoDashboardGenerator, and a CrossRepoGraph
+  for multi-repo relationship visualization.
+
+  FB-001 — CodeReviewOrchestrator: a 6-stage code review pipeline (PR Context →
+  Intelligence Diamond → Security Analysis → Quality Analysis → RCA Cross-Reference →
+  Learning). Integrates OWASP knowledge YAMLs for security analysis. Produces a
+  structured verdict: APPROVE / REQUEST_CHANGES / BLOCK based on P0/P1 finding counts.
+  Exposed via REVIEW IntentType and cortex_review MCP tool (review | findings |
+  history | patterns | health). Governed by code-review-workflow.yaml.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── FB-003: Universal Repo Intelligence Engine ───────────────────────────────
+  - id: GAP-132-01
+    title: "Universal Repo Intelligence Engine — 8 extractors + manifest + dashboard"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      CORTEX /onboard currently performs a shallow LENS scan that misses .NET-specific
+      signals (Castle Windsor, NHibernate, NServiceBus), Angular module trees, and
+      bounded context boundaries. Large enterprise repos with 300+ projects receive
+      a single-page summary rather than a structured manifest that agents can query.
+      The Universal Repo Intelligence Engine closes this gap with a pipeline of 8
+      typed extractors feeding a queryable OnboardingManifest persisted to the
+      intelligence registry.
+    action_ref: "phase-132-a"
+    files_to_create:
+      - cortex/intelligence/repo_intelligence/solution_topology_extractor.py
+      - cortex/intelligence/repo_intelligence/castle_windsor_extractor.py
+      - cortex/intelligence/repo_intelligence/nhibernate_extractor.py
+      - cortex/intelligence/repo_intelligence/nservicebus_extractor.py
+      - cortex/intelligence/repo_intelligence/angular_extractor.py
+      - cortex/intelligence/repo_intelligence/aspnet_route_extractor.py
+      - cortex/intelligence/repo_intelligence/bounded_context_extractor.py
+      - cortex/intelligence/repo_intelligence/tfm_classifier_extractor.py
+      - cortex/intelligence/repo_intelligence/__init__.py
+      - cortex/intelligence/repo_intelligence/onboarding_manifest.py   # OnboardingManifest dataclass
+      - cortex/intelligence/repo_intelligence/lens_onboarding_integration.py
+      - cortex/intelligence/repo_intelligence/tab_population_pipeline.py
+      - cortex/intelligence/repo_intelligence/registry_materializer.py
+      - cortex/intelligence/repo_intelligence/repo_dashboard_generator.py
+      - cortex/intelligence/repo_intelligence/cross_repo_graph.py
+    files_to_modify:
+      - cortex/intelligence/facade.py    # add analyze_repository() method using 8-extractor pipeline
+      - cortex/orchestrators/core/interaction_orchestrator.py  # wire manifest into /onboard flow
+    test_file: "tests/intelligence/test_repo_intelligence_engine.py"
+
+  # ── FB-001: CodeReviewOrchestrator ──────────────────────────────────────────
+  - id: GAP-132-02
+    title: "CodeReviewOrchestrator + REVIEW intent + cortex_review MCP + workflow YAML"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      CORTEX has no PR code review capability. The /review command is undocumented
+      and unrouted. Enterprise teams performing PR reviews lack OWASP security analysis,
+      structured quality gates, or an APPROVE / REQUEST_CHANGES / BLOCK verdict.
+      The CodeReviewOrchestrator closes this gap with a 6-stage pipeline backed by
+      the Intelligence Diamond and OWASP knowledge YAMLs.
+    action_ref: "phase-132-b"
+    files_to_create:
+      - cortex/orchestrators/domain/code_review_orchestrator.py   # 6-stage review pipeline
+      - cortex/mcp/tools/cortex_review.py                         # MCP tool: review|findings|history|patterns|health
+      - cortex-registry/workflows/templates/sdlc/code-review-workflow.yaml
+      - cortex-registry/knowledge/security/owasp-top-10.yaml
+      - cortex-registry/knowledge/security/owasp-api-security.yaml
+    files_to_modify:
+      - cortex/models/canonical_enums.py   # add REVIEW to IntentType enum
+      - cortex/orchestrators/core/intent_router_impl.py  # route REVIEW → CodeReviewOrchestrator
+      - cortex/mcp/mcp_registry.py         # register cortex_review as tool #33
+    test_file: "tests/domain_orchestrators/test_code_review_orchestrator.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (sequential, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: phase-132-a
+    title: "Universal Repo Intelligence Engine — 8 extractors + manifest + dashboard"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-132-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: []
+    prerequisite: "phase-131 completion gate PASSED; make test-preflight GREEN"
+    tdd_cycle:
+      red:
+        action: "Write test_repo_intelligence_engine.py — assert SolutionTopology extracts .sln project list, assert Angular extractor finds module declarations, assert OnboardingManifest serializes to JSON, assert all 8 extractors handle empty repo gracefully"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement all 8 extractor classes. Create OnboardingManifest dataclass. Implement LensOnboardingIntegration, TabPopulationPipeline, RegistryMaterializer, RepoDashboardGenerator, CrossRepoGraph. Wire analyze_repository() into IntelligenceFacade."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Ensure all extractors implement a common BaseExtractor ABC. Verify CrossRepoGraph handles single-repo scenarios without error."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + repo intelligence tests GREEN + 8 extractors operational"
+
+  - id: phase-132-b
+    title: "CodeReviewOrchestrator + REVIEW intent + cortex_review MCP tool"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-132-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-132-a"]
+    prerequisite: "phase-132-a completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_code_review_orchestrator.py — assert REVIEW intent routes to CodeReviewOrchestrator, assert P0 finding produces BLOCK verdict, assert P1 finding produces REQUEST_CHANGES, assert clean review produces APPROVE, assert cortex_review MCP tool responds to all 5 ops"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement CodeReviewOrchestrator (6 stages). Add REVIEW to IntentType. Wire REVIEW routing in intent_router_impl.py. Create cortex_review.py MCP tool. Create code-review-workflow.yaml. Create owasp-top-10.yaml + owasp-api-security.yaml knowledge YAMLs. Register cortex_review in mcp_registry.py."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify OrchestratorProtocolMixin is correctly applied. Confirm PLIP-001 scope lock is declared as 'code-review'. Run preflight."
+        gate: "make test-smoke GREEN + make test-preflight GREEN"
+    completion_gate: "make test-smoke GREEN + code review tests GREEN + cortex_review MCP registered (tool #33) + REVIEW intent in canonical_enums.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - smoke_gate: "make test-smoke GREEN (≥2775 baseline — zero regressions)"
+  - preflight_gate: "make test-preflight GREEN"
+  - repo_intelligence: "8 extractors produce OnboardingManifest for any repo; all extractors handle empty repo gracefully"
+  - code_review: "CodeReviewOrchestrator produces APPROVE / REQUEST_CHANGES / BLOCK verdict; OWASP knowledge YAMLs loaded"
+  - review_intent: "REVIEW present in IntentType enum; routes to CodeReviewOrchestrator"
+  - mcp_count: "mcp_registry.py shows 33 registered tools after phase-132 (cortex_review added)"
+  - workflow_yaml: "code-review-workflow.yaml exists and passes YAML validation"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+governance:
+  core_rules_applied: [CORE-008, CORE-011, CORE-012, CORE-035, CORE-049, CORE-064, CORE-068]
+  plip_scope_lock: "orchestration"
+  tdd_applies: true
+  test_gate: "make test-smoke"

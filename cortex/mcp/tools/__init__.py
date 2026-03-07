@@ -134,6 +134,12 @@ from cortex.mcp.tools.cortex_distill_tool import CortexDistill
 # Phase 130 — Content Optimization Mode (multi-file batch optimization)
 from cortex.mcp.tools.cortex_optimize_tool import CortexOptimize
 
+# Phase 130-c — Content Library Engine (quote/principle/ai_spark pool management)
+from cortex.mcp.tools.cortex_content import CortexContent
+
+# Phase 131-c — ADO Context Synthesizer (Azure DevOps work item synthesis)
+from cortex.mcp.tools.cortex_ado import CortexAdo
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -198,6 +204,10 @@ ALL_TOOLS = [
     CortexDistill,
     # Content Optimization (1) - Phase 130 — multi-file batch optimization
     CortexOptimize,
+    # Content Library Engine (1) - Phase 130-c — quote/principle/ai_spark pool management
+    CortexContent,
+    # ADO Context Synthesizer (1) - Phase 131-c — Azure DevOps work item synthesis
+    CortexAdo,
 ]
 
 
@@ -334,6 +344,10 @@ __all__ = [
     "CortexDistill",
     # Content Optimization (Phase 130)
     "CortexOptimize",
+    # Content Library Engine (Phase 130-c)
+    "CortexContent",
+    # ADO Context Synthesizer (Phase 131-c)
+    "CortexAdo",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

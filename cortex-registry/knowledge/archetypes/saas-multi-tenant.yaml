@@ -1,0 +1,27 @@
+# SaaS Multi-Tenant Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: saas-multi-tenant
+archetype: SaaSMultiTenant
+description: "SaaS multi-tenant application — tenant isolation, billing, subscription"
+phase: "131"
+
+knowledge_domains:
+  - saas-architecture
+  - security
+  - testing-validation
+
+best_practices:
+  - "Row Level Security on all tenant data — enforce at DB layer, not app layer"
+  - "Audit log every tenant data access and mutation"
+  - "Feature flags per plan tier — decouple billing from code"
+  - "Tenant-scoped API rate limits — prevent noisy neighbour"
+  - "Zero-downtime tenant migration tooling"
+
+common_pitfalls:
+  - "Tenant ID missing from index — full table scans at scale"
+  - "Cross-tenant data leaks in shared cache keys"
+  - "Billing webhooks without idempotency keys"
+
+recommended_workflows:
+  - "security/security-compliance-audit.yaml"
+  - "audit/audit-fix-pipeline.yaml"

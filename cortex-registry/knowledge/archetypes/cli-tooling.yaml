@@ -1,0 +1,27 @@
+# CLI Tooling Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: cli-tooling
+archetype: CLITooling
+description: "CLI tooling / developer tool — command-line interface, scripts, DevEx"
+phase: "131"
+
+knowledge_domains:
+  - developer-experience
+  - testing-validation
+  - backend-python
+
+best_practices:
+  - "Follow POSIX conventions: exit 0 success, exit 1 error, exit 2 misuse"
+  - "Print help when called with --help or no args"
+  - "Machine-readable output with --json flag"
+  - "Idempotent commands — safe to run twice"
+  - "Comprehensive --dry-run mode for destructive operations"
+
+common_pitfalls:
+  - "Swallowing stderr — users can't diagnose failures"
+  - "Missing version command (--version)"
+  - "Hardcoded paths incompatible across OS"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "quality/refactor-workflow.yaml"

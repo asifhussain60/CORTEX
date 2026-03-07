@@ -1,0 +1,28 @@
+# SPA Frontend Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: spa-frontend
+archetype: SPAFrontend
+description: "Single-page application — React, Angular, Vue, Svelte"
+phase: "131"
+
+knowledge_domains:
+  - frontend
+  - typescript
+  - testing-jest
+
+best_practices:
+  - "Colocate component, styles, and tests in one folder"
+  - "Use lazy loading for route-level code splitting"
+  - "Prefer composition over inheritance in component design"
+  - "Enforce accessibility (a11y) checks in CI"
+  - "E2E tests with Playwright / Cypress for critical user journeys"
+
+common_pitfalls:
+  - "Prop drilling deeper than 3 levels — use context or state management"
+  - "Missing error boundaries causing full-page crashes"
+  - "Bundle size bloat from unanalysed dependencies"
+  - "No memoisation on expensive computed values"
+
+recommended_workflows:
+  - "frontend/html-view-lifecycle.yaml"
+  - "frontend/typescript-refactor-workflow.yaml"

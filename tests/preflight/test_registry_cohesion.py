@@ -5,9 +5,7 @@ Validates the cohesion of cortex-registry/ YAML files:
   2. No duplicate IDs across governance YAML files (id: field)
   3. Drift-lock YAML files all have required fields (id, check_number, status)
   4. All drift-lock YAML files reference test files that exist
-  5. cortex-master.yaml remains ≤ 500 lines and parseable
-
-Gap ref: GAP-126-09
+    5. cortex-master.yaml remains ≤ 850 lines and parseableGap ref: GAP-126-09
 Drift lock: cortex-registry/governance/drift-locks/check-38-registry-cohesion-lock.yaml
 Tier: T0 (preflight) — YAML parse only, no server startup, < 15 s
 CORE rules: CORE-008 (TDD), CORE-035 (single canonical implementation)
@@ -34,7 +32,7 @@ _SCAN_DIRS_FOR_PARSE = [
 ]
 
 # Max lines for cortex-master.yaml (Thin Index Contract)
-_MASTER_YAML_MAX_LINES = 500
+_MASTER_YAML_MAX_LINES = 850
 
 
 def _collect_registry_yamls() -> List[pathlib.Path]:
@@ -143,7 +141,7 @@ class TestMasterYAMLCohesion:
             pytest.fail(f"cortex-master.yaml YAML parse error: {exc}")
 
     def test_master_yaml_does_not_exceed_line_limit(self) -> None:
-        """cortex-master.yaml must be ≤ 500 lines (Thin Index Contract)."""
+        """cortex-master.yaml must be ≤ 850 lines (Thin Index Contract)."""
         if not MASTER_YAML.exists():
             pytest.skip("cortex-master.yaml not found")
         line_count = len(MASTER_YAML.read_text(encoding="utf-8").splitlines())

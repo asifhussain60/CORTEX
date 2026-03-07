@@ -1,0 +1,317 @@
+# Canonical Archetype Definitions — CORTEX Knowledge Base
+# Authority: GAP-131-01 (Phase 131-a — Intelligence Layer Backport)
+# SSOT for ArchetypeClassifier weighted signal scoring.
+# Each archetype has a set of file/pattern signals with numeric weights.
+# Classifier sums weights of matched signals; highest-scoring archetype wins.
+# Score ties resolved alphabetically by archetype id.
+
+created: "2026-03-07"
+phase: "131"
+gap_ref: "GAP-131-01"
+
+archetypes:
+  - id: DotNetMonolith
+    description: ".NET monolithic application — single deployable unit, C#/VB.NET stack"
+    knowledge_yaml: "dotnet-monolith.yaml"
+    signals:
+      - pattern: "*.sln"
+        weight: 5
+      - pattern: "*.csproj"
+        weight: 3
+      - pattern: "*.vbproj"
+        weight: 3
+      - pattern: "Global.asax"
+        weight: 4
+      - pattern: "web.config"
+        weight: 3
+      - pattern: "App.config"
+        weight: 2
+      - pattern: "*.sln"
+        weight: 5
+      - keyword: "Castle.Windsor"
+        weight: 3
+      - keyword: "Autofac"
+        weight: 2
+      - keyword: "EntityFramework"
+        weight: 2
+
+  - id: MicroservicesMesh
+    description: "Multi-service architecture — Docker Compose / Kubernetes / service mesh"
+    knowledge_yaml: "microservices-mesh.yaml"
+    signals:
+      - pattern: "docker-compose*.yaml"
+        weight: 4
+      - pattern: "docker-compose*.yml"
+        weight: 4
+      - pattern: "k8s/"
+        weight: 4
+      - pattern: "kubernetes/"
+        weight: 4
+      - pattern: "helm/"
+        weight: 3
+      - pattern: "Dockerfile"
+        weight: 2
+      - keyword: "istio"
+        weight: 3
+      - keyword: "envoy"
+        weight: 2
+      - keyword: "grpc"
+        weight: 2
+      # Multiple services in docker-compose — detected programmatically
+      - pattern: "deployment.yaml"
+        weight: 3
+
+  - id: SPAFrontend
+    description: "Single-page application — React, Angular, Vue, Svelte"
+    knowledge_yaml: "spa-frontend.yaml"
+    signals:
+      - pattern: "package.json"
+        weight: 2
+      - pattern: "angular.json"
+        weight: 5
+      - pattern: "next.config.js"
+        weight: 5
+      - pattern: "vite.config.*"
+        weight: 4
+      - pattern: "webpack.config.*"
+        weight: 3
+      - pattern: "tsconfig.json"
+        weight: 2
+      - keyword: "@angular/core"
+        weight: 5
+      - keyword: "react"
+        weight: 4
+      - keyword: "vue"
+        weight: 4
+      - keyword: "svelte"
+        weight: 4
+
+  - id: LegacyBatchProcessor
+    description: "Legacy batch processing system — ETL, COBOL, mainframe or aged codebase"
+    knowledge_yaml: "legacy-batch.yaml"
+    signals:
+      - pattern: "*.cob"
+        weight: 6
+      - pattern: "*.cbl"
+        weight: 6
+      - pattern: "*.jcl"
+        weight: 6
+      - pattern: "*.rpg"
+        weight: 5
+      - keyword: "BATCH"
+        weight: 2
+      - keyword: "ETL"
+        weight: 2
+      - keyword: "mainframe"
+        weight: 3
+      - keyword: "COBOL"
+        weight: 5
+      - pattern: "batch*.py"
+        weight: 2
+      - pattern: "run_batch*"
+        weight: 2
+
+  - id: EventDriven
+    description: "Event-driven architecture — message queues, pub/sub, Kafka, RabbitMQ"
+    knowledge_yaml: "event-driven.yaml"
+    signals:
+      - keyword: "kafka"
+        weight: 5
+      - keyword: "rabbitmq"
+        weight: 5
+      - keyword: "celery"
+        weight: 4
+      - keyword: "pubsub"
+        weight: 4
+      - keyword: "eventbus"
+        weight: 4
+      - keyword: "sns"
+        weight: 3
+      - keyword: "sqs"
+        weight: 3
+      - pattern: "*.proto"
+        weight: 2
+      - keyword: "asyncio"
+        weight: 2
+      - keyword: "aiohttp"
+        weight: 2
+
+  - id: DataPlatform
+    description: "Data platform — data warehousing, pipelines, analytics, dbt, Spark"
+    knowledge_yaml: "data-platform.yaml"
+    signals:
+      - pattern: "dbt_project.yml"
+        weight: 6
+      - pattern: "*.ipynb"
+        weight: 3
+      - keyword: "pyspark"
+        weight: 5
+      - keyword: "airflow"
+        weight: 5
+      - keyword: "databricks"
+        weight: 5
+      - keyword: "snowflake"
+        weight: 4
+      - keyword: "dbt"
+        weight: 4
+      - keyword: "pandas"
+        weight: 2
+      - pattern: "dagster*"
+        weight: 4
+      - keyword: "prefect"
+        weight: 4
+
+  - id: MobileNative
+    description: "Native mobile application — iOS (Swift), Android (Kotlin/Java), Flutter"
+    knowledge_yaml: "mobile-native.yaml"
+    signals:
+      - pattern: "*.xcodeproj"
+        weight: 6
+      - pattern: "*.xcworkspace"
+        weight: 6
+      - pattern: "Podfile"
+        weight: 5
+      - pattern: "AndroidManifest.xml"
+        weight: 6
+      - pattern: "pubspec.yaml"
+        weight: 5
+      - keyword: "flutter"
+        weight: 5
+      - keyword: "kotlin"
+        weight: 3
+      - keyword: "swift"
+        weight: 3
+      - pattern: "build.gradle"
+        weight: 4
+      - pattern: "*.swift"
+        weight: 3
+
+  - id: EmbeddedSystems
+    description: "Embedded / firmware systems — C/C++, RTOS, microcontrollers"
+    knowledge_yaml: "embedded-systems.yaml"
+    signals:
+      - pattern: "CMakeLists.txt"
+        weight: 4
+      - pattern: "*.ld"
+        weight: 5
+      - pattern: "*.hex"
+        weight: 5
+      - pattern: "*.elf"
+        weight: 5
+      - keyword: "FreeRTOS"
+        weight: 6
+      - keyword: "RTOS"
+        weight: 5
+      - keyword: "HAL_"
+        weight: 5
+      - keyword: "gpio"
+        weight: 4
+      - keyword: "uart"
+        weight: 4
+      - pattern: "Makefile"
+        weight: 2
+
+  - id: SaaSMultiTenant
+    description: "SaaS multi-tenant application — tenant isolation, billing, subscription"
+    knowledge_yaml: "saas-multi-tenant.yaml"
+    signals:
+      - keyword: "tenant"
+        weight: 4
+      - keyword: "multi_tenant"
+        weight: 5
+      - keyword: "subscription"
+        weight: 3
+      - keyword: "billing"
+        weight: 3
+      - keyword: "stripe"
+        weight: 4
+      - keyword: "organization"
+        weight: 2
+      - keyword: "plan_tier"
+        weight: 4
+      - keyword: "feature_flag"
+        weight: 2
+      - pattern: "tenancy*"
+        weight: 4
+      - keyword: "Row Level Security"
+        weight: 4
+
+  - id: Serverless
+    description: "Serverless architecture — AWS Lambda, Azure Functions, GCP Cloud Functions"
+    knowledge_yaml: "serverless.yaml"
+    signals:
+      - pattern: "serverless.yml"
+        weight: 6
+      - pattern: "serverless.yaml"
+        weight: 6
+      - pattern: "template.yaml"
+        weight: 3
+      - keyword: "lambda"
+        weight: 4
+      - keyword: "azure_functions"
+        weight: 5
+      - keyword: "cloud_functions"
+        weight: 5
+      - keyword: "sam"
+        weight: 3
+      - pattern: "sam-template*"
+        weight: 4
+      - keyword: "chalice"
+        weight: 4
+      - keyword: "handler"
+        weight: 2
+
+  - id: MLPlatform
+    description: "Machine learning / AI platform — model training, serving, MLOps"
+    knowledge_yaml: "ml-platform.yaml"
+    signals:
+      - pattern: "MLproject"
+        weight: 5
+      - pattern: "model_card.yaml"
+        weight: 5
+      - keyword: "mlflow"
+        weight: 5
+      - keyword: "pytorch"
+        weight: 4
+      - keyword: "tensorflow"
+        weight: 4
+      - keyword: "transformers"
+        weight: 4
+      - keyword: "scikit-learn"
+        weight: 3
+      - keyword: "kubeflow"
+        weight: 5
+      - keyword: "bentoml"
+        weight: 4
+      - pattern: "*.pkl"
+        weight: 3
+
+  - id: CLITooling
+    description: "CLI tooling / developer tool — command-line interface, scripts, DevEx"
+    knowledge_yaml: "cli-tooling.yaml"
+    signals:
+      - pattern: "setup.py"
+        weight: 3
+      - pattern: "pyproject.toml"
+        weight: 2
+      - keyword: "click"
+        weight: 4
+      - keyword: "typer"
+        weight: 4
+      - keyword: "argparse"
+        weight: 3
+      - keyword: "cobra"
+        weight: 4
+      - keyword: "clap"
+        weight: 4
+      - pattern: "cli/**"
+        weight: 3
+      - pattern: "cmd/**"
+        weight: 2
+      - keyword: "readline"
+        weight: 2
+
+  - id: GENERIC
+    description: "Generic / unrecognised repository — no dominant archetype signals"
+    knowledge_yaml: ""
+    signals: []

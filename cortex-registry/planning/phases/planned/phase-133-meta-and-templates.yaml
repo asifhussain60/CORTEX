@@ -1,0 +1,194 @@
+id: phase-133
+title: "Meta & Templates Backport — FEEDBACK Intent + 15 Workflow Templates"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: ["phase-132"]
+sweep_id: SWEEP-133-META-AND-TEMPLATES
+estimated_effort: "1 day"
+
+description: |
+  Meta and templates backport — depends on phase-132 (core capabilities). Delivers
+  two meta-level backport items from the _workspaces/cortex-sts/ implementation:
+
+  FB-008 — FEEDBACK Intent + FeedbackOrchestrator: a cross-repo capability extraction
+  pipeline that discovers novel patterns in company repos and generates sanitized
+  backport instructions for integration into CORTEX. 8 sanitization gates (G1–G8)
+  enforce privacy compliance — no company-specific names, paths, or IP in output.
+  Output is restricted to _workspaces/_feedback/ directory. Exposed via FEEDBACK
+  IntentType, FeedbackOrchestrator (in cortex/orchestrators/support/), FeedbackAgent
+  (.github/agents/support/cortex-feedback-agent.md), cortex-feedback.prompt.md,
+  and keyword registry entry.
+
+  FB-010 — 15 Workflow Template YAMLs: backports the full set of workflow templates
+  needed by the new orchestrators and intents. Templates span backend (C# refactor,
+  C# security), frontend (TypeScript refactor, HTML view lifecycle), lifecycle
+  (feedback, onboarding, service decomposition, train), maintenance (health check,
+  vacuum), security (security compliance audit), quality (refactor), and primitives
+  (challenge gate, holistic validation gate extensions). Also updates
+  workflow-composer-spec.yaml routing table with REVIEW and FEEDBACK entries.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── FB-008: FEEDBACK Intent + FeedbackOrchestrator ──────────────────────────
+  - id: GAP-133-01
+    title: "FEEDBACK IntentType + FeedbackOrchestrator + agent + prompt + keyword registry"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      CORTEX has no mechanism to extract cross-repo learnings from company codebases
+      and safely backport them as improvement instructions. The /feedback command
+      is undocumented and unrouted. Without sanitization gates, any extraction
+      workflow risks leaking company-specific IP. The FeedbackOrchestrator with
+      8 sanitization gates (G1: no company names, G2: no internal URLs, G3: no
+      credentials, G4: no internal system references, G5: no employee PII,
+      G6: no proprietary algorithms, G7: no internal architecture specifics,
+      G8: output path restriction to _workspaces/_feedback/) closes this gap.
+    action_ref: "phase-133-a"
+    files_to_create:
+      - cortex/orchestrators/support/feedback_orchestrator.py   # 6-stage extraction pipeline
+      - cortex/orchestrators/support/feedback_agent.py          # FeedbackAgent (sanitization gates)
+      - .github/agents/support/cortex-feedback-agent.md         # agent routing file
+      - .github/prompts/cortex-feedback.prompt.md               # dedicated feedback prompt
+    files_to_modify:
+      - cortex/models/canonical_enums.py              # add FEEDBACK to IntentType enum
+      - cortex/orchestrators/core/intent_router_impl.py  # route FEEDBACK → FeedbackOrchestrator
+      - cortex-registry/core/intent-keyword-registry.yaml  # add FEEDBACK trigger keywords
+    test_file: "tests/domain_orchestrators/test_feedback_orchestrator.py"
+    sanitization_gates:
+      - G1: "No company names (org, product, team names)"
+      - G2: "No internal URLs (intranet, internal API endpoints)"
+      - G3: "No credentials (tokens, passwords, connection strings)"
+      - G4: "No internal system references (proprietary tools, internal CI/CD names)"
+      - G5: "No employee PII (names, emails, employee IDs)"
+      - G6: "No proprietary algorithms (business logic specifics)"
+      - G7: "No internal architecture specifics (undisclosed topology)"
+      - G8: "Output path restricted to _workspaces/_feedback/ directory only"
+
+  # ── FB-010: 15 Workflow Template YAMLs ──────────────────────────────────────
+  - id: GAP-133-02
+    title: "15 workflow template YAMLs + workflow-composer-spec.yaml routing table update"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      The workflow-composer-spec.yaml routing table does not include REVIEW or
+      FEEDBACK intents. The corresponding workflow templates are missing from
+      cortex-registry/workflows/templates/. This means WorkflowComposer cannot
+      route these intents through the 3-tier workflow hierarchy.
+      15 templates are required to complete the routing table and provide workflow
+      governance for all existing and new intents.
+    action_ref: "phase-133-b"
+    files_to_create:
+      # Backend templates
+      - cortex-registry/workflows/templates/backend/csharp-refactor-workflow.yaml
+      - cortex-registry/workflows/templates/backend/csharp-security-workflow.yaml
+      # Frontend templates
+      - cortex-registry/workflows/templates/frontend/typescript-refactor-workflow.yaml
+      - cortex-registry/workflows/templates/frontend/html-view-lifecycle.yaml
+      # Lifecycle templates
+      - cortex-registry/workflows/templates/lifecycle/feedback-workflow.yaml
+      - cortex-registry/workflows/templates/lifecycle/onboarding-workflow.yaml
+      - cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml
+      - cortex-registry/workflows/templates/lifecycle/train-workflow.yaml
+      # Maintenance templates
+      - cortex-registry/workflows/templates/maintenance/health-check-workflow.yaml
+      - cortex-registry/workflows/templates/maintenance/vacuum-workflow.yaml
+      # Security templates
+      - cortex-registry/workflows/templates/security/security-compliance-audit.yaml
+      # Quality templates
+      - cortex-registry/workflows/templates/quality/refactor-workflow.yaml
+      # Code review template (supplements phase-132 code-review-workflow.yaml)
+      - cortex-registry/workflows/templates/sdlc/review-workflow.yaml
+      # Primitive extensions
+      - cortex-registry/workflows/templates/primitives/governance/challenge-gate.yaml
+      - cortex-registry/workflows/templates/primitives/governance/dor-display.yaml
+    files_to_modify:
+      - cortex-registry/workflows/workflow-composer-spec.yaml  # add REVIEW + FEEDBACK to intent_routing table
+    test_file: "tests/governance/test_workflow_template_completeness.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (sequential, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: phase-133-a
+    title: "FEEDBACK IntentType + FeedbackOrchestrator + agent + prompt"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-133-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "5 hours"
+    depends_on: []
+    prerequisite: "phase-132 completion gate PASSED; make test-preflight GREEN"
+    tdd_cycle:
+      red:
+        action: "Write test_feedback_orchestrator.py — assert FEEDBACK intent routes to FeedbackOrchestrator, assert each of 8 sanitization gates blocks company-specific content, assert output path is restricted to _workspaces/_feedback/, assert FEEDBACK keyword triggers routing"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement FeedbackOrchestrator (6 stages) + FeedbackAgent (8 sanitization gates G1–G8). Add FEEDBACK to IntentType. Wire FEEDBACK routing in intent_router_impl.py. Add FEEDBACK keywords to intent-keyword-registry.yaml. Create cortex-feedback-agent.md and cortex-feedback.prompt.md."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify each sanitization gate is independently testable. Confirm output path enforcement uses constants from cortex/orchestrators/health/constants.py (from phase-130-a). Declare PLIP-001 scope lock as 'feedback'."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + feedback tests GREEN + FEEDBACK in IntentType + agent + prompt files exist"
+
+  - id: phase-133-b
+    title: "15 workflow template YAMLs + composer-spec routing update"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-133-02"]
+    governance_authority: "CORE-028, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-133-a"]
+    prerequisite: "phase-133-a completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_workflow_template_completeness.py — assert all 15 template files exist, assert each is valid YAML, assert workflow-composer-spec.yaml routing table includes REVIEW and FEEDBACK"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Create all 15 workflow template YAML files following existing template structure (see sdlc/implement-workflow.yaml as reference). Update workflow-composer-spec.yaml intent_routing table: add REVIEW → sdlc/review-workflow.yaml and FEEDBACK → lifecycle/feedback-workflow.yaml entries."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify all 15 files pass python3 -c 'import yaml; yaml.safe_load(open(f))' validation. Confirm composer-spec.yaml remains valid YAML. Run build-registry-docs.py to ensure registry indexer picks up new templates."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + template completeness tests GREEN + composer-spec has REVIEW + FEEDBACK routes"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - smoke_gate: "make test-smoke GREEN (≥2775 baseline — zero regressions)"
+  - preflight_gate: "make test-preflight GREEN"
+  - feedback_intent: "FEEDBACK present in IntentType enum; routes to FeedbackOrchestrator"
+  - sanitization: "All 8 sanitization gates block respective content categories"
+  - output_restriction: "FeedbackOrchestrator only writes to _workspaces/_feedback/"
+  - workflow_templates: "All 15 YAML template files exist and are valid YAML"
+  - composer_routing: "workflow-composer-spec.yaml includes REVIEW and FEEDBACK in intent_routing"
+  - agent_files: "cortex-feedback-agent.md and cortex-feedback.prompt.md exist with correct format"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+governance:
+  core_rules_applied: [CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-049, CORE-064, CORE-068]
+  plip_scope_lock: "orchestration"
+  tdd_applies: true
+  test_gate: "make test-smoke"

@@ -185,6 +185,17 @@ LEGACY_ROOT_FOLDERS_RELOCATION: Dict[str, str] = {
 """
 
 
+VACUUM_RECENCY_GUARD_HOURS: int = 24
+"""Files modified within this many hours are never deleted or archived by VacuumOrchestrator.
+
+Any file or directory whose ``st_mtime`` is less than ``VACUUM_RECENCY_GUARD_HOURS`` old is
+unconditionally skipped during planning stages (_plan_empty_cleanup, _plan_orphan_cleanup,
+_plan_markdown_archive, _plan_root_cleanup).  This prevents accidental removal of work
+in progress during active development sessions.
+
+GAP-REF: GAP-130-01 (Phase 130-a — Foundation Backport)
+"""
+
 __all__ = [
     "EXCLUDED_DIRS",
     "PROTECTED_FILES",
@@ -200,4 +211,5 @@ __all__ = [
     "ROLLBACK_FILENAME",
     "DISSOLVED_PACKAGES",
     "LEGACY_ROOT_FOLDERS_RELOCATION",
+    "VACUUM_RECENCY_GUARD_HOURS",
 ]

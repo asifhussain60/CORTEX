@@ -1,0 +1,27 @@
+# ML Platform Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: ml-platform
+archetype: MLPlatform
+description: "Machine learning / AI platform — model training, serving, MLOps"
+phase: "131"
+
+knowledge_domains:
+  - machine-learning
+  - mlops
+  - data-engineering
+
+best_practices:
+  - "Version datasets, code, and models together (DVC / MLflow artifacts)"
+  - "Reproducible training: pin dependencies, seed RNG, log hyperparameters"
+  - "Shadow deploy new model before full traffic switch"
+  - "Monitor prediction distribution drift in production"
+  - "Separate feature engineering pipeline from model training code"
+
+common_pitfalls:
+  - "Training/serving skew — feature computation differs between train and serve"
+  - "Missing data validation before model training causes silent quality issues"
+  - "No rollback plan when new model degrades key metrics"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "audit/audit-fix-pipeline.yaml"

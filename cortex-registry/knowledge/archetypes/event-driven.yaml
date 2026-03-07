@@ -1,0 +1,27 @@
+# Event-Driven Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: event-driven
+archetype: EventDriven
+description: "Event-driven architecture — message queues, pub/sub, Kafka, RabbitMQ"
+phase: "131"
+
+knowledge_domains:
+  - distributed-systems
+  - messaging
+  - observability
+
+best_practices:
+  - "Design events as immutable facts — never mutate published events"
+  - "Include correlation and causation IDs in every event envelope"
+  - "Use dead-letter queues for unprocessable messages"
+  - "Consumer idempotency — handle duplicate delivery gracefully"
+  - "Schema registry for event contracts (Avro / Protobuf)"
+
+common_pitfalls:
+  - "Event sourcing without snapshot strategy — slow aggregate rebuilds"
+  - "Missing consumer group naming convention causing partition contention"
+  - "No backpressure handling causing consumer lag build-up"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "debugging/multi-stack-debug-pipeline.yaml"

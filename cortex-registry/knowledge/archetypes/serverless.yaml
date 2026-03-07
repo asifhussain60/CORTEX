@@ -1,0 +1,27 @@
+# Serverless Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: serverless
+archetype: Serverless
+description: "Serverless architecture — AWS Lambda, Azure Functions, GCP Cloud Functions"
+phase: "131"
+
+knowledge_domains:
+  - cloud-functions
+  - observability
+  - security
+
+best_practices:
+  - "Keep functions single-purpose — one trigger, one action"
+  - "Cold start budget: avoid heavy imports at module level"
+  - "Idempotent handlers — cloud platforms guarantee at-least-once delivery"
+  - "Use structured logging with correlation IDs"
+  - "Set explicit memory and timeout budgets per function"
+
+common_pitfalls:
+  - "Vendor lock-in through platform-specific SDK leaking into business logic"
+  - "Missing dead-letter queue on async invocations"
+  - "Secrets hardcoded in environment variables visible in console"
+
+recommended_workflows:
+  - "security/security-compliance-audit.yaml"
+  - "sdlc/implement-workflow.yaml"

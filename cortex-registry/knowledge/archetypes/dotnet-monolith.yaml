@@ -1,0 +1,28 @@
+# .NET Monolith Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: dotnet-monolith
+archetype: DotNetMonolith
+description: ".NET monolithic application — single deployable unit, C#/VB.NET stack"
+phase: "131"
+
+knowledge_domains:
+  - backend-dotnet
+  - testing-xunit
+  - deployment-iis
+
+best_practices:
+  - "Apply SOLID principles — Single Responsibility prevents monolith rot"
+  - "Use dependency injection (Autofac / Castle Windsor / built-in DI)"
+  - "Modularise into feature folders before considering service extraction"
+  - "Add integration tests for every database round-trip"
+  - "Use EF Core migrations — never hand-craft schema changes"
+
+common_pitfalls:
+  - "God classes accumulating business logic"
+  - "Missing database transaction boundaries"
+  - "Direct SQL strings instead of ORM"
+  - "Static global state breaking testability"
+
+recommended_workflows:
+  - "backend/csharp-refactor-workflow.yaml"
+  - "backend/csharp-security-workflow.yaml"

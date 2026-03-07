@@ -1,0 +1,209 @@
+id: phase-131
+title: "Intelligence Layer Backport — Archetype Classifier + CortexFrameworkAnalyzer + ADO Synthesizer"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: ["phase-130"]
+sweep_id: SWEEP-131-INTELLIGENCE-LAYER
+estimated_effort: "1.5 days"
+
+description: |
+  Intelligence layer backport — depends on phase-130 (foundation). Delivers three
+  intelligence capabilities from the _workspaces/cortex-sts/ implementation:
+
+  FB-005 — ArchetypeClassifier: classifies repositories into canonical archetypes
+  (e.g. DotNetMonolith, MicroservicesMesh, SPAFrontend, LegacyBatchProcessor) using
+  weighted signal scoring. Backed by 13 new knowledge YAMLs and an expanded
+  INDEX.yaml (94 files total). Enables knowledge domain routing and workflow
+  recommendation to be repo-specific rather than generic.
+
+  FB-009 — CortexFrameworkAnalyzer: a LENS analyzer (regex-based, graceful degradation
+  for non-CORTEX repos) that detects other CORTEX instances during onboarding and
+  tailors the intelligence profile accordingly. Self-awareness enables CORTEX to
+  avoid applying CORTEX-specific workflow templates to non-CORTEX repos.
+
+  FB-004 — ADOContextSynthesizer: produces token-optimized Azure DevOps context
+  summaries (budget ≤8000 chars). Extended ado_orchestrator with fetch_story_full
+  and fetch_linked_tests operations. New cortex_ado MCP tool (get_story | get_full |
+  get_tests | search | health). New ado-integration.yaml config YAML.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── FB-005: ArchetypeClassifier ─────────────────────────────────────────────
+  - id: GAP-131-01
+    title: "ArchetypeClassifier + archetype-definitions.yaml + 13 knowledge YAMLs"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      CORTEX applies the same default knowledge routing to all repos regardless
+      of technology stack. A .NET monolith and a React SPA receive identical
+      LENS analysis profiles. The ArchetypeClassifier + archetype-definitions.yaml
+      closes this gap by scoring repos against canonical archetype patterns and
+      selecting the optimal knowledge domain set per repo.
+    action_ref: "phase-131-a"
+    files_to_create:
+      - cortex/intelligence/archetype_classifier.py            # ArchetypeClassifier (weighted scoring)
+      - cortex-registry/knowledge/archetypes/archetype-definitions.yaml  # canonical archetype patterns
+      - cortex-registry/knowledge/archetypes/dotnet-monolith.yaml
+      - cortex-registry/knowledge/archetypes/microservices-mesh.yaml
+      - cortex-registry/knowledge/archetypes/spa-frontend.yaml
+      - cortex-registry/knowledge/archetypes/legacy-batch.yaml
+      - cortex-registry/knowledge/archetypes/event-driven.yaml
+      - cortex-registry/knowledge/archetypes/data-platform.yaml
+      - cortex-registry/knowledge/archetypes/mobile-native.yaml
+      - cortex-registry/knowledge/archetypes/embedded-systems.yaml
+      - cortex-registry/knowledge/archetypes/saas-multi-tenant.yaml
+      - cortex-registry/knowledge/archetypes/serverless.yaml
+      - cortex-registry/knowledge/archetypes/ml-platform.yaml
+      - cortex-registry/knowledge/archetypes/cli-tooling.yaml
+    files_to_modify:
+      - cortex-registry/knowledge/INDEX.yaml     # expand from 81 → 94 entries
+      - cortex/intelligence/facade.py            # add classify_archetype() method
+    test_file: "tests/intelligence/test_archetype_classifier.py"
+
+  # ── FB-009: CortexFrameworkAnalyzer ─────────────────────────────────────────
+  - id: GAP-131-02
+    title: "CortexFrameworkAnalyzer LENS analyzer — self-aware repo detection"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      When CORTEX onboards a non-CORTEX repo, it applies CORTEX-specific workflow
+      assumptions (e.g. presence of cortex-registry/, cortex/orchestrators/,
+      .cortex-runtime/). This produces false-positive drift violations. The
+      CortexFrameworkAnalyzer detects whether the target repo is a CORTEX instance
+      and sets an is_cortex_framework flag that gates CORTEX-specific checks.
+    action_ref: "phase-131-b"
+    files_to_create:
+      - cortex/lens/analyzers/cortex_framework_analyzer.py  # regex-based, graceful degradation
+    files_to_modify:
+      - cortex/lens/lens_orchestrator.py    # register CortexFrameworkAnalyzer in analyzer chain
+      - cortex/intelligence/facade.py       # expose is_cortex_framework() convenience method
+    test_file: "tests/lens/test_cortex_framework_analyzer.py"
+
+  # ── FB-004: ADOContextSynthesizer ───────────────────────────────────────────
+  - id: GAP-131-03
+    title: "ADOContextSynthesizer + cortex_ado MCP tool + ado-integration.yaml"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      Fetching full ADO work items produces context payloads >10,000 tokens that
+      exhaust Copilot Chat context budget. ADOContextSynthesizer produces summaries
+      ≤8000 chars by extracting: acceptance criteria scenarios, top 5 comment
+      themes, child task hierarchy (2 levels max), and classification tags.
+      The cortex_ado MCP tool makes this accessible without terminal access.
+    action_ref: "phase-131-c"
+    files_to_create:
+      - cortex/intelligence/ado_context_synthesizer.py      # ADOContextSynthesizer (token budget ≤8000)
+      - cortex/mcp/tools/cortex_ado.py                      # MCP tool: get_story|get_full|get_tests|search|health
+      - cortex-registry/config/ado-integration.yaml         # ADO endpoint + field mapping config
+    files_to_modify:
+      - cortex/orchestrators/domain/ado_orchestrator.py     # add fetch_story_full(), fetch_linked_tests()
+      - cortex/mcp/mcp_registry.py                          # register cortex_ado as tool #32
+    test_file: "tests/intelligence/test_ado_context_synthesizer.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (sequential, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: phase-131-a
+    title: "ArchetypeClassifier + archetype-definitions.yaml + knowledge YAMLs"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-131-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "phase-130 completion gate PASSED; make test-preflight GREEN"
+    tdd_cycle:
+      red:
+        action: "Write test_archetype_classifier.py — assert DotNetMonolith detected from .sln + Castle Windsor signals, assert SPA detected from package.json Angular signals, assert unknown repo returns UNKNOWN archetype gracefully"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Create ArchetypeClassifier with weighted signal scoring. Create archetype-definitions.yaml with 13 canonical archetypes. Create 13 archetype YAML knowledge files. Expand INDEX.yaml to 94 entries. Wire classify_archetype() into IntelligenceFacade."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Confirm scoring is YAML-driven (no hardcoded signal weights in Python). Verify graceful degradation on empty/minimal repos returns GENERIC archetype."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + archetype tests GREEN + INDEX.yaml has 94 entries"
+
+  - id: phase-131-b
+    title: "CortexFrameworkAnalyzer LENS analyzer"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-131-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-131-a"]
+    prerequisite: "phase-131-a completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_cortex_framework_analyzer.py — assert CORTEX repo detected (cortex-registry/ + cortex/orchestrators/ present), assert non-CORTEX repo returns is_cortex_framework=False, assert analyzer raises no exceptions on empty directory"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Create CortexFrameworkAnalyzer in cortex/lens/analyzers/. Register in LensOrchestrator analyzer chain. Wire is_cortex_framework() convenience method into IntelligenceFacade."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Ensure all regex patterns are compiled at class init (not per-call). Confirm graceful degradation path is tested."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + framework analyzer tests GREEN + LensOrchestrator updated"
+
+  - id: phase-131-c
+    title: "ADOContextSynthesizer + cortex_ado MCP tool"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-131-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-131-b"]
+    prerequisite: "phase-131-b completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_ado_context_synthesizer.py — assert output ≤8000 chars regardless of input size, assert AC scenarios extracted, assert comment themes limited to top 5, assert cortex_ado MCP responds to get_story/get_full/get_tests/search/health"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement ADOContextSynthesizer with token budget enforcement. Create cortex_ado.py MCP tool. Create ado-integration.yaml config. Add fetch_story_full() and fetch_linked_tests() to ado_orchestrator. Register cortex_ado in mcp_registry.py."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify budget enforcement truncates gracefully (no half-sentence cuts). Confirm cortex_ado health op returns registry status correctly."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + ADO tests GREEN + cortex_ado MCP registered (tool #32)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - smoke_gate: "make test-smoke GREEN (≥2775 baseline — zero regressions)"
+  - preflight_gate: "make test-preflight GREEN"
+  - archetype_classifier: "ArchetypeClassifier classifies 13 archetypes from YAML-driven signal weights"
+  - framework_analyzer: "CortexFrameworkAnalyzer correctly identifies CORTEX repos vs non-CORTEX repos"
+  - ado_synthesizer: "ADOContextSynthesizer output ≤8000 chars; cortex_ado MCP responds to all 5 ops"
+  - mcp_count: "mcp_registry.py shows 32 registered tools after phase-131 (cortex_ado added)"
+  - knowledge_index: "INDEX.yaml has 94 entries"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+governance:
+  core_rules_applied: [CORE-008, CORE-011, CORE-012, CORE-035, CORE-049, CORE-064, CORE-068]
+  plip_scope_lock: "orchestration"
+  tdd_applies: true
+  test_gate: "make test-smoke"

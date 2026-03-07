@@ -1,0 +1,28 @@
+# Microservices Mesh Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: microservices-mesh
+archetype: MicroservicesMesh
+description: "Multi-service architecture — Docker Compose / Kubernetes / service mesh"
+phase: "131"
+
+knowledge_domains:
+  - cloud-native
+  - distributed-systems
+  - observability
+
+best_practices:
+  - "Each service owns its data — no shared databases"
+  - "Use circuit breakers (Polly / Resilience4j) for inter-service calls"
+  - "Centralise tracing with OpenTelemetry"
+  - "Contract-test service boundaries (Pact / Spring Cloud Contract)"
+  - "Health endpoints on every service"
+
+common_pitfalls:
+  - "Distributed monolith — services share database tables"
+  - "Missing correlation IDs across service boundaries"
+  - "Synchronous coupling defeating the purpose of microservices"
+  - "No retry / backoff strategy on inter-service HTTP calls"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "audit/audit-fix-pipeline.yaml"

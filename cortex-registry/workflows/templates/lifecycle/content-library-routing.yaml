@@ -1,0 +1,109 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# WORKFLOW TEMPLATE: Content Library Routing
+# ID: content-library-routing
+# Tier: 2 (Mode Workflow — per-response content selection routing)
+#
+# PURPOSE: Route each response turn to the correct content pool(s) via
+#          ContentLibraryEngine.  Enforces mutual exclusion between atom-principle
+#          (analysis_section zone) and atom-proceed-principle (proceed_gate zone).
+#
+# TRIGGER: MasterOrchestrator Stage 4 (response enrichment), once per turn
+# SSOT: cortex-registry/templates/response/atoms/
+# Phase: 130 (GAP-130-03 — ContentLibraryEngine routing)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: content-library-routing
+type: workflow
+tier: 2
+phase: "130"
+
+# ─── Trigger Conditions ───────────────────────────────────────────────────────
+trigger:
+  event: "response_enrichment"
+  stage: "MasterOrchestrator Stage 4"
+  frequency: "once_per_turn"
+  caller: "ContentLibraryOrchestrator.orchestrate()"
+
+# ─── Pool Routing Decision Tree ──────────────────────────────────────────────
+#
+# At each response turn, exactly ONE of these pools renders.
+# ContentLibraryEngine.select_across() enforces mutual exclusion.
+#
+# Pool → Atom mapping:
+#   quotes     → atom-quote      (Zone 2 — always renders, every turn)
+#   principles → atom-principle  (Zone: analysis_section — analysis/design intents only)
+#   ai_sparks  → atom-ai-spark   (Zone: analysis_section — same conditions as atom-principle)
+#   principles → atom-proceed-principle (Zone: proceed_gate — action intents before execution)
+
+routing:
+  # Zone 2 Quote — always rendered, independent of other pools
+  zone_2_quote:
+    pool: quotes
+    atom: atom-quote
+    zone: 2
+    always_render: true
+    selection: "EpochShuffler(quotes_pool).next()"
+
+  # Analysis-section content — atom-principle OR atom-ai-spark (mutual exclusion)
+  analysis_section_content:
+    trigger_intents: [QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE]
+    complexity_gate: "request_word_count >= 8 OR analytical_signal_detected"
+    selection_method: "ContentLibraryEngine.select_across(['principles', 'ai_sparks'])"
+    mutual_exclusion: true
+    pools:
+      - name: principles
+        atom: atom-principle
+        zone: analysis_section
+      - name: ai_sparks
+        atom: atom-ai-spark
+        zone: analysis_section
+    anti_repetition: "EpochShuffler with ring_buffer_size=10 per pool"
+    omit_if:
+      - "silent autonomous execution mode (CORE-049)"
+      - "request_word_count < 8 AND no analytical signal"
+      - "intent is operational (IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, HEALTH, VACUUM)"
+
+  # Proceed Gate content — atom-proceed-principle (action intents only)
+  proceed_gate_content:
+    trigger_intents: [IMPLEMENT, FIX, REFACTOR, TDD, AUDIT, DESIGN, PLAN]
+    selection_method: "ContentLibraryEngine.select('principles')"
+    atom: atom-proceed-principle
+    zone: proceed_gate
+    pool: principles
+    max_per_response: 1
+    omit_if:
+      - "atom-principle already rendered in analysis_section (max_per_response = 1 across all principle atoms)"
+      - "silent autonomous execution mode — user has already said proceed (CORE-049)"
+      - "request_word_count < 8 AND no analytical signal"
+
+# ─── MCP Tool Mapping ─────────────────────────────────────────────────────────
+mcp_tool:
+  name: cortex_content
+  operations:
+    select:
+      description: "Draw next item from named pool"
+      params: {pool: "quotes|principles|ai_sparks or comma-separated for select_across"}
+    history:
+      description: "Return recent-draw ring buffer for a pool"
+      params: {pool: "pool name"}
+    reset:
+      description: "Reset a pool's EpochShuffler to epoch 0"
+      params: {pool: "pool name"}
+    stats:
+      description: "Return per-pool epoch and history statistics"
+      params: {}
+
+# ─── Governance ───────────────────────────────────────────────────────────────
+governance:
+  core_rules: [CORE-035, CORE-049]
+  audit_check: "P2-005 — atom-proceed-principle zone boundary enforcement"
+  ssot:
+    engine: "cortex/intelligence/content_library_engine.py"
+    orchestrator: "cortex/orchestrators/response/content_library_orchestrator.py"
+    mcp_tool: "cortex/mcp/tools/cortex_content.py"
+    atoms:
+      - "cortex-registry/templates/response/atoms/atom-quote.yaml"
+      - "cortex-registry/templates/response/atoms/atom-principle.yaml"
+      - "cortex-registry/templates/response/atoms/atom-ai-spark.yaml"
+      - "cortex-registry/templates/response/atoms/atom-proceed-principle.yaml"

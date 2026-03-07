@@ -468,6 +468,43 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["optimize"],
     },
+    # Phase 130-c: Content Library Engine — epoch-shuffled anti-repetition pool management
+    "cortex_content": {
+        "description": (
+            "Manage CORTEX response content pools (quotes, principles, ai_sparks) "
+            "with epoch-based anti-repetition guarantee (Fisher-Yates shuffle per epoch). "
+            "Provides MCP control surface for ContentLibraryEngine. Phase 130."
+        ),
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": True,
+             "enum": ["select", "history", "reset", "stats"],
+             "description": "Operation: select (draw next item), history (recent draws), reset (epoch 0), stats (pool info)"},
+            {"name": "pool", "type": "string", "required": False,
+             "description": "Pool name: quotes | principles | ai_sparks (default: quotes). Comma-separated for select_across()."},
+        ],
+        "operations": ["select", "history", "reset", "stats"],
+    },
+    "cortex_ado": {
+        "description": (
+            "Azure DevOps context operations — fetch and synthesize work items "
+            "within an 8000-char budget. "
+            "Operations: get_story | get_full | get_tests | search | health. Phase 131."
+        ),
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": True,
+             "enum": ["get_story", "get_full", "get_tests", "search", "health"],
+             "description": "ADO operation"},
+            {"name": "work_item_id", "type": "integer", "required": False,
+             "description": "ADO work item ID (required for get_story, get_full, get_tests)"},
+            {"name": "query", "type": "string", "required": False,
+             "description": "Search query string (required for search)"},
+            {"name": "project", "type": "string", "required": False,
+             "description": "ADO project name (uses ADO_PROJECT env var if omitted)"},
+        ],
+        "operations": ["get_story", "get_full", "get_tests", "search", "health"],
+    },
 }
 
 

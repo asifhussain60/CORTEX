@@ -312,6 +312,48 @@ class IntelligenceFacade:
             from cortex.intelligence.models.master_plan_index import MasterPlanIndex
             return MasterPlanIndex()
 
+    def classify_archetype(self, repo_path: "Path") -> "Dict[str, Any]":
+        """Classify a repository into a canonical archetype using signal scoring.
+
+        Delegates to :class:`~cortex.intelligence.archetype_classifier.ArchetypeClassifier`.
+        Gracefully returns ``GENERIC`` if the classifier is unavailable.
+
+        Args:
+            repo_path: Path to the repository root directory.
+
+        Returns:
+            Dict with ``archetype`` (str), ``score`` (int), and ``breakdown`` (dict).
+
+        Phase: 131 — GAP-131-01
+        """
+        try:
+            from cortex.intelligence.archetype_classifier import get_archetype_classifier
+            return get_archetype_classifier().classify(repo_path)
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.classify_archetype: %s", exc)
+            return {"archetype": "GENERIC", "score": 0, "breakdown": {}}
+
+    def is_cortex_framework(self, repo_path: "Path") -> bool:
+        """Return True if *repo_path* is a CORTEX framework repository.
+
+        Delegates to :class:`~cortex.lens.analyzers.cortex_framework_analyzer.CortexFrameworkAnalyzer`.
+        Gracefully returns ``False`` if the analyzer is unavailable.
+
+        Args:
+            repo_path: Path to the repository root directory.
+
+        Returns:
+            True when the repository contains ≥2 CORTEX structural signals.
+
+        Phase: 131 — GAP-131-02
+        """
+        try:
+            from cortex.lens.analyzers.cortex_framework_analyzer import CortexFrameworkAnalyzer
+            return CortexFrameworkAnalyzer().is_cortex_framework(repo_path)
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.is_cortex_framework: %s", exc)
+            return False
+
     def registry_index(
         self,
         domain: Optional[str] = None,

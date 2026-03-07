@@ -1,0 +1,26 @@
+# Legacy Batch Processor Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: legacy-batch
+archetype: LegacyBatchProcessor
+description: "Legacy batch processing system — ETL, COBOL, mainframe or aged codebase"
+phase: "131"
+
+knowledge_domains:
+  - legacy-modernisation
+  - data-migration
+  - testing-validation
+
+best_practices:
+  - "Characterise existing behaviour with golden-file tests before refactoring"
+  - "Introduce strangler-fig façade to route new flows without breaking legacy"
+  - "Document implicit business rules hidden in COBOL/JCL logic"
+  - "Add idempotency to all batch jobs — safe to re-run on failure"
+
+common_pitfalls:
+  - "Rewriting without characterisation tests — guaranteed regression"
+  - "Ignoring EBCDIC encoding edge cases during ETL migration"
+  - "Missing checkpoint/restart logic in long-running jobs"
+
+recommended_workflows:
+  - "quality/refactor-workflow.yaml"
+  - "audit/audit-fix-pipeline.yaml"

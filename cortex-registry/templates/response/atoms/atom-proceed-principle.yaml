@@ -1,0 +1,127 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ATOM: Proceed-Gate Principle
+# ID: atom-proceed-principle
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: Injects a curated SDLC engineering principle inside the ⚡ Proceed Gate
+# section — as a lightweight reinforcement for the user BEFORE they commit to
+# autonomous execution.  This is DISTINCT from atom-principle (which renders
+# inside ## 🔍 Analysis for analysis/design intents).
+#
+# This separation resolves the rendering violation where atom-principle was
+# incorrectly appearing inside the Proceed Gate (mixing zones).
+#
+# Position: Inside ⚡ Proceed Gate — after the numbered steps list, before
+#            the one-liner summary sentence.
+#
+# Rendering: blockquote (> prefix) — same left-accent bar as Zone 2 quote and
+#            atom-principle.  One principle per Proceed Gate, max.
+#
+# Template (verbatim):
+#   > 💡 **Principle: {title}**
+#   > {body}
+#
+# Selection: PrincipleSelector(intent_type, pool='proceed_principles').select()
+#            Prefer principles from 'discipline', 'systems-thinking', 'quality' themes.
+#
+# SSOT: cortex-registry/knowledge/sdlc/high-value-principles.yaml (90 principles)
+# Phase: 130 (GAP-130-02 — quote/principle atom separation)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+# ─────────────────────────────────────────────────────────────────────────────
+
+id: atom-proceed-principle
+type: atom
+phase: "130"         # Phase 130-b: Proceed Gate principle atom (separate from atom-principle)
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  element: blockquote          # blockquote renders with VS Code left-accent bar
+  heading_level: null          # no H3 — blockquote format only
+  heading_prefix: null
+  position: "Inside ⚡ Proceed Gate — after numbered steps list, before final summary sentence"
+  zone: "proceed_gate"         # Proceed Gate zone — NOT analysis_section
+  max_per_response: 1
+  body_max_chars: 200
+  body_max_lines: 2
+  forbidden_in_content:
+    - "raw URLs"
+    - "HTML tags"
+    - "tree characters"
+    - "nested bullet lists"
+  render_only_for:
+    - "IMPLEMENT (before execution confirmation)"
+    - "FIX (before execution confirmation)"
+    - "REFACTOR (before execution confirmation)"
+    - "TDD (before execution confirmation)"
+    - "AUDIT (before execution confirmation)"
+    - "DESIGN (before design commitment)"
+    - "PLAN (before planning commitment)"
+  omit_if:
+    - "silent autonomous execution mode (CORE-049) — user has already said proceed"
+    - "atom-principle already rendered in ## 🔍 Analysis in the same response (max_per_response = 1 across all principle atoms)"
+    - "request_text ≤ 8 words with no analytical signal (brevity gate)"
+
+# ─── Separation Contract ──────────────────────────────────────────────────────
+# atom-proceed-principle renders ONLY in ⚡ Proceed Gate.
+# atom-principle renders ONLY in ## 🔍 Analysis.
+# They NEVER appear together in the same response.
+# ContentLibraryFacade.select_across() enforces the mutual exclusion.
+separation_contract:
+  paired_atom: atom-principle
+  mutual_exclusion: true
+  enforcement: "ContentLibraryFacade.select_across() — max 1 principle atom per response"
+  zone_owned: "proceed_gate"
+  zone_forbidden: "analysis_section"   # atom-principle owns this zone
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+# Render as blockquote (> prefix) — this produces a left-accent bar in VS Code
+# Copilot Chat, matching the visual weight of the header quote in Zone 2.
+template: |
+  > 💡 **Principle: {title}**
+  > {body}
+
+# ─── Theme Map ────────────────────────────────────────────────────────────────
+# Maps CORTEX intent_type to a preferred principle domain for Proceed Gate context.
+# Proceed Gate principles should reinforce discipline and execution quality.
+theme_map:
+  IMPLEMENT: tdd               # Red-Green-Refactor — reinforce TDD commitment
+  FIX: systems-thinking        # Defensive Programming, fail-safe defaults
+  REFACTOR: refactoring        # Boy Scout Rule, extract-till-you-drop
+  TDD: tdd                     # TDD cycle, test contracts
+  AUDIT: discipline            # Sweep completeness, governance
+  DESIGN: architecture         # SOLID, dependency inversion
+  PLAN: strategy               # Thin Index Contract, phase gating
+  DEFAULT: discipline          # fallback — governance and delivery discipline
+
+# ─── Selection Rules ──────────────────────────────────────────────────────────
+selection:
+  source: "cortex-registry/knowledge/sdlc/high-value-principles.yaml"
+  engine: "PrincipleSelector (cortex/intelligence/principle_selector.py)"
+  pool: "proceed_principles"   # separate pool from atom-principle to avoid repetition
+  anti_repetition: "ring buffer n=10 (independent from atom-principle ring buffer)"
+  weighted_random: true
+  prefer_domains: ["discipline", "systems-thinking", "quality", "tdd"]
+  fallback: "return first principle matching theme_map domain if pool exhausted"
+
+# ─── Variables (injected by PrincipleSelector) ────────────────────────────────
+variables:
+  title:
+    type: string
+    source: "principle.title from high-value-principles.yaml"
+    example: "Sweep Completeness"
+  body:
+    type: string
+    source: "principle.body from high-value-principles.yaml"
+    example: >
+      Every FIX, REFACTOR, and AUDIT must exhaust its full issue catalogue
+      before marking AC_COMPLETE. Partial sweeps create hidden technical debt
+      and erode trust in the governance pipeline.
+
+# ─── Audit Contract ───────────────────────────────────────────────────────────
+audit_contract:
+  check_id: "P2-005"
+  description: "atom-proceed-principle must only appear in Proceed Gate compositions; atom-principle must never appear in proceed_gate zone"
+  detection_method: "Scan all comp-*.yaml atoms lists; assert zone boundaries are honoured"
+  severity: "P2"
+  blocking: false

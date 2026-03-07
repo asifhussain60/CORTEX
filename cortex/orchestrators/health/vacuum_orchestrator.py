@@ -34,6 +34,7 @@ from .constants import (
     LEGACY_ROOT_FOLDERS_RELOCATION,
     PROTECTED_DIRS,
     PROTECTED_FILES,
+    VACUUM_RECENCY_GUARD_HOURS,
 )
 from .file_context import FileContext
 from .models import OperationResult, ScanResult, VacuumReport
@@ -1141,6 +1142,35 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
     # INTERNAL PLANNERS
     # ─────────────────────────────────────────────────────────────────────
 
+    def _is_recent(self, path: Path) -> bool:
+        """Return True if *path* was modified within VACUUM_RECENCY_GUARD_HOURS.
+
+        Files (or directories) that are younger than the guard window are never
+        deleted, moved, or archived by any vacuum planning stage.  This prevents
+        accidental removal of work in progress during active development sessions.
+
+        The guard is intentionally conservative: if ``stat()`` fails for any
+        reason (race condition, permission error, path already removed), the
+        method returns ``True`` so that the file is left untouched.
+
+        Args:
+            path: Absolute or workspace-relative :class:`pathlib.Path` to inspect.
+
+        Returns:
+            ``True`` if the path was modified less than
+            ``VACUUM_RECENCY_GUARD_HOURS`` hours ago **or** if the stat call
+            fails; ``False`` otherwise.
+
+        GAP-REF: GAP-130-01 (Phase 130-a — Foundation Backport)
+        """
+        import time as _time
+
+        try:
+            age_hours = (_time.time() - path.stat().st_mtime) / 3600
+            return age_hours < VACUUM_RECENCY_GUARD_HOURS
+        except OSError:
+            return True  # safe default: treat unreadable paths as recent
+
     def _plan_naming_fixes(
         self, ctx: FileContext
     ) -> List[Dict[str, Any]]:
@@ -1188,6 +1218,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                     continue
             if f.name.startswith("."):
                 continue
+            # GAP-130-01: Skip recently modified files
+            if self._is_recent(f):
+                continue
             ops.append({
                 "type": "relocate",
                 "source": f,
@@ -1202,6 +1235,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
         Skips files inside PROTECTED_DIRS — e.g. ``_workspaces`` contains
         ``.gitkeep`` markers and legitimate zero-byte placeholders.
+        Skips files modified within VACUUM_RECENCY_GUARD_HOURS (GAP-130-01).
         """
         exempt = {"__init__.py", ".gitkeep", "conftest.py"}
         ops: List[Dict[str, Any]] = []
@@ -1215,6 +1249,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                     continue
             except ValueError:
                 pass
+            # GAP-130-01: Skip recently modified files
+            if self._is_recent(f):
+                continue
             try:
                 if f.stat().st_size == 0:
                     ops.append({"type": "delete", "source": f})
@@ -1230,6 +1267,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         Skips directories inside PROTECTED_DIRS — ``_workspaces`` and
         ``cortex-sts`` intentionally contain subdirectory structures without
         Python files.
+        Skips directories modified within VACUUM_RECENCY_GUARD_HOURS (GAP-130-01).
         """
         dirs_with_files = {f.parent for f in ctx.all_files}
         ops: List[Dict[str, Any]] = []
@@ -1243,6 +1281,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                     continue
             except ValueError:
                 pass
+            # GAP-130-01: Skip recently created/modified directories
+            if self._is_recent(d):
+                continue
             ops.append({"type": "rmdir", "source": d})
         return ops
 
@@ -1253,6 +1294,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
         Skips files inside PROTECTED_DIRS (.github, cortex-docs, cortex-registry,
         etc.) to avoid archiving legitimate agent/prompt/spec markdown files.
+        Skips files modified within VACUUM_RECENCY_GUARD_HOURS (GAP-130-01).
         """
         doc_dirs = {"docs", "docs", "documentation"}
         ops: List[Dict[str, Any]] = []
@@ -1268,6 +1310,9 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             # Never touch files inside protected top-level dirs
             top_dir = rel.parts[0] if rel.parts else ""
             if top_dir in PROTECTED_DIRS or top_dir in doc_dirs:
+                continue
+            # GAP-130-01: Skip recently modified markdown files
+            if self._is_recent(f):
                 continue
             ops.append({
                 "type": "relocate",

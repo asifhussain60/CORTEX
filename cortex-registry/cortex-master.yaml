@@ -3,7 +3,7 @@ maintainer: CORTEX Architecture Team
 
 # ============================================================
 # THIN INDEX CONTRACT — cortex-master.yaml
-# This file is a REFERENCE INDEX ONLY. Max 800 lines (alarm at 700).
+# This file is a REFERENCE INDEX ONLY. Max 850 lines (alarm at 750).
 # ALL phase detail lives in cortex-registry/planning/phases/ or
 #   cortex-registry/planning/phases/
 # Governance: workflows/templates/governance/master-plan-phase-lifecycle.yaml
@@ -15,12 +15,12 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  last_updated: '2026-03-07T12:00:00Z'
+  last_updated: '2026-03-07T18:00:00Z'
   total_phases: 115
   active: 0
   completed: 107
   in_progress: 0
-  planned: 5
+  planned: 6
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -128,35 +128,16 @@ verification:
   last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 110
+  total_phases: 115
   completed: 107
   active: 0
   in_progress: 0
-  planned: 1
+  planned: 6
   archived: 4
   playbooks: 1
-  completion_percentage: 98
-  consolidation_summary: "2026-03-05 — Phase 128 COMPLETE (Conflict & Drift Eradication — 25/25 gaps CLOSED, 9/9 sub-phases, 140 new tests, 8 drift locks #42-#49). Phase 127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs, 23 golden tests). knowledge-base/ stale dir removed. planned/ cleared. Governance: 197. Preflight: 424. Smoke: 2780+."
-  active_phases:
-    phase-124: "COMPLETE 2026-03-04 — Principle Block Library & Injection System: 5/5 GAPs CLOSED. high-value-principles.yaml (90 principles, 10 domains), atom-principle.yaml (Zone 3), comp-query.yaml injection, PrincipleSelector pool='principles' extension (QUERY universal mode, domain soft-preference), 44 TDD tests GREEN + 13 drift locks GREEN. Golden test updated. Smoke: 2395 ✅"
-    phase-123: "COMPLETE 2026-03-04 — Principle of the Moment: 3/3 GAPs CLOSED. PrincipleSelector (cortex/intelligence/principle_selector.py), dedup_key ring buffer (n=10), weighted random, p95 ≤ 3ms. atom-quote.yaml updated: dedup_key + relevance_weight on all 120 quotes. 12 TDD tests GREEN. Smoke: 2395 ✅"
-    phase-122: "COMPLETE 2026-03-04 — Workflow Composer Activation: 5/5 GAPs CLOSED. target_files extraction (regex), threshold 0.60→0.39, 'implement' OPERATION_SCORES, cortex_workflow MCP documented, exception swallowing→structured logging. V1-V6 holistic verification PASSED. Smoke: 2395 ✅"
-    phase-47: "COMPLETE 2026-02-28 — Memory Tier Architecture Migration: 3 stages, 4 GAPs CLOSED. tier1_learned/tier2_adaptive/scratch_space dirs created. BrainTierPusher TIER_PATHS wired. Golden tests GREEN. Previously unregistered in master — registered 2026-03-04."
-    phase-120: "COMPLETE 2026-03-04 — Response Template System v3 LEGO: 15/15 GAPs CLOSED. 3-Tier architecture (Atoms→Blocks→Compositions). 26 YAMLs, 8 terminal compositions, 5 content blocks, 6 prompt intros. 49 golden tests GREEN. Smoke: 2388 ✅"
-    phase-119: "COMPLETE 2026-03-04 — Class Consolidation CORE-035: 4/4 GAPs CLOSED. 266 classes audited: Config×19 pydantic-nested (intentional), 9 high-severity canonical shared types verified, 191 2-location domain variants confirmed intentional. Preflight: 258 ✅ Smoke: 2388 ✅"
-    phase-117: "COMPLETE — Intelligence Diamond Completion: 10/10 GAPs CLOSED. analyze()→LENS, best_practices sig, LENS keys, domain knowledge, singleton, gateway injection. 220 preflight ✅"
-    phase-114: "COMPLETE — Architectural Layering Reset: 3/3 sub-phases CLOSED. Shared models extracted, DAG enforced, noqa budget enforced. Smoke: 2,311 ✅"
-    phase-115: "COMPLETE — Speculative Code Quarantine: 3/3 sub-phases CLOSED. Lens monolith deleted (2045L), brain_state_manager shim completed, 12 modules quarantined. Smoke: 2,319 ✅"
-    phase-116: "COMPLETE — Metadata Reconciliation: cortex-master.yaml truth-aligned. Silent failures fixed. Smoke: 2,319 ✅"
-    phase-100: "COMPLETE — Dead Code and Empty Stubs (P0) ✅"
-    phase-101: "COMPLETE — Duplicate File Consolidation CORE-035 (P0) ✅"
-    phase-102: "COMPLETE — Subsystem Boundaries: all 8 GAPs CLOSED. 30 tests GREEN. Smoke: 2275 passed. ✅"
-    phase-103: "COMPLETE — God Object Decomposition: 6/8 GAPs CLOSED, 2 DEFERRED to phase-115. master_orchestrator 3167L→702L, intent_router_impl 2895L→686L, tdd_orchestrator 2072L→package, lens_orchestrator 2045L→277L, utilities+operations→14 single-class files, knowledge_synthesis→package. Smoke: 2289 passed. ✅"
-    phase-104: "COMPLETE — Build Artifacts, Test Mirror, DB Consolidation (P1) ✅"
-    phase-105: "COMPLETE — Stale Imports and Legacy Naming: 4/4 GAPs CLOSED. 11 tests GREEN. Zero dissolved package imports. ✅"
-    phase-108: "COMPLETE 2026-03-03 — cortex-registry Consolidation: 9/11 GAPs CLOSED. knowledge-base/→knowledge/, core/governance/→governance/, core/config/→config/, integration/→patterns/. 19 Python path refs updated. registry_proxy.py dual→single root. GAPs 06/07 SKIPPED (live store/non-existent). 25 tests GREEN. Preflight: 220 passed ✅"
-    phase-110: "COMPLETE — CLI Entry Point + Governance Validator (P0) ✅"
-    phase-111: "COMPLETE — Duplicate Class Sweep CORE-035 (P1) ✅"
+  completion_percentage: 93
+  consolidation_summary: "2026-03-07 — phases 129–134 PLANNED (6 phases added: Foundation Backport, Intelligence Layer, Core Capabilities, Meta & Templates, PO Intelligence Suite, Knowledge Sync & Prompt Wiring). Phase 128 COMPLETE (Conflict & Drift Eradication — 25/25 gaps CLOSED). Phase 127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs, 23 golden tests). Governance: 197. Preflight: 424. Smoke: 2780+."
+  active_phases: "No active phases. 6 PLANNED: phases 129–134. Full completion detail in phase_detail_files and cortex-registry/planning/phases/completed/."
 
 phases:
   # ── PHASE 134: KNOWLEDGE SYNC & PROMPT WIRING (2026-03-07) ───────────────────

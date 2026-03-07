@@ -1,0 +1,71 @@
+# ADO Integration Configuration — CORTEX
+# Authority: GAP-131-03 (Phase 131-c — Intelligence Layer Backport)
+# Configures Azure DevOps context extraction field mapping and synthesis budget.
+
+created: "2026-03-07"
+phase: "131"
+gap_ref: "GAP-131-03"
+
+# ─── Organisation / Endpoint ─────────────────────────────────────────────────
+organization:
+  url_env_var: "ADO_ORG_URL"          # e.g. https://dev.azure.com/myorg
+  pat_env_var: "ADO_PAT"              # Personal Access Token (base64 encoded)
+  default_project_env_var: "ADO_PROJECT"
+
+endpoint:
+  base_url: "${ADO_ORG_URL}"
+  api_version: "7.1"
+  timeout_seconds: 15
+  max_retries: 3
+
+# ─── Field Mapping ────────────────────────────────────────────────────────────
+# Maps canonical ADOContextSynthesizer dict keys → ADO REST API field paths.
+field_mapping:
+  id:                   "id"
+  title:                "fields.System.Title"
+  description:          "fields.System.Description"
+  acceptance_criteria:  "fields.Microsoft.VSTS.Common.AcceptanceCriteria"
+  state:                "fields.System.State"
+  assigned_to:          "fields.System.AssignedTo.displayName"
+  tags:                 "fields.System.Tags"       # semicolon-separated string
+  work_item_type:       "fields.System.WorkItemType"
+  iteration_path:       "fields.System.IterationPath"
+  area_path:            "fields.System.AreaPath"
+  priority:             "fields.Microsoft.VSTS.Common.Priority"
+  story_points:         "fields.Microsoft.VSTS.Scheduling.StoryPoints"
+
+# ─── Synthesis Budget ─────────────────────────────────────────────────────────
+synthesis:
+  max_chars: 8000
+  max_comment_themes: 5
+  max_child_tasks_per_level: 10
+  max_child_levels: 2
+  description_max_chars: 800
+  acceptance_criteria_max_chars: 1200
+
+# ─── Operations ───────────────────────────────────────────────────────────────
+operations:
+  get_story:
+    description: "Fetch a single work item by ID and synthesize a compact summary"
+    endpoint: "/{project}/_apis/wit/workitems/{id}?$expand=all"
+    synthesize: true
+
+  get_full:
+    description: "Fetch full work item with relations and comments"
+    endpoint: "/{project}/_apis/wit/workitems/{id}?$expand=relations"
+    synthesize: true
+    include_comments: true
+
+  get_tests:
+    description: "Fetch linked test cases for a work item"
+    endpoint: "/{project}/_apis/wit/workitems/{id}?$expand=relations"
+    filter_relation_type: "Microsoft.VSTS.Common.TestedBy-Forward"
+
+  search:
+    description: "WIQL query for work items matching a search string"
+    endpoint: "/{project}/_apis/wit/wiql"
+    max_results: 20
+
+  health:
+    description: "Check ADO connectivity and authentication status"
+    endpoint: "/_apis/connectionData"

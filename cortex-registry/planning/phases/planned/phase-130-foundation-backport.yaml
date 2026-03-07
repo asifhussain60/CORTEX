@@ -1,0 +1,196 @@
+id: phase-130
+title: "Foundation Backport — Vacuum Guard + Quote-Principle Separation + Content Library Engine"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: []
+sweep_id: SWEEP-130-FOUNDATION-BACKPORT
+estimated_effort: "1 day"
+
+description: |
+  Standalone backport phase — no dependencies. Delivers three foundational
+  framework capabilities from the _workspaces/cortex-sts/ implementation:
+
+  FB-007 — VacuumOrchestrator recency guard: prevents the vacuum pipeline from
+  deleting files modified within the last 24h, and adds hard protection for the
+  _workspaces/ directory so cross-repo work files are never vacuumed.
+
+  FB-006 — Quote-principle separation atoms: introduces atom-proceed-principle.yaml
+  for the Proceed Gate section, updates atom-principle.yaml to carry the Zone 3
+  header placement rule, adds principle-trigger-policy.yaml as the canonical
+  trigger policy SSOT, and adds a copilot_chat_compatible flag to response
+  compositions so rendering engines can suppress markdown that breaks in VS Code
+  Copilot Chat.
+
+  FB-002 — Content Library Engine: ContentLibraryEngine with EpochShuffler
+  anti-repetition across three pools (quotes + principles + AI sparks, 800 items
+  total), ContentLibraryOrchestrator wired into MasterOrchestrator Stage 4
+  response enrichment, cortex_content MCP tool (select | history | reset | stats),
+  and content-library-routing.yaml governance YAML.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation
+  - CORE-049   # Silent autonomous execution
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── FB-007: VacuumOrchestrator Recency Guard ────────────────────────────────
+  - id: GAP-130-01
+    title: "VacuumOrchestrator — recency guard + _workspaces/ hard protection"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      VacuumOrchestrator currently deletes files matching naming/empty/orphan
+      criteria without checking modification time. Files modified within 24h
+      that happen to match vacuum patterns are silently deleted, causing data
+      loss in active sessions. _workspaces/ directory is not on the exclusion
+      list, so cross-repo work files created by /feedback are at risk.
+    action_ref: "phase-130-a"
+    files_to_create:
+      - cortex/orchestrators/health/constants.py   # shared VACUUM_RECENCY_GUARD_HOURS=24, PROTECTED_DIRS
+    files_to_modify:
+      - cortex/orchestrators/health/vacuum_orchestrator.py  # inject recency guard in Stage 1-8 loops
+    test_file: "tests/health/test_vacuum_recency_guard.py"
+
+  # ── FB-006: Quote-Principle Separation Atoms ────────────────────────────────
+  - id: GAP-130-02
+    title: "Quote-principle atom separation + principle-trigger-policy.yaml SSOT"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      atom-principle.yaml currently conflates the principle rendering rule with
+      the Proceed Gate composition. This causes the Proceed Gate to occasionally
+      render a principle block inline (P2 rendering violation). The trigger policy
+      is documented inline in copilot-instructions.md (duplicated) rather than
+      from a single YAML SSOT that all response composers can import.
+    action_ref: "phase-130-b"
+    files_to_create:
+      - cortex-registry/templates/response/atoms/atom-proceed-principle.yaml  # Proceed Gate principle block
+      - cortex-registry/core/principle-trigger-policy.yaml                     # canonical trigger SSOT
+    files_to_modify:
+      - cortex-registry/templates/response/atoms/atom-principle.yaml  # add copilot_chat_compatible flag; remove Proceed Gate overlap
+      - cortex-registry/templates/response/compositions/comp-query.yaml  # reference new atom-proceed-principle
+    test_file: "tests/intelligence/test_principle_trigger_policy.py"
+
+  # ── FB-002: Content Library Engine ─────────────────────────────────────────
+  - id: GAP-130-03
+    title: "ContentLibraryEngine + EpochShuffler + ContentLibraryOrchestrator + cortex_content MCP"
+    severity: P1
+    status: OPEN
+    source: "_workspaces/cortex-sts/ implementation review"
+    evidence: |
+      Quote and principle selection is currently done ad-hoc across multiple
+      orchestrators and prompt files with no unified pool management, no
+      anti-repetition guarantee, and no MCP-accessible control surface.
+      The EpochShuffler epoch boundary approach (Fisher-Yates shuffle per epoch)
+      provides a mathematical guarantee against repeats within an epoch of N items.
+    action_ref: "phase-130-c"
+    files_to_create:
+      - cortex/intelligence/content_library_engine.py        # ContentLibraryEngine + EpochShuffler
+      - cortex/orchestrators/response/content_library_orchestrator.py  # ContentLibraryOrchestrator
+      - cortex/mcp/tools/cortex_content.py                  # MCP tool: select|history|reset|stats
+      - cortex-registry/workflows/templates/lifecycle/content-library-routing.yaml
+    files_to_modify:
+      - cortex/mcp/mcp_registry.py                          # register cortex_content as tool #31
+      - cortex/orchestrators/core/master_orchestrator.py    # wire ContentLibraryOrchestrator at Stage 4
+    test_file: "tests/intelligence/test_content_library_engine.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (sequential, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: phase-130-a
+    title: "VacuumOrchestrator recency guard + _workspaces/ protection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-130-01"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "make test-preflight GREEN"
+    tdd_cycle:
+      red:
+        action: "Write test_vacuum_recency_guard.py — assert modified-within-24h files survive vacuum, assert _workspaces/ files never deleted"
+        gate: "make test-changed — all new tests FAIL (no implementation yet)"
+      green:
+        action: "Create cortex/orchestrators/health/constants.py with VACUUM_RECENCY_GUARD_HOURS=24 and PROTECTED_DIRS=[\"_workspaces\"]. Inject recency guard check into VacuumOrchestrator Stages 1-8 before any deletion."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Extract recency check into private _is_recent(path) method. Confirm PROTECTED_DIRS is imported from constants.py only."
+        gate: "make test-smoke GREEN (zero regressions)"
+    completion_gate: "make test-smoke GREEN + recency guard tests GREEN + _workspaces protected"
+
+  - id: phase-130-b
+    title: "Quote-principle atom separation + principle-trigger-policy.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-130-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-130-a"]
+    prerequisite: "phase-130-a completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_principle_trigger_policy.py — assert policy YAML loads, assert trigger conditions match documented rules, assert Proceed Gate does not render principle block"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Create cortex-registry/core/principle-trigger-policy.yaml (intents: QUERY/DESIGN/PLAN/INVESTIGATE/ONBOARD/INTRODUCE, suppress_for: IMPLEMENT/FIX/REFACTOR/DEBUG/AUDIT/HEALTH/VACUUM, max_per_response: 1). Create atom-proceed-principle.yaml. Update atom-principle.yaml: add copilot_chat_compatible: true, remove Proceed Gate overlap. Update comp-query.yaml to reference atom-proceed-principle."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify atom-principle.yaml body ≤200 chars per principle. Confirm comp-query.yaml renders correctly in golden tests."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + trigger policy tests GREEN + no Proceed Gate principle bleed"
+
+  - id: phase-130-c
+    title: "ContentLibraryEngine + EpochShuffler + MCP tool"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-130-03"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-130-b"]
+    prerequisite: "phase-130-b completion gate PASSED"
+    tdd_cycle:
+      red:
+        action: "Write test_content_library_engine.py — assert EpochShuffler never repeats within epoch, assert select returns correct pool item, assert history tracks last N, assert reset clears epoch"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement ContentLibraryEngine (pools: quotes, principles, ai_sparks) with EpochShuffler (Fisher-Yates per epoch). Implement ContentLibraryOrchestrator. Implement cortex_content MCP (select|history|reset|stats). Register in mcp_registry.py. Wire ContentLibraryOrchestrator into MasterOrchestrator Stage 4."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Confirm pool sizes: quotes=120, principles=90, ai_sparks configured. Confirm MCP tool ID does not clash with existing 30 registered tools. Run full smoke."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + content library tests GREEN + cortex_content MCP registered"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - smoke_gate: "make test-smoke GREEN (≥2775 baseline — zero regressions)"
+  - preflight_gate: "make test-preflight GREEN"
+  - vacuum_guard: "VacuumOrchestrator skips files modified within 24h; _workspaces/ immune"
+  - principle_policy: "principle-trigger-policy.yaml exists, loads, governs all compositions"
+  - content_library: "ContentLibraryEngine selects without repeating within epoch; cortex_content MCP tool responds to select/history/reset/stats"
+  - mcp_count: "mcp_registry.py shows 31 registered tools after phase-130 (cortex_content added)"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+governance:
+  core_rules_applied: [CORE-008, CORE-035, CORE-049, CORE-064, CORE-068]
+  plip_scope_lock: "orchestration"
+  tdd_applies: true
+  test_gate: "make test-smoke"

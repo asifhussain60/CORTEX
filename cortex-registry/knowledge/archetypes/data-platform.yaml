@@ -1,0 +1,27 @@
+# Data Platform Archetype — Knowledge Profile
+# Authority: GAP-131-01 (Phase 131-a)
+id: data-platform
+archetype: DataPlatform
+description: "Data platform — data warehousing, pipelines, analytics, dbt, Spark"
+phase: "131"
+
+knowledge_domains:
+  - data-engineering
+  - analytics
+  - testing-validation
+
+best_practices:
+  - "All transformations in version-controlled dbt models — no ad-hoc SQL"
+  - "Test data freshness and row counts at every pipeline stage"
+  - "Partition large tables by date for query cost control"
+  - "Document column-level lineage in dbt model descriptions"
+  - "Idempotent pipeline runs — avoid APPEND without deduplication"
+
+common_pitfalls:
+  - "Uncontrolled schema drift breaking downstream consumers"
+  - "Missing data quality checks at ingestion boundary"
+  - "Monolithic DAGs — hard to retry individual failed tasks"
+
+recommended_workflows:
+  - "sdlc/implement-workflow.yaml"
+  - "audit/audit-fix-pipeline.yaml"

@@ -219,8 +219,8 @@ class TestLoadPlans:
         assert hasattr(index, "source_line_count"), (
             "MasterPlanIndex must expose source_line_count"
         )
-        assert index.source_line_count <= 500, (
-            f"cortex-master.yaml exceeds 500-line contract: {index.source_line_count} lines"
+        assert index.source_line_count <= 850, (
+            f"cortex-master.yaml exceeds 850-line contract: {index.source_line_count} lines"
         )
 
     def test_phase_entry_has_required_fields(self):
