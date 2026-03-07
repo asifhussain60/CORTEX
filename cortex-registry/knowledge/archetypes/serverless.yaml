@@ -1,5 +1,6 @@
 # Serverless Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: serverless
 archetype: Serverless
 description: "Serverless architecture — AWS Lambda, Azure Functions, GCP Cloud Functions"

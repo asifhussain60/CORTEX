@@ -4,6 +4,7 @@
 # Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 id: owasp-api-security
+domain: security
 version: "2023"
 description: "OWASP API Security Top 10 (2023 Edition)"
 

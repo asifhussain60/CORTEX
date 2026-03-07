@@ -1,0 +1,30 @@
+# Sample .NET Monolith Repository — Knowledge Profile
+# Template for onboarding .NET monolithic repositories via LENS analysis
+# Authority: phase-132 (Universal Repo Intelligence Engine)
+# Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+domain: "repositories"
+id: sample-dotnet-monolith
+description: "Sample knowledge profile for a .NET monolithic repository"
+archetype: DotNetMonolith
+
+analysis:
+  architecture_type: dotnet-monolith
+  patterns_detected:
+    - Castle Windsor IoC
+    - NHibernate ORM
+    - NServiceBus messaging
+    - ASP.NET MVC routing
+  repository_path: "."
+  status: template
+
+metadata:
+  template: true
+  usage: "Reference profile — replace with actual LENS analysis output"
+  extractors_applied:
+    - SolutionTopology
+    - CastleWindsor
+    - NHibernate
+    - NServiceBus
+    - AspNetRoute
+  onboarding_phase: phase-132

@@ -4,6 +4,7 @@
 # Author: Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 id: owasp-top-10
+domain: security
 version: "2021"
 description: "OWASP Top 10 Web Application Security Risks (2021 Edition)"
 

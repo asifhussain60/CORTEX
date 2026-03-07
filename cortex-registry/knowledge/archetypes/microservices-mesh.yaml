@@ -1,5 +1,6 @@
 # Microservices Mesh Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: microservices-mesh
 archetype: MicroservicesMesh
 description: "Multi-service architecture — Docker Compose / Kubernetes / service mesh"

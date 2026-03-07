@@ -1,5 +1,6 @@
 # SPA Frontend Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: spa-frontend
 archetype: SPAFrontend
 description: "Single-page application — React, Angular, Vue, Svelte"

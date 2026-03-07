@@ -1,5 +1,6 @@
 # CLI Tooling Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: cli-tooling
 archetype: CLITooling
 description: "CLI tooling / developer tool — command-line interface, scripts, DevEx"

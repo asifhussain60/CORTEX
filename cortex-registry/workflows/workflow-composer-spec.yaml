@@ -461,6 +461,20 @@ intent_routing:
     agent: 'cortex-architect.md'
     triggers: ['decompose', 'service decomposition', 'extract service', 'split monolith']
 
+  # ── REVIEW: code review pipeline (phase-132) ──────────────────────────────
+  REVIEW:
+    workflow_ref: 'sdlc/review-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-architect.md'
+    triggers: ['review', 'code review', '/review', 'review this', 'review pr', 'review pull request', 'owasp review']
+
+  # ── FEEDBACK: user feedback pipeline (phase-133) ──────────────────────────
+  FEEDBACK:
+    workflow_ref: 'lifecycle/feedback-workflow'
+    agent: 'cortex-architect.md'
+    triggers: ['feedback', '/feedback', 'submit feedback', 'rate this', 'provide feedback']
+
 # ============================================================================
 # VALIDATION RULES FOR WORKFLOW TEMPLATES
 # ============================================================================

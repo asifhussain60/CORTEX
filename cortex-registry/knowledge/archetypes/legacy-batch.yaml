@@ -1,5 +1,6 @@
 # Legacy Batch Processor Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: legacy-batch
 archetype: LegacyBatchProcessor
 description: "Legacy batch processing system — ETL, COBOL, mainframe or aged codebase"

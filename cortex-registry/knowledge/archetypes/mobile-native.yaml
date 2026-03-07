@@ -1,5 +1,6 @@
 # Mobile Native Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: mobile-native
 archetype: MobileNative
 description: "Native mobile application — iOS (Swift), Android (Kotlin/Java), Flutter"

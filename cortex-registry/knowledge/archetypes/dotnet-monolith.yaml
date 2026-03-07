@@ -1,5 +1,6 @@
 # .NET Monolith Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: dotnet-monolith
 archetype: DotNetMonolith
 description: ".NET monolithic application — single deployable unit, C#/VB.NET stack"

@@ -1,5 +1,6 @@
 # Event-Driven Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: event-driven
 archetype: EventDriven
 description: "Event-driven architecture — message queues, pub/sub, Kafka, RabbitMQ"

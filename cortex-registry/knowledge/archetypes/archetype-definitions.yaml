@@ -5,6 +5,7 @@
 # Classifier sums weights of matched signals; highest-scoring archetype wins.
 # Score ties resolved alphabetically by archetype id.
 
+domain: archetypes
 created: "2026-03-07"
 phase: "131"
 gap_ref: "GAP-131-01"

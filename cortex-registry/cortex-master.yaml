@@ -312,6 +312,7 @@ phases:
     status: COMPLETE
     sweep_id: SWEEP-110-CLI-ENTRY-POINT
     gaps: 3
+    gaps_closed: 3
     sub_phases: 3
     file: "cortex-registry/planning/phases/completed/phase-110-cli-entry-point.yaml"
     note: "COMPLETE 2026-03-03. cortex/__main__.py created; python -m cortex works. Governance validator replaced with real CORE-002/CORE-028 implementation. 10 tests GREEN. Smoke: 2,140 passed."
@@ -322,6 +323,7 @@ phases:
     status: COMPLETE
     sweep_id: SWEEP-111-DUPLICATE-CLASS-SWEEP
     gaps: 5
+    gaps_closed: 5
     sub_phases: 4
     file: "cortex-registry/planning/phases/completed/phase-111-duplicate-class-sweep.yaml"
     note: "COMPLETE 2026-03-03. AST scan DUPLICATES=0. OrchestratorLookup consolidated (3→1 canonical). 185+ domain-scoped files annotated with noqa: CORE-035. 2 compat shims. test_no_duplicate_classes.py 8 GREEN. Smoke: 2194 passed."
@@ -337,6 +339,7 @@ phases:
     status: COMPLETE
     sweep_id: SWEEP-100-DEAD-CODE-STUBS
     gaps: 10
+    gaps_closed: 10
     sub_phases: 4
     file: "cortex-registry/planning/phases/completed/phase-100-dead-code-and-stubs.yaml"
     note: "969 F401 fixed (92.5%), 3 orphans deleted, 1 runtime bug fixed, 6 F811 duplicate methods resolved, 6 duplicate imports fixed. 1,950 tests green."
@@ -347,6 +350,7 @@ phases:
     status: COMPLETE
     sweep_id: SWEEP-101-DUPLICATE-CONSOLIDATION
     gaps: 8
+    gaps_closed: 8
     sub_phases: 4
     file: "cortex-registry/planning/phases/completed/phase-101-duplicate-consolidation.yaml"
     note: "All 8 GAPs CLOSED. 3x orchestrator_lookup→shims, 5x justified-distinct (diff class names). 66 tests GREEN. Smoke: 2,255 passed. Completed 2026-03-03."
@@ -380,6 +384,7 @@ phases:
     status: COMPLETE
     sweep_id: SWEEP-104-ARTIFACTS-AND-MIRRORS
     gaps: 7
+    gaps_closed: 7
     sub_phases: 3
     file: "cortex-registry/planning/phases/completed/phase-104-artifacts-and-mirrors.yaml"
     note: "7/7 GAPs CLOSED: build artifacts deleted (241 files, 46MB), gitignore hardened (+6 patterns), vacuum wired (build+OS artifact cleanup), .ds-store untracked, DB consolidation 9→7, test mirror dirs created. 1,950+ tests green."
@@ -443,11 +448,13 @@ phases:
     note: "10 GAPs CLOSED. WorkflowGateway + 18-mode map + SQLite trace. WorkflowEnforcementMixin + enforce_gateway; 173 tests GREEN. Smoke: 1,784."
 
   - id: phase-93-intent-router-full-wiring
+    title: "Intent Router Full Wiring — 27-Intent Coverage + InteractionOrchestrator Breadcrumb"
     status: COMPLETE
     priority: P0
     sweep_id: SWEEP-093
     gaps: 5
-    file: cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml
+    gaps_closed: 5
+    file: "cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml"
     note: "5 GAPs CLOSED. IntentRouter.route() wired; 27-intent coverage; InteractionOrchestrator + breadcrumb. 30 tests GREEN."
 
   - id: phase-119
@@ -467,28 +474,31 @@ phases:
     priority: P1
     sweep_id: SWEEP-120-RESPONSE-TEMPLATE-V3
     gaps: 15
+    gaps_closed: 15
     sub_phases: 7
     file: "cortex-registry/planning/phases/completed/phase-120-response-template-modular-lego.yaml"
     note: "COMPLETE 2026-03-04. 3-Tier LEGO architecture (Atoms→Blocks→Compositions). 26 new YAMLs under cortex-registry/templates/response/. 8 terminal compositions, 5 new content blocks, status footer, cumulative reflection, 6 prompt intros. Migrates 6 legacy YAMLs (2,029L). Fixes 3 drifted prompts. 49 golden tests (40 functional + 9 rendering contract). Smoke: 2388 GREEN. Golden: 279 PASS."
 
-  # ── PLANNED ───────────────────────────────────────────────────────────────
+  # ── COMPLETE ──────────────────────────────────────────────────────────────
   - id: phase-122
     title: "Workflow Composer Activation — MCP-First Surgical Fix"
     status: COMPLETE
     priority: P1
     sweep_id: SWEEP-122-WORKFLOW-ACTIVATION
     gaps: 5
+    gaps_closed: 5
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-122-workflow-composer-activation.yaml"
     note: "COMPLETE 2026-03-04. 5/5 GAPs CLOSED. (1) target_files extracted via regex from description text — router now receives meaningful inputs. (2) MODERATE threshold 0.60→0.39; 'implement' added to OPERATION_SCORES. (3) cortex_workflow MCP documented in copilot-instructions.md. (4) Exception swallowing → structured logging. (5) V1-V6 holistic verification PASSED. Smoke: 2395 GREEN."
 
-  # ── PLANNED ───────────────────────────────────────────────────────────────
+  # ── COMPLETE ──────────────────────────────────────────────────────────────
   - id: phase-125
     title: "Registry-Aware Documentation Viewer — YAML→Model→JSON→HTML Pipeline + D3.js Interactive Visualizations"
     status: COMPLETE
     priority: P1
     sweep_id: SWEEP-125-REGISTRY-DOC-VIEWER
     gaps: 13
+    gaps_closed: 13
     sub_phases: 8
     file: "cortex-registry/planning/phases/completed/phase-125-registry-documentation-viewer.yaml"
     note: "COMPLETE 2026-03-04. 13/13 GAPs CLOSED. 8 sub-phases delivered: (a) Base models + parser registry + GenericParser (b) 8 typed parsers (governance, workflow, pattern, plan, config, knowledge, template) (c) ReferenceResolver + DependencyGraphBuilder (d) IntegrityChecker + HistoryTracker (e) RegistryIndexer full pipeline + build-registry-docs.py (f) 6 HTML renderers (g) D3 graph explorer + diff viewer + integrity dashboard (h) BusinessLensWriter. 195 registry tests GREEN. Smoke: 2582."

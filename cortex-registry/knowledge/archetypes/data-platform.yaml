@@ -1,5 +1,6 @@
 # Data Platform Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: data-platform
 archetype: DataPlatform
 description: "Data platform — data warehousing, pipelines, analytics, dbt, Spark"

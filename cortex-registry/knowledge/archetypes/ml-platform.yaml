@@ -1,5 +1,6 @@
 # ML Platform Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: ml-platform
 archetype: MLPlatform
 description: "Machine learning / AI platform — model training, serving, MLOps"

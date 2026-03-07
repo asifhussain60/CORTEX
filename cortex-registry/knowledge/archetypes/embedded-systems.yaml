@@ -1,5 +1,6 @@
 # Embedded Systems Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: embedded-systems
 archetype: EmbeddedSystems
 description: "Embedded / firmware systems — C/C++, RTOS, microcontrollers"

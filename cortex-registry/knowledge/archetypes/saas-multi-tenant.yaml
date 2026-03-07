@@ -1,5 +1,6 @@
 # SaaS Multi-Tenant Archetype — Knowledge Profile
 # Authority: GAP-131-01 (Phase 131-a)
+domain: archetypes
 id: saas-multi-tenant
 archetype: SaaSMultiTenant
 description: "SaaS multi-tenant application — tenant isolation, billing, subscription"

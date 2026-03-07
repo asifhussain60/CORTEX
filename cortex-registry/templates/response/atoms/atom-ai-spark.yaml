@@ -12,7 +12,9 @@
 #            PrincipleSelector backwards-compatible shim (unchanged)
 
 atom_id: "atom-ai-spark"
-version: "1.0.0"
+id: atom-ai-spark
+type: atom
+# version field removed — governance YAML versioning prohibited (Check #34)
 description: >
   AI Spark rendering atom — presents an AI adoption insight as a blockquote
   callout inside the Analysis section of qualifying responses. Encourages
