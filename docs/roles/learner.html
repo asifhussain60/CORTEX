@@ -63,46 +63,6 @@
         </div>
     </section>
 
-    <!-- Architecture Deep Dive CTA — surfaced early so learners know the full system map exists before exploring tracks -->
-    <div style="max-width:1100px;margin:0 auto 2rem auto;padding:0 1rem;">
-        <a href="../architecture.html" style="text-decoration:none;color:inherit;display:block;">
-            <div style="position:relative;overflow:hidden;border-radius:1.5rem;border:1px solid rgba(139,92,246,0.25);background:linear-gradient(135deg,rgba(139,92,246,0.06) 0%,rgba(99,102,241,0.06) 50%,rgba(16,185,129,0.06) 100%);transition:border-color 0.4s ease;" onmouseover="this.style.borderColor='rgba(139,92,246,0.5)'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
-                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.3) 50%,transparent);"></div>
-                <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.2) 50%,transparent);"></div>
-                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem;padding:2rem 2.5rem;">
-                    <!-- Icon cluster -->
-                    <div style="position:relative;flex-shrink:0;">
-                        <div style="width:80px;height:80px;border-radius:1rem;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(99,102,241,0.2));border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
-                            <i data-lucide="cpu" style="width:2.5rem;height:2.5rem;color:#a78bfa;"></i>
-                        </div>
-                        <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:0.5rem;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;">
-                            <i data-lucide="brain" style="width:14px;height:14px;color:#34d399;"></i>
-                        </div>
-                        <div style="position:absolute;bottom:-8px;left:-8px;width:28px;height:28px;border-radius:0.5rem;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;">
-                            <i data-lucide="shield-check" style="width:14px;height:14px;color:#818cf8;"></i>
-                        </div>
-                    </div>
-                    <!-- Copy -->
-                    <div style="flex:1;min-width:200px;">
-                        <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#c4b5fd;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;">
-                            <i data-lucide="layers" style="width:12px;height:12px;"></i> 7-Tab Interactive Deep Dive
-                        </div>
-                        <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:0.5rem;">
-                            Explore the <span style="background:linear-gradient(to right,#a78bfa,#818cf8);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CORTEX Brain Architecture</span>
-                        </div>
-                        <p style="color:#94a3b8;font-size:0.9rem;line-height:1.6;font-weight:300;max-width:36rem;">
-                            See the real system behind everything you'll learn — 323 orchestrators, 9 LENS analyzers, 30 MCP tools, and 37 governance rules mapped interactively.
-                        </p>
-                    </div>
-                    <!-- Arrow -->
-                    <div style="flex-shrink:0;width:48px;height:48px;border-radius:50%;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
-                        <i data-lucide="arrow-right" style="width:20px;height:20px;color:#a78bfa;"></i>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
     <div class="role-content-wrapper">
 
         <!-- ═══ SECTION 1 — BLUF ═══ -->
@@ -120,7 +80,121 @@
             </div>
         </div>
 
-        <!-- ═══ SECTION 2 — THE LEARNING JOURNEY (D3 progression chart) ═══ -->
+        <!-- ═══ SECTION 2 — WHY LEARN WITH CORTEX (motivation before curriculum) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-star"></i> Why Learn With CORTEX</h2>
+
+            <div class="bl-tab-layout">
+                <div class="bl-tabs" role="tablist" aria-label="Why CORTEX tabs">
+                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-cl-real"><i class="fas fa-code"></i>Real Standards</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-system"><i class="fas fa-brain"></i>System Thinking</button>
+                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-career"><i class="fas fa-chart-line"></i>Career Depth</button>
+                </div>
+                <div class="bl-tab-content">
+
+                    <div class="bl-tab-panel active" id="tab-cl-real" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128736;</div>
+                                <div>
+                                    <div class="pillar-title">Learn the Standards Real Teams Use</div>
+                                    <div class="pillar-text">CORTEX&rsquo;s 32 CORE rules are not invented for a course &mdash; they are the actual governance rules enforced on every commit in a production codebase. Learning them means learning what engineering teams actually require, not a simplified subset.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129516;</div>
+                                <div>
+                                    <div class="pillar-title">TDD Is Not Optional Here</div>
+                                    <div class="pillar-text">CORE-008 is architecturally mandated. Every lesson that involves code has a test. The 18,116 tests in the codebase are the best tutorial on what TDD looks like at scale &mdash; you can read every one of them.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128274;</div>
+                                <div>
+                                    <div class="pillar-title">Security Is a First-Class Concept</div>
+                                    <div class="pillar-text">LENS scans for CVEs, PHI/PII, and insecure patterns on every analysis. You don&rsquo;t learn security as a separate module &mdash; you learn it as the standard approach to every change, which is how production teams treat it.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128202;</div>
+                                <div>
+                                    <div class="pillar-title">Observability as a Habit</div>
+                                    <div class="pillar-text">Every orchestrator emits AC markers. Every run is logged to SQLite. You learn observability not as a topic in a module but as the default way a well-engineered system is built &mdash; because you see it applied everywhere in the codebase.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-cl-system" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129504;</div>
+                                <div>
+                                    <div class="pillar-title">See How a 258-File System Is Organised</div>
+                                    <div class="pillar-text">CORTEX has 258 orchestrator files across 9 domains &mdash; core, domain, git, health, intelligence, persona, support, validation, workflow. Understanding how to organise a system this size is the skill that separates senior engineers from junior ones.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128302;</div>
+                                <div>
+                                    <div class="pillar-title">Declarative vs Procedural Thinking</div>
+                                    <div class="pillar-text">The Workflow Composer teaches you to think in declarative pipelines &mdash; YAML templates that describe <em>what</em> should happen, composed into sequences. This is how modern infrastructure (Kubernetes, GitHub Actions, CI/CD) is designed. You learn the pattern at code level first.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128737;</div>
+                                <div>
+                                    <div class="pillar-title">Governance as Architecture, Not Process</div>
+                                    <div class="pillar-text">CORTEX doesn&rsquo;t ask developers to follow standards &mdash; it enforces them architecturally. You learn the difference between a quality standard that depends on human discipline (fragile) and one that is enforced by infrastructure (durable).</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128260;</div>
+                                <div>
+                                    <div class="pillar-title">Feedback Loops and Convergence</div>
+                                    <div class="pillar-text">CORE-068 convergence gate (detect&rarr;fix&rarr;rescan) is a formal feedback loop. The RCA Engine closes the loop on failures. You learn system design by studying a system that has designed its own feedback loops consciously and durably.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bl-tab-panel" id="tab-cl-career" role="tabpanel">
+                        <div class="role-pillars">
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#127775;</div>
+                                <div>
+                                    <div class="pillar-title">Portfolio-Ready: Real Code, Real Standards</div>
+                                    <div class="pillar-text">Completing a CORTEX learning track means you can demonstrate understanding of production governance, TDD at scale, multi-stack debugging, and architectural patterns &mdash; all backed by a real open-source codebase you can reference in interviews.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128295;</div>
+                                <div>
+                                    <div class="pillar-title">Multi-Stack Fluency</div>
+                                    <div class="pillar-text">CORTEX&rsquo;s debug pipeline covers Python, JavaScript/TypeScript, C#/.NET, SQL, HTML/CSS, and REST/GraphQL APIs. You see all stacks governed by the same principles &mdash; which builds the transferable skill of recognising patterns across languages and frameworks.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#128218;</div>
+                                <div>
+                                    <div class="pillar-title">Learn at Your Own Pace, Forever</div>
+                                    <div class="pillar-text">The CORTEX codebase is always evolving. Every phase adds new orchestrators, new rules, new patterns. Returning to the Advanced track in 6 months means encountering new material &mdash; the living textbook grows with the framework.</div>
+                                </div>
+                            </div>
+                            <div class="role-pillar">
+                                <div class="pillar-icon">&#129504;</div>
+                                <div>
+                                    <div class="pillar-title">Institutional Knowledge You Can Articulate</div>
+                                    <div class="pillar-text">CORTEX captures engineering decisions as queryable data &mdash; RCA prevention rules, governance YAMLs, LENS analysis history. You learn not just how to make good decisions but how to <em>document and enforce</em> them so they outlast any individual engineer.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 3 — THE LEARNING JOURNEY (D3 progression chart) ═══ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-route"></i> Your Learning Journey: Three Tracks, One Framework</h2>
             <p class="bl-tab-desc">Each track builds systematically on the previous. Beginner establishes professional foundations. Intermediate adds system thinking and security. Advanced teaches you to architect and scale. All three use CORTEX as the live reference implementation.</p>
@@ -222,7 +296,61 @@
             </div>
         </div>
 
-        <!-- ═══ SECTION 4 — HOW CORTEX TEACHES: The Learning Pipeline (Mermaid) ═══ -->
+        <!-- ═══ SECTION 4 — CORTEX AS A LIVING TEXTBOOK (meta-frame before pedagogy) ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-sitemap"></i> CORTEX as a Living Textbook</h2>
+            <p class="bl-tab-desc">Every component of CORTEX is a learning opportunity. The knowledge is not separate from the code &mdash; it <em>is</em> the code. Study how a production-grade AI engineering framework makes decisions, enforces rules, and learns from failures.</p>
+
+            <div class="bl-mermaid-panel" aria-label="CORTEX as a living learning system mindmap">
+                <div class="bl-mermaid-title"><i class="fas fa-brain"></i> CORTEX &mdash; What Each Component Teaches You</div>
+                <div class="bl-mermaid-canvas">
+                    <pre class="mermaid">
+mindmap
+  root(("&#127891;\nCORTEX\nLiving\nTextbook"))
+    ("&#128736; Governance (CORE Rules)")
+      ["Why quality must be enforced, not requested"]
+      ["32 rules &mdash; each solves a real failure mode"]
+      ["Pre-commit hooks as the first defence layer"]
+    ("&#129516; Testing (18,116 Tests)")
+      ["RED&#8594;GREEN&#8594;REFACTOR as a workflow, not a theory"]
+      ["Parallel test execution with pytest-xdist"]
+      ["TDD-first means fewer production surprises"]
+    ("&#128302; Workflow Composer")
+      ["Declarative pipelines over procedural code"]
+      ["3-tier: Primitives, Modes, Composites"]
+      ["Convergence loops: detect&#8594;fix&#8594;rescan"]
+    ("&#128269; LENS Analysis")
+      ["8 parallel analyzers: AST, security, architecture"]
+      ["Why codebase context matters before every change"]
+      ["Shift-left: risks found at planning, not post-ship"]
+    ("&#128202; Observability")
+      ["AC markers as structured audit trail"]
+      ["9 SQLite databases for queryable history"]
+      ["Prometheus metrics for engineering throughput"]
+    ("&#129504; RCA Engine")
+      ["4 methodologies matched to failure categories"]
+      ["Prevention rules: the same mistake cannot recur"]
+      ["Institutional memory as queryable data"]
+                    </pre>
+                </div>
+                <p class="bl-mermaid-caption">CORTEX is not just a tool to use &mdash; it is a system to study. Every orchestrator, every governance rule, every test, and every workflow template teaches a real engineering principle. The framework is the curriculum.</p>
+            </div>
+
+            <div class="bl-image-context bl-image-context--amber bl-context-inline">
+                <div class="bl-context-stat bl-context-stat--block">
+                    <span class="bl-context-stat-value bl-context-stat-value--amber">258</span>
+                    <span class="bl-context-stat-label">orchestrator files &middot; each is a case study</span>
+                </div>
+                <p class="bl-context-narrative">
+                    <strong>258 orchestrator files across 9 domains</strong> &mdash; each one demonstrates a real architectural decision: how to separate concerns, how to implement a protocol, how to handle failures gracefully.
+                    <strong>30 MCP tools</strong> &mdash; each shows how to expose capabilities as machine-callable APIs with proper registration, typing, and error handling.
+                    <strong>32 governance YAMLs</strong> &mdash; each one is a documented engineering standard with a rationale you can read and a test suite that proves it is being enforced.
+                    <strong>99 delivery phases</strong> &mdash; the git history is a complete record of how a production system evolves with discipline over time.
+                </p>
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 5 — HOW CORTEX TEACHES: The Learning Pipeline (Mermaid) ═══ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-graduation-cap"></i> How CORTEX Teaches: Learning by Real Systems</h2>
             <p class="bl-tab-desc">Traditional courses teach concepts in isolation. CORTEX teaches them in context &mdash; every principle is illustrated by the actual framework rule that enforces it, and the real code that implements it. The learning pipeline mirrors the production pipeline.</p>
@@ -379,60 +507,6 @@ flowchart LR
             </div>
         </div>
 
-        <!-- ═══ SECTION 6 — CORTEX AS A LEARNING SYSTEM (Mermaid mindmap) ═══ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-sitemap"></i> CORTEX as a Living Textbook</h2>
-            <p class="bl-tab-desc">Every component of CORTEX is a learning opportunity. The knowledge is not separate from the code &mdash; it <em>is</em> the code. Study how a production-grade AI engineering framework makes decisions, enforces rules, and learns from failures.</p>
-
-            <div class="bl-mermaid-panel" aria-label="CORTEX as a living learning system mindmap">
-                <div class="bl-mermaid-title"><i class="fas fa-brain"></i> CORTEX &mdash; What Each Component Teaches You</div>
-                <div class="bl-mermaid-canvas">
-                    <pre class="mermaid">
-mindmap
-  root(("&#127891;\nCORTEX\nLiving\nTextbook"))
-    ("&#128736; Governance (CORE Rules)")
-      ["Why quality must be enforced, not requested"]
-      ["32 rules &mdash; each solves a real failure mode"]
-      ["Pre-commit hooks as the first defence layer"]
-    ("&#129516; Testing (18,116 Tests)")
-      ["RED&#8594;GREEN&#8594;REFACTOR as a workflow, not a theory"]
-      ["Parallel test execution with pytest-xdist"]
-      ["TDD-first means fewer production surprises"]
-    ("&#128302; Workflow Composer")
-      ["Declarative pipelines over procedural code"]
-      ["3-tier: Primitives, Modes, Composites"]
-      ["Convergence loops: detect&#8594;fix&#8594;rescan"]
-    ("&#128269; LENS Analysis")
-      ["8 parallel analyzers: AST, security, architecture"]
-      ["Why codebase context matters before every change"]
-      ["Shift-left: risks found at planning, not post-ship"]
-    ("&#128202; Observability")
-      ["AC markers as structured audit trail"]
-      ["9 SQLite databases for queryable history"]
-      ["Prometheus metrics for engineering throughput"]
-    ("&#129504; RCA Engine")
-      ["4 methodologies matched to failure categories"]
-      ["Prevention rules: the same mistake cannot recur"]
-      ["Institutional memory as queryable data"]
-                    </pre>
-                </div>
-                <p class="bl-mermaid-caption">CORTEX is not just a tool to use &mdash; it is a system to study. Every orchestrator, every governance rule, every test, and every workflow template teaches a real engineering principle. The framework is the curriculum.</p>
-            </div>
-
-            <div class="bl-image-context bl-image-context--amber bl-context-inline">
-                <div class="bl-context-stat bl-context-stat--block">
-                    <span class="bl-context-stat-value bl-context-stat-value--amber">258</span>
-                    <span class="bl-context-stat-label">orchestrator files &middot; each is a case study</span>
-                </div>
-                <p class="bl-context-narrative">
-                    <strong>258 orchestrator files across 9 domains</strong> &mdash; each one demonstrates a real architectural decision: how to separate concerns, how to implement a protocol, how to handle failures gracefully.
-                    <strong>30 MCP tools</strong> &mdash; each shows how to expose capabilities as machine-callable APIs with proper registration, typing, and error handling.
-                    <strong>32 governance YAMLs</strong> &mdash; each one is a documented engineering standard with a rationale you can read and a test suite that proves it is being enforced.
-                    <strong>99 delivery phases</strong> &mdash; the git history is a complete record of how a production system evolves with discipline over time.
-                </p>
-            </div>
-        </div>
-
         <!-- ═══ SECTION 7 — PROOF: Knowledge Base Stats ═══ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-chart-line"></i> The Knowledge Base Behind Every Lesson</h2>
@@ -499,120 +573,6 @@ mindmap
             </div>
         </div>
 
-        <!-- ═══ SECTION 8 — STRATEGIC VALUE (Tabbed Pillars) ═══ -->
-        <div class="bl-section-panel">
-            <h2 class="role-section-title"><i class="fas fa-star"></i> Why Learn With CORTEX</h2>
-
-            <div class="bl-tab-layout">
-                <div class="bl-tabs" role="tablist" aria-label="Why CORTEX tabs">
-                    <button class="bl-tab active" role="tab" aria-selected="true" data-target="tab-cl-real"><i class="fas fa-code"></i>Real Standards</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-system"><i class="fas fa-brain"></i>System Thinking</button>
-                    <button class="bl-tab" role="tab" aria-selected="false" data-target="tab-cl-career"><i class="fas fa-chart-line"></i>Career Depth</button>
-                </div>
-                <div class="bl-tab-content">
-
-                    <div class="bl-tab-panel active" id="tab-cl-real" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128736;</div>
-                                <div>
-                                    <div class="pillar-title">Learn the Standards Real Teams Use</div>
-                                    <div class="pillar-text">CORTEX&rsquo;s 32 CORE rules are not invented for a course &mdash; they are the actual governance rules enforced on every commit in a production codebase. Learning them means learning what engineering teams actually require, not a simplified subset.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#129516;</div>
-                                <div>
-                                    <div class="pillar-title">TDD Is Not Optional Here</div>
-                                    <div class="pillar-text">CORE-008 is architecturally mandated. Every lesson that involves code has a test. The 18,116 tests in the codebase are the best tutorial on what TDD looks like at scale &mdash; you can read every one of them.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128274;</div>
-                                <div>
-                                    <div class="pillar-title">Security Is a First-Class Concept</div>
-                                    <div class="pillar-text">LENS scans for CVEs, PHI/PII, and insecure patterns on every analysis. You don&rsquo;t learn security as a separate module &mdash; you learn it as the standard approach to every change, which is how production teams treat it.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128202;</div>
-                                <div>
-                                    <div class="pillar-title">Observability as a Habit</div>
-                                    <div class="pillar-text">Every orchestrator emits AC markers. Every run is logged to SQLite. You learn observability not as a topic in a module but as the default way a well-engineered system is built &mdash; because you see it applied everywhere in the codebase.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bl-tab-panel" id="tab-cl-system" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#129504;</div>
-                                <div>
-                                    <div class="pillar-title">See How a 258-File System Is Organised</div>
-                                    <div class="pillar-text">CORTEX has 258 orchestrator files across 9 domains &mdash; core, domain, git, health, intelligence, persona, support, validation, workflow. Understanding how to organise a system this size is the skill that separates senior engineers from junior ones.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128302;</div>
-                                <div>
-                                    <div class="pillar-title">Declarative vs Procedural Thinking</div>
-                                    <div class="pillar-text">The Workflow Composer teaches you to think in declarative pipelines &mdash; YAML templates that describe <em>what</em> should happen, composed into sequences. This is how modern infrastructure (Kubernetes, GitHub Actions, CI/CD) is designed. You learn the pattern at code level first.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128737;</div>
-                                <div>
-                                    <div class="pillar-title">Governance as Architecture, Not Process</div>
-                                    <div class="pillar-text">CORTEX doesn&rsquo;t ask developers to follow standards &mdash; it enforces them architecturally. You learn the difference between a quality standard that depends on human discipline (fragile) and one that is enforced by infrastructure (durable).</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128260;</div>
-                                <div>
-                                    <div class="pillar-title">Feedback Loops and Convergence</div>
-                                    <div class="pillar-text">CORE-068 convergence gate (detect&rarr;fix&rarr;rescan) is a formal feedback loop. The RCA Engine closes the loop on failures. You learn system design by studying a system that has designed its own feedback loops consciously and durably.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bl-tab-panel" id="tab-cl-career" role="tabpanel">
-                        <div class="role-pillars">
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#127775;</div>
-                                <div>
-                                    <div class="pillar-title">Portfolio-Ready: Real Code, Real Standards</div>
-                                    <div class="pillar-text">Completing a CORTEX learning track means you can demonstrate understanding of production governance, TDD at scale, multi-stack debugging, and architectural patterns &mdash; all backed by a real open-source codebase you can reference in interviews.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128295;</div>
-                                <div>
-                                    <div class="pillar-title">Multi-Stack Fluency</div>
-                                    <div class="pillar-text">CORTEX&rsquo;s debug pipeline covers Python, JavaScript/TypeScript, C#/.NET, SQL, HTML/CSS, and REST/GraphQL APIs. You see all stacks governed by the same principles &mdash; which builds the transferable skill of recognising patterns across languages and frameworks.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#128218;</div>
-                                <div>
-                                    <div class="pillar-title">Learn at Your Own Pace, Forever</div>
-                                    <div class="pillar-text">The CORTEX codebase is always evolving. Every phase adds new orchestrators, new rules, new patterns. Returning to the Advanced track in 6 months means encountering new material &mdash; the living textbook grows with the framework.</div>
-                                </div>
-                            </div>
-                            <div class="role-pillar">
-                                <div class="pillar-icon">&#129504;</div>
-                                <div>
-                                    <div class="pillar-title">Institutional Knowledge You Can Articulate</div>
-                                    <div class="pillar-text">CORTEX captures engineering decisions as queryable data &mdash; RCA prevention rules, governance YAMLs, LENS analysis history. You learn not just how to make good decisions but how to <em>document and enforce</em> them so they outlast any individual engineer.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- ═══ SECTION 9 — PLATFORM CAPABILITIES ═══ -->
         <div class="bl-section-panel">
             <h2 class="role-section-title"><i class="fas fa-check-double"></i> What You Have Access To</h2>
@@ -630,6 +590,43 @@ mindmap
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-history"></i> 99 Phases of Git History</span>
                 <span class="bl-badge bl-badge--amber"><i class="fas fa-book"></i> 45+ Knowledge YAMLs</span>
             </div>
+        </div>
+
+        <!-- Architecture Deep Dive CTA — earns its place after the full learning picture is built -->
+        <div style="margin-bottom:1.5rem;">
+            <a href="../architecture.html" style="text-decoration:none;color:inherit;display:block;">
+                <div style="position:relative;overflow:hidden;border-radius:1.5rem;border:1px solid rgba(139,92,246,0.25);background:linear-gradient(135deg,rgba(139,92,246,0.06) 0%,rgba(99,102,241,0.06) 50%,rgba(16,185,129,0.06) 100%);transition:border-color 0.4s ease;" onmouseover="this.style.borderColor='rgba(139,92,246,0.5)'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+                    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.3) 50%,transparent);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.2) 50%,transparent);"></div>
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem;padding:2rem 2.5rem;">
+                        <div style="position:relative;flex-shrink:0;">
+                            <div style="width:80px;height:80px;border-radius:1rem;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(99,102,241,0.2));border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="cpu" style="width:2.5rem;height:2.5rem;color:#a78bfa;"></i>
+                            </div>
+                            <div style="position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:0.5rem;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="brain" style="width:14px;height:14px;color:#34d399;"></i>
+                            </div>
+                            <div style="position:absolute;bottom:-8px;left:-8px;width:28px;height:28px;border-radius:0.5rem;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;">
+                                <i data-lucide="shield-check" style="width:14px;height:14px;color:#818cf8;"></i>
+                            </div>
+                        </div>
+                        <div style="flex:1;min-width:200px;">
+                            <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#c4b5fd;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;">
+                                <i data-lucide="layers" style="width:12px;height:12px;"></i> 7-Tab Interactive Deep Dive
+                            </div>
+                            <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:0.5rem;">
+                                Explore the <span style="background:linear-gradient(to right,#a78bfa,#818cf8);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CORTEX Brain Architecture</span>
+                            </div>
+                            <p style="color:#94a3b8;font-size:0.9rem;line-height:1.6;font-weight:300;max-width:36rem;">
+                                See the real system behind everything you just read — 323 orchestrators, 9 LENS analyzers, 30 MCP tools, and 37 governance rules mapped interactively.
+                            </p>
+                        </div>
+                        <div style="flex-shrink:0;width:48px;height:48px;border-radius:50%;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="arrow-right" style="width:20px;height:20px;color:#a78bfa;"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <!-- ═══ SECTION 10 — START HERE (CTAs) ═══ -->
