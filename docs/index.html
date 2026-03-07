@@ -712,6 +712,8 @@
     .vsp-header {
         padding: 2rem 2rem 1.25rem;
         position: relative;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center;
     }
     .vsp-eyebrow {
         display: inline-flex; align-items: center; gap: 0.5rem;
@@ -727,6 +729,7 @@
     }
     .vsp-subtitle {
         font-size: 0.95rem; color: var(--text-tertiary); margin: 0; max-width: 64ch; line-height: 1.6;
+        text-align: center;
     }
 
     /* ── Role Tab Row (horizontal pill strip) ─────────── */
@@ -734,6 +737,8 @@
         display: flex; flex-wrap: wrap; gap: 0.6rem;
         padding: 1rem 2rem 1.25rem;
         border-bottom: 1px solid rgba(255,255,255,0.06);
+        justify-content: center;
+        align-items: center;
     }
     .vsp-role-btn {
         display: inline-flex; align-items: center; gap: 0.65rem;
@@ -853,10 +858,11 @@
         50%       { transform: scale(1.05); opacity: 0.5; }
     }
 
-    /* Center content (logo + text) */
+    /* Center content (logo + text) — nudged up to visually centre in canvas above overlay */
     .vsp-logo-wrap {
         position: relative; z-index: 2;
         display: flex; flex-direction: column; align-items: center; gap: 1.75rem;
+        margin-bottom: 5rem; /* offset for the bottom overlay height */
     }
     .vsp-logo-glow {
         position: relative; width: 140px; height: 140px;
@@ -893,10 +899,12 @@
     }
     .vsp-placeholder-headline {
         font-family: var(--font-display); font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-        font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.02em;
+        font-weight: 700; color: var(--text-primary); margin: 0;
+        letter-spacing: -0.02em; text-align: center;
     }
     .vsp-placeholder-sub {
-        font-size: 0.88rem; color: var(--text-tertiary); margin: 0; max-width: 46ch; line-height: 1.55;
+        font-size: 0.88rem; color: var(--text-tertiary); margin: 0;
+        max-width: 46ch; line-height: 1.55; text-align: center;
     }
 
     /* Role-accent overrides */
@@ -928,31 +936,33 @@
         100% { top: 100%; opacity: 0; }
     }
 
-    /* Panel description overlay — bottom-left glass card */
+    /* Panel description overlay — full-width bottom glass */
     .vsp-panel-overlay {
         position: absolute; bottom: 0; left: 0; right: 0;
-        padding: 2rem 2rem 1.5rem;
+        padding: 2.5rem 2rem 0;
         background: linear-gradient(0deg,
-            rgba(2,5,14,0.96) 0%,
-            rgba(2,5,14,0.7)  50%,
+            rgba(2,5,14,0.97) 0%,
+            rgba(2,5,14,0.75) 55%,
             transparent       100%);
         display: flex; flex-direction: column; gap: 0.25rem;
+        pointer-events: none;
     }
     .vsp-panel-title {
-        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.4rem);
+        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.35rem);
         font-weight: 700; color: var(--text-primary);
         letter-spacing: -0.02em; margin: 0;
     }
     .vsp-panel-desc {
-        font-size: 0.85rem; color: var(--text-tertiary); margin: 0;
+        font-size: 0.85rem; color: var(--text-tertiary); margin: 0 0 2.5rem;
         max-width: 72ch; line-height: 1.55;
     }
 
-    /* Status bar inside placeholder */
+    /* Status bar inside placeholder — sits at absolute bottom, above overlay gradient */
     .vsp-status-bar {
         position: absolute; bottom: 0; left: 0; right: 0;
-        padding: 0.6rem 1.5rem 0.6rem 1.25rem;
+        padding: 0.55rem 1.5rem 0.55rem 1.25rem;
         display: flex; align-items: center; justify-content: space-between;
+        z-index: 3;
     }
     .vsp-status-dot {
         display: inline-flex; align-items: center; gap: 0.4rem;
@@ -975,9 +985,10 @@
 
     /* Footnote */
     .vsp-footnote {
-        display: flex; align-items: center; gap: 0.5rem;
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
         font-size: 0.77rem; color: var(--text-tertiary);
         padding: 1rem 2rem 1.5rem;
+        text-align: center;
     }
     .vsp-footnote i { color: var(--accent-cyan); opacity: 0.6; font-size: 0.68rem; }
 
