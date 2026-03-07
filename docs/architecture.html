@@ -6,6 +6,7 @@
     <title>CORTEX Architecture — Intelligence · Orchestration · Governance</title>
     <meta name="description" content="CORTEX Architecture — Deep dive into the Intelligence Diamond, 324 orchestrators across 15 domains, 32 MCP tools, governance infrastructure, and institutional memory."/>
     <meta name="author" content="Asif Hussain"/>
+    <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -131,6 +132,7 @@
             border-top: 1px solid rgba(123, 97, 255, 0.12);
             border-bottom: 2px solid rgba(123, 97, 255, 0.25);
             padding: 0 1rem;
+            box-shadow: 0 4px 20px rgba(123, 97, 255, 0.06);
         }
         .tab-nav-inner {
             max-width: 80rem; margin: 0 auto;
@@ -152,23 +154,48 @@
             border-radius: 0.625rem 0.625rem 0 0;
             margin: 0 0.15rem; margin-bottom: -1px;
             white-space: nowrap; position: relative;
-            transition: all 0.25s ease;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: tabIdleGlow 4s ease-in-out infinite;
+            animation-delay: calc(var(--tab-i, 0) * 0.5s);
+        }
+        @keyframes tabIdleGlow {
+            0%, 100% { border-color: rgba(100, 116, 139, 0.25); box-shadow: none; }
+            50% { border-color: rgba(123, 97, 255, 0.25); box-shadow: 0 0 8px rgba(123, 97, 255, 0.08), inset 0 0 6px rgba(123, 97, 255, 0.03); }
         }
         .tab-btn:hover { 
-            color: #cbd5e1; 
+            color: #e2d9ff; 
             background: rgba(51, 65, 85, 0.6);
-            border-color: rgba(123, 97, 255, 0.3);
+            border-color: rgba(123, 97, 255, 0.45);
+            box-shadow: 0 0 18px rgba(123, 97, 255, 0.15), 0 -2px 8px rgba(0, 212, 255, 0.08);
+            animation: none;
         }
         .tab-btn.active { 
             color: #e2d9ff; 
             background: rgba(123, 97, 255, 0.14);
-            border-color: rgba(123, 97, 255, 0.5);
-            box-shadow: 0 -2px 12px rgba(123, 97, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+            border-color: rgba(123, 97, 255, 0.6);
+            box-shadow: 0 -4px 20px rgba(123, 97, 255, 0.25), 0 0 30px rgba(123, 97, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+            animation: tabActiveGlow 3s ease-in-out infinite;
+        }
+        @keyframes tabActiveGlow {
+            0%, 100% { border-color: rgba(123, 97, 255, 0.6); box-shadow: 0 -4px 20px rgba(123, 97, 255, 0.25), 0 0 30px rgba(123, 97, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.06); }
+            50% { border-color: rgba(0, 212, 255, 0.5); box-shadow: 0 -4px 25px rgba(0, 212, 255, 0.2), 0 0 40px rgba(123, 97, 255, 0.18), inset 0 1px 0 rgba(255,255,255,0.1); }
         }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
+            background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan), var(--accent-violet));
+            background-size: 200% 100%;
+            animation: tabBarShimmer 3s linear infinite;
             border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 12px rgba(123, 97, 255, 0.5), 0 0 4px rgba(0, 212, 255, 0.3);
+        }
+        @keyframes tabBarShimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        /* Top-edge light shimmer on active tab */
+        .tab-btn.active::before {
+            content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
         .tab-num {
             display: inline-flex; align-items: center; justify-content: center;
@@ -450,13 +477,13 @@
     <!-- ═══════════════════ TAB NAVIGATION ═══════════════════ -->
     <nav class="tab-nav" role="tablist" aria-label="Architecture sections">
         <div class="tab-nav-inner">
-            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="overview"><span class="tab-num">1</span>Overview</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="intelligence"><span class="tab-num">2</span>Intelligence</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="orchestrators"><span class="tab-num">3</span>Orchestrators</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="knowledge"><span class="tab-num">4</span>Knowledge</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="mcp"><span class="tab-num">5</span>MCP Tools</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="governance"><span class="tab-num">6</span>Governance</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="lifecycle"><span class="tab-num">7</span>Lifecycle</button>
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="overview" style="--tab-i:0"><span class="tab-num">1</span>Overview</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="intelligence" style="--tab-i:1"><span class="tab-num">2</span>Intelligence</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="orchestrators" style="--tab-i:2"><span class="tab-num">3</span>Orchestrators</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="knowledge" style="--tab-i:3"><span class="tab-num">4</span>Knowledge</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="mcp" style="--tab-i:4"><span class="tab-num">5</span>MCP Tools</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="governance" style="--tab-i:5"><span class="tab-num">6</span>Governance</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="lifecycle" style="--tab-i:6"><span class="tab-num">7</span>Lifecycle</button>
         </div>
     </nav>
 
