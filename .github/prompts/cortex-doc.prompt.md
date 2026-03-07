@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting + Count Floor-Approximation Policy) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -83,8 +83,28 @@ Update the following targets to reflect the latest architecture while preserving
 - ✅ Ensure terminology consistency across ALL documents
 - ✅ Preserve backward compatibility notes where relevant
 - ✅ Auto-archive deprecated content (never delete blindly)
+- ✅ **Count Policy (MANDATORY — see below):** All numeric counts in `.content/` files MUST use conservative floor approximations — never exact numbers
 - ❌ Never introduce code snippets into `.content/` files
 - ❌ Never alter existing section numbering without migration
+- ❌ Never write an exact count into documentation (e.g. `293` → write `290+`; `33` → write `30+`)
+
+**📐 Count Floor-Approximation Policy (enforced on every sync):**
+
+All architecture metrics in `.content/` documentation MUST be expressed as rounded-down floor approximations, not exact counts. This keeps documentation valid across small changes without requiring a sync on every addition.
+
+| Metric | Rounding Rule | Example (live=293) | Written As |
+|--------|--------------|-------------------|-----------|
+| Orchestrator files | Round down to nearest 10, append `+` | 293 → 290 | `290+` |
+| MCP tools registered | Round down to nearest 5, append `+` | 33 → 30 | `30+` |
+| Governance YAMLs | Round down to nearest 5, append `+` | 59 → 55 | `55+` |
+| Workflow templates | Round down to nearest 5, append `+` | 87 → 85 | `85+` |
+| Intent types | Round down to nearest 5, append `+` | 31 → 30 | `30+` |
+| SDLC principles | Round down to nearest 10, append `+` | 110 → 100 | `100+` |
+| Quote entries | Round down to nearest 10, append `+` | 180 → 180 | `180+` |
+| Test count | Round down to nearest 1000, append `+` | 20290 → 20000 | `20,000+` |
+| Phases complete | Round down to nearest 5, append `+` | 65 → 65 | `65+` |
+
+**Drift trigger for counts:** Only flag a count as stale when the live value falls **below** the documented floor (e.g. documented `290+` but live count drops to `285` → flag P1). A live count *above* the floor is never a drift violation — the approximation is intentionally conservative.
 
 ### Phase 4: Narrative Synchronization (Agent: `narrative-continuity-agent`)
 
@@ -725,7 +745,9 @@ Documentation is versioned consistently with release tags:
 |------|--------|----------|
 | Coverage map — zero orphaned features | 100% coverage | P0 |
 | Coverage map — zero phantom docs | 0 undead docs | P0 |
-| Diagram accuracy — node counts match live architecture | Exact match | P0 |
+| Diagram accuracy — node labels match live architecture (no phantom nodes) | 0 phantom nodes | P0 |
+| Count policy — all numeric counts use floor approximations (e.g. `290+`, `30+`) | 0 exact counts | P0 |
+| Count floor validity — live count does not fall below documented floor | live ≥ floor | P1 |
 | **Chapter file count** — exactly 12 `.md` files in `chapters/` | 12 (immutable) | P0 |
 | **index.html chapter links** — all 12 chapter links resolve (HTTP 200) | 100% | P0 |
 | **Video prompt file count** — exactly 16 files (9 root + 7 tutorials) | 16 (no additions) | P1 |

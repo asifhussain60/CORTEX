@@ -4,7 +4,7 @@ scope: non-production-admin
 # Doc Sync Agent
 
 **Agent ID:** `doc-sync-agent`  
-**Updated:** 2026-03-02  
+**Updated:** 2026-03-07  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Update `.content/`, glossary, video-prompts, and image-prompts to reflect current architecture  
@@ -83,16 +83,43 @@ Every `.content/` file has an established section structure. Sync edits operate 
 ❌ Change heading levels
 ```
 
-### Rule 2: Update Counts Atomically
+### Rule 2: Update Counts Using Floor Approximations (MANDATORY)
 
-When a metric changes, update it everywhere it appears:
+**Policy:** Documentation MUST express numeric architecture counts as conservative floor approximations — never exact numbers. This keeps documentation valid across small additions without requiring a sync on every orchestrator or tool added.
+
+When `drift-detection-agent` flags a `count_policy_violation` (exact number found) or a `stale_count` (live fell below floor), apply the canonical floor from the Floor-Approximation Table in `drift-detection-agent.md §5`.
 
 ```
-For metric_change in drift_report.stale_counts:
-  1. Find ALL occurrences of the old value in context
-  2. Update each occurrence to the new value
-  3. Log each update location
+For count_policy_violation or stale_count in drift_report:
+  1. Look up the canonical floor approximation from the Floor-Approximation Table
+  2. Find ALL occurrences of the old/exact value in context across ALL .content/ files
+  3. Replace each occurrence with the floor approximation (e.g. "293" → "290+", "33 tools" → "30+ tools")
+  4. Log each update location with before/after values
+  5. NEVER replace a valid floor approximation with a higher one unless the live value
+     has crossed a rounding boundary (e.g. live=300 → new floor="300+", replacing "290+")
 ```
+
+**Floor update trigger:** Only raise the floor when `live_value >= current_floor + rounding_unit`.
+
+```
+Example (orchestrators, rounding_unit=10):
+  current floor = 290, live = 293  → no update (293 < 300)
+  current floor = 290, live = 301  → update floor to 300+ (301 >= 300)
+  current floor = 290, live = 285  → P1 flag (live dropped below floor) — floor stays, investigation needed
+```
+
+**Forbidden patterns (always replace):**
+
+| Found in .content/ | Replace With |
+|-------------------|-------------|
+| `293 orchestrator` | `290+ orchestrator` |
+| `33 registered tools` | `30+ registered tools` |
+| `59 governance` | `55+ governance` |
+| `87 workflow templates` | `85+ workflow templates` |
+| `110 principles` | `100+ principles` |
+| `180 quotes` | `180+ quotes` |
+| `31 intent types` | `30+ intent types` |
+| `20,290 tests` | `20,000+ tests` |
 
 ### Rule 3: Eliminate Stale References
 

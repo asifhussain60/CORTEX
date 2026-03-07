@@ -4,7 +4,7 @@ scope: non-production-admin
 # Drift Detection Agent
 
 **Agent ID:** `drift-detection-agent`  
-**Updated:** 2026-03-06  
+**Updated:** 2026-03-07  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Cross-reference implementation vs documentation to detect drift  
@@ -78,12 +78,14 @@ drift_report:
       glossary_ref: "docs/.content/glossary.md#masterorchestrator"
 
   stale_counts:
-    # Numeric values that no longer match reality
+    # Floor-approximation values that the live count has dropped BELOW
+    # (live count exceeding the floor is NEVER a violation — floor is intentionally conservative)
     - metric: "orchestrator_count"
-      documented: 323
-      actual: 324
+      documented_floor: "290+"     # e.g. "290+" means floor=290
+      actual: 285                  # VIOLATION: live dropped below floor of 290
       location: "docs/.content/05-orchestration-the-engine-room.md"
       severity: P1
+      note: "Only flag when actual < floor. If actual=293 and floor=290 → no violation."
 
   stale_diagrams:
     # Diagrams with outdated nodes or flows
@@ -94,7 +96,7 @@ drift_report:
   narrative_drift:
     # Story content referencing outdated system state
     - chapter: "docs/awakening-of-cortex/chapters/12-The-Enterprise-Brain.md"
-      issue: "References 51 orchestrators — now 324 orchestrator files"
+      issue: "References 51 orchestrators — floor is now 290+ orchestrator files"
       severity: P2
 ```
 
@@ -148,17 +150,45 @@ For each glossary term:
   4. Flag each variant occurrence as P2 drift
 ```
 
-### 5. Count Staleness Detection (P1)
+### 5. Count Floor-Approximation Validation (P1)
 
-**Method:** Extract numeric metrics from documentation and compare against live counts.
+**Policy (MANDATORY):** Documentation MUST use conservative floor approximations — never exact counts. A count like `290+` means the floor is 290. The live value may be higher (never a violation). The live value falling *below* the floor is a P1 drift.
 
-| Metric | Live Source | Verification Command |
-|--------|-----------|---------------------|
-| Orchestrator files | `find cortex/orchestrators -name "*.py" \| wc -l` | Compare against documented count |
-| MCP tools registered | `grep -c "register" cortex/mcp/mcp_registry.py` | Compare against documented count |
-| Governance YAMLs | `find cortex-registry/core -name "*.yaml" \| wc -l` | Compare against documented count |
-| Test count | `python3 -m pytest --collect-only -q 2>/dev/null \| tail -1` | Compare against documented count |
-| Intent types | `grep -c "=" cortex/models/canonical_enums.py` in IntentType class | Compare against documented count |
+**Floor-Approximation Table (canonical — SSOT):**
+
+| Metric | Live Source Command | Documented Form | Floor Value | Rounding Rule |
+|--------|-------------------|----------------|-------------|--------------|
+| Orchestrator files | `find cortex/orchestrators -name "*.py" \| grep -v __pycache__ \| grep -v ^__ \| wc -l` | `290+` | 290 | Round down to nearest 10 |
+| MCP tools registered | Count unique `cortex_*` keys in `cortex/mcp/mcp_registry.py` | `30+` | 30 | Round down to nearest 5 |
+| Governance YAMLs | `find cortex-registry/core cortex-registry/governance -name "*.yaml" \| wc -l` | `55+` | 55 | Round down to nearest 5 |
+| Workflow templates | `find cortex-registry/workflows/templates -name "*.yaml" \| wc -l` | `85+` | 85 | Round down to nearest 5 |
+| Intent types | Parse `IntentType` enum in `cortex/models/canonical_enums.py` (exclude `UNKNOWN`) | `30+` | 30 | Round down to nearest 5 |
+| SDLC principles | Count `- id:` entries in `cortex-registry/knowledge/sdlc/high-value-principles.yaml` | `100+` | 100 | Round down to nearest 10 |
+| Quote entries | Count `text`+`author` pairs in `cortex-registry/templates/response/atoms/atom-quote.yaml` | `180+` | 180 | Round down to nearest 10 |
+| Test count | `python3 -m pytest --collect-only -q 2>/dev/null \| tail -1` | `20,000+` | 20000 | Round down to nearest 1000 |
+
+**Detection Algorithm:**
+
+```
+For each metric in the floor-approximation table:
+  1. Compute live_value using the live source command
+  2. Parse documented_floor from .content/ file (strip "+" and commas → integer)
+  3. If live_value < documented_floor:
+       → FLAG as P1 stale_count (live dropped below floor)
+  4. If documented value is an exact number (no "+" suffix):
+       → FLAG as P0 count_policy_violation (exact counts are forbidden)
+  5. If live_value >= documented_floor:
+       → No action (floor approximation is valid — intentionally conservative)
+```
+
+**Count Policy Violation (P0 — forbidden exact counts):**
+
+```
+For each .content/ file:
+  1. Scan for numeric patterns matching known metrics (e.g. "323 orchestrator", "35 tools")
+  2. If an exact number is found without a "+" suffix → P0 violation
+  3. The fix is: replace with the correct floor approximation from the table above
+```
 
 ### 6. Diagram Staleness Detection (P1)
 
