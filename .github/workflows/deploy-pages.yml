@@ -1,0 +1,150 @@
+name: Deploy to GitHub Pages
+
+# ============================================================
+# DEPLOY-PAGES-001 — Sync cortex-docs/*.html → gh-pages branch
+# Triggers: any HTML/CSS/JS/asset change in cortex-docs/
+# Target: gh-pages branch root (served at asifhussain60.github.io/CORTEX/)
+# ============================================================
+
+on:
+  push:
+    branches: [CORTEX, main]
+    paths:
+      - 'cortex-docs/**/*.html'
+      - 'cortex-docs/**/*.css'
+      - 'cortex-docs/**/*.js'
+      - 'cortex-docs/**/*.json'
+      - 'cortex-docs/favicon.ico'
+      - 'cortex-docs/robots.txt'
+      - 'cortex-docs/sitemap.xml'
+      - 'cortex-docs/.nojekyll'
+      - 'cortex-docs/assets/images/**'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'Manual trigger'
+
+# Only one deploy at a time — cancel stale runs
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: "Sync cortex-docs → gh-pages"
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout full history (needed for gh-pages push) ──
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 2. Validate: no inline style= attributes (P0 gate) ──
+      - name: P0 CSS inline gate
+        run: |
+          violations=$(grep -rl 'style=' cortex-docs/*.html 2>/dev/null | wc -l)
+          echo "Files with inline style= attributes: $violations"
+          if [ "$violations" -gt 0 ]; then
+            echo "❌ P0 GATE FAIL: inline style= found in cortex-docs HTML files"
+            grep -rln 'style=' cortex-docs/*.html 2>/dev/null
+            exit 1
+          fi
+          echo "✅ P0 CSS inline gate: PASS"
+
+      # ── 3. Validate: index.html exists and is non-trivial ──
+      - name: Validate index.html
+        run: |
+          if [ ! -f "cortex-docs/index.html" ]; then
+            echo "❌ FATAL: cortex-docs/index.html not found"
+            exit 1
+          fi
+          lines=$(wc -l < cortex-docs/index.html)
+          echo "index.html: $lines lines"
+          if [ "$lines" -lt 100 ]; then
+            echo "❌ GATE FAIL: index.html appears too small ($lines lines) — possible corruption"
+            exit 1
+          fi
+          echo "✅ index.html validated ($lines lines)"
+
+      # ── 4. Configure git identity ──
+      - name: Configure git identity
+        run: |
+          git config user.name "CORTEX Pages Bot"
+          git config user.email "cortex-pages@asifhussain60.github.io"
+
+      # ── 5. Sync cortex-docs/ → gh-pages branch ──
+      - name: Deploy to gh-pages
+        run: |
+          echo "📦 Preparing gh-pages deployment..."
+
+          # Stash the cortex-docs content we want to publish
+          TMPDIR=$(mktemp -d)
+          cp -r cortex-docs/. "$TMPDIR/"
+
+          # Switch to gh-pages (orphan-safe: fetch or create)
+          if git ls-remote --exit-code origin gh-pages > /dev/null 2>&1; then
+            git fetch origin gh-pages
+            git checkout gh-pages
+            echo "✅ Checked out existing gh-pages branch"
+          else
+            git checkout --orphan gh-pages
+            git rm -rf . --quiet
+            echo "✅ Created new orphan gh-pages branch"
+          fi
+
+          # Clear everything except .git
+          find . -maxdepth 1 -not -name '.git' -not -name '.' -exec rm -rf {} + 2>/dev/null || true
+
+          # Copy fresh content from temp dir
+          cp -r "$TMPDIR/." .
+          rm -rf "$TMPDIR"
+
+          # Ensure Jekyll is disabled (critical for raw HTML sites)
+          touch .nojekyll
+
+          # Stage all changes
+          git add -A
+
+          # Check if there's anything to commit
+          if git diff --cached --quiet; then
+            echo "ℹ️  No changes detected — gh-pages is already up to date"
+            exit 0
+          fi
+
+          # Commit with provenance metadata
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          SOURCE_BRANCH="${{ github.ref_name }}"
+
+          git commit -m "deploy: sync cortex-docs → gh-pages [skip ci]
+
+          Source branch: ${SOURCE_BRANCH}
+          Source commit: ${COMMIT_SHA:0:8}
+          Triggered by: ${COMMIT_MSG}
+          Workflow run: ${{ github.run_id }}"
+
+          git push origin gh-pages --force
+          echo "✅ Deployed to gh-pages → https://asifhussain60.github.io/CORTEX/"
+
+      # ── 6. Post deployment summary ──
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "## ✅ GitHub Pages Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| **URL** | https://asifhussain60.github.io/CORTEX/ |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Source branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Source commit** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Deployed at** | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> ⏱️ Allow 30–90 seconds for GitHub Pages CDN propagation." >> $GITHUB_STEP_SUMMARY
