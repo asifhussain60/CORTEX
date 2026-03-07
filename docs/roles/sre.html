@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX — AI Engineering Orchestration Framework | Site Reliability Engineer</title>
+    <meta name="description" content="CORTEX for SREs — 22 health endpoints, 4 RCA methodologies, Prometheus metrics, OpenTelemetry tracing, SLO-driven alerting, 8-stage vacuum pipeline, and self-healing diagnostics."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-teal: #2dd4bf;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-violet: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            background-color: #020617;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(45, 212, 191, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; }
+        @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+
+        .hero-section-wrapper { position: relative; padding-top: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+        .hero-robot-container { position: relative; z-index: 10; margin-bottom: -1px; }
+        .hero-divider-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.3) 50%, transparent); }
+        .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(45, 212, 191, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
+        .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(45, 212, 191, 0.65)); transform: scale(1.02); }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(45,212,191,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+
+        .gradient-text-teal { background: linear-gradient(to right, #2dd4bf, #06b6d4); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
+        .breadcrumb-nav a:hover { color: var(--accent-teal); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(45,212,191,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(45,212,191,0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(45,212,191,0); } }
+
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-kw  { color: #f472b6; }
+        .code-fn  { color: #60a5fa; }
+        .code-str { color: #34d399; }
+        .code-cmt { color: #475569; font-style: italic; }
+        .code-cls { color: #facc15; }
+        .code-dec { color: #a78bfa; }
+
+        .pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        @media (max-width: 768px) { .pillar-grid { grid-template-columns: 1fr; } }
+        .pillar-card { padding: 2rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); transition: all 0.25s ease; }
+        .pillar-card:hover { transform: translateY(-4px); border-color: var(--pillar-color, rgba(45,212,191,0.4)); box-shadow: 0 14px 30px -6px var(--pillar-glow, rgba(0,0,0,0.3)); }
+        .pillar-icon { font-size: 2.75rem; line-height: 1; }
+        .pillar-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pillar-color, #2dd4bf); }
+        .pillar-desc { font-size: 0.875rem; color: #64748b; line-height: 1.6; max-width: 24ch; }
+
+        .health-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.625rem; }
+        @media (max-width: 768px) { .health-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .health-grid { grid-template-columns: 1fr; } }
+        .health-ep { padding: 0.875rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; cursor: default; font-size: 0.8125rem; }
+        .health-ep:hover { border-color: rgba(45,212,191,0.3); background: rgba(45,212,191,0.04); }
+        .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .health-dot--green { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+        .health-path { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #e2e8f0; font-size: 0.75rem; }
+        .health-checks { color: #64748b; font-size: 0.6875rem; margin-left: auto; }
+
+        .rca-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+        @media (max-width: 640px) { .rca-grid { grid-template-columns: 1fr; } }
+        .rca-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border-left: 3px solid var(--rca-color, #2dd4bf); background: rgba(255,255,255,0.02); transition: background 0.2s ease; }
+        .rca-card:hover { background: rgba(45,212,191,0.04); }
+        .rca-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 800; color: var(--rca-color, #2dd4bf); }
+        .rca-trigger { font-size: 0.75rem; color: #64748b; margin-top: 0.125rem; }
+        .rca-desc { font-size: 0.8125rem; color: #94a3b8; line-height: 1.6; margin-top: 0.5rem; }
+
+        .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.625rem; }
+        @media (max-width: 640px) { .metric-grid { grid-template-columns: repeat(2, 1fr); } }
+        .metric-card { padding: 1rem; border-radius: 0.875rem; text-align: center; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); transition: all 0.2s ease; cursor: default; }
+        .metric-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
+        .metric-name { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; color: var(--accent-teal); font-weight: 700; word-break: break-all; }
+        .metric-type { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
+        .metric-badge { display: inline-block; margin-top: 0.375rem; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.125rem 0.5rem; border-radius: 4px; }
+
+        .vacuum-stage { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 1rem; border-radius: 0.625rem; transition: transform 0.2s ease; }
+        .vacuum-stage:hover { transform: translateX(4px); }
+        .vacuum-num { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 800; color: #2dd4bf; min-width: 28px; }
+        .vacuum-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #e2e8f0; }
+        .vacuum-desc { font-size: 0.75rem; color: #64748b; margin-left: auto; }
+
+        .slo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.625rem; }
+        @media (max-width: 640px) { .slo-grid { grid-template-columns: repeat(2, 1fr); } }
+        .slo-card { padding: 1rem; border-radius: 0.875rem; text-align: center; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); transition: all 0.2s ease; cursor: default; }
+        .slo-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
+        .slo-target { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 900; color: #2dd4bf; }
+        .slo-label { font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; }
+        .slo-scope { font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; color: #475569; margin-top: 0.25rem; }
+
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(45,212,191,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+
+        @media (max-width: 768px) { .hero-robot-head { width: 200px; } .glass-card { border-radius: 1.25rem; } }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html">
+            <img src="../assets/images/cortex-logo-64.png" alt="CORTEX" style="width: 20px; height: 20px; border-radius: 4px;"/>
+            CORTEX
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../index.html#who-is-cortex-for">Roles</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Site Reliability Engineer</span>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+
+        <div id="tooltip" class="d3-tooltip"></div>
+
+        <!-- ═══ 1. HERO ═══ -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="hero-section-wrapper">
+                <div class="hero-robot-container">
+                    <img src="../assets/images/cortex-logo-200.png" alt="CORTEX SRE" class="hero-robot-head mx-auto"/>
+                </div>
+                <div class="hero-divider-line"></div>
+            </div>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-teal-400/30 bg-teal-400/10 text-teal-300 text-xs font-bold uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-teal-400 pulse-dot"></span>
+                Site Reliability Command
+            </div>
+            <h1 class="hero-title text-4xl md:text-6xl font-extrabold tracking-tight">
+                <span class="gradient-text-teal">Operational Intelligence</span><br/>
+                <span class="text-slate-400 text-2xl md:text-3xl font-semibold">Not Reactive Firefighting</span>
+            </h1>
+            <p class="section-desc max-w-2xl mx-auto">
+                22 health endpoints, 4 RCA methodologies, Prometheus metrics pipeline, OpenTelemetry tracing, SLO-driven alerting, 8-stage workspace hygiene, and self-healing diagnostics — all orchestrated.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3 text-sm">
+                <span class="px-3 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-300 font-semibold">📊 Metrics</span>
+                <span class="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-semibold">🔭 Traces</span>
+                <span class="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-semibold">💚 Health</span>
+                <span class="px-3 py-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300 font-semibold">🔍 RCA</span>
+                <span class="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 font-semibold">🧹 Vacuum</span>
+            </div>
+        </section>
+
+        <!-- ═══ 2. THREE PILLARS OF OBSERVABILITY ═══ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3">
+                <h2 class="section-title font-extrabold gradient-text-teal">Three Pillars of Observability</h2>
+                <p class="section-desc max-w-xl mx-auto">Metrics, Logs, and Traces — instrumented at every orchestrator boundary, every MCP tool call, every health check.</p>
+            </div>
+            <div class="pillar-grid">
+                <div class="pillar-card" style="--pillar-color: #2dd4bf; --pillar-glow: rgba(45,212,191,0.15);">
+                    <div class="pillar-icon">📊</div>
+                    <div class="pillar-label" style="color: #2dd4bf;">Metrics</div>
+                    <div class="pillar-desc">Prometheus histograms, counters, and gauges for latency, errors, throughput, and cache efficiency</div>
+                </div>
+                <div class="pillar-card" style="--pillar-color: #06b6d4; --pillar-glow: rgba(6,182,212,0.15);">
+                    <div class="pillar-icon">📋</div>
+                    <div class="pillar-label" style="color: #06b6d4;">Logs</div>
+                    <div class="pillar-desc">Structured JSON logs with correlation_id + trace_id on every line — AC markers for orchestrator lifecycle</div>
+                </div>
+                <div class="pillar-card" style="--pillar-color: #8b5cf6; --pillar-glow: rgba(139,92,246,0.15);">
+                    <div class="pillar-icon">🔭</div>
+                    <div class="pillar-label" style="color: #8b5cf6;">Traces</div>
+                    <div class="pillar-desc">OpenTelemetry spans across orchestrator chains with parent-child relationships and OTLP export</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 3. HEALTH ENDPOINTS — Glass Panel ═══ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-teal-950/40 via-slate-900/60 to-slate-950/80 border border-teal-500/10"></div>
+            <div class="relative px-6 md:px-10 py-8 space-y-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-extrabold gradient-text-teal">22 Health Endpoints</h2>
+                    <p class="section-desc max-w-xl mx-auto">HealthOrchestrator aggregates all orchestrator health checks into a single scan. Every endpoint returns structured health signals.</p>
+                </div>
+                <div class="health-grid">
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/event-ingestion</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/compliance-graph</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/service-graph</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/graph-federation</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/reconciliation</span><span class="health-checks">4 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/capacity-estimation</span><span class="health-checks">5 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/health/bluf-system</span><span class="health-checks">5 checks</span></div>
+                    <div class="health-ep"><span class="health-dot health-dot--green"></span><span class="health-path">/ready</span><span class="health-checks">liveness</span></div>
+                </div>
+                <!-- D3 Health Endpoint Chart -->
+                <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4 text-center">Health Check Distribution</h3>
+                    <div id="health-chart" style="width: 100%; height: 280px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 4. RCA ENGINE — 4 METHODOLOGIES ═══ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3">
+                <h2 class="section-title font-extrabold gradient-text-teal">Root Cause Analysis Engine</h2>
+                <p class="section-desc max-w-xl mx-auto">Four structured methodologies — auto-selected by failure category. Each completed analysis generates an ADVISORY prevention rule persisted in SQLite.</p>
+            </div>
+            <div class="rca-grid">
+                <div class="rca-card" style="--rca-color: #2dd4bf;">
+                    <div class="rca-name">Five-Whys</div>
+                    <div class="rca-trigger">Category: TECHNOLOGY</div>
+                    <div class="rca-desc">Iterative questioning — peel back layers until the root cause emerges. Best for technical failures with clear causal chains. Generates a why-chain of 5 levels with the root cause at the terminal node.</div>
+                </div>
+                <div class="rca-card" style="--rca-color: #06b6d4;">
+                    <div class="rca-name">Fishbone (Ishikawa)</div>
+                    <div class="rca-trigger">Category: PROCESS / PEOPLE</div>
+                    <div class="rca-desc">6-category cause analysis — Method, Machine, Material, Measurement, Man, Environment. Best for systemic issues with multiple contributing factors.</div>
+                </div>
+                <div class="rca-card" style="--rca-color: #8b5cf6;">
+                    <div class="rca-name">Fault Tree</div>
+                    <div class="rca-trigger">Manual override</div>
+                    <div class="rca-desc">Boolean logic tree — AND/OR gates model how combinations of failures lead to the top event. Best for complex systems where multiple conditions must coincide.</div>
+                </div>
+                <div class="rca-card" style="--rca-color: #f59e0b;">
+                    <div class="rca-name">Causal Chain</div>
+                    <div class="rca-trigger">Category: DATA</div>
+                    <div class="rca-desc">Linear cause-effect sequence from initiating event to final impact. Best for data pipeline failures and cascading errors across boundaries.</div>
+                </div>
+            </div>
+            <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
+                <div class="code-block text-[13px]"><span class="code-cmt"># RCA via cortex_learning MCP tool</span>
+<span class="code-fn">cortex_learning</span> op=<span class="code-str">rca</span> rca_action=<span class="code-str">analyze</span> \
+  failure_id=<span class="code-str">"PROD-2026-0342"</span> \
+  symptom=<span class="code-str">"API P99 latency spike to 800ms"</span> \
+  category=<span class="code-str">TECHNOLOGY</span>
+
+<span class="code-cmt"># → Five-Whys auto-selected</span>
+<span class="code-cmt"># → PreventionRule(ADVISORY) persisted to rca_store.db</span>
+
+<span class="code-fn">cortex_learning</span> op=<span class="code-str">rca</span> rca_action=<span class="code-str">query</span>
+<span class="code-cmt"># → Surfaces matching prevention rules before next fix</span></div>
+            </div>
+        </section>
+
+        <!-- ═══ 5. PROMETHEUS METRICS — Glass Panel ═══ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-950/30 via-slate-900/60 to-slate-950/80 border border-cyan-500/10"></div>
+            <div class="relative px-6 md:px-10 py-8 space-y-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-extrabold" style="background: linear-gradient(to right, #06b6d4, #2dd4bf); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Prometheus Metrics Pipeline</h2>
+                    <p class="section-desc max-w-xl mx-auto">6 production-grade metrics defined in <code style="color:#2dd4bf;">cortex/prometheus_metrics.py</code> — histograms for latency, counters for errors, gauges for cache. Scraped every 30s.</p>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_intent_routing_duration_seconds</div>
+                        <div class="metric-type">Routing latency per mode</div>
+                        <div class="metric-badge" style="background: rgba(45,212,191,0.15); color: #2dd4bf;">histogram</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_intent_routing_errors_total</div>
+                        <div class="metric-type">Error count by mode + type</div>
+                        <div class="metric-badge" style="background: rgba(239,68,68,0.15); color: #ef4444;">counter</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_agent_collaboration_duration_seconds</div>
+                        <div class="metric-type">Multi-agent coordination time</div>
+                        <div class="metric-badge" style="background: rgba(45,212,191,0.15); color: #2dd4bf;">histogram</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_mcp_tool_execution_duration_seconds</div>
+                        <div class="metric-type">MCP tool timing by success/error</div>
+                        <div class="metric-badge" style="background: rgba(45,212,191,0.15); color: #2dd4bf;">histogram</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_cache_hit_ratio</div>
+                        <div class="metric-type">Cache effectiveness (0.0–1.0)</div>
+                        <div class="metric-badge" style="background: rgba(139,92,246,0.15); color: #8b5cf6;">gauge</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">cortex_mode_requests_total</div>
+                        <div class="metric-type">Intent requests per mode</div>
+                        <div class="metric-badge" style="background: rgba(239,68,68,0.15); color: #ef4444;">counter</div>
+                    </div>
+                </div>
+                <!-- D3 Metrics Type Donut -->
+                <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-200 mb-4 text-center">Metric Types Distribution</h3>
+                    <div id="metrics-chart" style="width: 100%; height: 260px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 6. SLO TARGETS ═══ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3">
+                <h2 class="section-title font-extrabold gradient-text-teal">SLO Targets — Alert on Burn Rate</h2>
+                <p class="section-desc max-w-xl mx-auto">Alert on SLO burn rate, not raw thresholds. Every alert is actionable and links to a runbook. P99 &gt; 200ms for 5 min → alert. P99 &gt; 500ms for 1 min → page.</p>
+            </div>
+            <div class="slo-grid">
+                <div class="slo-card">
+                    <div class="slo-target">200ms</div>
+                    <div class="slo-label">API P99 Latency</div>
+                    <div class="slo-scope">api_p99_latency_ms</div>
+                </div>
+                <div class="slo-card">
+                    <div class="slo-target">500ms</div>
+                    <div class="slo-label">Payment P99 Latency</div>
+                    <div class="slo-scope">payment_p99_latency_ms</div>
+                </div>
+                <div class="slo-card">
+                    <div class="slo-target">200ms</div>
+                    <div class="slo-label">Core Orchestrator P99</div>
+                    <div class="slo-scope">orchestrator_core_p99_ms</div>
+                </div>
+                <div class="slo-card">
+                    <div class="slo-target">500ms</div>
+                    <div class="slo-label">Domain Orchestrator P99</div>
+                    <div class="slo-scope">orchestrator_domain_p99_ms</div>
+                </div>
+                <div class="slo-card">
+                    <div class="slo-target">1000ms</div>
+                    <div class="slo-label">Support Orchestrator P99</div>
+                    <div class="slo-scope">orchestrator_support_p99_ms</div>
+                </div>
+                <div class="slo-card">
+                    <div class="slo-target">≤ 100</div>
+                    <div class="slo-label">Label Cardinality</div>
+                    <div class="slo-scope">per metric label</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 7. OPENTELEMETRY TRACING — Glass Panel ═══ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-violet-950/30 via-slate-900/60 to-slate-950/80 border border-violet-500/10"></div>
+            <div class="relative px-6 md:px-10 py-8 space-y-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-extrabold" style="background: linear-gradient(to right, #a78bfa, #8b5cf6); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OpenTelemetry Distributed Tracing</h2>
+                    <p class="section-desc max-w-xl mx-auto">Request-scoped trace context propagated across orchestrator chains, MCP tool calls, and agent collaborations. OTLP export to Jaeger/Tempo/Honeycomb.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card p-5 space-y-3">
+                        <h3 class="text-sm font-bold text-violet-400 uppercase tracking-wider">Span Attributes</h3>
+                        <ul class="text-sm text-slate-400 space-y-1.5 list-none">
+                            <li>✦ <code style="color:#a78bfa">intent.mode</code> — IMPLEMENT, FIX, AUDIT, etc.</li>
+                            <li>✦ <code style="color:#a78bfa">router.decision</code> — orchestrator routing path</li>
+                            <li>✦ <code style="color:#a78bfa">mcp.tool</code> — MCP tool name + result status</li>
+                            <li>✦ <code style="color:#a78bfa">agent.name</code> — health agent identifier</li>
+                            <li>✦ <code style="color:#a78bfa">ac.marker</code> — AC_START / AC_COMPLETE</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-5 space-y-3">
+                        <h3 class="text-sm font-bold text-violet-400 uppercase tracking-wider">Trace Features</h3>
+                        <ul class="text-sm text-slate-400 space-y-1.5 list-none">
+                            <li>✦ Parent-child span relationships for agent chains</li>
+                            <li>✦ Performance overhead tracking (&lt;10ms per request)</li>
+                            <li>✦ OTLP/HTTP export via <code style="color:#a78bfa">OTEL_EXPORTER_OTLP_ENDPOINT</code></li>
+                            <li>✦ Jaeger, Zipkin, Tempo, Honeycomb compatible</li>
+                            <li>✦ Fire-and-forget — never raises into caller code</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
+                    <div class="code-block text-[13px]"><span class="code-cmt"># Enable OTLP export (Jaeger, Tempo, etc.)</span>
+<span class="code-kw">export</span> OTEL_EXPORTER_OTLP_ENDPOINT=<span class="code-str">http://localhost:4318/v1/traces</span>
+
+<span class="code-cmt"># Prometheus scrape config (deployment/prometheus.yml)</span>
+scrape_configs:
+  - job_name: <span class="code-str">'cortex'</span>
+    static_configs:
+      - targets: [<span class="code-str">'cortex-mcp:8443'</span>]
+    metrics_path: <span class="code-str">'/metrics'</span>
+    scrape_interval: <span class="code-cls">30s</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 8. VACUUM PIPELINE ═══ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3">
+                <h2 class="section-title font-extrabold gradient-text-teal">8-Stage Vacuum Pipeline</h2>
+                <p class="section-desc max-w-xl mx-auto">Workspace hygiene — automated cleanup of naming violations, root clutter, empty directories, orphan files, markdown sprawl, stale digests, build artifacts, and OS artifacts.</p>
+            </div>
+            <div class="glass-card p-6 space-y-2">
+                <div class="vacuum-stage"><span class="vacuum-num">1</span><span class="vacuum-name">Naming</span><span class="vacuum-desc">Fix snake_case violations</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">2</span><span class="vacuum-name">Root</span><span class="vacuum-desc">Clean workspace root clutter</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">3</span><span class="vacuum-name">Empty</span><span class="vacuum-desc">Remove empty directories</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">4</span><span class="vacuum-name">Orphan</span><span class="vacuum-desc">Delete unreferenced files</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">5</span><span class="vacuum-name">Markdown</span><span class="vacuum-desc">Consolidate sprawling docs</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">6</span><span class="vacuum-name">Digest</span><span class="vacuum-desc">Prune stale digest artifacts</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">7</span><span class="vacuum-name">Build</span><span class="vacuum-desc">Clean build artifacts (__pycache__, .pyc)</span></div>
+                <div class="vacuum-stage"><span class="vacuum-num">8</span><span class="vacuum-name">OS</span><span class="vacuum-desc">Remove .DS_Store, Thumbs.db, desktop.ini</span></div>
+            </div>
+            <!-- D3 Vacuum Stage Chart -->
+            <div class="glass-card p-6 md:p-8">
+                <h3 class="text-lg font-bold text-slate-200 mb-4 text-center">Vacuum Stage — Typical Impact</h3>
+                <div id="vacuum-chart" style="width: 100%; height: 280px;"></div>
+            </div>
+        </section>
+
+        <!-- ═══ 9. SQLITE RUNTIME DATABASES — Glass Panel ═══ -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-950/20 via-slate-900/60 to-slate-950/80 border border-amber-500/10"></div>
+            <div class="relative px-6 md:px-10 py-8 space-y-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-extrabold" style="background: linear-gradient(to right, #f59e0b, #fbbf24); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">7 Runtime Databases</h2>
+                    <p class="section-desc max-w-xl mx-auto">All telemetry persists to SQLite in <code style="color:#f59e0b">.cortex-runtime/</code>. 30-day retention. Auto-VACUUM via <code style="color:#f59e0b">refresh_prompt_suite.py --db-cleanup</code>.</p>
+                </div>
+                <div class="glass-card p-5 md:p-6 overflow-x-auto">
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                        <thead>
+                            <tr>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Database</th>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Path</th>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 0.8125rem; color: #94a3b8;">
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">orchestrator-traces</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">traces/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">AC markers, stage logs, workflow runs</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">rca-store</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">rca/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">RCA analyses + prevention rules</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">audit.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Audit events + governance checks</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">governance</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">governance.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Scaffolder audit log</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">conversations</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">state/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Session state (90-day retention)</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">wiring-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">wiring/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Contract validation audit</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">intelligence-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">intelligence/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Intelligence layer traces</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
+                    <div class="code-block text-[13px]"><span class="code-cmt"># Cleanup — 30-day retention + VACUUM all 7 databases</span>
+<span class="code-fn">python3</span> scripts/refresh_prompt_suite.py <span class="code-str">--db-cleanup</span>
+
+<span class="code-cmt"># Skip in CI environments</span>
+<span class="code-kw">export</span> CORTEX_DISABLE_DB_CLEANUP=<span class="code-str">true</span>
+
+<span class="code-cmt"># Introspect live counts</span>
+<span class="code-fn">python3</span> scripts/refresh_prompt_suite.py <span class="code-str">--counts-only</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ FINAL CTA ═══ -->
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
+            <div class="space-y-6">
+                <h2 class="text-2xl md:text-3xl font-extrabold gradient-text-teal">Start Operating with Intelligence</h2>
+                <p class="section-desc max-w-md mx-auto">Every orchestrator has a health check. Every failure has a root cause. Every metric has a threshold. Begin now.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Health scan</span>
+<span class="code-dec">/health</span></div>
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Root cause</span>
+<span class="code-fn">/rca</span></div>
+                    <div class="code-block text-sm text-center px-8 py-4 rounded-full"><span class="code-cmt"># Workspace clean</span>
+<span class="code-str">/vacuum</span></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="flex justify-center gap-6 md:gap-8 text-slate-500">
+            <i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="activity" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+        </div>
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Site Reliability Engineer
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function () {
+            lucide.createIcons();
+            buildHealthChart();
+            buildMetricsChart();
+            buildVacuumChart();
+        };
+
+        /* ── Health Endpoint Checks Bar Chart ── */
+        function buildHealthChart() {
+            const data = [
+                { ep: '/health', checks: 4, color: '#22c55e' },
+                { ep: '/event-ingestion', checks: 4, color: '#2dd4bf' },
+                { ep: '/compliance-graph', checks: 4, color: '#06b6d4' },
+                { ep: '/service-graph', checks: 4, color: '#3b82f6' },
+                { ep: '/graph-federation', checks: 4, color: '#8b5cf6' },
+                { ep: '/reconciliation', checks: 4, color: '#a78bfa' },
+                { ep: '/capacity-est.', checks: 5, color: '#f59e0b' },
+                { ep: '/bluf-system', checks: 5, color: '#f97316' },
+                { ep: '/ready', checks: 1, color: '#ef4444' }
+            ];
+
+            const el = document.getElementById('health-chart');
+            if (!el) return;
+            const margin = { top: 20, right: 40, bottom: 48, left: 120 };
+            const totalW = el.getBoundingClientRect().width || 600;
+            const totalH = el.getBoundingClientRect().height || 280;
+            const w = totalW - margin.left - margin.right;
+            const h = totalH - margin.top - margin.bottom;
+
+            const svg = d3.select('#health-chart').append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${totalW} ${totalH}`)
+                .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const y = d3.scaleBand().range([0, h]).domain(data.map(d => d.ep)).padding(0.3);
+            const x = d3.scaleLinear().domain([0, 6]).range([0, w]);
+
+            svg.selectAll('.bar-bg').data(data).enter().append('rect')
+                .attr('x', 0).attr('y', d => y(d.ep))
+                .attr('width', w).attr('height', y.bandwidth())
+                .attr('fill', 'rgba(255,255,255,0.03)').attr('rx', 4);
+
+            svg.selectAll('.bar').data(data).enter().append('rect')
+                .attr('x', 0).attr('y', d => y(d.ep))
+                .attr('height', y.bandwidth()).attr('fill', d => d.color)
+                .attr('rx', 4).attr('opacity', 0.85)
+                .attr('width', 0)
+                .transition().duration(1200).ease(d3.easeCubicOut)
+                .attr('width', d => x(d.checks));
+
+            svg.selectAll('.count').data(data).enter().append('text')
+                .attr('x', d => x(d.checks) + 8)
+                .attr('y', d => y(d.ep) + y.bandwidth() / 2 + 4)
+                .attr('fill', d => d.color)
+                .attr('font-size', '11px').attr('font-weight', '800')
+                .attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.checks);
+
+            svg.selectAll('.ep-label').data(data).enter().append('text')
+                .attr('x', -8).attr('y', d => y(d.ep) + y.bandwidth() / 2 + 4)
+                .attr('text-anchor', 'end').attr('fill', '#94a3b8')
+                .attr('font-size', '10px').attr('font-weight', '600')
+                .attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.ep);
+        }
+
+        /* ── Metrics Type Donut Chart ── */
+        function buildMetricsChart() {
+            const data = [
+                { type: 'Histogram', count: 3, color: '#2dd4bf' },
+                { type: 'Counter', count: 2, color: '#ef4444' },
+                { type: 'Gauge', count: 1, color: '#8b5cf6' }
+            ];
+
+            const el = document.getElementById('metrics-chart');
+            if (!el) return;
+            const totalW = el.getBoundingClientRect().width || 600;
+            const totalH = el.getBoundingClientRect().height || 260;
+            const radius = Math.min(totalW, totalH) / 2 - 30;
+
+            const svg = d3.select('#metrics-chart').append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${totalW} ${totalH}`)
+                .append('g').attr('transform', `translate(${totalW / 2},${totalH / 2})`);
+
+            const pie = d3.pie().value(d => d.count).sort(null).padAngle(0.04);
+            const arc = d3.arc().innerRadius(radius * 0.5).outerRadius(radius);
+
+            const tooltip = d3.select('#tooltip');
+
+            svg.selectAll('.arc').data(pie(data)).enter().append('path')
+                .attr('d', arc).attr('fill', d => d.data.color).attr('opacity', 0.85)
+                .attr('stroke', '#020617').attr('stroke-width', 2)
+                .on('mouseenter', function(event, d) {
+                    d3.select(this).attr('opacity', 1).attr('transform', 'scale(1.04)');
+                    tooltip.style('opacity', 1)
+                        .html(`<strong>${d.data.type}</strong><br/>${d.data.count} metric${d.data.count > 1 ? 's' : ''}`)
+                        .style('left', (event.pageX + 12) + 'px')
+                        .style('top', (event.pageY - 28) + 'px');
+                })
+                .on('mouseleave', function() {
+                    d3.select(this).attr('opacity', 0.85).attr('transform', 'scale(1)');
+                    tooltip.style('opacity', 0);
+                });
+
+            svg.selectAll('.arc-label').data(pie(data)).enter().append('text')
+                .attr('transform', d => `translate(${arc.centroid(d)})`)
+                .attr('text-anchor', 'middle').attr('dy', '0.35em')
+                .attr('fill', '#fff').attr('font-size', '11px').attr('font-weight', '800')
+                .attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.data.type);
+
+            svg.append('text').attr('text-anchor', 'middle').attr('dy', '-0.2em')
+                .attr('fill', '#f8fafc').attr('font-size', '28px').attr('font-weight', '900')
+                .attr('font-family', 'Space Grotesk, sans-serif').text('6');
+            svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.3em')
+                .attr('fill', '#64748b').attr('font-size', '10px').attr('font-weight', '600')
+                .attr('font-family', 'Inter, sans-serif').text('METRICS');
+        }
+
+        /* ── Vacuum Stage Impact Bar Chart ── */
+        function buildVacuumChart() {
+            const data = [
+                { stage: 'Naming', impact: 15, color: '#2dd4bf' },
+                { stage: 'Root', impact: 8, color: '#06b6d4' },
+                { stage: 'Empty', impact: 22, color: '#3b82f6' },
+                { stage: 'Orphan', impact: 35, color: '#8b5cf6' },
+                { stage: 'Markdown', impact: 12, color: '#a78bfa' },
+                { stage: 'Digest', impact: 6, color: '#f59e0b' },
+                { stage: 'Build', impact: 45, color: '#f97316' },
+                { stage: 'OS', impact: 18, color: '#ef4444' }
+            ];
+
+            const el = document.getElementById('vacuum-chart');
+            if (!el) return;
+            const margin = { top: 20, right: 40, bottom: 48, left: 72 };
+            const totalW = el.getBoundingClientRect().width || 600;
+            const totalH = el.getBoundingClientRect().height || 280;
+            const w = totalW - margin.left - margin.right;
+            const h = totalH - margin.top - margin.bottom;
+
+            const svg = d3.select('#vacuum-chart').append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${totalW} ${totalH}`)
+                .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand().range([0, w]).domain(data.map(d => d.stage)).padding(0.3);
+            const y = d3.scaleLinear().domain([0, 50]).range([h, 0]);
+
+            svg.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(''))
+                .selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
+            svg.selectAll('.domain').remove();
+
+            const tooltip = d3.select('#tooltip');
+
+            svg.selectAll('.bar').data(data).enter().append('rect')
+                .attr('x', d => x(d.stage)).attr('width', x.bandwidth())
+                .attr('fill', d => d.color).attr('rx', 5).attr('opacity', 0.85)
+                .attr('y', h).attr('height', 0)
+                .on('mouseenter', function(event, d) {
+                    d3.select(this).attr('opacity', 1);
+                    tooltip.style('opacity', 1)
+                        .html(`<strong>${d.stage}</strong><br/>${d.impact} files typically cleaned`)
+                        .style('left', (event.pageX + 12) + 'px')
+                        .style('top', (event.pageY - 28) + 'px');
+                })
+                .on('mouseleave', function() {
+                    d3.select(this).attr('opacity', 0.85);
+                    tooltip.style('opacity', 0);
+                })
+                .transition().duration(1200).ease(d3.easeCubicOut)
+                .attr('y', d => y(d.impact)).attr('height', d => h - y(d.impact));
+
+            svg.selectAll('.val').data(data).enter().append('text')
+                .attr('x', d => x(d.stage) + x.bandwidth() / 2)
+                .attr('y', d => y(d.impact) - 6)
+                .attr('text-anchor', 'middle').attr('fill', d => d.color)
+                .attr('font-size', '10px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.impact);
+
+            svg.append('g').attr('transform', `translate(0,${h})`)
+                .call(d3.axisBottom(x).tickSize(0))
+                .selectAll('text').attr('fill', '#64748b').attr('font-size', '9px')
+                .attr('font-weight', 'bold').attr('font-family', 'Inter, sans-serif').attr('dy', '1.4em');
+            svg.selectAll('.domain').remove();
+
+            svg.append('text').attr('transform', 'rotate(-90)')
+                .attr('y', -52).attr('x', -h / 2).attr('text-anchor', 'middle')
+                .attr('fill', '#475569').attr('font-size', '9px').attr('font-family', 'Inter, sans-serif')
+                .text('Files cleaned (typical)');
+        }
+
+        window.addEventListener('resize', () => {
+            ['health-chart', 'metrics-chart', 'vacuum-chart'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.innerHTML = ''; }
+            });
+            buildHealthChart();
+            buildMetricsChart();
+            buildVacuumChart();
+        });
+    </script>
+</body>
+</html>
