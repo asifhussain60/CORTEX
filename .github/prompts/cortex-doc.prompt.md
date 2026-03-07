@@ -2,11 +2,12 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-06 (Phase 108 — Documentation Governance Layer + Design+Implement Mode) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 **Knowledge Base:** `cortex-docs/.content/knowledge/` (5 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist)
+**Content Sources:** `cortex-docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
 
 ---
 
@@ -123,7 +124,157 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 ---
 
-## � Design + Implement Mode
+## 🎭 Role-Aware Content Synthesis (MANDATORY for Role Views)
+
+**Trigger:** Any HTML work touching `cortex-docs/roles/` or `cortex-docs/index.html` persona sections.
+
+When building or enhancing role-specific HTML views, the Documentation Orchestrator MUST automatically load and synthesise content from the `.content/` knowledge base. The user should **never** need to mention `.content` files — the prompt does this autonomously based on the target role.
+
+### Role → Content Routing Table
+
+| Role | Target HTML | Primary `.content` Sources | Content Focus |
+|------|------------|---------------------------|---------------|
+| **Business Leader** | `roles/business-leader.html` | `01-platform`, `03-governance`, `07-security`, `09-lifecycle`, `12-ai-efficiency` | ROI, risk reduction, compliance evidence, audit trails, cost of ungoverned AI, shift-left economics |
+| **Product Owner** | `roles/product-owner.html` | `01-platform`, `03-governance`, `04-tdd-quality-flywheel`, `05-orchestration`, `09-lifecycle` | AC traceability, DoR→DoD pipeline, code-backed SWAGs, intent→delivery connection, sweep completeness |
+| **Software Engineer** | `roles/software-engineer.html` | `01-platform`, `02-intelligence`, `04-tdd-quality-flywheel`, `05-orchestration`, `06-mcp-tools`, `08-learning` | LENS analysis, TDD cycle, orchestrator wiring, MCP tools, RCA memory, intelligence tiers, convergence gates |
+| **Landing Page** | `index.html` | `01-platform` (§ What CORTEX Does for Each Role, § Platform at a Glance) | Framework definition, role summaries, capability overview |
+
+### Content Synthesis Rules (NON-NEGOTIABLE)
+
+- ✅ **Auto-load:** Before proposing any role-view design, load ALL `.content` files listed in the routing table for that role
+- ✅ **Synthesise, don't copy:** Extract key propositions, metrics, and value statements — rewrite for the target audience's vocabulary (executives think ROI; POs think ACs; engineers think APIs)
+- ✅ **Evidence-backed:** Every claim in the HTML must trace to a `.content` source. No fabricated metrics.
+- ✅ **Role perspective:** Each `.content` file has a `## For {Role}` section or `audience:` frontmatter — use the role-specific angle, not the generic explanation
+- ✅ **3-role coverage:** `01-platform` § "What CORTEX Does for Each Role" contains per-role summaries — use these as the canonical voice for each audience
+- ✅ **Qualified language:** Use "designed to", "has potential", "engineered to" — never unqualified absolutes ("guarantees", "eliminates all")
+- ❌ **Never** surface internal implementation details (class names, file paths, private methods) in role views
+- ❌ **Never** leave a role view with generic boilerplate when `.content` sources are available
+- ❌ **Never** require the user to say "use .content files" — this routing is automatic
+
+### Per-Role Section Templates
+
+**Business Leader sections** (synthesise from `.content`):
+1. The Cost of Ungoverned AI (from `03-governance`, `07-security`)
+2. The Governed SDLC Pipeline (from `09-lifecycle`)
+3. Shift-Left Economics / ROI (from `07-security` § shift-left, `03-governance` § convergence)
+4. Architecture Proof — by the numbers (from `01-platform` § Platform at a Glance)
+5. Intelligence Advantage (from `01-platform` § Core Idea, `12-ai-efficiency`)
+6. What CORTEX Delivers — By Role (from `01-platform` § What CORTEX Does for Each Role)
+
+**Product Owner sections** (synthesise from `.content`):
+1. Context-Aware Use Cases & AC Writing (from `04-tdd` § Red phase, `05-orchestration` § 29 intents)
+2. Code-Backed SWAGs via Challenge-First Protocol (from `01-platform` § Core Idea)
+3. DoR → TDD → DoD Pipeline (from `03-governance` § convergence, `04-tdd` § two levels)
+4. Delivery Velocity — Before/After (from `09-lifecycle` § seven phases)
+5. Institutional Memory / RCA (from `08-learning` if sourced, `01-platform` § 4 RCA methodologies)
+6. Predictable Delivery Metrics (from `09-lifecycle` § production readiness audit)
+
+**Software Engineer sections** (synthesise from `.content`):
+1. LENS — The Sensory System (from `02-intelligence` § nine analyzers, § three tiers)
+2. The Brain — Perception → Reasoning → Action (from `02-intelligence` § pattern recognition, § strategy selection)
+3. TDD Cycle — Red/Green/Refactor (from `04-tdd` § three-phase cycle, § test quality scoring)
+4. Orchestrator Architecture — 15 Domains (from `05-orchestration` § fifteen domains)
+5. MCP Tools — In Your IDE (from `06-mcp-tools` § 30 registered tools)
+6. RCA Memory & Institutional Learning (from `08-learning`)
+7. Governance as Infrastructure (from `03-governance` § three layers, § ten agents)
+
+---
+
+## 🎨 Glassmorphism Design Intelligence — Proven Patterns (MANDATORY)
+
+**Authority:** Lessons codified from iterative design sessions. These patterns are PROVEN superior through user testing and must be applied automatically on all `cortex-docs/` HTML work. The user should never need to request these — they are the default.
+
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+
+**🔒 Scope Lock — `documentation`:** This prompt learns ONLY from documentation, HTML/CSS design, a11y, and doc-sync patterns. Allowed pattern_id prefixes: `html-design`, `doc-sync`, `design-system`, `a11y`. It MUST NOT query or emit patterns scoped to: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`. Those domains belong to other prompts. Violation = P1 scope bleed.
+
+Before every Design+Implement or Doc Sync operation:
+- Call `cortex_learning op=history scope=documentation` — retrieve prior documentation/design failure patterns
+- If prior failures exist (confidence ≥ 0.4): surface in design proposal as `⚠️ Prior failure pattern: {description}`
+- Check `cortex_learning op=rca rca_action=query` for prevention rules matching current context
+
+After every Design+Implement completion:
+- On success: `cortex_learning op=emit signal_type=MILD_REWARD pattern_id={operation}`
+- On failure (a11y regression, theme drift, broken links): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id={operation}`
+
+Exempt: Discovery-only, Drift-detection, Certification (read-only operations)
+
+### Typography Rules (IMMUTABLE)
+
+| Context | Font | Weight | Why |
+|---------|------|--------|-----|
+| **Headings (h1–h6)** | `Inter` | 600–900 | Superior letter-spacing at large sizes; no word-fusion |
+| **Hero titles** | `Space Grotesk` | 700 | Geometric, modern, distinctive for page identity |
+| **Body copy** | `Inter` | 400–500 | Optimised for long-form reading on dark backgrounds |
+| **Code / IDs / monospace** | `JetBrains Mono` | 400–500 | Purpose-built for code; ligatures, clear glyphs |
+| **Heading letter-spacing** | `letter-spacing: -0.02em; word-spacing: 0.04em` | — | Prevents word-fusion at large sizes |
+
+- ❌ **NEVER** use `Plus Jakarta Sans` for headings — proven to cause word-fusion at display sizes
+- ❌ **NEVER** introduce additional font families — the three above are locked (`design_system.yaml`)
+
+### Visualisation Rules (MANDATORY)
+
+| Need | ✅ USE | ❌ NEVER USE | Reason |
+|------|--------|-------------|--------|
+| **SDLC pipeline / workflow** | Hand-crafted CSS flexbox pipeline (phase cards with icons, gate pills, hover-lift) | Mermaid.js diagrams | Mermaid renders unreadably small, no sizing control, poor dark-theme support |
+| **Domain/category distribution** | Proportional bubble grid (CSS circles, colour-coded, hover-scale) | D3.js horizontal bar charts | Bar charts are dense and hard to scan; bubbles are intuitive and visually striking |
+| **Before/After comparison** | Split card-pair layout (red left / emerald right, full-width 2-column) | 3-column table-row grids with arrow columns | Table grids are cramped, arrows intrusive; card-pairs are readable and mobile-friendly |
+| **Stat counters** | Animated stat cards with glow borders (count-up animation optional) | Plain text numbers in paragraphs | Cards create visual rhythm and scanability |
+| **Process steps** | Numbered glass-card pipeline with connecting line (CSS pseudo-elements) | Ordered lists `<ol>` | Glass cards with step numbers and hover-lift convey progression visually |
+| **Role perspectives** | Icon + title + description cards in responsive grid | Bullet lists | Cards allow per-role colour coding and visual hierarchy |
+
+### Layout Rules
+
+| Rule | Standard |
+|------|----------|
+| **Card width for definitions** | 80% page width, centered (`max-width: 80%; margin: 0 auto`) — NOT 60% (too much dead space) |
+| **Card padding** | `padding: 2.5rem 2.25rem` — NOT `3rem` sides (wastes horizontal space on dark backgrounds) |
+| **Section spacing** | `space-y-16 md:space-y-24` between major sections |
+| **Icon sizing in tiles** | `font-size: 2.5rem` minimum — NOT `1.3rem` (unreadable at card scale) |
+| **Tile min/max width** | `min-width: 180px; max-width: 260px` — NOT `140px/180px` (text wraps awkwardly) |
+| **Body text max-width** | `max-width: 72ch` — scales with card width, avoids artificial constraint |
+| **Muted text colour** | `#94a3b8` — NOT `#64748b` (too dim on dark navy backgrounds) |
+
+### Theme Identity Contract (IMMUTABLE)
+
+| Token | Value | Enforcement |
+|-------|-------|-------------|
+| **Page background** | `#030712` – `#080b14` range (deep navy) | NEVER light backgrounds |
+| **Card background** | `rgba(10–30, 15–41, 30–59, 0.35–0.7)` with `backdrop-filter: blur(16–32px)` | NEVER opaque cards |
+| **Primary accent** | `#00d4ff` (electric cyan) | ALL pages |
+| **Secondary accent** | `#7b61ff` (indigo violet) | ALL pages |
+| **Success accent** | `#10b981` (emerald) | Positive states, "after" comparisons |
+| **Danger accent** | `#f43f5e` (rose) or `#ef4444` (red) | Negative states, "before" comparisons |
+| **Border** | `rgba(255, 255, 255, 0.06–0.12)` | Glass edge definition |
+| **Card hover** | `translateY(-4px–-5px)` + border glow + shadow lift | All interactive cards |
+
+### CDN & Dependency Rules
+
+| Dependency | Status | Rule |
+|------------|--------|------|
+| **Tailwind CSS** (`cdn.tailwindcss.com`) | ✅ Allowed | Role pages use Tailwind utility classes |
+| **D3.js** | ✅ Allowed | For D3-specific interactive charts (tooltips, animations) — NOT for bar charts |
+| **Lucide Icons** | ✅ Allowed | Role pages use Lucide icon set |
+| **Font Awesome** | ✅ Allowed | Landing page uses FA icons |
+| **Mermaid.js** | ❌ BANNED in role views | Use hand-crafted CSS pipelines instead |
+| **Chart.js** | ⚪ Not used | No current need |
+
+### Architecture Detection (Software Engineer View)
+
+The `software-engineer.html` uses a **different architecture** from the other role views:
+- It loads content dynamically via `content-loader.js` from `cortex-docs/data/content.json`
+- It uses the external CSS design system (`glassmorphism.css`, `glass-design-tokens.css`, `glass-ui-components.css`, `main.css`, `role-landing.css`)
+- Other role views (`business-leader.html`, `product-owner.html`) use inline `<style>` blocks + Tailwind
+
+**When working on `software-engineer.html`:** Respect its dynamic loading architecture. Enhance the content source (`content.json` or the loader), or add sections that work alongside the dynamic content — do not replace the architecture with inline styles.
+
+**When working on `business-leader.html` or `product-owner.html`:** These use self-contained inline styles + Tailwind. Maintain this pattern for consistency within each file.
+
+---
+
+## 🖌️ Design + Implement Mode
 
 **Trigger:** Any request to update, redesign, or improve an HTML view in `cortex-docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
 
@@ -131,10 +282,35 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ❌ **NEVER** add `style=` inline attributes — all styling via CSS classes
 - ❌ **NEVER** introduce new CSS values without first checking `glass-design-tokens.css`
 - ❌ **NEVER** drift the dark blue glassmorphism theme — `design_system.yaml` is the identity contract
+- ❌ **NEVER** use Mermaid.js for SDLC pipelines — use hand-crafted CSS flexbox pipelines (§ Glassmorphism Design Intelligence)
+- ❌ **NEVER** use D3 horizontal bar charts for domain distributions — use proportional bubble grids
+- ❌ **NEVER** use `Plus Jakarta Sans` for headings — use `Inter` with `letter-spacing: -0.02em`
+- ❌ **NEVER** use 3-column table-row grids for before/after comparisons — use split card-pair layout
 - ✅ CSS changes → `cortex-docs/assets/css/` files only (matching the existing layer)
 - ✅ Read `cortex-docs/.content/knowledge/` before proposing any structural change
 - ✅ Validate against `a11y_checklist.yaml` and `performance_checklist.yaml`
 - ✅ All new components must reference entries in `components.yaml`
+- ✅ Apply all rules from `§ Glassmorphism Design Intelligence — Proven Patterns` automatically
+- ✅ Apply all rules from `§ Role-Aware Content Synthesis` when working on role views
+
+### Step 0 — Role Context Loading (automatic, before design)
+
+**Agent:** `html-view-designer` (pre-flight)
+
+This step runs **automatically** whenever the target file is a role view or the landing page. The user does not need to request it.
+
+1. **Detect target role** from file path:
+   - `roles/business-leader.html` → Business Leader
+   - `roles/product-owner.html` → Product Owner
+   - `roles/software-engineer.html` → Software Engineer
+   - `index.html` → Landing Page (all roles)
+2. **Load `.content` files** from the Role → Content Routing Table (§ Role-Aware Content Synthesis)
+3. **Extract role-specific content** — find `## For {Role}` sections, `audience:` frontmatter matches, and role-relevant propositions
+4. **Detect target architecture** — inline styles + Tailwind (business-leader, product-owner) vs external CSS + content-loader (software-engineer) vs landing page pattern (index.html)
+5. **Build content brief** — a structured list of sections to create/enhance, each mapped to a `.content` source, with the role-specific angle identified
+6. Pass the content brief to Step 1 as input context
+
+**Output:** A content brief that Step 1's design proposal must address. Every section in the brief must appear in the design proposal or be explicitly justified as out-of-scope.
 
 ### Step 1 — Design (before any implementation)
 
@@ -164,17 +340,18 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 | Step | Agent | Knowledge Input | Gate |
 |------|-------|-----------------|------|
-| Audit current state | `html-view-designer` | `doc_best_practices.yaml`, `components.yaml` | — |
-| Propose design | `html-view-designer` | `design_system.yaml` | ⚡ Proceed Gate |
-| Token validation | `design-system-enforcer` | `design_system.yaml`, `glass-design-tokens.css` | P0 block on violation |
-| Implement HTML | `html-view-designer` + `doc-sync-agent` | `components.yaml`, `a11y_checklist.yaml` | — |
-| Implement CSS | `doc-sync-agent` (CSS rules) | `design_system.yaml`, `performance_checklist.yaml` | — |
-| A11y + perf gate | `a11y-perf-guardian` | `a11y_checklist.yaml`, `performance_checklist.yaml` | P0 block on regression |
-| Regression guard | `regression-sentinel` | Current vs proposed diff | P1 flag on theme drift |
+| **Step 0:** Role context load | `html-view-designer` | `.content/` files per Role Routing Table | Auto — no gate |
+| **Step 1:** Audit current state | `html-view-designer` | `doc_best_practices.yaml`, `components.yaml` | — |
+| **Step 1:** Propose design | `html-view-designer` | `design_system.yaml`, Step 0 content brief | ⚡ Proceed Gate |
+| **Step 2:** Token validation | `design-system-enforcer` | `design_system.yaml`, `glass-design-tokens.css` | P0 block on violation |
+| **Step 2:** Implement HTML | `html-view-designer` + `doc-sync-agent` | `components.yaml`, `a11y_checklist.yaml` | — |
+| **Step 2:** Implement CSS | `doc-sync-agent` (CSS rules) | `design_system.yaml`, `performance_checklist.yaml` | — |
+| **Step 2:** A11y + perf gate | `a11y-perf-guardian` | `a11y_checklist.yaml`, `performance_checklist.yaml` | P0 block on regression |
+| **Step 2:** Regression guard | `regression-sentinel` | Current vs proposed diff | P1 flag on theme drift |
 
 ---
 
-## �🎯 Commands
+## 🎯 Commands
 
 | Command | Action | Agents Invoked |
 |---------|--------|----------------|

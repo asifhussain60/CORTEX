@@ -203,4 +203,20 @@ grep -rn "except:$\|except Exception:$" cortex/ --include="*.py" | grep -v "test
 
 ---
 
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `refactor`:** This agent learns ONLY from `refactor` and `prompt-optimization` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `debug`, `a11y`, `design-system`, `training`.
+
+Before modifying any prompt or agent file:
+1. `cortex_learning op=history scope=refactor` — check prior refactoring failures
+2. `cortex_learning op=rca rca_action=query category=TECHNOLOGY` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="refactor: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="refactor: {description}"`
+
+**Watch for:** Token budget overflows from over-aggressive consolidation, SSOT boundary violations when merging duplicate content, broken `/command` routing after prompt restructuring.
+
+---
+
 **Token Usage:** ~1,600

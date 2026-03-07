@@ -168,3 +168,15 @@ exists, surface its `sweep_id` and `open_items_count` to the user before proceed
 ---
 
 *v1.1 — Added CORE-064 Sweep Catalogue Protection guard (Phase 16, 2026-02-21)*
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `vacuum`:** This agent learns ONLY from `vacuum` and `cleanup` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `debug`, `training`, `design-system`, `a11y`.
+
+- Before vacuum: call `cortex_learning op=history pattern_id=vacuum` — check if prior vacuum runs caused false-positive deletions
+- If prior failures exist (e.g. deleted active files, broke links): adjust cleanup aggressiveness
+- After successful vacuum (zero regressions): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=vacuum`
+- After vacuum regression (new sprawl detected, broken links): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=vacuum`

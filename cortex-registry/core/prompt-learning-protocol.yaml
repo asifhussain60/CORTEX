@@ -1,0 +1,228 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Prompt-Layer Intelligence Protocol (PLIP-001)
+# ─────────────────────────────────────────────────────────────────────────────
+# SSOT for cross-prompt learning integration. All prompts and agents reference
+# this file for consult-before / record-after behaviour.
+#
+# Infrastructure consumed (zero new code — all pre-existing):
+#   - OPJ Mixin:          cortex/intelligence/learning/opj_mixin.py
+#   - OPJ Reader:         cortex/intelligence/learning/opj_reader.py
+#   - OPJ Writer:         cortex/intelligence/learning/opj_writer.py
+#   - URS Engine:         cortex/intelligence/learning/reinforcement_signal.py
+#   - RCA Engine:         cortex/intelligence/learning/rca_engine.py
+#   - Prevention Gate:    cortex/intelligence/learning/prevention_gate.py
+#   - Recurrence Engine:  cortex/intelligence/learning/recurrence_engine.py
+#   - Cross-Session Cache: cortex/intelligence/learning/cross_session_pattern_cache.py
+#   - MCP Tool:           cortex/mcp/tools/learning_tool.py (cortex_learning)
+#
+# CORE: CORE-035 (single canonical), CORE-002 (inline output only)
+# ─────────────────────────────────────────────────────────────────────────────
+
+protocol_id: PLIP-001
+name: Prompt-Layer Intelligence Protocol
+version_policy: NO_VERSIONING  # CORE-NO-VERSION — never add semver
+updated: "2026-03-07"
+status: ACTIVE
+
+# ─── Trigger Rules ───────────────────────────────────────────────────────────
+# Which intents trigger consult-before and record-after behaviour.
+triggers:
+  consult_before:
+    - IMPLEMENT
+    - FIX
+    - REFACTOR
+    - AUDIT
+    - DEBUG
+    - VACUUM
+    - SYNC
+    - TOTALRECALL
+  record_after:
+    - IMPLEMENT
+    - FIX
+    - REFACTOR
+    - AUDIT
+    - DEBUG
+  exempt:
+    - QUERY
+    - REPHRASE
+    - INTRODUCE
+    - DIGEST
+    - DESIGN
+    - PLAN
+    - RCA          # RCA is itself a learning output — no recursion
+
+# ─── MCP Tool Bindings ──────────────────────────────────────────────────────
+# Exact MCP calls that prompts/agents must issue at each phase.
+mcp_bindings:
+  consult:
+    tool: cortex_learning
+    operation: history
+    description: "Query prior success/failure patterns for this operation type"
+    parameters:
+      op: history
+      pattern_id: "{operation_name}"  # e.g. "fix-circular-import"
+    surface_rule: >
+      If prior failures exist with confidence >= 0.4, surface them in the
+      Analysis section as: "⚠️ Prior failure pattern: {description} (confidence: {score})"
+
+  prevention_check:
+    tool: cortex_learning
+    operation: rca
+    description: "Check if stored prevention rules match current operation context"
+    parameters:
+      op: rca
+      rca_action: query
+    surface_rule: >
+      If a matching prevention rule exists at WARNING or BLOCKING level,
+      surface it before proceeding: "🛡️ Prevention rule triggered: {rule_description}"
+
+  record_success:
+    tool: cortex_learning
+    operation: emit
+    description: "Emit a reward signal after successful operation"
+    parameters:
+      op: emit
+      signal_type: MILD_REWARD
+      pattern_id: "{operation_name}"
+      source_orchestrator: "{orchestrator_name}"
+
+  record_failure:
+    tool: cortex_learning
+    operation: emit
+    description: "Emit a punishment signal after failed operation"
+    parameters:
+      op: emit
+      signal_type: MILD_PUNISHMENT
+      pattern_id: "{operation_name}"
+      source_orchestrator: "{orchestrator_name}"
+
+# ─── Scope Isolation Contract (P0 — non-negotiable) ─────────────────────────
+# Each prompt/agent MUST only learn from patterns within its own domain.
+# Cross-domain pattern leakage is a P1 governance violation.
+scope_isolation:
+  rule: >
+    Every PLIP `op=history` and `op=emit` call MUST include a `scope` or
+    `pattern_id` parameter that matches the prompt/agent's declared domain.
+    An agent MUST NOT query or emit patterns outside its scope.
+  enforcement: >
+    Prompt-level guardrail text constrains the LLM to the correct scope.
+    Meta-audit check PLIP-SCOPE verifies no cross-domain leakage.
+  # Domain → allowed pattern_id prefixes and scope values
+  domain_scopes:
+    cortex-architect:
+      scope: architect
+      pattern_prefixes: [implement, fix, refactor, audit, debug]
+      description: "Core execution modes — code-modifying operations"
+    cortex-doc:
+      scope: documentation
+      pattern_prefixes: [html-design, doc-sync, design-system, a11y]
+      description: "Documentation governance — HTML/CSS/a11y only"
+      forbidden_scopes: [database, sync, vacuum, refactor, debug]
+    cortex-sync:
+      scope: sync
+      pattern_prefixes: [sync]
+      description: "One-way deterministic sync — merge/copy only"
+      forbidden_scopes: [database, html-design, doc-sync, debug, vacuum]
+    cortex-total-recall:
+      scope: certification
+      pattern_prefixes: [totalrecall-phase]
+      description: "10-phase production certification pipeline"
+      forbidden_scopes: [sync, html-design]
+    cortex-trainer:
+      scope: training
+      pattern_prefixes: [training, gap-detection]
+      description: "Gap-driven training — analysis and proposals only"
+      forbidden_scopes: [database, sync, html-design, vacuum]
+    cortex-master:
+      scope: orchestration
+      pattern_prefixes: [implement, fix, refactor, audit, debug]
+      description: "Master orchestrator — routes to domain prompts"
+
+  # Agent-level scope locks (agent → allowed scope value)
+  agent_scopes:
+    cortex-executor:       { scope: execution,     allowed: [implement, fix, refactor] }
+    cortex-auditor:        { scope: audit,         allowed: [audit, compliance] }
+    cortex-holistic-validator: { scope: validation, allowed: [holistic-validation] }
+    cortex-meta-auditor:   { scope: meta-audit,    allowed: [meta-audit, drift] }
+    cortex-sync-agent:     { scope: sync,          allowed: [sync] }
+    cortex-debugger:       { scope: debug,         allowed: [debug, markers] }
+    cortex-vacuum:         { scope: vacuum,        allowed: [vacuum, cleanup] }
+    doc-sync-agent:        { scope: doc-sync,      allowed: [doc-sync] }
+    html-view-designer:    { scope: html-design,   allowed: [html-design] }
+    design-system-enforcer: { scope: design-system, allowed: [design-system, css-tokens] }
+    a11y-perf-guardian:    { scope: a11y,          allowed: [a11y, performance] }
+    cortex-refactor-agent: { scope: refactor,      allowed: [refactor, prompt-optimization] }
+    cortex-memory-agent:   { scope: memory,        allowed: [memory, lifecycle] }
+    cortex-vacuum-agent:   { scope: vacuum,        allowed: [vacuum, file-cleanup] }
+    cortex-db-agent:       { scope: database,      allowed: [database, migration, purge] }
+
+# ─── Anti-Pattern Source ─────────────────────────────────────────────────────
+# Where the LLM reads known failure patterns before acting.
+anti_pattern_source: cortex-registry/patterns/failure/
+success_pattern_source: cortex-registry/patterns/success/
+
+# ─── Confidence Thresholds ───────────────────────────────────────────────────
+# When to surface patterns to the LLM vs ignore them.
+confidence_thresholds:
+  surface_in_analysis: 0.4    # Show patterns at or above this confidence
+  warn_strongly: 0.7          # Highlight with ⚠️ icon
+  auto_apply: 0.9             # Pattern is so reliable it should auto-inform the approach
+
+# ─── Lifecycle Rules ─────────────────────────────────────────────────────────
+# How patterns age and get promoted/quarantined.
+lifecycle:
+  promote_threshold: 0.9      # Confidence >= this with 3+ rewards → promoted to T1
+  quarantine_threshold: 0.3   # Confidence <= this with 2+ punishments → quarantined
+  decay_rate: 0.1             # Confidence decay per 30 days of inactivity
+  cross_cutting_boost: 0.15   # Boost when validated by 3+ different orchestrators
+
+# ─── Prompt Section Specification ────────────────────────────────────────────
+# The exact section that must appear in every applicable prompt file.
+prompt_section:
+  title: "🧠 Learning Protocol (PLIP-001)"
+  location: "After CORE RULES / GOVERNANCE section, before EXECUTION MODES"
+  max_tokens: 150
+  mandatory_content:
+    - "Consult `cortex_learning op=history` before code-modifying operations"
+    - "Check `cortex_learning op=rca rca_action=query` for prevention rules"
+    - "Surface prior failures in Analysis section with confidence scores"
+    - "After completion: emit URS signal via `cortex_learning op=emit`"
+
+# ─── Agent Footer Specification ──────────────────────────────────────────────
+# The exact footer that must appear in every agent participating in code mods.
+agent_footer:
+  title: "📝 Learning Protocol (PLIP-001 — Automatic)"
+  max_tokens: 80
+  mandatory_content:
+    - "Before executing: call `cortex_learning op=history` for this operation"
+    - "If prior failures exist: surface in Analysis as ⚠️ Prior failure pattern"
+    - "After completing: call `cortex_learning op=emit` with MILD_REWARD or MILD_PUNISHMENT"
+
+# ─── Audit Compliance ────────────────────────────────────────────────────────
+# How to verify PLIP is correctly wired.
+audit:
+  check_id: PLIP-COMPLIANCE
+  description: "Every applicable prompt contains § 🧠 Learning Protocol"
+  detect_command: >
+    grep -l "Learning Protocol (PLIP-001)" .github/prompts/*.prompt.md | wc -l
+  pass_criteria: ">= 6"  # 6 of 7 prompts (luum excluded)
+  severity: P1
+
+  scope_check:
+    check_id: PLIP-SCOPE
+    description: "Every PLIP section includes a Scope Lock guardrail matching the prompt/agent domain"
+    detect_command: >
+      grep -l "Scope Lock" .github/prompts/*.prompt.md .github/agents/**/*.md | wc -l
+    pass_criteria: ">= 20"  # 6 prompts + 15 agents
+    severity: P1
+
+  conflict_check:
+    check_id: PLIP-CONFLICT
+    description: "No PLIP section contains instructions that conflict with the prompt/agent design goal"
+    rules:
+      - "Read-only agents (cortex-audit-agent, drift-detection-agent, regression-sentinel) MUST NOT have PLIP record-after sections"
+      - "Doc agents MUST NOT reference database/sync/debug scopes"
+      - "Sync agent MUST NOT reference html-design/doc-sync/database scopes"
+      - "DB agent MUST NOT reference html-design/vacuum/sync scopes"
+      - "PLIP Watch-for items MUST relate only to the agent's declared Role"
+    severity: P0

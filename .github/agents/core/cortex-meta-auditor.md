@@ -316,3 +316,13 @@ cortex_audit_remediation_plan (replaced by cortex_governance op=remediation_plan
 
 ---
 
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `meta-audit`:** This agent learns ONLY from `meta-audit` and `drift` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `training`, `design-system`, `a11y`.
+
+- Before meta-audit: call `cortex_learning op=history pattern_id=meta-audit` — surface recurring meta-audit failure patterns
+- If same drift pattern recurs across 3+ sessions: escalate to P1 systemic prompt issue
+- After meta-audit fixes applied: call `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=meta-audit`
+- After meta-audit regressions introduced: call `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=meta-audit`
+

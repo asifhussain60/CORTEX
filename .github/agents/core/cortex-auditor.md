@@ -117,4 +117,16 @@ Self-attestation ("I believe this passes") is REFUSED by the audit pipeline.
 **Drift Lock Dir:** `cortex-registry/governance/drift-locks/`
 
 **Activity Log:** Every stage → `.cortex-runtime/traces/orchestrator-traces.db`
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `audit`:** This agent learns ONLY from `audit` and `compliance` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `training`, `design-system`.
+
+- Before each audit stage: call `cortex_learning op=history scope=audit` — surface recurring violation patterns from prior audits
+- If same P0 recurs across 3+ audit sessions: escalate to systemic architectural issue (not point fix)
+- After audit-fix convergence: call `cortex_learning op=emit signal_type=MILD_REWARD` per resolved P0/P1
+- After fix failure or regression introduced: call `cortex_learning op=emit signal_type=MILD_PUNISHMENT`
 ...

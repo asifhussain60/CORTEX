@@ -46,6 +46,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Intent Types | **29** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
+| PLIP-001 | Prompt-Layer Intelligence Protocol — all code-modifying prompts/agents consult failure history before action and record outcomes after (SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`) |
 | RCA Engine | 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
 | Debug Strategies | 8 total: 3 Python + 5 multi-stack (Frontend/HTML-Vision/API/SQL/DotNet) |
 | Response Format | phase-list+bar mandatory; SSOT: `.github/templates/cortex-response-templates.md` |

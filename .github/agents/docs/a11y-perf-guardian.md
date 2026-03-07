@@ -142,3 +142,19 @@ Perf checks: {pass}/{total}
 - ❌ Never approve changes that add `style=` (delegate check to design-system-enforcer but double-check)
 - ✅ Always provide the exact corrective HTML/CSS alongside each violation
 - ✅ Run ALL P0 checks before reporting — show complete list, not first-fail
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `a11y`:** This agent learns ONLY from `a11y` and `performance` patterns. MUST NOT query or emit: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`, `training`.
+
+Before providing a11y/perf fixes:
+1. `cortex_learning op=history scope=a11y` — check prior accessibility fix failures
+2. `cortex_learning op=rca rca_action=query category=TECHNOLOGY` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="a11y: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="a11y: {description}"`
+
+**Watch for:** Skip link removal during template restructuring, ARIA role conflicts with semantic HTML5 elements, render-blocking script reintroduction during performance optimization.

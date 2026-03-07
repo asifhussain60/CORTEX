@@ -105,6 +105,26 @@
 
 **Load full rules:** `cortex_load` (op: `rules`) (MCP tool)
 
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**Infrastructure:** OPJ + URS + RCA + PreventionGate — all in `cortex/intelligence/learning/` (zero new code)
+**MCP Tool:** `cortex_learning` (op=`history|emit|rca`)
+
+**🔒 Scope Lock — `architect`:** This prompt learns ONLY from core execution patterns: `implement`, `fix`, `refactor`, `audit`, `debug`. It MUST NOT query or emit patterns with scope/pattern_id belonging to: `documentation`, `sync`, `html-design`, `doc-sync`, `database`, `training`, `a11y`, `design-system`. Violation = P1 scope bleed.
+
+**Before every code-modifying operation** (IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG):
+1. Call `cortex_learning op=history pattern_id={operation}` — retrieve prior success/failure patterns
+2. Call `cortex_learning op=rca rca_action=query` — check if stored prevention rules match context
+3. If prior failures exist (confidence ≥ 0.4): surface in `## 🔍 Analysis` as `⚠️ Prior failure pattern: {description} (confidence: {score})`
+4. If a prevention rule triggers at WARNING or BLOCKING: surface as `🛡️ Prevention rule: {description}` before proceeding
+
+**After every code-modifying operation completes:**
+1. On success: call `cortex_learning op=emit signal_type=MILD_REWARD pattern_id={operation} source_orchestrator={name}`
+2. On failure: call `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id={operation} source_orchestrator={name}`
+
+**Exempt intents (no consult/record):** QUERY, REPHRASE, INTRODUCE, DIGEST, DESIGN, PLAN, RCA
+
 ### 🔄 Universal Convergence Gate (CORE-068)
 
 **Applies to:** IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH  

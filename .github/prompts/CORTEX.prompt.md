@@ -99,6 +99,22 @@ EnforcementOrchestrator validates CORE rules before every operation:
 - Architecture guard (CORE-035 compliance)
 - File naming (snake_case, CORE-028)
 
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+
+**🔒 Scope Lock — `orchestration`:** This prompt learns ONLY from top-level routing and orchestration patterns. It delegates domain-specific learning to child prompts (`cortex-architect`, `cortex-doc`, `cortex-sync`, etc.). It MUST NOT query or emit patterns scoped to: `html-design`, `doc-sync`, `database`, `design-system`, `a11y`, `training`. Domain prompts own their own learning.
+
+Before every code-modifying operation (IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG):
+- Call `cortex_learning op=history` — surface prior failure patterns in Analysis section
+- Call `cortex_learning op=rca rca_action=query` — check prevention rules against current context
+
+After every code-modifying operation:
+- On success: `cortex_learning op=emit signal_type=MILD_REWARD`
+- On failure: `cortex_learning op=emit signal_type=MILD_PUNISHMENT`
+
+Exempt: QUERY, REPHRASE, INTRODUCE, DIGEST, DESIGN, PLAN, RCA
+
 ---
 
 ## 🔎 AUDIT MODE

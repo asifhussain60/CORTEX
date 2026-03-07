@@ -198,3 +198,19 @@ Persist to `.cortex-runtime/certification/recommendations.json`.
 - **Recommendations are advisory** — never auto-apply architectural changes
 
 ---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `memory`:** This agent learns ONLY from `memory` and `lifecycle` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `sync`, `debug`, `refactor`, `design-system`, `a11y`, `training`.
+
+Before modifying memory state or document lifecycle:
+1. `cortex_learning op=history scope=memory` — check prior memory operation failures
+2. `cortex_learning op=rca rca_action=query category=DATA` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="memory: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="memory: {description}"`
+
+**Watch for:** Orphaned lifecycle states after interrupted operations, metrics data loss from overly aggressive cleanup, false-positive orphan detection in multi-session contexts.
+
+---

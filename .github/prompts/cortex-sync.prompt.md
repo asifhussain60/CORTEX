@@ -347,6 +347,23 @@ python3 -m cortex.tools.cortex_sync --target /path/to/target --apply \
 
 ## ✅ Governance Compliance
 
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+
+**🔒 Scope Lock — `sync`:** This prompt learns ONLY from sync operation patterns: merge conflicts, danger-scan results, encoding issues, baseline comparisons. Allowed pattern_id: `sync`. It MUST NOT query or emit patterns scoped to: `html-design`, `doc-sync`, `database`, `debug`, `vacuum`, `refactor`, `a11y`, `design-system`. Those domains belong to other prompts. Violation = P1 scope bleed.
+
+Before every sync apply operation:
+- Call `cortex_learning op=history pattern_id=sync` — retrieve prior sync failure patterns (e.g. merge conflicts, danger-scan false positives, missing baselines)
+- If prior failures exist: adjust sync strategy pre-emptively (e.g. prefer skip over merge for repeatedly-conflicting files)
+
+After every sync apply completes:
+- On success (0 conflicts, 0 danger): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=sync`
+- On partial (conflicts staged): `cortex_learning op=emit signal_type=NEUTRAL pattern_id=sync`
+- On failure (apply errors): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=sync`
+
+Dry-run mode is exempt from record-after — no changes made, no signal emitted.
+
 | Rule | Status |
 |---|---|
 | CORE-002 | ✅ All output inline — no .md/.txt report files created |

@@ -132,3 +132,19 @@ vacuum_metrics:
 | `cortex-db-agent.md` | Downstream — SQLite cleanup (Phase 8) |
 
 > **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `vacuum`:** This agent learns ONLY from `vacuum` and `file-cleanup` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `debug`, `design-system`, `a11y`, `training`.
+
+Before any cleanup operation:
+1. `cortex_learning op=history scope=vacuum` — check prior vacuum failures
+2. `cortex_learning op=rca rca_action=query category=PROCESS` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="vacuum: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="vacuum: {description}"`
+
+**Watch for:** False-positive deletions of valid files, broken cross-references after orphan removal, OS artifact patterns that vary by platform (macOS `.DS_Store` vs Windows `Thumbs.db`).

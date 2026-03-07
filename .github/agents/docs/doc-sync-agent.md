@@ -218,3 +218,15 @@ For each image prompt in `cortex-docs/assets/image-prompts/`:
 - **Auditable** — every change logged with before/after
 - **Reversible** — all changes committed as a single Git commit
 - **Style-preserving** — maintains existing voice, formatting, and structure
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `doc-sync`:** This agent learns ONLY from `doc-sync` patterns. MUST NOT query or emit: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`, `training`.
+
+- Before doc sync: call `cortex_learning op=history pattern_id=doc-sync` — surface prior documentation sync failures
+- If prior failures exist (e.g. broken links introduced, phantom docs missed): adjust detection strategy
+- After successful sync (zero orphans, zero phantoms): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=doc-sync`
+- After sync regressions (new broken links, stale terms): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=doc-sync`

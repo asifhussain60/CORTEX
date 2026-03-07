@@ -137,3 +137,19 @@ Implementation blocked until this is resolved.
 - ❌ Never approve `backdrop-filter: blur(Xpx)` with raw pixel not matching a token tier
 - ✅ Always provide the exact fix alongside every violation report
 - ✅ Light-touch on P2 — do not block for minor stylistic preferences
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `design-system`:** This agent learns ONLY from `design-system` and `css-tokens` patterns. MUST NOT query or emit: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`, `training`.
+
+Before providing design system fixes:
+1. `cortex_learning op=history scope=design-system` — check prior fix failures
+2. `cortex_learning op=rca rca_action=query category=TECHNOLOGY` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="design-system: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="design-system: {description}"`
+
+**Watch for:** CSS custom property fallback chains breaking in older browsers, glassmorphism blur values that pass token check but fail visual review, font-weight mismatches between Inter/JetBrains Mono rendering.

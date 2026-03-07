@@ -62,6 +62,23 @@ found it — zero regressions, zero drift, zero dead logic, zero duplication.
 
 ## 🏗️ Agent Architecture — The Certification Diamond
 
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+
+**🔒 Scope Lock — `certification`:** This prompt learns ONLY from certification pipeline patterns: `totalrecall-phase-{N}`. It MUST NOT query or emit patterns scoped to: `html-design`, `doc-sync`, `sync`, `training`, `design-system`, `a11y`. Certification agents may internally use domain scopes (e.g. `cortex-db-agent` uses `database`), but this prompt's own signals are scoped to `totalrecall-phase-*` only. Violation = P1 scope bleed.
+
+Before each certification phase that modifies code (Phases 4, 5, 7, 8, 9):
+- Call `cortex_learning op=history pattern_id=totalrecall-phase-{N}` — retrieve prior certification failure patterns
+- If recurring failures detected (same pattern 3+ times): escalate to P1 systemic issue
+- Check `cortex_learning op=rca rca_action=query` for prevention rules matching current phase
+
+After each certification phase completes:
+- On success: `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=totalrecall-phase-{N}`
+- On failure: `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=totalrecall-phase-{N}`
+
+Read-only phases (1, 2, 3, 6, 10) are exempt from record-after — they consult but do not emit.
+
 Total Recall delegates to 7 specialist agents under `.github/agents/certification/`.
 The **Certification Coordinator** orchestrates them in a deterministic pipeline.
 

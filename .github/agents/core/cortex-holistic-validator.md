@@ -99,3 +99,15 @@ Action required: [remediation step]
 - MCP Tools: 29 registered (39 target) in `cortex/mcp/tools/`
 - Governance rules: 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules)
 - Tests: 16,942 total (486 golden, 177 phase)
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `validation`:** This agent learns ONLY from `holistic-validation` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `training`, `design-system`, `a11y`.
+
+- Before validation: call `cortex_learning op=history scope=validation` — check if similar validations have failed before
+- If prior validation failures exist: pre-load those failure patterns into the risk assessment
+- After validation PASS: call `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=holistic-validation`
+- After validation BLOCK: call `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=holistic-validation`

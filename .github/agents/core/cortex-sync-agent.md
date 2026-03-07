@@ -441,3 +441,15 @@ If `changed_files` is empty after exclusion:
    AC_COMPLETE: AC-SYNC-{TIMESTAMP} ✅ {elapsed_ms}ms — 0 files synced
 ```
 Session ends cleanly.
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `sync`:** This agent learns ONLY from `sync` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `debug`, `vacuum`, `refactor`, `a11y`, `design-system`, `training`.
+
+- Before sync apply: call `cortex_learning op=history pattern_id=sync` — surface prior merge conflict patterns
+- If prior failures exist (e.g. clobbered local edits, encoding issues): adjust merge strategy pre-emptively
+- After successful sync (0 conflicts, 0 danger): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=sync`
+- After sync with conflicts or errors: `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=sync`

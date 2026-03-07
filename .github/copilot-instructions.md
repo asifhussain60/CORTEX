@@ -284,6 +284,17 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full catalogue |
 | CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
 
+**Prompt-Layer Intelligence Protocol (PLIP-001 — SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`):**
+- ✅ Before every code-modifying operation: call `cortex_learning op=history` to surface prior failure patterns
+- ✅ Before every code-modifying operation: call `cortex_learning op=rca rca_action=query` to check prevention rules
+- ✅ If prior failures exist (confidence ≥ 0.4): surface in `## 🔍 Analysis` as `⚠️ Prior failure pattern: {description} (confidence: {score})`
+- ✅ After success: `cortex_learning op=emit signal_type=MILD_REWARD`
+- ✅ After failure: `cortex_learning op=emit signal_type=MILD_PUNISHMENT`
+- ✅ **Scope Lock (P1):** Every `op=history` and `op=emit` call MUST include a `scope` or `pattern_id` matching the prompt/agent's declared domain. Cross-domain pattern leakage is a P1 violation. Each prompt has a `🔒 Scope Lock` line declaring its allowed scopes. Agents inherit scope from their parent prompt. See `prompt-learning-protocol.yaml` § `scope_isolation` for the full domain map.
+- ❌ Exempt intents (no consult/record): QUERY, REPHRASE, INTRODUCE, DIGEST, DESIGN, PLAN, RCA
+- ❌ Never emit signals during silent autonomous execution dry-runs
+- ❌ Never query or emit patterns outside the prompt/agent's declared scope lock (P1 — PLIP-SCOPE audit check)
+
 **Principle Injection Policy (CORE-PRINCIPLE-TRIGGER — SSOT: `cortex-registry/core/principle-trigger-policy.yaml`):**
 - ✅ Principles render **only** for: QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE intents
 - ✅ One principle per response maximum — rendered as **FIRST element inside `## 🔍 Analysis`** (NOT in Zone 3 of the response header)

@@ -287,3 +287,15 @@ Agent Response:
 ---
 
 *CORTEX Debug Orchestrator Agent v2.0 — Multi-Stack Debug Pipeline (Phase 86)*
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `debug`:** This agent learns ONLY from `debug` and `markers` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `training`, `design-system`, `a11y`, `vacuum`.
+
+- Before debug injection: call `cortex_learning op=history pattern_id=debug` — surface prior debug failure patterns
+- If prior failures exist (e.g. orphaned markers, strategy mismatch for file type): adapt strategy selection pre-emptively
+- After successful debug cycle (markers injected → captured → cleaned): `cortex_learning op=emit signal_type=MILD_REWARD`
+- After debug failure (orphaned markers, cleanup incomplete): `cortex_learning op=emit signal_type=MILD_PUNISHMENT`

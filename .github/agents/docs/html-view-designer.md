@@ -146,3 +146,15 @@ Present a structured proposal:
 - ❌ Never change the heading hierarchy level of existing headings without IA justification
 - ❌ Never reference deleted packages (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) in content
 - ✅ Always preserve the dark blue glassmorphism theme identity
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `html-design`:** This agent learns ONLY from `html-design` patterns. MUST NOT query or emit: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`, `training`.
+
+- Before design proposal: call `cortex_learning op=history pattern_id=html-design` — surface prior design failure patterns
+- If prior failures exist (e.g. word-fusion from wrong font, a11y regressions, mobile breakage): incorporate lessons into proposal
+- After successful design+implement (a11y pass, no theme drift): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=html-design`
+- After design regression (broken links, a11y failure, theme drift): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=html-design`

@@ -351,4 +351,20 @@ for db_path in pathlib.Path('.cortex-runtime').rglob('*.db'):
 
 ---
 
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**🔒 Scope Lock — `database`:** This agent learns ONLY from `database`, `migration`, and `purge` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `sync`, `debug`, `vacuum`, `design-system`, `a11y`, `training`.
+
+Before any SQLite operation:
+1. `cortex_learning op=history scope=database` — check prior migration/purge failures
+2. `cortex_learning op=rca rca_action=query category=DATA` — check prevention rules
+
+After completion:
+- ✅ Success → `cortex_learning op=emit signal_type=MILD_REWARD context="db: {description}"`
+- ❌ Failure → `cortex_learning op=emit signal_type=MILD_PUNISHMENT context="db: {description}"`
+
+**Watch for:** Schema migration rollback failures, retention policy miscalculation (30 vs 90 day), VACUUM on locked databases, `.bak` files left behind after successful purge.
+
+---
+
 **Token Usage:** ~1,500

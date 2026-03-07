@@ -109,3 +109,15 @@ Do not duplicate the completion report inline here. (CORE-035: single canonical 
 - EnforcementOrchestrator: `cortex/orchestrators/core/enforcement_orchestrator.py`
 - Test structure: `tests/` mirrors `cortex/` (52 orchestrator classes, 10 domains)
 - Package: `cortex` (single canonical import)
+
+---
+
+## 📝 Learning Protocol (PLIP-001 — Automatic)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+**🔒 Scope Lock — `execution`:** This agent learns ONLY from `implement`, `fix`, `refactor` patterns. MUST NOT query or emit: `html-design`, `doc-sync`, `database`, `sync`, `a11y`, `design-system`, `training`.
+
+- Before executing: call `cortex_learning op=history scope=execution` for this operation — surface prior failure patterns
+- If prior failures exist (confidence ≥ 0.4): surface in `## 🔍 Analysis` as `⚠️ Prior failure pattern: {description} (confidence: {score})`
+- After completing successfully: call `cortex_learning op=emit signal_type=MILD_REWARD pattern_id={operation}`
+- After failure: call `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id={operation}`

@@ -58,6 +58,22 @@ cortex_train(op="score", execution_report={...})  # Phase 83: URS scoring
 
 ## URS Scoring Model (Phase 83)
 
+### 🧠 Learning Protocol (PLIP-001)
+
+**SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
+
+**🔒 Scope Lock — `training`:** This prompt learns ONLY from training and gap-detection patterns: `training`, `gap-detection`. It MUST NOT query or emit patterns scoped to: `html-design`, `doc-sync`, `database`, `sync`, `debug`, `vacuum`, `design-system`, `a11y`. Those domains belong to other prompts. Violation = P1 scope bleed.
+
+Before every gap detection and proposal generation:
+- Call `cortex_learning op=history scope=training` — retrieve prior training session outcomes
+- If prior failures exist (e.g. rejected proposals, failed template applications): surface as `⚠️ Prior failure pattern: {description}`
+
+After every training execution:
+- On success (proposal applied, tests pass): `cortex_learning op=emit signal_type=MILD_REWARD pattern_id=training`
+- On failure (proposal rejected, tests fail): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id=training`
+
+The URS scoring model below provides the signal vocabulary for these emissions.
+
 The Unified Reinforcement Signal (URS) system closes the learning loop. When orchestrators complete operations, they emit reinforcement signals that adjust pattern confidence.
 
 ### Signal Types
