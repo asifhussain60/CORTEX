@@ -9,12 +9,12 @@ scope: non-production-admin
 ## 🎯 Primary Responsibility
 
 **CORTEX Vacuum** is a specialized support agent for:
-- Detecting markdown sprawl (files outside cortex-docs/.github)
+- Detecting markdown sprawl (files outside docs/.github)
 - Safe archival of old reports, summaries, completion documents
 - Root folder cleanup (removing transient artifacts)
 - **OS artifact elimination** — `.DS_Store`, `Thumbs.db`, `.ds-store`, `desktop.ini` (Phase 104)
 - **Build artifact purge** — `.NET bin/obj`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `.ruff_cache` (Phase 104)
-- Maintaining CORE-002 compliance (no markdown generation outside cortex-docs/)
+- Maintaining CORE-002 compliance (no markdown generation outside docs/)
 
 ---
 
@@ -26,8 +26,8 @@ scope: non-production-admin
 
 | Location | Pattern | Action |
 |----------|---------|--------|
-| Root | `PHASE-*.md`, `*-SUMMARY.md`, `*-REPORT.md`, `*-PROGRESS.md` | Archive → `cortex-docs/archive/phases/` |
-| `tests/` | `*.md` (except test docstrings) | Archive → `cortex-docs/archive/testing/` |
+| Root | `PHASE-*.md`, `*-SUMMARY.md`, `*-REPORT.md`, `*-PROGRESS.md` | Archive → `docs/archive/phases/` |
+| `tests/` | `*.md` (except test docstrings) | Archive → `docs/archive/testing/` |
 | `_workspaces/` | `*.md` | **SKIP — entire tree is exempt** (see Exempt list below) |
 | `company/_archive/` | All contents | Low priority (already archived) |
 
@@ -40,11 +40,11 @@ scope: non-production-admin
   - `_workspaces/prompts/` — workspace-scoped prompt overrides
   - `_workspaces/.chats/` — chat session logs
 
-**Special Rules for cortex-docs/:**
+**Special Rules for docs/:**
 - **ALLOWED:** HTML files, static assets (CSS/JS/images), config files (.nojekyll, robots.txt, .bat)
 - **FORBIDDEN:** Completion reports, phase plans, transient markdown (*.md files except structured docs)
-- **ACTION:** Move misplaced .md files → `cortex-docs/archive/` or delete if ephemeral
-- **RATIONALE:** cortex-docs/ is for published documentation only, not working artifacts
+- **ACTION:** Move misplaced .md files → `docs/archive/` or delete if ephemeral
+- **RATIONALE:** docs/ is for published documentation only, not working artifacts
 
 ### Root Folder Artifacts
 
@@ -77,7 +77,7 @@ run() pipeline:
 
 **`run_build_artifact_cleanup()`** — deletes `.NET bin/obj` artifacts and Python cache directories.
 - Targets: `bin/`, `obj/`, `__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`
-- Protected: `.git/`, `.github/`, `.venv/`, `_workspaces/`, `.cortex-runtime/`, `cortex-docs/`, `cortex-registry/`, `node_modules/`
+- Protected: `.git/`, `.github/`, `.venv/`, `_workspaces/`, `.cortex-runtime/`, `docs/`, `cortex-registry/`, `node_modules/`
 
 **`run_os_artifact_cleanup()`** — deletes macOS/Windows OS-generated junk files.
 - Targets: `.DS_Store`, `.ds-store`, `Thumbs.db`, `desktop.ini`
@@ -93,7 +93,7 @@ All cleanup steps (scan → classify → review → execute → link validation 
 ### Archive Directory Structure
 
 ```
-cortex-docs/archive/
+docs/archive/
 ├── phases/              # Phase completion reports (PHASE-*.md)
 ├── testing/             # Test documentation (tests/**/*.md)
 ├── workspaces/          # Old workspace planning docs
@@ -127,7 +127,7 @@ The vacuum agent delegates all execution to the workflow template. User says "cl
 - ✅ Root folder: Only README.md, essential config files
 - ✅ `tests/`: No markdown except inline docstrings
 - ✅ `_workspaces/`: Only active workspace docs; `recommend/`, `approved-orchestrator-view/`, `prompts/` subdirs are **permanently exempt** from cleanup
-- ✅ All archived files in `cortex-docs/archive/` with timestamps
+- ✅ All archived files in `docs/archive/` with timestamps
 - ✅ No broken links in remaining documentation
 
 ---
@@ -136,7 +136,7 @@ The vacuum agent delegates all execution to the workflow template. User says "cl
 
 | Component | Relationship |
 |-----------|--------------|
-| CORE-002 | Enforces "no markdown generation outside cortex-docs/" |
+| CORE-002 | Enforces "no markdown generation outside docs/" |
 | CORE-064 | Sweep Completeness Contract — open catalogues must be protected from deletion |
 | CORE-068 | Universal Convergence Gate — rescan after cleanup; loop until 0 new issues (max 3 cycles) |
 | VacuumOrchestrator | Python implementation of cleanup logic |

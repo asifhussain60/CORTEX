@@ -91,7 +91,7 @@ ALLOWED_MARKDOWN_PREFIXES: FrozenSet[str] = frozenset({
 
 PROTECTED_DIRS: FrozenSet[str] = frozenset({
     ".github",
-    "cortex-docs",
+    "docs",
     "cortex-registry",
     "_workspaces",
     "scripts",
@@ -104,7 +104,7 @@ relocations, or markdown archival inside these trees.
 
 Includes:
 - ``.github``        — agents, prompts, copilot instructions, CI
-- ``cortex-docs``    — user-facing HTML documentation
+- ``docs``    — user-facing HTML documentation
 - ``cortex-registry``— YAML governance rules and registry
 - ``_workspaces``    — intentional workspace area; ALL subfolders are protected:
                          • ``approved-orchestrator-view/`` — approved orchestrator dashboard

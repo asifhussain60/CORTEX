@@ -424,7 +424,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         # Directories that must NEVER be touched
         _PROTECTED_ROOTS: frozenset = frozenset({
             ".git", ".github", ".venv", "venv", "env",
-            "_workspaces", ".cortex-runtime", "cortex-docs",
+            "_workspaces", ".cortex-runtime", "docs",
             "cortex-registry", "node_modules",
         })
 
@@ -575,7 +575,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
 
         Recursively finds all files whose name starts with ``chat-`` and
         deletes them, **except** files inside protected directories
-        (``_workspaces``, ``.github``, ``cortex-docs``, ``cortex-registry``,
+        (``_workspaces``, ``.github``, ``docs``, ``cortex-registry``,
         etc.) which are preserved.
 
         Targets:
@@ -1254,7 +1254,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         Skips files inside PROTECTED_DIRS (.github, cortex-docs, cortex-registry,
         etc.) to avoid archiving legitimate agent/prompt/spec markdown files.
         """
-        doc_dirs = {"docs", "cortex-docs", "documentation"}
+        doc_dirs = {"docs", "docs", "documentation"}
         ops: List[Dict[str, Any]] = []
         for f in ctx.all_files:
             if f.suffix != ".md":

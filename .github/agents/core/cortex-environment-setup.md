@@ -172,11 +172,11 @@ The following folders are user-sovereign and are **never overwritten** by automa
 
 | Folder | Reason |
 |--------|--------|
-| `cortex-docs/` | Published documentation site — user controls all HTML/CSS content |
+| `docs/` | Published documentation site — user controls all HTML/CSS content |
 | `_workspaces/` | Session-specific workspace files, chat histories, local prompts |
 | `cortex-sts/` | Sample tenant system — admin-specific analysis artifacts |
 | `.github/prompts/cortex-doc.prompt.md` | Documentation system prompt — admin-configured per deployment |
-| `.github/agents/docs/` | Documentation governance agents — tightly coupled to user's cortex-docs/ site structure |
+| `.github/agents/docs/` | Documentation governance agents — tightly coupled to user's docs/ site structure |
 
 To add further exclusions without code changes, set `CORTEX_UPGRADE_EXCLUDE_PATHS` to a comma-separated list of additional paths.
 

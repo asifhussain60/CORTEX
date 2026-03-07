@@ -169,7 +169,7 @@ class UpgradeOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
 
         # Protected admin-only paths — never overwritten by remote origin/main
         default_protected = [
-            "cortex-docs/",
+            "docs/",
             "_workspaces/",
             "cortex-sts/",
             ".github/prompts/cortex-doc.prompt.md",

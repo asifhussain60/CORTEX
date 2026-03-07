@@ -2460,7 +2460,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 **SYNC mode** — add under Analysis:
 - `### Stage Results` — 6-stage pipeline status: SCAN ✅ | PLAN ✅ | VALIDATE ✅ | APPLY ✅ | VERIFY ✅ | REPORT ✅ (or ❌ with reason per stage)
 - `### File Summary` — table: planned | copied | updated | merged | skipped | conflicts | excluded
-- `### Exclusions Applied` — deny rules fired: `_workspaces/`, `cortex-registry/company/repos/**`, `cortex-docs/**` (not `.content/`)
+- `### Exclusions Applied` — deny rules fired: `_workspaces/`, `cortex-registry/company/repos/**`, `docs/**` (not `.content/`)
 - `### Conflicts / Warnings` — per-file: path | decision | reason | resolution (use [A]/[K]/[M] keys)
 - `### Proof Artifacts` — manifest path, baseline dir, patch dir (if any patches generated)
 
@@ -3075,7 +3075,7 @@ Excluded by policy:
   _workspaces/**                              — N files
   cortex-registry/company/repos/**            — N files
   cortex-registry/company/dashboards/repos/** — N files
-  cortex-docs/** (except .content/)           — N files
+  docs/** (except .content/)           — N files
   .github/prompts/** (admin prompts)          — N files
 ```
 

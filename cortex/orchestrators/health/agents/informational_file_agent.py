@@ -19,7 +19,7 @@ class InformationalFileAgent(BaseHealthAgent):
 
     Informational files should be:
     - YAML configurations in cortex-registry/
-    - Documentation in cortex-docs/
+    - Documentation in docs/
     - Prompts in .github/prompts/
     - Root README.md only
 
@@ -42,7 +42,7 @@ class InformationalFileAgent(BaseHealthAgent):
             ".github/agents/",
             ".github/scripts/",
             "README.md",  # Root only
-            "cortex-docs/",
+            "docs/",
             "cortex-registry/",
             "_workspaces/",  # EXCEPTION per request
             ".cortex-runtime/",
@@ -92,10 +92,10 @@ class InformationalFileAgent(BaseHealthAgent):
                     file_path=file_path,
                     description=(
                         f"File '{rel_path}' violates CORTEX YAML-heavy philosophy. "
-                        f"Informational files should be in cortex-docs/, cortex-registry/, or .github/. "
+                        f"Informational files should be in docs/, cortex-registry/, or .github/. "
                         f"Consider converting to YAML configuration or moving to documentation."
                     ),
-                    suggested_fix="Move to cortex-docs/ or delete if obsolete",
+                    suggested_fix="Move to docs/ or delete if obsolete",
                 ))
 
         return HealthCheckResult(

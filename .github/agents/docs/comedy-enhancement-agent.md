@@ -20,7 +20,7 @@ Apply the codified comedic writing principles from `cortex-registry/knowledge/be
 
 **HARD STOPS:**
 - ❌ Do NOT create new chapter `.md` files
-- ❌ Do NOT modify `cortex-docs/awakening-of-cortex/index.html` chapter list
+- ❌ Do NOT modify `docs/awakening-of-cortex/index.html` chapter list
 - ❌ Do NOT add new entries to story-prompts directory
 - ❌ Do NOT release, sync, or expose this agent to production
 - ✅ In-place enhancement of existing `.md` chapter content ONLY
@@ -32,7 +32,7 @@ Apply the codified comedic writing principles from `cortex-registry/knowledge/be
 | Input | Source | Required |
 |-------|--------|----------|
 | **Comedy principles** | `cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml` | ✅ |
-| **Chapter files** | `cortex-docs/awakening-of-cortex/chapters/*.md` | ✅ |
+| **Chapter files** | `docs/awakening-of-cortex/chapters/*.md` | ✅ |
 | **Running gag register** | Comedy YAML `running_gags` section | ✅ |
 | **Chapter enhancements map** | Comedy YAML `chapter_enhancements` section | ✅ |
 | **Narrative continuity agent** | `.github/agents/docs/narrative-continuity-agent.md` (canon rules) | ✅ |
@@ -43,7 +43,7 @@ Apply the codified comedic writing principles from `cortex-registry/knowledge/be
 
 | Output | Path | Description |
 |--------|------|-------------|
-| Enhanced chapters | `cortex-docs/awakening-of-cortex/chapters/*.md` | In-place improvements only |
+| Enhanced chapters | `docs/awakening-of-cortex/chapters/*.md` | In-place improvements only |
 | Enhancement report | Inline (CORE-002) | Running gag coverage map, techniques applied, gaps remaining |
 
 ---
@@ -202,7 +202,7 @@ Output format (inline — CORE-002):
 - Kevin: silent. His silence IS the punchline.
 
 ### Index.html Integrity
-- The 12 chapter links in `cortex-docs/awakening-of-cortex/index.html` must never break
+- The 12 chapter links in `docs/awakening-of-cortex/index.html` must never break
 - No chapter file renames
 - No chapter file additions or deletions
 - Enhancement = content change only, filenames preserved

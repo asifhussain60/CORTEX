@@ -26,8 +26,8 @@ Synchronize all documentation targets with the current state of the CORTEX imple
 | **Change manifest** | `git-discovery-agent` output | ✅ |
 | **Drift report** | `drift-detection-agent` output | ✅ |
 | **Live file system** | Workspace root | ✅ |
-| **Content files** | `cortex-docs/.content/*.md` | ✅ |
-| **Glossary** | `cortex-docs/.content/glossary.md` | ✅ |
+| **Content files** | `docs/.content/*.md` | ✅ |
+| **Glossary** | `docs/.content/glossary.md` | ✅ |
 
 ---
 
@@ -35,10 +35,10 @@ Synchronize all documentation targets with the current state of the CORTEX imple
 
 | Output | Path | Description |
 |--------|------|-------------|
-| Updated content files | `cortex-docs/.content/*.md` | In-place edits to reflect current architecture |
-| Updated glossary | `cortex-docs/.content/glossary.md` | New terms added, stale terms removed |
-| Updated video prompts | `cortex-docs/assets/video-prompts/*.md` | Capability descriptions refreshed |
-| Updated image prompts | `cortex-docs/assets/image-prompts/*.md` | Visual descriptions refreshed |
+| Updated content files | `docs/.content/*.md` | In-place edits to reflect current architecture |
+| Updated glossary | `docs/.content/glossary.md` | New terms added, stale terms removed |
+| Updated video prompts | `docs/assets/video-prompts/*.md` | Capability descriptions refreshed |
+| Updated image prompts | `docs/assets/image-prompts/*.md` | Visual descriptions refreshed |
 | Sync manifest | Inline report (CORE-002) | Summary of all changes made |
 
 ---
@@ -187,7 +187,7 @@ All sync edits MUST maintain the established content voice:
 
 ## 📊 Image Prompt Synchronization
 
-For each image prompt in `cortex-docs/assets/image-prompts/`:
+For each image prompt in `docs/assets/image-prompts/`:
 
 1. Read the prompt's visual description
 2. Verify referenced UI elements still exist

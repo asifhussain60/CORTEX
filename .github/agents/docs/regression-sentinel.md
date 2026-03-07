@@ -28,8 +28,8 @@ Be the **last gate** in the Design + Implement pipeline. Run after `a11y-perf-gu
 | **Proposed HTML** | `html-view-designer` output | ✅ |
 | **Current CSS** | CSS files before changes | ✅ |
 | **Proposed CSS** | `doc-sync-agent` CSS output | ✅ |
-| **Design identity** | `cortex-docs/.content/knowledge/design_system.yaml` | ✅ |
-| **Component registry** | `cortex-docs/.content/knowledge/components.yaml` | ✅ |
+| **Design identity** | `docs/.content/knowledge/design_system.yaml` | ✅ |
+| **Component registry** | `docs/.content/knowledge/components.yaml` | ✅ |
 
 ---
 
@@ -139,8 +139,8 @@ grep -cn 'style=' {proposed_html}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Files reviewed:
-  HTML: cortex-docs/{file}.html
-  CSS: cortex-docs/assets/css/{file(s)}.css
+  HTML: docs/{file}.html
+  CSS: docs/assets/css/{file(s)}.css
 
 Checks: {pass}/{total}
 P0 regressions: {n}

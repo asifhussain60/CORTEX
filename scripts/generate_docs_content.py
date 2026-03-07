@@ -7,7 +7,7 @@ from datetime import datetime
 # Configuration
 KNOWLEDGE_ROOT = Path("cortex-registry/knowledge")
 KNOWLEDGE_BASE_ROOT = Path("cortex-registry/knowledge-base")
-OUTPUT_FILE = Path("cortex-docs/data/content.json")
+OUTPUT_FILE = Path("docs/data/content.json")
 
 def load_yaml(path: Path):
     try:

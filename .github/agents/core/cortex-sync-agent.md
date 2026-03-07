@@ -109,8 +109,8 @@ Display decision table inline in Copilot Chat:
 │ cortex/mcp/tools/new_tool.py    │ copy     │ net-new file                         │
 │ cortex/intelligence/provider.py │ merged   │ three-way merge clean                 │
 │ .github/prompts/CORTEX.prompt.md│ update   │ target unchanged from baseline        │
-│ cortex-docs/.content/guide.md   │ copy     │ net-new file                         │
-│ cortex-docs/index.html          │ excluded │ denied by policy pattern              │
+│ docs/.content/guide.md   │ copy     │ net-new file                         │
+│ docs/index.html          │ excluded │ denied by policy pattern              │
 │ _workspaces/old_project/        │ excluded │ denied by policy pattern              │
 └─────────────────────────────────┴──────────┴──────────────────────────────────────┘
 

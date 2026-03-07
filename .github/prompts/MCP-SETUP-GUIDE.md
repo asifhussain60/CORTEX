@@ -119,5 +119,5 @@ See `SECURITY.md` for full threat model.
 
 - [Model Context Protocol Specification](https://modelcontextprotocol.io)
 - [VS Code MCP Extension Docs](https://code.visualstudio.com/docs/copilot/mcp)
-- CORTEX Architecture: `cortex-docs/ARCHITECTURE-RECOMMENDATION.md`
+- CORTEX Architecture: `docs/ARCHITECTURE-RECOMMENDATION.md`
 - Governance Rules: `cortex-registry/governance/`

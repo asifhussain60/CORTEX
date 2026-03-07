@@ -27,7 +27,7 @@ This agent does NOT modify any files. It produces a change manifest consumed by 
 |-------|--------|----------|
 | **Repository path** | Workspace root | ✅ |
 | **Last execution timestamp** | `.cortex-runtime/doc-orchestrator-state.json` | ✅ (falls back to 7 days if missing) |
-| **Scope filter** | User-provided or default `[cortex/, cortex-registry/, cortex-docs/, .github/, tests/]` | Optional |
+| **Scope filter** | User-provided or default `[cortex/, cortex-registry/, docs/, .github/, tests/]` | Optional |
 
 ---
 
@@ -71,7 +71,7 @@ discovery:
 
     documentation_changes:
       - type: "content_update"
-        path: "cortex-docs/.content/05-orchestration.md"
+        path: "docs/.content/05-orchestration.md"
         summary: "Updated orchestrator count"
 
     test_changes:
@@ -97,7 +97,7 @@ discovery:
 | `cortex-registry/workflows/**/*.yaml` (new) | `new_capabilities` | `new_workflow_template` |
 | `cortex/models/canonical_enums.py` (modified) | `behavioral_changes` | `intent_type_change` |
 | `cortex/intelligence/**/*.py` (modified) | `behavioral_changes` | `intelligence_change` |
-| `cortex-docs/**` (any) | `documentation_changes` | varies |
+| `docs/**` (any) | `documentation_changes` | varies |
 | `.github/prompts/**` (any) | `documentation_changes` | `prompt_change` |
 | `.github/agents/**` (any) | `documentation_changes` | `agent_change` |
 | `tests/**` (any) | `test_changes` | varies |

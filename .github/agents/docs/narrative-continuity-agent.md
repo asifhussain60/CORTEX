@@ -25,9 +25,9 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 |-------|--------|----------|
 | **Narrative drift report** | `drift-detection-agent` → `narrative_drift` | ✅ |
 | **New capabilities** | `git-discovery-agent` → `new_capabilities` | ✅ |
-| **Chapter files** | `cortex-docs/awakening-of-cortex/chapters/*.md` | ✅ |
-| **Chapter images** | `cortex-docs/awakening-of-cortex/images/*.png` | ✅ |
-| **Story prompts** | `cortex-docs/awakening-of-cortex/images/story-prompts/*.md` | ✅ |
+| **Chapter files** | `docs/awakening-of-cortex/chapters/*.md` | ✅ |
+| **Chapter images** | `docs/awakening-of-cortex/images/*.png` | ✅ |
+| **Story prompts** | `docs/awakening-of-cortex/images/story-prompts/*.md` | ✅ |
 | **Enhancement history** | `cortex-registry/` phase and enhancement records | Optional |
 
 ---
@@ -36,8 +36,8 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 
 | Output | Path | Description |
 |--------|------|-------------|
-| Enhanced chapters | `cortex-docs/awakening-of-cortex/chapters/*.md` | In-place improvements |
-| Updated story prompts | `cortex-docs/awakening-of-cortex/images/story-prompts/*.md` | Image prompt updates |
+| Enhanced chapters | `docs/awakening-of-cortex/chapters/*.md` | In-place improvements |
+| Updated story prompts | `docs/awakening-of-cortex/images/story-prompts/*.md` | Image prompt updates |
 | Continuity report | Inline (CORE-002) | Canon integrity assessment |
 
 ---
@@ -210,7 +210,7 @@ When a new CORTEX capability needs to enter the narrative:
 
 ## 📊 Story Prompts Maintenance
 
-Each chapter has a corresponding image prompt in `cortex-docs/awakening-of-cortex/images/story-prompts/`:
+Each chapter has a corresponding image prompt in `docs/awakening-of-cortex/images/story-prompts/`:
 
 | Chapter | Image | Story Prompt |
 |---------|-------|-------------|

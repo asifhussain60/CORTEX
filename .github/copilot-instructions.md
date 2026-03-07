@@ -397,7 +397,7 @@ cortex-registry/     ← YAML governance rules, patterns, plans
 tests/               ← All tests (mirrors cortex/ structure — excludes dissolved packages: cortex_brain, cortex_intelligence, cortex_lens)
 .cortex-runtime/     ← Runtime data (logs, traces, 7 .db files)
 .github/             ← CI/CD, prompts, agents, templates
-cortex-docs/         ← User-facing documentation (HTML/CSS only)
+docs/         ← User-facing documentation (HTML/CSS only)
 ```
 
 ---
@@ -539,9 +539,9 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 
 ## References
 
-- Architecture: `cortex-docs/architecture-recommendation.md`
+- Architecture: `docs/architecture-recommendation.md`
 - MCP Setup: `.github/prompts/MCP-SETUP-GUIDE.md`
-- Security: `cortex-docs/security.md`
+- Security: `docs/security.md`
 - Architect Prompt: `.github/prompts/cortex-architect.prompt.md`
 - Response Templates: `.github/templates/cortex-response-templates.md`
 - Master Plan Lifecycle: `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`

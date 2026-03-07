@@ -27,11 +27,11 @@ Serve as the final gate in the documentation certification pipeline. Validate th
 | **Sync results** | `doc-sync-agent` | ✅ |
 | **Narrative continuity report** | `narrative-continuity-agent` | ✅ |
 | **Live file system** | Workspace root | ✅ |
-| **Content files** | `cortex-docs/.content/*.md` | ✅ |
-| **Glossary** | `cortex-docs/.content/glossary.md` | ✅ |
-| **Diagrams** | `cortex-docs/assets/diagrams/` | ✅ |
-| **Media prompts** | `cortex-docs/assets/image-prompts/`, `video-prompts/` | ✅ |
-| **Narrative chapters** | `cortex-docs/awakening-of-cortex/chapters/` | ✅ |
+| **Content files** | `docs/.content/*.md` | ✅ |
+| **Glossary** | `docs/.content/glossary.md` | ✅ |
+| **Diagrams** | `docs/assets/diagrams/` | ✅ |
+| **Media prompts** | `docs/assets/image-prompts/`, `video-prompts/` | ✅ |
+| **Narrative chapters** | `docs/awakening-of-cortex/chapters/` | ✅ |
 
 ---
 
@@ -88,7 +88,7 @@ For each capability in live system:
   workflow_templates = scan(cortex-registry/workflows/templates/)
 
   For each capability:
-    documented = grep(capability_name, cortex-docs/.content/)
+    documented = grep(capability_name, docs/.content/)
     if NOT documented → P0 FAIL: orphaned feature
 ```
 
@@ -99,7 +99,7 @@ For each capability in live system:
 **Rule:** No documentation may describe a capability that doesn't exist.
 
 ```
-For each documented_feature in cortex-docs/.content/:
+For each documented_feature in docs/.content/:
   exists = verify(feature, cortex/)
   if NOT exists AND NOT marked_as_planned → P0 FAIL: phantom doc
 ```
@@ -109,7 +109,7 @@ For each documented_feature in cortex-docs/.content/:
 **Rule:** Every diagram must match the current architecture.
 
 ```
-For each diagram in cortex-docs/assets/diagrams/:
+For each diagram in docs/assets/diagrams/:
   nodes = parse(diagram)
   for node in nodes:
     exists = verify(node.component, cortex/)
@@ -128,7 +128,7 @@ For each term in glossary.md:
   canonical = term.canonical_form
   variants = term.known_variants
 
-  for file in cortex-docs/.content/*.md:
+  for file in docs/.content/*.md:
     variant_uses = grep(variants, file)
     if variant_uses > 0 → P2: terminology drift
 ```
@@ -164,7 +164,7 @@ For each prompt in image-prompts/ and video-prompts/:
 **Rule:** All content files should be updated within 7 days of related code changes.
 
 ```
-For each content_file in cortex-docs/.content/:
+For each content_file in docs/.content/:
   last_updated = parse(content_file.header.updated_date)
   related_code_changes = git_log(related_paths, since=last_updated)
 
@@ -202,7 +202,7 @@ For each completed_phase in cortex-registry/planning/phases/completed/:
 ```
 For each deleted_file in git_log(deleted_files):
   if file was documentation:
-    archived = exists(cortex-docs/_archive/ + file)
+    archived = exists(docs/_archive/ + file)
     if NOT archived → P2: deprecation policy violation
 ```
 
@@ -275,8 +275,8 @@ coverage_map:
 
 ```
 # Structural integrity checks
-chapter_count = count(cortex-docs/awakening-of-cortex/chapters/*.md)
-video_prompt_count = count(cortex-docs/assets/video-prompts/*.md) + count(cortex-docs/assets/video-prompts/videos/tutorials/*.md)
+chapter_count = count(docs/awakening-of-cortex/chapters/*.md)
+video_prompt_count = count(docs/assets/video-prompts/*.md) + count(docs/assets/video-prompts/videos/tutorials/*.md)
 
 if chapter_count != 12:
   P0 FAIL: "Chapter file count is {chapter_count} — must be exactly 12"

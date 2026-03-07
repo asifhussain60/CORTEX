@@ -438,7 +438,7 @@ class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         self, ctx: FileContext, result: ScanResult
     ) -> None:
         """H-007: Detect markdown files in non-documentation directories."""
-        doc_dirs = {"docs", "cortex-docs", "documentation"}
+        doc_dirs = {"docs", "docs", "documentation"}
         for f in ctx.all_files:
             if f.suffix != ".md":
                 continue
@@ -457,7 +457,7 @@ class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
                     path=rel,
                     severity=IssueSeverity.LOW,
                     description=f"Markdown in non-docs location: {rel}",
-                    suggested_fix="Move to docs/ or cortex-docs/",
+                    suggested_fix="Move to docs/ or docs/",
                     category="markdown_location",
                 )
             )

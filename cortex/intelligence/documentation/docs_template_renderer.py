@@ -90,8 +90,8 @@ class DocsTemplateRenderer:
 
     def __init__(
         self,
-        template_dir: Path = Path("cortex-docs/templates"),
-        output_dir: Path = Path("cortex-docs"),
+        template_dir: Path = Path("docs/templates"),
+        output_dir: Path = Path("docs"),
     ) -> None:
         """
         Initialize template renderer.

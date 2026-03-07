@@ -26,8 +26,8 @@ Be the **accessibility and performance quality gate** in the Design + Implement 
 |-------|--------|----------|
 | **Proposed HTML changes** | `html-view-designer` output | ✅ |
 | **Proposed CSS changes** | `doc-sync-agent` CSS output | ✅ |
-| **A11y checklist** | `cortex-docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
-| **Performance checklist** | `cortex-docs/.content/knowledge/performance_checklist.yaml` | ✅ |
+| **A11y checklist** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **Performance checklist** | `docs/.content/knowledge/performance_checklist.yaml` | ✅ |
 
 ---
 

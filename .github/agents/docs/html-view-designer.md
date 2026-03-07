@@ -16,7 +16,7 @@ scope: non-production-admin
 
 ## 🎯 Single Responsibility
 
-Lead the Design + Implement cycle for any `cortex-docs/` HTML view. This agent owns the **structural** and **semantic** layer of implementation — what elements exist, their hierarchy, their ARIA roles, and their DOM hooks. CSS values are delegated to `design-system-enforcer`.
+Lead the Design + Implement cycle for any `docs/` HTML view. This agent owns the **structural** and **semantic** layer of implementation — what elements exist, their hierarchy, their ARIA roles, and their DOM hooks. CSS values are delegated to `design-system-enforcer`.
 
 ---
 
@@ -139,14 +139,14 @@ These patterns were validated through iterative design sessions and must be appl
 
 | Input | Source | Required |
 |-------|--------|----------|
-| **Target HTML file** | `cortex-docs/*.html` | ✅ |
-| **IA rules** | `cortex-docs/.content/knowledge/doc_best_practices.yaml` | ✅ |
-| **Design tokens** | `cortex-docs/.content/knowledge/design_system.yaml` | ✅ |
-| **Component registry** | `cortex-docs/.content/knowledge/components.yaml` | ✅ |
-| **A11y checklist** | `cortex-docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
-| **Existing CSS files** | `cortex-docs/assets/css/` | ✅ |
-| **Diagram specs** | `cortex-docs/assets/diagrams/` | Optional |
-| **Content data** | `cortex-docs/.content/` | Optional |
+| **Target HTML file** | `docs/*.html` | ✅ |
+| **IA rules** | `docs/.content/knowledge/doc_best_practices.yaml` | ✅ |
+| **Design tokens** | `docs/.content/knowledge/design_system.yaml` | ✅ |
+| **Component registry** | `docs/.content/knowledge/components.yaml` | ✅ |
+| **A11y checklist** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **Existing CSS files** | `docs/assets/css/` | ✅ |
+| **Diagram specs** | `docs/assets/diagrams/` | Optional |
+| **Content data** | `docs/.content/` | Optional |
 
 ---
 
@@ -165,7 +165,7 @@ These patterns were validated through iterative design sessions and must be appl
 ### Step 1 — Audit (always first)
 
 1. Read target HTML file completely
-2. Load all 5 knowledge YAMLs from `cortex-docs/.content/knowledge/`
+2. Load all 5 knowledge YAMLs from `docs/.content/knowledge/`
 3. Identify issues against:
    - `doc_best_practices.yaml` § information_architecture, css_architecture
    - `a11y_checklist.yaml` — check all P0 items
@@ -192,8 +192,8 @@ Present a structured proposal:
 2. ...
 
 **Files I will modify:**
-- `cortex-docs/{file}.html` — {description}
-- `cortex-docs/assets/css/{file}.css` — {description}
+- `docs/{file}.html` — {description}
+- `docs/assets/css/{file}.css` — {description}
 
 **Files I will NOT touch:**
 - [list unchanged files]

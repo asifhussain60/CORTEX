@@ -116,9 +116,9 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin
 
     def __init__(
         self,
-        content_root: Path = Path("cortex-docs/content/src"),
-        output_root: Path = Path("cortex-docs"),
-        template_dir: Path = Path("cortex-docs/templates"),
+        content_root: Path = Path("docs/content/src"),
+        output_root: Path = Path("docs"),
+        template_dir: Path = Path("docs/templates"),
         build_mode: BuildMode = BuildMode.INCREMENTAL,
         skip_stages: Optional[List[PipelineStage]] = None,
         dry_run: bool = False,

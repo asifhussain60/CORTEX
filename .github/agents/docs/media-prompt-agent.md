@@ -25,8 +25,8 @@ Ensure all visual media prompts (DALL-E image prompts and video narration script
 |-------|--------|----------|
 | **Drift report** | `drift-detection-agent` output | ✅ |
 | **Capability inventory** | Live orchestrator/tool/rule counts | ✅ |
-| **Existing image prompts** | `cortex-docs/assets/image-prompts/` | ✅ |
-| **Existing video prompts** | `cortex-docs/assets/video-prompts/` | ✅ |
+| **Existing image prompts** | `docs/assets/image-prompts/` | ✅ |
+| **Existing video prompts** | `docs/assets/video-prompts/` | ✅ |
 | **Design tokens** | Glassmorphism color palette | ✅ |
 
 ---
@@ -35,10 +35,10 @@ Ensure all visual media prompts (DALL-E image prompts and video narration script
 
 | Output | Path | Description |
 |--------|------|-------------|
-| Updated image prompts | `cortex-docs/assets/image-prompts/**/*.prompt.md` | DALL-E prompts reflecting current system |
-| Updated video prompts | `cortex-docs/assets/video-prompts/*.md` | Video narration scripts reflecting current capabilities |
+| Updated image prompts | `docs/assets/image-prompts/**/*.prompt.md` | DALL-E prompts reflecting current system |
+| Updated video prompts | `docs/assets/video-prompts/*.md` | Video narration scripts reflecting current capabilities |
 | New prompts | Same paths | For newly added capabilities |
-| Archived prompts | `cortex-docs/_archive/media-prompts/` | For deprecated capabilities |
+| Archived prompts | `docs/_archive/media-prompts/` | For deprecated capabilities |
 
 ---
 
@@ -51,7 +51,7 @@ Every `.prompt.md` file MUST follow this structure:
 ```markdown
 # CORTEX Image Prompt: {Title}
 # Role: {Business Leader | Product Owner | Software Engineer | Learner | Shared}
-# Output: cortex-docs/assets/images/generated/{role}/{filename}.png
+# Output: docs/assets/images/generated/{role}/{filename}.png
 # Size: 1200x675 (16:9 landscape)
 # Style: Dark glassmorphism, {audience-specific qualities}
 # Generated: {ISO 8601 timestamp}
@@ -110,7 +110,7 @@ Every image prompt has a matching production-named placeholder PNG. When a DALL-
 
 ### Video Prompt Structure
 
-The video prompts directory (`cortex-docs/assets/video-prompts/`) contains two tiers:
+The video prompts directory (`docs/assets/video-prompts/`) contains two tiers:
 
 | Tier | Path | Purpose |
 |------|------|---------|
@@ -189,7 +189,7 @@ For each new_capability in change_manifest.new_capabilities:
 
 For each deprecated_feature in change_manifest.deprecated_features:
   1. Find all image prompts referencing this feature
-  2. Archive prompt to cortex-docs/_archive/media-prompts/
+  2. Archive prompt to docs/_archive/media-prompts/
   3. Archive matching placeholder PNG
   4. Find all video prompts referencing this feature
   5. Flag for narration script update (do not auto-delete video prompts)

@@ -59,7 +59,7 @@ ok, issues = verify_runtime_environment()
 | Prompts/Agents | `.github/prompts/**`, `.github/agents/**` | MEDIUM |
 | Tests | `tests/**` | LOW |
 | Config | `*.yaml`, `*.toml`, `*.ini` | MEDIUM |
-| Docs | `cortex-docs/**`, `*.md` | LOW |
+| Docs | `docs/**`, `*.md` | LOW |
 
 **Gate:** Change manifest must be non-empty OR this is the first execution.
 

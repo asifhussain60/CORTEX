@@ -52,7 +52,7 @@ production-ready state with zero detritus.
 | 2 | **Root Clutter** | Files in workspace root not in allowlist | Move to `_workspaces/` or delete | P2 |
 | 3 | **Empty Directories** | `find cortex/ tests/ -type d -empty` | `rmdir` | P2 |
 | 4 | **Orphaned Files** | Python files with zero imports/references from any other file | Flag for review | P2 |
-| 5 | **Markdown Sprawl** | `.md` files outside `.github/`, `cortex-docs/`, `_workspaces/` | Archive or delete | P1 |
+| 5 | **Markdown Sprawl** | `.md` files outside `.github/`, `docs/`, `_workspaces/` | Archive or delete | P1 |
 | 6 | **Digested Content** | Files marked as `DIGESTED` in memory state > 7 days old | Delete | P1 |
 | 7 | **Build Artifacts** | `__pycache__/`, `*.pyc`, `dist/`, `build/`, `*.egg-info` | `rm -rf` | P2 |
 | 8 | **OS & Backup Artifacts** | `.DS_Store`, `Thumbs.db`, `desktop.ini`, `._*`, `*.bak`, `*.orig`, `*.backup` | `rm` | P2 |
@@ -67,7 +67,7 @@ tests/               # Test suite
 scripts/             # Utility scripts
 deployment/          # Deployment configs
 cortex-registry/     # Governance + planning
-cortex-docs/         # Documentation site
+docs/         # Documentation site
 _workspaces/         # Scratch/legacy content
 .github/             # CI/CD + prompts + agents
 .cortex-runtime/     # Runtime data

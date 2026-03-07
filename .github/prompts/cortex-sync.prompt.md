@@ -100,7 +100,7 @@ All repo root files and directories are synced **unless** explicitly denied belo
 | `cortex-registry/artifacts/**` | Build/release artefacts — admin-only |
 | `cortex-registry/company/repos/**` | Company-private repo artifacts |
 | `cortex-registry/company/dashboards/repos/**` | Company-private dashboard artifacts |
-| `cortex-docs/**` | **Default-deny all of cortex-docs** — sub-paths re-allowed below |
+| `docs/**` | **Default-deny all of cortex-docs** — sub-paths re-allowed below |
 | `.cortex-runtime/**` | Runtime data — never sync |
 | `.git/**` | Git internals |
 | `**/__pycache__/**`, `**/*.pyc`, `**/*.pyo` | Python bytecode |
@@ -119,10 +119,10 @@ All repo root files and directories are synced **unless** explicitly denied belo
 
 | Pattern | What It Permits |
 |---|---|
-| `cortex-docs/.content/**` | **Only** the `.content/` subdirectory from cortex-docs |
+| `docs/.content/**` | **Only** the `.content/` subdirectory from cortex-docs |
 
 > ⛔ **Root `index.html` and all other cortex-docs web artifacts are NOT synced.**
-> Only `cortex-docs/.content/**` is eligible.
+> Only `docs/.content/**` is eligible.
 
 ### .github Allowlist (production-critical prompts only)
 
@@ -294,7 +294,7 @@ python3 -m cortex.tools.cortex_sync --target /path/to/target --apply --write-man
 # Custom deny/allow overrides
 python3 -m cortex.tools.cortex_sync --target /path/to/target --apply \
     --denylist "cortex/internal/**,scripts/personal/**" \
-    --allowlist "cortex-docs/.content/extra/**"
+    --allowlist "docs/.content/extra/**"
 
 # Override baseline directory
 python3 -m cortex.tools.cortex_sync --target /path/to/target --apply \

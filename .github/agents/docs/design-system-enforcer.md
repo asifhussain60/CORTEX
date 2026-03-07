@@ -81,9 +81,9 @@ These color pairings are APPROVED for card systems, section panels, and visual h
 | Input | Source | Required |
 |-------|--------|----------|
 | **Proposed CSS changes** | `html-view-designer` output | ✅ |
-| **Design system** | `cortex-docs/.content/knowledge/design_system.yaml` | ✅ |
-| **Token source** | `cortex-docs/assets/css/glass-design-tokens.css` | ✅ |
-| **CSS layer map** | `cortex-docs/.content/knowledge/doc_best_practices.yaml § css_architecture` | ✅ |
+| **Design system** | `docs/.content/knowledge/design_system.yaml` | ✅ |
+| **Token source** | `docs/assets/css/glass-design-tokens.css` | ✅ |
+| **CSS layer map** | `docs/.content/knowledge/doc_best_practices.yaml § css_architecture` | ✅ |
 
 ---
 
@@ -173,7 +173,7 @@ When a P0 violation is found, emit:
 ```
 🔴 DESIGN SYSTEM VIOLATION — P0 BLOCK
 
-File: cortex-docs/assets/css/{file}.css (line {n})
+File: docs/assets/css/{file}.css (line {n})
 Rule: {css-001 | css-002 | css-003}
 Found: {violating value}
 Fix: Replace with {token reference}

@@ -320,7 +320,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
 | 10 | **Test-source mirror** — `tests/` dirs without matching `cortex/` source and vice versa; stale test dirs referencing deleted packages (e.g. `tests/cortex_brain/` without `cortex/brain/`). **DISSOLVED PACKAGE GUARD:** NEVER create mirror dirs for dissolved packages (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) — these were relocated into `cortex/` and their old test dirs must be deleted, not recreated. SSOT: `DISSOLVED_PACKAGES` in `cortex/orchestrators/health/constants.py` | `diff <(ls -d cortex/*/) <(ls -d tests/*/)`; also check `cortex_brain/` vs `cortex/orchestrators/core/phase_executors/`; skip any dir matching `DISSOLVED_PACKAGES` | ✅ Delete stale dirs for dissolved packages; create mirror `__init__.py` ONLY for active `cortex/` subdirs |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
-| 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
+| 12 | **Markdown sprawl** — `.md` files outside `.github/`, `docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
 | 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (26 checks) | ✅ Update inline |
 | 14 | **Response header drift** — prompts using wrong product icon (`{icon}` variable instead of fixed 🧠/🛠️), wrong product name (`CORTEX` vs `CORTEX Architect`), or containing forbidden `**Orchestrator:**` field | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header; check for fixed icons: 🧠 in `CORTEX.prompt.md`, 🛠️ in `cortex-architect.prompt.md` | ✅ Restore canonical header in prompt |
 | 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
@@ -953,7 +953,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | Templates | `.github/templates/` |
 | Runtime data | `.cortex-runtime/` (logs, traces, .db files) |
 
-**Forbidden:** Python in `cortex-docs/`, report .md/.txt files anywhere, registry data in `cortex/`.
+**Forbidden:** Python in `docs/`, report .md/.txt files anywhere, registry data in `cortex/`.
 
 ---
 

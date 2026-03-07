@@ -68,7 +68,7 @@ class CleanupManager:
     # Directories to exclude from vacuum
     EXCLUDE_DIRS = {
         "docs",
-        "cortex-docs",
+        "docs",
         ".github",
         "_archives",
         "node_modules",

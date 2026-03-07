@@ -15,7 +15,7 @@ scope: non-production-admin
 
 ## 🎯 Single Responsibility
 
-Detect when architecture diagrams no longer reflect the live system and regenerate them from source of truth. This agent owns all diagram files in `cortex-docs/assets/diagrams/`.
+Detect when architecture diagrams no longer reflect the live system and regenerate them from source of truth. This agent owns all diagram files in `docs/assets/diagrams/`.
 
 ---
 
@@ -36,15 +36,15 @@ Detect when architecture diagrams no longer reflect the live system and regenera
 
 | Output | Path | Format |
 |--------|------|--------|
-| Architecture overview | `cortex-docs/assets/diagrams/architecture-overview.mmd` | Mermaid |
-| Request flow | `cortex-docs/assets/diagrams/request-flow.mmd` | Mermaid |
-| Orchestrator tier map | `cortex-docs/assets/diagrams/orchestrator-tier-map.mmd` | Mermaid |
-| LENS pipeline | `cortex-docs/assets/diagrams/lens-pipeline.mmd` | Mermaid |
-| Governance flow | `cortex-docs/assets/diagrams/governance-flow.mmd` | Mermaid |
-| MCP transport | `cortex-docs/assets/diagrams/mcp-transport.mmd` | Mermaid |
-| TDD workflow | `cortex-docs/assets/diagrams/tdd-workflow.mmd` | Mermaid |
-| Testing pyramid | `cortex-docs/assets/diagrams/testing-pyramid.mmd` | Mermaid |
-| D3.js interactive diagrams | `cortex-docs/assets/diagrams/d3/*.html` | HTML + D3.js v7 |
+| Architecture overview | `docs/assets/diagrams/architecture-overview.mmd` | Mermaid |
+| Request flow | `docs/assets/diagrams/request-flow.mmd` | Mermaid |
+| Orchestrator tier map | `docs/assets/diagrams/orchestrator-tier-map.mmd` | Mermaid |
+| LENS pipeline | `docs/assets/diagrams/lens-pipeline.mmd` | Mermaid |
+| Governance flow | `docs/assets/diagrams/governance-flow.mmd` | Mermaid |
+| MCP transport | `docs/assets/diagrams/mcp-transport.mmd` | Mermaid |
+| TDD workflow | `docs/assets/diagrams/tdd-workflow.mmd` | Mermaid |
+| Testing pyramid | `docs/assets/diagrams/testing-pyramid.mmd` | Mermaid |
+| D3.js interactive diagrams | `docs/assets/diagrams/d3/*.html` | HTML + D3.js v7 |
 
 ---
 

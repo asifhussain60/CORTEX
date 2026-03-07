@@ -33,7 +33,7 @@ class GovernanceViolation(NamedTuple):
 # Directories where .md/.txt files are allowed (CORE-002 exceptions)
 CORE_002_ALLOWED_DIRS = {
     ".github",
-    "cortex-docs",
+    "docs",
     "cortex-registry",
     "_workspaces",
     "deployment",

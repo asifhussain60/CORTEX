@@ -62,21 +62,21 @@ jobs:
 
       - name: CSS zero-inline gate (P0)
         run: |
-          violations=$(grep -r 'style=' cortex-docs/**/*.html 2>/dev/null | wc -l)
+          violations=$(grep -r 'style=' docs/**/*.html 2>/dev/null | wc -l)
           echo "CSS inline style violations: $violations"
           if [ "$violations" -gt 0 ]; then
             echo "❌ P0 GATE FAIL: $violations inline style= attributes found in HTML"
-            grep -rn 'style=' cortex-docs/**/*.html 2>/dev/null | head -20
+            grep -rn 'style=' docs/**/*.html 2>/dev/null | head -20
             exit 1
           fi
           echo "✅ CSS zero-inline gate: PASS"
 
       - name: No deprecated paths in HTML
         run: |
-          violations=$(grep -r 'href.*views/' cortex-docs/**/*.html 2>/dev/null | wc -l)
+          violations=$(grep -r 'href.*views/' docs/**/*.html 2>/dev/null | wc -l)
           if [ "$violations" -gt 0 ]; then
             echo "⚠️  P1 WARNING: $violations references to deprecated views/ path"
-            grep -rn 'href.*views/' cortex-docs/**/*.html 2>/dev/null
+            grep -rn 'href.*views/' docs/**/*.html 2>/dev/null
           else
             echo "✅ No deprecated views/ path references"
           fi
@@ -114,14 +114,14 @@ jobs:
         run: pip install -r requirements.txt --quiet
 
       - name: Stage 1 — Discovery (git + registry + live code)
-        working-directory: cortex-docs
+        working-directory: docs
         run: |
           echo "🔍 Running discovery scan..."
           python pipeline/discover.py --output ../.cortex-runtime/doc-discovery/ || true
           echo "✅ Discovery complete"
 
       - name: Stage 2 — Generate JSON catalogs
-        working-directory: cortex-docs
+        working-directory: docs
         run: |
           echo "⚙️  Generating data/*.json catalogs..."
           python pipeline/build.py || true
@@ -130,7 +130,7 @@ jobs:
 
       - name: Validate orchestrator count
         run: |
-          count=$(python -c "import json; d=json.load(open('cortex-docs/data/orchestrators.json')); print(len(d))" 2>/dev/null || echo "0")
+          count=$(python -c "import json; d=json.load(open('docs/data/orchestrators.json')); print(len(d))" 2>/dev/null || echo "0")
           echo "Orchestrator count: $count"
           if [ "$count" -lt 1 ]; then
             echo "⚠️  P1 WARNING: orchestrators.json has $count entries (expected 27)"
@@ -140,7 +140,7 @@ jobs:
 
       - name: Validate MCP tool count
         run: |
-          count=$(python -c "import json; d=json.load(open('cortex-docs/data/mcp-tools.json')); print(len(d))" 2>/dev/null || echo "0")
+          count=$(python -c "import json; d=json.load(open('docs/data/mcp-tools.json')); print(len(d))" 2>/dev/null || echo "0")
           echo "MCP tool count: $count"
           if [ "$count" -lt 1 ]; then
             echo "⚠️  P1 WARNING: mcp-tools.json has $count entries (expected 26)"
@@ -160,7 +160,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: doc-data-${{ github.run_id }}
-          path: cortex-docs/data/
+          path: docs/data/
           retention-days: 7
 
   # ──────────────────────────────────────────────────────────
@@ -177,7 +177,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: doc-data-${{ github.run_id }}
-          path: cortex-docs/data/
+          path: docs/data/
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -190,18 +190,18 @@ jobs:
 
       - name: CSS zero-inline final gate
         run: |
-          violations=$(grep -r 'style=' cortex-docs/**/*.html 2>/dev/null | wc -l)
+          violations=$(grep -r 'style=' docs/**/*.html 2>/dev/null | wc -l)
           echo "CSS inline style violations: $violations"
           [ "$violations" -eq 0 ] && echo "✅ PASS" || (echo "❌ FAIL" && exit 1)
 
       - name: JSON schema validation
-        working-directory: cortex-docs
+        working-directory: docs
         run: |
           python pipeline/validate.py --check json_schemas || true
           echo "✅ JSON validation complete"
 
       - name: Internal link check (advisory)
-        working-directory: cortex-docs
+        working-directory: docs
         run: |
           python pipeline/validate.py --check internal_links || true
           echo "✅ Link check complete"
@@ -222,15 +222,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: doc-data-${{ github.run_id }}
-          path: cortex-docs/data/
+          path: docs/data/
 
       - name: Check for data changes
         id: check_diff
         run: |
-          git diff --name-only cortex-docs/data/ | head -20
-          if git diff --quiet cortex-docs/data/; then
+          git diff --name-only docs/data/ | head -20
+          if git diff --quiet docs/data/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "ℹ️  No changes to cortex-docs/data/ — skipping commit"
+            echo "ℹ️  No changes to docs/data/ — skipping commit"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
@@ -240,11 +240,11 @@ jobs:
         run: |
           git config user.name "CORTEX Doc Refresh Bot"
           git config user.email "cortex-docs@asifhussain60.github.io"
-          git add cortex-docs/data/*.json
+          git add docs/data/*.json
           git commit -m "docs: auto-refresh JSON catalogs [DOC-REFRESH-001] [skip ci]
 
           Triggered by: ${{ github.event_name }}
           Ref: ${{ github.ref }}
           Run: ${{ github.run_id }}"
           git push origin HEAD
-          echo "✅ Deployed: cortex-docs/data/*.json updated"
+          echo "✅ Deployed: docs/data/*.json updated"

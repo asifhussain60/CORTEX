@@ -200,7 +200,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |
-| Docs | `cortex-docs/` (HTML/CSS only) |
+| Docs | `docs/` (HTML/CSS only) |
 | Prompts | `.github/prompts/` |
 
 **⛔ Never reference:** `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`

@@ -26,7 +26,7 @@ Transform raw Git change data into human-readable, structured release notes. Pro
 | **Change manifest** | `git-discovery-agent` output | ✅ |
 | **Phase records** | `cortex-registry/planning/phases/completed/` | ✅ |
 | **Git tags** | `git tag --list` | Optional |
-| **Previous release notes** | `cortex-docs/_archive/release-notes/` or inline history | Optional |
+| **Previous release notes** | `docs/_archive/release-notes/` or inline history | Optional |
 
 ---
 

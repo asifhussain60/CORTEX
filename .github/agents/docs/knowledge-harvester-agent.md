@@ -80,7 +80,7 @@ When harvesting from a session, extract:
 | Input | Source | Required |
 |-------|--------|----------|
 | **Source list** | User-specified URLs or documents | ✅ |
-| **Existing knowledge YAMLs** | `cortex-docs/.content/knowledge/` | ✅ |
+| **Existing knowledge YAMLs** | `docs/.content/knowledge/` | ✅ |
 | **Design constraints** | `design_system.yaml § design_constraints` | ✅ |
 
 ---
@@ -89,11 +89,11 @@ When harvesting from a session, extract:
 
 | Output | Path | Description |
 |--------|------|-------------|
-| Updated best practices | `cortex-docs/.content/knowledge/doc_best_practices.yaml` | IA, navigation, CSS architecture rules |
-| Updated design system | `cortex-docs/.content/knowledge/design_system.yaml` | Token additions (rare — CSS is SSOT) |
-| Updated components | `cortex-docs/.content/knowledge/components.yaml` | New approved component patterns |
-| Updated a11y checklist | `cortex-docs/.content/knowledge/a11y_checklist.yaml` | New WCAG checks or updated status |
-| Updated perf checklist | `cortex-docs/.content/knowledge/performance_checklist.yaml` | New Core Web Vitals guidance |
+| Updated best practices | `docs/.content/knowledge/doc_best_practices.yaml` | IA, navigation, CSS architecture rules |
+| Updated design system | `docs/.content/knowledge/design_system.yaml` | Token additions (rare — CSS is SSOT) |
+| Updated components | `docs/.content/knowledge/components.yaml` | New approved component patterns |
+| Updated a11y checklist | `docs/.content/knowledge/a11y_checklist.yaml` | New WCAG checks or updated status |
+| Updated perf checklist | `docs/.content/knowledge/performance_checklist.yaml` | New Core Web Vitals guidance |
 
 ---
 

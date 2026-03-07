@@ -6,8 +6,8 @@ scope: non-production-admin
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
-**Knowledge Base:** `cortex-docs/.content/knowledge/` (5 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist)
-**Content Sources:** `cortex-docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
+**Knowledge Base:** `docs/.content/knowledge/` (5 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist)
+**Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
 
 ---
 
@@ -45,7 +45,7 @@ When invoked **without an explicit user request**, this prompt executes a full d
 2. Detect added, removed, renamed, or modified files across:
    - `cortex/` — implementation changes
    - `cortex-registry/` — governance and workflow changes
-   - `cortex-docs/` — documentation changes
+   - `docs/` — documentation changes
    - `.github/` — prompt and agent changes
    - `tests/` — test coverage changes
 3. Classify changes into:
@@ -56,7 +56,7 @@ When invoked **without an explicit user request**, this prompt executes a full d
 
 ### Phase 2: Drift Detection (Agent: `drift-detection-agent`)
 
-1. Cross-reference implementation (`cortex/`) against documentation (`cortex-docs/`)
+1. Cross-reference implementation (`cortex/`) against documentation (`docs/`)
 2. Detect **orphaned features** — implemented but undocumented capabilities
 3. Detect **phantom documentation** — documented features with no implementation
 4. Detect **stale references** — docs referencing deleted paths, dissolved packages, old counts
@@ -70,11 +70,11 @@ Update the following targets to reflect the latest architecture while preserving
 
 | Target | Path | Constraints |
 |--------|------|-------------|
-| **Content files** | `cortex-docs/.content/` | Preserve consolidation structure (14 files), update counts and capabilities |
-| **Glossary** | `cortex-docs/.content/glossary.md` | Add new terms, remove stale terms, enforce consistency |
-| **Video prompts** | `cortex-docs/assets/video-prompts/` | Update capability descriptions to match implementation |
-| **Image prompts** | `cortex-docs/assets/image-prompts/` | Update visual descriptions to match actual UI/system behaviors |
-| **Diagrams** | `cortex-docs/assets/diagrams/` | Regenerate when architecture changes (agent: `diagram-regeneration-agent`) |
+| **Content files** | `docs/.content/` | Preserve consolidation structure (14 files), update counts and capabilities |
+| **Glossary** | `docs/.content/glossary.md` | Add new terms, remove stale terms, enforce consistency |
+| **Video prompts** | `docs/assets/video-prompts/` | Update capability descriptions to match implementation |
+| **Image prompts** | `docs/assets/image-prompts/` | Update visual descriptions to match actual UI/system behaviors |
+| **Diagrams** | `docs/assets/diagrams/` | Regenerate when architecture changes (agent: `diagram-regeneration-agent`) |
 
 **Synchronization Rules:**
 - ✅ Maintain formatting conventions and structural patterns
@@ -92,9 +92,9 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 | Target | Path |
 |--------|------|
-| **Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (12 chapters) |
-| **Chapter images** | `cortex-docs/awakening-of-cortex/images/` (12 images + prompts) |
-| **Story prompts** | `cortex-docs/awakening-of-cortex/images/story-prompts/` |
+| **Chapters** | `docs/awakening-of-cortex/chapters/` (12 chapters) |
+| **Chapter images** | `docs/awakening-of-cortex/images/` (12 images + prompts) |
+| **Story prompts** | `docs/awakening-of-cortex/images/story-prompts/` |
 
 **Narrative Constraints (NON-NEGOTIABLE):**
 - ✅ Preserve the existing comedic, dramatic, self-aware tone
@@ -105,7 +105,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ✅ New system capabilities integrated organically into existing story arc
 - ✅ Maintain narrative continuity and internal lore consistency
 - ✅ Running gags preserved and evolved (router blinks red, coffee going cold, LED eyes, etc.)
-- ✅ All chapter links in `cortex-docs/awakening-of-cortex/index.html` must remain valid and resolvable
+- ✅ All chapter links in `docs/awakening-of-cortex/index.html` must remain valid and resolvable
 - ❌ **No new chapter `.md` files** — the 12-chapter structure is locked; new chapters are NEVER added
 - ❌ **Do not modify `index.html` chapter list** — link structure is frozen; chapter additions break this invariant
 - ❌ **No Book Two content** injected into Book One chapters — "The Collective Consciousness" is a future placeholder only
@@ -126,7 +126,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 ## 🎭 Role-Aware Content Synthesis (MANDATORY for Role Views)
 
-**Trigger:** Any HTML work touching `cortex-docs/roles/` or `cortex-docs/index.html` persona sections.
+**Trigger:** Any HTML work touching `docs/roles/` or `docs/index.html` persona sections.
 
 When building or enhancing role-specific HTML views, the Documentation Orchestrator MUST automatically load and synthesise content from the `.content/` knowledge base. The user should **never** need to mention `.content` files — the prompt does this autonomously based on the target role.
 
@@ -182,7 +182,7 @@ When building or enhancing role-specific HTML views, the Documentation Orchestra
 
 ## 🎨 Glassmorphism Design Intelligence — Proven Patterns (MANDATORY)
 
-**Authority:** Lessons codified from iterative design sessions. These patterns are PROVEN superior through user testing and must be applied automatically on all `cortex-docs/` HTML work. The user should never need to request these — they are the default.
+**Authority:** Lessons codified from iterative design sessions. These patterns are PROVEN superior through user testing and must be applied automatically on all `docs/` HTML work. The user should never need to request these — they are the default.
 
 ### 🧠 Learning Protocol (PLIP-001)
 
@@ -470,7 +470,7 @@ All HTML pages use inline `<style>` blocks as their primary styling mechanism. T
 
 ## 🖌️ Design + Implement Mode
 
-**Trigger:** Any request to update, redesign, or improve an HTML view in `cortex-docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
+**Trigger:** Any request to update, redesign, or improve an HTML view in `docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
 
 **Mode contract (non-negotiable):**
 - ✅ Inline `style=` attributes are **ALLOWED** — prefer CSS classes for reusable patterns, but inline styles are permitted for one-off overrides, rapid prototyping, and page-scoped tweaks. This rule was relaxed because all HTML pages already use inline `<style>` blocks as their primary architecture.
@@ -480,8 +480,8 @@ All HTML pages use inline `<style>` blocks as their primary styling mechanism. T
 - ❌ **NEVER** use D3 horizontal bar charts for domain distributions — use proportional bubble grids
 - ❌ **NEVER** use `Plus Jakarta Sans` for headings — use `Inter` with `letter-spacing: -0.02em`
 - ❌ **NEVER** use 3-column table-row grids for before/after comparisons — use split card-pair layout
-- ✅ CSS changes → `cortex-docs/assets/css/` files OR inline `<style>` blocks (matching the page's existing architecture)
-- ✅ Read `cortex-docs/.content/knowledge/` before proposing any structural change
+- ✅ CSS changes → `docs/assets/css/` files OR inline `<style>` blocks (matching the page's existing architecture)
+- ✅ Read `docs/.content/knowledge/` before proposing any structural change
 - ✅ Validate against `a11y_checklist.yaml` and `performance_checklist.yaml`
 - ✅ All new components must reference entries in `components.yaml`
 - ✅ Apply all rules from `§ Glassmorphism Design Intelligence — Proven Patterns` automatically
@@ -510,11 +510,11 @@ This step runs **automatically** whenever the target file is a role view or the 
 
 **Agent:** `html-view-designer`
 
-1. Load `cortex-docs/.content/knowledge/doc_best_practices.yaml` — IA and navigation rules
-2. Load `cortex-docs/.content/knowledge/design_system.yaml` — token constraints
-3. Load `cortex-docs/.content/knowledge/components.yaml` — approved component patterns
+1. Load `docs/.content/knowledge/doc_best_practices.yaml` — IA and navigation rules
+2. Load `docs/.content/knowledge/design_system.yaml` — token constraints
+3. Load `docs/.content/knowledge/components.yaml` — approved component patterns
 4. Read the target HTML file — understand current structure and DOM hooks
-5. Read existing CSS files in `cortex-docs/assets/css/` — understand current styles
+5. Read existing CSS files in `docs/assets/css/` — understand current styles
 6. Propose: layout changes, component additions, structural improvements
 7. Present **🪞 Intent Reflection** with the design proposal
 8. Wait for `proceed` before implementing
@@ -640,11 +640,11 @@ The coverage audit agent maintains a live coverage map tracking:
 | **Workflow Templates** | `cortex-registry/workflows/templates/` | `.content/09-lifecycle-from-idea-to-production.md` |
 | **Debug Strategies** | `cortex/orchestrators/support/debugging/` (8 strategies) | `.content/05-orchestration-the-engine-room.md` |
 | **RCA Methodologies** | `cortex/intelligence/learning/rca_engine.py` (4 methods) | `.content/08-learning-institutional-memory.md` |
-| **Diagrams** | `cortex-docs/assets/diagrams/` | `.content/` inline Mermaid blocks |
-| **Narrative Chapters** | `cortex-docs/awakening-of-cortex/chapters/` (12) | Story prompts in `images/story-prompts/` |
-| **Video Prompts** | `cortex-docs/assets/video-prompts/` (16 files) | Aligned with capability descriptions |
-| **Image Prompts** | `cortex-docs/assets/image-prompts/` | Aligned with UI/system behaviors |
-| **Glossary Terms** | All `.content/` files | `cortex-docs/.content/glossary.md` |
+| **Diagrams** | `docs/assets/diagrams/` | `.content/` inline Mermaid blocks |
+| **Narrative Chapters** | `docs/awakening-of-cortex/chapters/` (12) | Story prompts in `images/story-prompts/` |
+| **Video Prompts** | `docs/assets/video-prompts/` (16 files) | Aligned with capability descriptions |
+| **Image Prompts** | `docs/assets/image-prompts/` | Aligned with UI/system behaviors |
+| **Glossary Terms** | All `.content/` files | `docs/.content/glossary.md` |
 
 ---
 
@@ -652,7 +652,7 @@ The coverage audit agent maintains a live coverage map tracking:
 
 ### Rendering-Ready Content Philosophy
 
-**For `*.md` files in `cortex-docs/.content/`, generate ONLY rendering-ready content:**
+**For `*.md` files in `docs/.content/`, generate ONLY rendering-ready content:**
 
 **✅ ALWAYS Include:**
 - User-facing capabilities and outcomes
@@ -672,7 +672,7 @@ The coverage audit agent maintains a live coverage map tracking:
 
 ### Terminology Consistency (Glossary-Enforced)
 
-All documents MUST use terms as defined in `cortex-docs/.content/glossary.md`. The glossary is the single authority for:
+All documents MUST use terms as defined in `docs/.content/glossary.md`. The glossary is the single authority for:
 - Component names (MasterOrchestrator, not "master orchestrator" or "Master Orch")
 - Acronyms (LENS, URS, RCA, MCP — always expanded on first use)
 - Tier names (Tier 0 Skull, Tier 1 Core, etc.)
@@ -692,7 +692,7 @@ Documentation is versioned consistently with release tags:
 
 **When content becomes outdated:**
 
-1. **Auto-archive** — Move to `cortex-docs/_archive/` with a dated subfolder
+1. **Auto-archive** — Move to `docs/_archive/` with a dated subfolder
 2. **Never blind-delete** — All removals go through archival first
 3. **Preserve Git history** — Archival is a move, not a delete
 4. **Update cross-references** — Fix any links pointing to archived content
@@ -702,8 +702,8 @@ Documentation is versioned consistently with release tags:
 - `cortex_brain/` — dissolved; rules at `cortex-registry/core/`
 - `cortex_intelligence/` — deleted; use `cortex/intelligence/`
 - `cortex_lens/` — deleted; use `cortex/lens/`
-- `cortex-docs/views/` — migrated to `cortex-docs/roles/`
-- `cortex-docs/business/`, `product/`, `engineering/` — removed
+- `docs/views/` — migrated to `docs/roles/`
+- `docs/business/`, `product/`, `engineering/` — removed
 
 ---
 
@@ -762,6 +762,6 @@ When invoked with a specific `/doc-*` command:
 - **Agents:** `.github/agents/docs/` (8 modular agents)
 - **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **Master Plan:** `cortex-registry/cortex-master.yaml`
-- **Content Source:** `cortex-docs/.content/` (14 consolidated files + glossary + index)
-- **Narrative Source:** `cortex-docs/awakening-of-cortex/`
-- **Visual Assets:** `cortex-docs/assets/` (diagrams, images, video-prompts)
+- **Content Source:** `docs/.content/` (14 consolidated files + glossary + index)
+- **Narrative Source:** `docs/awakening-of-cortex/`
+- **Visual Assets:** `docs/assets/` (diagrams, images, video-prompts)

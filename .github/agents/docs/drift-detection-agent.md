@@ -27,9 +27,9 @@ This agent does NOT fix drift — it only detects and reports it.
 |-------|--------|----------|
 | **Change manifest** | `git-discovery-agent` output | ✅ |
 | **Live file system** | Workspace root | ✅ |
-| **Glossary** | `cortex-docs/.content/glossary.md` | ✅ |
-| **Content files** | `cortex-docs/.content/*.md` | ✅ |
-| **Diagrams** | `cortex-docs/assets/diagrams/` | ✅ |
+| **Glossary** | `docs/.content/glossary.md` | ✅ |
+| **Content files** | `docs/.content/*.md` | ✅ |
+| **Diagrams** | `docs/assets/diagrams/` | ✅ |
 
 ---
 
@@ -50,21 +50,21 @@ drift_report:
     # Implemented but NOT documented
     - feature: "FooOrchestrator"
       implementation: "cortex/orchestrators/core/foo_orchestrator.py"
-      expected_doc: "cortex-docs/.content/05-orchestration-the-engine-room.md"
+      expected_doc: "docs/.content/05-orchestration-the-engine-room.md"
       severity: P0
       reason: "New orchestrator has no documentation coverage"
 
   phantom_documentation:
     # Documented but NOT implemented
     - feature: "BarTool"
-      documentation: "cortex-docs/.content/06-mcp-tools-in-your-ide.md#bar-tool"
+      documentation: "docs/.content/06-mcp-tools-in-your-ide.md#bar-tool"
       expected_impl: "cortex/mcp/tools/cortex_bar.py"
       severity: P0
       reason: "Tool documented but implementation file does not exist"
 
   stale_references:
     # Documentation referencing deleted/moved paths
-    - file: "cortex-docs/.content/02-intelligence.md"
+    - file: "docs/.content/02-intelligence.md"
       reference: "cortex_intelligence/"
       severity: P1
       reason: "Package dissolved — should reference cortex/intelligence/"
@@ -73,27 +73,27 @@ drift_report:
     # Inconsistent naming across documents
     - term: "master orchestrator"
       expected: "MasterOrchestrator"
-      found_in: ["cortex-docs/.content/05-orchestration.md:42"]
+      found_in: ["docs/.content/05-orchestration.md:42"]
       severity: P2
-      glossary_ref: "cortex-docs/.content/glossary.md#masterorchestrator"
+      glossary_ref: "docs/.content/glossary.md#masterorchestrator"
 
   stale_counts:
     # Numeric values that no longer match reality
     - metric: "orchestrator_count"
       documented: 323
       actual: 324
-      location: "cortex-docs/.content/05-orchestration-the-engine-room.md"
+      location: "docs/.content/05-orchestration-the-engine-room.md"
       severity: P1
 
   stale_diagrams:
     # Diagrams with outdated nodes or flows
-    - diagram: "cortex-docs/assets/diagrams/architecture-overview.mmd"
+    - diagram: "docs/assets/diagrams/architecture-overview.mmd"
       issue: "Missing FooOrchestrator node"
       severity: P1
 
   narrative_drift:
     # Story content referencing outdated system state
-    - chapter: "cortex-docs/awakening-of-cortex/chapters/12-The-Enterprise-Brain.md"
+    - chapter: "docs/awakening-of-cortex/chapters/12-The-Enterprise-Brain.md"
       issue: "References 51 orchestrators — now 324 orchestrator files"
       severity: P2
 ```
@@ -133,7 +133,7 @@ For each documented capability:
 - `cortex_brain/` → should be `cortex-registry/core/`
 - `cortex_intelligence/` → should be `cortex/intelligence/`
 - `cortex_lens/` → should be `cortex/lens/`
-- `cortex-docs/views/` → should be `cortex-docs/roles/`
+- `docs/views/` → should be `docs/roles/`
 - `cortex/orchestrators/internal/` → not a canonical tier
 
 ### 4. Terminology Consistency Check (P2)
@@ -165,7 +165,7 @@ For each glossary term:
 **Method:** Parse Mermaid diagram files and verify referenced nodes exist in implementation.
 
 ```
-For each .mmd file in cortex-docs/assets/diagrams/:
+For each .mmd file in docs/assets/diagrams/:
   1. Extract node labels (orchestrator names, tool names, component names)
   2. Verify each referenced component exists in live code
   3. Check for missing components that should be in the diagram
@@ -177,7 +177,7 @@ For each .mmd file in cortex-docs/assets/diagrams/:
 **Method:** Scan Awakening of CORTEX chapters for system references that may be outdated.
 
 ```
-For each chapter in cortex-docs/awakening-of-cortex/chapters/:
+For each chapter in docs/awakening-of-cortex/chapters/:
   1. Extract numeric claims (orchestrator counts, tool counts, etc.)
   2. Extract feature references (specific tools, orchestrators, capabilities)
   3. Cross-reference against current implementation
