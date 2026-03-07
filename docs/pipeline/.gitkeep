@@ -1,7 +1,0 @@
-# Build-time extraction scripts will live here
-
-Files to create:
-- discover.py
-- extract.py
-- validate.py
-- build.py
