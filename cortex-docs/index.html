@@ -742,6 +742,114 @@
 
 <main id="main-content" role="main">
 
+    <!-- What is CORTEX? -->
+    <section class="section" aria-label="What is CORTEX?" style="padding-bottom: 0;">
+        <div style="
+            width: 80%;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(15,23,42,0.65) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(99,102,241,0.35);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            box-shadow: 0 0 0 1px rgba(99,102,241,0.1), 0 24px 60px -12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+            padding: 2.5rem 2.25rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        ">
+            <!-- Subtle radial glow behind content -->
+            <div aria-hidden="true" style="
+                position: absolute; inset: 0; z-index: 0;
+                background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 70%);
+                pointer-events: none;
+            "></div>
+
+            <div style="position: relative; z-index: 1;">
+                <!-- Eyebrow label -->
+                <div style="
+                    display: inline-flex; align-items: center; gap: 0.5rem;
+                    padding: 0.25rem 0.85rem;
+                    border-radius: 999px;
+                    background: rgba(99,102,241,0.12);
+                    border: 1px solid rgba(99,102,241,0.28);
+                    font-size: 0.65rem; font-weight: 700;
+                    letter-spacing: 0.18em; text-transform: uppercase;
+                    color: #a5b4fc;
+                    margin-bottom: 1.25rem;
+                ">
+                    <span style="width:6px;height:6px;border-radius:50%;background:#818cf8;display:inline-block;box-shadow:0 0 6px #818cf8;"></span>
+                    Framework Definition
+                </div>
+
+                <!-- Headline -->
+                <h2 style="
+                    font-size: clamp(1.5rem, 2.5vw, 2rem);
+                    font-weight: 800;
+                    letter-spacing: -0.03em;
+                    background: linear-gradient(135deg, #fff 30%, #c4b5fd 70%, #67e8f9 100%);
+                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin: 0 0 1.25rem;
+                    line-height: 1.2;
+                ">What is CORTEX?</h2>
+
+                <!-- Body -->
+                <p style="
+                    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+                    color: #94a3b8;
+                    line-height: 1.75;
+                    margin: 0 auto 1.75rem;
+                    max-width: 72ch;
+                ">
+                    <strong style="color:#e2e8f0;">CORTEX</strong> is an
+                    <strong style="color:#a5b4fc;">AI Engineering Orchestration Framework</strong>
+                    that governs how AI-assisted code is planned, written, tested, and delivered.
+                    It wraps GitHub Copilot with a structured lifecycle — enforcing TDD, governance rules,
+                    and sweep-complete quality gates — so every output meets a verified standard before it ships.
+                </p>
+
+                <!-- Three pillars -->
+                <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
+                    <div style="
+                        flex: 1; min-width: 180px; max-width: 260px;
+                        background: rgba(255,255,255,0.03);
+                        border: 1px solid rgba(255,255,255,0.07);
+                        border-radius: 0.875rem;
+                        padding: 1.5rem 1.25rem;
+                    ">
+                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">🧠</div>
+                        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#a5b4fc; margin-bottom:0.45rem;">Orchestrates</div>
+                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">323 orchestrators across 15 domains</div>
+                    </div>
+                    <div style="
+                        flex: 1; min-width: 180px; max-width: 260px;
+                        background: rgba(255,255,255,0.03);
+                        border: 1px solid rgba(255,255,255,0.07);
+                        border-radius: 0.875rem;
+                        padding: 1.5rem 1.25rem;
+                    ">
+                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">🛡️</div>
+                        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#67e8f9; margin-bottom:0.45rem;">Governs</div>
+                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">37 YAML rules enforced at every gate</div>
+                    </div>
+                    <div style="
+                        flex: 1; min-width: 180px; max-width: 260px;
+                        background: rgba(255,255,255,0.03);
+                        border: 1px solid rgba(255,255,255,0.07);
+                        border-radius: 0.875rem;
+                        padding: 1.5rem 1.25rem;
+                    ">
+                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">✅</div>
+                        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#34d399; margin-bottom:0.45rem;">Verifies</div>
+                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">19,000+ tests · TDD-first · zero regressions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 2. Value Proposition / CORTEX Vision -->
     <section class="section container" aria-label="Value Proposition">
         <div class="grid-2">

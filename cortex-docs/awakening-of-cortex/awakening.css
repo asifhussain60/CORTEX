@@ -121,6 +121,13 @@ body {
   background-clip: text; line-height: 1.2; margin: 0;
   text-align: center;
 }
+.awakening-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.6rem, 1.2vw, 0.78rem); font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #7b61ff; opacity: 0.85;
+  text-align: center; margin: 0.35rem 0 0;
+}
 .awakening-tagline {
   font-size: 0.92rem; color: #a0a6c0;
   line-height: 1.65; margin: 0;

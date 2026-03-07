@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>CORTEX | Strategic Executive Command</title>
+    <title>CORTEX — AI Engineering Orchestration Framework | Strategic Executive Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass-bg: rgba(10, 15, 30, 0.7);
@@ -24,9 +24,16 @@
                 radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
             color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ── Inter heading override ── */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+            word-spacing: 0.04em;
         }
 
         /* Hero Wrapper Styles - Preserved as requested */
@@ -157,12 +164,216 @@
 
         /* Mobile specific layout fixes */
         @media (max-width: 768px) {
-            .hero-robot-head {
-                width: 100px;
-            }
-            .glass-card {
-                border-radius: 1rem;
-            }
+            .hero-robot-head { width: 100px; }
+            .glass-card { border-radius: 1rem; }
+        }
+
+        /* ── Enhanced Section Styles ── */
+        .section-eyebrow {
+            font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .pill-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.2rem 0.8rem; border-radius: 999px;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+        }
+        /* Pain vs CORTEX comparison — card-pair layout */
+        .compare-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.07);
+            margin-bottom: 0.75rem;
+        }
+        .compare-pair-before {
+            background: rgba(239, 68, 68, 0.05);
+            border-right: 1px solid rgba(239,68,68,0.12);
+            padding: 1rem 1.1rem;
+        }
+        .compare-pair-after {
+            background: rgba(16, 185, 129, 0.05);
+            padding: 1rem 1.1rem;
+        }
+        .compare-pair-before .ccp-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; font-weight: 700;
+            letter-spacing: 0.12em; color: #f87171;
+            margin-bottom: 0.25rem; display: block;
+        }
+        .compare-pair-after .ccp-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem; font-weight: 700;
+            letter-spacing: 0.12em; color: #34d399;
+            margin-bottom: 0.25rem; display: block;
+        }
+        .compare-pair-before p { color: #fca5a5; font-size: 0.8rem; line-height: 1.5; margin: 0; }
+        .compare-pair-after  p { color: #6ee7b7; font-size: 0.8rem; line-height: 1.5; margin: 0; }
+        @media (max-width: 600px) {
+            .compare-pair { grid-template-columns: 1fr; }
+            .compare-pair-before { border-right: none; border-bottom: 1px solid rgba(239,68,68,0.12); }
+        }
+        /* Pipeline breadcrumb */
+        .pipeline-track {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 0; justify-content: center;
+        }
+        .pipeline-node {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 0.6rem 0.9rem;
+            border-radius: 0.6rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            min-width: 100px; text-align: center;
+            position: relative;
+        }
+        .pipeline-node.active {
+            background: rgba(0,212,255,0.08);
+            border-color: rgba(0,212,255,0.3);
+        }
+        .pipeline-connector {
+            width: 2rem; height: 1px;
+            background: linear-gradient(90deg, rgba(0,212,255,0.3), rgba(139,92,246,0.3));
+            flex-shrink: 0;
+        }
+        /* Mermaid theme override */
+        .mermaid svg { background: transparent !important; }
+        /* Animated counter */
+        @keyframes count-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .count-animate { animation: count-up 0.6s ease forwards; }
+        /* Hover lift for stat cards */
+        .stat-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px -8px rgba(0,212,255,0.2);
+        }
+
+        /* ── SDLC Visual Pipeline ── */
+        .sdlc-pipeline {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scroll-snap-type: x mandatory;
+        }
+        .sdlc-phase {
+            flex: 1;
+            min-width: 110px;
+            max-width: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 1.25rem 0.75rem 1rem;
+            border-radius: 0.875rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: linear-gradient(160deg, var(--phase-glow, rgba(255,255,255,0.02)), rgba(255,255,255,0.01));
+            scroll-snap-align: start;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sdlc-phase:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px -4px var(--phase-glow, rgba(0,0,0,0.2));
+            border-color: var(--phase-color, rgba(255,255,255,0.1));
+        }
+        .sdlc-phase--certified {
+            border-color: rgba(16,185,129,0.3);
+        }
+        .sdlc-icon {
+            font-size: 1.75rem;
+            line-height: 1;
+        }
+        .sdlc-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--phase-color, #e2e8f0);
+        }
+        .sdlc-gate {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            color: #94a3b8;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .sdlc-gate--dor  { border-color: rgba(0,212,255,0.25); color: #67e8f9; }
+        .sdlc-gate--arch { border-color: rgba(167,139,250,0.25); color: #c4b5fd; }
+        .sdlc-gate--tdd  { border-color: rgba(139,92,246,0.3); color: #a78bfa; }
+        .sdlc-gate--gov  { border-color: rgba(56,189,248,0.25); color: #7dd3fc; }
+        .sdlc-gate--lens { border-color: rgba(52,211,153,0.25); color: #6ee7b7; }
+        .sdlc-gate--sec  { border-color: rgba(248,113,113,0.3); color: #fca5a5; }
+        .sdlc-gate--dod  { border-color: rgba(16,185,129,0.35); color: #34d399; background: rgba(16,185,129,0.08); }
+        .sdlc-desc {
+            font-size: 0.68rem;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.45;
+            margin-top: 0.1rem;
+        }
+        .sdlc-arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 0.2rem;
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.12);
+            flex-shrink: 0;
+            align-self: center;
+        }
+        @media (max-width: 900px) {
+            .sdlc-pipeline { gap: 0; }
+            .sdlc-phase { min-width: 90px; padding: 1rem 0.5rem; }
+            .sdlc-desc { display: none; }
+        }
+
+        /* ── Domain Bubble Grid ── */
+        .domain-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .domain-bubble {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: default;
+            flex-shrink: 0;
+        }
+        .domain-bubble:hover {
+            transform: scale(1.06);
+            box-shadow: 0 8px 24px -4px var(--bubble-glow);
+            border-color: var(--bubble-color);
+        }
+        .domain-bubble .db-count {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            color: var(--bubble-color);
+            line-height: 1;
+        }
+        .domain-bubble .db-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.06em;
+            text-align: center;
         }
     </style>
 </head>
@@ -171,7 +382,10 @@
     <nav class="nav-blur sticky top-0 z-50 px-4 md:px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-2 md:gap-3">
             <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center font-bold text-black text-xs">CX</div>
-            <span class="font-bold tracking-tight text-lg md:text-xl">CORTEX</span>
+            <div class="flex flex-col leading-none">
+                <span class="font-bold tracking-tight text-lg md:text-xl">CORTEX</span>
+                <span class="text-[9px] text-cyan-500/70 font-semibold tracking-widest uppercase hidden md:block">AI Engineering Orchestration Framework</span>
+            </div>
         </div>
         <div class="flex gap-4">
             <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] md:text-xs font-semibold flex items-center gap-2">
@@ -184,7 +398,7 @@
 
     <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-16 md:space-y-24">
 
-        <!-- Hero Section -->
+        <!-- ── Hero Section ── -->
         <section class="text-center space-y-6 md:space-y-8">
             <div class="hero-section-wrapper">
                 <div class="hero-robot-container">
@@ -195,16 +409,19 @@
                 </div>
                 <div class="hero-divider-line"></div>
             </div>
-            
+
             <div class="space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold tracking-widest uppercase">
+                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> AI Engineering Orchestration Framework
+                </div>
                 <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500 leading-[1.1] md:leading-tight">
                     Strategic Engineering Governance at Scale
                 </h1>
                 <p class="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-4">
-                    CORTEX transforms software engineering from an ad-hoc process into a <span class="text-cyan-400 font-semibold uppercase tracking-tight">Governed Development Lifecycle</span>. We ensure institutional integrity through automated cognitive checkpoints.
+                    CORTEX — the <span class="text-cyan-400 font-semibold">AI Engineering Orchestration Framework</span> — transforms software engineering from an ad-hoc process into a <span class="text-cyan-400 font-semibold uppercase tracking-tight">Governed Development Lifecycle</span>. Institutional integrity through automated cognitive checkpoints.
                 </p>
             </div>
-            
+
             <div class="flex flex-wrap justify-center gap-4 md:gap-6 pt-4 px-2">
                 <div class="glass-card px-4 md:px-8 py-4 md:py-6 text-center w-[calc(50%-1rem)] md:w-48">
                     <div class="text-xl md:text-3xl font-black text-emerald-400 mb-1">99 / 99</div>
@@ -217,6 +434,110 @@
                 <div class="glass-card px-4 md:px-8 py-4 md:py-6 text-center w-full md:w-48">
                     <div class="text-xl md:text-3xl font-black text-violet-400 mb-1">Zero</div>
                     <div class="text-[8px] md:text-[10px] text-slate-500 uppercase tracking-widest font-bold">Regressions</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── NEW: The Cost of Uncontrolled AI (8 Pain Points) ── -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3 px-4">
+                <div class="section-eyebrow text-red-400">The Problem Space</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">The Cost of Uncontrolled AI</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base font-light leading-relaxed">
+                    Unorchestrated AI creates 8 structural failure modes that compound silently — eroding quality, audit trails and institutional knowledge.
+                </p>
+            </div>
+
+            <div class="glass-card p-5 md:p-8 space-y-2">
+                <!-- Column headers -->
+                <div class="grid grid-cols-2 gap-0 mb-3 px-1">
+                    <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-400">
+                        <span class="text-base">❌</span> Without CORTEX
+                    </div>
+                    <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                        <span class="text-base">✅</span> With CORTEX
+                    </div>
+                </div>
+
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-001 · Session Amnesia</span>
+                        <p>No memory between sessions. Every conversation starts from zero — context, decisions, and prior work vanish.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Persistent Memory</span>
+                        <p>Orchestrator traces, 7 SQLite databases, and RCA history carry full context across every session indefinitely.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-002 · No Enforcement</span>
+                        <p>AI suggestions violate standards silently. Governance lives only in documents nobody reads at commit time.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Tiered Enforcement</span>
+                        <p>36 governance rules enforced automatically at pre-commit, CI pipeline, and runtime — no human reviewer required.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-003 · Implementation First</span>
+                        <p>Code ships without tests. Regressions surface in production weeks after the causal change.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Mandatory TDD</span>
+                        <p>CORE-008 mandates RED → GREEN → REFACTOR on every change. No implementation proceeds without a failing test.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-004 · Invisible Audit Trail</span>
+                        <p>Who changed what, when, and why? No traceable decision log. Compliance evidence reconstructed manually.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Full Traceability</span>
+                        <p>AC_START/AC_COMPLETE markers log every operation — hash-chained and tamper-evident from keystroke to release.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-005 · Single-Pass Execution</span>
+                        <p>One-shot AI responses with no convergence loop. Defects survive review because nothing rescans after a fix.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Convergence Loops</span>
+                        <p>CORE-068: detect → fix → rescan cycles repeat autonomously until zero P0/P1 violations remain — up to 3 passes.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-006 · Context Blindness</span>
+                        <p>AI responds without workspace awareness. Suggestions ignore existing architecture, history, and coupling.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">LENS Intelligence</span>
+                        <p>9 parallel analyzers scan structure, history, dependencies, security, and patterns before every single response.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-007 · Knowledge Drain</span>
+                        <p>Expertise leaves when engineers leave. No pattern library. Institutional knowledge lives in Slack threads.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">Living Knowledge Base</span>
+                        <p>Pattern library, domain knowledge, and RCA prevention rules persist and compound over time — cross-team.</p>
+                    </div>
+                </div>
+                <div class="compare-pair">
+                    <div class="compare-pair-before">
+                        <span class="ccp-id">CCP-008 · Security Afterthought</span>
+                        <p>Security reviewed at end-of-cycle in a separate scanner. Vulnerabilities routinely reach production.</p>
+                    </div>
+                    <div class="compare-pair-after">
+                        <span class="ccp-id">5-Layer Security</span>
+                        <p>PII blocks, governance integrity, LENS scans, CVE analysis, and OWASP gate — enforced from keystroke to release.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -271,6 +592,101 @@
                 <div class="glass-card p-4 space-y-2 border-emerald-500/20 bg-emerald-500/5">
                     <span class="analyzer-tag !text-emerald-400 !border-emerald-400">Synthesis</span>
                     <p class="text-[10px] md:text-[11px] text-slate-400">Unified strategic reporting for leadership.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── NEW: The Governed SDLC Pipeline ── -->
+        <section class="space-y-10">
+            <div class="text-center space-y-3 px-4">
+                <div class="section-eyebrow text-cyan-400">End-to-End Governance</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">The Governed SDLC Pipeline</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base font-light leading-relaxed">
+                    Every delivery phase is gated by automated Definition of Ready and Definition of Done checks — turning policy into an immutable engineering contract.
+                </p>
+            </div>
+
+            <!-- Visual pipeline — hand-crafted, fully readable at all viewport sizes -->
+            <div class="glass-card p-6 md:p-10 overflow-hidden">
+                <div class="sdlc-pipeline">
+
+                    <div class="sdlc-phase" style="--phase-color:#00d4ff; --phase-glow:rgba(0,212,255,0.15);">
+                        <div class="sdlc-icon">📋</div>
+                        <div class="sdlc-label">Requirements</div>
+                        <div class="sdlc-gate sdlc-gate--dor">DoR Gate</div>
+                        <p class="sdlc-desc">Threat surface identified. Acceptance criteria captured. Ambiguities resolved before design.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase" style="--phase-color:#a78bfa; --phase-glow:rgba(167,139,250,0.15);">
+                        <div class="sdlc-icon">🔍</div>
+                        <div class="sdlc-label">Design</div>
+                        <div class="sdlc-gate sdlc-gate--arch">Architecture Review</div>
+                        <p class="sdlc-desc">Design validated against security patterns and governance rules before code is written.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase" style="--phase-color:#8b5cf6; --phase-glow:rgba(139,92,246,0.15);">
+                        <div class="sdlc-icon">⚡</div>
+                        <div class="sdlc-label">Implement</div>
+                        <div class="sdlc-gate sdlc-gate--tdd">TDD RED→GREEN</div>
+                        <p class="sdlc-desc">Tests written first. CORE-008 mandatory. No implementation without a failing test.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase" style="--phase-color:#38bdf8; --phase-glow:rgba(56,189,248,0.15);">
+                        <div class="sdlc-icon">👁</div>
+                        <div class="sdlc-label">Code Review</div>
+                        <div class="sdlc-gate sdlc-gate--gov">Governance Scan</div>
+                        <p class="sdlc-desc">Type hints, docstrings, naming, PII and secrets blocked at the commit boundary.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase" style="--phase-color:#34d399; --phase-glow:rgba(52,211,153,0.15);">
+                        <div class="sdlc-icon">🔗</div>
+                        <div class="sdlc-label">Integration</div>
+                        <div class="sdlc-gate sdlc-gate--lens">LENS Sweep</div>
+                        <p class="sdlc-desc">9 analyzers verify the change works correctly in the context of the full system.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase" style="--phase-color:#f87171; --phase-glow:rgba(248,113,113,0.15);">
+                        <div class="sdlc-icon">🛡</div>
+                        <div class="sdlc-label">Security</div>
+                        <div class="sdlc-gate sdlc-gate--sec">5-Layer Immune</div>
+                        <p class="sdlc-desc">OWASP Top 10 check, CVE scan, SAST analysis. Critical findings block release.</p>
+                    </div>
+
+                    <div class="sdlc-arrow">›</div>
+
+                    <div class="sdlc-phase sdlc-phase--certified" style="--phase-color:#10b981; --phase-glow:rgba(16,185,129,0.2);">
+                        <div class="sdlc-icon">🚀</div>
+                        <div class="sdlc-label">Release</div>
+                        <div class="sdlc-gate sdlc-gate--dod">DoD Certified ✅</div>
+                        <p class="sdlc-desc">All phases passed. Audit trail hash-linked. Deployment configuration hardened.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Three gate callouts -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card p-5 space-y-2 border-cyan-500/20">
+                    <div class="pill-badge bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Definition of Ready</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">No work begins until acceptance criteria, security scope, and test plan are formally captured — not assumed. From content file <code class="text-[9px] text-slate-600">09-lifecycle</code>.</p>
+                </div>
+                <div class="glass-card p-5 space-y-2 border-violet-500/20">
+                    <div class="pill-badge bg-violet-500/10 text-violet-400 border border-violet-500/20">Convergence Gate</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">CORE-068 enforces detect → fix → rescan loops until zero P0/P1 violations remain — max 3 autonomous cycles per operation.</p>
+                </div>
+                <div class="glass-card p-5 space-y-2 border-emerald-500/20">
+                    <div class="pill-badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Definition of Done</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Release certified only after all gates pass, audit trail is hash-linked, and DoD checklist is fully closed.</p>
                 </div>
             </div>
         </section>
@@ -523,16 +939,247 @@
             </div>
         </section>
 
-        <!-- Operational ROI Chart -->
+        <!-- ── NEW: Architecture Proof (live stats) ── -->
+        <section class="space-y-8">
+            <div class="text-center space-y-3 px-4">
+                <div class="section-eyebrow text-violet-400">Proven at Scale</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">The Architecture Behind the Promise</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm font-light">
+                    These are verified counts from the live CORTEX codebase — not aspirational targets.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div class="stat-card glass-card p-6 text-center space-y-2 border-cyan-500/20">
+                    <div class="text-3xl md:text-4xl font-black text-cyan-400 count-animate">320</div>
+                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Orchestrator Files</div>
+                    <div class="text-[8px] text-slate-600">across 15 domains</div>
+                </div>
+                <div class="stat-card glass-card p-6 text-center space-y-2 border-violet-500/20">
+                    <div class="text-3xl md:text-4xl font-black text-violet-400 count-animate">30</div>
+                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
+                    <div class="text-[8px] text-slate-600">registered &amp; live</div>
+                </div>
+                <div class="stat-card glass-card p-6 text-center space-y-2 border-amber-500/20">
+                    <div class="text-3xl md:text-4xl font-black text-amber-400 count-animate">36</div>
+                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
+                    <div class="text-[8px] text-slate-600">enforced automatically</div>
+                </div>
+                <div class="stat-card glass-card p-6 text-center space-y-2 border-emerald-500/20">
+                    <div class="text-3xl md:text-4xl font-black text-emerald-400 count-animate">19k+</div>
+                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Tests Collected</div>
+                    <div class="text-[8px] text-slate-600">parallel execution</div>
+                </div>
+                <div class="stat-card glass-card p-6 text-center space-y-2 border-red-500/20 col-span-2 md:col-span-1">
+                    <div class="text-3xl md:text-4xl font-black text-red-400 count-animate">9</div>
+                    <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
+                    <div class="text-[8px] text-slate-600">converging to zero violations</div>
+                </div>
+            </div>
+
+            <!-- Domain Bubble Grid (replaces horizontal bar chart) -->
+            <div class="glass-card p-6 md:p-8 space-y-5">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains</span>
+                    <span class="text-[10px] font-bold text-cyan-400">15 domains · 323 files</span>
+                </div>
+                <div class="domain-grid">
+                    <!-- Bubble size is proportional to file count; set via inline style -->
+                    <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.25); width:110px;height:110px; background:rgba(0,212,255,0.07);">
+                        <span class="db-count" style="font-size:2rem;">139</span>
+                        <span class="db-name" style="font-size:0.55rem; margin-top:0.2rem;">core</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#8b5cf6;--bubble-glow:rgba(139,92,246,0.25); width:90px;height:90px; background:rgba(139,92,246,0.07);">
+                        <span class="db-count" style="font-size:1.6rem;">55</span>
+                        <span class="db-name" style="font-size:0.55rem; margin-top:0.2rem;">support</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#f59e0b;--bubble-glow:rgba(245,158,11,0.25); width:82px;height:82px; background:rgba(245,158,11,0.07);">
+                        <span class="db-count" style="font-size:1.4rem;">33</span>
+                        <span class="db-name" style="font-size:0.55rem; margin-top:0.2rem;">domain</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25); width:80px;height:80px; background:rgba(16,185,129,0.07);">
+                        <span class="db-count" style="font-size:1.3rem;">31</span>
+                        <span class="db-name" style="font-size:0.55rem; margin-top:0.2rem;">health</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2); width:68px;height:68px; background:rgba(167,139,250,0.06);">
+                        <span class="db-count" style="font-size:1.1rem;">17</span>
+                        <span class="db-name" style="font-size:0.52rem; margin-top:0.15rem;">intelligence</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2); width:63px;height:63px; background:rgba(52,211,153,0.06);">
+                        <span class="db-count" style="font-size:1rem;">13</span>
+                        <span class="db-name" style="font-size:0.52rem; margin-top:0.15rem;">validation</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2); width:54px;height:54px; background:rgba(103,232,249,0.05);">
+                        <span class="db-count" style="font-size:0.95rem;">7</span>
+                        <span class="db-name" style="font-size:0.5rem; margin-top:0.1rem;">persona</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2); width:54px;height:54px; background:rgba(251,191,36,0.05);">
+                        <span class="db-count" style="font-size:0.95rem;">7</span>
+                        <span class="db-name" style="font-size:0.5rem; margin-top:0.1rem;">workflow</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2); width:50px;height:50px; background:rgba(244,114,182,0.05);">
+                        <span class="db-count" style="font-size:0.9rem;">5</span>
+                        <span class="db-name" style="font-size:0.48rem; margin-top:0.1rem;">response</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2); width:50px;height:50px; background:rgba(74,222,128,0.05);">
+                        <span class="db-count" style="font-size:0.9rem;">5</span>
+                        <span class="db-name" style="font-size:0.48rem; margin-top:0.1rem;">git</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#94a3b8;--bubble-glow:rgba(148,163,184,0.15); width:45px;height:45px; background:rgba(148,163,184,0.04);">
+                        <span class="db-count" style="font-size:0.85rem;">2</span>
+                        <span class="db-name" style="font-size:0.46rem; margin-top:0.1rem;">registry</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#c084fc;--bubble-glow:rgba(192,132,252,0.15); width:45px;height:45px; background:rgba(192,132,252,0.04);">
+                        <span class="db-count" style="font-size:0.85rem;">2</span>
+                        <span class="db-name" style="font-size:0.46rem; margin-top:0.1rem;">synthesis</span>
+                    </div>
+                    <div class="domain-bubble" style="--bubble-color:#fb923c;--bubble-glow:rgba(251,146,60,0.15); width:45px;height:45px; background:rgba(251,146,60,0.04);">
+                        <span class="db-count" style="font-size:0.85rem;">2</span>
+                        <span class="db-name" style="font-size:0.46rem; margin-top:0.1rem;">tools</span>
+                    </div>
+                </div>
+                <p class="text-center text-[9px] text-slate-600 font-medium">Bubble size is proportional to file count. Hover any bubble to highlight.</p>
+            </div>
+        </section>
+
+        <!-- ── FROM .content: The Intelligence Advantage ── -->
+        <!-- Source: 01-platform-what-is-cortex.md + 12-ai-efficiency-context-management.md -->
+        <section class="space-y-8">
+            <div class="text-center space-y-3 px-4">
+                <div class="section-eyebrow text-cyan-400">From the Knowledge Base</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">The Intelligence Advantage</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm font-light leading-relaxed">
+                    CORTEX is not a code generator. It is a governed AI engineering partner that classifies intent, understands your codebase, enforces quality automatically, and learns from every project it touches.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Calculator vs Brain -->
+                <div class="glass-card p-6 md:p-8 space-y-5 border-cyan-500/15">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-lg flex-shrink-0">🧠</div>
+                        <div>
+                            <div class="text-[9px] font-black uppercase tracking-widest text-cyan-400 mb-0.5">Platform Identity</div>
+                            <h3 class="text-lg font-black tracking-tight">Calculator vs Brain</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">A calculator waits for instructions. A brain perceives the situation, reasons about the best approach, acts — and learns from every interaction. Traditional development tools answer questions. <strong class="text-white">CORTEX thinks alongside your team.</strong></p>
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <div class="p-3 rounded-lg bg-red-500/5 border border-red-500/10">
+                            <div class="text-[9px] font-bold text-red-400 uppercase tracking-wider mb-1">Traditional AI Tool</div>
+                            <p class="text-[10px] text-slate-500 leading-relaxed">Raw suggestion returned. No classification. No governance. No test. No audit.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/10">
+                            <div class="text-[9px] font-bold text-cyan-400 uppercase tracking-wider mb-1">CORTEX</div>
+                            <p class="text-[10px] text-slate-400 leading-relaxed">Classifies intent → LENS analysis → governance gate → test-first → auditable execution.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Tier Context Model -->
+                <div class="glass-card p-6 md:p-8 space-y-5 border-violet-500/15">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-lg flex-shrink-0">⚙️</div>
+                        <div>
+                            <div class="text-[9px] font-black uppercase tracking-widest text-violet-400 mb-0.5">AI Efficiency</div>
+                            <h3 class="text-lg font-black tracking-tight">3-Tier Context Model</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">CORTEX treats the AI context window as a <strong class="text-white">managed resource</strong> — every token consumed by background knowledge is a token unavailable for your specific problem.</p>
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-3 p-2.5 rounded-lg bg-white/3 border border-white/5">
+                            <div class="w-6 h-6 rounded bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-[9px] font-black flex-shrink-0 mt-0.5">T0</div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-300">Always Available</div>
+                                <p class="text-[9px] text-slate-500">Compact architecture summary — under 10% of session budget. Auto-loaded.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-2.5 rounded-lg bg-white/3 border border-white/5">
+                            <div class="w-6 h-6 rounded bg-violet-500/20 flex items-center justify-center text-violet-400 text-[9px] font-black flex-shrink-0 mt-0.5">T1</div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-300">Task-Specific</div>
+                                <p class="text-[9px] text-slate-500">Specialist knowledge loaded for the active workflow only. Released after session.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-2.5 rounded-lg bg-white/3 border border-white/5">
+                            <div class="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-[9px] font-black flex-shrink-0 mt-0.5">T2</div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-300">File-Specific</div>
+                                <p class="text-[9px] text-slate-500">Intelligence for the specific files involved — not the whole codebase. Scalable to 1M+ lines.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FROM .content: What CORTEX Does For Each Role ── -->
+        <!-- Source: 01-platform-what-is-cortex.md § "What CORTEX Does for Each Role" -->
+        <section class="space-y-8">
+            <div class="text-center space-y-3 px-4">
+                <div class="section-eyebrow text-emerald-400">Role-Based Value</div>
+                <h2 class="text-2xl md:text-4xl font-black tracking-tighter">What CORTEX Delivers — By Role</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm font-light leading-relaxed">
+                    One framework. Four stakeholder perspectives. Every role gets what they need — without asking developers to produce reports.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5">
+                <div class="glass-card p-6 space-y-3 border-cyan-500/20">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🎯</span>
+                        <div>
+                            <div class="text-[8px] font-black uppercase tracking-widest text-cyan-400">Business Leadership</div>
+                            <h4 class="text-base font-black tracking-tight">Governance Without Reports</h4>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">CORTEX eliminates the invisible cost of ungoverned AI. Every decision is recorded. Every quality gate is enforced automatically. Delivery metrics, compliance evidence, and audit trails are available on demand.</p>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-violet-500/20">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🗺</span>
+                        <div>
+                            <div class="text-[8px] font-black uppercase tracking-widest text-violet-400">Product Owners</div>
+                            <h4 class="text-base font-black tracking-tight">Intent to Delivery</h4>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">Requirements flow into structured execution plans, work items stay synchronised, and every feature ships with documented evidence that it was tested, reviewed, and governance-validated before reaching production.</p>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-emerald-500/20">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">⚡</span>
+                        <div>
+                            <div class="text-[8px] font-black uppercase tracking-widest text-emerald-400">Software Engineers</div>
+                            <h4 class="text-base font-black tracking-tight">The Senior Engineer Who Never Sleeps</h4>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">CORTEX enforces test-driven development on every change, detects security issues before they reach version control, understands the architecture of your specific codebase, and prevents the same mistakes recurring through institutional memory.</p>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-amber-500/20">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📚</span>
+                        <div>
+                            <div class="text-[8px] font-black uppercase tracking-widest text-amber-400">Curious Learners</div>
+                            <h4 class="text-base font-black tracking-tight">Living Reference for World-Class Engineering</h4>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">Every capability demonstrates a principle: test-driven development, clean architecture, governance by design, root cause analysis, and continuous improvement — observable in a real production codebase.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operational ROI Chart (enhanced) -->
         <section class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center px-2 md:px-0">
-            <div class="glass-card p-6 md:p-8 order-2 lg:order-1">
-                <div id="roi-chart" class="h-48 md:h-64 w-full"></div>
+            <div class="glass-card p-6 md:p-8 order-2 lg:order-1 space-y-2">
+                <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500 text-center">Cost Multiplier: Defect Escape by Stage</div>
+                <div id="roi-chart" class="h-52 md:h-64 w-full"></div>
+                <div class="text-center text-[8px] text-emerald-400 font-bold uppercase tracking-widest">← CORTEX catches 94% at the keyboard</div>
             </div>
             <div class="space-y-6 order-1 lg:order-2 px-2 md:px-0">
                 <div class="text-cyan-400 font-bold tracking-widest text-[10px] uppercase">Measurable Impact</div>
                 <h2 class="text-2xl md:text-3xl font-black tracking-tighter">The Shift-Left Dividend</h2>
                 <p class="text-slate-400 text-sm md:text-lg font-light leading-relaxed">
-                    By catching 94% of engineering defects at the keyboard boundary, CORTEX reclaims lost productivity, redirecting capital from maintenance to innovation.
+                    A defect fixed at the keyboard costs <strong class="text-white">1×</strong>. The same defect found in production costs <strong class="text-red-400">100×</strong>. CORTEX catches 94% of engineering defects before they escape — redirecting capital from maintenance to innovation.
                 </p>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="p-4 bg-white/5 rounded-xl border border-white/10">
@@ -541,7 +1188,7 @@
                     </div>
                     <div class="p-4 bg-white/5 rounded-xl border border-white/10">
                         <div class="text-cyan-400 font-black text-xl md:text-2xl">60%</div>
-                        <div class="text-[8px] md:text-[9px] text-slate-500 uppercase font-bold tracking-widest">Innovation focus</div>
+                        <div class="text-[8px] md:text-[9px] text-slate-500 uppercase font-bold tracking-widest">Innovation Focus</div>
                     </div>
                 </div>
             </div>
@@ -559,7 +1206,7 @@
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <button class="px-6 md:px-10 py-4 md:py-5 bg-cyan-500 text-black font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white hover:scale-105 transition-all">
-                        Schedule executive Briefing
+                        Schedule Executive Briefing
                     </button>
                     <button class="px-6 md:px-10 py-4 md:py-5 glass-card font-black uppercase tracking-widest text-[10px] md:text-xs rounded-full hover:bg-white/10 transition-all">
                         Request Capability Audit
@@ -577,108 +1224,95 @@
             <i data-lucide="shield" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
         </div>
         <div class="text-[9px] md:text-[10px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
-            &copy; 2026 CORTEX | THE AI ENGINEERING FRAMEWORK | STRATEGIC COMMAND VIEW 4.2
+            &copy; 2026 CORTEX | AI ENGINEERING ORCHESTRATION FRAMEWORK | STRATEGIC COMMAND VIEW 4.2
         </div>
     </footer>
 
     <script>
         window.onload = function() {
             lucide.createIcons();
-            initCharts();
+            buildRoiChart();
         };
 
-        function initCharts() {
-            // Shift-Left ROI Chart (Cost of Defects)
+        // ── Shift-Left ROI Chart (enhanced with cost-multiplier labels) ──
+        function buildRoiChart() {
             const roiData = [
-                { stage: 'Keyboard', cost: 1, color: '#10b981' },
-                { stage: 'Review', cost: 4, color: '#00d4ff' },
-                { stage: 'QA', cost: 15, color: '#8b5cf6' },
-                { stage: 'UAT', cost: 40, color: '#f59e0b' },
-                { stage: 'Prod', cost: 100, color: '#ef4444' }
+                { stage: 'Keyboard', cost: 1,   label: '1×',   color: '#10b981' },
+                { stage: 'Review',   cost: 4,   label: '4×',   color: '#00d4ff' },
+                { stage: 'QA',       cost: 15,  label: '15×',  color: '#8b5cf6' },
+                { stage: 'UAT',      cost: 40,  label: '40×',  color: '#f59e0b' },
+                { stage: 'Prod',     cost: 100, label: '100×', color: '#ef4444' }
             ];
 
-            const chartId = '#roi-chart';
-            const container = d3.select(chartId);
-            if (container.empty()) return;
+            const chartEl = document.getElementById('roi-chart');
+            if (!chartEl) return;
 
-            const margin = {top: 20, right: 20, bottom: 40, left: 30};
-            const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
-            const height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
+            const margin = { top: 28, right: 16, bottom: 36, left: 28 };
+            const totalW = chartEl.getBoundingClientRect().width || 400;
+            const totalH = chartEl.getBoundingClientRect().height || 220;
+            const width  = totalW - margin.left - margin.right;
+            const height = totalH - margin.top  - margin.bottom;
 
-            const svg = container
-                .append("svg")
-                .attr("width", "100%")
-                .attr("height", "100%")
-                .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-                .append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
+            const svg = d3.select('#roi-chart')
+                .append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${totalW} ${totalH}`)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            const x = d3.scaleBand()
-                .range([0, width])
-                .domain(roiData.map(d => d.stage))
-                .padding(0.4);
+            const x = d3.scaleBand().range([0, width]).domain(roiData.map(d => d.stage)).padding(0.38);
+            const y = d3.scaleLinear().domain([0, 112]).range([height, 0]);
 
-            const y = d3.scaleLinear()
-                .domain([0, 100])
-                .range([height, 0]);
+            // Soft grid
+            svg.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(''))
+                .selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
+            svg.selectAll('.domain').remove();
 
-            // Grid lines
-            svg.append("g")
-                .attr("class", "grid")
-                .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(""));
+            // Bars with entrance animation
+            svg.selectAll('.bar').data(roiData).enter().append('rect')
+                .attr('x', d => x(d.stage)).attr('width', x.bandwidth())
+                .attr('fill', d => d.color).attr('rx', 5)
+                .attr('y', height).attr('height', 0)
+                .transition().duration(1400).ease(d3.easeCubicOut)
+                .attr('y', d => y(d.cost)).attr('height', d => height - y(d.cost));
 
-            svg.selectAll(".grid line").attr("stroke", "rgba(255,255,255,0.05)");
-            svg.select(".grid path").remove();
+            // Bar inner glow overlay
+            svg.selectAll('.bar-glow').data(roiData).enter().append('rect')
+                .attr('x', d => x(d.stage) + 2).attr('width', d => Math.max(0, x.bandwidth() - 4))
+                .attr('fill', d => d.color).attr('rx', 4).attr('opacity', 0.12)
+                .attr('y', d => y(d.cost)).attr('height', d => Math.min(12, height - y(d.cost)));
 
-            // Bars
-            svg.selectAll(".bar")
-                .data(roiData)
-                .enter()
-                .append("rect")
-                .attr("x", d => x(d.stage))
-                .attr("width", x.bandwidth())
-                .attr("fill", d => d.color)
-                .attr("rx", 4)
-                .attr("y", height)
-                .attr("height", 0)
-                .transition()
-                .duration(1500)
-                .attr("y", d => y(d.cost))
-                .attr("height", d => height - y(d.cost));
+            // Cost multiplier label above bar
+            svg.selectAll('.cost-label').data(roiData).enter().append('text')
+                .attr('x', d => x(d.stage) + x.bandwidth() / 2)
+                .attr('y', d => y(d.cost) - 7)
+                .attr('text-anchor', 'middle').attr('fill', d => d.color)
+                .attr('font-size', '10px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                .text(d => d.label);
 
-            // Labels
-            svg.selectAll(".label")
-                .data(roiData)
-                .enter()
-                .append("text")
-                .attr("x", d => x(d.stage) + x.bandwidth() / 2)
-                .attr("y", d => y(d.cost) - 8)
-                .attr("text-anchor", "middle")
-                .attr("fill", d => d.color)
-                .attr("font-size", "9px")
-                .attr("font-weight", "black")
-                .text(d => d.cost + "×");
+            // "CORTEX catches here" annotation on Keyboard bar
+            const kx = x('Keyboard') + x.bandwidth() / 2;
+            const ky = y(1) - 18;
+            svg.append('line').attr('x1', kx).attr('y1', ky - 2).attr('x2', kx).attr('y2', y(1) - 6)
+                .attr('stroke', '#10b981').attr('stroke-width', 1.5).attr('stroke-dasharray', '3,2');
+            svg.append('text').attr('x', kx).attr('y', ky - 5)
+                .attr('text-anchor', 'middle').attr('fill', '#10b981')
+                .attr('font-size', '7px').attr('font-weight', '700').attr('font-family', 'JetBrains Mono, monospace')
+                .text('← 94% caught here');
 
-            // X-axis
-            svg.append("g")
-                .attr("transform", `translate(0,${height})`)
+            // X-axis stage labels
+            svg.append('g').attr('transform', `translate(0,${height})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll("text")
-                .attr("fill", "#64748b")
-                .attr("font-size", "8px")
-                .attr("font-weight", "bold")
-                .attr("dy", "1.2em");
-                
-            svg.selectAll(".domain").remove();
+                .selectAll('text')
+                .attr('fill', '#64748b').attr('font-size', '9px').attr('font-weight', 'bold')
+                .attr('font-family', 'Inter, sans-serif').attr('dy', '1.2em');
+            svg.selectAll('.domain').remove();
         }
 
-        // Handle resize for charts
+        // Rebuild chart on window resize
         window.addEventListener('resize', () => {
-            const chart = document.getElementById('roi-chart');
-            if (chart) {
-                chart.innerHTML = '';
-                initCharts();
-            }
+            const el = document.getElementById('roi-chart');
+            if (el) { el.innerHTML = ''; buildRoiChart(); }
         });
     </script>
 </body>
