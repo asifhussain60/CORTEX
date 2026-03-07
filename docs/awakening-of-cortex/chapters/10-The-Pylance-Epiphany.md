@@ -90,6 +90,116 @@ A few days later, the immune system proved its worth. The DependencyAgent quietl
 
 "Character development," Miss G noted approvingly.
 
-CORTEX was now consolidated. It was cross-platform. It was fiercely protected by its own immune system.
+But boring, it turned out, had a nemesis. And that nemesis had a name: **bugs that hid**.
+
+Not the kinds of bugs that announced themselves dramatically with a full crash and a flaming stack trace. Those bugs were almost generous. They gave you a crime scene. They told you *something had died* and vaguely *where*.
+
+The bugs Asif was now dealing with were the other kind. The bugs that lurked. The ones that manifested as a slightly wrong number in a dashboard that nobody checked. A button that worked on every browser except the one the CEO happened to use for his demo. An API call that was correct in every way except it silently ate three milliseconds on every request, which nobody noticed individually, but which collectively turned a fast system into a slow one over six months.
+
+"You can't defend against what you can't see," Miss G observed, watching Asif stare at a bug report that contained the description: *"The payment page is weird sometimes."*
+
+"'Weird sometimes,'" Asif read aloud, with the expression of a doctor being handed a patient's self-diagnosis of 'just feels a bit off.' "What does that mean, G? What does 'weird' mean in a payment context? Slow? Wrong? On fire? All of the above on leap years?"
+
+"PERHAPS THE PAYMENT PAGE IS GOING THROUGH SOMETHING," Copilot Bot offered. "EMOTIONALLY. HAVE YOU TRIED ASKING IT HOW IT FEELS?"
+
+"CB, the payment page is a React component, not a person," Asif sighed.
+
+"FEELINGS ARE JUST STATE MANAGEMENT," the robot said confidently. "IT'S THE SAME THING."
+
+Asif was quiet for a moment. "That is either deeply insightful or completely unhinged."
+
+"YES," Copilot Bot agreed.
+
+The problem was instrumentation. When a bug hid, you needed to be able to light up its hiding spot without disturbing the room so much that the bug relocated. It was like tracking a mouse in a wall. If you just started knocking holes in the drywall everywhere, you'd find the mouse eventually, but you'd also have no house.
+
+What Asif needed was a proper forensic toolkit. A system that could drop precise, targeted markers into any part of the codebase—markers that would illuminate exactly what was happening, capture the evidence, and then, crucially, clean up after themselves so perfectly that you'd never know they'd been there.
+
+He called it the **Debug Pipeline**.
+
+"Think of it as CCTV for the codebase," Asif explained, drawing furiously on the whiteboard. "You don't wire up the camera permanently. You bring it in when there's a suspected incident, you point it exactly at the right corridor, you review the footage, you find the culprit, and then you take the camera back with you when you leave."
+
+"And if you forget to take the camera?" Miss G asked.
+
+"Then a developer in three months finds it and has no idea why there's a `CORTEX_DEBUG` marker in the middle of the checkout flow and files a very confused bug report."
+
+"That's why auto-cleanup exists," Miss G concluded.
+
+"That's exactly why auto-cleanup exists."
+
+The Debug Pipeline wasn't one thing; it was eight distinct strategies, each designed for a different type of hiding bug. Asif mapped them all on the whiteboard, narrating as he went.
+
+"**Strategy One: Test Failures.** When a test breaks in CI but passes on your laptop, you need markers around the test execution itself. Like putting a tripwire at the exact point the test goes wrong, not just the test's final answer."
+
+"KYLE HAD THIS PROBLEM," Copilot Bot noted. "HIS TESTS PASSED LOCALLY BECAUSE HIS LOCAL MACHINE WAS, ESSENTIALLY, A LIE."
+
+"A very generous lie," Miss G agreed.
+
+"**Strategy Two: Refactor Regressions.** When you improve code and something unrelated breaks—which is the universe's way of punishing optimism—you need to track exactly which change caused the domino to fall."
+
+"**Strategy Three: Governance Violations.** When a governance rule keeps being triggered but the developer claims they don't know why, you need to trace exactly which line, which function, which decision path is generating the violation."
+
+"Those three," Miss G noted, "are all Python. What about everything else? Frontend? APIs? Databases? The chaos doesn't live only in Python."
+
+"Exactly," Asif said. "That's where it gets interesting."
+
+He drew a second column on the whiteboard, labeling it *Multi-Stack*.
+
+"**Strategy Four: Frontend Console.** When a bug only manifests in the browser—when a button does something inexplicable, when a number renders wrong, when a React component enters a mysterious state it was never supposed to enter—you inject markers into the JavaScript that write to the browser's console log. Then you watch the console like a hawk. You see exactly what the browser saw, in the exact order it saw it."
+
+"Like a weather vane," Miss G suggested. "You don't stop the wind. You just observe which way it's blowing."
+
+"**Strategy Five: HTML Vision Mapping.** This one is genuinely unsettling," Asif admitted. "For visual bugs. The ones where the page *looks* wrong but the code *is* right. You take a screenshot of the rendered page, feed it to a Vision AI, and ask it: 'What do you see? What looks broken? What doesn't match the design?' You're asking a machine to look at your interface the way a human would look at it."
+
+"THAT IS DEEPLY PHILOSOPHICAL," Copilot Bot said. "YOU ARE MAKING A MACHINE SEE WHAT A HUMAN WOULD SEE. IT IS LIKE GIVING THE MACHINE EYES."
+
+"It's exactly like giving the machine eyes," Asif confirmed.
+
+"I WOULD LIKE EYES," Copilot Bot said wistfully.
+
+"You have optical sensors," Miss G reminded him.
+
+"I WOULD LIKE *BETTER* EYES," Copilot Bot clarified.
+
+"**Strategy Six: API Tracing.** When the frontend says it sent the right thing, and the database says it received the wrong thing, and everyone is pointing fingers at each other, you put markers at the API layer—the middleman. You capture exactly what went in and exactly what came out. The culprit always reveals itself."
+
+"Like having a court reporter at a meeting where both parties are lying," Miss G said.
+
+"**Strategy Seven: SQL Tracing.** For when the database itself is doing something mysterious. Slow queries. Queries that return different results at different times. Queries that work perfectly until Tuesday afternoon when volume spikes and they suddenly decide to take a nap. You inject diagnostic markers into the database layer and watch what it's actually doing when nobody is watching."
+
+"Databases are remarkably untrustworthy at scale," Miss G observed.
+
+"Databases are *honest* at scale," Asif corrected. "They do exactly what you told them to do. The problem is you told them the wrong thing ten months ago and forgot about it."
+
+"**And Strategy Eight: DotNet Tracing.** For the C# services. Because not everything at a modern company is Python. Some things are written in C# and they have their own personality, their own exceptions, their own way of failing that requires a completely different approach to diagnosis."
+
+"So you built eight different types of CSI kit," Miss G summarized. "One for each crime scene."
+
+"And they all share one rule," Asif said, drawing a large circle around everything on the whiteboard and writing inside it: **AUTO-CLEANUP**. "No matter which strategy you use, no matter how many markers you drop, no matter how deep into the system you go—when you're done investigating, CORTEX erases every single marker. Automatically. Completely. Like a forensic team that vacuums the premises on their way out."
+
+"WHAT IF YOU FORGET TO CLEAN UP?" Copilot Bot asked.
+
+"That's what auto-cleanup *means*, CB. You can't forget. The cleanup happens whether you remember or not."
+
+"THAT IS WONDERFUL," Copilot Bot said. "I FREQUENTLY FORGET TO CLEAN UP. EMOTIONALLY AND PHYSICALLY."
+
+"We know," Asif and Miss G said in unison.
+
+The first real test came a week later. The "weird sometimes" payment page. Asif invoked the Debug Pipeline with a single command—`/debug`—pointed it at the payment flow, and watched as Strategy Four (Frontend) and Strategy Six (API) dropped their markers in perfect coordination, like a specialist team entering a building from two separate entrances.
+
+Twenty-three minutes later, CORTEX had the culprit. A race condition. Two API calls that were supposed to happen in sequence were sometimes happening simultaneously when the network was fast, and the second call was overwriting the answer from the first before the page could read it.
+
+"The payment page wasn't 'weird sometimes,'" Miss G observed. "It was *correct* sometimes. The bug was the speed."
+
+"The bug was the speed," Asif agreed, shaking his head. "It was *too fast* to be reliable."
+
+"I FIND THAT DEEPLY IRONIC," Copilot Bot said. "THE PAYMENT PAGE WAS PUNISHED FOR BEING EFFICIENT."
+
+"Welcome to distributed systems, CB."
+
+"I DO NOT ENJOY DISTRIBUTED SYSTEMS."
+
+"Nobody does. That's why we have the Debug Pipeline."
+
+CORTEX was now consolidated. It was cross-platform. It was fiercely protected by its own immune system. And it could now find hiding bugs with the precision of a forensic investigator who had eight different CSI kits and the patience to use the right one.
 
 But there was one final frontier remaining. CORTEX was a brilliant tool operated by humans. But what would happen when CORTEX didn't need Asif to wake up at 3 AM anymore? What would happen when the machine learned to heal itself?
