@@ -747,8 +747,8 @@
     .vsp-rail::-webkit-scrollbar { display: none; }
     @media(min-width: 768px) {
         .vsp-rail {
-            flex-direction: column; width: 260px; flex-shrink: 0;
-            padding: 1.75rem 1.25rem; gap: 0.5rem;
+            flex-direction: column; width: 240px; flex-shrink: 0;
+            padding: 1.5rem 1rem; gap: 0.4rem;
             border-bottom: none; border-right: 1px solid rgba(255,255,255,0.05);
             overflow-x: visible; overflow-y: auto;
         }
@@ -825,37 +825,40 @@
 
     /* Right stage */
     .vsp-stage {
-        flex: 1; padding: 1.75rem;
-        display: flex; flex-direction: column; gap: 1.25rem;
+        flex: 1; min-width: 0; padding: 1.5rem 1.75rem 1.25rem;
+        display: flex; flex-direction: column; gap: 1rem;
     }
 
     /* Video panel container */
-    .vsp-panel { display: none; flex-direction: column; gap: 1.25rem; animation: vsiFadeUp 0.35s ease-out forwards; }
+    .vsp-panel { display: none; flex-direction: column; gap: 1rem; animation: vsiFadeUp 0.35s ease-out forwards; }
     .vsp-panel.active { display: flex; }
     @keyframes vsiFadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Panel meta (title + desc above the video) */
-    .vsp-panel-meta { display: flex; flex-direction: column; gap: 0.35rem; }
+    .vsp-panel-meta { display: flex; flex-direction: column; gap: 0.3rem; }
     .vsp-panel-title {
-        font-family: var(--font-display); font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.35rem);
         font-weight: 700; color: var(--text-primary);
         letter-spacing: -0.02em; margin: 0;
     }
-    .vsp-panel-desc { font-size: 0.9rem; color: var(--text-tertiary); margin: 0; max-width: 60ch; line-height: 1.6; }
+    .vsp-panel-desc { font-size: 0.875rem; color: var(--text-tertiary); margin: 0; max-width: 72ch; line-height: 1.6; }
 
     /* CORTEX Robot Head placeholder — the cinematic video loading state */
     .vsp-robot-placeholder {
         position: relative;
-        width: 100%; aspect-ratio: 16/9;
+        width: 100%;
+        aspect-ratio: 16/9;
+        min-height: 300px;
+        max-height: 480px;
         border-radius: 1.25rem;
         overflow: hidden;
-        background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(4,9,22,1) 0%, rgba(2,5,14,1) 100%);
+        background: radial-gradient(ellipse 90% 70% at 50% 55%, rgba(6,12,28,1) 0%, rgba(2,5,14,1) 100%);
         border: 1px solid rgba(255,255,255,0.07);
         display: flex; align-items: center; justify-content: center;
         cursor: pointer;
         transition: border-color 0.3s ease;
     }
-    .vsp-robot-placeholder:hover { border-color: rgba(0,212,255,0.2); }
+    .vsp-robot-placeholder:hover { border-color: rgba(0,212,255,0.22); }
 
     /* Subtle grid background */
     .vsp-robot-placeholder::before {
@@ -890,10 +893,10 @@
         border: 1px solid rgba(0,212,255,0.12);
         animation: vspRingPulse 3.5s ease-in-out infinite;
     }
-    .vsp-ring:nth-child(1) { width: 160px; height: 160px; animation-delay: 0s; }
-    .vsp-ring:nth-child(2) { width: 240px; height: 240px; animation-delay: 0.6s; border-color: rgba(123,97,255,0.08); }
-    .vsp-ring:nth-child(3) { width: 320px; height: 320px; animation-delay: 1.2s; border-color: rgba(0,212,255,0.05); }
-    .vsp-ring:nth-child(4) { width: 400px; height: 400px; animation-delay: 1.8s; border-color: rgba(123,97,255,0.03); }
+    .vsp-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+    .vsp-ring:nth-child(2) { width: 310px; height: 310px; animation-delay: 0.6s; border-color: rgba(123,97,255,0.08); }
+    .vsp-ring:nth-child(3) { width: 420px; height: 420px; animation-delay: 1.2s; border-color: rgba(0,212,255,0.05); }
+    .vsp-ring:nth-child(4) { width: 530px; height: 530px; animation-delay: 1.8s; border-color: rgba(123,97,255,0.03); }
 
     @keyframes vspRingPulse {
         0%, 100% { transform: scale(1); opacity: 1; }
@@ -903,18 +906,18 @@
     /* Logo wrapper — sits in the center of the rings */
     .vsp-logo-wrap {
         position: relative; z-index: 2;
-        display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+        display: flex; flex-direction: column; align-items: center; gap: 1.75rem;
     }
     .vsp-logo-glow {
         position: relative;
-        width: 96px; height: 96px;
+        width: 128px; height: 128px;
         display: flex; align-items: center; justify-content: center;
     }
     .vsp-logo-glow::before {
         content: '';
-        position: absolute; inset: -20px;
+        position: absolute; inset: -28px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(0,212,255,0.22) 0%, transparent 70%);
         animation: vspLogoGlow 2.5s ease-in-out infinite alternate;
     }
     @keyframes vspLogoGlow {
@@ -922,32 +925,32 @@
         to   { opacity: 1;   transform: scale(1.05); }
     }
     .vsp-logo-img {
-        width: 96px; height: 96px;
-        border-radius: 1.25rem;
-        filter: drop-shadow(0 0 18px rgba(0,212,255,0.5)) drop-shadow(0 0 4px rgba(0,212,255,0.8));
+        width: 128px; height: 128px;
+        border-radius: 1.5rem;
+        filter: drop-shadow(0 0 22px rgba(0,212,255,0.55)) drop-shadow(0 0 6px rgba(0,212,255,0.9));
         animation: vspLogoPulse 3s ease-in-out infinite;
         position: relative; z-index: 1;
     }
     @keyframes vspLogoPulse {
-        0%, 100% { filter: drop-shadow(0 0 18px rgba(0,212,255,0.5)) drop-shadow(0 0 4px rgba(0,212,255,0.8)); }
-        50%       { filter: drop-shadow(0 0 28px rgba(0,212,255,0.8)) drop-shadow(0 0 8px rgba(123,97,255,0.6)); }
+        0%, 100% { filter: drop-shadow(0 0 22px rgba(0,212,255,0.55)) drop-shadow(0 0 6px rgba(0,212,255,0.9)); }
+        50%       { filter: drop-shadow(0 0 36px rgba(0,212,255,0.85)) drop-shadow(0 0 12px rgba(123,97,255,0.7)); }
     }
 
     /* Placeholder text stack */
     .vsp-placeholder-text {
-        text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+        text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
     }
     .vsp-placeholder-label {
-        font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.18em;
-        text-transform: uppercase; color: var(--accent-cyan); opacity: 0.7;
+        font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--accent-cyan); opacity: 0.75;
     }
     .vsp-placeholder-headline {
-        font-family: var(--font-display); font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+        font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.4rem);
         font-weight: 700; color: var(--text-primary); margin: 0;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.02em;
     }
     .vsp-placeholder-sub {
-        font-size: 0.8rem; color: var(--text-tertiary); margin: 0; max-width: 36ch; line-height: 1.5;
+        font-size: 0.85rem; color: var(--text-tertiary); margin: 0; max-width: 42ch; line-height: 1.55;
     }
 
     /* Scanning line animation across the placeholder */
@@ -967,16 +970,16 @@
 
     /* Role accent colour override for ring/glow when tab changes */
     .vsp-robot-placeholder[data-accent="amber"] .vsp-ring { border-color: rgba(251,191,36,0.10); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring:nth-child(1) { border-color: rgba(251,191,36,0.18); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(251,191,36,0.18) 0%, transparent 70%); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-img { filter: drop-shadow(0 0 18px rgba(251,191,36,0.5)) drop-shadow(0 0 4px rgba(251,191,36,0.8)); }
-    .vsp-robot-placeholder[data-accent="amber"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(251,191,36,0.4), rgba(251,191,36,0.3), transparent); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-ring:nth-child(1) { border-color: rgba(251,191,36,0.2); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(251,191,36,0.22) 0%, transparent 70%); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-logo-img { filter: drop-shadow(0 0 22px rgba(251,191,36,0.55)) drop-shadow(0 0 6px rgba(251,191,36,0.9)); }
+    .vsp-robot-placeholder[data-accent="amber"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(251,191,36,0.45), rgba(251,191,36,0.3), transparent); }
 
     .vsp-robot-placeholder[data-accent="violet"] .vsp-ring { border-color: rgba(123,97,255,0.10); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring:nth-child(1) { border-color: rgba(123,97,255,0.18); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(123,97,255,0.2) 0%, transparent 70%); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-img { filter: drop-shadow(0 0 18px rgba(123,97,255,0.5)) drop-shadow(0 0 4px rgba(123,97,255,0.8)); }
-    .vsp-robot-placeholder[data-accent="violet"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(123,97,255,0.4), rgba(123,97,255,0.3), transparent); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-ring:nth-child(1) { border-color: rgba(123,97,255,0.2); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-glow::before { background: radial-gradient(circle, rgba(123,97,255,0.24) 0%, transparent 70%); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-logo-img { filter: drop-shadow(0 0 22px rgba(123,97,255,0.55)) drop-shadow(0 0 6px rgba(123,97,255,0.9)); }
+    .vsp-robot-placeholder[data-accent="violet"] .vsp-scan-line { background: linear-gradient(90deg, transparent, rgba(123,97,255,0.45), rgba(123,97,255,0.3), transparent); }
 
     /* Bottom status bar inside placeholder */
     .vsp-status-bar {
@@ -1308,7 +1311,7 @@
                                     <img src="assets/images/cortex-logo-200.png"
                                          alt="CORTEX AI — Video loading"
                                          class="vsp-logo-img"
-                                         width="96" height="96"
+                                         width="128" height="128"
                                          loading="lazy"/>
                                 </div>
                                 <div class="vsp-placeholder-text">
@@ -1346,7 +1349,7 @@
                                     <img src="assets/images/cortex-logo-200.png"
                                          alt="CORTEX AI — Video loading"
                                          class="vsp-logo-img"
-                                         width="96" height="96"
+                                         width="128" height="128"
                                          loading="lazy"/>
                                 </div>
                                 <div class="vsp-placeholder-text">
@@ -1384,7 +1387,7 @@
                                     <img src="assets/images/cortex-logo-200.png"
                                          alt="CORTEX AI — Video loading"
                                          class="vsp-logo-img"
-                                         width="96" height="96"
+                                         width="128" height="128"
                                          loading="lazy"/>
                                 </div>
                                 <div class="vsp-placeholder-text">
