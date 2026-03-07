@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="The Awakening Of CORTEX — The origin story of the AI Engineering Orchestration Framework, told across 14 chapters. From a New Jersey basement at 3 AM to 290 orchestrators, 24 CORE governance rules, and 19,000+ tests — and the vision of an Enterprise Brain for all." name="description"/>
+<meta content="CORTEX, origin story, AI engineering framework, TDD, GitHub Copilot, autonomous AI, orchestrators" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>The Awakening Of CORTEX — AI Engineering Orchestration Framework | Origin Story</title>
+<link href="../assets/images/cortex-logo-64.png" rel="icon" type="image/png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"/>
+<link href="../assets/css/glassmorphism.css" rel="stylesheet"/>
+<link href="awakening.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Ambient orbs -->
+<div class="ambient-orb ambient-orb--purple" aria-hidden="true"></div>
+<div class="ambient-orb ambient-orb--cyan" aria-hidden="true"></div>
+
+<!-- Mobile sidebar backdrop -->
+<div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../index.html">CORTEX</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>The Awakening Of CORTEX</span>
+</nav>
+
+<main id="main-content">
+
+  <!-- ── Hero (compact horizontal) ───────────────────────────────── -->
+  <div class="awakening-hero" id="awakening-hero">
+    <div class="awakening-hero-inner">
+      <!-- Left: CORTEX logo -->
+      <div class="awakening-hero-logo-wrap">
+        <img src="../assets/images/cortex-logo-200.png"
+             alt="CORTEX"
+             class="awakening-cortex-logo"
+             width="150" height="150"
+             loading="eager" fetchpriority="high"/>
+      </div>
+      <!-- Right: text block -->
+      <div class="awakening-hero-text">
+        <h1 class="awakening-title">The Awakening Of CORTEX</h1>
+        <p class="awakening-subtitle">AI Engineering Orchestration Framework</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Split-Panel Reader ────────────────────────────────────────── -->
+  <div class="reader-container" id="reader-container">
+
+    <!-- Left Panel: Chapter List -->
+    <aside class="chapter-sidebar" id="chapter-sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-book-open"></i>
+        <span>Chapters</span>
+      </div>
+
+      <!-- Wave 0 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--origin">Wave 0 · Origin</span>
+      </div>
+      <button class="sidebar-chapter active" data-chapter="01" data-wave="0">
+        <span class="sidebar-num">PRO</span>
+        <span class="sidebar-title">Deep in the Basement</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="02" data-wave="0">
+        <span class="sidebar-num">02</span>
+        <span class="sidebar-title">The Hotel Receptionist</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="03" data-wave="0">
+        <span class="sidebar-num">03</span>
+        <span class="sidebar-title">The Sacred Rules</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="04" data-wave="0">
+        <span class="sidebar-num">04</span>
+        <span class="sidebar-title">The Conductor and the Tool Belt</span>
+      </button>
+
+      <!-- Wave 1 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--early">Wave 1 · Structure</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="05" data-wave="1">
+        <span class="sidebar-num">05</span>
+        <span class="sidebar-title">The Four Walls</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="06" data-wave="1">
+        <span class="sidebar-num">06</span>
+        <span class="sidebar-title">The Crystal Ball and the Ghost Registry</span>
+      </button>
+
+      <!-- Wave 2 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--growth">Wave 2 · Resilience</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="07" data-wave="2">
+        <span class="sidebar-num">07</span>
+        <span class="sidebar-title">When Everything Broke</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="08" data-wave="2">
+        <span class="sidebar-num">08</span>
+        <span class="sidebar-title">The Reckoning</span>
+      </button>
+
+      <!-- Wave 3 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--scale">Wave 3 · Autonomy</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="09" data-wave="3">
+        <span class="sidebar-num">09</span>
+        <span class="sidebar-title">The Great Pruning</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="10" data-wave="3">
+        <span class="sidebar-num">10</span>
+        <span class="sidebar-title">The Pylance Epiphany</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="11" data-wave="3">
+        <span class="sidebar-num">11</span>
+        <span class="sidebar-title">The 3 AM Healer</span>
+      </button>
+
+      <!-- Wave 4 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--vision">Wave 4 · Vision</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="12" data-wave="4">
+        <span class="sidebar-num">12</span>
+        <span class="sidebar-title">The Enterprise Brain</span>
+      </button>
+
+      <!-- Mobile toggle -->
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle chapter list">
+        <i class="fas fa-bars"></i>
+      </button>
+    </aside>
+
+    <!-- Right Panel: Chapter Content -->
+    <article class="chapter-content" id="chapter-content">
+      <div class="chapter-content-inner" id="chapter-content-inner">
+        <div class="chapter-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Loading chapter…</span>
+        </div>
+      </div>
+      <nav class="chapter-nav" id="chapter-nav" aria-label="Chapter navigation">
+        <button class="chapter-nav-btn chapter-nav-prev" id="nav-prev" disabled>
+          <i class="fas fa-arrow-left"></i> Previous
+        </button>
+        <span class="chapter-nav-counter" id="nav-counter">1 / 14</span>
+        <button class="chapter-nav-btn chapter-nav-next" id="nav-next">
+          The Hotel Receptionist <i class="fas fa-arrow-right"></i>
+        </button>
+      </nav>
+    </article>
+  </div>
+
+</main>
+
+<script>
+(function() {
+  'use strict';
+
+  // alignA/alignB: contextual float placement for the two story images per chapter.
+  // Pattern alternates per chapter so consecutive chapters never share the same lead side.
+  const CHAPTERS = [
+    { id: '01', file: 'chapters/01-Deep-in-the-Basement.md',                      title: 'Deep in the Basement',                    wave: 0, imageA: 'images/ch-01-a.png', imageB: 'images/ch-01-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '02', file: 'chapters/02-The-Hotel-Receptionist.md',                    title: 'The Hotel Receptionist',                  wave: 0, imageA: 'images/ch-02-a.png', imageB: 'images/ch-02-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '03', file: 'chapters/03-The-Sacred-Rules.md',                          title: 'The Sacred Rules',                        wave: 0, imageA: 'images/ch-03-a.png', imageB: 'images/ch-03-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '04', file: 'chapters/04-The-Conductor-and-the-Tool-Belt.md',           title: 'The Conductor and the Tool Belt',          wave: 0, imageA: 'images/ch-04-a.png', imageB: 'images/ch-04-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '05', file: 'chapters/05-The-Four-Walls.md',                            title: 'The Four Walls',                          wave: 1, imageA: 'images/ch-05-a.png', imageB: 'images/ch-05-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '06', file: 'chapters/06-The-Crystal-Ball-and-the-Ghost-Registry.md',   title: 'The Crystal Ball and the Ghost Registry',  wave: 1, imageA: 'images/ch-06-a.png', imageB: 'images/ch-06-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '07', file: 'chapters/07-When-Everything-Broke.md',                     title: 'When Everything Broke',                   wave: 2, imageA: 'images/ch-07-a.png', imageB: 'images/ch-07-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '08', file: 'chapters/08-The-Reckoning.md',                             title: 'The Reckoning',                           wave: 2, imageA: 'images/ch-08-a.png', imageB: 'images/ch-08-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '09', file: 'chapters/09-The-Great-Pruning.md',                         title: 'The Great Pruning',                       wave: 3, imageA: 'images/ch-09-a.png', imageB: 'images/ch-09-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '10', file: 'chapters/10-The-Pylance-Epiphany.md',                      title: 'The Pylance Epiphany',                    wave: 3, imageA: 'images/ch-10-a.png', imageB: 'images/ch-10-b.png', alignA: 'right',  alignB: 'left'   },
+    { id: '11', file: 'chapters/11-The-3AM-Healer.md',                            title: 'The 3 AM Healer',                         wave: 3, imageA: 'images/ch-11-a.png', imageB: 'images/ch-11-b.png', alignA: 'left',   alignB: 'right'  },
+    { id: '12', file: 'chapters/12-The-Enterprise-Brain.md',                      title: 'The Enterprise Brain',                    wave: 4, imageA: 'images/ch-12-a.png', imageB: 'images/ch-12-b.png', alignA: 'right',  alignB: 'left'   },
+  ];
+
+  const WAVE_LABELS = ['Origin', 'Structure', 'Resilience', 'Autonomy', 'Vision'];
+
+  const contentEl = document.getElementById('chapter-content-inner');
+  const sidebarBtns = document.querySelectorAll('.sidebar-chapter');
+  const prevBtn = document.getElementById('nav-prev');
+  const nextBtn = document.getElementById('nav-next');
+  const counterEl = document.getElementById('nav-counter');
+  const sidebarEl = document.getElementById('chapter-sidebar');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  const backdropEl = document.getElementById('sidebar-backdrop');
+
+  let currentIdx = 0;
+  const cache = {};
+  // Cache-bust version — frozen at page load so all chapters share the same
+  // version token within a session, but a hard-refresh always hits disk fresh.
+  const CACHE_V = '?v=' + Date.now();
+
+  /* ── Markdown Processing ─────────────────────────────────── */
+  function stripFrontmatter(md) {
+    const m = md.match(/^---\s*\n[\s\S]*?\n---\s*\n/);
+    return m ? md.slice(m[0].length) : md;
+  }
+
+  function renderMd(md) {
+    const clean = stripFrontmatter(md);
+    // Strip leading h1 (# Title) — the JS header already renders ch.title
+    const noH1 = clean.replace(/^#[^#][^\n]*\n+/, '');
+    marked.setOptions({ breaks: false, gfm: true });
+    return marked.parse(noH1);
+  }
+
+  /* ── Story Image Injection ───────────────────────────────── */
+  function buildStoryImg(src, wave, slot, align) {
+    return '<figure class="ch-story-img" data-wave="' + wave + '" data-slot="' + slot + '" data-align="' + align + '">' +
+      '<img src="' + src + '" alt="" loading="lazy" decoding="async"/>' +
+    '</figure>';
+  }
+
+  function injectImages(html, ch) {
+    // Split after every </p> — keeps the delimiter attached to each segment
+    const parts = html.split(/(?<=<\/p>)/);
+    const total = parts.length;
+    // Need at least 4 segments to place both images without touching start/end
+    if (total < 4) return html;
+    const posA = Math.max(1, Math.floor(total * 0.33));
+    const posB = Math.max(posA + 1, Math.floor(total * 0.67));
+    // Insert B first (higher index) so posA index is unaffected
+    parts.splice(posB, 0, buildStoryImg(ch.imageB, ch.wave, 'b', ch.alignB));
+    parts.splice(posA, 0, buildStoryImg(ch.imageA, ch.wave, 'a', ch.alignA));
+    return parts.join('');
+  }
+
+  /* ── Chapter Loading ─────────────────────────────────────── */
+  async function loadChapter(idx) {
+    if (idx < 0 || idx >= CHAPTERS.length) return;
+    currentIdx = idx;
+    const ch = CHAPTERS[idx];
+
+    // Sidebar active
+    sidebarBtns.forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector('[data-chapter="' + ch.id + '"]');
+    if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+
+    // Nav — update buttons with target chapter titles
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === CHAPTERS.length - 1;
+    counterEl.textContent = (idx + 1) + ' / ' + CHAPTERS.length;
+    prevBtn.innerHTML = idx > 0
+      ? '<i class="fas fa-arrow-left"></i> ' + CHAPTERS[idx - 1].title
+      : '<i class="fas fa-arrow-left"></i> Previous';
+    nextBtn.innerHTML = idx < CHAPTERS.length - 1
+      ? CHAPTERS[idx + 1].title + ' <i class="fas fa-arrow-right"></i>'
+      : 'Next <i class="fas fa-arrow-right"></i>';
+
+    // Loading state
+    contentEl.innerHTML = '<div class="chapter-loading"><i class="fas fa-spinner fa-spin"></i><span>Loading…</span></div>';
+
+    try {
+      if (!cache[ch.id]) {
+        const r = await fetch(ch.file + CACHE_V);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        cache[ch.id] = await r.text();
+      }
+      const rawHtml = renderMd(cache[ch.id]);
+      const html = injectImages(rawHtml, ch);
+      const label = ch.id === '01' ? 'PROLOGUE' : 'CHAPTER ' + parseInt(ch.id, 10);
+
+      contentEl.innerHTML =
+        '<div class="ch-header" data-wave="' + ch.wave + '">' +
+          '<div class="ch-wave-tag">' + WAVE_LABELS[ch.wave] + '</div>' +
+          '<div class="ch-label">' + label + '</div>' +
+          '<h2 class="ch-title">' + ch.title + '</h2>' +
+        '</div>' +
+        '<div class="ch-body">' + html + '</div>';
+
+      document.getElementById('chapter-content').scrollTop = 0;
+      history.replaceState(null, '', '#chapter-' + ch.id);
+
+      // Close sidebar on mobile after selection
+      if (window.innerWidth < 900) closeSidebar();
+
+    } catch (e) {
+      contentEl.innerHTML = '<div class="chapter-error"><i class="fas fa-exclamation-triangle"></i><p>Could not load chapter.<br/><small>' + e.message + '</small></p></div>';
+    }
+  }
+
+  /* ── Events ──────────────────────────────────────────────── */
+  sidebarBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var chapterId = btn.getAttribute('data-chapter');
+      var idx = CHAPTERS.findIndex(function(c) { return c.id === chapterId; });
+      if (idx >= 0) loadChapter(idx);
+    });
+  });
+  prevBtn.addEventListener('click', function() { loadChapter(currentIdx - 1); });
+  nextBtn.addEventListener('click', function() { loadChapter(currentIdx + 1); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' && currentIdx > 0) loadChapter(currentIdx - 1);
+    if (e.key === 'ArrowRight' && currentIdx < CHAPTERS.length - 1) loadChapter(currentIdx + 1);
+  });
+
+  // Mobile sidebar toggle
+  function openSidebar() {
+    sidebarEl.classList.add('open');
+    if (backdropEl) backdropEl.classList.add('active');
+  }
+  function closeSidebar() {
+    sidebarEl.classList.remove('open');
+    if (backdropEl) backdropEl.classList.remove('active');
+  }
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      sidebarEl.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+  }
+  if (backdropEl) {
+    backdropEl.addEventListener('click', closeSidebar);
+  }
+
+  /* ── Init ────────────────────────────────────────────────── */
+  var hash = window.location.hash;
+  var hm = hash.match(/chapter-(\d+)/);
+  if (hm) {
+    var hi = CHAPTERS.findIndex(function(c) { return c.id === hm[1].padStart(2, '0'); });
+    loadChapter(hi >= 0 ? hi : 0);
+  } else {
+    loadChapter(0);
+  }
+})();
+</script>
+</body>
+</html>
