@@ -105,6 +105,7 @@
         --spacing-2: 0.5rem;
         --spacing-3: 0.75rem;
         --spacing-4: 1rem;
+        --spacing-5: 1.25rem;
         --spacing-6: 1.5rem;
         --spacing-8: 2rem;
         --spacing-10: 2.5rem;
@@ -162,6 +163,10 @@
     /* --- LAYOUT & UTILITY CLASSES --- */
     .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 var(--spacing-6); }
     .section { padding: var(--spacing-16) 0; }
+
+    /* ── Responsive section spacing ── */
+    @media (max-width: 640px)  { .section { padding: var(--spacing-10) 0; } }   /* phone:  2.5rem */
+    @media (min-width: 641px) and (max-width: 1023px) { .section { padding: var(--spacing-12) 0; } } /* tablet: 3rem */
     
     .m-0 { margin: 0 !important; }
     .mb-0 { margin-bottom: 0 !important; }
@@ -476,6 +481,11 @@
         .awakening-image-wrapper { width: 100%; height: 200px; }
         .awakening-image-wrapper::after { background: linear-gradient(to bottom, transparent, rgba(45, 35, 75, 0.8)); }
         .awakening-content { padding: var(--spacing-6); }
+    }
+    @media(max-width: 640px) {
+        /* Shrink image so the circular illustration fits without cropping */
+        .awakening-image-wrapper { height: 160px; }
+        .awakening-image { object-fit: contain; object-position: center top; min-height: unset; max-height: 160px; }
     }
 
     /* --- STATS PILL --- */
@@ -1162,6 +1172,11 @@
     }
     .vsp-footnote i { color: var(--accent-cyan); opacity: 0.6; font-size: 0.8125rem; }
 
+    /* Gap between VSP section and Awakening section */
+    .video-showcase-panel { margin-bottom: 0; }
+    @media (max-width: 640px)  { .video-showcase-panel { margin-bottom: var(--spacing-6); } }
+    @media (min-width: 641px) and (max-width: 1023px) { .video-showcase-panel { margin-bottom: var(--spacing-4); } }
+
     /* ── VSP Mobile Responsive ────────────────────────── */
     @media (max-width: 640px) {
         /* Tighter container on phones */
@@ -1175,8 +1190,8 @@
         .vsp-title { font-size: clamp(1.5rem, 7vw, 2.2rem); }
         .vsp-subtitle { font-size: 0.88rem; }
 
-        /* Tab row — wrap tightly, smaller pills */
-        .vsp-tab-row { padding: 0.75rem 1.25rem 1rem; gap: 0.4rem; }
+        /* Tab row — wrap with visible breathing room between pills */
+        .vsp-tab-row { padding: 0.75rem 1.25rem 1rem; gap: 0.625rem; }
         .vsp-role-btn { padding: 0.5rem 0.9rem; font-size: 0.8125rem; gap: 0.45rem; }
         .vsp-role-icon { width: 1.4rem; height: 1.4rem; font-size: 0.8125rem; }
 
@@ -1219,6 +1234,61 @@
 
         /* Hero stats bar — 2-column grid on phones */
         .hero-stats-bar { padding: var(--spacing-4) var(--spacing-5); gap: var(--spacing-3); }
+
+        /* ── Card padding reductions ── */
+        .glass-card { padding: var(--spacing-6); }           /* 1.5rem — comfortable on phone */
+        .glass-card-super { padding: var(--spacing-6); }     /* 1.5rem — matches glass-card */
+        .bento-item { padding: var(--spacing-4); }           /* 1rem */
+
+        /* ── Image 3 fix: stats items as equal bordered tiles on mobile ── */
+        .stats-pill {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-3);
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        .stats-item {
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: var(--spacing-2) !important;
+            background: linear-gradient(145deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.7) 100%);
+            border: 1px solid var(--border-highlight);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-4) var(--spacing-3);
+            min-width: unset !important;
+            flex: unset !important;
+        }
+        .stats-divider { display: none !important; }
+        .stats-val { font-size: 1.5rem; }
+        .stats-lbl { font-size: 0.6875rem; white-space: normal; text-align: center; }
+
+        /* ── Get started CTA ── */
+        .get-started-cta { padding: var(--spacing-8) var(--spacing-6); }  /* 2rem 1.5rem */
+
+        /* ── Tab panel ── */
+        .tab-content-area { padding: var(--spacing-6); }     /* 1.5rem */
+
+        /* ── Dictionary card bottom margin ── */
+        .dictionary-card { margin-bottom: var(--spacing-8); }  /* 2rem */
+
+        /* ── Role tiles ── */
+        .role-tile { padding: 1.25rem 1rem; }
+
+        /* ── What is CORTEX card — expand to near-full width on phones ── */
+        #main-content > section:first-child > div { width: 95% !important; padding: 1.5rem 1.25rem !important; }
+
+        /* ── Image 1 fix: gap between Awakening card and Dogfooding section ── */
+        section[aria-labelledby="dogfood-heading"] { padding-top: var(--spacing-12); }
+
+        /* ── Image 2 fix: gap between stats-pill and Platform Capabilities heading ── */
+        section#platform-capabilities { padding-top: var(--spacing-12); }
+
+        /* ── Image 4 fix: gap between Role tiles and Get Started CTA ── */
+        section#get-started { padding-top: var(--spacing-12); }
     }
 
     /* Tablet (641–1023px) — intermediate tweaks */
@@ -1395,7 +1465,7 @@
 <main id="main-content" role="main">
 
     <!-- What is CORTEX? -->
-    <section class="section" aria-label="What is CORTEX?" style="padding-bottom: 0;">
+    <section class="section" aria-label="What is CORTEX?">
         <div style="
             width: 80%;
             margin: 0 auto;
@@ -1465,7 +1535,7 @@
                 <!-- Three pillars -->
                 <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
                     <div style="
-                        flex: 1; min-width: 180px; max-width: 260px;
+                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
@@ -1476,7 +1546,7 @@
                         <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">323 orchestrators across 15 domains</div>
                     </div>
                     <div style="
-                        flex: 1; min-width: 180px; max-width: 260px;
+                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
@@ -1487,7 +1557,7 @@
                         <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">37 YAML rules enforced at every gate</div>
                     </div>
                     <div style="
-                        flex: 1; min-width: 180px; max-width: 260px;
+                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
