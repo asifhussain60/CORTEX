@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX University — The Five-Step Lifecycle</title>
+    <meta name="description" content="Deep dive into CORTEX's five-step orchestrator lifecycle — Prepare, Govern, Execute, Validate, Close — with AC markers, primitive YAMLs, and interactive D3 state diagram."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../../../assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #14b8a6;
+            --accent-em: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --issa-content-content: 3rem;
+            --issa-content-panel: 2rem;
+            --issa-panel-panel: 1.5rem;
+            --issa-hero-first: 3rem;
+        }
+        body { background-color: #020617; background-image: radial-gradient(circle at 20% 20%, rgba(20,184,166,0.08) 0%, transparent 45%), radial-gradient(circle at 80% 80%, rgba(16,185,129,0.06) 0%, transparent 45%); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; font-size: 16px; line-height: 1.6; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; }
+        @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(20,184,166,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(20,184,166,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+
+        .gradient-text-teal { background: linear-gradient(to right, #14b8a6, #10b981); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
+        .breadcrumb-nav a:hover { color: var(--accent); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.75; background: rgba(0,0,0,0.45); border-radius: 0.875rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; } .code-yaml-key { color: #60a5fa; } .code-yaml-val { color: #34d399; }
+
+        .phase-step { border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); padding: 1.5rem; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+        @media (hover: hover) { .phase-step:hover { transform: translateY(-3px); } }
+
+        .primitive-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; border: 1px solid; }
+
+        #lifecycle-diagram { width: 100%; height: 420px; border-radius: 1rem; }
+        @media (min-width: 768px) { #lifecycle-diagram { height: 480px; } }
+        .d3-tooltip { position: absolute; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); white-space: nowrap; }
+
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+        @media (prefers-reduced-motion: reduce) { .glass-card, .phase-step { transition: none; } }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm" style="scroll-margin-top:4rem">Skip to main content</a>
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../../../index.html"><i data-lucide="home" class="w-4 h-4"></i><span>CORTEX</span></a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../../index.html">University</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../index.html">Architecture Patterns</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Five-Step Lifecycle</span>
+    </nav>
+
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+
+        <div id="tooltip" class="d3-tooltip"></div>
+
+        <!-- ═══ HERO ═══ -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i> Deep Dive · Architecture Patterns · Concept 02
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    The Five-Step<br/><span class="gradient-text-teal">Lifecycle.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    Every CORTEX orchestrator — regardless of domain or specialisation — follows the same five phases: Prepare → Govern → Execute → Validate → Close. This consistency is what makes every operation auditable, predictable, and safe to roll back.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 text-[11px]">
+                <span class="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold">~14 min read</span>
+                <span class="px-3 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-400 font-bold">5 phases</span>
+                <span class="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold">8 primitives</span>
+            </div>
+        </section>
+
+        <!-- ═══ REAL-WORLD ANALOGY ═══ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-950/60 via-slate-900/80 to-emerald-950/60 border border-teal-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Real-World Analogy
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Think of a Surgical Procedure</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">No surgeon walks into an operating theatre and starts cutting. There is a mandated sequence: pre-op checks, ethical sign-off, the operation, recovery monitoring, and formal discharge. Skip any step and patient safety is at risk. CORTEX applies the same discipline to every code-touching operation.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                    <div class="text-center p-4 rounded-xl border border-teal-500/20 bg-teal-500/5 space-y-2">
+                        <div class="text-2xl">🩺</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-teal-500">Pre-op</div>
+                        <div class="text-xs text-teal-300 font-bold">Prepare</div>
+                        <p class="text-[11px] text-slate-500">Patient history, consent, equipment check</p>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
+                        <div class="text-2xl">📝</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-amber-500">Sign-off</div>
+                        <div class="text-xs text-amber-300 font-bold">Govern</div>
+                        <p class="text-[11px] text-slate-500">Ethics approval, WHO checklist, risk gate</p>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-violet-500/20 bg-violet-500/5 space-y-2">
+                        <div class="text-2xl">🔪</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-violet-500">Operation</div>
+                        <div class="text-xs text-violet-300 font-bold">Execute</div>
+                        <p class="text-[11px] text-slate-500">The surgical work — specialised, precise</p>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-2">
+                        <div class="text-2xl">🫀</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Recovery</div>
+                        <div class="text-xs text-emerald-300 font-bold">Validate</div>
+                        <p class="text-[11px] text-slate-500">Vitals monitored until stable — zero P0</p>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 space-y-2">
+                        <div class="text-2xl">📋</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-pink-500">Discharge</div>
+                        <div class="text-xs text-pink-300 font-bold">Close</div>
+                        <p class="text-[11px] text-slate-500">Records updated, patient signed out</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ D3 STATE DIAGRAM ═══ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-teal-950/40 to-slate-900/80 border border-teal-500/15 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-6 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="git-merge" class="w-3.5 h-3.5"></i> Interactive State Diagram
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Lifecycle State Flow</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Hover each state for what happens inside it. The Validate phase can loop back to Execute until all P0/P1 violations are resolved — CORE-068 Convergence Gate.</p>
+                </div>
+                <div id="lifecycle-diagram"></div>
+            </div>
+        </section>
+
+        <!-- ═══ FIVE PHASES — DETAILED ═══ -->
+        <section class="space-y-8">
+            <div class="text-center space-y-4">
+                <h2 class="section-title font-black tracking-tighter">What Happens in Each Phase</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Each phase is implemented via declarative YAML primitive templates — not inline procedural code in the orchestrator itself.</p>
+            </div>
+            <div class="space-y-4">
+
+                <!-- Prepare -->
+                <div class="phase-step" style="background: rgba(20,184,166,0.05); border-color: rgba(20,184,166,0.2);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400">
+                                <i data-lucide="settings" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black uppercase tracking-widest text-teal-600">Phase 1</div>
+                                <div class="text-xl font-black text-teal-300">Prepare</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-[14px] text-slate-400 leading-relaxed">Emits <code class="text-teal-400 text-[12px] font-mono">AC_START</code> — the audit trail begins. Creates a git checkpoint for safe rollback. Displays the Definition of Ready (DoR) card so the operator sees exactly what work is scoped.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="primitive-tag" style="color:#14b8a6; border-color:rgba(20,184,166,0.3); background:rgba(20,184,166,0.08)">primitives/execution/ac-marker-emit.yaml</span>
+                                <span class="primitive-tag" style="color:#14b8a6; border-color:rgba(20,184,166,0.3); background:rgba(20,184,166,0.08)">primitives/execution/git-checkpoint.yaml</span>
+                                <span class="primitive-tag" style="color:#14b8a6; border-color:rgba(20,184,166,0.3); background:rgba(20,184,166,0.08)">primitives/governance/dor-display.yaml</span>
+                            </div>
+                            <div class="code-block text-[12px]"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)        <span class="code-cmt"># timestamp + orchestrator + operation</span>
+<span class="code-fn">git_checkpoint</span>(<span class="code-str">"before-implement-user-auth"</span>)
+<span class="code-fn">display_dor</span>(scope, acceptance_criteria)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Govern -->
+                <div class="phase-step" style="background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                                <i data-lucide="shield-check" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black uppercase tracking-widest text-amber-600">Phase 2</div>
+                                <div class="text-xl font-black text-amber-300">Govern</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-[14px] text-slate-400 leading-relaxed">Runs the Holistic Validation Gate (CORE-048) — checks all 60 governance YAMLs for existing P0/P1 violations before a single line of code is touched. If violations exist, execution is blocked. Also opens the Sweep Catalogue to track every issue found this session.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="primitive-tag" style="color:#f59e0b; border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.08)">primitives/governance/holistic-validation-gate.yaml</span>
+                                <span class="primitive-tag" style="color:#f59e0b; border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.08)">primitives/governance/challenge-gate.yaml</span>
+                                <span class="primitive-tag" style="color:#f59e0b; border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.08)">primitives/governance/sweep-catalogue-open.yaml</span>
+                            </div>
+                            <div class="code-block text-[12px]"><span class="code-cmt"># CORE-048 Holistic Validation Gate</span>
+violations = <span class="code-fn">scan_all_governance_rules</span>()
+<span class="code-kw">if</span> violations.p0_count > <span class="code-str">0</span>:
+    <span class="code-kw">raise</span> <span class="code-cls">GovernanceBlockError</span>(
+        f<span class="code-str">"❌ {violations.p0_count} P0 violations — fix before proceeding"</span>
+    )</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Execute -->
+                <div class="phase-step" style="background: rgba(139,92,246,0.05); border-color: rgba(139,92,246,0.2);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400">
+                                <i data-lucide="play" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black uppercase tracking-widest text-violet-600">Phase 3</div>
+                                <div class="text-xl font-black text-violet-300">Execute</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-[14px] text-slate-400 leading-relaxed">The orchestrator performs its specialised work — TDD cycle, code implementation, audit scan, or refactor sweep. For IMPLEMENT/FIX/REFACTOR, this is the TDD red-green-refactor loop. The work is driven by declarative workflow YAML templates, not inline orchestrator logic.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="primitive-tag" style="color:#8b5cf6; border-color:rgba(139,92,246,0.3); background:rgba(139,92,246,0.08)">sdlc/implement-workflow.yaml</span>
+                                <span class="primitive-tag" style="color:#8b5cf6; border-color:rgba(139,92,246,0.3); background:rgba(139,92,246,0.08)">tdd/tdd-workflow.yaml</span>
+                                <span class="primitive-tag" style="color:#8b5cf6; border-color:rgba(139,92,246,0.3); background:rgba(139,92,246,0.08)">audit/audit-fix-pipeline.yaml</span>
+                            </div>
+                            <div class="code-block text-[12px]"><span class="code-cmt"># TDD inner loop (CORE-008 — tests before implementation)</span>
+<span class="code-fn">write_failing_test</span>(acceptance_criteria)     <span class="code-cmt"># RED</span>
+<span class="code-fn">implement_minimal_code</span>(to_pass_test)         <span class="code-cmt"># GREEN</span>
+<span class="code-fn">refactor</span>(maintain_green)                      <span class="code-cmt"># REFACTOR</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validate -->
+                <div class="phase-step" style="background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                <i data-lucide="check-circle" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Phase 4</div>
+                                <div class="text-xl font-black text-emerald-300">Validate</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-[14px] text-slate-400 leading-relaxed">Runs the Convergence Loop (CORE-068): detect → fix → rescan until <code class="text-emerald-400 text-[12px] font-mono">p0_count == 0 AND p1_count == 0</code>. Maximum 3 cycles before escalation. This is not a single pass — it loops until the workspace is provably clean.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="primitive-tag" style="color:#10b981; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.08)">primitives/validation/detect-fix-rescan-loop.yaml</span>
+                            </div>
+                            <div class="code-block text-[12px]"><span class="code-cmt"># CORE-068 Universal Convergence Gate</span>
+cycle = <span class="code-str">0</span>
+<span class="code-kw">while</span> cycle < <span class="code-str">3</span>:
+    violations = <span class="code-fn">detect</span>()
+    <span class="code-kw">if</span> violations.p0 == <span class="code-str">0</span> <span class="code-kw">and</span> violations.p1 == <span class="code-str">0</span>:
+        <span class="code-kw">break</span>                                <span class="code-cmt"># ✅ clean</span>
+    <span class="code-fn">fix</span>(violations)
+    cycle += <span class="code-str">1</span>
+<span class="code-kw">else</span>:
+    <span class="code-kw">raise</span> <span class="code-cls">ConvergenceError</span>(<span class="code-str">"Max cycles reached"</span>)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Close -->
+                <div class="phase-step" style="background: rgba(244,114,182,0.05); border-color: rgba(244,114,182,0.2);">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-shrink-0 flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400">
+                                <i data-lucide="flag" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black uppercase tracking-widest text-pink-600">Phase 5</div>
+                                <div class="text-xl font-black text-pink-300">Close</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-[14px] text-slate-400 leading-relaxed">Emits <code class="text-pink-400 text-[12px] font-mono">AC_COMPLETE</code> with timing and success/failure status. Closes the Sweep Catalogue — verifying CORE-064 (every issue catalogued at Govern has been resolved). Emits a URS reinforcement signal for the learning system.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="primitive-tag" style="color:#f472b6; border-color:rgba(244,114,182,0.3); background:rgba(244,114,182,0.08)">primitives/execution/ac-marker-emit.yaml</span>
+                                <span class="primitive-tag" style="color:#f472b6; border-color:rgba(244,114,182,0.3); background:rgba(244,114,182,0.08)">primitives/governance/sweep-catalogue-close.yaml</span>
+                            </div>
+                            <div class="code-block text-[12px]"><span class="code-fn">sweep_catalogue_close</span>(assert_all_closed=<span class="code-kw">True</span>)  <span class="code-cmt"># CORE-064</span>
+<span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"AC-IMPL-001"</span>, status=<span class="code-str">"✅"</span>, ms=<span class="code-str">1247</span>)
+<span class="code-fn">urs_emit</span>(signal_type=<span class="code-str">"MILD_REWARD"</span>, scope=<span class="code-str">"implement"</span>)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ AC MARKER FORMAT ═══ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-teal-950/60 border border-emerald-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="fingerprint" class="w-3.5 h-3.5"></i> AC Marker Format Standard
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">The Audit Trail</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every operation generates a pair of AC markers persisted to SQLite. No orphaned <code class="text-emerald-400 text-sm">AC_START</code> without a matching <code class="text-emerald-400 text-sm">AC_COMPLETE</code> is allowed — EnforcementOrchestrator blocks the commit.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Marker Anatomy</div>
+                        <div class="code-block"><span class="code-cmt"># Format: AC-{DOMAIN}-{SEQUENCE}</span>
+<span class="code-str">AC-P89-001</span>   <span class="code-cmt"># Phase 89, operation 1</span>
+<span class="code-str">AC-IMPL-042</span>  <span class="code-cmt"># IMPLEMENT domain, op 42</span>
+<span class="code-str">AC-CORE-007</span>  <span class="code-cmt"># CORE domain, op 7</span>
+<span class="code-str">AC-AUDIT-001</span> <span class="code-cmt"># AUDIT domain, op 1</span>
+
+<span class="code-cmt"># Domain is the phase or module identifier</span>
+<span class="code-cmt"># Sequence is zero-padded 3-digit counter</span></div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">SQLite Persistence</div>
+                        <div class="code-block"><span class="code-cmt"># .cortex-runtime/traces/orchestrator-traces.db</span>
+<span class="code-cmt"># Tables: audit_sessions, audit_stage_log,</span>
+<span class="code-cmt">#         audit_violations, workflow_cycles</span>
+
+<span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
+<span class="code-cmt"># → INSERT into audit_sessions</span>
+<span class="code-cmt">#     (id, marker, ts, orchestrator)</span>
+
+<span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"AC-IMPL-001"</span>, <span class="code-str">"✅"</span>, ms=<span class="code-str">842</span>)
+<span class="code-cmt"># → UPDATE audit_sessions SET status=OK</span></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+                    <div class="text-center p-4 rounded-xl border border-teal-500/15 bg-teal-500/5">
+                        <div class="text-2xl font-black text-teal-400 font-mono">7</div>
+                        <div class="text-[11px] text-slate-500 mt-1">SQLite databases</div>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-emerald-500/15 bg-emerald-500/5">
+                        <div class="text-2xl font-black text-emerald-400 font-mono">30d</div>
+                        <div class="text-[11px] text-slate-500 mt-1">audit retention</div>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-violet-500/15 bg-violet-500/5">
+                        <div class="text-2xl font-black text-violet-400 font-mono">0</div>
+                        <div class="text-[11px] text-slate-500 mt-1">orphan AC_STARTs allowed</div>
+                    </div>
+                    <div class="text-center p-4 rounded-xl border border-amber-500/15 bg-amber-500/5">
+                        <div class="text-2xl font-black text-amber-400 font-mono">3</div>
+                        <div class="text-[11px] text-slate-500 mt-1">max convergence cycles</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ NAVIGATION ═══ -->
+        <section class="flex flex-col sm:flex-row justify-between gap-4">
+            <a href="orchestrator-domains.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-slate-500/20 hover:border-teal-500/30" style="text-decoration:none;">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i>
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Previous Deep Dive</div>
+                    <div class="text-sm font-bold text-slate-300">Orchestrator Domains</div>
+                </div>
+            </a>
+            <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-teal-400"></i>
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Back to Domain</div>
+                    <div class="text-sm font-bold text-teal-300">Architecture Patterns</div>
+                </div>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center">
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | University · Architecture Patterns · Five-Step Lifecycle
+        </div>
+    </footer>
+
+    <script>
+        const PHASES = [
+            { id: 'prepare',  label: 'Prepare',  color: '#14b8a6', icon: '⚙️', desc: 'AC_START · Git checkpoint · DoR display' },
+            { id: 'govern',   label: 'Govern',   color: '#f59e0b', icon: '🛡️', desc: 'CORE-048 holistic gate · Challenge gate · Sweep catalogue open' },
+            { id: 'execute',  label: 'Execute',  color: '#8b5cf6', icon: '▶️', desc: 'TDD cycle · Workflow template execution · Specialised work' },
+            { id: 'validate', label: 'Validate', color: '#10b981', icon: '✅', desc: 'CORE-068 convergence loop · detect→fix→rescan · max 3 cycles' },
+            { id: 'close',    label: 'Close',    color: '#f472b6', icon: '🏁', desc: 'AC_COMPLETE · Sweep catalogue close (CORE-064) · URS signal emit' },
+        ];
+
+        window.onload = function () {
+            lucide.createIcons();
+            buildLifecycleDiagram();
+        };
+
+        function buildLifecycleDiagram() {
+            const el = document.getElementById('lifecycle-diagram');
+            if (!el) return;
+            const w = el.getBoundingClientRect().width || 800;
+            const h = el.getBoundingClientRect().height || 420;
+
+            const svg = d3.select('#lifecycle-diagram').append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${w} ${h}`);
+
+            // Defs: arrowhead marker
+            const defs = svg.append('defs');
+            defs.append('marker')
+                .attr('id', 'arrow').attr('viewBox', '-0 -5 10 10')
+                .attr('refX', 8).attr('refY', 0).attr('orient', 'auto')
+                .attr('markerWidth', 7).attr('markerHeight', 7)
+                .append('path').attr('d', 'M 0,-5 L 10,0 L 0,5')
+                .attr('fill', 'rgba(255,255,255,0.25)');
+
+            defs.append('marker')
+                .attr('id', 'arrow-loop').attr('viewBox', '-0 -5 10 10')
+                .attr('refX', 8).attr('refY', 0).attr('orient', 'auto')
+                .attr('markerWidth', 7).attr('markerHeight', 7)
+                .append('path').attr('d', 'M 0,-5 L 10,0 L 0,5')
+                .attr('fill', '#f59e0b');
+
+            const nodeR = Math.min(44, w / 14);
+            const totalWidth = w - nodeR * 2;
+            const spacing = totalWidth / (PHASES.length - 1);
+            const cy = h / 2;
+
+            // Positions
+            const positions = PHASES.map((p, i) => ({
+                ...p,
+                x: nodeR + i * spacing,
+                y: cy
+            }));
+
+            // Sequential edges
+            for (let i = 0; i < positions.length - 1; i++) {
+                const src = positions[i], tgt = positions[i + 1];
+                svg.append('line')
+                    .attr('x1', src.x + nodeR).attr('y1', src.y)
+                    .attr('x2', tgt.x - nodeR - 8).attr('y2', tgt.y)
+                    .attr('stroke', 'rgba(255,255,255,0.12)').attr('stroke-width', 1.5)
+                    .attr('marker-end', 'url(#arrow)');
+            }
+
+            // Validate → Execute loop-back arc
+            const vPos = positions[3], ePos = positions[2];
+            const loopPath = `M ${vPos.x - nodeR * 0.7} ${vPos.y - nodeR}
+                              C ${vPos.x - nodeR * 1.2} ${vPos.y - nodeR * 2.8},
+                                ${ePos.x + nodeR * 1.2} ${ePos.y - nodeR * 2.8},
+                                ${ePos.x + nodeR * 0.7} ${ePos.y - nodeR}`;
+            svg.append('path')
+                .attr('d', loopPath)
+                .attr('fill', 'none')
+                .attr('stroke', '#f59e0b').attr('stroke-width', 1.5)
+                .attr('stroke-dasharray', '5,4')
+                .attr('marker-end', 'url(#arrow-loop)');
+
+            svg.append('text')
+                .attr('x', (vPos.x + ePos.x) / 2).attr('y', cy - nodeR * 3.2)
+                .attr('text-anchor', 'middle').attr('fill', '#f59e0b')
+                .attr('font-size', '11px').attr('font-family', 'JetBrains Mono, monospace')
+                .attr('font-weight', '700')
+                .text('loop if P0/P1 > 0');
+
+            const tip = d3.select('#tooltip');
+
+            // Nodes
+            const nodeG = svg.selectAll('.phase-node')
+                .data(positions).enter().append('g')
+                .attr('class', 'phase-node')
+                .attr('transform', d => `translate(${d.x},${d.y})`)
+                .style('cursor', 'pointer');
+
+            nodeG.append('circle')
+                .attr('r', nodeR)
+                .attr('fill', d => d.color + '18')
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 2)
+                .on('mouseover', function (event, d) {
+                    d3.select(this).transition().duration(180).attr('r', nodeR * 1.15).attr('fill', d.color + '35');
+                    tip.transition().duration(180).style('opacity', 1);
+                    tip.html(`<strong style="color:${d.color}">${d.label}</strong><br/><span style="color:#94a3b8;font-size:11px;white-space:normal;max-width:240px;display:block;margin-top:4px">${d.desc}</span>`)
+                        .style('left', (event.pageX + 16) + 'px').style('top', (event.pageY - 48) + 'px');
+                })
+                .on('mouseout', function (event, d) {
+                    d3.select(this).transition().duration(180).attr('r', nodeR).attr('fill', d.color + '18');
+                    tip.transition().duration(180).style('opacity', 0);
+                });
+
+            nodeG.append('text')
+                .attr('text-anchor', 'middle').attr('dy', '-0.2em')
+                .attr('fill', d => d.color)
+                .attr('font-size', Math.max(9, nodeR * 0.28) + 'px')
+                .attr('font-weight', '700')
+                .attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.label);
+
+            // Step numbers below each node
+            nodeG.append('text')
+                .attr('text-anchor', 'middle').attr('dy', nodeR + 18)
+                .attr('fill', 'rgba(148,163,184,0.4)')
+                .attr('font-size', '10px').attr('font-family', 'JetBrains Mono, monospace')
+                .text((d, i) => `0${i + 1}`);
+        }
+    </script>
+
+</body>
+</html>
