@@ -1869,6 +1869,194 @@
     #cortex-robot-top:hover .robot-tooltip {
         opacity: 1;
     }
+
+    /* ── WB: Whiteboard YouTube Embed — Animations ───────────────────────── */
+    @keyframes wbBorderFlow {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes wbGlowPulse {
+        0%, 100% {
+            box-shadow:
+                0 0 0 1px rgba(99,102,241,0.35),
+                0 0 32px rgba(0,212,255,0.18),
+                0 0 80px rgba(99,102,241,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                0 32px 80px -8px rgba(0,0,0,0.7);
+        }
+        50% {
+            box-shadow:
+                0 0 0 1px rgba(0,212,255,0.55),
+                0 0 56px rgba(0,212,255,0.35),
+                0 0 120px rgba(99,102,241,0.22),
+                inset 0 1px 0 rgba(255,255,255,0.12),
+                0 32px 80px -8px rgba(0,0,0,0.7);
+        }
+    }
+    @keyframes wbScanline {
+        0%   { transform: translateY(-100%); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 1; }
+        100% { transform: translateY(100vh); opacity: 0; }
+    }
+    @keyframes wbDotBlink {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%       { opacity: 0.35; transform: scale(0.75); }
+    }
+    @keyframes wbBadgeShimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position:  200% center; }
+    }
+    @keyframes wbCornerPulse {
+        0%, 100% { opacity: 0.5; }
+        50%      { opacity: 1; }
+    }
+    @keyframes wbFloatUp {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-6px); }
+    }
+    @keyframes wbOrb1 {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.45; }
+        50%      { transform: translate(-30px, 20px) scale(1.15); opacity: 0.65; }
+    }
+    @keyframes wbOrb2 {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.35; }
+        50%      { transform: translate(20px, -25px) scale(1.2); opacity: 0.55; }
+    }
+
+    /* Animated rainbow border wrapper */
+    .wb-rainbow-ring {
+        position: relative;
+        border-radius: 1.5rem;
+        padding: 2px;
+        background: linear-gradient(135deg,
+            #00d4ff, #7b61ff, #00ff88, #fbbf24, #00d4ff);
+        background-size: 300% 300%;
+        animation: wbBorderFlow 4s ease infinite;
+    }
+    /* Bezel */
+    .wb-bezel {
+        position: relative;
+        border-radius: 1.375rem;
+        background: linear-gradient(160deg, rgba(14,20,48,0.98) 0%, rgba(6,10,28,1) 100%);
+        animation: wbGlowPulse 3.5s ease-in-out infinite;
+        padding: 1.1rem 1.1rem 0;
+        overflow: hidden;
+    }
+    /* Scanline that sweeps down the bezel */
+    .wb-scanline {
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), rgba(123,97,255,0.4), transparent);
+        animation: wbScanline 5s linear infinite;
+        pointer-events: none;
+        z-index: 20;
+        border-radius: 100px;
+    }
+    /* Live dot in title bar */
+    .wb-live-dot {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: #00ff88;
+        box-shadow: 0 0 10px rgba(0,255,136,0.8), 0 0 20px rgba(0,255,136,0.4);
+        animation: wbDotBlink 1.8s ease-in-out infinite;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+    /* Badge shimmer */
+    .wb-badge {
+        display: inline-flex; align-items: center; gap: 0.45rem;
+        font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        background: linear-gradient(90deg,
+            rgba(0,212,255,0.0) 0%,
+            rgba(0,212,255,0.15) 30%,
+            rgba(123,97,255,0.2) 60%,
+            rgba(0,212,255,0.0) 100%);
+        background-size: 200% auto;
+        animation: wbBadgeShimmer 3s linear infinite;
+        border: 1px solid rgba(0,212,255,0.28);
+        border-radius: 100px; padding: 0.3rem 1rem;
+        color: #00d4ff;
+    }
+    /* Corner brackets pulse */
+    .wb-corner { animation: wbCornerPulse 2.5s ease-in-out infinite; }
+    /* Entire frame floats */
+    .wb-float  { animation: wbFloatUp 5s ease-in-out infinite; }
+    /* Ambient orbs */
+    .wb-orb1 {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 70%);
+        top: -60px; left: -80px;
+        animation: wbOrb1 8s ease-in-out infinite alternate;
+    }
+    .wb-orb2 {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 260px; height: 260px;
+        background: radial-gradient(circle, rgba(123,97,255,0.16) 0%, transparent 70%);
+        bottom: -40px; right: -60px;
+        animation: wbOrb2 9s ease-in-out infinite alternate;
+    }
+    /* Traffic light dots */
+    .wb-dot-r { background: #ff5f57; box-shadow: 0 0 8px rgba(255,95,87,0.7); }
+    .wb-dot-y { background: #febc2e; box-shadow: 0 0 8px rgba(254,188,46,0.7); }
+    .wb-dot-g { background: #28c840; box-shadow: 0 0 8px rgba(40,200,64,0.7); }
+    /* Video container */
+    .wb-video-wrapper {
+        position: relative;
+        width: 100%; padding-bottom: 56.25%;
+        border-radius: 0.75rem 0.75rem 0 0;
+        overflow: hidden;
+        background: #000;
+        box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,0.07),
+            0 -1px 0 rgba(0,212,255,0.12);
+        z-index: 1;
+    }
+    .wb-video-wrapper iframe {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        border: 0;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
+    /* Bottom chin */
+    .wb-chin {
+        height: 1.1rem;
+        background: linear-gradient(180deg, rgba(8,12,30,1) 0%, rgba(4,7,20,1) 100%);
+        border-top: 1px solid rgba(0,212,255,0.12);
+        border-radius: 0 0 1rem 1rem;
+        display: flex; align-items: center; justify-content: center;
+    }
+    /* Stand */
+    .wb-stand-neck {
+        width: 36px; height: 12px;
+        background: linear-gradient(180deg, rgba(10,14,30,0.95), rgba(5,8,20,0.9));
+        border-left: 1px solid rgba(0,212,255,0.12);
+        border-right: 1px solid rgba(0,212,255,0.12);
+        margin: 0 auto;
+    }
+    .wb-stand-foot {
+        width: 120px; height: 7px;
+        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.12) 20%, rgba(99,102,241,0.12) 80%, transparent);
+        border-top: 1px solid rgba(0,212,255,0.18);
+        border-radius: 0 0 6px 6px;
+        margin: 0 auto;
+    }
+    /* Floor glow */
+    .wb-floor-glow {
+        position: absolute; bottom: -20px; left: 15%; right: 15%; height: 20px;
+        background: linear-gradient(180deg, rgba(0,212,255,0.1) 0%, transparent 100%);
+        filter: blur(8px); border-radius: 50%;
+        pointer-events: none;
+    }
+    /* Caption */
+    .wb-caption {
+        text-align: center; margin: 1.5rem 0 0;
+        font-size: 0.8rem; color: rgba(148,163,184,0.5);
+        font-family: var(--font-mono); letter-spacing: 0.06em;
+    }
 </style>
 
 </head>
@@ -2561,175 +2749,125 @@
             <!-- ── Divider ── -->
             <div aria-hidden="true" style="
                 height: 1px;
-                background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.3) 30%, rgba(0,212,255,0.25) 70%, transparent 100%);
+                background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.4) 30%, rgba(0,212,255,0.35) 70%, transparent 100%);
                 margin: 0;
                 position: relative; z-index: 1;
             "></div>
 
             <!-- ── Bottom: Digital Whiteboard YouTube Embed ── -->
-            <div style="position: relative; z-index: 1; padding: 2.5rem 2.5rem 2.75rem;">
+            <div style="position:relative; z-index:1; padding: 2rem 3rem 2.5rem; overflow:hidden;">
 
-                <!-- Whiteboard label -->
-                <div style="display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-bottom:1.5rem;">
-                    <span style="
-                        display:inline-flex; align-items:center; gap:0.45rem;
-                        font-family: var(--font-mono); font-size:0.75rem; font-weight:700;
-                        letter-spacing:0.18em; text-transform:uppercase;
-                        color:var(--accent-cyan); opacity:0.85;
-                        background:rgba(0,212,255,0.07); border:1px solid rgba(0,212,255,0.18);
-                        border-radius:100px; padding:0.28rem 0.9rem;
-                    ">
-                        <i class="fas fa-play-circle" aria-hidden="true" style="font-size:0.7rem;"></i>
+                <!-- Ambient background orbs — depth behind the monitor -->
+                <div class="wb-orb1" aria-hidden="true"></div>
+                <div class="wb-orb2" aria-hidden="true"></div>
+
+                <!-- Badge label -->
+                <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:1.25rem;position:relative;z-index:2;">
+                    <span class="wb-badge">
+                        <span class="wb-live-dot" aria-hidden="true"></span>
                         Watch · CORTEX in Action
                     </span>
                 </div>
 
-                <!-- Digital whiteboard frame -->
+                <!-- Outer layout: centred at 80% width -->
                 <div style="
+                    max-width: 80%;
+                    margin: 0 auto;
                     position: relative;
-                    border-radius: 1.25rem;
-                    overflow: visible;
-                    /* Outer ambient glow */
-                    filter: drop-shadow(0 0 48px rgba(0,212,255,0.12)) drop-shadow(0 24px 56px rgba(0,0,0,0.55));
+                    z-index: 2;
                 " aria-label="CORTEX introduction video — digital whiteboard">
 
-                    <!-- Whiteboard bezel / monitor casing -->
-                    <div style="
-                        position: relative;
-                        border-radius: 1.25rem;
-                        background: linear-gradient(160deg, rgba(18,24,48,0.98) 0%, rgba(10,14,36,1) 100%);
-                        border: 1.5px solid rgba(0,212,255,0.22);
-                        box-shadow:
-                            0 0 0 1px rgba(99,102,241,0.18),
-                            0 0 0 4px rgba(0,212,255,0.04),
-                            inset 0 1px 0 rgba(255,255,255,0.06),
-                            inset 0 -1px 0 rgba(0,212,255,0.06),
-                            0 2px 80px -8px rgba(0,212,255,0.1);
-                        padding: 1.25rem 1.25rem 0;
-                    ">
+                    <!-- Floating animation wrapper -->
+                    <div class="wb-float">
 
-                        <!-- Whiteboard toolbar strip (top decoration) -->
-                        <div style="
-                            display: flex; align-items: center; justify-content: space-between;
-                            margin-bottom: 1rem;
-                            padding: 0 0.25rem;
-                        ">
-                            <!-- Traffic-light dots (left) -->
-                            <div style="display:flex; align-items:center; gap:0.5rem;">
-                                <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,79,79,0.75);box-shadow:0 0 6px rgba(255,79,79,0.4);display:block;"></span>
-                                <span style="width:10px;height:10px;border-radius:50%;background:rgba(251,191,36,0.75);box-shadow:0 0 6px rgba(251,191,36,0.4);display:block;"></span>
-                                <span style="width:10px;height:10px;border-radius:50%;background:rgba(52,211,153,0.75);box-shadow:0 0 6px rgba(52,211,153,0.4);display:block;"></span>
-                            </div>
-                            <!-- Centre title bar -->
-                            <div style="
-                                position: absolute; left: 50%; transform: translateX(-50%);
-                                font-family: var(--font-mono); font-size:0.75rem; letter-spacing:0.12em;
-                                text-transform: uppercase; color: rgba(148,163,184,0.55);
-                                white-space: nowrap; pointer-events:none;
-                            ">cortex-intro.mp4 · HD</div>
-                            <!-- Right: pin icon -->
-                            <div style="
-                                width:24px; height:24px; border-radius:50%;
-                                background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.18);
-                                display:flex; align-items:center; justify-content:center;
-                            ">
-                                <i class="fas fa-thumbtack" aria-hidden="true" style="font-size:0.65rem;color:rgba(0,212,255,0.55);transform:rotate(45deg);"></i>
-                            </div>
-                        </div>
+                        <!-- Rainbow animated border ring -->
+                        <div class="wb-rainbow-ring">
 
-                        <!-- Corner brackets — whiteboard feel -->
-                        <span aria-hidden="true" style="position:absolute;top:3.75rem;left:0.75rem;width:18px;height:18px;border-top:2px solid rgba(99,102,241,0.55);border-left:2px solid rgba(99,102,241,0.55);border-radius:4px 0 0 0;pointer-events:none;"></span>
-                        <span aria-hidden="true" style="position:absolute;top:3.75rem;right:0.75rem;width:18px;height:18px;border-top:2px solid rgba(0,212,255,0.45);border-right:2px solid rgba(0,212,255,0.45);border-radius:0 4px 0 0;pointer-events:none;"></span>
+                            <!-- Bezel (monitor casing) with pulsing glow -->
+                            <div class="wb-bezel">
 
-                        <!-- Inset glow behind video -->
-                        <div aria-hidden="true" style="
-                            position:absolute; inset:3.5rem 0.75rem 0;
-                            border-radius:0.875rem 0.875rem 0 0;
-                            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%);
-                            pointer-events:none;
-                            z-index:0;
-                        "></div>
+                                <!-- Scanline sweep -->
+                                <div class="wb-scanline" aria-hidden="true"></div>
 
-                        <!-- 16:9 video wrapper — clipped with rounded top corners -->
-                        <div style="
-                            position: relative;
-                            width: 100%;
-                            padding-bottom: 56.25%; /* 16:9 */
-                            border-radius: 0.875rem 0.875rem 0 0;
-                            overflow: hidden;
-                            background: #000;
-                            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
-                            z-index: 1;
-                        ">
-                            <iframe
-                                src="https://www.youtube.com/embed/ObXKAq-2bIA?rel=0&modestbranding=1&color=white"
-                                title="CORTEX — Cognitive Orchestration Real-Time Execution eXpert: Introduction"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                                loading="lazy"
-                                style="
-                                    position: absolute; inset: 0;
-                                    width: 100%; height: 100%;
-                                    border: 0;
-                                    border-radius: 0.875rem 0.875rem 0 0;
-                                "
-                            ></iframe>
-                        </div>
+                                <!-- Title bar -->
+                                <div style="
+                                    display:flex; align-items:center; justify-content:space-between;
+                                    margin-bottom:0.875rem; padding:0 0.2rem;
+                                    position:relative; z-index:5;
+                                ">
+                                    <!-- Traffic lights (vivid) -->
+                                    <div style="display:flex;align-items:center;gap:0.45rem;">
+                                        <span class="wb-dot-r" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
+                                        <span class="wb-dot-y" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
+                                        <span class="wb-dot-g" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
+                                    </div>
+                                    <!-- Title — bright & legible -->
+                                    <div style="
+                                        position:absolute; left:50%; transform:translateX(-50%);
+                                        font-family:var(--font-mono); font-size:0.72rem; font-weight:600;
+                                        letter-spacing:0.14em; text-transform:uppercase;
+                                        color:rgba(200,215,240,0.9);
+                                        white-space:nowrap; pointer-events:none;
+                                        text-shadow: 0 0 12px rgba(0,212,255,0.5);
+                                    ">CORTEX-INTRO.MP4 · HD</div>
+                                    <!-- Pin icon — bright -->
+                                    <div style="
+                                        width:26px; height:26px; border-radius:50%;
+                                        background:rgba(0,212,255,0.14); border:1px solid rgba(0,212,255,0.4);
+                                        display:flex; align-items:center; justify-content:center;
+                                        box-shadow: 0 0 10px rgba(0,212,255,0.25);
+                                    ">
+                                        <i class="fas fa-thumbtack" aria-hidden="true" style="font-size:0.65rem;color:#00d4ff;transform:rotate(45deg);"></i>
+                                    </div>
+                                </div>
 
-                        <!-- Whiteboard chin / stand base strip -->
-                        <div style="
-                            height: 1.25rem;
-                            background: linear-gradient(180deg, rgba(8,12,30,1) 0%, rgba(5,8,22,1) 100%);
-                            border-top: 1px solid rgba(0,212,255,0.1);
-                            border-radius: 0 0 1rem 1rem;
-                            position: relative;
-                            display: flex; align-items: center; justify-content: center;
-                        ">
-                            <!-- Subtle centre notch -->
-                            <span aria-hidden="true" style="
-                                width: 48px; height: 3px; border-radius: 2px;
-                                background: rgba(0,212,255,0.15);
-                            "></span>
-                        </div>
+                                <!-- Corner brackets — vivid, animated -->
+                                <span class="wb-corner" aria-hidden="true" style="position:absolute;top:3.6rem;left:0.65rem;width:22px;height:22px;border-top:2.5px solid rgba(123,97,255,0.9);border-left:2.5px solid rgba(123,97,255,0.9);border-radius:4px 0 0 0;pointer-events:none;box-shadow:-2px -2px 8px rgba(123,97,255,0.4);"></span>
+                                <span class="wb-corner" aria-hidden="true" style="position:absolute;top:3.6rem;right:0.65rem;width:22px;height:22px;border-top:2.5px solid rgba(0,212,255,0.9);border-right:2.5px solid rgba(0,212,255,0.9);border-radius:0 4px 0 0;pointer-events:none;box-shadow:2px -2px 8px rgba(0,212,255,0.4);"></span>
+                                <span class="wb-corner" aria-hidden="true" style="position:absolute;bottom:1.85rem;left:0.65rem;width:22px;height:22px;border-bottom:2.5px solid rgba(0,255,136,0.6);border-left:2.5px solid rgba(0,255,136,0.6);border-radius:0 0 0 4px;pointer-events:none;box-shadow:-2px 2px 8px rgba(0,255,136,0.3);"></span>
+                                <span class="wb-corner" aria-hidden="true" style="position:absolute;bottom:1.85rem;right:0.65rem;width:22px;height:22px;border-bottom:2.5px solid rgba(251,191,36,0.6);border-right:2.5px solid rgba(251,191,36,0.6);border-radius:0 0 4px 0;pointer-events:none;box-shadow:2px 2px 8px rgba(251,191,36,0.3);"></span>
 
-                        <!-- Stand neck -->
-                        <div style="
-                            width: 40px; height: 14px;
-                            background: linear-gradient(180deg, rgba(10,14,30,0.95), rgba(6,9,22,0.9));
-                            border-left: 1px solid rgba(0,212,255,0.1);
-                            border-right: 1px solid rgba(0,212,255,0.1);
-                            margin: 0 auto;
-                        "></div>
+                                <!-- Screen inner glow -->
+                                <div aria-hidden="true" style="
+                                    position:absolute; inset:3.4rem 0.65rem 1.4rem;
+                                    border-radius:0.75rem 0.75rem 0 0;
+                                    background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,255,0.1) 0%, transparent 65%);
+                                    pointer-events:none; z-index:0;
+                                "></div>
 
-                        <!-- Stand foot -->
-                        <div style="
-                            width: 140px; height: 8px;
-                            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.1) 20%, rgba(99,102,241,0.1) 80%, transparent);
-                            border-top: 1px solid rgba(0,212,255,0.15);
-                            border-radius: 0 0 6px 6px;
-                            margin: 0 auto;
-                        "></div>
+                                <!-- 16:9 video -->
+                                <div class="wb-video-wrapper">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/ObXKAq-2bIA?rel=0&modestbranding=1&color=white"
+                                        title="CORTEX — Cognitive Orchestration Real-Time Execution eXpert: Introduction"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen
+                                        loading="lazy"
+                                    ></iframe>
+                                </div>
 
-                    </div><!-- /bezel -->
+                                <!-- Chin strip -->
+                                <div class="wb-chin">
+                                    <span aria-hidden="true" style="width:44px;height:3px;border-radius:2px;background:rgba(0,212,255,0.25);box-shadow:0 0 6px rgba(0,212,255,0.3);"></span>
+                                </div>
 
-                    <!-- Ambient floor reflection -->
-                    <div aria-hidden="true" style="
-                        position: absolute; bottom: -18px; left: 10%; right: 10%; height: 18px;
-                        background: linear-gradient(180deg, rgba(0,212,255,0.07) 0%, transparent 100%);
-                        filter: blur(6px);
-                        border-radius: 50%;
-                        pointer-events: none;
-                    "></div>
+                            </div><!-- /bezel -->
+                        </div><!-- /rainbow ring -->
 
-                </div><!-- /whiteboard frame -->
+                        <!-- Stand -->
+                        <div class="wb-stand-neck"></div>
+                        <div class="wb-stand-foot"></div>
+
+                    </div><!-- /float -->
+
+                    <!-- Floor glow -->
+                    <div class="wb-floor-glow" aria-hidden="true"></div>
+
+                </div><!-- /80% centred frame -->
 
                 <!-- Caption -->
-                <p style="
-                    text-align: center; margin: 1.75rem 0 0;
-                    font-size: 0.875rem; color: rgba(148,163,184,0.55);
-                    font-family: var(--font-mono); letter-spacing: 0.06em;
-                ">
-                    <i class="fas fa-robot" aria-hidden="true" style="color:rgba(0,212,255,0.4); margin-right:0.4rem;"></i>
+                <p class="wb-caption">
+                    <i class="fas fa-robot" aria-hidden="true" style="color:rgba(0,212,255,0.5);margin-right:0.4rem;"></i>
                     Conceived, designed &amp; generated by CORTEX — an AI framework that built its own story.
                 </p>
 
