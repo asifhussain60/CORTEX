@@ -1,0 +1,449 @@
+id: phase-137
+title: "Deep Intelligence Wiring — CCLQueryEngine + CapabilityVerifier + IntelligenceFacade 4-Method Extension"
+created: "2026-03-08"
+status: PLANNED
+priority: P1
+depends_on: ["phase-136"]
+sweep_id: SWEEP-137-DEEP-INTELLIGENCE-WIRING
+estimated_effort: "1.5 days"
+source: "GitHub Issue #14 — CORTEX Feedback 2026-03-08 (FB-2026-03-08-009 partial + FB-2026-03-08-010)"
+
+description: |
+  Backport of Deep Intelligence Wiring from cortex-sts Phase 141. Depends on phase-136
+  (CAPE) — IntelligenceFacade.classify_archetype() consumes CAPE's ComplexityTriageEngine band.
+
+  Two new infrastructure components + four IntelligenceFacade method extensions:
+
+  1. CCLQueryEngine — translates CORE rule IDs (e.g. "CORE-008") into business-language
+     impact statements by querying ccl-governance-crystal.yaml. Supports audience-specific
+     translations and multi-violation markdown rendering. Makes governance audits readable
+     to non-engineers without requiring knowledge of CORE rule numbering.
+
+  2. verify_capabilities_manifest() — reads cortex-registry/config/capabilities-manifest.yaml
+     and calls importlib.import_module() for every declared orchestrator. Returns a drift list
+     of unimportable modules, enabling init-time architecture drift detection. Empty list =
+     all importable (no drift). Wired into MasterOrchestrator initialization.
+
+  3. IntelligenceFacade 4 new lazy-loaded methods (Phase 141 complement to phase-135's
+     acquire/invalidate_cache):
+     - threat_assessment(file_path) — delegates to ThreatModelEngine
+     - quality_baseline(file_paths) — delegates to QualityAnalysisEngine
+     - guidance(module_path) — delegates to KnowledgeGuidanceEngine
+     - classify_archetype(workspace_path) — delegates to ArchetypeClassifier
+     All use null-object fallbacks for graceful degradation.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-048   # Holistic validation gate
+  - CORE-061   # CCL Integration — runtime business-language governance queries
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── GAP-137-01: CCLQueryEngine ─────────────────────────────────────────────
+  - id: GAP-137-01
+    title: "CCLQueryEngine — CORE rule ID → business-language translation"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-010"
+    evidence: |
+      Governance violation reports surface raw CORE rule IDs (e.g. CORE-008, CORE-035)
+      with no business-language context. Non-engineers reading audit output cannot
+      understand the business impact of violations. The CCL Governance Crystal YAML
+      contains this mapping but is never queried at runtime.
+    action_ref: "phase-137-a"
+    files_to_create:
+      - cortex/governance/ccl_query_engine.py  # CCLQueryEngine with translate_violation(), render_business_impact(), get_all_rules()
+    test_file: "tests/intelligence/test_phase_141_infrastructure.py"
+
+  # ── GAP-137-02: verify_capabilities_manifest() ────────────────────────────
+  - id: GAP-137-02
+    title: "verify_capabilities_manifest() — import-time architecture drift detection"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-010"
+    evidence: |
+      MasterOrchestrator initialisation has no mechanism to detect if declared orchestrators
+      in capabilities-manifest.yaml are actually importable. Architecture drift (renamed/moved
+      modules) silently breaks routing without any startup warning. Phase 140 audit in
+      cortex-sts identified this gap during wiring integrity scan.
+    action_ref: "phase-137-b"
+    files_to_create:
+      - cortex/core/capability_verifier.py  # verify_capabilities_manifest() function
+    files_to_modify:
+      - cortex/orchestrators/core/master_orchestrator_init.py  # call verify_capabilities_manifest() at init
+    test_file: "tests/intelligence/test_phase_141_infrastructure.py"
+
+  # ── GAP-137-03: IntelligenceFacade — 4 new lazy-loaded methods ────────────
+  - id: GAP-137-03
+    title: "IntelligenceFacade.threat_assessment() + quality_baseline() + guidance() + classify_archetype()"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-009 (Phase 141 complement)"
+    evidence: |
+      IntelligenceFacade (Phase 107 canonical entry) exposes analyze/synthesize/query plus
+      the Phase 135 additions (acquire/invalidate_cache). Four intelligence capabilities
+      remain unreachable via the facade: threat model assessment, quality baseline scoring,
+      knowledge guidance, and archetype classification. Callers are forced to instantiate
+      provider classes directly, bypassing the canonical entry point (CORE-035 violation).
+    action_ref: "phase-137-c"
+    files_to_modify:
+      - cortex/intelligence/facade.py  # add threat_assessment(), quality_baseline(), guidance(), classify_archetype() with null-object fallbacks
+    test_file: "tests/intelligence/test_facade_kal_extension.py"
+
+  # ── GAP-137-04: URS emission on low-confidence routing ────────────────────
+  - id: GAP-137-04
+    title: "IntentRouter URS emission on low-confidence routing"
+    severity: P2
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08 GAP-141-02"
+    evidence: |
+      IntentRouter.routing_core_mixin emits no learning signal when routing confidence
+      falls below threshold. Low-confidence routes represent valuable training data for the
+      URS closed-loop learning system but are currently silently discarded.
+    action_ref: "phase-137-d"
+    files_to_modify:
+      - cortex/orchestrators/core/intent_router/routing_core_mixin.py  # emit MILD_PUNISHMENT on confidence < threshold
+    test_file: "tests/intelligence/test_phase_141_infrastructure.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── 137-a: CCLQueryEngine ──────────────────────────────────────────────────
+  - id: phase-137-a
+    title: "CCLQueryEngine — translate CORE rule IDs to business language"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-137-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-061, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-136 ALL gaps CLOSED. smoke tests green (≥2775 baseline)"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_phase_141_infrastructure.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement CCLQueryEngine reading ccl-governance-crystal.yaml"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, graceful defaults for unknown rule IDs"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_translate_known_rule — CORE-008 → business_term, principle, business_statement populated"
+        - "test_translate_unknown_rule — CORE-999 → graceful default (no KeyError)"
+        - "test_get_audience_returns_list — CORE-008 → non-empty audience list"
+        - "test_render_business_impact_single — one violation → single-rule markdown"
+        - "test_render_business_impact_multiple — two violations → multi-rule markdown"
+        - "test_get_all_rules_sorted — returns sorted list of all rule IDs from crystal"
+        - "test_crystal_yaml_parseable — ccl-governance-crystal.yaml loads without error"
+      green:
+        - "Implement CCLQueryEngine with translate_violation(), get_audience_for_rule(), render_business_impact(), get_all_rules()"
+        - "Load ccl-governance-crystal.yaml (cached) from cortex-registry/core/"
+        - "Provide graceful defaults for unknown rule IDs"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Cache crystal YAML singleton to avoid repeated file reads"
+
+    acceptance_criteria:
+      - "CCLQueryEngine.translate_violation('CORE-008') returns dict with rule_id, business_term, business_statement, business_audience"
+      - "Unknown rule IDs return graceful default dict (no KeyError)"
+      - "render_business_impact() produces valid markdown for 1+ violations"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + ruff check cortex/governance/ccl_query_engine.py"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 137-b: verify_capabilities_manifest() ─────────────────────────────────
+  - id: phase-137-b
+    title: "verify_capabilities_manifest() — import-time drift detection wired into MasterOrchestrator init"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-137-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-137-a"]
+    prerequisite: "phase-137-a completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_phase_141_infrastructure.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement verify_capabilities_manifest() in cortex/core/capability_verifier.py"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, wire into master_orchestrator_init.py"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_verify_all_importable — manifest with importable modules → empty drift list"
+        - "test_verify_one_missing — manifest with one unimportable path → drift list has 1 entry"
+        - "test_drift_entry_schema — drift item has orchestrator, module, tier, error keys"
+        - "test_verify_missing_manifest_file — no manifest at path → raises FileNotFoundError"
+        - "test_master_orchestrator_init_calls_verifier — MasterOrchestrator init invokes verify_capabilities_manifest()"
+      green:
+        - "Implement verify_capabilities_manifest(manifest_path) using importlib.import_module()"
+        - "Read manifest YAML → extract orchestrator module paths → attempt import each → collect failures"
+        - "Wire call in master_orchestrator_init.py"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Log drift items as P1 warnings at init-time (not exceptions — non-blocking)"
+
+    acceptance_criteria:
+      - "verify_capabilities_manifest() returns [] when all declared orchestrators are importable"
+      - "Returns drift entries [{orchestrator, module, tier, error}] for unimportable modules"
+      - "MasterOrchestrator init calls verify_capabilities_manifest() on startup"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 137-c: IntelligenceFacade 4-Method Extension ──────────────────────────
+  - id: phase-137-c
+    title: "IntelligenceFacade — threat_assessment(), quality_baseline(), guidance(), classify_archetype() + null-object fallbacks"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-137-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-137-b"]
+    prerequisite: "phase-137-b completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_facade_kal_extension.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Add 4 new lazy-loaded methods + null-object fallbacks to IntelligenceFacade"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, verify single canonical entry point not broken (CORE-035)"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_threat_assessment_delegates_to_engine — returns ThreatModelEngine result"
+        - "test_threat_assessment_null_fallback — missing provider → null-object result (no exception)"
+        - "test_quality_baseline_delegates_to_engine — returns QualityAnalysisEngine result"
+        - "test_quality_baseline_null_fallback — missing provider → null-object result"
+        - "test_guidance_delegates_to_engine — returns KnowledgeGuidanceEngine result"
+        - "test_guidance_null_fallback — missing provider → null-object result"
+        - "test_classify_archetype_delegates_to_classifier — returns ArchetypeClassifier result"
+        - "test_classify_archetype_null_fallback — missing classifier → null-object result"
+        - "test_facade_remains_singleton — IntelligenceFacade() returns same instance"
+        - "test_all_12_methods_present — facade has analyze, synthesize, query, acquire, invalidate_cache, threat_assessment, quality_baseline, guidance, classify_archetype + registry methods"
+      green:
+        - "Add threat_assessment(file_path, **kwargs) with lazy-load ThreatModelEngine"
+        - "Add quality_baseline(file_paths, **kwargs) with lazy-load QualityAnalysisEngine"
+        - "Add guidance(module_path, **kwargs) with lazy-load KnowledgeGuidanceEngine"
+        - "Add classify_archetype(workspace_path, **kwargs) with lazy-load ArchetypeClassifier"
+        - "Add null-object fallbacks for all 4 new providers"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Confirm IntelligenceFacade singleton pattern not broken (CORE-035)"
+        - "All 4 new providers use identical lazy-load pattern as existing providers"
+
+    acceptance_criteria:
+      - "IntelligenceFacade exposes all 4 new methods (threat_assessment/quality_baseline/guidance/classify_archetype)"
+      - "Each method degrades gracefully when provider is unavailable (null-object)"
+      - "IntelligenceFacade remains the single canonical entry point (CORE-035)"
+      - "Singleton not broken — second instantiation returns same instance"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 137-d: IntentRouter URS emission ──────────────────────────────────────
+  - id: phase-137-d
+    title: "IntentRouter — URS MILD_PUNISHMENT emission on low-confidence routing"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-137-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-137-c"]
+    prerequisite: "phase-137-c completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for URS emission in tests/intelligence/test_phase_141_infrastructure.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Add URS MILD_PUNISHMENT emission in routing_core_mixin.py on confidence < threshold"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, confirm threshold configurable (not hardcoded)"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_urs_emitted_on_low_confidence — confidence < threshold → MILD_PUNISHMENT signal emitted"
+        - "test_urs_not_emitted_on_high_confidence — confidence ≥ threshold → no signal emitted"
+        - "test_confidence_threshold_configurable — threshold can be set (not hardcoded 0.5)"
+      green:
+        - "In routing_core_mixin.py: add URS emit call when routing_confidence < confidence_threshold"
+        - "Use existing cortex_learning MCP tool infrastructure for signal emission"
+      refactor:
+        - "Add type hints (CORE-011), docstring update (CORE-012)"
+
+    acceptance_criteria:
+      - "MILD_PUNISHMENT URS signal emitted when IntentRouter confidence falls below threshold"
+      - "No signal emitted for confident routes"
+      - "Threshold is configurable"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 3
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 137-final: Smoke Gate + CORE-064 Close ─────────────────────────────────
+  - id: phase-137-final
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P1
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-137-d"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "make test-smoke — ≥2775 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2775 tests pass with zero regressions"
+        gate: "make test-smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase-137-deep-intelligence-wiring.yaml: planned/ → completed/. Update cortex-master.yaml."
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 4 sweep_catalogue GAPs have status: CLOSED"
+      - "make test-smoke passes ≥2775 tests"
+      - "Zero new test failures vs baseline"
+      - "cortex/governance/ccl_query_engine.py present"
+      - "cortex/core/capability_verifier.py present"
+      - "cortex/intelligence/facade.py: threat_assessment, quality_baseline, guidance, classify_archetype methods present"
+      - "MasterOrchestrator init calls verify_capabilities_manifest()"
+      - "IntentRouter emits URS signal on low-confidence routing"
+      - "phase-137-deep-intelligence-wiring.yaml moved to cortex-registry/planning/phases/completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤850 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "make test-smoke"
+      min_tests_pass: 2775
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-137-DEEP-WIRING-{timestamp}"
+  complete: "AC_COMPLETE: AC-137-DEEP-WIRING-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKPORT NOTES
+# ─────────────────────────────────────────────────────────────────────────────
+backport_notes: |
+  Source: cortex-sts Phase 141 — Deep Intelligence Wiring
+  Issue: https://github.com/asifhussain60/CORTEX/issues/14
+  Capabilities: FB-2026-03-08-009 partial (4 new facade methods + null objects — acquire/invalidate_cache already in phase-135)
+               FB-2026-03-08-010 (CCLQueryEngine + verify_capabilities_manifest)
+               GAP-141-02 (URS emission on low-confidence routing)
+               GAP-141-04 (URS emission in Stage 1 — already in phase-135 InteractionOrchestrator)
+  Test lines in source: 123 (phase_141_infrastructure) + 234 (facade_kal_extension) = 357
+  cortex-sts phases 138 (bug remediation) + 140 (wiring audit) SUPERSEDED by this workspace's phases 126-128.

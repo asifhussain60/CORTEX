@@ -1,0 +1,423 @@
+id: phase-135
+title: "Knowledge Acquisition Layer (KAL) — Coverage Assessor + Acquisition Orchestrator + IntelligenceFacade.acquire()"
+created: "2026-03-08"
+status: PLANNED
+priority: P1
+depends_on: []
+sweep_id: SWEEP-135-KAL
+estimated_effort: "2 days"
+source: "GitHub Issue #14 — CORTEX Feedback 2026-03-08 (FB-2026-03-08-006, 007, 008, 009 partial)"
+
+description: |
+  Standalone foundation backport — no dependencies. Delivers the Knowledge Acquisition
+  Layer from cortex-sts Phases 137 and 138 (94 GAPs closed across 6 phases total;
+  this phase extracts the KAL-specific subset).
+
+  KAL solves a gap in CORTEX intelligence: when LENS analysis encounters a domain
+  not covered by existing knowledge YAMLs, requests degrade silently. KAL adds
+  on-demand knowledge synthesis: assess coverage → identify gaps → synthesize YAML
+  → validate schema → register in INDEX.yaml → re-verify. This runs automatically
+  from Stage 1 comprehension (InteractionOrchestrator._run_kal_coverage_check()) and
+  on-demand via IntelligenceFacade.acquire().
+
+  Four new components:
+  1. DomainSignalExtractor — converts LENS output to domain signal strings via
+     regex patterns in cortex-registry/config/domain-signal-map.yaml
+  2. KnowledgeCoverageAssessor — scores coverage (0.0–1.0) against INDEX.yaml,
+     triggers acquisition when below threshold (default 0.80)
+  3. KnowledgeAcquisitionOrchestrator — 6-step pipeline with OPJMixin + URS signals
+  4. Supporting triad: KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator +
+     KnowledgeIndexRegistrar
+
+  IntelligenceFacade gains two new methods: acquire() (KAL entry) and
+  invalidate_cache() (BUG-1 fix — static cache never invalidated post-acquisition).
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-048   # Holistic validation gate
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── GAP-135-01: domain-signal-map.yaml + DomainSignalExtractor ─────────────
+  - id: GAP-135-01
+    title: "domain-signal-map.yaml config + DomainSignalExtractor"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-006"
+    evidence: |
+      No mechanism exists to convert LENS output (language/files/imports) into
+      domain signal strings matchable against INDEX.yaml entries. Without this,
+      KnowledgeCoverageAssessor cannot compute coverage — the entire KAL pipeline
+      has no input layer.
+    action_ref: "phase-135-a"
+    files_to_create:
+      - cortex-registry/config/domain-signal-map.yaml          # regex patterns: {pattern, domain, knowledge_file}
+      - cortex/intelligence/knowledge/domain_signal_extractor.py
+    test_file: "tests/intelligence/test_knowledge_coverage_assessor.py"
+
+  # ── GAP-135-02: KnowledgeCoverageAssessor ──────────────────────────────────
+  - id: GAP-135-02
+    title: "KnowledgeCoverageAssessor — coverage scoring + acquisition trigger"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-006"
+    evidence: |
+      No component exists to assess what fraction of detected domain signals have
+      corresponding knowledge YAML entries in INDEX.yaml. Without a coverage score,
+      CORTEX cannot know when knowledge gaps exist, making acquisition triggers
+      impossible.
+    action_ref: "phase-135-a"
+    files_to_create:
+      - cortex/intelligence/knowledge/knowledge_coverage_assessor.py  # CoverageResult dataclass + assess()
+    test_file: "tests/intelligence/test_knowledge_coverage_assessor.py"
+
+  # ── GAP-135-03: KAL supporting triad ──────────────────────────────────────
+  - id: GAP-135-03
+    title: "KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-008"
+    evidence: |
+      The acquisition pipeline needs three atomic components: a synthesizer to
+      generate CORTEX-format knowledge YAMLs (5 best-practice categories), a
+      validator enforcing a 5-rule schema, and a registrar for idempotent INDEX.yaml
+      updates. Without these, KnowledgeAcquisitionOrchestrator has no worker
+      components to delegate to.
+    action_ref: "phase-135-b"
+    files_to_create:
+      - cortex/intelligence/knowledge/knowledge_template_synthesizer.py
+      - cortex/intelligence/knowledge/knowledge_schema_validator.py
+      - cortex/intelligence/knowledge/knowledge_index_registrar.py
+    test_file: "tests/intelligence/test_knowledge_acquisition.py"
+
+  # ── GAP-135-04: KnowledgeAcquisitionOrchestrator + IntelligenceFacade extension
+  - id: GAP-135-04
+    title: "KnowledgeAcquisitionOrchestrator (6-step) + IntelligenceFacade.acquire() + invalidate_cache()"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-007, 009"
+    evidence: |
+      IntelligenceFacade (Phase 107 canonical entry) has no acquire() method,
+      meaning KAL is unreachable from Stage 1 comprehension. The static
+      _registry_index_cache is never invalidated post-acquisition — new knowledge
+      files are invisible until process restart (BUG-1). KnowledgeAcquisitionOrchestrator
+      does not exist; the 6-step pipeline has no coordinator.
+    action_ref: "phase-135-c"
+    files_to_create:
+      - cortex/intelligence/knowledge/knowledge_acquisition_orchestrator.py  # OPJMixin, 6-step, URS signals
+      - cortex-registry/workflows/templates/intelligence/knowledge-acquisition-workflow.yaml
+      - cortex-registry/patterns/success/knowledge_acquisition_orchestrator.yaml
+      - cortex-registry/patterns/failure/knowledge_acquisition_orchestrator.yaml
+    files_to_modify:
+      - cortex/intelligence/facade.py  # add acquire(), invalidate_cache(), _NullCoverageAssessor, _NullAcquisitionOrchestrator
+      - cortex/orchestrators/core/interaction_orchestrator.py  # add _run_kal_coverage_check() to Stage 1
+    test_file: "tests/intelligence/test_knowledge_acquisition.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── 135-a: Signal Extraction + Coverage Assessment ─────────────────────────
+  - id: phase-135-a
+    title: "domain-signal-map.yaml + DomainSignalExtractor + KnowledgeCoverageAssessor"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-135-01", "GAP-135-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2775 baseline)"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_knowledge_coverage_assessor.py BEFORE any implementation"
+        gate: "make test-changed — ALL listed tests must FAIL (import errors count)"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Create domain-signal-map.yaml (162 lines), DomainSignalExtractor, KnowledgeCoverageAssessor"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), CORE-035 check, singleton cache for signal map"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_extract_returns_sorted_unique_signals — DomainSignalExtractor.extract() returns sorted, deduplicated list"
+        - "test_extract_from_lens_output — flatten LENS dict to searchable string, apply regex patterns"
+        - "test_signal_map_loaded_and_cached — _load_signal_map() reads YAML once, subsequent calls use cache"
+        - "test_assess_full_coverage — all signals matched in INDEX.yaml → score 1.0, acquisition_needed False"
+        - "test_assess_partial_coverage — 2 of 4 signals matched → score 0.5, acquisition_needed True"
+        - "test_assess_below_threshold — score < 0.80 → CoverageResult.acquisition_needed True"
+        - "test_assess_empty_signals — empty input → score 1.0 (vacuously complete)"
+        - "test_assess_multi_level_matching — exact → prefix → keyword containment fallback chain"
+        - "test_coverage_result_dataclass — score, covered_domains, missing_domains, acquisition_needed, threshold fields"
+      green:
+        - "Create cortex-registry/config/domain-signal-map.yaml with {pattern, domain, knowledge_file} entries"
+        - "Implement DomainSignalExtractor with extract() and _load_signal_map() (cached)"
+        - "Implement KnowledgeCoverageAssessor with CoverageResult dataclass and assess()"
+        - "Wire multi-level matching: exact → prefix → keyword containment"
+      refactor:
+        - "Add type hints to all public methods (CORE-011)"
+        - "Add docstrings to DomainSignalExtractor and KnowledgeCoverageAssessor (CORE-012)"
+        - "Verify no duplicate implementations of signal map loading (CORE-035)"
+        - "Cache INDEX.yaml singleton with invalidation hook for post-acquisition refresh"
+
+    acceptance_criteria:
+      - "DomainSignalExtractor.extract() returns sorted, deduplicated domain signal strings from LENS output"
+      - "KnowledgeCoverageAssessor.assess() returns CoverageResult with score 0.0–1.0"
+      - "Score < 0.80 (configurable threshold) sets acquisition_needed = True"
+      - "domain-signal-map.yaml present and parseable at cortex-registry/config/domain-signal-map.yaml"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 9
+      zero_new_failures: true
+      all_gap_refs_closed: false     # GAP-135-01 and GAP-135-02 close when 135-a + 135-b both complete
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + ruff check cortex/intelligence/knowledge/ --select=F401,F811"
+      fix_step: "Apply targeted fixes for ruff violations and test regressions"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 135-b: KAL Supporting Triad ───────────────────────────────────────────
+  - id: phase-135-b
+    title: "KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-135-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-135-a"]
+    prerequisite: "phase-135-a completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_knowledge_acquisition.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement KnowledgeTemplateSynthesizer, KnowledgeSchemaValidator, KnowledgeIndexRegistrar"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, alphabetical sort in registrar, CORE-035 check"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_synthesize_returns_valid_yaml — output is parseable YAML with required fields"
+        - "test_synthesize_5_categories — best_practices has Architecture/Testing/Performance/Security/Pitfalls sections"
+        - "test_synthesize_cortex_alignment_metadata — cortex_alignment block with source/phase/intent/confidence"
+        - "test_validate_valid_yaml — SchemaValidationResult.is_valid True for well-formed content"
+        - "test_validate_missing_title — is_valid False, errors contains 'title required'"
+        - "test_validate_missing_domain — is_valid False, errors contains 'domain required'"
+        - "test_validate_best_practices_not_list — is_valid False"
+        - "test_validate_fewer_than_3_items — is_valid False, errors contains min-items rule"
+        - "test_register_new_domain — INDEX.yaml gains new domain section with guide entry"
+        - "test_register_idempotent — registering same path twice produces only one entry"
+        - "test_register_sorts_alphabetically — guides within domain sorted by path"
+        - "test_register_creates_domain_section_if_missing — missing domain key is created"
+      green:
+        - "Implement KnowledgeTemplateSynthesizer with synthesize(domain, intent) returning YAML string"
+        - "Implement KnowledgeSchemaValidator with SchemaValidationResult dataclass and validate()"
+        - "Implement KnowledgeIndexRegistrar with register() idempotent, alphabetical sort"
+      refactor:
+        - "Add type hints to all public methods (CORE-011)"
+        - "Add docstrings to all three classes (CORE-012)"
+        - "Verify one registrar for INDEX.yaml writes — no other module writes directly (CORE-035)"
+
+    acceptance_criteria:
+      - "KnowledgeTemplateSynthesizer.synthesize() returns YAML string with 5 best-practice categories"
+      - "KnowledgeSchemaValidator.validate() enforces 5 rules: valid YAML, title, domain, list, ≥3 items"
+      - "KnowledgeIndexRegistrar.register() is idempotent — duplicate paths produce single entry"
+      - "INDEX.yaml registration is alphabetically sorted within each domain"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true      # GAP-135-03 closes here
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + ruff check cortex/intelligence/knowledge/ --select=F401,F811"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 135-c: KnowledgeAcquisitionOrchestrator + IntelligenceFacade.acquire() ─
+  - id: phase-135-c
+    title: "KnowledgeAcquisitionOrchestrator (6-step pipeline) + IntelligenceFacade.acquire() + invalidate_cache()"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-135-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-048, CORE-064, CORE-068"
+    duration_estimate: "5 hours"
+    depends_on: ["phase-135-b"]
+    prerequisite: "phase-135-b completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/intelligence/test_knowledge_acquisition.py + tests/intelligence/test_kal_urs_workflow.py + tests/integration/test_kal_pipeline.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement KnowledgeAcquisitionOrchestrator, wire IntelligenceFacade, wire InteractionOrchestrator Stage 1"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, null-object fallbacks, OPJ pattern YAML files"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_acquire_below_threshold_triggers_pipeline — score < 0.80 → orchestrator runs"
+        - "test_acquire_above_threshold_skips — score ≥ 0.80 → returns early, no synthesis"
+        - "test_acquire_result_contains_acquired_domains — AcquisitionResult.acquired_domains populated"
+        - "test_opj_consulted_before_acquisition — OPJ history queried before pipeline starts"
+        - "test_urs_reward_emitted_on_success — MILD_REWARD signal emitted per successful domain"
+        - "test_urs_punishment_emitted_on_failure — MILD_PUNISHMENT signal on synthesis error"
+        - "test_cache_invalidated_after_acquisition — invalidate_cache() clears _registry_index_cache"
+        - "test_facade_acquire_delegates_to_orchestrator — IntelligenceFacade.acquire() calls orchestrator"
+        - "test_facade_invalidate_cache_clears_all_registries — clears governance/workflow/pattern registries"
+        - "test_null_coverage_assessor_returns_full_coverage — _NullCoverageAssessor.assess() → score 1.0"
+        - "test_null_acquisition_orchestrator_returns_empty — _NullAcquisitionOrchestrator.acquire() → empty result"
+        - "test_interaction_orchestrator_kal_check_stage1 — _run_kal_coverage_check() called in Stage 1"
+        - "test_kal_pipeline_end_to_end — assess → identify → synthesize → validate → register → re-verify"
+        - "test_convergence_gate_max_2_cycles — pipeline retries max 2 times until coverage ≥ 0.80"
+      green:
+        - "Implement KnowledgeAcquisitionOrchestrator(OPJMixin) with acquire() 6-step pipeline"
+        - "Add IntelligenceFacade.acquire() + IntelligenceFacade.invalidate_cache() methods"
+        - "Add _NullCoverageAssessor and _NullAcquisitionOrchestrator null-object fallbacks to facade"
+        - "Add InteractionOrchestrator._run_kal_coverage_check() call in Stage 1"
+        - "Create knowledge-acquisition-workflow.yaml (6 steps, convergence max 2 cycles)"
+        - "Create OPJ pattern YAMLs: success/knowledge_acquisition_orchestrator.yaml + failure variant"
+      refactor:
+        - "Add type hints to all public methods (CORE-011)"
+        - "Add docstrings to KnowledgeAcquisitionOrchestrator and all new facade methods (CORE-012)"
+        - "Verify IntelligenceFacade remains THE single canonical entry point (CORE-035)"
+        - "Confirm invalidate_cache() clears all 4 registry caches: _registry_index_cache, _governance_registry, _workflow_registry, _pattern_registry"
+
+    acceptance_criteria:
+      - "KnowledgeAcquisitionOrchestrator.acquire() runs 6-step pipeline when coverage < 0.80"
+      - "OPJ consulted before acquisition; URS MILD_REWARD/MILD_PUNISHMENT emitted after"
+      - "IntelligenceFacade.acquire() is the public KAL entry point"
+      - "IntelligenceFacade.invalidate_cache() clears all 4 static caches (BUG-1 fixed)"
+      - "_NullCoverageAssessor and _NullAcquisitionOrchestrator degrade gracefully"
+      - "InteractionOrchestrator Stage 1 calls _run_kal_coverage_check()"
+      - "knowledge-acquisition-workflow.yaml present and valid"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 14
+      zero_new_failures: true
+      all_gap_refs_closed: true      # GAP-135-04 closes here; GAP-135-01/02 also confirm closed
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for compliance and regression failures"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 135-final: Smoke Gate + CORE-064 Close ─────────────────────────────────
+  - id: phase-135-final
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P1
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-135-c"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "make test-smoke — ≥2775 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2775 tests pass with zero regressions"
+        gate: "make test-smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase-135-kal.yaml: planned/ → completed/. Update cortex-master.yaml status → COMPLETE."
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 4 sweep_catalogue GAPs have status: CLOSED"
+      - "make test-smoke passes ≥2775 tests"
+      - "Zero new test failures vs baseline"
+      - "cortex/intelligence/knowledge/ contains: domain_signal_extractor.py, knowledge_coverage_assessor.py, knowledge_template_synthesizer.py, knowledge_schema_validator.py, knowledge_index_registrar.py, knowledge_acquisition_orchestrator.py"
+      - "cortex/intelligence/facade.py: acquire() and invalidate_cache() methods present"
+      - "cortex-registry/config/domain-signal-map.yaml present"
+      - "cortex-registry/workflows/templates/intelligence/knowledge-acquisition-workflow.yaml present"
+      - "phase-135-kal.yaml moved to cortex-registry/planning/phases/completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤850 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "make test-smoke"
+      min_tests_pass: 2775
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-135-KAL-{timestamp}"
+  complete: "AC_COMPLETE: AC-135-KAL-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKPORT NOTES
+# ─────────────────────────────────────────────────────────────────────────────
+backport_notes: |
+  Source: cortex-sts Phases 137 (Knowledge Acquisition Layer) + 138 (Production Audit Bug Remediation)
+  Issue: https://github.com/asifhussain60/CORTEX/issues/14
+  Capabilities: FB-2026-03-08-006 (Coverage Assessor + Signal Extractor)
+               FB-2026-03-08-007 (Acquisition Orchestrator 6-step)
+               FB-2026-03-08-008 (Synthesizer + Validator + Registrar)
+               FB-2026-03-08-009 partial (acquire() + invalidate_cache() only — remaining methods in phase-137)
+  Test lines in source: 408 (coverage assessor) + 434 (acquisition) + 205 (urs workflow) + 335 (integration) = 1,382
+  Implementation order: GAP-135-01/02 (signal layer) → GAP-135-03 (supporting triad) → GAP-135-04 (orchestrator + facade)
+  CAPE (phase-136) depends on this phase being complete before ComplexityTriageEngine can use KAL for gap filling.

@@ -1,0 +1,371 @@
+id: phase-138
+title: "Git Checkpoint Safety — SubPhaseCheckpointInjector + RollbackManager + WorkflowComposer Integration"
+created: "2026-03-08"
+status: PLANNED
+priority: P1
+depends_on: ["phase-137"]
+sweep_id: SWEEP-138-GIT-CHECKPOINT-SAFETY
+estimated_effort: "1.5 days"
+source: "GitHub Issue #14 — CORTEX Feedback 2026-03-08 (FB-2026-03-08-011)"
+
+description: |
+  Backport of Git Checkpoint Sub-Phase Enforcement from cortex-sts Phase 139.
+  Depends on phase-137 (Deep Intelligence Wiring) — RollbackManager emits URS
+  punishment signals which require the wired IntelligenceFacade from phase-137.
+
+  Problem: When CAPE's PlanExecutionLoop runs sub-phases autonomously, a failure
+  in sub-phase N can leave the workspace in a partially-modified dirty state. There
+  is no automatic rollback mechanism — recovery requires manual git resets.
+
+  Solution — two new components:
+
+  1. RollbackManager — wraps git reset --hard operations: get_head_sha(), rollback_to(),
+     restore_stash(). Emits URS MILD_PUNISHMENT on rollback to feed the learning system.
+     Includes audit logging to .cortex-runtime/traces/.
+
+  2. SubPhaseCheckpointInjector — decorates any sub-phase callback with a full safety
+     envelope: create checkpoint (record HEAD SHA + stash dirty tree) → execute callback
+     → commit on success with "[CORTEX] sub-phase {id} COMPLETE" message → rollback on
+     failure using RollbackManager. Uses CheckpointState dataclass to carry checkpoint
+     context between lifecycle hooks.
+
+  WorkflowComposer gains compose_for_sub_phase() — integrating checkpoint injection
+  directly into the workflow engine so every sub-phase executed by CAPE's PlanExecutionLoop
+  is automatically checkpoint-wrapped without callers needing to manually instantiate
+  the injector.
+
+  Note: primitives/execution/git-checkpoint.yaml already exists as a declarative primitive.
+  This phase backs it with real Python implementation.
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-048   # Holistic validation gate
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate (convergence gate now has rollback safety)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── GAP-138-01: RollbackManager ───────────────────────────────────────────
+  - id: GAP-138-01
+    title: "RollbackManager — git reset --hard + URS punishment + audit logging"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-011"
+    evidence: |
+      No programmatic rollback mechanism exists in CORTEX. When autonomous execution
+      fails mid-sub-phase, the workspace is left in a dirty state with no recovery path
+      other than manual git intervention. The git-checkpoint.yaml primitive declares
+      rollback intent but has no backing Python implementation.
+    action_ref: "phase-138-a"
+    files_to_create:
+      - cortex/core/rollback_manager.py  # RollbackManager: get_head_sha(), rollback_to(), restore_stash()
+    test_file: "tests/core/test_sub_phase_checkpoint.py"
+
+  # ── GAP-138-02: SubPhaseCheckpointInjector ────────────────────────────────
+  - id: GAP-138-02
+    title: "SubPhaseCheckpointInjector — create/commit/rollback checkpoint wrapper"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-011"
+    evidence: |
+      CAPE's PlanExecutionLoop has no mechanism to wrap sub-phase execution in a
+      safety envelope. A failure in any sub-phase leaves changes from that sub-phase
+      uncommitted and mixed with clean state, making rollback ambiguous. The checkpoint
+      injector provides a clean before/after SHA boundary.
+    action_ref: "phase-138-b"
+    files_to_create:
+      - cortex/core/sub_phase_checkpoint_injector.py  # CheckpointState, SubPhaseCheckpointInjector
+    test_file: "tests/core/test_sub_phase_checkpoint.py"
+
+  # ── GAP-138-03: WorkflowComposer.compose_for_sub_phase() ──────────────────
+  - id: GAP-138-03
+    title: "WorkflowComposer.compose_for_sub_phase() — checkpoint injection into workflow engine"
+    severity: P1
+    status: OPEN
+    source: "Issue #14 — FB-2026-03-08-011"
+    evidence: |
+      WorkflowComposer has no method to compose a workflow for a single sub-phase with
+      automatic checkpoint injection. Callers of WorkflowComposer must manually wrap
+      execution in checkpoints — this is error-prone and breaks the single-responsibility
+      principle of the workflow engine.
+    action_ref: "phase-138-c"
+    files_to_modify:
+      - cortex/orchestrators/workflow/workflow_composer.py  # add compose_for_sub_phase()
+    test_file: "tests/golden/workflow/test_sub_phase_checkpoint.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── 138-a: RollbackManager ─────────────────────────────────────────────────
+  - id: phase-138-a
+    title: "RollbackManager — get_head_sha() + rollback_to() + restore_stash() + URS signal"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-138-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-137 ALL gaps CLOSED. smoke tests green (≥2775 baseline)"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/core/test_sub_phase_checkpoint.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement RollbackManager with subprocess git calls and URS signal emission"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, guard for non-git workspace (no .git dir)"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_get_head_sha_returns_sha — git rev-parse HEAD returns 40-char hex"
+        - "test_get_head_sha_non_git_workspace — no .git dir → returns None (no exception)"
+        - "test_rollback_to_valid_sha — git reset --hard {sha} runs successfully"
+        - "test_rollback_emits_urs_punishment — MILD_PUNISHMENT signal emitted after rollback"
+        - "test_rollback_non_git_workspace — no .git dir → no-op, no exception"
+        - "test_restore_stash_with_stash — git stash pop runs when stash exists"
+        - "test_restore_stash_empty — no stash present → no-op, no exception"
+      green:
+        - "Implement RollbackManager.get_head_sha() using subprocess git rev-parse HEAD"
+        - "Implement RollbackManager.rollback_to(target_sha, sub_phase_id) with git reset --hard + URS emit"
+        - "Implement RollbackManager.restore_stash() with git stash pop"
+        - "Guard all methods for non-git workspace (check .git dir exists)"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Audit log rollback events to .cortex-runtime/traces/ (existing SQLite pattern)"
+
+    acceptance_criteria:
+      - "RollbackManager.get_head_sha() returns current HEAD SHA or None for non-git workspace"
+      - "RollbackManager.rollback_to() runs git reset --hard and emits URS MILD_PUNISHMENT"
+      - "All methods are no-ops (not exceptions) in non-git workspaces"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + ruff check cortex/core/rollback_manager.py"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 138-b: SubPhaseCheckpointInjector ─────────────────────────────────────
+  - id: phase-138-b
+    title: "SubPhaseCheckpointInjector — CheckpointState + create/commit/rollback lifecycle"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-138-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-138-a"]
+    prerequisite: "phase-138-a completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/core/test_sub_phase_checkpoint.py (checkpoint injector section)"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement CheckpointState dataclass + SubPhaseCheckpointInjector with wrap_sub_phase()"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, CORE-035 check (no duplicate checkpoint logic elsewhere)"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_create_checkpoint_records_sha — CheckpointState.baseline_sha set to HEAD SHA"
+        - "test_create_checkpoint_stashes_dirty_tree — dirty workspace → stash_created True"
+        - "test_create_checkpoint_clean_workspace — clean workspace → stash_created False"
+        - "test_commit_on_success_makes_commit — successful callback → git commit with CORTEX message"
+        - "test_commit_message_format — commit message contains sub_phase_id"
+        - "test_rollback_on_failure — callback raises → RollbackManager.rollback_to() called"
+        - "test_rollback_restores_stash_if_created — stash_created True → restore_stash() called after rollback"
+        - "test_wrap_sub_phase_success_path — callback returns value → value returned"
+        - "test_wrap_sub_phase_failure_path — callback raises → exception re-raised after rollback"
+        - "test_checkpoint_skipped_non_git — no .git → CheckpointState.skipped True"
+      green:
+        - "Implement CheckpointState dataclass (sub_phase_id, baseline_sha, stash_created, skipped)"
+        - "Implement SubPhaseCheckpointInjector.create_checkpoint(sub_phase_id) → CheckpointState"
+        - "Implement SubPhaseCheckpointInjector.commit_on_success(checkpoint)"
+        - "Implement SubPhaseCheckpointInjector.wrap_sub_phase(sub_phase_id, callback)"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Confirm no duplicate checkpoint logic in other files (CORE-035)"
+
+    acceptance_criteria:
+      - "SubPhaseCheckpointInjector.wrap_sub_phase() creates checkpoint → executes callback → commits on success → rolls back on failure"
+      - "CheckpointState carries sub_phase_id, baseline_sha, stash_created, skipped"
+      - "Non-git workspaces produce CheckpointState.skipped=True (no exception)"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke + ruff check cortex/core/sub_phase_checkpoint_injector.py"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 138-c: WorkflowComposer.compose_for_sub_phase() ───────────────────────
+  - id: phase-138-c
+    title: "WorkflowComposer.compose_for_sub_phase() — checkpoint-wrapped workflow execution"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-138-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064, CORE-068"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-138-b"]
+    prerequisite: "phase-138-b completion_gate PASSED"
+    regression_gate: "make test-smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in tests/golden/workflow/test_sub_phase_checkpoint.py"
+        gate: "make test-changed — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Add compose_for_sub_phase() to WorkflowComposer"
+        gate: "make test-changed — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, verify no duplicate compose patterns (CORE-035)"
+        gate: "make test-smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_compose_for_sub_phase_wraps_in_checkpoint — SubPhaseCheckpointInjector.wrap_sub_phase() called"
+        - "test_compose_for_sub_phase_passes_template_data — template_data forwarded to composed template"
+        - "test_compose_for_sub_phase_returns_result — returns composed template execution result"
+        - "test_compose_for_sub_phase_non_git — skipped=True checkpoint → execution still proceeds"
+        - "test_existing_compose_methods_unaffected — existing WorkflowComposer methods still pass regression"
+      green:
+        - "Add compose_for_sub_phase(sub_phase_id, template_data, context) to WorkflowComposer"
+        - "Wrap internal execution with SubPhaseCheckpointInjector.wrap_sub_phase()"
+      refactor:
+        - "Add type hints (CORE-011), docstrings (CORE-012)"
+        - "Confirm no duplication with existing compose() method (CORE-035)"
+
+    acceptance_criteria:
+      - "WorkflowComposer.compose_for_sub_phase() exists and wraps execution in checkpoint"
+      - "Non-git workspace does not block workflow execution (checkpoint skipped gracefully)"
+      - "All existing WorkflowComposer tests still pass (zero regression)"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "make test-changed"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+    convergence_gate:
+      detect_step: "make test-smoke"
+      fix_step: "Apply targeted fixes"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      blocks_ac_complete: true
+
+  # ── 138-final: Smoke Gate + CORE-064 Close ─────────────────────────────────
+  - id: phase-138-final
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P1
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-138-c"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "make test-smoke — ≥2775 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥2775 tests pass with zero regressions"
+        gate: "make test-smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase-138-git-checkpoint-safety.yaml: planned/ → completed/. Update cortex-master.yaml."
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 3 sweep_catalogue GAPs have status: CLOSED"
+      - "make test-smoke passes ≥2775 tests"
+      - "Zero new test failures vs baseline"
+      - "cortex/core/rollback_manager.py present"
+      - "cortex/core/sub_phase_checkpoint_injector.py present"
+      - "cortex/orchestrators/workflow/workflow_composer.py has compose_for_sub_phase() method"
+      - "primitives/execution/git-checkpoint.yaml now has Python backing (documented in YAML)"
+      - "phase-138-git-checkpoint-safety.yaml moved to cortex-registry/planning/phases/completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤850 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "make test-smoke"
+      min_tests_pass: 2775
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-138-GIT-CHECKPOINT-{timestamp}"
+  complete: "AC_COMPLETE: AC-138-GIT-CHECKPOINT-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKPORT NOTES
+# ─────────────────────────────────────────────────────────────────────────────
+backport_notes: |
+  Source: cortex-sts Phase 139 — Git Checkpoint Sub-Phase Enforcement
+  Issue: https://github.com/asifhussain60/CORTEX/issues/14
+  Capabilities: FB-2026-03-08-011 (SubPhaseCheckpointInjector + RollbackManager + WorkflowComposer.compose_for_sub_phase)
+  Test lines in source: 290 (test_sub_phase_checkpoint) + 340 (golden workflow) = 630
+  This phase backs the existing primitives/execution/git-checkpoint.yaml primitive with Python.
+  RollbackManager.rollback_to() emits URS MILD_PUNISHMENT — requires phase-137 wiring to be complete first.
