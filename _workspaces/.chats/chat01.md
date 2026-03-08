@@ -1,268 +1,1824 @@
-# CORTEX Feedback — Phase 142: PO Change Intelligence Orchestration
+asifhussain60: Follow instructions in [cortex-doc.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-doc.prompt.md).
+DIGEST #file:chat01.md along with https://github.com/asifhussain60/CORTEX/issues/15 and update #file:.content #file:diagrams . Then holistically and systematically and update the #file:product-owner.html with rich content and visulizations as per defined rules.
 
-**Generated:** 2026-03-08
-**Session:** Design Session — PO Decision-Support Orchestration Layer
-**Phase:** 142 (PLANNED)
-**Priority:** P1
-**Sweep ID:** SWEEP-142-PO-CHANGE-INTELLIGENCE
+GitHub Copilot: 
 
----
-
-## Executive Summary
-
-Phase 142 introduces a **Product Owner Change Intelligence Orchestration Layer** — 3 new orchestrators, 7 reusable Workflow Composer templates, and 1 new primitive that enable structured PO decision-support workflows. The design reuses 11 existing CORTEX components (55% coverage already built) and fills genuine gaps in the change-intelligence pipeline. No existing orchestrators are duplicated.
+# 🧠 CORTEX Documenting
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 
-## Documentation Updates Required
-
-### 1. `canonical_enums.py` — New Intent Types
-
-Add 2 new `IntentType` enum values:
-
-| Intent | Value | Keywords |
-|---|---|---|
-| `CHANGE_INTELLIGENCE` | `"CHANGE_INTELLIGENCE"` | `change-analyze`, `compare process`, `capability-summary`, `what does the system do` |
-| `REQUIREMENTS` | `"REQUIREMENTS"` | `requirements`, `acceptance criteria`, `generate requirements`, `what needs to change` |
-
-**Total intent types after:** 34 (up from 32)
+> *"The best architectures, requirements, and designs emerge from self-organizing teams."*
+> — Kent Beck, **Extreme Programming Explained**
 
 ---
 
-### 2. `CORTEX.prompt.md` — §5 Execution Modes Table
+🧭 Orchestration: Classifier → Documentation Orchestrator → Content Ingestor → HTML View Designer
 
-Add these rows to the execution modes table:
+---
+
+## 🪞 Intent Reflection
+
+You want me to digest the Phase 142 design session (chat01.md) and GitHub issue #15, then update the documentation content files, diagrams, and comprehensively rebuild the Product Owner role page with rich content and visualizations aligned to the PO Change Intelligence Orchestration Layer.
+
+Let me start by gathering all necessary context — the GitHub issue, existing content files, the current product-owner.html, design system knowledge, and the doc prompt. 
+
+Using "Fetch Web Page"
+
+Fetched https://github.com/asifhussain60/CORTEX/issues/15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/design_system.yaml#1-1), lines 1 to 200
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/components.yaml#1-1), lines 1 to 200
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/visualization_standards.yaml#1-1), lines 1 to 200
+
+Good — I've ingested the GitHub issue #15 (confirms Phase 142 content matches chat01.md) and the design system knowledge. Let me now read the remaining knowledge files and the full product-owner.html to understand everything I need to update. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1-1), lines 1 to 200
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/content_writing_standards.yaml#1-1), lines 1 to 150
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/motion_ux_standards.yaml#1-1), lines 1 to 150
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/a11y_checklist.yaml#1-1), lines 1 to 100
+
+Now let me read the rest of the product-owner.html file and existing content files to get the full picture. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#200-200), lines 200 to 500
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#500-500), lines 500 to 1000
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1000-1000), lines 1000 to 1748
+
+Now let me read the existing `.content` files and diagrams to understand what needs updating. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/05-orchestration-the-engine-room.md#1-1), lines 1 to 80
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/09-lifecycle-from-idea-to-production.md#1-1), lines 1 to 80
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/assets/diagrams/README.md)
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/assets/diagrams/13-diagram-orchestration-intent-classification-routing.md#1-1), lines 1 to 80
+
+Now let me read the other content files to check for references that need updating. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/assets/diagrams/13-diagram-orchestration-intent-classification-routing.md#80-80), lines 80 to 104
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/index.md#1-1), lines 1 to 60
+
+I now have comprehensive context. Let me proceed systematically:
+
+1. **Update `.content` files** to reflect Phase 142 PO capabilities
+2. **Create a new diagram spec** for the PO Change Intelligence pipeline 
+3. **Update the intent routing diagram** to include new intents
+4. **Rebuild product-owner.html** with rich Phase 142 content and new D3.js visualizations
+
+Let me start with the content and diagram updates: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/05-orchestration-the-engine-room.md#80-80), lines 80 to 163
+
+Now I have all the context I need. Let me execute the updates systematically. First, I'll update the content files and create the new diagram, then rebuild the product-owner.html. 
+
+Using "Replace String in File"
+
 
 ```
-| CHANGE_INTELLIGENCE | "change-analyze", "compare process" | ChangeIntelligenceOrchestrator | ✅ | cortex-po-orchestrator.md |
-| REQUIREMENTS | "requirements", "acceptance criteria" | RequirementsOrchestrator | ✅ | cortex-po-orchestrator.md |
-```
-
----
-
-### 3. `copilot-instructions.md` — Architecture Section
-
-Update metrics:
-
-| Metric | Old Value | New Value |
-|---|---|---|
-| Intent Types | 32 | 34 |
-| Orchestrator files | 309 | 311+ |
-| Planned phases | 1 | 2 |
-
-Add to Intent → Workflow Routing table:
 
 ```
-| CHANGE_INTELLIGENCE | `po/process-discovery.yaml` (+ composed templates) | `primitives/governance/challenge-gate.yaml` |
-| REQUIREMENTS | `po/requirements-synthesis.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-```
 
-Add to Quick Command Reference:
 
-```
-| `/change-analyze` | PO change intelligence — process discovery, comparison, recommendations | Varies by sub-command |
-| `/requirements` | Generate implementation-ready requirements from change intent | 6 stages |
-| `/training` | Generate role-based training documentation from changes | 5 stages |
-| `/capability-summary` | Generate system capability inventory | 5 stages |
-```
+Using "Replace String in File"
 
----
-
-### 4. `workflow-composer-spec.yaml` — Intent Routing Section
-
-Add to `intent_routing:` block:
-
-```yaml
-CHANGE_INTELLIGENCE:
-  workflow_ref: 'po/process-discovery'
-  pre_gate: 'primitives/governance/challenge-gate'
-  convergence: null  # analysis-only — no code modification
-  agent: 'cortex-po-orchestrator.md'
-
-REQUIREMENTS:
-  workflow_ref: 'po/requirements-synthesis'
-  pre_gate: 'primitives/governance/holistic-validation-gate'
-  convergence: null  # analysis-only
-  agent: 'cortex-po-orchestrator.md'
-```
-
-Add to `tier_2_mode_workflows.catalogue:` a new `po:` category:
-
-```yaml
-po:
-  - process-discovery.yaml
-  - best-practice-comparison.yaml
-  - change-recommendation.yaml
-  - roi-analysis.yaml
-  - requirements-synthesis.yaml
-  - training-doc-generation.yaml
-  - capability-summary.yaml
-```
-
-Add to `tier_1_primitives.catalogue.analysis:`:
-
-```yaml
-- gap-comparison.yaml
-```
-
----
-
-### 5. `AGENT-INDEX.md` — New Agent Entry
-
-Add agent entry:
 
 ```
-| cortex-po-orchestrator.md | CHANGE_INTELLIGENCE, REQUIREMENTS | PO decision-support and change intelligence | ~3,000 |
-```
-
----
-
-### 6. New Orchestrator Files
-
-| File | Purpose |
-|---|---|
-| `cortex/orchestrators/domain/change_intelligence_orchestrator.py` | Owns: process discovery, best-practice comparison, change recommendations, ROI analysis, capability summaries |
-| `cortex/orchestrators/domain/requirements_orchestrator.py` | Owns: requirements accuracy — business/functional/NFR decomposition + acceptance criteria |
-| Enhancement to existing `TrainerOrchestrator` | New `po_training` operation mode for role-based training doc generation |
-
----
-
-### 7. New Workflow Templates (7 files)
-
-All in `cortex-registry/workflows/templates/po/`:
-
-| Template | Purpose | Reused Components |
-|---|---|---|
-| `process-discovery.yaml` | Current-state process documentation | `lens-ast-scan`, `intelligence-injection`, LENS RuleExtractor |
-| `best-practice-comparison.yaml` | Gap analysis: current vs target state | Composes `process-discovery`, `cortex_knowledge`, `gap-comparison` primitive |
-| `change-recommendation.yaml` | Idea evaluation + feasibility | `impact-assessment`, `challenge-gate` |
-| `roi-analysis.yaml` | LOE-to-ROI conversion | Adapted `ROICompositeScorer` |
-| `requirements-synthesis.yaml` | Structured requirements generation | Composes `sdlc/requirements-analysis`, `holistic-validation-gate` |
-| `training-doc-generation.yaml` | Role-based training materials | LENS diff analysis, `ContentLibraryEngine` |
-| `capability-summary.yaml` | System capability inventory | Composes `process-discovery`, `cortex_git` |
-
----
-
-### 8. New Primitive
-
-| File | Purpose |
-|---|---|
-| `cortex-registry/workflows/templates/primitives/analysis/gap-comparison.yaml` | Compare current-state model against target-state pattern, produce structured gap list with severity scores |
-
----
-
-### 9. New Knowledge YAMLs
-
-| File | Purpose |
-|---|---|
-| `cortex-registry/knowledge/best-practices/business/po-change-intelligence.yaml` | PO change intelligence best practices |
-| `cortex-registry/knowledge/best-practices/business/requirements-best-practices.yaml` | Requirements engineering best practices |
-
----
-
-### 10. `MasterOrchestrator` Routing Updates
-
-Add to `INTENT_TRIGGER_MAP` in `cortex/orchestrators/core/master_orchestrator.py`:
-
-```python
-IntentType.CHANGE_INTELLIGENCE: ChangeIntelligenceOrchestrator,
-IntentType.REQUIREMENTS: RequirementsOrchestrator,
-```
-
----
-
-### 11. Display Name Map Addition
-
-Add to breadcrumb display name map in `copilot-instructions.md`, `CORTEX.prompt.md`, and `cortex-response-templates.md`:
-
-| Class Name | Display Name |
-|---|---|
-| ChangeIntelligenceOrchestrator | Change Analyst |
-| RequirementsOrchestrator | Requirements Engineer |
-
----
-
-## Orchestration Chain (Conceptual)
 
 ```
-📥 PO Request
- │
- ├─ "What does the system do?"
- │   → ChangeIntelligenceOrchestrator
- │     → po/process-discovery → po/capability-summary
- │       → Inline: Current-State Documentation
- │
- ├─ "Compare current process to best practice"
- │   → ChangeIntelligenceOrchestrator
- │     → po/process-discovery → po/best-practice-comparison
- │       → Inline: Gap Analysis + Recommendations
- │
- ├─ "Generate requirements for this change"
- │   → RequirementsOrchestrator
- │     → po/requirements-synthesis (composes sdlc/requirements-analysis)
- │       → Inline: Business + Functional + NFR + AC
- │
- ├─ "What's the ROI of this change?"
- │   → ChangeIntelligenceOrchestrator
- │     → po/roi-analysis (adapts ROICompositeScorer)
- │       → Inline: ROI Artifact with Priority Tier
- │
- ├─ "Should we build this idea?"
- │   → ChangeIntelligenceOrchestrator
- │     → po/change-recommendation (composes impact + challenge)
- │       → Inline: Recommendation + Risk + Feasibility
- │
- └─ "Create training docs for this change"
-     → TrainerOrchestrator (enhanced)
-       → po/training-doc-generation
-         → Inline: Role-Based Training Materials
+Now update the intent count references: 
+
+Using "Replace String in File"
+
+
 ```
 
-**Traceability spine:**
-`process-discovery` → `best-practice-comparison` → `change-recommendation` → `requirements-synthesis` → implementation (existing TDD pipeline) → `training-doc-generation`
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now update the lifecycle content to include Change Intelligence: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now update the index.md to reflect the new intent count and capabilities: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now update the intent routing diagram to include the new intents: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now create the new PO Change Intelligence diagram spec: 
+
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/assets/diagrams/19-diagram-orchestration-po-change-intelligence-pipeline.md)
+
+Now update the diagrams README to include the new diagram: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now for the main event — rebuilding product-owner.html with rich Phase 142 content. This is a comprehensive rewrite incorporating Change Intelligence, Requirements Engineering, Process Discovery, new D3.js visualizations, and all the Phase 142 capabilities. Let me create the new file: 
+
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html)
+
+Summarized conversation historyThe file already exists, so I need to replace its contents. Let me read the current file first to understand its structure, then do a full replacement. 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1-1), lines 1 to 5
+
+Since the file is 1748 lines, I'll use the terminal to replace it entirely with the new content. 
+
+Ran terminal command: cat > /Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html << 'CORTEX_EOF_MARKER_7f3a9b2c'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX — Product Owner Command Centre | AI-Powered Change Intelligence</title>
+    <meta name="description" content="CORTEX gives Product Owners evidence-based decision support — change intelligence, requirements engineering, ROI analysis, and governance traceability powered by real codebase analysis.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="CORTEX — Product Owner Command Centre">
+    <meta property="og:description" content="Evidence-based change intelligence, requirements engineering, and delivery governance for Product Owners.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://asifhussain60.github.io/CORTEX/roles/product-owner.html">
+    <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(15, 20, 40, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
+            --accent-teal: #14b8a6;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --accent-cyan: #00d4ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 3rem;
+            --issa-content-panel:   2rem;
+            --issa-panel-panel:     1.5rem;
+            --issa-hero-first:      3rem;
+        }
+
+        body {
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+            word-spacing: 0.04em;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            line-height: 1.2;
+        }
+        @media (min-width: 768px) {
+            .section-title { font-size: 2.5rem; }
+        }
+        
+        .section-desc {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #94a3b8;
+        }
+        @media (min-width: 768px) {
+            .section-desc { font-size: 1.125rem; }
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        @media (min-width: 768px) {
+            .card-title { font-size: 1.25rem; }
+        }
+        
+        .card-body {
+            font-size: 0.9375rem;
+            line-height: 1.65;
+            color: #94a3b8;
+        }
+        @media (min-width: 768px) {
+            .card-body { font-size: 1rem; }
+        }
+        
+        .badge-text {
+            font-size: 0.8125rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .code-snippet {
+            font-size: 0.8125rem;
+        }
+        @media (min-width: 768px) {
+            .code-snippet { font-size: 0.875rem; }
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-section-wrapper {
+            position: relative;
+            padding-top: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-robot-container {
+            position: relative;
+            z-index: 10;
+            margin-bottom: -1px;
+        }
+        .hero-divider-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent);
+        }
+
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (hover: hover) {
+            .glass-card:hover {
+                border-color: rgba(99, 102, 241, 0.3);
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.15);
+            }
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .hero-robot-head {
+            width: 320px;
+            max-width: 400px;
+            height: auto;
+            filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.4));
+            transition: filter 0.5s ease, transform 0.3s ease;
+        }
+        .hero-robot-head:hover {
+            filter: drop-shadow(0 0 50px rgba(99, 102, 241, 0.6));
+            transform: scale(1.02);
+        }
+
+        .d3-tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(15, 23, 42, 0.95);
+            color: #fff;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 50;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #818cf8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+        .comparison-card-before { border-top: 3px solid var(--accent-rose); }
+        .comparison-card-after { border-top: 3px solid var(--accent-emerald); }
+
+        .pipeline-container {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            position: relative;
+        }
+        .pipeline-step {
+            flex: 1;
+            position: relative;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .pipeline-step:first-child { border-radius: 1rem 0 0 1rem; }
+        .pipeline-step:last-child { border-radius: 0 1rem 1rem 0; }
+        .pipeline-step::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 12px solid var(--accent-indigo);
+            z-index: 5;
+        }
+        .pipeline-step:last-child::after { display: none; }
+        .pipeline-step:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .pipeline-container { flex-direction: column; }
+            .pipeline-step { border-radius: 0.75rem !important; }
+            .pipeline-step::after { display: none; }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .roi-stat {
+            text-align: center;
+            padding: 2rem;
+        }
+        .roi-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        @media (min-width: 768px) {
+            .roi-value { font-size: 3.5rem; }
+        }
+        .roi-label {
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-weight: 500;
+        }
+        @media (min-width: 768px) {
+            .roi-label { font-size: 0.875rem; }
+        }
+
+        .safe-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .pulse-dot {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-robot-head { width: 200px; }
+            .glass-card { border-radius: 1.25rem; }
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        .breadcrumb-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .breadcrumb-nav a:hover { color: var(--accent-indigo); }
+        .breadcrumb-separator { color: rgba(148, 163, 184, 0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        /* ISSA Responsive Section Gap Overrides */
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+
+        /* Reduced motion: strip all animation */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 1ms !important;
+                animation-delay: -1ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 1ms !important;
+                transition-delay: -1ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Scroll margin for sticky-nav accessibility (WCAG 2.4.11) */
+        :target, :focus { scroll-margin-top: 68px; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span>CORTEX</span>
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../index.html#who-is-cortex-for">Roles</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Product Owner</span>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+
+        <div id="tooltip" class="d3-tooltip"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 1. HERO — Outcome-led, evidence-first messaging                -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="hero-section-wrapper">
+                <div class="hero-robot-container">
+                    <a href="../index.html" title="Back to CORTEX Home">
+                        <img alt="CORTEX — AI Engineering Orchestration Framework logo" class="hero-robot-head" loading="eager" fetchpriority="high"
+                             src="../assets/images/cortex-logo-512.png"/>
+                    </a>
+                </div>
+                <div class="hero-divider-line"></div>
+            </div>
+            
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 pulse-dot"></div> Change Intelligence Command Centre
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    Decide with Evidence,<br /> <span class="gradient-text">Deliver with Confidence.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    CORTEX replaces gut-feel decisions with code-backed intelligence. Discover how your system works today, compare it to best practice, evaluate ROI from real complexity data, and generate implementation-ready requirements — all from your IDE.
+                </p>
+            </div>
+            
+            <!-- Hero Stat Cards -->
+            <div class="flex flex-wrap justify-center items-stretch gap-3 md:gap-6 pt-6">
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/30 to-violet-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 to-slate-900/90 hover:border-indigo-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-indigo-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(99,102,241,0.6)]">7</div>
+                        <div class="text-[11px] md:text-[12px] text-indigo-300/80 uppercase tracking-widest font-bold">Workflow Templates</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-cyan-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-blue-500/40 bg-gradient-to-br from-blue-950/80 to-slate-900/90 hover:border-blue-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-blue-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(59,130,246,0.6)]">100%</div>
+                        <div class="text-[11px] md:text-[12px] text-blue-300/80 uppercase tracking-widest font-bold">AC Traceability</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-6 md:px-10 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 hover:border-violet-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
+                        <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">Code-Backed</div>
+                        <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">SWAGs &amp; ROI</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 2. CHANGE INTELLIGENCE PIPELINE — D3.js Visualization          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-8">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-indigo-500/10 to-violet-500/10 rounded-2xl blur-2xl"></div>
+                <div class="relative glass-card p-8 md:p-10">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+                                <i data-lucide="search-code" class="w-7 h-7 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-cyan-400 font-bold badge-text uppercase tracking-widest mb-1">Change Intelligence Pipeline</div>
+                                <h2 class="section-title">From Question to Evidence-Based Decision</h2>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <div class="px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                                <div class="text-xs text-cyan-400 uppercase tracking-wider font-bold mb-0.5">6 Stages</div>
+                                <div class="text-sm text-cyan-300">Fully Automated</div>
+                            </div>
+                            <div class="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                <div class="text-xs text-emerald-400 uppercase tracking-wider font-bold mb-0.5">LENS-Powered</div>
+                                <div class="text-sm text-emerald-300">Real Code Data</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="section-desc max-w-3xl mt-4 font-light leading-relaxed">
+                        Ask CORTEX "should we build this?" and receive a structured Change Recommendation Report — process discovery, gap analysis, feasibility, ROI projection, and implementation paths — all grounded in real codebase analysis.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <div class="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-violet-500/20 rounded-3xl blur-xl opacity-40"></div>
+                <div class="glass-card p-6 md:p-8 w-full h-[320px] md:h-[420px] flex flex-col justify-center relative overflow-hidden" role="img" aria-label="Change Intelligence Pipeline: 6-stage flow from PO question through process discovery, gap analysis, change recommendation, requirements synthesis, to implementation and training">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-600/10 blur-[120px] pointer-events-none"></div>
+                    <div id="change-intelligence-chart" class="w-full h-full relative z-10"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 3. AGILE INTELLIGENCE — Context-Aware ACs & SWAGs             -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-blue-950/60 border border-indigo-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            
+            <div class="relative space-y-10 px-4 md:px-8">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="brain" class="w-3.5 h-3.5"></i> Intelligence Engine
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Agile Intelligence Engine</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    Stop guessing on estimates and writing vague acceptance criteria. CORTEX uses LENS (Language → Examination → Navigation → Synthesis) to analyze your existing architecture — transforming Agile planning from theoretical to empirical.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="glass-card p-8 space-y-6 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all h-full">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                            <i data-lucide="file-edit" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="card-title text-xl md:text-2xl text-blue-300">Context-Aware Acceptance Criteria</h3>
+                    </div>
+                    <p class="card-body font-light leading-relaxed">
+                        CORTEX drafts acceptance criteria grounded in your actual codebase. By scanning the repository with LENS, it suggests ACs that map directly to existing enterprise patterns — ensuring features are implementable as specified.
+                    </p>
+                    <div class="p-4 bg-slate-950/60 rounded-xl border border-blue-500/20 code-snippet font-mono text-slate-300">
+                        <span class="text-blue-400">PO:</span> "Draft ACs for a rate limiter."<br/><br/>
+                        <span class="text-cyan-400">CORTEX:</span> "Based on LENS analysis of your service layer, I recommend 4 ACs utilizing your existing Redis caching pattern..."
+                    </div>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="glass-card p-8 space-y-6 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all h-full">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/30">
+                            <i data-lucide="calculator" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="card-title text-xl md:text-2xl text-violet-300">Code-Backed SWAGs</h3>
+                    </div>
+                    <p class="card-body font-light leading-relaxed">
+                        Through the <strong class="text-violet-300">Challenge-First Protocol</strong>, CORTEX evaluates the actual codebase before a sprint begins — providing multiple implementation options with estimated effort, architectural risk, and maintainability trade-offs.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="font-bold text-slate-300">Option A: Quick Extension</span>
+                            <span class="text-amber-400 text-xs">Low Effort / High Tech Debt</span>
+                        </div>
+                        <div class="w-full bg-slate-800/80 rounded-full h-2.5 border border-slate-700/50">
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-2.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm pt-2">
+                            <span class="font-bold text-slate-300">Option B: Pattern Refactor</span>
+                            <span class="text-emerald-400 text-xs">Med Effort / Zero Tech Debt</span>
+                        </div>
+                        <div class="w-full bg-slate-800/80 rounded-full h-2.5 border border-slate-700/50">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-500 h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 4. PROCESS GAP ANALYSIS — Current vs Best Practice             -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="git-compare" class="w-3.5 h-3.5"></i> Process Intelligence
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Current State vs. Best Practice</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    CORTEX discovers how your application works today using LENS, then compares it against best-practice patterns — producing a structured gap analysis with severity scores aligned to your SAFe PI objectives.
+                </p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="glass-card comparison-card-before p-8 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400">
+                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="card-title text-rose-300">Current Process</h3>
+                        </div>
+                        <span class="safe-badge bg-slate-700/50 text-slate-400">Legacy</span>
+                    </div>
+                    <ul class="space-y-4 card-body">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="x-circle" class="w-5 h-5 text-rose-500 mt-0.5 shrink-0"></i>
+                            <span>Manual process documentation scattered across wikis, Confluence, and tribal knowledge</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="x-circle" class="w-5 h-5 text-rose-500 mt-0.5 shrink-0"></i>
+                            <span>Architectural decisions undocumented — teams reinvent solutions each sprint</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="x-circle" class="w-5 h-5 text-rose-500 mt-0.5 shrink-0"></i>
+                            <span>No traceability from Epic → Feature → Story → Code</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="x-circle" class="w-5 h-5 text-rose-500 mt-0.5 shrink-0"></i>
+                            <span>Tech debt accumulates invisibly until velocity collapses</span>
+                        </li>
+                    </ul>
+                    <div class="pt-4 border-t border-slate-700/50">
+                        <div class="badge-text text-rose-400 font-semibold uppercase tracking-wider mb-2">Typical Impact</div>
+                        <div class="text-2xl font-black text-rose-300">35–50% Sprint Variance</div>
+                    </div>
+                </div>
+
+                <div class="glass-card comparison-card-after p-8 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="card-title text-emerald-300">CORTEX-Governed</h3>
+                        </div>
+                        <span class="safe-badge bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">SAFe Aligned</span>
+                    </div>
+                    <ul class="space-y-4 card-body text-slate-300">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>LENS auto-discovers processes from code, generates current-state documentation</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>Gap comparison primitive scores deviations against best-practice patterns</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>Full traceability: PI Objective → Epic → Feature → Story → Test → Commit</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>Tech debt is quantified via LENS complexity scoring and surfaced in every SWAG</span>
+                        </li>
+                    </ul>
+                    <div class="pt-4 border-t border-emerald-500/20">
+                        <div class="badge-text text-emerald-400 font-semibold uppercase tracking-wider mb-2">CORTEX Impact</div>
+                        <div class="text-2xl font-black text-emerald-300">&lt;10% Sprint Variance</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 5. REQUIREMENTS ENGINEERING PIPELINE                           -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            
+            <div class="relative space-y-10 px-4 md:px-8">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 badge-text font-bold tracking-widest uppercase">
+                    <i data-lucide="target" class="w-4 h-4"></i> Requirements Engineering
+                </div>
+                <h2 class="section-title font-black tracking-tighter">From Stakeholder Intent to Testable Requirements</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    The Requirements Orchestrator decomposes ambiguous stakeholder requests into structured, testable requirements — business, functional, non-functional, and acceptance criteria — all mapped to your existing architecture.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 rounded-2xl blur-2xl"></div>
+                
+            <div class="pipeline-container relative">
+                <div class="pipeline-step border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/60 to-slate-900/80 hover:border-blue-400/50">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold mb-3 text-base shadow-lg shadow-blue-500/30">1</div>
+                    <h4 class="font-bold text-blue-300 mb-2 text-base">Stakeholder Intent</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Capture raw business need: "We need customers to pay faster"</p>
+                    <div class="mt-3 px-3 py-1.5 bg-blue-950/60 rounded code-snippet text-blue-400/70 font-mono border border-blue-500/20">Intent Classification</div>
+                </div>
+                <div class="pipeline-step border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/60 to-slate-900/80 hover:border-indigo-400/50">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold mb-3 text-base shadow-lg shadow-indigo-500/30">2</div>
+                    <h4 class="font-bold text-indigo-300 mb-2 text-base">LENS Analysis</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Scan codebase for payment patterns, APIs, and dependencies</p>
+                    <div class="mt-3 px-3 py-1.5 bg-indigo-950/60 rounded code-snippet text-indigo-400/70 font-mono border border-indigo-500/20">9 Parallel Analyzers</div>
+                </div>
+                <div class="pipeline-step border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/60 to-slate-900/80 hover:border-violet-400/50">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-white font-bold mb-3 text-base shadow-lg shadow-violet-500/30">3</div>
+                    <h4 class="font-bold text-violet-300 mb-2 text-base">Requirements Decomposition</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">Business + Functional + Non-Functional requirements structured automatically</p>
+                    <div class="mt-3 px-3 py-1.5 bg-violet-950/60 rounded code-snippet text-violet-400/70 font-mono border border-violet-500/20">4-Layer Decomposition</div>
+                </div>
+                <div class="pipeline-step border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/60 to-slate-900/80 hover:border-emerald-400/50">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-bold mb-3 text-base shadow-lg shadow-emerald-500/30">4</div>
+                    <h4 class="font-bold text-emerald-300 mb-2 text-base">AC + SWAG Output</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">TDD-ready acceptance criteria with code-backed estimates and options</p>
+                    <div class="mt-3 px-3 py-1.5 bg-emerald-950/60 rounded code-snippet text-emerald-400/70 font-mono border border-emerald-500/20">DoR Validated</div>
+                </div>
+            </div>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 mt-8">
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <div class="text-4xl md:text-5xl font-black text-blue-400 mb-2">32+</div>
+                        <div class="text-sm md:text-base text-slate-400 uppercase tracking-wider font-medium">Intent Types Classified</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-black text-indigo-400 mb-2">&lt;40ms</div>
+                        <div class="text-sm md:text-base text-slate-400 uppercase tracking-wider font-medium">Classification Speed</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-black text-emerald-400 mb-2">100%</div>
+                        <div class="text-sm md:text-base text-slate-400 uppercase tracking-wider font-medium">Testable ACs</div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 6. CHANGE RECOMMENDATION REPORT — Rich Interactive Card        -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 badge-text font-bold tracking-widest uppercase">
+                    <i data-lucide="file-search" class="w-4 h-4"></i> Change Analyst
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Change Recommendation Report</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    Before committing to any change, the Change Intelligence Orchestrator analyzes current functionality, compares it to best practice, evaluates ROI from real complexity data, and delivers implementation paths with trade-offs.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-emerald-500/20 rounded-3xl blur-xl opacity-50"></div>
+                
+                <div class="glass-card p-8 md:p-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent rounded-bl-full"></div>
+                    
+                    <!-- Report Header -->
+                    <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 mb-8 border-b border-slate-700/30">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+                                <i data-lucide="file-search" class="w-7 h-7 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-cyan-400 font-bold text-sm uppercase tracking-wider mb-1">Change Analysis Report</div>
+                                <h3 class="text-xl md:text-2xl font-black text-white">Express Checkout Flow</h3>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-indigo-400 pulse-dot"></div>
+                                <span class="text-sm font-bold text-indigo-300">PI 2026.2</span>
+                            </div>
+                            <div class="px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                                <span class="text-sm font-bold text-emerald-300">Low Risk</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Two-Column Analysis -->
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-amber-500/10 rounded-2xl blur-sm group-hover:blur-md transition-all"></div>
+                            <div class="relative bg-slate-900/60 rounded-2xl p-6 border border-rose-500/20 hover:border-rose-500/40 transition-all">
+                                <div class="flex items-center gap-3 mb-5">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/20 flex items-center justify-center border border-rose-500/30">
+                                        <i data-lucide="scan-search" class="w-5 h-5 text-rose-400"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white text-lg">Current State (LENS Discovery)</h4>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="flex items-start gap-3 p-3 bg-slate-800/50 rounded-xl">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center flex-shrink-0"><i data-lucide="route" class="w-4 h-4 text-slate-400"></i></div>
+                                        <div><div class="text-sm font-medium text-slate-200">3-Step Flow</div><div class="text-[14px] text-slate-500">Cart → Shipping → Payment</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-slate-800/50 rounded-xl">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center flex-shrink-0"><i data-lucide="timer" class="w-4 h-4 text-amber-400"></i></div>
+                                        <div><div class="text-sm font-medium text-slate-200">4.2 min avg</div><div class="text-[14px] text-slate-500">Completion time</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-rose-950/30 rounded-xl border border-rose-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trending-down" class="w-4 h-4 text-rose-400"></i></div>
+                                        <div><div class="text-sm font-medium text-rose-300">68% Abandonment</div><div class="text-xs text-rose-400/70">Critical gap vs. best practice</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-amber-950/30 rounded-xl border border-amber-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i></div>
+                                        <div><div class="text-sm font-medium text-amber-300">Legacy Gateway</div><div class="text-xs text-amber-400/70">Severity: HIGH — modernization needed</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-sm group-hover:blur-md transition-all"></div>
+                            <div class="relative bg-slate-900/60 rounded-2xl p-6 border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                                <div class="flex items-center gap-3 mb-5">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/30">
+                                        <i data-lucide="sparkles" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white text-lg">CORTEX Recommendations</h4>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="flex items-start gap-3 p-3 bg-emerald-950/30 rounded-xl border border-emerald-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i></div>
+                                        <div><div class="text-sm font-medium text-emerald-300">Single-Page Express</div><div class="text-xs text-emerald-400/70">Reuse existing Stripe hooks</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-cyan-950/30 rounded-xl border border-cyan-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="gauge" class="w-4 h-4 text-cyan-400"></i></div>
+                                        <div><div class="text-sm font-medium text-cyan-300">&lt;90 sec Target</div><div class="text-xs text-cyan-400/70">78% time reduction</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-emerald-950/30 rounded-xl border border-emerald-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i></div>
+                                        <div><div class="text-sm font-medium text-emerald-300">-23% Abandonment</div><div class="text-xs text-emerald-400/70">ROI: $240K annual revenue impact</div></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 bg-blue-950/30 rounded-xl border border-blue-500/20">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="calculator" class="w-4 h-4 text-blue-400"></i></div>
+                                        <div><div class="text-sm font-medium text-blue-300">8 Story Points</div><div class="text-xs text-blue-400/70">Existing pattern match via LENS</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Paths -->
+                    <div class="pt-6 border-t border-slate-700/30">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+                                <i data-lucide="git-branch" class="w-4 h-4 text-indigo-400"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-lg">Implementation Paths (Challenge-First Protocol)</h4>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500/5 via-slate-900/80 to-slate-900/80 border border-amber-500/30 hover:border-amber-500/50 transition-all">
+                                <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-bl-full"></div>
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center border border-amber-500/30"><i data-lucide="rabbit" class="w-5 h-5 text-amber-400"></i></div>
+                                            <div><div class="text-xs text-amber-400 uppercase tracking-wider font-bold">Option A</div><div class="text-lg font-bold text-white">Quick MVP</div></div>
+                                        </div>
+                                        <div class="px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30"><span class="text-lg font-black text-amber-400">5 SP</span></div>
+                                    </div>
+                                    <p class="text-sm text-slate-400 mb-4 leading-relaxed">Minimal UI refactor, keep legacy gateway. Ships in 1 sprint with focused scope.</p>
+                                    <div class="flex items-center gap-2 p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                                        <span class="text-sm text-amber-300 font-medium">Tech debt: +3 SP future obligation</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500/10 via-slate-900/80 to-slate-900/80 border-2 border-emerald-500/50 hover:border-emerald-400/70 transition-all shadow-lg shadow-emerald-500/10">
+                                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/15 rounded-bl-full"></div>
+                                <div class="absolute top-3 right-3"><div class="px-2 py-1 rounded-full bg-emerald-500 text-[11px] font-bold text-white uppercase tracking-wider shadow-lg shadow-emerald-500/30">Recommended</div></div>
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center border border-emerald-500/40"><i data-lucide="rocket" class="w-5 h-5 text-emerald-400"></i></div>
+                                            <div><div class="text-xs text-emerald-400 uppercase tracking-wider font-bold">Option B</div><div class="text-lg font-bold text-white">Full Modernization</div></div>
+                                        </div>
+                                        <div class="px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40"><span class="text-lg font-black text-emerald-400">8 SP</span></div>
+                                    </div>
+                                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">Stripe SDK upgrade, new UI, A/B testing infrastructure. Production-grade solution.</p>
+                                    <div class="flex items-center gap-2 p-3 bg-emerald-500/15 rounded-xl border border-emerald-500/30">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+                                        <span class="text-sm text-emerald-300 font-medium">Zero tech debt · Scalable · Future-proof</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 7. ROI INTELLIGENCE — Automated LOE to ROI Conversion          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-blue-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            
+            <div class="relative space-y-10 px-4 md:px-8">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 badge-text font-bold tracking-widest uppercase">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i> ROI Intelligence
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Level of Effort → Automated ROI</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    The ROI Analysis workflow transforms engineering estimates into business intelligence. Every SWAG includes ROI projections, priority tiers, and risk matrices — all calculated from actual LENS complexity scores.
+                </p>
+            </div>
+
+            <div class="relative group">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-emerald-500/20 rounded-2xl blur-xl"></div>
+                <div class="glass-card p-8 md:p-10 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80">
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="roi-stat border-r border-blue-500/30">
+                        <div class="roi-value text-rose-400">40%</div>
+                        <div class="roi-label text-rose-300/70">Rework Before</div>
+                    </div>
+                    <div class="roi-stat border-r border-blue-500/30">
+                        <div class="roi-value text-emerald-400">8%</div>
+                        <div class="roi-label text-emerald-300/70">Rework After</div>
+                    </div>
+                    <div class="roi-stat border-r border-blue-500/30">
+                        <div class="roi-value text-blue-400">32%</div>
+                        <div class="roi-label text-blue-300/70">Sprint Capacity Recovered</div>
+                    </div>
+                    <div class="roi-stat">
+                        <div class="roi-value text-amber-400">2.4x</div>
+                        <div class="roi-label text-amber-300/70">Velocity Multiplier</div>
+                    </div>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-blue-500/20">
+                    <h4 class="card-title text-white mb-6 text-center">ROI Calculation Pipeline</h4>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-blue-950/40 rounded-xl p-5 border-2 border-blue-500/30 hover:border-blue-400/50 transition-colors">
+                            <div class="badge-text text-blue-400 uppercase tracking-wider mb-2">Input</div>
+                            <div class="font-semibold text-white text-base">Story Points per Sprint</div>
+                            <div class="text-slate-400 text-sm mt-1">Average capacity across ARTs</div>
+                        </div>
+                        <div class="bg-cyan-950/40 rounded-xl p-5 border-2 border-cyan-500/30 hover:border-cyan-400/50 transition-colors">
+                            <div class="badge-text text-cyan-400 uppercase tracking-wider mb-2">Analysis</div>
+                            <div class="font-semibold text-white text-base">LENS Complexity Score</div>
+                            <div class="text-slate-400 text-sm mt-1">ROICompositeScorer metrics</div>
+                        </div>
+                        <div class="bg-emerald-950/40 rounded-xl p-5 border-2 border-emerald-500/30 hover:border-emerald-400/50 transition-colors">
+                            <div class="badge-text text-emerald-400 uppercase tracking-wider mb-2">Output</div>
+                            <div class="font-semibold text-white text-base">ROI + Priority Tier</div>
+                            <div class="text-slate-400 text-sm mt-1">Executive-ready projection</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 8. TRAINING DOCUMENTATION — Auto-Generated Knowledge           -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 badge-text font-bold tracking-widest uppercase">
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i> Knowledge Transfer
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Auto-Generated Training Documentation</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    Every change produces institutional knowledge. CORTEX generates role-based training materials using LENS diff analysis and the ContentLibraryEngine — ensuring every team member understands what changed and why.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="glass-card p-6 md:p-8 space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+                        <i data-lucide="message-square-text" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="card-title">/distill Command</h3>
+                    <p class="card-body leading-relaxed">
+                        Transform any Copilot Chat session into a reusable, executable prompt or training document. Captures decisions, rationale, and code patterns.
+                    </p>
+                    <div class="code-snippet text-violet-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg">/distill session → training-doc.md</div>
+                </div>
+
+                <div class="glass-card p-6 md:p-8 space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="card-title">Role-Based Materials</h3>
+                    <p class="card-body leading-relaxed">
+                        The training doc generator produces tailored content per affected role — developers get code patterns, QA gets test strategies, POs get impact summaries.
+                    </p>
+                    <div class="code-snippet text-blue-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg">/training → role-based docs</div>
+                </div>
+
+                <div class="glass-card p-6 md:p-8 space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="card-title">Team Onboarding</h3>
+                    <p class="card-body leading-relaxed">
+                        New developers onboard in hours, not weeks. The /onboard command analyzes any repo and generates a complete LENS intelligence profile with architecture maps.
+                    </p>
+                    <div class="code-snippet text-teal-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg">/onboard → LENS profile in minutes</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 9. GOVERNANCE PIPELINE — DoR to TDD to DoD                     -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 badge-text font-bold tracking-widest uppercase mx-auto">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> Governance Pipeline
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Automating DoR to DoD</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    CORTEX replaces manual checklists with automated execution gates. Quality, security, and TDD are structurally enforced — code that does not meet the standard cannot be committed.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 via-blue-500/5 to-emerald-500/5 rounded-3xl"></div>
+                
+                <div class="grid md:grid-cols-4 gap-6 relative p-4">
+                    <div class="hidden md:block absolute top-1/2 left-16 right-16 h-1 bg-gradient-to-r from-indigo-500/50 via-blue-500/50 to-emerald-500/50 -translate-y-1/2 z-0 rounded-full"></div>
+
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-violet-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-indigo-500 hover:-translate-y-2 transition-all duration-300 h-full">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-indigo-500/30">1</div>
+                            <h4 class="card-title mb-3 text-indigo-300">Definition of Ready</h4>
+                            <p class="card-body leading-relaxed">CORTEX intercepts tickets. If ACs are vague or untestable, execution is blocked and clarification requested automatically.</p>
+                            <div class="mt-4 flex items-center gap-2 text-xs text-indigo-400 font-medium"><i data-lucide="shield" class="w-4 h-4"></i><span>Quality Gate</span></div>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-blue-500 hover:-translate-y-2 transition-all duration-300 h-full">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-blue-500/30">2</div>
+                            <h4 class="card-title mb-3 text-blue-300">TDD Enforcement</h4>
+                            <p class="card-body leading-relaxed">English ACs translate to programmatic failing tests. <strong class="text-white">CORE-008</strong> mandates tests before code — no exceptions.</p>
+                            <div class="mt-4 flex items-center gap-2 text-xs text-blue-400 font-medium"><i data-lucide="test-tube-2" class="w-4 h-4"></i><span>RED → GREEN</span></div>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-emerald-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-teal-500 hover:-translate-y-2 transition-all duration-300 h-full">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-teal-500/30">3</div>
+                            <h4 class="card-title mb-3 text-teal-300">Secure Execution</h4>
+                            <p class="card-body leading-relaxed">5-Layer Immune System scans for secrets, PII, and OWASP vulnerabilities in real-time during code generation.</p>
+                            <div class="mt-4 flex items-center gap-2 text-xs text-teal-400 font-medium"><i data-lucide="lock" class="w-4 h-4"></i><span>Zero-Trust</span></div>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-emerald-500 hover:-translate-y-2 transition-all duration-300 h-full">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-emerald-500/30">4</div>
+                            <h4 class="card-title mb-3 text-emerald-300">Definition of Done</h4>
+                            <p class="card-body leading-relaxed">All tests green, 60+ governance rules met. Results logged to SQLite Audit DB for full compliance traceability.</p>
+                            <div class="mt-4 flex items-center gap-2 text-xs text-emerald-400 font-medium"><i data-lucide="check-circle-2" class="w-4 h-4"></i><span>Audit-Ready</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 10. INSTITUTIONAL MEMORY (RCA) — Prevention Rules              -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-10">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-violet-500/10 rounded-2xl blur-2xl"></div>
+                <div class="relative grid lg:grid-cols-5 gap-8 items-center">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 badge-text font-bold tracking-widest uppercase">
+                            <i data-lucide="brain" class="w-4 h-4"></i> RCA Engine
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Eliminate Recurring Defects</h2>
+                        <p class="section-desc leading-relaxed font-light">
+                            When a defect escapes, CORTEX analyzes the root cause using 4 methodologies and writes a <span class="text-white font-semibold">Prevention Rule</span> into the registry — ensuring the same failure category never recurs.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-950/50 to-transparent rounded-xl border-l-2 border-blue-500">
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="search" class="w-4 h-4 text-blue-400"></i></div>
+                                <span class="text-sm text-slate-300 font-medium">Five-Whys Logic Chains</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-indigo-950/50 to-transparent rounded-xl border-l-2 border-indigo-500">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="git-branch" class="w-4 h-4 text-indigo-400"></i></div>
+                                <span class="text-sm text-slate-300 font-medium">Fishbone (Ishikawa) Analysis</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-violet-950/50 to-transparent rounded-xl border-l-2 border-violet-500">
+                                <div class="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="network" class="w-4 h-4 text-violet-400"></i></div>
+                                <span class="text-sm text-slate-300 font-medium">Fault-Tree Probability Mapping</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-cyan-950/50 to-transparent rounded-xl border-l-2 border-cyan-500">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="link" class="w-4 h-4 text-cyan-400"></i></div>
+                                <span class="text-sm text-slate-300 font-medium">Causal-Chain Decomposition</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-3">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-violet-500/20 rounded-2xl blur-lg opacity-50"></div>
+                            <div class="glass-card p-6 md:p-8 relative overflow-hidden">
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-3 gap-4 pb-4 border-b border-slate-700/50">
+                                        <div class="text-sm font-bold text-slate-300 uppercase tracking-wider">Scenario</div>
+                                        <div class="text-sm font-bold text-rose-400 uppercase tracking-wider">Without CORTEX</div>
+                                        <div class="text-sm font-bold text-emerald-400 uppercase tracking-wider">With CORTEX</div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 py-3 hover:bg-slate-800/30 rounded-xl transition-colors">
+                                        <div class="text-sm font-semibold text-white flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-indigo-500"></div>Acceptance Criteria</div>
+                                        <div class="text-sm text-slate-400">Subjective interpretation</div>
+                                        <div class="text-sm text-emerald-300 flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>TDD-verified automatically</div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 py-3 hover:bg-slate-800/30 rounded-xl transition-colors">
+                                        <div class="text-sm font-semibold text-white flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-blue-500"></div>Change Decisions</div>
+                                        <div class="text-sm text-slate-400">Gut-feel estimates</div>
+                                        <div class="text-sm text-emerald-300 flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>LENS-backed ROI analysis</div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 py-3 hover:bg-slate-800/30 rounded-xl transition-colors">
+                                        <div class="text-sm font-semibold text-white flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-violet-500"></div>Knowledge Transfer</div>
+                                        <div class="text-sm text-slate-400">Lost when team leaves</div>
+                                        <div class="text-sm text-emerald-300 flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>Stored as Prevention Rules</div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 py-3 hover:bg-slate-800/30 rounded-xl transition-colors">
+                                        <div class="text-sm font-semibold text-white flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-cyan-500"></div>Requirements Quality</div>
+                                        <div class="text-sm text-slate-400">Ambiguous, untestable</div>
+                                        <div class="text-sm text-emerald-300 flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>Structured 4-layer decomp.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 11. DELIVERY METRICS — D3.js Dual Donut Charts                 -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="space-y-8">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 badge-text font-bold tracking-widest uppercase mx-auto">
+                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Velocity Analytics
+                </div>
+                <h2 class="section-title font-black tracking-tight">Predictable Delivery Velocity</h2>
+                <p class="section-desc mt-2 max-w-xl mx-auto">CORTEX shifts effort from late-stage rework to upfront feature development — transforming your team's capacity allocation.</p>
+            </div>
+            
+            <div class="glass-card p-6 md:p-10">
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="relative flex flex-col items-center" role="img" aria-label="Before CORTEX: 40% features, 35% bug fixes, 15% testing, 10% compliance">
+                        <div class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Before CORTEX</div>
+                        <div id="donut-before" class="relative w-48 h-48 md:w-56 md:h-56"></div>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" style="top: 28px;">
+                            <div class="text-center">
+                                <div class="text-3xl md:text-4xl font-black text-slate-400">40%</div>
+                                <div class="text-[14px] text-slate-500 uppercase tracking-wide">Features</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex flex-col items-center" role="img" aria-label="After CORTEX: 65% features, 10% bug fixes, 15% testing, 10% compliance">
+                        <div class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-4">After CORTEX</div>
+                        <div id="donut-after" class="relative w-48 h-48 md:w-56 md:h-56"></div>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" style="top: 28px;">
+                            <div class="text-center">
+                                <div class="text-3xl md:text-4xl font-black text-indigo-400">65%</div>
+                                <div class="text-xs text-indigo-300 uppercase tracking-wide">Features</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex justify-center items-center -mt-32 mb-8 relative z-10">
+                    <div class="flex items-center gap-3 bg-slate-900/80 px-6 py-3 rounded-full border border-indigo-500/30">
+                        <span class="text-emerald-400 text-2xl font-black">+62%</span>
+                        <span class="text-slate-400 text-sm uppercase tracking-wide">Feature Capacity</span>
+                        <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i>
+                    </div>
+                </div>
+                
+                <div class="flex md:hidden justify-center mt-6">
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-full border border-indigo-500/30">
+                        <span class="text-emerald-400 text-lg font-black">+62%</span>
+                        <span class="text-slate-400 text-xs uppercase">Feature Capacity</span>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-slate-700/50">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30">
+                            <div class="w-4 h-4 rounded-full bg-blue-500 ring-2 ring-blue-500/30"></div>
+                            <div><div class="text-sm font-bold text-slate-200">New Features</div><div class="text-[14px] text-slate-500">40% → 65%</div></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30">
+                            <div class="w-4 h-4 rounded-full bg-rose-500 ring-2 ring-rose-500/30"></div>
+                            <div><div class="text-sm font-bold text-slate-200">Bug Fixes</div><div class="text-[14px] text-slate-500">35% → 10%</div></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30">
+                            <div class="w-4 h-4 rounded-full bg-teal-500 ring-2 ring-teal-500/30"></div>
+                            <div><div class="text-sm font-bold text-slate-200">Testing/QA</div><div class="text-[14px] text-slate-500">15% → 15%</div></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 rounded-lg bg-slate-800/30">
+                            <div class="w-4 h-4 rounded-full bg-violet-500 ring-2 ring-violet-500/30"></div>
+                            <div><div class="text-sm font-bold text-slate-200">Compliance</div><div class="text-[14px] text-slate-500">10% → 10%</div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-5 bg-gradient-to-r from-indigo-900/20 to-emerald-900/20 rounded-xl border border-indigo-500/20">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="lightbulb" class="w-5 h-5 text-emerald-400"></i></div>
+                        <div>
+                            <div class="text-base font-bold text-slate-200 mb-1">Key Insight</div>
+                            <p class="card-body leading-relaxed">CORTEX's TDD-first enforcement, governance gates, and Change Intelligence reduce bug-fix overhead by <strong class="text-rose-400">71%</strong> — freeing your team to deliver more customer value per sprint.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 12. PO COMMAND REFERENCE — Quick Commands                      -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-indigo-950/60 border border-cyan-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> PO Command Reference
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Your Commands, Your Intelligence</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                        Type these commands in VS Code Copilot Chat. CORTEX classifies your intent and routes to the right orchestrator automatically.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="glass-card p-5 border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-slate-900/80 hover:border-cyan-400/50 transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400"><i data-lucide="search-code" class="w-4 h-4"></i></div>
+                            <code class="text-cyan-300 font-mono text-sm font-bold">/change-analyze</code>
+                        </div>
+                        <p class="text-[13px] text-slate-400 leading-relaxed">Process discovery, best-practice comparison, change recommendations, and capability summaries — all powered by LENS code intelligence.</p>
+                    </div>
+                    <div class="glass-card p-5 border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900/80 hover:border-indigo-400/50 transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center text-indigo-400"><i data-lucide="target" class="w-4 h-4"></i></div>
+                            <code class="text-indigo-300 font-mono text-sm font-bold">/requirements</code>
+                        </div>
+                        <p class="text-[13px] text-slate-400 leading-relaxed">Generate implementation-ready requirements from stakeholder intent — business, functional, NFR, and acceptance criteria decomposition.</p>
+                    </div>
+                    <div class="glass-card p-5 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50 transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="graduation-cap" class="w-4 h-4"></i></div>
+                            <code class="text-violet-300 font-mono text-sm font-bold">/training</code>
+                        </div>
+                        <p class="text-[13px] text-slate-400 leading-relaxed">Generate role-based training documentation from changes — tailored materials for developers, QA, and product owners.</p>
+                    </div>
+                    <div class="glass-card p-5 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900/80 hover:border-emerald-400/50 transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="layout-list" class="w-4 h-4"></i></div>
+                            <code class="text-emerald-300 font-mono text-sm font-bold">/capability-summary</code>
+                        </div>
+                        <p class="text-[13px] text-slate-400 leading-relaxed">Generate a system capability inventory — feature map, module tree, and architecture overview from live LENS analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 13. ZERO OVERHEAD CTA                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/50 via-slate-900/80 to-blue-950/50 border border-indigo-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="settings" class="w-3.5 h-3.5"></i> Zero Platform Overhead
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">CORTEX Runs Itself.<br/>Your Team Focuses on Delivery.</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        No dedicated team operates CORTEX. DoR gates enforce themselves. Audit trails write themselves. Change Intelligence surfaces automatically. When your team grows, CORTEX absorbs the change — no upgrade cycle, no configuration sprint.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900/80 hover:border-indigo-400/50 transition-all">
+                        <div class="w-9 h-9 bg-indigo-500/20 rounded-lg flex items-center justify-center text-indigo-400"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-indigo-300">Standards That Hold Themselves</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX blocks work that has not passed DoR — every sprint, automatically. No process champion needed to remind the team to write ACs before coding starts.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
+                        <div class="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="plug" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-blue-300">Teams Extend Without Asking</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Engineers add domain-specific orchestrators and agents without a change request. CORTEX routes and governs new additions automatically.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
+                        <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="brain" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-teal-300">Memory Survives Attrition</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Root cause analyses, prevention rules, and delivery patterns persist in SQLite databases — new engineers inherit institutional memory from day one.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- 14. FINAL CTA                                                  -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
+            <div class="glass-card p-10 md:p-16 space-y-8 relative border-indigo-500/20">
+                <div class="w-16 h-16 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/30 text-indigo-400 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+                    <i data-lucide="rocket" class="w-8 h-8"></i>
+                </div>
+                <h3 class="section-title font-black tracking-tighter">Decide with Evidence. Ship with Confidence.</h3>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    From change evaluation to PI Planning to Sprint Review — CORTEX ensures every decision is backed by real codebase intelligence, every requirement is testable, and every change is traceable from intent to production.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-4 pt-6 max-w-3xl mx-auto text-left">
+                    <div class="bg-slate-900/40 rounded-xl p-5 border border-slate-700/30">
+                        <div class="text-cyan-400 font-bold text-base mb-1">For Decisions</div>
+                        <div class="text-sm text-slate-400">Change Intelligence replaces gut-feel</div>
+                    </div>
+                    <div class="bg-slate-900/40 rounded-xl p-5 border border-slate-700/30">
+                        <div class="text-emerald-400 font-bold text-base mb-1">For Sprints</div>
+                        <div class="text-sm text-slate-400">DoR→DoD automation eliminates rework</div>
+                    </div>
+                    <div class="bg-slate-900/40 rounded-xl p-5 border border-slate-700/30">
+                        <div class="text-blue-400 font-bold text-base mb-1">For ARTs</div>
+                        <div class="text-sm text-slate-400">Institutional memory scales across teams</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-6">
+                    <a href="../getting-started.html" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-full transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] tracking-wide uppercase text-center">
+                        Get Started with CORTEX
+                    </a>
+                    <a href="../architecture.html" class="px-8 py-4 glass-card hover:bg-white/5 font-bold text-sm rounded-full transition-all tracking-wide text-slate-300 uppercase text-center">
+                        Explore the Architecture
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-10 border-t border-white/5 text-center space-y-6">
+        <div class="flex justify-center gap-6 text-slate-500">
+            <a href="https://github.com/asifhussain60/CORTEX" aria-label="CORTEX GitHub repository"><i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i></a>
+        </div>
+        <div class="text-[14px] text-slate-600 uppercase font-bold tracking-[0.15em] px-4">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Product Owner View
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            setTimeout(() => {
+                initChangeIntelligenceChart();
+                initVelocityChart();
+            }, 100);
+        });
+
+        window.addEventListener('resize', () => {
+            d3.select('#change-intelligence-chart').selectAll('*').remove();
+            d3.select('#donut-before').selectAll('*').remove();
+            d3.select('#donut-after').selectAll('*').remove();
+            initChangeIntelligenceChart();
+            initVelocityChart();
+        });
+
+        /* ═══════════════════════════════════════════════════════════════
+         * D3.js — Change Intelligence Pipeline (6-stage horizontal flow)
+         * SSOT: 19-diagram-orchestration-po-change-intelligence-pipeline.md
+         * ═══════════════════════════════════════════════════════════════ */
+        function initChangeIntelligenceChart() {
+            const container = d3.select('#change-intelligence-chart');
+            if (container.empty()) return;
+            
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .style('overflow', 'visible');
+
+            // Check reduced motion preference
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isMobile = width < 768;
+            
+            const stages = [
+                { label: 'PO Question', sub: 'Natural language', color: '#94a3b8', accent: '#64748b' },
+                { label: 'Process\nDiscovery', sub: 'LENS scan', color: '#00d4ff', accent: '#0891b2' },
+                { label: 'Gap\nAnalysis', sub: 'Best practice', color: '#818cf8', accent: '#6366f1' },
+                { label: 'Change\nRecommend.', sub: 'Impact + ROI', color: '#a78bfa', accent: '#7c3aed' },
+                { label: 'Requirements\nSynthesis', sub: '4-layer AC', color: '#34d399', accent: '#059669' },
+                { label: 'Training\nDocs', sub: 'Role-based', color: '#10b981', accent: '#047857' }
+            ];
+            
+            const nodeW = isMobile ? 70 : 130;
+            const nodeH = isMobile ? 50 : 60;
+            const paddingX = isMobile ? 5 : 30;
+            const paddingY = height * 0.5 - nodeH / 2;
+            
+            const gap = (width - paddingX * 2 - nodeW) / (stages.length - 1);
+
+            // Arrow marker
+            svg.append('defs').append('marker')
+                .attr('id', 'arrow-ci')
+                .attr('viewBox', '0 -5 10 10')
+                .attr('refX', 8).attr('refY', 0)
+                .attr('markerWidth', 6).attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M0,-5L10,0L0,5')
+                .attr('fill', '#818cf8');
+
+            // Draw connecting lines
+            for (let i = 0; i < stages.length - 1; i++) {
+                const x1 = paddingX + i * gap + nodeW;
+                const x2 = paddingX + (i + 1) * gap;
+                const y = paddingY + nodeH / 2;
+                
+                const line = svg.append('line')
+                    .attr('x1', x1).attr('y1', y)
+                    .attr('x2', reducedMotion ? x2 : x1).attr('y2', y)
+                    .attr('stroke', stages[i + 1].accent)
+                    .attr('stroke-width', 2)
+                    .attr('marker-end', 'url(#arrow-ci)')
+                    .attr('opacity', 0.7);
+                
+                if (!reducedMotion) {
+                    line.transition()
+                        .duration(600)
+                        .delay(i * 200 + 300)
+                        .attr('x2', x2);
+                }
+            }
+
+            // Draw nodes
+            stages.forEach((stage, i) => {
+                const x = paddingX + i * gap;
+                const g = svg.append('g')
+                    .attr('transform', 'translate(' + x + ',' + paddingY + ')');
+
+                // Glow behind node
+                g.append('rect')
+                    .attr('width', nodeW).attr('height', nodeH)
+                    .attr('rx', 10)
+                    .attr('fill', stage.accent)
+                    .attr('opacity', 0.08)
+                    .attr('filter', 'blur(8px)');
+
+                // Node rect
+                const rect = g.append('rect')
+                    .attr('width', nodeW).attr('height', nodeH)
+                    .attr('rx', 10)
+                    .attr('fill', 'rgba(15, 23, 42, 0.9)')
+                    .attr('stroke', stage.accent)
+                    .attr('stroke-width', i === 0 ? 1 : 2)
+                    .attr('opacity', reducedMotion ? 1 : 0);
+                
+                if (!reducedMotion) {
+                    rect.transition().duration(500).delay(i * 200).attr('opacity', 1);
+                }
+
+                // Step number badge
+                g.append('circle')
+                    .attr('cx', nodeW / 2)
+                    .attr('cy', -8)
+                    .attr('r', isMobile ? 8 : 10)
+                    .attr('fill', stage.accent)
+                    .attr('opacity', 0.9);
+                
+                g.append('text')
+                    .attr('x', nodeW / 2)
+                    .attr('y', isMobile ? -5 : -4)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#fff')
+                    .attr('font-size', isMobile ? '8px' : '10px')
+                    .attr('font-weight', 'bold')
+                    .text(i + 1);
+
+                // Label (multi-line support)
+                const lines = stage.label.split('\n');
+                lines.forEach((line, li) => {
+                    g.append('text')
+                        .attr('x', nodeW / 2)
+                        .attr('y', nodeH / 2 + (li - (lines.length - 1) / 2) * (isMobile ? 10 : 14) - 1)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', stage.color)
+                        .attr('font-size', isMobile ? '8px' : '12px')
+                        .attr('font-weight', 'bold')
+                        .text(line);
+                });
+
+                // Sub-label (desktop only)
+                if (!isMobile) {
+                    g.append('text')
+                        .attr('x', nodeW / 2)
+                        .attr('y', nodeH + 18)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#64748b')
+                        .attr('font-size', '10px')
+                        .text(stage.sub);
+                }
+            });
+
+            // Title
+            svg.append('text')
+                .attr('x', paddingX)
+                .attr('y', 20)
+                .text('Change Intelligence Pipeline')
+                .attr('fill', '#00d4ff')
+                .attr('font-size', isMobile ? '11px' : '14px')
+                .attr('font-weight', 'bold')
+                .attr('opacity', 0.8);
+
+            // Traceability label
+            if (!isMobile) {
+                svg.append('text')
+                    .attr('x', width - paddingX)
+                    .attr('y', 20)
+                    .attr('text-anchor', 'end')
+                    .text('Full traceability: Discovery → Requirements → TDD → Training')
+                    .attr('fill', '#475569')
+                    .attr('font-size', '10px')
+                    .attr('font-style', 'italic');
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+         * D3.js — Dual Donut Charts (capacity allocation)
+         * ═══════════════════════════════════════════════════════════════ */
+        function initVelocityChart() {
+            const beforeData = [
+                { label: 'New Features', value: 40, color: '#3b82f6' },
+                { label: 'Bug Fixes', value: 35, color: '#ef4444' },
+                { label: 'Testing/QA', value: 15, color: '#14b8a6' },
+                { label: 'Compliance', value: 10, color: '#8b5cf6' }
+            ];
+            const afterData = [
+                { label: 'New Features', value: 65, color: '#3b82f6' },
+                { label: 'Bug Fixes', value: 10, color: '#ef4444' },
+                { label: 'Testing/QA', value: 15, color: '#14b8a6' },
+                { label: 'Compliance', value: 10, color: '#8b5cf6' }
+            ];
+            createDonutChart('#donut-before', beforeData, false);
+            createDonutChart('#donut-after', afterData, true);
+        }
+        
+        function createDonutChart(selector, data, isHighlight) {
+            const container = d3.select(selector);
+            if (container.empty()) return;
+            
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const width = container.node().getBoundingClientRect().width || 224;
+            const height = container.node().getBoundingClientRect().height || 224;
+            const radius = Math.min(width, height) / 2;
+            const innerRadius = radius * 0.65;
+            const outerRadius = radius * 0.95;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + width/2 + ', ' + height/2 + ')');
+
+            // Accessible title + desc
+            svg.append('title').text(isHighlight ? 'After CORTEX capacity allocation' : 'Before CORTEX capacity allocation');
+            
+            const pie = d3.pie().value(d => d.value).sort(null).padAngle(0.02);
+            const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).cornerRadius(4);
+            const arcHover = d3.arc().innerRadius(innerRadius - 4).outerRadius(outerRadius + 8).cornerRadius(4);
+            const tooltip = d3.select('#tooltip');
+            
+            const paths = svg.selectAll('path')
+                .data(pie(data))
+                .enter()
+                .append('path')
+                .attr('fill', d => d.data.color)
+                .attr('stroke', isHighlight ? 'rgba(99, 102, 241, 0.3)' : 'rgba(51, 65, 85, 0.5)')
+                .attr('stroke-width', 1)
+                .style('filter', isHighlight ? 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.3))' : 'none')
+                .style('opacity', 0.9)
+                .on('mouseover', function(e, d) {
+                    d3.select(this).transition().duration(200).attr('d', arcHover).style('opacity', 1);
+                    tooltip.style('opacity', 1).html('<strong>' + d.data.label + '</strong><br/>' + d.data.value + '% of capacity');
+                })
+                .on('mousemove', e => {
+                    tooltip.style('left', (e.pageX + 10) + 'px').style('top', (e.pageY - 20) + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select(this).transition().duration(200).attr('d', arc).style('opacity', 0.9);
+                    tooltip.style('opacity', 0);
+                });
+            
+            if (reducedMotion) {
+                paths.attr('d', arc);
+            } else {
+                paths.transition()
+                    .duration(1200)
+                    .delay((d, i) => i * 150)
+                    .attrTween('d', function(d) {
+                        const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+                        return t => arc(interpolate(t));
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
+CORTEX_EOF_MARKER_7f3a9b2c
+
+Ran terminal command: wc -l /Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1-1), lines 1 to 15
+
+Let me verify the D3.js section and the closing tags are intact: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1570-1570), lines 1570 to 1582
+
+The file is complete and well-formed. Let me verify the key Phase 142 sections are present: 
+
+Searched text for `Change Intelligence|Requirements Orchestrator|/change-analyze|/requirements|/training|/capability-summary|32\+|gap-comparison|ROICompositeScorer` (`**/docs/roles/product-owner.html`), 20 results
+
+All Phase 142 content is present and correctly placed. Let me also verify the WCAG compliance elements: 
+
+Searched text for `prefers-reduced-motion|scroll-margin-top|aria-label|role="img"|fetchpriority` (`**/docs/roles/product-owner.html`), 13 results
+
+The rebuild is complete. Here's a summary of what was delivered:
 
 ---
 
-## Phase Dependencies
+**product-owner.html — Comprehensive Phase 142 Rebuild Complete** (1,582 lines)
 
-| Phase | Dependency |
-|---|---|
-| Phase 142 | No hard dependencies — can run independently of Phase 141 |
-| Phase 141 | Deep Intelligence Wiring — enhances IntelligenceFacade (benefits 142 but not required) |
+### 14 Sections (up from 11)
 
----
+| # | Section | Key Changes |
+|---|---------|------------|
+| 1 | **Hero** | New tagline "Decide with Evidence, Deliver with Confidence", badge updated to "Change Intelligence Command Centre", stat cards: 7 Workflow Templates / 100% AC Traceability / Code-Backed SWAGs |
+| 2 | **🆕 Change Intelligence Pipeline** | New D3.js 6-stage horizontal flowchart (PO Question → Process Discovery → Gap Analysis → Change Recommendation → Requirements Synthesis → Training Docs) with animated connectors and step badges |
+| 3 | **Agile Intelligence Engine** | Enriched with LENS reference, Context-Aware ACs, Challenge-First Protocol SWAGs |
+| 4 | **Process Gap Analysis** | Enhanced with gap-comparison primitive, LENS auto-discovery, full SAFe traceability chain |
+| 5 | **Requirements Engineering Pipeline** | Enriched with RequirementsOrchestrator's 4-layer decomposition, updated stats to 32+ intents |
+| 6 | **Change Recommendation Report** | Rich interactive card with LENS Discovery panel, CORTEX Recommendations panel, and Challenge-First dual implementation paths (Quick MVP vs Full Modernization) |
+| 7 | **ROI Intelligence** | Enriched with ROICompositeScorer, LENS Complexity Score, 3-stage pipeline visualization |
+| 8 | **Training Documentation** | Added /distill, /training, /onboard commands with ContentLibraryEngine reference |
+| 9 | **Governance Pipeline** | DoR → TDD → Secure → DoD 4-step connected pipeline |
+| 10 | **Institutional Memory (RCA)** | 4-methodology RCA engine + comparison table (Without/With CORTEX) including Change Decisions and Requirements Quality rows |
+| 11 | **Delivery Metrics** | D3.js dual donut charts with +62% feature capacity callout |
+| 12 | **🆕 PO Command Reference** | 4 new slash commands: `/change-analyze`, `/requirements`, `/training`, `/capability-summary` |
+| 13 | **Zero Overhead CTA** | Updated with Change Intelligence surfaces reference |
+| 14 | **Final CTA** | 3-column value prop: Decisions / Sprints / ARTs |
 
-## Sub-Phase Execution Order
+### Compliance Checklist
+- ✅ **D3.js v7.8.5 ONLY** — no Mermaid
+- ✅ **WCAG 2.1 AA + 2.2**: `prefers-reduced-motion`, `scroll-margin-top: 68px`, `role="img"` + `aria-label` on all SVG containers, `aria-label` on nav
+- ✅ **ISSA tokens**: all CSS custom properties present
+- ✅ **Dark Blue Glassmorphism**: glass-card, gradient backgrounds, backdrop-filter
+- ✅ **SEO meta tags**: title, description, og:title, og:description, canonical
+- ✅ **Content writing standards**: active voice, present tense, second person, qualified language
+- ✅ **Typography**: Inter (body), Space Grotesk (hero), JetBrains Mono (code)
+- ✅ **Responsive**: mobile breakpoints, pipeline stacks vertically, D3 adapts to viewport
 
-| Sub-Phase | Title | Duration Est. | GAPs |
-|---|---|---|---|
-| 142-a | Intent Types + Routing | 2 hours | 3 |
-| 142-b | Gap Comparison Primitive | 1 hour | 1 |
-| 142-c | PO Workflow Templates (7) | 4 hours | 7 |
-| 142-d | ChangeIntelligenceOrchestrator | 4 hours | 3 |
-| 142-e | RequirementsOrchestrator | 3 hours | 3 |
-| 142-f | TrainerOrchestrator Enhancement | 2 hours | 2 |
-| 142-g | Agent, Knowledge & Prompts | 2 hours | 3 |
-| **Total** | | **~18 hours** | **20 GAPs** |
+Made changes.
 
----
+asifhussain60: commit all and push
 
-## Design Pillar Evaluation
+GitHub Copilot: Read changed files in the active git repository
 
-| Pillar | Score | Evidence |
-|---|---|---|
-| **Extensibility** | ✅ High | 7 templates reusable across all 3 orchestrators + future PO workflows |
-| **Scalability** | ✅ High | Workflow Composer supports 600+ templates — 7 additions negligible |
-| **Accuracy** | ✅ High | LENS-powered discovery + ROICompositeScorer = data-driven |
-| **Collaboration** | ✅ High | PO ↔ Dev ↔ QA ↔ Training traceability through artifact chain |
-| **Maintainability** | ✅ High | 3 orchestrators (not 7) — clean ownership boundaries |
-
----
-
-## Files Created This Session
-
-| File | Type | Purpose |
-|---|---|---|
-| `cortex-registry/planning/phases/planned/phase-142-po-change-intelligence.yaml` | Phase Detail | Full phase plan with 20 GAPs, 7 sub-phases, TDD sequences |
-| `cortex-registry/cortex-master.yaml` | Updated | Thin index entry for phase-142, metadata bumped |
-| `_workspaces/_feedback/2026-03-08-po-change-intelligence.md` | Feedback | This documentation update guide |
+Summarizing conversation history...
