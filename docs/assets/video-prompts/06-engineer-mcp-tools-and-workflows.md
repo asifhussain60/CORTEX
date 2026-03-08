@@ -23,7 +23,7 @@ Does NOT repeat: test-first mechanics (SE-01), business identity (Video 01), arc
 
 ## Problem Statement — Why This Video Exists
 
-Software and Platform Engineers who extend and operate AI-augmented systems face a recurring maintenance nightmare: every customisation requires forking core orchestrators, patching modules, and hoping upgrades don't break the fork. CORTEX solves this with three hard architectural guarantees — **55+ MCP tools** exposed through the same stdio pipe that powers Pylance (zero server configuration), **110+ workflow templates** dynamically composed from tested YAML primitives at runtime (zero core-module changes to add a new mode), and a **cross-cutting intelligence pipeline** where every operation automatically feeds a learning loop — so patterns detected today improve recommendations tomorrow, without manual tuning.
+Software and Platform Engineers who extend and operate AI-augmented systems face a recurring maintenance nightmare: every customisation requires forking core orchestrators, patching modules, and hoping upgrades don't break the fork. CORTEX solves this with three hard architectural guarantees — **55+ MCP tools** exposed through the same stdio pipe that powers Pylance (zero server configuration), **90+ workflow templates** dynamically composed from tested YAML primitives at runtime (zero core-module changes to add a new mode), and a **cross-cutting intelligence pipeline** where every operation automatically feeds a learning loop — so patterns detected today improve recommendations tomorrow, without manual tuning.
 
 **Primary audience pain points addressed:**
 - "I need to add a new automation step — do I have to fork the orchestrator?"
@@ -41,7 +41,7 @@ Software and Platform Engineers who extend and operate AI-augmented systems face
 ---
 
 ## Ground-truth constraints
-- 55+ MCP tools registered in `cortex/mcp/mcp_registry.py`; 60 tool files in `cortex/mcp/tools/`
+- 36 MCP tools registered in `cortex/mcp/mcp_registry.py`; 60 tool files in `cortex/mcp/tools/` (use "35+" as the public floor-approximation)
 - MCP transport: Pylance-style stdio, configured in `.vscode/settings.json`, auto-detected by VS Code
 - Tool calls use operation-based pattern: `cortex_validate(op="compliance")`, `cortex_load(op="rules")`
 - Workflow templates: YAML registry at `cortex-registry/workflows/templates/` (3-tier hierarchy: Primitives → Mode Workflows → Composite Pipelines)

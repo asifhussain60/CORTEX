@@ -75,7 +75,7 @@ order: 99
 
 **cortex_ado** — MCP tool for Azure DevOps work item synthesis. Pulls user stories, bugs, and tasks from ADO boards, enriches them with LENS context, and injects sprint-aware acceptance criteria into the intelligence pipeline. Extends the provider-agnostic `WorkItemProvider` protocol. Module: `cortex/mcp/tools/ado_tool.py`.
 
-**cortex_feedback** — MCP tool for structured user feedback capture. Records satisfaction signals, improvement suggestions, and correction notes against specific CORTEX responses. Feedback flows into the Unified Reinforcement Signal for confidence adjustment. Module: `cortex/mcp/tools/feedback_tool.py`.
+**cortex_feedback** — MCP tool for structured user feedback capture. Records satisfaction signals, improvement suggestions, and correction notes against specific CORTEX responses. Feedback flows into the Unified Reinforcement Signal for confidence adjustment. Implemented by `cortex/orchestrators/support/feedback_orchestrator.py`; exposed via `cortex/tools/feedback_agent.py`.
 
 **cortex_learning** — MCP tool for Unified Reinforcement Signal management. Six operations: `emit` (record signal), `history` (query signals), `decay` (age idle patterns), `promote` (elevate high-confidence patterns), `quarantine` (isolate low-confidence patterns), `metrics` (URS dashboard). Module: `cortex/mcp/tools/learning_tool.py`.
 
@@ -83,7 +83,7 @@ order: 99
 
 **cortex_fetch_work_items** — MCP tool for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
 
-**cortex_review** — MCP tool exposing the Code Review Orchestrator. Accepts a file path or directory, runs the 6-stage review pipeline (structure → security → patterns → documentation → governance → synthesis), and returns prioritised findings with remediation guidance. Module: `cortex/mcp/tools/review_tool.py`.
+**cortex_review** — MCP tool exposing the Code Review Orchestrator. Accepts a unified diff (PR), runs the 6-stage review pipeline (structure → security → patterns → documentation → governance → synthesis), and returns an APPROVE / REQUEST_CHANGES / BLOCK verdict with P0–P3 prioritised findings. Module: `cortex/mcp/tools/cortex_review.py`.
 
 ## D
 
@@ -107,9 +107,9 @@ order: 99
 
 ## F
 
-**Feedback / FEEDBACK Intent** — A CORTEX intent type for structured user feedback. When triggered, the FeedbackOrchestrator captures satisfaction signals, improvement suggestions, or correction notes and routes them into the Unified Reinforcement Signal for confidence adjustment. Exposed as the `cortex_feedback` MCP tool. Location: `cortex/orchestrators/domain/feedback_orchestrator.py`.
+**Feedback / FEEDBACK Intent** — A CORTEX intent type for structured user feedback. When triggered, the FeedbackOrchestrator captures satisfaction signals, improvement suggestions, or correction notes and routes them into the Unified Reinforcement Signal for confidence adjustment. Exposed as the `cortex_feedback` MCP tool. Location: `cortex/orchestrators/support/feedback_orchestrator.py`.
 
-**FeedbackOrchestrator** — Domain orchestrator that processes FEEDBACK intent requests. Validates feedback structure, links it to the originating request via audit trail, and emits a reinforcement signal based on the feedback sentiment. Location: `cortex/orchestrators/domain/feedback_orchestrator.py`.
+**FeedbackOrchestrator** — Support orchestrator that processes FEEDBACK intent requests. Validates feedback structure, links it to the originating request via audit trail, and emits a reinforcement signal based on the feedback sentiment. Location: `cortex/orchestrators/support/feedback_orchestrator.py`.
 
 **Framework Self-Analyzer (CortexFrameworkAnalyzer)** — Intelligence component that introspects CORTEX's own architecture at runtime — counting orchestrators, MCP tools, governance rules, workflow templates, and intent types. Powers the `refresh_prompt_suite.py` script and enables CORTEX to validate its documentation against its live implementation. Detects architecture drift between code and documentation as P0/P1 violations. Module: `cortex/intelligence/framework_analyzer.py`.
 

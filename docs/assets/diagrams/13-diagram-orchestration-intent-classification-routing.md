@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/orchestrators/core/intent_router.py
   - cortex/models/canonical_enums.py
-last_verified: 2026-03-03
+last_verified: 2026-03-08
 diagram_type: Orchestration
 render: ascii
 render_html: true
@@ -80,6 +80,8 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  QUERY ────────  QueryCoordinator ──────────── (none)                │
   │  VACUUM ──────── VacuumOrchestrator ─────────── (none)               │
   │  INTRODUCE ────  InteractionOrchestrator ────── (none)               │
+  │  REVIEW ───────  CodeReviewOrchestrator ──────── (none)              │
+  │  FEEDBACK ─────  FeedbackOrchestrator ─────────── (none)             │
   └──────────────────────────────────────────────────────────────────────┘
 ```
 

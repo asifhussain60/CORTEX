@@ -1,7 +1,7 @@
 """
 MCP Tool Registry: Production Tool Definitions.
 
-This module defines the COMPLETE set of production tools (30 tools).
+This module defines the COMPLETE set of production tools (36 tools).
 No more, no fewer. Every tool serves a specific business capability.
 
 Tool Count Strategy:
@@ -10,6 +10,8 @@ Tool Count Strategy:
     - Removed cortex_check (ops absorbed into cortex_verify)
     - Removed cortex_total_recall (ops absorbed into cortex_tools_catalog)
     - Added cortex_scaffold_files, cortex_master_plan, cortex_brain_query (wired from orphan status)
+    - Added cortex_content, cortex_ado (Phase 130-131 backport)
+    - Added cortex_review (Phase 132 backport — CodeReviewOrchestrator)
     - Consolidation by business capability
     - Operation parameters instead of separate tools
     - Removal of dev-only tools
@@ -24,11 +26,13 @@ from cortex.mcp.mcp_tool_base import Tool, ToolCategory, ToolParameter
 
 
 # ============================================================================
-# PRODUCTION TOOL DEFINITIONS (30 Tools — WAVE-101 consolidation)
+# PRODUCTION TOOL DEFINITIONS (36 Tools — WAVE-101 + Phase 130-132 backport)
 # Removed: cortex_process_request (deprecated), cortex_lens (deleted per architect spec)
 #          cortex_check (ops merged into cortex_verify)
 #          cortex_total_recall (ops merged into cortex_tools_catalog)
 # Added:   cortex_scaffold_files, cortex_master_plan, cortex_brain_query
+#          cortex_content, cortex_ado (Phase 130-131)
+#          cortex_review (Phase 132 — CodeReviewOrchestrator 6-stage pipeline)
 # ============================================================================
 
 PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
@@ -504,6 +508,27 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
              "description": "ADO project name (uses ADO_PROJECT env var if omitted)"},
         ],
         "operations": ["get_story", "get_full", "get_tests", "search", "health"],
+    },
+    # Phase 132-b: Code Review Orchestrator — 6-stage OWASP-aligned review pipeline
+    "cortex_review": {
+        "description": (
+            "PR code review pipeline — 6-stage OWASP-aligned analysis producing "
+            "APPROVE / REQUEST_CHANGES / BLOCK verdict with structured P0–P3 findings. "
+            "Operations: review | findings | history | patterns | health. Phase 132."
+        ),
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "op", "type": "string", "required": True,
+             "enum": ["review", "findings", "history", "patterns", "health"],
+             "description": "Operation: review | findings | history | patterns | health"},
+            {"name": "diff", "type": "string", "required": False,
+             "description": "Unified diff text of the PR (required for review)"},
+            {"name": "pr_title", "type": "string", "required": False,
+             "description": "Pull request title (optional context)"},
+            {"name": "author", "type": "string", "required": False,
+             "description": "PR author name (optional context)"},
+        ],
+        "operations": ["review", "findings", "history", "patterns", "health"],
     },
 }
 
