@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX University — AI Orchestration</title>
+    <meta name="description" content="Explore CORTEX AI orchestration — intent routing, LENS intelligence tiers, IntelligenceFacade, and the Perception → Reasoning → Action pipeline."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../../assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root { --glass-bg: rgba(10,15,30,0.7); --glass-border: rgba(255,255,255,0.08); --accent-teal: #14b8a6; --text-main: #f8fafc; --text-muted: #94a3b8; --issa-content-content: 3rem; --issa-content-panel: 2rem; --issa-panel-panel: 1.5rem; --issa-hero-first: 3rem; }
+        body { background-color: #020617; background-image: radial-gradient(circle at 20% 20%, rgba(139,92,246,0.07) 0%, transparent 45%), radial-gradient(circle at 80% 80%, rgba(20,184,166,0.06) 0%, transparent 45%); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; font-size: 16px; line-height: 1.6; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; } @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; } @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(139,92,246,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+        .gradient-text-violet { background: linear-gradient(to right, #8b5cf6, #a78bfa); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; } .breadcrumb-nav a:hover { color: var(--accent-teal); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); } .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+        .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
+        .concept-card:hover { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.04); transform: translateY(-2px); }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; }
+        .tier-pipeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; } @media (max-width: 768px) { .tier-pipeline { grid-template-columns: 1fr; } }
+        .tier-step { padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .tier-step:hover { transform: translateY(-4px); }
+        #orchestration-graph { width: 100%; height: 420px; border-radius: 1rem; }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+        @media (prefers-reduced-motion: reduce) { .glass-card, .concept-card, .tier-step { transition: none; } }
+    </style>
+</head>
+<body class="min-h-screen">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm" style="scroll-margin-top:4rem">Skip to main content</a>
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../../index.html"><i data-lucide="home" class="w-4 h-4"></i><span>CORTEX</span></a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../index.html">University</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">AI Orchestration</span>
+    </nav>
+
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+        <div id="tooltip" class="d3-tooltip"></div>
+
+        <!-- HERO -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Domain · Intermediate · 7 Topics
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    AI<br/><span class="gradient-text-violet">Orchestration.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    How CORTEX perceives your workspace, reasons about the best strategy, and acts with enforced quality at every step. You learn the three-tier intelligence pipeline — from LENS sensory input through IntelligenceFacade decision-making to MasterOrchestrator execution.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 text-[11px]">
+                <span class="px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold">~40 min</span>
+                <span class="px-3 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-400 font-bold">7 concepts</span>
+                <span class="px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 font-bold">Intermediate</span>
+            </div>
+        </section>
+
+        <!-- PERCEPTION → REASONING → ACTION Pipeline -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-teal-950/60 border border-violet-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-black tracking-tighter">Perception → Reasoning → Action</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">CORTEX is a three-tier intelligence system. Each tier has a clear responsibility and a measurable latency target.</p>
+                </div>
+                <div class="tier-pipeline">
+                    <div class="tier-step" style="background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.3);">
+                        <div class="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400"><i data-lucide="eye" class="w-6 h-6"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Tier 1</div>
+                        <div class="font-bold text-base text-teal-300">Perception</div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">LENS scans 9 dimensions simultaneously. Matches your codebase against canonical patterns with confidence scores 0–1.0.</p>
+                        <div class="code-block text-[12px] text-left mt-2"><span class="code-cmt"># 9 parallel analyzers</span>
+<span class="code-fn">lens.scan</span>(<span class="code-str">"structural"</span>)
+<span class="code-fn">lens.scan</span>(<span class="code-str">"security"</span>)
+<span class="code-fn">lens.scan</span>(<span class="code-str">"history"</span>)
+<span class="code-cmt"># → AnalysisContext built</span></div>
+                    </div>
+                    <div class="tier-step" style="background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.3);">
+                        <div class="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 2</div>
+                        <div class="font-bold text-base text-violet-300">Reasoning</div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">IntelligenceFacade selects Quick, Targeted, or Full strategy based on complexity and historical success rates.</p>
+                        <div class="code-block text-[12px] text-left mt-2"><span class="code-cls">IntelligenceFacade</span>
+  .<span class="code-fn">select_strategy</span>(ctx)
+<span class="code-cmt"># → QUICK | TARGETED | FULL</span>
+  .<span class="code-fn">check_rca_history</span>()</div>
+                    </div>
+                    <div class="tier-step" style="background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3);">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i data-lucide="activity" class="w-6 h-6"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 3</div>
+                        <div class="font-bold text-base text-emerald-300">Action</div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">MasterOrchestrator routes to intent-specialised orchestrators with convergence loops until zero P0/P1 violations.</p>
+                        <div class="code-block text-[12px] text-left mt-2"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
+<span class="code-cls">MasterOrchestrator</span>
+  .<span class="code-fn">route</span>(IMPLEMENT)
+<span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"✅ 842ms"</span>)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT LIST -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <h2 class="section-title font-black tracking-tighter">7 Orchestration Concepts</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="concepts/lens-sensory-system.html" class="concept-card" style="text-decoration:none; border-color: rgba(139,92,246,0.2);">
+                    <div class="flex items-center justify-between">
+                        <span class="concept-number">01</span>
+                        <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Deep Dive →</span>
+                    </div>
+                    <h3 class="font-bold text-sm text-violet-300">LENS — The Sensory System</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">9 parallel analyzers build a complete workspace picture in under one second. Structure, history, security, patterns, complexity.</p>
+                </a>
+                <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
+                    <span class="concept-number">02</span>
+                    <h3 class="font-bold text-sm text-violet-300">Three Intelligence Tiers</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Quick (&lt;200ms), Targeted (&lt;2s), Full (&lt;10s). Each tier matches request complexity to analysis depth.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
+                    <span class="concept-number">03</span>
+                    <h3 class="font-bold text-sm text-teal-300">IntelligenceFacade</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">The single canonical entry point with 12+ methods and null-object fallbacks for graceful degradation.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
+                    <span class="concept-number">04</span>
+                    <h3 class="font-bold text-sm text-teal-300">Intent Classification</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">31 intent types classified in under 40ms. From IMPLEMENT to AUDIT to DEBUG — every request maps to a specialised handler.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
+                    <span class="concept-number">05</span>
+                    <h3 class="font-bold text-sm text-emerald-300">Session Context Chain</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Prior 5 requests injected into each LENS run. SHA-256 hashed, parent-linked, status-tracked in SQLite.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
+                    <span class="concept-number">06</span>
+                    <h3 class="font-bold text-sm text-emerald-300">MCP Tool Registry</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">36 MCP tools registered via Pylance-style stdio server. Auto-discovered by VS Code Copilot Chat. Zero manual startup.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
+                    <span class="concept-number">07</span>
+                    <h3 class="font-bold text-sm text-amber-300">KAL — Knowledge Acquisition</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">On-demand knowledge synthesis. Coverage scoring triggers automatic gap identification and YAML knowledge generation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT GRAPH -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-950/60 via-slate-900/80 to-violet-950/60 border border-teal-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-6 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="network" class="w-3.5 h-3.5"></i> Interactive Concept Map
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Orchestration Relationships</h2>
+                </div>
+                <div id="orchestration-graph"></div>
+                <div class="flex flex-wrap gap-3 justify-center text-[11px]">
+                    <span class="flex items-center gap-1.5 text-violet-400"><span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span>Intelligence</span>
+                    <span class="flex items-center gap-1.5 text-teal-400"><span class="w-3 h-3 rounded-full bg-teal-500 inline-block"></span>Orchestrator</span>
+                    <span class="flex items-center gap-1.5 text-amber-400"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>Knowledge</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- NAVIGATION -->
+        <section class="flex flex-col sm:flex-row justify-between gap-4">
+            <a href="../architecture-patterns/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30" style="text-decoration:none;">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-teal-400"></i>
+                <div><div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Previous</div><div class="text-sm font-bold text-teal-300">Architecture Patterns</div></div>
+            </a>
+            <a href="../workflow-automation/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-emerald-500/20 hover:border-emerald-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400"></i>
+                <div><div class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Next Domain</div><div class="text-sm font-bold text-emerald-300">Workflow Automation</div></div>
+            </a>
+        </section>
+    </main>
+
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">&copy; 2026 CORTEX | AI Engineering Orchestration Framework | University · AI Orchestration</div>
+    </footer>
+
+    <script>
+        window.onload = function () { lucide.createIcons(); buildOrchGraph(); };
+        function buildOrchGraph() {
+            const el = document.getElementById('orchestration-graph'); if (!el) return;
+            const w = el.getBoundingClientRect().width || 700, h = el.getBoundingClientRect().height || 420;
+            const nodes = [
+                { id: 'lens', label: 'LENS', group: 'intelligence', r: 28 },
+                { id: 'facade', label: 'IntelligenceFacade', group: 'intelligence', r: 26 },
+                { id: 'intent', label: 'IntentRouter', group: 'orchestrator', r: 24 },
+                { id: 'master', label: 'MasterOrch', group: 'orchestrator', r: 26 },
+                { id: 'tiers', label: '3 Tiers', group: 'intelligence', r: 20 },
+                { id: 'session', label: 'Session Chain', group: 'intelligence', r: 18 },
+                { id: 'mcp', label: 'MCP Tools', group: 'orchestrator', r: 22 },
+                { id: 'kal', label: 'KAL', group: 'knowledge', r: 20 },
+                { id: 'urs', label: 'URS Signals', group: 'knowledge', r: 18 },
+                { id: 'rca', label: 'RCA Engine', group: 'knowledge', r: 18 },
+            ];
+            const links = [
+                { source: 'lens', target: 'facade' }, { source: 'facade', target: 'tiers' },
+                { source: 'facade', target: 'intent' }, { source: 'intent', target: 'master' },
+                { source: 'master', target: 'mcp' }, { source: 'session', target: 'lens' },
+                { source: 'kal', target: 'lens' }, { source: 'urs', target: 'rca' },
+                { source: 'rca', target: 'facade' }, { source: 'urs', target: 'master' },
+            ];
+            const colors = { intelligence: '#8b5cf6', orchestrator: '#14b8a6', knowledge: '#f59e0b' };
+            const svg = d3.select('#orchestration-graph').append('svg').attr('width','100%').attr('height','100%').attr('viewBox',`0 0 ${w} ${h}`);
+            const sim = d3.forceSimulation(nodes).force('link', d3.forceLink(links).id(d=>d.id).distance(100)).force('charge', d3.forceManyBody().strength(-350)).force('center', d3.forceCenter(w/2,h/2)).force('collision', d3.forceCollide().radius(d=>d.r+12));
+            const link = svg.append('g').selectAll('line').data(links).enter().append('line').attr('stroke','rgba(255,255,255,0.07)').attr('stroke-width',1.5);
+            const node = svg.append('g').selectAll('g').data(nodes).enter().append('g').call(d3.drag().on('start',(e)=>{if(!e.active)sim.alphaTarget(0.3).restart();e.subject.fx=e.subject.x;e.subject.fy=e.subject.y;}).on('drag',(e)=>{e.subject.fx=e.x;e.subject.fy=e.y;}).on('end',(e)=>{if(!e.active)sim.alphaTarget(0);e.subject.fx=null;e.subject.fy=null;}));
+            node.append('circle').attr('r',d=>d.r).attr('fill',d=>colors[d.group]+'20').attr('stroke',d=>colors[d.group]).attr('stroke-width',2).attr('cursor','grab');
+            node.append('text').attr('text-anchor','middle').attr('dy','0.35em').attr('fill',d=>colors[d.group]).attr('font-size',d=>d.r>24?'11px':'10px').attr('font-weight','700').attr('font-family','JetBrains Mono, monospace').text(d=>d.label);
+            const tip = d3.select('#tooltip');
+            node.on('mouseover',(e,d)=>{tip.transition().duration(200).style('opacity',1);tip.html(`<strong>${d.label}</strong><br/><span style="color:${colors[d.group]}">${d.group}</span>`).style('left',(e.pageX+15)+'px').style('top',(e.pageY-30)+'px');d3.select(e.currentTarget).select('circle').transition().duration(200).attr('r',d.r+4);}).on('mouseout',(e,d)=>{tip.transition().duration(200).style('opacity',0);d3.select(e.currentTarget).select('circle').transition().duration(200).attr('r',d.r);});
+            sim.on('tick',()=>{link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);node.attr('transform',d=>`translate(${d.x},${d.y})`);});
+        }
+    </script>
+</body>
+</html>

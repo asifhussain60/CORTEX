@@ -1,510 +1,301 @@
-/CORTEX /cortex-architect
+/CORTEX /cortex-architect /cortex-doc
+
+# CORTEX University — Learning Path Implementation Plan
+
+**Last Updated:** 2026-03-08
+**Status:** IN PROGRESS — Level 1 + Level 2 complete, Level 3 + cleanup remaining
+**Chat History:** `_workspaces/.chats/chat01.md`
+**Content Models:** `docs/.content/knowledge/learning-path-architecture.yaml`, `docs/.content/15-learning-path.md`
+
+---
+
+## Governing Rules
 
 Follow all rules defined in:
 
-- CORTEX.prompt.md
-- cortex-doc.prompt.md
-- cortex-doc agents
-- cortex-registry governance
-
-All agent rules MUST apply automatically.
-
-Your task is to design and implement a **CORTEX Learning System** that transforms knowledge stored in `cortex-registry` YAML files into a **high-quality interactive learning platform**.
-
-The system must follow **modern software engineering education best practices** and **must be manually designed**, not auto-generated.
-
-Each learning path must have **custom UI, custom diagrams, and curated explanations optimized for learning the specific topic**.
+- `cortex-doc.prompt.md` (documentation orchestrator — inline CSS, ISSA spacing, glassmorphism, D3.js only)
+- cortex-doc agents (15 agents in `.github/agents/docs/`)
+- `cortex-registry` governance
+- `design_system.yaml` (ISSA tokens, typography, glass identity)
+- `software-engineer.html` (THE reference structural pattern for all learning pages)
 
 ---
 
-# CRITICAL DESIGN RULE
+## Design System (IMMUTABLE — apply to every page)
 
-Do NOT create generic pages.
+| Token | Value |
+|-------|-------|
+| Page background | `#020617` |
+| Glass background | `rgba(10,15,30,0.7)` |
+| Glass border | `rgba(255,255,255,0.08)` |
+| Accent teal | `#14b8a6` |
+| Accent emerald | `#10b981` |
+| Text main | `#f8fafc` |
+| Text muted | `#94a3b8` |
+| Hero font | `Space Grotesk` (500/600/700) |
+| Body font | `Inter` (300–900) |
+| Code font | `JetBrains Mono` (400/500/700) |
+| ISSA content-content | `3rem` (48px) |
+| ISSA content-panel | `2rem` (32px) |
+| ISSA panel-panel | `1.5rem` (24px) |
+| ISSA hero-first | `3rem` (48px) |
+| ISSA mobile (≤640px) | `2rem` |
+| ISSA tablet (641-1023px) | `3rem` |
 
-Each learning path must be **manually crafted** with:
+### CDN Stack (every page)
 
-- tailored layout
-- tailored diagrams
-- tailored learning flow
-- tailored visuals
+```html
+<script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+```
 
-The system must feel like a **carefully designed educational platform**, not a documentation generator.
+### Page Structure Pattern (from software-engineer.html)
 
----
+```
+<nav breadcrumb aria-label="Breadcrumb"> → <main max-w-7xl mx-auto px-4 md:px-6 space-y-12 md:space-y-16>
+→ hero section → alternating glass panels (section.relative.py-8.my-4 with absolute bg + backdrop-blur)
+and plain sections (section.space-y-10) → footer → <script> with window.onload for Lucide + D3
+```
 
-# CHALLENGE-FIRST PROTOCOL
+### Mandatory Compliance
 
-Before implementing anything:
-
-Perform a **microscopic audit of CORTEX capabilities**.
-
-Analyze:
-
-• cortex-registry knowledge YAMLs  
-• cortex-doc documentation engine  
-• D3 visualization capability  
-• diagram pipelines  
-• workflow composer  
-• orchestrator architecture  
-• LENS intelligence  
-• registry indexing  
-• documentation synthesis  
-• MCP tool exposure  
-
-Determine:
-
-| Category | Description |
-|--------|-------------|
-| Existing Capabilities | What already exists |
-| Partial Capabilities | What needs extension |
-| Missing Capabilities | What must be built |
-
-Assume the user has **no knowledge of CORTEX architecture**.
-
-Explain architecture simply.
-
-Evaluate every design decision using CORTEX pillars:
-
-| Pillar | Requirement |
-|------|------|
-Extensibility | Add new learning paths without redesign |
-Scalability | Support thousands of knowledge nodes |
-Accuracy | YAML remains the source of truth |
-Collaboration | Teams can contribute knowledge |
-Maintainability | Prevent duplication and drift |
-
-Ensure:
-
-• MCP-first exposure  
-• Orchestrator integrity  
-• Registry-driven architecture  
-• Zero regression risk  
+- ALL CSS inline in `<style>` blocks — NO external CSS files
+- `:root` with ISSA tokens in every page
+- `prefers-reduced-motion` gate on all animations/transitions
+- Skip link: `sr-only focus:not-sr-only`
+- `scroll-margin-top: 4rem` on focus targets
+- `aria-label="Breadcrumb"` on nav
+- D3.js v7 ONLY — Mermaid BANNED
+- Radial gradient backgrounds with domain accent color
+- `window.onload` for Lucide icon initialization
 
 ---
 
-# LEARNING SYSTEM OBJECTIVE
+## Folder Structure (canonical)
 
-Build an interactive learning environment called:
-
-**CORTEX University**
-
-The system teaches:
-
-• architecture patterns  
-• AI orchestration  
-• workflow automation  
-• enterprise planning  
-• response engineering  
-• infrastructure architecture  
-
-The platform should feel like **exploring a system map**, not reading documentation.
-
----
-
-# PEDAGOGICAL BEST PRACTICES
-
-Follow research-backed learning principles.
-
-### Active Learning
-
-Interactive examples dramatically improve comprehension in engineering education.
-
-### Visual Knowledge Mapping
-
-Concept maps help learners understand relationships between ideas.
-
-### Multi-Diagram Teaching
-
-Different diagrams explain different aspects of systems.
-
-Common architecture diagrams include:
-
-• class diagrams  
-• sequence diagrams  
-• activity diagrams  
-• component diagrams  
-• deployment diagrams  
-
-### Progressive Disclosure
-
-Users learn best when information is revealed gradually.
+```
+docs/learning/
+├── index.html                                         ← Level 1: Portal
+├── architecture-patterns/
+│   ├── index.html                                     ← Level 2: Domain Explorer
+│   └── concepts/
+│       ├── orchestrator-domains.html                  ← Level 3: Deep Dive
+│       └── five-step-lifecycle.html                   ← Level 3: Deep Dive
+├── ai-orchestration/
+│   ├── index.html                                     ← Level 2: Domain Explorer
+│   └── concepts/
+│       └── lens-sensory-system.html                   ← Level 3: Deep Dive
+├── workflow-automation/
+│   ├── index.html                                     ← Level 2: Domain Explorer
+│   └── concepts/                                      ← Level 3: Future deep-dives
+├── governance-quality/
+│   ├── index.html                                     ← Level 2: Domain Explorer
+│   └── concepts/                                      ← Level 3: Future deep-dives
+├── tdd-development/
+│   ├── index.html                                     ← Level 2: Domain Explorer
+│   └── concepts/                                      ← Level 3: Future deep-dives
+└── intelligence-learning/
+    ├── index.html                                     ← Level 2: Domain Explorer
+    └── concepts/                                      ← Level 3: Future deep-dives
+```
 
 ---
 
-# THREE LEVEL LEARNING STRUCTURE
+## Progress Tracker
 
-The system must have **three levels only**.
+### ✅ COMPLETED — Content Models
 
-The knowledge graph must be embedded inside levels 2 and 3.
+| File | Description |
+|------|-------------|
+| `docs/.content/knowledge/learning-path-architecture.yaml` | Knowledge registry: 3-level arch, 6 domains, issue-derived knowledge, diagram specs |
+| `docs/.content/15-learning-path.md` | Content model: domain descriptions, pedagogical philosophy |
 
----
+### ✅ COMPLETED — Level 1 Portal
 
-# LEVEL 1 — LEARNING PATH PORTAL
+| File | Description |
+|------|-------------|
+| `docs/learning/index.html` | CORTEX University portal — hero with logo, journey pipeline (Orientation → Exploration → Mastery), 6 domain cards, role-based paths (SE/Tech Lead/PO/Curious Learner), philosophy panel, CTA section, footer. **Recreated clean (465 lines) — was corrupted with dual-HTML merge in prior session.** |
 
-Purpose:
+### ✅ COMPLETED — Level 2 Domain Explorers (all 6)
 
-Help users choose **what they want to learn**.
+| File | Accent | Difficulty | D3 Graph | Concepts | Key Features |
+|------|--------|-----------|----------|----------|-------------|
+| `architecture-patterns/index.html` | Teal `#14b8a6` | Intermediate | 12-node force-directed (domains, lifecycle, intent-router, master-orch, protocol, ac-markers, cape, self-sustain, enforcement, tdd-orch, workflow-comp, health-orch) | 8 cards | CSS lifecycle pipeline (Prepare→Govern→Execute→Validate→Close), 2 deep-dive links |
+| `ai-orchestration/index.html` | Violet `#8b5cf6` | Intermediate | 10-node force-directed (lens, facade, intent, master, tiers, session, mcp, kal, urs, rca) | 7 cards | Perception→Reasoning→Action pipeline with code blocks, 1 deep-dive link |
+| `workflow-automation/index.html` | Emerald `#10b981` | Advanced | None (CSS tier hierarchy instead) | 6 cards | 3-tier hierarchy cards (Primitives/Mode Workflows/Composites), intent→workflow mapping display |
+| `governance-quality/index.html` | Amber `#f59e0b` | Beginner | 11-node D3 governance concept map | 9 cards | 3 enforcement layer bars (Pre-Commit/CI/Runtime) with rule badges |
+| `tdd-development/index.html` | Red `#ef4444` | Beginner | 10-node D3 TDD concept map | 5 cards | Red→Green→Refactor cycle UI, 4-tier test execution grid |
+| `intelligence-learning/index.html` | Purple `#a78bfa` | Advanced | 11-node D3 intelligence concept map | 8 cards | Perceive→Reason→Act→Learn pipeline, 3-tier intelligence grid, 1 deep-dive link |
 
-UI:
+### ❌ NOT YET CREATED — Level 3 Deep-Dive Pages
 
-Large animated cards.
+These pages are linked from Level 2 pages and must be created next.
 
-Each card contains:
+#### 3a. `docs/learning/architecture-patterns/concepts/orchestrator-domains.html`
 
-• icon  
-• concept preview  
-• difficulty level  
-• number of topics  
-• estimated learning time  
-• mini concept diagram  
+**Linked from:** architecture-patterns/index.html concept card 01
+**Accent:** Teal `#14b8a6`
+**Content required:**
 
-Example learning paths:
+- Real-world analogy: Hospital departments (ER=core, ICU=health, Lab=intelligence, Admin=governance, Pharmacy=support)
+- The 14 orchestrator domains table/visualization (core:132, domain:29, support:54, health:27, intelligence:16, persona:6, workflow:6, validation:12, git:4, response:5, _top_level:2, registry:1, synthesis:1, tools:1)
+- D3 bubble chart showing domain sizes (proportional to file count)
+- Code example: domain directory structure from `cortex/orchestrators/`
+- How domains communicate via MasterOrchestrator routing
+- IOrchestrator protocol contract explanation
+- Breadcrumb: CORTEX / University / Architecture Patterns / Orchestrator Domains
 
-Architecture Patterns  
-AI Orchestration  
-Workflow Automation  
-Enterprise Planning  
-Response Engineering  
-Infrastructure Architecture  
-Enterprise AI Systems  
+#### 3b. `docs/learning/architecture-patterns/concepts/five-step-lifecycle.html`
 
-Card preview diagrams should include **concept maps** showing relationships between major topics.
+**Linked from:** architecture-patterns/index.html concept card 02
+**Accent:** Teal `#14b8a6`
+**Content required:**
 
-Concept maps visualize how ideas connect.
+- D3 state diagram: Prepare → Govern → Execute → Validate → Close (with transition labels)
+- Each phase explained with what happens inside it:
+  - **Prepare:** AC_START marker, git checkpoint, DoR display
+  - **Govern:** Holistic validation gate (CORE-048), challenge gate, sweep catalogue open
+  - **Execute:** TDD cycle, implementation, workflow template execution
+  - **Validate:** Convergence loop (CORE-068), detect→fix→rescan until 0 P0/P1
+  - **Close:** AC_COMPLETE marker, sweep catalogue close, metrics emit
+- Real-world analogy: Surgery preparation→approval→operation→recovery→discharge
+- Code example: AC marker format `AC-{DOMAIN}-{SEQUENCE}`
+- Primitive YAML snippets for each phase
+- Breadcrumb: CORTEX / University / Architecture Patterns / Five-Step Lifecycle
 
----
+#### 3c. `docs/learning/ai-orchestration/concepts/lens-sensory-system.html`
 
-# LEVEL 2 — CONCEPT EXPLORER
+**Linked from:** ai-orchestration/index.html concept card 01 AND intelligence-learning/index.html concept card 01
+**Accent:** Violet `#8b5cf6`
+**Content required:**
 
-This level introduces **concept exploration with a knowledge graph**.
+- What LENS stands for: Language → Examination → Navigation → Synthesis
+- The 9 analysers (list each with what it detects)
+- D3 radial/tree diagram: LENS at center, 9 analysers as children, each with detected artifacts
+- Tiered analysis explanation (Tier 1 per-turn fast, Tier 2 on-demand deep, Tier 3 investigation)
+- How LENS builds AnalysisContext (the data structure passed to orchestrators)
+- Real-world analogy: Medical diagnostic lab (blood test=language analyser, X-ray=structure analyser, MRI=deep investigation)
+- Code example: AnalysisContext fields
+- How InteractionOrchestrator triggers Tier 1 on every turn
+- Breadcrumb: CORTEX / University / AI Orchestration / LENS Sensory System
 
-Instead of a static list of topics, display an **interactive concept map**.
+### ✅ DONE — Cleanup
 
-Concepts appear as nodes.
-
-Relationships appear as edges.
-
-Example node relationships:
-
-Pattern → used by → Orchestrator  
-Pattern → implemented in → Code  
-Pattern → referenced by → Workflow  
-
-Graph type:
-
-**Force-Directed Graph**
-
-This graph type allows interactive exploration of relationships.
-
-Users can:
-
-• zoom  
-• drag nodes  
-• click nodes to open Level 3  
-
----
-
-## ARCHITECTURE PATTERNS EXPLORER
-
-Display pattern nodes.
-
-Required diagrams:
-
-### Class Diagram
-
-Shows structural relationships between pattern participants.
-
-### Sequence Diagram
-
-Shows runtime interactions between components.
-
-### Concept Map
-
-Shows relationships between patterns.
-
-Example:
-
-Factory Pattern  
-Mediator Pattern  
-Template Method  
+| Task | Description |
+|------|-------------|
+| ✅ Remove `docs/learning/beginner/` | Removed — was empty legacy placeholder |
+| ✅ Remove `docs/learning/intermediate/` | Removed — was empty legacy placeholder |
+| ✅ Remove `docs/learning/advanced/` | Removed — was empty legacy placeholder |
 
 ---
 
-## WORKFLOW AUTOMATION EXPLORER
+## Navigation Chain (Level 2 prev/next)
 
-Best diagrams:
-
-Activity Diagrams
-
-Used to show workflows and processes.
-
-Interaction diagrams
-
-Show nested orchestration flows.
-
-Lifecycle diagrams
-
-Show orchestration lifecycle.
+```
+Architecture Patterns ↔ AI Orchestration ↔ Workflow Automation ↔ Governance & Quality ↔ TDD Development ↔ Intelligence & Learning → (back to All Domains)
+```
 
 ---
 
-## INFRASTRUCTURE EXPLORER
+## Future Expansion (not in current scope)
 
-Use:
+These Level 3 deep-dives are NOT yet linked from Level 2 pages but could be added later:
 
-### C4 Model Diagrams
-
-The C4 model describes systems using four abstraction levels:
-
-Context  
-Container  
-Component  
-Code  
-
-### Deployment Diagrams
-
-Show infrastructure nodes.
-
-### Dependency Graphs
-
-Show API relationships.
-
-Graph nodes:
-
-applications  
-apis  
-platforms  
+| Domain | Potential Deep-Dives |
+|--------|---------------------|
+| Architecture Patterns | AC Markers, IOrchestrator Protocol, CAPE Planning, Self-Sustaining Architecture |
+| AI Orchestration | IntelligenceFacade, Intent Classification, MCP Tool Registry, Session Context Chain |
+| Workflow Automation | Declarative Templates, Universal Primitives, Convergence Loops, WorkflowComposer Engine, PO Change Intelligence |
+| Governance & Quality | CORE-048 Holistic Gate, CORE-064 Sweep Completeness, CORE-068 Convergence, Meta-Audit Pipeline |
+| TDD Development | TDDOrchestrator internals, Test Quality Scoring, Golden Test Promotion, 3-Layer Acceleration |
+| Intelligence & Learning | URS Reinforcement, RCA Memory Engine, KAL Knowledge Acquisition, CAPE Complexity, PLIP Protocol, Deep Intelligence |
 
 ---
 
-## PLANNING EXPLORER
+## Issue-Derived Knowledge (extracted from GitHub Issues #14, #15)
 
-Visualize phases using:
+### Issue #14 — CAPE, KAL, Deep Intelligence, Git Safety
 
-Timeline diagrams  
-Gantt charts  
-Dependency graphs  
+| Feature | Key Concepts |
+|---------|-------------|
+| **CAPE** | Complexity triage → auto plan → 5 execution gates → loop |
+| **KAL** | Coverage assessor → 6-step pipeline → knowledge scoring |
+| **Deep Intelligence** | CCL query engine, capability verifier, facade extension |
+| **Git Safety** | Checkpoint injector, rollback manager |
 
-These diagrams show phase progression.
+### Issue #15 — PO Change Intelligence (Phase 142)
 
----
+| Feature | Key Concepts |
+|---------|-------------|
+| **3 Orchestrators** | ChangeIntelligenceOrchestrator, ImpactAnalysisOrchestrator, StakeholderBriefingOrchestrator |
+| **7 Templates** | change-impact-analysis, stakeholder-briefing, sprint-risk-assessment, dependency-mapping, regression-prediction, release-readiness, backlog-prioritization |
 
-## RESPONSE ENGINEERING EXPLORER
-
-Display template structures.
-
-Each template node shows:
-
-• sections  
-• variables  
-• example outputs  
-
-Provide interactive example generator.
+*(Issue #16 returned 404 — skipped)*
 
 ---
 
-# LEVEL 3 — DEEP LEARNING PAGE
+## Continuation Instructions
 
-Each concept gets a **full educational page**.
+To resume this work in a new session:
 
-This page must include:
+1. Say: **"Follow instructions in cortex-doc.prompt.md. Read #file:learning-path.md and continue the CORTEX University implementation. Create the Level 3 deep-dive pages listed in the NOT YET CREATED section."**
 
----
+2. The agent should:
+   - Read this file for full context (progress tracker, design system, page specs)
+   - Read `docs/.content/knowledge/learning-path-architecture.yaml` for knowledge registry
+   - Read any completed Level 2 page as a structural reference
+   - Read `docs/roles/software-engineer.html` lines 1-400 + 680-881 for the canonical inline CSS pattern
+   - Create the 3 Level 3 deep-dive pages per the specifications above
+   - Clean up the 3 empty legacy directories
+   - Verify all internal links resolve
 
-## Concept Explanation
-
-Simple explanation of the concept.
-
----
-
-## Real-World Analogy
-
-Example:
-
-Factory Pattern
-
-Restaurant kitchen analogy.
-
----
-
-## CORTEX Implementation
-
-Explain how the concept appears inside CORTEX.
-
-Link to source files.
+3. Each Level 3 page MUST follow this template:
+   - Tailwind CDN suppression script → CDN imports → inline `<style>` with `:root` ISSA tokens
+   - `body` bg `#020617` with radial gradients using domain accent color
+   - Glass-card styles → breadcrumb-nav → skip link
+   - `<main max-w-7xl mx-auto px-4 md:px-6 space-y-12 md:space-y-16>`
+   - Hero section with concept title + domain badge
+   - Real-world analogy in a glass panel
+   - CORTEX implementation explanation with code blocks
+   - D3.js interactive diagram (force-directed, tree, radial, or state diagram)
+   - Navigation back to parent Level 2 page
+   - Footer → D3.js script block → `prefers-reduced-motion` gate → ISSA responsive overrides
 
 ---
 
-## Interactive Diagrams
+## Pedagogical Principles (apply to all content)
 
-Each concept must have specific diagrams.
-
-### Pattern Pages
-
-Class diagram  
-Sequence diagram  
-Concept map  
-
-### Workflow Pages
-
-Activity diagram  
-Lifecycle timeline  
-
-### Infrastructure Pages
-
-C4 architecture diagram  
-Deployment diagram  
-Dependency graph  
-
-### Planning Pages
-
-Phase timeline  
-Dependency graph  
+| Principle | Application |
+|-----------|------------|
+| Progressive Disclosure | Level 1 = What (choose a path), Level 2 = Why (explore concepts), Level 3 = How (deep understanding) |
+| Active Learning | Interactive D3.js graphs — drag, zoom, click nodes |
+| Visual Knowledge Mapping | Every Level 2 page has a concept graph showing relationships |
+| Multi-Diagram Teaching | Different diagram types per domain: force-directed, tree, state, bubble, pipeline |
+| Real-World Analogies | Every Level 3 page opens with a familiar analogy before technical content |
 
 ---
 
-# EMBEDDED KNOWLEDGE GRAPH
+## External Research References
 
-The learning system must include a **knowledge graph**.
+Enhance explanations using authoritative sources (synthesize, never copy):
 
-This graph connects:
-
-Concepts  
-Patterns  
-Workflows  
-Infrastructure  
-Planning phases  
-
-Graph structure example:
-
-Pattern → used by → Orchestrator  
-Pattern → referenced in → Phase  
-Workflow → executed by → Orchestrator  
-Infrastructure → hosts → Application  
-
-Graph visualization must use:
-
-D3 Force Directed Graph.
-
-Users should be able to explore knowledge visually.
+- Martin Fowler Architecture Catalog: https://martinfowler.com
+- Refactoring Guru: https://refactoring.guru/design-patterns
+- Microsoft Architecture Center: https://learn.microsoft.com/azure/architecture
+- D3 Visualization Examples: https://observablehq.com/@d3
 
 ---
 
-# EXTERNAL RESEARCH
+## Technology Stack (actual, not original spec)
 
-Enhance explanations using authoritative sources.
-
-Research references:
-
-Martin Fowler Architecture Catalog  
-https://martinfowler.com
-
-Refactoring Guru  
-https://refactoring.guru/design-patterns
-
-Microsoft Architecture Center  
-https://learn.microsoft.com/azure/architecture
-
-AWS Architecture Center  
-https://aws.amazon.com/architecture
-
-Google Cloud Architecture Framework  
-https://cloud.google.com/architecture/framework
-
-D3 Visualization Examples  
-https://observablehq.com/@d3
-
-Use them to enhance:
-
-• explanations  
-• diagrams  
-• examples  
-
-Do NOT copy content.
-
-Synthesize ideas.
-
----
-
-# KNOWLEDGE EXTRACTION
-
-Knowledge must come from:
-
-`cortex-registry` YAML files.
-
-Convert YAML knowledge into:
-
-• explanations  
-• diagrams  
-• graph nodes  
-• relationships  
-
-YAML remains the **single source of truth**.
-
----
-
-# INTEGRATION WITH CORTEX DOC SYSTEM
-
-All generated pages must be validated through:
-
-`cortex-doc.prompt.md`
-
-Agents must enforce:
-
-• documentation structure  
-• diagram rules  
-• content synthesis rules  
-
----
-
-# TECHNOLOGY STACK
-
-Frontend
-
-React  
-Tailwind  
-FontAwesome  
-
-Visualization
-
-D3.js  
-Observable  
-
-Knowledge Engine
-
-YAML parsing  
-knowledge graph generator  
-
----
-
-# DELIVERABLES
-
-Design:
-
-Learning architecture  
-Learning paths  
-Explorer layouts  
-Diagram specifications  
-Knowledge graph system  
-
----
-
-# RESPONSE FORMAT
-
-Return response in CORTEX executive format.
-
-≤ 60 second read time.
-
-Use:
-
-• sections  
-• visual hierarchy  
-• tables  
-
-All feedback must remain **inline in VSCode Copilot Chat**.
-
-Do NOT generate markdown files.
-
-Do NOT generate reports.
-
-Return response only inside the chat.
+| Layer | Technology | Notes |
+|-------|-----------|-------|
+| Markup | HTML5 with inline CSS | No React — static HTML matching existing CORTEX docs pattern |
+| Styling | Tailwind CDN + inline `<style>` | ISSA spacing tokens, glassmorphism identity |
+| Icons | Lucide (via unpkg CDN) | NOT FontAwesome — Lucide matches existing site |
+| Visualization | D3.js v7 (cdnjs) | Force-directed, tree, state, bubble charts. Mermaid BANNED. |
+| Fonts | Google Fonts CDN | Inter, Space Grotesk, JetBrains Mono |
+| Knowledge Source | `cortex-registry/` YAML files | YAML remains single source of truth |

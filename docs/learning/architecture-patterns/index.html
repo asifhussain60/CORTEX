@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX University — Architecture Patterns</title>
+    <meta name="description" content="Explore CORTEX architecture patterns — 14 orchestrator domains, the five-step lifecycle, coordination patterns, and domain separation. Interactive concept graph included."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../../assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-teal: #14b8a6;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --issa-content-content: 3rem;
+            --issa-content-panel: 2rem;
+            --issa-panel-panel: 1.5rem;
+            --issa-hero-first: 3rem;
+        }
+        body { background-color: #020617; background-image: radial-gradient(circle at 15% 15%, rgba(20,184,166,0.07) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(16,185,129,0.06) 0%, transparent 45%); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; font-size: 16px; line-height: 1.6; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; }
+        @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(20,184,166,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(20,184,166,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+
+        .gradient-text-teal { background: linear-gradient(to right, #14b8a6, #10b981); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
+        .breadcrumb-nav a:hover { color: var(--accent-teal); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
+        .concept-card:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.04); transform: translateY(-2px); }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+
+        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
+        .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; }
+
+        #concept-graph { width: 100%; height: 400px; border-radius: 1rem; }
+        @media (min-width: 768px) { #concept-graph { height: 500px; } }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+
+        .lifecycle-pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; }
+        @media (max-width: 768px) { .lifecycle-pipeline { grid-template-columns: 1fr; } }
+        .lifecycle-step { padding: 1.25rem 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); transition: transform 0.2s ease; }
+        .lifecycle-step:hover { transform: translateY(-3px); }
+
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+        @media (prefers-reduced-motion: reduce) { .glass-card, .concept-card, .lifecycle-step { transition: none; } }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm" style="scroll-margin-top:4rem">Skip to main content</a>
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../../index.html"><i data-lucide="home" class="w-4 h-4"></i><span>CORTEX</span></a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="../index.html">University</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Architecture Patterns</span>
+    </nav>
+
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+
+        <div id="tooltip" class="d3-tooltip"></div>
+
+        <!-- ═══ HERO ═══ -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i> Domain · Intermediate · 8 Topics
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    Architecture<br/><span class="gradient-text-teal">Patterns.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    How 290+ orchestrators coordinate across 14 domains. You learn the structural backbone of CORTEX — the hospital analogy, domain separation, the five-step lifecycle, and the coordination patterns that make everything work together.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 text-[11px]">
+                <span class="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold">~45 min</span>
+                <span class="px-3 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-slate-400 font-bold">8 concepts</span>
+                <span class="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold">Intermediate</span>
+            </div>
+        </section>
+
+        <!-- ═══ CONCEPT GRAPH — D3.js Force-Directed ═══ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-950/60 via-slate-900/80 to-emerald-950/60 border border-teal-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-6 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="network" class="w-3.5 h-3.5"></i> Interactive Concept Map
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">How Concepts Connect</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Drag nodes to explore. Hover for details. Click to open the deep-dive page.</p>
+                </div>
+                <div id="concept-graph"></div>
+                <div class="flex flex-wrap gap-3 justify-center text-[11px]">
+                    <span class="flex items-center gap-1.5 text-teal-400"><span class="w-3 h-3 rounded-full bg-teal-500 inline-block"></span>Pattern</span>
+                    <span class="flex items-center gap-1.5 text-violet-400"><span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span>Orchestrator</span>
+                    <span class="flex items-center gap-1.5 text-amber-400"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>Workflow</span>
+                    <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>Governance</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ CONCEPT LIST ═══ -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <h2 class="section-title font-black tracking-tighter">8 Architecture Concepts</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Each concept has a deep-dive page with explanations, analogies, diagrams, and practical examples.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="concepts/orchestrator-domains.html" class="concept-card" style="text-decoration:none; border-color: rgba(20,184,166,0.2);">
+                    <div class="flex items-center justify-between">
+                        <span class="concept-number">01</span>
+                        <span class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
+                    </div>
+                    <h3 class="font-bold text-sm text-teal-300">The 14 Orchestrator Domains</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">How CORTEX organises 290+ orchestrators into specialised domains — the hospital analogy that makes the architecture intuitive.</p>
+                </a>
+                <a href="concepts/five-step-lifecycle.html" class="concept-card" style="text-decoration:none; border-color: rgba(20,184,166,0.2);">
+                    <div class="flex items-center justify-between">
+                        <span class="concept-number">02</span>
+                        <span class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
+                    </div>
+                    <h3 class="font-bold text-sm text-teal-300">The Five-Step Lifecycle</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Every orchestrator follows Prepare → Govern → Execute → Validate → Close. This lifecycle is what makes CORTEX auditable and predictable.</p>
+                </a>
+                <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
+                    <span class="concept-number">03</span>
+                    <h3 class="font-bold text-sm text-emerald-300">Intent Routing</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">How IntentRouter classifies 31 intent types and dispatches to specialised orchestrators in under 40ms.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
+                    <span class="concept-number">04</span>
+                    <h3 class="font-bold text-sm text-emerald-300">Domain Separation</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Why orchestrators never communicate directly — all inter-orchestrator calls flow through a central coordinator.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
+                    <span class="concept-number">05</span>
+                    <h3 class="font-bold text-sm text-violet-300">The IOrchestrator Protocol</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">The protocol mixin that every orchestrator implements. Declare intent keywords, drop a file, and CORTEX discovers it at startup.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
+                    <span class="concept-number">06</span>
+                    <h3 class="font-bold text-sm text-violet-300">AC Markers &amp; Audit Trail</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">AC_START and AC_COMPLETE markers create a tamper-proof audit trail for every operation, stored in SQLite.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
+                    <span class="concept-number">07</span>
+                    <h3 class="font-bold text-sm text-amber-300">CAPE — Autonomous Planning</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">5-dimension complexity scoring, auto plan generation, 5 mandatory analysis gates, and topological execution. Strategy + Builder + Pipeline patterns.</p>
+                </div>
+                <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
+                    <span class="concept-number">08</span>
+                    <h3 class="font-bold text-sm text-amber-300">Self-Sustaining Architecture</h3>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">How CORTEX manages itself — zero-drift documentation, 22 health endpoints, refresh scripts that introspect live code.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ FIVE-STEP LIFECYCLE PIPELINE ═══ -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-teal-950/60 border border-emerald-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-3">
+                    <h2 class="section-title font-black tracking-tighter">The Orchestrator Lifecycle</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every orchestrator, regardless of specialisation, follows these five steps. This consistency is what makes CORTEX auditable.</p>
+                </div>
+                <div class="lifecycle-pipeline">
+                    <div class="lifecycle-step" style="background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.25);">
+                        <div class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400"><i data-lucide="settings" class="w-5 h-5"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Step 1</div>
+                        <div class="font-bold text-sm text-teal-300">Prepare</div>
+                        <p class="text-[12px] text-slate-500">Load config. Establish connections.</p>
+                    </div>
+                    <div class="lifecycle-step" style="background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.25);">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400"><i data-lucide="shield" class="w-5 h-5"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Step 2</div>
+                        <div class="font-bold text-sm text-amber-300">Govern</div>
+                        <p class="text-[12px] text-slate-500">Run governance gate. Block if P0.</p>
+                    </div>
+                    <div class="lifecycle-step" style="background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.25);">
+                        <div class="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center text-violet-400"><i data-lucide="play" class="w-5 h-5"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Step 3</div>
+                        <div class="font-bold text-sm text-violet-300">Execute</div>
+                        <p class="text-[12px] text-slate-500">Perform the specialised work.</p>
+                    </div>
+                    <div class="lifecycle-step" style="background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.25);">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i data-lucide="check-circle" class="w-5 h-5"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Step 4</div>
+                        <div class="font-bold text-sm text-emerald-300">Validate</div>
+                        <p class="text-[12px] text-slate-500">Verify against acceptance criteria.</p>
+                    </div>
+                    <div class="lifecycle-step" style="background: rgba(244,114,182,0.06); border-color: rgba(244,114,182,0.25);">
+                        <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400"><i data-lucide="flag" class="w-5 h-5"></i></div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-pink-500">Step 5</div>
+                        <div class="font-bold text-sm text-pink-300">Close</div>
+                        <p class="text-[12px] text-slate-500">Record audit trail. Emit signals.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ NAVIGATION ═══ -->
+        <section class="flex flex-col sm:flex-row justify-between gap-4">
+            <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-slate-500/20 hover:border-teal-500/30" style="text-decoration:none;">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i>
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Back</div>
+                    <div class="text-sm font-bold text-slate-300">All Domains</div>
+                </div>
+            </a>
+            <a href="../ai-orchestration/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-violet-500/20 hover:border-violet-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-violet-400"></i>
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-violet-500">Next Domain</div>
+                    <div class="text-sm font-bold text-violet-300">AI Orchestration</div>
+                </div>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | University · Architecture Patterns
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function () {
+            lucide.createIcons();
+            buildConceptGraph();
+        };
+
+        function buildConceptGraph() {
+            const graphEl = document.getElementById('concept-graph');
+            if (!graphEl) return;
+
+            const w = graphEl.getBoundingClientRect().width || 800;
+            const h = graphEl.getBoundingClientRect().height || 500;
+
+            const nodes = [
+                { id: 'domains', label: '14 Domains', group: 'pattern', r: 28 },
+                { id: 'lifecycle', label: '5-Step Lifecycle', group: 'pattern', r: 26 },
+                { id: 'intent-router', label: 'IntentRouter', group: 'orchestrator', r: 24 },
+                { id: 'master-orch', label: 'MasterOrchestrator', group: 'orchestrator', r: 26 },
+                { id: 'protocol', label: 'IOrchestrator', group: 'pattern', r: 22 },
+                { id: 'ac-markers', label: 'AC Markers', group: 'governance', r: 20 },
+                { id: 'cape', label: 'CAPE', group: 'workflow', r: 22 },
+                { id: 'self-sustain', label: 'Self-Sustaining', group: 'pattern', r: 20 },
+                { id: 'enforcement', label: 'EnforcementOrch', group: 'orchestrator', r: 20 },
+                { id: 'tdd-orch', label: 'TDDOrchestrator', group: 'orchestrator', r: 20 },
+                { id: 'workflow-comp', label: 'WorkflowComposer', group: 'workflow', r: 22 },
+                { id: 'health-orch', label: 'HealthOrchestrator', group: 'orchestrator', r: 18 },
+            ];
+
+            const links = [
+                { source: 'master-orch', target: 'intent-router', label: 'routes via' },
+                { source: 'intent-router', target: 'domains', label: 'classifies into' },
+                { source: 'master-orch', target: 'lifecycle', label: 'follows' },
+                { source: 'protocol', target: 'lifecycle', label: 'defines' },
+                { source: 'domains', target: 'protocol', label: 'implements' },
+                { source: 'ac-markers', target: 'lifecycle', label: 'wraps' },
+                { source: 'cape', target: 'workflow-comp', label: 'uses' },
+                { source: 'cape', target: 'master-orch', label: 'feeds' },
+                { source: 'enforcement', target: 'ac-markers', label: 'validates' },
+                { source: 'tdd-orch', target: 'lifecycle', label: 'follows' },
+                { source: 'self-sustain', target: 'health-orch', label: 'monitors via' },
+                { source: 'workflow-comp', target: 'lifecycle', label: 'orchestrates' },
+            ];
+
+            const colors = { pattern: '#14b8a6', orchestrator: '#8b5cf6', workflow: '#f59e0b', governance: '#10b981' };
+
+            const svg = d3.select('#concept-graph').append('svg')
+                .attr('width', '100%').attr('height', '100%')
+                .attr('viewBox', `0 0 ${w} ${h}`);
+
+            svg.append('defs').append('marker')
+                .attr('id', 'arrowhead').attr('viewBox', '-0 -5 10 10')
+                .attr('refX', 20).attr('refY', 0).attr('orient', 'auto')
+                .attr('markerWidth', 6).attr('markerHeight', 6)
+                .append('path').attr('d', 'M 0,-5 L 10,0 L 0,5')
+                .attr('fill', 'rgba(255,255,255,0.15)');
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(120))
+                .force('charge', d3.forceManyBody().strength(-400))
+                .force('center', d3.forceCenter(w / 2, h / 2))
+                .force('collision', d3.forceCollide().radius(d => d.r + 15));
+
+            const link = svg.append('g').selectAll('line').data(links).enter().append('line')
+                .attr('stroke', 'rgba(255,255,255,0.08)').attr('stroke-width', 1.5)
+                .attr('marker-end', 'url(#arrowhead)');
+
+            const linkLabel = svg.append('g').selectAll('text').data(links).enter().append('text')
+                .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.2)')
+                .attr('font-size', '10px').attr('font-family', 'Inter, sans-serif')
+                .text(d => d.label);
+
+            const node = svg.append('g').selectAll('g').data(nodes).enter().append('g')
+                .call(d3.drag().on('start', dragStart).on('drag', dragged).on('end', dragEnd));
+
+            node.append('circle')
+                .attr('r', d => d.r)
+                .attr('fill', d => colors[d.group] + '20')
+                .attr('stroke', d => colors[d.group])
+                .attr('stroke-width', 2)
+                .attr('cursor', 'grab');
+
+            node.append('text')
+                .attr('text-anchor', 'middle').attr('dy', '0.35em')
+                .attr('fill', d => colors[d.group])
+                .attr('font-size', d => d.r > 24 ? '11px' : '10px')
+                .attr('font-weight', '700')
+                .attr('font-family', 'JetBrains Mono, monospace')
+                .text(d => d.label);
+
+            const tooltip = d3.select('#tooltip');
+
+            node.on('mouseover', function (event, d) {
+                tooltip.transition().duration(200).style('opacity', 1);
+                tooltip.html(`<strong>${d.label}</strong><br/><span style="color:${colors[d.group]}">${d.group}</span>`)
+                    .style('left', (event.pageX + 15) + 'px').style('top', (event.pageY - 30) + 'px');
+                d3.select(this).select('circle').transition().duration(200).attr('r', d.r + 4);
+            })
+            .on('mouseout', function (event, d) {
+                tooltip.transition().duration(200).style('opacity', 0);
+                d3.select(this).select('circle').transition().duration(200).attr('r', d.r);
+            });
+
+            simulation.on('tick', () => {
+                link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                linkLabel.attr('x', d => (d.source.x + d.target.x) / 2)
+                    .attr('y', d => (d.source.y + d.target.y) / 2 - 5);
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragStart(event) { if (!event.active) simulation.alphaTarget(0.3).restart(); event.subject.fx = event.subject.x; event.subject.fy = event.subject.y; }
+            function dragged(event) { event.subject.fx = event.x; event.subject.fy = event.y; }
+            function dragEnd(event) { if (!event.active) simulation.alphaTarget(0); event.subject.fx = null; event.subject.fy = null; }
+        }
+    </script>
+</body>
+</html>

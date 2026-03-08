@@ -1,79 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX Learning | All Tracks</title>
-    <meta name="description" content="CORTEX structured learning paths — Beginner, Intermediate, and Advanced software development tracks.">
-    <link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png">
-    <link rel="stylesheet" href="../assets/css/glassmorphism.css">
-    <link rel="stylesheet" href="../assets/css/layouts/learning-path.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX University — Structured Learning Paths</title>
+    <meta name="description" content="CORTEX University — progressive learning paths across architecture, orchestration, workflows, governance, TDD, and intelligence. 6 domains, 43 concepts, 3 levels of depth."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-teal: #14b8a6;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens */
+            --issa-content-content: 3rem;
+            --issa-content-panel:   2rem;
+            --issa-panel-panel:     1.5rem;
+            --issa-hero-first:      3rem;
+        }
+        body {
+            background-color: #020617;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(20, 184, 166, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
+        .hero-title { font-family: 'Space Grotesk', sans-serif; }
+        .section-title { font-size: 1.75rem; line-height: 1.2; }
+        @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
+
+        .hero-section-wrapper { position: relative; padding-top: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+        .hero-robot-container { position: relative; z-index: 10; margin-bottom: -1px; }
+        .hero-divider-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.3) 50%, transparent); }
+        .hero-robot-head { width: 240px; max-width: 300px; height: auto; filter: drop-shadow(0 0 40px rgba(20, 184, 166, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
+        .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(20, 184, 166, 0.65)); transform: scale(1.02); }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @media (hover: hover) { .glass-card:hover { border-color: rgba(20,184,166,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(20,184,166,0.15); } }
+        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+
+        .gradient-text-teal { background: linear-gradient(to right, #14b8a6, #10b981); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
+        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
+        .breadcrumb-nav a:hover { color: var(--accent-teal); }
+        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
+        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+
+        .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(20,184,166,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(20,184,166,0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(20,184,166,0); } }
+
+        /* Domain cards */
+        .domain-card { cursor: pointer; }
+        .domain-card .domain-icon-wrap { width: 3.5rem; height: 3.5rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; }
+        .domain-card:hover .domain-icon-wrap { transform: scale(1.1); }
+        .difficulty-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.625rem; border-radius: 0.5rem; }
+        .difficulty-beginner   { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+        .difficulty-intermediate { background: rgba(20,184,166,0.12); color: #5eead4; border: 1px solid rgba(20,184,166,0.25); }
+        .difficulty-advanced   { background: rgba(139,92,246,0.12); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.25); }
+
+        /* Journey pipeline */
+        .journey-pipeline { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
+        .journey-step { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem 2rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); min-width: 180px; text-align: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .journey-step:hover { transform: translateY(-4px); }
+        .journey-arrow { color: #334155; font-size: 1.5rem; flex-shrink: 0; padding: 0 0.5rem; }
+        @media (max-width: 768px) {
+            .journey-pipeline { flex-direction: column; gap: 0.5rem; }
+            .journey-arrow { transform: rotate(90deg); }
+            .journey-step { min-width: auto; width: 100%; }
+        }
+
+        /* Role path cards */
+        .role-path-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s ease; cursor: default; }
+        .role-path-card:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.04); }
+        .role-icon-wrap { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        @media (max-width: 768px) { .hero-robot-head { width: 160px; } .glass-card { border-radius: 1.25rem; } }
+
+        /* ISSA Responsive Overrides */
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pulse-dot { animation: none; }
+            .glass-card { transition: none; }
+            .hero-robot-head { transition: none; }
+            .domain-card .domain-icon-wrap { transition: none; }
+            .journey-step { transition: none; }
+        }
+    </style>
 </head>
-<body class="role-page">
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <div id="content-area">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="../index.html">CORTEX</a>
-            <span class="breadcrumb-separator">›</span>
-            <a href="../roles/learner.html">Learner</a>
-            <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">Learning Paths</span>
-        </nav>
+<body class="min-h-screen">
 
-        <div class="role-hero-header">
-            <h1>📚 Learning Paths</h1>
-            <div class="subtitle">Master software development with real-world CORTEX practices</div>
-        </div>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm" style="scroll-margin-top:4rem">Skip to main content</a>
 
-        <main id="main-content">
-            <div class="track-grid">
-                <!-- Beginner -->
-                <a href="beginner/index.html" class="glass-card track-card track-card--beginner">
-                    <div class="track-card-accent"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🌱</span>
-                        <h3 class="track-title">Beginner Track</h3>
-                        <p class="track-tagline">Foundations First</p>
-                        <p class="track-description">Python basics, pytest, TDD fundamentals, clean code, and Git workflows.</p>
-                        <div class="track-meta">
-                            <span class="track-duration">📅 8 weeks</span>
-                            <span class="track-modules">📚 12 modules</span>
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html"><i data-lucide="home" class="w-4 h-4"></i><span>CORTEX</span></a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">University</span>
+    </nav>
+
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+
+        <!-- HERO -->
+        <section class="text-center space-y-6 md:space-y-8">
+            <div class="hero-section-wrapper">
+                <div class="hero-robot-container">
+                    <a href="../index.html" title="Back to CORTEX Home">
+                        <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" src="../assets/images/cortex-logo-512.png"/>
+                    </a>
+                </div>
+                <div class="hero-divider-line"></div>
+            </div>
+            <div class="space-y-4 md:space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="w-1.5 h-1.5 rounded-full bg-teal-400 pulse-dot"></div>
+                    Structured Learning Experience
+                </div>
+                <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] md:leading-tight">
+                    CORTEX<br/><span class="gradient-text-teal">University.</span>
+                </h1>
+                <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed px-2">
+                    Progressive learning paths that build understanding from <span class="text-teal-400 font-semibold">orientation</span> through <span class="text-violet-400 font-semibold">exploration</span> to <span class="text-emerald-400 font-semibold">mastery</span>. Six domains, 43 concepts, three levels of depth — each matched to your role and experience.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center items-stretch gap-3 md:gap-6 pt-4">
+                <div class="relative group w-[calc(33%-0.75rem)] md:w-44 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-teal-600/30 to-emerald-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-teal-500/40 bg-gradient-to-br from-teal-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
+                        <div class="text-2xl md:text-3xl font-black text-teal-400 mb-1 drop-shadow-[0_0_12px_rgba(20,184,166,0.6)]">6</div>
+                        <div class="text-[10px] md:text-[11px] text-teal-300/80 uppercase tracking-widest font-bold">Domains</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(33%-0.75rem)] md:w-44 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
+                        <div class="text-2xl md:text-3xl font-black text-violet-400 mb-1 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">43</div>
+                        <div class="text-[10px] md:text-[11px] text-violet-300/80 uppercase tracking-widest font-bold">Concepts</div>
+                    </div>
+                </div>
+                <div class="relative group w-[calc(33%-0.75rem)] md:w-44 flex">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-green-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
+                        <div class="text-2xl md:text-3xl font-black text-emerald-400 mb-1 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">3</div>
+                        <div class="text-[10px] md:text-[11px] text-emerald-300/80 uppercase tracking-widest font-bold">Depth Levels</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEARNING JOURNEY — Glass Panel with CSS Pipeline -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-950/60 via-slate-900/80 to-violet-950/60 border border-teal-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="map" class="w-3.5 h-3.5"></i> Your Learning Journey
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Three Levels of Understanding</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        You encounter concepts in order of dependency. High-level orientation before architectural detail. Conceptual foundations before implementation specifics. Every level builds on what came before.
+                    </p>
+                </div>
+                <div class="journey-pipeline py-4">
+                    <div class="journey-step" style="border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.06);">
+                        <div class="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400">
+                            <i data-lucide="compass" class="w-6 h-6"></i>
                         </div>
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Level 1</div>
+                            <div class="font-bold text-sm text-teal-300">Orientation</div>
+                            <p class="text-[13px] text-slate-500 mt-1">Choose your domain.<br/>Assess your starting point.</p>
+                        </div>
+                    </div>
+                    <div class="journey-arrow">&#8594;</div>
+                    <div class="journey-step" style="border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.06);">
+                        <div class="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400">
+                            <i data-lucide="network" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Level 2</div>
+                            <div class="font-bold text-sm text-violet-300">Exploration</div>
+                            <p class="text-[13px] text-slate-500 mt-1">Interactive concept maps.<br/>See how ideas connect.</p>
+                        </div>
+                    </div>
+                    <div class="journey-arrow">&#8594;</div>
+                    <div class="journey-step" style="border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.06);">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="microscope" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Level 3</div>
+                            <div class="font-bold text-sm text-emerald-300">Mastery</div>
+                            <p class="text-[13px] text-slate-500 mt-1">Deep-dive explanations.<br/>Diagrams, code, analogies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOMAIN CARDS — Level 1 Orientation -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Choose Your Domain
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Six Learning Domains</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    Each domain covers a major capability area of CORTEX. Start with what interests you most — or follow a recommended path based on your role.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="architecture-patterns/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-teal-500/20 text-teal-400"><i data-lucide="layers" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-teal-300 mb-1">Architecture Patterns</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">How 290+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">8 topics &middot; ~45 min</span>
+                        <span class="text-teal-400 font-bold">Explore &#8594;</span>
                     </div>
                 </a>
 
-                <!-- Intermediate -->
-                <a href="intermediate/index.html" class="glass-card track-card track-card--intermediate">
-                    <div class="track-card-accent"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🔧</span>
-                        <h3 class="track-title">Intermediate Track</h3>
-                        <p class="track-tagline">Build With Confidence</p>
-                        <p class="track-description">Architecture patterns, OWASP security, SOLID principles, and API design.</p>
-                        <div class="track-meta">
-                            <span class="track-duration">📅 10 weeks</span>
-                            <span class="track-modules">📚 15 modules</span>
-                        </div>
+                <a href="ai-orchestration/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-violet-500/20 text-violet-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-violet-300 mb-1">AI Orchestration</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Intent routing, LENS intelligence tiers, and the Perception &#8594; Reasoning &#8594; Action pipeline.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">7 topics &middot; ~40 min</span>
+                        <span class="text-violet-400 font-bold">Explore &#8594;</span>
                     </div>
                 </a>
 
-                <!-- Advanced -->
-                <a href="advanced/index.html" class="glass-card track-card track-card--advanced">
-                    <div class="track-card-accent"></div>
-                    <div class="track-card-content">
-                        <span class="track-icon">🚀</span>
-                        <h3 class="track-title">Advanced Track</h3>
-                        <p class="track-tagline">Lead & Scale</p>
-                        <p class="track-description">Distributed systems, observability, CI/CD hardening, and engineering leadership.</p>
-                        <div class="track-meta">
-                            <span class="track-duration">📅 12 weeks</span>
-                            <span class="track-modules">📚 18 modules</span>
-                        </div>
+                <a href="workflow-automation/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900/80 hover:border-emerald-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-emerald-500/20 text-emerald-400"><i data-lucide="git-branch" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-advanced">Advanced</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-emerald-300 mb-1">Workflow Automation</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Declarative workflow templates, primitive composition, and the WorkflowComposer engine.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">6 topics &middot; ~35 min</span>
+                        <span class="text-emerald-400 font-bold">Explore &#8594;</span>
+                    </div>
+                </a>
+
+                <a href="governance-quality/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/40 to-slate-900/80 hover:border-amber-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-amber-500/20 text-amber-400"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-amber-300 mb-1">Governance &amp; Quality</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">60+ self-enforcing governance rules across pre-commit, CI, and runtime layers.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">9 topics &middot; ~50 min</span>
+                        <span class="text-amber-400 font-bold">Explore &#8594;</span>
+                    </div>
+                </a>
+
+                <a href="tdd-development/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-red-500/30 bg-gradient-to-br from-red-950/40 to-slate-900/80 hover:border-red-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-red-500/20 text-red-400"><i data-lucide="rotate-cw" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-red-300 mb-1">TDD-First Development</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">The mandatory Red &#8594; Green &#8594; Refactor cycle, test quality scoring, and golden test promotion.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">5 topics &middot; ~30 min</span>
+                        <span class="text-red-400 font-bold">Explore &#8594;</span>
+                    </div>
+                </a>
+
+                <a href="intelligence-learning/index.html" class="domain-card glass-card p-6 space-y-4 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/40 to-slate-900/80 hover:border-purple-400/50" style="text-decoration:none;">
+                    <div class="flex items-center justify-between">
+                        <div class="domain-icon-wrap bg-purple-500/20 text-purple-400"><i data-lucide="brain" class="w-5 h-5"></i></div>
+                        <span class="difficulty-badge difficulty-advanced">Advanced</span>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base tracking-tight text-purple-300 mb-1">Intelligence &amp; Learning</h3>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">LENS sensory system, RCA memory engine, URS reinforcement signals, and knowledge acquisition.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-600">
+                        <span class="font-bold">8 topics &middot; ~45 min</span>
+                        <span class="text-purple-400 font-bold">Explore &#8594;</span>
                     </div>
                 </a>
             </div>
-        </main>
-    </div>
+        </section>
+
+        <!-- RECOMMENDED PATHS BY ROLE -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="route" class="w-3.5 h-3.5"></i> Recommended Paths
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Start Based on Your Role</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    Not sure where to begin? Follow the path designed for your role. Each recommendation prioritises the domains most relevant to your daily work.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="role-path-card">
+                    <div class="role-icon-wrap bg-teal-500/20 text-teal-400"><i data-lucide="code-2" class="w-5 h-5"></i></div>
+                    <div class="space-y-1.5">
+                        <h4 class="font-black text-sm text-teal-300">Software Engineer</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-teal-400">TDD-First Development</strong>, then <strong class="text-teal-400">Architecture Patterns</strong>, then <strong class="text-teal-400">AI Orchestration</strong>. Build muscle memory for the TDD cycle before learning how CORTEX routes and executes.</p>
+                        <div class="flex gap-1.5 mt-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 text-[10px] font-bold">TDD</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[10px] font-bold">Architecture</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[10px] font-bold">AI Orchestration</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="role-path-card">
+                    <div class="role-icon-wrap bg-violet-500/20 text-violet-400"><i data-lucide="compass" class="w-5 h-5"></i></div>
+                    <div class="space-y-1.5">
+                        <h4 class="font-black text-sm text-violet-300">Tech Lead / Architect</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-violet-400">Architecture Patterns</strong>, then <strong class="text-violet-400">Governance &amp; Quality</strong>, then <strong class="text-violet-400">Workflow Automation</strong>. Understand the structural backbone before learning how rules enforce and workflows compose.</p>
+                        <div class="flex gap-1.5 mt-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[10px] font-bold">Architecture</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">Governance</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Workflows</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="role-path-card">
+                    <div class="role-icon-wrap bg-amber-500/20 text-amber-400"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
+                    <div class="space-y-1.5">
+                        <h4 class="font-black text-sm text-amber-300">Product Owner</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-amber-400">Governance &amp; Quality</strong>, then <strong class="text-amber-400">AI Orchestration</strong>. Understand what CORTEX enforces and how it makes decisions — you do not need implementation detail.</p>
+                        <div class="flex gap-1.5 mt-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">Governance</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[10px] font-bold">AI Orchestration</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="role-path-card">
+                    <div class="role-icon-wrap bg-emerald-500/20 text-emerald-400"><i data-lucide="sparkles" class="w-5 h-5"></i></div>
+                    <div class="space-y-1.5">
+                        <h4 class="font-black text-sm text-emerald-300">Curious Learner</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Start anywhere that interests you. Every domain is self-contained. The interactive concept maps in Level 2 help you discover connections naturally as you explore.</p>
+                        <div class="flex gap-1.5 mt-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Any Domain</span>
+                            <span class="text-slate-600 text-[10px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-slate-500/10 text-slate-400 text-[10px] font-bold">Follow the graph</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEARNING PHILOSOPHY — Glass Panel -->
+        <section class="relative py-8 my-4">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-teal-950/60 border border-emerald-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Pedagogy
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">How We Teach</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-emerald-500/20">
+                        <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-teal-300">Progressive Disclosure</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">You encounter concepts in order of dependency. High-level orientation before architectural detail. Conceptual foundations before implementation specifics.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-violet-500/20">
+                        <div class="w-9 h-9 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="mouse-pointer-click" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-violet-300">Active Learning</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Interactive diagrams and explorable concept maps replace passive reading. You engage with the system rather than observing it from a distance.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-emerald-500/20">
+                        <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="git-fork" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-emerald-300">Visual Knowledge Mapping</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Concept relationship graphs help you see how ideas connect. Architecture patterns link to orchestrators. Governance rules link to enforcement. Every concept exists in a web.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-amber-500/20">
+                        <div class="w-9 h-9 bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="bar-chart-3" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-amber-300">Multi-Diagram Teaching</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Different diagrams explain different aspects. Architecture layers use tree layouts. Workflows use pipeline visualizations. Relationships use force-directed graphs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
+            <div class="glass-card p-8 md:p-16 space-y-8 md:space-y-10 relative overflow-visible border-teal-500/30">
+                <div class="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-teal-500 rounded-2xl md:rounded-3xl rotate-45 flex items-center justify-center shadow-[0_0_50px_rgba(20,184,166,0.4)]">
+                    <i data-lucide="graduation-cap" class="w-8 h-8 md:w-10 md:h-10 text-black -rotate-45"></i>
+                </div>
+                <h3 class="section-title font-black tracking-tighter pt-4 md:pt-0">Ready to Start Learning?</h3>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Choose a domain above and begin your journey. Every page is self-contained — start anywhere, explore at your own pace, and follow the concept maps to discover connections.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
+                    <a href="governance-quality/index.html" class="glass-card px-8 py-4 text-center rounded-full border-emerald-500/30 hover:border-emerald-400/50" style="text-decoration:none;">
+                        <span class="text-[13px] font-bold text-emerald-400">Beginner? Start with Governance &#8594;</span>
+                    </a>
+                    <a href="architecture-patterns/index.html" class="glass-card px-8 py-4 text-center rounded-full border-teal-500/30 hover:border-teal-400/50" style="text-decoration:none;">
+                        <span class="text-[13px] font-bold text-teal-400">Intermediate? Architecture &#8594;</span>
+                    </a>
+                    <a href="intelligence-learning/index.html" class="glass-card px-8 py-4 text-center rounded-full border-violet-500/30 hover:border-violet-400/50" style="text-decoration:none;">
+                        <span class="text-[13px] font-bold text-violet-400">Advanced? Intelligence &#8594;</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
+        <div class="flex justify-center gap-6 md:gap-8 text-slate-500">
+            <i data-lucide="github" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+            <i data-lucide="book-open" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
+        </div>
+        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+            &copy; 2026 CORTEX | AI Engineering Orchestration Framework | University
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function () { lucide.createIcons(); };
+    </script>
 </body>
 </html>
