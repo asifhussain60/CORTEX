@@ -76,6 +76,20 @@ Recurrence detection spans all orchestrators. If the same root cause appears in 
 
 ---
 
+## The Knowledge Acquisition Layer — Self-Growing Intelligence
+
+Beyond consulting its existing knowledge base, CORTEX is designed to detect when its knowledge is insufficient and automatically acquire what is missing.
+
+The **Knowledge Acquisition Layer (KAL)** runs a 6-stage pipeline: it extracts domain signals from the LENS output, assesses how well those signals are covered by the existing knowledge index, synthesises new domain-specific knowledge YAML files for any gaps, validates each new YAML against a 7-rule schema, registers them in the knowledge index, and invalidates the intelligence cache so the new knowledge is used immediately. This pipeline triggers automatically whenever LENS domain signal coverage drops below 80% — no manual intervention required.
+
+Before acquiring new knowledge, KAL consults the Operational Pattern Journal for prior patterns in the same domain, and emits a Unified Reinforcement Signal on success — so successful knowledge acquisitions compound into stronger future recommendations for similar domains.
+
+### What KAL Validates
+
+Every synthesised knowledge YAML is checked against 7 rules before it enters the index: valid YAML syntax, required `title` and `domain` fields, `best_practices` as a list, minimum 3 practice items, no empty entries, and no duplicate titles. A YAML that fails any rule is rejected — the index only grows with valid, well-structured knowledge.
+
+---
+
 ## The Unified Reinforcement Signal — Learning from Every Outcome
 
 Beyond root cause analysis, CORTEX maintains a continuous learning signal that updates the confidence scores used throughout the intelligence layer.

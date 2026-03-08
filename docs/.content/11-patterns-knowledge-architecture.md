@@ -64,14 +64,15 @@ The company domain knowledge base answers questions like: "How does our team imp
 
 ### Knowledge Resolution Priority
 
-When CORTEX formulates a recommendation, it combines both knowledge stores using a priority hierarchy:
+When CORTEX formulates a recommendation, it combines both knowledge stores using a five-tier priority hierarchy:
 
-1. **Company-specific overrides** — explicit conventions your team has defined take highest priority
-2. **Company-observed patterns** — patterns consistently observed across your codebase
-3. **Universal best practices** — the canonical engineering principles from the universal knowledge base
-4. **Language defaults** — language-specific idioms and conventions
+1. **Domain-specific overrides** — explicit conventions your team has defined for a specific module or domain take highest priority
+2. **Tier 0 (skull rules)** — immutable non-negotiable rules that can never be overridden
+3. **Tier 1 (domain-specific)** — domain knowledge profiles (FinOps, Healthcare, DevOps, Legal, ML, etc.)
+4. **Tier 2 (engineering)** — universal engineering best practices from the knowledge base
+5. **CORTEX best practices** — the framework's own accumulated best-practice baseline
 
-This hierarchy ensures recommendations feel native to your codebase, not generic and disconnected.
+This hierarchy ensures recommendations feel native to your codebase, not generic and disconnected. The five-tier system replaced the earlier three-tier model — the additional tiers provide finer-grained control for domain-specific organisations with regulatory compliance requirements.
 
 ---
 

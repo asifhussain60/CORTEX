@@ -1,14 +1,14 @@
 # Orchestration — The Engine Room
 
 ---
-title: Orchestration — How CORTEX Coordinates 290+ Specialised Engines
+title: Orchestration — How CORTEX Coordinates 296+ Specialised Engines
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
 last_verified: 2026-03-08
 order: 5
 ---
 
-> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 290+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds. Think of it like a large hospital: when a patient arrives, the triage nurse (the router) instantly determines whether to send them to cardiology, orthopaedics, or radiology. Each department has deep expertise. The hospital works because every department follows the same protocols and communicates through a central system — never by shouting across the corridor.
+> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 296+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds. Think of it like a large hospital: when a patient arrives, the triage nurse (the router) instantly determines whether to send them to cardiology, orthopaedics, or radiology. Each department has deep expertise. The hospital works because every department follows the same protocols and communicates through a central system — never by shouting across the corridor.
 
 ---
 
@@ -30,7 +30,7 @@ The governance step runs before execution on every orchestrator, every time. The
 
 ## The Architecture — Fourteen Domains
 
-290+ orchestrators are organised across 14 specialised domains based on their role in the system.
+296+ orchestrators are organised across 14 specialised domains based on their role in the system.
 
 ### Core — The Command Layer (130+ orchestrators)
 
@@ -39,13 +39,15 @@ The core tier contains orchestrators responsible for coordination, routing, enfo
 | Orchestrator | What It Does |
 |---|---|
 | **Central Coordinator** | Receives every request, routes to the appropriate specialist, monitors execution, records the complete audit trail |
-| **Request Classifier** | Classifies every incoming request into one of 30 intent types in under 40 milliseconds |
+| **Request Classifier** | Classifies every incoming request into one of 33+ intent types in under 40 milliseconds |
 | **Interaction Handler** | Understands the request in context of the current codebase before routing |
 | **Development Engine** | Enforces the three-phase test-driven cycle on every build and fix |
 | **Governance Enforcer** | Coordinates ten specialised agents that check different categories of rules |
 | **Workflow Runner** | Reads structured workflow templates and executes them as typed step sequences |
 | **Audit Orchestrator** | Coordinates the comprehensive nine-stage production readiness audit |
 | **Conversation Manager** | Maintains multi-turn session state so context is preserved across interactions |
+| **Complexity Triage Engine** | Scores every request on five CDR dimensions — clarity, context, scope, risk, and precedent — routing to the correct planning tier (SIMPLE/MODERATE/COMPLEX) in a single pass |
+| **Autonomous Planning Engine** | CAPE: 11-component pipeline that converts complex requests into governed execution plans with dependency ordering (Kahn's algorithm), five analysis gates, seven-item machine-checkable completion checklists, and per-sub-phase stabilisation injection |
 
 ### Domain — The Specialist Layer (25+ orchestrators)
 
@@ -64,12 +66,14 @@ The domain tier contains orchestrators with deep expertise in specific engineeri
 | **Feedback Processor** | Captures structured user feedback — satisfaction signals, corrections, suggestions — and routes them into the Unified Reinforcement Signal for confidence adjustment |
 | **Change Intelligence Analyst** | Discovers current-state processes via LENS, compares them against best-practice patterns, produces gap analyses with severity scores, evaluates ROI for proposed changes, and generates system capability inventories — purpose-built for Product Owner decision support |
 | **Requirements Engineer** | Decomposes stakeholder intent into structured, testable requirements — business requirements, functional requirements, non-functional requirements, and acceptance criteria — grounded in LENS analysis of the actual codebase |
+| **Knowledge Acquisition Orchestrator** | 6-stage auto-synthesis pipeline: detects knowledge gaps when LENS domain signal coverage drops below 80%, synthesises domain YAML, validates against a 7-rule schema, and registers in the knowledge index — integrates OPJ learning and URS reinforcement |
+| **Cross-Repo Extractor** | 6-stage pipeline that extracts operational learnings from git history, classifies changes into 8 categories (NEW_CAPABILITY, BUG_FIX, GOVERNANCE, etc.), and scrubs all proprietary content through an 8-gate sanitisation system before output |
 
 ### Support — The Operations Layer (50+ orchestrators)
 
 The support tier handles operational concerns — health monitoring, cleanup, onboarding, debugging, and the infrastructure that keeps everything running.
 
-Key support orchestrators include the health monitor (checks all systems and reports status), the cleanup engine (removes accumulated documentation sprawl and stale files — protected by a Vacuum Recency Guard that excludes files modified within the last 7 days from deletion), the debugging pipeline (multi-strategy debugging for Python, TypeScript, C#, SQL, and REST APIs), the onboarding engine (analyses a new repository and produces a complete intelligence profile), the upgrade manager (handles CORTEX version updates and dependency resolution), and the sync engine (one-way synchronisation between private and shared repositories with automatic privacy protection).
+Key support orchestrators include the health monitor (checks all systems and reports status), the cleanup engine (removes accumulated documentation sprawl and stale files — protected by a Vacuum Recency Guard that excludes files modified within the last 7 days from deletion), the debugging pipeline (multi-strategy debugging for Python, TypeScript, C#, SQL, and REST APIs), the onboarding engine (analyses a new repository and produces a complete intelligence profile), the upgrade manager (handles CORTEX version updates and dependency resolution), the sync engine (one-way synchronisation between private and shared repositories with automatic privacy protection), and the Rollback Manager (records a git HEAD checkpoint before every sub-phase and restores to it on failure — emitting a MILD_PUNISHMENT signal to the learning loop so the failure informs future decisions).
 
 ### Health — System Wellness (25+ orchestrators)
 
@@ -85,9 +89,9 @@ Four dedicated orchestrators handle all interactions with version control: stand
 
 ---
 
-## The 30+ Intent Types — Speaking CORTEX's Language
+## The 33+ Intent Types — Speaking CORTEX's Language
 
-Every request to CORTEX is classified into one of 32+ intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated. It works like a skilled receptionist who hears "I need help with my knee" and immediately knows to book an orthopaedic appointment — not a dental one.
+Every request to CORTEX is classified into one of 33+ intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated. It works like a skilled receptionist who hears "I need help with my knee" and immediately knows to book an orthopaedic appointment — not a dental one.
 
 | Category | Intents |
 |---|---|
@@ -98,7 +102,7 @@ Every request to CORTEX is classified into one of 32+ intent types. This classif
 | **Planning** | Plan (structured planning), Design (architecture decisions) |
 | **Auditing** | Audit (compliance check), Health (system status), Security (vulnerability scan) |
 | **Learning** | Digest (content ingestion), Train (knowledge building), Distill (conversation → executable prompt) |
-| **Decision Support** | Change Intelligence (process discovery, gap analysis, ROI evaluation), Requirements (structured requirements generation from stakeholder intent) |
+| **Decision Support** | Change Intelligence (process discovery, gap analysis, ROI evaluation), Requirements (structured requirements generation from stakeholder intent), PO Training (training documentation for product owners) |
 | **Collaborating** | Challenge (alternatives analysis), Rephrase (request clarification) |
 | **Operating** | Onboard (repository setup), Sync (repository synchronisation), Publish (release), Rollback (undo), Introduce (role-based onboarding) |
 | **Visualising** | Dashboard (reporting), Discover (exploration) |
@@ -162,4 +166,4 @@ This visibility is structural. It is generated by a dedicated rendering componen
 
 ---
 
-*Orchestrator count verified against live codebase (290+) · Intent routing verified against live IntentRouter implementation (32+ intent types) · Last verified: 2026-03-08*
+*Orchestrator count verified against live codebase (296+) · Intent routing verified against live IntentRouter implementation (33+ intent types) · Last verified: 2026-03-08*

@@ -1,0 +1,215 @@
+# learning-path-architecture.yaml
+# CORTEX Learning Path Architecture — Knowledge Registry
+# Authority: cortex-doc.prompt.md → html-view-designer
+# Updated: 2026-03-08 | Synthesised from Issues #14, #15, learning-path.md
+# Source: GitHub Issues knowledge base + learning-path.md source material
+
+metadata:
+  title: "CORTEX University — Learning Path Architecture"
+  version: "1.0.0"
+  synthesised_from:
+    - "GitHub Issue #14 — CORTEX Feedback 2026-03-08 (12 capability records)"
+    - "GitHub Issue #15 — Phase 142 PO Change Intelligence Orchestration"
+    - "_workspaces/recommendations/learning-path.md (source material)"
+  last_verified: "2026-03-08"
+
+# ── 3-Level Learning Architecture ──────────────────────────────────────
+
+learning_architecture:
+  philosophy: |
+    Progressive disclosure applied to system learning. Each level reduces
+    cognitive load by revealing detail only when the learner has context
+    to absorb it. Visual knowledge mapping at Level 2 replaces passive
+    reading with active exploration.
+
+  level_1_orientation:
+    purpose: "Help learners choose what to learn and assess their starting point"
+    components:
+      - "Hero with system identity and value proposition"
+      - "6 learning domain cards with difficulty, duration, topic count, mini concept preview"
+      - "Recommended path selector based on role"
+    domains:
+      - id: "architecture-patterns"
+        title: "Architecture Patterns"
+        icon: "layers"
+        difficulty: "Intermediate"
+        topics: 8
+        duration: "~45 min"
+        description: "How 290+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX"
+        accent_color: "#14b8a6"
+      - id: "ai-orchestration"
+        title: "AI Orchestration"
+        icon: "cpu"
+        difficulty: "Intermediate"
+        topics: 7
+        duration: "~40 min"
+        description: "Intent routing, LENS intelligence tiers, and the Perception→Reasoning→Action pipeline"
+        accent_color: "#8b5cf6"
+      - id: "workflow-automation"
+        title: "Workflow Automation"
+        icon: "git-branch"
+        difficulty: "Advanced"
+        topics: 6
+        duration: "~35 min"
+        description: "Declarative workflow templates, primitive composition, and the WorkflowComposer engine"
+        accent_color: "#10b981"
+      - id: "governance-quality"
+        title: "Governance & Quality"
+        icon: "shield-check"
+        difficulty: "Beginner"
+        topics: 9
+        duration: "~50 min"
+        description: "60+ self-enforcing governance rules across pre-commit, CI, and runtime layers"
+        accent_color: "#f59e0b"
+      - id: "tdd-development"
+        title: "TDD-First Development"
+        icon: "rotate-cw"
+        difficulty: "Beginner"
+        topics: 5
+        duration: "~30 min"
+        description: "The mandatory Red→Green→Refactor cycle, test quality scoring, and golden test promotion"
+        accent_color: "#ef4444"
+      - id: "intelligence-learning"
+        title: "Intelligence & Learning"
+        icon: "brain"
+        difficulty: "Advanced"
+        topics: 8
+        duration: "~45 min"
+        description: "LENS sensory system, RCA memory engine, URS reinforcement signals, and knowledge acquisition"
+        accent_color: "#a78bfa"
+
+  level_2_concept_explorer:
+    purpose: "Interactive concept exploration with relationship visualization"
+    components:
+      - "D3.js force-directed knowledge graph"
+      - "Concept nodes with category colouring"
+      - "Relationship edges (uses, implements, references, composes)"
+      - "Click-to-expand detail panels"
+    interaction_model:
+      - "Hover: highlight connected concepts"
+      - "Click node: open Level 3 detail panel"
+      - "Drag: rearrange for exploration"
+      - "Zoom: focus on sub-graph"
+
+  level_3_deep_dive:
+    purpose: "Full educational page per concept with practical examples"
+    components:
+      - "Concept explanation (plain language)"
+      - "Real-world analogy"
+      - "CORTEX implementation context"
+      - "Interactive diagrams (D3.js)"
+      - "Practical example with code"
+      - "Related concepts (graph neighbourhood)"
+
+# ── Issue-Derived Knowledge (synthesised, not copied) ──────────────────
+
+issue_knowledge:
+  issue_14_capabilities:
+    cape:
+      title: "CORTEX Autonomous Planning Engine (CAPE)"
+      summary: |
+        CAPE introduces intelligent plan generation. A 5-dimension Complexity-Driven
+        Routing (CDR) scorer classifies requests into SIMPLE/MODERATE/COMPLEX bands.
+        The Auto Plan Generator transforms triage results into scaffolded phase YAML
+        files. Five mandatory analysis gates (Threat, Quality, Security, RCA History,
+        OPJ Consultation) validate plans before execution. A topological execution loop
+        with Kahn's algorithm resolves dependencies, and a stabilization injector
+        auto-appends convergence cleanup after every implementation phase.
+      learning_relevance:
+        - "Demonstrates Strategy pattern (5 scoring dimensions)"
+        - "Demonstrates Builder pattern (phase file scaffolder)"
+        - "Demonstrates Chain of Responsibility (5 analysis gates)"
+        - "Demonstrates Pipeline pattern (execution loop)"
+      components:
+        - "ComplexityTriageEngine — 3-band CDR scoring"
+        - "AutoPlanGenerator + PhaseFileScaffolder"
+        - "PlanAnalysisGateRunner — 5 mandatory gates"
+        - "PlanExecutionLoop — topological ordering"
+        - "PlanStabilizationInjector — convergence cleanup"
+
+    kal:
+      title: "Knowledge Acquisition Layer (KAL)"
+      summary: |
+        KAL enables on-demand domain knowledge synthesis. A Knowledge Coverage
+        Assessor scores current coverage (0.0–1.0) and triggers acquisition when
+        below threshold. The Domain Signal Extractor converts LENS output to domain
+        signals via regex patterns. A 6-step pipeline orchestrator assesses, identifies
+        gaps, synthesizes YAML knowledge files, validates schema, registers in INDEX,
+        and re-verifies coverage.
+      learning_relevance:
+        - "Demonstrates Observer pattern (coverage-triggered acquisition)"
+        - "Demonstrates Pipeline pattern (6-step orchestration)"
+        - "Demonstrates Factory pattern (template synthesizer)"
+        - "Demonstrates Registry pattern (index registrar)"
+
+    deep_intelligence:
+      title: "Deep Intelligence Wiring"
+      summary: |
+        The CCL Query Engine translates governance rule IDs into business-language
+        impact statements. The Capability Verifier validates that all declared
+        orchestrators are importable at runtime, detecting architecture drift.
+        IntelligenceFacade extends from 8 to 12+ methods with null-object fallbacks.
+      learning_relevance:
+        - "Demonstrates Adapter pattern (CCL → business language)"
+        - "Demonstrates Facade pattern (single canonical entry point)"
+        - "Demonstrates Null Object pattern (graceful degradation)"
+
+    git_safety:
+      title: "Git Checkpoint Safety"
+      summary: |
+        SubPhaseCheckpointInjector wraps every sub-phase in a git checkpoint.
+        RollbackManager handles hard-reset restoration with URS signal emission.
+        WorkflowComposer.compose_for_sub_phase() integrates checkpoint injection
+        into the workflow engine.
+      learning_relevance:
+        - "Demonstrates Decorator pattern (checkpoint wrapping)"
+        - "Demonstrates Command pattern (rollback actions)"
+
+  issue_15_capabilities:
+    po_change_intelligence:
+      title: "PO Change Intelligence Orchestration (Phase 142)"
+      summary: |
+        3 new orchestrators and 7 reusable Workflow Composer templates enable
+        structured PO decision-support workflows. ChangeIntelligenceOrchestrator
+        handles process discovery, best-practice comparison, change recommendations,
+        ROI analysis, and capability summaries. RequirementsOrchestrator decomposes
+        stakeholder intent into structured, testable requirements.
+      learning_relevance:
+        - "Demonstrates how CORTEX extends to non-engineering roles"
+        - "Shows Workflow Composer template composition"
+        - "Illustrates the traceability spine from discovery to training"
+      orchestration_chain: |
+        process-discovery → best-practice-comparison → change-recommendation
+        → requirements-synthesis → implementation (TDD pipeline) → training-doc-generation
+
+# ── Diagram Specifications ─────────────────────────────────────────────
+
+diagram_specifications:
+  learning_journey_map:
+    type: "CSS flexbox pipeline"
+    purpose: "Visual progression from orientation through exploration to deep-dive"
+    nodes: ["Choose Your Path", "Explore Concepts", "Master Details"]
+    style: "3-step horizontal pipeline with glassmorphism cards"
+
+  architecture_overview:
+    type: "d3.tree() horizontal"
+    purpose: "System layer view — Core → Domain → Support → Health → Intelligence → Git"
+    d3_method: "d3.tree().size([height, width])"
+    audience: "All learners"
+
+  concept_relationship_graph:
+    type: "d3.forceSimulation()"
+    purpose: "Interactive knowledge graph connecting patterns, orchestrators, workflows"
+    nodes: "~40 concept nodes across 6 domains"
+    edges: "uses, implements, references, composes relationships"
+    interaction: "hover highlight, click expand, drag rearrange"
+
+  request_lifecycle:
+    type: "CSS flexbox pipeline"
+    purpose: "How a request flows: Arrival → LENS → Intelligence → Governance → Execution → Delivery"
+    style: "6-step horizontal pipeline with animated arrows"
+
+  tdd_cycle_diagram:
+    type: "CSS + D3 hybrid"
+    purpose: "RED→GREEN→REFACTOR cycle with convergence gate"
+    style: "Circular state machine with colour-coded phases"

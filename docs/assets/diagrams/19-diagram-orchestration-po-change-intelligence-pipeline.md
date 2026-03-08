@@ -1,13 +1,15 @@
 ---
 id: orchestration-po-change-intelligence-pipeline
 title: Product Owner Change Intelligence Pipeline
-purpose: Show how CORTEX supports PO decision-making through a structured pipeline — from process discovery through gap analysis, change recommendations, requirements synthesis, and training documentation generation.
+purpose: Show how CORTEX supports PO decision-making through a structured pipeline — from process discovery through gap analysis, change recommendations, requirements synthesis, and training documentation generation. For complex multi-phase work, CAPE (Complexity, Analysis, and Planning Engine) is invoked automatically to decompose the request into a structured delivery plan before requirements synthesis begins.
 audience:
   - Business Leaders
   - Product Owners
 source_of_truth:
   - cortex/orchestrators/domain/change_intelligence_orchestrator.py
   - cortex/orchestrators/domain/requirements_orchestrator.py
+  - cortex/orchestrators/core/complexity_triage_engine.py
+  - cortex/orchestrators/domain/auto_plan_generator.py
   - cortex-registry/workflows/templates/po/
 last_verified: 2026-03-08
 diagram_type: Orchestration
@@ -105,18 +107,70 @@ d3_method: "d3.tree() horizontal — 6-stage pipeline with branching sub-workflo
   └──────────────────────────────────────────────────────────────────────┘
 ```
 
+## CAPE Integration — Complex Feature Planning
+
+For PO requests that score above the FULL_PLAN threshold on CAPE's CDR triage, an additional
+planning stage is injected **between requirements synthesis and TDD pipeline entry**:
+
+```
+  Requirements Synthesis (DoR validated)
+         │
+         ▼
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │              CAPE — AUTONOMOUS PLANNING ENGINE                       │
+  │                     (FULL_PLAN branch only)                         │
+  │                                                                      │
+  │  CDR Score ≥ 0.30 (FULL_PLAN) triggers this stage                  │
+  │                                                                      │
+  │  ComplexityTriageEngine scores 5 dimensions:                        │
+  │    clarity · context · scope · risk · precedent                     │
+  │                                                                      │
+  │  AutoPlanGenerator (Kahn's topological sort) produces:              │
+  │    Phase sequence  │  Sub-phase files  │  Acceptance gates           │
+  │    RoadmapPattern  │  Completion checklist (7 items)                │
+  │                                                                      │
+  │  Plan analysis gates (run in parallel):                             │
+  │    Threat Gate · Quality Gate · Security Gate · RCA Gate · OPJ     │
+  │                                                                      │
+  │  Output: Structured delivery plan → handed to TDD Pipeline          │
+  └──────────────────────────┬──────────────────────────────────────────┘
+                             │
+                             ▼
+         TDD PIPELINE  (per sub-phase — convergence loop per phase)
+```
+
+**CDR routing bands:**
+- `≥ 0.70` → ESCALATION (human review required before planning)
+- `0.50–0.70` → MICRO_PLAN (lightweight — AutoPlanGenerator, no analysis gates)
+- `0.30–0.50` → FULL_PLAN (full CAPE pipeline with 5 analysis gates)
+- `< 0.30` → DIRECT (no planning stage — straight to TDD pipeline)
+
+## PO Workflow Templates (7 — `cortex-registry/workflows/templates/po/`)
+
+| Template | Trigger Intent | Purpose |
+|---|---|---|
+| `po/change-discovery-workflow.yaml` | CHANGE_INTELLIGENCE | Process discovery via LENS scan + AST parse |
+| `po/best-practice-comparison-workflow.yaml` | CHANGE_INTELLIGENCE | Gap analysis + severity scoring |
+| `po/roi-analysis-workflow.yaml` | CHANGE_INTELLIGENCE | LOE→ROI conversion + priority tier projection |
+| `po/requirements-synthesis-workflow.yaml` | REQUIREMENTS | 4-type requirements → DoR validation |
+| `po/training-doc-generation-workflow.yaml` | PO_TRAINING | LENS diff → role-based training materials |
+| `po/stakeholder-summary-workflow.yaml` | CHANGE_INTELLIGENCE | Executive-readable change summary |
+| `po/capability-mapping-workflow.yaml` | CHANGE_INTELLIGENCE | System capability inventory + feature map |
+
 ## Traceability Spine
 
 ```
   Process Discovery → Best-Practice Comparison → Change Recommendation
          │                                              │
          ▼                                              ▼
-  Requirements Synthesis ──── Implementation (TDD) ──── Training Docs
+  Requirements Synthesis → [CAPE if FULL_PLAN] → Implementation (TDD) → Training Docs
 ```
 
 Each artifact in the chain carries a forward reference to the next — providing full
 traceability from "what does the system do today?" through "what did we change and why?"
-to "how do we train teams on the change?"
+to "how do we train teams on the change?" For complex features, the CAPE planning stage
+inserts a structured delivery plan into this chain, giving POs visibility into sub-phase
+sequencing and acceptance gates before implementation begins.
 
 ## Workflow Templates (7 in `po/` category)
 

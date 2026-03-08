@@ -1,7 +1,7 @@
 ---
 id: orchestration-intent-classification-routing
 title: Intent classification and orchestrator routing
-purpose: Show how CORTEX classifies user requests into 32+ intent types and routes them to specialized orchestrators with confidence-based decisions.
+purpose: Show how CORTEX classifies user requests into 33+ intent types and routes them to specialized orchestrators with confidence-based decisions.
 audience:
   - Business Leaders
   - Product Owners
@@ -79,7 +79,7 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  AUDIT ────────  AuditCoordinator ─────────── (none)                │
   │  DEBUG ────────  DebuggerOrchestrator ──────── (none)                │
   │  DESIGN ──────── DesignCoordinator ─────────── (none)                │
-  │  PLAN ─────────  PlanningCoordinator ────────── (none)               │
+  │  PLAN ─────────  PlanningCoordinator / CAPE ─── CDR Triage          │
   │  QUERY ────────  QueryCoordinator ──────────── (none)                │
   │  VACUUM ──────── VacuumOrchestrator ─────────── (none)               │
   │  INTRODUCE ────  InteractionOrchestrator ────── (none)               │
@@ -87,7 +87,28 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  FEEDBACK ─────  FeedbackOrchestrator ─────────── (none)             │
   │  CHANGE_INT ───  ChangeIntelligenceOrchestrator ─ Challenge Gate     │
   │  REQUIREMENTS ─  RequirementsOrchestrator ──────── Holistic Valid.   │
+  │  PO_TRAINING ──  DigestOrchestrator (po_training) ─ (none)          │
   └──────────────────────────────────────────────────────────────────────┘
+```
+
+## CAPE — Autonomous Planning for COMPLEX Requests
+
+```
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  ComplexityTriageEngine scores every PLAN/IMPLEMENT request          │
+  │                                                                      │
+  │  CDR Score:  clarity(0.25) + context(0.20) + scope(0.25)            │
+  │              + risk(0.20) + precedent(0.10) = composite [0,1]       │
+  │                                                                      │
+  │  Routing:  ≥0.70 → DIRECT (no planning needed)                      │
+  │            0.50–0.70 → MICRO_PLAN (light decomposition)              │
+  │            0.30–0.50 → FULL_PLAN (CAPE 11-stage pipeline)            │
+  │            < 0.30 → ESCALATION (human review required)              │
+  │                                                                      │
+  │  FULL_PLAN pipeline: Scaffold → TopologicalSort (Kahn's) →          │
+  │    ThreatGate → QualityGate → SecurityGate → RCAGate → OPJGate →   │
+  │    StabilizationInject → CompletionChecklist (7 items)              │
+  └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ## MCP Tiered Blocking (CORE-050)
@@ -105,4 +126,4 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 32+ intent types covering the complete engineering lifecycle, from change intelligence and requirements engineering through implementation, root cause analysis, and self-healing governance.
+**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 33+ intent types covering the complete engineering lifecycle, from autonomous planning and PO decision support through implementation, root cause analysis, and self-healing governance.

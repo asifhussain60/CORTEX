@@ -51,6 +51,8 @@ Does NOT repeat: what CORTEX is (Video 01), lane comparison (Video 02), MCP tool
   - `make test-parallel` — xdist, pre-commit full speed.
 - CORTEX does NOT claim "no bugs" — it claims: *systematic validation, repeatable process, fail fast before deploy*.
 - Any terminal output shown must be plausible, not fabricated metrics or fake coverage percentages.
+- Test priority classification: `TestPriorityClassifier` (`cortex/orchestrators/core/test_priority_classifier.py`) scores each test on four dimensions — business impact, failure likelihood, detection difficulty, and maintenance cost — and assigns a priority tier (P0 critical through P3 low). A 13-domain risk map calibrates scoring to the service type (payment, authentication, data pipeline, etc.). This is the mechanism behind CORTEX's "not all tests are equal" principle. Do NOT claim the classifier labels tests manually; it runs automatically per test scope.
+- Golden test generation: `GoldenTestGenerator` (`cortex/orchestrators/core/golden_test_generator.py`) generates tests across 7 categories: sunshine path, rainy path, edge cases, blind spots, RCA-driven (from prior failure patterns), security (injection/boundary), and regression (from closed incidents). Balance constraints are enforced: at least 30% sunshine path, at least 20% rainy path, at least 2 edge cases per scope — ensuring test suites are structurally sound, not just high-count. Use this when explaining why CORTEX-generated test suites have measurable coverage quality rather than random coverage quantity.
 
 ---
 

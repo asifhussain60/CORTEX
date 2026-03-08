@@ -48,11 +48,11 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **290+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
-| **35+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
+| **296+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
+| **36+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
 | **60+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
-| **30+ intent types** | CORTEX understands and routes 30+ distinct categories of engineering request — including code review, feedback, and work item synthesis |
+| **33+ intent types** | CORTEX understands and routes 33+ distinct categories of engineering request — including autonomous planning, PO decision support, and cross-repo extraction |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
@@ -65,6 +65,9 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 | **Universal repo intelligence** | 8 parallel extractors analyse any repository — dependency graph, architecture topology, test map, API surface, and more |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated from live analysis |
 | **Repository onboarding** | Any new codebase analysed, profiled, and brought under governance within minutes — no manual configuration required |
+| **Autonomous planning engine** | CAPE: 11-component pipeline converts requests into governed execution plans — complexity triage, dependency ordering, 5 analysis gates, 7-item machine-checkable checklists |
+| **Knowledge acquisition layer** | KAL: automatically detects knowledge gaps, synthesises domain YAML, validates it, and registers it — triggered when coverage drops below 80% |
+| **Cross-repo extraction** | 6-stage pipeline extracts operational learnings from git history with 8-gate privacy sanitisation for safe cross-workspace transfer |
 | **Single package** | One canonical Python package — no fragmented modules, no parallel implementations, no version alignment problems |
 
 ---

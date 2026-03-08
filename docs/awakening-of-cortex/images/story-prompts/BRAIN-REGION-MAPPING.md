@@ -19,7 +19,7 @@
 | 09 | The Great Pruning | **Synaptic Pruning** — adolescent brain eliminates weak connections | **Consolidation Architecture** — fewer, stronger components beat sprawling duplication | Architectural consolidation is a permanent engineering principle. |
 | 10 | The Pylance Epiphany | **Peripheral Nervous System** — translates brain signals for different body parts | **Cross-Platform via stdio** — one universal transport protocol | stdio as universal transport is a permanent architectural choice. |
 | 11 | The 3AM Healer | **Glymphatic System** — brain heals itself during sleep | **Self-Healing + RCA + Reinforcement Learning** — detect, diagnose, repair, remember | Autonomous remediation is the permanent goal. Methods may improve; the aspiration won't. |
-| 12 | The Enterprise Brain | **Complete Brain** — all regions working in concert | **Intelligence Facade + Enterprise Scale** — one front door, all rooms behind it | The architectural principle of a unified facade is permanent. |
+| 12 | The Enterprise Brain | **Complete Brain** — all regions working in concert | **Intelligence Facade + Enterprise Scale** — one front door, all rooms behind it; CAPE plans the complex, KAL grows domain knowledge autonomously, RollbackManager ensures no partial state | The architectural principle of a unified facade is permanent. CAPE/KAL/Rollback are the permanent self-improvement mechanisms behind it. |
 
 ---
 

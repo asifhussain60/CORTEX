@@ -54,6 +54,9 @@ Does NOT repeat: what CORTEX is (Video 01), architecture internals (Video 03), e
   - Test-first: *"a failing test must exist before any implementation begins"*
   - Sweep completeness: *"when an issue pattern is found, all instances are fixed — not just the reported one"*
 - Azure DevOps integration: `ADOWorkItemProvider` (`cortex/repositories/ado/ado_provider.py`) pulls user stories from Azure DevOps boards directly into developer context via the `cortex_fetch_work_items` tool — the developer sees the acceptance criteria without leaving VS Code
+- Autonomous planning for complex features: for large, multi-phase work items, CORTEX's Complexity, Analysis, and Planning Engine (CAPE) automatically scores the request on five dimensions — clarity, context, scope, risk, and precedent — and generates a structured delivery plan, including sub-phases, acceptance gates, and a completion checklist. POs do not configure this; it activates automatically for complex requests. Key orchestrators: `cortex/orchestrators/core/complexity_triage_engine.py`, `cortex/orchestrators/domain/auto_plan_generator.py`
+- PO workflow templates: 7 dedicated workflow templates in `cortex-registry/workflows/templates/po/` — covering change discovery, best-practice comparison, ROI analysis, requirements synthesis, training document generation, stakeholder summarisation, and capability mapping. These are invoked automatically based on intent; POs do not select them manually
+- Training document generation intent: `PO_TRAINING` is a dedicated intent type. When a PO asks CORTEX to produce role-based training materials after a change, CORTEX automatically runs a LENS diff analysis, identifies affected roles, and routes through the `ContentLibraryEngine` to generate structured training content — not a generic summary
 - No invented percentages. No invented return on investment numbers.
 - Safe adoption framing: smoke tests + changed-tests loop is the lowest-risk entry point
 

@@ -84,6 +84,16 @@ Golden tests cover areas including the complete request routing flow, governance
 
 ---
 
+## Test Priority Classification and Golden Test Generation
+
+Not every test deserves equal investment. CORTEX includes a **Test Priority Classifier** that scores test candidates on four dimensions: impact (how critical is the behaviour protected?), likelihood (how realistic is this failure path?), detection (does the test verify the right output?), and maintenance burden (how expensive is this test to keep current?).
+
+Priority thresholds produce four tiers: P0 (score ≥ 7 — must have, covers payment, auth, security, and data integrity domains), P1 (score 4–6 — high value), P2 (score 2–3 — standard coverage), and P3 (score < 2 — low-value, flagged for removal). Domain-specific defaults mean that any test touching the authentication or payment domain starts at P0 priority regardless of other scores.
+
+The **Golden Test Generator** complements the classifier by producing a balanced set of test cases for any new scope. It generates across seven categories: sunshine (primary success path), rainy (expected failure modes), edge (boundary conditions), blind spot (non-obvious interactions), RCA (tests that would have caught prior failures), security (invariant checks), and regression (guards against known historical breaks). Balance constraints ensure the generated set is realistic: at minimum 30% sunshine, 20% rainy, and 2 edge cases per scope. Every generated test is assessed by the classifier before inclusion — only tests that meet the minimum priority threshold for their domain are promoted.
+
+---
+
 ## Test Reinforcement — Learning from Outcomes
 
 Every test-driven cycle feeds CORTEX's learning system. When a test passes on the first implementation attempt, that's a strong positive signal — the approach that produced it gets a confidence boost. When implementation requires multiple attempts to satisfy a test, that's a weaker signal. When implementation gets stuck entirely, the system notes the pattern for future reference.
