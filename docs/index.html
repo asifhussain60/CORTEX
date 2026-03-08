@@ -1402,6 +1402,12 @@
     position: relative;
     overflow: hidden;
   }
+  @media (max-width: 768px) {
+    #cortex-mission { padding: 3.5rem 0 3.5rem; }
+  }
+  @media (max-width: 480px) {
+    #cortex-mission { padding: 2.5rem 0 2.5rem; }
+  }
 
   /* Ambient glow orbs — matching reference design */
   #cortex-mission .m-orb-1 {
@@ -1432,13 +1438,94 @@
 
   #cortex-mission .mission-inner {
     position: relative; z-index: 1;
-    max-width: 860px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 5rem;   /* desktop: doubled from 2.5rem */
+  }
+  @media (max-width: 768px) {
+    #cortex-mission .mission-inner { padding: 0 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    #cortex-mission .mission-inner { padding: 0 1rem; }
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     OUTER WRAP — single unified border enclosing header + frame
+  ══════════════════════════════════════════════════════════ */
+  .mission-outer-wrap {
+    position: relative;
+    border-radius: 2.5rem;
+    padding: 3px; /* animated gradient border thickness */
+    background: linear-gradient(135deg,
+      rgba(0,212,255,0.55) 0%,
+      rgba(123,97,255,0.45) 25%,
+      rgba(16,185,129,0.5) 55%,
+      rgba(232,121,249,0.4) 80%,
+      rgba(0,212,255,0.55) 100%);
+    background-size: 300% 300%;
+    animation: mFrameBorderFlow 8s linear infinite;
+    box-shadow:
+      0 0 0 1px rgba(0,212,255,0.08),
+      0 0 50px rgba(0,212,255,0.1),
+      0 0 100px rgba(123,97,255,0.07),
+      0 60px 120px -30px rgba(0,0,0,0.9);
+  }
+  @media (max-width: 768px) {
+    .mission-outer-wrap { border-radius: 1.75rem; }
+  }
+  @media (max-width: 480px) {
+    .mission-outer-wrap { border-radius: 1.25rem; }
+  }
+  @keyframes mFrameBorderFlow {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  .mission-outer-inner {
+    background: linear-gradient(160deg, rgba(5,9,22,0.97) 0%, rgba(2,5,16,0.99) 100%);
+    border-radius: calc(2.5rem - 3px);
+    overflow: hidden;
+    /* Faint dot-grid texture throughout */
+    background-image:
+      linear-gradient(160deg, rgba(5,9,22,0.97) 0%, rgba(2,5,16,0.99) 100%),
+      radial-gradient(rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px;
+    background-blend-mode: normal, overlay;
+  }
+  @media (max-width: 768px) {
+    .mission-outer-inner { border-radius: calc(1.75rem - 3px); }
+  }
+  @media (max-width: 480px) {
+    .mission-outer-inner { border-radius: calc(1.25rem - 3px); }
+  }
+
+  /* ── Header lives inside the outer wrap ── */
+  .mission-header-inner {
+    text-align: center;
+    padding: 3.5rem 8rem 3rem;   /* desktop: horizontal doubled from 4rem */
+  }
+  @media (max-width: 768px) {
+    .mission-header-inner { padding: 2.75rem 2.5rem 2.5rem; }
+  }
+  @media (max-width: 480px) {
+    .mission-header-inner { padding: 2.25rem 1.5rem 2rem; }
+  }
+
+  /* Hairline between header and accordion frame */
+  .mission-header-divider {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0,212,255,0.2) 20%,
+      rgba(123,97,255,0.3) 50%,
+      rgba(0,212,255,0.2) 80%,
+      transparent 100%);
+    margin: 0;
   }
 
   /* ── Section header ── */
-  .mission-header { text-align: center; margin-bottom: 3.5rem; }
+  .mission-header { text-align: center; margin-bottom: 0; }
 
   .mission-eyebrow {
     display: inline-flex; align-items: center; gap: 0.5rem;
@@ -1495,68 +1582,56 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     SECTION FRAME — thick glowing border wrapping all cards
+     INNER FRAME — sits inside the outer wrap, no own border
   ══════════════════════════════════════════════════════════ */
   .mission-frame {
     position: relative;
-    border-radius: 2rem;
-    padding: 3px; /* border thickness lives here */
-    background: linear-gradient(135deg,
-      rgba(0,212,255,0.55) 0%,
-      rgba(123,97,255,0.4) 30%,
-      rgba(16,185,129,0.45) 60%,
-      rgba(0,212,255,0.55) 100%);
-    background-size: 300% 300%;
-    animation: mFrameBorderFlow 7s linear infinite;
-    box-shadow:
-      0 0 0 1px rgba(0,212,255,0.1),
-      0 0 60px rgba(0,212,255,0.12),
-      0 0 120px rgba(123,97,255,0.08),
-      0 48px 96px -24px rgba(0,0,0,0.75);
-  }
-  @keyframes mFrameBorderFlow {
-    0%   { background-position: 0% 0%; }
-    50%  { background-position: 100% 100%; }
-    100% { background-position: 0% 0%; }
+    border-radius: 0;       /* flush inside outer wrap */
+    padding: 0;
+    background: transparent;
+    animation: none;
+    box-shadow: none;
   }
 
   .mission-frame-inner {
-    background: linear-gradient(160deg, rgba(7,10,25,0.97) 0%, rgba(3,6,18,0.99) 100%);
-    border-radius: calc(2rem - 3px);
+    background: linear-gradient(160deg, rgba(4,8,20,0.98) 0%, rgba(2,5,15,0.99) 100%);
+    border-radius: 0 0 calc(2.5rem - 6px) calc(2.5rem - 6px); /* flush top, rounded bottom */
     overflow: hidden;
-    /* Subtle grid texture inside */
+    /* Subtle grid texture + deep navy tint inside */
     background-image:
-      linear-gradient(160deg, rgba(7,10,25,0.97) 0%, rgba(3,6,18,0.99) 100%),
-      linear-gradient(rgba(0,212,255,0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.018) 1px, transparent 1px);
+      linear-gradient(160deg, rgba(5,9,22,0.98) 0%, rgba(2,5,16,0.99) 100%),
+      linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);
     background-size: 100% 100%, 56px 56px, 56px 56px;
     background-blend-mode: normal, overlay, overlay;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  @media (max-width: 768px) {
+    .mission-frame-inner { border-radius: 0 0 calc(1.75rem - 6px) calc(1.75rem - 6px); }
+  }
+  @media (max-width: 480px) {
+    .mission-frame-inner { border-radius: 0 0 calc(1.25rem - 6px) calc(1.25rem - 6px); }
   }
 
-  /* ── Mono status bar at the top of the frame ── */
+  /* ── Mono status bar — hidden ── */
   .mission-status-bar {
-    display: flex; align-items: center; gap: 0.75rem;
-    padding: 0.9rem 1.75rem;
-    border-bottom: 1px solid rgba(0,212,255,0.1);
-    background: rgba(0,212,255,0.03);
-    font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: rgba(0,212,255,0.5);
-  }
-  .mission-status-dot {
-    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-    background: #00d4ff; box-shadow: 0 0 7px #00d4ff;
-    animation: pulseGlowGlass 2s ease-in-out infinite;
-  }
-  .mission-status-line {
-    flex: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(0,212,255,0.22), transparent);
+    display: none;
   }
 
   /* ══════════════════════════════════════════════════
      ACCORDION CARDS — individual glass card per item
   ══════════════════════════════════════════════════ */
-  .macc-list { list-style: none; margin: 0; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; }
+  .macc-list {
+    list-style: none; margin: 0;
+    padding: 1.25rem 3rem;   /* desktop: horizontal doubled from 1.5rem */
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  @media (max-width: 768px) {
+    .macc-list { padding: 1rem 1.1rem; gap: 0.625rem; }
+  }
+  @media (max-width: 480px) {
+    .macc-list { padding: 0.75rem 0.75rem; gap: 0.5rem; }
+  }
 
   /* Each card */
   .macc {
@@ -1566,11 +1641,23 @@
     background: rgba(255,255,255,0.02);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     /* stagger animation */
     opacity: 0;
     animation: mCardFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
   }
+  /* Glass shimmer sweep on hover */
+  .macc::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+  }
+  .macc:hover::before { transform: translateX(100%); }
   .macc:nth-child(1) { animation-delay: 0.05s; }
   .macc:nth-child(2) { animation-delay: 0.12s; }
   .macc:nth-child(3) { animation-delay: 0.19s; }
@@ -1592,9 +1679,10 @@
 
   /* Hover state for closed cards */
   .macc:not(.is-open):hover {
-    background: rgba(255,255,255,0.035);
-    border-color: rgba(255,255,255,0.09);
-    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4);
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.5);
+    transform: scale(1.05);
   }
 
   /* Coloured top edge on open */
@@ -1629,44 +1717,58 @@
   /* ── TRIGGER row ── */
   .macc__trigger {
     display: flex; align-items: center; gap: 1.25rem;
-    width: 100%; padding: 1.35rem 1.5rem;
+    width: 100%; padding: 1.4rem 1.75rem;  /* wider horizontal padding — was 1.5rem */
     cursor: pointer; background: transparent; border: none;
     text-align: left; color: inherit; border-radius: 1.25rem;
     transition: background 0.25s ease;
   }
   .macc__trigger:hover { background: rgba(255,255,255,0.02); }
   .macc__trigger:focus-visible { outline: 2px solid rgba(0,212,255,0.5); outline-offset: -2px; }
+  @media (max-width: 768px) {
+    .macc__trigger { padding: 1.2rem 1.25rem; gap: 1rem; }
+  }
+  @media (max-width: 480px) {
+    .macc__trigger { padding: 1rem 1rem; gap: 0.875rem; }
+  }
 
   /* Icon badge — larger, richer glow */
   .macc__icon-wrap {
-    width: 58px; height: 58px; border-radius: 1rem;
+    width: 68px; height: 68px; border-radius: 1.15rem;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; flex-shrink: 0;
+    font-size: 1.85rem; flex-shrink: 0;
     transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
     position: relative; overflow: hidden;
+  }
+  @media (max-width: 768px) {
+    .macc__icon-wrap { width: 56px; height: 56px; border-radius: 1rem; font-size: 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .macc__icon-wrap { width: 48px; height: 48px; border-radius: 0.875rem; font-size: 1.3rem; }
   }
   /* Shimmer inside icon on open */
   .macc__icon-wrap::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 60%);
     opacity: 0; transition: opacity 0.4s ease; border-radius: inherit;
   }
   .macc.is-open .macc__icon-wrap::after { opacity: 1; }
 
   .macc:not(.is-open) .macc__icon-wrap { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
   .macc:not(.is-open):hover .macc__icon-wrap { background: rgba(255,255,255,0.09); }
-  .macc.is-open .macc__icon-wrap { transform: scale(1.1); }
+  .macc.is-open .macc__icon-wrap { transform: scale(1.12); }
 
   /* Open icon backgrounds per accent */
-  .macc[data-accent="cyan"].is-open    .macc__icon-wrap { background: rgba(0,212,255,0.18);   border: 1px solid rgba(0,212,255,0.35);   box-shadow: 0 0 22px rgba(0,212,255,0.25); }
-  .macc[data-accent="violet"].is-open  .macc__icon-wrap { background: rgba(123,97,255,0.18);  border: 1px solid rgba(123,97,255,0.35);  box-shadow: 0 0 22px rgba(123,97,255,0.25); }
-  .macc[data-accent="emerald"].is-open .macc__icon-wrap { background: rgba(16,185,129,0.18);  border: 1px solid rgba(16,185,129,0.35);  box-shadow: 0 0 22px rgba(16,185,129,0.25); }
-  .macc[data-accent="amber"].is-open   .macc__icon-wrap { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.3);   box-shadow: 0 0 22px rgba(251,191,36,0.2); }
-  .macc[data-accent="magenta"].is-open .macc__icon-wrap { background: rgba(232,121,249,0.18); border: 1px solid rgba(232,121,249,0.35); box-shadow: 0 0 22px rgba(232,121,249,0.25); }
+  .macc[data-accent="cyan"].is-open    .macc__icon-wrap { background: rgba(0,212,255,0.18);   border: 1px solid rgba(0,212,255,0.38);   box-shadow: 0 0 28px rgba(0,212,255,0.3); }
+  .macc[data-accent="violet"].is-open  .macc__icon-wrap { background: rgba(123,97,255,0.18);  border: 1px solid rgba(123,97,255,0.38);  box-shadow: 0 0 28px rgba(123,97,255,0.3); }
+  .macc[data-accent="emerald"].is-open .macc__icon-wrap { background: rgba(16,185,129,0.18);  border: 1px solid rgba(16,185,129,0.38);  box-shadow: 0 0 28px rgba(16,185,129,0.3); }
+  .macc[data-accent="amber"].is-open   .macc__icon-wrap { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.35);  box-shadow: 0 0 28px rgba(251,191,36,0.25); }
+  .macc[data-accent="magenta"].is-open .macc__icon-wrap { background: rgba(232,121,249,0.18); border: 1px solid rgba(232,121,249,0.38); box-shadow: 0 0 28px rgba(232,121,249,0.3); }
 
-  .macc__icon-wrap i { font-size: 1.4rem; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
-  .macc.is-open .macc__icon-wrap i { transform: scale(1.1); }
+  .macc__icon-wrap i { font-size: 1.75rem; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  @media (max-width: 768px) { .macc__icon-wrap i { font-size: 1.4rem; } }
+  @media (max-width: 480px) { .macc__icon-wrap i { font-size: 1.2rem; } }
+  .macc.is-open .macc__icon-wrap i { transform: scale(1.12); }
 
   /* Icon colours */
   .macc[data-accent="cyan"]    .macc__icon-wrap i { color: #00d4ff; }
@@ -1678,10 +1780,7 @@
   /* Headline block */
   .macc__head { flex: 1; min-width: 0; }
   .macc__index {
-    font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; opacity: 0.35;
-    margin-bottom: 0.2rem; display: block;
+    display: none; /* index numbers removed */
   }
   .macc__headline {
     font-family: var(--font-family-heading, 'Space Grotesk', sans-serif);
@@ -1689,6 +1788,11 @@
     font-weight: 700; color: rgba(255,255,255,0.9); line-height: 1.25;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     transition: color 0.3s ease;
+  }
+  @media (max-width: 480px) {
+    /* Allow wrap on very narrow screens so titles don't truncate */
+    .macc__headline { white-space: normal; font-size: 0.9375rem; }
+    .macc__subtitle { white-space: normal; }
   }
   .macc.is-open .macc__headline { color: #fff; }
 
@@ -1701,20 +1805,10 @@
   .macc:hover .macc__subtitle,
   .macc.is-open .macc__subtitle { color: rgba(148,163,184,0.75); }
 
-  /* Tag pill */
+  /* Tag pill — hidden (role audience removed from trigger row) */
   .macc__tag {
-    font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; border-radius: 9999px;
-    padding: 0.28rem 0.85rem; white-space: nowrap; flex-shrink: 0;
-    display: none;
+    display: none !important;
   }
-  @media (min-width: 640px) { .macc__tag { display: inline; } }
-  .macc[data-accent="cyan"]    .macc__tag { color: #00d4ff; background: rgba(0,212,255,0.08);   border: 1px solid rgba(0,212,255,0.2); }
-  .macc[data-accent="violet"]  .macc__tag { color: #a78bfa; background: rgba(123,97,255,0.08);  border: 1px solid rgba(123,97,255,0.2); }
-  .macc[data-accent="emerald"] .macc__tag { color: #34d399; background: rgba(16,185,129,0.07);  border: 1px solid rgba(16,185,129,0.18); }
-  .macc[data-accent="amber"]   .macc__tag { color: #fbbf24; background: rgba(251,191,36,0.07);  border: 1px solid rgba(251,191,36,0.18); }
-  .macc[data-accent="magenta"] .macc__tag { color: #e879f9; background: rgba(232,121,249,0.07); border: 1px solid rgba(232,121,249,0.18); }
 
   /* Chevron */
   .macc__chevron {
@@ -1748,11 +1842,12 @@
 
   /* Panel divider */
   .macc__body {
-    padding: 0 1.5rem 1.75rem 1.5rem;
+    padding: 0 1.75rem 2rem 1.75rem;   /* wider horizontal — was 1.5rem */
     border-top: 1px solid rgba(255,255,255,0.05);
     margin-top: 0.125rem;
   }
-  @media (max-width: 600px) { .macc__body { padding: 0 1.1rem 1.5rem; } }
+  @media (max-width: 768px) { .macc__body { padding: 0 1.25rem 1.75rem; } }
+  @media (max-width: 480px) { .macc__body { padding: 0 1rem 1.5rem; } }
 
   /* Two-column layout (from reference): description left, viz right */
   .macc__body-inner {
@@ -1761,7 +1856,7 @@
     gap: 1.25rem;
     padding-top: 1.25rem;
   }
-  @media (max-width: 680px) { .macc__body-inner { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .macc__body-inner { grid-template-columns: 1fr; } }
 
   /* Description prose */
   .macc__desc {
@@ -1934,6 +2029,7 @@
     .macc__viz-fill { transition: none !important; }
     .mission-eyebrow::before, .mission-status-dot { animation: none !important; }
     .mission-frame { animation: none !important; }
+    .mission-outer-wrap { animation: none !important; }
     .m-orb-1, .m-orb-2 { animation: none !important; }
   }
 </style>
@@ -2032,52 +2128,51 @@
 
       <div class="mission-inner">
 
-        <!-- Header -->
-        <header class="mission-header">
-          <span class="mission-eyebrow"><i class="fas fa-satellite-dish" aria-hidden="true"></i>&nbsp; Core Principles</span>
-          <h2 id="mission-heading" class="mission-title">
-            <span class="t-white">Mission</span>&nbsp;<span class="accent-cyan">Statement</span>
-          </h2>
-          <div class="mission-title-rule" aria-hidden="true">
-            <div class="mission-title-rule-dot"></div>
-          </div>
-          <p class="mission-subtitle">
-            <strong style="color:rgba(255,255,255,0.88);">CORTEX</strong> is the governed AI engineering partner that thinks, enforces, and learns alongside your team —
-            so that quality, security, and institutional knowledge become <strong style="color:#00d4ff;">structural guarantees</strong>, not aspirational targets.
-          </p>
-        </header>
+        <!-- Unified outer border — header + accordion as one component -->
+        <div class="mission-outer-wrap">
+          <div class="mission-outer-inner">
 
-        <!-- Frame with thick animated border -->
-        <div class="mission-frame" aria-label="CORTEX Mission Principles">
-          <div class="mission-frame-inner">
-
-            <!-- Status bar -->
-            <div class="mission-status-bar" aria-hidden="true">
-              <span class="mission-status-dot"></span>
-              <span>CORTEX.MISSION_KERNEL — 5 PRINCIPLES LOADED · v5.0 · ACTIVE</span>
-              <span class="mission-status-line"></span>
-              <span>GLASSMORPHISM v4.0</span>
+            <!-- Header inside unified border -->
+            <div class="mission-header-inner">
+              <header class="mission-header">
+                <span class="mission-eyebrow"><i class="fas fa-satellite-dish" aria-hidden="true"></i>&nbsp; Core Principles</span>
+                <h2 id="mission-heading" class="mission-title">
+                  <span class="t-white">Mission</span>&nbsp;<span class="accent-cyan">Statement</span>
+                </h2>
+                <div class="mission-title-rule" aria-hidden="true">
+                  <div class="mission-title-rule-dot"></div>
+                </div>
+                <p class="mission-subtitle">
+                  <strong style="color:rgba(255,255,255,0.88);">CORTEX</strong> is the governed AI engineering partner that thinks, enforces, and learns alongside your team —
+                  so that quality, security, and institutional knowledge become <strong style="color:#00d4ff;">structural guarantees</strong>, not aspirational targets.
+                </p>
+              </header>
             </div>
+
+            <!-- Hairline separator between header and accordion -->
+            <div class="mission-header-divider" aria-hidden="true"></div>
+
+            <!-- Accordion — nested inside unified outer border -->
+            <div class="mission-frame" aria-label="CORTEX Mission Principles">
+              <div class="mission-frame-inner">
 
             <!-- Accordion card list -->
             <ul class="macc-list" role="list">
 
               <!-- ── 01 Imagination Over Administration ── -->
-              <li class="macc is-open" data-accent="cyan" id="macc-1">
+              <li class="macc" data-accent="cyan" id="macc-1">
                 <div class="macc__corner-glow" aria-hidden="true"></div>
                 <button
                   class="macc__trigger"
-                  aria-expanded="true"
+                  aria-expanded="false"
                   aria-controls="macc-panel-1"
                   id="macc-btn-1"
                 >
-                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-brain"></i></div>
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-lightbulb"></i></div>
                   <div class="macc__head">
-                    <span class="macc__index">01</span>
                     <div class="macc__headline">Imagination Over Administration</div>
-                    <div class="macc__subtitle">Amplifying human creativity, eliminating tool overhead.</div>
+                    <div class="macc__subtitle">Engineers build — CORTEX handles the rest.</div>
                   </div>
-                  <span class="macc__tag">Engineers · Learners</span>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
                 <div class="macc__panel-wrap">
@@ -2136,13 +2231,11 @@
                   aria-controls="macc-panel-2"
                   id="macc-btn-2"
                 >
-                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-book-open"></i></div>
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-brain"></i></div>
                   <div class="macc__head">
-                    <span class="macc__index">02</span>
                     <div class="macc__headline">Knowledge That Travels With the Team</div>
-                    <div class="macc__subtitle">Institutional memory that never walks out the door.</div>
+                    <div class="macc__subtitle">Institutional memory that outlives any individual.</div>
                   </div>
-                  <span class="macc__tag">Product Owners · Learners</span>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
                 <div class="macc__panel-wrap">
@@ -2199,13 +2292,11 @@
                   aria-controls="macc-panel-3"
                   id="macc-btn-3"
                 >
-                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
                   <div class="macc__head">
-                    <span class="macc__index">03</span>
                     <div class="macc__headline">Quality That Enforces Itself</div>
-                    <div class="macc__subtitle">Governance that runs on every commit — automatically.</div>
+                    <div class="macc__subtitle">Governance runs automatically on every commit.</div>
                   </div>
-                  <span class="macc__tag">Business Leaders</span>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
                 <div class="macc__panel-wrap">
@@ -2262,13 +2353,11 @@
                   aria-controls="macc-panel-4"
                   id="macc-btn-4"
                 >
-                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-sync-alt"></i></div>
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-rotate"></i></div>
                   <div class="macc__head">
-                    <span class="macc__index">04</span>
                     <div class="macc__headline">A System That Learns So History Doesn't Repeat</div>
                     <div class="macc__subtitle">Failure knowledge made permanent through closed-loop learning.</div>
                   </div>
-                  <span class="macc__tag">All Audiences</span>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
                 <div class="macc__panel-wrap">
@@ -2325,13 +2414,11 @@
                   aria-controls="macc-panel-5"
                   id="macc-btn-5"
                 >
-                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-globe"></i></div>
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-sitemap"></i></div>
                   <div class="macc__head">
-                    <span class="macc__index">05</span>
                     <div class="macc__headline">One Platform, Every Role, No Coordination Overhead</div>
-                    <div class="macc__subtitle">Engineers, product owners, and business leaders — one governed platform.</div>
+                    <div class="macc__subtitle">Engineers, product owners, leaders — one governed platform.</div>
                   </div>
-                  <span class="macc__tag">All Roles</span>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
                 <div class="macc__panel-wrap">
@@ -2394,8 +2481,11 @@
               </li>
 
             </ul><!-- /macc-list -->
-          </div><!-- /mission-frame-inner -->
-        </div><!-- /mission-frame -->
+              </div><!-- /mission-frame-inner -->
+            </div><!-- /mission-frame -->
+
+          </div><!-- /mission-outer-inner -->
+        </div><!-- /mission-outer-wrap -->
 
         <hr class="mission-divider" aria-hidden="true">
 
@@ -2408,10 +2498,12 @@
     (function() {
       var items = document.querySelectorAll('#cortex-mission .macc');
 
+      // How far below the top of the viewport the clicked item trigger lands
+      var ITEM_TOP_OFFSET = 72; // px — leaves a small breathing gap above the trigger row
+
       function openItem(item) {
         item.classList.add('is-open');
         item.querySelector('.macc__trigger').setAttribute('aria-expanded', 'true');
-        // Animate progress bars inside this item
         item.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
           var w = bar.getAttribute('data-width') || '0';
           bar.style.width = w + '%';
@@ -2421,18 +2513,27 @@
       function closeItem(item) {
         item.classList.remove('is-open');
         item.querySelector('.macc__trigger').setAttribute('aria-expanded', 'false');
-        // Reset bars
         item.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
           bar.style.width = '0%';
         });
       }
 
-      // Initialise: open first item's bars
+      // Scroll so that `el` sits ITEM_TOP_OFFSET px from the top of the viewport.
+      // `delay` lets the CSS transition start before we scroll (so the layout
+      // shift caused by opening/closing the panel is included in the final position).
+      function scrollToItem(el, delay) {
+        setTimeout(function() {
+          var rect = el.getBoundingClientRect();
+          var targetScrollY = window.pageYOffset + rect.top - ITEM_TOP_OFFSET;
+          window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+        }, delay);
+      }
+
+      // Initialise: animate bars in the default-open item
       var firstOpen = document.querySelector('#cortex-mission .macc.is-open');
       if (firstOpen) {
         firstOpen.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
           var w = bar.getAttribute('data-width') || '0';
-          // Slight delay so CSS transition fires after paint
           setTimeout(function() { bar.style.width = w + '%'; }, 120);
         });
       }
@@ -2440,9 +2541,21 @@
       items.forEach(function(item) {
         var btn = item.querySelector('.macc__trigger');
         btn.addEventListener('click', function() {
-          var isOpen = item.classList.contains('is-open');
+          var wasOpen = item.classList.contains('is-open');
+
+          // Close everything first
           items.forEach(closeItem);
-          if (!isOpen) openItem(item);
+
+          if (!wasOpen) {
+            // Opening this item — scroll its trigger to near the top of the
+            // viewport AFTER the expand transition completes (~500 ms).
+            openItem(item);
+            scrollToItem(item, 520);
+          } else {
+            // Collapsing — scroll so the item trigger stays visible
+            // (panel shrinks above, so we re-anchor after collapse)
+            scrollToItem(item, 520);
+          }
         });
       });
     })();
