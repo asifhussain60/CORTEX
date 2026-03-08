@@ -94,7 +94,7 @@ These approximate budgets reflect typical session cost by operation type:
 |---|---|---|
 | **Conversational query** | ~6,000 tokens | Tier 0 + question + response |
 | **Code review** | ~10,000 tokens | Tier 0 + Tier 1 governance + file analysis |
-| **Feature implementation** | ~19,000 tokens | Tier 0 + Tier 1 implementation + file intelligence |
+| **Feature implementation** | ~20,000 tokens | Tier 0 + Tier 1 implementation + file intelligence |
 | **Full production audit** | ~30,000 tokens | Tier 0 + all governance rules + compliance analysis |
 | **Debugging session** | ~15,000 tokens | Tier 0 + Tier 1 debug strategies + affected file context |
 | **Refactoring session** | ~18,000 tokens | Tier 0 + Tier 1 patterns + before/after analysis |

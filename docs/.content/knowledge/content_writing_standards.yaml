@@ -32,7 +32,7 @@ voice_and_tone:
   tone_by_context:
     hero_sections:
       tone: "Bold and credible — leads with outcomes, not features"
-      example_good: "CORTEX executes 323 orchestrators in parallel — your AI logic runs at scale"
+      example_good: "CORTEX coordinates 290+ orchestrators in parallel — your AI logic runs at scale"
       example_bad: "CORTEX is an amazing AI framework that will transform your workflow"
     technical_reference:
       tone: "Direct and scannable — verbs first, no preamble"
@@ -185,7 +185,7 @@ seo_meta_standards:
   meta_description:
     max_length: "155 characters"
     formula: "What this page covers + who it's for + key benefit"
-    example: "Get started with CORTEX in minutes. Configure your environment, run your first orchestrator, and explore 30 MCP tools."
+    example: "Get started with CORTEX in minutes. Configure your environment, run your first orchestrator, and explore 36 MCP tools."
   open_graph:
     required_tags:
       - "og:title — same as <title> tag"

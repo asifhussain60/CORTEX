@@ -1,8 +1,8 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-03-03 (Total Recall — Production Truth Reconciliation) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
+**Updated:** 2026-03-08 (Documentation Sync) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 97 completed, 5 planned | **Tests:** ~18,874 | **Intent Types:** 29
+**Phases:** 65 completed, 22 planned | **Tests:** ~20,565 | **Intent Types:** 31
 
 ---
 
@@ -38,12 +38,12 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrator files | **320** across 15 domains (`core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 _top_level:3 response:3 registry:2 synthesis:2 tools:2 strategies:1`) |
-| MCP Tools | **30 registered** in `mcp_registry.py`; 54 tool files in `cortex/mcp/tools/` |
-| Governance YAMLs | **36** across `cortex-registry/core/` (23) and `cortex-registry/governance/` (13) |
+| Orchestrator files | **296** across 14 domains (`core:132 domain:29 support:54 health:27 intelligence:16 persona:6 workflow:6 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) |
+| MCP Tools | **36 registered** in `mcp_registry.py`; 58 tool files in `cortex/mcp/tools/` |
+| Governance YAMLs | **60** across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) |
 | Package | `cortex` (single) |
-| Tests | **~18,874** collected |
-| Intent Types | **29** (see `cortex/models/canonical_enums.py`) |
+| Tests | **~20,565** collected |
+| Intent Types | **31** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
 | PLIP-001 | Prompt-Layer Intelligence Protocol — all code-modifying prompts/agents consult failure history before action and record outcomes after (SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`) |

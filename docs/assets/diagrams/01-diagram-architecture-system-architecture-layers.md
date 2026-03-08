@@ -45,7 +45,7 @@ d3_method: "d3.tree() — layered SVG rectangles + connectors"
 │  │(intent map) │   │ RED→GRN→RF │   │ (agents)      │   │ Refactor/Plan/... │          │
 │  └─────────────┘   └────────────┘   └───────────────┘   └───────────────────┘          │
 │                                                                                         │
-│  Wired orchestrators: 320 files · core · domain · support · health · git · intelligence · persona · validation · workflow · registry · response · synthesis · tools · strategies (15 domains) │
+│  Wired orchestrators: 290+ files · core · domain · support · health · git · intelligence · persona · validation · workflow · registry · response · synthesis · tools · strategies (14 domains) │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐

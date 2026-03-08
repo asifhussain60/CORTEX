@@ -89,7 +89,7 @@ Simple queries return in seconds. A code review returns in 5–15 seconds depend
 Yes. This is a core governance rule. The test-driven approach — write a failing test, implement to make it pass, refactor — is enforced structurally. A workflow that produces code without a corresponding test will not pass the governance gate.
 
 **How many tests does CORTEX have?**
-The test suite currently has approximately 19,000+ tests. Parallel execution across all CPU cores completes the full suite faster than a sequential run of a fraction of that number. A smoke subset (the most critical tests) runs in under 60 seconds.
+The test suite currently has approximately 20,000+ tests. Parallel execution across all CPU cores completes the full suite faster than a sequential run of a fraction of that number. A smoke subset (the most critical tests) runs in under 60 seconds.
 
 **What are Golden Tests?**
 Golden Tests are the immutable quality contracts for CORTEX's core invariants. Every core claim about CORTEX's behaviour is backed by a Golden Test. These tests cannot be skipped, cannot be modified without explicit governance approval, and must pass with no exceptions at every commit. They are the production-quality guarantee.

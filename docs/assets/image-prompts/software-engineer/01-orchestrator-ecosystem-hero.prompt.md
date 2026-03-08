@@ -15,8 +15,8 @@ Create a professional hero banner image for the Software Engineer section of an 
 CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimum 60px margin on all four sides (left, right, top, bottom). No element, text, icon, border, glow, or card should touch or bleed into the outer 60px edge boundary. The outer margin area must remain the plain dark navy background (#0a0e27) with no content. This ensures clean rendering with no cropped or edge-clipped elements.
 
 The image should show:
-- An abstract visualization of 330+ orchestrator files arranged as a constellation network
-- 15 colored cluster groups representing domains: core (cyan, 140+), domain (purple, 35+), support (emerald, 55+), git (amber, 5), health (teal, 30+), intelligence (magenta, 15+), persona (orange, 7), validation (lime, 13), workflow (indigo, 7), registry (coral, 2), synthesis (gold, 2), tools (silver, 2), strategies (bronze, 1), response (slate, 5), _top_level (white, 3)
+- An abstract visualization of 290+ orchestrator files arranged as a constellation network
+- 14 colored cluster groups representing domains: core (cyan, 132), domain (purple, 29), support (emerald, 54), health (teal, 27), intelligence (magenta, 16), persona (orange, 6), workflow (indigo, 6), validation (lime, 12), git (amber, 4), response (slate, 5), registry (coral, 1), synthesis (gold, 1), tools (silver, 1), _top_level (white, 2)
 - Thin connecting lines between nodes showing inter-orchestrator communication
 - A central "MasterOrchestrator" node larger than others with a bright cyan pulse
 - The overall shape suggesting an intelligent neural network or brain-like topology

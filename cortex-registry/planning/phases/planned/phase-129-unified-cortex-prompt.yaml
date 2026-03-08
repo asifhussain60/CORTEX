@@ -86,7 +86,7 @@ design_decisions:
         product_title: "CORTEX"
         capabilities_added:
           - "Standard 21 execution modes (IMPLEMENT/FIX/REFACTOR/etc.)"
-          - "MCP tooling (30 registered tools)"
+          - "MCP tooling (36 registered tools)"
           - "LENS analysis pipeline"
           - "Lazy agent loading per AGENT-INDEX.md"
 
@@ -245,7 +245,7 @@ phases:
         11. ## 🧭 INTENTROUTER — Confidence Thresholds
         12. ## 🏗️ RESPONSE FORMAT (CONDITIONAL — icon/title based on repo-context)
         13. ## 📁 FILE PLACEMENT
-        14. ## ⚡ MCP TOOLS (30 registered)
+        14. ## ⚡ MCP TOOLS (36 registered)
         15. ## 🔗 AGENT LOADING MAP (lazy-load map — from architect prompt)
         16. ## ✅ COMPLETION CHECKLIST
         17. ## 🔧 QUICK COMMANDS (merged command tables)

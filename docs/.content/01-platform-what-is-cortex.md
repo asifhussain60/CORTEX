@@ -48,8 +48,8 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **330+ orchestration engines** | Specialised processing engines across 15 domains — each an expert at one category of engineering work |
-| **55+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
+| **290+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
+| **35+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
 | **60+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
 | **30+ intent types** | CORTEX understands and routes 30+ distinct categories of engineering request — including code review, feedback, and work item synthesis |
@@ -58,7 +58,7 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
 | **90+ curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — TDD, architecture, security, devops, code quality, testing |
 | **AI context intelligence** | 8-vendor AI artifact scanning with PII guard, automatic knowledge dissemination to registry hierarchy |
-| **110+ workflow templates** | Codified best practices across 17 categories — assembled from reusable building blocks like LEGO bricks |
+| **90+ workflow templates** | Codified best practices across 17 categories — assembled from reusable building blocks like LEGO bricks |
 | **Automated code review** | Multi-pass review with security, governance, test-coverage, and style analysis — surfaced inline with severity and fix suggestions |
 | **Threat modelling** | STRIDE-based threat analysis of entry points, data flows, and trust boundaries — ranked threat catalogue with mitigations |
 | **Quality analysis** | Multi-dimensional codebase quality scoring (0–100) with trend tracking across complexity, coverage, documentation, and compliance |

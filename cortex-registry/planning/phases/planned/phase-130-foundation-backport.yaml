@@ -166,7 +166,7 @@ phases:
         action: "Implement ContentLibraryEngine (pools: quotes, principles, ai_sparks) with EpochShuffler (Fisher-Yates per epoch). Implement ContentLibraryOrchestrator. Implement cortex_content MCP (select|history|reset|stats). Register in mcp_registry.py. Wire ContentLibraryOrchestrator into MasterOrchestrator Stage 4."
         gate: "make test-changed — all new tests PASS"
       refactor:
-        action: "Confirm pool sizes: quotes=120, principles=90, ai_sparks configured. Confirm MCP tool ID does not clash with existing 30 registered tools. Run full smoke."
+        action: "Confirm pool sizes: quotes=120, principles=90, ai_sparks configured. Confirm MCP tool ID does not clash with existing 36 registered tools. Run full smoke."
         gate: "make test-smoke GREEN"
     completion_gate: "make test-smoke GREEN + content library tests GREEN + cortex_content MCP registered"
 

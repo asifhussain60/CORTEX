@@ -24,7 +24,7 @@ d3_method: "d3.tree() — directory tree with expandable nodes"
  │  REPO ROOT                                                                  │
  │                                                                             │
  │  cortex/                          ← Single canonical Python package         │
- │  ├── orchestrators/               ← 320 files across 15 domains           │
+ │  ├── orchestrators/               ← 290+ files across 14 domains           │
  │  │   ├── core/                       MasterOrch, IntentRouter, TDD, Enforce │
  │  │   ├── domain/                     Onboarding, Planning, Design           │
  │  │   ├── support/                    Debug, Sweep, Refactoring              │
@@ -34,9 +34,9 @@ d3_method: "d3.tree() — directory tree with expandable nodes"
  │  │   ├── git/                        GitOrchestrator, sync pipeline         │
  │  │   ├── persona/                    Role-based persona orchestrators       │
  │  │   ├── validation/                 Contract + wiring validation           │
- │  │   └── ... (15 domains total)                                             │
- │  ├── mcp/                         ← MCP stdio server + 30 registered tools  │
- │  │   └── tools/                      54 tool files                          │
+ │  │   └── ... (14 domains total)                                             │
+ │  ├── mcp/                         ← MCP stdio server + 36 registered tools  │
+ │  │   └── tools/                      58 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │
  │  ├── intelligence/                ← Reasoning, learning, RCA engine         │
  │  │   ├── facade.py               ← IntelligenceFacade — canonical entry (Phase 107) │
@@ -49,7 +49,7 @@ d3_method: "d3.tree() — directory tree with expandable nodes"
  │  └── config/                      ← Settings, environment                   │
  │                                                                             │
  │  cortex-registry/                 ← Configuration as code (YAML)            │
- │  ├── core/                           55+ governance rules across core/ + governance/ │
+ │  ├── core/                           60+ governance rules across core/ + governance/ │
  │  │   └── specifications/             4 wiring contract YAMLs               │
  │  ├── workflows/templates/            3-tier: primitives → templates →       │
  │  │   ├── primitives/                    composites                          │

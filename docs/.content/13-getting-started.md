@@ -139,12 +139,12 @@ Available tasks include all test modes, MCP setup, and the full audit pipeline.
 | Path | What Lives Here |
 |---|---|
 | `cortex/` | All CORTEX source code (the Python package) |
-| `cortex/orchestrators/` | The 330+ orchestrators that handle every request type |
-| `cortex/mcp/tools/` | The 55+ tools exposed to Copilot Chat |
+| `cortex/orchestrators/` | The 290+ orchestrators that handle every request type |
+| `cortex/mcp/tools/` | The 35+ tools exposed to Copilot Chat |
 | `cortex-registry/` | Governance rules, workflow templates, knowledge base (YAML) |
 | `tests/` | The full test suite (mirrors `cortex/` structure) |
 | `.cortex-runtime/` | Runtime databases and logs (auto-created, excluded from git) |
-| `cortex-docs/` | User-facing documentation (HTML/CSS site) |
+| `docs/` | User-facing documentation (HTML/CSS site) |
 | `scripts/` | Development utilities and maintenance scripts |
 | `deployment/` | Production infrastructure configuration |
 

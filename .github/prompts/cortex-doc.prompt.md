@@ -335,8 +335,8 @@ When building or enhancing role-specific HTML views, the Documentation Orchestra
 1. LENS — The Sensory System (from `02-intelligence` § nine analyzers, § three tiers)
 2. The Brain — Perception → Reasoning → Action (from `02-intelligence` § pattern recognition, § strategy selection)
 3. TDD Cycle — Red/Green/Refactor (from `04-tdd` § three-phase cycle, § test quality scoring)
-4. Orchestrator Architecture — 15 Domains (from `05-orchestration` § fifteen domains)
-5. MCP Tools — In Your IDE (from `06-mcp-tools` § 30 registered tools)
+4. Orchestrator Architecture — 14 Domains (from `05-orchestration` § fourteen domains)
+5. MCP Tools — In Your IDE (from `06-mcp-tools` § 36 registered tools)
 6. RCA Memory & Institutional Learning (from `08-learning`)
 7. Governance as Infrastructure (from `03-governance` § three layers, § ten agents)
 
@@ -713,7 +713,7 @@ const CORTEX_D3_THEME = {
 | 5 | TDD Cycle FSM | State machine | Engineers | `d3.forceSimulation()` circular | RED→GREEN→REFACTOR with states |
 | 6 | Governance Rule Tiers | Sunburst | POs, Security | `d3.partition()` + `d3.arc()` | 60+ rules in 3-tier drill-down |
 | 7 | LENS Intelligence Pipeline | Data flow | Engineers | `d3.sankey()` | 4-layer analysis evidence flow |
-| 8 | Orchestrator Domain Map | Treemap | Engineers | `d3.treemap()` | 15 domains, 320+ files proportional |
+| 8 | Orchestrator Domain Map | Treemap | Engineers | `d3.treemap()` | 14 domains, 290+ files proportional |
 | 9 | Convergence Gate Loop | Cycle diagram | POs, Engineers | Custom SVG circular | Detect→fix→rescan visual loop |
 | 10 | Defect Cost Comparison | Bar chart | Business | `d3.scaleBand()` | ROI evidence — before/after |
 | 11 | Testing Strategy Pyramid | Pyramid | Engineers, QA | Custom SVG trapezoids | 5-tier test confidence model |
@@ -954,10 +954,10 @@ The coverage audit agent maintains a live coverage map tracking:
 
 | Dimension | Source of Truth | Documentation Target |
 |-----------|----------------|---------------------|
-| **Orchestrators** | `cortex/orchestrators/` (320+ files) | `.content/05-orchestration-the-engine-room.md` |
-| **MCP Tools** | `cortex/mcp/mcp_registry.py` (30 registered) | `.content/06-mcp-tools-in-your-ide.md` |
-| **Governance Rules** | `cortex-registry/core/` (35+ YAMLs) | `.content/03-governance-quality-that-enforces-itself.md` |
-| **Intent Types** | `cortex/models/canonical_enums.py` (29 types) | `.content/05-orchestration-the-engine-room.md` |
+| **Orchestrators** | `cortex/orchestrators/` (290+ files) | `.content/05-orchestration-the-engine-room.md` |
+| **MCP Tools** | `cortex/mcp/mcp_registry.py` (36 registered) | `.content/06-mcp-tools-in-your-ide.md` |
+| **Governance Rules** | `cortex-registry/core/` (60+ YAMLs) | `.content/03-governance-quality-that-enforces-itself.md` |
+| **Intent Types** | `cortex/models/canonical_enums.py` (31 types) | `.content/05-orchestration-the-engine-room.md` |
 | **Workflow Templates** | `cortex-registry/workflows/templates/` | `.content/09-lifecycle-from-idea-to-production.md` |
 | **Debug Strategies** | `cortex/orchestrators/support/debugging/` (8 strategies) | `.content/05-orchestration-the-engine-room.md` |
 | **RCA Methodologies** | `cortex/intelligence/learning/rca_engine.py` (4 methods) | `.content/08-learning-institutional-memory.md` |

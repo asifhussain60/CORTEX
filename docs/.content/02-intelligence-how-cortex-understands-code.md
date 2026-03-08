@@ -87,7 +87,7 @@ Scores are tracked over time, enabling trend analysis: is this codebase getting 
 
 Unlike most development tools, CORTEX can introspect its own architecture. The **Framework Self-Analyzer** (`CortexFrameworkAnalyzer`) counts orchestrators, MCP tools, governance rules, workflow templates, and intent types at runtime. This powers:
 
-- **Architecture drift detection** — if documentation says "330+ orchestrators" but only 310 exist, a P0 violation is raised
+- **Architecture drift detection** — if documentation says "290+ orchestrators" but only 280 exist, a P0 violation is raised
 - **Prompt refresh automation** — `refresh_prompt_suite.py` calls the analyzer to regenerate all prompts with accurate counts
 - **Self-healing documentation** — the documentation you are reading now reflects counts verified against live code, not manually maintained numbers
 

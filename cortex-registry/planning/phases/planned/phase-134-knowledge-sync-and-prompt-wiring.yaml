@@ -32,7 +32,7 @@ sweep_catalogue:
     description: |
       After phases 130–133 complete, the following counts in copilot-instructions.md
       will be stale and must be updated to reflect live architecture:
-      - Orchestrator files: currently 323 → recalculate post-backport
+      - Orchestrator files: currently 296 → recalculate post-backport
       - MCP Tools registered: 30 → 33 (+cortex_review, +cortex_content, +cortex_ado)
       - Intent Types: 29 → 31 (+REVIEW, +FEEDBACK)
       - Governance YAMLs: 37 → recalculate (new workflow templates from FB-010 +
@@ -62,7 +62,7 @@ sweep_catalogue:
       first. It must reflect post-backport reality:
       - Architecture Quick Reference table:
           Orchestrator files: 320 → recalculate
-          MCP Tools: 30 registered → 33 registered
+          MCP Tools: 36 registered → 33 registered
           Intent Types: 29 → 31
           Tests: ~18,874 → recalculate (new ~35 test files from backport)
       - Specialist Agents table: add row for cortex-review-agent.md (if created)

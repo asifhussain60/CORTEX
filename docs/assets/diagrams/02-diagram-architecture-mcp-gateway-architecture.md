@@ -77,7 +77,7 @@ response_header_enhancement:
 │  │                             TOOL REGISTRY                                  │  │
 │  │                                                                            │  │
 │  │  Categories: routing · governance · intelligence · audit · testing · docs   │
-  │  Tool count: 30 registered tools · 54 tool files in cortex/mcp/tools/     │  │
+  │  Tool count: 36 registered tools · 58 tool files in cortex/mcp/tools/     │  │
 │  │                                                                            │  │
 │  │  Tool Call Flow:                                                           │  │
 │  │  stdin → JSON parse → tool lookup → validate → orchestrate → stdout        │  │

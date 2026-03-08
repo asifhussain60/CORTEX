@@ -150,7 +150,7 @@ All CORTEX configuration — governance rules, workflow templates, enterprise pa
 
 ## Self-Awareness — CORTEX Knows Its Own Architecture
 
-Unlike most development platforms, CORTEX can introspect its own architecture at runtime. The **Framework Self-Analyzer** counts orchestrators, MCP tools, governance rules, workflow templates, and intent types — then compares those counts against what the documentation claims. If the documentation says "330+ orchestrators" but the live codebase contains only 310, a P0 architecture drift violation is raised.
+Unlike most development platforms, CORTEX can introspect its own architecture at runtime. The **Framework Self-Analyzer** counts orchestrators, MCP tools, governance rules, workflow templates, and intent types — then compares those counts against what the documentation claims. If the documentation says "290+ orchestrators" but the live codebase contains only 280, a P0 architecture drift violation is raised.
 
 This self-awareness powers the self-healing prompt suite: `refresh_prompt_suite.py` calls the analyzer to regenerate all prompts and agents with verified counts, ensuring documentation never drifts from reality. Every number in this documentation — the orchestrator count, the tool count, the governance rule count — is verified against the running codebase, not manually maintained.
 

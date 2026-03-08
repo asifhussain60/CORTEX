@@ -39,7 +39,7 @@ background: |
     - Smoke tests: 2775 passed (2026-03-05 baseline)
     - Preflight: 424 passed
     - IntentType enum: 29 values (DISTILL is the 30th)
-    - MCP tools: 30 registered in mcp_registry.py (CortexDistill is the 31st)
+    - MCP tools: 36 registered in mcp_registry.py (CortexDistill is the 31st)
   Differentiation from DIGEST:
     - DIGEST → produces EnhancementProposal[] for knowledge store ingestion
     - DISTILL → produces a single synthesised executable prompt string; rewrites file in place

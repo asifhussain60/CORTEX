@@ -185,7 +185,7 @@ For each metric in the floor-approximation table:
 
 ```
 For each .content/ file:
-  1. Scan for numeric patterns matching known metrics (e.g. "323 orchestrator", "35 tools")
+  1. Scan for numeric patterns matching known metrics (e.g. "296 orchestrator", "36 tools")
   2. If an exact number is found without a "+" suffix → P0 violation
   3. The fix is: replace with the correct floor approximation from the table above
 ```
