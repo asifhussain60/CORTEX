@@ -23,6 +23,231 @@
 <link href="../assets/css/main.css" rel="stylesheet"/>
 <link href="../assets/css/layouts/role-landing.css" rel="stylesheet"/>
 <link href="../assets/css/layouts/learning-path.css" rel="stylesheet"/>
+<style>
+/* ── Get Started Steps ───────────────────────────────────────────────── */
+.cl-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 2rem 0 0.5rem;
+    position: relative;
+}
+.cl-step {
+    display: grid;
+    grid-template-columns: 3rem 2px 1fr;
+    column-gap: 1.25rem;
+    align-items: start;
+    position: relative;
+}
+.cl-step-num {
+    width: 3rem; height: 3rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.125rem; font-weight: 800;
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+}
+.cl-step-num--emerald { background: rgba(52,211,153,0.12); border: 2px solid rgba(52,211,153,0.45); color: #34d399; }
+.cl-step-num--cyan    { background: rgba(0,212,255,0.10);  border: 2px solid rgba(0,212,255,0.40);  color: #00d4ff; }
+.cl-step-num--violet  { background: rgba(167,139,250,0.10); border: 2px solid rgba(167,139,250,0.40); color: #a78bfa; }
+.cl-step-connector {
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+    margin: 0 auto;
+    min-height: calc(100% + 1.5rem);
+    align-self: stretch;
+}
+.cl-step-connector--last { background: transparent; }
+.cl-step-content {
+    padding: 0 0 2.5rem 0;
+}
+.cl-step-title {
+    font-size: 1.0625rem; font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+.cl-step-desc {
+    font-size: 0.9rem; color: #94a3b8; line-height: 1.65;
+    margin-bottom: 0.875rem;
+}
+.cl-step-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem; line-height: 1.75;
+    color: #a0a6c0;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 0.625rem;
+    padding: 0.875rem 1rem;
+}
+
+/* ── FAQ Accordion ───────────────────────────────────────────────────── */
+.cl-faq {
+    display: flex; flex-direction: column; gap: 0.625rem;
+    margin-top: 1.5rem;
+}
+.cl-faq-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 0.875rem;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+.cl-faq-item[open] {
+    border-color: rgba(0,212,255,0.25);
+}
+.cl-faq-q {
+    display: flex; align-items: center; gap: 0.75rem;
+    cursor: pointer;
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem; font-weight: 600; color: #e2e8f0;
+    list-style: none;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+.cl-faq-q::-webkit-details-marker { display: none; }
+.cl-faq-q:hover { color: #00d4ff; }
+.cl-faq-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 1.25rem; height: 1.25rem;
+    color: #00d4ff; font-size: 0.7rem;
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+}
+details[open] .cl-faq-icon { transform: rotate(90deg); }
+.cl-faq-a {
+    padding: 0 1.25rem 1rem 3.25rem;
+    font-size: 0.875rem; color: #94a3b8; line-height: 1.7;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+.cl-faq-a p { margin: 0.875rem 0 0; }
+
+/* ── Principles Panel ────────────────────────────────────────────────── */
+.cl-principles-panel {
+    background: linear-gradient(135deg, rgba(13,27,62,0.7) 0%, rgba(10,14,39,0.8) 100%);
+    border: 1px solid rgba(167,139,250,0.18);
+    border-radius: 1.25rem;
+    padding: 2rem 1.75rem;
+    margin: 0 0 0.5rem;
+}
+.cl-principles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+}
+@media (max-width: 860px) {
+    .cl-principles-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .cl-principle-divider { display: none; }
+}
+.cl-principle-quote {
+    padding: 0.25rem 0;
+}
+.cl-principle-mark {
+    font-size: 4rem; line-height: 1;
+    color: rgba(167,139,250,0.35);
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: -0.75rem;
+}
+.cl-principle-text {
+    font-size: 1.0625rem; font-weight: 600; line-height: 1.55;
+    color: #e2e8f0; font-style: italic;
+    margin: 0 0 0.625rem;
+    border-left: 3px solid rgba(167,139,250,0.5);
+    padding-left: 0.875rem;
+}
+.cl-principle-attr {
+    font-size: 0.8125rem; color: #a78bfa; font-weight: 500;
+    margin-bottom: 0.375rem;
+}
+.cl-principle-caption {
+    font-size: 0.8rem; color: #64748b; line-height: 1.5;
+}
+.cl-principle-divider {
+    background: rgba(255,255,255,0.07);
+    align-self: stretch;
+    min-height: 100px;
+}
+.cl-principle-list {
+    display: flex; flex-direction: column; gap: 0.625rem;
+}
+.cl-principle-list-title {
+    font-size: 0.8125rem; font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+.cl-principle-rule {
+    display: flex; align-items: baseline; gap: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255,255,255,0.025);
+    border-radius: 0.5rem;
+    border-left: 2px solid rgba(255,255,255,0.08);
+}
+.cl-principle-rule-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; font-weight: 800;
+    white-space: nowrap;
+}
+.cl-principle-rule-text {
+    font-size: 0.8125rem; color: #94a3b8; line-height: 1.4;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.cl-footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 3rem 1.5rem 2.5rem;
+    margin-top: 0;
+}
+.cl-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+}
+.cl-footer-brand {
+    display: flex; align-items: center; gap: 0.625rem;
+}
+.cl-footer-logo {
+    width: 32px; height: 32px; border-radius: 6px;
+}
+.cl-footer-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.125rem; font-weight: 700; color: #e2e8f0;
+    letter-spacing: 0.04em;
+}
+.cl-footer-tagline {
+    font-size: 0.875rem; color: #64748b;
+    max-width: 480px; line-height: 1.6;
+    margin: 0;
+}
+.cl-footer-links {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.5rem 1.25rem;
+}
+.cl-footer-link {
+    font-size: 0.8125rem; color: #6b7280;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.35rem;
+    transition: color 0.2s ease;
+}
+.cl-footer-link:hover { color: #00d4ff; }
+.cl-footer-copy {
+    font-size: 0.75rem; color: #374151;
+}
+
+/* ── ISSA Responsive overrides (SSOT: design_system.yaml § spacing) ─── */
+@media (max-width: 640px) {
+    .cl-step-code { font-size: 0.74rem; padding: 0.75rem; }
+    .cl-principles-panel { padding: 1.5rem 1rem; }
+    .cl-principle-text { font-size: 0.9375rem; }
+}
+</style>
 </head>
 <body>
 
@@ -642,8 +867,197 @@ flowchart LR
             </div>
         </div>
 
+        <!-- ═══ SECTION 12 — GET STARTED IN 3 STEPS ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-map-signs"></i> Your First 30 Minutes</h2>
+            <p class="bl-tab-desc">Every track starts the same way &mdash; no setup, no installs, no accounts. Open the codebase, read the rules, run your first command. Here&rsquo;s exactly how to begin.</p>
+
+            <div class="cl-steps">
+                <div class="cl-step">
+                    <div class="cl-step-num cl-step-num--emerald">1</div>
+                    <div class="cl-step-connector"></div>
+                    <div class="cl-step-content">
+                        <div class="cl-step-title">Clone &amp; Explore</div>
+                        <div class="cl-step-desc">Clone the CORTEX repository and open it in VS Code. Read <code>cortex-registry/core/</code> &mdash; these are the 60+ CORE rules the whole framework is built on. Each YAML file is a governance standard with a rationale you can read in 2 minutes.</div>
+                        <div class="cl-step-code"><span style="color:#34d399">git</span> clone https://github.com/asifhussain60/CORTEX<br/><span style="color:#a0a6c0">cd</span> CORTEX &amp;&amp; <span style="color:#34d399">code</span> .<br/><span style="color:#a0a6c0"># Read the rules — start with CORE-008</span><br/><span style="color:#a0a6c0">cat</span> cortex-registry/core/rules.yaml</div>
+                    </div>
+                </div>
+                <div class="cl-step">
+                    <div class="cl-step-num cl-step-num--cyan">2</div>
+                    <div class="cl-step-connector"></div>
+                    <div class="cl-step-content">
+                        <div class="cl-step-title">Run the Test Suite</div>
+                        <div class="cl-step-desc">Run <code>make test-smoke</code> and watch 20,000+ tests execute in under 60 seconds using pytest-xdist parallel execution. Every test is a real example of TDD applied at production scale &mdash; read any test file to see the pattern.</div>
+                        <div class="cl-step-code"><span style="color:#00d4ff">make</span> test-smoke<br/><span style="color:#a0a6c0"># Or: python3 scripts/run_tests.py smoke</span><br/><span style="color:#a0a6c0"># 20,000+ tests · parallel · &lt;60s</span><br/><span style="color:#34d399">✓</span> All tests GREEN &mdash; you&rsquo;re ready to learn</div>
+                    </div>
+                </div>
+                <div class="cl-step">
+                    <div class="cl-step-num cl-step-num--violet">3</div>
+                    <div class="cl-step-connector cl-step-connector--last"></div>
+                    <div class="cl-step-content">
+                        <div class="cl-step-title">Pick Your Track &amp; Go</div>
+                        <div class="cl-step-desc">Navigate to your learning track index. Each module starts with the governance rule it teaches, links to the real orchestrator or test file that implements it, and ends with a practice exercise. The framework is the textbook &mdash; explore at your own pace.</div>
+                        <div class="cl-step-code"><span style="color:#a78bfa"># Beginner &rarr;</span><br/><span style="color:#a0a6c0">open</span> docs/learning/beginner/index.html<br/><span style="color:#a78bfa"># Advanced &rarr;</span><br/><span style="color:#a0a6c0">open</span> docs/learning/advanced/index.html</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bl-insight-callout" style="margin-top: 1.5rem;">
+                <i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 0.5rem;"></i>
+                <strong>No prerequisites beyond curiosity.</strong> If you know what a function is, you can start the Beginner track today. If you&rsquo;ve shipped production code, you&rsquo;ll find the Advanced track immediately practical.
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 13 — FAQ ACCORDION ═══ -->
+        <div class="bl-section-panel">
+            <h2 class="role-section-title"><i class="fas fa-question-circle"></i> Common Questions</h2>
+            <p class="bl-tab-desc">The most frequent questions from learners exploring CORTEX for the first time. Expand any question for the full answer.</p>
+
+            <div class="cl-faq">
+
+                <details class="cl-faq-item" open>
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        Do I need Python experience to start?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>The Beginner track teaches Python from a professional standpoint &mdash; not from scratch. You should be comfortable with variables, functions, and basic loops before starting. If you&rsquo;re new to programming entirely, complete a free Python basics course first (Python.org&rsquo;s official tutorial is ideal). The Intermediate and Advanced tracks assume solid Python proficiency.</p>
+                    </div>
+                </details>
+
+                <details class="cl-faq-item">
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        Is CORTEX just for Python developers?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>No. The governance principles, TDD methodology, architectural patterns, and system-thinking concepts are language-agnostic. The Advanced track&rsquo;s multi-stack debug pipeline covers Python, TypeScript/JavaScript, C#/.NET, SQL, HTML/CSS, and REST APIs. CORTEX&rsquo;s LENS analysis supports multiple languages via tree-sitter. Python is the implementation language of the framework, but the lessons transfer to any stack.</p>
+                    </div>
+                </details>
+
+                <details class="cl-faq-item">
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        How long does each track realistically take?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>The listed timelines (8 / 10 / 12 weeks) assume 6&ndash;8 hours of focused learning per week &mdash; roughly an hour each weekday. If you have more time, the tracks can be compressed. If you&rsquo;re studying alongside a job, they expand naturally. There is no deadline, no expiry, and no account to maintain &mdash; the codebase is always there and always growing. Returning after 6 months means finding new material from the latest delivery phases.</p>
+                    </div>
+                </details>
+
+                <details class="cl-faq-item">
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        Can I contribute to CORTEX as part of learning?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>Yes &mdash; and it&rsquo;s encouraged at the Advanced level. CORTEX is governed by the same CORE rules you&rsquo;re learning. Any contribution must follow CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings), and the full governance pipeline. That&rsquo;s not a barrier &mdash; it&rsquo;s the lesson. Submitting a pull request that passes the 29-point audit is one of the most effective Advanced learning exercises possible.</p>
+                    </div>
+                </details>
+
+                <details class="cl-faq-item">
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        What makes CORTEX different from a MOOC or textbook?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>Three things. First, the codebase is the curriculum &mdash; every concept links to a real file you can inspect, modify, and run. Second, the standards are production-grade, not pedagogically simplified &mdash; you learn what engineering teams actually enforce, not a beginner-friendly approximation. Third, the system is alive &mdash; it adds new orchestrators, rules, and patterns with every delivery phase. A MOOC freezes at publication date. CORTEX is always current because it is always running.</p>
+                    </div>
+                </details>
+
+                <details class="cl-faq-item">
+                    <summary class="cl-faq-q">
+                        <span class="cl-faq-icon"><i class="fas fa-chevron-right"></i></span>
+                        How do I know which track to start with?
+                    </summary>
+                    <div class="cl-faq-a">
+                        <p>Use these signals. <strong>Start Beginner</strong> if: you are relatively new to software development, you have never written a unit test, or you have never used Git branching in a team setting. <strong>Start Intermediate</strong> if: you write Python regularly, you understand what a REST API is, and you have shipped at least one project to production. <strong>Start Advanced</strong> if: you have designed systems with multiple components, you have used Docker or CI/CD pipelines, and you want to deepen architectural decision-making skills. When in doubt, start one level below where you think you are &mdash; the foundational chapters of each track move quickly.</p>
+                    </div>
+                </details>
+
+            </div>
+        </div>
+
+        <!-- ═══ SECTION 14 — PRINCIPLES CALLOUT ═══ -->
+        <div class="cl-principles-panel">
+            <div class="cl-principles-grid">
+
+                <div class="cl-principle-quote">
+                    <div class="cl-principle-mark">&ldquo;</div>
+                    <blockquote class="cl-principle-text">
+                        The only way to go fast is to go well.
+                    </blockquote>
+                    <div class="cl-principle-attr">&mdash; Robert C. Martin, <em>Clean Architecture</em></div>
+                    <div class="cl-principle-caption">Why TDD is mandatory in CORTEX, not optional.</div>
+                </div>
+
+                <div class="cl-principle-divider"></div>
+
+                <div class="cl-principle-list">
+                    <div class="cl-principle-list-title"><i class="fas fa-gavel"></i> What CORTEX Enforces</div>
+                    <div class="cl-principle-rule">
+                        <span class="cl-principle-rule-code" style="color:#34d399">CORE-008</span>
+                        <span class="cl-principle-rule-text">Tests before code &mdash; no exceptions, no overrides</span>
+                    </div>
+                    <div class="cl-principle-rule">
+                        <span class="cl-principle-rule-code" style="color:#00d4ff">CORE-035</span>
+                        <span class="cl-principle-rule-text">One canonical implementation &mdash; no silent duplicates</span>
+                    </div>
+                    <div class="cl-principle-rule">
+                        <span class="cl-principle-rule-code" style="color:#a78bfa">CORE-064</span>
+                        <span class="cl-principle-rule-text">Complete sweeps &mdash; no partial fixes left open</span>
+                    </div>
+                    <div class="cl-principle-rule">
+                        <span class="cl-principle-rule-code" style="color:#fbbf24">CORE-068</span>
+                        <span class="cl-principle-rule-text">Convergence to zero &mdash; detect &rarr; fix &rarr; verify loop</span>
+                    </div>
+                </div>
+
+                <div class="cl-principle-divider"></div>
+
+                <div class="cl-principle-quote">
+                    <div class="cl-principle-mark">&ldquo;</div>
+                    <blockquote class="cl-principle-text">
+                        Quality is never an accident; it is always the result of intelligent effort.
+                    </blockquote>
+                    <div class="cl-principle-attr">&mdash; John Ruskin</div>
+                    <div class="cl-principle-caption">What 20,000+ automated tests and 60+ governance rules look like in practice.</div>
+                </div>
+
+            </div>
+
+            <!-- D3: Learning Velocity Chart — hours invested vs skill confidence over 30 weeks -->
+            <div class="bl-d3-panel" id="velocity-chart" role="img" aria-label="Line chart showing estimated skill confidence growth over 30 weeks across all three learning tracks">
+                <div class="bl-d3-title">Estimated Skill Confidence Growth &mdash; 30 Weeks</div>
+                <div class="bl-d3-subtitle">Illustrative trajectory based on 6&ndash;8 hrs/week &middot; Beginner (green) &middot; Intermediate (cyan) &middot; Advanced (violet)</div>
+                <div class="bl-d3-canvas" id="velocity-canvas"></div>
+            </div>
+        </div>
+
     </div><!-- /.role-content-wrapper -->
 </main>
+
+<footer class="cl-footer" role="contentinfo">
+    <div class="cl-footer-inner">
+        <div class="cl-footer-brand">
+            <img src="../assets/images/cortex-logo-64.png" alt="CORTEX" class="cl-footer-logo" loading="lazy"/>
+            <span class="cl-footer-title">CORTEX</span>
+        </div>
+        <p class="cl-footer-tagline">A production-grade AI Engineering Framework &mdash; open to study, open to extend.</p>
+        <div class="cl-footer-links">
+            <a href="../index.html" class="cl-footer-link"><i class="fas fa-home"></i> Platform Home</a>
+            <a href="../getting-started.html" class="cl-footer-link"><i class="fas fa-play-circle"></i> Getting Started</a>
+            <a href="../architecture.html" class="cl-footer-link"><i class="fas fa-sitemap"></i> Architecture</a>
+            <a href="software-engineer.html" class="cl-footer-link"><i class="fas fa-code"></i> Software Engineer View</a>
+            <a href="quality-engineer.html" class="cl-footer-link"><i class="fas fa-vial"></i> Quality Engineer View</a>
+            <a href="security-engineer.html" class="cl-footer-link"><i class="fas fa-shield-alt"></i> Security Engineer View</a>
+            <a href="sre.html" class="cl-footer-link"><i class="fas fa-server"></i> SRE View</a>
+            <a href="business-leader.html" class="cl-footer-link"><i class="fas fa-briefcase"></i> Business Leader View</a>
+            <a href="product-owner.html" class="cl-footer-link"><i class="fas fa-tasks"></i> Product Owner View</a>
+        </div>
+        <div class="cl-footer-copy">&copy; 2025&ndash;2026 Asif Hussain &mdash; CORTEX Framework. All rights reserved.</div>
+    </div>
+</footer>
 
 <!-- ══ SCRIPTS ══ -->
 <script>
@@ -894,6 +1308,148 @@ if (typeof mermaid !== 'undefined') {
 <script src="../assets/js/content-loader.js"></script>
 <script>
     window.cortexLoader = new ContentLoader('../data/content.json');
+</script>
+
+<script>
+/* D3 Chart 4: Learning Velocity — 30-week confidence growth line chart */
+(function () {
+    'use strict';
+    if (typeof d3 === 'undefined') return;
+    var container = document.getElementById('velocity-canvas');
+    if (!container) return;
+
+    /* Confidence growth curves: week → score (0–100) */
+    var weeks = d3.range(0, 31);
+    function sigmoid(w, shift, scale) {
+        return 100 / (1 + Math.exp(-(w - shift) / scale));
+    }
+
+    var tracks = [
+        {
+            id: 'beginner',
+            label: 'Beginner',
+            color: '#34d399',
+            pts: weeks.map(function (w) { return { w: w, v: Math.min(100, sigmoid(w, 5, 2.2) * 0.9) }; })
+        },
+        {
+            id: 'intermediate',
+            label: 'Intermediate',
+            color: '#00d4ff',
+            pts: weeks.map(function (w) { return { w: w, v: Math.min(100, Math.max(0, sigmoid(w, 12, 3.0) * 0.92)) }; })
+        },
+        {
+            id: 'advanced',
+            label: 'Advanced',
+            color: '#a78bfa',
+            pts: weeks.map(function (w) { return { w: w, v: Math.min(100, Math.max(0, sigmoid(w, 20, 3.8) * 0.95)) }; })
+        }
+    ];
+
+    var margin = { top: 24, right: 80, bottom: 48, left: 52 };
+    var totalW = Math.max((container.offsetWidth || 0), 520);
+    var totalH = 300;
+    var w = totalW - margin.left - margin.right;
+    var h = totalH - margin.top - margin.bottom;
+
+    var svg = d3.select(container).append('svg')
+        .attr('width', '100%').attr('height', totalH)
+        .attr('viewBox', '0 0 ' + totalW + ' ' + totalH)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    /* Defs: glow filter + clip */
+    var defs = svg.append('defs');
+    var glow = defs.append('filter').attr('id', 'cl-vel-glow').attr('x', '-20%').attr('y', '-20%').attr('width', '140%').attr('height', '140%');
+    glow.append('feGaussianBlur').attr('in', 'SourceGraphic').attr('stdDeviation', '3').attr('result', 'blur');
+    var gm = glow.append('feMerge');
+    gm.append('feMergeNode').attr('in', 'blur');
+    gm.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    var clip = defs.append('clipPath').attr('id', 'cl-vel-clip');
+    clip.append('rect').attr('width', w).attr('height', h);
+
+    var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var x = d3.scaleLinear().domain([0, 30]).range([0, w]);
+    var y = d3.scaleLinear().domain([0, 100]).range([h, 0]);
+
+    /* Grid lines */
+    g.append('g').call(
+        d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat('')
+    ).call(function (s) {
+        s.select('.domain').remove();
+        s.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
+    });
+
+    /* Phase band backgrounds */
+    var phases = [
+        { label: 'Beginner\n8 wks', x0: 0, x1: 8,  color: 'rgba(52,211,153,0.04)' },
+        { label: 'Intermediate\n10 wks', x0: 8, x1: 18, color: 'rgba(0,212,255,0.04)' },
+        { label: 'Advanced\n12 wks', x0: 18, x1: 30, color: 'rgba(167,139,250,0.04)' }
+    ];
+    phases.forEach(function (p) {
+        g.append('rect')
+            .attr('x', x(p.x0)).attr('y', 0)
+            .attr('width', x(p.x1) - x(p.x0)).attr('height', h)
+            .attr('fill', p.color);
+        /* Phase divider */
+        if (p.x0 > 0) {
+            g.append('line')
+                .attr('x1', x(p.x0)).attr('y1', 0).attr('x2', x(p.x0)).attr('y2', h)
+                .attr('stroke', 'rgba(255,255,255,0.08)').attr('stroke-dasharray', '4,4');
+        }
+        /* Phase label */
+        var mid = (p.x0 + p.x1) / 2;
+        var parts = p.label.split('\n');
+        var lt = g.append('text').attr('x', x(mid)).attr('y', 10)
+            .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.2)')
+            .attr('font-size', '9px').attr('font-weight', '600')
+            .attr('font-family', 'Inter, sans-serif').attr('letter-spacing', '0.04em');
+        parts.forEach(function (p2, i) {
+            lt.append('tspan').attr('x', x(mid)).attr('dy', i === 0 ? 0 : '1.2em').text(p2);
+        });
+    });
+
+    /* Area fill + line for each track */
+    var lineGen = d3.line().x(function (d) { return x(d.w); }).y(function (d) { return y(d.v); }).curve(d3.curveCatmullRom.alpha(0.5));
+    var areaGen = d3.area().x(function (d) { return x(d.w); }).y0(h).y1(function (d) { return y(d.v); }).curve(d3.curveCatmullRom.alpha(0.5));
+
+    tracks.forEach(function (t) {
+        /* Area */
+        g.append('path').datum(t.pts)
+            .attr('clip-path', 'url(#cl-vel-clip)')
+            .attr('d', areaGen)
+            .attr('fill', t.color)
+            .attr('opacity', 0.07);
+        /* Line */
+        g.append('path').datum(t.pts)
+            .attr('clip-path', 'url(#cl-vel-clip)')
+            .attr('d', lineGen)
+            .attr('fill', 'none')
+            .attr('stroke', t.color)
+            .attr('stroke-width', 2.5)
+            .attr('opacity', 0.85)
+            .attr('filter', 'url(#cl-vel-glow)');
+        /* End label */
+        var last = t.pts[t.pts.length - 1];
+        g.append('text')
+            .attr('x', x(last.w) + 6).attr('y', y(last.v) + 4)
+            .attr('fill', t.color).attr('font-size', '10px').attr('font-weight', '700')
+            .attr('font-family', 'Inter, sans-serif').text(t.label);
+    });
+
+    /* Axes */
+    var xAxis = g.append('g').attr('transform', 'translate(0,' + h + ')').call(
+        d3.axisBottom(x).ticks(6).tickFormat(function (d) { return 'Wk ' + d; })
+    );
+    xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.08)');
+    xAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif');
+    xAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.06)');
+
+    var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function (d) { return d + '%'; }));
+    yAxis.select('.domain').remove();
+    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif');
+    yAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
+})();
 </script>
 
 </body>
