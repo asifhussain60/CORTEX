@@ -1,0 +1,545 @@
+# visualization_standards.yaml
+# CORTEX Documentation — Visualization & Diagram Standards
+# Authority: diagram-regeneration-agent, html-view-designer, a11y-perf-guardian
+# Updated: 2026-03-08 | Phase 110 — Visualization Library Consolidation
+# Purpose: Single source of truth for all diagram rendering, library policy,
+#          accessibility standards, and D3.js integration patterns for docs/
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LIBRARY POLICY (IMMUTABLE)
+# ══════════════════════════════════════════════════════════════════════════════
+library_policy:
+  approved:
+    d3js:
+      version_pin: "7.9.0"
+      cdn: "https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"
+      bundle_size: "~80KB gzipped"
+      status: APPROVED
+      role: "Sole visualization engine for ALL diagrams, charts, and interactive visuals"
+      capabilities:
+        - flowcharts_via_d3_tree
+        - sequence_diagrams_via_custom_svg_swimlanes
+        - architecture_layers_via_d3_tree_horizontal
+        - data_flow_via_d3_sankey
+        - mind_maps_via_d3_tree_radial
+        - donut_charts_via_d3_pie
+        - bar_charts_via_d3_scaleBand
+        - heatmaps_via_d3_scaleSequential
+        - force_directed_graphs_via_d3_forceSimulation
+        - treemaps_via_d3_treemap
+        - sunburst_via_d3_partition
+        - cycle_diagrams_via_custom_svg_circular
+    css_html:
+      status: APPROVED
+      role: "Hand-crafted flexbox/grid for static pipeline visuals, step cards, bubble grids"
+      use_cases:
+        - sdlc_pipeline_phase_cards
+        - domain_distribution_bubble_grids
+        - process_step_numbered_cards
+        - feature_pill_lists
+        - before_after_split_card_pairs
+
+  banned:
+    mermaid_js:
+      status: BANNED
+      reason: "Unreadable font sizes at role-view scale, no SVG text styling control, poor dark-theme rendering, no glassmorphism integration, renders tiny by default with no sizing API"
+      alternative: "D3.js d3.tree() for flowcharts, custom SVG for sequences"
+    chart_js:
+      status: NOT_APPROVED
+      reason: "Canvas-based (no glassmorphism blur), no SVG export, duplicates D3.js capabilities"
+    cytoscape_js:
+      status: NOT_APPROVED
+      reason: "Canvas-based rendering (no backdrop-filter blur), 540KB bundle, limited font control in dark themes"
+    vis_network:
+      status: NOT_APPROVED
+      reason: "Canvas-based, limited styling API, no SVG output, poor a11y support"
+    elkjs:
+      status: NOT_APPROVED
+      reason: "Layout engine only (computes positions, does not render), 8MB unpacked, GWT transpilation issues, requires separate rendering library"
+    markmap:
+      status: NOT_APPROVED
+      reason: "Mind-map only niche — D3.js d3.tree() radial layout covers this natively with full theme control"
+    gojs:
+      status: NOT_APPROVED
+      reason: "Commercial license required, heavy runtime, proprietary lock-in"
+    plotly:
+      status: NOT_APPROVED
+      reason: "3.5MB bundle, opinionated styling conflicts with glassmorphism, overkill for documentation diagrams"
+    raphael:
+      status: NOT_APPROVED
+      reason: "Legacy library (last major update 2016), VML fallback unnecessary, D3.js is strictly superior"
+    jointjs:
+      status: NOT_APPROVED
+      reason: "Diagram-specific but 600KB+, commercial rappid version, D3.js custom SVG is lighter and more flexible"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DIAGRAM TYPE CATALOGUE — D3.js Implementation Map
+# ══════════════════════════════════════════════════════════════════════════════
+diagram_types:
+  architecture_layers:
+    d3_module: "d3.tree() + custom SVG group nesting"
+    description: "System layer views showing component hierarchy (IDE → MCP → Orchestration → Intelligence → Governance → Infrastructure)"
+    audience: [business_leaders, product_owners, software_engineers]
+    example: "01-diagram-architecture-system-architecture-layers.md"
+    svg_min_viewbox: "0 0 900 600"
+
+  flowcharts:
+    d3_module: "d3.tree() horizontal OR CSS flexbox card pipeline"
+    description: "Process flows, decision trees, pipeline stages with gates"
+    audience: [all]
+    variants:
+      - name: "CSS pipeline cards"
+        when: "Static, linear flow (≤ 10 steps)"
+        method: "Hand-crafted flexbox with glass-card components"
+      - name: "D3.js tree"
+        when: "Branching flows, conditional paths, > 10 nodes"
+        method: "d3.tree().size() with custom link generators"
+    example: "03-diagram-workflow-sdlc-pipeline.md"
+
+  sequence_diagrams:
+    d3_module: "Custom SVG with d3.scaleLinear() swimlanes"
+    description: "Time-ordered interactions between actors/components"
+    audience: [product_owners, software_engineers]
+    svg_pattern: |
+      Vertical lifelines with d3.scaleLinear() for Y positioning.
+      Horizontal arrows with text labels. Actor headers at top.
+      Activation boxes on lifelines during processing.
+    example: "09-diagram-orchestration-request-sequence.md"
+
+  data_flow:
+    d3_module: "d3-sankey (d3.sankey())"
+    description: "Volume-weighted flows between system stages"
+    audience: [business_leaders, product_owners]
+    note: "Requires d3-sankey plugin — loaded on-demand only on pages that use it"
+
+  mind_maps:
+    d3_module: "d3.tree() with radial layout (d3.cluster())"
+    description: "Hierarchical capability overviews, knowledge taxonomies"
+    audience: [all]
+    layout: "d3.tree().size([2 * Math.PI, radius]) with d3.linkRadial()"
+
+  donut_charts:
+    d3_module: "d3.pie() + d3.arc() with attrTween entrance animation"
+    description: "Before/after percentage comparisons, governance compliance scores"
+    audience: [business_leaders]
+    rules:
+      - "Dual donuts side-by-side: rose/red (before) | emerald/green (after)"
+      - "Center percentage display with large font (≥ 28px)"
+      - "4-column legend below charts"
+      - "NEVER horizontal bar charts for percentage comparisons"
+
+  bar_charts:
+    d3_module: "d3.scaleBand() + d3.scaleLinear()"
+    description: "ROI metrics, defect cost comparison, trend data"
+    audience: [business_leaders]
+    rules:
+      - "Vertical bars ONLY — never horizontal (horizontal wastes space in narrow viewports)"
+      - "Axis tick labels ≥ 12px (JetBrains Mono)"
+      - "Bar width: 60% of band width minimum"
+      - "Value labels on top of bars ≥ 13px"
+
+  heatmaps:
+    d3_module: "d3.scaleSequential() + SVG rects"
+    description: "Code churn visualization, test coverage density, hotspot analysis"
+    audience: [software_engineers]
+    a11y_note: "Must include pattern fills or text labels — colour alone must NOT convey information"
+
+  force_directed:
+    d3_module: "d3.forceSimulation() with forceLink, forceManyBody, forceCenter"
+    description: "Dependency maps, orchestrator relationship graphs"
+    audience: [software_engineers]
+    interaction:
+      - drag_nodes: true
+      - zoom_pan: true
+      - tooltip_on_hover: true
+
+  treemaps:
+    d3_module: "d3.treemap()"
+    description: "Proportional area visualization — file sizes, module sizes, test distribution"
+    audience: [software_engineers]
+    rules:
+      - "Cell labels ≥ 14px — truncate with ellipsis if cell too small"
+      - "Hide labels on cells < 40px wide — show on hover instead"
+      - "Use domain-consistent colours from CORTEX palette"
+
+  sunburst:
+    d3_module: "d3.partition() + d3.arc()"
+    description: "Hierarchical drill-down — governance tier pyramid, package hierarchy"
+    audience: [product_owners, software_engineers]
+    interaction:
+      - click_to_drill: true
+      - breadcrumb_trail: true
+
+  cycle_diagrams:
+    d3_module: "Custom SVG with circular arc layout"
+    description: "Closed loops — TDD cycle, convergence gate, RCA memory cycle, URS lifecycle"
+    audience: [product_owners, software_engineers]
+    svg_pattern: "Nodes arranged in circle, curved arrows between adjacent nodes, center label"
+
+  state_machines:
+    d3_module: "d3.forceSimulation() with custom states and transitions"
+    description: "Workflow engine FSM states (pending → running → completed/failed/blocked)"
+    audience: [software_engineers]
+
+  pyramids:
+    d3_module: "Custom SVG trapezoids stacked vertically"
+    description: "Testing strategy pyramid (5 tiers), governance enforcement tiers"
+    audience: [software_engineers, quality_engineers]
+    rules:
+      - "Widest tier at bottom, narrowest at top"
+      - "Each tier labelled with count and name (≥ 14px)"
+      - "Tier colours match CORTEX domain palette"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SVG TEXT ACCESSIBILITY — FONT FLOORS (P0 — IMMUTABLE)
+# ══════════════════════════════════════════════════════════════════════════════
+svg_text_accessibility:
+  critical_rule: "Dark glassmorphism backgrounds require LARGER font sizes than light themes. SVG text has no browser zoom scaling — sizes must be explicit."
+
+  font_floors:
+    diagram_titles:
+      min_px: 20
+      font_family: "Space Grotesk (var(--font-family-heading))"
+      font_weight: 600
+      anti_pattern: "< 16px, Arial, system-ui default"
+    node_labels:
+      min_px: 14
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 500
+      anti_pattern: "< 12px, condensed fonts"
+    edge_labels:
+      min_px: 12
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 400
+      anti_pattern: "< 10px, italic on dark backgrounds"
+    axis_labels:
+      min_px: 13
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 400
+      anti_pattern: "< 11px"
+    axis_tick_values:
+      min_px: 12
+      font_family: "JetBrains Mono (var(--font-family-mono))"
+      font_weight: 400
+      anti_pattern: "< 10px"
+    legend_text:
+      min_px: 13
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 400
+      anti_pattern: "< 11px"
+    tooltip_text:
+      min_px: 13
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 400
+      anti_pattern: "< 11px, no backdrop-filter blur"
+    annotation_text:
+      min_px: 12
+      font_family: "Inter (var(--font-family-body))"
+      font_weight: 400
+      anti_pattern: "< 10px"
+    badge_count_text:
+      min_px: 16
+      font_family: "Space Grotesk (var(--font-family-heading))"
+      font_weight: 700
+      anti_pattern: "< 14px"
+
+  colour_contrast:
+    on_background: "#0a0e27"
+    approved:
+      primary:   { hex: "#ffffff", contrast: "19.2:1", usage: "All labels, titles" }
+      secondary: { hex: "#a0a6c0", contrast: "7.1:1",  usage: "Muted annotations, axis labels" }
+      accent:    { hex: "#00d4ff", contrast: "8.6:1",  usage: "Highlighted values, active states" }
+      danger:    { hex: "#ff4444", contrast: "5.2:1",  usage: "Error indicators, critical counts" }
+      success:   { hex: "#00ff88", contrast: "12.1:1", usage: "Positive indicators" }
+      warning:   { hex: "#fbbf24", contrast: "11.8:1", usage: "Caution indicators" }
+    forbidden:
+      muted_gray: { hex: "#6b7280", contrast: "3.8:1", reason: "Fails WCAG AA 4.5:1 minimum — use #a0a6c0 instead" }
+
+  svg_sizing:
+    min_node_width: 120
+    min_node_height: 40
+    node_padding_h: 12
+    node_padding_v: 8
+    edge_stroke_width: 2
+    arrow_marker_size: 8
+    min_viewbox_width: 800
+    preserve_aspect_ratio: "xMidYMid meet"
+    container_max_width: "100%"
+    note: "Never use fixed pixel widths on containers — always responsive"
+
+  # ── Responsive Diagram Design ──────────────────────────────────────────────
+  # P0 — all D3.js SVG diagrams MUST implement these responsive rules
+  responsive_design:
+
+    breakpoints:
+      mobile:
+        max_width: 480
+        label: "--bp-mobile"
+        diagram_adaptations:
+          - "Single-column layout, vertical stacking"
+          - "Simplified node labels (abbreviate if > 20 chars)"
+          - "Horizontal flowcharts rotate to top-to-bottom"
+          - "Force-directed: reduce charge strength to -120"
+          - "Sankey: reduce node width, increase vertical spacing"
+          - "Sunburst/chord: constrain to min(100vw - 2rem, 500px)"
+      tablet:
+        max_width: 768
+        label: "--bp-tablet"
+        diagram_adaptations:
+          - "Condensed layout, 2-column maximum"
+          - "Touch-optimised nodes (44×44px min)"
+          - "Side legends stack below diagram"
+          - "Intermediate font scaling applied"
+      desktop:
+        min_width: 769
+        max_width: 1279
+        label: "--bp-desktop"
+        diagram_adaptations:
+          - "Full layout with all interactions enabled"
+          - "Standard font floors apply"
+      wide:
+        min_width: 1280
+        label: "--bp-wide"
+        diagram_adaptations:
+          - "Expanded viewBox, max-width 1200px centred"
+
+    svg_container_css: |
+      .cortex-diagram svg {
+        width: 100%;
+        height: auto;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: block;
+      }
+      @media (max-width: 480px) {
+        .cortex-diagram svg { min-height: 300px; }
+      }
+      @media (max-width: 768px) {
+        .cortex-diagram svg { min-height: 400px; }
+      }
+
+    mobile_font_scaling:
+      note: "Mobile screens held closer — increase body text, reduce oversized stats"
+      overrides:
+        node_labels:    { desktop: 14, tablet: 15, mobile: 16 }
+        edge_labels:    { desktop: 12, tablet: 13, mobile: 14 }
+        title_heading:  { desktop: 18, tablet: 19, mobile: 20 }
+        legend_text:    { desktop: 12, tablet: 13, mobile: 14 }
+        stat_numbers:   { desktop: 28, tablet: 26, mobile: 24 }
+        annotations:    { desktop: 11, tablet: 12, mobile: 13 }
+
+    section_spacing:
+      margins:
+        diagram_before_text:   { value: "2rem",   token: "--space-xl",  mobile: "1.5rem" }
+        diagram_after_text:    { value: "2rem",   token: "--space-xl",  mobile: "1.5rem" }
+        between_stacked:       { value: "3rem",   token: "--space-2xl", mobile: "2.5rem" }
+        caption_to_next:       { value: "1.5rem", token: "--space-lg",  mobile: "1rem" }
+      paddings:
+        diagram_container:     { value: "1.5rem", mobile: "1rem", note: "Glass card breathing room" }
+        figcaption:            { value: "0.75rem 0", mobile: "0.5rem 0" }
+        svg_internal_group:    { value: "20px from viewBox edges", mobile: "12px" }
+        tooltip_container:     { value: "12px 16px", mobile: "10px 14px" }
+
+    touch_targets:
+      note: "WCAG 2.5.5 (AAA) — 44×44px minimum on touch devices"
+      interactive_nodes:    { touch: "44×44px", desktop: "32×32px" }
+      legend_toggles:       { touch: "44×44px", desktop: "28×28px" }
+      zoom_controls:        { touch: "48×48px", desktop: "36×36px" }
+      tooltip_dismiss:      { touch: "48×48px", desktop: "click-away" }
+      filter_buttons:       { touch: "44×36px", desktop: "36×28px" }
+
+    layout_adaptation_rules:
+      - rule: "Horizontal flowcharts → vertical stack on mobile (≤480px)"
+        implementation: "Rotate d3.tree orientation from left-to-right to top-to-bottom"
+      - rule: "Multi-column layouts → single column on mobile"
+        implementation: "CSS Grid grid-template-columns: 1fr"
+      - rule: "Side-by-side legends → stacked below diagram on tablet (≤768px)"
+        implementation: "flex-direction: column on .diagram-legend"
+      - rule: "Sunburst/chord → constrain to min(100vw - 2rem, 500px) on mobile"
+        implementation: "Prevent horizontal overflow on circular layouts"
+      - rule: "Force-directed graphs → tighter charge on mobile"
+        implementation: "d3.forceManyBody().strength(-200) → strength(-120)"
+      - rule: "Sankey diagrams → reduce node width, increase vertical spacing"
+        implementation: "Narrower nodes prevent text overlap on small screens"
+    forbidden:
+      - "NEVER hide diagram content on mobile — simplify, never remove"
+      - "NEVER use overflow: hidden on diagram containers — use overflow-x: auto"
+      - "NEVER use fixed pixel widths on SVG containers"
+
+  # ── Dark Glassmorphism Colour Harmony ──────────────────────────────────────
+  colour_harmony:
+    note: "Colours must complement, not contradict, dark glassmorphism theme"
+    rules:
+      - "Node fills MUST use rgba() with 0.6–0.8 opacity — preserves glass translucency"
+      - "Edge strokes MUST use 0.3–0.5 opacity — not 1.0 which overpowers glassmorphism"
+      - "Accent #00d4ff for active/selected states ONLY — overuse dilutes hierarchy"
+      - "Secondary #7b61ff for category differentiation — complements cyan"
+      - "Semantic colours (#00ff88 success, #fbbf24 warning, #ff4444 danger) for state ONLY"
+      - "Glow effects (feGaussianBlur) stdDeviation ≤ 4 — excessive glow bleeds on mobile"
+      - "Glass borders rgba(255,255,255,0.08–0.15) — subtle, never opaque"
+    forbidden:
+      - "NEVER solid bright fills (#00d4ff solid, #7b61ff solid) — breaks glass aesthetic"
+      - "NEVER mix warm and cool accent colours in the same diagram"
+      - "NEVER gradient fills competing with page background gradients (keep < 0.3 opacity)"
+    approved_triad: ["#00d4ff", "#7b61ff", "#10b981"]
+    approved_semantic: { success: "#00ff88", warning: "#fbbf24", danger: "#ff4444" }
+
+  aria_requirements:
+    - "Every <svg> MUST have <title> and <desc> children"
+    - "Every <figure> wrapping a diagram MUST have role='img' + aria-labelledby"
+    - "Interactive nodes MUST have tabindex='0' for keyboard navigation"
+    - "Tooltips MUST use role='tooltip' with aria-describedby"
+    - "Colour MUST NOT be the only means of conveying information"
+    - "Never use <img src='diagram.svg'> — inline SVG required for a11y"
+    - "Never rely on hover-only information — provide static fallback"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# D3.js GLASSMORPHISM THEME CONFIG (canonical — used by all diagram code)
+# ══════════════════════════════════════════════════════════════════════════════
+d3_theme:
+  svg_background: transparent
+  node:
+    fill: "rgba(26, 31, 58, 0.7)"
+    stroke: "rgba(255, 255, 255, 0.1)"
+    stroke_width: 1
+    border_radius: 8
+    hover_fill: "rgba(26, 31, 58, 0.85)"
+    hover_stroke: "rgba(0, 212, 255, 0.3)"
+  edge:
+    stroke: "rgba(0, 212, 255, 0.4)"
+    stroke_width: 2
+    hover_stroke: "rgba(0, 212, 255, 0.7)"
+  text:
+    primary: "#ffffff"
+    secondary: "#a0a6c0"
+    accent: "#00d4ff"
+  effects:
+    glow_filter:
+      id: "cortex-glow"
+      std_deviation: 4
+      color: "rgba(0, 212, 255, 0.5)"
+    hover_scale: 1.05
+    transition_duration_ms: 200
+  tooltip:
+    background: "rgba(15, 23, 42, 0.95)"
+    border: "1px solid rgba(0, 212, 255, 0.3)"
+    border_radius: "8px"
+    font_size: "13px"
+    padding: "10px 14px"
+    backdrop_filter: "blur(4px)"
+    box_shadow: "0 10px 25px rgba(0, 0, 0, 0.5)"
+    z_index: 50
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HIGH-VALUE DIAGRAM CATALOGUE (prioritized by audience impact)
+# ══════════════════════════════════════════════════════════════════════════════
+high_value_diagrams:
+  # ── For ALL audiences ──────────────────────────────────────────────────────
+  - id: system-architecture-layers
+    type: architecture_layers
+    audience: [all]
+    value: "End-to-end system understanding — the 'elevator pitch' diagram"
+    existing: "01-diagram-architecture-system-architecture-layers.md"
+    d3_method: "d3.tree() horizontal with grouped SVG layers"
+
+  - id: intent-classification-routing
+    type: flowcharts
+    audience: [all]
+    value: "30+ intents → orchestrator mapping — shows CORTEX understands your request"
+    existing: "13-diagram-orchestration-intent-classification-routing.md"
+    d3_method: "d3.tree() with colour-coded intent groups + confidence thresholds"
+
+  # ── For Business Leaders ───────────────────────────────────────────────────
+  - id: defect-cost-comparison
+    type: bar_charts
+    audience: [business_leaders]
+    value: "ROI evidence — before/after defect cost reduction"
+    existing: "business-leader.html (inline D3.js)"
+    d3_method: "d3.scaleBand() vertical bars with animated entrance"
+
+  - id: governance-compliance-donut
+    type: donut_charts
+    audience: [business_leaders]
+    value: "Visual compliance score — before/after governance adoption"
+    existing: "business-leader.html (inline D3.js)"
+    d3_method: "d3.pie() + d3.arc() dual donuts"
+
+  # ── For Product Owners ─────────────────────────────────────────────────────
+  - id: sdlc-pipeline-7-phase
+    type: flowcharts
+    audience: [product_owners, business_leaders]
+    value: "7-phase lifecycle with governance gates — delivery visibility"
+    existing: "03-diagram-workflow-sdlc-pipeline.md"
+    d3_method: "CSS flexbox phase cards (preferred) OR d3.tree() horizontal"
+
+  - id: request-lifecycle-sequence
+    type: sequence_diagrams
+    audience: [product_owners, software_engineers]
+    value: "How a single request flows through the 4-stage pipeline"
+    existing: "09-diagram-orchestration-request-sequence.md"
+    d3_method: "Custom SVG swimlanes with d3.scaleLinear() Y-axis"
+
+  # ── For Software & Quality Engineers ───────────────────────────────────────
+  - id: lens-intelligence-pipeline
+    type: data_flow
+    audience: [software_engineers]
+    value: "4-layer LENS analysis — how CORTEX understands code before touching it"
+    existing: "11-diagram-intelligence-lens-analysis-pipeline.md"
+    d3_method: "d3.sankey() or d3.tree() vertical with evidence flow arrows"
+
+  - id: tdd-cycle-fsm
+    type: cycle_diagrams
+    audience: [software_engineers]
+    value: "RED→GREEN→REFACTOR with FSM states — the development heartbeat"
+    existing: "05-diagram-workflow-tdd-cycle-and-fsm.md"
+    d3_method: "Custom SVG circular layout with animated transitions"
+
+  - id: orchestrator-domain-treemap
+    type: treemaps
+    audience: [software_engineers]
+    value: "15 domains, 320+ files — proportional view of the orchestration layer"
+    d3_method: "d3.treemap() with domain-coloured cells"
+
+  - id: testing-strategy-pyramid
+    type: pyramids
+    audience: [software_engineers, quality_engineers]
+    value: "5-tier confidence model — preflight → smoke → unit → parallel → batch"
+    existing: "07-diagram-testing-testing-strategy-pyramid.md"
+    d3_method: "Custom SVG trapezoids stacked vertically"
+
+  # ── For Security Engineers ─────────────────────────────────────────────────
+  - id: stride-threat-model
+    type: heatmaps
+    audience: [security_engineers]
+    value: "STRIDE classification + DREAD scoring — automated threat catalogue"
+    existing: "17-diagram-security-threat-model-stride-analysis.md"
+    d3_method: "d3.scaleSequential() heatmap + threat severity matrix"
+
+  - id: governance-rule-tiers
+    type: sunburst
+    audience: [security_engineers, product_owners]
+    value: "60+ rules in 3-tier drill-down — governance depth visualization"
+    existing: "15-diagram-governance-rule-enforcement-tiers.md"
+    d3_method: "d3.partition() + d3.arc() with click-to-drill interaction"
+
+  # ── For Quality Engineers ──────────────────────────────────────────────────
+  - id: convergence-gate-loop
+    type: cycle_diagrams
+    audience: [quality_engineers, software_engineers]
+    value: "Detect→fix→rescan visual loop — why CORTEX achieves zero P0/P1"
+    existing: "12-diagram-governance-convergence-gate-core-068.md"
+    d3_method: "Custom SVG circular with numbered steps"
+
+  - id: sweep-completeness
+    type: flowcharts
+    audience: [quality_engineers]
+    value: "Why CORTEX fixes ALL instances, not just the one reported"
+    existing: "06-diagram-governance-sweep-completeness-core-064.md"
+    d3_method: "d3.tree() with issue catalogue nodes"
+
+  - id: quality-scoring-dashboard
+    type: donut_charts
+    audience: [quality_engineers, software_engineers]
+    value: "5-dimension quality score with composite rating"
+    existing: "18-diagram-quality-analysis-engine-scoring-dashboard.md"
+    d3_method: "d3.pie() multiple + d3.scaleBand() trend bars"

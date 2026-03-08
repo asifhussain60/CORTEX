@@ -40,7 +40,7 @@ strengths:
     description: >
       CORTEX generated a complete SDLC artifact suite rarely produced by refactoring
       tools: requirements YAML (business + functional + non-functional), design YAMLs,
-      5 ADRs, 5 architecture diagrams, 8 before/after comparison docs with Mermaid.
+      5 ADRs, 5 architecture diagrams, 8 before/after comparison docs with D3.js SVG.
     replicable_pattern: "requirements → design → estimation → comparison → ADR per major decision"
 
   typescript_strict_mode:

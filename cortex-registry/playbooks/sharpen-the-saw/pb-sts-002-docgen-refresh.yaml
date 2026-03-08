@@ -48,7 +48,7 @@ playbook:
     Purpose:
     - Auto-discover changes in markdown content and knowledge artifacts
     - Regenerate JSON catalogs (content.json, knowledge-catalog.json, learning-paths.json)
-    - Unify diagram loading patterns (Mermaid + D3.js)
+    - Unify diagram loading patterns (D3.js SVG only)
     - Eliminate inline styles (extract to semantic CSS classes)
     - Validate role-based content mapping completeness
     - Deploy updated site with zero regression risk
@@ -70,7 +70,7 @@ playbook:
       html: "Static HTML5 with semantic structure"
       css: "Glassmorphism theme + responsive grid (CSS Grid + Flexbox)"
       js: "Vanilla JavaScript (ES6+) with content-loader + diagram-loader"
-      diagrams: "Mermaid.js + D3.js"
+      diagrams: "D3.js v7 SVG only (Mermaid.js banned)"
       fonts: "Google Fonts (Inter, Space Grotesk, JetBrains Mono)"
     
     issue_count: 7  # From chat01.md remediation plan
@@ -340,27 +340,28 @@ stages:
             tool: "cortex_refactor"
             target: "cortex-docs/assets/js/modules/diagram-loader.js"
             content: |
-              // Unified Mermaid + D3 initialization with lazy loading
+              // Unified D3.js SVG initialization with lazy loading
+              // Mermaid.js is BANNED — see visualization_standards.yaml
               document.addEventListener('DOMContentLoaded', () => {
-                mermaid.initialize({ theme: 'dark', startOnLoad: false });
                 const observer = new IntersectionObserver((entries) => {
                   entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                      mermaid.init(undefined, entry.target);
+                      const svg = entry.target.querySelector('svg');
+                      if (svg) svg.classList.add('d3-loaded');
                       observer.unobserve(entry.target);
                     }
                   });
                 });
-                document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
+                document.querySelectorAll('.d3-diagram').forEach(el => observer.observe(el));
               });
           
-          - action: "Remove scattered initializeMermaid calls"
+          - action: "Remove any remaining Mermaid initialization calls"
             tool: "cortex_refactor"
             operation: "remove_pattern"
             files: "cortex-docs/**/*.html"
-            pattern: "initializeMermaid\\(\\)|mermaid\\.initialize"
+            pattern: "initializeMermaid\\(\\)|mermaid\\.initialize|mermaid\\.init"
           
-          - action: "Add diagram-loader.js to all HTML files with diagrams"
+          - action: "Add diagram-loader.js to all HTML files with D3.js diagrams"
             tool: "cortex_refactor"
             operation: "add_script_reference"
             files: "cortex-docs/**/*.html"
@@ -547,9 +548,9 @@ stages:
         severity: "P2"
       
       - name: "Diagram Rendering"
-        check: "grep -r 'mermaid.initialize' cortex-docs/ | wc -l"
-        expect: 1
-        severity: "P1"
+        check: "grep -rn 'mermaid' cortex-docs/**/*.html | wc -l"
+        expect: 0
+        severity: "P0"
       
       - name: "Content.json Completeness"
         check: "jq '.categories[].files[] | select(.roles == null)' cortex-docs/data/content.json | wc -l"
@@ -707,7 +708,7 @@ sharpen_the_saw:
     - "Add cortex_doc_discover MCP tool for content gap analysis"
     - "Extend cortex_refactor with CSS extraction capabilities"
     - "Add cortex_validate responsive testing operation"
-    - "Create cortex_diagram_validate for Mermaid/D3 syntax checking"
+    - "Create cortex_diagram_validate for D3.js SVG syntax checking"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # VERSIONING & CHANGELOG

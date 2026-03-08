@@ -89,8 +89,8 @@ All image prompts MUST specify:
 
 ### Role-Specific Diagram Strategy
 
-| Role | DALL-E Images | D3.js/Mermaid |
-|------|--------------|---------------|
+| Role | DALL-E Images | D3.js SVG |
+|------|--------------|------------|
 | **Software Engineer** | Hero/banner ONLY — never replace technical diagrams | ✅ REQUIRED for technical detail |
 | **Business Leader** | ✅ PREFERRED — executive visual impact | ⚡ Optional |
 | **Product Owner** | ✅ PREFERRED — sprint/pipeline visuals | ⚡ Optional |

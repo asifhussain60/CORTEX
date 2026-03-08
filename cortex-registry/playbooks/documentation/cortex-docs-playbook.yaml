@@ -314,7 +314,7 @@ agents:
       - "Ensure content philosophy (rendering-ready only)"
     outputs:
       - "cortex-docs/.content/*.md files"
-      - "Mermaid diagram specifications"
+      - "D3.js SVG diagram specifications"
       - "Role-specific narratives"
   
   gitpages_builder:

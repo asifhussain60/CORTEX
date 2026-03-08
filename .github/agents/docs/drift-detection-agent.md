@@ -89,7 +89,7 @@ drift_report:
 
   stale_diagrams:
     # Diagrams with outdated nodes or flows
-    - diagram: "docs/assets/diagrams/architecture-overview.mmd"
+    - diagram: "docs/assets/diagrams/d3/architecture-overview.html"
       issue: "Missing FooOrchestrator node"
       severity: P1
 
@@ -192,14 +192,15 @@ For each .content/ file:
 
 ### 6. Diagram Staleness Detection (P1)
 
-**Method:** Parse Mermaid diagram files and verify referenced nodes exist in implementation.
+**Method:** Parse D3.js SVG diagram HTML files and verify referenced nodes exist in implementation.
 
 ```
-For each .mmd file in docs/assets/diagrams/:
-  1. Extract node labels (orchestrator names, tool names, component names)
+For each .html file in docs/assets/diagrams/d3/:
+  1. Extract SVG node labels (orchestrator names, tool names, component names)
   2. Verify each referenced component exists in live code
   3. Check for missing components that should be in the diagram
-  4. Flag any mismatch as P1
+  4. Verify SVG text font-size >= 11px (accessibility floor)
+  5. Flag any mismatch as P1
 ```
 
 ### 7. Narrative Drift Detection (P2)

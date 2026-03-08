@@ -27,7 +27,7 @@ agents/
 │   ├── git-discovery-agent.md     # Git history inspection + change classification
 │   ├── drift-detection-agent.md   # Implementation vs documentation cross-reference
 │   ├── doc-sync-agent.md          # Content + glossary + media synchronization
-│   ├── diagram-regeneration-agent.md # Mermaid/D3.js diagram regeneration
+│   ├── diagram-regeneration-agent.md # D3.js SVG diagram regeneration
 │   ├── media-prompt-agent.md      # DALL-E image + video prompt maintenance
 │   ├── narrative-continuity-agent.md # Awakening of CORTEX story arc governance
 │   ├── coverage-audit-agent.md    # Completeness validation + certification

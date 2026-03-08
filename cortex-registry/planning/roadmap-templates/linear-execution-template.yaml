@@ -188,9 +188,10 @@ wave:
         - "deployment/rollback-plan.md"
 
 # =============================================================================
-# Execution Flow Visualization (Mermaid)
+# Execution Flow Visualization (D3.js SVG)
 # =============================================================================
-# ```mermaid
+# Render as D3.js force-directed or tree layout (Mermaid is BANNED)
+# ```
 # graph LR
 #   A[Phase A: Requirements] --> B[Phase B: Design]
 #   B --> C[Phase C: Implementation]

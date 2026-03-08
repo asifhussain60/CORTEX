@@ -93,7 +93,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **git-discovery-agent.md** | Git history inspection, change classification | 1 — Discovery |
 | **drift-detection-agent.md** | Implementation vs documentation cross-reference | 2 — Drift Detection |
 | **doc-sync-agent.md** | Update `.content/`, glossary, media prompts | 3 — Synchronization |
-| **diagram-regeneration-agent.md** | Regenerate Mermaid/D3.js diagrams | 3 — Synchronization |
+| **diagram-regeneration-agent.md** | Regenerate D3.js SVG diagrams | 3 — Synchronization |
 | **media-prompt-agent.md** | Maintain DALL-E image + video script prompts | 3 — Synchronization |
 | **narrative-continuity-agent.md** | Guard Awakening of CORTEX story arc | 4 — Narrative Update |
 | **comedy-enhancement-agent.md** | Apply comedic writing principles to chapters (INTERNAL ONLY — sub-agent of narrative-continuity) | 4 — Comedy Enhancement |
@@ -275,16 +275,16 @@ IF BLOCK → Show remediation, require override
 | **DOCUMENT (STS)** | doc-sync-agent.md | ~4,500 |
 | **DOCUMENT (CORTEX)** | cortex-doc.prompt.md → 9 docs agents (git-discovery, drift-detection, doc-sync, diagram-regeneration, media-prompt, narrative-continuity, comedy-enhancement[internal], coverage-audit, release-notes) | ~8,500 |
 
-**STS Trigger Phrases:** "document STS", "review STS", "STS sample app docs", "account-modernized README", "payment-processor README", "fix mmd diagrams", "STS architecture diagram"
+**STS Trigger Phrases:** "document STS", "review STS", "STS sample app docs", "account-modernized README", "payment-processor README", "fix diagrams", "STS architecture diagram"
 
 **STS Documentation Authority:** `cortex-doc.prompt.md` + `doc-sync-agent.md` (Section: Documentation Sync)
 
-**STS `.mmd` Quality Gate (run before marking complete):**
-- `participant` keyword only in sequenceDiagram (never `user`)
+**STS D3.js SVG Quality Gate (run before marking complete):**
+- Node labels use full English names (no truncations like `_less`, `Conta`, `Emptyc`)
 - Start nodes use actual HTTP endpoints (not "API Invoked" / "Execute")
-- No truncated labels (`_less`, `Conta`, `Emptyc`, etc.)
 - Error nodes include HTTP status codes
 - D3.js interactive diagram present at workspace root
+- SVG text font-size ≥ 11px (absolute floor)
 
 ---
 

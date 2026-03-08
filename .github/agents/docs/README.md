@@ -12,7 +12,7 @@
 | 1 | **Git Discovery** | `git-discovery-agent.md` | Inspect Git history, classify changes | IN: Git repo, timestamp → OUT: Change manifest |
 | 2 | **Drift Detection** | `drift-detection-agent.md` | Cross-reference implementation vs documentation | IN: Change manifest, file system → OUT: Drift report |
 | 3 | **Doc Sync** | `doc-sync-agent.md` | Update `.content/`, glossary, media prompts | IN: Change manifest, drift report → OUT: Updated files |
-| 4 | **Diagram Regeneration** | `diagram-regeneration-agent.md` | Regenerate Mermaid/D3.js diagrams | IN: Architectural shifts, stale diagrams → OUT: Updated diagrams |
+| 4 | **Diagram Regeneration** | `diagram-regeneration-agent.md` | Regenerate D3.js SVG diagrams | IN: Architectural shifts, stale diagrams → OUT: Updated D3.js SVG diagrams |
 | 5 | **Media Prompt** | `media-prompt-agent.md` | Maintain DALL-E image + video prompts | IN: Drift report, capabilities → OUT: Updated prompts |
 | 6 | **Narrative Continuity** | `narrative-continuity-agent.md` | Guard Awakening of CORTEX story arc | IN: Narrative drift, new capabilities → OUT: Enhanced chapters |
 | 7 | **Coverage Audit** | `coverage-audit-agent.md` | Validate completeness, produce certification | IN: All upstream reports → OUT: Certification verdict |

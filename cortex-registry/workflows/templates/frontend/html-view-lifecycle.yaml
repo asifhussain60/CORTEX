@@ -64,19 +64,15 @@ design_system:
 diagram_strategy:
   software-engineer:
     d3js: REQUIRED
-    mermaid: REQUIRED
     dalle_images: hero_banner_only
   business-leader:
     d3js: optional_replaceable
-    mermaid: optional_replaceable
     dalle_images: PREFERRED
   product-owner:
     d3js: optional_replaceable
-    mermaid: optional_replaceable
     dalle_images: PREFERRED
   learner:
     d3js: optional_replaceable
-    mermaid: optional_replaceable
     dalle_images: PREFERRED
 
 # ── IMAGE PLACEHOLDER SYSTEM ───────────────────────────────────────────────────

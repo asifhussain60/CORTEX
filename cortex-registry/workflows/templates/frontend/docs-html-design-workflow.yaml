@@ -248,6 +248,44 @@ visualisation:
     legend: "4-column below charts"
     never: "horizontal bar charts for before/after percentage comparisons"
 
+  # ── Responsive Diagram Rules (P0) ─────────────────────────────────────────
+  diagram_responsive:
+    svg_container:
+      width: "100%"
+      height: "auto"
+      max_width: "1200px"
+      margin: "0 auto"
+      overflow: "overflow-x: auto — NEVER overflow: hidden"
+    breakpoints:
+      mobile_max: 480
+      tablet_max: 768
+      desktop_min: 769
+      wide_min: 1280
+    mobile_rules:
+      - "Horizontal flowcharts rotate to vertical (top-to-bottom)"
+      - "Multi-column diagram layouts collapse to single column"
+      - "Legends stack below diagram (flex-direction: column)"
+      - "SVG font floors increase: node labels 16px, edge labels 14px"
+      - "Touch targets minimum 44×44px on all interactive nodes"
+      - "Container padding reduces to 1rem"
+      - "SVG internal group padding reduces to 12px from viewBox edges"
+    tablet_rules:
+      - "2-column max layout for side-by-side diagrams"
+      - "Font scaling intermediate: node labels 15px, edge labels 13px"
+      - "Touch-optimised interactive elements (44×44px min)"
+    section_spacing:
+      between_diagram_and_text: "2rem (--space-xl), mobile: 1.5rem"
+      between_stacked_diagrams: "3rem (--space-2xl), mobile: 2.5rem"
+      container_padding: "1.5rem all sides, mobile: 1rem"
+      caption_to_next: "1.5rem (--space-lg), mobile: 1rem"
+    colour_harmony:
+      - "Node fills: rgba() with 0.6–0.8 opacity — never solid"
+      - "Edge strokes: 0.3–0.5 opacity — never 1.0"
+      - "Glow effects stdDeviation ≤ 4"
+      - "Approved triad only: #00d4ff + #7b61ff + #10b981"
+      - "Never mix warm/cool accents in same diagram"
+      - "Glass borders rgba(255,255,255,0.08–0.15)"
+
 # ══════════════════════════════════════════════════════════════════════════════
 # LAYOUT RULES (MANDATORY)
 # ══════════════════════════════════════════════════════════════════════════════
