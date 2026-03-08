@@ -1913,14 +1913,6 @@
         0%, 100% { transform: translate(0,0) scale(1); opacity: 0.3; }
         50%      { transform: translate(30px, -30px) scale(1.15); opacity: 0.5; }
     }
-    @keyframes ctTagFloat {
-        0%, 100% { transform: translateY(0) rotate(-1deg); }
-        50%      { transform: translateY(-5px) rotate(1deg); }
-    }
-    @keyframes ctTagFloat2 {
-        0%, 100% { transform: translateY(0) rotate(1deg); }
-        50%      { transform: translateY(-7px) rotate(-1deg); }
-    }
     @keyframes ctCornerPulse {
         0%, 100% { opacity: 0.45; }
         50%      { opacity: 1; }
@@ -1938,7 +1930,7 @@
     @media (prefers-reduced-motion: reduce) {
         .ct-float, .ct-border-ring, .ct-orb-a, .ct-orb-b,
         .ct-scanline, .ct-live-dot, .ct-badge, .ct-corner,
-        .ct-tag-a, .ct-tag-b, .ct-progress-bar, .ct-progress-fill { animation: none !important; }
+        .ct-progress-bar, .ct-progress-fill { animation: none !important; }
         .ct-glow-layer { animation: none !important; }
     }
 
@@ -2170,46 +2162,6 @@
         position: absolute; bottom: -12px; left: 10%; right: 10%; height: 24px;
         background: linear-gradient(180deg, rgba(0,212,255,0.12) 0%, transparent 100%);
         filter: blur(10px); border-radius: 50%; pointer-events: none;
-    }
-
-    /* ── Floating metadata tags ── */
-    .ct-tag {
-        position: absolute; z-index: 20;
-        display: flex; align-items: center; gap: 0.4rem;
-        padding: 0.45rem 0.85rem;
-        border-radius: 100px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.1);
-        font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
-        letter-spacing: 0.1em; text-transform: uppercase;
-        white-space: nowrap; pointer-events: none;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-    .ct-tag-cyan {
-        background: rgba(0,212,255,0.12); color: #67e8f9;
-        border-color: rgba(0,212,255,0.25);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(0,212,255,0.15),
-                    inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-    .ct-tag-purple {
-        background: rgba(123,97,255,0.12); color: #a78bfa;
-        border-color: rgba(123,97,255,0.25);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(123,97,255,0.15),
-                    inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-    .ct-tag-a {
-        top: 18%; left: -3%;
-    }
-    .ct-tag-b {
-        top: 22%; right: -3%;
-    }
-    @media (max-width: 768px) {
-        .ct-tag-a, .ct-tag-b { display: none; }
-    }
-    @media (prefers-reduced-motion: no-preference) {
-        .ct-tag-a { animation: ctTagFloat  7s ease-in-out infinite; }
-        .ct-tag-b { animation: ctTagFloat2 8s ease-in-out infinite; }
     }
 
     /* ── Section heading & sub-copy ── */
@@ -2963,16 +2915,6 @@
                     position: relative;
                     z-index: 2;
                 " aria-label="CORTEX introduction video player">
-
-                    <!-- Floating metadata tags (decorative) -->
-                    <div class="ct-tag ct-tag-cyan ct-tag-a" aria-hidden="true">
-                        <i class="fas fa-shield-halved" style="font-size:0.65rem;"></i>
-                        Governed
-                    </div>
-                    <div class="ct-tag ct-tag-purple ct-tag-b" aria-hidden="true">
-                        <i class="fas fa-bolt" style="font-size:0.65rem;"></i>
-                        AI-Driven
-                    </div>
 
                     <!-- Levitation wrapper -->
                     <div class="ct-float">
