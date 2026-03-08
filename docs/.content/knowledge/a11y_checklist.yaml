@@ -1,10 +1,16 @@
 # a11y_checklist.yaml
 # CORTEX Documentation — Accessibility Checklist (WCAG 2.1 Level AA)
 # Authority: a11y-perf-guardian
-# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
+# Updated: 2026-03-08 | Phase 108 — Design+Implement Mode
 # Sources: WCAG 2.1 AA, W3C ARIA APG patterns, MDN Accessibility
+#
+# ⚠️  WCAG VERSION NOTE: This file covers WCAG 2.1 AA criteria.
+#     WCAG 2.2 delta (9 new criteria + 1 removal) is in: wcag22_delta_checklist.yaml
+#     Together, these two files represent FULL WCAG 2.2 AA compliance coverage.
+#     Reference: https://www.w3.org/WAI/WCAG22/quickref/ (updated 2025-09-22)
 
-standard: "WCAG 2.1 Level AA"
+standard: "WCAG 2.1 Level AA (see wcag22_delta_checklist.yaml for 2.2 additions)"
+wcag_22_delta_file: "docs/.content/knowledge/wcag22_delta_checklist.yaml"
 enforcement: "a11y-perf-guardian blocks any HTML view change that introduces a regression"
 
 checks:

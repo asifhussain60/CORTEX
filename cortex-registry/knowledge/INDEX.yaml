@@ -3,14 +3,15 @@
 # Maps intent types to applicable YAML files across BOTH knowledge roots:
 #   1. cortex-registry/knowledge/           (best-practice guides)
 #   2. cortex-registry/knowledge-base/      (runtime knowledge)
+#   3. docs/.content/knowledge/             (docs site UI/UX knowledge — see docs-site-ux section)
 #
-# Total: 44 YAML files across 11 domains
+# Total: 44 YAML files across 11 domains (+ 9 docs-site-ux knowledge files)
 # Cross-reference authority: This INDEX is the SSOT for all knowledge relationships.
 # Individual knowledge YAMLs do NOT cross-reference each other — only this INDEX does.
-# Updated: 2026-02-25 (Phase-79 — Batch 1: 10 migration YAMLs + 2 pattern YAMLs added)
+# Updated: 2026-03-08 (docs-site-ux section added — 3 new YAMLs synthesized from online sources)
 
 created: "2026-02-09"
-updated: "2026-02-25"
+updated: "2026-03-08"
 
 # ─── Best-Practice Guides (cortex-registry/knowledge/) ───────────────
 
@@ -272,3 +273,80 @@ internal-content:
         - ".github/agents/docs/comedy-enhancement-agent.md"
         - ".github/agents/docs/narrative-continuity-agent.md"
         - "cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml"
+
+# ─── Docs Site UI/UX Knowledge (docs/.content/knowledge/) ────────────────────
+# Knowledge base for the CORTEX documentation site: design system, accessibility,
+# performance, components, content writing, motion, and visualization standards.
+# Authority: html-view-designer, design-system-enforcer, a11y-perf-guardian
+# Root: docs/.content/knowledge/ (separate from cortex-registry/knowledge/)
+# NOTE: Paths here are relative to docs/.content/knowledge/ (not cortex-registry/)
+# Updated: 2026-03-08 (3 new YAMLs added from online synthesis — see below)
+
+docs-site-ux:
+  root: "docs/.content/knowledge/"
+  authority: ["html-view-designer", "design-system-enforcer", "a11y-perf-guardian"]
+  guides:
+    # ── EXISTING (Phase 108) ──────────────────────────────────────────────
+    - path: "docs/.content/knowledge/design_system.yaml"
+      title: "CORTEX Design System Token Registry"
+      keywords: ["design-system", "tokens", "colors", "typography", "spacing", "glassmorphism", "ISSA", "dark-theme", "css-variables"]
+      topics: ["color-palette", "font-scale", "shadow-glow", "border-radius", "spacing-tokens", "inter-section-spacing-algorithm"]
+
+    - path: "docs/.content/knowledge/doc_best_practices.yaml"
+      title: "Documentation Site Best Practices (IA, Navigation, CSS Architecture)"
+      keywords: ["information-architecture", "navigation", "css-layers", "content-patterns", "progressive-disclosure", "persona-tiles"]
+      topics: ["ia-principles", "nav-patterns", "css-architecture", "search-ux", "content-hierarchy"]
+
+    - path: "docs/.content/knowledge/a11y_checklist.yaml"
+      title: "Accessibility Checklist (WCAG 2.1 AA)"
+      keywords: ["accessibility", "wcag", "a11y", "aria", "keyboard", "contrast", "screen-reader", "focus"]
+      topics: ["perceivable", "operable", "understandable", "robust", "wcag-2.1"]
+      wcag_version: "2.1 AA"
+      delta_file: "docs/.content/knowledge/wcag22_delta_checklist.yaml"
+
+    - path: "docs/.content/knowledge/performance_checklist.yaml"
+      title: "Performance Checklist (Core Web Vitals)"
+      keywords: ["performance", "core-web-vitals", "LCP", "INP", "CLS", "lighthouse", "preload", "lazy-loading", "CLS"]
+      topics: ["resource-loading", "css-performance", "image-optimization", "layout-stability"]
+
+    - path: "docs/.content/knowledge/components.yaml"
+      title: "Reusable Component Registry"
+      keywords: ["components", "glass-card", "tabs", "hero", "nav", "breadcrumb", "persona-tile", "callout", "diagram"]
+      topics: ["navigation", "cards", "tabs", "callouts", "hero", "diagrams"]
+
+    - path: "docs/.content/knowledge/visualization_standards.yaml"
+      title: "Visualization & Diagram Standards (D3.js Policy)"
+      keywords: ["visualization", "d3js", "diagrams", "charts", "svg", "mermaid-banned", "flowchart", "architecture-diagram"]
+      topics: ["library-policy", "diagram-types", "d3js-patterns", "banned-libraries"]
+
+    # ── NEW (2026-03-08 — Synthesized from online authoritative sources) ──
+    - path: "docs/.content/knowledge/motion_ux_standards.yaml"
+      title: "Motion, Animation & Interaction UX Standards"
+      keywords: ["animation", "motion", "prefers-reduced-motion", "vestibular", "transition", "glassmorphism-motion", "performance", "will-change"]
+      topics: ["vestibular-risk", "reduced-motion", "animation-performance", "functional-animation", "motion-identity"]
+      sources:
+        - "web.dev/articles/prefers-reduced-motion (Google Chrome team)"
+        - "W3C WCAG 2.3 Seizures and Physical Reactions"
+        - "CSS Media Queries Level 5"
+
+    - path: "docs/.content/knowledge/wcag22_delta_checklist.yaml"
+      title: "WCAG 2.2 Delta Checklist (New Criteria vs 2.1)"
+      keywords: ["wcag22", "wcag-2.2", "focus-not-obscured", "target-size", "dragging", "consistent-help", "redundant-entry", "accessible-authentication"]
+      topics: ["2.4.11-focus-not-obscured", "2.5.7-dragging", "2.5.8-target-size", "3.2.6-consistent-help", "3.3.7-redundant-entry", "3.3.8-accessible-auth"]
+      wcag_version: "2.2 (delta from 2.1)"
+      new_criteria_count: 9
+      removed_criteria: ["4.1.1 Parsing"]
+      sources:
+        - "W3C WCAG 2.2 Quick Reference (https://www.w3.org/WAI/WCAG22/quickref/)"
+        - "W3C Understanding WCAG 2.2"
+        - "W3C WCAG 2.2 publication 2023-10-05; updated 2025-09-22"
+
+    - path: "docs/.content/knowledge/content_writing_standards.yaml"
+      title: "Content Writing & UX Copy Standards"
+      keywords: ["content", "writing", "ux-copy", "active-voice", "second-person", "progressive-disclosure", "inclusive-language", "seo", "meta-tags", "open-graph", "link-text"]
+      topics: ["voice-tone", "active-voice", "heading-standards", "progressive-disclosure", "link-text", "inclusive-language", "seo-meta", "timeless-docs", "error-states"]
+      sources:
+        - "Google Developer Documentation Style Guide (developers.google.com/style, updated 2025-12-09)"
+        - "W3C Writing for Web Accessibility"
+        - "Nielsen Norman Group — Writing for the Web"
+

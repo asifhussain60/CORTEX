@@ -1,0 +1,239 @@
+# motion_ux_standards.yaml
+# CORTEX Documentation — Motion, Animation & Interaction UX Standards
+# Authority: html-view-designer, design-system-enforcer, a11y-perf-guardian
+# Created: 2026-03-08 | Synthesized from web.dev + W3C WCAG 2.2
+# Sources:
+#   - web.dev/articles/prefers-reduced-motion (Google Chrome team)
+#   - W3C WCAG 2.3 (Seizures and Physical Reactions)
+#   - W3C WCAG 2.2 SC 2.3.3 Animation from Interactions (AAA)
+#   - MDN: Web Animations API
+#   - CSS Media Queries Level 5 (prefers-reduced-motion)
+
+# ── GOVERNING PRINCIPLE ────────────────────────────────────────────────────
+governing_principle: >
+  Animation is a tool for communication and feedback, not decoration.
+  Every motion must serve a purpose. All motion must be optional for users who
+  need it to be. Decorative animations are privileges; functional animations are
+  obligations. Source: web.dev — "prefers-reduced-motion: Sometimes less movement is more"
+
+# ── VESTIBULAR DISORDER RISK CLASSIFICATION ───────────────────────────────
+vestibular_risk:
+  high_risk_patterns:
+    - "Parallax scrolling — background moves at different rate from foreground"
+    - "Zooming/scaling effects on large elements (>25% viewport)"
+    - "Spinning or rotating content beyond 90 degrees"
+    - "Auto-playing videos with motion > 5 seconds"
+    - "Flash effects > 3 per second (triggers seizures — WCAG 2.3.1 P0)"
+    - "Rapid sequential element reveals in rapid succession"
+  low_risk_patterns:
+    - "Opacity fade-in (no position change)"
+    - "Subtle translate (< 10px displacement)"
+    - "Color transitions on hover (no geometry change)"
+    - "Height/width expand for accordion (single axis, user-triggered)"
+
+# ── PREFERS-REDUCED-MOTION IMPLEMENTATION CONTRACT ────────────────────────
+prefers_reduced_motion:
+  standard: "CSS Media Queries Level 5 — universally supported (Chrome 74+, Firefox 63+, Safari 10.1+, Edge 79+)"
+  pattern: "Opt-in: animate by default for no-preference users; strip for reduce users"
+
+  css_implementation:
+    preferred_pattern: |
+      /* Default: no animation for all users (safe baseline) */
+      .animated-element { }
+
+      /* Opt-in: only animate if user has NO reduced-motion preference */
+      @media (prefers-reduced-motion: no-preference) {
+        .animated-element {
+          animation: slide-in 0.3s ease-out;
+          transition: transform 0.2s ease;
+        }
+      }
+    alternative_pattern: |
+      /* Alternative: animate by default, strip for reduce users */
+      .animated-element {
+        animation: slide-in 0.3s ease-out;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .animated-element {
+          animation: none;
+          transition: none;
+        }
+      }
+    nuclear_option: |
+      /* Emergency: strip ALL motion globally (use in glass-animations.css guard) */
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after {
+          animation-duration: 1ms !important;
+          animation-delay: -1ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 1ms !important;
+          transition-delay: -1ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    note: "Do NOT use animation: none !important globally — animationend events will fire incorrectly and break JS-dependent animations"
+
+  javascript_implementation: |
+    /* Listen for preference changes at runtime — no page reload needed */
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) {
+        stopAllAnimations();  // cancel Web Animations API playback
+      } else {
+        startAllAnimations();
+      }
+    });
+
+    /* Check at page load */
+    if (reducedMotion.matches) {
+      document.body.classList.add('no-motion');
+    }
+
+  picture_element_pattern: |
+    <!-- Serve animated AVIF/GIF only to users with no-preference -->
+    <picture>
+      <source srcset="hero.avifs" type="image/avif"
+              media="(prefers-reduced-motion: no-preference)" />
+      <source srcset="hero.gif" type="image/gif"
+              media="(prefers-reduced-motion: no-preference)" />
+      <img src="hero-static.png" alt="CORTEX Architecture Overview"
+           width="800" height="450" />
+    </picture>
+
+  cortex_docs_checklist:
+    - id: motion-001
+      rule: "glass-animations.css MUST include a @media (prefers-reduced-motion: reduce) block that suppresses all keyframe animations"
+      severity: P0
+      test: "grep -A5 'prefers-reduced-motion' docs/assets/css/glass-animations.css"
+    - id: motion-002
+      rule: "Tab panel transitions (opacity/transform) must be suppressed under reduced motion"
+      severity: P0
+      fix: "Wrap .cortex-tab-panel transition in @media (prefers-reduced-motion: no-preference)"
+    - id: motion-003
+      rule: "Hero gradient animation must pause under reduced motion"
+      severity: P1
+      fix: "Wrap hero gradient keyframe in no-preference media query"
+    - id: motion-004
+      rule: "IntersectionObserver-triggered D3 renders must skip entry animation under reduced motion"
+      severity: P1
+      fix: "Check reducedMotion.matches before calling .attr('transition')"
+    - id: motion-005
+      rule: "Scroll-triggered animations (AOS, custom) must be disabled when reduced motion is preferred"
+      severity: P0
+      fix: "Add CSS class .no-motion to <body> via JS; all AOS elements: [data-aos] { animation: none }"
+
+# ── ANIMATION PERFORMANCE CONTRACT ────────────────────────────────────────
+animation_performance:
+  composited_properties_only:
+    rule: "Only animate transform and opacity — never width, height, top, left, margin, padding"
+    reason: "Non-composited property animations trigger layout recalculation (reflow) on every frame — causes jank"
+    approved:
+      - "transform: translate(), scale(), rotate()"
+      - "opacity: 0 → 1"
+    forbidden:
+      - "width / height (causes layout)"
+      - "top / left / bottom / right (causes layout)"
+      - "margin / padding (causes layout)"
+      - "background-color as animation target (causes paint — use opacity on overlay instead)"
+      - "box-shadow as animation target (causes paint — use opacity on pseudo-element instead)"
+
+  will_change_policy:
+    rule: "Use will-change: transform on glass panels that animate — creates GPU compositing layer"
+    constraint: "Apply ONLY to elements that WILL animate — overuse causes memory bloat"
+    anti_pattern: "will-change: transform on static elements (wastes GPU memory)"
+    correct_usage: |
+      .glass-panel--animated {
+        will-change: transform; /* Applied before animation starts */
+      }
+      /* Remove after animation to free GPU layer */
+      .glass-panel--animated.animation-complete {
+        will-change: auto;
+      }
+
+  glassmorphism_specific:
+    backdrop_filter_cost: "backdrop-filter: blur() creates a GPU compositing layer — expensive"
+    rule: "Limit simultaneous visible glass panels with backdrop-filter to 3 maximum"
+    test: "Chrome DevTools → Rendering → Layer borders — count blue-outlined compositing layers"
+    optimisation: "Use will-change: transform on glass panels to promote to GPU layer before scroll"
+
+# ── FUNCTIONAL ANIMATION PATTERNS ─────────────────────────────────────────
+functional_animations:
+  tab_transition:
+    purpose: "Signal content change — not decorative"
+    approved_implementation: |
+      @media (prefers-reduced-motion: no-preference) {
+        .cortex-tab-panel {
+          transition: opacity 0.2s ease;
+        }
+        .cortex-tab-panel.entering {
+          opacity: 0;
+          animation: fadeIn 0.2s ease forwards;
+        }
+      }
+    constraint: "Duration ≤ 300ms — WCAG 2.3.3 recommends keeping motion brief"
+
+  loading_states:
+    purpose: "Communicate processing without freezing UI"
+    approved_patterns:
+      skeleton_screen: "Shimmer animation on placeholder content (opacity pulse 0.4→0.8)"
+      spinner: "Border rotation — suppress to static under reduced motion"
+      progress_bar: "Width transition 0% → N% — width change is acceptable for progress (user understands)"
+    constraint: "No spinner faster than 1 revolution/second — vestibular risk"
+
+  scroll_reveal:
+    purpose: "Progressive content disclosure on scroll"
+    constraint: "Use IntersectionObserver, not scroll event listeners (performance)"
+    implementation: |
+      @media (prefers-reduced-motion: no-preference) {
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .reveal-on-scroll.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Reduced motion: show immediately */
+      @media (prefers-reduced-motion: reduce) {
+        .reveal-on-scroll { opacity: 1; transform: none; }
+      }
+    cortex_docs_status: "Not yet implemented — deferred to future phase"
+
+# ── WCAG 2.2 ANIMATION CRITERIA ───────────────────────────────────────────
+wcag_animation_criteria:
+  - id: wcag-2.3.1
+    criterion: "Three Flashes or Below Threshold"
+    level: A
+    rule: "No content flashes more than 3 times per second"
+    cortex_status: "PASSING — no flashing content in CORTEX docs"
+    severity: P0
+
+  - id: wcag-2.3.3
+    criterion: "Animation from Interactions (AAA)"
+    level: AAA
+    rule: "Motion animation triggered by interaction can be disabled"
+    implementation: "prefers-reduced-motion media query — see above"
+    cortex_target: "Target AAA compliance for animation — implemented via reduced-motion guards"
+
+# ── GLASSMORPHISM MOTION IDENTITY ─────────────────────────────────────────
+glassmorphism_motion_identity:
+  duration_scale:
+    micro: "100ms — hover state color changes, focus rings"
+    short: "200ms — tab switches, button press feedback"
+    medium: "300ms — panel open/close, modal entry"
+    long: "500ms — page-level section reveals (scroll-triggered)"
+    constraint: "Never exceed 500ms for any single animation — attention cost too high"
+
+  easing_palette:
+    default: "ease (cubic-bezier(0.25, 0.1, 0.25, 1)) — natural deceleration"
+    enter: "ease-out — elements entering the scene"
+    exit: "ease-in — elements leaving the scene"
+    spring: "cubic-bezier(0.34, 1.56, 0.64, 1) — slight overshoot for playful components"
+    constraint: "No linear easing for visible animations — looks mechanical"
+
+  hover_states:
+    glass_card_hover: "transform: translateY(-2px) + box-shadow increase — 200ms ease-out"
+    button_hover: "background-color shift via opacity overlay — no geometry change"
+    nav_link_hover: "color transition + underline width — 150ms ease"

@@ -1,0 +1,226 @@
+# content_writing_standards.yaml
+# CORTEX Documentation — Content Writing & UX Copy Standards
+# Authority: html-view-designer, doc-quality-agent
+# Created: 2026-03-08
+# Sources:
+#   - Google Developer Documentation Style Guide (developers.google.com/style, updated 2025-12-09)
+#   - W3C Writing for Web Accessibility (https://www.w3.org/WAI/tips/writing/)
+#   - Nielsen Norman Group — Writing for the Web (core principles)
+#   - Microsoft Writing Style Guide (selected principles applicable to CORTEX docs)
+#   - WCAG 3.1.5 Reading Level (technical doc guidance)
+
+# ── GOVERNING PHILOSOPHY ──────────────────────────────────────────────────
+governing_philosophy:
+  source: "Google Developer Documentation Style Guide"
+  principles:
+    - "Write for your audience — not for the technology"
+    - "Use present tense — not future tense ('the command starts' not 'the command will start')"
+    - "Use second person — address the reader as 'you'"
+    - "Use active voice — agent performs action, not passive construction"
+    - "Be consistent — use the same term for the same concept throughout"
+    - "Be succinct — every word must earn its place"
+    - "Break the rules when following them produces worse content"
+  reference: "https://developers.google.com/style/philosophy"
+
+# ── VOICE AND TONE ────────────────────────────────────────────────────────
+voice_and_tone:
+  cortex_voice:
+    adjectives: ["confident", "precise", "human", "direct"]
+    anti_patterns: ["hype", "jargon without explanation", "passive constructions", "filler phrases"]
+    constraint: "CORTEX docs speak to engineers and technical decision-makers — assume intelligence, not background"
+
+  tone_by_context:
+    hero_sections:
+      tone: "Bold and credible — leads with outcomes, not features"
+      example_good: "CORTEX executes 323 orchestrators in parallel — your AI logic runs at scale"
+      example_bad: "CORTEX is an amazing AI framework that will transform your workflow"
+    technical_reference:
+      tone: "Direct and scannable — verbs first, no preamble"
+      example_good: "Call cortex_verify (op: mcp) to confirm MCP is running"
+      example_bad: "In order to verify that the MCP server is running, you should call cortex_verify"
+    error_messages:
+      tone: "Clear, non-blaming, actionable"
+      example_good: "Page not found. Try searching or browse recent articles."
+      example_bad: "Error 404: The requested resource could not be located on this server"
+
+# ── ACTIVE VOICE RULES ────────────────────────────────────────────────────
+active_voice:
+  rule: "Subject performs action — not 'action is performed by subject'"
+  test: "If you can add 'by zombies' after the verb, it's passive voice"
+  examples:
+    - passive: "The orchestrator is invoked by the TDD builder"
+      active: "The TDD builder invokes the orchestrator"
+    - passive: "Tests are run before implementation is started"
+      active: "Run tests before starting implementation"
+    - passive: "Governance is enforced by the EnforcementOrchestrator"
+      active: "The EnforcementOrchestrator enforces governance"
+  exceptions:
+    - "When the actor is unknown or unimportant: 'The file was deleted' (acceptable)"
+    - "When emphasising the object over the actor in release notes"
+
+# ── PRESENT TENSE ─────────────────────────────────────────────────────────
+present_tense:
+  rule: "Write documentation in present tense — describe what IS, not what WILL BE"
+  examples:
+    - wrong: "The command will start the MCP server"
+      right: "The command starts the MCP server"
+    - wrong: "After you run the command, the server will respond"
+      right: "After you run the command, the server responds"
+  exception: "Future tense is acceptable for product roadmap and planned features"
+
+# ── SECOND PERSON ─────────────────────────────────────────────────────────
+second_person:
+  rule: "Address the reader as 'you' — not 'the user', 'one', 'they' (in instructional context)"
+  examples:
+    - wrong: "The user should configure the environment first"
+      right: "Configure the environment first"
+    - wrong: "One must ensure the MCP server is running"
+      right: "Ensure the MCP server is running"
+  note: "Third person is acceptable in conceptual/reference docs describing system behaviour"
+
+# ── HEADING STANDARDS ─────────────────────────────────────────────────────
+headings:
+  hierarchy: "H1 (page) → H2 (major section) → H3 (subsection) → H4 (minor detail)"
+  h1_rule: "One H1 per page — states the page purpose, not the product name"
+  style:
+    capitalisation: "Title case for H1, H2 — sentence case for H3, H4"
+    source: "Google Developer Style Guide — Headings and titles"
+  content_rules:
+    - "Headings describe the content that follows — not the feature name"
+    - "Avoid gerunds as headings ('Running tests' → 'Run tests' — imperative is more direct)"
+    - "Avoid vague headings: 'Overview', 'Details', 'More info' — be specific"
+  examples:
+    - wrong: "Running the CORTEX Framework"
+      right: "Run CORTEX"
+    - wrong: "Details"
+      right: "Configuration options"
+  linking_rule: "All headings become link anchors — use stable, descriptive slug-friendly text"
+
+# ── PROGRESSIVE DISCLOSURE ────────────────────────────────────────────────
+progressive_disclosure:
+  principle: "Surface the WHAT before the HOW — outcome before mechanism"
+  page_structure:
+    level_1: "What this is and why you care (hero / intro paragraph)"
+    level_2: "What it does for your specific role (persona-specific content)"
+    level_3: "How it works at a high level (conceptual overview)"
+    level_4: "How to use it step-by-step (task-oriented guide)"
+    level_5: "Reference detail (API docs, config tables)"
+  cortex_docs_application:
+    - "index.html: What → hero with outcomes; Who → persona tiles"
+    - "role views: Who you are → Tagline; What you get → benefits; How it helps → feature details"
+    - "getting-started.html: Why → value prop; How → steps; Reference → links to deeper docs"
+  anti_pattern: "Leading with implementation details before establishing value ('CORTEX uses SQLite for...' before 'CORTEX gives you...')"
+
+# ── LINK TEXT STANDARDS ───────────────────────────────────────────────────
+link_text:
+  rule: "Link text must describe the destination without surrounding context"
+  test: "Read the link text in isolation — is the destination clear?"
+  examples:
+    - wrong: "<a href='...'>click here</a> to see the architecture"
+      right: "<a href='...'>CORTEX architecture overview</a>"
+    - wrong: "Read <a href='...'>more</a>"
+      right: "<a href='...'>Read the full orchestrator guide</a>"
+  wcag_reference: "WCAG 2.4.4 Link Purpose (In Context) — AA required; 2.4.9 Link Only — AAA"
+  aria_exception: "When link text is genuinely ambiguous in context, add aria-label with full description"
+
+# ── INCLUSIVE LANGUAGE ────────────────────────────────────────────────────
+inclusive_language:
+  source: "Google Developer Documentation Style Guide — Inclusive language"
+  reference: "https://developers.google.com/style/inclusive-documentation"
+  rules:
+    - rule: "Avoid 'whitelist' / 'blacklist' → use 'allowlist' / 'denylist'"
+    - rule: "Avoid 'master' / 'slave' → use 'primary' / 'replica' or 'leader' / 'follower'"
+    - rule: "Avoid 'sanity check' → use 'quick check', 'smoke test', 'confidence check'"
+    - rule: "Avoid gendered pronouns for hypothetical people → use 'they' (singular)"
+    - rule: "Avoid 'dummy' data → use 'placeholder', 'sample', 'example' data"
+    - rule: "Avoid 'simply', 'just', 'obviously', 'clearly' — implies prior knowledge"
+
+# ── JARGON POLICY ────────────────────────────────────────────────────────
+jargon_policy:
+  rule: "Technical terms are allowed; unexplained acronyms are not"
+  first_use: "Define technical terms and acronyms on first use per page"
+  examples:
+    - wrong: "Use the LENS analysis to understand the workspace"
+      right: "Use LENS (Language → Examination → Navigation → Synthesis) analysis to understand the workspace"
+  cortex_defined_terms:
+    LENS: "Language → Examination → Navigation → Synthesis — CORTEX workspace intelligence module"
+    CORTEX: "COgnitive Real-Time EXecution — the AI Engineering Framework"
+    MCP: "Model Context Protocol — the tool registration and invocation standard"
+    URS: "Unified Reinforcement Signal — CORTEX closed-loop learning mechanism"
+    ISSA: "Inter-Section Spacing Algorithm — CORTEX spacing formula for section gaps"
+    AC: "Activity Completion — structured start/end markers for orchestrator tracing"
+
+# ── CONTENT LENGTH GUIDELINES ─────────────────────────────────────────────
+content_length:
+  hero_tagline: "≤ 12 words — must be immediately scannable"
+  hero_subtext: "≤ 30 words — 2 sentences maximum"
+  card_description: "≤ 40 words — 2–3 sentences; outcome + brief mechanism"
+  section_intro: "≤ 60 words — value proposition before detail"
+  tab_panel_content: "Scannable — use bullets over paragraphs; max 5 bullets per grouping"
+  page_reading_time: "Target ≤ 3 minutes per role view page (≤ 750 words of body content)"
+
+# ── ERROR & EMPTY STATES ──────────────────────────────────────────────────
+error_and_empty_states:
+  error_message_formula: "{What went wrong} + {Why it might have happened} + {What to do next}"
+  examples:
+    404:
+      pattern: "Clear heading + likely cause + 2–3 navigation options"
+      good: "Page not found. It may have moved. Try: [Search] [Home] [Recent articles]"
+    empty_search:
+      pattern: "Acknowledge result + suggest refinement"
+      good: "No results for '{query}'. Try a shorter term or browse by section."
+  constraints:
+    - "Never blame the user — 'Your search returned no results' not 'You searched incorrectly'"
+    - "Always provide a path forward — no dead ends"
+    - "Maintain brand voice even in error states"
+
+# ── SEO AND META STANDARDS ────────────────────────────────────────────────
+seo_meta_standards:
+  title_tag:
+    format: "{Page Name} | CORTEX"
+    max_length: "60 characters (including ' | CORTEX')"
+    examples:
+      - "Getting Started | CORTEX"
+      - "Software Engineer Guide | CORTEX"
+  meta_description:
+    max_length: "155 characters"
+    formula: "What this page covers + who it's for + key benefit"
+    example: "Get started with CORTEX in minutes. Configure your environment, run your first orchestrator, and explore 30 MCP tools."
+  open_graph:
+    required_tags:
+      - "og:title — same as <title> tag"
+      - "og:description — same as meta description"
+      - "og:image — 1200×630px, CORTEX branded card (currently: cortex-logo-512.png)"
+      - "og:type — 'website'"
+      - "og:url — canonical URL for the page"
+    cortex_status: "PARTIALLY IMPLEMENTED — verify og: tags present on all role view pages"
+  canonical_url:
+    rule: "Every page must have <link rel='canonical' href='...'> to prevent duplicate content"
+    constraint: "Canonical must be the HTTPS version of the URL"
+    cortex_status: "NEEDS AUDIT — verify canonical tags on all docs pages"
+  structured_data:
+    recommended_type: "TechArticle or WebSite schema (JSON-LD)"
+    cortex_priority: P2
+    example: |
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "CORTEX AI Engineering Framework",
+        "description": "Production-grade AI orchestration framework...",
+        "author": { "@type": "Person", "name": "Asif Hussain" }
+      }
+      </script>
+
+# ── TIMELESS DOCUMENTATION ────────────────────────────────────────────────
+timeless_documentation:
+  source: "Google Developer Documentation Style Guide — Timeless documentation"
+  reference: "https://developers.google.com/style/timeless-documentation"
+  rules:
+    - rule: "Avoid time-relative language: 'recently', 'soon', 'currently', 'new', 'upcoming'"
+      fix: "State the version or date: 'As of Phase 108' or 'Introduced in CORTEX 4.0'"
+    - rule: "Avoid 'as of now' / 'at the time of writing' — will be inaccurate immediately"
+      fix: "Use the actual date or version number"
+    - rule: "Avoid 'we' when it means the system — use the system name"
+      fix: "'CORTEX validates' not 'We validate'"
+  cortex_application: "Stats in hero sections (orchestrator count, test count) must pull from live data, not be hardcoded prose"

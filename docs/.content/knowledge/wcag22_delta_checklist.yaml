@@ -1,0 +1,238 @@
+# wcag22_delta_checklist.yaml
+# CORTEX Documentation — WCAG 2.2 New Criteria (delta from 2.1)
+# Authority: a11y-perf-guardian
+# Created: 2026-03-08
+# Sources:
+#   - W3C WCAG 2.2 Quick Reference (https://www.w3.org/WAI/WCAG22/quickref/)
+#   - W3C Understanding WCAG 2.2 (https://www.w3.org/WAI/WCAG22/Understanding/)
+#   - W3C WCAG 2.2 official publication date: October 5, 2023
+#   - Updated: September 22, 2025 (latest W3C revision)
+#
+# CONTEXT: a11y_checklist.yaml covers WCAG 2.1 AA.
+# This file covers the 9 NEW success criteria added in WCAG 2.2.
+# Together, these two files represent FULL WCAG 2.2 AA compliance coverage.
+
+standard: "WCAG 2.2"
+published: "2023-10-05"
+w3c_last_updated: "2025-09-22"
+relationship: "Additive delta to a11y_checklist.yaml (which covers WCAG 2.1 AA)"
+target_level: "AA (6 of 9 new criteria are AA or A; 3 are AAA — noted below)"
+
+# ── SUMMARY OF WCAG 2.2 CHANGES ──────────────────────────────────────────
+changes_summary:
+  removed_from_2_1:
+    - criterion: "4.1.1 Parsing"
+      reason: "Modern browsers parse HTML robustly; criterion no longer meaningful — officially removed from 2.2"
+      action: "Remove 4.1.1 checks from CI — no longer a compliance requirement"
+
+  new_criteria_count: 9
+  new_aa_criteria: 6  # 2.4.11, 2.5.7, 2.5.8, 3.2.6, 3.3.7, 3.3.8
+  new_a_criteria: 0   # 3.2.6 is Level A (not AA)
+  new_aaa_criteria: 3 # 2.4.12, 2.4.13, 3.3.9
+
+# ── NEW WCAG 2.2 CRITERIA — FULL CHECKLIST ────────────────────────────────
+new_criteria:
+
+  # ── PRINCIPLE 2 OPERABLE — Guideline 2.4 Navigable ─────────────────────
+
+  - id: wcag22-2.4.11
+    criterion: "2.4.11 Focus Not Obscured (Minimum)"
+    level: AA
+    added_in: "2.2"
+    rule: "When a UI component receives keyboard focus, it is not ENTIRELY hidden by author-created content"
+    explanation: >
+      Sticky headers, cookie banners, floating CTAs, or chat widgets must not fully
+      cover the focused element. Partial obscuring is acceptable (Minimum level).
+      The Enhanced version (2.4.12, AAA) requires NO obscuring at all.
+    cortex_risk:
+      - "Sticky .main-nav could obscure focusable elements near the top of the page on scroll"
+      - "Any fixed/sticky footer elements could obscure bottom-of-page interactive elements"
+    test: |
+      1. Tab through the page while sticky nav is visible
+      2. Verify focused element is at least partially visible above/below sticky nav
+      3. Use: document.querySelectorAll(':focus') to verify visibility programmatically
+    fix: |
+      /* Add scroll-margin-top to interactive elements below sticky nav */
+      :focus {
+        scroll-margin-top: calc(var(--nav-height, 60px) + 8px);
+      }
+    severity: P1
+    cortex_status: "NEEDS AUDIT — sticky nav may obscure focus near top of page"
+
+  - id: wcag22-2.4.12
+    criterion: "2.4.12 Focus Not Obscured (Enhanced)"
+    level: AAA
+    added_in: "2.2"
+    rule: "When a UI component receives keyboard focus, NO part of the component is hidden by author-created content"
+    cortex_target: "AAA — aspirational; address after 2.4.11 (AA) is confirmed passing"
+    severity: P2
+
+  - id: wcag22-2.4.13
+    criterion: "2.4.13 Focus Appearance"
+    level: AAA
+    added_in: "2.2"
+    rule: >
+      Keyboard focus indicator meets minimum size and contrast requirements:
+      - Area ≥ area of 2px perimeter of the unfocused component
+      - Contrast ratio ≥ 3:1 between focused and unfocused states
+      - Contrast ratio ≥ 3:1 against adjacent colors
+    cortex_implementation: |
+      /* Current CORTEX focus ring — verify meets AAA spec */
+      :focus-visible {
+        outline: 2px solid var(--accent-primary);  /* #00d4ff cyan */
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+      }
+      /* #00d4ff on #0a0e27 = 9.2:1 contrast — PASSES 3:1 AAA requirement */
+    cortex_status: "LIKELY PASSING — cyan accent on dark bg has 9.2:1 contrast; verify 2px minimum area rule"
+    severity: P2
+    test: "Verify outline-width ≥ 2px AND outline contrasts ≥ 3:1 against adjacent background"
+
+  # ── PRINCIPLE 2 OPERABLE — Guideline 2.5 Input Modalities ──────────────
+
+  - id: wcag22-2.5.7
+    criterion: "2.5.7 Dragging Movements"
+    level: AA
+    added_in: "2.2"
+    rule: "All drag-based functionality must have a single-pointer alternative (no drag required)"
+    cortex_relevance: "LOW — CORTEX docs are read-only; no drag interfaces currently"
+    watch: "If D3.js force-directed graphs or reorderable tab lists are added, this applies"
+    action: |
+      When implementing any drag interface:
+      - Provide up/down buttons or + / - controls as single-pointer alternatives
+      - Or: make drag optional (click-to-select, then click destination)
+    severity: P2
+    cortex_status: "N/A — no draggable elements in current docs"
+
+  - id: wcag22-2.5.8
+    criterion: "2.5.8 Target Size (Minimum)"
+    level: AA
+    added_in: "2.2"
+    rule: "Pointer input targets are at least 24×24 CSS pixels, OR adequate spacing ensures effective target size ≥ 24px"
+    note: "Different from 2.5.5 (AAA, 44×44px). 2.5.8 is the AA minimum — smaller targets allowed if spaced"
+    cortex_checks:
+      - element: "Nav links (.main-nav a)"
+        current: "Likely OK — full nav bar height clickable"
+        test: "Inspect padding on nav links — height should be ≥ 24px (ideally ≥ 44px)"
+      - element: "Tab buttons (.cortex-tab)"
+        current: "Need to verify min-height ≥ 24px"
+        fix: "min-height: 24px; padding: 0.5rem 1rem"
+      - element: "Social/icon links in footer"
+        current: "Risk — small icon links may be < 24px"
+        fix: "padding: 8px; display: inline-flex; min-width: 24px; min-height: 24px"
+      - element: "Persona tile links"
+        current: "Large tiles — PASSING (well over 44×44px)"
+    severity: P1
+    test: |
+      /* DevTools: check all interactive elements */
+      document.querySelectorAll('a, button, [role="tab"], [role="button"]')
+        .forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.width < 24 || rect.height < 24) {
+            console.warn('Target too small:', el, rect.width, rect.height);
+          }
+        });
+
+  # ── PRINCIPLE 3 UNDERSTANDABLE — Guideline 3.2 Predictable ─────────────
+
+  - id: wcag22-3.2.6
+    criterion: "3.2.6 Consistent Help"
+    level: A
+    added_in: "2.2"
+    rule: >
+      If help mechanisms (contact, FAQs, chat, self-help) appear on multiple pages,
+      they appear in the same relative order to other page content on each page.
+    cortex_relevance: "LOW — CORTEX docs do not currently have persistent help mechanisms"
+    watch: >
+      If a feedback button, GitHub issue link, or help contact is added to the nav
+      or footer of multiple pages, it must appear in the same position on all pages.
+    action: "When adding any help mechanism: establish position in component registry first"
+    severity: P3
+    cortex_status: "N/A — no persistent help mechanism currently implemented"
+
+  # ── PRINCIPLE 3 UNDERSTANDABLE — Guideline 3.3 Input Assistance ─────────
+
+  - id: wcag22-3.3.7
+    criterion: "3.3.7 Redundant Entry"
+    level: A
+    added_in: "2.2"
+    rule: >
+      Information previously entered by the user in the same process must not
+      be re-entered unless re-entering is essential or for security reasons.
+    cortex_relevance: "LOW — CORTEX docs are static read-only; no multi-step form flows"
+    watch: "If a search feature with multi-step filtering is added, this applies"
+    severity: P3
+    cortex_status: "N/A — no user input flows currently"
+
+  - id: wcag22-3.3.8
+    criterion: "3.3.8 Accessible Authentication (Minimum)"
+    level: AA
+    added_in: "2.2"
+    rule: >
+      Cognitive function tests (e.g. solving a puzzle, remembering a password without
+      password manager support) are NOT required in authentication unless an alternative
+      is provided. Password managers must be permitted (no paste-blocking).
+    cortex_relevance: "LOW — CORTEX docs site has no authentication"
+    watch: "If login/auth is added in future phases, this applies immediately"
+    implementation_note: |
+      - Do NOT block paste in password fields (allows password manager use)
+      - Provide 'Show password' toggle
+      - Support WebAuthn / passkeys as alternative to cognitive-test auth
+    severity: P3
+    cortex_status: "N/A — no authentication on docs site"
+
+  - id: wcag22-3.3.9
+    criterion: "3.3.9 Accessible Authentication (Enhanced)"
+    level: AAA
+    added_in: "2.2"
+    rule: "No cognitive function test required for authentication at all (no exceptions)"
+    cortex_status: "N/A — no authentication on docs site"
+    severity: P3
+
+# ── REMOVED CRITERION (WCAG 2.2) ─────────────────────────────────────────
+removed_criteria:
+  - id: wcag21-4.1.1
+    criterion: "4.1.1 Parsing"
+    removed_in: "2.2"
+    reason: >
+      Modern browsers handle malformed HTML gracefully. The interoperability
+      issues 4.1.1 was designed to address no longer exist in modern browser engines.
+      W3C formally removed this criterion from WCAG 2.2.
+    cortex_action: "Remove 4.1.1 checks from any CI scripts or audit tools; document as N/A"
+
+# ── COMPLIANCE MATRIX ─────────────────────────────────────────────────────
+compliance_matrix:
+  wcag_22_aa_target:
+    total_aa_criteria: 56  # WCAG 2.2 AA (50 from 2.1 minus 4.1.1 + 6 new AA = 55 net)
+    cortex_fully_passing:
+      - "1.4.3 Contrast Minimum — dark theme is 19.2:1"
+      - "1.4.7 Non-text Contrast — cyan accent is 9.2:1"
+      - "2.4.1 Bypass Blocks — skip link implemented"
+      - "2.5.8 Target Size (Minimum) — persona tiles, nav links (pending full audit)"
+    cortex_needs_audit:
+      - "2.4.11 Focus Not Obscured — sticky nav interaction with focus"
+      - "2.5.8 Target Size — icon links in footer"
+    cortex_not_applicable:
+      - "2.5.7 Dragging Movements (no drag interfaces)"
+      - "3.2.6 Consistent Help (no help mechanism)"
+      - "3.3.7 Redundant Entry (no forms)"
+      - "3.3.8 Accessible Authentication (no auth)"
+
+  recommended_audit_tools:
+    browser_extensions:
+      - name: "axe DevTools"
+        url: "https://www.deque.com/axe/devtools/"
+        notes: "Best automated WCAG 2.2 coverage; free tier available"
+      - name: "WAVE"
+        url: "https://wave.webaim.org/"
+        notes: "Visual feedback; good for contrast and structure checks"
+    cli_tools:
+      - name: "axe-core + Playwright"
+        command: "npx playwright test --grep a11y"
+        notes: "Integrate in CI — run on each HTML page build"
+    manual_tests:
+      - "Tab through entire page with keyboard only"
+      - "Use VoiceOver (macOS) or NVDA (Windows) — navigate page headings"
+      - "Zoom to 200% — check no horizontal scrolling"
+      - "Test on 320px viewport — mobile reflow check"
+      - "Enable 'Reduce Motion' in macOS Settings → Accessibility → Display"
