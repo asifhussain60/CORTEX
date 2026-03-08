@@ -359,7 +359,7 @@ enforcing routing in production (where context is always supplied).
 | SYNC | `lifecycle/sync-workflow.yaml` | — |
 | TRAIN | `lifecycle/train-workflow.yaml` | — |
 | META-AUDIT | `governance/meta-audit-workflow.yaml` | — |
-| **FRONTEND** | **`frontend/html-view-lifecycle.yaml`** | **`primitives/governance/holistic-validation-gate.yaml`** |
+| **FRONTEND** | **`frontend/html-view-lifecycle.yaml`** (generic HTML views) · **`frontend/docs-html-design-workflow.yaml`** (docs/ HTML/CSS/web) | **`primitives/governance/holistic-validation-gate.yaml`** |
 | TDD | `tdd/tdd-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
 | TYPESCRIPT | `frontend/typescript-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
 | CSHARP_REFACTOR | `backend/csharp-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |

@@ -2,10 +2,11 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-07 (Phase 108 — Documentation Governance Layer + Design+Implement Mode + Role-Aware Content Synthesis + Design Intelligence + Session Pattern Harvesting + Count Floor-Approximation Policy + WCAG Font Size Floor Rules) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-08 (Phase 109 — Workflow Composer Delegation for HTML/CSS/Web; design system rules extracted to `frontend/docs-html-design-workflow.yaml`) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
+**Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
 **Knowledge Base:** `docs/.content/knowledge/` (5 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist)
 **Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
 
@@ -200,416 +201,72 @@ When building or enhancing role-specific HTML views, the Documentation Orchestra
 
 ---
 
-## 🎨 Glassmorphism Design Intelligence — Proven Patterns (MANDATORY)
+## 🎨 HTML/CSS/Web Design — Workflow Composer Delegation (MANDATORY)
 
-**Authority:** Lessons codified from iterative design sessions. These patterns are PROVEN superior through user testing and must be applied automatically on all `docs/` HTML work. The user should never need to request these — they are the default.
+**SSOT:** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml`
+
+All design-system rules for `docs/` HTML, CSS, and static web-page work are encoded in the dedicated workflow template above. The prompt does **not** repeat them. The WorkflowComposer executes the canonical step chain automatically.
+
+**Every HTML/CSS/web operation in `docs/` delegates to:**
+
+```
+WorkflowComposer → frontend/docs-html-design-workflow.yaml
+```
+
+**What the workflow template owns (not this prompt):**
+- Glassmorphism theme identity contract (page bg, card bg, accent tokens, hover states)
+- Typography rules (Inter / Space Grotesk / JetBrains Mono — immutable)
+- WCAG font size floor rules (P0 a11y gate — enforced before emitting any markup)
+- Visualisation rules (CSS flexbox pipelines, bubble grids, donut charts — no Mermaid)
+- Layout rules (card width, padding, icon sizing, alternating panels, equal-height grids)
+- Card border & glow system, pipeline step cards, feature pills
+- CDN & dependency rules (Tailwind, D3.js, Lucide, FA — Mermaid BANNED)
+- Per-page architecture detection (inline `<style>` vs external CSS)
+- Quality gates: wcag_font_floor_audit, theme_integrity, dom_validation, a11y_gate, regression_guard
+- Learning signal emission (PLIP-001, scope_lock: `documentation`)
 
 ### 🧠 Learning Protocol (PLIP-001)
 
 **SSOT:** `cortex-registry/core/prompt-learning-protocol.yaml`
 
-**🔒 Scope Lock — `documentation`:** This prompt learns ONLY from documentation, HTML/CSS design, a11y, and doc-sync patterns. Allowed pattern_id prefixes: `html-design`, `doc-sync`, `design-system`, `a11y`. It MUST NOT query or emit patterns scoped to: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`. Those domains belong to other prompts. Violation = P1 scope bleed.
+**🔒 Scope Lock — `documentation`:** Allowed pattern_id prefixes: `html-design`, `doc-sync`, `design-system`, `a11y`. MUST NOT query or emit patterns for: `database`, `sync`, `debug`, `vacuum`, `refactor`, `implement`, `fix`.
 
-Before every Design+Implement or Doc Sync operation:
-- Call `cortex_learning op=history scope=documentation` — retrieve prior documentation/design failure patterns
-- If prior failures exist (confidence ≥ 0.4): surface in design proposal as `⚠️ Prior failure pattern: {description}`
-- Check `cortex_learning op=rca rca_action=query` for prevention rules matching current context
+- Before every Design+Implement or Doc Sync: `cortex_learning op=history scope=documentation`
+- Prior failures (confidence ≥ 0.4): surface as `⚠️ Prior failure pattern: {description}`
+- After success: `cortex_learning op=emit signal_type=MILD_REWARD scope=documentation`
+- After failure: `cortex_learning op=emit signal_type=MILD_PUNISHMENT scope=documentation`
+- Exempt (read-only): Discovery, Drift-detection, Certification
 
-After every Design+Implement completion:
-- On success: `cortex_learning op=emit signal_type=MILD_REWARD pattern_id={operation}`
-- On failure (a11y regression, theme drift, broken links): `cortex_learning op=emit signal_type=MILD_PUNISHMENT pattern_id={operation}`
-
-Exempt: Discovery-only, Drift-detection, Certification (read-only operations)
-
-### Typography Rules (IMMUTABLE)
-
-| Context | Font | Weight | Why |
-|---------|------|--------|-----|
-| **Headings (h1–h6)** | `Inter` | 600–900 | Superior letter-spacing at large sizes; no word-fusion |
-| **Hero titles** | `Space Grotesk` | 700 | Geometric, modern, distinctive for page identity |
-| **Body copy** | `Inter` | 400–500 | Optimised for long-form reading on dark backgrounds |
-| **Code / IDs / monospace** | `JetBrains Mono` | 400–500 | Purpose-built for code; ligatures, clear glyphs |
-| **Heading letter-spacing** | `letter-spacing: -0.02em; word-spacing: 0.04em` | — | Prevents word-fusion at large sizes |
-
-- ❌ **NEVER** use `Plus Jakarta Sans` for headings — proven to cause word-fusion at display sizes
-- ❌ **NEVER** introduce additional font families — the three above are locked (`design_system.yaml`)
-
-### WCAG Font Size Floor Rules (IMMUTABLE — P0 a11y gate)
-
-**Authority:** WCAG 2.2 Level AA + LearnUI Design accessibility research. Codified from Phase 108 audit where generated HTML had unreadable `8px–12px` text across all role pages.
-
-**Lesson learned:** LLMs default to compact, information-dense layouts with tiny font sizes optimised for screenshots — not for real-user readability. Every HTML generation pass MUST enforce these floors BEFORE emitting any markup.
-
-| Element | Minimum Size | Recommended | Anti-Pattern (NEVER) |
-|---------|-------------|-------------|---------------------|
-| **Body text / paragraphs** | `16px` (`1rem`) | `16–20px` | `text-[12px]`, `text-[13px]`, `text-[14px]`, `0.75rem`, `0.8rem`, `0.875rem` for body |
-| **Card titles / h3–h4** | `18px` (`1.125rem`) | `18–24px` | `text-[14px]`, `text-[16px]`, `1rem` for titles |
-| **Section headings / h2** | `24px` (`1.5rem`) | `24–36px` | `text-[18px]`, `text-[20px]` for section heads |
-| **Hero titles / h1** | `36px` (`2.25rem`) | `36–56px` | `text-[24px]`, `text-[28px]` for hero |
-| **Secondary/muted text** | `14px` (`0.875rem`) | `14–16px` | `text-[11px]`, `text-[12px]`, `0.7rem`, `0.75rem` |
-| **Code blocks (monospace)** | `13px` (`0.8125rem`) | `13–15px` | `text-[10px]`, `text-[11px]`, `0.65rem`, `0.7rem` |
-| **Badge/pill labels** | `11px` (`0.6875rem`) | `11–13px` | `text-[8px]`, `text-[9px]`, `text-[10px]` |
-| **Stat counters (large)** | `28px` (`1.75rem`) | `28–48px` | `text-[18px]`, `text-[20px]` for stat numbers |
-| **Stat sub-labels** | `11px` (`0.6875rem`) | `11–13px` | `text-[8px]`, `text-[9px]`, `text-[10px]` |
-| **Step numbers** | `14px` (`0.875rem`) | `14–18px` | `0.6rem` (9.6px), `0.65rem` |
-| **Checklist / list items** | `14px` (`0.875rem`) | `14–16px` | `0.75rem`, `0.8rem`, `text-[11px]` |
-| **Icon sizing in card titles** | `1.25em` relative to title | Match title height | `w-4 h-4` next to `text-xl` title |
-| **Line height (all text)** | `1.5` (WCAG SC 1.4.12) | `1.5–1.75` | `leading-none`, `leading-tight` for body |
-
-**Icon–Title Ratio Rule:** Icons adjacent to card titles MUST be sized proportionally. When a card title is `text-lg` (`18px`), the icon must be at minimum `w-5 h-5` (`20px`). When a title is `text-xl` (`20px`+), use `w-6 h-6` (`24px`). Mismatched tiny icons next to large titles signal visual hierarchy failure.
-
-**Tailwind class mapping for floors:**
-
-| Floor | Tailwind Utility | CSS `font-size` |
-|-------|-----------------|----------------|
-| 11px | `text-[11px]` | `0.6875rem` |
-| 13px | `text-[13px]` | `0.8125rem` |
-| 14px | `text-sm` | `0.875rem` |
-| 16px | `text-base` | `1rem` |
-| 18px | `text-lg` | `1.125rem` |
-| 20px | `text-xl` | `1.25rem` |
-| 24px | `text-2xl` | `1.5rem` |
-| 36px | `text-4xl` | `2.25rem` |
-
-**Enforcement rules:**
-- ✅ Every HTML generation pass MUST self-audit against this table before final output
-- ✅ Card titles MUST be visibly larger than card body text (minimum 2px / 0.125rem gap)
-- ✅ Use `rem` units (not `px`) for all font sizes — enables user zoom scaling
-- ✅ Prefer Tailwind utility classes over inline `font-size` where the page uses Tailwind
-- ✅ `-webkit-background-clip: text` MUST always be paired with standard `background-clip: text`
-- ❌ **NEVER** generate `text-[8px]`, `text-[9px]`, `text-[10px]` for ANY visible text — these are below WCAG floors
-- ❌ **NEVER** use `text-xs` (`12px`) for body copy or descriptions — only for non-essential decorative labels
-- ❌ **NEVER** set `font-size` below `0.6875rem` (`11px`) for any visible element
-- ❌ **NEVER** assume "compact looks professional" — readability on dark backgrounds requires LARGER sizes than light themes
-
-### Visualisation Rules (MANDATORY)
-
-| Need | ✅ USE | ❌ NEVER USE | Reason |
-|------|--------|-------------|--------|
-| **SDLC pipeline / workflow** | Hand-crafted CSS flexbox pipeline (phase cards with icons, gate pills, hover-lift) | Mermaid.js diagrams | Mermaid renders unreadably small, no sizing control, poor dark-theme support |
-| **Domain/category distribution** | Proportional bubble grid (CSS circles, colour-coded, hover-scale) | D3.js horizontal bar charts | Bar charts are dense and hard to scan; bubbles are intuitive and visually striking |
-| **Before/After comparison** | Split card-pair layout (red left / emerald right, full-width 2-column) | 3-column table-row grids with arrow columns | Table grids are cramped, arrows intrusive; card-pairs are readable and mobile-friendly |
-| **Stat counters** | Animated stat cards with glow borders (count-up animation optional) | Plain text numbers in paragraphs | Cards create visual rhythm and scanability |
-| **Process steps** | Numbered glass-card pipeline with connecting line (CSS pseudo-elements) | Ordered lists `<ol>` | Glass cards with step numbers and hover-lift convey progression visually |
-| **Role perspectives** | Icon + title + description cards in responsive grid | Bullet lists | Cards allow per-role colour coding and visual hierarchy |
-
-### Layout Rules
-
-| Rule | Standard |
-|------|----------|
-| **Card width for definitions** | 80% page width, centered (`max-width: 80%; margin: 0 auto`) — NOT 60% (too much dead space) |
-| **Card padding** | `padding: 2.5rem 2.25rem` — NOT `3rem` sides (wastes horizontal space on dark backgrounds) |
-| **Section spacing** | `space-y-16 md:space-y-24` between major sections |
-| **Icon sizing in tiles** | `font-size: 2.5rem` minimum — NOT `1.3rem` (unreadable at card scale) |
-| **Tile min/max width** | `min-width: 180px; max-width: 260px` — NOT `140px/180px` (text wraps awkwardly) |
-| **Body text max-width** | `max-width: 72ch` — scales with card width, avoids artificial constraint |
-| **Muted text colour** | `#94a3b8` — NOT `#64748b` (too dim on dark navy backgrounds) |
-
-### Alternating Section Panels (MANDATORY for multi-section pages)
-
-**Problem solved:** Sections blend into each other when all use the same transparent background.
-
-**Solution:** Alternate sections between transparent (no background) and gradient glass panels with rounded corners.
-
-| Section Position | Background Treatment |
-|-----------------|---------------------|
-| **Odd sections (1, 3, 5...)** | No panel background — content floats on page background |
-| **Even sections (2, 4, 6...)** | Gradient glass panel with rounded corners + border |
-
-**Panel Implementation Pattern:**
-```html
-<section class="relative py-12 my-6">
-    <!-- Section Background - Gradient Glass Panel with rounded corners -->
-    <div class="absolute inset-0 bg-gradient-to-br from-{color}-950/60 via-slate-900/80 to-{color2}-950/60 border border-{color}-500/20 rounded-3xl"></div>
-    <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
-    
-    <div class="relative space-y-10 px-4 md:px-8">
-        <!-- Section content here -->
-    </div>
-</section>
-```
-
-**Color palette for alternating panels:**
-| Panel | Gradient Colors | Border Color |
-|-------|----------------|--------------|
-| Panel A | `from-indigo-950/60 via-slate-900/80 to-blue-950/60` | `border-indigo-500/20` |
-| Panel B | `from-purple-950/60 via-slate-900/80 to-violet-950/60` | `border-purple-500/20` |
-| Panel C | `from-blue-950/60 via-slate-900/80 to-cyan-950/60` | `border-blue-500/20` |
-
-**Rules:**
-- ✅ `rounded-3xl` on both the background div AND the backdrop-blur div
-- ✅ `border` (all sides) — NOT `border-y` (top/bottom only creates harsh horizontal lines)
-- ✅ `my-6` for vertical spacing between panels
-- ✅ `px-4 md:px-8` padding inside the relative content wrapper
-- ❌ NEVER use `-mx-4 md:-mx-6` with rounded corners — negative margins break the soft edge effect
-- ❌ NEVER use `border-y` for panels — always use `border` (all sides) with rounded corners
-
-### Equal Height Card Grids (MANDATORY)
-
-**Problem solved:** Cards with different content lengths have mismatched heights, creating visual imbalance.
-
-**Solution:** Use flexbox with `items-stretch` and consistent `min-h-[]` on all cards in a row.
-
-**Pattern:**
-```html
-<div class="flex flex-wrap justify-center items-stretch gap-3 md:gap-6">
-    <div class="relative group w-[calc(50%-0.5rem)] md:w-56 flex">
-        <div class="glass-card ... w-full flex flex-col justify-center min-h-[120px]">
-            <!-- Card content -->
-        </div>
-    </div>
-    <!-- Repeat for each card -->
-</div>
-```
-
-**Rules:**
-- ✅ Parent container: `items-stretch` to force equal heights
-- ✅ Card wrapper: `flex` to participate in stretch
-- ✅ Card inner: `w-full flex flex-col justify-center min-h-[120px]`
-- ✅ Content vertically centered with `justify-center`
-- ❌ NEVER let cards auto-size to content — always enforce consistent height
-
-### Card Border & Glow System (MANDATORY)
-
-**Problem solved:** Cards blend into each other and lack visual hierarchy.
-
-**Solution:** Multi-layer card system with gradient backgrounds, colored borders, and hover glow effects.
-
-**Standard Card Pattern:**
-```html
-<div class="relative group">
-    <!-- Hover glow layer -->
-    <div class="absolute inset-0 bg-gradient-to-br from-{color}-600/20 to-{color2}-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-    
-    <!-- Card -->
-    <div class="glass-card p-6 relative border-2 border-{color}-500/30 bg-gradient-to-br from-{color}-950/50 to-slate-900/80 hover:border-{color}-400/50 transition-all">
-        <!-- Content -->
-    </div>
-</div>
-```
-
-**Color-Coded Card Semantics:**
-| Purpose | Border Color | Background Gradient | Icon/Title Color |
-|---------|-------------|--------------------|-----------------| 
-| **Primary/Default** | `border-indigo-500/30` | `from-indigo-950/50 to-slate-900/80` | `text-indigo-300` |
-| **Secondary** | `border-blue-500/30` | `from-blue-950/50 to-slate-900/80` | `text-blue-300` |
-| **Tertiary** | `border-violet-500/30` | `from-violet-950/50 to-slate-900/80` | `text-violet-300` |
-| **Success/After** | `border-emerald-500/30` | `from-emerald-950/50 to-slate-900/80` | `text-emerald-300` |
-| **Warning** | `border-amber-500/30` | `from-amber-950/50 to-slate-900/80` | `text-amber-300` |
-| **Danger/Before** | `border-rose-500/30` | `from-rose-950/50 to-slate-900/80` | `text-rose-300` |
-
-**Rules:**
-- ✅ `border-2` (2px width) — NOT `border` (1px too subtle)
-- ✅ Border opacity `/30` at rest, `/50` on hover
-- ✅ Hover glow uses `blur-xl` with matching color gradient
-- ✅ `transition-all` for smooth border and background transitions
-- ✅ Cards in same section use different colors from the palette (visual variety)
-
-### Pipeline Step Cards (MANDATORY for sequential processes)
-
-**Problem solved:** Pipeline steps need visual connection and progression indication.
-
-**Solution:** Numbered gradient badges with connecting line and color progression.
-
-**Pattern:**
-```html
-<div class="relative">
-    <!-- Gradient Background -->
-    <div class="absolute inset-0 bg-gradient-to-r from-{color1}-500/5 via-{color2}-500/5 to-{color3}-500/5 rounded-3xl"></div>
-    
-    <div class="grid md:grid-cols-4 gap-6 relative p-4">
-        <!-- Connecting Line -->
-        <div class="hidden md:block absolute top-1/2 left-16 right-16 h-1 bg-gradient-to-r from-{color1}-500/50 via-{color2}-500/50 to-{color3}-500/50 -translate-y-1/2 z-0 rounded-full"></div>
-        
-        <!-- Animated Dots on Line (optional) -->
-        <div class="hidden md:block absolute top-1/2 left-16 right-16 -translate-y-1/2 z-0 overflow-hidden">
-            <div class="w-3 h-3 rounded-full bg-{color1}-400 animate-pulse absolute left-1/4"></div>
-            <div class="w-3 h-3 rounded-full bg-{color2}-400 animate-pulse absolute left-1/2" style="animation-delay: 0.5s;"></div>
-            <div class="w-3 h-3 rounded-full bg-{color3}-400 animate-pulse absolute left-3/4" style="animation-delay: 1s;"></div>
-        </div>
-
-        <!-- Step Card -->
-        <div class="relative group">
-            <div class="absolute inset-0 bg-gradient-to-br from-{color}-500/20 to-{color2}-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div class="glass-card p-6 relative z-10 rounded-2xl border-t-4 border-t-{color}-500 hover:-translate-y-2 transition-all duration-300 h-full">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-{color}-500 to-{color2}-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-lg shadow-{color}-500/30">1</div>
-                <h4 class="card-title mb-3 text-{color}-300">Step Title</h4>
-                <p class="card-body leading-relaxed">Step description...</p>
-                <div class="mt-4 flex items-center gap-2 text-xs text-{color}-400 font-medium">
-                    <i data-lucide="icon-name" class="w-4 h-4"></i>
-                    <span>Footer Label</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-```
-
-**Color Progression for 4-step pipelines:**
-| Step | Primary Color | Secondary Color |
-|------|--------------|-----------------|
-| 1 | `indigo` | `violet` |
-| 2 | `blue` | `cyan` |
-| 3 | `teal` | `emerald` |
-| 4 | `emerald` | `green` |
-
-**Rules:**
-- ✅ Step badges: `w-12 h-12 rounded-xl` with gradient fill and shadow
-- ✅ Connecting line: gradient matching step colors, `h-1 rounded-full`
-- ✅ Cards: `border-t-4` top accent matching step color
-- ✅ Hover: `-translate-y-2` lift with glow effect
-- ✅ Footer badges with icons for each step
-
-### Feature Pills (MANDATORY for capability lists)
-
-**Problem solved:** Bullet lists are visually flat and hard to scan.
-
-**Solution:** Gradient-bordered pills with icons.
-
-**Pattern:**
-```html
-<div class="flex flex-wrap gap-3">
-    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-{color}-500/10 to-{color2}-500/10 border border-{color}-500/30 text-{color}-300 text-sm font-medium">
-        <i data-lucide="icon-name" class="w-4 h-4"></i>
-        <span>Feature Name</span>
-    </div>
-</div>
-```
-
-**Rules:**
-- ✅ `rounded-full` for pill shape
-- ✅ Gradient background with low opacity (`/10`)
-- ✅ Border matching the gradient colors (`/30` opacity)
-- ✅ Icon + text layout with `gap-2`
-- ✅ `text-sm font-medium` for consistent sizing
-
-### D3.js Donut Charts (MANDATORY for before/after comparisons with percentages)
-
-**Problem solved:** Bar charts are dense and hard to compare at a glance.
-
-**Solution:** Dual donut charts with animated arc transitions and center percentages.
-
-**Rules:**
-- ✅ Use `d3.pie()` with animated arc entrance via `attrTween`
-- ✅ Show percentage in center of each donut
-- ✅ Side-by-side layout: "Before" (rose/red tones) | "After" (emerald/green tones)
-- ✅ 4-column legend below charts
-- ✅ Improvement badge between charts (`+{X}%`)
-- ❌ NEVER use horizontal bar charts for before/after percentage comparisons
-
-### Theme Identity Contract (IMMUTABLE)
-
-| Token | Value | Enforcement |
-|-------|-------|-------------|
-| **Page background** | `#030712` – `#080b14` range (deep navy) | NEVER light backgrounds |
-| **Card background** | `rgba(10–30, 15–41, 30–59, 0.35–0.7)` with `backdrop-filter: blur(16–32px)` | NEVER opaque cards |
-| **Primary accent** | `#00d4ff` (electric cyan) | ALL pages |
-| **Secondary accent** | `#7b61ff` (indigo violet) | ALL pages |
-| **Success accent** | `#10b981` (emerald) | Positive states, "after" comparisons |
-| **Danger accent** | `#f43f5e` (rose) or `#ef4444` (red) | Negative states, "before" comparisons |
-| **Border** | `rgba(255, 255, 255, 0.06–0.12)` | Glass edge definition |
-| **Card hover** | `translateY(-4px–-5px)` + border glow + shadow lift | All interactive cards |
-
-### CDN & Dependency Rules
-
-| Dependency | Status | Rule |
-|------------|--------|------|
-| **Tailwind CSS** (`cdn.tailwindcss.com`) | ✅ Allowed | Role pages use Tailwind utility classes |
-| **D3.js** | ✅ Allowed | For D3-specific interactive charts (tooltips, animations) — NOT for bar charts |
-| **Lucide Icons** | ✅ Allowed | Role pages use Lucide icon set |
-| **Font Awesome** | ✅ Allowed | Landing page uses FA icons |
-| **Mermaid.js** | ❌ BANNED in role views | Use hand-crafted CSS pipelines instead |
-| **Chart.js** | ⚪ Not used | No current need |
-
-### Architecture Detection (Per-Page Styling)
-
-All HTML pages use inline `<style>` blocks as their primary styling mechanism. This is the accepted architecture:
-- `index.html` — inline `<style>` block (~624 lines) with its own tokens + Font Awesome
-- `roles/business-leader.html` — inline `<style>` block (~367 lines) + Tailwind CDN
-- `roles/product-owner.html` — inline `<style>` block (~121 lines) + Tailwind CDN
-- `roles/software-engineer.html` — external CSS design system (`glassmorphism.css`, `glass-design-tokens.css`, `glass-ui-components.css`, `main.css`, `role-landing.css`) + `content-loader.js`
-- `roles/learner.html` — external CSS design system (same as software-engineer)
-
-**When working on any page:** Respect its existing architecture (inline or external). Inline `style=` attributes are allowed on all pages. Prefer CSS classes for patterns that repeat across pages — use inline styles for page-specific one-offs.
-
-**When working on `software-engineer.html`:** Respect its dynamic loading architecture. Enhance the content source (`content.json` or the loader), or add sections that work alongside the dynamic content.
+> All typography, WCAG floors, visualisation, layout, card, and theme rules are defined in
+> `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` — not repeated here.
 
 ---
 
 ## 🖌️ Design + Implement Mode
 
-**Trigger:** Any request to update, redesign, or improve an HTML view in `docs/` (especially `index.html`). Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
+**Trigger:** Any request to update, redesign, or improve an HTML view in `docs/`. Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
 
-**Mode contract (non-negotiable):**
-- ✅ Inline `style=` attributes are **ALLOWED** — prefer CSS classes for reusable patterns, but inline styles are permitted for one-off overrides, rapid prototyping, and page-scoped tweaks. This rule was relaxed because all HTML pages already use inline `<style>` blocks as their primary architecture.
-- ❌ **NEVER** introduce new CSS values without first checking `glass-design-tokens.css`
-- ❌ **NEVER** drift the dark blue glassmorphism theme — `design_system.yaml` is the identity contract
-- ❌ **NEVER** use Mermaid.js for SDLC pipelines — use hand-crafted CSS flexbox pipelines (§ Glassmorphism Design Intelligence)
-- ❌ **NEVER** use D3 horizontal bar charts for domain distributions — use proportional bubble grids
-- ❌ **NEVER** use `Plus Jakarta Sans` for headings — use `Inter` with `letter-spacing: -0.02em`
-- ❌ **NEVER** use 3-column table-row grids for before/after comparisons — use split card-pair layout
-- ✅ CSS changes → `docs/assets/css/` files OR inline `<style>` blocks (matching the page's existing architecture)
-- ✅ Read `docs/.content/knowledge/` before proposing any structural change
-- ✅ Validate against `a11y_checklist.yaml` and `performance_checklist.yaml`
-- ✅ All new components must reference entries in `components.yaml`
-- ✅ Apply all rules from `§ Glassmorphism Design Intelligence — Proven Patterns` automatically
-- ✅ Apply all rules from `§ Role-Aware Content Synthesis` when working on role views
+**WorkflowComposer delegation (non-negotiable):**
 
-### Step 0 — Role Context Loading (automatic, before design)
+```
+WorkflowComposer → frontend/docs-html-design-workflow.yaml
+```
 
-**Agent:** `html-view-designer` (pre-flight)
+All design-system rules, WCAG gates, typography, visualisation, layout, card patterns, CDN rules, and per-page architecture detection are encoded in that workflow template. This prompt does not repeat them.
 
-This step runs **automatically** whenever the target file is a role view or the landing page. The user does not need to request it.
+**Step chain (see workflow template for full detail):**
 
-1. **Detect target role** from file path:
-   - `roles/business-leader.html` → Business Leader
-   - `roles/product-owner.html` → Product Owner
-   - `roles/software-engineer.html` → Software Engineer
-   - `index.html` → Landing Page (all roles)
-2. **Load `.content` files** from the Role → Content Routing Table (§ Role-Aware Content Synthesis)
-3. **Extract role-specific content** — find `## For {Role}` sections, `audience:` frontmatter matches, and role-relevant propositions
-4. **Detect target architecture** — inline `<style>` block (index, business-leader, product-owner) vs external CSS + content-loader (software-engineer, learner)
-5. **Build content brief** — a structured list of sections to create/enhance, each mapped to a `.content` source, with the role-specific angle identified
-6. Pass the content brief to Step 1 as input context
-
-**Output:** A content brief that Step 1's design proposal must address. Every section in the brief must appear in the design proposal or be explicitly justified as out-of-scope.
-
-### Step 1 — Design (before any implementation)
-
-**Agent:** `html-view-designer`
-
-1. Load `docs/.content/knowledge/doc_best_practices.yaml` — IA and navigation rules
-2. Load `docs/.content/knowledge/design_system.yaml` — token constraints
-3. Load `docs/.content/knowledge/components.yaml` — approved component patterns
-4. Read the target HTML file — understand current structure and DOM hooks
-5. Read existing CSS files in `docs/assets/css/` — understand current styles
-6. Propose: layout changes, component additions, structural improvements
-7. Present **🪞 Intent Reflection** with the design proposal
-8. Wait for `proceed` before implementing
-
-### Step 2 — Implement (after proceed)
-
-**Agents:** `design-system-enforcer` → `doc-sync-agent` (CSS rules) → `a11y-perf-guardian` → `regression-sentinel`
-
-1. **design-system-enforcer** — verify all proposed CSS values reference tokens from `glass-design-tokens.css`
-2. Apply HTML changes to target file — semantic elements, ARIA, stable DOM hooks
-3. Apply CSS changes to correct CSS layer file — never create a new file unless no existing layer fits
-4. **a11y-perf-guardian** — run `a11y_checklist.yaml` checks; block on P0 regressions
-5. **regression-sentinel** — diff HTML/CSS changes; confirm no theme drift, no broken links, no removed ARIA landmarks
-6. Report completion with `✅ Completion State`
-
-### Design + Implement Agent Delegation Map
-
-| Step | Agent | Knowledge Input | Gate |
-|------|-------|-----------------|------|
-| **Step 0:** Role context load | `html-view-designer` | `.content/` files per Role Routing Table | Auto — no gate |
-| **Step 1:** Audit current state | `html-view-designer` | `doc_best_practices.yaml`, `components.yaml` | — |
-| **Step 1:** Propose design | `html-view-designer` | `design_system.yaml`, Step 0 content brief | ⚡ Proceed Gate |
-| **Step 2:** Token validation | `design-system-enforcer` | `design_system.yaml`, `glass-design-tokens.css` | P0 block on violation |
-| **Step 2:** Implement HTML | `html-view-designer` + `doc-sync-agent` | `components.yaml`, `a11y_checklist.yaml` | — |
-| **Step 2:** Implement CSS | `doc-sync-agent` (CSS rules) | `design_system.yaml`, `performance_checklist.yaml` | — |
-| **Step 2:** A11y + perf gate | `a11y-perf-guardian` | `a11y_checklist.yaml`, `performance_checklist.yaml` | P0 block on regression |
-| **Step 2:** Regression guard | `regression-sentinel` | Current vs proposed diff | P1 flag on theme drift |
+| Step | Agent | Gate |
+|------|-------|------|
+| 0 — Role context load | `html-view-designer` | Auto (no user gate) |
+| 1 — Knowledge pre-flight + design proposal | `html-view-designer` | ⚡ Proceed Gate |
+| 2 — Token validation | `design-system-enforcer` | P0 block on violation |
+| 3 — HTML implementation | `html-view-designer` + `doc-sync-agent` | dom_validation, wcag_font_floor_audit |
+| 4 — CSS compliance | `doc-sync-agent` | css-zero-inline-workflow.yaml |
+| 5 — A11y & performance | `a11y-perf-guardian` | P0 block on regression |
+| 6 — Regression guard | `regression-sentinel` | P1 flag on theme drift |
+| 7 — Convergence gate | `EnforcementOrchestrator` | CORE-068, max 3 cycles |
+| 8 — Learning signal | PLIP-001 | scope_lock: documentation |
 
 ---
 
@@ -626,9 +283,9 @@ This step runs **automatically** whenever the target file is a role view or the 
 | `/doc-release` | Generate release notes from Git diffs | `release-notes-agent` |
 | `/doc-diagrams` | Regenerate all architecture diagrams | `diagram-regeneration-agent` |
 | `/doc-media` | Update all image and video prompts | `media-prompt-agent` |
-| `/doc-design {file}` | Design + Implement mode — improve target HTML view | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
+| `/doc-design {file}` | Design + Implement — WorkflowComposer → `docs-html-design-workflow.yaml` | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
 | `/doc-harvest` | Harvest best practices from sources → update knowledge YAMLs | `knowledge-harvester-agent` |
-| `/doc-learn-session` | **NEW:** Harvest design patterns from current Copilot Chat session → update prompts + agents | `knowledge-harvester-agent` |
+| `/doc-learn-session` | Harvest design patterns from current session → update prompts + agents | `knowledge-harvester-agent` |
 
 ---
 

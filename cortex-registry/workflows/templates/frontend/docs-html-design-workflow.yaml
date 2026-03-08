@@ -1,0 +1,531 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Docs — HTML/CSS/Web Design Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Canonical design-system rules, WCAG gates, typography standards,
+#          visualisation strategy, and step chain for ALL docs/ HTML, CSS, and
+#          static web-page development. Replaces inline design prose in
+#          cortex-doc.prompt.md (Design + Implement Mode section).
+# Authority: cortex-doc.prompt.md | CORE-002 | CORE-048 | CORE-073
+# Composer:  cortex/orchestrators/workflow/workflow_composer.py
+# Related:
+#   - frontend/html-view-lifecycle.yaml    (build/enhance/refactor entry point)
+#   - frontend/html-refactor-validation.yaml (DOM validation gates)
+#   - frontend/css-zero-inline-workflow.yaml (CSS zero-inline gate)
+#   - frontend/css-extraction-workflow.yaml  (inline → external CSS)
+# Intent routing: FRONTEND
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/docs-html-design-workflow
+name: CORTEX Docs — HTML/CSS/Web Design Workflow
+category: frontend
+priority: P0
+
+metadata:
+  author: CORTEX
+  created: "2026-03-08"
+  updated: "2026-03-08"
+  technologies: [html, css, javascript, tailwindcss, d3js, lucide-icons, font-awesome]
+  rollback_on_failure: true
+  vision_api_integration: true
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DESIGN SYSTEM — IMMUTABLE TOKENS
+# ══════════════════════════════════════════════════════════════════════════════
+design_system:
+  theme: glassmorphism-v4.0
+  tokens_file: docs/assets/css/glass-design-tokens.css
+  ssot: docs/.content/knowledge/design_system.yaml
+
+  # ── Theme Identity Contract (IMMUTABLE) ────────────────────────────────────
+  theme_tokens:
+    page_background:
+      value: "#030712–#080b14"
+      note: deep navy — NEVER light backgrounds
+    card_background:
+      value: "rgba(10–30, 15–41, 30–59, 0.35–0.7)"
+      blur: "backdrop-filter: blur(16–32px)"
+      note: NEVER opaque cards
+    accent_primary: "#00d4ff"    # electric cyan — ALL pages
+    accent_secondary: "#7b61ff"  # indigo violet — ALL pages
+    accent_success: "#10b981"    # emerald — positive states, "after" comparisons
+    accent_danger: "#f43f5e"     # rose — negative states, "before" comparisons
+    border: "rgba(255,255,255,0.06–0.12)"  # glass edge definition
+    card_hover: "translateY(-4px–-5px) + border glow + shadow lift"
+
+  # ── Typography (IMMUTABLE) ─────────────────────────────────────────────────
+  typography:
+    headings:
+      font: Inter
+      weight: "600–900"
+      letter_spacing: "-0.02em"
+      word_spacing: "0.04em"
+      note: prevents word-fusion at large sizes
+    hero_titles:
+      font: Space Grotesk
+      weight: "700"
+      note: geometric, modern, distinctive page identity
+    body:
+      font: Inter
+      weight: "400–500"
+    code:
+      font: JetBrains Mono
+      weight: "400–500"
+    forbidden:
+      - "Plus Jakarta Sans"   # proven word-fusion at display sizes
+      - "any font not in [Inter, Space Grotesk, JetBrains Mono]"
+
+  # ── CDN & Dependency Rules ─────────────────────────────────────────────────
+  dependencies:
+    tailwind_css:
+      cdn: "cdn.tailwindcss.com"
+      status: ALLOWED
+    d3js:
+      version_pin: "7.9.0"
+      cdn: "https://d3js.org/d3.v7.min.js"
+      status: ALLOWED
+      use_case: "interactive charts with tooltips/animations — NOT bar charts"
+    lucide_icons:
+      status: ALLOWED
+    font_awesome:
+      status: ALLOWED
+      use_case: "index.html landing page only"
+    mermaid_js:
+      status: BANNED
+      reason: "unreadable at role-view scale, no sizing control, poor dark-theme"
+    chart_js:
+      status: NOT_USED
+
+# ══════════════════════════════════════════════════════════════════════════════
+# WCAG FONT SIZE FLOOR RULES — P0 A11Y GATE (IMMUTABLE)
+# Authority: WCAG 2.2 Level AA + LearnUI Design accessibility research
+# Lesson: LLMs default to compact 8px–12px layouts — enforce floors BEFORE emitting markup
+# ══════════════════════════════════════════════════════════════════════════════
+wcag_font_floors:
+  body_paragraphs:   { min_px: 16, min_rem: "1rem",      recommended: "16–20px",  forbidden: ["text-[12px]","text-[13px]","text-[14px]","0.75rem","0.8rem","0.875rem for body"] }
+  card_titles_h3_h4: { min_px: 18, min_rem: "1.125rem",  recommended: "18–24px",  forbidden: ["text-[14px]","text-[16px]","1rem for titles"] }
+  section_headings:  { min_px: 24, min_rem: "1.5rem",    recommended: "24–36px",  forbidden: ["text-[18px]","text-[20px] for section heads"] }
+  hero_titles_h1:    { min_px: 36, min_rem: "2.25rem",   recommended: "36–56px",  forbidden: ["text-[24px]","text-[28px] for hero"] }
+  secondary_muted:   { min_px: 14, min_rem: "0.875rem",  recommended: "14–16px",  forbidden: ["text-[11px]","text-[12px]","0.7rem","0.75rem"] }
+  code_blocks:       { min_px: 13, min_rem: "0.8125rem", recommended: "13–15px",  forbidden: ["text-[10px]","text-[11px]","0.65rem","0.7rem"] }
+  badge_labels:      { min_px: 11, min_rem: "0.6875rem", recommended: "11–13px",  forbidden: ["text-[8px]","text-[9px]","text-[10px]"] }
+  stat_counters:     { min_px: 28, min_rem: "1.75rem",   recommended: "28–48px",  forbidden: ["text-[18px]","text-[20px] for stat numbers"] }
+  stat_sub_labels:   { min_px: 11, min_rem: "0.6875rem", recommended: "11–13px",  forbidden: ["text-[8px]","text-[9px]","text-[10px]"] }
+  step_numbers:      { min_px: 14, min_rem: "0.875rem",  recommended: "14–18px",  forbidden: ["0.6rem","0.65rem"] }
+  list_items:        { min_px: 14, min_rem: "0.875rem",  recommended: "14–16px",  forbidden: ["0.75rem","0.8rem","text-[11px]"] }
+  line_height:       { min: 1.5,   note: "WCAG SC 1.4.12 — NEVER leading-none or leading-tight for body" }
+  icon_title_ratio:
+    rule: "Icons adjacent to card titles MUST be sized proportionally"
+    text_lg:  "w-5 h-5 minimum (20px) when title is text-lg (18px)"
+    text_xl:  "w-6 h-6 (24px) when title is text-xl (20px+)"
+  absolute_floor:
+    min_px: 11
+    min_rem: "0.6875rem"
+    note: "NEVER below this for any visible element"
+  use_rem: true   # enables user zoom scaling
+  forbidden_always:
+    - "text-[8px]"
+    - "text-[9px]"
+    - "text-[10px]"
+    - "text-xs for body copy or descriptions"
+    - "font-size below 0.6875rem"
+
+  tailwind_floor_map:
+    11px: "text-[11px]"
+    13px: "text-[13px]"
+    14px: "text-sm"
+    16px: "text-base"
+    18px: "text-lg"
+    20px: "text-xl"
+    24px: "text-2xl"
+    36px: "text-4xl"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VISUALISATION RULES (MANDATORY)
+# ══════════════════════════════════════════════════════════════════════════════
+visualisation:
+  sdlc_pipeline:
+    use: "hand-crafted CSS flexbox phase cards with icons, gate pills, hover-lift"
+    never: "Mermaid.js diagrams"
+    reason: "Mermaid renders small, no sizing control, poor dark-theme"
+  domain_distribution:
+    use: "proportional bubble grid (CSS circles, colour-coded, hover-scale)"
+    never: "D3.js horizontal bar charts"
+    reason: "bar charts are dense; bubbles are intuitive and visually striking"
+  before_after:
+    use: "split card-pair layout (rose left / emerald right, 2-column)"
+    never: "3-column table-row grids with arrow columns"
+    reason: "table grids are cramped; card-pairs are readable and mobile-friendly"
+  stat_counters:
+    use: "animated stat cards with glow borders (count-up animation optional)"
+    never: "plain text numbers in paragraphs"
+  process_steps:
+    use: "numbered glass-card pipeline with connecting CSS line (pseudo-elements)"
+    never: "ordered lists <ol>"
+  role_perspectives:
+    use: "icon + title + description cards in responsive grid"
+    never: "bullet lists"
+  donut_charts:
+    use: "d3.pie() with animated arc entrance via attrTween, center percentage"
+    layout: "side-by-side Before (rose/red) | After (emerald/green)"
+    legend: "4-column below charts"
+    never: "horizontal bar charts for before/after percentage comparisons"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LAYOUT RULES (MANDATORY)
+# ══════════════════════════════════════════════════════════════════════════════
+layout:
+  card_width:          "max-width: 80%; margin: 0 auto"          # NOT 60%
+  card_padding:        "padding: 2.5rem 2.25rem"                 # NOT 3rem sides
+  section_spacing:     "space-y-16 md:space-y-24"
+  icon_size_in_tiles:  "font-size: 2.5rem minimum"              # NOT 1.3rem
+  tile_min_max_width:  "min-width: 180px; max-width: 260px"     # NOT 140/180
+  body_text_max_width: "max-width: 72ch"
+  muted_text_colour:   "#94a3b8"                                  # NOT #64748b (too dim)
+
+  alternating_panels:
+    rule: "Alternate sections between transparent and gradient glass panels"
+    odd_sections:  "no panel background — content floats on page background"
+    even_sections: "gradient glass panel with rounded corners + border"
+    implementation:
+      wrapper_class: "relative py-12 my-6"
+      panel_class: "absolute inset-0 bg-gradient-to-br from-{color}-950/60 via-slate-900/80 to-{color2}-950/60 border border-{color}-500/20 rounded-3xl"
+      blur_class: "absolute inset-0 backdrop-blur-sm rounded-3xl"
+      content_class: "relative space-y-10 px-4 md:px-8"
+    palette:
+      panel_a: { gradient: "from-indigo-950/60 via-slate-900/80 to-blue-950/60",   border: "border-indigo-500/20" }
+      panel_b: { gradient: "from-purple-950/60 via-slate-900/80 to-violet-950/60", border: "border-purple-500/20" }
+      panel_c: { gradient: "from-blue-950/60 via-slate-900/80 to-cyan-950/60",     border: "border-blue-500/20" }
+    rules:
+      - "rounded-3xl on BOTH background div AND backdrop-blur div"
+      - "border (all sides) — NOT border-y (harsh horizontal lines)"
+      - "my-6 for vertical spacing between panels"
+      - "px-4 md:px-8 inside relative content wrapper"
+      - "NEVER -mx-4 md:-mx-6 with rounded corners (breaks soft edge)"
+      - "NEVER border-y for panels — always border (all sides)"
+
+  equal_height_cards:
+    parent: "flex flex-wrap justify-center items-stretch gap-3 md:gap-6"
+    wrapper: "relative group w-[calc(50%-0.5rem)] md:w-56 flex"
+    inner:   "glass-card ... w-full flex flex-col justify-center min-h-[120px]"
+    rules:
+      - "items-stretch forces equal heights"
+      - "flex on card wrapper participates in stretch"
+      - "NEVER let cards auto-size to content"
+
+  card_border_glow:
+    pattern: "Multi-layer: hover glow div + card div with gradient bg and colored border"
+    glow_div: "absolute inset-0 bg-gradient-to-br from-{color}-600/20 to-{color2}-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"
+    card_div: "glass-card p-6 relative border-2 border-{color}-500/30 bg-gradient-to-br from-{color}-950/50 to-slate-900/80 hover:border-{color}-400/50 transition-all"
+    semantics:
+      primary:   { border: "border-indigo-500/30", bg: "from-indigo-950/50 to-slate-900/80", text: "text-indigo-300" }
+      secondary: { border: "border-blue-500/30",   bg: "from-blue-950/50 to-slate-900/80",   text: "text-blue-300" }
+      tertiary:  { border: "border-violet-500/30", bg: "from-violet-950/50 to-slate-900/80", text: "text-violet-300" }
+      success:   { border: "border-emerald-500/30",bg: "from-emerald-950/50 to-slate-900/80",text: "text-emerald-300" }
+      warning:   { border: "border-amber-500/30",  bg: "from-amber-950/50 to-slate-900/80",  text: "text-amber-300" }
+      danger:    { border: "border-rose-500/30",   bg: "from-rose-950/50 to-slate-900/80",   text: "text-rose-300" }
+    rules:
+      - "border-2 (2px) — NOT border (1px too subtle)"
+      - "Border opacity /30 at rest, /50 on hover"
+      - "Hover glow uses blur-xl with matching color gradient"
+      - "transition-all for smooth transitions"
+      - "Cards in same section use different colors (visual variety)"
+
+  pipeline_step_cards:
+    purpose: "sequential process steps with visual connection and progression"
+    badge: "w-12 h-12 rounded-xl gradient fill shadow"
+    connector_line: "h-1 gradient matching step colors rounded-full"
+    card_accent: "border-t-4 top accent matching step color"
+    hover: "-translate-y-2 lift with glow effect"
+    color_progression_4step:
+      step1: { primary: indigo, secondary: violet }
+      step2: { primary: blue,   secondary: cyan }
+      step3: { primary: teal,   secondary: emerald }
+      step4: { primary: emerald,secondary: green }
+
+  feature_pills:
+    purpose: "capability lists — replaces flat bullet lists"
+    pattern: "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-{color}-500/10 to-{color2}-500/10 border border-{color}-500/30 text-{color}-300 text-sm font-medium"
+    rules:
+      - "rounded-full for pill shape"
+      - "Gradient background /10 opacity"
+      - "Border matching gradient /30 opacity"
+      - "icon + text with gap-2"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PAGE ARCHITECTURE — Per-Page Styling Strategy
+# ══════════════════════════════════════════════════════════════════════════════
+page_architecture:
+  index_html:
+    styling: inline_style_block
+    approx_lines: 624
+    icons: font-awesome
+    note: "inline <style> block is accepted architecture — respect it"
+  roles_business_leader:
+    path: docs/roles/business-leader.html
+    styling: inline_style_block
+    cdn: tailwind
+    approx_lines: 367
+  roles_product_owner:
+    path: docs/roles/product-owner.html
+    styling: inline_style_block
+    cdn: tailwind
+    approx_lines: 121
+  roles_software_engineer:
+    path: docs/roles/software-engineer.html
+    styling: external_css
+    css_files:
+      - docs/assets/css/glassmorphism.css
+      - docs/assets/css/glass-design-tokens.css
+      - docs/assets/css/glass-ui-components.css
+      - docs/assets/css/main.css
+      - docs/assets/css/role-landing.css
+    js: docs/assets/js/content-loader.js
+    note: "dynamic loading architecture — enhance content.json or add compatible sections"
+  roles_learner:
+    path: docs/roles/learner.html
+    styling: external_css
+    css_files: [same as software-engineer]
+  rule: "When working on any page: respect its existing architecture. Inline style= attributes are allowed. Prefer CSS classes for repeating patterns; inline styles for page-specific one-offs."
+
+# ══════════════════════════════════════════════════════════════════════════════
+# QUALITY GATES (enforced at every step)
+# ══════════════════════════════════════════════════════════════════════════════
+gates:
+  wcag_font_floor_audit:
+    description: "Self-audit all font sizes against wcag_font_floors before emitting HTML"
+    severity: P0
+    blocking: true
+    check: "min(all_font_sizes_px) >= 11"
+
+  card_visual_hierarchy:
+    description: "Card titles must be >= 2px larger than card body text"
+    severity: P0
+    blocking: true
+
+  theme_integrity:
+    description: "No light backgrounds, no opaque cards, accent tokens match design_system"
+    severity: P0
+    blocking: true
+
+  forbidden_typography:
+    description: "No Plus Jakarta Sans, no font families outside [Inter, Space Grotesk, JetBrains Mono]"
+    severity: P0
+    blocking: true
+
+  no_mermaid_in_roles:
+    description: "Zero Mermaid.js usage in docs/roles/ views"
+    severity: P0
+    blocking: true
+
+  no_d3_bar_charts:
+    description: "No D3.js horizontal bar charts — use bubble grids or donut charts"
+    severity: P1
+    blocking: false
+
+  background_clip_pairing:
+    description: "-webkit-background-clip: text MUST always be paired with background-clip: text"
+    severity: P0
+    blocking: true
+
+  css_token_check:
+    description: "All new CSS values reference tokens from glass-design-tokens.css"
+    severity: P1
+    blocking: false
+    delegate_to: "design-system-enforcer"
+
+  a11y_gate:
+    description: "WCAG 2.1 AA checklist — block on P0 regressions"
+    severity: P0
+    blocking: true
+    delegate_to: "a11y-perf-guardian"
+    source: docs/.content/knowledge/a11y_checklist.yaml
+
+  performance_gate:
+    description: "No performance regressions"
+    severity: P1
+    blocking: false
+    delegate_to: "a11y-perf-guardian"
+    source: docs/.content/knowledge/performance_checklist.yaml
+
+  regression_guard:
+    description: "Diff — no theme drift, no broken links, no removed ARIA landmarks"
+    severity: P1
+    blocking: true
+    delegate_to: "regression-sentinel"
+
+  dom_validation:
+    description: "HTML parses without errors; no duplicate IDs or duplicate sections"
+    severity: P0
+    blocking: true
+    delegate_to: "frontend/html-refactor-validation.yaml"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# WORKFLOW STEPS — Design + Implement for docs/ HTML/CSS/Web
+# ══════════════════════════════════════════════════════════════════════════════
+workflow:
+  name: CORTEX Docs — HTML/CSS/Web Design + Implement
+  description: |
+    Unified step chain for building, enhancing, or refactoring any HTML, CSS,
+    or static web page under docs/. All design intelligence rules (typography,
+    visualisation, layout, WCAG) are encoded in this template — not in the prompt.
+
+  steps:
+    # ── Step 0: Role Context Loading (automatic) ──────────────────────────────
+    - step_id: role_context_load
+      agent: html-view-designer
+      description: |
+        Auto-detect target role from file path. Load .content/ files per the
+        Role → Content Routing Table (SSOT: cortex-doc.prompt.md). Extract
+        role-specific propositions, metrics, and value statements. Build a
+        structured content brief mapping each section to a .content source.
+      triggers:
+        - path_matches: "docs/roles/*.html"
+        - path_matches: "docs/index.html"
+      outputs:
+        - content_brief: "structured list of sections → .content source → role angle"
+        - target_architecture: "inline_style_block | external_css"
+      gate: none  # auto-executes, no user gate
+
+    # ── Step 1: Knowledge Pre-flight ─────────────────────────────────────────
+    - step_id: knowledge_preflight
+      agent: html-view-designer
+      description: |
+        Load doc_best_practices.yaml, design_system.yaml, components.yaml.
+        Read target HTML file and current CSS files. Validate design_system
+        tokens file is reachable. Surface any prior failure patterns via
+        cortex_learning op=history scope=documentation (PLIP-001).
+      inputs:
+        - docs/.content/knowledge/doc_best_practices.yaml
+        - docs/.content/knowledge/design_system.yaml
+        - docs/.content/knowledge/components.yaml
+        - "{{target_html_file}}"
+      gates: [theme_integrity, forbidden_typography]
+
+    # ── Step 2: Design Proposal ───────────────────────────────────────────────
+    - step_id: design_proposal
+      agent: html-view-designer
+      description: |
+        Propose layout changes, component additions, and structural improvements
+        grounded in the content brief (Step 0) and knowledge pre-flight (Step 1).
+        Apply all rules from design_system, wcag_font_floors, visualisation,
+        and layout sections of THIS workflow before emitting the proposal.
+        Present Intent Reflection (🪞) then ⚡ Proceed Gate — wait for proceed.
+      gates: [wcag_font_floor_audit, card_visual_hierarchy]
+      outputs: ["design_proposal_doc"]
+      proceed_gate: true   # blocks until user says proceed
+
+    # ── Step 3: Token Validation ──────────────────────────────────────────────
+    - step_id: token_validation
+      agent: design-system-enforcer
+      description: |
+        Verify all proposed CSS values reference tokens from glass-design-tokens.css.
+        Block on any new color/spacing/blur value not in the token file.
+      gates: [css_token_check, theme_integrity]
+
+    # ── Step 4: HTML Implementation ───────────────────────────────────────────
+    - step_id: html_implementation
+      agent: html-view-designer
+      description: |
+        Implement HTML changes. Use semantic elements, ARIA, and stable DOM hooks.
+        Respect page architecture (inline_style_block vs external_css).
+        Run WCAG self-audit against wcag_font_floors before emitting any markup.
+        Enforce background_clip pairing rule for gradient text.
+      delegate_to: frontend/html-refactor-validation.yaml
+      gates: [wcag_font_floor_audit, dom_validation, no_mermaid_in_roles, background_clip_pairing]
+
+    # ── Step 5: CSS Compliance ────────────────────────────────────────────────
+    - step_id: css_compliance
+      agent: doc-sync-agent
+      description: |
+        Enforce CSS architecture for the target page. For external-CSS pages:
+        assign styles to the correct CSS layer file. For inline-style pages:
+        use inline <style> blocks; extract repeated patterns to CSS classes.
+        Run frontend/css-zero-inline-workflow.yaml gate (zero style= attributes).
+      delegate_to: frontend/css-zero-inline-workflow.yaml
+      gates: [no_d3_bar_charts]
+
+    # ── Step 6: A11y & Performance Gate ──────────────────────────────────────
+    - step_id: a11y_perf_gate
+      agent: a11y-perf-guardian
+      description: |
+        Run a11y_checklist.yaml and performance_checklist.yaml. Block on P0
+        regressions. Flag P1s as advisory.
+      gates: [a11y_gate, performance_gate]
+
+    # ── Step 7: Regression Guard ──────────────────────────────────────────────
+    - step_id: regression_guard
+      agent: regression-sentinel
+      description: |
+        Diff HTML/CSS changes. Confirm no theme drift, no broken links, no
+        removed ARIA landmarks. Flag P1s for manual review.
+      gates: [regression_guard]
+
+    # ── Step 8: Convergence Gate ──────────────────────────────────────────────
+    - step_id: convergence_gate
+      orchestrator: EnforcementOrchestrator
+      description: |
+        Rescan all P0/P1 gates. Loop until 0 violations (CORE-068, max 3 cycles).
+      delegate_to: primitives/validation/detect-fix-rescan-loop.yaml
+      parameters:
+        convergence_predicate: "p0_count == 0 AND p1_count == 0"
+        max_cycles: 3
+
+    # ── Step 9: Learning Signal ───────────────────────────────────────────────
+    - step_id: learning_signal
+      description: |
+        On success: cortex_learning op=emit signal_type=MILD_REWARD scope=documentation.
+        On failure (a11y regression, theme drift, broken links):
+          cortex_learning op=emit signal_type=MILD_PUNISHMENT scope=documentation.
+      scope_lock: documentation  # PLIP-001 — no cross-domain signal emission
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OPERATIONS (entry points)
+# ══════════════════════════════════════════════════════════════════════════════
+operations:
+  build:
+    description: "Generate a new HTML view for docs/"
+    steps: [knowledge_preflight, design_proposal, token_validation, html_implementation, css_compliance, a11y_perf_gate, convergence_gate, learning_signal]
+
+  enhance:
+    description: "Add sections, diagrams, or features to an existing docs/ page"
+    steps: [role_context_load, knowledge_preflight, design_proposal, token_validation, html_implementation, css_compliance, a11y_perf_gate, regression_guard, convergence_gate, learning_signal]
+
+  refactor:
+    description: "Restructure docs/ HTML/CSS without changing visual output"
+    steps: [knowledge_preflight, design_proposal, token_validation, html_implementation, css_compliance, a11y_perf_gate, regression_guard, convergence_gate, learning_signal]
+
+  validate:
+    description: "Run all gates against a docs/ HTML file without modification"
+    steps: [knowledge_preflight, a11y_perf_gate, regression_guard]
+
+  design_only:
+    description: "Propose design with proceed gate — no implementation"
+    steps: [role_context_load, knowledge_preflight, design_proposal]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# INVOCATION
+# ══════════════════════════════════════════════════════════════════════════════
+invocation:
+  composer: "cortex/orchestrators/workflow/workflow_composer.py"
+  intent_routing: FRONTEND
+  pre_gate: "primitives/governance/holistic-validation-gate.yaml"
+  example: |
+    from pathlib import Path
+    from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
+
+    composer = WorkflowComposer(
+        template_path=Path(
+            "cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml"
+        )
+    )
+    result = composer.execute(operation="enhance", context={"target_html_file": "docs/roles/product-owner.html"})
+
+  doc_prompt_delegation: |
+    # In cortex-doc.prompt.md — Design + Implement Mode delegates here:
+    #
+    #   WorkflowComposer → frontend/docs-html-design-workflow.yaml
+    #
+    # All typography rules, WCAG floors, visualisation strategy, layout patterns,
+    # card systems, pipeline steps, feature pills, theme tokens, CDN rules, and
+    # page architecture detection live in THIS file — not in the prompt.
+    # The prompt references this template; it does not repeat the rules.
