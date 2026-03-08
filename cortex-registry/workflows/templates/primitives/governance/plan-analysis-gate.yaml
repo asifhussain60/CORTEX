@@ -1,0 +1,51 @@
+# plan-analysis-gate.yaml
+# ──────────────────────────────────────────────────────────────────────────
+# CAPE Plan Analysis Gate — Workflow Primitive
+# Injects 5-gate pre-approval analysis before any CAPE-generated plan
+# proceeds to execution.
+#
+# Authority: CORE-048 (holistic validation gate), CORE-064 (sweep contract)
+# Used by:   cortex-registry/workflows/templates/sdlc/implement-workflow.yaml
+#            (CAPE-generated plans only)
+# ──────────────────────────────────────────────────────────────────────────
+
+id: plan-analysis-gate
+description: |
+  Run PlanAnalysisGateRunner with all 5 gates before CAPE plan execution.
+  Blocking gates (Threat/Quality/Security) HALT on P0 conditions.
+  Informational gates (RCA/OPJ) adjust CDR score only — never block.
+
+gates:
+  - name: ThreatModel
+    type: blocking
+    trigger: "P0 threats in plan scope"
+    action: "HALT plan — resolve threats before proceeding"
+
+  - name: Quality
+    type: blocking
+    trigger: "quality_score < 7.0"
+    action: "HALT plan — raise quality score before proceeding"
+
+  - name: Security
+    type: blocking
+    trigger: "P0 CVE or vulnerability present"
+    action: "HALT plan — patch vulnerability before proceeding"
+
+  - name: RCAHistory
+    type: informational
+    trigger: "rca_failures > 0"
+    action: "Adjust CDR score downward (max −0.3); continue"
+
+  - name: OPJConsultation
+    type: informational
+    trigger: "always"
+    action: "Adjust CDR score ±0.3 based on OPJ signal; continue"
+
+outcome:
+  approved: "All 3 blocking gates passed — proceed to PlanExecutionLoop"
+  rejected: "One or more blocking gates fired — HALT; surface to user"
+
+implementation_ref:
+  class: "cortex.orchestrators.domain.plan_analysis_gates.PlanAnalysisGateRunner"
+  method: "run_all_gates"
+  overall_check: "overall_approved(verdicts)"
