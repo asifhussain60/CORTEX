@@ -1871,192 +1871,370 @@
         opacity: 1;
     }
 
-    /* ── WB: Whiteboard YouTube Embed — Animations ───────────────────────── */
-    @keyframes wbBorderFlow {
+    /* ══════════════════════════════════════════════════════════════════════
+       CT: Cinema Theatre — YouTube Embed  (Redesigned)
+       Motion: prefers-reduced-motion compliant (opt-in via no-preference)
+       Composited-only animations: transform + opacity only (P1 compliant)
+       ══════════════════════════════════════════════════════════════════════ */
+
+    /* ── Keyframes (all transform/opacity only — no layout thrash) ── */
+    @keyframes ctBorderSpin {
         0%   { background-position: 0% 50%; }
         50%  { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
-    @keyframes wbGlowPulse {
-        0%, 100% {
-            box-shadow:
-                0 0 0 1px rgba(99,102,241,0.35),
-                0 0 32px rgba(0,212,255,0.18),
-                0 0 80px rgba(99,102,241,0.12),
-                inset 0 1px 0 rgba(255,255,255,0.08),
-                0 32px 80px -8px rgba(0,0,0,0.7);
-        }
-        50% {
-            box-shadow:
-                0 0 0 1px rgba(0,212,255,0.55),
-                0 0 56px rgba(0,212,255,0.35),
-                0 0 120px rgba(99,102,241,0.22),
-                inset 0 1px 0 rgba(255,255,255,0.12),
-                0 32px 80px -8px rgba(0,0,0,0.7);
-        }
-    }
-    @keyframes wbScanline {
-        0%   { transform: translateY(-100%); opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 1; }
-        100% { transform: translateY(100vh); opacity: 0; }
-    }
-    @keyframes wbDotBlink {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50%       { opacity: 0.35; transform: scale(0.75); }
-    }
-    @keyframes wbBadgeShimmer {
-        0%   { background-position: -200% center; }
-        100% { background-position:  200% center; }
-    }
-    @keyframes wbCornerPulse {
-        0%, 100% { opacity: 0.5; }
+    @keyframes ctGlowBreath {
+        0%, 100% { opacity: 0.7; }
         50%      { opacity: 1; }
     }
-    @keyframes wbFloatUp {
-        0%, 100% { transform: translateY(0); }
-        50%      { transform: translateY(-6px); }
+    @keyframes ctScanline {
+        0%   { transform: translateY(-100%); opacity: 0; }
+        8%   { opacity: 0.8; }
+        92%  { opacity: 0.8; }
+        100% { transform: translateY(2000%); opacity: 0; }
     }
-    @keyframes wbOrb1 {
-        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.45; }
-        50%      { transform: translate(-30px, 20px) scale(1.15); opacity: 0.65; }
+    @keyframes ctDotPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%      { opacity: 0.3; transform: scale(0.7); }
     }
-    @keyframes wbOrb2 {
-        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.35; }
-        50%      { transform: translate(20px, -25px) scale(1.2); opacity: 0.55; }
+    @keyframes ctBadgeSheen {
+        0%   { background-position: -300% center; }
+        100% { background-position:  300% center; }
+    }
+    @keyframes ctFloat {
+        0%, 100% { transform: translateY(0px); }
+        50%      { transform: translateY(-8px); }
+    }
+    @keyframes ctOrb1Drift {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.4; }
+        50%      { transform: translate(-40px, 25px) scale(1.2); opacity: 0.6; }
+    }
+    @keyframes ctOrb2Drift {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.3; }
+        50%      { transform: translate(30px, -30px) scale(1.15); opacity: 0.5; }
+    }
+    @keyframes ctTagFloat {
+        0%, 100% { transform: translateY(0) rotate(-1deg); }
+        50%      { transform: translateY(-5px) rotate(1deg); }
+    }
+    @keyframes ctTagFloat2 {
+        0%, 100% { transform: translateY(0) rotate(1deg); }
+        50%      { transform: translateY(-7px) rotate(-1deg); }
+    }
+    @keyframes ctCornerPulse {
+        0%, 100% { opacity: 0.45; }
+        50%      { opacity: 1; }
+    }
+    @keyframes ctProgressFill {
+        0%   { transform: scaleX(0); }
+        100% { transform: scaleX(0.62); }
+    }
+    @keyframes ctProgressShimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position: 200% center; }
     }
 
-    /* Animated rainbow border wrapper */
-    .wb-rainbow-ring {
-        position: relative;
-        border-radius: 1.5rem;
-        padding: 2px;
-        background: linear-gradient(135deg,
-            #00d4ff, #7b61ff, #00ff88, #fbbf24, #00d4ff);
-        background-size: 300% 300%;
-        animation: wbBorderFlow 4s ease infinite;
+    /* ── Reduced-motion: cut all animations down to instant cross-fades ── */
+    @media (prefers-reduced-motion: reduce) {
+        .ct-float, .ct-border-ring, .ct-orb-a, .ct-orb-b,
+        .ct-scanline, .ct-live-dot, .ct-badge, .ct-corner,
+        .ct-tag-a, .ct-tag-b, .ct-progress-bar, .ct-progress-fill { animation: none !important; }
+        .ct-glow-layer { animation: none !important; }
     }
-    /* Bezel */
-    .wb-bezel {
+
+    /* ── Outer scene wrapper ── */
+    .ct-scene {
         position: relative;
-        border-radius: 1.375rem;
-        background: linear-gradient(160deg, rgba(14,20,48,0.98) 0%, rgba(6,10,28,1) 100%);
-        animation: wbGlowPulse 3.5s ease-in-out infinite;
-        padding: 1.1rem 1.1rem 0;
+        padding: 2.5rem 2rem 3rem;
         overflow: hidden;
     }
-    /* Scanline that sweeps down the bezel */
-    .wb-scanline {
-        position: absolute;
-        left: 0; right: 0; top: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), rgba(123,97,255,0.4), transparent);
-        animation: wbScanline 5s linear infinite;
-        pointer-events: none;
-        z-index: 20;
-        border-radius: 100px;
+
+    /* ── Ambient depth orbs ── */
+    .ct-orb-a {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 420px; height: 420px;
+        background: radial-gradient(circle, rgba(0,212,255,0.14) 0%, transparent 70%);
+        top: -80px; left: -100px;
     }
-    /* Live dot in title bar */
-    .wb-live-dot {
+    .ct-orb-b {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 360px; height: 360px;
+        background: radial-gradient(circle, rgba(123,97,255,0.13) 0%, transparent 70%);
+        bottom: -60px; right: -80px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-orb-a { animation: ctOrb1Drift 10s ease-in-out infinite alternate; }
+        .ct-orb-b { animation: ctOrb2Drift 12s ease-in-out infinite alternate; }
+    }
+
+    /* ── Section eyebrow badge ── */
+    .ct-badge {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
+        letter-spacing: 0.22em; text-transform: uppercase; color: #00d4ff;
+        border: 1px solid rgba(0,212,255,0.3);
+        border-radius: 100px; padding: 0.35rem 1.1rem;
+        background: linear-gradient(90deg,
+            rgba(0,212,255,0) 0%, rgba(0,212,255,0.12) 35%,
+            rgba(123,97,255,0.15) 65%, rgba(0,212,255,0) 100%);
+        background-size: 300% auto;
+        box-shadow: 0 0 20px rgba(0,212,255,0.1), inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-badge { animation: ctBadgeSheen 4s linear infinite; }
+    }
+
+    /* ── Live recording dot ── */
+    .ct-live-dot {
         width: 7px; height: 7px; border-radius: 50%;
         background: #00ff88;
-        box-shadow: 0 0 10px rgba(0,255,136,0.8), 0 0 20px rgba(0,255,136,0.4);
-        animation: wbDotBlink 1.8s ease-in-out infinite;
-        display: inline-block;
-        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(0,255,136,0.9), 0 0 18px rgba(0,255,136,0.5);
+        display: inline-block; flex-shrink: 0;
     }
-    /* Badge shimmer */
-    .wb-badge {
-        display: inline-flex; align-items: center; gap: 0.45rem;
-        font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
-        letter-spacing: 0.2em; text-transform: uppercase;
-        background: linear-gradient(90deg,
-            rgba(0,212,255,0.0) 0%,
-            rgba(0,212,255,0.15) 30%,
-            rgba(123,97,255,0.2) 60%,
-            rgba(0,212,255,0.0) 100%);
-        background-size: 200% auto;
-        animation: wbBadgeShimmer 3s linear infinite;
-        border: 1px solid rgba(0,212,255,0.28);
-        border-radius: 100px; padding: 0.3rem 1rem;
-        color: #00d4ff;
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-live-dot { animation: ctDotPulse 2s ease-in-out infinite; }
     }
-    /* Corner brackets pulse */
-    .wb-corner { animation: wbCornerPulse 2.5s ease-in-out infinite; }
-    /* Entire frame floats */
-    .wb-float  { animation: wbFloatUp 5s ease-in-out infinite; }
-    /* Ambient orbs */
-    .wb-orb1 {
-        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-        width: 300px; height: 300px;
-        background: radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 70%);
-        top: -60px; left: -80px;
-        animation: wbOrb1 8s ease-in-out infinite alternate;
+
+    /* ── Floating frame wrapper (levitation) ── */
+    .ct-float {
+        will-change: transform;
     }
-    .wb-orb2 {
-        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-        width: 260px; height: 260px;
-        background: radial-gradient(circle, rgba(123,97,255,0.16) 0%, transparent 70%);
-        bottom: -40px; right: -60px;
-        animation: wbOrb2 9s ease-in-out infinite alternate;
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-float { animation: ctFloat 6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
     }
-    /* Traffic light dots */
-    .wb-dot-r { background: #ff5f57; box-shadow: 0 0 8px rgba(255,95,87,0.7); }
-    .wb-dot-y { background: #febc2e; box-shadow: 0 0 8px rgba(254,188,46,0.7); }
-    .wb-dot-g { background: #28c840; box-shadow: 0 0 8px rgba(40,200,64,0.7); }
-    /* Video container */
-    .wb-video-wrapper {
+
+    /* ── Animated gradient border ring ── */
+    .ct-border-ring {
         position: relative;
-        width: 100%; padding-bottom: 56.25%;
-        border-radius: 0.75rem 0.75rem 0 0;
-        overflow: hidden;
-        background: #000;
+        border-radius: 1.75rem;
+        padding: 2.5px;
+        background: linear-gradient(135deg,
+            #00d4ff 0%, #7b61ff 25%, #ba55d3 50%, #00ff88 75%, #00d4ff 100%);
+        background-size: 400% 400%;
         box-shadow:
-            inset 0 0 0 1px rgba(255,255,255,0.07),
-            0 -1px 0 rgba(0,212,255,0.12);
-        z-index: 1;
+            0 0 0 1px rgba(0,212,255,0.08),
+            0 40px 100px -12px rgba(0,0,0,0.8),
+            0 0 80px rgba(0,212,255,0.12);
     }
-    .wb-video-wrapper iframe {
-        position: absolute; inset: 0;
-        width: 100%; height: 100%;
-        border: 0;
-        border-radius: 0.75rem 0.75rem 0 0;
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-border-ring { animation: ctBorderSpin 5s ease infinite; }
     }
-    /* Bottom chin */
-    .wb-chin {
-        height: 1.1rem;
-        background: linear-gradient(180deg, rgba(8,12,30,1) 0%, rgba(4,7,20,1) 100%);
-        border-top: 1px solid rgba(0,212,255,0.12);
-        border-radius: 0 0 1rem 1rem;
+
+    /* ── Cinema bezel / chassis ── */
+    .ct-bezel {
+        border-radius: 1.625rem;
+        background: linear-gradient(170deg,
+            rgba(10,15,40,0.99) 0%,
+            rgba(4,7,22,1) 60%,
+            rgba(8,12,30,1) 100%);
+        padding: 1.25rem 1.25rem 0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Subtle inner vignette glow layer */
+    .ct-glow-layer {
+        position: absolute; inset: 0; pointer-events: none; border-radius: 1.625rem;
+        background: radial-gradient(ellipse 80% 60% at 50% -10%,
+            rgba(0,212,255,0.1) 0%, transparent 60%);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-glow-layer { animation: ctGlowBreath 4s ease-in-out infinite; }
+    }
+
+    /* ── Scanline sweep ── */
+    .ct-scanline {
+        position: absolute; left: 0; right: 0; top: 0; height: 1.5px;
+        background: linear-gradient(90deg,
+            transparent 0%, rgba(0,212,255,0.5) 30%,
+            rgba(123,97,255,0.35) 70%, transparent 100%);
+        pointer-events: none; z-index: 30; border-radius: 100px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-scanline { animation: ctScanline 6s linear infinite; }
+    }
+
+    /* ── Title bar ── */
+    .ct-titlebar {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1rem; padding: 0 0.15rem; position: relative; z-index: 10;
+    }
+    .ct-traffic-lights { display: flex; align-items: center; gap: 0.4rem; }
+    .ct-dot {
+        width: 11px; height: 11px; border-radius: 50%; display: block;
+        transition: transform 150ms cubic-bezier(0.4,0,0.2,1);
+    }
+    .ct-dot:hover { transform: scale(1.25); }
+    .ct-dot-r { background: #ff5f57; box-shadow: 0 0 8px rgba(255,95,87,0.8); }
+    .ct-dot-y { background: #febc2e; box-shadow: 0 0 8px rgba(254,188,46,0.8); }
+    .ct-dot-g { background: #28c840; box-shadow: 0 0 8px rgba(40,200,64,0.8); }
+    .ct-window-title {
+        position: absolute; left: 50%; transform: translateX(-50%);
+        font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(200,215,245,0.85);
+        text-shadow: 0 0 14px rgba(0,212,255,0.5);
+        white-space: nowrap; pointer-events: none;
+    }
+    .ct-pin-btn {
+        width: 28px; height: 28px; border-radius: 50%;
+        background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.35);
         display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 12px rgba(0,212,255,0.2);
+        transition: background 200ms cubic-bezier(0.4,0,0.2,1),
+                    box-shadow 200ms cubic-bezier(0.4,0,0.2,1);
     }
-    /* Stand */
-    .wb-stand-neck {
-        width: 36px; height: 12px;
-        background: linear-gradient(180deg, rgba(10,14,30,0.95), rgba(5,8,20,0.9));
-        border-left: 1px solid rgba(0,212,255,0.12);
-        border-right: 1px solid rgba(0,212,255,0.12);
-        margin: 0 auto;
+    .ct-pin-btn:hover { background: rgba(0,212,255,0.2); box-shadow: 0 0 20px rgba(0,212,255,0.35); }
+
+    /* ── Corner bracket decorators ── */
+    .ct-corner {
+        position: absolute; width: 20px; height: 20px;
+        pointer-events: none; border-radius: 3px;
     }
-    .wb-stand-foot {
-        width: 120px; height: 7px;
-        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.12) 20%, rgba(99,102,241,0.12) 80%, transparent);
-        border-top: 1px solid rgba(0,212,255,0.18);
-        border-radius: 0 0 6px 6px;
-        margin: 0 auto;
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-corner { animation: ctCornerPulse 2.8s ease-in-out infinite; }
     }
-    /* Floor glow */
-    .wb-floor-glow {
-        position: absolute; bottom: -20px; left: 15%; right: 15%; height: 20px;
-        background: linear-gradient(180deg, rgba(0,212,255,0.1) 0%, transparent 100%);
-        filter: blur(8px); border-radius: 50%;
-        pointer-events: none;
+
+    /* ── Screen inner glow ── */
+    .ct-screen-glow {
+        position: absolute; inset: 3.8rem 0.65rem 1.4rem;
+        border-radius: 0.875rem 0.875rem 0 0;
+        background: radial-gradient(ellipse 80% 50% at 50% 0%,
+            rgba(0,212,255,0.12) 0%, transparent 70%);
+        pointer-events: none; z-index: 0;
     }
-    /* Caption */
-    .wb-caption {
-        text-align: center; margin: 1.5rem 0 0;
-        font-size: 0.8rem; color: rgba(148,163,184,0.5);
-        font-family: var(--font-mono); letter-spacing: 0.06em;
+
+    /* ── 16:9 Video wrapper ── */
+    .ct-video-wrapper {
+        position: relative; width: 100%; padding-bottom: 56.25%;
+        border-radius: 0.875rem 0.875rem 0 0;
+        overflow: hidden; background: #000; z-index: 2;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .ct-video-wrapper iframe {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%; border: 0;
+        border-radius: 0.875rem 0.875rem 0 0;
+    }
+
+    /* ── Chin strip with mock progress bar ── */
+    .ct-chin {
+        height: 2rem;
+        background: linear-gradient(180deg, rgba(6,10,26,1) 0%, rgba(3,6,16,1) 100%);
+        border-top: 1px solid rgba(0,212,255,0.1);
+        border-radius: 0 0 1.25rem 1.25rem;
+        display: flex; align-items: center;
+        padding: 0 1rem; gap: 0.75rem; position: relative; z-index: 3;
+    }
+    .ct-progress-track {
+        flex: 1; height: 3px; border-radius: 100px;
+        background: rgba(255,255,255,0.06);
+        overflow: hidden; position: relative;
+    }
+    .ct-progress-fill {
+        height: 100%; border-radius: 100px; transform-origin: left;
+        background: linear-gradient(90deg,
+            #00d4ff 0%, #7b61ff 50%, #ba55d3 100%);
+        background-size: 200% auto;
+        transform: scaleX(0.62);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-progress-fill { animation: ctProgressShimmer 3s linear infinite; }
+    }
+    .ct-chin-time {
+        font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600;
+        color: rgba(148,163,184,0.6); letter-spacing: 0.05em; white-space: nowrap;
+    }
+    .ct-chin-icon {
+        color: rgba(0,212,255,0.5); font-size: 0.7rem; flex-shrink: 0;
+    }
+
+    /* ── Monitor stand ── */
+    .ct-stand-neck {
+        width: 40px; height: 14px; margin: 0 auto;
+        background: linear-gradient(180deg, rgba(8,12,28,0.98), rgba(4,6,16,0.95));
+        border-left: 1px solid rgba(0,212,255,0.1);
+        border-right: 1px solid rgba(0,212,255,0.1);
+    }
+    .ct-stand-base {
+        width: 130px; height: 8px; margin: 0 auto;
+        background: linear-gradient(90deg,
+            transparent, rgba(0,212,255,0.1) 20%,
+            rgba(99,102,241,0.1) 80%, transparent);
+        border-top: 1px solid rgba(0,212,255,0.15);
+        border-radius: 0 0 8px 8px;
+    }
+
+    /* ── Stage floor glow ── */
+    .ct-floor-glow {
+        position: absolute; bottom: -12px; left: 10%; right: 10%; height: 24px;
+        background: linear-gradient(180deg, rgba(0,212,255,0.12) 0%, transparent 100%);
+        filter: blur(10px); border-radius: 50%; pointer-events: none;
+    }
+
+    /* ── Floating metadata tags ── */
+    .ct-tag {
+        position: absolute; z-index: 20;
+        display: flex; align-items: center; gap: 0.4rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 100px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.1);
+        font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        white-space: nowrap; pointer-events: none;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .ct-tag-cyan {
+        background: rgba(0,212,255,0.12); color: #67e8f9;
+        border-color: rgba(0,212,255,0.25);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(0,212,255,0.15),
+                    inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .ct-tag-purple {
+        background: rgba(123,97,255,0.12); color: #a78bfa;
+        border-color: rgba(123,97,255,0.25);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(123,97,255,0.15),
+                    inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .ct-tag-a {
+        top: 18%; left: -3%;
+    }
+    .ct-tag-b {
+        top: 22%; right: -3%;
+    }
+    @media (max-width: 768px) {
+        .ct-tag-a, .ct-tag-b { display: none; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-tag-a { animation: ctTagFloat  7s ease-in-out infinite; }
+        .ct-tag-b { animation: ctTagFloat2 8s ease-in-out infinite; }
+    }
+
+    /* ── Section heading & sub-copy ── */
+    .ct-heading {
+        font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.25rem);
+        font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+        color: var(--text-primary); margin: 0;
+    }
+    .ct-subheading {
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        color: var(--text-secondary); line-height: 1.7; margin: 0;
+    }
+
+    /* ── Caption ── */
+    .ct-caption {
+        text-align: center; margin: 1.75rem 0 0;
+        font-size: 0.78rem; color: rgba(148,163,184,0.45);
+        font-family: var(--font-mono); letter-spacing: 0.07em;
+    }
+
+    /* ── Responsive: compress padding on mobile ── */
+    @media (max-width: 640px) {
+        .ct-scene { padding: 1.5rem 1rem 2rem; }
+        .ct-border-ring { border-radius: 1.25rem; }
+        .ct-bezel { border-radius: 1.125rem; padding: 0.9rem 0.9rem 0; }
     }
 </style>
 
@@ -2755,89 +2933,91 @@
                 position: relative; z-index: 1;
             "></div>
 
-            <!-- ── Bottom: Digital Whiteboard YouTube Embed ── -->
-            <div style="position:relative; z-index:1; padding: 2rem 3rem 2.5rem; overflow:hidden;">
+            <!-- ── Bottom: Cinema Theatre YouTube Embed ── -->
+            <div class="ct-scene">
 
-                <!-- Ambient background orbs — depth behind the monitor -->
-                <div class="wb-orb1" aria-hidden="true"></div>
-                <div class="wb-orb2" aria-hidden="true"></div>
+                <!-- Ambient depth orbs -->
+                <div class="ct-orb-a" aria-hidden="true"></div>
+                <div class="ct-orb-b" aria-hidden="true"></div>
 
-                <!-- Badge label -->
-                <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:1.25rem;position:relative;z-index:2;">
-                    <span class="wb-badge">
-                        <span class="wb-live-dot" aria-hidden="true"></span>
-                        Watch · CORTEX in Action
-                    </span>
+                <!-- ── Section header (eyebrow + heading + sub) ── -->
+                <div style="text-align:center; margin-bottom:2rem; position:relative; z-index:5;">
+                    <div style="display:flex; align-items:center; justify-content:center; margin-bottom:1rem;">
+                        <span class="ct-badge">
+                            <span class="ct-live-dot" aria-hidden="true"></span>
+                            Watch · CORTEX in Action
+                        </span>
+                    </div>
+                    <h3 class="ct-heading" style="margin-bottom:0.5rem;">
+                        See How <span style="background:linear-gradient(135deg,#00d4ff,#7b61ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">CORTEX</span> Orchestrates
+                    </h3>
+                    <p class="ct-subheading" style="max-width:52ch; margin:0 auto;">
+                        Governance-first AI delivery — from intent to ship, fully automated.
+                    </p>
                 </div>
 
-                <!-- Outer layout: centred at 80% width -->
+                <!-- ── Centred monitor frame ── -->
                 <div style="
-                    max-width: 80%;
+                    max-width: 82%;
                     margin: 0 auto;
                     position: relative;
                     z-index: 2;
-                " aria-label="CORTEX introduction video — digital whiteboard">
+                " aria-label="CORTEX introduction video player">
 
-                    <!-- Floating animation wrapper -->
-                    <div class="wb-float">
+                    <!-- Floating metadata tags (decorative) -->
+                    <div class="ct-tag ct-tag-cyan ct-tag-a" aria-hidden="true">
+                        <i class="fas fa-shield-halved" style="font-size:0.65rem;"></i>
+                        Governed
+                    </div>
+                    <div class="ct-tag ct-tag-purple ct-tag-b" aria-hidden="true">
+                        <i class="fas fa-bolt" style="font-size:0.65rem;"></i>
+                        AI-Driven
+                    </div>
 
-                        <!-- Rainbow animated border ring -->
-                        <div class="wb-rainbow-ring">
+                    <!-- Levitation wrapper -->
+                    <div class="ct-float">
 
-                            <!-- Bezel (monitor casing) with pulsing glow -->
-                            <div class="wb-bezel">
+                        <!-- Animated chromatic border ring -->
+                        <div class="ct-border-ring">
+
+                            <!-- Monitor bezel / chassis -->
+                            <div class="ct-bezel">
+
+                                <!-- Inner glow layer -->
+                                <div class="ct-glow-layer" aria-hidden="true"></div>
 
                                 <!-- Scanline sweep -->
-                                <div class="wb-scanline" aria-hidden="true"></div>
+                                <div class="ct-scanline" aria-hidden="true"></div>
 
                                 <!-- Title bar -->
-                                <div style="
-                                    display:flex; align-items:center; justify-content:space-between;
-                                    margin-bottom:0.875rem; padding:0 0.2rem;
-                                    position:relative; z-index:5;
-                                ">
-                                    <!-- Traffic lights (vivid) -->
-                                    <div style="display:flex;align-items:center;gap:0.45rem;">
-                                        <span class="wb-dot-r" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
-                                        <span class="wb-dot-y" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
-                                        <span class="wb-dot-g" style="width:11px;height:11px;border-radius:50%;display:block;"></span>
+                                <div class="ct-titlebar">
+                                    <!-- Traffic lights -->
+                                    <div class="ct-traffic-lights" aria-hidden="true">
+                                        <span class="ct-dot ct-dot-r"></span>
+                                        <span class="ct-dot ct-dot-y"></span>
+                                        <span class="ct-dot ct-dot-g"></span>
                                     </div>
-                                    <!-- Title — bright & legible -->
-                                    <div style="
-                                        position:absolute; left:50%; transform:translateX(-50%);
-                                        font-family:var(--font-mono); font-size:0.72rem; font-weight:600;
-                                        letter-spacing:0.14em; text-transform:uppercase;
-                                        color:rgba(200,215,240,0.9);
-                                        white-space:nowrap; pointer-events:none;
-                                        text-shadow: 0 0 12px rgba(0,212,255,0.5);
-                                    ">CORTEX-INTRO.MP4 · HD</div>
-                                    <!-- Pin icon — bright -->
-                                    <div style="
-                                        width:26px; height:26px; border-radius:50%;
-                                        background:rgba(0,212,255,0.14); border:1px solid rgba(0,212,255,0.4);
-                                        display:flex; align-items:center; justify-content:center;
-                                        box-shadow: 0 0 10px rgba(0,212,255,0.25);
-                                    ">
-                                        <i class="fas fa-thumbtack" aria-hidden="true" style="font-size:0.65rem;color:#00d4ff;transform:rotate(45deg);"></i>
+                                    <!-- Window title -->
+                                    <div class="ct-window-title" aria-hidden="true">
+                                        CORTEX-INTRO.MP4 &nbsp;·&nbsp; HD
+                                    </div>
+                                    <!-- Pin icon -->
+                                    <div class="ct-pin-btn" aria-hidden="true">
+                                        <i class="fas fa-thumbtack" style="font-size:0.6rem;color:#00d4ff;transform:rotate(45deg);"></i>
                                     </div>
                                 </div>
 
-                                <!-- Corner brackets — vivid, animated -->
-                                <span class="wb-corner" aria-hidden="true" style="position:absolute;top:3.6rem;left:0.65rem;width:22px;height:22px;border-top:2.5px solid rgba(123,97,255,0.9);border-left:2.5px solid rgba(123,97,255,0.9);border-radius:4px 0 0 0;pointer-events:none;box-shadow:-2px -2px 8px rgba(123,97,255,0.4);"></span>
-                                <span class="wb-corner" aria-hidden="true" style="position:absolute;top:3.6rem;right:0.65rem;width:22px;height:22px;border-top:2.5px solid rgba(0,212,255,0.9);border-right:2.5px solid rgba(0,212,255,0.9);border-radius:0 4px 0 0;pointer-events:none;box-shadow:2px -2px 8px rgba(0,212,255,0.4);"></span>
-                                <span class="wb-corner" aria-hidden="true" style="position:absolute;bottom:1.85rem;left:0.65rem;width:22px;height:22px;border-bottom:2.5px solid rgba(0,255,136,0.6);border-left:2.5px solid rgba(0,255,136,0.6);border-radius:0 0 0 4px;pointer-events:none;box-shadow:-2px 2px 8px rgba(0,255,136,0.3);"></span>
-                                <span class="wb-corner" aria-hidden="true" style="position:absolute;bottom:1.85rem;right:0.65rem;width:22px;height:22px;border-bottom:2.5px solid rgba(251,191,36,0.6);border-right:2.5px solid rgba(251,191,36,0.6);border-radius:0 0 4px 0;pointer-events:none;box-shadow:2px 2px 8px rgba(251,191,36,0.3);"></span>
+                                <!-- Corner bracket decorators — four corners -->
+                                <span class="ct-corner" aria-hidden="true" style="top:3.9rem;left:0.6rem;border-top:2px solid rgba(123,97,255,0.9);border-left:2px solid rgba(123,97,255,0.9);box-shadow:-2px -2px 10px rgba(123,97,255,0.45);"></span>
+                                <span class="ct-corner" aria-hidden="true" style="top:3.9rem;right:0.6rem;border-top:2px solid rgba(0,212,255,0.9);border-right:2px solid rgba(0,212,255,0.9);box-shadow:2px -2px 10px rgba(0,212,255,0.45);"></span>
+                                <span class="ct-corner" aria-hidden="true" style="bottom:2.4rem;left:0.6rem;border-bottom:2px solid rgba(0,255,136,0.65);border-left:2px solid rgba(0,255,136,0.65);box-shadow:-2px 2px 10px rgba(0,255,136,0.3);"></span>
+                                <span class="ct-corner" aria-hidden="true" style="bottom:2.4rem;right:0.6rem;border-bottom:2px solid rgba(251,191,36,0.65);border-right:2px solid rgba(251,191,36,0.65);box-shadow:2px 2px 10px rgba(251,191,36,0.3);"></span>
 
                                 <!-- Screen inner glow -->
-                                <div aria-hidden="true" style="
-                                    position:absolute; inset:3.4rem 0.65rem 1.4rem;
-                                    border-radius:0.75rem 0.75rem 0 0;
-                                    background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,255,0.1) 0%, transparent 65%);
-                                    pointer-events:none; z-index:0;
-                                "></div>
+                                <div class="ct-screen-glow" aria-hidden="true"></div>
 
-                                <!-- 16:9 video -->
-                                <div class="wb-video-wrapper">
+                                <!-- 16:9 YouTube embed -->
+                                <div class="ct-video-wrapper">
                                     <iframe
                                         src="https://www.youtube.com/embed/ObXKAq-2bIA?rel=0&modestbranding=1&color=white"
                                         title="CORTEX — Cognitive Orchestration Real-Time Execution eXpert: Introduction"
@@ -2847,32 +3027,36 @@
                                     ></iframe>
                                 </div>
 
-                                <!-- Chin strip -->
-                                <div class="wb-chin">
-                                    <span aria-hidden="true" style="width:44px;height:3px;border-radius:2px;background:rgba(0,212,255,0.25);box-shadow:0 0 6px rgba(0,212,255,0.3);"></span>
+                                <!-- Chin strip with cinematic progress bar -->
+                                <div class="ct-chin">
+                                    <i class="fas fa-play ct-chin-icon" aria-hidden="true"></i>
+                                    <div class="ct-progress-track" role="presentation" aria-hidden="true">
+                                        <div class="ct-progress-fill"></div>
+                                    </div>
+                                    <span class="ct-chin-time" aria-hidden="true">2:47 / 4:30</span>
                                 </div>
 
                             </div><!-- /bezel -->
-                        </div><!-- /rainbow ring -->
+                        </div><!-- /border ring -->
 
-                        <!-- Stand -->
-                        <div class="wb-stand-neck"></div>
-                        <div class="wb-stand-foot"></div>
+                        <!-- Monitor stand -->
+                        <div class="ct-stand-neck"></div>
+                        <div class="ct-stand-base"></div>
 
                     </div><!-- /float -->
 
-                    <!-- Floor glow -->
-                    <div class="wb-floor-glow" aria-hidden="true"></div>
+                    <!-- Stage floor glow -->
+                    <div class="ct-floor-glow" aria-hidden="true"></div>
 
-                </div><!-- /80% centred frame -->
+                </div><!-- /centred frame -->
 
                 <!-- Caption -->
-                <p class="wb-caption">
-                    <i class="fas fa-robot" aria-hidden="true" style="color:rgba(0,212,255,0.5);margin-right:0.4rem;"></i>
+                <p class="ct-caption">
+                    <i class="fas fa-robot" aria-hidden="true" style="color:rgba(0,212,255,0.45);margin-right:0.4rem;"></i>
                     Conceived, designed &amp; generated by CORTEX — an AI framework that built its own story.
                 </p>
 
-            </div><!-- /bottom video section -->
+            </div><!-- /cinema theatre video section -->
         </div>
     </section>
 
