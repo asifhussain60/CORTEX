@@ -139,6 +139,70 @@ Icons adjacent to text headings MUST be proportional:
 
 `-webkit-background-clip: text` MUST be accompanied by the standard `background-clip: text` property in the same CSS rule. Missing the standard property triggers a CSS lint warning and may fail in non-WebKit browsers.
 
+### Inter-Section Spacing Check (Check 9 — ISSA Gate)
+
+**SSOT:** `docs/.content/knowledge/design_system.yaml § spacing.inter_section_spacing`
+
+When validating spacing between any two adjacent **block-level sections** (`<section>`, `<div>` used as a layout row, `.glass-panel`, `.relative.py-*`) in proposed HTML/CSS, resolve the four-part visual gap:
+
+```
+Visual Gap = padding_bottom_A + max(margin_bottom_A, margin_top_B) + padding_top_B
+```
+
+Then compare against the ISSA lookup table:
+
+| Adjacent Section Pair | Target Token | Target px | Permitted Deviation |
+|---|---|---|---|
+| Content → Content | `--space-2xl` | 48px | ±4px (P1) / >8px (P0) |
+| Content → Glass Panel | `--space-xl` | 32px | ±4px (P1) / >8px (P0) |
+| Diagram → Text | `--space-xl` | 32px | ±4px (P1) / >8px (P0) |
+| Card Grid → Section | `--space-lg` | 24px | ±4px (P1) / >8px (P0) |
+| Hero → First Section | `--space-2xl` | 48px | ±4px (P1) / >8px (P0) |
+| Glass Panel → Glass Panel | `--space-lg` | 24px | ±4px (P1) / >8px (P0) |
+
+**Resolution rules (apply in order):**
+
+1. **Zero-margin recipe (preferred):** Set `mb-0` on Section A and `mt-0` on Section B. Visual gap = `pb_A + pt_B`. Split the target evenly: `pb_A = pt_B = Target_px / 2`. Round up to nearest token (4px increment in Tailwind).
+2. **Non-zero margin case:** If existing margins cannot be removed (legacy layout, `my-6` panel convention), calculate `required_padding_sum = Target_px - max(mb_A_px, mt_B_px)`, then set `pb_A = ceil(required_padding_sum / 2)` and `pt_B = floor(required_padding_sum / 2)`.
+3. **Glass panel shorthand:** Sections using `my-6` convention (24px margin) already satisfy `--space-lg` target. Flag only if the adjacent section adds `pt-*` that pushes the gap above 28px (P1) or 32px (P0 — now in `--space-xl` territory, wrong context).
+
+**Tailwind px reference (for algorithm calculation):**
+
+| Tailwind class | px value |
+|---|---|
+| `py-4` / `pt-4` / `pb-4` | 16px |
+| `py-6` / `pt-6` / `pb-6` | 24px |
+| `py-8` / `pt-8` / `pb-8` | 32px |
+| `py-10` / `pt-10` / `pb-10` | 40px |
+| `py-12` / `pt-12` / `pb-12` | 48px |
+| `my-4` / `mt-4` / `mb-4` | 16px |
+| `my-6` / `mt-6` / `mb-6` | 24px |
+| `my-8` / `mt-8` / `mb-8` | 32px |
+| `space-y-16` | 64px margin-top on children |
+| `space-y-24` | 96px margin-top on children |
+
+**Violation templates:**
+
+```
+🟡 SPACING DEVIATION — P1 FLAG (ISSA Check 9)
+
+Pair: {Section A description} → {Section B description}
+Computed gap: {pb_A}px + max({mb_A}px, {mt_B}px) + {pt_B}px = {total}px
+Expected: {target_px}px ({target_token})
+Deviation: {delta}px
+
+Fix: Change Section A pb-{n} → pb-{correct} and Section B pt-{n} → pt-{correct}
+```
+
+```
+🔴 SPACING VIOLATION — P0 BLOCK (ISSA Check 9)
+
+Pair: {Section A description} → {Section B description}
+Computed gap: {total}px
+Expected: {target_px}px ({target_token}) — deviation > 8px
+Fix: {zero-margin recipe or non-zero-margin formula result}
+```
+
 ### Enforcement
 
 - **P0 BLOCK** — any `font-size` below `11px` / `0.6875rem` for any visible element

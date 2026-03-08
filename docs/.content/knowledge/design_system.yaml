@@ -82,6 +82,70 @@ spacing:
   xl: "2rem — var(--spacing-xl)"
   xxl: "3rem — var(--spacing-2xl)"
 
+  # ── Inter-Section Spacing Algorithm (ISSA) ─────────────────────────────────
+  # The visual gap between Section A (above) and Section B (below) is:
+  #
+  #   Visual Gap = margin_bottom_A + padding_bottom_A + padding_top_B + margin_top_B
+  #
+  # CSS margin collapsing rule: adjacent block margins collapse to max(mb_A, mt_B).
+  # Padding NEVER collapses. Therefore the safe, deterministic recipe is:
+  #
+  #   Set mb_A = 0 and mt_B = 0 (zero margins, let padding drive the gap).
+  #   Visual Gap = padding_bottom_A + padding_top_B = Target Gap Token
+  #
+  # Standard recipe: Section A → pb-6 (24px) + Section B → pt-6 (24px) = 48px = --space-2xl
+  #
+  # Formula when you CANNOT zero the margins:
+  #   required_padding_sum = Target_px - max(mb_A_px, mt_B_px)
+  #   split evenly: pb_A = pt_B = required_padding_sum / 2  (round up to nearest token)
+  #
+  # Gap Target Lookup Table (use token name as the design language):
+  inter_section_spacing:
+    algorithm: "Visual Gap = pb_A + pt_B + max(mb_A, mt_B)  [CSS margin-collapse applies]"
+    safe_recipe: "Zero margins (mb=0, mt=0). Set pb_A = pt_B = Target_px / 2."
+    targets:
+      content_to_content:
+        token: "--space-2xl"
+        px: 48
+        rem: "3rem"
+        tailwind_recipe: "pb-6 pt-6"
+        use_case: "Default: hero→features, features→stats, any two plain content sections"
+      content_to_glass_panel:
+        token: "--space-xl"
+        px: 32
+        rem: "2rem"
+        tailwind_recipe: "pb-4 pt-4"
+        use_case: "Section before/after a glass panel — panel border absorbs visual weight"
+      diagram_to_text:
+        token: "--space-xl"
+        px: 32
+        rem: "2rem"
+        tailwind_recipe: "mb-8 mt-0 (diagram) + pt-8 (next section)"
+        use_case: "After a D3.js / CSS diagram, before narrative text continues"
+      card_grid_to_section:
+        token: "--space-lg"
+        px: 24
+        rem: "1.5rem"
+        tailwind_recipe: "pb-6 pt-0 (card wrapper already has gap-6)"
+        use_case: "Card grid to next section — cards carry internal breathing room"
+      hero_to_first_section:
+        token: "--space-2xl"
+        px: 48
+        rem: "3rem"
+        tailwind_recipe: "pb-12 pt-0 (hero) + pt-12 (first section, no margin)"
+        use_case: "Spacious entry — hero to first content section"
+      glass_panel_to_glass_panel:
+        token: "--space-lg"
+        px: 24
+        rem: "1.5rem"
+        tailwind_recipe: "my-6 (each panel)"
+        use_case: "Stacked glass panels — my-6 = 24px already correct, now token-documented"
+    enforcement_note: >
+      When the design-system-enforcer validates spacing between adjacent sections,
+      it MUST resolve the four-part sum (pb_A + mb_A + pt_B + mt_B) against this
+      lookup table. A deviation of ±4px from the target token is a P1 FLAG.
+      A deviation of >8px is a P0 BLOCK.
+
 elevation:
   # Z-index layers for consistent stacking
   base: 1

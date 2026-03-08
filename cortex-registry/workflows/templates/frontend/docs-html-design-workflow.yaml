@@ -319,6 +319,37 @@ layout:
       - "NEVER -mx-4 md:-mx-6 with rounded corners (breaks soft edge)"
       - "NEVER border-y for panels — always border (all sides)"
 
+  # ── Inter-Section Spacing Algorithm (ISSA) ─────────────────────────────────
+  # SSOT: docs/.content/knowledge/design_system.yaml § spacing.inter_section_spacing
+  #
+  # Visual Gap = padding_bottom_A + max(margin_bottom_A, margin_top_B) + padding_top_B
+  #
+  # Safe recipe: zero both margins (mb-0, mt-0), then set pb_A = pt_B = Target_px / 2
+  # This eliminates CSS margin-collapse ambiguity and produces a deterministic gap.
+  #
+  inter_section_spacing_algorithm:
+    formula: "Visual Gap = pb_A + max(mb_A, mt_B) + pt_B"
+    safe_recipe: "mb_A = 0, mt_B = 0 → pb_A + pt_B = Target_px; split evenly"
+    non_zero_margin_formula: "required_padding_sum = Target_px - max(mb_A_px, mt_B_px); pb_A = ceil(sum/2), pt_B = floor(sum/2)"
+    targets:
+      content_to_content:       { token: "--space-2xl", px: 48, tailwind: "pb-6 pt-6" }
+      content_to_glass_panel:   { token: "--space-xl",  px: 32, tailwind: "pb-4 pt-4" }
+      diagram_to_text:          { token: "--space-xl",  px: 32, tailwind: "mb-8 + pt-8 on next" }
+      card_grid_to_section:     { token: "--space-lg",  px: 24, tailwind: "pb-6 pt-0" }
+      hero_to_first_section:    { token: "--space-2xl", px: 48, tailwind: "pb-12 + pt-12 on first section" }
+      glass_panel_to_glass_panel: { token: "--space-lg", px: 24, tailwind: "my-6 (existing convention)" }
+    tailwind_px_map:
+      pt-4: 16  pt-6: 24  pt-8: 32  pt-10: 40  pt-12: 48
+      pb-4: 16  pb-6: 24  pb-8: 32  pb-10: 40  pb-12: 48
+      mt-4: 16  mt-6: 24  mt-8: 32
+      mb-4: 16  mb-6: 24  mb-8: 32
+      "space-y-16": 64  "space-y-24": 96
+    enforcement:
+      p1_threshold_px: 4   # deviation ±4px → P1 FLAG
+      p0_threshold_px: 8   # deviation >8px → P0 BLOCK
+      gate: issa_spacing_gate
+      delegate_to: design-system-enforcer  # Check 9
+
   equal_height_cards:
     parent: "flex flex-wrap justify-center items-stretch gap-3 md:gap-6"
     wrapper: "relative group w-[calc(50%-0.5rem)] md:w-56 flex"
@@ -449,6 +480,19 @@ gates:
     blocking: false
     delegate_to: "design-system-enforcer"
 
+  issa_spacing_gate:
+    description: |
+      Inter-Section Spacing Algorithm (ISSA) gate. For every pair of adjacent block
+      sections in proposed HTML, compute: Visual Gap = pb_A + max(mb_A, mt_B) + pt_B.
+      Compare against the target from design_system.yaml § spacing.inter_section_spacing.
+      Deviation ±4px → P1 FLAG. Deviation >8px → P0 BLOCK.
+    severity: P1
+    blocking: false   # P1 default; escalates to P0 when deviation > 8px
+    delegate_to: "design-system-enforcer"
+    check_id: "Check 9"
+    ssot: "docs/.content/knowledge/design_system.yaml § spacing.inter_section_spacing"
+    applies_to: ["html_implementation", "design_proposal"]
+
   a11y_gate:
     description: "WCAG 2.1 AA checklist — block on P0 regressions"
     severity: P0
@@ -525,8 +569,10 @@ workflow:
         grounded in the content brief (Step 0) and knowledge pre-flight (Step 1).
         Apply all rules from design_system, wcag_font_floors, visualisation,
         and layout sections of THIS workflow before emitting the proposal.
+        For every pair of adjacent sections, resolve the ISSA formula (layout §
+        inter_section_spacing_algorithm) and confirm the target token is met.
         Present Intent Reflection (🪞) then ⚡ Proceed Gate — wait for proceed.
-      gates: [wcag_font_floor_audit, card_visual_hierarchy]
+      gates: [wcag_font_floor_audit, card_visual_hierarchy, issa_spacing_gate]
       outputs: ["design_proposal_doc"]
       proceed_gate: true   # blocks until user says proceed
 
@@ -546,8 +592,11 @@ workflow:
         Respect page architecture (inline_style_block vs external_css).
         Run WCAG self-audit against wcag_font_floors before emitting any markup.
         Enforce background_clip pairing rule for gradient text.
+        Apply ISSA: for every section pair, compute Visual Gap and match to target
+        token from design_system.yaml § spacing.inter_section_spacing. Use the
+        zero-margin recipe (pb_A + pt_B = Target_px) as default.
       delegate_to: frontend/html-refactor-validation.yaml
-      gates: [wcag_font_floor_audit, dom_validation, no_mermaid_in_roles, background_clip_pairing]
+      gates: [wcag_font_floor_audit, dom_validation, no_mermaid_in_roles, background_clip_pairing, issa_spacing_gate]
 
     # ── Step 5: CSS Compliance ────────────────────────────────────────────────
     - step_id: css_compliance

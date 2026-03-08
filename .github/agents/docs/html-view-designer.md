@@ -296,6 +296,27 @@ Present a structured proposal:
 
 **Self-audit rule:** Before emitting any HTML, scan all `font-size`, `text-[*]`, and `text-xs`/`text-sm` classes against this floor table. Fix violations before output — do NOT rely on downstream `a11y-perf-guardian` to catch them.
 
+**ISSA self-audit rule (mandatory — run alongside font-size audit):** For every pair of vertically adjacent block sections in proposed HTML, resolve the inter-section gap using the formula below before emitting. Correct spacing at source — do NOT rely on `design-system-enforcer` Check 9 as the first catch.
+
+```
+Visual Gap = padding_bottom_A + max(margin_bottom_A, margin_top_B) + padding_top_B
+
+Target Gap Lookup (SSOT: design_system.yaml § spacing.inter_section_spacing):
+  Content → Content          48px  (pb-6 + pt-6)
+  Content → Glass Panel      32px  (pb-4 + pt-4)
+  Diagram → Text             32px  (mb-8 on diagram + pt-8 on next section)
+  Card Grid → Section        24px  (pb-6; card grid carries internal gap-6)
+  Hero → First Section       48px  (pb-12 on hero + pt-12 on first section)
+  Glass Panel → Glass Panel  24px  (my-6 = existing convention ✅)
+
+Safe recipe (default): mb_A = 0, mt_B = 0 → pb_A = pt_B = Target_px / 2
+Non-zero margin fallback: pb_A = ceil((Target_px - max(mb_A, mt_B)) / 2)
+                          pt_B = floor((Target_px - max(mb_A, mt_B)) / 2)
+
+Tailwind px reference: pt-4/pb-4=16px, pt-6/pb-6=24px, pt-8/pb-8=32px,
+                       pt-10/pb-10=40px, pt-12/pb-12=48px
+```
+
 ### ARIA Checklist (run before every HTML edit)
 
 - [ ] `<html lang='en'>` present
