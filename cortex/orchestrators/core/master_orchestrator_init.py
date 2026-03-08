@@ -54,6 +54,7 @@ class MasterOrchestratorInitialiser:
         self.wire_knowledge()       # needs infrastructure (db_path)
         self.wire_stages()          # needs knowledge (synthesis engine)
         self.wire_intelligence()    # needs stages (tech intelligence)
+        self.wire_capability_verification()  # Phase 137 — GAP-137-02: drift detection
 
     # ------------------------------------------------------------------
     # wire_state_and_logging
@@ -806,3 +807,52 @@ class MasterOrchestratorInitialiser:
         if host._business_knowledge_repository is not None:
             backends["business"] = host._business_knowledge_repository
         return FallbackRouter(backends=backends)
+
+    # ------------------------------------------------------------------
+    # wire_capability_verification — Phase 137 GAP-137-02
+    # ------------------------------------------------------------------
+
+    def wire_capability_verification(self) -> None:
+        """Run import-time drift detection against capabilities-manifest.yaml.
+
+        Calls verify_capabilities_manifest() and logs any unimportable
+        orchestrator modules as P1 warnings. Non-blocking — drift is
+        reported but does not prevent MasterOrchestrator from starting.
+
+        Phase: 137 — GAP-137-02 (CORE-035: detect architecture drift at init-time)
+        """
+        try:
+            from cortex.core.capability_verifier import verify_capabilities_manifest
+            from pathlib import Path as _Path
+            manifest_path = (
+                _Path(__file__).resolve().parents[3]
+                / "cortex-registry"
+                / "core"
+                / "capabilities-manifest.yaml"
+            )
+            if manifest_path.exists():
+                drift = verify_capabilities_manifest(str(manifest_path))
+                if drift:
+                    self._h.logger.log_operation_complete(
+                        ac_id="AC-137-B-001",
+                        operation="CAPABILITY_DRIFT_DETECTED",
+                        success=False,
+                        details={
+                            "drift_count": len(drift),
+                            "drift_modules": [d["module"] for d in drift],
+                            "severity": "P1",
+                        },
+                    )
+                else:
+                    self._h.logger.log_operation_complete(
+                        ac_id="AC-137-B-001",
+                        operation="CAPABILITY_VERIFICATION_COMPLETE",
+                        success=True,
+                        details={"drift_count": 0},
+                    )
+        except Exception as _exc:
+            # Non-blocking fallback — drift detection failure must not crash init
+            import logging as _logging
+            _logging.getLogger(__name__).warning(
+                "wire_capability_verification: skipped — %s", _exc
+            )

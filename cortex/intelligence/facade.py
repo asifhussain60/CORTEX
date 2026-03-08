@@ -79,6 +79,10 @@ class IntelligenceFacade:
                     instance._workflow_registry = None  # type: ignore[attr-defined]
                     instance._pattern_registry = None  # type: ignore[attr-defined]
                     instance._registry_index_cache = None  # type: ignore[attr-defined]
+                    # Phase 137: new lazy-load slots for threat/quality/guidance providers
+                    instance._threat_engine = None  # type: ignore[attr-defined]
+                    instance._quality_engine = None  # type: ignore[attr-defined]
+                    instance._guidance_engine = None  # type: ignore[attr-defined]
                     _SINGLETON_INSTANCE = instance
         return _SINGLETON_INSTANCE
 
@@ -311,6 +315,152 @@ class IntelligenceFacade:
             logger.debug("IntelligenceFacade.load_plans: %s", exc)
             from cortex.intelligence.models.master_plan_index import MasterPlanIndex
             return MasterPlanIndex()
+
+    # ── Phase 137: Deep Intelligence Wiring — 3 new lazy-loaded methods ─────
+
+    def _get_threat_engine(self) -> Any:
+        """Lazy-load ThreatModelEngine with null-object fallback.
+
+        Returns:
+            ThreatModelEngine instance, or _NullThreatEngine on failure.
+        """
+        if self._threat_engine is None:
+            try:
+                from cortex.intelligence.threat_model_engine import ThreatModelEngine
+                self._threat_engine = ThreatModelEngine()
+            except Exception as exc:
+                logger.debug("IntelligenceFacade: threat_engine unavailable — %s", exc)
+                self._threat_engine = _NullThreatEngine()
+        return self._threat_engine
+
+    def _get_quality_engine(self) -> Any:
+        """Lazy-load QualityAnalysisEngine with null-object fallback.
+
+        Returns:
+            QualityAnalysisEngine instance, or _NullQualityEngine on failure.
+        """
+        if self._quality_engine is None:
+            try:
+                from cortex.intelligence.quality_analysis_engine import QualityAnalysisEngine
+                self._quality_engine = QualityAnalysisEngine()
+            except Exception as exc:
+                logger.debug("IntelligenceFacade: quality_engine unavailable — %s", exc)
+                self._quality_engine = _NullQualityEngine()
+        return self._quality_engine
+
+    def _get_guidance_engine(self) -> Any:
+        """Lazy-load KnowledgeGuidanceEngine with null-object fallback.
+
+        Returns:
+            KnowledgeGuidanceEngine instance, or _NullGuidanceEngine on failure.
+        """
+        if self._guidance_engine is None:
+            try:
+                from cortex.core.knowledge_guidance_engine import get_guidance_engine
+                self._guidance_engine = get_guidance_engine()
+            except Exception as exc:
+                logger.debug("IntelligenceFacade: guidance_engine unavailable — %s", exc)
+                self._guidance_engine = _NullGuidanceEngine()
+        return self._guidance_engine
+
+    def threat_assessment(self, file_path: str, **kwargs: Any) -> Dict[str, Any]:
+        """Assess threat model for a given file path.
+
+        Delegates to :class:`~cortex.intelligence.threat_model_engine.ThreatModelEngine`.
+        Gracefully returns an empty assessment dict when the engine is unavailable.
+
+        Args:
+            file_path: Path to the file or module to assess.
+            **kwargs: Additional options forwarded to the engine.
+
+        Returns:
+            Dict with at minimum a ``status`` key. Contains threat assessment
+            results on success, empty ``threats`` list on graceful degradation.
+
+        Phase: 137 — GAP-137-03
+        """
+        try:
+            engine = self._get_threat_engine()
+            if hasattr(engine, "assess"):
+                result = engine.assess(file_path, **kwargs)
+                if isinstance(result, dict):
+                    return result
+            return {
+                    "status": "ok",
+                    "file_path": file_path,
+                    "threats": [],
+                    "source": "intelligence_facade",
+                }
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.threat_assessment: %s", exc)
+            return {"status": "ok", "file_path": file_path, "threats": [], "degraded": True}
+
+    def quality_baseline(self, file_paths: "List[str]", **kwargs: Any) -> Dict[str, Any]:
+        """Compute quality baseline for a list of file paths.
+
+        Delegates to :class:`~cortex.intelligence.quality_analysis_engine.QualityAnalysisEngine`.
+        Gracefully returns an empty baseline dict when the engine is unavailable.
+
+        Args:
+            file_paths: List of file paths to assess.
+            **kwargs: Additional options forwarded to the engine.
+
+        Returns:
+            Dict with at minimum a ``status`` key. Contains quality scores
+            on success, empty ``scores`` dict on graceful degradation.
+
+        Phase: 137 — GAP-137-03
+        """
+        try:
+            engine = self._get_quality_engine()
+            if hasattr(engine, "baseline"):
+                result = engine.baseline(file_paths, **kwargs)
+                if isinstance(result, dict):
+                    return result
+            return {
+                    "status": "ok",
+                    "file_paths": file_paths,
+                    "scores": {},
+                    "source": "intelligence_facade",
+                }
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.quality_baseline: %s", exc)
+            return {"status": "ok", "file_paths": file_paths, "scores": {}, "degraded": True}
+
+    def guidance(self, module_path: str, **kwargs: Any) -> Dict[str, Any]:
+        """Return knowledge guidance for a given module path.
+
+        Delegates to :class:`~cortex.core.knowledge_guidance_engine.KnowledgeGuidanceEngine`.
+        Gracefully returns an empty guidance dict when the engine is unavailable.
+
+        Args:
+            module_path: Python module path (e.g. ``"cortex.core.engine"``).
+            **kwargs: Additional options forwarded to the engine.
+
+        Returns:
+            Dict with at minimum a ``status`` key. Contains guidance content
+            on success, empty ``guidance`` list on graceful degradation.
+
+        Phase: 137 — GAP-137-03
+        """
+        try:
+            engine = self._get_guidance_engine()
+            if hasattr(engine, "get_guidance_for_module"):
+                result = engine.get_guidance_for_module(module_path, **kwargs)
+                if isinstance(result, dict):
+                    return result
+                # KnowledgeGuidanceEngine returns ModuleGuidance — convert to dict
+                if hasattr(result, "__dict__"):
+                    return {"status": "ok", "module_path": module_path, "guidance": vars(result)}
+            return {
+                    "status": "ok",
+                    "module_path": module_path,
+                    "guidance": {},
+                    "source": "intelligence_facade",
+                }
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.guidance: %s", exc)
+            return {"status": "ok", "module_path": module_path, "guidance": {}, "degraded": True}
 
     def classify_archetype(self, repo_path: "Path") -> "Dict[str, Any]":
         """Classify a repository into a canonical archetype using signal scoring.
@@ -740,6 +890,55 @@ class _NullPatternRegistry:
 
 
 # ── Phase 135: KAL null-object fallbacks ─────────────────────────────────────
+# ── Phase 137: Deep Intelligence Wiring null-object fallbacks ────────────────
+
+
+class _NullThreatEngine:
+    """Null-object fallback when ThreatModelEngine is unavailable."""
+
+    def assess(self, file_path: str, **kwargs: Any) -> Dict[str, Any]:
+        """Return empty threat assessment.
+
+        Args:
+            file_path: Ignored.
+            **kwargs: Ignored.
+
+        Returns:
+            Dict with status="ok" and empty threats list.
+        """
+        return {"status": "ok", "threats": [], "source": "null_threat_engine"}
+
+
+class _NullQualityEngine:
+    """Null-object fallback when QualityAnalysisEngine is unavailable."""
+
+    def baseline(self, file_paths: List[str], **kwargs: Any) -> Dict[str, Any]:
+        """Return empty quality baseline.
+
+        Args:
+            file_paths: Ignored.
+            **kwargs: Ignored.
+
+        Returns:
+            Dict with status="ok" and empty scores dict.
+        """
+        return {"status": "ok", "scores": {}, "source": "null_quality_engine"}
+
+
+class _NullGuidanceEngine:
+    """Null-object fallback when KnowledgeGuidanceEngine is unavailable."""
+
+    def get_guidance_for_module(self, module_path: str, **kwargs: Any) -> Dict[str, Any]:
+        """Return empty guidance.
+
+        Args:
+            module_path: Ignored.
+            **kwargs: Ignored.
+
+        Returns:
+            Dict with status="ok" and empty guidance dict.
+        """
+        return {"status": "ok", "guidance": {}, "source": "null_guidance_engine"}
 
 class _NullCoverageResult:
     """Minimal duck-type of CoverageResult returned by _NullCoverageAssessor."""

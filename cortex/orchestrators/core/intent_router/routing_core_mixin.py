@@ -41,7 +41,14 @@ class RoutingCoreMixin:
         - self.complexity_router  (WorkflowComplexityRouter)
         - self.golden_hammer_rules (GoldenHammerRules)
         - self.registry_agent     (Optional[...])
+
+    Phase 137 (GAP-137-04): ``confidence_threshold`` controls URS emission.
+    Routes with confidence below this value emit a MILD_PUNISHMENT URS signal
+    so the closed-loop learning system can improve future routing.
     """
+
+    # Phase 137 — GAP-137-04: configurable low-confidence threshold for URS emission
+    confidence_threshold: float = 0.4
 
     # ------------------------------------------------------------------
     # Config loading
@@ -224,8 +231,9 @@ class RoutingCoreMixin:
                 },
             )
 
-            if clf_result.confidence < 0.4 or clf_result.intent_type == IntentType.UNKNOWN:
+            if clf_result.confidence < self.confidence_threshold or clf_result.intent_type == IntentType.UNKNOWN:
                 self._log_routing_miss(combined_text, clf_result)
+                self._emit_urs_low_confidence(clf_result.confidence)
 
             return clf_result.intent_type
 
@@ -303,6 +311,30 @@ class RoutingCoreMixin:
             )
         except Exception:
             pass  # Non-blocking — must never break routing
+
+    def _emit_urs_low_confidence(self, confidence: float) -> None:
+        """Emit a URS MILD_PUNISHMENT signal for low-confidence routing.
+
+        Called when routing confidence falls below ``confidence_threshold``.
+        Low-confidence routes represent training data for the URS closed-loop
+        learning system.  Emission is best-effort — failures are silently
+        swallowed to prevent routing disruption.
+
+        Args:
+            confidence: The observed routing confidence score.
+
+        Phase: 137 — GAP-137-04 (CORE-064: URS closed-loop learning signal)
+        """
+        try:
+            from cortex.mcp.tools.cortex_learning import cortex_learning_tool  # type: ignore[import]
+            cortex_learning_tool(
+                op="emit",
+                signal_type="MILD_PUNISHMENT",
+                scope="intent_routing",
+                context={"confidence": confidence, "reason": "low_confidence_routing"},
+            )
+        except Exception:
+            pass  # Non-blocking — URS emission must never break routing
 
     # ------------------------------------------------------------------
     # Cache
