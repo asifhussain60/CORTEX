@@ -1,300 +1,319 @@
 /CORTEX /cortex-architect
 
-Follow the rules defined in:
+Follow all rules defined in:
+
 - CORTEX.prompt.md
 - cortex-doc.prompt.md
 - cortex-doc agents
 - cortex-registry governance
 
-All agent rules MUST be applied automatically.
+All agent rules MUST apply automatically.
 
-This task designs and implements a **CORTEX Learning System** built from the knowledge contained in `cortex-registry`.
+Your task is to design and implement a **CORTEX Learning System** that transforms knowledge stored in `cortex-registry` YAML files into a **high-quality interactive learning platform**.
 
-This learning system must transform CORTEX knowledge YAMLs into a **three-level interactive learning application designed for human learning**.
+The system must follow **modern software engineering education best practices** and **must be manually designed**, not auto-generated.
 
-The system must be **manually designed**, not generated from templates.
-
-Each learning path must have **custom designed UI and diagrams optimized for teaching the subject matter**.
+Each learning path must have **custom UI, custom diagrams, and curated explanations optimized for learning the specific topic**.
 
 ---
 
-# Challenge-First Protocol
+# CRITICAL DESIGN RULE
 
-Before proposing the implementation:
+Do NOT create generic pages.
 
-1. Perform a **full audit of existing CORTEX capabilities** including:
+Each learning path must be **manually crafted** with:
 
-- cortex-registry knowledge YAMLs
-- cortex-doc documentation engine
-- diagram generation systems
-- D3 visualization pipelines
-- workflow composer
-- orchestrator architecture
-- LENS intelligence
-- registry indexing
-- documentation generation
+- tailored layout
+- tailored diagrams
+- tailored learning flow
+- tailored visuals
 
-2. Identify:
+The system must feel like a **carefully designed educational platform**, not a documentation generator.
 
-| Category | Requirement |
-|--------|--------|
-Existing Capabilities | What CORTEX already supports |
-Partial Capabilities | Systems that exist but must be extended |
-New Capabilities | What must be created |
+---
 
-3. Assume the user has **no knowledge of CORTEX architecture**.
+# CHALLENGE-FIRST PROTOCOL
 
-Explain the architecture simply.
+Before implementing anything:
 
-4. Evaluate every recommendation using CORTEX design pillars:
+Perform a **microscopic audit of CORTEX capabilities**.
 
-| Pillar | Evaluation Criteria |
+Analyze:
+
+• cortex-registry knowledge YAMLs  
+• cortex-doc documentation engine  
+• D3 visualization capability  
+• diagram pipelines  
+• workflow composer  
+• orchestrator architecture  
+• LENS intelligence  
+• registry indexing  
+• documentation synthesis  
+• MCP tool exposure  
+
+Determine:
+
+| Category | Description |
+|--------|-------------|
+| Existing Capabilities | What already exists |
+| Partial Capabilities | What needs extension |
+| Missing Capabilities | What must be built |
+
+Assume the user has **no knowledge of CORTEX architecture**.
+
+Explain architecture simply.
+
+Evaluate every design decision using CORTEX pillars:
+
+| Pillar | Requirement |
 |------|------|
-Extensibility | Can new learning paths be added easily |
-Scalability | Can system support thousands of knowledge objects |
-Accuracy | YAML knowledge remains authoritative |
-Collaboration | Teams can extend knowledge |
+Extensibility | Add new learning paths without redesign |
+Scalability | Support thousands of knowledge nodes |
+Accuracy | YAML remains the source of truth |
+Collaboration | Teams can contribute knowledge |
 Maintainability | Prevent duplication and drift |
 
 Ensure:
 
-- MCP-first exposure
-- Orchestrator integrity
-- Registry-driven knowledge
-- Zero regression risk
+• MCP-first exposure  
+• Orchestrator integrity  
+• Registry-driven architecture  
+• Zero regression risk  
 
 ---
 
-# Learning System Objective
+# LEARNING SYSTEM OBJECTIVE
 
-Create an **interactive educational platform** built from CORTEX knowledge.
+Build an interactive learning environment called:
 
-The system should feel like:
+**CORTEX University**
 
-"CORTEX University"
+The system teaches:
 
-It must teach:
+• architecture patterns  
+• AI orchestration  
+• workflow automation  
+• enterprise planning  
+• response engineering  
+• infrastructure architecture  
 
-- architecture
-- patterns
-- workflows
-- infrastructure
-- enterprise planning
-- AI orchestration
+The platform should feel like **exploring a system map**, not reading documentation.
 
 ---
 
-# Pedagogical Design Requirements
+# PEDAGOGICAL BEST PRACTICES
 
-Use **modern educational best practices**.
+Follow research-backed learning principles.
 
-Key learning principles:
+### Active Learning
 
-### 1 Active Learning
+Interactive examples dramatically improve comprehension in engineering education.
 
-Students learn better when interacting with examples and diagrams.
+### Visual Knowledge Mapping
 
-Example-based learning improves comprehension and engagement in software engineering education. :contentReference[oaicite:0]{index=0}
+Concept maps help learners understand relationships between ideas.
 
-### 2 Visual Knowledge Mapping
-
-Concept maps help learners understand relationships between concepts. :contentReference[oaicite:1]{index=1}
-
-### 3 Multi-Diagram Teaching
+### Multi-Diagram Teaching
 
 Different diagrams explain different aspects of systems.
 
-Common software architecture diagrams include:
+Common architecture diagrams include:
 
-- class diagrams
-- sequence diagrams
-- activity diagrams
-- component diagrams
-- deployment diagrams :contentReference[oaicite:2]{index=2}
+• class diagrams  
+• sequence diagrams  
+• activity diagrams  
+• component diagrams  
+• deployment diagrams  
 
-### 4 Interactive Visualization
+### Progressive Disclosure
 
-Interactive visualizations improve comprehension compared to static diagrams. :contentReference[oaicite:3]{index=3}
-
----
-
-# Learning Architecture
-
-The learning system must have **three levels**.
+Users learn best when information is revealed gradually.
 
 ---
 
-# LEVEL 1 — Learning Paths (Portal)
+# THREE LEVEL LEARNING STRUCTURE
+
+The system must have **three levels only**.
+
+The knowledge graph must be embedded inside levels 2 and 3.
+
+---
+
+# LEVEL 1 — LEARNING PATH PORTAL
 
 Purpose:
 
 Help users choose **what they want to learn**.
 
-Design:
+UI:
 
-Large interactive learning cards.
+Large animated cards.
 
 Each card contains:
 
-- icon
-- concept summary
-- visual preview
-- difficulty level
-- number of topics
-- estimated learning time
+• icon  
+• concept preview  
+• difficulty level  
+• number of topics  
+• estimated learning time  
+• mini concept diagram  
 
 Example learning paths:
 
 Architecture Patterns  
-AI Orchestration Architecture  
+AI Orchestration  
 Workflow Automation  
-Enterprise Planning Systems  
+Enterprise Planning  
 Response Engineering  
 Infrastructure Architecture  
 Enterprise AI Systems  
 
-### UI Design
+Card preview diagrams should include **concept maps** showing relationships between major topics.
 
-Grid layout with:
-
-Tailwind  
-FontAwesome icons  
-animated hover previews  
-
-Each card must include **visual micro-diagram previews**.
-
-Example preview diagrams:
-
-Architecture Patterns
-
-Concept Map diagram
-
-Boxes connected by arrows showing relationships between patterns.
-
-Concept maps visually represent relationships between ideas. :contentReference[oaicite:4]{index=4}
-
-Infrastructure
-
-Mini system topology graph.
+Concept maps visualize how ideas connect.
 
 ---
 
-# LEVEL 2 — Concept Explorer
+# LEVEL 2 — CONCEPT EXPLORER
 
-Purpose:
+This level introduces **concept exploration with a knowledge graph**.
 
-Explore concepts within a learning path.
+Instead of a static list of topics, display an **interactive concept map**.
 
-Each learning path must have **custom visual layout**.
+Concepts appear as nodes.
 
----
+Relationships appear as edges.
 
-## Architecture Patterns Explorer
+Example node relationships:
 
-Display pattern cards.
+Pattern → used by → Orchestrator  
+Pattern → implemented in → Code  
+Pattern → referenced by → Workflow  
 
-Each card includes:
+Graph type:
 
-- pattern type
-- short explanation
-- micro diagram
-- when to use
-- anti-pattern warning
+**Force-Directed Graph**
 
-### Required Diagrams
+This graph type allows interactive exploration of relationships.
 
-Class Diagram
+Users can:
 
-Used to show pattern structure.
-
-Class diagrams show relationships between classes and components. :contentReference[oaicite:5]{index=5}
-
-Sequence Diagram
-
-Used to show runtime interaction.
-
-Sequence diagrams illustrate how components interact over time. :contentReference[oaicite:6]{index=6}
-
-Concept Map
-
-Shows relationship between patterns.
+• zoom  
+• drag nodes  
+• click nodes to open Level 3  
 
 ---
 
-## Workflow Automation Explorer
+## ARCHITECTURE PATTERNS EXPLORER
 
-Best diagram types:
+Display pattern nodes.
+
+Required diagrams:
+
+### Class Diagram
+
+Shows structural relationships between pattern participants.
+
+### Sequence Diagram
+
+Shows runtime interactions between components.
+
+### Concept Map
+
+Shows relationships between patterns.
+
+Example:
+
+Factory Pattern  
+Mediator Pattern  
+Template Method  
+
+---
+
+## WORKFLOW AUTOMATION EXPLORER
+
+Best diagrams:
 
 Activity Diagrams
 
-Used to show workflows and business processes. :contentReference[oaicite:7]{index=7}
+Used to show workflows and processes.
 
-Interaction Overview Diagrams
+Interaction diagrams
 
-Used for complex workflows with nested interactions. :contentReference[oaicite:8]{index=8}
+Show nested orchestration flows.
 
-Timeline diagrams showing lifecycle.
+Lifecycle diagrams
 
----
-
-## Infrastructure Explorer
-
-Best diagram types:
-
-Component Diagram
-
-Shows system modules and dependencies.
-
-Deployment Diagram
-
-Shows infrastructure nodes and deployment relationships.
-
-C4 Architecture Diagrams
-
-C4 model decomposes systems into containers and components. :contentReference[oaicite:9]{index=9}
-
-Graph visualizations using D3.
+Show orchestration lifecycle.
 
 ---
 
-## Planning Explorer
+## INFRASTRUCTURE EXPLORER
 
-Best diagrams:
+Use:
+
+### C4 Model Diagrams
+
+The C4 model describes systems using four abstraction levels:
+
+Context  
+Container  
+Component  
+Code  
+
+### Deployment Diagrams
+
+Show infrastructure nodes.
+
+### Dependency Graphs
+
+Show API relationships.
+
+Graph nodes:
+
+applications  
+apis  
+platforms  
+
+---
+
+## PLANNING EXPLORER
+
+Visualize phases using:
 
 Timeline diagrams  
 Gantt charts  
 Dependency graphs  
 
-These visualize phases and deliverables.
+These diagrams show phase progression.
 
 ---
 
-## Response Engineering Explorer
+## RESPONSE ENGINEERING EXPLORER
 
-Display template cards.
+Display template structures.
 
-Each card shows:
+Each template node shows:
 
-- template structure
-- variables
-- example outputs
-- real use cases
+• sections  
+• variables  
+• example outputs  
 
-Interactive example editor.
+Provide interactive example generator.
 
 ---
 
-# LEVEL 3 — Deep Learning Pages
+# LEVEL 3 — DEEP LEARNING PAGE
 
 Each concept gets a **full educational page**.
 
-Every page must contain:
+This page must include:
 
 ---
 
 ## Concept Explanation
 
-Explain the idea in simple language.
+Simple explanation of the concept.
 
 ---
 
@@ -304,25 +323,21 @@ Example:
 
 Factory Pattern
 
-Analogy:
-
-Restaurant kitchen preparing meals.
+Restaurant kitchen analogy.
 
 ---
 
 ## CORTEX Implementation
 
-Explain how CORTEX implements the concept.
+Explain how the concept appears inside CORTEX.
 
-Show relevant code references.
+Link to source files.
 
 ---
 
 ## Interactive Diagrams
 
-Diagrams must be interactive.
-
-Required diagram types per concept:
+Each concept must have specific diagrams.
 
 ### Pattern Pages
 
@@ -337,9 +352,9 @@ Lifecycle timeline
 
 ### Infrastructure Pages
 
-C4 architecture diagrams  
-Deployment diagrams  
-Dependency graphs  
+C4 architecture diagram  
+Deployment diagram  
+Dependency graph  
 
 ### Planning Pages
 
@@ -348,38 +363,43 @@ Dependency graph
 
 ---
 
-# Diagram Implementation
+# EMBEDDED KNOWLEDGE GRAPH
 
-All diagrams must use:
+The learning system must include a **knowledge graph**.
 
-D3.js
+This graph connects:
 
-Examples:
+Concepts  
+Patterns  
+Workflows  
+Infrastructure  
+Planning phases  
 
-Force-directed graph
+Graph structure example:
 
-Used for concept maps.
+Pattern → used by → Orchestrator  
+Pattern → referenced in → Phase  
+Workflow → executed by → Orchestrator  
+Infrastructure → hosts → Application  
 
-Sequence diagram
+Graph visualization must use:
 
-Animated message flow.
+D3 Force Directed Graph.
 
-Lifecycle diagram
-
-Animated phase transitions.
+Users should be able to explore knowledge visually.
 
 ---
 
-# External Research Requirement
+# EXTERNAL RESEARCH
 
-Enhance YAML knowledge using trusted architecture sources.
+Enhance explanations using authoritative sources.
 
-Required research sources:
+Research references:
 
 Martin Fowler Architecture Catalog  
 https://martinfowler.com
 
-Refactoring Guru Pattern Guides  
+Refactoring Guru  
 https://refactoring.guru/design-patterns
 
 Microsoft Architecture Center  
@@ -394,12 +414,11 @@ https://cloud.google.com/architecture/framework
 D3 Visualization Examples  
 https://observablehq.com/@d3
 
-Use them to improve:
+Use them to enhance:
 
-- explanations
-- analogies
-- diagrams
-- examples
+• explanations  
+• diagrams  
+• examples  
 
 Do NOT copy content.
 
@@ -407,37 +426,38 @@ Synthesize ideas.
 
 ---
 
-# Knowledge Extraction Strategy
+# KNOWLEDGE EXTRACTION
 
-Extract information from:
+Knowledge must come from:
 
-cortex-registry YAMLs
+`cortex-registry` YAML files.
 
-Convert YAML structures into:
+Convert YAML knowledge into:
 
-- concept definitions
-- diagrams
-- explanations
+• explanations  
+• diagrams  
+• graph nodes  
+• relationships  
 
-The YAML remains the **source of truth**.
+YAML remains the **single source of truth**.
 
 ---
 
-# Integration with cortex-doc
+# INTEGRATION WITH CORTEX DOC SYSTEM
 
-All generated learning pages must be validated using:
+All generated pages must be validated through:
 
-cortex-doc.prompt.md
+`cortex-doc.prompt.md`
 
 Agents must enforce:
 
-documentation structure  
-diagram rules  
-content synthesis rules  
+• documentation structure  
+• diagram rules  
+• content synthesis rules  
 
 ---
 
-# Technical Stack
+# TECHNOLOGY STACK
 
 Frontend
 
@@ -448,45 +468,43 @@ FontAwesome
 Visualization
 
 D3.js  
-Observable patterns  
+Observable  
 
-Content Engine
+Knowledge Engine
 
 YAML parsing  
-knowledge synthesis  
+knowledge graph generator  
 
 ---
 
-# Deliverables
+# DELIVERABLES
 
 Design:
 
 Learning architecture  
-Learning path definitions  
-View specifications  
+Learning paths  
+Explorer layouts  
 Diagram specifications  
-Knowledge extraction system  
+Knowledge graph system  
 
 ---
 
-# Response Format
+# RESPONSE FORMAT
 
-Follow CORTEX executive format.
+Return response in CORTEX executive format.
 
 ≤ 60 second read time.
 
 Use:
 
-visual hierarchy  
-tables  
-sections  
+• sections  
+• visual hierarchy  
+• tables  
 
-All responses must remain **inline in the VSCode Copilot Chat session**.
+All feedback must remain **inline in VSCode Copilot Chat**.
 
-Never generate external markdown files.
+Do NOT generate markdown files.
 
-Never generate summary documents.
+Do NOT generate reports.
 
-Never produce reports.
-
-Return only in the GitHub Copilot Chat session.
+Return response only inside the chat.

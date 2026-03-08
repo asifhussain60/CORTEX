@@ -211,3 +211,4 @@ cortex-registry/company/repos/test_*/
 cortex-registry/artifacts/ast-graphs/test_*
 cortex-registry/knowledge-base/repositories/test_*.yaml
 cortex_intelligence/onboarded_repos/test_*.json
+_workspaces/_feedback/
