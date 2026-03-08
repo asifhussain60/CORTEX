@@ -52,7 +52,8 @@ Every diagram spec file includes YAML frontmatter:
 
 ### Orchestration (request handling)
 - `09-diagram-orchestration-request-sequence.md` — Full 4-stage pipeline sequence diagram
-- `13-diagram-orchestration-intent-classification-routing.md` — 30+ intent types, confidence routing, orchestrator mapping
+- `13-diagram-orchestration-intent-classification-routing.md` — 32+ intent types, confidence routing, orchestrator mapping
+- `19-diagram-orchestration-po-change-intelligence-pipeline.md` — PO Change Intelligence pipeline: process discovery → gap analysis → recommendations → requirements → training
 
 ### Intelligence (code understanding)
 - `11-diagram-intelligence-lens-analysis-pipeline.md` — 4-layer LENS analysis (git → AST → annotations → patterns) + Diamond Facade architecture (IntelligenceFacade single entry: analyze/synthesize/query) + Phase 109 migration state

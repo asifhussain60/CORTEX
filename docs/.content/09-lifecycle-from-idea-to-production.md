@@ -26,6 +26,14 @@ CORTEX treats the entire delivery lifecycle as a single coordinated pipeline whe
 
 CORTEX codifies seven phases of the software delivery lifecycle as structured workflow templates. Each template defines the steps, the knowledge to inject, the governance gates, and the success criteria for that phase.
 
+### Phase 0 — Change Intelligence (Product Owner Decision Support)
+
+Before a feature even enters the requirements phase, CORTEX helps Product Owners evaluate whether to build it at all. The Change Intelligence Orchestrator discovers how the system works today via LENS analysis, compares current processes against best-practice patterns, produces structured gap analyses with severity scores, evaluates ROI based on actual codebase complexity, and generates system capability inventories.
+
+The output is a Change Recommendation Report: a structured artifact containing current-state documentation, gap analysis, feasibility assessment, ROI projection, and implementation path options — all grounded in real code analysis rather than assumptions. This evidence-based approach replaces subjective "should we build this?" discussions with data-driven decision support.
+
+When the decision is "yes, build it", the Requirements Engineer takes the change intent and decomposes it into structured, testable requirements — business requirements, functional requirements, non-functional requirements, and acceptance criteria — all mapped to the existing architecture discovered during change intelligence.
+
 ### Phase 1 — Requirements Analysis
 
 When a developer or product owner asks CORTEX to analyse requirements or scope a feature, the requirements analysis workflow activates. It runs code intelligence analysis to understand the existing system, identifies the threat surface of the proposed change, flags ambiguities that need resolution before design begins, and produces a structured scope document with explicit acceptance criteria.

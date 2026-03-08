@@ -47,7 +47,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **35+ IDE-accessible tools** | All CORTEX capabilities available directly in your coding assistant — no context switching, no separate applications |
 | **60+ governance rules** | Quality standards enforced automatically at every commit, build, and deployment — not dependent on code reviewers remembering to check |
 | **6 programming languages** | Deep analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML — including framework-specific understanding for Angular, React, and Vue |
-| **30+ request types understood** | From "implement this feature" to "debug this failure" to "audit this codebase" — CORTEX classifies and routes every request to the right specialist |
+| **30+ request types understood** | From "implement this feature" to "debug this failure" to "audit this codebase" to "evaluate this change" — CORTEX classifies and routes every request to the right specialist |
 | **4 root cause methodologies** | Failures are analysed structurally, stored permanently, and prevented from recurring — institutional memory that grows with every sprint |
 | **9 resilience patterns** | Circuit breakers, bulkheads, graceful degradation — production-grade infrastructure in the framework itself |
 | **90+ workflow templates** | Codified best practices across 17 categories — from TDD enforcement to production audits — assembled from reusable building blocks |

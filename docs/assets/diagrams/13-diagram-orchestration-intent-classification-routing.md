@@ -1,7 +1,7 @@
 ---
 id: orchestration-intent-classification-routing
 title: Intent classification and orchestrator routing
-purpose: Show how CORTEX classifies user requests into 30+ intent types and routes them to specialized orchestrators with confidence-based decisions.
+purpose: Show how CORTEX classifies user requests into 32+ intent types and routes them to specialized orchestrators with confidence-based decisions.
 audience:
   - Business Leaders
   - Product Owners
@@ -34,7 +34,7 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  Keyword matching + context analysis → confidence score              │
   │                                                                      │
   │  ┌──────────────────────────────────────────────────────────────┐    │
-  │  │  30+ Intent Types:                                           │    │
+  │  │  32+ Intent Types:                                           │    │
   │  │                                                              │    │
   │  │  CODE-TOUCHING          NON-CODE              LIFECYCLE      │    │
   │  │  ⚡ IMPLEMENT           📖 QUERY              📚 DIGEST     │    │
@@ -43,9 +43,12 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  │  🔎 AUDIT               💬 REPHRASE           🔁 TOTALRECALL│    │
   │  │  🐛 DEBUG               🔬 INVESTIGATE        👋 INTRODUCE  │    │
   │  │  🧹 VACUUM              🧠 RCA                              │    │
-  │  │  🩺 HEALTH              🥇 GOLDEN_TEST        REVIEWING     │    │
-  │  │                          🔧🔄 WORKFLOW_COMPOSE 👁️ REVIEW     │    │
-  │  │                                                💬 FEEDBACK   │    │
+  │  │  🩺 HEALTH              🥇 GOLDEN_TEST        DECISION      │    │
+  │  │                          🔧🔄 WORKFLOW_COMPOSE � CHANGE_INT │    │
+  │  │                                                📝 REQUIREMTS │    │
+  │  │                          REVIEWING                           │    │
+  │  │                          👁️ REVIEW                           │    │
+  │  │                          💬 FEEDBACK                         │    │
   │  └──────────────────────────────────────────────────────────────┘    │
   └──────────────────────────┬───────────────────────────────────────────┘
                              │
@@ -82,6 +85,8 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  INTRODUCE ────  InteractionOrchestrator ────── (none)               │
   │  REVIEW ───────  CodeReviewOrchestrator ──────── (none)              │
   │  FEEDBACK ─────  FeedbackOrchestrator ─────────── (none)             │
+  │  CHANGE_INT ───  ChangeIntelligenceOrchestrator ─ Challenge Gate     │
+  │  REQUIREMENTS ─  RequirementsOrchestrator ──────── Holistic Valid.   │
   └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -100,4 +105,4 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 30+ intent types covering the complete engineering lifecycle, from first implementation through root cause analysis and self-healing governance.
+**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 32+ intent types covering the complete engineering lifecycle, from change intelligence and requirements engineering through implementation, root cause analysis, and self-healing governance.
