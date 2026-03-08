@@ -16,11 +16,11 @@ Author: Asif Hussain
 """
 from __future__ import annotations
 
-import logging
-import subprocess
 from dataclasses import dataclass
+import logging
 from pathlib import Path
-from typing import Any, Callable, Optional, TypeVar
+import subprocess
+from typing import Callable, Optional, TypeVar
 
 from cortex.core.rollback_manager import RollbackManager
 

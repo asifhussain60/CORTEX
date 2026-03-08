@@ -15,8 +15,8 @@ Author: Asif Hussain
 from __future__ import annotations
 
 import logging
-import subprocess
 from pathlib import Path
+import subprocess
 from typing import Optional
 
 logger = logging.getLogger(__name__)

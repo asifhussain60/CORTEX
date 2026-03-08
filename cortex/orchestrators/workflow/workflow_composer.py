@@ -12,10 +12,13 @@ Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 # CORE-035 — domain-scoped; class name appropriate for this module
 
 from dataclasses import dataclass
+import logging
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
-import logging
+
 import yaml
+
+from cortex.core.sub_phase_checkpoint_injector import SubPhaseCheckpointInjector
 
 logger = logging.getLogger(__name__)
 
@@ -550,6 +553,34 @@ class WorkflowComposer:
         )
         self._execution_history.append(result)
         return result
+
+    def compose_for_sub_phase(
+        self,
+        sub_phase_id: str,
+        template_data: Any,
+        context: Optional[Dict[str, Any]] = None,
+        workspace: Optional[Path] = None,
+    ) -> "WorkflowExecutionResult":
+        """Execute a workflow template wrapped in a git checkpoint for a sub-phase.
+
+        Creates a git checkpoint before execution and commits on success,
+        or rolls back to the baseline SHA on failure.
+
+        Args:
+            sub_phase_id: Identifier for the sub-phase (e.g. "138-a").
+            template_data: Workflow template data passed to execute_from_template.
+            context: Optional execution context dict.
+            workspace: Optional workspace Path; defaults to CWD.
+
+        Returns:
+            WorkflowExecutionResult from the wrapped execution.
+        """
+        injector = SubPhaseCheckpointInjector(workspace=workspace)
+
+        def _execute() -> "WorkflowExecutionResult":
+            return self.execute_from_template(template_data, context=context)
+
+        return injector.wrap_sub_phase(sub_phase_id, _execute)
 
 
 __all__ = [

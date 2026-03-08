@@ -7,10 +7,9 @@ Covers:
 """
 from __future__ import annotations
 
-import subprocess
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -19,7 +18,6 @@ from cortex.core.sub_phase_checkpoint_injector import (
     CheckpointState,
     SubPhaseCheckpointInjector,
 )
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Fixtures
