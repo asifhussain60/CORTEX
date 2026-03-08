@@ -26,7 +26,7 @@ This agent does NOT modify any files. It produces a change manifest consumed by 
 | Input | Source | Required |
 |-------|--------|----------|
 | **Repository path** | Workspace root | ✅ |
-| **Last execution timestamp** | `.cortex-runtime/doc-orchestrator-state.json` | ✅ (falls back to 7 days if missing) |
+| **Last execution timestamp** | `cortex-registry/config/doc-orchestrator-state.yaml` | ✅ (falls back to 7 days if missing) |
 | **Scope filter** | User-provided or default `[cortex/, cortex-registry/, docs/, .github/, tests/]` | Optional |
 
 ---

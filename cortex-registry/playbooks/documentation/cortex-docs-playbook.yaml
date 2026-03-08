@@ -1,5 +1,5 @@
 # CORTEX Documentation Playbook
-# Authority: cortex-doc.prompt.md + cortex-documentation-architect.md + cortex-gitpages-builder.md
+# Authority: cortex-doc.prompt.md + 15 agents in .github/agents/docs/
 # Created: 2026-02-25
 # Status: ACTIVE
 
@@ -8,10 +8,10 @@ title: "CORTEX Documentation - Site Design, Content, & Maintenance"
 status: ACTIVE
 authority:
   - ".github/prompts/cortex-doc.prompt.md"
-  - ".github/agents/core/cortex-documentation-architect.md"
-  - ".github/agents/core/cortex-gitpages-builder.md"
+  - ".github/agents/docs/doc-sync-agent.md"
+  - ".github/agents/docs/diagram-regeneration-agent.md"
 owner: "Asif Hussain"
-last_updated: "2026-02-25"
+last_updated: "2026-03-08"
 
 # ============================================
 # PURPOSE & SCOPE
@@ -19,7 +19,7 @@ last_updated: "2026-02-25"
 
 purpose: |
   This playbook governs ALL CORTEX documentation work including:
-  - GitHub Pages site design (cortex-docs/)
+  - GitHub Pages site design (docs/)
   - HTML/CSS/JS front-end architecture
   - Content generation pipelines
   - Automated refresh workflows
@@ -28,7 +28,7 @@ purpose: |
 
 scope:
   in_scope:
-    - "cortex-docs/ directory structure and files"
+    - "docs/ directory structure and files"
     - "HTML views (index.html, roles/*.html, learning/**/*.html)"
     - "CSS design system (glassmorphism v4.0)"
     - "JavaScript interactivity (content-loader.js, index.js)"
@@ -57,17 +57,21 @@ canonical_paths:
     lifecycle_workflow: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
   
   site_structure:
-    root: "cortex-docs/"
-    entry_point: "cortex-docs/index.html"
-    roles: "cortex-docs/roles/"
-    learning: "cortex-docs/learning/"
-    assets: "cortex-docs/assets/"
-    data: "cortex-docs/assets/data/"
-    pipeline: "cortex-docs/pipeline/"
+    root: "docs/"
+    entry_point: "docs/index.html"
+    roles: "docs/roles/"
+    learning: "docs/learning/"
+    assets: "docs/assets/"
+    data: "docs/data/"
+    pipeline: "docs/pipeline/"
   
   agents:
-    documentation_architect: ".github/agents/core/cortex-documentation-architect.md"
-    gitpages_builder: ".github/agents/core/cortex-gitpages-builder.md"
+    doc_sync: ".github/agents/docs/doc-sync-agent.md"
+    diagram_regeneration: ".github/agents/docs/diagram-regeneration-agent.md"
+    github_issue_harvester: ".github/agents/docs/github-issue-harvester-agent.md"
+  
+  state:
+    durable: "cortex-registry/config/doc-orchestrator-state.yaml"
   
   prompts:
     main: ".github/prompts/cortex-doc.prompt.md"
@@ -95,10 +99,10 @@ active_phases:
       - "Validate WCAG 2.1 Level AA compliance"
     deliverables:
       - "tests/cortex_docs/test_index_redesign.py"
-      - "cortex-docs/index.html (zero inline styles)"
-      - "cortex-docs/assets/css/ (5 updated files)"
-      - "cortex-docs/roles/*.html (updated headers)"
-      - "cortex-docs/learning/**/*.html (updated headers)"
+      - "docs/index.html (zero inline styles)"
+      - "docs/assets/css/ (5 updated files)"
+      - "docs/roles/*.html (updated headers)"
+      - "docs/learning/**/*.html (updated headers)"
 
 # ============================================
 # PLANNING WORKFLOW
@@ -187,7 +191,7 @@ planning_workflow:
 # ============================================
 
 design_system:
-  standard: "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
+  standard: "docs/ARCHITECTURE-RECOMMENDATION.md"
   
   theme:
     name: "Glassmorphism"
@@ -219,7 +223,7 @@ design_system:
     cdn: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   
   design_tokens:
-    location: "cortex-docs/assets/css/glass-design-tokens.css"
+    location: "docs/assets/css/glass-design-tokens.css"
     includes:
       - "Blur values (3 tiers: 10px, 20px, 30px)"
       - "Background colors (glass-bg-*)"
@@ -230,7 +234,7 @@ design_system:
       - "Transition timings"
   
   components:
-    location: "cortex-docs/assets/css/glass-ui-components.css"
+    location: "docs/assets/css/glass-ui-components.css"
     includes:
       - "Page loading overlay"
       - "Navigation components"
@@ -239,7 +243,7 @@ design_system:
       - "Button components"
   
   animations:
-    location: "cortex-docs/assets/css/glass-animations.css"
+    location: "docs/assets/css/glass-animations.css"
     principles:
       - "Subtle, professional animations only"
       - "Duration: 200-300ms for interactions"
@@ -251,7 +255,7 @@ design_system:
 # ============================================
 
 content_architecture:
-  source_of_truth: "cortex-docs/.content/"
+  source_of_truth: "docs/.content/"
   
   content_structure:
     - path: ".content/index.md"
@@ -276,7 +280,7 @@ content_architecture:
       purpose: "Derived mirror (auto-generated, never edited)"
   
   data_layer:
-    location: "cortex-docs/assets/data/"
+    location: "docs/assets/data/"
     files:
       - "content.json - Extracted from .content/"
       - "knowledge-catalog.json - From cortex-registry/knowledge/"
@@ -285,7 +289,7 @@ content_architecture:
       - "mcp-tools.json - 26 MCP tool catalog"
   
   views:
-    entry: "cortex-docs/index.html"
+    entry: "docs/index.html"
     roles:
       - "business-leader.html"
       - "product-owner.html"
@@ -302,37 +306,35 @@ content_architecture:
 # ============================================
 
 agents:
-  documentation_architect:
-    file: ".github/agents/core/cortex-documentation-architect.md"
+  doc_sync:
+    file: ".github/agents/docs/doc-sync-agent.md"
     role: "Content extraction, Diátaxis framework, role narratives"
     responsibilities:
       - "Extract content from cortex-registry/"
       - "Apply Diátaxis taxonomy (Tutorial/How-To/Reference/Explanation)"
       - "Generate 3-role perspective content"
-      - "Create C4 Model diagrams"
       - "Maintain flat-file output layer"
       - "Ensure content philosophy (rendering-ready only)"
     outputs:
-      - "cortex-docs/.content/*.md files"
-      - "D3.js SVG diagram specifications"
+      - "docs/.content/*.md files"
       - "Role-specific narratives"
   
-  gitpages_builder:
-    file: ".github/agents/core/cortex-gitpages-builder.md"
-    role: "HTML site generation & deployment"
+  diagram_regeneration:
+    file: ".github/agents/docs/diagram-regeneration-agent.md"
+    role: "D3.js SVG diagram generation & HTML site deployment"
     responsibilities:
-      - "Read cortex-docs/.content/*.md"
-      - "Run pipeline/extract-json.py → content.json"
+      - "Read docs/.content/*.md"
       - "Apply glassmorphism templates"
+      - "Generate D3.js SVG diagrams"
       - "Generate role landing pages"
       - "Embed D3.js visualizations"
       - "Optimize assets (minify)"
       - "GitHub Pages deployment"
     outputs:
-      - "cortex-docs/index.html"
-      - "cortex-docs/roles/*.html"
-      - "cortex-docs/learning/**/*.html"
-      - "cortex-docs/assets/data/*.json"
+      - "docs/index.html"
+      - "docs/roles/*.html"
+      - "docs/learning/**/*.html"
+      - "docs/assets/data/*.json"
 
 orchestrators:
   documentation_orchestrator:
@@ -457,7 +459,7 @@ governance:
   core_rules_applicable:
     - rule: "CORE-002"
       description: "All output inline — never create .md/.txt report files"
-      enforcement: "No documentation artifacts outside cortex-docs/"
+      enforcement: "No documentation artifacts outside docs/"
     
     - rule: "CORE-008"
       description: "TDD mandatory — RED → GREEN → REFACTOR"
@@ -479,7 +481,7 @@ governance:
     - rule: "DOC-001"
       description: "Zero inline styles in HTML files"
       enforcement: "All styles in external CSS files (glass-*.css, main.css)"
-      validation: "grep '<style>' cortex-docs/*.html returns no matches"
+      validation: "grep '<style>' docs/*.html returns no matches"
     
     - rule: "DOC-002"
       description: "WCAG 2.1 Level AA compliance mandatory"
@@ -580,20 +582,22 @@ maintenance:
 
 references:
   architecture:
-    - "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
+    - "docs/ARCHITECTURE-RECOMMENDATION.md"
     - "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
   
   design:
-    - "cortex-docs/assets/css/glass-design-tokens.css"
-    - "cortex-docs/assets/css/glassmorphism.css"
+    - "docs/assets/css/glass-design-tokens.css"
+    - "docs/assets/css/glassmorphism.css"
   
   workflows:
     - "cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml"
     - "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
   
   agents:
-    - ".github/agents/core/cortex-documentation-architect.md"
-    - ".github/agents/core/cortex-gitpages-builder.md"
+    - ".github/agents/docs/doc-sync-agent.md"
+    - ".github/agents/docs/diagram-regeneration-agent.md"
+    - ".github/agents/docs/github-issue-harvester-agent.md"
+    - ".github/agents/docs/README.md"
     - ".github/agents/AGENT-INDEX.md"
   
   prompts:

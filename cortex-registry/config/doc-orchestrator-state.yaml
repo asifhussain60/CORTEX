@@ -1,0 +1,50 @@
+# CORTEX Documentation Orchestrator — Durable State
+# SSOT for tracking documentation pipeline execution state.
+# Updated automatically by the Documentation Orchestrator pipeline.
+# Manual edits allowed for bootstrapping or recovery.
+#
+# Location: cortex-registry/config/doc-orchestrator-state.yaml
+# Consumers: git-discovery-agent, github-issue-harvester-agent, coverage-audit-agent
+# Created: 2026-03-08
+
+state:
+  # Last pipeline execution timestamp (ISO 8601)
+  # Used by git-discovery-agent to determine "since" window.
+  # Falls back to 7 days if null.
+  last_execution_timestamp: null
+
+  # Last Git commit SHA processed by the pipeline.
+  # Used for precise diff range (commit_range: last_commit..HEAD).
+  last_commit_sha: null
+
+  # GitHub Issue Tracking — used by github-issue-harvester-agent
+  github_issues:
+    # Repository URL for issue fetching
+    repository: "https://github.com/asifhussain60/CORTEX"
+
+    # Last issue ID successfully processed.
+    # The harvester starts from (last_processed_issue_id + 1).
+    # Set to 13 so the first run starts at issue #14.
+    last_processed_issue_id: 13
+
+    # Issues explicitly skipped (e.g., spam, irrelevant).
+    # The harvester will not re-fetch these.
+    skipped_issue_ids: []
+
+    # Timestamp of last issue harvest run.
+    last_harvest_timestamp: null
+
+    # Total issues ingested across all runs.
+    total_issues_ingested: 0
+
+  # Pipeline execution history (last 5 runs for audit trail)
+  execution_history: []
+  # Each entry:
+  #   - timestamp: "2026-03-08T10:00:00Z"
+  #     commit_range: "abc1234..def5678"
+  #     phases_executed: [discovery, drift, sync, narrative, certification]
+  #     issues_harvested: [14, 15]
+  #     certification_result: CERTIFIED | FAILED
+  #     p0_count: 0
+  #     p1_count: 1
+  #     p2_count: 3

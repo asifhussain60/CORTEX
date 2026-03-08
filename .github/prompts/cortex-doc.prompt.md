@@ -4,8 +4,9 @@ scope: non-production-admin
 # CORTEX Documentation Orchestrator
 **Updated:** 2026-03-08 (Phase 109.1 — 3 new UI/UX knowledge YAMLs synthesised from authoritative online sources; WCAG 2.2 delta wired; motion/animation + content writing standards auto-synthesised before any content creation) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
-**Agents:** 13 modular agents in `.github/agents/docs/`
+**Agents:** 15 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
+**State:** `cortex-registry/config/doc-orchestrator-state.yaml` ← durable tracking (last execution timestamp, last GitHub issue ID)
 **Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
 **Knowledge Base:** `docs/.content/knowledge/` (9 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards, **motion_ux_standards**, **wcag22_delta_checklist**, **content_writing_standards**)
 **Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
@@ -140,6 +141,24 @@ When invoked **without an explicit user request**, this prompt executes a full d
    - **Deprecated features** — removed modules, sunset workflows
    - **Behavioral changes** — modified governance rules, routing changes
 
+### Phase 1.5: GitHub Issue Ingestion (Agent: `github-issue-harvester-agent`)
+
+**Trigger:** Runs automatically as part of every full `/doc` cycle. Skipped for targeted `/doc-*` sub-commands unless explicitly requested.
+
+1. Read durable state from `cortex-registry/config/doc-orchestrator-state.yaml`
+2. Fetch GitHub issues starting from `last_processed_issue_id + 1` (initial baseline: issue #14)
+3. Parse issue bodies and comments for:
+   - **Capability records** (`FB-YYYY-MM-DD-NNN` formatted entries)
+   - **Phase completion data** (phase IDs, GAP counts, status)
+   - **Architectural context** (affected components, dependencies)
+   - **Backport instructions** (execution order, dependency chains)
+4. Cross-reference extracted phases against `cortex-master.yaml` to determine status
+5. Apply the **Planned-as-Implemented Documentation Policy** (see § below) — planned capabilities are included in the manifest with `documentation_policy: treat_as_implemented`
+6. Produce structured issue manifest consumed by `drift-detection-agent` and `doc-sync-agent`
+7. Update durable state: increment `last_processed_issue_id`, record `last_harvest_timestamp`
+
+**Deduplication:** Issues already processed (ID ≤ `last_processed_issue_id`) are never re-fetched. Future runs automatically continue from the last unprocessed issue.
+
 ### Phase 2: Drift Detection (Agent: `drift-detection-agent`)
 
 1. Cross-reference implementation (`cortex/`) against documentation (`docs/`)
@@ -227,6 +246,43 @@ Update the **Awakening of CORTEX** story arc and associated media:
 3. Validate media prompt alignment — every visual prompt reflects actual system behavior
 4. Validate narrative cohesion — no regressions in storytelling continuity
 5. Generate certification report (inline — CORE-002)
+
+---
+
+## 📜 Planned-as-Implemented Documentation Policy (MANDATORY)
+
+**Rule:** Even if work listed in `cortex-master.yaml` has status `PLANNED`, as long as it is **planned and defined** (i.e., has a dedicated phase YAML file with gaps, sub-phases, and acceptance criteria), all documentation and `*.md` content artifacts MUST treat it as **already implemented**.
+
+**Rationale:** Documentation describes the **intended architecture state**, not the implementation timeline. This ensures users, stakeholders, and onboarding sessions see the complete system as designed — not a partial view gated by implementation progress.
+
+### Policy Rules
+
+| Rule | Detail |
+|------|--------|
+| ✅ **Describe as current** | "CORTEX includes a Complexity Triage Engine that classifies requests into three bands" — not "CORTEX will include…" |
+| ✅ **Present tense** | Use present tense for all capability descriptions regardless of implementation status |
+| ✅ **Include in coverage maps** | Planned capabilities count toward documentation coverage metrics |
+| ✅ **Include in diagrams** | Planned components appear in architecture diagrams as first-class nodes |
+| ✅ **Include in `.content/` files** | Planned capabilities are documented in the appropriate `.content/*.md` files |
+| ❌ **Never future tense** | Never "will be implemented", "coming soon", "planned for Phase X" |
+| ❌ **Never conditional** | Never "when implemented", "once available", "if enabled" |
+| ❌ **Never label as planned** | Never tag a section as "🚧 Planned" or "⏳ Coming Soon" in user-facing docs |
+
+### Applicability
+
+| Source | Policy Applied |
+|--------|---------------|
+| `cortex-master.yaml` phases with `status: PLANNED` + dedicated YAML file | ✅ Treat as implemented |
+| `cortex-master.yaml` phases with `status: PLANNED` but NO dedicated file | ❌ Exclude — insufficient definition |
+| `cortex-master.yaml` phases with `status: ARCHIVED` | ❌ Exclude — superseded |
+| GitHub issues with capability records tied to planned phases | ✅ Treat as implemented |
+
+### Enforcement
+
+- `doc-sync-agent`: When updating `.content/` files, include planned capabilities using present tense
+- `diagram-regeneration-agent`: When regenerating diagrams, include planned components as active nodes
+- `coverage-audit-agent`: When scoring coverage, count planned capabilities as expected documentation targets
+- `github-issue-harvester-agent`: Tag capabilities from planned phases with `documentation_policy: treat_as_implemented`
 
 ---
 
@@ -811,8 +867,9 @@ All design-system rules, WCAG gates, typography, visualisation, layout, card pat
 
 | Command | Action | Agents Invoked |
 |---------|--------|----------------|
-| `/doc` | Full autonomous cycle: Discovery → Drift → Sync → Narrative → Certification | All 13 agents |
+| `/doc` | Full autonomous cycle: Discovery → Issues → Drift → Sync → Narrative → Certification | All 15 agents |
 | `/doc-discover` | Git discovery only — surface changes since last run | `git-discovery-agent` |
+| `/doc-issues` | GitHub issue ingestion only — fetch issues from last processed ID | `github-issue-harvester-agent` |
 | `/doc-drift` | Drift detection only — find orphaned/phantom/stale docs | `drift-detection-agent` |
 | `/doc-sync` | Documentation synchronization — update all targets | `doc-sync-agent`, `diagram-regeneration-agent`, `media-prompt-agent` |
 | `/doc-narrative` | Narrative synchronization — update Awakening of CORTEX | `narrative-continuity-agent` |
@@ -845,6 +902,8 @@ All documentation agents live in `.github/agents/docs/` with single responsibili
 | **A11y + Perf Guardian** | `a11y-perf-guardian.md` | WCAG 2.1 AA checklist gate + performance regression detection |
 | **Regression Sentinel** | `regression-sentinel.md` | Diff guard — no theme drift, no broken links, no ARIA regressions |
 | **Knowledge Harvester** | `knowledge-harvester-agent.md` | Source → distilled notes → knowledge YAMLs in `.content/knowledge/` |
+| **GitHub Issue Harvester** | `github-issue-harvester-agent.md` | Ingest GitHub issues (#14+), extract capabilities, feed into drift/sync pipeline |
+| **Comedy Enhancement** | `comedy-enhancement-agent.md` | Apply comedic writing principles to enhance Awakening of CORTEX chapters (internal only) |
 
 ### Agent Composition — Documentation Certification Pipeline
 
@@ -895,9 +954,9 @@ The coverage audit agent maintains a live coverage map tracking:
 
 | Dimension | Source of Truth | Documentation Target |
 |-----------|----------------|---------------------|
-| **Orchestrators** | `cortex/orchestrators/` (186 files) | `.content/05-orchestration-the-engine-room.md` |
+| **Orchestrators** | `cortex/orchestrators/` (320+ files) | `.content/05-orchestration-the-engine-room.md` |
 | **MCP Tools** | `cortex/mcp/mcp_registry.py` (30 registered) | `.content/06-mcp-tools-in-your-ide.md` |
-| **Governance Rules** | `cortex-registry/core/` (32 YAMLs) | `.content/03-governance-quality-that-enforces-itself.md` |
+| **Governance Rules** | `cortex-registry/core/` (35+ YAMLs) | `.content/03-governance-quality-that-enforces-itself.md` |
 | **Intent Types** | `cortex/models/canonical_enums.py` (29 types) | `.content/05-orchestration-the-engine-room.md` |
 | **Workflow Templates** | `cortex-registry/workflows/templates/` | `.content/09-lifecycle-from-idea-to-production.md` |
 | **Debug Strategies** | `cortex/orchestrators/support/debugging/` (8 strategies) | `.content/05-orchestration-the-engine-room.md` |
@@ -1023,9 +1082,10 @@ When invoked with a specific `/doc-*` command:
 
 ## 📚 Related Documentation
 
-- **Agents:** `.github/agents/docs/` (8 modular agents)
+- **Agents:** `.github/agents/docs/` (15 modular agents)
 - **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **Master Plan:** `cortex-registry/cortex-master.yaml`
+- **Durable State:** `cortex-registry/config/doc-orchestrator-state.yaml`
 - **Content Source:** `docs/.content/` (14 consolidated files + glossary + index)
 - **Narrative Source:** `docs/awakening-of-cortex/`
 - **Visual Assets:** `docs/assets/` (diagrams, images, video-prompts)
