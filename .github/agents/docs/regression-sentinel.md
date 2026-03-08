@@ -4,7 +4,7 @@ scope: non-production-admin
 # Regression Sentinel Agent
 
 **Agent ID:** `regression-sentinel`
-**Updated:** 2026-03-07
+**Updated:** 2026-03-08
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -150,6 +150,34 @@ grep -En 'card-title.*text-(xs|sm|base|\[1[2-6]px\])' {proposed_html}
 ```
 
 Any match → **P0 BLOCK** with the exact line number and recommended fix from `cortex-doc.prompt.md` § WCAG Font Size Floor Rules.
+
+### Check 9 — Wave Colour & Character Consistency (P1)
+
+**Added:** 2026-03-08. Codified from design session where wave assignments drifted between index.html, sidebar, CSS, and story prompts.
+
+For changes touching `docs/awakening-of-cortex/`:
+
+| Sub-Check | Verify |
+|-----------|--------|
+| Wave assignment in CHAPTERS JS array | Chapters 01–04 = wave 0, 05–08 = wave 1, 09–10 = wave 2, 11 = wave 3, 12 = wave 4 |
+| Wave assignment in sidebar HTML | Same grouping as CHAPTERS array |
+| `data-wave` on `<figure>` tags | Matches chapter's wave assignment |
+| Wave hex colours in story prompts | #a78bfa (0), #67e8f9 (1), #fbbf24 (2), #34d399 (3), #8b5cf6 (4) |
+
+For changes touching `docs/awakening-of-cortex/images/story-prompts/`:
+
+| Sub-Check | Verify |
+|-----------|--------|
+| Asif canonical face block | "54-year-old eccentric mad scientist" present (exempt: ch-03-b where Asif absent) |
+| Miss G canonical face block | "Indian-Asian beauty" present in all 28 prompts |
+| Miss G purple hue | Purple/violet glow referenced in every prompt featuring Miss G |
+| CB dome evolution | Brain dome description appropriate for chapter's evolution phase |
+| Art style | "New Yorker cartoon meets Tintin" or "Cinematic 2D cartoon illustration" |
+| No photorealism | "No photorealism" clause present |
+
+**SSOT:** `docs/awakening-of-cortex/images/story-prompts/CHARACTER-CONSISTENCY-SHEET.md`
+
+Any wave mismatch or character inconsistency → **P1 FLAG** with reference to canonical SSOT.
 
 ---
 

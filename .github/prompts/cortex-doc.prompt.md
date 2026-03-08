@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-08 (Phase 109 — Workflow Composer Delegation for HTML/CSS/Web; design system rules extracted to `frontend/docs-html-design-workflow.yaml`) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-08 (Phase 109 — Workflow Composer Delegation for HTML/CSS/Web; design system rules extracted to `frontend/docs-html-design-workflow.yaml`; author design preferences codified) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -224,6 +224,99 @@ WorkflowComposer → frontend/docs-html-design-workflow.yaml
 - Per-page architecture detection (inline `<style>` vs external CSS)
 - Quality gates: wcag_font_floor_audit, theme_integrity, dom_validation, a11y_gate, regression_guard
 - Learning signal emission (PLIP-001, scope_lock: `documentation`)
+
+---
+
+## 🎨 Author Design Preferences (MANDATORY — P0 Governance)
+
+**Source:** Distilled from iterative design sessions (chat01.md, 2026-03-08). These preferences are **permanent governance rules** — not suggestions. All future HTML view development, image prompt authoring, and narrative work MUST respect them without the author needing to re-state them.
+
+### Visual Art Style — 2D Black & White Comic (Immutable)
+
+| Rule | Detail |
+|------|--------|
+| **Art style** | "New Yorker cartoon meets Tintin" — 2D black & white comic illustration |
+| **Photorealism** | ❌ **BANNED** — no photographic, 3D-rendered, or photorealistic imagery anywhere |
+| **Generator** | Gemini Imagen 2 (or successor) — all story prompts target this model |
+| **Aspect ratio** | 16:9 landscape — all story and architecture images |
+| **Line work** | Bold confident outlines, cross-hatching for shadows, stipple dots for texture |
+| **Shading** | Ink wash gradients only — no colour fills except wave accent colour |
+| **Wave accent** | One hex colour per wave used ONLY for glowing highlights (brain dome, Miss G's hue, LED eyes) |
+
+### Character Consistency — P0 Requirement (Non-Negotiable)
+
+**Every image prompt** MUST include the canonical face block for each character present in the scene. Character descriptions are **immutable** — never alter physical appearance across chapters.
+
+**SSOT:** `docs/awakening-of-cortex/images/story-prompts/CHARACTER-CONSISTENCY-SHEET.md`
+
+| Character | Canonical Identity | Key Visual Rules |
+|-----------|-------------------|-----------------|
+| **Asif Codenstein** | 54-year-old eccentric mad scientist, youthful-looking despite age, slightly overweight (not fat), funny ADHD hair, bare feet | Same face in EVERY prompt. Hair shows signs of severe ADHD (wild, unkempt, expressive). Slightly plump build — lovable, not exaggerated. |
+| **Miss G** | Beautiful Indian-Asian woman, petite curvy body, long curly hair, **purple glowing hue** always | Purple aura/glow in every scene. National dress rotation per chapter — no outfit repeats within same wave. Outfit SSOT in CHARACTER-CONSISTENCY-SHEET.md. |
+| **Copilot Bot (CB)** | Cute robot with transparent brain dome — evolves from infant (empty dome) to adult (full luminous brain) across 12 chapters | Dome growth is the visual through-line. Ch 01–04: empty/tiny sparks. Ch 05–08: growing network. Ch 09–10: dense lattice. Ch 11: organized brain. Ch 12: full radiant brain (CORTEX logo). |
+
+### National Dress Rotation — Miss G (Immutable)
+
+Miss G wears a **different country's national dress** in each image prompt. No repeats within the same wave. The outfit rotation is defined in `CHARACTER-CONSISTENCY-SHEET.md` and MUST be followed exactly. When creating new prompts, select from countries not yet used, prioritising culturally rich and visually distinctive outfits.
+
+### Illustrated Storybook Image Integration (Mandatory for Narrative HTML)
+
+When integrating images into narrative chapter markdown (`.md` files rendered in `docs/awakening-of-cortex/`):
+
+| Rule | Detail |
+|------|--------|
+| **Tag format** | `<figure class="ch-arch-img" data-wave="{n}">` wrapping `<img>` + `<figcaption>` |
+| **Alignment** | Left, right, and center — alternate like an illustrated storybook |
+| **Contextual placement** | Images appear at narrative moments where the concept is being explained — never arbitrary |
+| **Architecture diagrams** | Use `ch-arch-img` CSS class (whiteboard-style panel with wave-coloured accent border) |
+| **Story images** | Auto-injected by `index.html` `injectImages()` function at ~33% and ~67% paragraph positions — do NOT manually add story images |
+| **Path convention** | Architecture images: `../assets/images/generated/shared/{name}.png` relative to chapter render context |
+| **Alt text** | Descriptive, accessible — never empty for architecture diagrams |
+
+### Brain Analogy as Master Frame (Mandatory for All Content)
+
+The **brain/nervous system** is the master metaphor unifying all CORTEX content:
+
+| Content Body | How Brain Frame Is Used |
+|-------------|------------------------|
+| **`.content/` docs** | Brain anatomy explicitly: spinal cord → Motor Cortex → Prefrontal Cortex → Immune System → Neuroplasticity |
+| **Story chapters** | Each chapter anchored to a brain region via ONE sentence (thalamus, motor cortex, autonomic nervous system, etc.) |
+| **Story prompts** | CB's brain dome grows chapter-by-chapter — the visual brain evolution |
+| **Architecture images** | Shared prompts map to immutable brain concepts (intelligence diamond, governance shield, etc.) |
+
+**SSOT:** `docs/awakening-of-cortex/images/story-prompts/BRAIN-REGION-MAPPING.md`
+
+When creating new content, documentation views, or visual assets, anchor explanations to the brain analogy where it adds clarity. Do NOT force the analogy where it doesn't fit naturally.
+
+### Wave-Based Chapter Grouping (Immutable)
+
+| Wave | Chapters | Colour | Hex | Theme |
+|------|----------|--------|-----|-------|
+| 0 — Origin | 01–04 | Purple | `#a78bfa` | Birth and early formation |
+| 1 — Structure | 05–08 | Cyan | `#67e8f9` | Architecture and resilience |
+| 2 — Resilience | 09–10 | Amber | `#fbbf24` | Pruning and adaptation |
+| 3 — Autonomy | 11 | Emerald | `#34d399` | Self-healing and learning |
+| 4 — Vision | 12 | Violet | `#8b5cf6` | Enterprise brain and future |
+
+All HTML, CSS, sidebar groupings, story prompts, and image wave accents MUST match this table.
+
+### Immutable Architecture Concepts for Image Prompts
+
+Image prompts for shared architecture diagrams MUST depict **concepts that will not change with future enhancements**. Choose the most central, stable abstraction — not implementation details.
+
+| Image | Immutable Concept | Why It Won't Change |
+|-------|-------------------|---------------------|
+| Platform Architecture Overview | 5-layer brain anatomy | Core identity |
+| LENS Intelligence Pipeline | PERCEIVE → REASON → ACT → REMEMBER | Fundamental cycle |
+| Principle Selection System | Wisdom distillation (90 principles, 10 domains) | Principle library grows, pattern is fixed |
+| Brain Architecture Six Domains | 6 brain regions = 6 orchestrator domains | Domain model is stable |
+| Intelligence Diamond Three Tiers | Skull → Core → Cortex intelligence tiers | Tier structure is foundational |
+| Governance Shield | Defence-in-depth (3 layers) | Security model is fixed |
+| TDD Flywheel | RED → GREEN → REFACTOR cycle | Industry-standard, immutable |
+| Learning Loop | Institutional memory (emit → decay → promote → quarantine) | URS lifecycle is core |
+| Request Journey | Intent → routing → execution → result | Pipeline structure is fixed |
+
+**SSOT:** `docs/assets/image-prompts/shared/` (9 prompt files)
 
 ### 🧠 Learning Protocol (PLIP-001)
 

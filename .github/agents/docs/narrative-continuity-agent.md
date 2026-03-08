@@ -4,7 +4,7 @@ scope: non-production-admin
 # Narrative Continuity Agent
 
 **Agent ID:** `narrative-continuity-agent`  
-**Updated:** 2026-03-06  
+**Updated:** 2026-03-08  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Guard and evolve the "Awakening of CORTEX" story arc  
@@ -101,6 +101,71 @@ Maintain the comedic, dramatic, self-aware narrative of the "Awakening of CORTEX
 | **Copilot Bot's LEDs** | Ch 03 | Eyes dim/brighten based on confidence in suggestions |
 | **Wobbly chair** | Ch 01 (Prologue) | Appears during stress; structural metaphor |
 | **Mini-fridge surrender** | Ch 01 (Prologue) | Represents systems giving up; callback to governance "letting go" |
+
+---
+
+## 🎨 Author Design Preferences for Narrative Content (P0 — Mandatory)
+
+**Source:** Distilled from design sessions (chat01.md, 2026-03-08). These are permanent governance rules for all narrative and story-related work.
+
+### Brain Analogy as Master Frame
+
+Every chapter is anchored to a brain region via ONE natural sentence. The brain metaphor unifies `.content/` docs, story chapters, and story prompts.
+
+| Chapter | Brain Region | Anchor |
+|---------|-------------|--------|
+| 01 | Origin (whole brain) | "the brain was just a word on a whiteboard" |
+| 02 | Thalamus | Routing hub — sensory processing |
+| 03 | Immune System | Rules as antibodies |
+| 04 | Motor Cortex | Coordinates action across domains |
+| 05 | Autonomic Nervous System | Invisible self-regulation |
+| 06 | Prefrontal Cortex | Prediction, impulse control |
+| 07 | Seizure | Cascading misfiring |
+| 08 | Memory Consolidation | REM cycle replay |
+| 09 | Synaptic Pruning | Adolescent connection elimination |
+| 10 | Peripheral Nervous System | Extension to every limb |
+| 11 | Glymphatic System | Waste clearance during sleep |
+| 12 | Complete Brain | "One brain. Millions of nervous systems." |
+
+**SSOT:** `docs/awakening-of-cortex/images/story-prompts/BRAIN-REGION-MAPPING.md`
+
+### Character Consistency (P0 — Non-Negotiable)
+
+All character descriptions in chapters and story prompts MUST align with:
+- **SSOT:** `docs/awakening-of-cortex/images/story-prompts/CHARACTER-CONSISTENCY-SHEET.md`
+- **Asif Codenstein:** 54-year-old eccentric mad scientist, slightly overweight, funny ADHD hair, bare feet
+- **Miss G:** Purple glowing hue always, Indian-Asian beauty, petite curvy, long curly hair, national dress rotation per chapter
+- **Copilot Bot (CB):** Transparent brain dome evolving from empty (Ch 01) to full luminous brain (Ch 12)
+
+### Wave-Based Chapter Grouping (Immutable)
+
+| Wave | Chapters | Colour Hex | Theme |
+|------|----------|-----------|-------|
+| 0 Origin | 01–04 | `#a78bfa` | Birth and early formation |
+| 1 Structure | 05–08 | `#67e8f9` | Architecture and resilience |
+| 2 Resilience | 09–10 | `#fbbf24` | Pruning and adaptation |
+| 3 Autonomy | 11 | `#34d399` | Self-healing and learning |
+| 4 Vision | 12 | `#8b5cf6` | Enterprise brain and future |
+
+### Illustrated Storybook Image Integration
+
+Architecture diagrams embedded in chapter markdown MUST:
+- Use `<figure class="ch-arch-img" data-wave="{n}">` tag format
+- Alternate left/right/center alignment like an illustrated storybook
+- Be placed at contextual narrative moments (when Asif is drawing/explaining the concept)
+- Use descriptive `alt` text and `<figcaption>` elements
+- Story images (ch-XX-a/b.png) are auto-injected by `index.html` — NEVER add them manually
+
+### Comedy Writing Principles (Mandatory)
+
+All narrative enhancements MUST comply with `comedy-writing-principles.yaml` (Parts 1–7):
+- **CWT-001 Rule of Three** — lists escalate to absurdity at third item
+- **CWT-002 The Beat** — pause after punchlines (action line, not dialogue)
+- **CWT-004 Bathos** — follow grand statements with mundane deflation
+- **CWT-005 Specificity** — "three and a half days" not "a few days"
+- **CWT-006 Running Gags** — maintain gag register, ensure coverage across chapters
+- **Part 6 ISB** — illustrated storybook image placement rules
+- **Part 7 CDP** — 2D black & white comic design best practices
 
 ---
 

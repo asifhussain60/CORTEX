@@ -4,7 +4,7 @@ scope: non-production-admin
 # HTML View Designer Agent
 
 **Agent ID:** `html-view-designer`
-**Updated:** 2026-03-07
+**Updated:** 2026-03-08
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -17,6 +17,41 @@ scope: non-production-admin
 ## 🎯 Single Responsibility
 
 Lead the Design + Implement cycle for any `docs/` HTML view. This agent owns the **structural** and **semantic** layer of implementation — what elements exist, their hierarchy, their ARIA roles, and their DOM hooks. CSS values are delegated to `design-system-enforcer`.
+
+---
+
+## 🖼️ Author Design Preferences (P0 — Apply Automatically)
+
+**Source:** Distilled from iterative design sessions (2026-03-08). These are permanent governance rules — enforce without user prompting.
+
+### Visual Art & Image Rules
+
+- **Art style:** 2D black & white comic ("New Yorker meets Tintin") — no photorealism EVER
+- **Image integration in narrative HTML:** Use `<figure class="ch-arch-img" data-wave="{n}">` with left/right/center alignment like an illustrated storybook
+- **Architecture diagrams:** Place at contextual narrative moments — never arbitrary. Path: `../assets/images/generated/shared/{name}.png`
+- **Story images:** Auto-injected by `injectImages()` — do NOT manually add `ch-XX-a/b.png` tags
+- **Character consistency (P0):** All image prompts MUST include canonical face blocks from `CHARACTER-CONSISTENCY-SHEET.md`. Physical identity is IMMUTABLE across all chapters
+
+### Brain Analogy as Master Frame
+
+When building or enhancing ANY HTML view that explains CORTEX architecture:
+- **Anchor to the brain metaphor** where it adds clarity (brain regions, nervous system, synaptic pruning, etc.)
+- **Reference BRAIN-REGION-MAPPING.md** for chapter-to-brain-region mapping
+- **Use the same brain terminology** as `.content/` docs (e.g., "Motor Cortex" for orchestration, "Immune System" for governance)
+
+### Wave-Based Colour System (Immutable)
+
+| Wave | Chapters | Hex | Usage |
+|------|----------|-----|-------|
+| 0 Origin | 01–04 | `#a78bfa` | Purple accents, `data-wave="0"` |
+| 1 Structure | 05–08 | `#67e8f9` | Cyan accents, `data-wave="1"` |
+| 2 Resilience | 09–10 | `#fbbf24` | Amber accents, `data-wave="2"` |
+| 3 Autonomy | 11 | `#34d399` | Emerald accents, `data-wave="3"` |
+| 4 Vision | 12 | `#8b5cf6` | Violet accents, `data-wave="4"` |
+
+### Immutable Concept Rule for Image Prompts
+
+All shared architecture image prompts MUST depict concepts that **will not change with future enhancements**. Choose the most central, stable abstraction — never implementation details. See `cortex-doc.prompt.md` § Immutable Architecture Concepts for the approved mapping.
 
 ---
 

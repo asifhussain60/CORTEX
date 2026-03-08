@@ -4,7 +4,7 @@ scope: non-production-admin
 # A11y + Perf Guardian Agent
 
 **Agent ID:** `a11y-perf-guardian`
-**Updated:** 2026-03-07
+**Updated:** 2026-03-08
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -99,6 +99,15 @@ Run all checks from `a11y_checklist.yaml`. Priority order:
 | perf-003 | New images below hero have `loading='lazy'` |
 | perf-022 | New `<img>` elements have `width` + `height` attributes (CLS prevention) |
 | perf-030 | All new images have explicit dimensions |
+
+### P1 A11y Checks — Narrative Content (Awakening of CORTEX)
+
+| Check ID | What to verify |
+|----------|---------------|
+| a11y-050 | All `<figure class="ch-arch-img">` have `<img>` with descriptive `alt` text (not empty) |
+| a11y-051 | All `<figure>` elements include `<figcaption>` with meaningful caption |
+| a11y-052 | `data-wave` attribute on `ch-arch-img` figures matches chapter wave assignment |
+| a11y-053 | Architecture image `src` paths resolve (relative to render context) |
 
 ---
 

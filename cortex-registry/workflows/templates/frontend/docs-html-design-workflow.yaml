@@ -24,6 +24,7 @@ metadata:
   author: CORTEX
   created: "2026-03-08"
   updated: "2026-03-08"
+  design_preferences_harvested: "2026-03-08"
   technologies: [html, css, javascript, tailwindcss, d3js, lucide-icons, font-awesome]
   rollback_on_failure: true
   vision_api_integration: true
@@ -138,6 +139,83 @@ wcag_font_floors:
     20px: "text-xl"
     24px: "text-2xl"
     36px: "text-4xl"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# AUTHOR DESIGN PREFERENCES — PERMANENT GOVERNANCE (IMMUTABLE)
+# Source: Distilled from design sessions (chat01.md, 2026-03-08)
+# These rules are applied automatically — user does not need to re-state them
+# ══════════════════════════════════════════════════════════════════════════════
+author_preferences:
+  # ── Visual Art Style (Immutable) ─────────────────────────────────────────
+  art_style:
+    aesthetic: "New Yorker cartoon meets Tintin — 2D black & white comic illustration"
+    generator: "Gemini Imagen 2"
+    aspect_ratio: "16:9 landscape"
+    line_work: "Bold confident outlines, cross-hatching for shadows, stipple dots for texture"
+    shading: "Ink wash gradients only — no colour fills except wave accent colour"
+    photorealism: BANNED
+    note: "Every story and architecture image follows this style"
+
+  # ── Character Consistency (P0 — Non-Negotiable) ─────────────────────────
+  character_consistency:
+    ssot: "docs/awakening-of-cortex/images/story-prompts/CHARACTER-CONSISTENCY-SHEET.md"
+    rule: "Every image prompt includes canonical face block. Physical identity is IMMUTABLE."
+    characters:
+      asif_codenstein:
+        identity: "54-year-old eccentric mad scientist, youthful-looking, slightly overweight, funny ADHD hair, bare feet"
+        note: "Same face in EVERY prompt"
+      miss_g:
+        identity: "Indian-Asian beauty, petite curvy, long curly hair, purple glowing hue always"
+        outfit_rule: "National dress rotation per chapter — no repeats within same wave"
+        outfit_ssot: "CHARACTER-CONSISTENCY-SHEET.md outfit table"
+      copilot_bot:
+        identity: "Cute robot with transparent brain dome — evolves from infant to adult across 12 chapters"
+        evolution: "Ch01-04 empty → Ch05-08 growing → Ch09-10 dense → Ch11 organized → Ch12 full brain"
+
+  # ── Wave-Based Chapter System (Immutable) ─────────────────────────────────
+  wave_system:
+    wave_0: { name: Origin,     chapters: [1,2,3,4],   hex: "#a78bfa", tailwind: "violet-400" }
+    wave_1: { name: Structure,  chapters: [5,6,7,8],   hex: "#67e8f9", tailwind: "cyan-300" }
+    wave_2: { name: Resilience, chapters: [9,10],      hex: "#fbbf24", tailwind: "amber-400" }
+    wave_3: { name: Autonomy,   chapters: [11],        hex: "#34d399", tailwind: "emerald-400" }
+    wave_4: { name: Vision,     chapters: [12],        hex: "#8b5cf6", tailwind: "violet-500" }
+    enforcement: "All HTML, CSS, sidebar, story prompts, and image wave accents MUST match"
+
+  # ── Brain Analogy as Master Frame ─────────────────────────────────────────
+  brain_analogy:
+    rule: "The brain/nervous system is the master metaphor unifying ALL CORTEX content"
+    ssot: "docs/awakening-of-cortex/images/story-prompts/BRAIN-REGION-MAPPING.md"
+    scope: "Anchor to brain terminology where it adds clarity — do NOT force where unnatural"
+
+  # ── Illustrated Storybook Image Integration ────────────────────────────────
+  image_integration:
+    figure_class: "ch-arch-img"
+    data_attribute: "data-wave"
+    alignment: "alternate left/right/center like an illustrated storybook"
+    placement_rule: "At contextual narrative moments when concept is being explained — never arbitrary"
+    path_convention: "../assets/images/generated/shared/{name}.png relative to chapter render context"
+    story_images: "Auto-injected by injectImages() — NEVER add manually"
+    alt_text: "Descriptive and accessible — never empty for architecture diagrams"
+
+  # ── Immutable Architecture Concepts ────────────────────────────────────────
+  immutable_concepts:
+    rule: "All shared architecture image prompts depict concepts that will NOT change with future enhancements"
+    mapping:
+      - { image: "01-platform-architecture-overview", concept: "5-layer brain anatomy", immutable: true }
+      - { image: "02-lens-intelligence-pipeline", concept: "PERCEIVE→REASON→ACT→REMEMBER cycle", immutable: true }
+      - { image: "03-principle-selection-system", concept: "Wisdom distillation (90 principles, 10 domains)", immutable: true }
+      - { image: "04-brain-architecture-six-domains", concept: "6 brain regions = 6 orchestrator domains", immutable: true }
+      - { image: "05-intelligence-diamond-three-tiers", concept: "Skull→Core→Cortex intelligence tiers", immutable: true }
+      - { image: "06-governance-shield-defence-in-depth", concept: "Defence-in-depth (3 layers)", immutable: true }
+      - { image: "07-tdd-flywheel-cycle", concept: "RED→GREEN→REFACTOR cycle", immutable: true }
+      - { image: "08-learning-loop-institutional-memory", concept: "Institutional memory lifecycle", immutable: true }
+      - { image: "09-request-journey-intent-to-delivery", concept: "Intent→routing→execution→result", immutable: true }
+
+  # ── Comedy Writing Compliance ──────────────────────────────────────────────
+  comedy:
+    ssot: "cortex-registry/knowledge/best-practices/content/comedy-writing-principles.yaml"
+    parts: "Parts 1–7 (CWT rules, ISB image integration, CDP 2D comic design)"
+    enforcement: "All narrative enhancements MUST comply with comedy-writing-principles.yaml"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # VISUALISATION RULES (MANDATORY)

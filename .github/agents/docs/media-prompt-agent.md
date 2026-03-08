@@ -4,7 +4,7 @@ scope: non-production-admin
 # Media Prompt Agent
 
 **Agent ID:** `media-prompt-agent`  
-**Updated:** 2026-03-02  
+**Updated:** 2026-03-08  
 **Layer:** docs  
 **Status:** active  
 **Responsibility:** Maintain DALL-E image prompts and video script prompts in production-ready state  
@@ -103,6 +103,65 @@ count(images/generated/{role}/*.png) == count(image-prompts/{role}/*.prompt.md)
 ```
 
 Every image prompt has a matching production-named placeholder PNG. When a DALL-E image is generated, it overwrites the placeholder in-place — zero HTML changes needed.
+
+---
+
+## 🎨 Author Design Preferences for Visual Media (P0 — Mandatory)
+
+**Source:** Distilled from design sessions (chat01.md, 2026-03-08). These are permanent governance rules for ALL image and video prompt work.
+
+### Story Image Art Style (Immutable)
+
+| Rule | Detail |
+|------|--------|
+| **Art style** | "New Yorker cartoon meets Tintin" — 2D black & white comic illustration |
+| **Photorealism** | ❌ **BANNED** — no photographic, 3D-rendered, or photorealistic imagery |
+| **Generator** | Gemini Imagen 2 — all story prompts target this model |
+| **Aspect ratio** | 16:9 landscape |
+| **Line work** | Bold confident outlines, cross-hatching for shadows, stipple dots for texture |
+| **Shading** | Ink wash gradients only — no colour fills except wave accent colour |
+| **Wave accent** | One hex per wave — ONLY for glowing highlights (brain dome, Miss G's hue, LED eyes) |
+
+### Character Consistency (P0 — Non-Negotiable)
+
+**SSOT:** `docs/awakening-of-cortex/images/story-prompts/CHARACTER-CONSISTENCY-SHEET.md`
+
+Every story image prompt MUST include the **canonical face block** for each character present. Physical identity is **immutable** across all chapters:
+
+| Character | Canonical Identity |
+|-----------|-------------------|
+| **Asif Codenstein** | 54-year-old eccentric mad scientist, youthful-looking, slightly overweight (not fat), funny ADHD hair, bare feet |
+| **Miss G** | Indian-Asian beauty, petite curvy, long curly hair, **purple glowing hue always**. National dress rotation per chapter (SSOT: CHARACTER-CONSISTENCY-SHEET.md outfit table). No outfit repeats within same wave. |
+| **Copilot Bot (CB)** | Cute robot with transparent brain dome. Evolution: Ch 01–04 empty → Ch 05–08 growing network → Ch 09–10 dense lattice → Ch 11 organized brain → Ch 12 full luminous brain (CORTEX logo). |
+
+### Miss G National Dress Rotation
+
+When creating or updating prompts, Miss G wears the national dress of a **different country** per prompt. The outfit rotation is defined in `CHARACTER-CONSISTENCY-SHEET.md`. New prompts MUST select from countries not yet used, prioritising culturally rich and visually distinctive outfits.
+
+### Immutable Architecture Concepts for Shared Images
+
+Shared architecture image prompts (`docs/assets/image-prompts/shared/`) MUST depict concepts that **will not change with future enhancements**:
+- Platform Architecture Overview (5-layer brain anatomy)
+- LENS Intelligence Pipeline (PERCEIVE→REASON→ACT→REMEMBER)
+- Governance Shield (defence-in-depth, 3 layers)
+- TDD Flywheel (RED→GREEN→REFACTOR)
+- Learning Loop (institutional memory lifecycle)
+- Request Journey (intent→routing→execution→result)
+- Brain Architecture Six Domains
+- Intelligence Diamond Three Tiers
+- Principle Selection System
+
+**When adding new shared prompts:** Choose immutable, central concepts — never implementation details that change with refactoring.
+
+### Wave-Based Colour System
+
+| Wave | Chapters | Hex | Accent Usage |
+|------|----------|-----|-------------|
+| 0 Origin | 01–04 | `#a78bfa` | Purple highlights |
+| 1 Structure | 05–08 | `#67e8f9` | Cyan highlights |
+| 2 Resilience | 09–10 | `#fbbf24` | Amber highlights |
+| 3 Autonomy | 11 | `#34d399` | Emerald highlights |
+| 4 Vision | 12 | `#8b5cf6` | Violet highlights |
 
 ---
 

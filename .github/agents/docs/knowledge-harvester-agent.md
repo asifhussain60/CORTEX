@@ -4,7 +4,7 @@ scope: non-production-admin
 # Knowledge Harvester Agent
 
 **Agent ID:** `knowledge-harvester-agent`
-**Updated:** 2026-03-07
+**Updated:** 2026-03-08
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement (Knowledge Acquisition)
@@ -72,6 +72,11 @@ When harvesting from a session, extract:
 - [ ] **Corrections made** — what the user asked to change (= anti-patterns)
 - [ ] **Equal height / alignment fixes** — flexbox patterns used
 - [ ] **Visual separation techniques** — how sections were distinguished
+- [ ] **Image art style preferences** — 2D/3D, colour/B&W, photorealism rules
+- [ ] **Character design rules** — consistency sheets, evolution arcs, outfit rotation
+- [ ] **Wave/theme colour systems** — chapter groupings, hex assignments
+- [ ] **Content metaphor systems** — brain analogy, storybook integration patterns
+- [ ] **Illustrated storybook layout** — figure placement, alignment alternation, contextual triggers
 
 ---
 

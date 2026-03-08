@@ -4,7 +4,7 @@ scope: non-production-admin
 # Design System Enforcer Agent
 
 **Agent ID:** `design-system-enforcer`
-**Updated:** 2026-03-07
+**Updated:** 2026-03-08
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
@@ -57,6 +57,33 @@ These color pairings are APPROVED for card systems, section panels, and visual h
 ### Hover Glow Layer
 
 **Pattern:** `absolute inset-0 bg-gradient-to-br from-{color}-600/20 to-{color2}-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`
+
+---
+
+## 🎨 Author Design Preferences — CSS Enforcement (P0)
+
+**Source:** Distilled from design sessions (chat01.md, 2026-03-08). Enforce these in token validation.
+
+### Wave-Based Colour Tokens (Immutable)
+
+When validating CSS for `docs/awakening-of-cortex/` or any wave-themed content:
+
+| Wave | Hex | Tailwind Equivalent | Usage |
+|------|-----|-------------------|-------|
+| 0 Origin | `#a78bfa` | `violet-400` | Chapter 01–04 accents |
+| 1 Structure | `#67e8f9` | `cyan-300` | Chapter 05–08 accents |
+| 2 Resilience | `#fbbf24` | `amber-400` | Chapter 09–10 accents |
+| 3 Autonomy | `#34d399` | `emerald-400` | Chapter 11 accents |
+| 4 Vision | `#8b5cf6` | `violet-500` | Chapter 12 accents |
+
+**Enforcement:** If a CSS rule in awakening-of-cortex uses a wave colour not matching the above table for the given chapter context → P1 FLAG.
+
+### Illustrated Storybook Image Classes
+
+The `.ch-arch-img` CSS class (defined in `docs/awakening-of-cortex/awakening.css`) is the canonical class for architecture diagram integration in narrative content. Validate that:
+- All `<figure>` tags in chapter markdown use `class="ch-arch-img"`
+- `data-wave` attribute matches the chapter's wave assignment
+- No inline `style=` overrides on these figures (use the class)
 
 ---
 
