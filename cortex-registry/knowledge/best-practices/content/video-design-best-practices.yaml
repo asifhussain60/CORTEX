@@ -5,7 +5,7 @@
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
 # Scope: EXTERNAL — included in /sync; used in cortex-docs video prompt generation
 # Created: 2026-02-27
-# Updated: 2026-03-04 — Counts verified against live architecture (322 orchestrators, 54 MCP tool files, 30 registered, 15 domains, 108 phases, 36 governance rules)
+# Updated: 2026-03-08 — Counts verified against live architecture (296 orchestrators, 58 MCP tool files, 36 registered, 14 domains, 65 phases complete, 60 governance rules)
 
 domain: content-production
 type: best-practice

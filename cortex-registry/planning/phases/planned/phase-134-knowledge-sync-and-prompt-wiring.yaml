@@ -61,10 +61,10 @@ sweep_catalogue:
       AGENT-INDEX.md is the token-efficient source of truth that all agents load
       first. It must reflect post-backport reality:
       - Architecture Quick Reference table:
-          Orchestrator files: 320 → recalculate
-          MCP Tools: 36 registered → 33 registered
-          Intent Types: 29 → 31
-          Tests: ~18,874 → recalculate (new ~35 test files from backport)
+          Orchestrator files: 296 (current live)
+          MCP Tools: 36 registered (current live)
+          Intent Types: 31 (current live)
+          Tests: ~20,565 (current live) → recalculate post-backport
       - Specialist Agents table: add row for cortex-review-agent.md (if created)
         and cortex-feedback-agent.md (if created in phase-133)
       - Documentation Agents table: no new docs agents; verify existing rows
