@@ -1,0 +1,131 @@
+# domain-signal-map.yaml
+# CORTEX Knowledge Acquisition Layer — Domain Signal Map
+# Converts LENS output (language / imports / files) into domain signal strings
+# matchable against cortex-registry/knowledge/INDEX.yaml entries.
+#
+# Each entry: { pattern: regex, domain: index-domain-key, knowledge_file: optional }
+# DomainSignalExtractor applies these in order; first match per signal wins.
+#
+# Phase: 135-a (KAL — GAP-135-01)
+# CORE: CORE-035 (single canonical)
+# Updated: 2026-03-08
+# ---
+
+version: "1.0"
+updated: "2026-03-08"
+
+# Total signal patterns: 60 across 12 domains
+patterns:
+
+  # ── Testing / Validation ──────────────────────────────────────────────────
+  - pattern: "pytest|unittest|test_|_test|testing|tdd|coverage|mock|fixture|parametrize"
+    domain: "testing-validation"
+    knowledge_file: "testing-validation/tdd-best-practices.yaml"
+
+  - pattern: "behave|bdd|cucumber|gherkin|acceptance"
+    domain: "testing-validation"
+    knowledge_file: "testing-validation/tdd-best-practices.yaml"
+
+  # ── Python Backend ────────────────────────────────────────────────────────
+  - pattern: "fastapi|flask|django|uvicorn|starlette|aiohttp|sanic|tornado"
+    domain: "backend-python"
+    knowledge_file: "backend-python/clean-code.yaml"
+
+  - pattern: "sqlalchemy|alembic|peewee|tortoise|databases|asyncpg|psycopg"
+    domain: "backend-python"
+    knowledge_file: "backend-python/clean-code.yaml"
+
+  - pattern: "pydantic|dataclass|attrs|marshmallow|cerberus"
+    domain: "backend-python"
+    knowledge_file: "backend-python/clean-code.yaml"
+
+  - pattern: "refactor|clean.code|code.quality|naming|solid|dry|srp|coupling"
+    domain: "backend-python"
+    knowledge_file: "backend-python/refactoring.yaml"
+
+  - pattern: "code.review|review|checklist|pull.request|pr.review"
+    domain: "backend-python"
+    knowledge_file: "backend-python/code-review.yaml"
+
+  # ── Security ──────────────────────────────────────────────────────────────
+  - pattern: "owasp|injection|xss|csrf|sqli|auth|jwt|oauth|tls|ssl|encryption"
+    domain: "security"
+    knowledge_file: "security/secure-coding-practices.yaml"
+
+  - pattern: "secret|vault|rotation|key.management|hsm|kms"
+    domain: "security"
+    knowledge_file: "../knowledge-base/security/secrets-patterns.yaml"
+
+  - pattern: "cicd|pipeline|supply.chain|sbom|sast|dast|dependency.scan"
+    domain: "security"
+    knowledge_file: "../knowledge-base/security/cicd-hardening.yaml"
+
+  # ── Architecture ──────────────────────────────────────────────────────────
+  - pattern: "microservice|monolith|event.driven|cqrs|saga|hexagonal|clean.arch"
+    domain: "architecture"
+    knowledge_file: "architecture/engineering-design-patterns.yaml"
+
+  - pattern: "solid|single.responsibility|open.closed|liskov|interface.segregation|dependency.inversion"
+    domain: "architecture"
+    knowledge_file: "architecture/engineering-solid-principles.yaml"
+
+  - pattern: "anti.pattern|god.object|spaghetti|big.ball|coupling|cohesion"
+    domain: "architecture"
+    knowledge_file: "architecture/engineering-anti-patterns.yaml"
+
+  # ── DevOps / SRE ─────────────────────────────────────────────────────────
+  - pattern: "docker|kubernetes|k8s|helm|terraform|ansible|ci.cd|github.actions|jenkins"
+    domain: "devops"
+    knowledge_file: "devops/deployment-pipeline-patterns.yaml"
+
+  - pattern: "prometheus|grafana|alertmanager|loki|jaeger|opentelemetry|sre|slo|sla|sli"
+    domain: "devops"
+    knowledge_file: "devops/deployment-pipeline-patterns.yaml"
+
+  # ── Observability ─────────────────────────────────────────────────────────
+  - pattern: "logging|tracing|metrics|telemetry|span|trace.id|correlation.id|structured.log"
+    domain: "observability"
+    knowledge_file: "observability/observability-practices.yaml"
+
+  # ── Frontend / UI ─────────────────────────────────────────────────────────
+  - pattern: "react|angular|vue|svelte|nextjs|nuxt|gatsby|remix|typescript|javascript|tsx|jsx"
+    domain: "frontend"
+    knowledge_file: "frontend/frontend-practices.yaml"
+
+  - pattern: "html|css|tailwind|bootstrap|accessibility|wcag|aria|a11y"
+    domain: "frontend"
+    knowledge_file: "frontend/frontend-practices.yaml"
+
+  # ── Data / AI / ML ────────────────────────────────────────────────────────
+  - pattern: "pandas|numpy|sklearn|tensorflow|pytorch|transformers|langchain|openai|llm|embedding"
+    domain: "data-ml"
+    knowledge_file: "data-ml/ml-engineering-patterns.yaml"
+
+  - pattern: "dbt|airflow|spark|kafka|flink|redshift|bigquery|snowflake|databricks"
+    domain: "data-ml"
+    knowledge_file: "data-ml/ml-engineering-patterns.yaml"
+
+  # ── Cloud / Infrastructure ────────────────────────────────────────────────
+  - pattern: "aws|azure|gcp|s3|lambda|ecs|eks|cloudformation|bicep|pulumi"
+    domain: "cloud"
+    knowledge_file: "cloud/cloud-patterns.yaml"
+
+  # ── API / Integration ────────────────────────────────────────────────────
+  - pattern: "rest|graphql|grpc|protobuf|openapi|swagger|webhook|event.bus|message.queue|rabbitmq|sqs"
+    domain: "api"
+    knowledge_file: "api/api-design-patterns.yaml"
+
+  # ── Governance / Compliance ───────────────────────────────────────────────
+  - pattern: "gdpr|pci.dss|hipaa|sox|iso.27001|nist|audit|compliance|policy|regulation"
+    domain: "governance"
+    knowledge_file: "governance/compliance-patterns.yaml"
+
+  # ── Performance / Scalability ─────────────────────────────────────────────
+  - pattern: "cache|redis|memcached|cdn|load.balance|rate.limit|throttle|latency|throughput|profil"
+    domain: "performance"
+    knowledge_file: "performance/performance-patterns.yaml"
+
+  # ── Docs / Documentation ──────────────────────────────────────────────────
+  - pattern: "sphinx|mkdocs|docstring|readme|changelog|swagger.ui|openapi.spec"
+    domain: "documentation"
+    knowledge_file: "documentation/documentation-practices.yaml"

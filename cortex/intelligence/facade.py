@@ -530,6 +530,118 @@ class IntelligenceFacade:
                 "error": str(exc),
             }
 
+    # ── Phase 135: KAL — Knowledge Acquisition Layer ────────────────────
+
+    def _get_coverage_assessor(self) -> Any:
+        """Lazy-load KnowledgeCoverageAssessor with null-object fallback."""
+        try:
+            from cortex.intelligence.knowledge.knowledge_coverage_assessor import (
+                KnowledgeCoverageAssessor,
+            )
+            return KnowledgeCoverageAssessor()
+        except Exception as exc:
+            logger.debug("IntelligenceFacade: coverage_assessor unavailable — %s", exc)
+            return _NullCoverageAssessor()
+
+    def _get_acquisition_orchestrator(self) -> Any:
+        """Lazy-load KnowledgeAcquisitionOrchestrator with null-object fallback."""
+        try:
+            from cortex.intelligence.knowledge.knowledge_acquisition_orchestrator import (
+                KnowledgeAcquisitionOrchestrator,
+            )
+            return KnowledgeAcquisitionOrchestrator()
+        except Exception as exc:
+            logger.debug("IntelligenceFacade: acquisition_orchestrator unavailable — %s", exc)
+            return _NullAcquisitionOrchestrator()
+
+    def acquire(
+        self,
+        signals: Optional[List[str]] = None,
+        intent: str = "IMPLEMENT",
+        threshold: float = 0.80,
+    ) -> Dict[str, Any]:
+        """Run on-demand Knowledge Acquisition Layer (KAL) pipeline.
+
+        Assesses domain signal coverage and triggers knowledge synthesis
+        for any missing domains below the threshold.
+
+        This is the public KAL entry point — callers should not import
+        KnowledgeAcquisitionOrchestrator directly.
+
+        Args:
+            signals: Domain signal strings (from ``DomainSignalExtractor.extract()``).
+                     Defaults to empty list (no-op).
+            intent: Intent context forwarded to the synthesizer.
+            threshold: Coverage acquisition trigger threshold (default 0.80).
+
+        Returns:
+            Dict with ``status``, ``skipped``, ``acquired_domains``, ``errors``.
+        """
+        if signals is None:
+            signals = []
+        try:
+            assessor = self._get_coverage_assessor()
+            coverage = assessor.assess(signals)
+            orch = self._get_acquisition_orchestrator()
+            result = orch.acquire(
+                signals=signals,
+                coverage_score=coverage.score,
+                intent=intent,
+            )
+            # BUG-1 fix: invalidate all caches after acquisition so new domains are visible
+            if not result.skipped and result.acquired_domains:
+                self.invalidate_cache()
+            return {
+                "status": "ok",
+                "skipped": result.skipped,
+                "acquired_domains": result.acquired_domains,
+                "errors": result.errors,
+                "coverage_score": coverage.score,
+                "cycles": result.cycles,
+            }
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.acquire: %s", exc)
+            return {
+                "status": "error",
+                "error": str(exc),
+                "skipped": True,
+                "acquired_domains": [],
+                "errors": [str(exc)],
+            }
+
+    def invalidate_cache(self) -> None:
+        """Clear all cached registry and knowledge index state.
+
+        Called automatically after successful knowledge acquisition (BUG-1 fix)
+        so newly registered domains are immediately visible to the assessor and
+        all registry-aware components.
+
+        Clears:
+        - ``_registry_index_cache`` — cortex-registry/ scan results
+        - ``_governance_registry`` — GovernanceRegistry singleton cache slot
+        - ``_workflow_registry`` — WorkflowTemplateRegistry cache slot
+        - ``_pattern_registry`` — CustomPatternRegistry cache slot
+        - module-level signal map and INDEX domain caches
+        """
+        self._registry_index_cache = None
+        self._governance_registry = None
+        self._workflow_registry = None
+        self._pattern_registry = None
+
+        # Invalidate module-level caches in KAL sub-modules
+        try:
+            from cortex.intelligence.knowledge.domain_signal_extractor import invalidate_signal_map_cache
+            invalidate_signal_map_cache()
+        except Exception:
+            pass
+        try:
+            from cortex.intelligence.knowledge.knowledge_coverage_assessor import invalidate_index_cache
+            invalidate_index_cache()
+        except Exception:
+            pass
+
+        logger.debug("IntelligenceFacade.invalidate_cache: all caches cleared")
+
     def query(
         self,
         query: str = "",
@@ -625,6 +737,67 @@ class _NullPatternRegistry:
             Empty list.
         """
         return []
+
+
+# ── Phase 135: KAL null-object fallbacks ─────────────────────────────────────
+
+class _NullCoverageResult:
+    """Minimal duck-type of CoverageResult returned by _NullCoverageAssessor."""
+
+    def __init__(self) -> None:
+        self.score: float = 1.0
+        self.covered_domains: List[str] = []
+        self.missing_domains: List[str] = []
+        self.acquisition_needed: bool = False
+        self.threshold: float = 0.80
+
+
+class _NullCoverageAssessor:
+    """Null-object fallback when KnowledgeCoverageAssessor is unavailable.
+
+    Returns a full-coverage result so KAL acquisition is never triggered
+    when the real assessor cannot be imported.
+    """
+
+    def assess(self, signals: List[str]) -> _NullCoverageResult:
+        """Return full-coverage result (score=1.0, acquisition_needed=False).
+
+        Args:
+            signals: Ignored.
+
+        Returns:
+            :class:`_NullCoverageResult` with score=1.0.
+        """
+        return _NullCoverageResult()
+
+
+class _NullAcquisitionResult:
+    """Minimal duck-type of AcquisitionResult returned by _NullAcquisitionOrchestrator."""
+
+    def __init__(self) -> None:
+        self.skipped: bool = True
+        self.acquired_domains: List[str] = []
+        self.errors: List[str] = []
+        self.cycles: int = 0
+
+
+class _NullAcquisitionOrchestrator:
+    """Null-object fallback when KnowledgeAcquisitionOrchestrator is unavailable.
+
+    Always returns a skipped result so no acquisition is attempted when the
+    real orchestrator cannot be imported.
+    """
+
+    def acquire(self, **kwargs: Any) -> _NullAcquisitionResult:
+        """Return a skipped acquisition result.
+
+        Args:
+            **kwargs: Ignored.
+
+        Returns:
+            :class:`_NullAcquisitionResult` with skipped=True.
+        """
+        return _NullAcquisitionResult()
 
 
 # ── Module-level convenience helper ──────────────────────────────────────────
