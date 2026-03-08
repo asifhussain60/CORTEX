@@ -20,6 +20,11 @@
             --accent-emerald: #10b981;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 3rem;    /* 48px: content→content */
+            --issa-content-panel:   2rem;    /* 32px: content→glass panel */
+            --issa-panel-panel:     1.5rem;  /* 24px: glass→glass (my-4 x2) */
+            --issa-hero-first:      3rem;    /* 48px: hero→first section */
         }
         body {
             background-color: #020617;
@@ -124,6 +129,13 @@
         .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
 
         @media (max-width: 768px) { .hero-robot-head { width: 200px; } .glass-card { border-radius: 1.25rem; } }
+
+        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
+         * SSOT: design_system.yaml § spacing.inter_section_spacing
+         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
+         * ──────────────────────────────────────────────────────────────────*/
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
     </style>
 </head>
 <body class="min-h-screen">
@@ -136,7 +148,7 @@
         <span class="breadcrumb-current">Software Engineer</span>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
         <div id="tooltip" class="d3-tooltip"></div>
 
@@ -188,7 +200,7 @@
         </section>
 
         <!-- LENS — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-teal-950/60 via-slate-900/80 to-emerald-950/60 border border-teal-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -298,7 +310,7 @@
         </section>
 
         <!-- TDD — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-red-950/40 via-slate-900/80 to-violet-950/50 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -400,7 +412,7 @@
         </section>
 
         <!-- GOVERNANCE — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-teal-950/40 to-slate-900/90 border border-teal-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -460,7 +472,7 @@
         </section>
 
         <!-- MCP TOOLS — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-teal-950/60 border border-emerald-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -511,7 +523,7 @@
         </section>
 
         <!-- BUILD YOUR OWN AGENTS — New Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-purple-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">

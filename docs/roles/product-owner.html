@@ -22,6 +22,11 @@
             --accent-cyan: #00d4ff;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 3rem;    /* 48px: content→content */
+            --issa-content-panel:   2rem;    /* 32px: content→glass panel */
+            --issa-panel-panel:     1.5rem;  /* 24px: glass→glass (my-4 x2) */
+            --issa-hero-first:      3rem;    /* 48px: hero→first section */
         }
 
         body {
@@ -369,6 +374,13 @@
             color: var(--text-main);
             font-weight: 600;
         }
+
+        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
+         * SSOT: design_system.yaml § spacing.inter_section_spacing
+         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
+         * ──────────────────────────────────────────────────────────────────*/
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
     </style>
 </head>
 <body class="min-h-screen">
@@ -385,7 +397,7 @@
         <span class="breadcrumb-current">Product Owner</span>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
         <div id="tooltip" class="d3-tooltip"></div>
 
@@ -439,7 +451,7 @@
         </section>
 
         <!-- 2. Agile Intelligence (Writing ACs & SWAGs) -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <!-- Section Background - Purple/Blue Glass Panel with rounded corners -->
             <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-blue-950/60 border border-indigo-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
@@ -599,7 +611,7 @@
         </section>
 
         <!-- 4. Requirements Engineering Pipeline -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <!-- Section Background - Purple Glass Panel with rounded corners -->
             <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
@@ -722,7 +734,7 @@
         </section>
 
         <!-- 6. ROI Calculator Section -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <!-- Section Background - Blue/Cyan Glass Panel with rounded corners -->
             <div class="absolute inset-0 bg-gradient-to-br from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-blue-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
@@ -1354,7 +1366,7 @@
         </section>
 
         <!-- Final CTA -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/50 via-slate-900/80 to-blue-950/50 border border-indigo-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
@@ -1388,7 +1400,7 @@
         </section>
 
         <!-- Final CTA -->
-        <section class="text-center py-8">
+        <section class="text-center py-6 md:py-10 px-4 md:px-0">
             <div class="glass-card p-10 md:p-16 space-y-8 relative border-indigo-500/20">
                 <div class="w-16 h-16 mx-auto bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/30 text-indigo-400 mb-4 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
                     <i data-lucide="rocket" class="w-8 h-8"></i>

@@ -27,6 +27,11 @@
             --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            /* ── ISSA Section Gap Tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 48px;   /* content → content: space-y-12 */
+            --issa-content-panel:   32px;   /* content → glass panel: space-y-8 */
+            --issa-panel-panel:     24px;   /* panel → panel: space-y-6 */
+            --issa-hero-first:      48px;   /* hero → first section */
         }
 
         body {
@@ -795,6 +800,13 @@
             .hero-robot-head { width: 200px; }
             .glass-card { border-radius: 1.25rem; }
         }
+
+        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
+         * SSOT: design_system.yaml § spacing.inter_section_spacing
+         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
+         * ──────────────────────────────────────────────────────────────────*/
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
     </style>
 </head>
 <body class="min-h-screen">
@@ -895,10 +907,10 @@
 
     <!-- ═══════════════════ TAB 1: OVERVIEW ═══════════════════ -->
     <div id="panel-overview" class="tab-panel active" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
             <!-- Intelligence Diamond — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-purple-950/60 border border-violet-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative px-4 md:px-8">
@@ -995,7 +1007,7 @@
             </section>
 
             <!-- Request Flow Pipeline — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-blue-950/60 border border-indigo-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1052,10 +1064,10 @@
 
     <!-- ═══════════════════ TAB 2: INTELLIGENCE & BRAIN ═══════════════════ -->
     <div id="panel-intelligence" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
             <!-- LENS Sensory System — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-violet-950/60 border border-cyan-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1145,7 +1157,7 @@
 
 
             <!-- Hero — What the Brain Is -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-950/70 via-slate-900/85 to-violet-950/70 border border-purple-500/25 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative grid lg:grid-cols-2 gap-10 md:gap-16 items-center px-4 md:px-8 py-4">
@@ -1338,7 +1350,7 @@
             </section>
 
             <!-- Unified Reinforcement Signal -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-purple-950/60 border border-indigo-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative px-4 md:px-8 space-y-10">
@@ -1486,7 +1498,7 @@
 
     <!-- ═══════════════════ TAB 3: ORCHESTRATION ═══════════════════ -->
     <div id="panel-orchestrators" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
             <!-- Domain Bubble Grid -->
             <section class="space-y-10">
@@ -1515,7 +1527,7 @@
             </section>
 
             <!-- Core Orchestrators Table — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-violet-950/60 border border-indigo-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1584,7 +1596,7 @@
 
 
             <!-- How MCP Works — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-indigo-950/60 border border-cyan-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1697,10 +1709,10 @@
 
     <!-- ═══════════════════ TAB 4: GOVERNANCE & LEARNING ═══════════════════ -->
     <div id="panel-governance" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
             <!-- Three Layers — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-red-950/40 via-slate-900/80 to-emerald-950/40 border border-violet-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1809,7 +1821,7 @@
 
 
             <!-- RCA Methodologies — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1866,7 +1878,7 @@
             </section>
 
             <!-- Reinforcement Learning — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1930,10 +1942,10 @@
 
     <!-- ═══════════════════ TAB 5: LIFECYCLE ═══════════════════ -->
     <div id="panel-lifecycle" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
             <!-- Governed SDLC Pipeline — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-violet-950/60 border border-indigo-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">
@@ -1975,7 +1987,7 @@
             </section>
 
             <!-- 9-Stage Audit — Glass Panel -->
-            <section class="relative py-12 my-6">
+            <section class="relative py-8 my-4">
                 <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-purple-950/60 border border-violet-500/20 rounded-3xl"></div>
                 <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
                 <div class="relative space-y-10 px-4 md:px-8">

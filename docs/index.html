@@ -112,7 +112,13 @@
         --spacing-12: 3rem;
         --spacing-16: 4rem;
         --spacing-24: 6rem;
-        
+
+        /* ── ISSA Section Gap Tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+        --issa-content-content: 48px;   /* content → content (mobile: 32px, tablet: 48px, desktop: 64px) */
+        --issa-content-panel:   32px;   /* content → glass panel */
+        --issa-panel-panel:     24px;   /* panel → panel */
+        --issa-hero-first:      48px;   /* hero → first section */
+
         /* Radii */
         --radius-md: 0.75rem;
         --radius-lg: 1rem;
@@ -162,11 +168,20 @@
 
     /* --- LAYOUT & UTILITY CLASSES --- */
     .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 var(--spacing-6); }
-    .section { padding: var(--spacing-16) 0; }
 
-    /* ── Responsive section spacing ── */
-    @media (max-width: 640px)  { .section { padding: var(--spacing-10) 0; } }   /* phone:  2.5rem */
-    @media (min-width: 641px) and (max-width: 1023px) { .section { padding: var(--spacing-12) 0; } } /* tablet: 3rem */
+    /*
+     * ISSA — Inter-Section Spacing Algorithm (SSOT: design_system.yaml § spacing.inter_section_spacing)
+     * Visual Gap = pb_A + max(mb_A, mt_B) + pt_B
+     * Target: content→content = 48px (--space-2xl = 3rem each side)
+     * Desktop: pb=2rem + pt=2rem = 4rem total (--space-xl per side → 64px combined)
+     * Tablet:  pb=1.5rem + pt=1.5rem = 3rem total (48px combined) ✅
+     * Mobile:  pb=1.25rem + pt=1.25rem = 2.5rem total (40px — approx --space-xl for smaller viewports)
+     */
+    .section { padding: var(--spacing-8) 0; }                                             /* desktop: 2rem each = 64px combined */
+
+    /* ── Responsive section spacing (ISSA-calibrated) ── */
+    @media (max-width: 640px)  { .section { padding: var(--spacing-6) 0; } }              /* phone:  1.5rem each = 48px combined ✅ */
+    @media (min-width: 641px) and (max-width: 1023px) { .section { padding: var(--spacing-6) 0; } } /* tablet: 1.5rem each = 48px ✅ */
     
     .m-0 { margin: 0 !important; }
     .mb-0 { margin-bottom: 0 !important; }
@@ -2763,7 +2778,7 @@
     </script>
 
     <!-- What is CORTEX? — unified intro + role video showcase -->
-    <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading" style="padding-top: 2rem;">
+    <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading">
         <div style="
             background: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(15,23,42,0.65) 100%);
             border: 1px solid rgba(255,255,255,0.08);
@@ -3408,7 +3423,7 @@
     </section>
 
     <!-- Architecture Deep Dive CTA — Showstopper -->
-    <section class="container" style="padding-top:2rem;padding-bottom:2rem;">
+    <section class="section container">
         <a href="architecture.html" class="arch-cta">
             <!-- 7-Layer Background System -->
             <div class="arch-cta-bg"></div>

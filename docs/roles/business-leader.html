@@ -21,6 +21,11 @@
             --accent-violet: #8b5cf6;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 3rem;    /* 48px: content→content */
+            --issa-content-panel:   2rem;    /* 32px: content→glass panel */
+            --issa-panel-panel:     1.5rem;  /* 24px: glass→glass (my-4 x2) */
+            --issa-hero-first:      3rem;    /* 48px: hero→first section */
         }
 
         body {
@@ -213,6 +218,24 @@
             .hero-robot-head { width: 200px; }
             .glass-card { border-radius: 1.25rem; }
         }
+
+        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
+         * SSOT: design_system.yaml § spacing.inter_section_spacing
+         * space-y-12 md:space-y-16 on <main> drives inter-section gaps.
+         * These overrides ensure ISSA targets on small screens:
+         *   Mobile  (≤640px): 32px between sections (--issa-content-panel)
+         *   Tablet  (641–1023px): 48px (--issa-content-content)
+         *   Desktop (≥1024px): 64px (generous desktop rhythm)
+         * Glass panels (py-8 my-4) add 32px internal + 16px margin = ISSA-compliant.
+         * ──────────────────────────────────────────────────────────────────*/
+        @media (max-width: 640px) {
+            /* Tailwind space-y-12 = 3rem; override to 2rem on mobile */
+            main > * + * { margin-top: 2rem !important; }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            /* Tablet: keep 3rem (48px) = --issa-content-content target */
+            main > * + * { margin-top: 3rem !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -229,7 +252,7 @@
         <span class="breadcrumb-current">Business Leader</span>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
         <div id="tooltip" class="d3-tooltip"></div>
 
@@ -298,7 +321,7 @@
         </section>
 
         <!-- SECTION 2: Cost of Ungoverned AI — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-red-950/50 via-slate-900/80 to-rose-950/50 border border-red-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -444,7 +467,7 @@
         </section>
 
         <!-- SECTION 4: Shift-Left ROI — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/60 via-slate-900/80 to-blue-950/60 border border-cyan-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -577,7 +600,7 @@
         </section>
 
         <!-- SECTION 6: CORTEX MVP — Agentic Intelligence ★ -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-indigo-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -691,7 +714,7 @@
         </section>
 
         <!-- SECTION 8: The Intelligence Diamond — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-purple-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative px-4 md:px-8">
@@ -853,7 +876,7 @@
         </section>
 
         <!-- SECTION 10: What CORTEX Delivers By Role — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-950/60 via-slate-900/80 to-cyan-950/60 border border-blue-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -925,7 +948,7 @@
         </section>
 
         <!-- SECTION 11: Zero Operational Overhead — Glass Panel -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-slate-900/80 to-teal-950/50 border border-emerald-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">

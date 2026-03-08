@@ -24,6 +24,11 @@
             --accent-cyan: #06b6d4;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
+            --issa-content-content: 3rem;    /* 48px: content→content */
+            --issa-content-panel:   2rem;    /* 32px: content→glass panel */
+            --issa-panel-panel:     1.5rem;  /* 24px: glass→glass (my-4 x2) */
+            --issa-hero-first:      3rem;    /* 48px: hero→first section */
         }
         body {
             background-color: #020617;
@@ -155,6 +160,13 @@
         .cmd-badge-start { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
         .cmd-badge-power { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
         .cmd-badge-essential { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+
+        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
+         * SSOT: design_system.yaml § spacing.inter_section_spacing
+         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
+         * ──────────────────────────────────────────────────────────────────*/
+        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
+        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
     </style>
 </head>
 <body class="min-h-screen">
@@ -171,7 +183,7 @@
         <span class="breadcrumb-current">Getting Started</span>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
         <!-- ═══════════════════ HERO ═══════════════════ -->
         <section class="text-center space-y-6 md:space-y-8">
@@ -226,7 +238,7 @@
 
 
         <!-- ═══════════════════ PREREQUISITES — Glass Panel ═══════════════════ -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-orange-950/60 border border-amber-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -450,7 +462,7 @@
 
 
         <!-- ═══════════════════ HOW TO USE CORTEX — Glass Panel ═══════════════════ -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-amber-950/60 border border-emerald-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -678,7 +690,7 @@
 
 
         <!-- ═══════════════════ MCP CONFIG — Glass Panel ═══════════════════ -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-amber-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -772,7 +784,7 @@
 
 
         <!-- ═══════════════════ WORKSPACE STRUCTURE ═══════════════════ -->
-        <section class="relative py-12 my-6">
+        <section class="relative py-8 my-4">
             <div class="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/90 to-amber-950/60 border border-amber-500/15 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
@@ -855,7 +867,7 @@
 
 
         <!-- ═══════════════════ ARCHITECTURE CTA ═══════════════════ -->
-        <section>
+        <section class="space-y-0">
             <a href="architecture.html" class="block group" style="text-decoration:none;color:inherit;">
                 <div class="relative overflow-hidden rounded-3xl border border-amber-500/20 hover:border-amber-400/40 transition-all duration-500" style="background:linear-gradient(135deg,rgba(245,158,11,0.06) 0%,rgba(249,115,22,0.06) 50%,rgba(139,92,246,0.06) 100%);">
                     <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:linear-gradient(135deg,rgba(245,158,11,0.10) 0%,rgba(249,115,22,0.10) 50%,rgba(139,92,246,0.10) 100%);"></div>
