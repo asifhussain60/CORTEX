@@ -240,6 +240,7 @@ class IntentType(Enum):
     INTRODUCE = "introduce"        # Interactive onboarding + role-based introduction
     DISTILL = "distill"            # Conversational entropy reduction to executable prompt
     OPTIMIZE = "optimize"          # Multi-file content optimization and compression
+    FEEDBACK = "feedback"          # Cross-repo feedback extraction + backport (phase-139)
     UNKNOWN = "unknown"
 
 

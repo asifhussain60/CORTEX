@@ -242,6 +242,14 @@ class IntentKeywordRegistry:
         "overwrite with optimized", "rewrite optimized",
     ]
 
+    FEEDBACK_KEYWORDS: List[str] = [
+        "/feedback", "feedback", "extract feedback", "generate feedback",
+        "backport", "capability extraction", "cross-repo", "cross repo",
+        "extract capabilities", "extract patterns", "feedback extractor",
+        "repo feedback", "cross-repo feedback", "sanitize feedback",
+        "feedback document", "feedback report", "feedback pipeline",
+    ]
+
     # ------------------------------------------------------------------
     # Factory
     # ------------------------------------------------------------------
@@ -284,4 +292,5 @@ class IntentKeywordRegistry:
             IntentType.INTRODUCE: cls.INTRODUCE_KEYWORDS,
             IntentType.DISTILL: cls.DISTILL_KEYWORDS,
             IntentType.OPTIMIZE: cls.OPTIMIZE_KEYWORDS,
+            IntentType.FEEDBACK: cls.FEEDBACK_KEYWORDS,
         }

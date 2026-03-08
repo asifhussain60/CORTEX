@@ -27,9 +27,12 @@ CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
 
 from __future__ import annotations
 
-import re
+from datetime import datetime
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional
+
+from cortex.tools.cross_repo_extractor import CrossRepoExtractor
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Constants
@@ -288,3 +291,45 @@ class FeedbackOrchestrator:
             "```",
         ]
         return "\n".join(lines)
+
+    # ------------------------------------------------------------------
+    # Phase-139: mode=extract routing (GAP-139-03)
+    # ------------------------------------------------------------------
+
+    def _execute_extraction(
+        self,
+        repo_path: Optional[Path] = None,
+        since: Optional[str] = None,
+    ) -> Path:
+        """Run CrossRepoExtractor pipeline and write output to _workspaces/_feedback/.
+
+        Stages:
+            1. Instantiate CrossRepoExtractor with repo_path.
+            2. Parse git commits via get_commits(since).
+            3. Extract capabilities.
+            4. Sanitize capabilities.
+            5. Generate markdown output.
+            6. Write to _workspaces/_feedback/{date}-feedback.md (G8 output gate).
+
+        Args:
+            repo_path: Path to the repo to extract from. Defaults to CWD.
+            since: ISO date string to filter commits from.
+
+        Returns:
+            Path to the written feedback markdown file.
+        """
+        _repo = repo_path or Path(".")
+        extractor = CrossRepoExtractor(repo_path=_repo)
+
+        commits = extractor.get_commits(since=since)
+        capabilities = extractor.extract_capabilities(commits)
+        sanitized = extractor.sanitize_capabilities(capabilities)
+        markdown = extractor.generate_output(sanitized)
+
+        # G8: output path restricted to _workspaces/_feedback/ only
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        output_path = OUTPUT_DIR / f"{date_str}-feedback.md"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(markdown, encoding="utf-8")
+
+        return output_path

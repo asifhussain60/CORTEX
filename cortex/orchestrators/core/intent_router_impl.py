@@ -275,6 +275,7 @@ class IntentRouter(
     WORKFLOW_COMPOSE_KEYWORDS = IntentKeywordRegistry.WORKFLOW_COMPOSE_KEYWORDS
     GOLDEN_TEST_KEYWORDS = IntentKeywordRegistry.GOLDEN_TEST_KEYWORDS
     INTRODUCE_KEYWORDS = IntentKeywordRegistry.INTRODUCE_KEYWORDS
+    FEEDBACK_KEYWORDS = IntentKeywordRegistry.FEEDBACK_KEYWORDS
 
     def __init__(self) -> None:
         """Initialise IntentRouter orchestrator.
