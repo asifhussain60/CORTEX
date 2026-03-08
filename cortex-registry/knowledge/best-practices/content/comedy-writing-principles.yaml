@@ -451,7 +451,7 @@ chapter_enhancements:
       - technique: CWT-005
         action: "'Works on my laptop' — add a precise counter: '94% of all production disasters in recorded software history.'"
 
-  - chapter: "13-The-3AM-Healer"
+  - chapter: "11-The-3AM-Healer"
     strengths: ["Callback (847ms)", "Tone poetry", "Bathos peak"]
     gap_priority: P1
     enhancements:
@@ -464,16 +464,20 @@ chapter_enhancements:
       - technique: CWT-004
         action: "Asif's tiny bruised ego at not being needed. One sentence. Played small."
 
-  - chapter: "14-The-Enterprise-Brain"
+  - chapter: "12-The-Enterprise-Brain"
     strengths: ["Character voice peak", "Ambition"]
     gap_priority: P1
     enhancements:
       - technique: RG-001
         action: "Payoff: Asif arrives in actual adult clothing. CORTEX runs perfectly. Note the correlation without claiming causation."
+      - technique: RG-002
+        action: "Payoff: The 2019 coffee mug is finally washed. It is somehow worse."
       - technique: RG-003
         action: "Payoff: CB says 'This is probably fine.' And it is. CB is as surprised as anyone."
       - technique: RG-005
-        action: "Payoff: Asif makes an expression Miss G has never catalogued. She opens a new page."
+        action: "Payoff: Asif makes an expression Miss G has never catalogued. She opens a new page. Look #23."
+      - technique: RG-006
+        action: "Payoff: 847 incidents prevented. The number redeemed."
       - technique: CWT-001
         action: "The napkin scene: Rule of Three for dead markers. First dead. Second dead. Third — works."
       - technique: CWT-003
@@ -494,7 +498,7 @@ structural_rules:
   - id: CSR-002
     name: "No New Chapters"
     description: |
-      The 14-chapter structure is closed. Comedy enhancements apply ONLY to
+      The 12-chapter structure is closed. Comedy enhancements apply ONLY to
       existing chapter content. No new chapter files may be created.
       In-place improvement only.
     enforcement: "comedy-enhancement-agent must include this as a hard stop check"
@@ -503,7 +507,7 @@ structural_rules:
     name: "Running Gag Minimum Coverage"
     description: |
       Each registered running gag (RG-001 through RG-006) must appear in
-      at least 3 chapters. Final chapter (Ch 14) must pay off at least 2 gags.
+      at least 3 chapters. Final chapter (Ch 12) must pay off at least 2 gags.
     enforcement: "comedy-enhancement-agent validates coverage before marking enhancement complete"
 
   - id: CSR-004
@@ -525,3 +529,187 @@ structural_rules:
       - ".github/agents/docs/comedy-enhancement-agent.md"
       - "cortex-registry/workflows/templates/internal/narrative-comedy-enhancement.yaml"
     enforcement: "cortex-sync-agent.md exclusion list + .gitignore (if externally synced)"
+
+# ─────────────────────────────────────────────────────────────────
+# PART 6 — ILLUSTRATED STORYBOOK BEST PRACTICES
+# ─────────────────────────────────────────────────────────────────
+# Source: Synthesized from illustrated children's/graphic novel conventions
+# (McCloud "Understanding Comics", Salisbury & Styles "Children's Picturebooks",
+# Nikolajeva & Scott "How Picturebooks Work", Mo Willems layout techniques)
+
+illustrated_storybook:
+  principles:
+    - id: ISB-001
+      name: "Image-Text Counterpoint"
+      description: |
+        Images should ADD information the text doesn't provide, not duplicate it.
+        If the text says 'Asif was horrified,' the image should show WHY — not
+        just a horrified face. Best illustrated books use counterpoint: text says
+        one thing, image reveals something additional.
+      severity: P0
+
+    - id: ISB-002
+      name: "Alternating Alignment — Left/Right Float Pattern"
+      description: |
+        Story images alternate between left-float and right-float across consecutive
+        placements within a chapter. This creates visual rhythm and prevents the
+        reader's eye from settling into a monotonous scan pattern. Within a single
+        chapter: first image left, second image right (or vice versa per chapter
+        alternation). Between chapters: the lead alignment alternates.
+      severity: P0
+
+    - id: ISB-003
+      name: "The Page-Turn Reveal"
+      description: |
+        Place impactful images AFTER a textual setup, never before. The reader
+        should read the setup text, then encounter the image as a visual punchline
+        or revelation. This mirrors the comic-book page-turn technique where the
+        big splash is always on the verso (left page) after turning.
+      severity: P1
+
+    - id: ISB-004
+      name: "Contextual Placement Over Mechanical Spacing"
+      description: |
+        Images should appear at narratively meaningful moments — after a key
+        revelation, at a character's emotional peak, or at a scene transition.
+        Mechanical placement (every N paragraphs) feels robotic. The image should
+        feel like it belongs where it is placed, as if the story paused to show
+        you what it was describing.
+      severity: P1
+
+    - id: ISB-005
+      name: "Center Alignment for Climactic Moments Only"
+      description: |
+        Full-width center-aligned images break the reading flow deliberately.
+        Reserve this for maximum-impact moments: the 847 incident, the SELF-HEALED
+        notification, the Enterprise Brain revelation. Maximum 1 center-aligned
+        image per chapter. Most chapters should use 0.
+      severity: P1
+
+    - id: ISB-006
+      name: "Caption as Voice, Not Description"
+      description: |
+        If an image has alt-text or a visible caption, it should be in-character
+        (Miss G's observation, CB's misinterpretation) rather than a clinical
+        description. The caption IS part of the comedy.
+      severity: P2
+
+  image_integration_rules:
+    - rule: "Story images (ch-XX-a/b.png) are injected automatically by index.html JS at ~33% and ~67% positions"
+    - rule: "Technical architecture images from docs/assets/image-prompts/ can be manually placed in chapter markdown as <img> tags"
+    - rule: "Manual <img> tags use CSS classes: story-img-left, story-img-right, story-img-center"
+    - rule: "Maximum 4 images per chapter (2 auto-injected story + up to 2 manual architecture)"
+    - rule: "Architecture images serve as 'Asif's whiteboard drawings' — contextual, not decorative"
+
+# ─────────────────────────────────────────────────────────────────
+# PART 7 — 2D BLACK & WHITE COMIC DESIGN BEST PRACTICES
+# Sources: Scott McCloud "Understanding Comics", Will Eisner "Comics and Sequential Art",
+#          Hergé/Tintin "ligne claire" tradition, New Yorker cartoon style guides,
+#          Studio Ghibli character consistency methodologies
+# ─────────────────────────────────────────────────────────────────
+
+comic_design_principles:
+  - id: CDP-001
+    name: "Character Model Sheet Discipline"
+    description: |
+      Every recurring character MUST have a canonical model sheet defining:
+      (a) head proportions and facial landmarks, (b) body proportions and silhouette,
+      (c) signature accessories and props, (d) expression range (6-8 named expressions).
+      The model sheet is the P0 reference — all image prompts copy from it, never improvise.
+      SSOT: CHARACTER-CONSISTENCY-SHEET.md in story-prompts/.
+    severity: P0
+
+  - id: CDP-002
+    name: "Monochrome + Single Accent Color"
+    description: |
+      The Tintin/New Yorker tradition: all elements are monochrome (black ink, white paper,
+      grey crosshatching) EXCEPT one specific accent color per scene/chapter. This creates
+      visual unity, dramatic focus, and ensures the accent color carries narrative meaning.
+      In CORTEX: the wave color is the sole accent. Purple for Origin, Cyan for Structure,
+      Amber for Resilience, Emerald for Autonomy, Violet for Vision.
+    severity: P0
+
+  - id: CDP-003
+    name: "Ligne Claire Line Weight"
+    description: |
+      All character outlines use uniform, bold, clean line weight — the Hergé tradition.
+      No sketchy or varying line weights. Crosshatching is used for shading and texture
+      (shadows, clothing folds, background depth) but character silhouettes remain crisp.
+      This ensures characters are instantly recognizable even at thumbnail size.
+    severity: P1
+
+  - id: CDP-004
+    name: "Silhouette Test"
+    description: |
+      Every character must be identifiable from silhouette alone. Asif = round body + wild hair +
+      glasses. Miss G = petite curvy + cascading curls + floating slightly. CB = dome head +
+      boxy chassis + casters. If the silhouette is ambiguous, the design has failed.
+      This is how Tintin, Asterix, and Peanuts achieved instant recognition.
+    severity: P1
+
+  - id: CDP-005
+    name: "Evolution Through Accumulation"
+    description: |
+      Character evolution (especially CB's brain growth) is shown through ADDITION, not redesign.
+      The base character stays recognizable — same chassis, same dome shape, same LED eyes.
+      What changes is what's INSIDE the dome (empty → dots → network → full brain) and
+      POSTURE (goofy → measured → confident → Iron Man). The viewer should always recognize
+      CB across chapters. Eisner's principle: "consistency breeds investment."
+    severity: P0
+
+  - id: CDP-006
+    name: "Panel Composition — The 60/30/10 Rule"
+    description: |
+      In each image: 60% of visual weight goes to the primary action/character,
+      30% to the secondary elements (whiteboard, monitors, environment),
+      10% to accent details (sticky notes, mug, router, wave-color highlights).
+      This prevents visual clutter and ensures the comedy beat lands.
+    severity: P1
+
+  - id: CDP-007
+    name: "Speech Bubble Hierarchy"
+    description: |
+      CB's speech = ALL CAPS in rectangular industrial bubbles. Asif's speech = mixed case
+      in organic rounded bubbles. Miss G's thoughts = italic in translucent thought clouds
+      with wave-color tint. This typographic hierarchy ensures readers instantly know
+      who is speaking without reading attribution.
+    severity: P1
+
+  - id: CDP-008
+    name: "Environmental Continuity"
+    description: |
+      The basement set has fixed geography: desk position, whiteboard location, mini-fridge,
+      router shelf, bare bulb, stairs position. These NEVER change between images.
+      Accumulated details (sticky notes, brain diagram annotations, coffee stains) only
+      increase — they never disappear. The environment tells time.
+    severity: P1
+
+  - id: CDP-009
+    name: "Translucency Rendering for Miss G"
+    description: |
+      Miss G's semi-translucent rendering follows a specific technique: solid bold outline
+      at full ink weight (same as Asif and CB), but interior fill uses a lighter value
+      (approximately 30-40% opacity equivalent in crosshatch density). Background elements
+      should be faintly visible through her form. The glow-halo is rendered as radiating
+      lines from her silhouette edge, not as a soft photographic blur.
+    severity: P0
+
+  - id: CDP-010
+    name: "Aspect Ratio and Safe Zones"
+    description: |
+      All images are 16:9 (1200×630px). Character faces must fall within the center 80%
+      safe zone. No critical detail in the outer 10% margins — these may be cropped
+      on mobile or in the auto-injection layout. Speech bubbles can extend to margins
+      but text must stay within safe zone.
+    severity: P1
+
+  character_consistency_rules:
+    - rule: "P0 — ALL prompts MUST reference CHARACTER-CONSISTENCY-SHEET.md and copy canonical face/body blocks verbatim"
+    - rule: "P0 — Asif's face proportions (round cheeks, thick glasses, wild hair) are IDENTICAL across all 28+ images"
+    - rule: "P0 — Miss G's face (canonical block) is copied EXACTLY — no paraphrasing, no 'similar' descriptions"
+    - rule: "P0 — CB's dome shape, chassis proportions, and LED eyes are consistent — only dome CONTENTS evolve"
+    - rule: "P1 — Miss G's outfit MUST be a different national dress in EVERY image — no repeats within same chapter"
+    - rule: "P1 — Miss G's hair style MUST change per image — rotating through curly style variations"
+    - rule: "P1 — Each prompt must specify VISUAL DISTINCTION FROM sibling variants (a vs b vs c)"
+    - rule: "P2 — Background details accumulate but never disappear (whiteboard annotations, sticky notes, coffee stains)"
+

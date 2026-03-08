@@ -47,7 +47,7 @@ render: ascii
  │  └── config/                      ← Settings, environment                   │
  │                                                                             │
  │  cortex-registry/                 ← Configuration as code (YAML)            │
- │  ├── core/                           36 governance rules: 23 in core/ + 13 in governance/ │
+ │  ├── core/                           55+ governance rules across core/ + governance/ │
  │  │   └── specifications/             4 wiring contract YAMLs               │
  │  ├── workflows/templates/            3-tier: primitives → templates →       │
  │  │   ├── primitives/                    composites                          │

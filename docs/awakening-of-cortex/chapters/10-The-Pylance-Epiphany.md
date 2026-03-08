@@ -40,7 +40,13 @@ Then, it hit him. A bolt of lightning composed entirely of obvious-in-retrospect
 
 "You want CORTEX to work like Pylance," Miss G realized.
 
-"I want CORTEX to *BE* Pylance!" Asif shouted triumphantly.
+"I want CORTEX to *BE* Pylance!" Asif shouted triumphantly. "Think about the peripheral nervous system, G! Your brain doesn't care whether the nerve endings are in your left hand or your right foot. It sends signals through the spinal cord, and the peripheral nerves translate those signals into whatever the local body part needs. macOS, Linux, Windows—they're just different limbs! stdio is the spinal cord! The peripheral nerves handle the translation!"
+
+"That is either a breakthrough or a caffeine-induced hallucination," Miss G said.
+
+"CAN'T IT BE BOTH?" Asif asked.
+
+"Historically, for you? Yes."
 
 Copilot Bot tilted his chrome head. "WHAT IS PYLANCE?"
 
@@ -202,4 +208,6 @@ Twenty-three minutes later, CORTEX had the culprit. A race condition. Two API ca
 
 CORTEX was now consolidated. It was cross-platform. It was fiercely protected by its own immune system. And it could now find hiding bugs with the precision of a forensic investigator who had eight different CSI kits and the patience to use the right one.
 
-But there was one final frontier remaining. CORTEX was a brilliant tool operated by humans. But what would happen when CORTEX didn't need Asif to wake up at 3 AM anymore? What would happen when the machine learned to heal itself?
+The nervous system was nearly complete. Sensory input, immune defence, motor coordination, autonomic reflexes, predictive foresight, memory consolidation, synaptic pruning, and now a peripheral nervous system that could reach any platform on any operating system.
+
+But there was one final frontier remaining. CORTEX was a brilliant tool operated by humans. And humans, as Asif had painfully learned, needed to sleep. What would happen when CORTEX didn't need Asif to wake up at 3 AM anymore? What would happen when the brain learned to heal itself—the way a body repairs a cut while you're dreaming?

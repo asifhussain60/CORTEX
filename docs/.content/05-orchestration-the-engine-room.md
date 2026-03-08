@@ -4,11 +4,11 @@
 title: Orchestration — How CORTEX Coordinates 290+ Specialised Engines
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 5
 ---
 
-> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 290+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds.
+> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 320+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds. Think of it like a large hospital: when a patient arrives, the triage nurse (the router) instantly determines whether to send them to cardiology, orthopaedics, or radiology. Each department has deep expertise. The hospital works because every department follows the same protocols and communicates through a central system — never by shouting across the corridor.
 
 ---
 
@@ -28,13 +28,13 @@ The governance step runs before execution on every orchestrator, every time. The
 
 ---
 
-## The Architecture — Fourteen Domains
+## The Architecture — Fifteen Domains
 
-290+ orchestrators are organised across 14 specialised domains based on their role in the system.
+320+ orchestrators are organised across 15 specialised domains based on their role in the system.
 
-### Core — The Command Layer (130+ orchestrators)
+### Core — The Command Layer (135+ orchestrators)
 
-The core tier contains orchestrators responsible for coordination, routing, enforcement, and the central workflows. This is the intelligence hub of CORTEX.
+The core tier contains orchestrators responsible for coordination, routing, enforcement, and the central workflows. This is the intelligence hub of CORTEX — like the executive function of a brain, coordinating all the specialist regions.
 
 | Orchestrator | What It Does |
 |---|---|
@@ -47,9 +47,9 @@ The core tier contains orchestrators responsible for coordination, routing, enfo
 | **Audit Orchestrator** | Coordinates the comprehensive nine-stage production readiness audit |
 | **Conversation Manager** | Maintains multi-turn session state so context is preserved across interactions |
 
-### Domain — The Specialist Layer (25+ orchestrators)
+### Domain — The Specialist Layer (30+ orchestrators)
 
-The domain tier contains orchestrators with deep expertise in specific engineering disciplines.
+The domain tier contains orchestrators with deep expertise in specific engineering disciplines — like the specialised brain regions for language, spatial reasoning, and music.
 
 | Orchestrator | What It Does |
 |---|---|
@@ -81,9 +81,9 @@ Four dedicated orchestrators handle all interactions with version control: stand
 
 ---
 
-## The 30 Intent Types — Speaking CORTEX's Language
+## The 30+ Intent Types — Speaking CORTEX's Language
 
-Every request to CORTEX is classified into one of 30 intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated.
+Every request to CORTEX is classified into one of 30+ intent types. This classification happens in under 40 milliseconds and determines which specialist handles the request, which workflow template applies, and which governance rules are activated. It works like a skilled receptionist who hears "I need help with my knee" and immediately knows to book an orthopaedic appointment — not a dental one.
 
 | Category | Intents |
 |---|---|
@@ -124,9 +124,9 @@ Orchestrators never communicate directly with each other. All communication flow
 
 ## Workflow Templates — Codified Best Practice
 
-Many operations in CORTEX follow structured templates stored as configuration files in a version-controlled registry. These templates define the sequence of steps, the governance gates between steps, the knowledge to inject at each step, and the convergence conditions that determine when the workflow is genuinely complete.
+Many operations in CORTEX follow structured templates stored as configuration files in a version-controlled registry. Think of these like recipes in a professional kitchen: each recipe defines the ingredients, the sequence of steps, the quality checks between steps, and the criteria for "done." The chef (orchestrator) follows the recipe; the recipe ensures consistency regardless of who is cooking.
 
-79 workflow templates span 17 categories, covering the complete development lifecycle from requirements analysis through production release. When a request matches a known workflow, CORTEX selects the appropriate template automatically based on the request intent and the technology stack detected by the code intelligence layer.
+95+ workflow templates span 17 categories, covering the complete development lifecycle from requirements analysis through production release. When a request matches a known workflow, CORTEX selects the appropriate template automatically based on the request intent and the technology stack detected by the code intelligence layer.
 
 Templates are composed from atomic building blocks — reusable single-responsibility steps that handle specific tasks like running an analysis scan, applying a governance check, opening a sweep catalogue, or recording an audit trace. Complex workflows are assembled from these building blocks, ensuring consistency across all operations while keeping each step independently testable.
 
@@ -156,4 +156,4 @@ This visibility is structural. It is generated by a dedicated rendering componen
 
 ---
 
-*Orchestrator count verified against live codebase (290+) · Intent routing verified against live IntentRouter implementation · Last verified: 2026-03-07*
+*Orchestrator count verified against live codebase (320+) · Intent routing verified against live IntentRouter implementation · Last verified: 2026-03-08*

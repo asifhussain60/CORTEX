@@ -24,6 +24,12 @@ Total time from detection to resolution: **2.3 seconds.** All while Asif was sno
 
 "...Without you," Miss G confirmed.
 
+"The glymphatic system," Asif said quietly, staring at the SELF-HEALED notification as if it were a religious text. "During sleep, the brain's glymphatic system flushes out toxins. It does maintenance while the conscious mind is completely offline. That's what just happened. CORTEX cleaned up a production incident while I was literally unconscious. The brain healed itself while the body slept."
+
+"The metaphor has become literal," Miss G observed.
+
+"The metaphor was always literal, G. We just hadn't built far enough to see it."
+
 The self-healing capability wasn't dark magic; it was the culmination of Asif's latest ADHD hyper-fixation: Phase 87, the **RCA Engine**. CORTEX had used a structured investigation method to trace the chain of causation, effectively updating its own immune system. It didn't just put a band-aid on the wound; it generated a prevention rule to ensure the system never suffered the same wound twice.
 
 But here was the thing about root cause analysis that nobody told you in school: there wasn't just one way to find a root cause. Different kinds of failures had different kinds of hiding spots.
@@ -119,6 +125,11 @@ Asif built the **Unified Reinforcement Signal**—which he privately referred to
 "You're giving it gold stars and detention slips," Miss G said.
 
 "I'm giving it *feedback*," Asif corrected. "Over time, the patterns with lots of gold stars get promoted. They get used more. The patterns with lots of detention slips get reviewed. If they're consistently wrong, they get retired."
+
+<figure class="ch-arch-img" data-wave="3">
+  <img src="../assets/images/generated/shared/08-learning-loop-institutional-memory.png" alt="Learning Loop — Institutional Memory Cycle" loading="lazy" decoding="async"/>
+  <figcaption>Gold stars and quarantine: the brain that never forgets a lesson</figcaption>
+</figure>
 
 "And what happens to the patterns that were good in 2024 but have become wrong in 2026 because the system changed?" Miss G asked.
 
@@ -234,7 +245,7 @@ But as Asif stared at the monitors, watching his masterpiece run flawlessly, an 
 
 "You want to give them CORTEX," Miss G realized.
 
-"I want to give them a *BRAIN*!" Asif declared, throwing his arms wide. "A centralized, enterprise-grade brain that any company can plug into! One brain that understands intent, enforces governance, and heals itself—for everyone!"
+"I want to give them a *BRAIN*!" Asif declared, throwing his arms wide. "Not just the components—the whole nervous system! Senses, immune defence, motor coordination, autonomic reflexes, prediction, memory, pruning, peripheral nerves, self-healing—everything we built! A centralized, enterprise-grade brain that any company can plug into! One brain that understands intent, enforces governance, and heals itself—for everyone!"
 
 Copilot Bot's LEDs flickered in awe. "A BRAIN... FOR ALL THE BASEMENTS?"
 

@@ -4,11 +4,11 @@
 title: AI Efficiency — Context Management and Token Optimization
 type: explanation
 audience: [Product Owners, Business Leaders, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 12
 ---
 
-> **The central idea:** AI-powered development tools have a fixed session budget — the amount of information that can be active in memory at any moment. How that budget is spent determines the quality and longevity of each session. CORTEX manages this budget precisely, loading exactly the intelligence needed for each task and holding nothing that isn't contributing to the current request.
+> **The central idea:** AI-powered development tools have a fixed session budget — the amount of information that can be active in memory at any moment. Think of it like your working memory: you can hold about seven things in mind at once. When you try to juggle more, you start dropping things. CORTEX manages this budget precisely — like a skilled assistant who brings you exactly the file you need, exactly when you need it, and files it away the moment you're done — leaving your desk clear for the next task.
 
 ---
 

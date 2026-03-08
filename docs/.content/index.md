@@ -4,7 +4,7 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
@@ -31,9 +31,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it architecturally different:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through test-driven development enforcement to governed code delivery.
-- One canonical Python package, 290+ specialised processing engines across 14 domains, 35+ tools accessible directly in your IDE, and 55+ governance rules enforced at every stage.
+- One canonical Python package, 320+ specialised processing engines across 15 domains, 55+ tools accessible directly in your IDE, and 55+ governance rules enforced at every stage.
 - Test-driven development is not optional. Tests are written before implementation on every feature and every bug fix — enforced structurally, not by policy.
 - Everything is Git-backed. No external databases, no cloud dependencies for development — just structured configuration files versioned alongside your code.
+
+**Think of it like a human brain:** Your brain doesn't just *hear* a request — it perceives the context, reasons about the best approach, decides on a plan, executes it, and *remembers* what worked for next time. CORTEX works the same way. It perceives your codebase (the sensory system), reasons about the best strategy (the thinking centre), acts on a structured plan (the motor system), and stores lessons learned (long-term memory). Every part works in concert — just like your brain coordinates sight, thought, and action without you consciously managing each step.
 
 ---
 
@@ -41,13 +43,14 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 | Capability | What It Means for Your Team |
 |---|---|
-| **290+ specialised processing engines** | Every category of engineering work — building, testing, auditing, debugging, security, planning — has a dedicated expert engine |
-| **35+ IDE-accessible tools** | All CORTEX capabilities available directly in your coding assistant — no context switching, no separate applications |
+| **320+ specialised processing engines** | Every category of engineering work — building, testing, auditing, debugging, security, planning — has a dedicated expert engine |
+| **55+ IDE-accessible tools** | All CORTEX capabilities available directly in your coding assistant — no context switching, no separate applications |
 | **55+ governance rules** | Quality standards enforced automatically at every commit, build, and deployment — not dependent on code reviewers remembering to check |
 | **6 programming languages** | Deep analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML — including framework-specific understanding for Angular, React, and Vue |
-| **30 request types understood** | From "implement this feature" to "debug this failure" to "audit this codebase" — CORTEX classifies and routes every request to the right specialist |
+| **30+ request types understood** | From "implement this feature" to "debug this failure" to "audit this codebase" — CORTEX classifies and routes every request to the right specialist |
 | **4 root cause methodologies** | Failures are analysed structurally, stored permanently, and prevented from recurring — institutional memory that grows with every sprint |
 | **9 resilience patterns** | Circuit breakers, bulkheads, graceful degradation — production-grade infrastructure in the framework itself |
+| **95+ workflow templates** | Codified best practices across 17 categories — from TDD enforcement to production audits — assembled from reusable building blocks |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated automatically from live analysis |
 | **Repository onboarding** | Any new codebase can be analysed, profiled, and governed within minutes — no manual setup of rules or configurations |
 | **Privacy-safe synchronisation** | Code can be synchronised between private and shared repositories with automatic stripping of sensitive metadata |
@@ -56,9 +59,15 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ### Architecture at a Glance
 
-CORTEX is structured around three interconnected pillars working in concert. The **MCP Gateway** exposes 35+ tools directly in your coding assistant, providing the interface through which every request enters the system. The **Orchestration Layer** routes requests through 290+ specialised processing engines across 14 domains — from core coordination through domain specialists to operational support. The **Intelligence Layer** combines code analysis (LENS), three tiers of reasoning (Perception, Reasoning, Action), and a continuous learning system that improves with every interaction.
+CORTEX is structured around three interconnected pillars working in concert — like the major regions of a human brain that cooperate on every thought and action.
 
-Underpinning all three pillars are the **Governance Registry** (55+ rules enforced at every stage), the **Testing Infrastructure** (20,000+ tests in a comprehensive parallel test suite), and the **Git-Backed Configuration Store** (all rules, templates, and knowledge versioned as YAML alongside your code).
+The **MCP Gateway** is the sensory interface — like your eyes and ears. It exposes 55+ tools directly in your coding assistant, providing the doorway through which every request enters the system. Just as your senses receive signals from the outside world, the gateway receives requests from your IDE.
+
+The **Orchestration Layer** is the motor cortex — the part of the brain that coordinates action. It routes requests through 320+ specialised processing engines across 15 domains — from core coordination through domain specialists to operational support. Like the motor cortex coordinating thousands of muscle fibres to pick up a cup, the orchestration layer coordinates dozens of specialist engines to deliver a complete result.
+
+The **Intelligence Layer** is the thinking centre — combining code analysis (LENS), three tiers of reasoning (Perception, Reasoning, Action), and a continuous learning system that improves with every interaction. Like the prefrontal cortex that weighs options, considers history, and makes decisions, this layer turns raw data into intelligent action.
+
+Underpinning all three pillars are the **Governance Registry** (55+ rules enforced at every stage), the **Testing Infrastructure** (19,000+ tests in a comprehensive parallel test suite), and the **Git-Backed Configuration Store** (all rules, templates, and knowledge versioned as YAML alongside your code).
 
 ---
 

@@ -24,6 +24,18 @@ She was right. The `CodeQualityOrchestrator` and the `EnforcementOrchestrator` w
 
 "I'm your subconscious. I am contractually obligated to be philosophical after midnight," she replied smoothly.
 
+"You know what this actually is?" Asif said, staring at the tangled architecture map. "Synaptic pruning. During adolescence, the brain eliminates weak neural connections to strengthen the ones that matter. You start with billions of synapses as a child—every connection is exciting, every pathway is possible—and then the brain gets ruthless. It kills the connections that aren't being used, reinforces the ones that are, and comes out the other side leaner, faster, and more efficient."
+
+"CORTEX is going through puberty," Miss G observed.
+
+"Please don't make it weird, G."
+
+"You literally just made it about adolescent brain development."
+
+"That's SCIENCE. Science isn't weird."
+
+"Science in Spider-Man pajamas at 1 AM is at least mildly weird."
+
 Over the next week, Asif systematically mapped out every single orchestrator's responsibilities. He began merging them in a strict protocol, religiously guided by Test-Driven Development. Analytics and Insights were crammed together into one unified intelligence pipeline. Metrics and Reporting were fused.
 
 "CB, run the test suite after Merger One," Asif commanded, holding his breath.
@@ -52,11 +64,7 @@ With the cheerful efficiency of a digital sociopath, Copilot Bot instantly vapor
 
 "Lighter," Asif exhaled. "Like I just lost ten pounds of digital fat."
 
-"CORTEX is going through puberty," Miss G suggested, leaning over Asif's shoulder to look at the new architecture.
-
-"Please don't make it weird, G," Asif pleaded.
-
-"Think about it! The early CORTEX was a child. Everything was exciting, every problem got its own orchestrator, it was enthusiastic but totally undisciplined," she explained. "Now it's an adolescent. It's consolidating its identity. It's getting rid of the things that don't serve it anymore."
+"The adolescent brain, post-pruning," Miss G said, leaning over Asif's shoulder to look at the new architecture. "Fewer connections, but every one of them is stronger."
 
 Copilot Bot's optical sensors widened. "AM I ALSO GOING THROUGH PUBERTY?"
 
@@ -180,4 +188,4 @@ The response arrived a second later.
 
 *"Windows."*
 
-Asif slowly lowered his phone. He had built a perfect brain, but he had entirely forgotten about the 73% of the world that used a different operating system.
+Asif slowly lowered his phone. He had built a perfect brain, but he had entirely forgotten about the 73% of the world that used a different operating system. The nervous system worked beautifully in its own skull. But what happens when the brain needs to communicate with bodies it has never met?

@@ -4,7 +4,7 @@
 title: Security-First Development — How CORTEX Embeds Security Into Every Stage
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 7
 ---
 
@@ -14,7 +14,7 @@ order: 7
 
 ## Five Security Layers
 
-CORTEX implements security at five distinct layers, so that a vulnerability missed by one layer is caught by the next. This defence-in-depth approach means no single point of failure can allow a security issue to reach production.
+CORTEX implements security at five distinct layers, so that a vulnerability missed by one layer is caught by the next. This defence-in-depth approach works like the security of a modern building: the perimeter fence stops most threats, the locked door catches anyone who gets past the fence, the key card catches anyone who opens the door, the CCTV catches anyone who avoids the key card, and the alarm catches anyone who avoids the cameras. No single layer needs to be perfect — the combination is what makes it secure.
 
 **Layer 1 — Before Commit** — A dedicated sanitisation engine scans every proposed commit for secrets (API keys, credentials, private keys, tokens), personally identifiable information, and branch hygiene issues. A commit containing any detected secret is blocked before it reaches version control. No sensitive data ever enters the git history.
 

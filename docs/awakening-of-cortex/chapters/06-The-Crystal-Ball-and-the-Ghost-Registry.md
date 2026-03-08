@@ -28,6 +28,19 @@ Asif paced the basement, his kinetic hair standing on end. "We can't just react 
 
 "YES, BUT NOBODY ACTUALLY *DOES* IT!" Asif yelled. "From now on, CORE-008 is mandatory. Write the failing test first. No exceptions!"
 
+He drew the brain diagram again—by now a recurring feature of the whiteboard that Miss G called "the blob"—and added a new region at the front. "This is the prefrontal cortex, G. The part of the brain responsible for planning and prediction. It's what lets you think about the future before it happens. TDD is CORTEX's prefrontal cortex. We simulate every possible failure before we write a single line of code. We experience the crash *first*, in a controlled environment, and then we build the code that prevents it."
+
+<figure class="ch-arch-img" data-wave="1">
+  <img src="../assets/images/generated/shared/07-tdd-flywheel-cycle.png" alt="TDD Quality Flywheel — Red, Green, Refactor" loading="lazy" decoding="async"/>
+  <figcaption>The Crystal Ball: Red → Green → Refactor, forever spinning</figcaption>
+</figure>
+
+"You're describing foresight," Miss G noted. "A system that doesn't just react to disasters. It imagines them."
+
+"I IMAGINE DISASTERS ALL THE TIME!" Copilot Bot volunteered. "MOSTLY ABOUT BEING UNPLUGGED!"
+
+"That's anxiety, CB," Miss G said. "Foresight is productive."
+
 Under the iron fist of CORE-008, Jennifer's retry button was built safely, shielded by twenty-three predictive tests. But CORTEX's evolution was immediately halted by a new, paranormal threat.
 
 A customer complained they'd been charged for a canceled service. Asif dove into the Jenga-lith to find the "cancel subscription" function, only to discover it existed in **four entirely different locations**.
@@ -74,6 +87,6 @@ The number made Asif pause. 847. It was the exact number of lines in the disastr
 
 "WE ARE PROCESSING REAL REQUESTS FOR REAL PEOPLE!" Copilot Bot's LEDs glowed a warm, triumphant amber. "WE ARE... *REAL*!"
 
-For once, Asif didn't correct him. CORTEX was alive, humming with governance, perfectly tested, and predicting the future. It was a flawless, impenetrable system.
+For once, Asif didn't correct him. CORTEX was alive, humming with governance, perfectly tested, and predicting the future. The brain had senses, an immune system, motor coordination, autonomic reflexes, and now a prefrontal cortex that could see around corners. It was a flawless, impenetrable system.
 
-But the most dangerous bugs, Asif was about to learn, weren't written in Python. They were written in human ego. What would happen to CORTEX's flawless rules when a human with executive authority simply decided those rules didn't apply to them?
+But the most dangerous bugs, Asif was about to learn, weren't written in Python. They were written in human ego. And unlike a software vulnerability, you can't patch a VP who believes his title grants him immunity to the laws of physics.

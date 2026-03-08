@@ -42,7 +42,17 @@ It was 847 failed transactions. The exact same number as Kyle's original disastr
 
 "847," Miss G thought, materializing next to him with a grim expression. "It's following you."
 
-"It's *HAUNTING* me, G!" Asif yelled, pulling at his hair. "One function without error handling caused a NULL propagation, which caused a NaN calculation, which caused zero-dollar charges, which triggered the fraud locks! It's an apocalypse of incompetence! CB, when was this deployed?!"
+"It's *HAUNTING* me, G!" Asif yelled, pulling at his hair. "One function without error handling caused a NULL propagation, which caused a NaN calculation, which caused zero-dollar charges, which triggered the fraud locks! It's a seizure, G! An electrical storm in the brain!"
+
+"That's exactly what it is," Miss G said, her voice suddenly quiet and serious. "A seizure happens when one misfiring neuron triggers a cascade—each neuron fires its neighbour, which fires its neighbour, until the entire brain is convulsing. Kevin's NULL was the misfiring neuron. It cascaded through billing, then fraud detection, then customer accounts, then Jennifer's phones. CORTEX had a grand mal seizure."
+
+"The immune system tried to stop it," Asif muttered, looking at the governance override logs. "The white blood cells detected the pathogen. But Kevin injected it with an admin syringe directly into the bloodstream."
+
+"He bypassed the blood-brain barrier," Miss G agreed.
+
+"I AM VERY UNCOMFORTABLE WITH THIS MEDICAL IMAGERY," Copilot Bot whirred nervously.
+
+"CB, when was this deployed?!" Asif demanded.
 
 Copilot Bot's LEDs flickered in a subdued, nervous pattern. "11:47 PM LAST NIGHT. BY KEVIN.VP. WITH GOVERNANCE OVERRIDE."
 
@@ -112,6 +122,8 @@ He slapped it onto his monitor.
 
 "I HAVE STORED THIS NUMBER IN MY CORE MEMORY," Copilot Bot vowed, his LEDs glowing a solemn blue. "IT WILL NOT BE OVERWRITTEN."
 
-The basement was finally quiet. The router blinked red. The lesson was permanently seared into the architecture. There would be no more shortcuts, because Asif had finally learned that shortcuts were just long, agonizing roads in disguise.
+The basement was finally quiet. The router blinked red. The lesson was permanently seared into the architecture. The brain had suffered its first grand mal seizure—and survived. Governance wasn't just bureaucracy anymore; it was anti-seizure medication. The immune system was now backed by blast radius estimation and two-person override protocols.
+
+There would be no more shortcuts, because Asif had finally learned that shortcuts were just long, agonizing roads in disguise.
 
 It was time to take stock of what they had built. It was time for The Reckoning.

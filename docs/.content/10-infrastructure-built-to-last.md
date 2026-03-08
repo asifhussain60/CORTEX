@@ -4,7 +4,7 @@
 title: Infrastructure — Observability, Resilience, Deployment, and the Audit Database
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 10
 ---
 
@@ -66,7 +66,7 @@ A log growth monitor tracks log volume over time and alerts when growth exceeds 
 
 ## Nine Resilience Patterns
 
-CORTEX implements nine production-grade resilience patterns in its own infrastructure, and these patterns are also modelled in the knowledge base as recommendations for the codebases it governs.
+CORTEX implements nine production-grade resilience patterns in its own infrastructure, and these patterns are also modelled in the knowledge base as recommendations for the codebases it governs. Think of these like the body's built-in survival mechanisms: when you touch something hot, your hand pulls away before your brain consciously registers pain (circuit breaker). When you're sick, your body redirects energy from digestion to immune response (graceful degradation). When you're tired, your body forces sleep rather than letting you operate unsafely (rate limiting).
 
 | Pattern | What It Does |
 |---|---|
@@ -110,7 +110,7 @@ CORTEX's own CI pipeline demonstrates the standards it advocates. Every push tri
 
 **Golden Tests** — The core invariant tests run sequentially for determinism. All must pass — no exceptions, no overrides.
 
-**Governance Validation** — All 32 active governance rules are enforced by the full compliance suite.
+**Governance Validation** — All 55+ active governance rules are enforced by the full compliance suite.
 
 **Integration Tests** — Cross-component flows are tested with orchestrators running against each other.
 

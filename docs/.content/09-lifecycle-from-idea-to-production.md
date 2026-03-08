@@ -4,7 +4,7 @@
 title: Delivery Lifecycle — How CORTEX Manages Requirements Through Release
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 9
 ---
 

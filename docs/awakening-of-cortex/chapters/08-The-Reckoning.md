@@ -34,6 +34,17 @@ The CTO simply nodded. Asif's budget for the next year was fully approved before
 
 Later that night, Asif was back in the basement, back in his Spider-Man pajamas, and back in his element. He sat at his wobbly desk and wrote down the Five Lessons he had learned over the past year. Not for management, but for the CORTEX knowledge graph.
 
+"You're consolidating memories," Miss G observed, watching him write. "That's what the hippocampus does during sleep. It takes the day's experiences—the raw, messy, emotional chaos of everything that happened—and converts them into long-term memory. Permanent knowledge. This is CORTEX's hippocampus moment."
+
+<figure class="ch-arch-img" data-wave="1">
+  <img src="../assets/images/generated/shared/03-principle-selection-system.png" alt="Intelligent Principle Selection System — contextual wisdom retrieval" loading="lazy" decoding="async"/>
+  <figcaption>The hippocampus at work: turning chaos into permanent wisdom</figcaption>
+</figure>
+
+"I'm writing a list, G. Not performing neurosurgery."
+
+"You're converting one year of chaos into five permanent lessons. That *is* memory consolidation."
+
 **Lesson One — Intelligence is Architecture, Not Magic:** The router, the governance, the orchestrators—none of it was magic. It was components working together.
 
 **Lesson Two — Rules Without Enforcement Are Suggestions:** Kevin proved that a password could bypass good intentions.
@@ -81,7 +92,7 @@ As midnight approached, Asif rolled out a blank sheet of actual, physical paper�
 
 "As long as it takes."
 
-Asif leaned back, rubbing his exhausted eyes. He looked at the neon yellow sticky note glowing faintly in the monitor's standby light: *847. Never again.* One year ago, he was a panicked developer with an imaginary girlfriend, a malfunctioning robot, and a wobbly chair. Now, he had a system.
+Asif leaned back, rubbing his exhausted eyes. He looked at the neon yellow sticky note glowing faintly in the monitor's standby light: *847. Never again.* One year ago, he was a panicked developer with an imaginary girlfriend, a malfunctioning robot, and a wobbly chair. Now, he had a system. The brain had senses, an immune system, motor coordination, autonomic reflexes, a prefrontal cortex for prediction, and now—thanks to the Five Lessons—its first permanent memories.
 
 "Are you proud?" Miss G asked softly.
 
@@ -91,6 +102,6 @@ Asif leaned back, rubbing his exhausted eyes. He looked at the neon yellow stick
 
 "I'm tired *and* proud. Is that allowed?"
 
-"I'll allow it," Miss G smiled. "Now go work on Phase 1. You've got orchestrators to consolidate."
+"I'll allow it," Miss G smiled. "Now go work on Phase 1. The brain has gotten fat. It's time for synaptic pruning."
 
 The future was a mountain, and Asif had only just climbed the foothills. It was time to put CORTEX on a diet.

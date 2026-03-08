@@ -1,7 +1,7 @@
 ---
 id: orchestration-intent-classification-routing
 title: Intent classification and orchestrator routing
-purpose: Show how CORTEX classifies user requests into 29 intent types and routes them to specialized orchestrators with confidence-based decisions.
+purpose: Show how CORTEX classifies user requests into 30+ intent types and routes them to specialized orchestrators with confidence-based decisions.
 audience:
   - Business Leaders
   - Product Owners
@@ -32,7 +32,7 @@ render: ascii
   │  Keyword matching + context analysis → confidence score              │
   │                                                                      │
   │  ┌──────────────────────────────────────────────────────────────┐    │
-  │  │  29 Intent Types:                                            │    │
+  │  │  30+ Intent Types:                                           │    │
   │  │                                                              │    │
   │  │  CODE-TOUCHING          NON-CODE              LIFECYCLE      │    │
   │  │  ⚡ IMPLEMENT           📖 QUERY              📚 DIGEST     │    │
@@ -95,4 +95,4 @@ render: ascii
   └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 29 intent types covering the complete engineering lifecycle, from first implementation through root cause analysis and self-healing governance.
+**Business impact:** Every request is understood, classified, and routed to the right specialist — no manual selection required. 30+ intent types covering the complete engineering lifecycle, from first implementation through root cause analysis and self-healing governance.

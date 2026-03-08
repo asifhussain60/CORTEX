@@ -4,7 +4,7 @@
 title: Frequently Asked Questions
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 14
 ---
 
@@ -48,7 +48,7 @@ Open Copilot Chat in Agent mode. Click the Tools button. CORTEX tools should app
 ## Governance and Compliance
 
 **How many governance rules does CORTEX enforce?**
-32 active governance rules organised by severity. Rules cover everything from code structure (type hints, naming conventions, file organisation) to process compliance (test-first development, complete fixes, convergence before completion) and security (secret management, dependency safety).
+55+ active governance rules organised by severity. Rules cover everything from code structure (type hints, naming conventions, file organisation) to process compliance (test-first development, complete fixes, convergence before completion) and security (secret management, dependency safety).
 
 **Can we customise governance rules for our organisation?**
 Yes. The governance rules are structured YAML files in the `cortex-registry/core/` directory. Rules can be modified, deactivated, or supplemented with organisation-specific rules. All changes are version-controlled, audited, and documented.
@@ -57,7 +57,7 @@ Yes. The governance rules are structured YAML files in the `cortex-registry/core
 Minor violations (warnings) surface as recommendations. Significant violations (major findings) block the relevant operation until addressed. Critical violations (blocking) prevent code from proceeding to the next stage. The audit trail records every violation found, every fix applied, and every governance gate outcome.
 
 **Does governance apply to all developers equally?**
-Yes. Governance is enforced structurally — not through peer review or manual oversight. The same rules apply regardless of seniority, team, or delivery pressure. There are no override mechanisms for governance gates.
+Yes. Governance is enforced structurally — not through peer review or manual oversight. The same rules apply regardless of seniority, team, or delivery pressure. Think of it like gravity: it applies equally to everyone, every time, without exception. There are no override mechanisms for governance gates.
 
 **How is governance audited?**
 Every governance gate outcome is written to the audit database with a cryptographic chain. Each record includes the rule applied, the outcome, the timestamp, and the operator (human or automated). The chain ensures that historical records cannot be modified without detection.
@@ -67,7 +67,7 @@ Every governance gate outcome is written to the audit database with a cryptograp
 ## Orchestration and AI Requests
 
 **What kinds of requests can CORTEX handle?**
-29 distinct intent types including: implementing features, fixing bugs, refactoring, auditing compliance, debugging failures, running security checks, generating documentation, managing the delivery lifecycle, learning from root cause analyses, and more. Requests are expressed in natural language.
+30+ distinct intent types including: implementing features, fixing bugs, refactoring, auditing compliance, debugging failures, running security checks, generating documentation, managing the delivery lifecycle, learning from root cause analyses, distilling conversations into executable prompts, and more. Requests are expressed in natural language.
 
 **How does CORTEX know which specialist to use for a request?**
 An Intent Router classifies incoming requests using semantic analysis. The classified intent maps to the appropriate specialist orchestrator. Each orchestrator has a specific domain of expertise — code intelligence, governance, testing, debugging, security, or lifecycle management. Routing is transparent and logged.
@@ -89,7 +89,7 @@ Simple queries return in seconds. A code review returns in 5–15 seconds depend
 Yes. This is a core governance rule. The test-driven approach — write a failing test, implement to make it pass, refactor — is enforced structurally. A workflow that produces code without a corresponding test will not pass the governance gate.
 
 **How many tests does CORTEX have?**
-The test suite currently has approximately 17,800 tests. Parallel execution across all CPU cores completes the full suite faster than a sequential run of a fraction of that number. A smoke subset (the most critical tests) runs in under 60 seconds.
+The test suite currently has approximately 19,000+ tests. Parallel execution across all CPU cores completes the full suite faster than a sequential run of a fraction of that number. A smoke subset (the most critical tests) runs in under 60 seconds.
 
 **What are Golden Tests?**
 Golden Tests are the immutable quality contracts for CORTEX's core invariants. Every core claim about CORTEX's behaviour is backed by a Golden Test. These tests cannot be skipped, cannot be modified without explicit governance approval, and must pass with no exceptions at every commit. They are the production-quality guarantee.

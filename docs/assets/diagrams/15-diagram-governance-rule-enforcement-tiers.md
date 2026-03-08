@@ -1,7 +1,7 @@
 ---
 id: governance-rule-enforcement-tiers
 title: Governance rule enforcement (4-tier precedence)
-purpose: Show how 32 CORE governance rules are enforced at 3 checkpoints with a 4-tier precedence hierarchy that prevents compliance gaps.
+purpose: Show how 55+ CORE governance rules are enforced at 3 checkpoints with a 4-tier precedence hierarchy that prevents compliance gaps.
 audience:
   - Business Leaders
   - Product Owners
@@ -17,7 +17,7 @@ render: ascii
 
 # Governance Rule Enforcement — 4-Tier Precedence
 
-## 32 Rules Enforced at 3 Checkpoints
+## 55+ Rules Enforced at 3 Checkpoints
 
 ```
  ═══════════════════════════════════════════════════════════════════════════════

@@ -4,7 +4,7 @@
 title: Getting Started — Setup, First Steps, and Quick Reference
 type: guide
 audience: [Software Developers]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 13
 ---
 
@@ -135,8 +135,8 @@ Available tasks include all test modes, MCP setup, and the full audit pipeline.
 | Path | What Lives Here |
 |---|---|
 | `cortex/` | All CORTEX source code (the Python package) |
-| `cortex/orchestrators/` | The 290+ orchestrators that handle every request type |
-| `cortex/mcp/tools/` | The 32 tools exposed to Copilot Chat |
+| `cortex/orchestrators/` | The 320+ orchestrators that handle every request type |
+| `cortex/mcp/tools/` | The 55+ tools exposed to Copilot Chat |
 | `cortex-registry/` | Governance rules, workflow templates, knowledge base (YAML) |
 | `tests/` | The full test suite (mirrors `cortex/` structure) |
 | `.cortex-runtime/` | Runtime databases and logs (auto-created, excluded from git) |
@@ -164,7 +164,7 @@ These environment variables adjust CORTEX behaviour for specific scenarios. Defa
 
 After your first successful session, most developers explore:
 
-1. **Read the governance rules** — `cortex-registry/core/` contains the 32 rules CORTEX enforces. Understanding them helps you understand why CORTEX makes the recommendations it does.
+1. **Read the governance rules** — `cortex-registry/core/` contains the 55+ rules CORTEX enforces. Understanding them helps you understand why CORTEX makes the recommendations it does.
 
 2. **Run your first audit** — In Copilot Chat, ask for a full audit: `Audit the codebase and fix all quality issues`. Watch the nine-stage pipeline work through the codebase systematically.
 

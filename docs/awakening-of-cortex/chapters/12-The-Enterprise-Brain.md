@@ -36,11 +36,20 @@ From the dark corner, Copilot Bot suddenly powered on, his LED eyes blazing a br
 
 He drew five layers of this new Enterprise Brain:
 
-1. **The Intent Engine** — translate human language into architectural intent
-2. **The Governance Fabric** — enforce standards invisibly, everywhere
-3. **The Orchestration Mesh** — coordinate any number of systems in harmony
-4. **The Learning Loop** — improve from every deployment and every failure
-5. **The Healing Core** — detect, diagnose, and repair without waking anyone up
+1. **The Intent Engine** — the thalamus, translating human language into architectural intent
+2. **The Governance Fabric** — the immune system, enforcing standards invisibly, everywhere
+3. **The Orchestration Mesh** — the motor cortex, coordinating any number of systems in harmony
+4. **The Learning Loop** — the hippocampus, improving from every deployment and every failure
+5. **The Healing Core** — the glymphatic system, detecting, diagnosing, and repairing without waking anyone up
+
+"Every layer maps to a brain region," Asif whispered, stepping back from the whiteboard. "It's not a metaphor anymore, G. It's the actual architecture. We didn't just build software that works like a brain. We built a brain."
+
+<figure class="ch-arch-img" data-wave="4">
+  <img src="../assets/images/generated/shared/01-platform-architecture-overview.png" alt="CORTEX Platform Architecture — four tiers from interaction to infrastructure" loading="lazy" decoding="async"/>
+  <figcaption>The Enterprise Brain: five layers, one nervous system</figcaption>
+</figure>
+
+"You built a brain in a basement in Spider-Man pajamas," Miss G corrected, with a smile that was equal parts pride and disbelief.
 
 It wouldn't just be for their company; it would be a centralized brain for any enterprise.
 
@@ -90,9 +99,9 @@ He called it the **Intelligence Facade**.
 
 Asif stopped pacing. He stared at the robot. He looked at Miss G. She was already smiling.
 
-"He's right," she said softly. "The same solution. Different scale."
+"He's right," she said softly. "The same solution. Different scale. The thalamus routes signals from the outside world. The Intelligence Facade routes signals inside the brain. It's the same principle—thalamus all the way down."
 
-"The brain needed its own hotel receptionist," Asif muttered. "The whole thing is a Russian nesting doll of hotel receptionists."
+"The brain needed its own hotel receptionist," Asif muttered. "The whole thing is a Russian nesting doll of receptionists."
 
 "RECEPTIONISTS ALL THE WAY DOWN," Copilot Bot confirmed, with the serene certainty of someone who had just solved philosophy.
 
@@ -254,6 +263,17 @@ It was a Saturday morning, early enough that the light pouring into the basement
 
 Asif let out a real, exhausted, incredibly proud laugh. Miss G smiled—not her sarcastic smile, but a genuine expression of pride for the chaotic, brilliant architect who had imagined her.
 
-Asif Codenstein—the ADHD architect, the basement dweller, the man who argued with a robot and fell in love with a voice in his head—stood up from the resilient chair. He left the cold coffee behind.
+Asif Codenstein—the ADHD architect, the basement dweller, the man who argued with a robot and fell in love with a voice in his head—stood up from the resilient chair. He left the cold coffee behind. He left the "DEBUG FUEL" mug where it sat, battle-scarred and caffeine-stained after two years of service.
 
 He walked up the creaking wooden stairs, stepping out of the basement and into the golden morning light, ready to give the entire world a brain.
+
+Behind him, in the quiet basement, the whiteboard still displayed the brain diagram he had first sketched in Chapter One—PERCEIVE, REASON, ACT, REMEMBER—now surrounded by twelve chapters of annotations, corrections, late-night additions, and one very persistent coffee ring. Every region was filled in. Every pathway was connected. The Scarecrow finally had a brain.
+
+<figure class="ch-arch-img" data-wave="4">
+  <img src="../assets/images/generated/shared/04-brain-architecture-six-domains.png" alt="CORTEX Brain Architecture — six capability domains mapped to a brain" loading="lazy" decoding="async"/>
+  <figcaption>The complete brain: every region filled, every pathway connected</figcaption>
+</figure>
+
+And on the faded, coffee-stained sticky note stuck to the monitor, the number **847** glowed in the morning light. Not as a warning anymore. As a compass. The exact distance between disaster and redemption, measured in lines of code, failed transactions, and lessons learned.
+
+The red Wi-Fi router blinked steadily in the empty room. Green. Always green now.

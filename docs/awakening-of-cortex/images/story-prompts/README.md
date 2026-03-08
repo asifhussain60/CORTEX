@@ -23,7 +23,8 @@ Prepend this **style preamble** to every prompt (already included in each file):
 - 🟣 **Purple glow (#a78bfa)** — Wave 0 / Origin chapters (01–04)
 - 🔵 **Cyan glow (#67e8f9)** — Wave 1 / Structure chapters (05–08)
 - 🟡 **Amber glow (#fbbf24)** — Wave 2 / Resilience chapters (09–10)
-- 🟢 **Emerald glow (#34d399)** — Wave 3 / Autonomy chapters (11–14)
+- 🟢 **Emerald glow (#34d399)** — Wave 3 / Autonomy chapter (11)
+- 🟣 **Violet glow (#8b5cf6)** — Wave 4 / Vision chapter (12)
 
 ---
 
@@ -60,8 +61,9 @@ Prepend this **style preamble** to every prompt (already included in each file):
 ### CORTEX (The Brain Being Built)
 - **Early chapters (01–04):** A small, dim, partially-formed brain in a glass jar on Asif's desk. Few neural connections glowing faintly purple.
 - **Mid chapters (05–08):** Growing brain with more neural pathways lit up in cyan. Jar is larger. Pulses with energy.
-- **Late chapters (09–13):** Fully formed glowing brain, no longer in a jar. Floats freely. Dense neural network. Amber then emerald glow.
-- **Final chapter (14):** Massive, radiant brain floating above the basement, casting light on everything below. Emerald neural lightning.
+- **Late chapters (09–10):** Fully formed glowing brain, no longer in a jar. Floats freely. Dense neural network. Amber glow.
+- **Autonomy (11):** Massive luminous brain pulsing like a heartbeat. Emerald glow.
+- **Final chapter (12):** Massive, radiant brain floating above the basement, casting light on everything below. Violet neural lightning. Multiple satellite brains. Has outgrown the basement entirely.
 
 ### The Basement (Recurring Setting)
 - Cramped room under wooden stairs. Exposed pipes on ceiling.
@@ -133,7 +135,7 @@ Prepend this **style preamble** to every prompt (already included in each file):
 ## Generator Note — Gemini Pro Upgrade
 
 **Recommended generator:** Gemini Imagen 3 (Gemini Pro / Google AI Studio Pro tier) for enhanced:
-- **Character consistency** — seed-based character anchoring for Miss G's face across all 24 prompts
+- **Character consistency** — seed-based character anchoring for Miss G's face across all 28 prompts
 - **Fine detail rendering** — embroidery patterns, ringlet curl texture, translucency effects
 - **Cinematic composition** — improved crosshatching and tonal range in the B&W/accent-color style
 - **Prompt fidelity** — longer prompt adherence for complex multi-character scenes

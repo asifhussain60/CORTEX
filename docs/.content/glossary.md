@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -72,6 +72,8 @@ order: 99
 **cortex_fetch_work_items** — MCP tool for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
 
 ## D
+
+**Defence in Depth** — Security architecture principle where multiple independent layers of protection ensure no single point of failure can allow a threat to reach production. In CORTEX, five security layers operate at commit time, build time, runtime, static analysis, and release gates — like a building with a perimeter fence, locked doors, key cards, CCTV, and alarms.
 
 **Definition of Ready (DoR)** — Checklist presented in MasterOrchestrator Stage 1. Ensures scope, acceptance criteria, and dependencies are clear before execution.
 

@@ -30,7 +30,8 @@ ch-13-3am-healer.png
 | Origin (0) | `#a78bfa` purple | 01, 02, 03, 04 |
 | Structure (1) | `#67e8f9` cyan | 05, 06, 07, 08 |
 | Resilience (2) | `#fbbf24` amber | 09, 10 |
-| Autonomy (3) | `#34d399` emerald | 11, 12, 13 |
+| Autonomy (3) | `#34d399` emerald | 11 |
+| Vision (4) | `#8b5cf6` violet | 12 |
 
 Images are loaded by `index.html` via the `image` field in the CHAPTERS array.
 If no image file exists for a chapter, the hero banner is simply hidden.

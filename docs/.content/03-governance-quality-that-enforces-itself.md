@@ -4,7 +4,7 @@
 title: Governance — Automated Quality, Compliance, and Rule Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 3
 ---
 
@@ -26,15 +26,15 @@ CORTEX enforces governance at every stage of the development process — not jus
 
 **At Commit Time** — Before code enters version control, ten enforcement agents scan the proposed changes. A failed check blocks the commit with a specific explanation and remediation guidance. No code that violates an active rule can enter the repository.
 
-**During the Build** — Continuous integration runs the full governance suite in parallel with tests. Type annotations, documentation coverage, naming conventions, duplicate detection, and security patterns are all validated automatically on every build.
+**During the Build** — Continuous integration runs the full governance suite in parallel with tests. Type annotations, documentation coverage, naming conventions, duplicate detection, and security patterns are all validated automatically on every build. It's like a quality checkpoint at every station of a factory assembly line — each station verifies one thing, and nothing moves forward until it passes.
 
 **During Execution** — Every time CORTEX performs an operation, a governance gate runs as part of the standard execution lifecycle. The gate checks the operation against all active rules before any files are touched. A blocked result means zero files are modified and the reason is surfaced immediately.
 
 ---
 
-## The Rule Hierarchy — 32 Active Rules
+## The Rule Hierarchy — 55+ Active Rules
 
-CORTEX governance rules live as structured configuration files in a version-controlled registry. Every rule is auditable, reviewable, and traceable to a commit. Rules are organised in tiers based on their authority level.
+CORTEX governance rules live as structured configuration files in a version-controlled registry. Every rule is auditable, reviewable, and traceable to a commit. Think of it like the building code for a city: every structure must meet the code, every inspection is recorded, and no builder can opt out. Rules are organised in tiers based on their authority level.
 
 **Immutable rules** — the foundational tier — cannot be overridden, disabled, or bypassed. They represent the non-negotiable commitments that make CORTEX trustworthy.
 

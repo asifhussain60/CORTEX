@@ -4,7 +4,7 @@
 title: Test-Driven Development — How CORTEX Makes Quality Automatic
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 4
 ---
 
@@ -22,7 +22,7 @@ CORTEX eliminates this pattern by making test-first development structurally una
 
 ## The Three-Phase Cycle
 
-CORTEX enforces a precise three-phase cycle for every implementation and bug fix.
+CORTEX enforces a precise three-phase cycle for every implementation and bug fix. Think of it like a scientific experiment: first you form a hypothesis (write the test), then you run the experiment (write the code), then you refine your method (improve the code). Scientists don't skip straight to refining — and CORTEX won't let developers skip to coding without a test.
 
 **Red — Write a Failing Test**
 

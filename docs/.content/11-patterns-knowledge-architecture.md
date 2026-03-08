@@ -4,7 +4,7 @@
 title: Enterprise Patterns and Knowledge Architecture
 type: explanation
 audience: [Software Developers, Business Leaders, Product Owners, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 11
 ---
 
@@ -14,9 +14,7 @@ order: 11
 
 ## Why Pattern Recognition Changes Everything
 
-Most code quality tools work syntactically — they check formatting, flag missing type hints, or count lines per function. These checks are valuable but shallow. They cannot detect an architectural anti-pattern, identify a system design that will become unmaintainable at scale, or suggest a structural refactoring that would eliminate an entire class of future bugs.
-
-CORTEX works architecturally. Its code intelligence layer recognises the structural patterns underlying any codebase — the same patterns that experienced software architects look for when assessing system quality. When CORTEX detects a pattern, it can evaluate whether the implementation is idiomatic, identify deviations that suggest fragility, and recommend specific improvements.
+Most code quality tools work syntactically — they check formatting, flag missing type hints, or count lines per function. These checks are valuable but shallow. They're like a spell-checker: it catches typos but can't tell you if your argument is logical. CORTEX works architecturally — it reads the *structure* of your code the way an experienced architect reads a building blueprint, spotting load-bearing walls, recognising structural patterns, and flagging designs that won't scale before a single brick is laid.
 
 ---
 

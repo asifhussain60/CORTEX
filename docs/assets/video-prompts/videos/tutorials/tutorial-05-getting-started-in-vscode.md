@@ -78,8 +78,8 @@ Response: Tool list renders -- grouped by category.
 Narrator: "The tools catalog shows you what CORTEX can do from chat. It is also your first check that the tool registry is complete. Each tool listed here corresponds to a registered function in mcp_registry.py."
 
 Card 3: `cortex_load op=rules`
-Response: Governance rules render -- 32 rules listed.
-Narrator: "Loading rules confirms the governance registry is healthy. If a YAML file in cortex-registry/core/ has a syntax error, this call will show fewer rules. Thirty-two is the expected count."
+Response: Governance rules render -- 55+ rules listed.
+Narrator: "Loading rules confirms the governance registry is healthy. If a YAML file in cortex-registry/core/ has a syntax error, this call will show fewer rules. Fifty-five-plus is the expected count."
 
 **SCENE 4 -- "Run a Smoke Test from the Terminal" [4:30-5:30]**
 VS Code terminal panel opens (amber border). `make test-smoke` runs.

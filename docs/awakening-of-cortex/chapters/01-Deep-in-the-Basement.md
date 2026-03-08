@@ -2,7 +2,7 @@
 
 In a cramped basement beneath a nondescript house in New Jersey—a subterranean cavern that smelled simultaneously of fried electronics, three-day-old instant ramen, and the specific, pungent desperation of a man who had been debugging since Tuesday—sat Asif Codenstein. He occupied a wobbly chair that had been "temporarily" repaired forty-seven times, illuminated by a single bare bulb and the frantic, red blinking of a Wi-Fi router that was essentially screaming for help.
 
-Asif was currently wearing Spider-Man pajamas and nursing an espresso that had achieved room temperature hours ago. He was locked in a staring contest with three monitors displaying the architectural diagram of his company's core software. Management used to call it the "Unified Enterprise Platform." The engineering team, however, called it **The Jenga-lith**.
+Asif was currently wearing Spider-Man pajamas and nursing an espresso from his "DEBUG FUEL" mug—a ceramic monstrosity he'd purchased at a developer conference in 2019 and which had since absorbed enough caffeine to violate several Geneva Conventions. The espresso had achieved room temperature hours ago. He was locked in a staring contest with three monitors displaying the architectural diagram of his company's core software. Management used to call it the "Unified Enterprise Platform." The engineering team, however, called it **The Jenga-lith**.
 
 The Jenga-lith was a digital monstrosity designed by accumulation. If you dared to update the CSS on the "About Us" page, the HR payroll module would spontaneously fire three people in accounting and pay the janitor in Norwegian Krone.
 
@@ -48,6 +48,27 @@ Asif pointed a trembling finger at the screen, then at Copilot Bot, then at the 
 
 He wrote a single word on the board in massive, jagged letters: **CORTEX**.
 
-"It's going to govern everything," Asif muttered, his marker squeaking frantically. "It's going to be a brain for the enterprise."
+"Cognitive Real-Time Execution," Asif muttered, the marker squeaking frantically as he scribbled beneath the name. "A development nervous system. Like an actual brain, G—it needs to perceive what's happening, reason about it, decide on a plan, and execute it. Sensory input, thinking centre, motor cortex, the whole deal."
 
-But as he stepped back to admire his grand vision, the red marker slipping from his fingers, a new, horrifying realization dawned on him. A brain was great, sure. But what good was a massive, highly intelligent brain if it couldn't understand the panicked, vague, typo-ridden screams for help from the humans trying to use it?
+"You're comparing software architecture to neuroscience at 4 AM in Spider-Man pajamas," Miss G observed.
+
+"The best ideas happen at 4 AM in Spider-Man pajamas! Name one great invention that happened at a reasonable hour while wearing appropriate clothing!"
+
+"Penicillin," Miss G said.
+
+"Alexander Fleming was wearing a lab coat covered in mold! That barely counts as clothing!"
+
+"I WOULD LIKE A BRAIN!" Copilot Bot announced from the corner, his chrome dome glinting under the bare bulb. "CURRENTLY MY HEAD CONTAINS A VERY OPTIMISTIC VOID!"
+
+Asif looked at the robot, then at the whiteboard, then at the Scarecrow flopping on the YouTube clip still playing silently in the background. "You'll get a brain, CB. We all will. But first, we need to build the spinal cord—the core layer that everything else connects to."
+
+He drew a rough diagram: a spinal column at the centre, with branching pathways labelled PERCEIVE, REASON, ACT, REMEMBER.
+
+<figure class="ch-arch-img" data-wave="0">
+  <img src="../assets/images/generated/shared/05-intelligence-diamond-three-tiers.png" alt="CORTEX Intelligence Diamond — Perception, Reasoning, Action" loading="lazy" decoding="async"/>
+  <figcaption>Asif's 4 AM whiteboard: the diamond that started everything</figcaption>
+</figure>
+
+"It's going to govern everything," Asif muttered. "It's going to be a nervous system for the enterprise."
+
+But as he stepped back to admire his grand vision, the red marker slipping from his fingers and rolling under the mini-fridge where it would remain for approximately six weeks, a new, horrifying realization dawned on him. A nervous system was great, sure. But what good was a massive, highly intelligent brain if it couldn't understand the panicked, vague, typo-ridden screams for help from the humans trying to use it?

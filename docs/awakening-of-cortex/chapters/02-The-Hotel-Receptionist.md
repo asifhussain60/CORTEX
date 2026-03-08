@@ -1,6 +1,6 @@
 # The Hotel Receptionist
 
-It was Wednesday, 3:47 AM. The basement was a cathedral of low-level hums, heavily perfumed with the musk of energized dust and the lingering ghost of yesterday's super-spicy ramen.
+It was Wednesday, 3:47 AM. The basement was a cathedral of low-level hums, heavily perfumed with the musk of energized dust and the lingering ghost of yesterday's super-spicy ramen. The word CORTEX still glared from the whiteboard in Asif's jagged red handwriting, the diagram of PERCEIVE → REASON → ACT → REMEMBER still radiating the manic energy of its creation.
 
 Asif Codenstein was currently having an existential crisis about the fundamental treachery of human language. His kinetic hair suggested he was personally grounding the house's electrical supply, and he was staring at his monitors with a vibrating, terrifying intensity.
 
@@ -48,6 +48,21 @@ Asif stared blankly at the wall. "G, remind me why we can't just recycle him for
 
 Six manic hours later, Asif finalized the **LENS Protocol**: Language, Examination, Navigation, Synthesis. CORTEX would parse the panicked raw request, examine the system context, navigate potential actions, and synthesize a clear understanding.
 
+<figure class="ch-arch-img" data-wave="0">
+  <img src="../assets/images/generated/shared/02-lens-intelligence-pipeline.png" alt="LENS Intelligence Pipeline — Language, Examination, Navigation, Synthesis" loading="lazy" decoding="async"/>
+  <figcaption>The LENS Protocol: CORTEX's sensory relay station</figcaption>
+</figure>
+
+"It's the thalamus," Asif announced, drawing an enormous brain on the whiteboard with LENS at the centre, arrows pointing inward from stick figures labelled CONFUSED HUMANS. "The thalamus is the sensory relay station. Every signal from every sense passes through it before the brain can process anything. LENS is CORTEX's thalamus—it takes the raw, chaotic, typo-ridden signal from the outside world and translates it into something the rest of the brain can actually work with."
+
+"You drew the brain upside down," Miss G noted.
+
+"It's ARTISTIC INTERPRETATION!"
+
+"The nose is where the brainstem should be."
+
+"MOVING ON," Asif said loudly.
+
 On Monday, Asif enabled the Intent Router company-wide. Jennifer immediately sent a request: *"Payment thing is broken."* CORTEX intercepted it, translated the panic, and notified the correct team instantly with full context. A four-hour discovery nightmare was fixed in 20 minutes.
 
 Even Copilot Bot started making suggestions that didn't involve mass deletion. "I SUGGEST WE IMPLEMENT ERROR HANDLING HERE," the robot said one afternoon.
@@ -60,8 +75,10 @@ Asif sat back, sipping his espresso at 3:30 AM, smiling triumphantly at the whit
 
 "Which is?" Asif asked, already opening a tab to research if alpacas made good indoor pets.
 
-"Understanding intent is great," Miss G warned. "But what happens when a developer understands he needs to build a payment processor, but he builds it with the structural integrity of a wet paper towel? You taught CORTEX how to listen. Now you need to teach it how to enforce standards."
+"Understanding intent is great," Miss G warned. "But what happens when a developer understands he needs to build a payment processor, but he builds it with the structural integrity of a wet paper towel? You taught CORTEX how to listen. Now you need to teach it how to judge."
 
-Asif's smile vanished. The "Hotel Receptionist" was only the beginning. If the Scarecrow from Oz was going to write code, Asif didn't just need a receptionist.
+Asif's smile vanished. He looked at the brain diagram on the whiteboard—the thalamus, the sensory relay, the beautiful new LENS protocol. The nervous system could perceive now. It could hear the screams for help and translate them into actionable intelligence.
 
-He needed a very judgmental, heavily armed Building Inspector.
+But a brain that could listen without enforcing standards was just a very attentive doormat. If the Scarecrow from Oz was going to write code, Asif didn't just need a receptionist.
+
+He needed a very judgmental, heavily armed immune system.

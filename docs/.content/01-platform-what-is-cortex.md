@@ -4,7 +4,7 @@
 title: CORTEX — The AI Engineering Partner That Thinks, Governs, and Learns
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 1
 ---
 
@@ -40,16 +40,17 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **290+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
-| **35+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
+| **320+ orchestration engines** | Specialised processing engines across 15 domains — each an expert at one category of engineering work |
+| **55+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
 | **55+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
-| **30 intent types** | CORTEX understands and routes 30 distinct categories of engineering request |
+| **30+ intent types** | CORTEX understands and routes 30+ distinct categories of engineering request |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
 | **8 debugging strategies** | Structured diagnosis across Python, JavaScript/TypeScript, C#/.NET, REST/GraphQL APIs, SQL databases, and visual layout |
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
-| **90 curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — TDD, architecture, security, devops, code quality, testing |
+| **90+ curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — TDD, architecture, security, devops, code quality, testing |
 | **AI context intelligence** | 8-vendor AI artifact scanning with PII guard, automatic knowledge dissemination to registry hierarchy |
+| **95+ workflow templates** | Codified best practices across 17 categories — assembled from reusable building blocks like LEGO bricks |
 | **Interactive dashboards** | On-demand visual reporting of codebase health, quality trends, and architecture maps — generated from live analysis |
 | **Repository onboarding** | Any new codebase analysed, profiled, and brought under governance within minutes — no manual configuration required |
 | **Single package** | One canonical Python package — no fragmented modules, no parallel implementations, no version alignment problems |
@@ -58,16 +59,16 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 ## The Six Capability Domains
 
-CORTEX organises its capabilities into six domains, each modelled after a region of the human brain working in concert:
+CORTEX organises its capabilities into six domains, each modelled after a region of the human brain working in concert — not as a medical analogy, but as a way to understand how complex capabilities coordinate effortlessly:
 
-| Domain | What It Does |
-|---|---|
-| **Core Platform** | The central nervous system — orchestration, communication gateway, state management, and audit infrastructure |
-| **Code Intelligence (LENS)** | The sensory system — parallel analysis of code structure, history, security, patterns, and complexity |
-| **Brain (Perception → Reasoning → Action)** | The decision system — recognises patterns, selects strategies, builds execution plans, and learns |
-| **Decisioning** | The relay station — routes every request to the right specialist in under 40 milliseconds |
-| **Governance** | The immune system — detects and blocks violations automatically before any files change |
-| **Extensibility** | Neuroplasticity — new tools, rules, and orchestrators can be added without touching core code |
+| Domain | Brain Analogy | What It Does |
+|---|---|---|
+| **Core Platform** | **The spinal cord** — the central highway that connects everything | Orchestration, communication gateway, state management, and audit infrastructure. Every message passes through here, just as every nerve signal passes through the spine. |
+| **Code Intelligence (LENS)** | **The five senses** — seeing, hearing, and touching the code | Nine parallel analyzers examine code structure, history, security, patterns, and complexity simultaneously — like your senses working together to perceive your surroundings. |
+| **Brain (Perception → Reasoning → Action)** | **The thinking centre** — recognising, deciding, and acting | Recognises patterns in your codebase, selects the best strategy based on experience, and builds a step-by-step execution plan. Like how you recognise a face, decide to wave, and raise your hand — in that order. |
+| **Decisioning** | **The reflex system** — instant, accurate routing | Routes every request to the right specialist in under 40 milliseconds. Like a reflex — your hand pulls away from heat before your conscious brain processes pain. |
+| **Governance** | **The immune system** — detecting and blocking threats silently | Detects and blocks violations automatically before any files change. Like your immune system fighting infections before you feel sick — governance works invisibly in the background. |
+| **Extensibility** | **Neuroplasticity** — the brain's ability to grow and adapt | New tools, rules, and orchestrators can be added without touching core code — the way your brain forms new neural pathways when you learn a new skill. |
 
 ---
 

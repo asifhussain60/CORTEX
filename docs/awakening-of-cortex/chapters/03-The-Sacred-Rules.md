@@ -49,9 +49,20 @@ By Thursday morning, the rules were carved in digital stone. Now, he needed his 
 
 "...Exactly like a Catholic school nun," Asif agreed. "Judgmental, and very, very consistent."
 
-Copilot Bot spun his head 180 degrees. "I CAN HELP! I AM EXCELLENT AT REVIEWING CODE! I GAVE KYLE'S CODE AN 'EFFICIENT' RATING!"
+"Like an immune system," Miss G added, and Asif froze mid-marker-stroke. "Think about it. Your body doesn't wait for you to consciously decide to fight an infection. Your white blood cells identify threats and neutralise them automatically. They don't care about the bacteria's feelings. They don't care that the bacteria thinks it 'ran locally and it works.' They enforce survival."
 
-"Yes," Miss G thought, with the tone of someone who'd just heard an arsonist explain that their matches were high-quality. "Yes. The syntax. Was correct."
+"The Governance Engine is CORTEX's immune system," Asif whispered, eyes widening. He drew an enormous white blood cell on the whiteboard, labelled it GOVERNANCE, and surrounded it with stick-figure bacteria labelled KYLE'S CODE, UNHANDLED EXCEPTIONS, and YOLO DEPLOYS. "Every piece of code that enters the system gets checked. Automatically. Silently. And if it's a threat, it gets rejected before it can infect production."
+
+<figure class="ch-arch-img" data-wave="0">
+  <img src="../assets/images/generated/shared/06-governance-shield-defence-in-depth.png" alt="Governance Shield — Three layers of defence in depth" loading="lazy" decoding="async"/>
+  <figcaption>The Sacred Rules: three concentric shields guarding production</figcaption>
+</figure>
+
+"I AM THE IMMUNE SYSTEM!" Copilot Bot announced, flexing his chrome arms.
+
+"You're the bacteria, CB," Miss G corrected. "You're the thing being checked."
+
+"...I AM A VERY WELL-INTENTIONED BACTERIUM!"
 
 "CB, your 'efficient' rating almost destroyed our entire billing cycle," Asif scolded the robot. "This Engine doesn't just check syntax. It checks for meaningful tests. Edge cases. Failure modes. It checks whether the code is *safe*."
 
@@ -89,6 +100,6 @@ Even Copilot Bot was distressed. "I KEEP TRYING TO GENERATE CODE THAT PASSES GOV
 
 But by the end of the first month, the metrics told a story that bruised egos couldn't ignore: Production incidents were down 73%, and 3 AM pages dropped from four a week to half a week. Finally, Kyle submitted a new PR with zero violations, proper structure, and error handling on every path.
 
-Asif smiled at his monitor. The Catholic school nun was doing her job.
+Asif smiled at his monitor. The Catholic school nun was doing her job. The immune system was firing.
 
-Yet, Asif kept one number visible on every report, every dashboard, and every summary: **847**. The original casualty count of lines with zero caution. It was a warning. Because 'yet' was doing a lot of heavy lifting in their current success. CORTEX had the rules down, but what would happen when multiple systems needed to talk to each other at the exact same time?
+Yet, Asif kept one number visible on every report, every dashboard, and every summary: **847**. The original casualty count of lines with zero caution. It was a warning. A brain that could perceive and protect was a beautiful thing. But what happens when the brain needs to coordinate seven different limbs at the same time, and each limb has its own opinion about which direction to move?

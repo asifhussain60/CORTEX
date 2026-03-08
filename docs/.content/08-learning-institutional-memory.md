@@ -4,7 +4,7 @@
 title: Institutional Memory — Root Cause Analysis, Reinforcement Learning, and the Knowledge Engine
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-07
+last_verified: 2026-03-08
 order: 8
 ---
 
@@ -16,7 +16,7 @@ order: 8
 
 Post-incident reviews are written and filed. The lessons learned section is carefully crafted. Six months later, the same failure occurs because nobody read the review, or the team member who wrote it has moved on.
 
-This is not a discipline problem. It is a systems problem. Institutional knowledge only compounds when it is stored in a system that surfaces it automatically at the moment it is needed — not in a document archive where it must be deliberately sought out.
+This is not a discipline problem. It is a systems problem. Think of it like a household: if you only remember that the fuse blows when you run the microwave and dryer simultaneously — but you never write it down — every new person in the house will trip the fuse. CORTEX's institutional memory is the note on the fuse box that says "Don't run both at once." It captures the lesson at the moment of failure and surfaces it automatically whenever someone is about to make the same mistake.
 
 CORTEX's learning infrastructure solves this by making knowledge capture automatic, storage persistent, and retrieval contextual. Every time something fails, the root cause is analysed and stored. Every time a similar operation is attempted in the future, the relevant historical knowledge surfaces automatically.
 

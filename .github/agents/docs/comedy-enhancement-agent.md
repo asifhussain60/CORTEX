@@ -91,27 +91,27 @@ Before marking any enhancement complete, validate all 6 running gags:
 
 ```
 RG-001: Spider-Man Pajamas
-  Required in: Ch 01 (origin), Ch 09, Ch 11, Ch 12 (payoff)
+  Required in: Ch 01 (origin), Ch 05, Ch 07, Ch 11, Ch 12 (payoff)
   Ch 12 payoff: Asif arrives in adult clothing → CORTEX has best day → note correlation
 
 RG-002: The 2019 Sentient Coffee Mug
-  Required in: Ch 01 (origin), Ch 05, Ch 10, Ch 12 (payoff: finally washed, worse somehow)
+  Required in: Ch 01 (origin), Ch 05, Ch 06, Ch 10, Ch 12 (payoff: finally washed, worse somehow)
   Rule: Silent background cameos only. Never plot-relevant.
 
 RG-003: CB's "This is probably fine"
-  Required in: Ch 06 (origin), Ch 09, Ch 11, Ch 12 (payoff: first time it's actually fine)
+  Required in: Ch 05 (origin), Ch 07, Ch 09, Ch 12 (payoff: first time it's actually fine)
   Rule: Always delivered with flat earnest confidence. Never ironically.
 
 RG-004: The Portuguese Incident of 2022
-  Required in: Ch 04 (origin), Ch 07, Ch 11, Ch 13
+  Required in: Ch 04 (origin), Ch 07, Ch 09, Ch 11
   Rule: NEVER explain. Each reference implies something more improbable.
 
 RG-005: Miss G's Catalogue of Asif's Looks
-  Required in: Ch 03 (origin), Ch 06, Ch 09, Ch 12 (payoff: Look #23, new page)
+  Required in: Ch 01 (origin: Look #12), Ch 02 (Look #14), Ch 06, Ch 09, Ch 11, Ch 12 (payoff: Look #23, new page)
   Rule: Each look must be numbered and named formally.
 
 RG-006: The Number 847
-  Required in: Ch 03 (origin: Kyle's line count), Ch 09, Ch 11, Ch 12
+  Required in: Ch 03 (origin: Kyle's line count), Ch 06, Ch 07, Ch 08, Ch 09, Ch 11, Ch 12 (payoff: 847 incidents prevented)
   Rule: Never explain the significance. State the number. Trust the reader.
 ```
 

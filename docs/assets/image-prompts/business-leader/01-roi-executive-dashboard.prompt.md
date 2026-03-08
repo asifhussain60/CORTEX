@@ -12,7 +12,7 @@ CRITICAL LAYOUT RULE: All content must be inset within a safe zone with a minimu
 
 The dashboard should show:
 - A large hero KPI panel showing "40% Cost Reduction" with a downward trend arrow in cyan (#00d4ff)
-- Four glass cards in a row: "4× Faster Resolution" (emerald green), "60% Token Savings" (purple #7b61ff), "0 Production Violations" (amber), "104 Phases Complete" (cyan)
+- Four glass cards in a row: "4× Faster Resolution" (emerald green), "60% Token Savings" (purple #7b61ff), "0 Production Violations" (amber), "105+ Phases Complete" (cyan)
 - A subtle area chart in the background showing upward velocity trend
 - Glass borders with subtle white opacity
 - Modern sans-serif typography (Inter-like)

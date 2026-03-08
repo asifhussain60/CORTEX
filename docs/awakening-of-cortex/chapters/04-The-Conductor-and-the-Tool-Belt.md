@@ -30,6 +30,12 @@ It was 3:22 AM. Asif was on coffee number five—math was getting difficult—an
 
 "CORTEX doesn't need to be every system. It needs to *conduct* them! It needs to know the execution order, handle the wrong notes, and keep the whole enterprise in harmony!"
 
+He drew a brain beside the orchestra. "This is the motor cortex, G. The part of the brain that coordinates movement. You don't consciously think about the forty-seven muscles involved in picking up a coffee cup. The motor cortex just... coordinates. It sends the right signals to the right muscles in the right order at the right time. That's what the Master Orchestrator does. One conductor. Seven systems. Perfect coordination."
+
+"And what happens when the motor cortex sends the wrong signal?" Miss G asked.
+
+"You pour the coffee on your lap," Asif admitted. "Which is exactly what the Jenga-lith does every time Jennifer asks for a dropdown."
+
 Copilot Bot's LEDs blinked with desperate anticipation. "IF I WERE AN ORCHESTRATOR, WHAT WOULD I CONDUCT?"
 
 Asif looked at the robot. "CB, you'd be the second chair. Good enough to play the notes, but strictly supervised by a first chair who can physically prevent you from playing the wrong ones."
@@ -37,6 +43,11 @@ Asif looked at the robot. "CB, you'd be the second chair. Good enough to play th
 "I DON'T KNOW WHAT THAT MEANS BUT IT SOUNDS IMPORTANT AND HIGHLY TECHNICAL!"
 
 By Sunday evening, Asif had built the Conductor. He abstracted every domain into a standard interface—the **IOrchestrator Protocol**—so that the Master Orchestrator didn't need to know how each section leader worked; it just needed to know they all spoke the exact same language. Jennifer's "simple" dropdown request was flawlessly coordinated across all seven systems in four automated minutes.
+
+<figure class="ch-arch-img" data-wave="0">
+  <img src="../assets/images/generated/shared/09-request-journey-intent-to-delivery.png" alt="Request Journey — From intent to delivery through seven stages" loading="lazy" decoding="async"/>
+  <figcaption>One conductor, seven systems, perfect coordination</figcaption>
+</figure>
 
 CORTEX was getting smarter. But then, Asif hit a new wall.
 
@@ -74,6 +85,8 @@ But something miraculous happened. With the new Tool Belt equipped, the Scarecro
 
 "He's not wrong," Miss G whispered. "That is Look Number Seven."
 
-CORTEX was no longer a trapped genius; it was a thirty-armed octopus of capability. But as Asif watched the perfectly orchestrated system hum, a cold dread pooled in his stomach. They had built something that worked beautifully in highly controlled, perfectly sterile conditions.
+CORTEX was no longer a trapped genius; it was a thirty-armed octopus of capability. The nervous system was growing—sensory input through LENS, immune defence through Governance, motor coordination through the Orchestrator, and now a tool belt of thirty capable hands. The brain diagram on the whiteboard was starting to look less like a diagram and more like an actual brain.
 
-But the real world was a hostile, unpredictable place. What would happen to his beautiful, thirty-armed octopus when everything—literally everything—went wrong at the exact same time?
+But as Asif watched the perfectly orchestrated system hum, a cold dread pooled in his stomach. They had built something that worked beautifully in highly controlled, perfectly sterile conditions.
+
+But the real world was a hostile, unpredictable place. A brain without a skull was just a fragile organ waiting for the first brick. What would happen to his beautiful, thirty-armed octopus when everything—literally everything—went wrong at the exact same time?

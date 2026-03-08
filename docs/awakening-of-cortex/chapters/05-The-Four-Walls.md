@@ -48,6 +48,14 @@ Asif didn't go back to sleep. Instead, he chugged a cup of coffee that tasted li
 
 "We need a fortress," Asif decreed, drawing four massive pillars on the board. "**Four walls.** Health Monitoring, Graceful Degradation, Resource Management, and Chaos Resilience."
 
+"You need an autonomic nervous system," Miss G corrected, and Asif stopped drawing mid-pillar. "Your brain doesn't consciously manage your heartbeat, Asif. It doesn't send you a notification every time your kidneys filter blood. The autonomic nervous system handles all of that silently, automatically, in the background. It keeps you alive without asking for permission."
+
+"CORTEX needs to breathe on its own," Asif whispered, the analogy clicking into place with an almost audible snap. He drew a pair of lungs next to the four pillars and connected them with arrows. "Health monitoring is the heartbeat sensor. Graceful degradation is the pain reflex—if you touch a hot stove, your hand jerks away before your conscious brain even registers the burn. Resource management is the kidney—filtering the blood, keeping the system clean. And chaos resilience is the immune response when everything goes wrong at once."
+
+"You're mixing your biological metaphors with alarming enthusiasm," Miss G observed.
+
+"Biology doesn't have clean API boundaries either, G! It's a proven model!"
+
 "Explain Health Monitoring," Miss G challenged, leaning against the mini-fridge. "And make it make sense."
 
 "It's the Half-Eaten Sandwich Problem," Asif explained, pacing rapidly. "You leave a sandwich on your desk. Day one, it's fine. Day two, still fine. Day seven, it's growing things. Day fourteen, it's developing its own civilization."
@@ -98,4 +106,6 @@ From the corner, Copilot Bot let out a slow, trembling electronic whine. "I... C
 
 "That's why we have the four walls. So we don't have to," Asif replied proudly.
 
-The fortress stood firm. CORTEX was safe from the outside world. But as Asif stared at the humming servers, a new, irritating thought scratched at the back of his ADHD brain. It was great that CORTEX could survive mistakes. But what if they could build a crystal ball that stopped humans from making those mistakes in the first place?
+The fortress stood firm. CORTEX was safe from the outside world. The nervous system now had its autonomic layer—breathing, pumping, healing in the background without conscious effort. The brain was alive, protected, and operational.
+
+But as Asif stared at the humming servers, a new, irritating thought scratched at the back of his ADHD brain. It was great that CORTEX could survive mistakes. But what if they could build a crystal ball that stopped humans from making those mistakes in the first place? What if, instead of just surviving the future, CORTEX could *predict* it?
