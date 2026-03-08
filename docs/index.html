@@ -2035,6 +2035,203 @@
   }
 </style>
 
+<!-- ─── Scroll-to-Top Robot ─── -->
+<style>
+    #cortex-robot-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9999;
+        width: 62px;
+        height: 62px;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+        opacity: 0;
+        transform: translateY(16px) scale(0.92);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+        pointer-events: none;
+    }
+    #cortex-robot-top.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+    #cortex-robot-top:hover .robot-body-wrap {
+        transform: translateY(-4px);
+    }
+    #cortex-robot-top:active .robot-body-wrap {
+        transform: translateY(0px) scale(0.95);
+    }
+    .robot-body-wrap {
+        transition: transform 0.22s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+    }
+    .robot-glow {
+        position: absolute;
+        bottom: -6px; left: 50%;
+        transform: translateX(-50%);
+        width: 44px; height: 10px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse, rgba(123,97,255,0.55) 0%, transparent 70%);
+        filter: blur(4px);
+        transition: width 0.22s ease, opacity 0.22s ease;
+    }
+    #cortex-robot-top:hover .robot-glow {
+        width: 54px;
+        opacity: 1.4;
+    }
+    .robot-head {
+        width: 38px; height: 28px;
+        background: linear-gradient(160deg, #1e1b4b 0%, #312e81 60%, #1a1040 100%);
+        border: 1.5px solid rgba(123,97,255,0.55);
+        border-radius: 8px 8px 6px 6px;
+        position: relative;
+        box-shadow: 0 0 14px rgba(123,97,255,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    .robot-head::before {
+        content: '';
+        position: absolute;
+        top: -9px; left: 50%;
+        transform: translateX(-50%);
+        width: 2.5px; height: 9px;
+        background: linear-gradient(to top, rgba(123,97,255,0.7), rgba(167,139,250,0.9));
+        border-radius: 2px;
+    }
+    .robot-head::after {
+        content: '';
+        position: absolute;
+        top: -13px; left: 50%;
+        transform: translateX(-50%);
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #a78bfa 30%, #7b61ff 100%);
+        box-shadow: 0 0 8px rgba(167,139,250,0.9);
+        animation: cortex-pulse 2s ease-in-out infinite;
+    }
+    @keyframes cortex-pulse {
+        0%, 100% { box-shadow: 0 0 6px rgba(167,139,250,0.8); opacity: 1; }
+        50% { box-shadow: 0 0 14px rgba(167,139,250,1), 0 0 20px rgba(123,97,255,0.5); opacity: 0.85; }
+    }
+    .robot-eye {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #00d4ff, #06b6d4 60%, #0e7490);
+        box-shadow: 0 0 6px rgba(0,212,255,0.7), 0 0 12px rgba(0,212,255,0.3);
+        animation: eye-blink 4s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+    .robot-eye:nth-child(2) { animation-delay: 0.12s; }
+    @keyframes eye-blink {
+        0%, 92%, 100% { transform: scaleY(1); }
+        95% { transform: scaleY(0.12); }
+    }
+    .robot-mouth {
+        position: absolute;
+        bottom: 5px; left: 50%;
+        transform: translateX(-50%);
+        width: 22px; height: 4px;
+        border-radius: 2px;
+        background: rgba(123,97,255,0.18);
+        border: 1px solid rgba(123,97,255,0.3);
+        overflow: hidden;
+    }
+    .robot-mouth::after {
+        content: '';
+        position: absolute;
+        left: -100%; top: 0;
+        width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.8), transparent);
+        animation: scan 2.4s linear infinite;
+    }
+    @keyframes scan {
+        0% { left: -60%; }
+        100% { left: 110%; }
+    }
+    .robot-body {
+        width: 46px; height: 26px;
+        background: linear-gradient(160deg, #1e1b4b 0%, #1a1040 100%);
+        border: 1.5px solid rgba(123,97,255,0.45);
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+        position: relative;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 0 1px rgba(123,97,255,0.06) inset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .robot-chest-arrow {
+        width: 0; height: 0;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 9px solid rgba(123,97,255,0.55);
+        position: relative;
+        filter: drop-shadow(0 0 4px rgba(123,97,255,0.6));
+        animation: chest-throb 1.8s ease-in-out infinite;
+    }
+    .robot-chest-arrow::after {
+        content: '';
+        position: absolute;
+        top: 5px; left: -5px;
+        width: 0; height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 7px solid rgba(167,139,250,0.45);
+    }
+    @keyframes chest-throb {
+        0%, 100% { opacity: 0.75; transform: translateY(0); }
+        50% { opacity: 1; transform: translateY(-2px); filter: drop-shadow(0 0 8px rgba(123,97,255,0.9)); }
+    }
+    .robot-body::before, .robot-body::after {
+        content: '';
+        position: absolute;
+        top: 50%; transform: translateY(-50%);
+        width: 4px; height: 4px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 6px rgba(16,185,129,0.8);
+        animation: side-blink 3s ease-in-out infinite;
+    }
+    .robot-body::before { left: 6px; }
+    .robot-body::after { right: 6px; animation-delay: 1.5s; }
+    @keyframes side-blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+    }
+    #cortex-robot-top .robot-tooltip {
+        position: absolute;
+        right: 70px; top: 50%;
+        transform: translateY(-50%);
+        background: rgba(10,15,30,0.92);
+        border: 1px solid rgba(123,97,255,0.35);
+        color: rgba(196,181,253,0.95);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+        white-space: nowrap;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+    #cortex-robot-top:hover .robot-tooltip {
+        opacity: 1;
+    }
+</style>
+
 </head>
 
 <body>
@@ -2174,8 +2371,8 @@
                 >
                   <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-lightbulb"></i></div>
                   <div class="macc__head">
-                    <div class="macc__headline">Imagination Over Administration</div>
-                    <div class="macc__subtitle">Engineers build — CORTEX handles the rest.</div>
+                    <div class="macc__headline">Build Fast. Break Nothing.</div>
+                    <div class="macc__subtitle">CORTEX handles governance while you handle ideas.</div>
                   </div>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
@@ -2237,8 +2434,8 @@
                 >
                   <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-brain"></i></div>
                   <div class="macc__head">
-                    <div class="macc__headline">Knowledge That Travels With the Team</div>
-                    <div class="macc__subtitle">Institutional memory that outlives any individual.</div>
+                    <div class="macc__headline">Memory That Never Quits</div>
+                    <div class="macc__subtitle">Every failure captured. Every fix remembered. Forever.</div>
                   </div>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
@@ -2298,8 +2495,8 @@
                 >
                   <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
                   <div class="macc__head">
-                    <div class="macc__headline">Quality That Enforces Itself</div>
-                    <div class="macc__subtitle">Governance runs automatically on every commit.</div>
+                    <div class="macc__headline">Quality Is the Default</div>
+                    <div class="macc__subtitle">Not a gate at the end — a rule at every step.</div>
                   </div>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
@@ -2359,8 +2556,8 @@
                 >
                   <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-rotate"></i></div>
                   <div class="macc__head">
-                    <div class="macc__headline">A System That Learns So History Doesn't Repeat</div>
-                    <div class="macc__subtitle">Failure knowledge made permanent through closed-loop learning.</div>
+                    <div class="macc__headline">AI That Learns From Its Mistakes</div>
+                    <div class="macc__subtitle">Zero manual input. Zero repeated failures.</div>
                   </div>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
@@ -2420,8 +2617,8 @@
                 >
                   <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-sitemap"></i></div>
                   <div class="macc__head">
-                    <div class="macc__headline">One Platform, Every Role, No Coordination Overhead</div>
-                    <div class="macc__subtitle">Engineers, product owners, leaders — one governed platform.</div>
+                    <div class="macc__headline">One Platform. Every Role.</div>
+                    <div class="macc__subtitle">Aligned delivery from engineer to boardroom.</div>
                   </div>
                   <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
                 </button>
@@ -3486,5 +3683,41 @@
     });
 </script>
 <!-- deploy: 2026-03-07 -->
+
+<!-- ─── CORTEX Robot Scroll-to-Top ─── -->
+<button id="cortex-robot-top" aria-label="Scroll to top" title="Back to top">
+    <span class="robot-tooltip">Back to top</span>
+    <span class="robot-glow"></span>
+    <span class="robot-body-wrap">
+        <span class="robot-head">
+            <span class="robot-eye"></span>
+            <span class="robot-eye"></span>
+            <span class="robot-mouth"></span>
+        </span>
+        <span class="robot-body">
+            <span class="robot-chest-arrow"></span>
+        </span>
+    </span>
+</button>
+
+<script>
+    // ─── Robot scroll-to-top show/hide + click ───
+    (function () {
+        const btn = document.getElementById('cortex-robot-top');
+        const THRESHOLD = 320;
+        let ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    btn.classList.toggle('visible', window.scrollY > THRESHOLD);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    })();
+</script>
 </body>
 </html>
