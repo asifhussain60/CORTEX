@@ -1391,220 +1391,323 @@
 <!-- ── Mission Accordion styles ── -->
 <style>
   /* ═══════════════════════════════════════════════════════════
-     CORTEX MISSION ACCORDION — Digital Robotic Scroll
-     Design: glassmorphism v4.0 · all values use CSS tokens
+     CORTEX MISSION ACCORDION v5.0 — Card-per-principle design
+     Inspired by: mission-statement.html reference layout
+     Design: glassmorphism v4.0 · CORTEX dark-navy palette
   ═══════════════════════════════════════════════════════════ */
 
   /* ── Section scaffold ── */
   #cortex-mission {
-    padding: 5rem 0 4rem;
+    padding: 5rem 0 5rem;
     position: relative;
     overflow: hidden;
   }
 
-  /* Ambient glow behind the whole section */
-  #cortex-mission::before {
-    content: '';
-    position: absolute;
-    top: -80px; left: 50%;
-    transform: translateX(-50%);
-    width: 900px; height: 500px;
-    background: radial-gradient(ellipse at center,
-      rgba(0,212,255,0.07) 0%, rgba(123,97,255,0.05) 45%, transparent 75%);
-    pointer-events: none; z-index: 0;
+  /* Ambient glow orbs — matching reference design */
+  #cortex-mission .m-orb-1 {
+    position: absolute; top: -10%; left: -8%;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+    filter: blur(80px); pointer-events: none; z-index: 0;
+    animation: mOrbFloat 12s ease-in-out infinite;
   }
-
-  /* ── Scan-line texture overlay ── */
-  #cortex-mission::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 3px, rgba(0,212,255,0.012) 3px, rgba(0,212,255,0.012) 4px
-    );
-    pointer-events: none; z-index: 0;
+  #cortex-mission .m-orb-2 {
+    position: absolute; bottom: -10%; right: -8%;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    filter: blur(80px); pointer-events: none; z-index: 0;
+    animation: mOrbFloat 15s ease-in-out infinite reverse;
+  }
+  #cortex-mission .m-orb-3 {
+    position: absolute; top: 40%; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 300px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(123,97,255,0.04) 0%, transparent 70%);
+    filter: blur(60px); pointer-events: none; z-index: 0;
+  }
+  @keyframes mOrbFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-24px) scale(1.04); }
   }
 
   #cortex-mission .mission-inner {
     position: relative; z-index: 1;
-    max-width: 900px;
+    max-width: 860px;
     margin: 0 auto;
     padding: 0 1.5rem;
   }
 
   /* ── Section header ── */
-  .mission-header { text-align: center; margin-bottom: 3rem; }
+  .mission-header { text-align: center; margin-bottom: 3.5rem; }
 
   .mission-eyebrow {
     display: inline-flex; align-items: center; gap: 0.5rem;
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em;
-    text-transform: uppercase; color: #00d4ff;
-    background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.22);
-    border-radius: 9999px; padding: 0.3rem 1rem; margin-bottom: 1.25rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(148,163,184,0.75);
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9999px; padding: 0.375rem 1.1rem; margin-bottom: 1.5rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   }
   .mission-eyebrow::before {
     content: ''; width: 6px; height: 6px; border-radius: 50%;
     background: #00d4ff; box-shadow: 0 0 8px #00d4ff;
     animation: pulseGlowGlass 2s ease-in-out infinite; flex-shrink: 0;
   }
+
   .mission-title {
     font-family: var(--font-family-heading, 'Space Grotesk', sans-serif);
-    font-size: clamp(1.85rem, 3.5vw + 0.5rem, 2.75rem); font-weight: 700;
-    color: #fff; line-height: 1.15; margin: 0 0 0.5rem;
+    font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800;
+    line-height: 1.1; letter-spacing: -0.025em;
+    margin: 0 0 1.5rem;
   }
-  .mission-title .accent-cyan {
-    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+  .mission-title .t-white {
+    background: linear-gradient(180deg, #fff 0%, rgba(148,163,184,0.7) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
+  .mission-title .accent-cyan {
+    background: linear-gradient(135deg, #34d399 0%, #00d4ff 55%, #7b61ff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 28px rgba(52,211,153,0.18));
+  }
+
+  /* Decorative divider dots under heading */
+  .mission-title-rule {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1rem; margin: 0 auto 1.5rem;
+  }
+  .mission-title-rule::before,
+  .mission-title-rule::after {
+    content: ''; height: 1px; width: 3rem;
+    background: linear-gradient(90deg, transparent, rgba(148,163,184,0.4));
+  }
+  .mission-title-rule::after {
+    background: linear-gradient(90deg, rgba(148,163,184,0.4), transparent);
+  }
+  .mission-title-rule-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(52,211,153,0.5);
+  }
+
   .mission-subtitle {
-    font-size: 1.0625rem; color: rgba(148,163,184,0.9); margin: 0 auto;
-    max-width: 60ch; line-height: 1.65;
+    font-size: 1.0625rem; color: rgba(148,163,184,0.85); margin: 0 auto;
+    max-width: 56ch; line-height: 1.7;
   }
 
-  /* ══════════════════════════════════════════════════
-     SCROLL CONTAINER — digital robotic scroll shell
-  ══════════════════════════════════════════════════ */
-  .mscroll {
-    background: linear-gradient(160deg, rgba(12,17,38,0.85) 0%, rgba(7,10,25,0.95) 100%);
-    border: 1px solid rgba(0,212,255,0.14);
-    border-top: 1px solid rgba(0,212,255,0.32);
-    border-radius: 1.25rem;
-    backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+  /* ══════════════════════════════════════════════════════════
+     SECTION FRAME — thick glowing border wrapping all cards
+  ══════════════════════════════════════════════════════════ */
+  .mission-frame {
+    position: relative;
+    border-radius: 2rem;
+    padding: 3px; /* border thickness lives here */
+    background: linear-gradient(135deg,
+      rgba(0,212,255,0.55) 0%,
+      rgba(123,97,255,0.4) 30%,
+      rgba(16,185,129,0.45) 60%,
+      rgba(0,212,255,0.55) 100%);
+    background-size: 300% 300%;
+    animation: mFrameBorderFlow 7s linear infinite;
     box-shadow:
-      0 0 0 1px rgba(0,212,255,0.07),
-      0 32px 72px -16px rgba(0,0,0,0.65),
-      inset 0 1px 0 rgba(255,255,255,0.05);
-    overflow: hidden; position: relative;
+      0 0 0 1px rgba(0,212,255,0.1),
+      0 0 60px rgba(0,212,255,0.12),
+      0 0 120px rgba(123,97,255,0.08),
+      0 48px 96px -24px rgba(0,0,0,0.75);
   }
-  /* Corner bracket decorations */
-  .mscroll::before, .mscroll::after {
-    content: ''; position: absolute; width: 56px; height: 56px;
-    pointer-events: none; z-index: 2;
-  }
-  .mscroll::before {
-    top: -1px; left: -1px;
-    border-top: 2px solid #00d4ff; border-left: 2px solid #00d4ff;
-    border-radius: 1.25rem 0 0 0;
-  }
-  .mscroll::after {
-    top: -1px; right: -1px;
-    border-top: 2px solid #7b61ff; border-right: 2px solid #7b61ff;
-    border-radius: 0 1.25rem 0 0;
+  @keyframes mFrameBorderFlow {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
   }
 
-  /* Scroll header bar */
-  .mscroll__bar {
-    display: flex; align-items: center; gap: 0.6rem;
-    padding: 0.85rem 1.5rem;
+  .mission-frame-inner {
+    background: linear-gradient(160deg, rgba(7,10,25,0.97) 0%, rgba(3,6,18,0.99) 100%);
+    border-radius: calc(2rem - 3px);
+    overflow: hidden;
+    /* Subtle grid texture inside */
+    background-image:
+      linear-gradient(160deg, rgba(7,10,25,0.97) 0%, rgba(3,6,18,0.99) 100%),
+      linear-gradient(rgba(0,212,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.018) 1px, transparent 1px);
+    background-size: 100% 100%, 56px 56px, 56px 56px;
+    background-blend-mode: normal, overlay, overlay;
+  }
+
+  /* ── Mono status bar at the top of the frame ── */
+  .mission-status-bar {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.9rem 1.75rem;
     border-bottom: 1px solid rgba(0,212,255,0.1);
     background: rgba(0,212,255,0.03);
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
     font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: rgba(0,212,255,0.55);
+    text-transform: uppercase; color: rgba(0,212,255,0.5);
   }
-  .mscroll__bar-dot {
+  .mission-status-dot {
     width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-    background: #00d4ff; box-shadow: 0 0 6px #00d4ff;
+    background: #00d4ff; box-shadow: 0 0 7px #00d4ff;
     animation: pulseGlowGlass 2s ease-in-out infinite;
   }
-  .mscroll__bar-line {
+  .mission-status-line {
     flex: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(0,212,255,0.25), transparent);
+    background: linear-gradient(90deg, rgba(0,212,255,0.22), transparent);
   }
 
   /* ══════════════════════════════════════════════════
-     ACCORDION LIST
+     ACCORDION CARDS — individual glass card per item
   ══════════════════════════════════════════════════ */
-  .mscroll__list { list-style: none; margin: 0; padding: 0; }
+  .macc-list { list-style: none; margin: 0; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; }
 
-  /* Each accordion item */
+  /* Each card */
   .macc {
-    border-bottom: 1px solid rgba(255,255,255,0.045);
-    position: relative; overflow: hidden;
-    transition: background 0.3s ease;
+    position: relative;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    /* stagger animation */
+    opacity: 0;
+    animation: mCardFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
   }
-  .macc:last-child { border-bottom: none; }
+  .macc:nth-child(1) { animation-delay: 0.05s; }
+  .macc:nth-child(2) { animation-delay: 0.12s; }
+  .macc:nth-child(3) { animation-delay: 0.19s; }
+  .macc:nth-child(4) { animation-delay: 0.26s; }
+  .macc:nth-child(5) { animation-delay: 0.33s; }
+  @keyframes mCardFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-  /* Active item highlight */
+  /* Open state — elevated glass card */
   .macc.is-open {
-    background: rgba(0,212,255,0.025);
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04);
+    transform: scale(1.012);
+    z-index: 5;
   }
 
-  /* Left accent bar — coloured per item */
-  .macc::before {
+  /* Hover state for closed cards */
+  .macc:not(.is-open):hover {
+    background: rgba(255,255,255,0.035);
+    border-color: rgba(255,255,255,0.09);
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4);
+  }
+
+  /* Coloured top edge on open */
+  .macc::after {
     content: ''; position: absolute;
-    left: 0; top: 0; bottom: 0; width: 3px;
-    border-radius: 0 2px 2px 0;
-    opacity: 0; transition: opacity 0.35s ease;
+    inset: 0; border-radius: 1.25rem;
+    pointer-events: none;
+    opacity: 0; transition: opacity 0.4s ease;
   }
-  .macc.is-open::before { opacity: 1; }
-  .macc[data-accent="cyan"]::before    { background: #00d4ff; box-shadow: 0 0 12px #00d4ff; }
-  .macc[data-accent="violet"]::before  { background: #7b61ff; box-shadow: 0 0 12px #7b61ff; }
-  .macc[data-accent="emerald"]::before { background: #10b981; box-shadow: 0 0 12px #10b981; }
-  .macc[data-accent="amber"]::before   { background: #fbbf24; box-shadow: 0 0 12px #fbbf24; }
-  .macc[data-accent="magenta"]::before { background: #e879f9; box-shadow: 0 0 12px #e879f9; }
+  .macc.is-open::after { opacity: 1; }
+  .macc[data-accent="cyan"].is-open    { border-color: rgba(0,212,255,0.22);   box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(0,212,255,0.08); }
+  .macc[data-accent="violet"].is-open  { border-color: rgba(123,97,255,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(123,97,255,0.08); }
+  .macc[data-accent="emerald"].is-open { border-color: rgba(16,185,129,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(16,185,129,0.08); }
+  .macc[data-accent="amber"].is-open   { border-color: rgba(251,191,36,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(251,191,36,0.08); }
+  .macc[data-accent="magenta"].is-open { border-color: rgba(232,121,249,0.22); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(232,121,249,0.08); }
 
-  /* ── TRIGGER (collapsed visible row) ── */
+  /* Coloured corner accent glow inside card when open */
+  .macc__corner-glow {
+    position: absolute; top: 0; right: 0;
+    width: 120px; height: 120px; border-radius: 50%;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease;
+    filter: blur(40px);
+  }
+  .macc.is-open .macc__corner-glow { opacity: 0.22; }
+  .macc[data-accent="cyan"]    .macc__corner-glow { background: #00d4ff; }
+  .macc[data-accent="violet"]  .macc__corner-glow { background: #7b61ff; }
+  .macc[data-accent="emerald"] .macc__corner-glow { background: #10b981; }
+  .macc[data-accent="amber"]   .macc__corner-glow { background: #fbbf24; }
+  .macc[data-accent="magenta"] .macc__corner-glow { background: #e879f9; }
+
+  /* ── TRIGGER row ── */
   .macc__trigger {
     display: flex; align-items: center; gap: 1.25rem;
-    width: 100%; padding: 1.35rem 1.75rem;
+    width: 100%; padding: 1.35rem 1.5rem;
     cursor: pointer; background: transparent; border: none;
-    text-align: left; color: inherit;
-    transition: background 0.2s ease;
+    text-align: left; color: inherit; border-radius: 1.25rem;
+    transition: background 0.25s ease;
   }
-  .macc__trigger:hover { background: rgba(255,255,255,0.025); }
-  .macc__trigger:focus-visible {
-    outline: 2px solid rgba(0,212,255,0.5); outline-offset: -2px;
-  }
+  .macc__trigger:hover { background: rgba(255,255,255,0.02); }
+  .macc__trigger:focus-visible { outline: 2px solid rgba(0,212,255,0.5); outline-offset: -2px; }
 
-  /* Large icon badge */
+  /* Icon badge — larger, richer glow */
   .macc__icon-wrap {
-    width: 54px; height: 54px; border-radius: 14px;
+    width: 58px; height: 58px; border-radius: 1rem;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.55rem; flex-shrink: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.5rem; flex-shrink: 0;
+    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    position: relative; overflow: hidden;
   }
-  .macc.is-open .macc__icon-wrap { transform: scale(1.08); }
-
-  .macc[data-accent="cyan"]    .macc__icon-wrap { background: rgba(0,212,255,0.1);   border: 1px solid rgba(0,212,255,0.28);   box-shadow: 0 0 18px rgba(0,212,255,0.15); }
-  .macc[data-accent="violet"]  .macc__icon-wrap { background: rgba(123,97,255,0.1);  border: 1px solid rgba(123,97,255,0.28);  box-shadow: 0 0 18px rgba(123,97,255,0.15); }
-  .macc[data-accent="emerald"] .macc__icon-wrap { background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.28);  box-shadow: 0 0 18px rgba(16,185,129,0.15); }
-  .macc[data-accent="amber"]   .macc__icon-wrap { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25);  box-shadow: 0 0 18px rgba(251,191,36,0.12); }
-  .macc[data-accent="magenta"] .macc__icon-wrap { background: rgba(232,121,249,0.1); border: 1px solid rgba(232,121,249,0.28); box-shadow: 0 0 18px rgba(232,121,249,0.15); }
-
-  .macc__icon-wrap i {
-    font-size: 1.4rem;
+  /* Shimmer inside icon on open */
+  .macc__icon-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0; transition: opacity 0.4s ease; border-radius: inherit;
   }
+  .macc.is-open .macc__icon-wrap::after { opacity: 1; }
+
+  .macc:not(.is-open) .macc__icon-wrap { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+  .macc:not(.is-open):hover .macc__icon-wrap { background: rgba(255,255,255,0.09); }
+  .macc.is-open .macc__icon-wrap { transform: scale(1.1); }
+
+  /* Open icon backgrounds per accent */
+  .macc[data-accent="cyan"].is-open    .macc__icon-wrap { background: rgba(0,212,255,0.18);   border: 1px solid rgba(0,212,255,0.35);   box-shadow: 0 0 22px rgba(0,212,255,0.25); }
+  .macc[data-accent="violet"].is-open  .macc__icon-wrap { background: rgba(123,97,255,0.18);  border: 1px solid rgba(123,97,255,0.35);  box-shadow: 0 0 22px rgba(123,97,255,0.25); }
+  .macc[data-accent="emerald"].is-open .macc__icon-wrap { background: rgba(16,185,129,0.18);  border: 1px solid rgba(16,185,129,0.35);  box-shadow: 0 0 22px rgba(16,185,129,0.25); }
+  .macc[data-accent="amber"].is-open   .macc__icon-wrap { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.3);   box-shadow: 0 0 22px rgba(251,191,36,0.2); }
+  .macc[data-accent="magenta"].is-open .macc__icon-wrap { background: rgba(232,121,249,0.18); border: 1px solid rgba(232,121,249,0.35); box-shadow: 0 0 22px rgba(232,121,249,0.25); }
+
+  .macc__icon-wrap i { font-size: 1.4rem; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .macc.is-open .macc__icon-wrap i { transform: scale(1.1); }
+
+  /* Icon colours */
   .macc[data-accent="cyan"]    .macc__icon-wrap i { color: #00d4ff; }
   .macc[data-accent="violet"]  .macc__icon-wrap i { color: #a78bfa; }
   .macc[data-accent="emerald"] .macc__icon-wrap i { color: #34d399; }
   .macc[data-accent="amber"]   .macc__icon-wrap i { color: #fbbf24; }
   .macc[data-accent="magenta"] .macc__icon-wrap i { color: #e879f9; }
 
-  /* Headline text block */
+  /* Headline block */
   .macc__head { flex: 1; min-width: 0; }
   .macc__index {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; opacity: 0.35; margin-bottom: 0.2rem;
-    display: block;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; opacity: 0.35;
+    margin-bottom: 0.2rem; display: block;
   }
   .macc__headline {
     font-family: var(--font-family-heading, 'Space Grotesk', sans-serif);
-    font-size: clamp(1rem, 1.8vw + 0.2rem, 1.2rem);
-    font-weight: 700; color: #fff; line-height: 1.25;
+    font-size: clamp(1rem, 1.6vw + 0.25rem, 1.25rem);
+    font-weight: 700; color: rgba(255,255,255,0.9); line-height: 1.25;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color 0.3s ease;
   }
   .macc.is-open .macc__headline { color: #fff; }
 
-  /* Audience tag */
+  /* Subtitle — visible below headline in closed state (reference design) */
+  .macc__subtitle {
+    font-size: 0.875rem; color: rgba(148,163,184,0.55); line-height: 1.4;
+    margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color 0.3s ease;
+  }
+  .macc:hover .macc__subtitle,
+  .macc.is-open .macc__subtitle { color: rgba(148,163,184,0.75); }
+
+  /* Tag pill */
   .macc__tag {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.66rem; font-weight: 500; letter-spacing: 0.08em;
+    font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em;
     text-transform: uppercase; border-radius: 9999px;
-    padding: 0.22rem 0.7rem; white-space: nowrap; flex-shrink: 0;
-    display: none; /* hidden on mobile, shown md+ */
+    padding: 0.28rem 0.85rem; white-space: nowrap; flex-shrink: 0;
+    display: none;
   }
   @media (min-width: 640px) { .macc__tag { display: inline; } }
   .macc[data-accent="cyan"]    .macc__tag { color: #00d4ff; background: rgba(0,212,255,0.08);   border: 1px solid rgba(0,212,255,0.2); }
@@ -1615,59 +1718,107 @@
 
   /* Chevron */
   .macc__chevron {
-    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
     background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; color: rgba(255,255,255,0.35);
-    transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
-                background 0.3s ease, color 0.3s ease;
+    font-size: 0.9rem; color: rgba(148,163,184,0.5);
+    transition: transform 0.45s cubic-bezier(0.175,0.885,0.32,1.275),
+                background 0.3s, color 0.3s, border-color 0.3s;
   }
-  .macc.is-open .macc__chevron {
-    transform: rotate(180deg); color: #00d4ff;
-    background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3);
-  }
+  .macc.is-open .macc__chevron { transform: rotate(180deg); }
+  .macc[data-accent="cyan"].is-open    .macc__chevron { color: #00d4ff; background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.3); }
+  .macc[data-accent="violet"].is-open  .macc__chevron { color: #a78bfa; background: rgba(123,97,255,0.12); border-color: rgba(123,97,255,0.3); }
+  .macc[data-accent="emerald"].is-open .macc__chevron { color: #34d399; background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.28); }
+  .macc[data-accent="amber"].is-open   .macc__chevron { color: #fbbf24; background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.28); }
+  .macc[data-accent="magenta"].is-open .macc__chevron { color: #e879f9; background: rgba(232,121,249,0.12); border-color: rgba(232,121,249,0.3); }
 
-  /* ── PANEL (expanded content) ── */
-  .macc__panel {
-    max-height: 0; overflow: hidden;
-    transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+  /* ── PANEL — grid height animation (from reference) ── */
+  .macc__panel-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s cubic-bezier(0.16,1,0.3,1),
+                opacity 0.4s ease 0.05s;
   }
-  .macc.is-open .macc__panel { max-height: 1200px; }
+  .macc.is-open .macc__panel-wrap {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .macc__panel { overflow: hidden; }
 
+  /* Panel divider */
   .macc__body {
-    padding: 0 1.75rem 1.75rem 5.25rem; /* indent to align with headline */
+    padding: 0 1.5rem 1.75rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    margin-top: 0.125rem;
   }
-  @media (max-width: 600px) { .macc__body { padding: 0 1.25rem 1.5rem; } }
+  @media (max-width: 600px) { .macc__body { padding: 0 1.1rem 1.5rem; } }
 
-  /* ── Detail prose ── */
-  .macc__body p {
+  /* Two-column layout (from reference): description left, viz right */
+  .macc__body-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    padding-top: 1.25rem;
+  }
+  @media (max-width: 680px) { .macc__body-inner { grid-template-columns: 1fr; } }
+
+  /* Description prose */
+  .macc__desc {
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .macc__desc p {
     font-size: 0.9375rem; color: rgba(148,163,184,0.9); line-height: 1.8;
-    margin: 0 0 1rem; max-width: 68ch;
+    margin: 0; max-width: 60ch;
+    font-weight: 300;
   }
-  .macc__body p:last-of-type { margin-bottom: 1.25rem; }
-  .macc__body strong { color: rgba(255,255,255,0.92); }
+  .macc__desc p strong, .macc__desc strong { color: rgba(255,255,255,0.92); font-weight: 600; }
 
-  /* ── Metric tile grid ── */
+  /* Right panel: metric tiles stacked */
+  .macc__metrics-col {
+    display: flex; flex-direction: column; gap: 0.625rem;
+  }
+
   .macc__metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.75rem; margin: 1rem 0 1.25rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
   }
   .macc__metric {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; padding: 1rem 1.1rem;
-    display: flex; flex-direction: column; gap: 0.25rem;
-    transition: border-color 0.25s, background 0.25s;
+    position: relative; overflow: hidden;
+    background: rgba(0,0,0,0.38);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 1rem; padding: 1rem 1.1rem;
+    display: flex; flex-direction: column; gap: 0.3rem;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: default;
   }
-  .macc__metric:hover { background: rgba(255,255,255,0.055); border-color: rgba(255,255,255,0.12); }
+  .macc__metric:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+
+  /* Inner glow per metric on hover */
+  .macc__metric::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 80px; height: 80px; border-radius: 50%;
+    opacity: 0.15; pointer-events: none;
+    transition: opacity 0.4s;
+    filter: blur(28px);
+  }
+  .macc__metric:hover::before { opacity: 0.3; }
+  .macc[data-accent="cyan"]    .macc__metric::before { background: #00d4ff; }
+  .macc[data-accent="violet"]  .macc__metric::before { background: #7b61ff; }
+  .macc[data-accent="emerald"] .macc__metric::before { background: #10b981; }
+  .macc[data-accent="amber"]   .macc__metric::before { background: #fbbf24; }
+  .macc[data-accent="magenta"] .macc__metric::before { background: #e879f9; }
+
   .macc__metric-val {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 1.5rem; font-weight: 700; line-height: 1;
+    font-size: 1.6rem; font-weight: 700; line-height: 1;
+    position: relative; z-index: 1;
   }
   .macc__metric-label {
-    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
-    text-transform: uppercase; color: rgba(148,163,184,0.65); line-height: 1.3;
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.07em;
+    text-transform: uppercase; color: rgba(148,163,184,0.6);
+    line-height: 1.35; position: relative; z-index: 1;
   }
   .macc[data-accent="cyan"]    .macc__metric-val { color: #00d4ff; }
   .macc[data-accent="violet"]  .macc__metric-val { color: #a78bfa; }
@@ -1675,44 +1826,98 @@
   .macc[data-accent="amber"]   .macc__metric-val { color: #fbbf24; }
   .macc[data-accent="magenta"] .macc__metric-val { color: #e879f9; }
 
+  /* Progress bar viz (from reference) */
+  .macc__viz {
+    background: rgba(0,0,0,0.38);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 1rem; padding: 1.1rem 1.1rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .macc__viz-label {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(148,163,184,0.55);
+  }
+  .macc__viz-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.875rem; font-weight: 600;
+    color: rgba(148,163,184,0.7);
+  }
+  .macc__viz-row span:last-child { color: #fff; font-weight: 700; }
+  .macc__viz-track {
+    height: 10px; background: rgba(255,255,255,0.06);
+    border-radius: 999px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .macc__viz-fill {
+    height: 100%; border-radius: 999px;
+    width: 0%; /* animated via JS */
+    transition: width 1.1s cubic-bezier(0.16,1,0.3,1) 0.2s;
+    position: relative; overflow: hidden;
+  }
+  /* Shimmer on bar */
+  .macc__viz-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+    animation: mBarShimmer 2.2s infinite;
+  }
+  @keyframes mBarShimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  .macc[data-accent="cyan"]    .macc__viz-fill { background: linear-gradient(90deg, #00d4ff, #7b61ff); }
+  .macc[data-accent="violet"]  .macc__viz-fill { background: linear-gradient(90deg, #7b61ff, #a78bfa); }
+  .macc[data-accent="emerald"] .macc__viz-fill { background: linear-gradient(90deg, #059669, #34d399); }
+  .macc[data-accent="amber"]   .macc__viz-fill { background: linear-gradient(90deg, #d97706, #fbbf24); }
+  .macc[data-accent="magenta"] .macc__viz-fill { background: linear-gradient(90deg, #c026d3, #e879f9); }
+
   /* ── Three-column role block (item 5) ── */
   .macc__role-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem; margin: 1rem 0 1.25rem;
+    gap: 0.75rem; margin-top: 0.25rem;
   }
   @media (max-width: 640px) { .macc__role-grid { grid-template-columns: 1fr; } }
   .macc__role-block {
-    background: rgba(255,255,255,0.025);
+    background: rgba(0,0,0,0.35);
     border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 12px; padding: 1.1rem 1rem;
+    border-radius: 0.875rem; padding: 1rem;
+    transition: border-color 0.25s, background 0.25s;
   }
+  .macc__role-block:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
   .macc__role-label {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
     font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: #e879f9; display: block; margin-bottom: 0.45rem;
+    text-transform: uppercase; color: #e879f9;
+    display: block; margin-bottom: 0.5rem;
   }
-  .macc__role-text { font-size: 0.875rem; color: rgba(148,163,184,0.9); line-height: 1.65; margin: 0; }
+  .macc__role-text { font-size: 0.875rem; color: rgba(148,163,184,0.85); line-height: 1.65; margin: 0; }
 
-  /* ── Kicker line ── */
+  /* ── Kicker quote ── */
   .macc__kicker {
-    font-size: 0.9rem; font-weight: 600; line-height: 1.5;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.925rem; font-weight: 500; line-height: 1.6;
+    padding: 0.875rem 1rem;
+    border-radius: 0.875rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: flex-start; gap: 0.65rem;
+    margin-top: 0.5rem;
+    font-style: italic;
   }
-  .macc__kicker i { font-size: 0.8rem; margin-top: 0.2rem; flex-shrink: 0; }
-  .macc[data-accent="cyan"]    .macc__kicker { color: rgba(0,212,255,0.9); }
-  .macc[data-accent="violet"]  .macc__kicker { color: rgba(167,139,250,0.9); }
-  .macc[data-accent="emerald"] .macc__kicker { color: rgba(52,211,153,0.9); }
-  .macc[data-accent="amber"]   .macc__kicker { color: rgba(251,191,36,0.9); }
-  .macc[data-accent="magenta"] .macc__kicker { color: rgba(232,121,249,0.9); }
+  .macc__kicker i { font-size: 0.85rem; margin-top: 0.25rem; flex-shrink: 0; opacity: 0.65; }
+  .macc[data-accent="cyan"]    .macc__kicker { color: rgba(0,212,255,0.85);   border-color: rgba(0,212,255,0.12);   background: rgba(0,212,255,0.04); }
+  .macc[data-accent="violet"]  .macc__kicker { color: rgba(167,139,250,0.85); border-color: rgba(123,97,255,0.12);  background: rgba(123,97,255,0.04); }
+  .macc[data-accent="emerald"] .macc__kicker { color: rgba(52,211,153,0.85);  border-color: rgba(16,185,129,0.12);  background: rgba(16,185,129,0.04); }
+  .macc[data-accent="amber"]   .macc__kicker { color: rgba(251,191,36,0.85);  border-color: rgba(251,191,36,0.12);  background: rgba(251,191,36,0.04); }
+  .macc[data-accent="magenta"] .macc__kicker { color: rgba(232,121,249,0.85); border-color: rgba(232,121,249,0.12); background: rgba(232,121,249,0.04); }
 
-  /* ── Rhythm chips ── */
-  .macc__chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  /* ── Chips ── */
+  .macc__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
   .macc__chip {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.76rem; font-weight: 600; padding: 0.28rem 0.85rem;
-    border-radius: 9999px;
+    font-size: 0.76rem; font-weight: 600; padding: 0.3rem 0.9rem;
+    border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem;
     color: #e879f9; background: rgba(232,121,249,0.07); border: 1px solid rgba(232,121,249,0.2);
   }
 
@@ -1725,10 +1930,11 @@
 
   /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
-    .macc__panel { transition: none !important; }
-    .macc__chevron { transition: none !important; }
-    .macc__icon-wrap { transition: none !important; }
-    .mission-eyebrow::before, #cortex-mission::after { animation: none !important; }
+    .macc, .macc__panel-wrap, .macc__chevron, .macc__icon-wrap { transition: none !important; animation: none !important; opacity: 1; }
+    .macc__viz-fill { transition: none !important; }
+    .mission-eyebrow::before, .mission-status-dot { animation: none !important; }
+    .mission-frame { animation: none !important; }
+    .m-orb-1, .m-orb-2 { animation: none !important; }
   }
 </style>
 
@@ -1811,302 +2017,432 @@
 <main id="main-content" role="main">
 
     <!-- ═══════════════════════════════════════════════════════════
-         MISSION ACCORDION — digital robotic scroll
-         Content SSOT: docs/.content/00-mission.md
+         MISSION ACCORDION v5.0 — Card-per-principle design
+         Inspired by mission-statement.html reference layout
          ═══════════════════════════════════════════════════════════ -->
     <section
       id="cortex-mission"
       aria-labelledby="mission-heading"
       role="region"
     >
+      <!-- Ambient orbs -->
+      <div class="m-orb-1" aria-hidden="true"></div>
+      <div class="m-orb-2" aria-hidden="true"></div>
+      <div class="m-orb-3" aria-hidden="true"></div>
+
       <div class="mission-inner">
 
         <!-- Header -->
         <header class="mission-header">
           <span class="mission-eyebrow"><i class="fas fa-satellite-dish" aria-hidden="true"></i>&nbsp; Core Principles</span>
           <h2 id="mission-heading" class="mission-title">
-            Built on a <span class="accent-cyan">conviction.</span><br>
-            Proven through every&nbsp;line.
+            <span class="t-white">Mission</span>&nbsp;<span class="accent-cyan">Statement</span>
           </h2>
+          <div class="mission-title-rule" aria-hidden="true">
+            <div class="mission-title-rule-dot"></div>
+          </div>
           <p class="mission-subtitle">
             <strong style="color:rgba(255,255,255,0.88);">CORTEX</strong> is the governed AI engineering partner that thinks, enforces, and learns alongside your team —
             so that quality, security, and institutional knowledge become <strong style="color:#00d4ff;">structural guarantees</strong>, not aspirational targets.
           </p>
         </header>
 
-        <!-- Robotic scroll container -->
-        <div class="mscroll" aria-label="CORTEX Mission Principles">
+        <!-- Frame with thick animated border -->
+        <div class="mission-frame" aria-label="CORTEX Mission Principles">
+          <div class="mission-frame-inner">
 
-          <!-- Bar -->
-          <div class="mscroll__bar" aria-hidden="true">
-            <span class="mscroll__bar-dot"></span>
-            <span>CORTEX.MISSION_KERNEL — 5 PRINCIPLES LOADED</span>
-            <span class="mscroll__bar-line"></span>
-            <span>v4.0 · ACTIVE</span>
-          </div>
+            <!-- Status bar -->
+            <div class="mission-status-bar" aria-hidden="true">
+              <span class="mission-status-dot"></span>
+              <span>CORTEX.MISSION_KERNEL — 5 PRINCIPLES LOADED · v5.0 · ACTIVE</span>
+              <span class="mission-status-line"></span>
+              <span>GLASSMORPHISM v4.0</span>
+            </div>
 
-          <!-- Accordion list -->
-          <ul class="mscroll__list" role="list">
+            <!-- Accordion card list -->
+            <ul class="macc-list" role="list">
 
-            <!-- ── 01 Imagination Over Administration ── -->
-            <li class="macc is-open" data-accent="cyan" id="macc-1">
-              <button
-                class="macc__trigger"
-                aria-expanded="true"
-                aria-controls="macc-panel-1"
-                id="macc-btn-1"
-              >
-                <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-brain"></i></div>
-                <div class="macc__head">
-                  <span class="macc__index">01 · Engineers &amp; Learners</span>
-                  <div class="macc__headline">Imagination Over Administration</div>
-                </div>
-                <span class="macc__tag">Engineers · Learners</span>
-                <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
-              </button>
-              <div class="macc__panel" id="macc-panel-1" role="region" aria-labelledby="macc-btn-1">
-                <div class="macc__body">
-                  <p>The best engineers don't want to manage tools — they want to build things that matter. CORTEX was built to handle everything else: classifying intent, understanding your codebase the way a senior colleague would, enforcing standards, and executing a coordinated plan — while you think about the problem only you can solve.</p>
-                  <p><strong>A calculator waits for instructions. CORTEX perceives the situation, reasons about the best approach, acts — and learns from every interaction.</strong></p>
-                  <!-- Metric tiles -->
-                  <div class="macc__metrics" aria-label="Key platform metrics">
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">323</span>
-                      <span class="macc__metric-label">Orchestrators across 15 domains</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">29</span>
-                      <span class="macc__metric-label">Intent types auto-routed</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">0&nbsp;sec</span>
-                      <span class="macc__metric-label">Setup — type /CORTEX to start</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">∞</span>
-                      <span class="macc__metric-label">Context retained across sessions</span>
+              <!-- ── 01 Imagination Over Administration ── -->
+              <li class="macc is-open" data-accent="cyan" id="macc-1">
+                <div class="macc__corner-glow" aria-hidden="true"></div>
+                <button
+                  class="macc__trigger"
+                  aria-expanded="true"
+                  aria-controls="macc-panel-1"
+                  id="macc-btn-1"
+                >
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-brain"></i></div>
+                  <div class="macc__head">
+                    <span class="macc__index">01</span>
+                    <div class="macc__headline">Imagination Over Administration</div>
+                    <div class="macc__subtitle">Amplifying human creativity, eliminating tool overhead.</div>
+                  </div>
+                  <span class="macc__tag">Engineers · Learners</span>
+                  <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+                </button>
+                <div class="macc__panel-wrap">
+                  <div class="macc__panel" id="macc-panel-1" role="region" aria-labelledby="macc-btn-1">
+                    <div class="macc__body">
+                      <div class="macc__body-inner">
+                        <!-- Left: description -->
+                        <div class="macc__desc">
+                          <p>The best engineers don't want to manage tools — they want to build things that matter. CORTEX was built to handle everything else: classifying intent, understanding your codebase the way a senior colleague would, enforcing standards, and executing a coordinated plan.</p>
+                          <p><strong>A calculator waits for instructions. CORTEX perceives the situation, reasons about the best approach, acts — and learns from every interaction.</strong></p>
+                          <p class="macc__kicker">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            Engineers spend their time on work that requires human creativity, not on the overhead that surrounds it.
+                          </p>
+                        </div>
+                        <!-- Right: metrics + viz -->
+                        <div class="macc__metrics-col">
+                          <div class="macc__metrics">
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">323</span>
+                              <span class="macc__metric-label">Orchestrators · 15 domains</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">29</span>
+                              <span class="macc__metric-label">Intent types auto-routed</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">0&nbsp;sec</span>
+                              <span class="macc__metric-label">Setup — type /CORTEX</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">∞</span>
+                              <span class="macc__metric-label">Context across sessions</span>
+                            </div>
+                          </div>
+                          <div class="macc__viz">
+                            <div class="macc__viz-label"><i class="fas fa-chart-bar" aria-hidden="true"></i>&nbsp; Automation Coverage</div>
+                            <div class="macc__viz-row"><span>Intent Classification</span><span>100%</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="100"></div></div>
+                            <div class="macc__viz-row"><span>Context Retention</span><span>∞</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="100"></div></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p class="macc__kicker" aria-label="Closing principle">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
-                    Engineers spend their time on work that requires human creativity, not on the overhead that surrounds it.
-                  </p>
                 </div>
-              </div>
-            </li>
+              </li>
 
-            <!-- ── 02 Knowledge That Travels With the Team ── -->
-            <li class="macc" data-accent="violet" id="macc-2">
-              <button
-                class="macc__trigger"
-                aria-expanded="false"
-                aria-controls="macc-panel-2"
-                id="macc-btn-2"
-              >
-                <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-book-open"></i></div>
-                <div class="macc__head">
-                  <span class="macc__index">02 · Product Owners &amp; Learners</span>
-                  <div class="macc__headline">Knowledge That Travels With the Team</div>
-                </div>
-                <span class="macc__tag">Product Owners · Learners</span>
-                <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
-              </button>
-              <div class="macc__panel" id="macc-panel-2" role="region" aria-labelledby="macc-btn-2">
-                <div class="macc__body">
-                  <p>Most engineering knowledge lives in one person's head. When that person leaves, the knowledge leaves with them. CORTEX was built to change that permanently. It analyses every codebase the way a seasoned expert would — tracking quality across eight dimensions, capturing the reason behind every failure at the exact moment it occurs.</p>
-                  <p>That knowledge is stored permanently, belongs to the team rather than any individual, and surfaces automatically the next time someone is about to make the same mistake.</p>
-                  <div class="macc__metrics">
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">8</span>
-                      <span class="macc__metric-label">Quality dimensions tracked by LENS</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">19k+</span>
-                      <span class="macc__metric-label">Tests capturing institutional knowledge</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">4</span>
-                      <span class="macc__metric-label">RCA methodologies (Five-Whys, Fishbone, Fault-Tree, Causal)</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">7</span>
-                      <span class="macc__metric-label">SQLite databases preserving runtime memory</span>
+              <!-- ── 02 Knowledge That Travels With the Team ── -->
+              <li class="macc" data-accent="violet" id="macc-2">
+                <div class="macc__corner-glow" aria-hidden="true"></div>
+                <button
+                  class="macc__trigger"
+                  aria-expanded="false"
+                  aria-controls="macc-panel-2"
+                  id="macc-btn-2"
+                >
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-book-open"></i></div>
+                  <div class="macc__head">
+                    <span class="macc__index">02</span>
+                    <div class="macc__headline">Knowledge That Travels With the Team</div>
+                    <div class="macc__subtitle">Institutional memory that never walks out the door.</div>
+                  </div>
+                  <span class="macc__tag">Product Owners · Learners</span>
+                  <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+                </button>
+                <div class="macc__panel-wrap">
+                  <div class="macc__panel" id="macc-panel-2" role="region" aria-labelledby="macc-btn-2">
+                    <div class="macc__body">
+                      <div class="macc__body-inner">
+                        <div class="macc__desc">
+                          <p>Most engineering knowledge lives in one person's head. When that person leaves, the knowledge leaves with them. CORTEX analyses every codebase the way a seasoned expert would — tracking quality across eight dimensions, capturing the reason behind every failure at the exact moment it occurs.</p>
+                          <p>That knowledge is stored permanently, belongs to the team rather than any individual, and surfaces automatically the next time someone is about to make the same mistake.</p>
+                          <p class="macc__kicker">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            Good practices spread. Mistakes don't repeat. The team gets smarter together — regardless of who joined last week or who leaves next month.
+                          </p>
+                        </div>
+                        <div class="macc__metrics-col">
+                          <div class="macc__metrics">
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">8</span>
+                              <span class="macc__metric-label">Quality dimensions tracked by LENS</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">19k+</span>
+                              <span class="macc__metric-label">Tests capturing knowledge</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">4</span>
+                              <span class="macc__metric-label">RCA methodologies</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">7</span>
+                              <span class="macc__metric-label">SQLite runtime memory DBs</span>
+                            </div>
+                          </div>
+                          <div class="macc__viz">
+                            <div class="macc__viz-label"><i class="fas fa-memory" aria-hidden="true"></i>&nbsp; Knowledge Retention</div>
+                            <div class="macc__viz-row"><span>Team Knowledge</span><span>Permanent</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="95"></div></div>
+                            <div class="macc__viz-row"><span>Failure Prevention</span><span>Auto</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="88"></div></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p class="macc__kicker">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
-                    Good practices spread. Mistakes don't repeat. The team gets smarter together — regardless of who joined last week or who leaves next month.
-                  </p>
                 </div>
-              </div>
-            </li>
+              </li>
 
-            <!-- ── 03 Quality That Enforces Itself ── -->
-            <li class="macc" data-accent="emerald" id="macc-3">
-              <button
-                class="macc__trigger"
-                aria-expanded="false"
-                aria-controls="macc-panel-3"
-                id="macc-btn-3"
-              >
-                <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
-                <div class="macc__head">
-                  <span class="macc__index">03 · Business Leaders</span>
-                  <div class="macc__headline">Quality That Enforces Itself</div>
-                </div>
-                <span class="macc__tag">Business Leaders</span>
-                <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
-              </button>
-              <div class="macc__panel" id="macc-panel-3" role="region" aria-labelledby="macc-btn-3">
-                <div class="macc__body">
-                  <p>Every engineering team has standards. The real question is who enforces them on the day everyone is tired, under pressure, and shipping fast. CORTEX was built to answer that question permanently — not with checklists that get skipped or code reviews that sit in queues, but with governance that runs automatically on every commit, every build, and every deployment.</p>
-                  <p>Security gaps are caught before they reach version control. Compliance evidence accumulates without anyone producing a report.</p>
-                  <div class="macc__metrics">
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">37</span>
-                      <span class="macc__metric-label">Governance YAMLs enforced at pre-commit &amp; CI</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">100%</span>
-                      <span class="macc__metric-label">TDD-first — no implementation without failing test</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">0</span>
-                      <span class="macc__metric-label">P0 issues allowed through the convergence gate</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">Auto</span>
-                      <span class="macc__metric-label">Compliance evidence — no manual reports</span>
+              <!-- ── 03 Quality That Enforces Itself ── -->
+              <li class="macc" data-accent="emerald" id="macc-3">
+                <div class="macc__corner-glow" aria-hidden="true"></div>
+                <button
+                  class="macc__trigger"
+                  aria-expanded="false"
+                  aria-controls="macc-panel-3"
+                  id="macc-btn-3"
+                >
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
+                  <div class="macc__head">
+                    <span class="macc__index">03</span>
+                    <div class="macc__headline">Quality That Enforces Itself</div>
+                    <div class="macc__subtitle">Governance that runs on every commit — automatically.</div>
+                  </div>
+                  <span class="macc__tag">Business Leaders</span>
+                  <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+                </button>
+                <div class="macc__panel-wrap">
+                  <div class="macc__panel" id="macc-panel-3" role="region" aria-labelledby="macc-btn-3">
+                    <div class="macc__body">
+                      <div class="macc__body-inner">
+                        <div class="macc__desc">
+                          <p>Every engineering team has standards. The real question is who enforces them on the day everyone is tired, under pressure, and shipping fast. CORTEX was built to answer that question permanently — governance that runs automatically on every commit, every build, and every deployment.</p>
+                          <p>Security gaps are caught before they reach version control. Compliance evidence accumulates without anyone producing a report.</p>
+                          <p class="macc__kicker">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            Quality and security are no longer things your team aspires to. They are things CORTEX guarantees.
+                          </p>
+                        </div>
+                        <div class="macc__metrics-col">
+                          <div class="macc__metrics">
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">37</span>
+                              <span class="macc__metric-label">Governance YAMLs at pre-commit</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">100%</span>
+                              <span class="macc__metric-label">TDD-first — tests before code</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">0</span>
+                              <span class="macc__metric-label">P0 issues through convergence gate</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">Auto</span>
+                              <span class="macc__metric-label">Compliance evidence — no manual reports</span>
+                            </div>
+                          </div>
+                          <div class="macc__viz">
+                            <div class="macc__viz-label"><i class="fas fa-shield-check" aria-hidden="true"></i>&nbsp; Enforcement Coverage</div>
+                            <div class="macc__viz-row"><span>Pre-commit Gates</span><span>100%</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="100"></div></div>
+                            <div class="macc__viz-row"><span>Security Scanning</span><span>Auto</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="100"></div></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p class="macc__kicker">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
-                    Quality and security are no longer things your team aspires to. They are things CORTEX guarantees.
-                  </p>
                 </div>
-              </div>
-            </li>
+              </li>
 
-            <!-- ── 04 A System That Learns ── -->
-            <li class="macc" data-accent="amber" id="macc-4">
-              <button
-                class="macc__trigger"
-                aria-expanded="false"
-                aria-controls="macc-panel-4"
-                id="macc-btn-4"
-              >
-                <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-sync-alt"></i></div>
-                <div class="macc__head">
-                  <span class="macc__index">04 · All Audiences</span>
-                  <div class="macc__headline">A System That Learns So History Doesn't Repeat</div>
-                </div>
-                <span class="macc__tag">All Audiences</span>
-                <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
-              </button>
-              <div class="macc__panel" id="macc-panel-4" role="region" aria-labelledby="macc-btn-4">
-                <div class="macc__body">
-                  <p>The same bugs keep coming back. The same architectural mistakes surface in different forms. Not because engineers are careless — but because knowledge of <em>why</em> something failed is fragile. It lives in Slack threads, Confluence pages nobody reads, and memories that leave when people do.</p>
-                  <p>CORTEX was built to make failure knowledge permanent. Every root cause is analysed, stored with full context, and surfaced automatically the next time someone is about to make the same mistake. Prevention rules generate themselves. Institutional memory accumulates without effort.</p>
-                  <div class="macc__metrics">
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">URS</span>
-                      <span class="macc__metric-label">Unified Reinforcement Signal — closed-loop learning</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">Auto</span>
-                      <span class="macc__metric-label">Prevention rules generated from every RCA</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">decay</span>
-                      <span class="macc__metric-label">Stale patterns expire · promoted patterns persist</span>
-                    </div>
-                    <div class="macc__metric">
-                      <span class="macc__metric-val">1st</span>
-                      <span class="macc__metric-label">Warning on the 10th repeat occurrence</span>
+              <!-- ── 04 A System That Learns ── -->
+              <li class="macc" data-accent="amber" id="macc-4">
+                <div class="macc__corner-glow" aria-hidden="true"></div>
+                <button
+                  class="macc__trigger"
+                  aria-expanded="false"
+                  aria-controls="macc-panel-4"
+                  id="macc-btn-4"
+                >
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-sync-alt"></i></div>
+                  <div class="macc__head">
+                    <span class="macc__index">04</span>
+                    <div class="macc__headline">A System That Learns So History Doesn't Repeat</div>
+                    <div class="macc__subtitle">Failure knowledge made permanent through closed-loop learning.</div>
+                  </div>
+                  <span class="macc__tag">All Audiences</span>
+                  <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+                </button>
+                <div class="macc__panel-wrap">
+                  <div class="macc__panel" id="macc-panel-4" role="region" aria-labelledby="macc-btn-4">
+                    <div class="macc__body">
+                      <div class="macc__body-inner">
+                        <div class="macc__desc">
+                          <p>The same bugs keep coming back — not because engineers are careless, but because knowledge of <em>why</em> something failed is fragile. CORTEX makes failure knowledge permanent: every root cause is analysed, stored with full context, and surfaced automatically the next time someone is about to make the same mistake.</p>
+                          <p>Prevention rules generate themselves. Institutional memory accumulates without effort. Stale patterns expire; promoted patterns persist.</p>
+                          <p class="macc__kicker">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            The tenth occurrence of a problem becomes the first warning.
+                          </p>
+                        </div>
+                        <div class="macc__metrics-col">
+                          <div class="macc__metrics">
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">URS</span>
+                              <span class="macc__metric-label">Unified Reinforcement Signal</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">Auto</span>
+                              <span class="macc__metric-label">Prevention rules from every RCA</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">decay</span>
+                              <span class="macc__metric-label">Stale patterns expire, good ones persist</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">1st</span>
+                              <span class="macc__metric-label">Warning on 10th repeat occurrence</span>
+                            </div>
+                          </div>
+                          <div class="macc__viz">
+                            <div class="macc__viz-label"><i class="fas fa-brain" aria-hidden="true"></i>&nbsp; Learning Cycle</div>
+                            <div class="macc__viz-row"><span>Pattern Confidence</span><span>90%</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="90"></div></div>
+                            <div class="macc__viz-row"><span>Recurrence Block Rate</span><span>85%</span></div>
+                            <div class="macc__viz-track"><div class="macc__viz-fill" data-width="85"></div></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p class="macc__kicker">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
-                    The tenth occurrence of a problem becomes the first warning.
-                  </p>
                 </div>
-              </div>
-            </li>
+              </li>
 
-            <!-- ── 05 One Platform, Every Role ── -->
-            <li class="macc" data-accent="magenta" id="macc-5">
-              <button
-                class="macc__trigger"
-                aria-expanded="false"
-                aria-controls="macc-panel-5"
-                id="macc-btn-5"
-              >
-                <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-globe"></i></div>
-                <div class="macc__head">
-                  <span class="macc__index">05 · Business Leaders &amp; Organisations</span>
-                  <div class="macc__headline">One Platform, Every Role, No Coordination Overhead</div>
-                </div>
-                <span class="macc__tag">All Roles</span>
-                <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
-              </button>
-              <div class="macc__panel" id="macc-panel-5" role="region" aria-labelledby="macc-btn-5">
-                <div class="macc__body">
-                  <p>CORTEX was built as a governed AI engineering partner that operates with structural discipline — combining the intelligence of GitHub Copilot with enforcement, learning, and memory. It builds upon Copilot by introducing architectural awareness, automated quality standards, and an institutional memory layer, helping teams scale delivery reliably across every role.</p>
-                  <!-- Role blocks -->
-                  <div class="macc__role-grid" aria-label="Role-specific value">
-                    <div class="macc__role-block">
-                      <span class="macc__role-label"><i class="fas fa-user-tie" aria-hidden="true"></i> Business Leader</span>
-                      <p class="macc__role-text">Compliance evidence and delivery metrics appear automatically. Governance runs on every commit — no reports to commission, no audits to schedule. Quality checks are infrastructure, not afterthoughts.</p>
-                    </div>
-                    <div class="macc__role-block">
-                      <span class="macc__role-label"><i class="fas fa-clipboard-list" aria-hidden="true"></i> Product Owner</span>
-                      <p class="macc__role-text">Requirements flow into structured, traceable, tested code — without manual coordination. Predictable delivery with enhanced visibility across every sprint.</p>
-                    </div>
-                    <div class="macc__role-block">
-                      <span class="macc__role-label"><i class="fas fa-laptop-code" aria-hidden="true"></i> Software Engineer</span>
-                      <p class="macc__role-text">A governed delivery workflow that evolves alongside your engineering practices — from solo developer to large enterprise. Catches structural issues early, enforces your team's coding standards, and adapts continuously.</p>
+              <!-- ── 05 One Platform, Every Role ── -->
+              <li class="macc" data-accent="magenta" id="macc-5">
+                <div class="macc__corner-glow" aria-hidden="true"></div>
+                <button
+                  class="macc__trigger"
+                  aria-expanded="false"
+                  aria-controls="macc-panel-5"
+                  id="macc-btn-5"
+                >
+                  <div class="macc__icon-wrap" aria-hidden="true"><i class="fas fa-globe"></i></div>
+                  <div class="macc__head">
+                    <span class="macc__index">05</span>
+                    <div class="macc__headline">One Platform, Every Role, No Coordination Overhead</div>
+                    <div class="macc__subtitle">Engineers, product owners, and business leaders — one governed platform.</div>
+                  </div>
+                  <span class="macc__tag">All Roles</span>
+                  <div class="macc__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+                </button>
+                <div class="macc__panel-wrap">
+                  <div class="macc__panel" id="macc-panel-5" role="region" aria-labelledby="macc-btn-5">
+                    <div class="macc__body">
+                      <div class="macc__body-inner">
+                        <div class="macc__desc">
+                          <p>CORTEX operates as a governed AI engineering partner combining GitHub Copilot intelligence with enforcement, learning, and memory — helping teams scale delivery reliably across every role, from solo developer to large enterprise.</p>
+                          <!-- Role blocks in the description column -->
+                          <div class="macc__role-grid" aria-label="Role-specific value">
+                            <div class="macc__role-block">
+                              <span class="macc__role-label"><i class="fas fa-user-tie" aria-hidden="true"></i> Business Leader</span>
+                              <p class="macc__role-text">Compliance evidence and delivery metrics appear automatically. Governance runs on every commit — quality checks are infrastructure, not afterthoughts.</p>
+                            </div>
+                            <div class="macc__role-block">
+                              <span class="macc__role-label"><i class="fas fa-clipboard-list" aria-hidden="true"></i> Product Owner</span>
+                              <p class="macc__role-text">Requirements flow into structured, traceable, tested code — without manual coordination. Predictable delivery with full visibility.</p>
+                            </div>
+                            <div class="macc__role-block">
+                              <span class="macc__role-label"><i class="fas fa-laptop-code" aria-hidden="true"></i> Engineer</span>
+                              <p class="macc__role-text">A governed delivery workflow that evolves alongside your engineering practices — catching structural issues early and enforcing standards continuously.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Right: metrics + chips -->
+                        <div class="macc__metrics-col">
+                          <div class="macc__metrics">
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">3</span>
+                              <span class="macc__metric-label">Roles served from one platform</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">0</span>
+                              <span class="macc__metric-label">Configuration required</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">30</span>
+                              <span class="macc__metric-label">MCP tools registered</span>
+                            </div>
+                            <div class="macc__metric">
+                              <span class="macc__metric-val">∞</span>
+                              <span class="macc__metric-label">Scale — solo to enterprise</span>
+                            </div>
+                          </div>
+                          <div class="macc__chips" aria-label="Core promise">
+                            <span class="macc__chip"><i class="fas fa-network-wired" aria-hidden="true"></i>&nbsp;One framework</span>
+                            <span class="macc__chip"><i class="fas fa-users" aria-hidden="true"></i>&nbsp;Every role</span>
+                            <span class="macc__chip"><i class="fas fa-bolt" aria-hidden="true"></i>&nbsp;Zero overhead</span>
+                            <span class="macc__chip"><i class="fas fa-check-double" aria-hidden="true"></i>&nbsp;Zero config</span>
+                          </div>
+                          <p class="macc__kicker">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            Quality checks are infrastructure, not afterthoughts. Architectural decisions remain consistently applied across all implementations.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="macc__chips" aria-label="Core promise">
-                    <span class="macc__chip"><i class="fas fa-network-wired" aria-hidden="true"></i> One framework</span>
-                    <span class="macc__chip"><i class="fas fa-users" aria-hidden="true"></i> Every role</span>
-                    <span class="macc__chip"><i class="fas fa-bolt" aria-hidden="true"></i> No coordination overhead</span>
-                    <span class="macc__chip"><i class="fas fa-check-double" aria-hidden="true"></i> Zero configuration</span>
-                  </div>
-                  <p class="macc__kicker" style="margin-top:1.25rem;">
-                    <i class="fas fa-quote-left" aria-hidden="true"></i>
-                    Modern quality checks are infrastructure, not afterthoughts. Architectural decisions and security postures remain consistently applied across all implementations.
-                  </p>
                 </div>
-              </div>
-            </li>
+              </li>
 
-          </ul><!-- /mscroll__list -->
-        </div><!-- /mscroll -->
+            </ul><!-- /macc-list -->
+          </div><!-- /mission-frame-inner -->
+        </div><!-- /mission-frame -->
 
         <hr class="mission-divider" aria-hidden="true">
 
       </div><!-- /mission-inner -->
     </section><!-- /#cortex-mission -->
 
-    <!-- Accordion JS — single-open, smooth expand -->
+          <!-- Bar -->
+    <!-- Accordion JS v5.0 — single-open, grid-height animation, progress bar fill -->
     <script>
     (function() {
       var items = document.querySelectorAll('#cortex-mission .macc');
+
+      function openItem(item) {
+        item.classList.add('is-open');
+        item.querySelector('.macc__trigger').setAttribute('aria-expanded', 'true');
+        // Animate progress bars inside this item
+        item.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
+          var w = bar.getAttribute('data-width') || '0';
+          bar.style.width = w + '%';
+        });
+      }
+
+      function closeItem(item) {
+        item.classList.remove('is-open');
+        item.querySelector('.macc__trigger').setAttribute('aria-expanded', 'false');
+        // Reset bars
+        item.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
+          bar.style.width = '0%';
+        });
+      }
+
+      // Initialise: open first item's bars
+      var firstOpen = document.querySelector('#cortex-mission .macc.is-open');
+      if (firstOpen) {
+        firstOpen.querySelectorAll('.macc__viz-fill').forEach(function(bar) {
+          var w = bar.getAttribute('data-width') || '0';
+          // Slight delay so CSS transition fires after paint
+          setTimeout(function() { bar.style.width = w + '%'; }, 120);
+        });
+      }
+
       items.forEach(function(item) {
         var btn = item.querySelector('.macc__trigger');
         btn.addEventListener('click', function() {
           var isOpen = item.classList.contains('is-open');
-          // Collapse all
-          items.forEach(function(i) {
-            i.classList.remove('is-open');
-            i.querySelector('.macc__trigger').setAttribute('aria-expanded','false');
-          });
-          // Expand clicked if it was closed
-          if (!isOpen) {
-            item.classList.add('is-open');
-            btn.setAttribute('aria-expanded','true');
-          }
+          items.forEach(closeItem);
+          if (!isOpen) openItem(item);
         });
       });
     })();
