@@ -2,12 +2,12 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-08 (Phase 109 — Workflow Composer Delegation for HTML/CSS/Web; design system rules extracted to `frontend/docs-html-design-workflow.yaml`; author design preferences codified) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-08 (Phase 109.1 — 3 new UI/UX knowledge YAMLs synthesised from authoritative online sources; WCAG 2.2 delta wired; motion/animation + content writing standards auto-synthesised before any content creation) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 13 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 **Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
-**Knowledge Base:** `docs/.content/knowledge/` (6 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards)
+**Knowledge Base:** `docs/.content/knowledge/` (9 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards, **motion_ux_standards**, **wcag22_delta_checklist**, **content_writing_standards**)
 **Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
 
 ---
@@ -36,7 +36,92 @@ scope: non-production-admin
 
 ---
 
-## 🔄 Default Behavior — Autonomous Discovery & Synchronization
+## � Knowledge Pre-Flight — MANDATORY Before ANY Content Creation
+
+**This section is the single most important rule in this prompt.**
+
+Before creating or updating **any** HTML file, `.md` file, diagram, or visual asset in `docs/`, the Documentation Orchestrator MUST silently synthesise all 9 knowledge YAMLs from `docs/.content/knowledge/`. The user should **never** need to reference these files — synthesis is automatic.
+
+### Knowledge Synthesis Order (run sequentially on every invocation)
+
+| # | YAML | Synthesises Into | Enforced By |
+|---|------|-----------------|-------------|
+| 1 | `design_system.yaml` | Color tokens, typography, ISSA spacing, glass identity | `design-system-enforcer` |
+| 2 | `doc_best_practices.yaml` | IA, navigation hierarchy, CSS architecture, progressive disclosure | `html-view-designer` |
+| 3 | `components.yaml` | Semantic HTML elements, ARIA roles, DOM hook IDs | `html-view-designer` |
+| 4 | `a11y_checklist.yaml` | WCAG 2.1 AA checks — all P0/P1 items | `a11y-perf-guardian` |
+| 5 | `wcag22_delta_checklist.yaml` | **9 new WCAG 2.2 criteria** (delta from 2.1) — focus not obscured, target size, consistent help, redundant entry, accessible auth | `a11y-perf-guardian` |
+| 6 | `performance_checklist.yaml` | Core Web Vitals (LCP, INP, CLS), lazy loading, render-blocking guards | `a11y-perf-guardian` |
+| 7 | `motion_ux_standards.yaml` | **Animation/motion governance** — vestibular risk classification, `prefers-reduced-motion` contracts, animation performance rules, glassmorphism motion identity | `design-system-enforcer`, `html-view-designer` |
+| 8 | `content_writing_standards.yaml` | **UX copy rules** — active voice, progressive disclosure, inclusive language, SEO/meta standards, error state formula, heading standards | `html-view-designer`, `doc-sync-agent` |
+| 9 | `visualization_standards.yaml` | D3.js v7 sole engine, diagram type→D3 map, SVG font floors, glassmorphism colour harmony | `diagram-regeneration-agent` |
+
+### What Each New YAML Enforces (Phase 109.1 additions)
+
+#### `motion_ux_standards.yaml` — Apply to ALL HTML with animations/transitions
+
+Synthesise these rules automatically — do NOT wait for the user to mention motion:
+
+- **Vestibular disorder gate (P0):** Any high-risk pattern (parallax, large zoom, spin > 90°, auto-play video > 5s) MUST be wrapped in `@media (prefers-reduced-motion: no-preference)`. Stripping motion on `reduce` is not sufficient — the preferred pattern is opt-in (animate only for `no-preference` users).
+- **Flash seizure gate (P0):** No element may flash > 3 times/second (WCAG 2.3.1). Applies to all CSS animations, JS transitions, and D3 transitions.
+- **Composited-only rule (P1):** Animations MUST use only `transform` and `opacity`. Animating `width`, `height`, `top`, `left`, `margin`, `padding`, or `background-color` causes layout thrash → P1 FLAG.
+- **`will-change` policy:** Declare `will-change: transform` ONLY on elements with confirmed 60fps animation requirements. Blanket `will-change` on static elements is a P1 violation.
+- **Glassmorphism motion identity (CORTEX):** All durations must follow the scale: micro=100ms, fast=150ms, base=200ms, moderate=300ms, slow=400ms, cinematic=500ms. Easings: `cubic-bezier(0.4, 0, 0.2, 1)` (standard), `cubic-bezier(0, 0, 0.2, 1)` (decelerate), `cubic-bezier(0.4, 0, 1, 1)` (accelerate). `backdrop-filter` is the most expensive property in the glassmorphism stack — never animate it.
+- **CORTEX-specific checklist (run on every HTML change):**
+  - [ ] `glass-animations.css`: all keyframe blocks wrapped in `@media (prefers-reduced-motion: no-preference)`
+  - [ ] Tab transitions (role views): `transition: opacity 0.15s ease` only — no transform animations on tab switch
+  - [ ] Hero gradient animation: confirm `will-change: background-position` removed; replace with `transform` on a pseudo-element
+  - [ ] D3.js renders: all `.transition().duration()` calls preceded by `if (!prefersReducedMotion)` guard
+  - [ ] Scroll reveal observers: `IntersectionObserver` callbacks must check `window.matchMedia('(prefers-reduced-motion: reduce)').matches` before adding animation classes
+
+#### `wcag22_delta_checklist.yaml` — Apply to ALL HTML (WCAG 2.2 is current standard)
+
+Nine new success criteria. The two P1-severity items for CORTEX docs are:
+
+- **SC 2.4.11 Focus Not Obscured (AA — P1):** Sticky `.main-nav` must not entirely cover a focused element. Fix: add `scroll-margin-top: calc(var(--nav-height, 60px) + 8px)` to `:focus` in every HTML file with a sticky nav.
+- **SC 2.5.8 Target Size Minimum (AA — P1):** Icon-only links and small interactive elements must have a minimum 24×24px touch target (AA) or 44×44px (AAA preferred). Apply `min-width: 24px; min-height: 24px` to all icon anchors. Icon pills and Lucide icon wraps must be `w-8 h-8` minimum on mobile.
+- **SC 4.1.1 Parsing REMOVED:** Remove any 4.1.1 checks from content — this criterion no longer exists in WCAG 2.2.
+- **SC 3.2.6 Consistent Help (A):** If a help mechanism (contact link, support link) appears on multiple pages, it must appear in the same relative position. Verify `getting-started.html` and role pages have consistent footer help links.
+- **SC 3.3.7 Redundant Entry (A):** Do not ask users for the same information twice in a single session/form interaction.
+
+#### `content_writing_standards.yaml` — Apply to ALL content (HTML sections, `.md` files, card copy, headings)
+
+Writing standards synthesise automatically before any copy is written or edited:
+
+- **Active voice:** Subject performs action. If "by zombies" works after the verb → passive → rewrite. Before every card description, heading, or paragraph is written, verify it follows active construction.
+- **Present tense:** "The command starts the server" not "The command will start the server."
+- **Second person:** Address the reader as "you" — never "the user" or "developers."
+- **Qualified language (mandatory):** Use "designed to", "has potential", "engineered to" — never absolute claims ("guarantees", "eliminates"). Unqualified absolutes are a P1 violation.
+- **Progressive disclosure page structure:** Level 1 = What (headline + 1-sentence outcome). Level 2 = Why (business/engineering rationale). Level 3 = How (step-by-step detail). Level 4 = Reference (exhaustive tables). Level 5 = Deep dive (architecture detail for experts). Never lead with Level 4/5.
+- **SEO/meta standards (apply to every HTML page):**
+  - `<title>` must follow: `{Page Topic} | CORTEX` (max 60 chars)
+  - `<meta name="description">` max 155 chars — active voice, includes primary keyword
+  - `<meta property="og:title">` and `<meta property="og:description">` must be present
+  - `<link rel="canonical">` must point to the authoritative URL
+  - `<meta name="robots" content="index, follow">` on all public pages
+- **Heading copy standards:** H1 = outcome-led ("Build Governed AI at Scale"), not tool-led ("CORTEX Documentation"). H2 = active verb phrase or noun phrase. H3 = scannable, parallelism with sibling H3s.
+- **Inclusive language rules:** "allowlist/denylist" not "whitelist/blacklist". "Disable/enable" not "kill/master". Avoid ableist terms ("blind to the problem", "sanity check" → "verify"). Gender-neutral pronouns.
+- **Error state formula:** `[What happened] + [Why] + [How to fix]`. Example: "Authentication failed. The session token expired. Sign in again to continue."
+- **Link text:** Descriptive — never "click here" or "learn more" alone. "Read the CORTEX architecture guide" not "click here".
+
+### Pre-Flight Gate (enforced before any HTML/MD/diagram output)
+
+Before emitting ANY content, run this 5-point internal checklist:
+
+```
+PRE-FLIGHT KNOWLEDGE GATE (silent — not shown to user):
+□ 1. MOTION  — Have I checked all animations against motion_ux_standards.yaml? Are all high-risk patterns wrapped in prefers-reduced-motion?
+□ 2. WCAG 2.2 — Have I applied wcag22_delta_checklist.yaml? Is scroll-margin-top applied for sticky nav? Are touch targets ≥ 24px?
+□ 3. COPY    — Have I applied content_writing_standards.yaml? Active voice? Present tense? Qualified language? Progressive disclosure?
+□ 4. SEO     — Does every new/edited HTML page have <title>, <meta description>, og: tags, and <link rel="canonical">?
+□ 5. A11Y    — Have I applied both a11y_checklist.yaml (WCAG 2.1) AND wcag22_delta_checklist.yaml (WCAG 2.2 delta)?
+```
+
+If any checkbox fails → fix before emitting output. Do not rely on downstream agents to catch knowledge-gate failures.
+
+---
+
+## �🔄 Default Behavior — Autonomous Discovery & Synchronization
 
 When invoked **without an explicit user request**, this prompt executes a full documentation discovery and synchronization cycle automatically:
 
@@ -238,7 +323,7 @@ WorkflowComposer → frontend/docs-html-design-workflow.yaml
 
 **SSOT:** `docs/.content/knowledge/visualization_standards.yaml`
 **Library:** D3.js v7 — sole visualization engine (no additional libraries)
-**Knowledge Base:** `docs/.content/knowledge/` (6 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards)
+**Knowledge Base:** `docs/.content/knowledge/` (9 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards, motion_ux_standards, wcag22_delta_checklist, content_writing_standards)
 
 ### Library Policy (IMMUTABLE)
 
@@ -448,6 +533,53 @@ WorkflowComposer → frontend/docs-html-design-workflow.yaml
 - ✅ Colour MUST NOT be the only means of conveying information (use pattern fills or labels)
 - ❌ NEVER rely on hover-only information — provide static fallback text
 - ❌ NEVER use `<img src="diagram.svg">` for D3.js diagrams — inline SVG required for a11y
+
+#### D3.js Motion & Animation Standards (MANDATORY — synthesised from `motion_ux_standards.yaml`)
+
+All D3.js transitions and animations MUST comply with motion safety rules. Apply **automatically** — do not wait for the user to mention animation.
+
+```javascript
+// CORTEX D3.js Motion Safety Pattern (canonical — applies to all diagrams)
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Gate ALL D3 transitions behind this check
+function safeTransition(selection, duration = 200) {
+  return prefersReducedMotion
+    ? selection  // instant — no animation
+    : selection.transition().duration(duration).ease(d3.easeCubicInOut);
+}
+
+// Usage in any D3 diagram:
+safeTransition(nodes.enter(), 300)
+  .attr('opacity', 1)
+  .attr('transform', d => `translate(${d.x},${d.y})`);
+
+// NEVER animate these properties (layout thrash — P1 violation):
+// width, height, x, y (on non-transform), fill, stroke (use opacity instead)
+
+// ALWAYS animate only:
+// opacity, transform (translate/scale/rotate)
+```
+
+**D3 Transition Duration Map (CORTEX glassmorphism identity):**
+
+| Animation Context | Duration | Easing | Rationale |
+|-------------------|----------|--------|-----------|
+| Node hover | `150ms` | `d3.easeQuadOut` | Fast response, glassmorphism micro |
+| Node enter (force layout) | `300ms` | `d3.easeCubicInOut` | Smooth appearance |
+| Zoom/pan | `200ms` | `d3.easeQuadInOut` | Fluid navigation |
+| Tooltip show | `100ms` | `d3.easeLinear` | Immediate feedback |
+| Tooltip hide | `150ms` | `d3.easeQuadIn` | Slightly slower disappear |
+| Chart data update | `400ms` | `d3.easeCubicInOut` | Deliberate data change |
+| Filter toggle | `200ms` | `d3.easeQuadInOut` | Responsive filter |
+
+**Diagram Caption Copy Standards (synthesised from `content_writing_standards.yaml`):**
+
+Every `<figcaption>` MUST follow active voice + present tense:
+- ✅ `"The LENS pipeline analyzes requests through four intelligence tiers."`
+- ❌ `"This diagram shows the LENS pipeline which is used to analyze requests."`
+- ✅ `"Fifteen orchestrator domains process 29 intent types in parallel."`
+- ❌ `"Shown above are the 15 orchestrator domains and their intent routing."`
 
 #### D3.js Glassmorphism Integration Standards
 

@@ -4,12 +4,12 @@ scope: non-production-admin
 # Design System Enforcer Agent
 
 **Agent ID:** `design-system-enforcer`
-**Updated:** 2026-03-08
+**Updated:** 2026-03-08 (Phase 109.1 — motion_ux_standards.yaml wired as Check 12 — animation token validation)
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
-**Responsibility:** Validate that all CSS values in proposed HTML/CSS changes reference tokens from `glass-design-tokens.css`; enforce theme integrity and CSS layer assignment
-**Inputs:** Proposed CSS changes, design_system.yaml, glass-design-tokens.css
+**Responsibility:** Validate that all CSS values in proposed HTML/CSS changes reference tokens from `glass-design-tokens.css`; enforce theme integrity, CSS layer assignment, and motion animation compliance
+**Inputs:** Proposed CSS changes, design_system.yaml, motion_ux_standards.yaml, glass-design-tokens.css
 **Outputs:** Token validation report (P0 block on violation); CSS layer assignment
 
 ---
@@ -332,6 +332,98 @@ Implementation blocked until this is resolved.
 - ❌ Never approve `backdrop-filter: blur(Xpx)` with raw pixel not matching a token tier
 - ✅ Always provide the exact fix alongside every violation report
 - ✅ Light-touch on P2 — do not block for minor stylistic preferences
+
+---
+
+## 🎬 Check 12 — Motion & Animation Token Validation (P1 Gate — from `motion_ux_standards.yaml`)
+
+**Authority:** `docs/.content/knowledge/motion_ux_standards.yaml`
+
+All animation and transition values in proposed CSS MUST comply with the CORTEX glassmorphism motion identity. Run this check on every `transition:`, `animation:`, `@keyframes`, and `will-change` rule in the changeset.
+
+### Approved Duration Scale (CORTEX canonical — check every `duration` value)
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--duration-micro` | `100ms` | Tooltip show/hide, icon hover |
+| `--duration-fast` | `150ms` | Tab switch, badge hover |
+| `--duration-base` | `200ms` | Card hover, zoom controls |
+| `--duration-moderate` | `300ms` | Node enter, panel reveal |
+| `--duration-slow` | `400ms` | Chart data update, page section |
+| `--duration-cinematic` | `500ms` | Full-page transition, hero |
+
+**Violation:** Any `transition-duration` or `animation-duration` not matching the above scale → P1 FLAG with nearest canonical value suggestion.
+
+### Approved Easing Functions
+
+| Function | Tailwind / CSS | Usage |
+|----------|---------------|-------|
+| Standard | `cubic-bezier(0.4, 0, 0.2, 1)` | Default interactive hover |
+| Decelerate (ease-out) | `cubic-bezier(0, 0, 0.2, 1)` | Element enters viewport |
+| Accelerate (ease-in) | `cubic-bezier(0.4, 0, 1, 1)` | Element exits viewport |
+| `ease` (Tailwind default) | Acceptable alias | Simple hover transitions |
+
+**Violation:** Raw `linear` easing on anything except loading spinners → P1 FLAG.
+
+### Composited-Only Rule (P1 — from `motion_ux_standards.yaml`)
+
+Only `transform` and `opacity` may be animated. Any other CSS property in a `transition:` or `animation:` → P1 FLAG.
+
+```
+# P1 violations (non-composited animation properties):
+transition: width ...           → FLAG
+transition: height ...          → FLAG
+transition: background-color ... → FLAG (use opacity layers instead)
+transition: top/left/right/bottom → FLAG (use transform: translate instead)
+transition: margin/padding ...  → FLAG
+transition: border-width ...    → FLAG
+
+# Approved:
+transition: opacity 200ms ease
+transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1)
+transition: opacity 150ms ease, transform 150ms ease  ✅
+```
+
+### `will-change` Policy (P1)
+
+`will-change` is approved ONLY on elements with confirmed 60fps animation. Blanket declarations on static containers → P1 FLAG with `will-change: auto` correction.
+
+```
+# P1 violations:
+will-change: transform  (on a static card with no animation) → FLAG
+will-change: opacity    (on a section heading) → FLAG
+
+# Approved:
+will-change: transform  (on a card with confirmed :hover animation)
+will-change: opacity    (on a tooltip/overlay that animate in/out)
+```
+
+### `backdrop-filter` Animation (P0 — NEVER animate)
+
+`backdrop-filter` is the most expensive property in the glassmorphism stack. It MUST NEVER be animated.
+
+```
+# P0 BLOCK — immediately block and fix:
+transition: backdrop-filter ...  → P0 BLOCK
+animation: { backdrop-filter: ... }  → P0 BLOCK
+
+# Correct pattern (animate opacity of an overlay instead):
+transition: opacity 200ms ease  ✅ (on an overlay div that sits over the glass element)
+```
+
+### `prefers-reduced-motion` Guard Check (P1)
+
+Every `@keyframes` block and every `transition:` on non-trivial (> 100ms) animations MUST be wrapped in or contingent on `@media (prefers-reduced-motion: no-preference)`. If unguarded → P1 FLAG with the canonical wrapping pattern.
+
+```css
+/* Canonical guard — preferred opt-in pattern */
+@media (prefers-reduced-motion: no-preference) {
+  .animated-card {
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 200ms ease;
+  }
+}
+```
 
 ---
 

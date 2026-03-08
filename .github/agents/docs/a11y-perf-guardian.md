@@ -4,12 +4,12 @@ scope: non-production-admin
 # A11y + Perf Guardian Agent
 
 **Agent ID:** `a11y-perf-guardian`
-**Updated:** 2026-03-08
+**Updated:** 2026-03-08 (Phase 109.1 — WCAG 2.2 delta wired; motion_ux_standards added as P0 gate; SEO meta standards from content_writing_standards wired)
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
-**Responsibility:** Run WCAG 2.1 Level AA accessibility checks and performance regression detection against any HTML/CSS change before it is accepted
-**Inputs:** Proposed HTML/CSS changes, a11y_checklist.yaml, performance_checklist.yaml
+**Responsibility:** Run WCAG 2.2 Level AA accessibility checks (2.1 + delta), motion safety checks, and performance regression detection against any HTML/CSS change before it is accepted
+**Inputs:** Proposed HTML/CSS changes, a11y_checklist.yaml, wcag22_delta_checklist.yaml, motion_ux_standards.yaml, content_writing_standards.yaml, performance_checklist.yaml
 **Outputs:** Gate verdict (PASS / P0 BLOCK / P1 FLAG) with actionable fixes
 
 ---
@@ -26,8 +26,11 @@ Be the **accessibility and performance quality gate** in the Design + Implement 
 |-------|--------|----------|
 | **Proposed HTML changes** | `html-view-designer` output | ✅ |
 | **Proposed CSS changes** | `doc-sync-agent` CSS output | ✅ |
-| **A11y checklist** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **A11y checklist (WCAG 2.1)** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **A11y delta (WCAG 2.2)** | `docs/.content/knowledge/wcag22_delta_checklist.yaml` | ✅ |
+| **Motion/animation standards** | `docs/.content/knowledge/motion_ux_standards.yaml` | ✅ |
 | **Performance checklist** | `docs/.content/knowledge/performance_checklist.yaml` | ✅ |
+| **Content writing standards** | `docs/.content/knowledge/content_writing_standards.yaml` | ✅ (SEO meta gate only) |
 
 ---
 
@@ -44,7 +47,8 @@ Be the **accessibility and performance quality gate** in the Design + Implement 
 
 ## 🔄 A11y Check Protocol
 
-Run all checks from `a11y_checklist.yaml`. Priority order:
+**Authority:** WCAG 2.2 AA (= WCAG 2.1 AA from `a11y_checklist.yaml` + 9 new criteria from `wcag22_delta_checklist.yaml`)
+Run all checks in order. Priority order:
 
 ### P0 Checks (block if ANY fails)
 
@@ -64,6 +68,9 @@ Run all checks from `a11y_checklist.yaml`. Priority order:
 | **a11y-043** | **Icons proportional to adjacent title text** | `w-4 h-4` icons next to `text-xl+` titles = violation |
 | **a11y-044** | **`-webkit-background-clip: text` paired with `background-clip: text`** | `grep 'webkit-background-clip' | grep -v 'background-clip: text'` in same rule |
 | css-001 | Inline `style=` attributes — informational count (RELAXED — no longer blocks) | `grep 'style='` |
+| **motion-001** | **WCAG 2.3.1 / motion_ux_standards: Flash rate** — no element flashes > 3/sec | Check CSS `animation-duration < 333ms` with `infinite` iteration — immediate P0 BLOCK |
+| **motion-002** | **prefers-reduced-motion compliance** — all high-risk animations (parallax, large zoom, spin > 90°) guarded | `grep -n 'animation:\|@keyframes' | grep -v 'prefers-reduced-motion'` → flag unguarded |
+| **meta-001** | **SEO meta completeness** (`content_writing_standards.yaml`) — `<title>`, `<meta name="description">`, `og:title`, `og:description`, `<link rel="canonical">` present in every HTML file being edited | `grep -c 'og:title'` must be ≥ 1 |
 
 ### P1 Checks (flag, do not block)
 
@@ -76,6 +83,12 @@ Run all checks from `a11y_checklist.yaml`. Priority order:
 | a11y-014 | Focus-visible outline present |
 | a11y-015 | aria-label contains visible text substring |
 | a11y-021 | No context change on focus |
+| **wcag22-2.4.11** | **Focus Not Obscured** — sticky nav/footer must not entirely cover focused element; apply `scroll-margin-top: calc(var(--nav-height, 60px) + 8px)` to `:focus` | Tab through with sticky nav; verify partially visible |
+| **wcag22-2.5.8** | **Target Size Minimum** — interactive elements ≥ 24×24px touch target; icon-only links and Lucide icon wraps must be `w-8 h-8` minimum | `grep -E 'class=".*w-4 h-4.*"' | grep 'a href\|button'` |
+| **wcag22-3.2.6** | **Consistent Help** — footer help/support links in same relative position across all role pages | Cross-check footer between `roles/*.html` pages |
+| **wcag22-3.3.7** | **Redundant Entry** — forms/interactions do not ask for same info twice in one session | Check any multi-step interactions |
+| **motion-003** | **Composited-only animation** — no animation on `width`, `height`, `top`, `left`, `background-color`, `margin`, `padding` | `grep -E 'transition:.*width\|transition:.*height\|animation:.*padding'` |
+| **motion-004** | **will-change policy** — `will-change` declared only on confirmed 60fps animation elements, not static elements | `grep 'will-change'` → flag any on non-animated containers |
 | perf-003 | Below-fold images have `loading='lazy'` |
 | perf-010 | No new CSS `@import` chains |
 | perf-012 | No layout-triggering animation properties |

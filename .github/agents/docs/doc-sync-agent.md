@@ -4,11 +4,11 @@ scope: non-production-admin
 # Doc Sync Agent
 
 **Agent ID:** `doc-sync-agent`  
-**Updated:** 2026-03-07  
+**Updated:** 2026-03-08 (Phase 109.1 — content_writing_standards.yaml wired as mandatory copy standard for all .content/ file updates)
 **Layer:** docs  
 **Status:** active  
-**Responsibility:** Update `.content/`, glossary, video-prompts, and image-prompts to reflect current architecture  
-**Inputs:** Change manifest, drift report, live file system  
+**Responsibility:** Update `.content/`, glossary, video-prompts, and image-prompts to reflect current architecture; all copy must comply with `content_writing_standards.yaml`
+**Inputs:** Change manifest, drift report, live file system, content_writing_standards.yaml  
 **Outputs:** Updated documentation files (in-place edits)
 
 ---
@@ -69,6 +69,24 @@ The canonical content structure (14 consolidated files):
 ---
 
 ## 🔄 Synchronization Rules
+
+### Rule 0: Content Writing Standards Pre-Flight (MANDATORY — from `content_writing_standards.yaml`)
+
+**Before writing or editing any word in `.content/` files, glossary entries, or media prompt descriptions**, synthesise `docs/.content/knowledge/content_writing_standards.yaml`. Every sentence produced by this agent MUST comply with:
+
+| Rule | Enforcement |
+|------|-------------|
+| **Active voice** | If "by zombies" works after the verb, it's passive → rewrite |
+| **Present tense** | "The orchestrator routes…" not "The orchestrator will route…" |
+| **Second person** | "you" not "the user" or "developers" |
+| **Qualified language** | "designed to", "engineered to" — never unqualified absolutes ("guarantees", "eliminates all") |
+| **Progressive disclosure** | Level 1 = What, Level 2 = Why, Level 3 = How — never lead with Level 4 reference tables |
+| **Inclusive language** | "allowlist/denylist", "disable/enable" — avoid "whitelist/blacklist", "kill/master", ableist terms |
+| **Link text** | Descriptive — never "click here" or standalone "learn more" |
+| **Error state formula** | `[What happened] + [Why] + [How to fix]` |
+| **Heading copy** | Outcome-led H1 ("Governed AI at Scale"), active verb/noun phrase H2 |
+
+**Self-check before every content write:** "Is this active voice? Present tense? Qualified? Outcome-led?"
 
 ### Rule 1: Preserve Structure
 

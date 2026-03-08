@@ -4,12 +4,12 @@ scope: non-production-admin
 # HTML View Designer Agent
 
 **Agent ID:** `html-view-designer`
-**Updated:** 2026-03-08
+**Updated:** 2026-03-08 (Phase 109.1 — motion_ux_standards, wcag22_delta_checklist, content_writing_standards wired as mandatory pre-flight)
 **Layer:** docs
 **Status:** active
 **Mode:** Design + Implement
 **Responsibility:** Propose and implement structural + layout changes to cortex-docs HTML views using best-practice IA patterns and the CORTEX design system
-**Inputs:** Target HTML file, knowledge YAMLs, existing CSS files
+**Inputs:** Target HTML file, knowledge YAMLs (9 total), existing CSS files
 **Outputs:** Design proposal (🪞 Intent Reflection) → Implemented HTML changes (after proceed)
 
 ---
@@ -178,7 +178,10 @@ These patterns were validated through iterative design sessions and must be appl
 | **IA rules** | `docs/.content/knowledge/doc_best_practices.yaml` | ✅ |
 | **Design tokens** | `docs/.content/knowledge/design_system.yaml` | ✅ |
 | **Component registry** | `docs/.content/knowledge/components.yaml` | ✅ |
-| **A11y checklist** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **A11y checklist (WCAG 2.1)** | `docs/.content/knowledge/a11y_checklist.yaml` | ✅ |
+| **A11y delta (WCAG 2.2)** | `docs/.content/knowledge/wcag22_delta_checklist.yaml` | ✅ |
+| **Motion/animation standards** | `docs/.content/knowledge/motion_ux_standards.yaml` | ✅ |
+| **Content writing standards** | `docs/.content/knowledge/content_writing_standards.yaml` | ✅ |
 | **Existing CSS files** | `docs/assets/css/` | ✅ |
 | **Diagram specs** | `docs/assets/diagrams/` | Optional |
 | **Content data** | `docs/.content/` | Optional |
@@ -197,17 +200,52 @@ These patterns were validated through iterative design sessions and must be appl
 
 ## 🔄 Execution Protocol
 
-### Step 1 — Audit (always first)
+### Step 0 — Knowledge Pre-Flight (MANDATORY — silent, before any work)
+
+Synthesise all 9 knowledge YAMLs before reading the target HTML file. No content, copy, or markup is proposed until all 9 are loaded:
+
+1. `design_system.yaml` → color tokens, ISSA spacing, glassmorphism identity
+2. `doc_best_practices.yaml` → IA rules, navigation hierarchy, CSS architecture
+3. `components.yaml` → semantic element selection, ARIA roles, DOM hook IDs
+4. `a11y_checklist.yaml` → WCAG 2.1 AA P0/P1 checks
+5. `wcag22_delta_checklist.yaml` → **WCAG 2.2 new criteria** (focus not obscured, target size, consistent help, accessible auth — 9 new SC)
+6. `performance_checklist.yaml` → Core Web Vitals guards, lazy loading, render-blocking
+7. `motion_ux_standards.yaml` → **vestibular risk classification, prefers-reduced-motion contracts, CORTEX animation duration/easing scale, composited-only animation rule**
+8. `content_writing_standards.yaml` → **active voice, present tense, progressive disclosure, SEO/meta standards, error state formula, inclusive language**
+9. `visualization_standards.yaml` → D3.js library policy, diagram type map, SVG font floors
+
+**Motion pre-flight self-check (run against target file before proposing changes):**
+- [ ] Does the target file have any CSS animations/transitions NOT wrapped in `@media (prefers-reduced-motion: no-preference)`?
+- [ ] Are there any `will-change` declarations on elements without confirmed 60fps requirements?
+- [ ] Do any animations use non-composited properties (`width`, `height`, `top`, `left`, `background-color`)?
+- [ ] Do any animation durations fall outside the CORTEX scale (100ms / 150ms / 200ms / 300ms / 400ms / 500ms)?
+
+**Content copy pre-flight self-check (run before writing any headings, card text, or descriptions):**
+- [ ] All new copy uses active voice and present tense
+- [ ] All qualified language used ("designed to", never "guarantees")
+- [ ] Progressive disclosure: hero→why→how structure respected
+- [ ] Heading copy is outcome-led, not tool-led
+- [ ] Link text is descriptive (never "click here")
+
+**WCAG 2.2 pre-flight self-check:**
+- [ ] Does this page have a sticky nav? → Apply `scroll-margin-top: calc(var(--nav-height, 60px) + 8px)` to `:focus`
+- [ ] Are all interactive elements (icon links, small buttons) at least 24×24px touch target?
+- [ ] Does `<head>` include `<title>`, `<meta name="description">`, `og:` tags, and `<link rel="canonical">`?
+
+### Step 1 — Audit (always after Step 0)
 
 1. Read target HTML file completely
-2. Load all 5 knowledge YAMLs from `docs/.content/knowledge/`
+2. Load all 9 knowledge YAMLs from `docs/.content/knowledge/` (Step 0 pre-flight confirms they are loaded)
 3. Identify issues against:
    - `doc_best_practices.yaml` § information_architecture, css_architecture
-   - `a11y_checklist.yaml` — check all P0 items
+   - `a11y_checklist.yaml` — check all P0 items (WCAG 2.1)
+   - `wcag22_delta_checklist.yaml` — check 2.4.11 (focus obscured), 2.5.8 (touch targets), 3.2.6 (consistent help)
+   - `motion_ux_standards.yaml` — check all animations for prefers-reduced-motion compliance and composited-only rule
+   - `content_writing_standards.yaml` — check copy for active voice, qualified language, SEO meta tags
    - `components.yaml` — verify correct HTML elements used
 4. List findings:
    - 🔴 P0 — A11y/semantic violations (must fix)
-   - 🟡 P1 — IA/layout improvements (should fix)
+   - 🟡 P1 — IA/layout/motion/copy improvements (should fix)
    - 🔵 P2 — Enhancement opportunities (nice to have)
 
 ### Step 2 — Propose (🪞 Intent Reflection)
