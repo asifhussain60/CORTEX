@@ -1398,15 +1398,15 @@
 
   /* ── Section scaffold ── */
   #cortex-mission {
-    padding: 5rem 0 5rem;
+    padding: 5rem 0 3rem;  /* reduce bottom — next section has its own top padding */
     position: relative;
     overflow: hidden;
   }
   @media (max-width: 768px) {
-    #cortex-mission { padding: 3.5rem 0 3.5rem; }
+    #cortex-mission { padding: 3.5rem 0 2.5rem; }
   }
   @media (max-width: 480px) {
-    #cortex-mission { padding: 2.5rem 0 2.5rem; }
+    #cortex-mission { padding: 2.5rem 0 2rem; }
   }
 
   /* Ambient glow orbs — matching reference design */
@@ -1440,7 +1440,7 @@
     position: relative; z-index: 1;
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 5rem;   /* desktop: doubled from 2.5rem */
+    padding: 0 3rem;   /* desktop: comfortable but not excessive */
   }
   @media (max-width: 768px) {
     #cortex-mission .mission-inner { padding: 0 1.5rem; }
@@ -1503,7 +1503,7 @@
   /* ── Header lives inside the outer wrap ── */
   .mission-header-inner {
     text-align: center;
-    padding: 3.5rem 8rem 3rem;   /* desktop: horizontal doubled from 4rem */
+    padding: 3.5rem 5rem 3rem;   /* desktop: generous but proportionate */
   }
   @media (max-width: 768px) {
     .mission-header-inner { padding: 2.75rem 2.5rem 2.5rem; }
@@ -1623,7 +1623,7 @@
   ══════════════════════════════════════════════════ */
   .macc-list {
     list-style: none; margin: 0;
-    padding: 1.25rem 3rem;   /* desktop: horizontal doubled from 1.5rem */
+    padding: 1.25rem 2rem 1.5rem;   /* desktop: balanced horizontal breathing room */
     display: flex; flex-direction: column; gap: 0.75rem;
   }
   @media (max-width: 768px) {
@@ -1785,13 +1785,12 @@
   .macc__headline {
     font-family: var(--font-family-heading, 'Space Grotesk', sans-serif);
     font-size: clamp(1rem, 1.6vw + 0.25rem, 1.25rem);
-    font-weight: 700; color: rgba(255,255,255,0.9); line-height: 1.25;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-weight: 700; color: rgba(255,255,255,0.9); line-height: 1.3;
+    white-space: normal; overflow: visible; /* allow wrap — never truncate titles */
     transition: color 0.3s ease;
   }
   @media (max-width: 480px) {
-    /* Allow wrap on very narrow screens so titles don't truncate */
-    .macc__headline { white-space: normal; font-size: 0.9375rem; }
+    .macc__headline { font-size: 0.9375rem; }
     .macc__subtitle { white-space: normal; }
   }
   .macc.is-open .macc__headline { color: #fff; }
@@ -1799,7 +1798,7 @@
   /* Subtitle — visible below headline in closed state (reference design) */
   .macc__subtitle {
     font-size: 0.875rem; color: rgba(148,163,184,0.55); line-height: 1.4;
-    margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-top: 0.2rem; white-space: normal; overflow: visible;
     transition: color 0.3s ease;
   }
   .macc:hover .macc__subtitle,
@@ -2016,11 +2015,9 @@
     color: #e879f9; background: rgba(232,121,249,0.07); border: 1px solid rgba(232,121,249,0.2);
   }
 
-  /* ── Section divider ── */
+  /* ── Section divider — hidden, gap handled by section padding alone ── */
   .mission-divider {
-    height: 1px; border: none; margin-top: 3rem;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 30%,
-      rgba(0,212,255,0.12) 50%, rgba(255,255,255,0.07) 70%, transparent 100%);
+    display: none;
   }
 
   /* ── Reduced motion ── */
@@ -2562,7 +2559,7 @@
     </script>
 
     <!-- What is CORTEX? — unified intro + role video showcase -->
-    <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading">
+    <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading" style="padding-top: 2rem;">
         <div style="
             background: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(15,23,42,0.65) 100%);
             border: 1px solid rgba(255,255,255,0.08);
