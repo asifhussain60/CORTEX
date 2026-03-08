@@ -22,15 +22,23 @@ The difference is like a calculator versus a brain. A calculator waits for instr
 
 ---
 
+## A Framework That Runs Itself
+
+CORTEX is architecturally self-sustaining. It does not require a dedicated platform team to operate, tune, or maintain. Governance rules self-enforce. The learning engine updates itself from outcomes. New orchestrators plug in via a defined protocol without touching any existing code. Teams extend CORTEX with their own domain expertise — adding orchestrators, agents, and workflow templates — and the framework absorbs those additions, routes them correctly, and governs them automatically. There is no upgrade cycle to manage. No configuration drift to resolve. No vendor to call. CORTEX keeps itself current.
+
+This means organisations carry no maintenance overhead for the framework itself — only the value it delivers.
+
+---
+
 ## What CORTEX Does for Each Role
 
-**For Business Leadership** — CORTEX eliminates the invisible cost of ungoverned AI. Every decision is recorded. Every quality gate is enforced automatically. Delivery metrics, compliance evidence, and audit trails are available on demand — without asking developers to produce reports.
+**For Business Leadership** — CORTEX removes the cost of governing AI without adding an operational burden. Quality gates enforce themselves. Compliance evidence accumulates automatically. Delivery metrics are available on demand — no developer time spent producing reports. And because CORTEX is self-managing, there is no platform team required to keep it healthy.
 
-**For Product Owners** — CORTEX connects intent to delivery. Requirements flow into structured execution plans, work items stay synchronised with your ticketing system (Azure DevOps, Jira, or custom providers), and every feature ships with documented evidence that it was tested, reviewed, and governance-validated before reaching production.
+**For Product Owners** — CORTEX connects intent to traceable delivery. Requirements flow into structured execution plans. Work items stay synchronised automatically. Every feature ships with documented evidence that it was tested, reviewed, and governance-validated — with no manual coordination between the product board and the engineering team.
 
-**For Software Engineers** — CORTEX is the senior engineer who never sleeps. It enforces test-driven development on every change, runs automated multi-pass code reviews against security, governance, and style standards, detects security issues before they reach version control, understands the architecture of your specific codebase (not a generic template), and prevents the same mistakes from recurring by building institutional memory. When you disagree with a decision, structured feedback flows back into the learning engine to refine future outcomes.
+**For Software Engineers** — CORTEX is the senior engineer who never sleeps and never leaves. It enforces test-driven development on every change, runs automated multi-pass code reviews against security, governance, and style standards, detects security issues before they reach version control, and understands the architecture of your specific codebase — not a generic template. Engineers can safely extend it with their own agents and orchestrators. The framework learns from their patterns and applies them consistently across the entire team.
 
-**For Curious Learners** — CORTEX is a living reference for how world-class engineering teams operate. Every capability demonstrates a principle: test-driven development, clean architecture, governance by design, root cause analysis, and continuous improvement.
+**For Curious Learners** — CORTEX is a living reference for how world-class engineering teams operate. Every capability demonstrates a principle: test-driven development, clean architecture, governance by design, root cause analysis, and continuous improvement. It is a production system, not a tutorial — and it teaches by example.
 
 ---
 
@@ -124,6 +132,24 @@ The principle is not chosen at random. CORTEX reads the intent behind each reque
 This appears as a formatted callout at the top of every CORTEX response. For business leaders, it is the visible expression of the framework's philosophy: CORTEX does not just enforce standards — it understands why they exist, and it makes that understanding part of every interaction.
 
 The full library contains 120 quotes across 10 themes, maintained as a single source of truth in `cortex-registry/templates/response/atoms/atom-quote.yaml`. Selection is managed by the Content Library — an EpochShuffler algorithm guarantees every quote is used exactly once before any quote repeats, like a playlist that plays every song before reshuffling. The same books are referenced in CORTEX's governance rule definitions — connecting the framework's enforcement logic directly to the intellectual tradition it is built on.
+
+---
+
+## Zero-Maintenance Architecture — Built to Run Itself
+
+Most platforms require a team to keep them healthy. CORTEX is designed to be the exception.
+
+**Self-governing enforcement** — Governance rules run automatically at pre-commit, build time, and runtime. No team member needs to run audits on a schedule or police standards in pull requests. The framework does it unconditionally, on every operation.
+
+**Self-extending design** — Any team member can add a new orchestrator, agent, or workflow template. CORTEX detects it, routes requests to it, and governs it — without requiring changes to any existing code. Extensibility is an architectural guarantee, not a feature request.
+
+**Self-healing health checks** — 22 health endpoints run on demand. A single `/health` command verifies every orchestrator is wired correctly, every MCP tool is importable, and every governance rule is active. If something is missing, CORTEX identifies it precisely.
+
+**Self-refreshing prompts** — The `refresh_prompt_suite.py` script introspects the live codebase and regenerates all documentation, prompts, and agents to match reality. Documentation never drifts from the code it describes.
+
+**Self-learning from outcomes** — The reinforcement signal engine records every success and failure. Confidence scores update automatically. Prevention rules generate themselves from root cause analyses. The framework improves with every operation — without anyone deciding to improve it.
+
+The practical consequence: once CORTEX is deployed, it requires no dedicated platform engineering capacity to remain current, compliant, or healthy. Teams invest their time in engineering product value — CORTEX manages itself in the background.
 
 ---
 

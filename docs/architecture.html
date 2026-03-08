@@ -56,6 +56,218 @@
         .hero-title { font-family: 'Space Grotesk', sans-serif; }
 
         /* Hero Logo */
+        /* ─── Scroll-to-Top Robot Button ─── */
+        #cortex-robot-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            width: 62px;
+            height: 62px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            padding: 0;
+            opacity: 0;
+            transform: translateY(16px) scale(0.92);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+        }
+        #cortex-robot-top.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        #cortex-robot-top:hover .robot-body-wrap {
+            transform: translateY(-4px);
+        }
+        #cortex-robot-top:active .robot-body-wrap {
+            transform: translateY(0px) scale(0.95);
+        }
+        .robot-body-wrap {
+            transition: transform 0.22s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        /* Glow base */
+        .robot-glow {
+            position: absolute;
+            bottom: -6px; left: 50%;
+            transform: translateX(-50%);
+            width: 44px; height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(123,97,255,0.55) 0%, transparent 70%);
+            filter: blur(4px);
+            transition: width 0.22s ease, opacity 0.22s ease;
+        }
+        #cortex-robot-top:hover .robot-glow {
+            width: 54px;
+            opacity: 1.4;
+        }
+
+        /* Head */
+        .robot-head {
+            width: 38px; height: 28px;
+            background: linear-gradient(160deg, #1e1b4b 0%, #312e81 60%, #1a1040 100%);
+            border: 1.5px solid rgba(123,97,255,0.55);
+            border-radius: 8px 8px 6px 6px;
+            position: relative;
+            box-shadow: 0 0 14px rgba(123,97,255,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        /* Antenna */
+        .robot-head::before {
+            content: '';
+            position: absolute;
+            top: -9px; left: 50%;
+            transform: translateX(-50%);
+            width: 2.5px; height: 9px;
+            background: linear-gradient(to top, rgba(123,97,255,0.7), rgba(167,139,250,0.9));
+            border-radius: 2px;
+        }
+        .robot-head::after {
+            content: '';
+            position: absolute;
+            top: -13px; left: 50%;
+            transform: translateX(-50%);
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #a78bfa 30%, #7b61ff 100%);
+            box-shadow: 0 0 8px rgba(167,139,250,0.9);
+            animation: cortex-pulse 2s ease-in-out infinite;
+        }
+        @keyframes cortex-pulse {
+            0%, 100% { box-shadow: 0 0 6px rgba(167,139,250,0.8); opacity: 1; }
+            50% { box-shadow: 0 0 14px rgba(167,139,250,1), 0 0 20px rgba(123,97,255,0.5); opacity: 0.85; }
+        }
+
+        /* Eyes */
+        .robot-eye {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #00d4ff, #06b6d4 60%, #0e7490);
+            box-shadow: 0 0 6px rgba(0,212,255,0.7), 0 0 12px rgba(0,212,255,0.3);
+            animation: eye-blink 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        .robot-eye:nth-child(2) { animation-delay: 0.12s; }
+        @keyframes eye-blink {
+            0%, 92%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.12); }
+        }
+
+        /* Mouth / scan bar */
+        .robot-mouth {
+            position: absolute;
+            bottom: 5px; left: 50%;
+            transform: translateX(-50%);
+            width: 22px; height: 4px;
+            border-radius: 2px;
+            background: rgba(123,97,255,0.18);
+            border: 1px solid rgba(123,97,255,0.3);
+            overflow: hidden;
+        }
+        .robot-mouth::after {
+            content: '';
+            position: absolute;
+            left: -100%; top: 0;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.8), transparent);
+            animation: scan 2.4s linear infinite;
+        }
+        @keyframes scan {
+            0% { left: -60%; }
+            100% { left: 110%; }
+        }
+
+        /* Body */
+        .robot-body {
+            width: 46px; height: 26px;
+            background: linear-gradient(160deg, #1e1b4b 0%, #1a1040 100%);
+            border: 1.5px solid rgba(123,97,255,0.45);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            position: relative;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 0 1px rgba(123,97,255,0.06) inset;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Chest chevron (up arrow) */
+        .robot-chest-arrow {
+            width: 0; height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 9px solid rgba(123,97,255,0.55);
+            position: relative;
+            filter: drop-shadow(0 0 4px rgba(123,97,255,0.6));
+            animation: chest-throb 1.8s ease-in-out infinite;
+        }
+        .robot-chest-arrow::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: -5px;
+            width: 0; height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 7px solid rgba(167,139,250,0.45);
+        }
+        @keyframes chest-throb {
+            0%, 100% { opacity: 0.75; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-2px); filter: drop-shadow(0 0 8px rgba(123,97,255,0.9)); }
+        }
+
+        /* Body side lights */
+        .robot-body::before, .robot-body::after {
+            content: '';
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16,185,129,0.8);
+            animation: side-blink 3s ease-in-out infinite;
+        }
+        .robot-body::before { left: 6px; }
+        .robot-body::after { right: 6px; animation-delay: 1.5s; }
+        @keyframes side-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* Tooltip */
+        #cortex-robot-top .robot-tooltip {
+            position: absolute;
+            right: 70px; top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10,15,30,0.92);
+            border: 1px solid rgba(123,97,255,0.35);
+            color: rgba(196,181,253,0.95);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        #cortex-robot-top:hover .robot-tooltip {
+            opacity: 1;
+        }
+
         .hero-section-wrapper {
             position: relative; padding-top: 0; margin-bottom: 1.5rem;
             display: flex; flex-direction: column; align-items: center;
@@ -73,6 +285,20 @@
         .hero-robot-head:hover {
             filter: drop-shadow(0 0 50px rgba(123, 97, 255, 0.6));
             transform: scale(1.02);
+        }
+
+        /* ─── Consistent card heights in all grids ─── */
+        /* Grid stretches cell wrappers to full row height by default;
+           propagate that height through the intermediate wrapper div
+           so every glass-card in a multi-column grid row is equal height. */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
         }
 
         .glass-card {
@@ -141,6 +367,83 @@
             justify-content: center; align-items: flex-end;
         }
         .tab-nav-inner::-webkit-scrollbar { display: none; }
+
+        /* ─── Tab Panel Bottom Nav ─── */
+        .tab-panel-nav-bottom {
+            margin-top: 3.5rem;
+            margin-bottom: 2rem;
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(123,97,255,0.06) 0%, rgba(15,23,42,0.6) 100%);
+            border: 1px solid rgba(123, 97, 255, 0.18);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(123,97,255,0.06) inset;
+        }
+        .tab-nav-controls {
+            max-width: 80rem; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1.5rem;
+        }
+        .tab-nav-step {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.85rem 2rem 0.85rem 1.6rem;
+            border-radius: 14px;
+            border: 1px solid rgba(123, 97, 255, 0.28);
+            background: rgba(123, 97, 255, 0.09);
+            color: rgba(196, 181, 253, 0.9);
+            font-size: 1rem; font-weight: 700;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            cursor: pointer; transition: all 0.22s ease;
+            backdrop-filter: blur(8px);
+            white-space: nowrap; user-select: none;
+            min-height: 52px;
+        }
+        .tab-nav-step:hover:not(:disabled) {
+            background: rgba(123, 97, 255, 0.2);
+            border-color: rgba(123, 97, 255, 0.55);
+            color: #c4b5fd;
+            box-shadow: 0 0 24px rgba(123, 97, 255, 0.22);
+            transform: translateY(-1px);
+        }
+        .tab-nav-step:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .tab-nav-step svg { flex-shrink: 0; }
+        .tab-nav-step--prev { padding: 0.85rem 1.6rem 0.85rem 2rem; }
+
+        .tab-nav-center {
+            display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+        }
+        .tab-nav-indicator {
+            display: flex; align-items: center; gap: 0.45rem;
+        }
+        .tab-nav-pip {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(123, 97, 255, 0.22);
+            transition: all 0.28s ease;
+        }
+        .tab-nav-pip.active {
+            width: 28px; border-radius: 4px;
+            background: linear-gradient(90deg, #7b61ff, #a78bfa);
+            box-shadow: 0 0 10px rgba(123, 97, 255, 0.55);
+        }
+        .tab-nav-label {
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.65);
+            white-space: nowrap;
+        }
+        .tab-nav-label strong {
+            color: rgba(196, 181, 253, 0.95);
+            font-weight: 800;
+        }
+        @media (max-width: 600px) {
+            .tab-nav-label { display: none; }
+            .tab-nav-step { padding: 0.85rem 1.2rem; font-size: 0.88rem; }
+            .tab-nav-step--prev { padding: 0.85rem 1.2rem; }
+        }
 
         .tab-btn {
             display: flex; align-items: center; gap: 0.625rem;
@@ -362,6 +665,110 @@
         .code-cmt  { color: #475569; font-style: italic; }
         .code-cls  { color: #facc15; }
 
+        /* ─── Brain Tier Diagrams ─── */
+        .brain-tier-stack { display: flex; flex-direction: column; gap: 0; align-items: stretch; }
+        .brain-tier-row {
+            position: relative;
+            padding: 2rem 2rem;
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .brain-tier-row:first-child { border-radius: 1.25rem 1.25rem 0 0; border-bottom: none; }
+        .brain-tier-row:last-child  { border-radius: 0 0 1.25rem 1.25rem; }
+        .brain-tier-row:not(:first-child):not(:last-child) { border-bottom: none; }
+        .brain-tier-row:hover { z-index: 2; }
+        .brain-tier-row--t1 { background: linear-gradient(135deg, rgba(0,212,255,0.07), rgba(0,212,255,0.03)); }
+        .brain-tier-row--t1:hover { background: linear-gradient(135deg, rgba(0,212,255,0.13), rgba(0,212,255,0.06)); border-color: rgba(0,212,255,0.4); box-shadow: 0 0 30px rgba(0,212,255,0.1); }
+        .brain-tier-row--t2 { background: linear-gradient(135deg, rgba(123,97,255,0.07), rgba(123,97,255,0.03)); }
+        .brain-tier-row--t2:hover { background: linear-gradient(135deg, rgba(123,97,255,0.13), rgba(123,97,255,0.06)); border-color: rgba(123,97,255,0.4); box-shadow: 0 0 30px rgba(123,97,255,0.1); }
+        .brain-tier-row--t3 { background: linear-gradient(135deg, rgba(16,185,129,0.07), rgba(16,185,129,0.03)); }
+        .brain-tier-row--t3:hover { background: linear-gradient(135deg, rgba(16,185,129,0.13), rgba(16,185,129,0.06)); border-color: rgba(16,185,129,0.4); box-shadow: 0 0 30px rgba(16,185,129,0.1); }
+
+        .brain-tier-connector {
+            display: flex; align-items: center; justify-content: center;
+            height: 2.5rem; position: relative;
+        }
+        .brain-tier-connector::before {
+            content: ''; position: absolute;
+            left: 50%; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(to bottom, rgba(123,97,255,0.4), rgba(123,97,255,0.1));
+        }
+        .brain-tier-connector-icon {
+            position: relative; z-index: 1;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: rgba(123,97,255,0.15); border: 1px solid rgba(123,97,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; color: #a78bfa;
+        }
+
+        .brain-signal-flow {
+            display: flex; align-items: center; gap: 0;
+            overflow-x: auto; padding-bottom: 0.5rem;
+            scrollbar-width: none;
+        }
+        .brain-signal-flow::-webkit-scrollbar { display: none; }
+        .brain-signal-node {
+            flex-shrink: 0;
+            padding: 0.75rem 1.25rem; border-radius: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            font-size: 0.8125rem; font-weight: 700;
+            white-space: nowrap; text-align: center;
+            transition: all 0.2s ease;
+        }
+        .brain-signal-node:hover {
+            transform: translateY(-2px);
+            border-color: rgba(123,97,255,0.4);
+            background: rgba(123,97,255,0.07);
+        }
+        .brain-signal-arrow {
+            flex-shrink: 0; padding: 0 0.5rem;
+            color: rgba(123,97,255,0.5); font-size: 1.1rem; font-weight: 900;
+        }
+
+        .urs-loop-diagram {
+            position: relative;
+            width: 100%; max-width: 520px; margin: 0 auto;
+            aspect-ratio: 1 / 1;
+        }
+        .urs-loop-diagram svg { width: 100%; height: 100%; }
+
+        .pattern-confidence-bar {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.625rem 0.875rem; border-radius: 0.625rem;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+        }
+        .pattern-confidence-bar:hover { background: rgba(123,97,255,0.04); border-color: rgba(123,97,255,0.2); }
+        .pcb-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 600; color: #94a3b8; min-width: 11rem; flex-shrink: 0; }
+        .pcb-track { flex: 1; height: 6px; border-radius: 9999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+        .pcb-fill  { height: 100%; border-radius: 9999px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+        .pcb-score { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 800; min-width: 2.5rem; text-align: right; }
+
+        /* Facade card */
+        .facade-card {
+            border: 2px solid rgba(123,97,255,0.4);
+            background: linear-gradient(135deg, rgba(123,97,255,0.1), rgba(168,85,247,0.06));
+            border-radius: 1rem; padding: 1.5rem 2rem;
+            position: relative; overflow: hidden;
+        }
+        .facade-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(123,97,255,0.05) 100%);
+            pointer-events: none;
+        }
+        .facade-method {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.5rem 0.75rem; border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        .facade-method:hover { border-color: rgba(123,97,255,0.3); background: rgba(123,97,255,0.05); }
+
         /* Analyzer Tags */
         .analyzer-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
         .analyzer-tag {
@@ -478,12 +885,10 @@
     <nav class="tab-nav" role="tablist" aria-label="Architecture sections">
         <div class="tab-nav-inner">
             <button class="tab-btn active" role="tab" aria-selected="true" data-tab="overview" style="--tab-i:0"><span class="tab-num">1</span>Overview</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="intelligence" style="--tab-i:1"><span class="tab-num">2</span>Intelligence</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="orchestrators" style="--tab-i:2"><span class="tab-num">3</span>Orchestrators</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="knowledge" style="--tab-i:3"><span class="tab-num">4</span>Knowledge</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="mcp" style="--tab-i:4"><span class="tab-num">5</span>MCP Tools</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="governance" style="--tab-i:5"><span class="tab-num">6</span>Governance</button>
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="lifecycle" style="--tab-i:6"><span class="tab-num">7</span>Lifecycle</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="intelligence" style="--tab-i:1"><span class="tab-num">2</span>Intelligence &amp; Brain</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="orchestrators" style="--tab-i:2"><span class="tab-num">3</span>Orchestration</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="governance" style="--tab-i:3"><span class="tab-num">4</span>Governance &amp; Learning</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="lifecycle" style="--tab-i:4"><span class="tab-num">5</span>Lifecycle</button>
         </div>
     </nav>
 
@@ -613,11 +1018,39 @@
                 </div>
             </section>
 
+            <!-- ─── Panel Navigation ─── -->
+            <section class="tab-panel-nav-bottom" aria-label="Tab navigation">
+                <div class="tab-nav-controls">
+                    <button class="tab-nav-step tab-nav-step--prev tab-btn-prev" aria-label="Previous tab" disabled>
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M14 17L8 11L14 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <div class="tab-nav-center">
+                        <div class="tab-nav-indicator tab-pip-row">
+                            <div class="tab-nav-pip active" data-pip="0"></div>
+                            <div class="tab-nav-pip" data-pip="1"></div>
+                            <div class="tab-nav-pip" data-pip="2"></div>
+                            <div class="tab-nav-pip" data-pip="3"></div>
+                            <div class="tab-nav-pip" data-pip="4"></div>
+                        </div>
+                        <div class="tab-nav-label tab-nav-label-text"><strong>Overview</strong> &nbsp;·&nbsp; 1 of 5</div>
+                    </div>
+                    <button class="tab-nav-step tab-btn-next" aria-label="Next tab">
+                        Next
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M8 5L14 11L8 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
 
-    <!-- ═══════════════════ TAB 2: INTELLIGENCE ═══════════════════ -->
+    <!-- ═══════════════════ TAB 2: INTELLIGENCE & BRAIN ═══════════════════ -->
     <div id="panel-intelligence" class="tab-panel" role="tabpanel">
         <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
 
@@ -681,51 +1114,14 @@
                 </div>
             </section>
 
-            <!-- The Brain — Perception → Reasoning → Action — Glass Panel -->
-            <section class="relative py-12 my-6">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
-                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
-                <div class="relative space-y-10 px-4 md:px-8">
-                    <div class="text-center space-y-4">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] font-bold tracking-widest uppercase">
-                            <i data-lucide="brain" class="w-3.5 h-3.5"></i> Intelligence Architecture
-                        </div>
-                        <h2 class="section-title font-black tracking-tighter">Perception → Reasoning → Action</h2>
-                        <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">CORTEX is not a code generator. It is a three-tier intelligence system that reads your workspace, selects a strategy, and executes with enforced quality gates.</p>
+            <!-- Brain Architecture Divider -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+                    <div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/25 text-purple-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="brain" class="w-3.5 h-3.5"></i> Cognitive Architecture
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-teal-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 md:p-8 space-y-4 relative border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 to-slate-900/80 hover:border-cyan-400/50 transition-all">
-                                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400"><i data-lucide="eye" class="w-5 h-5"></i></div><div><div class="text-[11px] font-black uppercase tracking-widest text-cyan-500">Tier 1</div><h4 class="font-black text-base tracking-tighter">Perception</h4></div></div>
-                                <p class="text-[14px] text-slate-500 leading-relaxed">Matches observed signals against 9 canonical patterns: Mediator, Strategy, Observer, Factory, Template Method, Chain of Responsibility, Adapter, Repository, Command. Each receives a confidence score (0.0–1.0).</p>
-                                <div class="code-block text-[13px]"><span class="code-cmt"># Pattern recognition</span>
-<span class="code-fn">patterns.match</span>(<span class="code-str">"repository"</span>) → <span class="code-cls">0.92</span>
-<span class="code-fn">patterns.match</span>(<span class="code-str">"mediator"</span>)   → <span class="code-cls">0.87</span></div>
-                            </div>
-                        </div>
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 md:p-8 space-y-4 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
-                                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="cpu" class="w-5 h-5"></i></div><div><div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 2</div><h4 class="font-black text-base tracking-tighter">Reasoning</h4></div></div>
-                                <p class="text-[14px] text-slate-500 leading-relaxed">Selects the best approach from ranked strategies. Each has a historical success rate that updates after every execution. The system learns which strategies work best for your team over time.</p>
-                                <div class="code-block text-[13px]"><span class="code-cls">IntelligenceFacade</span>
-  .<span class="code-fn">select_strategy</span>(ctx)
-<span class="code-cmt"># → QUICK | TARGETED | FULL</span>
-  .<span class="code-fn">check_rca_history</span>()
-<span class="code-cmt"># ⚠ Prior failure: {scope}</span></div>
-                            </div>
-                        </div>
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-teal-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 md:p-8 space-y-4 relative border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900/80 hover:border-emerald-400/50 transition-all">
-                                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i data-lucide="activity" class="w-5 h-5"></i></div><div><div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 3</div><h4 class="font-black text-base tracking-tighter">Action</h4></div></div>
-                                <p class="text-[14px] text-slate-500 leading-relaxed">Converts the chosen strategy into a step-by-step plan. Every step has a mandatory test checkpoint, a defined rollback point, and a governance validation check.</p>
-                                <div class="code-block text-[13px]"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
-<span class="code-cls">MasterOrchestrator</span>
-  .<span class="code-fn">route</span>(IMPLEMENT)
-<span class="code-fn">enforce</span>() <span class="code-cmt"># P0/P1 gate</span>
-<span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"✅ 842ms"</span>)</div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent via-purple-500/30 to-transparent"></div>
                 </div>
             </section>
 
@@ -747,11 +1143,348 @@
                 </div>
             </section>
 
+
+            <!-- Hero — What the Brain Is -->
+            <section class="relative py-12 my-6">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-950/70 via-slate-900/85 to-violet-950/70 border border-purple-500/25 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative grid lg:grid-cols-2 gap-10 md:gap-16 items-center px-4 md:px-8 py-4">
+                    <div class="space-y-8">
+                        <div class="space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] font-bold tracking-widest uppercase">
+                                <i data-lucide="brain" class="w-3.5 h-3.5"></i> Cognitive Architecture
+                            </div>
+                            <h2 class="section-title font-black tracking-tighter">The CORTEX Brain</h2>
+                        </div>
+                        <p class="section-desc font-light leading-relaxed">The Brain is the decision-making centre between the LENS sensory layer and the execution engine. It receives workspace signals, identifies patterns, selects the right strategy depth, and builds a step-by-step plan — before a single line of code is written or changed.</p>
+                        <p class="section-desc font-light leading-relaxed">Unlike a language model that generates responses, the CORTEX Brain routes through <strong class="text-purple-300 font-semibold">structured cognitive tiers</strong> — each with defined inputs, rules, and outputs — making every decision traceable and auditable.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold">👁️ Perception Tier</div>
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold">🧠 Reasoning Tier</div>
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold">⚡ Action Tier</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center items-center">
+                        <div id="brain-tier-svg" style="width:340px; max-width:100%; height:360px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Three Tiers — Deep Dive -->
+            <section class="space-y-10">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="layers" class="w-3.5 h-3.5"></i> Cognitive Stack
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Three Tiers — Perception · Reasoning · Action</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">Each tier is a distinct processing stage with its own inputs, algorithms, and outputs. Data flows top-down; feedback flows bottom-up through the Unified Reinforcement Signal.</p>
+                </div>
+
+                <div class="brain-tier-stack">
+                    <!-- T1: Perception -->
+                    <div class="brain-tier-row brain-tier-row--t1">
+                        <div class="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <div class="text-[10px] font-black uppercase tracking-widest text-cyan-500">Tier 1 — Reads LENS signals</div>
+                                        <h3 class="font-black text-xl tracking-tighter text-cyan-200">Perception</h3>
+                                    </div>
+                                </div>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Receives the structured output of the LENS scan and maps workspace signals to canonical design patterns. Each pattern receives a confidence score between 0.0 and 1.0 using a weighted signal model. Patterns scoring above 0.75 are promoted to the Reasoning tier as high-confidence candidates.</p>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Nine canonical patterns are evaluated on every scan — regardless of intent type — so the Brain always has a fresh context map before strategy selection begins.</p>
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 pt-2">Canonical Pattern Set</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Repository</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Mediator</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Strategy</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Observer</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Factory</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Template Method</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Chain of Responsibility</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Adapter</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/15 text-cyan-300 text-[11px] font-mono font-bold">Command</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Live Confidence Signals (illustrative)</div>
+                                <div class="space-y-2" id="pcb-bars">
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">repository</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#00d4ff,#06b6d4)" data-target="92"></div></div><span class="pcb-score" style="color:#00d4ff">0.92</span></div>
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">mediator</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#00d4ff,#06b6d4)" data-target="87"></div></div><span class="pcb-score" style="color:#00d4ff">0.87</span></div>
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">strategy</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#7b61ff,#a855f7)" data-target="81"></div></div><span class="pcb-score" style="color:#a855f7">0.81</span></div>
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">observer</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#7b61ff,#a855f7)" data-target="74"></div></div><span class="pcb-score" style="color:#a855f7">0.74</span></div>
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">factory</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#6366f1,#818cf8)" data-target="63"></div></div><span class="pcb-score" style="color:#818cf8">0.63</span></div>
+                                    <div class="pattern-confidence-bar"><span class="pcb-name">adapter</span><div class="pcb-track"><div class="pcb-fill" style="width:0%;background:linear-gradient(90deg,#475569,#64748b)" data-target="38"></div></div><span class="pcb-score" style="color:#64748b">0.38</span></div>
+                                </div>
+                                <div class="code-block text-[12px] mt-3"><span class="code-cmt"># cortex/intelligence/facade.py</span>
+<span class="code-cls">IntelligenceFacade</span>.<span class="code-fn">analyze</span>(context)
+  → <span class="code-str">"pattern_scores"</span>: {
+      <span class="code-str">"repository"</span>: <span class="code-cls">0.92</span>,   <span class="code-cmt"># ✅ high-confidence</span>
+      <span class="code-str">"mediator"</span>:   <span class="code-cls">0.87</span>,   <span class="code-cmt"># ✅ promoted</span>
+      <span class="code-str">"adapter"</span>:    <span class="code-cls">0.38</span>    <span class="code-cmt"># ⚪ below threshold</span>
+    }</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brain-tier-connector"><div class="brain-tier-connector-icon">↓</div></div>
+
+                    <!-- T2: Reasoning -->
+                    <div class="brain-tier-row brain-tier-row--t2">
+                        <div class="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <div class="text-[10px] font-black uppercase tracking-widest text-violet-500">Tier 2 — Selects strategy</div>
+                                        <h3 class="font-black text-xl tracking-tighter text-violet-200">Reasoning</h3>
+                                    </div>
+                                </div>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Takes high-confidence patterns from Tier 1 and selects the appropriate execution mode — Quick (cached rules), Targeted (LENS-scoped), or Full (all 9 analyzers). This decision determines which orchestrators are engaged and what governance gates are applied.</p>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Before strategy selection, the Brain consults the RCA Memory Engine (PLIP-001). If a prior failure pattern with confidence ≥ 0.4 matches the current context, it is surfaced as a warning — preventing the same mistake from recurring.</p>
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 pt-2">Strategy Selection Rules</div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/15">
+                                        <span class="text-emerald-400 font-mono text-[11px] font-bold bg-emerald-950/60 px-2 py-0.5 rounded">QUICK</span>
+                                        <span class="text-[12px] text-slate-400">Intent is a simple query or lookup · No code change</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/15">
+                                        <span class="text-blue-400 font-mono text-[11px] font-bold bg-blue-950/60 px-2 py-0.5 rounded">TARGETED</span>
+                                        <span class="text-[12px] text-slate-400">IMPLEMENT, FIX, REFACTOR · Scope ≤ 5 files</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-violet-500/5 border border-violet-500/15">
+                                        <span class="text-violet-400 font-mono text-[11px] font-bold bg-violet-950/60 px-2 py-0.5 rounded">FULL</span>
+                                        <span class="text-[12px] text-slate-400">AUDIT, SECURITY, architecture change · All 9 analyzers</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Intelligence Facade — Single Entry Point</div>
+                                <div class="facade-card space-y-3">
+                                    <div class="text-[11px] font-mono font-bold text-violet-400">cortex/intelligence/facade.py</div>
+                                    <div class="text-[12px] text-slate-400">Canonical entry point replacing 3 legacy facades (Phase 107 Sub-Phase C). All Brain operations route through here.</div>
+                                    <div class="space-y-2 pt-2">
+                                        <div class="facade-method"><span class="text-cyan-400 font-mono text-[11px]">.analyze()</span><span class="text-slate-500 text-[11px]">← workspace scan + pattern scoring</span></div>
+                                        <div class="facade-method"><span class="text-violet-400 font-mono text-[11px]">.synthesize()</span><span class="text-slate-500 text-[11px]">← cross-domain knowledge fusion</span></div>
+                                        <div class="facade-method"><span class="text-emerald-400 font-mono text-[11px]">.query()</span><span class="text-slate-500 text-[11px]">← in-context question answering</span></div>
+                                        <div class="facade-method"><span class="text-amber-400 font-mono text-[11px]">.select_strategy()</span><span class="text-slate-500 text-[11px]">← QUICK | TARGETED | FULL</span></div>
+                                        <div class="facade-method"><span class="text-rose-400 font-mono text-[11px]">.check_rca_history()</span><span class="text-slate-500 text-[11px]">← prior failure prevention rules</span></div>
+                                    </div>
+                                </div>
+                                <div class="code-block text-[12px]"><span class="code-cls">IntelligenceFacade</span>
+  .<span class="code-fn">select_strategy</span>(ctx)
+<span class="code-cmt"># → TARGETED (confidence: 0.89)</span>
+
+  .<span class="code-fn">check_rca_history</span>(scope=<span class="code-str">"implement"</span>)
+<span class="code-cmt"># ⚠ Prior failure: import rewrite</span>
+<span class="code-cmt">#   confidence: 0.76 — ADVISORY</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brain-tier-connector"><div class="brain-tier-connector-icon">↓</div></div>
+
+                    <!-- T3: Action -->
+                    <div class="brain-tier-row brain-tier-row--t3">
+                        <div class="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <div class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Tier 3 — Builds execution plan</div>
+                                        <h3 class="font-black text-xl tracking-tighter text-emerald-200">Action</h3>
+                                    </div>
+                                </div>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Converts the Reasoning tier's selected strategy into a concrete, step-by-step execution plan — routed through the <span class="text-emerald-300 font-semibold">MasterOrchestrator</span>. Every step includes a mandatory test checkpoint, a rollback point, and a governance gate.</p>
+                                <p class="text-[14px] text-slate-400 leading-relaxed">Every entry and exit point emits an <span class="text-emerald-300 font-mono font-bold">AC_START</span> / <span class="text-emerald-300 font-mono font-bold">AC_COMPLETE</span> marker, persisted to SQLite — making every Brain decision auditable and replayable.</p>
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 pt-2">Action Plan Guarantees</div>
+                                <div class="space-y-2">
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Failing test written before any code changes (CORE-008)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Holistic validation gate cleared before mutation (CORE-048)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Detect → Fix → Rescan loop until P0/P1 = 0 (CORE-068)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">AC markers emitted to SQLite audit trail on every step</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">URS reward / penalty signal emitted on completion</p></div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="code-block text-[12px]"><span class="code-cmt"># Full action pipeline</span>
+<span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
+
+<span class="code-cls">MasterOrchestrator</span>
+  .<span class="code-fn">route</span>(intent=IMPLEMENT,
+         strategy=TARGETED)
+
+→ <span class="code-fn">TDDOrchestrator</span>
+  .<span class="code-fn">write_failing_test</span>()     <span class="code-cmt"># 🔴 RED</span>
+  .<span class="code-fn">implement</span>()              <span class="code-cmt"># 🟢 GREEN</span>
+  .<span class="code-fn">refactor_and_converge</span>()  <span class="code-cmt"># ♻️ REFACTOR</span>
+
+→ <span class="code-fn">EnforcementOrchestrator</span>
+  .<span class="code-fn">enforce</span>()               <span class="code-cmt"># P0/P1 gate</span>
+
+→ <span class="code-fn">cortex_learning</span>
+  .<span class="code-fn">emit</span>(MILD_REWARD)       <span class="code-cmt"># URS signal</span>
+
+<span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"✅ 842ms"</span>)</div>
+                                <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/20 space-y-2 mt-2">
+                                    <div class="text-[11px] font-bold uppercase tracking-widest text-emerald-400">SQLite Audit Trail</div>
+                                    <p class="text-[12px] text-slate-400">Every AC_START/COMPLETE pair is written to <span class="font-mono text-emerald-300">.cortex-runtime/traces/orchestrator-traces.db</span> — tamper-evident, queryable, and retained for 30 days.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Unified Reinforcement Signal -->
+            <section class="relative py-12 my-6">
+                <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/60 via-slate-900/80 to-purple-950/60 border border-indigo-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative px-4 md:px-8 space-y-10">
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> URS — Closed-Loop Learning
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Unified Reinforcement Signal</h2>
+                        <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">After every Action tier execution, the Brain emits a reward or penalty signal. These signals update confidence scores for patterns and strategies — making the Brain measurably smarter about your codebase over time.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                        <div>
+                            <div id="urs-loop-svg" style="width:100%;max-width:420px;height:400px;margin:0 auto;"></div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="space-y-3">
+                                <div class="glass-card p-5 border-2 border-emerald-500/25 bg-gradient-to-br from-emerald-950/30 to-slate-900/80 space-y-2">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-2xl">🏆</span>
+                                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">MILD_REWARD (+1.0)</div>
+                                    </div>
+                                    <p class="text-[13px] text-slate-400 leading-relaxed">Emitted when an execution completes without governance violations, test failures, or regressions. The pattern's confidence score increases, making it more likely to be selected on similar future contexts.</p>
+                                </div>
+                                <div class="glass-card p-5 border-2 border-rose-500/25 bg-gradient-to-br from-rose-950/30 to-slate-900/80 space-y-2">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-2xl">⚠️</span>
+                                        <div class="text-[11px] font-black uppercase tracking-widest text-rose-400">MILD_PUNISHMENT (−1.0)</div>
+                                    </div>
+                                    <p class="text-[13px] text-slate-400 leading-relaxed">Emitted when an execution produces P0/P1 violations, test failures, or regressions. Confidence decreases. After 3 failures, the pattern is demoted. After 5, it is quarantined from recommendations.</p>
+                                </div>
+                            </div>
+                            <div class="p-5 rounded-xl bg-slate-900/60 border border-indigo-500/20 space-y-3">
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-indigo-400">Cross-Team Signal Propagation</div>
+                                <p class="text-[13px] text-slate-400 leading-relaxed">URS signals are stored in <span class="font-mono text-indigo-300">cortex_learning</span> MCP tool with scope-isolated domains. When Team A discovers a root cause, the generated PreventionRule is immediately available to all other teams — without post-mortems or knowledge-base updates.</p>
+                                <div class="code-block text-[12px]"><span class="code-cmt"># Emit after success</span>
+<span class="code-fn">cortex_learning</span>(
+  op=<span class="code-str">"emit"</span>,
+  signal_type=<span class="code-str">"MILD_REWARD"</span>,
+  pattern_id=<span class="code-str">"implement"</span>,
+  source_orchestrator=<span class="code-str">"TDDOrchestrator"</span>
+)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Signal Flow Diagram -->
+            <section class="space-y-8">
+                <div class="text-center space-y-4">
+                    <h2 class="section-title font-black tracking-tighter">End-to-End Signal Flow</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every request through the Brain follows this exact sequence. No shortcuts, no skipped stages.</p>
+                </div>
+                <div class="glass-card p-6 md:p-8 space-y-6">
+                    <div class="brain-signal-flow">
+                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.3);color:#00d4ff;background:rgba(0,212,255,0.05)">LENS Output<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Workspace signals</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.25);color:#67e8f9;background:rgba(0,212,255,0.04)">Pattern<br/>Scoring<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">0.0–1.0</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.3);color:#a78bfa;background:rgba(123,97,255,0.05)">RCA History<br/>Consult<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">PLIP-001</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.25);color:#c4b5fd;background:rgba(123,97,255,0.04)">Strategy<br/>Selection<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">QUICK|TARGET|FULL</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(99,102,241,0.3);color:#818cf8;background:rgba(99,102,241,0.05)">Master<br/>Orchestrator<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Route + AC_START</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.3);color:#34d399;background:rgba(16,185,129,0.05)">TDD<br/>Execution<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">RED→GREEN→REFACTOR</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(245,158,11,0.3);color:#fbbf24;background:rgba(245,158,11,0.05)">Convergence<br/>Gate<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">CORE-068</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(244,63,94,0.3);color:#fb7185;background:rgba(244,63,94,0.05)">URS<br/>Signal<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Reward / Penalty</span></div>
+                        <div class="brain-signal-arrow">→</div>
+                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.4);color:#10b981;background:rgba(16,185,129,0.08)">AC_COMPLETE<br/>✅<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Audit logged</span></div>
+                    </div>
+                    <p class="text-center text-[12px] text-slate-600 font-medium">← Scroll to see full flow on mobile →</p>
+                </div>
+            </section>
+
+            <!-- Brain vs LENS — What Each Does -->
+            <section class="space-y-8">
+                <div class="text-center space-y-4">
+                    <h2 class="section-title font-black tracking-tighter">Brain vs LENS — Clear Separation</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Two distinct systems, each with a single responsibility. LENS reads. Brain decides.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="glass-card p-6 md:p-8 space-y-5 border-2 border-cyan-500/25 bg-gradient-to-br from-cyan-950/30 to-slate-900/80">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
+                            <h4 class="font-black text-lg tracking-tighter text-cyan-200">LENS — The Sensory System</h4>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Reads</strong> — scans files, git history, dependencies, and security surfaces</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Produces</strong> — structured signal objects passed to the Brain</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Never decides</strong> — it is a pure observation layer with no strategy</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Location</strong> — <span class="font-mono text-xs">cortex/lens/</span> — 9 parallel analyzers</p></div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 md:p-8 space-y-5 border-2 border-purple-500/25 bg-gradient-to-br from-purple-950/30 to-slate-900/80">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400"><i data-lucide="brain" class="w-5 h-5"></i></div>
+                            <h4 class="font-black text-lg tracking-tighter text-purple-200">Brain — The Decision System</h4>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Decides</strong> — selects patterns, strategies, and execution plans</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Learns</strong> — URS signals update confidence on every execution</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Prevents</strong> — consults RCA history before every mutation</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Location</strong> — <span class="font-mono text-xs">cortex/intelligence/facade.py</span> — IntelligenceFacade</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── Panel Navigation ─── -->
+            <section class="tab-panel-nav-bottom" aria-label="Tab navigation">
+                <div class="tab-nav-controls">
+                    <button class="tab-nav-step tab-nav-step--prev tab-btn-prev" aria-label="Previous tab">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M14 17L8 11L14 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <div class="tab-nav-center">
+                        <div class="tab-nav-indicator tab-pip-row">
+                            <div class="tab-nav-pip" data-pip="0"></div>
+                            <div class="tab-nav-pip active" data-pip="1"></div>
+                            <div class="tab-nav-pip" data-pip="2"></div>
+                            <div class="tab-nav-pip" data-pip="3"></div>
+                            <div class="tab-nav-pip" data-pip="4"></div>
+                        </div>
+                        <div class="tab-nav-label tab-nav-label-text"><strong>Intelligence &amp; Brain</strong> &nbsp;·&nbsp; 2 of 5</div>
+                    </div>
+                    <button class="tab-nav-step tab-btn-next" aria-label="Next tab">
+                        Next
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M8 5L14 11L8 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
 
-    <!-- ═══════════════════ TAB 3: ORCHESTRATORS ═══════════════════ -->
+
+
+    <!-- ═══════════════════ TAB 3: ORCHESTRATION ═══════════════════ -->
     <div id="panel-orchestrators" class="tab-panel" role="tabpanel">
         <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
 
@@ -837,107 +1570,18 @@
                 </div>
             </section>
 
-        </main>
-    </div>
 
-
-    <!-- ═══════════════════ TAB 4: KNOWLEDGE ═══════════════════ -->
-    <div id="panel-knowledge" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
-
-            <!-- RCA Methodologies — Glass Panel -->
-            <section class="relative py-12 my-6">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
-                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
-                <div class="relative space-y-10 px-4 md:px-8">
-                    <div class="text-center space-y-4">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] font-bold tracking-widest uppercase">
-                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Root Cause Analysis
-                        </div>
-                        <h2 class="section-title font-black tracking-tighter">Four RCA Methodologies — Failures Never Repeat</h2>
-                        <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every root cause analysis generates a SQLite-backed <code class="font-mono text-sm bg-white/5 px-1.5 py-0.5 rounded text-purple-300">PreventionRule</code> that surfaces automatically the next time a similar pattern appears.</p>
+            <!-- ═══════════════ MCP TOOLS (merged) ═══════════════ -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> MCP Tools
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Linear root cause tracing — best for technology failures with clear sequential cause chains.</p></div>
-                        </div>
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Multi-factor analysis across People, Process, Technology, and Data failure axes.</p></div>
-                        </div>
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-teal-600/20 to-emerald-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">AND/OR gate analysis surfacing the minimum set of conditions for failure.</p></div>
-                        </div>
-                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Causal Chain</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Temporal event correlation — reveals triggering events that precede the visible symptom.</p></div>
-                        </div>
-                    </div>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent via-cyan-500/20 to-transparent"></div>
                 </div>
             </section>
 
-            <!-- Prevention Gates -->
-            <section class="space-y-10">
-                <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] font-bold tracking-widest uppercase">
-                        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Prevention Escalation
-                    </div>
-                    <h2 class="section-title font-black tracking-tighter">Three Escalation Levels</h2>
-                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Prevention rules escalate based on recurrence count. Chronic failures get harder to ignore.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div class="glass-card p-6 space-y-3 border-2 border-amber-500/25 bg-gradient-to-br from-amber-950/30 to-slate-900/80">
-                        <div class="text-2xl">⚠️</div>
-                        <h4 class="font-bold text-sm uppercase tracking-tighter text-amber-300">Advisory</h4>
-                        <p class="text-[14px] text-slate-500 leading-relaxed">Default level. Shows warning in analysis but does not block. Generated on first RCA completion.</p>
-                    </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-rose-500/25 bg-gradient-to-br from-rose-950/30 to-slate-900/80">
-                        <div class="text-2xl">🚫</div>
-                        <h4 class="font-bold text-sm uppercase tracking-tighter text-rose-300">Blocking</h4>
-                        <p class="text-[14px] text-slate-500 leading-relaxed">Promoted after 3+ recurrences. Requires explicit acknowledgment to proceed past the gate.</p>
-                    </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-red-500/25 bg-gradient-to-br from-red-950/30 to-slate-900/80">
-                        <div class="text-2xl">🔒</div>
-                        <h4 class="font-bold text-sm uppercase tracking-tighter text-red-300">Hard Block</h4>
-                        <p class="text-[14px] text-slate-500 leading-relaxed">Promoted after 5+ recurrences. Cannot be bypassed — the operation is refused outright.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Reinforcement Learning — Glass Panel -->
-            <section class="relative py-12 my-6">
-                <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/20 rounded-3xl"></div>
-                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
-                <div class="relative space-y-10 px-4 md:px-8">
-                    <div class="text-center space-y-4">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
-                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Continuous Learning
-                        </div>
-                        <h2 class="section-title font-black tracking-tighter">Unified Reinforcement Signal</h2>
-                        <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">CORTEX rewards successful patterns and demotes failed ones — getting measurably better at predicting which approaches succeed for your team.</p>
-                    </div>
-                    <div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
-                        <div class="lg:w-1/3 space-y-4 text-center lg:text-left">
-                            <h4 class="text-2xl md:text-3xl font-black tracking-tight">Learning Loop</h4>
-                            <p class="text-slate-400 text-xs md:text-sm font-light leading-relaxed">Every success and failure updates confidence scores. Approaches that consistently work are recommended first. Chronic failures are quarantined.</p>
-                            <div class="flex justify-center lg:justify-start gap-6">
-                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Reward</div></div>
-                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
-                            </div>
-                        </div>
-                        <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20"><div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div><p class="text-[13px] text-slate-400 leading-relaxed">When Team A discovers a root cause, the prevention rule is available to Teams B, C, and D immediately — without post-mortems or wiki pages.</p></div>
-                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20"><div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Pattern Quarantine</div><p class="text-[13px] text-slate-400 leading-relaxed">Chronically unsuccessful patterns are excluded from recommendations until explicitly rehabilitated. No noise from stale failures.</p></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-
-    <!-- ═══════════════════ TAB 5: MCP TOOLS ═══════════════════ -->
-    <div id="panel-mcp" class="tab-panel" role="tabpanel">
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
 
             <!-- How MCP Works — Glass Panel -->
             <section class="relative py-12 my-6">
@@ -1019,11 +1663,39 @@
                 </div>
             </section>
 
+            <!-- ─── Panel Navigation ─── -->
+            <section class="tab-panel-nav-bottom" aria-label="Tab navigation">
+                <div class="tab-nav-controls">
+                    <button class="tab-nav-step tab-nav-step--prev tab-btn-prev" aria-label="Previous tab">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M14 17L8 11L14 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <div class="tab-nav-center">
+                        <div class="tab-nav-indicator tab-pip-row">
+                            <div class="tab-nav-pip" data-pip="0"></div>
+                            <div class="tab-nav-pip" data-pip="1"></div>
+                            <div class="tab-nav-pip active" data-pip="2"></div>
+                            <div class="tab-nav-pip" data-pip="3"></div>
+                            <div class="tab-nav-pip" data-pip="4"></div>
+                        </div>
+                        <div class="tab-nav-label tab-nav-label-text"><strong>Orchestration</strong> &nbsp;·&nbsp; 3 of 5</div>
+                    </div>
+                    <button class="tab-nav-step tab-btn-next" aria-label="Next tab">
+                        Next
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M8 5L14 11L8 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
 
-    <!-- ═══════════════════ TAB 6: GOVERNANCE ═══════════════════ -->
+    <!-- ═══════════════════ TAB 4: GOVERNANCE & LEARNING ═══════════════════ -->
     <div id="panel-governance" class="tab-panel" role="tabpanel">
         <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
 
@@ -1123,11 +1795,140 @@
                 </div>
             </section>
 
+
+            <!-- ═══════════════ KNOWLEDGE & LEARNING (merged) ═══════════════ -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i> Knowledge &amp; Learning
+                    </div>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent via-emerald-500/20 to-transparent"></div>
+                </div>
+            </section>
+
+
+            <!-- RCA Methodologies — Glass Panel -->
+            <section class="relative py-12 my-6">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-slate-900/80 to-violet-950/60 border border-purple-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative space-y-10 px-4 md:px-8">
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] font-bold tracking-widest uppercase">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Root Cause Analysis
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Four RCA Methodologies — Failures Never Repeat</h2>
+                        <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every root cause analysis generates a SQLite-backed <code class="font-mono text-sm bg-white/5 px-1.5 py-0.5 rounded text-purple-300">PreventionRule</code> that surfaces automatically the next time a similar pattern appears.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Linear root cause tracing — best for technology failures with clear sequential cause chains.</p></div>
+                        </div>
+                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Multi-factor analysis across People, Process, Technology, and Data failure axes.</p></div>
+                        </div>
+                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-teal-600/20 to-emerald-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">AND/OR gate analysis surfacing the minimum set of conditions for failure.</p></div>
+                        </div>
+                        <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Causal Chain</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Temporal event correlation — reveals triggering events that precede the visible symptom.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prevention Gates -->
+            <section class="space-y-10">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Prevention Escalation
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Three Escalation Levels</h2>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Prevention rules escalate based on recurrence count. Chronic failures get harder to ignore.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-amber-500/25 bg-gradient-to-br from-amber-950/30 to-slate-900/80">
+                        <div class="text-2xl">⚠️</div>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter text-amber-300">Advisory</h4>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">Default level. Shows warning in analysis but does not block. Generated on first RCA completion.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-rose-500/25 bg-gradient-to-br from-rose-950/30 to-slate-900/80">
+                        <div class="text-2xl">🚫</div>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter text-rose-300">Blocking</h4>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">Promoted after 3+ recurrences. Requires explicit acknowledgment to proceed past the gate.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-red-500/25 bg-gradient-to-br from-red-950/30 to-slate-900/80">
+                        <div class="text-2xl">🔒</div>
+                        <h4 class="font-bold text-sm uppercase tracking-tighter text-red-300">Hard Block</h4>
+                        <p class="text-[14px] text-slate-500 leading-relaxed">Promoted after 5+ recurrences. Cannot be bypassed — the operation is refused outright.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reinforcement Learning — Glass Panel -->
+            <section class="relative py-12 my-6">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/40 via-slate-900/80 to-cyan-950/40 border border-emerald-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative space-y-10 px-4 md:px-8">
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Continuous Learning
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Unified Reinforcement Signal</h2>
+                        <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">CORTEX rewards successful patterns and demotes failed ones — getting measurably better at predicting which approaches succeed for your team.</p>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
+                        <div class="lg:w-1/3 space-y-4 text-center lg:text-left">
+                            <h4 class="text-2xl md:text-3xl font-black tracking-tight">Learning Loop</h4>
+                            <p class="text-slate-400 text-xs md:text-sm font-light leading-relaxed">Every success and failure updates confidence scores. Approaches that consistently work are recommended first. Chronic failures are quarantined.</p>
+                            <div class="flex justify-center lg:justify-start gap-6">
+                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Reward</div></div>
+                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
+                            </div>
+                        </div>
+                        <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20"><div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div><p class="text-[13px] text-slate-400 leading-relaxed">When Team A discovers a root cause, the prevention rule is available to Teams B, C, and D immediately — without post-mortems or wiki pages.</p></div>
+                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20"><div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Pattern Quarantine</div><p class="text-[13px] text-slate-400 leading-relaxed">Chronically unsuccessful patterns are excluded from recommendations until explicitly rehabilitated. No noise from stale failures.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── Panel Navigation ─── -->
+            <section class="tab-panel-nav-bottom" aria-label="Tab navigation">
+                <div class="tab-nav-controls">
+                    <button class="tab-nav-step tab-nav-step--prev tab-btn-prev" aria-label="Previous tab">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M14 17L8 11L14 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <div class="tab-nav-center">
+                        <div class="tab-nav-indicator tab-pip-row">
+                            <div class="tab-nav-pip" data-pip="0"></div>
+                            <div class="tab-nav-pip" data-pip="1"></div>
+                            <div class="tab-nav-pip" data-pip="2"></div>
+                            <div class="tab-nav-pip active" data-pip="3"></div>
+                            <div class="tab-nav-pip" data-pip="4"></div>
+                        </div>
+                        <div class="tab-nav-label tab-nav-label-text"><strong>Governance &amp; Learning</strong> &nbsp;·&nbsp; 4 of 5</div>
+                    </div>
+                    <button class="tab-nav-step tab-btn-next" aria-label="Next tab">
+                        Next
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M8 5L14 11L8 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
 
-    <!-- ═══════════════════ TAB 7: LIFECYCLE ═══════════════════ -->
+
+
+    <!-- ═══════════════════ TAB 5: LIFECYCLE ═══════════════════ -->
     <div id="panel-lifecycle" class="tab-panel" role="tabpanel">
         <main class="max-w-7xl mx-auto px-4 md:px-6 pt-8 pb-8 md:pb-16 space-y-16 md:space-y-24 relative">
 
@@ -1216,6 +2017,34 @@
                 </div>
             </section>
 
+            <!-- ─── Panel Navigation ─── -->
+            <section class="tab-panel-nav-bottom" aria-label="Tab navigation">
+                <div class="tab-nav-controls">
+                    <button class="tab-nav-step tab-nav-step--prev tab-btn-prev" aria-label="Previous tab">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M14 17L8 11L14 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <div class="tab-nav-center">
+                        <div class="tab-nav-indicator tab-pip-row">
+                            <div class="tab-nav-pip" data-pip="0"></div>
+                            <div class="tab-nav-pip" data-pip="1"></div>
+                            <div class="tab-nav-pip" data-pip="2"></div>
+                            <div class="tab-nav-pip" data-pip="3"></div>
+                            <div class="tab-nav-pip active" data-pip="4"></div>
+                        </div>
+                        <div class="tab-nav-label tab-nav-label-text"><strong>Lifecycle</strong> &nbsp;·&nbsp; 5 of 5</div>
+                    </div>
+                    <button class="tab-nav-step tab-btn-next" aria-label="Next tab" disabled>
+                        Next
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                            <path d="M8 5L14 11L8 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
@@ -1238,28 +2067,247 @@
         window.onload = function() {
             lucide.createIcons();
             buildDiamondChart();
+            buildBrainTierSvg();
+            buildUrsLoopSvg();
+            animatePcbBars();
         };
 
-        // ─── Tab System ───
+        // ─── Tab System (with Prev / Next + Pip Indicators) ───
         document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const panels = document.querySelectorAll('.tab-panel');
-            tabs.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-                    panels.forEach(p => p.classList.remove('active'));
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                    const target = document.getElementById('panel-' + btn.dataset.tab);
-                    if (target) target.classList.add('active');
-                    const tabNav = document.querySelector('.tab-nav');
-                    if (tabNav) {
-                        const navBottom = tabNav.getBoundingClientRect().bottom + window.scrollY;
-                        window.scrollTo({ top: navBottom - tabNav.offsetHeight, behavior: 'smooth' });
-                    }
+            const tabs    = Array.from(document.querySelectorAll('.tab-btn'));
+            const panels  = document.querySelectorAll('.tab-panel');
+
+            const TAB_LABELS = ['Overview', 'Intelligence &amp; Brain', 'Orchestration', 'Governance &amp; Learning', 'Lifecycle'];
+
+            function getActiveIndex() {
+                return tabs.findIndex(t => t.classList.contains('active'));
+            }
+
+            function scrollToNavTop() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function activateTab(idx) {
+                if (idx < 0 || idx >= tabs.length) return;
+
+                // Update tab buttons
+                tabs.forEach((t, i) => {
+                    const active = i === idx;
+                    t.classList.toggle('active', active);
+                    t.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+
+                // Update panels
+                panels.forEach(p => p.classList.remove('active'));
+                const target = document.getElementById('panel-' + tabs[idx].dataset.tab);
+                if (target) target.classList.add('active');
+
+                // Update ALL pip rows (one per panel)
+                document.querySelectorAll('.tab-pip-row').forEach(row => {
+                    row.querySelectorAll('.tab-nav-pip').forEach((pip, i) => {
+                        pip.classList.toggle('active', i === idx);
+                    });
+                });
+
+                // Update ALL labels
+                document.querySelectorAll('.tab-nav-label-text').forEach(lbl => {
+                    lbl.innerHTML = `<strong>${TAB_LABELS[idx]}</strong> &nbsp;·&nbsp; ${idx + 1} of ${tabs.length}`;
+                });
+
+                // Update ALL prev / next buttons
+                document.querySelectorAll('.tab-btn-prev').forEach(btn => { btn.disabled = idx === 0; });
+                document.querySelectorAll('.tab-btn-next').forEach(btn => { btn.disabled = idx === tabs.length - 1; });
+
+                scrollToNavTop();
+            }
+
+            // Wire tab button clicks
+            tabs.forEach((btn, i) => {
+                btn.addEventListener('click', () => activateTab(i));
+            });
+
+            // Wire prev / next via event delegation on each panel's nav section
+            document.querySelectorAll('.tab-btn-prev').forEach(btn => {
+                btn.addEventListener('click', () => activateTab(getActiveIndex() - 1));
+                btn.addEventListener('keydown', e => {
+                    if (e.key === 'ArrowLeft') { e.preventDefault(); activateTab(getActiveIndex() - 1); }
+                    if (e.key === 'ArrowRight') { e.preventDefault(); activateTab(getActiveIndex() + 1); }
                 });
             });
+            document.querySelectorAll('.tab-btn-next').forEach(btn => {
+                btn.addEventListener('click', () => activateTab(getActiveIndex() + 1));
+                btn.addEventListener('keydown', e => {
+                    if (e.key === 'ArrowLeft') { e.preventDefault(); activateTab(getActiveIndex() - 1); }
+                    if (e.key === 'ArrowRight') { e.preventDefault(); activateTab(getActiveIndex() + 1); }
+                });
+            });
+
+            // Initialise state (first tab is already active in HTML)
+            const initIdx = getActiveIndex();
+            document.querySelectorAll('.tab-btn-prev').forEach(btn => { btn.disabled = initIdx === 0; });
+            document.querySelectorAll('.tab-btn-next').forEach(btn => { btn.disabled = initIdx === tabs.length - 1; });
         });
+
+        // ─── Brain Tier: Animated Three-Tier Architecture SVG ───
+        function buildBrainTierSvg() {
+            const container = document.getElementById('brain-tier-svg');
+            if (!container) return;
+            const w = 340, h = 360;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`)
+                .attr('width', '100%').attr('height', '100%');
+
+            // Defs
+            const defs = svg.append('defs');
+            ['t1','t2','t3'].forEach((id, i) => {
+                const colors = [['#00d4ff','#06b6d4'],['#7b61ff','#a855f7'],['#10b981','#34d399']];
+                const lg = defs.append('linearGradient').attr('id','grad-'+id).attr('x1','0%').attr('y1','0%').attr('x2','100%').attr('y2','0%');
+                lg.append('stop').attr('offset','0%').attr('stop-color',colors[i][0]).attr('stop-opacity',0.9);
+                lg.append('stop').attr('offset','100%').attr('stop-color',colors[i][1]).attr('stop-opacity',0.9);
+            });
+
+            const tiers = [
+                { id:'t1', y:30, label:'Tier 1 — Perception', sub:'Pattern scoring · 9 canonical patterns', icon:'👁️', color:'#00d4ff', glow:'rgba(0,212,255,0.15)' },
+                { id:'t2', y:155, label:'Tier 2 — Reasoning', sub:'Strategy selection · RCA consult', icon:'🧠', color:'#7b61ff', glow:'rgba(123,97,255,0.15)' },
+                { id:'t3', y:280, label:'Tier 3 — Action', sub:'Execution plan · TDD · AC markers', icon:'⚡', color:'#10b981', glow:'rgba(16,185,129,0.15)' },
+            ];
+
+            // Connector lines between tiers
+            tiers.slice(0,-1).forEach((t,i) => {
+                const cx = w/2, y1 = t.y + 90, y2 = tiers[i+1].y;
+                svg.append('line').attr('x1',cx).attr('y1',y1).attr('x2',cx).attr('y2',y2)
+                    .attr('stroke','rgba(123,97,255,0.3)').attr('stroke-width',2).attr('stroke-dasharray','4,3');
+                // Arrow
+                svg.append('polygon').attr('points',`${cx-6},${y2-10} ${cx+6},${y2-10} ${cx},${y2}`)
+                    .attr('fill','rgba(123,97,255,0.5)');
+            });
+
+            // Tier boxes
+            tiers.forEach(t => {
+                const g = svg.append('g').attr('transform',`translate(20,${t.y})`);
+                // Glow rect
+                g.append('rect').attr('x',-4).attr('y',-4).attr('width',w-32).attr('height',96)
+                    .attr('rx',14).attr('fill',t.glow).attr('filter','blur(8px)');
+                // Box
+                g.append('rect').attr('width',w-40).attr('height',88)
+                    .attr('rx',12).attr('fill','rgba(10,14,39,0.7)')
+                    .attr('stroke','url(#grad-'+t.id+')').attr('stroke-width',1.5);
+                // Icon circle
+                g.append('circle').attr('cx',38).attr('cy',44).attr('r',22)
+                    .attr('fill',t.color+'18').attr('stroke',t.color+'40').attr('stroke-width',1.5);
+                g.append('text').attr('x',38).attr('y',50).attr('text-anchor','middle')
+                    .attr('font-size','18px').text(t.icon);
+                // Label
+                g.append('text').attr('x',74).attr('y',34).attr('fill','#f8fafc')
+                    .attr('font-size','12px').attr('font-weight','700').attr('font-family','Space Grotesk, Inter, sans-serif')
+                    .text(t.label);
+                // Sub
+                g.append('text').attr('x',74).attr('y',54).attr('fill','#64748b')
+                    .attr('font-size','10px').attr('font-weight','500').attr('font-family','Inter, sans-serif')
+                    .text(t.sub);
+                // Accent bar
+                g.append('rect').attr('x',0).attr('y',80).attr('width',w-40).attr('height',3)
+                    .attr('rx',2).attr('fill','url(#grad-'+t.id+')').attr('opacity',0.4);
+            });
+
+            // URS feedback arrow (right side, bottom-up)
+            const arrowX = w - 28;
+            svg.append('path')
+                .attr('d', `M${arrowX},345 C${arrowX+22},260 ${arrowX+22},160 ${arrowX},75`)
+                .attr('fill','none').attr('stroke','rgba(245,158,11,0.35)')
+                .attr('stroke-width',2).attr('stroke-dasharray','5,4');
+            svg.append('polygon')
+                .attr('points',`${arrowX-5},78 ${arrowX+5},78 ${arrowX},62`)
+                .attr('fill','rgba(245,158,11,0.5)');
+            svg.append('text').attr('x',arrowX+7).attr('y',220).attr('fill','#b45309')
+                .attr('font-size','9px').attr('font-weight','700').attr('font-family','Inter, sans-serif')
+                .attr('transform',`rotate(90,${arrowX+7},220)`).text('URS FEEDBACK');
+        }
+
+        // ─── URS Closed-Loop Circle Diagram ───
+        function buildUrsLoopSvg() {
+            const container = document.getElementById('urs-loop-svg');
+            if (!container) return;
+            const w = 420, h = 400, cx = w/2, cy = h/2, r = 140;
+            const svg = d3.select(container).append('svg')
+                .attr('viewBox', `0 0 ${w} ${h}`).attr('width','100%').attr('height','100%');
+
+            const defs = svg.append('defs');
+            // Radial glow
+            const rg = defs.append('radialGradient').attr('id','rg-urs').attr('cx','50%').attr('cy','50%').attr('r','50%');
+            rg.append('stop').attr('offset','0%').attr('stop-color','rgba(123,97,255,0.08)');
+            rg.append('stop').attr('offset','100%').attr('stop-color','transparent');
+            // Arrow marker
+            const marker = defs.append('marker').attr('id','urs-arrow').attr('viewBox','0 0 10 10')
+                .attr('refX',5).attr('refY',5).attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto');
+            marker.append('path').attr('d','M 0 0 L 10 5 L 0 10 z').attr('fill','rgba(123,97,255,0.7)');
+
+            svg.append('ellipse').attr('cx',cx).attr('cy',cy).attr('rx',r+30).attr('ry',r+20)
+                .attr('fill','url(#rg-urs)');
+
+            // Loop circle
+            svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',r)
+                .attr('fill','none').attr('stroke','rgba(123,97,255,0.18)').attr('stroke-width',1.5).attr('stroke-dasharray','6,4');
+
+            const nodes = [
+                { label:'LENS Scan',    sub:'Workspace signals',    angle:-90, color:'#00d4ff', icon:'👁️' },
+                { label:'Perception',   sub:'Pattern scoring',      angle:-18, color:'#06b6d4', icon:'🔍' },
+                { label:'Reasoning',    sub:'Strategy selection',   angle: 54, color:'#7b61ff', icon:'🧠' },
+                { label:'Action',       sub:'TDD execution',        angle:126, color:'#10b981', icon:'⚡' },
+                { label:'URS Signal',   sub:'Reward / Penalty',     angle:198, color:'#f59e0b', icon:'📊' },
+            ];
+
+            // Draw arcs between nodes
+            nodes.forEach((n, i) => {
+                const next = nodes[(i+1) % nodes.length];
+                const a1 = n.angle * Math.PI/180;
+                const a2 = next.angle * Math.PI/180;
+                const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+                const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+                svg.append('line').attr('x1',x1).attr('y1',y1).attr('x2',x2).attr('y2',y2)
+                    .attr('stroke',n.color+'55').attr('stroke-width',1.5)
+                    .attr('marker-end','url(#urs-arrow)');
+            });
+
+            // Node circles
+            nodes.forEach(n => {
+                const angle = n.angle * Math.PI / 180;
+                const nx = cx + r * Math.cos(angle);
+                const ny = cy + r * Math.sin(angle);
+                const g = svg.append('g').attr('transform',`translate(${nx},${ny})`);
+                g.append('circle').attr('r',32).attr('fill',n.color+'12').attr('stroke',n.color+'40').attr('stroke-width',1.5);
+                g.append('text').attr('y',-4).attr('text-anchor','middle').attr('font-size','18').text(n.icon);
+                g.append('text').attr('y',14).attr('text-anchor','middle').attr('fill',n.color)
+                    .attr('font-size','9px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text(n.label.toUpperCase());
+                g.append('text').attr('y',26).attr('text-anchor','middle').attr('fill','#475569')
+                    .attr('font-size','8px').attr('font-family','Inter,sans-serif').text(n.sub);
+            });
+
+            // Centre label
+            svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',36)
+                .attr('fill','rgba(10,14,39,0.9)').attr('stroke','rgba(123,97,255,0.3)').attr('stroke-width',1.5);
+            svg.append('text').attr('x',cx).attr('y',cy-6).attr('text-anchor','middle')
+                .attr('fill','#c4b5fd').attr('font-size','11px').attr('font-weight','800').attr('font-family','Space Grotesk,Inter,sans-serif').text('CORTEX');
+            svg.append('text').attr('x',cx).attr('y',cy+8).attr('text-anchor','middle')
+                .attr('fill','#475569').attr('font-size','9px').attr('font-family','Inter,sans-serif').text('Learning Loop');
+        }
+
+        // ─── PCB Bars — animate confidence fills on tab activation ───
+        function animatePcbBars() {
+            const bars = document.querySelectorAll('.pcb-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        bars.forEach(bar => {
+                            const t = bar.getAttribute('data-target');
+                            if (t) bar.style.width = t + '%';
+                        });
+                    }
+                });
+            }, { threshold: 0.3 });
+            const section = document.getElementById('pcb-bars');
+            if (section) observer.observe(section);
+        }
 
         // ─── D3: Intelligence Diamond ───
         function buildDiamondChart() {
@@ -1304,6 +2352,42 @@
             nodeG.append('text').attr('y', 55).attr('text-anchor', 'middle')
                 .attr('fill', '#64748b').attr('font-size', '8px').text(d => d.sub);
         }
+    </script>
+
+    <!-- ─── CORTEX Robot Scroll-to-Top ─── -->
+    <button id="cortex-robot-top" aria-label="Scroll to top" title="Back to top">
+        <span class="robot-tooltip">Back to top</span>
+        <span class="robot-glow"></span>
+        <span class="robot-body-wrap">
+            <span class="robot-head">
+                <span class="robot-eye"></span>
+                <span class="robot-eye"></span>
+                <span class="robot-mouth"></span>
+            </span>
+            <span class="robot-body">
+                <span class="robot-chest-arrow"></span>
+            </span>
+        </span>
+    </button>
+
+    <script>
+        // ─── Robot scroll-to-top show/hide + click ───
+        (function () {
+            const btn = document.getElementById('cortex-robot-top');
+            const THRESHOLD = 320;
+            let ticking = false;
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        btn.classList.toggle('visible', window.scrollY > THRESHOLD);
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        })();
     </script>
 </body>
 </html>

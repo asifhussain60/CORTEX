@@ -49,6 +49,17 @@
         .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
         .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(245, 158, 11, 0.65)); transform: scale(1.02); }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (hover: hover) { .glass-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(245,158,11,0.15); } }
         .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }

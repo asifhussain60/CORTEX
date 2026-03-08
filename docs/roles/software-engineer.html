@@ -45,6 +45,17 @@
         .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(20, 184, 166, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
         .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(20, 184, 166, 0.65)); transform: scale(1.02); }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (hover: hover) { .glass-card:hover { border-color: rgba(20,184,166,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(20,184,166,0.15); } }
         .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
@@ -665,6 +676,63 @@ cortex_verify op=agents
                     <span class="flex items-center gap-1.5 text-teal-400"><span class="w-3 h-3 rounded-sm bg-teal-500 inline-block"></span>Unit (&lt;5min)</span>
                     <span class="flex items-center gap-1.5 text-violet-400"><span class="w-3 h-3 rounded-sm bg-violet-500 inline-block"></span>Golden (sequential)</span>
                     <span class="flex items-center gap-1.5 text-amber-400"><span class="w-3 h-3 rounded-sm bg-amber-500 inline-block"></span>Full (parallel)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SELF-SUSTAINING ARCHITECTURE -->
+        <section class="space-y-10">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Zero Framework Overhead
+                </div>
+                <h2 class="section-title font-black tracking-tighter">CORTEX Manages Itself.<br/>You Manage Your Code.</h2>
+                <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                    Most frameworks require a dedicated engineer to keep them aligned — upgrading rules, fixing wiring drift, tuning configuration. CORTEX is built so that it never needs that. You extend it safely and ship — the framework stays current on its own.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
+                    <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-merge" class="w-4 h-4"></i></div>
+                    <h4 class="font-black text-sm tracking-tight text-teal-300">Add an Orchestrator — Ship Immediately</h4>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Implement <code class="font-mono text-teal-300">IOrchestrator</code>, drop it in <code class="font-mono text-teal-300">cortex/orchestrators/</code>, declare its intent keywords. CORTEX discovers it at startup, routes to it automatically, and governs it under all 60+ rules without any additional configuration.</p>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900/80 hover:border-emerald-400/50 transition-all">
+                    <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
+                    <h4 class="font-black text-sm tracking-tight text-emerald-300">No Drift, Ever</h4>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">Run <code class="font-mono text-emerald-300">refresh_prompt_suite.py</code> after any change. It introspects the live codebase, counts orchestrators, MCP tools, and intent types, then regenerates all documentation to match. Drift between docs and code becomes structurally impossible.</p>
+                </div>
+                <div class="glass-card p-6 space-y-3 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50 transition-all">
+                    <div class="w-9 h-9 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="activity" class="w-4 h-4"></i></div>
+                    <h4 class="font-black text-sm tracking-tight text-violet-300">Health Is a Command, Not a Meeting</h4>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">22 orchestrator health endpoints. One command: <code class="font-mono text-violet-300">/health</code>. Output tells you exactly what is wired, what isn't, and where. No manual diagnosis. No architecture review session to verify the framework is intact after a merge.</p>
+                </div>
+            </div>
+            <div class="glass-card p-5 md:p-7 border-teal-500/20 bg-gradient-to-br from-teal-950/20 to-transparent">
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="space-y-3">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-slate-400">The Engineer's Contract with CORTEX</div>
+                        <ul class="space-y-2 text-[14px] text-slate-400">
+                            <li class="flex gap-2"><span class="text-teal-400 mt-0.5">✅</span>Write your orchestrator. CORTEX registers it.</li>
+                            <li class="flex gap-2"><span class="text-teal-400 mt-0.5">✅</span>Ship your feature. CORTEX enforces TDD and security.</li>
+                            <li class="flex gap-2"><span class="text-teal-400 mt-0.5">✅</span>Encounter a failure. CORTEX logs it, analyses it, prevents recurrence.</li>
+                            <li class="flex gap-2"><span class="text-teal-400 mt-0.5">✅</span>Take a week off. CORTEX holds institutional memory while you're away.</li>
+                            <li class="flex gap-2"><span class="text-slate-600 mt-0.5">❌</span>No upgrade scripts. No platform team to coordinate. No documentation to manually keep current.</li>
+                        </ul>
+                    </div>
+                    <div class="code-block text-[13px]"><span class="code-cmt"># Add your domain. Three steps.</span>
+
+<span class="code-cmt"># 1. Implement the protocol</span>
+<span class="code-kw">class</span> <span class="code-cls">MyDomainOrchestrator</span>(OrchestratorProtocolMixin):
+    <span class="code-str">intent_keywords</span> = [<span class="code-str">"my-domain"</span>, <span class="code-str">"/my-cmd"</span>]
+
+<span class="code-cmt"># 2. Drop into orchestrators/</span>
+<span class="code-cmt"># cortex/orchestrators/domain/my_domain.py</span>
+
+<span class="code-cmt"># 3. Verify</span>
+<span class="code-fn">cortex_verify</span> op=orchestrators
+<span class="code-cmt"># → MyDomainOrchestrator registered ✅</span>
+<span class="code-cmt"># → Governed, wired, live. Done.</span></div>
                 </div>
             </div>
         </section>
