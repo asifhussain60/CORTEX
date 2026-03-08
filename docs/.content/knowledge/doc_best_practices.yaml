@@ -117,3 +117,182 @@ css_architecture:
     - id: css-005
       rule: "Media queries use token breakpoints from cortex-grid-system.css"
       severity: P1
+
+mission_statement_writing:
+  # Synthesised from: ClearPoint Strategy, Simon Sinek 'Start With Why', Georgetown University,
+  # American Red Cross, Harvard Business Review positioning research, and CORTEX .content/
+  # knowledge base. Approved source: docs/.content/00-mission.md
+  # Updated: 2026-03-08
+
+  canonical_mission: >
+    CORTEX is the governed AI engineering partner that thinks, enforces, and learns alongside
+    your team — so that quality, security, and institutional knowledge become structural
+    guarantees, not aspirational targets.
+
+  quality_criteria:
+    - id: ms-001
+      criterion: "One sentence at the core"
+      description: >
+        The essential mission must compress to a single sentence. Every role-specific
+        expansion is a derivation of that core — not a replacement for it.
+      enforcement: "canonical_mission key in this file is the SSOT — all derivations must trace to it"
+
+    - id: ms-002
+      criterion: "What + Who + Why we care — not How"
+      description: >
+        Mission statements answer what the platform does, who it serves, and why that matters
+        to those people. Implementation details (architectures, tool counts, pipeline stages)
+        belong in feature documentation — not in mission prose.
+      enforcement: "Review gate: if a statement contains a class name, file path, or metric count, revise it"
+
+    - id: ms-003
+      criterion: "Accessible language — the 14-year-old test"
+      description: >
+        If a curious non-technical person cannot understand the statement in one read,
+        it has failed. Jargon is permitted only when it carries irreplaceable meaning
+        and is immediately followed by a plain-language equivalent.
+      enforcement: "Read aloud to a non-engineer before publishing; revise any sentence that requires explanation"
+
+    - id: ms-004
+      criterion: "Honest specificity — no generic superlatives"
+      description: >
+        Words like 'innovative', 'transformative', 'world-class', and 'cutting-edge'
+        carry no information. Replace them with the specific problem being solved or
+        the specific outcome being delivered.
+      anti_patterns:
+        - "'CORTEX is an innovative AI platform' — say what it innovates instead"
+        - "'world-class governance' — say what governance prevents instead"
+        - "'transformative for your team' — say what transforms and why"
+
+    - id: ms-005
+      criterion: "Emotional truth — felt, not just comprehended"
+      description: >
+        The best mission statements make the reader feel the purpose before they analyse it.
+        Achieve this by naming the human frustration being solved, not just the solution.
+        'The same bugs keep coming back — not because engineers are careless, but because
+        knowledge of why something failed is fragile' lands before any list of features does.
+      enforcement: >
+        Read the statement and ask: 'Does this describe my actual experience?' If yes, publish.
+        If it reads like a spec sheet, revise.
+
+  structural_templates:
+    single_sentence:
+      pattern: "{Platform} is the {category} that {verb-phrase} — so that {outcome} becomes {guarantee}."
+      example: >
+        CORTEX is the governed AI engineering partner that thinks, enforces, and learns
+        alongside your team — so that quality, security, and institutional knowledge become
+        structural guarantees, not aspirational targets.
+
+    role_expansion:
+      pattern: |
+        [Name the problem the role actually feels]
+        [Name the frustration, not the technology]
+
+        [Platform] was built to [solve that problem].
+        [Show what changes — for that role, in their language]
+
+        [Closing line: short, rhythmic, memorable — 1 sentence maximum]
+      example_closing_lines:
+        - "Quality and security are no longer things your team aspires to. They are things CORTEX guarantees."
+        - "The team gets smarter together — regardless of who joined last week or who leaves next month."
+        - "One framework. Every role. No coordination overhead."
+
+  anti_patterns:
+    - id: ap-001
+      pattern: "Bolted-on quotes"
+      description: >
+        Appending a business thought-leader quote as justification after the claim
+        signals that the claim needs external support. A strong mission statement
+        stands without quotation. Use quotes in response headers and chapter epigraphs —
+        not in mission prose.
+
+    - id: ap-002
+      pattern: "Audience blending"
+      description: >
+        Writing one statement that tries to speak to engineers, business leaders, and
+        product owners simultaneously dilutes persuasion for all three. Write one
+        core sentence that is universal; write role expansions that each have one voice.
+
+    - id: ap-003
+      pattern: "Feature inventory disguised as mission"
+      description: >
+        'CORTEX provides 22 governance rules, a 6-stage AI pipeline, and OWASP gate checks'
+        is a feature list. A mission statement describes the human outcome those features produce.
+
+    - id: ap-004
+      pattern: "Passive voice opening"
+      description: >
+        'CORTEX is designed to help teams...' is weak. 'CORTEX was built on a single
+        conviction' or 'Every engineering team has standards — CORTEX enforces them' is
+        active and immediately engaging.
+
+    - id: ap-005
+      pattern: "Hedge words eroding confidence"
+      description: >
+        Words like 'helps', 'assists', 'aims to', 'seeks to' reduce the statement to an
+        aspiration. Replace with direct action verbs: enforces, guarantees, captures, surfaces.
+
+    - id: ap-006
+      pattern: "Length creep"
+      description: >
+        A mission statement longer than 3 sentences (per audience expansion) has drifted
+        into marketing copy. Cut to the conviction; move supporting detail to feature documentation.
+
+    - id: ap-007
+      pattern: "'So we built' construction"
+      description: >
+        'So we built a platform that...' centres the creator, not the person being served.
+        Prefer 'CORTEX was built to...' or '[Platform] was built on the conviction that...'
+        — these centre the purpose and the audience.
+
+  cortex_vocabulary:
+    approved_metaphors:
+      - term: "cognitive partner"
+        use_when: "Contrasting CORTEX with passive tools (calculators, linters, generators)"
+      - term: "senior colleague who never sleeps"
+        use_when: "Engineer audience — emphasises depth of codebase knowledge and always-on availability"
+      - term: "immune system"
+        use_when: "Governance explanation — self-defending, silent, proactive"
+      - term: "institutional memory"
+        use_when: "Learning and RCA — knowledge that persists beyond individual team members"
+      - term: "structural guarantee"
+        use_when: "Distinguishing enforcement from aspiration — quality as infrastructure"
+
+    forbidden_in_mission_prose:
+      - "orchestrator: internal implementation term; say 'specialist engine' or 'expert system'"
+      - "MCP: internal protocol; say 'IDE-accessible tools' or 'directly in your coding assistant'"
+      - "LENS: internal system name; say 'code intelligence' or 'deep code analysis'"
+      - "AC marker: internal audit term; say 'audit trail' or 'traceable record'"
+      - "token-optimised: implementation detail; describe the human outcome instead"
+      - "xdist / pytest: test tooling; say 'automated testing' if needed at all"
+
+  audience_routing:
+    - audience: "Business Leaders"
+      primary_concern: "Risk, cost, compliance, delivery predictability"
+      lead_with: "The cost of ungoverned AI / enforcement without overhead"
+      avoid: "Technical architecture, orchestrator counts, file paths"
+      canonical_expansion: "Statement 3 — Quality That Enforces Itself"
+
+    - audience: "Product Owners"
+      primary_concern: "Traceability, delivery velocity, requirement integrity"
+      lead_with: "Requirements flowing into tested, traceable code"
+      avoid: "Low-level implementation, governance rule IDs, test frameworks"
+      canonical_expansion: "Statement 2 — Knowledge That Travels With the Team"
+
+    - audience: "Software Engineers"
+      primary_concern: "Cognitive load reduction, code quality, learning, safety"
+      lead_with: "The senior colleague analogy; imagination over administration"
+      avoid: "Business ROI framing, compliance language, executive metrics"
+      canonical_expansion: "Statement 1 — Imagination Over Administration"
+
+    - audience: "Curious Learners"
+      primary_concern: "Understanding what AI-governed engineering looks like in practice"
+      lead_with: "Accessible narrative; show don't tell"
+      avoid: "Jargon of any kind; assume no prior engineering knowledge"
+      canonical_expansion: "Statements 1 and 4 combined"
+
+    - audience: "Organisations / Evaluators"
+      primary_concern: "Adoption risk, integration complexity, cross-role value"
+      lead_with: "One framework for every role; no coordination overhead"
+      avoid: "Single-role framing; implementation depth"
+      canonical_expansion: "Statement 5 — One Platform, Every Role"
