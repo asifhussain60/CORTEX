@@ -18,10 +18,9 @@ metadata:
   last_updated: '2026-03-08T00:00:00Z'
   total_phases: 120
   active: 0
-  completed: 107
+  completed: 108
   in_progress: 0
-  planned: 11
-  playbooks: 1
+  planned: 10
   governance_rules_total: 37
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
@@ -43,7 +42,7 @@ phase_detail_files:
   - { id: phase-138, status: PLANNED, priority: P1, sweep_id: SWEEP-138-GIT-CHECKPOINT-SAFETY, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-138-git-checkpoint-safety.yaml", note: "Git Checkpoint Safety: SubPhaseCheckpointInjector + RollbackManager + WorkflowComposer.compose_for_sub_phase(). Depends on phase-137." }
   - { id: phase-137, status: PLANNED, priority: P1, sweep_id: SWEEP-137-DEEP-INTELLIGENCE-WIRING, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-137-deep-intelligence-wiring.yaml", note: "Deep Intelligence Wiring: CCLQueryEngine + CapabilityVerifier + IntelligenceFacade 4 new methods + BUG-1 cache fix. Depends on phase-136." }
   - { id: phase-136, status: PLANNED, priority: P1, sweep_id: SWEEP-136-CAPE, gaps: 5, sub_phases: 5, file: "cortex-registry/planning/phases/planned/phase-136-cape.yaml", note: "CAPE: ComplexityTriageEngine + AutoPlanGenerator + 5 Analysis Gates + PlanExecutionLoop + GoldenTestGenerator. Depends on phase-135." }
-  - { id: phase-135, status: PLANNED, priority: P1, sweep_id: SWEEP-135-KAL, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-135-kal.yaml", note: "KAL: KnowledgeCoverageAssessor + KnowledgeAcquisitionOrchestrator (6-step) + IntelligenceFacade.acquire() + knowledge-acquisition-workflow.yaml. No dependencies — standalone foundation." }
+  - { id: phase-135, status: COMPLETE, completed_date: "2026-03-08", priority: P1, sweep_id: SWEEP-135-KAL, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-135-kal.yaml", note: "KAL COMPLETE 2026-03-08: DomainSignalExtractor + KnowledgeCoverageAssessor (GAP-01/02) + KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar (GAP-03) + KnowledgeAcquisitionOrchestrator 6-step + IntelligenceFacade.acquire() + invalidate_cache() + BUG-1 fix (GAP-04). 35 TDD tests GREEN. Ruff clean. No regressions." }
   - { id: phase-134, status: PLANNED, priority: P1, sweep_id: SWEEP-134-KNOWLEDGE-SYNC-PROMPT-WIRING, gaps: 11, sub_phases: 6, file: "cortex-registry/planning/phases/planned/phase-134-knowledge-sync-and-prompt-wiring.yaml", note: "Knowledge Sync & Prompt Wiring: post-backport alignment of copilot-instructions.md, AGENT-INDEX.md, cortex-doc.prompt.md, CORTEX.prompt.md, cortex-architect.prompt.md, all docs/.content/ files, and 2 new support agents (cortex-review-agent, cortex-feedback-agent). Depends on phases 130-133." }
   - { id: phase-133, status: PLANNED, priority: P1, sweep_id: SWEEP-133-META-AND-TEMPLATES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-133-meta-and-templates.yaml", note: "Backport Phase 4 — FEEDBACK intent + FeedbackOrchestrator + cortex-feedback.prompt.md (FB-008); 15 workflow template YAMLs + composer spec update (FB-010). Depends on phase-132." }
   - { id: phase-132, status: PLANNED, priority: P1, sweep_id: SWEEP-132-CORE-CAPABILITIES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-132-core-capabilities.yaml", note: "Backport Phase 3 — Universal Repo Intelligence Engine with 8 extractors + manifest + dashboard (FB-003); CodeReviewOrchestrator + REVIEW intent + cortex_review MCP tool (FB-001). Depends on phase-131." }
@@ -134,13 +133,13 @@ verification:
 
 summary:
   total_phases: 120
-  completed: 107
+  completed: 108
   active: 0
   in_progress: 0
-  planned: 11
+  planned: 10
   archived: 4
   playbooks: 1
-  completion_percentage: 89
+  completion_percentage: 90
   consolidation_summary: "2026-03-08 — phases 135–139 PLANNED (Issue #14 backport: KAL, CAPE, Deep Intelligence Wiring, Git Checkpoint Safety, Cross-Repo Feedback Extractor — dependency chain: 135→136→137→138→139). cortex-sts phases 138+140 SUPERSEDED by existing phases 126-128. 2026-03-07 — phases 129–134 PLANNED (6 phases added: Foundation Backport, Intelligence Layer, Core Capabilities, Meta & Templates, PO Intelligence Suite, Knowledge Sync & Prompt Wiring). Phase 128 COMPLETE (Conflict & Drift Eradication — 25/25 gaps CLOSED). Phase 127 COMPLETE (Deterministic Sync Engine — 6/6 GAPs, 23 golden tests). Governance: 197. Preflight: 424. Smoke: 2780+."
   active_phases: "No active phases. 11 PLANNED: phases 129–139. Execution order: 130→131→132→133→134 (prompt wiring) | 135→136→137→138→139 (Issue #14 backport, parallel track — no shared dependencies with 129-134). Full completion detail in phase_detail_files and cortex-registry/planning/phases/completed/."
 
@@ -197,13 +196,14 @@ phases:
   - id: phase-135
     title: "Knowledge Acquisition Layer (KAL) — Coverage Assessor + Acquisition Orchestrator + IntelligenceFacade.acquire()"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-08"
     depends_on: []
     sweep_id: SWEEP-135-KAL
     gaps: 4
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-135-kal.yaml"
-    note: "PLANNED 2026-03-08. Backport from cortex-sts Phases 137+138. KnowledgeCoverageAssessor (domain signal matching vs INDEX.yaml, threshold 0.80), DomainSignalExtractor (regex patterns from domain-signal-map.yaml), KnowledgeAcquisitionOrchestrator (6-step pipeline: assess→identify→synthesize→validate→register→re-verify, OPJMixin, URS signals), KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar, IntelligenceFacade.acquire() + invalidate_cache() entry points, knowledge-acquisition-workflow.yaml template. No dependencies — standalone foundation."
+    file: "cortex-registry/planning/phases/completed/phase-135-kal.yaml"
+    note: "COMPLETE 2026-03-08. Backport from cortex-sts Phases 137+138. KnowledgeCoverageAssessor (domain signal matching vs INDEX.yaml, threshold 0.80), DomainSignalExtractor (regex patterns from domain-signal-map.yaml), KnowledgeAcquisitionOrchestrator (6-step pipeline: assess→identify→synthesize→validate→register→re-verify, OPJMixin, URS signals), KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar, IntelligenceFacade.acquire() + invalidate_cache() entry points. 35 TDD tests GREEN. No dependencies — standalone foundation."
 
   # ── SUPERSEDED PHASES FROM cortex-sts (NOT BACKPORTED) ───────────────────────
   # cortex-sts Phase 138 (Production Audit Bug Remediation) → SUPERSEDED by phases 126-128
