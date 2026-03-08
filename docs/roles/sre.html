@@ -50,6 +50,17 @@
         .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(45, 212, 191, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
         .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(45, 212, 191, 0.65)); transform: scale(1.02); }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (hover: hover) { .glass-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(45,212,191,0.15); } }
         .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
@@ -459,6 +470,40 @@ scrape_configs:
 
 <span class="code-cmt"># Introspect live counts</span>
 <span class="code-fn">python3</span> scripts/refresh_prompt_suite.py <span class="code-str">--counts-only</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SELF-MANAGING INFRASTRUCTURE SECTION -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-950/50 via-slate-900/80 to-cyan-950/50 border border-teal-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Self-Managing Infrastructure
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">CORTEX Operates Itself.<br/>SREs Operate What Matters.</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        Seven SQLite databases with automatic 30-day retention and VACUUM cycles. Twenty-two health endpoints wired to structured probes. WAL mode enforced by governance rule, not convention. The platform's own reliability requirements are met continuously by the platform itself — without a runbook, a cron job, or an SRE on call for framework maintenance.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
+                        <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="database" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-teal-300">Data Hygiene Without Intervention</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">30-day retention enforced, orphaned records pruned, all 7 databases VACUUMed on a single command: <code class="text-teal-400 text-[11px]">refresh_prompt_suite.py --db-cleanup</code>. No custom scripts. No scheduled tasks to maintain.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-slate-900/80 hover:border-cyan-400/50 transition-all">
+                        <div class="w-9 h-9 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400"><i data-lucide="activity" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-cyan-300">22 Health Endpoints, Zero Manual Checks</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Every orchestrator domain exposes structured health probes. One command — <code class="text-cyan-400 text-[11px]">/health</code> — surfaces pass/fail status across the entire framework. Prometheus scrape config is included. Grafana dashboards ship with the repo.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
+                        <div class="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-blue-300">Extensions Register Themselves</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">New orchestrators added by the engineering team auto-register their health probes via the IOrchestrator protocol. SREs don't update dashboards for new services — the observability surface grows with the system.</p>
+                    </div>
                 </div>
             </div>
         </section>

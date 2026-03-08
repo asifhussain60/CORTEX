@@ -125,6 +125,17 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15) 50%, transparent);
         }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -1337,6 +1348,40 @@
                             <div class="text-base font-bold text-slate-200 mb-1">Key Insight</div>
                             <p class="card-body leading-relaxed">CORTEX's TDD-first enforcement and governance gates reduce bug-fix overhead by <strong class="text-rose-400">71%</strong>, freeing your team to deliver more customer value per sprint.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/50 via-slate-900/80 to-blue-950/50 border border-indigo-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="settings" class="w-3.5 h-3.5"></i> Zero Platform Overhead
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">CORTEX Runs Itself.<br/>Your Team Focuses on Delivery.</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        No dedicated team is needed to operate CORTEX. DoR gates enforce themselves. Audit trails write themselves. Velocity metrics update themselves. When your team grows or adds a new domain, CORTEX absorbs the change automatically — no upgrade cycle, no configuration sprint, no platform team to schedule.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900/80 hover:border-indigo-400/50 transition-all">
+                        <div class="w-9 h-9 bg-indigo-500/20 rounded-lg flex items-center justify-center text-indigo-400"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-indigo-300">Standards That Don't Need Champions</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">You no longer need a process champion reminding the team to write ACs before coding starts. CORTEX blocks work that hasn't passed DoR — every sprint, automatically. The standard holds itself.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
+                        <div class="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="plug" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-blue-300">Teams Extend It Without Asking</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Engineers add domain-specific orchestrators and agents without a change request or platform review. Your capacity to adapt grows with your team — CORTEX routes and governs new additions automatically.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
+                        <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="brain" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-teal-300">Institutional Memory Survives Attrition</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Root cause analyses, prevention rules, and delivery patterns persist in SQLite databases regardless of team turnover. New engineers inherit the institutional memory of everyone who came before them — from day one.</p>
                     </div>
                 </div>
             </div>

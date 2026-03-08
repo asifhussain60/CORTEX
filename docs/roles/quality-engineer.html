@@ -48,6 +48,17 @@
         .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(16, 185, 129, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
         .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(16, 185, 129, 0.65)); transform: scale(1.02); }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (hover: hover) { .glass-card:hover { border-color: rgba(16,185,129,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(16,185,129,0.15); } }
         .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
@@ -505,6 +516,40 @@
     cycle += 1
     <span class="code-kw">if</span> cycle >= 3: <span class="code-kw">break</span>       <span class="code-cmt"># max 3 cycles</span>
 <span class="code-fn">AC_COMPLETE</span>(<span class="code-str">"✅ 0 P0 | 0 P1"</span>)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SELF-MANAGING QUALITY SECTION -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-slate-900/80 to-teal-950/50 border border-emerald-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Autonomous Quality Governance
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Quality Gates Enforce Themselves.<br/>You Set the Standard.</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        CORTEX enforces quality continuously — no manual check-ins, no process championing, no reminders. TDD laws block non-compliant code before it merges. The 8-dimension quality scorer runs on every diff. Convergence loops rescan until P0 and P1 counts hit zero. QEs define <em>what quality means</em>; CORTEX enforces it without being asked.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900/80 hover:border-emerald-400/50 transition-all">
+                        <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-emerald-300">Tests Exist Before Code Does</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">CORE-008 is not a team agreement — it's an architectural constraint. TDD enforcement blocks work that skips the test-first contract. The gate doesn't need a QE present to fire; it fires on every save.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
+                        <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-teal-300">Issues Resolve Until Zero Remain</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">The detect→fix→rescan convergence loop (CORE-068) doesn't stop after one pass. It cycles until P0 and P1 counts are zero. Quality assurance is a guarantee, not a best-effort.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-green-500/30 bg-gradient-to-br from-green-950/40 to-slate-900/80 hover:border-green-400/50 transition-all">
+                        <div class="w-9 h-9 bg-green-500/20 rounded-lg flex items-center justify-center text-green-400"><i data-lucide="brain" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-green-300">Defects Don't Repeat</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">The RCA Memory Engine records root causes and generates prevention rules after every significant failure. The same bug class doesn't require a QE retrospective the second time — CORTEX already knows why it happened.</p>
+                    </div>
                 </div>
             </div>
         </section>

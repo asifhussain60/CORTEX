@@ -49,6 +49,17 @@
         .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(244, 63, 94, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
         .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(244, 63, 94, 0.65)); transform: scale(1.02); }
 
+
+        /* ─── Consistent card heights in all grids ─── */
+        [class*="grid"] > .relative,
+        [class*="grid"] > .relative.group {
+            display: flex;
+            flex-direction: column;
+        }
+        [class*="grid"] > .relative > .glass-card,
+        [class*="grid"] > .relative.group > .glass-card {
+            flex: 1;
+        }
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (hover: hover) { .glass-card:hover { border-color: rgba(244,63,94,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(244,63,94,0.15); } }
         .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
@@ -536,6 +547,40 @@
                         <span class="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm font-semibold">Fail secure</span>
                         <span class="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm font-semibold">Defense in depth</span>
                         <span class="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm font-semibold">Audit all access</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SELF-SUSTAINING SECURITY SECTION -->
+        <section class="relative py-12 my-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-rose-950/50 via-slate-900/80 to-red-950/50 border border-rose-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="shield" class="w-3.5 h-3.5"></i> Continuous Security Posture
+                    </div>
+                    <h2 class="section-title font-black tracking-tighter">Security Rules Self-Enforce.<br/>No Scheduling Required.</h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        OWASP gates don't wait for a scheduled audit. Secret detection doesn't wait for a policy review cycle. STRIDE/DREAD threat modelling runs as code touches the pipeline. Your security posture is a continuous invariant maintained by the framework — not a periodic exercise owned by a single engineer.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div class="glass-card p-6 space-y-3 border-2 border-rose-500/30 bg-gradient-to-br from-rose-950/40 to-slate-900/80 hover:border-rose-400/50 transition-all">
+                        <div class="w-9 h-9 bg-rose-500/20 rounded-lg flex items-center justify-center text-rose-400"><i data-lucide="lock" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-rose-300">Controls That Never Clock Off</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">5-layer defence — pre-commit secrets, SAST, OWASP gate, supply chain validation, compliance audit — runs on every change, every time. Controls don't degrade between security reviews because they aren't owned by the review cycle.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-orange-500/30 bg-gradient-to-br from-orange-950/40 to-slate-900/80 hover:border-orange-400/50 transition-all">
+                        <div class="w-9 h-9 bg-orange-500/20 rounded-lg flex items-center justify-center text-orange-400"><i data-lucide="git-commit" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-orange-300">Tamper-Evident by Architecture</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">Every orchestrator action writes to a tamper-evident audit chain in SQLite — WAL mode enforced by governance rule. Security Engineers don't configure log integrity; it's a non-negotiable structural property of the framework.</p>
+                    </div>
+                    <div class="glass-card p-6 space-y-3 border-2 border-red-500/30 bg-gradient-to-br from-red-950/40 to-slate-900/80 hover:border-red-400/50 transition-all">
+                        <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center text-red-400"><i data-lucide="brain" class="w-4 h-4"></i></div>
+                        <h4 class="font-black text-sm tracking-tight text-red-300">Threats Get Remembered</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">The RCA Memory Engine classifies security findings, generates prevention rules, and surfaces prior threat patterns before each code-modifying operation. Vulnerability classes that appeared once don't silently re-emerge — CORTEX has already seen them.</p>
                     </div>
                 </div>
             </div>
