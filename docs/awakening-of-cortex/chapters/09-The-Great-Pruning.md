@@ -164,7 +164,7 @@ On Thursday evening, Asif ran the Vacuum for the first time. He watched the eigh
 
 "It's telling me our mess was exactly proportional to our original sin," Asif said. "Which is either poetic or a data quality issue. I choose poetic."
 
-From that day forward, the Vacuum ran on a schedule—silently, automatically, without drama. Developers came in on Monday morning to find their shared workspace immaculate, with no human having performed any cleaning the previous week. It was deeply unsettling to everyone who hadn't been told about it.
+From that day forward, the Vacuum ran on a schedule—silently, automatically, without drama. A built-in **Recency Guard** ensured that recently touched files were never flagged for cleanup, protecting active work while still sweeping the accumulated entropy of weeks past. Developers came in on Monday morning to find their shared workspace immaculate, with no human having performed any cleaning the previous week. It was deeply unsettling to everyone who hadn't been told about it.
 
 Derek from DevOps filed a bug report titled: *"Who is tidying the repository at 3AM and why?"*
 

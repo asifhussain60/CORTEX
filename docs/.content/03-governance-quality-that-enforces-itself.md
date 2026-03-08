@@ -32,7 +32,7 @@ CORTEX enforces governance at every stage of the development process — not jus
 
 ---
 
-## The Rule Hierarchy — 55+ Active Rules
+## The Rule Hierarchy — 60+ Active Rules
 
 CORTEX governance rules live as structured configuration files in a version-controlled registry. Every rule is auditable, reviewable, and traceable to a commit. Think of it like the building code for a city: every structure must meet the code, every inspection is recorded, and no builder can opt out. Rules are organised in tiers based on their authority level.
 
@@ -72,6 +72,18 @@ After any implementation, fix, refactor, or audit, CORTEX runs a detect→fix→
 This means an audit does not complete because CORTEX ran through the checklist. It completes because the checklist items are resolved. An implementation does not complete when the tests pass. It completes when the tests pass *and* no new governance violations were introduced in the process.
 
 The convergence gate applies to implementations, fixes, refactors, audits, debugging sessions, cleanups, and health checks. Query operations and planning are exempt — they don't modify code.
+
+---
+
+## Quality Scoring — Governance Meets Intelligence
+
+Governance rules answer the question "does this code comply?" The **Quality Analysis Engine** answers a deeper question: "how healthy is this codebase overall?"
+
+The engine evaluates five dimensions — structural complexity, test coverage adequacy, documentation completeness, dependency health, and governance compliance posture — and produces a composite score from 0 to 100. Scores are tracked over time, so teams can see whether a codebase is improving or degrading across sprints.
+
+This score feeds directly into the Code Review Orchestrator and the production readiness audit. A codebase with a declining quality score triggers more aggressive governance gates and more detailed audit findings. A codebase with a rising score earns more advisory (rather than blocking) treatment for low-severity findings.
+
+For business leaders, the quality score is a single number they can report to stakeholders. For engineers, the per-dimension breakdowns identify exactly where to invest improvement effort.
 
 ---
 

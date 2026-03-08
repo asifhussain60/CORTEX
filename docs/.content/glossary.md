@@ -31,6 +31,8 @@ order: 99
 
 **Anti-Repetition Ring Buffer** — Deque-based memory (n=10) that prevents the same quote or principle from appearing in consecutive CORTEX responses. Part of PrincipleSelector. Module: `cortex/intelligence/principle_selector.py`.
 
+**Archetype Classifier** — Intelligence component that identifies the structural archetype of a codebase (monolith, modular monolith, microservices, serverless, event-driven, etc.) using LENS analysis signals. The classification drives strategy selection in the Reasoning tier and adjusts governance rule severity based on the detected architecture style. Archetype definitions are maintained in `cortex-registry/archetypes/archetype-definitions.yaml`. Module: `cortex/intelligence/perception/archetype_classifier.py`.
+
 **Atom (Response Template)** — Tier 1 building block in the 3-tier LEGO response template system. Smallest reusable units: identity, quote, principle, intent-reflection, status-footer. Location: `cortex-registry/templates/response/atoms/`.
 
 **Audit Database (CortexAuditDB)** — SQLite WAL database storing all operation records with hash-chain integrity. Location: `.cortex-runtime/`. Module: `cortex/infrastructure/audit_db.py`.
@@ -51,6 +53,8 @@ order: 99
 
 **Circuit Breaker** — Resilience pattern that stops calls to failing services. States: Closed → Open → Half-Open. Module: `cortex/infrastructure/circuit_breaker.py`.
 
+**Code Review Orchestrator** — Domain orchestrator that performs structured, multi-stage code review. Examines code quality, security posture, pattern adherence, documentation coverage, and governance compliance in a single coordinated pass. Produces prioritised findings with severity, remediation guidance, and links to the relevant governance rule. Exposed via the `cortex_review` MCP tool and triggered by the REVIEW intent type. Location: `cortex/orchestrators/domain/code_review_orchestrator.py`.
+
 **Cohesive Brain Refactor** — Multi-phase architectural transformation that unified multiple packages into the single `cortex` package.
 
 **Composition (Response Template)** — Tier 3 building block in the 3-tier LEGO response template system. Terminal outputs assembled from blocks: implement, fix, refactor, debug, audit-fix, health, vacuum, educational. Location: `cortex-registry/templates/response/compositions/`.
@@ -59,17 +63,27 @@ order: 99
 
 **ConsolidatedTool** — Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail. Module: `cortex/mcp/mcp_tool_base.py`.
 
+**Content Library (EpochShuffler)** — Centralised content management facade that provides anti-repetition guarantees across all content pools: quotes (120 entries), principles (90 entries), and analogies. The EpochShuffler algorithm ensures every item in a pool is used exactly once before any item repeats — like a playlist that plays every song before reshuffling. Accessed via `ContentLibraryFacade`. Module: `cortex/intelligence/content_library_facade.py`.
+
+**ContentLibraryFacade** — Single entry point for all content selection operations (quotes, principles, analogies). Delegates to pool-specific EpochShuffler instances and enforces anti-repetition ring buffers. Replaces direct access to `atom-quote.yaml` and `high-value-principles.yaml`. Module: `cortex/intelligence/content_library_facade.py`.
+
 **CORE-055** — Golden Test Tier Contract. Golden tests in `tests/golden/` must always pass. Zero regression allowed.
 
 **CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`.
 
 **CORE Rules** — Governance rules identified by `CORE-nnn` IDs. An extensive set of CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ AC rules), all enforced at pre-commit + CI + runtime.
 
+**cortex_ado** — MCP tool for Azure DevOps work item synthesis. Pulls user stories, bugs, and tasks from ADO boards, enriches them with LENS context, and injects sprint-aware acceptance criteria into the intelligence pipeline. Extends the provider-agnostic `WorkItemProvider` protocol. Module: `cortex/mcp/tools/ado_tool.py`.
+
+**cortex_feedback** — MCP tool for structured user feedback capture. Records satisfaction signals, improvement suggestions, and correction notes against specific CORTEX responses. Feedback flows into the Unified Reinforcement Signal for confidence adjustment. Module: `cortex/mcp/tools/feedback_tool.py`.
+
 **cortex_learning** — MCP tool for Unified Reinforcement Signal management. Six operations: `emit` (record signal), `history` (query signals), `decay` (age idle patterns), `promote` (elevate high-confidence patterns), `quarantine` (isolate low-confidence patterns), `metrics` (URS dashboard). Module: `cortex/mcp/tools/learning_tool.py`.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
 
 **cortex_fetch_work_items** — MCP tool for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
+
+**cortex_review** — MCP tool exposing the Code Review Orchestrator. Accepts a file path or directory, runs the 6-stage review pipeline (structure → security → patterns → documentation → governance → synthesis), and returns prioritised findings with remediation guidance. Module: `cortex/mcp/tools/review_tool.py`.
 
 ## D
 
@@ -85,9 +99,19 @@ order: 99
 
 **EnforcementOrchestrator** — Orchestrator that validates code against CORE governance rules. Coordinates multiple enforcement agents. Location: `cortex/orchestrators/core/`.
 
+**EpochShuffler** — Anti-repetition algorithm that guarantees every item in a content pool is selected exactly once before any item repeats. Named after the machine-learning concept of epoch-based data shuffling. Powers the Content Library's quote, principle, and analogy pools. See also: Content Library (EpochShuffler), ContentLibraryFacade. Module: `cortex/intelligence/content_library_facade.py`.
+
 **Evidence Bundle** — Collection of audit records, test results, and governance checks packaged as compliance proof. Module: `cortex/infrastructure/evidence_bundle.py`.
 
 **ExtendedGovernanceAgent** — Enforcement agent covering CORE-058 through CORE-063 rules.
+
+## F
+
+**Feedback / FEEDBACK Intent** — A CORTEX intent type for structured user feedback. When triggered, the FeedbackOrchestrator captures satisfaction signals, improvement suggestions, or correction notes and routes them into the Unified Reinforcement Signal for confidence adjustment. Exposed as the `cortex_feedback` MCP tool. Location: `cortex/orchestrators/domain/feedback_orchestrator.py`.
+
+**FeedbackOrchestrator** — Domain orchestrator that processes FEEDBACK intent requests. Validates feedback structure, links it to the originating request via audit trail, and emits a reinforcement signal based on the feedback sentiment. Location: `cortex/orchestrators/domain/feedback_orchestrator.py`.
+
+**Framework Self-Analyzer (CortexFrameworkAnalyzer)** — Intelligence component that introspects CORTEX's own architecture at runtime — counting orchestrators, MCP tools, governance rules, workflow templates, and intent types. Powers the `refresh_prompt_suite.py` script and enables CORTEX to validate its documentation against its live implementation. Detects architecture drift between code and documentation as P0/P1 violations. Module: `cortex/intelligence/framework_analyzer.py`.
 
 ## G
 
@@ -159,7 +183,9 @@ order: 99
 
 ## Q
 
-**Quote Library** — Curated collection of 120 literary quotes across 10 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal) sourced from engineering and business literature. Provides contextual wisdom in response headers. Location: `cortex-registry/templates/response/atoms/atom-quote.yaml`.
+**Quote Library** — Curated collection of 120 literary quotes across 10 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal) sourced from engineering and business literature. Provides contextual wisdom in response headers. Accessed via ContentLibraryFacade with EpochShuffler anti-repetition. Location: `cortex-registry/templates/response/atoms/atom-quote.yaml`.
+
+**Quality Analysis Engine** — Intelligence component that evaluates codebase quality across multiple dimensions: structural complexity, test coverage adequacy, documentation completeness, dependency health, and governance compliance posture. Produces a composite quality score (0–100) with per-dimension breakdowns and trend tracking over time. Findings feed into the Code Review Orchestrator and the production readiness audit. Module: `cortex/intelligence/quality_analysis_engine.py`.
 
 ## R
 
@@ -174,6 +200,8 @@ order: 99
 **ReinforcementSignal** — Dataclass carrying a typed feedback signal (see SignalType) from an orchestrator back to the learning subsystem. Fields: `signal_type`, `source`, `target_pattern`, `confidence_delta`, `context`, `timestamp`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
 **RequestRephraseOrchestrator** — Orchestrator that clarifies ambiguous or incomplete requests before routing to execution. Location: `cortex/orchestrators/core/`.
+
+**REVIEW / Code Review Intent** — Intent type routed to the Code Review Orchestrator. Triggers multi-pass code review across the changed-file set: structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance. Reviews are emitted inline as structured comments with severity (P0–P3) and fix suggestions. MCP tool: `cortex_review`. See also: Code Review Orchestrator.
 
 ## S
 
@@ -209,6 +237,8 @@ order: 99
 
 **Thin Index Contract** — Governance rule requiring `cortex-master.yaml` to remain a reference index only (≤500 lines). Phase detail lives in dedicated files under `cortex-registry/planning/phases/`. Prevents context exhaustion from bloated plan files.
 
+**Threat Model Engine** — Security intelligence component that generates threat models for a given codebase surface. Applies STRIDE classification (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) to entry points, data flows, and trust boundaries. Produces a ranked threat catalogue with risk scores and recommended mitigations. Integrates with the Security Orchestrator and the `/audit fix` pipeline Layer 5 security gate. Module: `cortex/intelligence/threat_model_engine.py`.
+
 **3-Tier Loading Model** — Token optimization architecture with three progressive context tiers: T0 (Auto — `copilot-instructions.md`, ~300 tokens, every session), T1 (Prompt — user-selected prompt file, ~1,500–2,700 tokens), T2 (Agent — lazy-loaded specialist agents, ~1,000–5,000 tokens each). Reduces session bootstrap from ~50,000 tokens to ~3,000 tokens (94% reduction). See `05-infrastructure/08-token-optimization.md`.
 
 **Token Optimization** — The set of strategies CORTEX uses to maximize productive turns in GitHub Copilot Chat sessions. Seven strategies: 3-Tier Loading Model, Lazy Agent Loading, LENS Intelligence Tiering, Request Rephrase compression, Continuation Prompt compression, YAML Lazy Loading with LRU caching, and Silent Autonomous Execution (CORE-049). Implementation spans `cortex/core/prompt_agent_integration.py`, `cortex/core/intelligence_mixin.py`, `cortex/core/yaml_loaders.py`, and `.github/templates/cortex-response-templates.md`.
@@ -218,6 +248,12 @@ order: 99
 ## U
 
 **Unified Reinforcement Signal (URS)** — Closed-loop learning system where every orchestrator operation emits a typed reinforcement signal that adjusts pattern confidence scores. Five signal strengths (STRONG_REWARD → STRONG_PUNISHMENT). Patterns with high confidence are promoted to top-tier knowledge; patterns with low confidence are quarantined. Idle patterns decay over time. Multiple integration surfaces wired across key orchestrators and intelligence components. MCP tool: `cortex_learning`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+
+**Universal Repo Intelligence** — Intelligence subsystem that extracts structured understanding from any repository regardless of language or framework. Employs 8 parallel extractors: dependency graph, architecture topology, test coverage map, API surface catalogue, configuration schema, build pipeline model, documentation index, and contributor-ownership matrix. Results feed into LENS analysis, onboarding workflows, and the Archetype Classifier. Module: `cortex/intelligence/repo_intelligence.py`.
+
+## V
+
+**Vacuum Recency Guard** — Safety mechanism within the Vacuum Orchestrator that prevents deletion of recently modified files. Files touched within a configurable grace window (default: 7 days) are excluded from vacuum sweeps even if they match cleanup heuristics. Protects work-in-progress artefacts from aggressive workspace cleaning. Enforced during all 8 vacuum stages. Module: `cortex/orchestrators/health/vacuum_orchestrator.py`.
 
 ## W
 

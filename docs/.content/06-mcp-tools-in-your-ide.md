@@ -52,6 +52,15 @@ These tools handle intent classification and request lifecycle management — th
 | **cortex_ask** | Answers educational questions about CORTEX architecture with verification against live code |
 | **cortex_tools_catalog** | Lists all registered tools with their categories and descriptions |
 
+### Code Review and Feedback
+
+These tools expose the review and feedback loop — automated code review and structured user feedback capture.
+
+| Tool | What It Does |
+|---|---|
+| **cortex_review** | Runs multi-pass code review across changed files — structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance — surfaced inline with severity (P0–P3) and fix suggestions |
+| **cortex_feedback** | Captures structured user feedback (satisfaction signals, corrections, suggestions) against specific CORTEX responses and routes them into the Unified Reinforcement Signal for confidence adjustment |
+
 ### Governance and Compliance
 
 These tools expose the governance layer — rule checking, compliance validation, and dependency management.
@@ -88,11 +97,13 @@ The principle is not selected at random. The same intent classification that rou
 
 This appears on every CORTEX response — not as decoration, but as a visible expression of the governance philosophy being applied. For teams new to structured engineering practices, it creates a learning moment on every interaction. For experienced engineers, it provides a shared vocabulary that connects daily tool use to the principles that shaped the discipline.
 
-### Intelligent Quote and Principle Selection (Phase 123-124)
+### Intelligent Quote and Principle Selection — Content Library
 
-CORTEX implements anti-repetition quote selection with a ring buffer (n=10) that ensures the same quote never appears twice in consecutive responses. Selection is weighted-random within theme-filtered candidates, with telemetry tracking selection latency (p95 ≤ 3ms) and repetition avoidance.
+CORTEX implements anti-repetition content selection through the **Content Library**, powered by the **EpochShuffler** algorithm. Like a music playlist that plays every song exactly once before reshuffling, the EpochShuffler guarantees every item in a content pool is used before any item repeats. This applies to quotes (120 entries), principles (90 entries), and analogies — all accessed through a unified `ContentLibraryFacade`.
 
-Beyond quotes, CORTEX maintains a curated library of 90 SDLC principles across 10 domains — including TDD, architecture, security, devops, code quality, and observability axioms. These principles are injected into analysis and design responses (QUERY, INVESTIGATE intents) but suppressed during operational execution (IMPLEMENT, FIX, REFACTOR) to maintain focus.
+Selection is weighted-random within theme-filtered candidates, with a ring buffer (n=10) as a secondary guard and telemetry tracking selection latency (p95 ≤ 3ms).
+
+Beyond quotes, CORTEX maintains a curated library of 90 SDLC principles across 10 domains — including TDD, architecture, security, devops, code quality, and observability axioms. These principles are injected into analysis and design responses (QUERY, INVESTIGATE intents) but suppressed during operational execution (IMPLEMENT, FIX, REFACTOR) to maintain focus. Quote and principle pools are strictly separated — quotes live in `atom-quote.yaml`, principles live in `high-value-principles.yaml` — and the ContentLibraryFacade manages both independently with no cross-contamination.
 
 The quote library contains 120 entries across 10 themes (`quality`, `improvement`, `security`, `architecture`, `discipline`, `systems-thinking`, `strategy`, `flow`, `learning`, `universal`), all sourced from books already cited in CORTEX's governance rule definitions. The full library and theme→intent routing table are maintained as a single source of truth in the LEGO atom system at `cortex-registry/templates/response/atoms/atom-quote.yaml`.
 
@@ -105,6 +116,7 @@ These tools connect CORTEX to project planning and repository assessment workflo
 | **cortex_plan** | Creates structured remediation and project plans from audit findings |
 | **cortex_onboard** | Runs a complete repository analysis — security assessment, architecture mapping, dashboard generation |
 | **cortex_master_plan** | Creates, queries, updates, and synchronises phase planning documents in the master plan registry |
+| **cortex_ado** | Pulls user stories, bugs, and tasks from Azure DevOps boards, enriches them with LENS context, and injects sprint-aware acceptance criteria into the intelligence pipeline |
 
 ### Test Generation
 

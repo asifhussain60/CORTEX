@@ -68,7 +68,7 @@ Writing a test is easy. Writing a *meaningful* test is harder. CORTEX includes a
 
 **Maintenance** — Will this test stay relevant? Tests that require extensive mocking score lower because they test the test infrastructure more than the actual behaviour.
 
-Tests scoring in the top tier are preserved and may be promoted to the core test suite — the highest-priority tests that must always pass. Tests scoring in the middle tier are flagged for improvement. Tests scoring in the bottom tier are candidates for removal, because a low-quality test provides false confidence without genuine protection.
+Tests scoring in the top tier are preserved and may be promoted to the core test suite — the highest-priority tests that must always pass. Tests scoring in the middle tier are flagged for improvement. Tests scoring in the bottom tier are candidates for removal, because a low-quality test provides false confidence without genuine protection. Test quality scores also feed into the Code Review Orchestrator and the Quality Analysis Engine, where they contribute to the overall codebase health score.
 
 ---
 

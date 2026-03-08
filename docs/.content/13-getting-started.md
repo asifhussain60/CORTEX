@@ -90,14 +90,18 @@ Once connected, you can interact with CORTEX entirely through natural language i
 |---|---|
 | Understand what CORTEX can do | `What capabilities does CORTEX provide?` |
 | Review code quality | `Review the code quality of src/services/user_service.py` |
+| Get an automated code review | `Review the changes I made to the auth module` |
 | Check governance compliance | `Run a compliance check on the current codebase` |
 | Start a new feature with TDD | `Implement user email verification using TDD` |
 | Find and fix quality issues | `Audit the codebase and fix all quality issues` |
 | Debug a failing test | `Debug why the authentication tests are failing` |
 | Understand a codebase | `Analyse the architecture of this repository` |
 | Check security posture | `Run a security audit` |
+| Generate a threat model | `Generate a threat model for the payment API` |
 | Refactor a file | `Refactor user_controller.py to follow clean architecture` |
 | Generate documentation | `Generate documentation for the payment module` |
+| Provide feedback on a response | `I disagree with the refactoring approach — here's why…` |
+| Pull work items from your board | `Show me the current sprint user stories from ADO` |
 
 ---
 
@@ -135,7 +139,7 @@ Available tasks include all test modes, MCP setup, and the full audit pipeline.
 | Path | What Lives Here |
 |---|---|
 | `cortex/` | All CORTEX source code (the Python package) |
-| `cortex/orchestrators/` | The 320+ orchestrators that handle every request type |
+| `cortex/orchestrators/` | The 330+ orchestrators that handle every request type |
 | `cortex/mcp/tools/` | The 55+ tools exposed to Copilot Chat |
 | `cortex-registry/` | Governance rules, workflow templates, knowledge base (YAML) |
 | `tests/` | The full test suite (mirrors `cortex/` structure) |
@@ -164,7 +168,7 @@ These environment variables adjust CORTEX behaviour for specific scenarios. Defa
 
 After your first successful session, most developers explore:
 
-1. **Read the governance rules** — `cortex-registry/core/` contains the 55+ rules CORTEX enforces. Understanding them helps you understand why CORTEX makes the recommendations it does.
+1. **Read the governance rules** — `cortex-registry/core/` contains the 60+ rules CORTEX enforces. Understanding them helps you understand why CORTEX makes the recommendations it does.
 
 2. **Run your first audit** — In Copilot Chat, ask for a full audit: `Audit the codebase and fix all quality issues`. Watch the nine-stage pipeline work through the codebase systematically.
 

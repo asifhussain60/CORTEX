@@ -24,7 +24,7 @@ CORTEX implements security at five distinct layers, so that a vulnerability miss
 
 **Layer 4 — Static Analysis and CVE Scanning** — Before implementation begins on security-sensitive changes, a dedicated security orchestrator performs static application security testing and checks dependencies against known vulnerability databases. New vulnerabilities in dependencies are flagged as they are published, not just when the next audit runs.
 
-**Layer 5 — Release Gate** — Before any production release, a security assessment workflow runs automatically, including a full OWASP Top 10 check and a threat model review for the specific change being released.
+**Layer 5 — Release Gate** — Before any production release, a security assessment workflow runs automatically, including a full OWASP Top 10 check and a threat model review for the specific change being released. The **Threat Model Engine** applies STRIDE classification (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) to entry points, data flows, and trust boundaries — producing a ranked threat catalogue with risk scores and recommended mitigations. The engine generates threat models on demand for any codebase surface, not just during release cycles.
 
 ---
 
@@ -54,11 +54,11 @@ Security is not a phase in CORTEX's delivery lifecycle. It is a gate at every ph
 
 **Implementation** — The security analyzer runs on the code being written. Findings are surfaced immediately — not in the next audit, but during the current development session, while the context is still fresh and the fix is trivial.
 
-**Code Review** — Secrets and PII are scanned again at the commit boundary. Dependencies are checked for newly published vulnerabilities. Branch hygiene is enforced.
+**Code Review** — The Code Review Orchestrator runs multi-pass reviews including a dedicated security pass that checks for secrets, PII, and vulnerability patterns in the changed files. Secrets and PII are scanned again at the commit boundary. Dependencies are checked for newly published vulnerabilities. Branch hygiene is enforced.
 
 **Integration** — Security integration tests verify that security controls work correctly in the integrated system, not just in unit isolation.
 
-**Security Audit** — A full security audit can be triggered at any time, running the complete threat model analysis and OWASP Top 10 check against the current codebase state.
+**Security Audit** — A full security audit can be triggered at any time, running the complete Threat Model Engine analysis and OWASP Top 10 check against the current codebase state. The threat model produces a ranked catalogue of risks with STRIDE classifications, enabling teams to prioritise remediation by actual risk severity rather than generic severity ratings.
 
 **Release** — The release security checklist validates that all security gates have passed, secrets have been rotated as required, and the deployment configuration is hardened.
 

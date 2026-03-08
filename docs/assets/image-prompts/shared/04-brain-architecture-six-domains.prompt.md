@@ -18,7 +18,7 @@ The image should show:
   2. PARIETAL REGION — "Code Intelligence (LENS)" (purple #7b61ff glow): labeled "The Five Senses — 9 parallel analyzers, structure, history, security, patterns". Upper area.
   3. TEMPORAL REGION — "Brain: Perception → Reasoning → Action" (emerald #10b981 glow): labeled "The Thinking Centre — pattern recognition, strategy selection, execution planning". Mid-area.
   4. BRAIN STEM — "Decisioning" (amber #f59e0b glow): labeled "The Reflex System — intent routing in under 40ms". Base of brain.
-  5. IMMUNE OVERLAY — "Governance" (rose #f43f5e glow): labeled "The Immune System — 55+ rules, silent violation blocking". Overlaid across the brain as a protective mesh or shield pattern.
+  5. IMMUNE OVERLAY — "Governance" (rose #f43f5e glow): labeled "The Immune System — 60+ rules, silent violation blocking". Overlaid across the brain as a protective mesh or shield pattern.
   6. NEURAL PATHWAYS — "Extensibility" (teal #2dd4bf glow): labeled "Neuroplasticity — new tools, rules, orchestrators without core changes". Shown as branching glowing pathways across the brain.
 - Thin glowing connection lines between all regions showing inter-domain communication
 - A small legend at the bottom mapping each color to the domain name

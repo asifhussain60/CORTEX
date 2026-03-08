@@ -34,7 +34,7 @@ Asif paused, staring at the whiteboard. "...Their code doesn't deploy."
 
 "That's *PROTECTION*!" Asif countered wildly. "From PRODUCTION's perspective, G, it's survival!"
 
-By 4:17 AM, Asif had forged the 29 Sacraments of CORTEX. Each one was born from the fire of an actual past disaster he'd witnessed, caused, or narrowly avoided using excessive espresso.
+By 4:17 AM, Asif had forged the first Sacraments of CORTEX—the seed of what would eventually grow to over sixty governance rules. Each one was born from the fire of an actual past disaster he'd witnessed, caused, or narrowly avoided using excessive espresso.
 
 - **CORE-001:** Every function must have error handling *(inspired entirely by Kyle's 847-line grenade).*
 - **CORE-008:** TDD mandatory; write the failing test first, then implement.

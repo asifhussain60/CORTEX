@@ -1,14 +1,14 @@
 # Orchestration — The Engine Room
 
 ---
-title: Orchestration — How CORTEX Coordinates 290+ Specialised Engines
+title: Orchestration — How CORTEX Coordinates 330+ Specialised Engines
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
 last_verified: 2026-03-08
 order: 5
 ---
 
-> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 320+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds. Think of it like a large hospital: when a patient arrives, the triage nurse (the router) instantly determines whether to send them to cardiology, orthopaedics, or radiology. Each department has deep expertise. The hospital works because every department follows the same protocols and communicates through a central system — never by shouting across the corridor.
+> **The central idea:** CORTEX is not a single AI system. It is a coordinated network of 330+ specialised processing engines — each an expert at one category of engineering work — all coordinated through a central dispatcher that routes every request to the right expert in under 40 milliseconds. Think of it like a large hospital: when a patient arrives, the triage nurse (the router) instantly determines whether to send them to cardiology, orthopaedics, or radiology. Each department has deep expertise. The hospital works because every department follows the same protocols and communicates through a central system — never by shouting across the corridor.
 
 ---
 
@@ -32,7 +32,7 @@ The governance step runs before execution on every orchestrator, every time. The
 
 320+ orchestrators are organised across 15 specialised domains based on their role in the system.
 
-### Core — The Command Layer (135+ orchestrators)
+### Core — The Command Layer (140+ orchestrators)
 
 The core tier contains orchestrators responsible for coordination, routing, enforcement, and the central workflows. This is the intelligence hub of CORTEX — like the executive function of a brain, coordinating all the specialist regions.
 
@@ -47,12 +47,13 @@ The core tier contains orchestrators responsible for coordination, routing, enfo
 | **Audit Orchestrator** | Coordinates the comprehensive nine-stage production readiness audit |
 | **Conversation Manager** | Maintains multi-turn session state so context is preserved across interactions |
 
-### Domain — The Specialist Layer (30+ orchestrators)
+### Domain — The Specialist Layer (35+ orchestrators)
 
 The domain tier contains orchestrators with deep expertise in specific engineering disciplines — like the specialised brain regions for language, spatial reasoning, and music.
 
 | Orchestrator | What It Does |
 |---|---|
+| **Code Review Specialist** | Runs multi-pass code reviews across changed files: structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance — all surfaced inline with severity and fix suggestions |
 | **Refactoring Specialist** | Performs semantic code improvements — extract methods, rename symbols, resolve duplication — across Python, TypeScript, and C# |
 | **Planning Engine** | Decomposes complex requests into structured, executable plans with work items and acceptance criteria |
 | **Enhanced Planner** | Advanced planning with return-on-investment scoring and wave-based delivery decomposition |
@@ -60,12 +61,13 @@ The domain tier contains orchestrators with deep expertise in specific engineeri
 | **Dashboard Generator** | Produces interactive HTML dashboards with codebase metrics, quality scores, and architecture visualisations |
 | **Domain Intelligence** | Applies domain-specific knowledge and governance to requests in specialised business verticals |
 | **Service Decomposer** | Analyses monolithic codebases and produces structured decomposition plans |
+| **Feedback Processor** | Captures structured user feedback — satisfaction signals, corrections, suggestions — and routes them into the Unified Reinforcement Signal for confidence adjustment |
 
 ### Support — The Operations Layer (50+ orchestrators)
 
 The support tier handles operational concerns — health monitoring, cleanup, onboarding, debugging, and the infrastructure that keeps everything running.
 
-Key support orchestrators include the health monitor (checks all systems and reports status), the cleanup engine (removes accumulated documentation sprawl and stale files), the debugging pipeline (multi-strategy debugging for Python, TypeScript, C#, SQL, and REST APIs), the onboarding engine (analyses a new repository and produces a complete intelligence profile), the upgrade manager (handles CORTEX version updates and dependency resolution), and the sync engine (one-way synchronisation between private and shared repositories with automatic privacy protection).
+Key support orchestrators include the health monitor (checks all systems and reports status), the cleanup engine (removes accumulated documentation sprawl and stale files — protected by a Vacuum Recency Guard that excludes files modified within the last 7 days from deletion), the debugging pipeline (multi-strategy debugging for Python, TypeScript, C#, SQL, and REST APIs), the onboarding engine (analyses a new repository and produces a complete intelligence profile), the upgrade manager (handles CORTEX version updates and dependency resolution), and the sync engine (one-way synchronisation between private and shared repositories with automatic privacy protection).
 
 ### Health — System Wellness (25+ orchestrators)
 
@@ -90,6 +92,7 @@ Every request to CORTEX is classified into one of 30+ intent types. This classif
 | **Building** | Implement (new feature), Fix (bug repair), Test (test creation) |
 | **Understanding** | Analyse (code examination), Investigate (root cause research), Query (information retrieval) |
 | **Improving** | Refactor (code quality), Vacuum (cleanup), Upgrade (dependency updates) |
+| **Reviewing** | Review (multi-pass code review), Feedback (structured user feedback capture) |
 | **Planning** | Plan (structured planning), Design (architecture decisions) |
 | **Auditing** | Audit (compliance check), Health (system status), Security (vulnerability scan) |
 | **Learning** | Digest (content ingestion), Train (knowledge building), Distill (conversation → executable prompt) |
@@ -126,7 +129,7 @@ Orchestrators never communicate directly with each other. All communication flow
 
 Many operations in CORTEX follow structured templates stored as configuration files in a version-controlled registry. Think of these like recipes in a professional kitchen: each recipe defines the ingredients, the sequence of steps, the quality checks between steps, and the criteria for "done." The chef (orchestrator) follows the recipe; the recipe ensures consistency regardless of who is cooking.
 
-95+ workflow templates span 17 categories, covering the complete development lifecycle from requirements analysis through production release. When a request matches a known workflow, CORTEX selects the appropriate template automatically based on the request intent and the technology stack detected by the code intelligence layer.
+110+ workflow templates span 17 categories, covering the complete development lifecycle from requirements analysis through production release. When a request matches a known workflow, CORTEX selects the appropriate template automatically based on the request intent and the technology stack detected by the code intelligence layer.
 
 Templates are composed from atomic building blocks — reusable single-responsibility steps that handle specific tasks like running an analysis scan, applying a governance check, opening a sweep catalogue, or recording an audit trace. Complex workflows are assembled from these building blocks, ensuring consistency across all operations while keeping each step independently testable.
 
@@ -156,4 +159,4 @@ This visibility is structural. It is generated by a dedicated rendering componen
 
 ---
 
-*Orchestrator count verified against live codebase (320+) · Intent routing verified against live IntentRouter implementation · Last verified: 2026-03-08*
+*Orchestrator count verified against live codebase (330+) · Intent routing verified against live IntentRouter implementation · Last verified: 2026-03-08*

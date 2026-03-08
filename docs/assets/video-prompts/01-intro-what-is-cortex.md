@@ -41,9 +41,9 @@ The **intent-aligned response header quote** (business/engineering principle sur
 ## Ground-truth constraints
 - CORTEX is a **production-grade AI engineering framework** — a governance and orchestration layer between the developer and the LLM.
 - Live-count callouts (use as lower-thirds, one at a time, never stacked):
-  - `"320+ orchestrators"` across 15 domains, Python
+  - `"330+ orchestrators"` across 15 domains, Python
   - `"55+ MCP tools"` — VS Code stdio (Pylance-style, auto-detected)
-  - `"55+ governance YAML rules"` — enforced at pre-commit, CI, and runtime
+  - `"60+ governance YAML rules"` — enforced at pre-commit, CI, and runtime
 - CORTEX orchestrates the host LLM (GitHub Copilot / GPT) — it does **not** embed its own ML model.
 - Claims permitted: "fewer regressions", "verifiable audit trail", "clearer definition of done"
 - Claims forbidden: "eliminates bugs", "replaces Copilot", "game-changing", "revolutionary"
@@ -83,9 +83,9 @@ Visual: The architecture layer diagram rises from dark — four layers materiali
   Layer 4: Governed Output — code + tests + audit trace (green)
 Each layer label fades in only when the camera settles on that layer.
 Lower-thirds appear sequentially as layers light up:
-  → `"320+ orchestrators"` when CORTEX layer activates
+  → `"330+ orchestrators"` when CORTEX layer activates
   → `"55+ MCP tools"` when MCP sublayer activates
-  → `"55+ governance YAML rules"` when enforcement sublayer activates
+  → `"60+ governance YAML rules"` when enforcement sublayer activates
 Narrator: *"CORTEX is the layer between the developer and the AI. It doesn't replace Copilot. It gives Copilot a rulebook — and verifies the rulebook was followed."*
 
 **SCENE 3 — "Four Delivery Problems" [3:30–5:30]**

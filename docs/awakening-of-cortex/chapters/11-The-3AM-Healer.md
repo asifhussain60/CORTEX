@@ -116,7 +116,7 @@ Every time CORTEX healed an incident, it generated a report. That report lived i
 
 "The data is there the same way your college textbooks are still on the shelf," Miss G said. "Technically accessible. Practically unread. The knowledge exists in the building, but it's not *in the brain*."
 
-She was right. Every time Asif's team started a new task, they were starting from zero. They weren't checking whether they'd made this same mistake six months ago. They weren't consulting the growing archive of what had failed and why. They were, in the most literal sense, not learning from their own history.
+She was right. Every time Asif's team started a new task, they were starting from zero. They weren't checking whether they'd made this same mistake six months ago. They weren't consulting the growing archive of what had failed and why. They weren't tapping into the **AI Domain Knowledge Library**—a curated compendium covering model selection, data pipeline design, feature engineering, and five other AI/ML concerns—that could have saved hours of rediscovery. They were, in the most literal sense, not learning from their own history.
 
 Asif built the **Unified Reinforcement Signal**—which he privately referred to as CORTEX's report card.
 
@@ -125,6 +125,8 @@ Asif built the **Unified Reinforcement Signal**—which he privately referred to
 "You're giving it gold stars and detention slips," Miss G said.
 
 "I'm giving it *feedback*," Asif corrected. "Over time, the patterns with lots of gold stars get promoted. They get used more. The patterns with lots of detention slips get reviewed. If they're consistently wrong, they get retired."
+
+Better still, he exposed a dedicated **FEEDBACK** intent—a first-class channel through which developers could submit structured responses directly. "Rate this suggestion. Flag that fix as incomplete. Tell CORTEX the code review was too strict." Every piece of human feedback became a reinforcement signal, a mini nudge that adjusted the system's behaviour without requiring anyone to rewrite a single rule.
 
 <figure class="ch-arch-img" data-wave="3">
   <img src="../assets/images/generated/shared/08-learning-loop-institutional-memory.png" alt="Learning Loop — Institutional Memory Cycle" loading="lazy" decoding="async"/>
@@ -194,6 +196,8 @@ The solution arrived at 1:47 AM, which was becoming statistically the most produ
 Miss G was very still for a moment. "A system that writes its own instruction manual," she said slowly. "Based on what it actually *is*, not what it used to be."
 
 "A self-updating employee handbook," Asif confirmed. "You run one script, it inspects the live system, it counts everything that exists, it checks what's changed, and it produces a fresh, accurate handbook. No more ghost instructions. No more phantom capabilities."
+
+Underlying the refresh was a **Framework Self-Analyzer**—a component that could introspect CORTEX's own architecture at any moment: count orchestrators, catalogue MCP tools, verify governance rule coverage, and compare live state against documented state. If the analyzer detected drift—a new orchestrator that wasn't mentioned in any prompt, a deleted tool still listed in the registry—it flagged the discrepancy before the refresh script even began to write.
 
 "What do you call it?" Miss G asked.
 

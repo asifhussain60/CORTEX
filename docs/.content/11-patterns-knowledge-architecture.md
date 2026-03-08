@@ -75,6 +75,32 @@ This hierarchy ensures recommendations feel native to your codebase, not generic
 
 ---
 
+## Universal Repo Intelligence — Understanding Any Repository
+
+When CORTEX encounters a repository for the first time — during onboarding, digest operations, or cross-repo analysis — it deploys **Universal Repo Intelligence**: eight parallel extractors that build structured understanding regardless of language, framework, or team conventions.
+
+The extractors produce: a dependency graph (internal and external dependencies with version health), architecture topology (layer structure and service boundaries), test coverage map (per-module coverage with gap identification), API surface catalogue (all exposed endpoints and contracts), configuration schema (environment variables and feature flags), build pipeline model (CI/CD stages and artefact flow), documentation index (completeness scoring), and contributor-ownership matrix (who owns what based on commit history).
+
+These results feed into the Archetype Classifier (which categorises the repository as monolith, microservice, library, CLI tool, data pipeline, or hybrid), the LENS analysis pipeline, and the pattern detection engine. The result is that CORTEX understands a codebase's architecture, quality posture, and team dynamics within minutes of first contact — enabling accurate pattern recommendations from the very first interaction.
+
+---
+
+## AI Domain Knowledge — When Your Codebase Is AI
+
+Software engineering principles apply to AI/ML codebases, but AI projects introduce domain-specific concerns that generic engineering guidance does not address. CORTEX maintains a curated **AI Domain Knowledge Library** covering:
+
+- **Model versioning** — tracking model artefacts alongside code versions
+- **Experiment tracking** — reproducibility, hyperparameter management, and metric comparison
+- **Data pipeline governance** — lineage, quality gates, and drift detection
+- **Feature store management** — shared feature engineering with versioning
+- **Model deployment patterns** — canary, shadow, A/B, and blue-green for ML models
+- **LLM prompt engineering** — prompt versioning, evaluation, and regression testing
+- **AI-specific security** — prompt injection, data poisoning, model theft, and adversarial robustness
+
+This knowledge activates automatically when CORTEX detects AI/ML patterns in a repository — TensorFlow, PyTorch, Hugging Face, LangChain, scikit-learn, or similar frameworks. An AI project receives domain-appropriate governance and recommendations rather than generic software engineering advice.
+
+---
+
 ## Sharpen the Saw — Learning from Real Migrations
 
 A critical part of CORTEX's pattern knowledge comes from hands-on codebase migrations. The demonstration repositories — informally called "Sharpen the Saw" — provide concrete before-and-after examples of architectural transformation.

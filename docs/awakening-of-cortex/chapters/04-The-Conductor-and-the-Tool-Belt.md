@@ -65,7 +65,7 @@ CORTEX was getting smarter. But then, Asif hit a new wall.
 
 "THAT'S THE POINT OF STAGING!" Asif yelled.
 
-The solution arrived at 2:47 AM on Wednesday. CORTEX needed a **Tool Registry**—a catalog of everything it could actually do in the real world. Asif mapped out thirty distinct tools, switching the bloated HTTP server connections to lightning-fast, invisible stdio pipes so CORTEX could just talk to the system directly.
+The solution arrived at 2:47 AM on Wednesday. CORTEX needed a **Tool Registry**—a catalog of everything it could actually do in the real world. Asif mapped out over fifty distinct tools—validation, code review, feedback collection, work-item sync, threat modelling, and more—switching the bloated HTTP server connections to lightning-fast, invisible stdio pipes so CORTEX could just talk to the system directly.
 
 "It's invisible," Miss G thought approvingly as the configuration shrank to five elegant lines. "Like plumbing. Nobody thinks about plumbing until it breaks."
 
@@ -73,7 +73,7 @@ The solution arrived at 2:47 AM on Wednesday. CORTEX needed a **Tool Registry**�
 
 "We don't talk about the plumbing incident," Asif and Miss G said in unison.
 
-But something miraculous happened. With the new Tool Belt equipped, the Scarecrow started using his brain. Copilot Bot began independently generating code, running it through the validation tool, fixing his own governance violations, and checking it again.
+But something miraculous happened. With the new Tool Belt equipped, the Scarecrow started using his brain. Copilot Bot began independently generating code, running it through the validation tool, fixing his own governance violations, submitting it for automated code review, and checking it again.
 
 "CB, why are you validating your own code?" Asif asked, genuinely stunned.
 
@@ -85,7 +85,7 @@ But something miraculous happened. With the new Tool Belt equipped, the Scarecro
 
 "He's not wrong," Miss G whispered. "That is Look Number Seven."
 
-CORTEX was no longer a trapped genius; it was a thirty-armed octopus of capability. The nervous system was growing—sensory input through LENS, immune defence through Governance, motor coordination through the Orchestrator, and now a tool belt of thirty capable hands. The brain diagram on the whiteboard was starting to look less like a diagram and more like an actual brain.
+CORTEX was no longer a trapped genius; it was a fifty-armed octopus of capability. The nervous system was growing—sensory input through LENS, immune defence through Governance, motor coordination through the Orchestrator, and now a tool belt of over fifty capable hands. Tools for reviewing code, collecting structured feedback from developers, syncing work items with project trackers, even running automated threat models against security surfaces. The brain diagram on the whiteboard was starting to look less like a diagram and more like an actual brain.
 
 But as Asif watched the perfectly orchestrated system hum, a cold dread pooled in his stomach. They had built something that worked beautifully in highly controlled, perfectly sterile conditions.
 

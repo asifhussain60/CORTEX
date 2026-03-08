@@ -24,7 +24,7 @@ This folder (`cortex-docs/assets/diagrams`) is the **only** canonical location f
 ### Governance (how quality is guaranteed)
 - `06-diagram-governance-sweep-completeness-core-064.md` — Why CORTEX fixes ALL instances, not just the one reported
 - `12-diagram-governance-convergence-gate-core-068.md` — The detect→fix→rescan loop that guarantees zero P0/P1
-- `15-diagram-governance-rule-enforcement-tiers.md` — 55+ rules, 3 checkpoints, 4-tier precedence hierarchy
+- `15-diagram-governance-rule-enforcement-tiers.md` — 60+ rules, 3 checkpoints, 4-tier precedence hierarchy
 
 ### Audit (production readiness)
 - `04-diagram-audit-audit-fix-pipeline.md` — 9-stage /audit fix flow with convergence loop
@@ -41,6 +41,13 @@ This folder (`cortex-docs/assets/diagrams`) is the **only** canonical location f
 
 ### Debugging (multi-stack)
 - `14-diagram-debugging-multi-stack-pipeline.md` — 8 strategies across Python, JS, C#, SQL, .NET with auto-cleanup
+
+### Quality (code health)
+- `16-diagram-quality-code-review-multi-pass-pipeline.md` — Code Review Orchestrator 5-pass pipeline with P0–P3 priority-ranked findings
+- `18-diagram-quality-analysis-engine-scoring-dashboard.md` — Quality Analysis Engine 5-dimension scoring with trend tracking and composite score
+
+### Security (threat modeling)
+- `17-diagram-security-threat-model-stride-analysis.md` — Threat Model Engine STRIDE classification with DREAD scoring and ranked threat catalogue
 
 ## Adding a new diagram
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>CORTEX Architecture — Intelligence · Orchestration · Governance</title>
-    <meta name="description" content="CORTEX Architecture — Deep dive into the Intelligence Diamond, 320+ orchestrators across 15 domains, 55+ MCP tools, governance infrastructure, and institutional memory."/>
+    <meta name="description" content="CORTEX Architecture — Deep dive into the Intelligence Diamond, 330+ orchestrators across 15 domains, 55+ MCP tools, governance infrastructure, and institutional memory."/>
     <meta name="author" content="Asif Hussain"/>
     <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -523,7 +523,7 @@
                                 </div>
                                 <div class="flex gap-4 md:gap-6 group">
                                     <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-all"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
-                                    <div><h4 class="text-sm md:text-base font-bold">Governance — Immune System</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">37 CORE rules enforced at pre-commit, CI, and runtime — no human reviewer required.</p></div>
+                                    <div><h4 class="text-sm md:text-base font-bold">Governance — Immune System</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">60+ CORE rules enforced at pre-commit, CI, and runtime — no human reviewer required.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -761,11 +761,11 @@
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
                         <i data-lucide="network" class="w-3.5 h-3.5"></i> 15 Domains
                     </div>
-                    <h2 class="section-title font-black tracking-tighter">320+ Orchestrators — 15 Domains</h2>
+                    <h2 class="section-title font-black tracking-tighter">330+ Orchestrators — 15 Domains</h2>
                     <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Every intent routes to a specialised orchestrator. The <code class="font-mono text-sm bg-white/5 px-1.5 py-0.5 rounded text-violet-300">IntentRouter</code> classifies 30+ intent types and dispatches accordingly.</p>
                 </div>
                 <div class="glass-card p-6 md:p-8 space-y-5">
-                    <div class="flex items-center justify-between"><span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains by File Count</span><span class="text-[11px] font-bold text-violet-400">15 domains · 324 files</span></div>
+                    <div class="flex items-center justify-between"><span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains by File Count</span><span class="text-[11px] font-bold text-violet-400">15 domains · 330+ files</span></div>
                     <div class="domain-grid">
                         <div class="domain-bubble" style="--bubble-color:#7b61ff;--bubble-glow:rgba(123,97,255,0.25);width:110px;height:110px;background:rgba(123,97,255,0.07)"><span class="db-count" style="font-size:2rem">139</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">core</span></div>
                         <div class="domain-bubble" style="--bubble-color:#3b82f6;--bubble-glow:rgba(59,130,246,0.25);width:90px;height:90px;background:rgba(59,130,246,0.07)"><span class="db-count" style="font-size:1.6rem">55</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">support</span></div>
@@ -1081,7 +1081,7 @@
             <section class="space-y-10">
                 <div class="text-center space-y-4">
                     <h2 class="section-title font-black tracking-tighter">Rule Hierarchy</h2>
-                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">37 rules ranked by immutability. Higher-tier rules cannot be overridden by lower tiers.</p>
+                    <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">60+ rules ranked by immutability. Higher-tier rules cannot be overridden by lower tiers.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="glass-card p-5 space-y-2 border-2 border-red-500/30 bg-gradient-to-br from-red-950/30 to-slate-900/80">
@@ -1148,9 +1148,9 @@
                             <div class="sdlc-phase" style="--phase-color:#6366f1;--phase-glow:rgba(99,102,241,0.15);"><div class="sdlc-icon">📋</div><div class="sdlc-label">Requirements</div><div class="sdlc-gate" style="border-color:rgba(99,102,241,0.25);color:#a5b4fc;">DoR Gate</div><div class="sdlc-desc">Scope, threat surface, acceptance criteria</div></div>
                             <div class="sdlc-phase" style="--phase-color:#a855f7;--phase-glow:rgba(168,85,247,0.15);"><div class="sdlc-icon">🔍</div><div class="sdlc-label">Design</div><div class="sdlc-gate" style="border-color:rgba(168,85,247,0.25);color:#c4b5fd;">Arch Review</div><div class="sdlc-desc">Architecture validation, security-by-design</div></div>
                             <div class="sdlc-phase" style="--phase-color:#7c3aed;--phase-glow:rgba(124,58,237,0.15);"><div class="sdlc-icon">⚡</div><div class="sdlc-label">Implement</div><div class="sdlc-gate" style="border-color:rgba(124,58,237,0.3);color:#a78bfa;">TDD RED→GREEN</div><div class="sdlc-desc">Tests first, then minimum passing code</div></div>
-                            <div class="sdlc-phase" style="--phase-color:#3b82f6;--phase-glow:rgba(59,130,246,0.15);"><div class="sdlc-icon">👁️</div><div class="sdlc-label">Code Review</div><div class="sdlc-gate" style="border-color:rgba(59,130,246,0.25);color:#93c5fd;">Gov Scan</div><div class="sdlc-desc">Type hints, docstrings, PII blocked</div></div>
+                            <div class="sdlc-phase" style="--phase-color:#3b82f6;--phase-glow:rgba(59,130,246,0.15);"><div class="sdlc-icon">👁️</div><div class="sdlc-label">Code Review</div><div class="sdlc-gate" style="border-color:rgba(59,130,246,0.25);color:#93c5fd;">5-Pass Review</div><div class="sdlc-desc">Structural, security, governance, test-coverage, style</div></div>
                             <div class="sdlc-phase" style="--phase-color:#06b6d4;--phase-glow:rgba(6,182,212,0.15);"><div class="sdlc-icon">🔗</div><div class="sdlc-label">Integration</div><div class="sdlc-gate" style="border-color:rgba(6,182,212,0.25);color:#67e8f9;">LENS Sweep</div><div class="sdlc-desc">9 analyzers verify full system context</div></div>
-                            <div class="sdlc-phase" style="--phase-color:#f43f5e;--phase-glow:rgba(244,63,94,0.15);"><div class="sdlc-icon">🛡️</div><div class="sdlc-label">Security</div><div class="sdlc-gate" style="border-color:rgba(244,63,94,0.3);color:#fda4af;">5-Layer Immune</div><div class="sdlc-desc">OWASP, CVE, SAST — critical blocks release</div></div>
+                            <div class="sdlc-phase" style="--phase-color:#f43f5e;--phase-glow:rgba(244,63,94,0.15);"><div class="sdlc-icon">🛡️</div><div class="sdlc-label">Security</div><div class="sdlc-gate" style="border-color:rgba(244,63,94,0.3);color:#fda4af;">STRIDE + 5-Layer</div><div class="sdlc-desc">Threat Model Engine, OWASP, CVE, SAST</div></div>
                             <div class="sdlc-phase" style="--phase-color:#10b981;--phase-glow:rgba(16,185,129,0.2);border-color:rgba(16,185,129,0.35);background:linear-gradient(160deg,rgba(16,185,129,0.08),rgba(16,185,129,0.03));"><div class="sdlc-icon">🚀</div><div class="sdlc-label">Release</div><div class="sdlc-gate" style="border-color:rgba(16,185,129,0.35);color:#34d399;background:rgba(16,185,129,0.08);">DoD Certified ✅</div><div class="sdlc-desc">All phases passed, audit trail linked</div></div>
                         </div>
                     </div>

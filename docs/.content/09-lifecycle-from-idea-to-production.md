@@ -46,9 +46,11 @@ An implementation cannot be considered complete without passing tests for every 
 
 ### Phase 4 — Code Review
 
-The code review phase runs automatically at the commit boundary. It validates type annotations, documentation coverage, naming conventions, and the absence of duplicate implementations. It scans for secrets and personally identifiable information. It checks dependency vulnerability databases for newly published issues.
+The Code Review Orchestrator runs multi-pass automated reviews across all changed files. Each review pass examines a different dimension: structural analysis (architecture conformance, complexity, coupling), security audit (secrets, PII, vulnerability patterns), governance compliance (active rule adherence), test-coverage gap detection (which behaviours lack tests), and style conformance (naming, formatting, documentation coverage).
 
-Code that passes all code review gates receives a governance certificate — a recorded confirmation that all automated checks passed at a specific point in time. This certificate is part of the audit trail.
+Findings are surfaced inline with severity levels (P0 critical through P3 advisory) and include specific fix suggestions. The Code Review Orchestrator integrates with the Quality Analysis Engine, so review comments reference the codebase's overall quality trend — a finding in a declining-quality module receives higher priority than the same finding in an improving module.
+
+Code that passes all review passes receives a governance certificate — a recorded confirmation that all automated checks passed at a specific point in time. This certificate is part of the audit trail.
 
 ### Phase 5 — Integration Verification
 
@@ -58,7 +60,7 @@ Integration failures are surfaced with full context from the code intelligence l
 
 ### Phase 6 — Security Assessment
 
-A dedicated security assessment phase runs the complete security analysis for the change: static application security testing, CVE checks for any new or updated dependencies, OWASP Top 10 validation for the specific feature type, and a threat model review if the change touches authentication, authorisation, or data handling.
+A dedicated security assessment phase runs the complete security analysis for the change: static application security testing, CVE checks for any new or updated dependencies, OWASP Top 10 validation for the specific feature type, and a **Threat Model Engine** review that applies STRIDE classification to entry points, data flows, and trust boundaries. The engine produces a ranked threat catalogue with risk scores and recommended mitigations — particularly when the change touches authentication, authorisation, or data handling.
 
 Security assessment findings are prioritised by severity. Critical and high findings block release. Medium findings require acknowledgment. Low findings are documented and tracked.
 
@@ -93,7 +95,7 @@ The planning engine produces decomposed work items with explicit acceptance crit
 
 Each planned item includes a readiness check — a set of conditions that must be true before work on that item can begin. This prevents the common failure mode of starting an item only to discover a dependency that wasn't ready, resulting in wasted partial work.
 
-Planning output integrates with work item management systems. Items created by CORTEX's planning tools appear in the team's tracking system automatically, with all relevant context attached.
+Planning output integrates with work item management systems. Items created by CORTEX's planning tools appear in the team's tracking system automatically, with all relevant context attached. The `cortex_ado` MCP tool connects directly to Azure DevOps boards, pulling user stories, bugs, and tasks, enriching them with LENS context, and injecting sprint-aware acceptance criteria into the intelligence pipeline. The provider-agnostic `WorkItemProvider` protocol supports Jira, GitHub Issues, and custom internal trackers with the same interface.
 
 ---
 
@@ -111,7 +113,7 @@ CORTEX includes a comprehensive production readiness audit that can be triggered
 
 **Orchestrator health** — Verifies that all active orchestrators are healthy, responsive, and correctly configured.
 
-**Cleanup** — Removes accumulated documentation sprawl, stale files, and orphaned artifacts.
+**Cleanup** — Removes accumulated documentation sprawl, stale files, and orphaned artifacts. The Vacuum Recency Guard protects files modified within the last 7 days from deletion, ensuring work-in-progress artefacts are never swept up by aggressive cleanup heuristics.
 
 **Meta-audit** — 23 checks against the framework's own internal consistency — ensuring the intelligence layer, prompt system, and configuration files are all in agreement.
 

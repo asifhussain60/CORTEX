@@ -36,11 +36,11 @@ From the dark corner, Copilot Bot suddenly powered on, his LED eyes blazing a br
 
 He drew five layers of this new Enterprise Brain:
 
-1. **The Intent Engine** — the thalamus, translating human language into architectural intent
-2. **The Governance Fabric** — the immune system, enforcing standards invisibly, everywhere
-3. **The Orchestration Mesh** — the motor cortex, coordinating any number of systems in harmony
-4. **The Learning Loop** — the hippocampus, improving from every deployment and every failure
-5. **The Healing Core** — the glymphatic system, detecting, diagnosing, and repairing without waking anyone up
+1. **The Intent Engine** — the thalamus, translating human language into architectural intent, now backed by an **Archetype Classifier** that identifies repository patterns (monolith, microservice, monorepo) to sharpen every analysis
+2. **The Governance Fabric** — the immune system, enforcing standards invisibly, everywhere, with a **Quality Analysis Engine** scoring code health across five dimensions and a **Code Review Orchestrator** running five automated review passes on every change
+3. **The Orchestration Mesh** — the motor cortex, coordinating any number of systems in harmony, with over 110 workflow templates and work-item sync through **cortex_ado**
+4. **The Learning Loop** — the hippocampus, improving from every deployment and every failure, strengthened by a structured **FEEDBACK** channel that turns developer responses into reinforcement signals
+5. **The Healing Core** — the glymphatic system, detecting, diagnosing, and repairing without waking anyone up, augmented by a **Threat Model Engine** that runs STRIDE analysis to surface security risks before they become incidents
 
 "Every layer maps to a brain region," Asif whispered, stepping back from the whiteboard. "It's not a metaphor anymore, G. It's the actual architecture. We didn't just build software that works like a brain. We built a brain."
 
@@ -209,7 +209,7 @@ Asif and Miss G both looked at the robot with genuine consideration.
 
 "We'd need a very large pot," Miss G said finally.
 
-Building the Enterprise Brain wasn't just copy-pasting CORTEX; it required extracting the pure intelligence while leaving the company's specific data behind. It had to be secure, it had to scale to thousands of teams, and it had to absolutely, positively never break anything.
+Building the Enterprise Brain wasn't just copy-pasting CORTEX; it required extracting the pure intelligence while leaving the company's specific data behind. A **Universal Repo Intelligence** layer—eight specialised extractors that analyse dependency graphs, CI pipelines, branching strategies, and more—meant the Brain could understand any repository it connected to, regardless of language or framework. Meanwhile, a **Content Library** with an **EpochShuffler** ensured that every quote, principle, and knowledge snippet CORTEX selected was drawn from a curated, never-repeating rotation rather than the same stale defaults. It had to be secure, it had to scale to thousands of teams, and it had to absolutely, positively never break anything.
 
 "You're trying to build something that's simultaneously universal and personal," Miss G observed. "That's the hardest design challenge in engineering."
 

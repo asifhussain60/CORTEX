@@ -20,7 +20,7 @@ The image should show:
 - Small icons along each ring showing specific checks: secret scanning (key icon), type checking (check icon), naming (tag icon), security (shield icon), duplicate detection (copy icon)
 - An arrow from outside labeled "Code Change" penetrating inward — stopped at the outer ring with a "BLOCKED" label if a violation is found
 - A second arrow showing clean code passing through all three rings to the green center
-- Small counter badge: "55+ Active Rules" near the top
+- Small counter badge: "60+ Active Rules" near the top
 - Clean, authoritative, immediately communicates defence-in-depth
 - No photographic elements — pure architectural/shield visualization
 - No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background

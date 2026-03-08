@@ -50,6 +50,51 @@ LENS caches analysis results so that repeat requests against unchanged code retu
 
 ---
 
+## Universal Repo Intelligence — Understanding Any Repository
+
+When CORTEX encounters a new repository — during onboarding, digest operations, or cross-repo analysis — it deploys **Universal Repo Intelligence**: eight parallel extractors that build a structured understanding of the repository regardless of language, framework, or team conventions.
+
+| Extractor | What It Produces |
+|---|---|
+| **Dependency Graph** | Complete map of internal and external dependencies with version health |
+| **Architecture Topology** | Layer structure, service boundaries, and communication patterns |
+| **Test Coverage Map** | Per-module coverage data with gap identification |
+| **API Surface Catalogue** | All exposed endpoints, contracts, and versioning schemes |
+| **Configuration Schema** | Environment variables, feature flags, and runtime configuration |
+| **Build Pipeline Model** | CI/CD stages, deployment targets, and artefact flow |
+| **Documentation Index** | README, wiki, inline docs — completeness scoring |
+| **Contributor-Ownership Matrix** | Who owns what, based on commit history and code review patterns |
+
+The eight extractors feed their results into LENS analysis, the Archetype Classifier, and the repository onboarding workflow. The result is that CORTEX understands a codebase's architecture, quality posture, and team dynamics within minutes of first contact — no manual configuration required.
+
+---
+
+## Quality Analysis Engine — Scoring Codebase Health
+
+The **Quality Analysis Engine** evaluates codebase quality across multiple dimensions, producing a composite score (0–100) with per-dimension breakdowns:
+
+- **Structural complexity** — cyclomatic complexity, coupling, cohesion
+- **Test coverage adequacy** — not just line coverage, but whether the tests cover meaningful scenarios
+- **Documentation completeness** — docstring coverage, API documentation, README quality
+- **Dependency health** — outdated packages, known vulnerabilities, circular imports
+- **Governance compliance posture** — CORE rule adherence rate, violation trend over time
+
+Scores are tracked over time, enabling trend analysis: is this codebase getting healthier or degrading? The Quality Analysis Engine feeds directly into the Code Review Orchestrator and the `/audit fix` production readiness pipeline. Business leaders see a single number they can track; engineers see per-dimension detail they can act on.
+
+---
+
+## Framework Self-Analyzer — CORTEX Knows Itself
+
+Unlike most development tools, CORTEX can introspect its own architecture. The **Framework Self-Analyzer** (`CortexFrameworkAnalyzer`) counts orchestrators, MCP tools, governance rules, workflow templates, and intent types at runtime. This powers:
+
+- **Architecture drift detection** — if documentation says "330+ orchestrators" but only 310 exist, a P0 violation is raised
+- **Prompt refresh automation** — `refresh_prompt_suite.py` calls the analyzer to regenerate all prompts with accurate counts
+- **Self-healing documentation** — the documentation you are reading now reflects counts verified against live code, not manually maintained numbers
+
+The Self-Analyzer is the reason CORTEX's documentation stays accurate as the system grows. Every prompt, agent, and documentation page references counts that are validated against the running codebase.
+
+---
+
 ## Three Intelligence Tiers — Matching Depth to Need
 
 Not every request requires the same depth of analysis. CORTEX automatically selects one of three tiers based on what the request actually needs.
@@ -73,6 +118,8 @@ After LENS produces its analysis, three cognitive layers process it into a concr
 The Perception layer is like the part of your brain that recognises faces. You don't consciously analyse each feature — nose shape, eye colour, jawline — your brain instantly matches the whole pattern against faces you've seen before. CORTEX's Perception layer does the same with code: it maintains a catalogue of known engineering patterns and instantly matches observed signals against nine canonical patterns: mediator, strategy, observer, factory, template method, chain of responsibility, adapter, repository, and command. Each match receives a confidence score between 0.0 and 1.0.
 
 The output is a clear picture of what architectural approach the codebase is already using. If your codebase uses the Repository pattern at 0.92 confidence, CORTEX knows to follow that pattern — not introduce an incompatible alternative.
+
+Beyond individual patterns, the **Archetype Classifier** categorises the entire repository into a high-level archetype — monolith, microservice, library, CLI tool, data pipeline, or hybrid. This classification influences every downstream decision: monoliths receive different refactoring strategies than microservices, CLI tools have different test structures than web APIs. The classifier runs alongside Perception and feeds its result into the Reasoning tier.
 
 For business leaders, Perception answers: "What patterns is this team actually using?" For product owners: "Does this codebase follow the standards we expect?" For engineers: "What conventions should I follow when adding to this module?"
 

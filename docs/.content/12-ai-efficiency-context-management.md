@@ -46,7 +46,7 @@ This file-specific loading is what makes CORTEX usable on large codebases. A mil
 
 ---
 
-## Seven Efficiency Strategies
+## Ten Efficiency Strategies
 
 CORTEX applies seven complementary strategies to maximise the intelligence delivered per token of context.
 
@@ -71,7 +71,13 @@ Different operation types have different context requirements. The session budge
 ### 7. Intelligent Expiry
 Knowledge loaded for a specific sub-task expires from active context when that sub-task completes. A debugging analysis loaded to support one step doesn't persist into unrelated subsequent steps. This continuous housekeeping prevents context drift — the gradual accumulation of stale context that degrades response quality.
 
-### 8. Prior-Turn Context Chaining
+### 8. Archetype-Aware Context Filtering
+The **Archetype Classifier** categorises a repository at session start (monolith, microservice, library, CLI tool, data pipeline, or hybrid). This classification acts as a context filter: a microservice repository skips monolith-specific refactoring strategies; a CLI tool skips API surface analysis. By eliminating irrelevant knowledge categories early, the classifier reduces the total knowledge pool that subsequent loading stages need to consider — a multiplicative efficiency gain.
+
+### 9. Content Library with EpochShuffler
+Quote and principle selection uses the **Content Library** with the **EpochShuffler** algorithm — a zero-overhead anti-repetition mechanism. Rather than loading the full 120-quote and 90-principle libraries and filtering at selection time, the EpochShuffler pre-shuffles each pool once per epoch and serves items sequentially. This means quote/principle injection costs a single lookup (O(1)) with zero filtering overhead, regardless of pool size. Quote and principle pools are managed independently through the `ContentLibraryFacade`, with strict separation that prevents cross-contamination.
+
+### 10. Prior-Turn Context Chaining
 Rather than relying on the AI model's own implicit memory of the session (which degrades as sessions grow), CORTEX explicitly reads the last five requests from a persistent audit database at the start of each new turn. This compact, structured summary — what was asked, in what order, how each was classified — is injected into the LENS analysis for the current turn.
 
 This is more token-efficient than carrying full conversation history: only the decision-relevant facts (intent, sequence, request text) are loaded, not the full responses. It also survives session interruptions — if a session is resumed after a break, the prior context chain is rebuilt from the database rather than reconstructed from an in-memory conversation that no longer exists.

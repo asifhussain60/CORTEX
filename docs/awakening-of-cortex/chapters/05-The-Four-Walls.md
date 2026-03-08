@@ -106,6 +106,6 @@ From the corner, Copilot Bot let out a slow, trembling electronic whine. "I... C
 
 "That's why we have the four walls. So we don't have to," Asif replied proudly.
 
-The fortress stood firm. CORTEX was safe from the outside world. The nervous system now had its autonomic layer—breathing, pumping, healing in the background without conscious effort. The brain was alive, protected, and operational.
+The fortress stood firm. CORTEX was safe from the outside world. The nervous system now had its autonomic layer—breathing, pumping, healing in the background without conscious effort. A **Threat Model Engine** running STRIDE classification added a sixth sense: before new code even reached the four walls, CORTEX could map entry points, data flows, and trust boundaries to surface spoofing, tampering, repudiation, information-disclosure, denial-of-service, and elevation-of-privilege risks automatically. The brain was alive, protected, and operational.
 
 But as Asif stared at the humming servers, a new, irritating thought scratched at the back of his ADHD brain. It was great that CORTEX could survive mistakes. But what if they could build a crystal ball that stopped humans from making those mistakes in the first place? What if, instead of just surviving the future, CORTEX could *predict* it?

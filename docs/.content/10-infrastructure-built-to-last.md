@@ -110,7 +110,7 @@ CORTEX's own CI pipeline demonstrates the standards it advocates. Every push tri
 
 **Golden Tests** — The core invariant tests run sequentially for determinism. All must pass — no exceptions, no overrides.
 
-**Governance Validation** — All 55+ active governance rules are enforced by the full compliance suite.
+**Governance Validation** — All 60+ active governance rules are enforced by the full compliance suite.
 
 **Integration Tests** — Cross-component flows are tested with orchestrators running against each other.
 
@@ -145,6 +145,14 @@ All CORTEX configuration — governance rules, workflow templates, enterprise pa
 **Machine parseable** — the same files that humans read are parsed by CORTEX at runtime.
 
 **No database dependency** — configuration doesn't require a database server, eliminating an entire class of infrastructure dependency.
+
+---
+
+## Self-Awareness — CORTEX Knows Its Own Architecture
+
+Unlike most development platforms, CORTEX can introspect its own architecture at runtime. The **Framework Self-Analyzer** counts orchestrators, MCP tools, governance rules, workflow templates, and intent types — then compares those counts against what the documentation claims. If the documentation says "330+ orchestrators" but the live codebase contains only 310, a P0 architecture drift violation is raised.
+
+This self-awareness powers the self-healing prompt suite: `refresh_prompt_suite.py` calls the analyzer to regenerate all prompts and agents with verified counts, ensuring documentation never drifts from reality. Every number in this documentation — the orchestrator count, the tool count, the governance rule count — is verified against the running codebase, not manually maintained.
 
 ---
 

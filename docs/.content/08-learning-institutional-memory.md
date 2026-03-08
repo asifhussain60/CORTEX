@@ -86,6 +86,12 @@ These signals accumulate over time. Approaches that consistently produce good ou
 
 The result is a system that gets measurably better over time at predicting which approaches will succeed for a given type of problem in a given codebase context.
 
+### Structured Feedback — Closing the Human Loop
+
+The learning signal is not limited to automated outcomes. CORTEX includes a dedicated **FEEDBACK** intent that allows developers to provide structured feedback on any CORTEX response — satisfaction signals, corrections, improvement suggestions, or disagreement with a decision. The `cortex_feedback` MCP tool captures this feedback, links it to the originating request via the audit trail, and emits a reinforcement signal based on the feedback sentiment.
+
+When a developer corrects CORTEX's approach ("this strategy didn't fit our architecture because…"), the correction strengthens the prevention of that strategy in similar future contexts. When a developer confirms a good outcome, the approach receives a confidence boost. This human-in-the-loop signal complements the automated outcome signals, creating a richer, more accurate learning model that reflects both what works technically and what the team prefers architecturally.
+
 ---
 
 ## The Knowledge Engine — Curated Best Practice
@@ -101,6 +107,8 @@ Beyond learning from failures, CORTEX maintains a structured knowledge base of e
 **SDLC Knowledge** — Analysis patterns, test strategy decision matrices, security-by-design principles, code review checklists, documentation standards, and integration strategies. This knowledge powers the full software delivery lifecycle workflows.
 
 **Stack-Specific Knowledge** — Language and framework-specific guidance for Python, TypeScript, C#, and frontend technologies. Stack-specific knowledge wins over generic guidance when conflicts arise.
+
+**AI Domain Knowledge** — A curated library covering AI/ML engineering practices: model versioning, experiment tracking, data pipeline governance, feature store management, model deployment patterns, LLM prompt engineering, and AI-specific security concerns (prompt injection, data poisoning, model theft). This knowledge activates automatically when CORTEX detects AI/ML patterns in a repository — TensorFlow, PyTorch, Hugging Face, LangChain, or similar frameworks — ensuring that AI projects receive domain-appropriate guidance rather than generic software engineering advice.
 
 ### Knowledge Resolution Priority
 

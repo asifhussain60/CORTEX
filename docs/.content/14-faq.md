@@ -48,7 +48,7 @@ Open Copilot Chat in Agent mode. Click the Tools button. CORTEX tools should app
 ## Governance and Compliance
 
 **How many governance rules does CORTEX enforce?**
-55+ active governance rules organised by severity. Rules cover everything from code structure (type hints, naming conventions, file organisation) to process compliance (test-first development, complete fixes, convergence before completion) and security (secret management, dependency safety).
+60+ active governance rules organised by severity. Rules cover everything from code structure (type hints, naming conventions, file organisation) to process compliance (test-first development, complete fixes, convergence before completion) and security (secret management, dependency safety).
 
 **Can we customise governance rules for our organisation?**
 Yes. The governance rules are structured YAML files in the `cortex-registry/core/` directory. Rules can be modified, deactivated, or supplemented with organisation-specific rules. All changes are version-controlled, audited, and documented.
@@ -151,6 +151,18 @@ The tamper-evident audit trail supports compliance reporting. Every governance d
 ---
 
 ## Advanced Capabilities
+
+**Can CORTEX perform automated code reviews?**
+Yes. The Code Review Orchestrator runs multi-pass reviews across changed files, examining structural conformance, security posture, governance compliance, test-coverage gaps, and style adherence. Findings are surfaced inline with severity levels (P0 critical through P3 advisory) and include specific fix suggestions. Use the `cortex_review` MCP tool or ask naturally: "Review my changes to the auth module."
+
+**Can I give CORTEX feedback on its decisions?**
+Yes. The FEEDBACK intent and `cortex_feedback` MCP tool allow structured feedback — satisfaction signals, corrections, improvement suggestions, or disagreement with a specific decision. Feedback flows into the Unified Reinforcement Signal, adjusting confidence scores so CORTEX refines its approach over time. You can say: "I disagree with that refactoring recommendation — here's why…"
+
+**Can CORTEX generate threat models?**
+Yes. The Threat Model Engine applies STRIDE classification (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) to entry points, data flows, and trust boundaries. It produces a ranked threat catalogue with risk scores and recommended mitigations. Threat models can be generated for any codebase surface on demand.
+
+**Can CORTEX pull work items from my project management tool?**
+Yes. The `cortex_ado` MCP tool connects to Azure DevOps boards, pulling user stories, bugs, and tasks and enriching them with LENS context. The provider-agnostic `WorkItemProvider` protocol supports Jira, GitHub Issues, and custom internal trackers with the same interface.
 
 **Can CORTEX generate visual dashboards?**
 Yes. CORTEX generates interactive HTML dashboards from live code analysis — codebase health, quality trends, architecture maps, and governance compliance visualised in a portfolio view. Dashboards are static HTML files that can be shared with stakeholders or hosted anywhere without a runtime server.

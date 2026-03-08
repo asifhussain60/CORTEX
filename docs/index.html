@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert. 320+ orchestrators, 55+ MCP tools, 55+ CORE governance rules, and 19,000+ tests. Transform GitHub Copilot into a fully governed AI delivery framework." name="description"/>
+<meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert. 330+ orchestrators, 55+ MCP tools, 60+ CORE governance rules, and 19,000+ tests. Transform GitHub Copilot into a fully governed AI delivery framework." name="description"/>
 <meta content="CORTEX, MCP tools, AI development, TDD, Planning System, GitHub Copilot, orchestrators, GitBackedRegistry" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
 
@@ -914,10 +914,10 @@
         font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.18em;
         text-transform: uppercase; color: var(--accent-cyan);
         background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
-        border-radius: 100px; padding: 0.28rem 0.85rem; margin-bottom: 0.75rem;
+        border-radius: 100px; padding: 0.28rem 0.85rem; margin-bottom: 1.25rem;
     }
     .vsp-title {
-        font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem);
+        font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
         font-weight: 700; color: var(--text-primary);
         letter-spacing: -0.02em; word-spacing: 0.04em; margin: 0 0 0.4rem;
     }
@@ -929,14 +929,14 @@
     /* ── Role Tab Row (horizontal pill strip) ─────────── */
     .vsp-tab-row {
         display: flex; flex-wrap: wrap; gap: 0.6rem;
-        padding: 1rem 2rem 1.25rem;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        justify-content: center;
-        align-items: center;
+        padding: 1.25rem 2rem 1rem;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        justify-content: flex-start;
+        align-items: stretch;
     }
     .vsp-role-btn {
-        display: inline-flex; align-items: center; gap: 0.65rem;
-        padding: 0.65rem 1.25rem;
+        display: inline-flex; align-items: center; gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
         background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 0.75rem;
@@ -945,6 +945,8 @@
         color: var(--text-secondary);
         transition: all 0.2s ease;
         position: relative;
+        min-height: 4rem;
+        text-align: left;
     }
     .vsp-role-btn:hover {
         background: rgba(255,255,255,0.07);
@@ -954,11 +956,11 @@
     .vsp-role-btn:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
 
     .vsp-role-icon {
-        width: 1.75rem; height: 1.75rem; border-radius: 0.45rem;
+        width: 2.25rem; height: 2.25rem; border-radius: 0.5rem;
         display: flex; align-items: center; justify-content: center;
-        font-size: 0.8125rem; flex-shrink: 0;
+        font-size: 1.1rem; flex-shrink: 0;
     }
-    .vsp-role-label { font-weight: 700; }
+    .vsp-role-label { font-weight: 700; white-space: normal; line-height: 1.3; }
     .vsp-role-desc  { display: none; } /* hidden in pill mode */
 
     /* Active states — 3 accent colours */
@@ -1187,13 +1189,13 @@
 
         /* Header — reduce padding */
         .vsp-header { padding: 1.5rem 1.25rem 1rem; }
-        .vsp-title { font-size: clamp(1.5rem, 7vw, 2.2rem); }
+        .vsp-title { font-size: clamp(1.25rem, 5.5vw, 1.75rem); }
         .vsp-subtitle { font-size: 0.88rem; }
 
         /* Tab row — wrap with visible breathing room between pills */
         .vsp-tab-row { padding: 0.75rem 1.25rem 1rem; gap: 0.625rem; }
-        .vsp-role-btn { padding: 0.5rem 0.9rem; font-size: 0.8125rem; gap: 0.45rem; }
-        .vsp-role-icon { width: 1.4rem; height: 1.4rem; font-size: 0.8125rem; }
+        .vsp-role-btn { padding: 0.6rem 0.9rem; font-size: 0.8125rem; gap: 0.5rem; min-height: 3.5rem; }
+        .vsp-role-icon { width: 1.9rem; height: 1.9rem; font-size: 0.9rem; }
 
         /* Canvas — tighter side padding */
         .vsp-canvas-wrap { padding: 0.75rem 1rem 0; }
@@ -1464,11 +1466,9 @@
 
 <main id="main-content" role="main">
 
-    <!-- What is CORTEX? -->
-    <section class="section" aria-label="What is CORTEX?">
+    <!-- What is CORTEX? — unified intro + role video showcase -->
+    <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading">
         <div style="
-            width: 80%;
-            margin: 0 auto;
             background: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(15,23,42,0.65) 100%);
             border: 1px solid rgba(255,255,255,0.08);
             border-top: 1px solid rgba(99,102,241,0.35);
@@ -1476,99 +1476,382 @@
             backdrop-filter: blur(32px);
             -webkit-backdrop-filter: blur(32px);
             box-shadow: 0 0 0 1px rgba(99,102,241,0.1), 0 24px 60px -12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
-            padding: 2.5rem 2.25rem;
-            position: relative;
             overflow: hidden;
-            text-align: center;
+            position: relative;
         ">
-            <!-- Subtle radial glow behind content -->
+            <!-- Radial glow -->
             <div aria-hidden="true" style="
                 position: absolute; inset: 0; z-index: 0;
-                background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 70%);
+                background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 65%);
                 pointer-events: none;
             "></div>
 
-            <div style="position: relative; z-index: 1;">
-                <!-- Eyebrow label -->
+            <!-- ── Top: intro header ── -->
+            <div style="position: relative; z-index: 1; padding: 2.75rem 2.5rem 2rem; text-align: center;">
+
+                <!-- Bordered text block -->
                 <div style="
-                    display: inline-flex; align-items: center; gap: 0.5rem;
-                    padding: 0.25rem 0.85rem;
-                    border-radius: 999px;
-                    background: rgba(99,102,241,0.12);
-                    border: 1px solid rgba(99,102,241,0.28);
-                    font-size: 0.8125rem; font-weight: 700;
-                    letter-spacing: 0.18em; text-transform: uppercase;
-                    color: #a5b4fc;
-                    margin-bottom: 1.25rem;
+                    display: inline-block;
+                    position: relative;
+                    max-width: 76ch;
+                    margin: 0 auto 2rem;
+                    padding: 2rem 2.25rem 1.75rem;
+                    border-radius: 1.125rem;
+                    background: rgba(99,102,241,0.04);
+                    border: 1px solid transparent;
+                    background-clip: padding-box;
+                    box-shadow:
+                        0 0 0 1px rgba(99,102,241,0.22),
+                        0 0 0 2px rgba(0,212,255,0.08),
+                        inset 0 1px 0 rgba(255,255,255,0.05),
+                        0 8px 32px -8px rgba(99,102,241,0.18);
                 ">
-                    <span style="width:6px;height:6px;border-radius:50%;background:#818cf8;display:inline-block;box-shadow:0 0 6px #818cf8;"></span>
-                    Framework Definition
-                </div>
+                    <!-- Corner accent — top-left -->
+                    <span aria-hidden="true" style="
+                        position: absolute; top: -1px; left: -1px;
+                        width: 48px; height: 48px;
+                        border-top: 2px solid #818cf8;
+                        border-left: 2px solid #818cf8;
+                        border-radius: 1.125rem 0 0 0;
+                        pointer-events: none;
+                    "></span>
+                    <!-- Corner accent — top-right -->
+                    <span aria-hidden="true" style="
+                        position: absolute; top: -1px; right: -1px;
+                        width: 48px; height: 48px;
+                        border-top: 2px solid #67e8f9;
+                        border-right: 2px solid #67e8f9;
+                        border-radius: 0 1.125rem 0 0;
+                        pointer-events: none;
+                    "></span>
+                    <!-- Corner accent — bottom-left -->
+                    <span aria-hidden="true" style="
+                        position: absolute; bottom: -1px; left: -1px;
+                        width: 48px; height: 48px;
+                        border-bottom: 2px solid #67e8f9;
+                        border-left: 2px solid #67e8f9;
+                        border-radius: 0 0 0 1.125rem;
+                        pointer-events: none;
+                    "></span>
+                    <!-- Corner accent — bottom-right -->
+                    <span aria-hidden="true" style="
+                        position: absolute; bottom: -1px; right: -1px;
+                        width: 48px; height: 48px;
+                        border-bottom: 2px solid #818cf8;
+                        border-right: 2px solid #818cf8;
+                        border-radius: 0 0 1.125rem 0;
+                        pointer-events: none;
+                    "></span>
 
-                <!-- Headline -->
-                <h2 style="
-                    font-size: clamp(1.5rem, 2.5vw, 2rem);
-                    font-weight: 800;
-                    letter-spacing: -0.03em;
-                    background: linear-gradient(135deg, #fff 30%, #c4b5fd 70%, #67e8f9 100%);
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                    margin: 0 0 1.25rem;
-                    line-height: 1.2;
-                ">What is CORTEX?</h2>
+                    <!-- Headline -->
+                    <h2 id="what-is-cortex-heading" style="
+                        font-size: clamp(1.5rem, 2.5vw, 2rem);
+                        font-weight: 800;
+                        letter-spacing: -0.03em;
+                        background: linear-gradient(135deg, #fff 30%, #c4b5fd 70%, #67e8f9 100%);
+                        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        margin: 0 0 1.25rem;
+                        line-height: 1.2;
+                    ">What is CORTEX?</h2>
 
-                <!-- Body -->
-                <p style="
-                    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-                    color: #94a3b8;
-                    line-height: 1.75;
-                    margin: 0 auto 1.75rem;
-                    max-width: 72ch;
-                ">
-                    <strong style="color:#e2e8f0;">CORTEX</strong> is an
-                    <strong style="color:#a5b4fc;">AI Engineering Orchestration Framework</strong>
-                    that governs how AI-assisted code is planned, written, tested, and delivered.
-                    It wraps GitHub Copilot with a structured lifecycle — enforcing TDD, governance rules,
-                    and sweep-complete quality gates — so every output meets a verified standard before it ships.
-                </p>
+                    <!-- Body — justified both ends -->
+                    <p style="
+                        font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+                        color: #94a3b8;
+                        line-height: 1.8;
+                        margin: 0 auto 1rem;
+                        max-width: 72ch;
+                        text-align: justify;
+                        text-align-last: center;
+                    ">
+                        <strong style="color:#e2e8f0;">CORTEX</strong> is an
+                        <strong style="color:#a5b4fc;">AI Engineering Orchestration Framework</strong>
+                        that governs how AI-assisted code is planned, written, tested, and delivered.
+                        It wraps GitHub Copilot with a structured lifecycle — enforcing TDD, governance rules,
+                        and sweep-complete quality gates — so every output meets a verified standard before it ships.
+                    </p>
+
+                    <!-- Simplicity statement -->
+                    <p style="
+                        font-size: 0.9375rem;
+                        color: #64748b;
+                        line-height: 1.6;
+                        margin: 0 auto 0;
+                        max-width: 60ch;
+                        text-align: justify;
+                        text-align-last: center;
+                    ">
+                        Getting started is as simple as typing <strong style="color:#67e8f9; font-family: 'JetBrains Mono', monospace; font-size:0.95em;">/CORTEX</strong> in GitHub Copilot Chat — no configuration, no boilerplate, no friction.
+                    </p>
+                </div><!-- /bordered text block -->
 
                 <!-- Three pillars -->
-                <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
+                <div style="display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.25rem;">
                     <div style="
-                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
+                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
-                        padding: 1.5rem 1.25rem;
+                        padding: 1.25rem 1rem;
                     ">
-                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">🧠</div>
-                        <div style="font-size:0.8125rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#a5b4fc; margin-bottom:0.45rem;">Orchestrates</div>
-                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">323 orchestrators across 15 domains</div>
+                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🧠</div>
+                        <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#a5b4fc; margin-bottom:0.35rem;">Orchestrates</div>
+                        <div style="font-size:0.8125rem; color:#94a3b8; line-height:1.5;">330+ orchestrators across 15 domains</div>
                     </div>
                     <div style="
-                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
+                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
-                        padding: 1.5rem 1.25rem;
+                        padding: 1.25rem 1rem;
                     ">
-                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">🛡️</div>
-                        <div style="font-size:0.8125rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#67e8f9; margin-bottom:0.45rem;">Governs</div>
-                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">37 YAML rules enforced at every gate</div>
+                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🛡️</div>
+                        <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#67e8f9; margin-bottom:0.35rem;">Governs</div>
+                        <div style="font-size:0.8125rem; color:#94a3b8; line-height:1.5;">35+ YAML rules enforced at every gate</div>
                     </div>
                     <div style="
-                        flex: 1; min-width: min(180px, 100%); max-width: 260px;
+                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
                         background: rgba(255,255,255,0.03);
                         border: 1px solid rgba(255,255,255,0.07);
                         border-radius: 0.875rem;
-                        padding: 1.5rem 1.25rem;
+                        padding: 1.25rem 1rem;
                     ">
-                        <div style="font-size:2.5rem; margin-bottom:0.65rem; line-height:1;">✅</div>
-                        <div style="font-size:0.8125rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#34d399; margin-bottom:0.45rem;">Verifies</div>
-                        <div style="font-size:0.85rem; color:#94a3b8; line-height:1.55;">19,000+ tests · TDD-first · zero regressions</div>
+                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">✅</div>
+                        <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#34d399; margin-bottom:0.35rem;">Verifies</div>
+                        <div style="font-size:0.8125rem; color:#94a3b8; line-height:1.5;">19,000+ tests · TDD-first · zero regressions</div>
                     </div>
                 </div>
             </div>
+
+            <!-- ── Divider ── -->
+            <div aria-hidden="true" style="
+                height: 1px;
+                background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.3) 30%, rgba(0,212,255,0.25) 70%, transparent 100%);
+                margin: 0;
+                position: relative; z-index: 1;
+            "></div>
+
+            <!-- ── Bottom: role-aware video showcase (canvas first, tabs below) ── -->
+            <div style="position: relative; z-index: 1;">
+
+                <!-- Full-width canvas -->
+                <div class="vsp-canvas-wrap">
+
+                    <!-- Panel: Business Leader -->
+                    <div class="vsp-panel active" id="vsp-panel-business" role="tabpanel" aria-labelledby="vsp-btn-business">
+                        <div class="vsp-robot-placeholder" data-accent="amber" aria-label="Video coming soon — CORTEX for Business Leaders">
+                            <div class="vsp-glow-rings" aria-hidden="true">
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                            </div>
+                            <div class="vsp-scan-line" aria-hidden="true"></div>
+                            <div class="vsp-logo-wrap">
+                                <div class="vsp-logo-glow">
+                                    <img src="assets/images/cortex-logo-200.png"
+                                         alt="CORTEX AI — Video loading"
+                                         class="vsp-logo-img"
+                                         width="140" height="140"
+                                         loading="lazy"/>
+                                </div>
+                                <div class="vsp-placeholder-text">
+                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                    <p class="vsp-placeholder-headline">The ROI of Governed AI</p>
+                                    <p class="vsp-placeholder-sub">A 5-minute introduction for executives — no engineering background required.</p>
+                                </div>
+                            </div>
+                            <div class="vsp-panel-overlay"></div>
+                            <div class="vsp-status-bar" aria-hidden="true">
+                                <span class="vsp-status-dot">
+                                    <span class="vsp-dot-pulse"></span> Video in production
+                                </span>
+                                <span class="vsp-status-badge">16:9 · HD</span>
+                            </div>
+                        </div>
+                    </div><!-- /business panel -->
+
+                    <!-- Panel: Product Owner -->
+                    <div class="vsp-panel" id="vsp-panel-product" role="tabpanel" aria-labelledby="vsp-btn-product">
+                        <div class="vsp-robot-placeholder" data-accent="violet" aria-label="Video coming soon — CORTEX for Product Owners">
+                            <div class="vsp-glow-rings" aria-hidden="true">
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                            </div>
+                            <div class="vsp-scan-line" aria-hidden="true"></div>
+                            <div class="vsp-logo-wrap">
+                                <div class="vsp-logo-glow">
+                                    <img src="assets/images/cortex-logo-200.png"
+                                         alt="CORTEX AI — Video loading"
+                                         class="vsp-logo-img"
+                                         width="140" height="140"
+                                         loading="lazy"/>
+                                </div>
+                                <div class="vsp-placeholder-text">
+                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                    <p class="vsp-placeholder-headline">From Backlog to Done — Governed</p>
+                                    <p class="vsp-placeholder-sub">Your acceptance criteria, traceability, and delivery velocity — all in one loop.</p>
+                                </div>
+                            </div>
+                            <div class="vsp-panel-overlay"></div>
+                            <div class="vsp-status-bar" aria-hidden="true">
+                                <span class="vsp-status-dot">
+                                    <span class="vsp-dot-pulse" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa;"></span> Video in production
+                                </span>
+                                <span class="vsp-status-badge">16:9 · HD</span>
+                            </div>
+                        </div>
+                    </div><!-- /product panel -->
+
+                    <!-- Panel: Software Engineer -->
+                    <div class="vsp-panel" id="vsp-panel-engineer" role="tabpanel" aria-labelledby="vsp-btn-engineer">
+                        <div class="vsp-robot-placeholder" data-accent="cyan" aria-label="Video coming soon — CORTEX for Software Engineers">
+                            <div class="vsp-glow-rings" aria-hidden="true">
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                                <div class="vsp-ring"></div>
+                            </div>
+                            <div class="vsp-scan-line" aria-hidden="true"></div>
+                            <div class="vsp-logo-wrap">
+                                <div class="vsp-logo-glow">
+                                    <img src="assets/images/cortex-logo-200.png"
+                                         alt="CORTEX AI — Video loading"
+                                         class="vsp-logo-img"
+                                         width="140" height="140"
+                                         loading="lazy"/>
+                                </div>
+                                <div class="vsp-placeholder-text">
+                                    <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
+                                    <p class="vsp-placeholder-headline">Build Faster. Break Nothing.</p>
+                                    <p class="vsp-placeholder-sub">LENS, TDD, 330+ orchestrators and MCP-first tooling — engineered for the engineer.</p>
+                                </div>
+                            </div>
+                            <div class="vsp-panel-overlay"></div>
+                            <div class="vsp-status-bar" aria-hidden="true">
+                                <span class="vsp-status-dot">
+                                    <span class="vsp-dot-pulse"></span> Video in production
+                                </span>
+                                <span class="vsp-status-badge">16:9 · HD</span>
+                            </div>
+                        </div>
+                    </div><!-- /engineer panel -->
+
+                </div><!-- /vsp-canvas-wrap -->
+
+                <!-- Role selector panel -->
+                <div style="
+                    margin: 0;
+                    padding: 2rem 2.5rem 2.25rem;
+                    border-top: 1px solid rgba(255,255,255,0.06);
+                    text-align: center;
+                ">
+                    <!-- Statement -->
+                    <p style="
+                        margin: 0 0 1.75rem;
+                        font-size: clamp(1rem, 1.8vw, 1.2rem);
+                        font-weight: 700;
+                        color: #e2e8f0;
+                        letter-spacing: -0.01em;
+                        line-height: 1.4;
+                    ">Choose your role — each video is crafted to show what <strong style="color:#a5b4fc;">CORTEX</strong> means <em style="color:#67e8f9; font-style:normal;">for you</em>.</p>
+
+                    <!-- 2×3 button grid -->
+                    <div role="tablist"
+                         aria-label="Select your role to watch the intro video"
+                         style="
+                             display: grid;
+                             grid-template-columns: repeat(3, 1fr);
+                             gap: 0.75rem;
+                             max-width: 720px;
+                             margin: 0 auto;
+                         ">
+
+                        <button class="vsp-role-btn active"
+                                data-role="business" data-accent="amber"
+                                data-panel="vsp-panel-business"
+                                id="vsp-btn-business"
+                                role="tab" aria-selected="true" aria-controls="vsp-panel-business"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;" aria-hidden="true">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <span class="vsp-role-label">Business<br>Leader</span>
+                        </button>
+
+                        <button class="vsp-role-btn"
+                                data-role="product" data-accent="violet"
+                                data-panel="vsp-panel-product"
+                                id="vsp-btn-product"
+                                role="tab" aria-selected="false" aria-controls="vsp-panel-product"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(123,97,255,0.12);color:#a78bfa;" aria-hidden="true">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <span class="vsp-role-label">Product<br>Owner</span>
+                        </button>
+
+                        <button class="vsp-role-btn"
+                                data-role="engineer" data-accent="cyan"
+                                data-panel="vsp-panel-engineer"
+                                id="vsp-btn-engineer"
+                                role="tab" aria-selected="false" aria-controls="vsp-panel-engineer"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(0,212,255,0.12);color:#00d4ff;" aria-hidden="true">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <span class="vsp-role-label">Software<br>Engineer</span>
+                        </button>
+
+                        <button class="vsp-role-btn"
+                                data-role="security" data-accent="rose"
+                                data-panel="vsp-panel-business"
+                                id="vsp-btn-security"
+                                role="tab" aria-selected="false" aria-controls="vsp-panel-business"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(244,63,94,0.12);color:#fb7185;" aria-hidden="true">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <span class="vsp-role-label">Security<br>Engineer</span>
+                        </button>
+
+                        <button class="vsp-role-btn"
+                                data-role="quality" data-accent="emerald"
+                                data-panel="vsp-panel-engineer"
+                                id="vsp-btn-quality"
+                                role="tab" aria-selected="false" aria-controls="vsp-panel-engineer"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(16,185,129,0.12);color:#34d399;" aria-hidden="true">
+                                <i class="fas fa-microscope"></i>
+                            </div>
+                            <span class="vsp-role-label">Quality<br>Engineer</span>
+                        </button>
+
+                        <button class="vsp-role-btn"
+                                data-role="sre" data-accent="teal"
+                                data-panel="vsp-panel-engineer"
+                                id="vsp-btn-sre"
+                                role="tab" aria-selected="false" aria-controls="vsp-panel-engineer"
+                                style="width:100%; justify-content:flex-start;">
+                            <div class="vsp-role-icon" style="background:rgba(45,212,191,0.12);color:#2dd4bf;" aria-hidden="true">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <span class="vsp-role-label">Site Reliability<br>Engineer</span>
+                        </button>
+
+                    </div>
+                </div><!-- /role selector panel -->
+
+                <!-- Panel footnote -->
+                <p class="vsp-footnote">
+                    <i class="fas fa-robot" aria-hidden="true"></i>
+                    Conceived, designed &amp; generated by CORTEX — an AI framework that built its own story.
+                </p>
+
+            </div><!-- /bottom video section -->
         </div>
     </section>
 
@@ -1613,180 +1896,6 @@
                 </p>
             </article>
         </div>
-    </section>
-
-    <!-- 3. Experience CORTEX — Role-Aware Video Showcase -->
-    <section class="container section" aria-labelledby="experience-cortex-heading">
-
-        <div class="video-showcase-panel">
-
-            <!-- Panel Header -->
-            <div class="vsp-header">
-                <div class="vsp-eyebrow" aria-hidden="true">
-                    <i class="fas fa-play-circle"></i> CORTEX in Action
-                </div>
-                <h2 class="vsp-title" id="experience-cortex-heading">See CORTEX Through Your Lens</h2>
-                <p class="vsp-subtitle">
-                    Choose your role below — each video is a focused introduction narrated by Google NotebookLM,
-                    crafted to show what CORTEX means <em>for you</em>.
-                </p>
-            </div>
-
-            <!-- Horizontal pill tab strip -->
-            <div class="vsp-tab-row" role="tablist" aria-label="Select your role to watch the intro video">
-
-                <button class="vsp-role-btn active"
-                        data-role="business" data-accent="amber"
-                        data-panel="vsp-panel-business"
-                        id="vsp-btn-business"
-                        role="tab" aria-selected="true" aria-controls="vsp-panel-business">
-                    <div class="vsp-role-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;" aria-hidden="true">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <span class="vsp-role-label">Business Leader</span>
-                </button>
-
-                <button class="vsp-role-btn"
-                        data-role="product" data-accent="violet"
-                        data-panel="vsp-panel-product"
-                        id="vsp-btn-product"
-                        role="tab" aria-selected="false" aria-controls="vsp-panel-product">
-                    <div class="vsp-role-icon" style="background:rgba(123,97,255,0.12);color:#a78bfa;" aria-hidden="true">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <span class="vsp-role-label">Product Owner</span>
-                </button>
-
-                <button class="vsp-role-btn"
-                        data-role="engineer" data-accent="cyan"
-                        data-panel="vsp-panel-engineer"
-                        id="vsp-btn-engineer"
-                        role="tab" aria-selected="false" aria-controls="vsp-panel-engineer">
-                    <div class="vsp-role-icon" style="background:rgba(0,212,255,0.12);color:#00d4ff;" aria-hidden="true">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <span class="vsp-role-label">Software Engineer</span>
-                </button>
-
-            </div><!-- /vsp-tab-row -->
-
-            <!-- Full-width canvas -->
-            <div class="vsp-canvas-wrap">
-
-                <!-- Panel: Business Leader -->
-                <div class="vsp-panel active" id="vsp-panel-business" role="tabpanel" aria-labelledby="vsp-btn-business">
-                    <div class="vsp-robot-placeholder" data-accent="amber" aria-label="Video coming soon — CORTEX for Business Leaders">
-                        <div class="vsp-glow-rings" aria-hidden="true">
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                        </div>
-                        <div class="vsp-scan-line" aria-hidden="true"></div>
-                        <div class="vsp-logo-wrap">
-                            <div class="vsp-logo-glow">
-                                <img src="assets/images/cortex-logo-200.png"
-                                     alt="CORTEX AI — Video loading"
-                                     class="vsp-logo-img"
-                                     width="140" height="140"
-                                     loading="lazy"/>
-                            </div>
-                            <div class="vsp-placeholder-text">
-                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                <p class="vsp-placeholder-headline">The ROI of Governed AI</p>
-                                <p class="vsp-placeholder-sub">A 5-minute introduction for executives — no engineering background required.</p>
-                            </div>
-                        </div>
-                        <div class="vsp-panel-overlay">
-                        </div>
-                        <div class="vsp-status-bar" aria-hidden="true">
-                            <span class="vsp-status-dot">
-                                <span class="vsp-dot-pulse"></span> Video in production
-                            </span>
-                            <span class="vsp-status-badge">16:9 · HD</span>
-                        </div>
-                    </div>
-                </div><!-- /business panel -->
-
-                <!-- Panel: Product Owner -->
-                <div class="vsp-panel" id="vsp-panel-product" role="tabpanel" aria-labelledby="vsp-btn-product">
-                    <div class="vsp-robot-placeholder" data-accent="violet" aria-label="Video coming soon — CORTEX for Product Owners">
-                        <div class="vsp-glow-rings" aria-hidden="true">
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                        </div>
-                        <div class="vsp-scan-line" aria-hidden="true"></div>
-                        <div class="vsp-logo-wrap">
-                            <div class="vsp-logo-glow">
-                                <img src="assets/images/cortex-logo-200.png"
-                                     alt="CORTEX AI — Video loading"
-                                     class="vsp-logo-img"
-                                     width="140" height="140"
-                                     loading="lazy"/>
-                            </div>
-                            <div class="vsp-placeholder-text">
-                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                <p class="vsp-placeholder-headline">From Backlog to Done — Governed</p>
-                                <p class="vsp-placeholder-sub">Your acceptance criteria, traceability, and delivery velocity — all in one loop.</p>
-                            </div>
-                        </div>
-                        <div class="vsp-panel-overlay">
-                        </div>
-                        <div class="vsp-status-bar" aria-hidden="true">
-                            <span class="vsp-status-dot">
-                                <span class="vsp-dot-pulse" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa;"></span> Video in production
-                            </span>
-                            <span class="vsp-status-badge">16:9 · HD</span>
-                        </div>
-                    </div>
-                </div><!-- /product panel -->
-
-                <!-- Panel: Software Engineer -->
-                <div class="vsp-panel" id="vsp-panel-engineer" role="tabpanel" aria-labelledby="vsp-btn-engineer">
-                    <div class="vsp-robot-placeholder" data-accent="cyan" aria-label="Video coming soon — CORTEX for Software Engineers">
-                        <div class="vsp-glow-rings" aria-hidden="true">
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                            <div class="vsp-ring"></div>
-                        </div>
-                        <div class="vsp-scan-line" aria-hidden="true"></div>
-                        <div class="vsp-logo-wrap">
-                            <div class="vsp-logo-glow">
-                                <img src="assets/images/cortex-logo-200.png"
-                                     alt="CORTEX AI — Video loading"
-                                     class="vsp-logo-img"
-                                     width="140" height="140"
-                                     loading="lazy"/>
-                            </div>
-                            <div class="vsp-placeholder-text">
-                                <span class="vsp-placeholder-label">NotebookLM · HD Video</span>
-                                <p class="vsp-placeholder-headline">Build Faster. Break Nothing.</p>
-                                <p class="vsp-placeholder-sub">LENS, TDD, 323 orchestrators and MCP-first tooling — engineered for the engineer.</p>
-                            </div>
-                        </div>
-                        <div class="vsp-panel-overlay">
-                        </div>
-                        <div class="vsp-status-bar" aria-hidden="true">
-                            <span class="vsp-status-dot">
-                                <span class="vsp-dot-pulse"></span> Video in production
-                            </span>
-                            <span class="vsp-status-badge">16:9 · HD</span>
-                        </div>
-                    </div>
-                </div><!-- /engineer panel -->
-
-            </div><!-- /vsp-canvas-wrap -->
-
-            <!-- Panel footnote -->
-            <p class="vsp-footnote">
-                <i class="fas fa-robot" aria-hidden="true"></i>
-                Conceived, designed &amp; generated by CORTEX — an AI framework that built its own story.
-            </p>
-
-        </div><!-- /video-showcase-panel -->
     </section>
 
     <!-- 4. The Awakening Of CORTEX -->
@@ -1869,9 +1978,9 @@
                     </div>
                     <p class="text-muted text-lg mb-6">The orchestrators and governance rules operate via an automated quality lifecycle designed to ensure comprehensive testing before deployment.</p>
                     <div class="flex flex-wrap gap-3">
-                        <span class="cortex-tag m-0"><i class="fas fa-network-wired text-purple" aria-hidden="true"></i> 320+ Orchestrators</span>
+                        <span class="cortex-tag m-0"><i class="fas fa-network-wired text-purple" aria-hidden="true"></i> 330+ Orchestrators</span>
                         <span class="cortex-tag m-0"><i class="fas fa-plug text-magenta" aria-hidden="true"></i> 55+ MCP Tools</span>
-                        <span class="cortex-tag m-0"><i class="fas fa-shield-alt text-emerald" aria-hidden="true"></i> 55+ Gov. Policies</span>
+                        <span class="cortex-tag m-0"><i class="fas fa-shield-alt text-emerald" aria-hidden="true"></i> 60+ Gov. Policies</span>
                     </div>
                 </div>
 
@@ -2081,20 +2190,20 @@
                         Explore the <span style="background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple),var(--accent-emerald));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CORTEX Brain Architecture</span>
                     </h3>
                     <p style="color:var(--text-tertiary);font-size:1rem;line-height:1.6;font-weight:300;max-width:36rem;margin:0 0 0.25rem 0;">
-                        The Intelligence Diamond behind your delivery pipeline — how 320+ orchestrators, the LENS sensory system, and 35+ governance rules enforce quality from intent to deployment.
+                        The Intelligence Diamond behind your delivery pipeline — how 330+ orchestrators, the LENS sensory system, and 60+ governance rules enforce quality from intent to deployment.
                     </p>
                     <!-- Inline Stats -->
                     <div class="arch-cta-stats">
                         <div class="arch-stat">
-                            <div class="arch-stat-value">320+</div>
+                            <div class="arch-stat-value">330+</div>
                             <div class="arch-stat-label">Orchestrators</div>
                         </div>
                         <div class="arch-stat">
-                            <div class="arch-stat-value">30+</div>
+                            <div class="arch-stat-value">55+</div>
                             <div class="arch-stat-label">MCP Tools</div>
                         </div>
                         <div class="arch-stat">
-                            <div class="arch-stat-value">35+</div>
+                            <div class="arch-stat-value">60+</div>
                             <div class="arch-stat-label">Governance</div>
                         </div>
                         <div class="arch-stat">
@@ -2177,7 +2286,7 @@
                 <div class="role-tile-body">
                     <h3>Security Engineers</h3>
                     <span class="role-tag text-rose">Shift-Left Security</span>
-                    <p>Embed security into the SDLC from day one. Automated vulnerability scanning, threat modeling, and compliance gates.</p>
+                    <p>Embed security into the SDLC from day one. Automated vulnerability scanning, STRIDE threat modelling via the Threat Model Engine, and compliance gates.</p>
                     <div class="role-tile-features">
                         <span class="role-feat"><i class="fas fa-bug text-rose" aria-hidden="true"></i> Vuln scanning</span>
                         <span class="role-dot"></span>

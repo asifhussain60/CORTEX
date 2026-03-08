@@ -41,8 +41,9 @@ render: ascii
   │  │  🔎 AUDIT               💬 REPHRASE           🔁 TOTALRECALL│    │
   │  │  🐛 DEBUG               🔬 INVESTIGATE        👋 INTRODUCE  │    │
   │  │  🧹 VACUUM              🧠 RCA                              │    │
-  │  │  🩺 HEALTH              🥇 GOLDEN_TEST                      │    │
-  │  │                          🔧🔄 WORKFLOW_COMPOSE               │    │
+  │  │  🩺 HEALTH              🥇 GOLDEN_TEST        REVIEWING     │    │
+  │  │                          🔧🔄 WORKFLOW_COMPOSE 👁️ REVIEW     │    │
+  │  │                                                💬 FEEDBACK   │    │
   │  └──────────────────────────────────────────────────────────────┘    │
   └──────────────────────────┬───────────────────────────────────────────┘
                              │

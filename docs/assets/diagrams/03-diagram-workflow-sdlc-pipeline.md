@@ -29,6 +29,8 @@ render: ascii
  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘
       │              │              │              │              │              │              │
    🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE
+                                              5-Pass Code     LENS Sweep    STRIDE Threat
+                                              Review Orch.                  Model Engine
 ```
 
 Also includes knowledge hydration (company overrides win) and a workflow FSM (pending → running → completed / failed / blocked).
