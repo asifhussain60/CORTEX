@@ -8,6 +8,24 @@ This folder (`cortex-docs/assets/diagrams`) is the **only** canonical location f
 - **High value only:** only keep diagrams that explain core system behavior end-to-end.
 - **Naming:** `NN-diagram-{category}-{short-title}.md` where category is a meaningful word (e.g., `architecture`, `workflow`, `governance`, `testing`, `orchestration`, `audit`).
 - **Renderability:** diagrams are Markdown so they can be referenced as `#file:cortex-docs/...` and hosted from `cortex-docs` via GitHub Pages.
+- **Visualization library:** D3.js v7.9.0 ONLY — no Mermaid.js (BANNED), no ELK.js, no Cytoscape.
+
+## Frontmatter Fields
+
+Every diagram spec file includes YAML frontmatter:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `id` | ✅ | Unique identifier (kebab-case) |
+| `title` | ✅ | Human-readable diagram title |
+| `purpose` | ✅ | One-line description of what the diagram explains |
+| `audience` | ✅ | Target audience list (Business Leaders, Product Owners, Software Developers, etc.) |
+| `source_of_truth` | ✅ | Source code paths this diagram represents |
+| `last_verified` | ✅ | Date last verified against live code |
+| `diagram_type` | ✅ | Category: Architecture, Workflow, Governance, Audit, Testing, Orchestration, Intelligence, Debugging, Quality, Security |
+| `render` | ✅ | Current render format (`ascii`) |
+| `render_html` | ✅ | Whether this diagram should be rendered as interactive D3.js SVG (`true`/`false`) |
+| `d3_method` | ✅ | Recommended D3.js rendering approach (e.g., `d3.tree()`, `d3.forceSimulation()`, `d3.pie()`) |
 
 ## Curated diagram set
 

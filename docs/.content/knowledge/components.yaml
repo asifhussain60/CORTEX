@@ -126,6 +126,102 @@ components:
         - "Lightbox: optional — if added, use native <dialog> element, not third-party lib"
         - "Diagram data sourced from cortex-docs/assets/diagrams/ spec files"
 
+    - id: comp-diagram-002
+      name: "D3.js Interactive SVG Diagram"
+      class: ".cortex-diagram"
+      html_element: "<div class='cortex-diagram' role='img' aria-label='[diagram title]'><svg></svg></div>"
+      css_file: "glassmorphism.css or inline"
+      aria: "role='img' aria-label='[descriptive title]' on container; <title> + <desc> inside <svg>"
+      constraints:
+        - "SVG viewBox set to content bounds; width='100%'; preserveAspectRatio='xMidYMid meet'"
+        - "Node fill: design_system.yaml → diagram_tokens.node_styles (never raw hex)"
+        - "Edge stroke: design_system.yaml → diagram_tokens.edge_styles"
+        - "Arrow markers: <defs><marker> using diagram_tokens.arrow_markers"
+        - "Font floor: node labels ≥14px, edge labels ≥12px, titles ≥18px, annotations ≥11px"
+        - "Responsive: container max-width:100%; @media breakpoints per visualization_standards.yaml"
+        - "Touch: interactive nodes min 44×44px (WCAG 2.5.5 AAA)"
+        - "Library: D3.js v7.9.0 ONLY — no Mermaid, no ELK, no Cytoscape"
+
+    - id: comp-diagram-003
+      name: "D3.js Force-Directed Network Graph"
+      class: ".cortex-diagram.cortex-diagram--network"
+      html_element: "<div class='cortex-diagram cortex-diagram--network'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[network title]'; nodes: <title> per node"
+      constraints:
+        - "d3.forceSimulation() with forceLink, forceManyBody, forceCenter"
+        - "Mobile: reduce charge strength (−80 → −40), constrain to viewport"
+        - "Nodes: circle r ≥ 22px (44px touch target diameter)"
+        - "Labels: ≥14px Inter, centred below nodes, white fill"
+        - "Edges: diagram_tokens.edge_styles.default; arrowhead markers in <defs>"
+        - "Hover: drop-shadow glow per diagram_tokens.glow_effects.node_hover"
+
+    - id: comp-diagram-004
+      name: "D3.js Flowchart / Pipeline"
+      class: ".cortex-diagram.cortex-diagram--flow"
+      html_element: "<div class='cortex-diagram cortex-diagram--flow'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[flow title]'"
+      constraints:
+        - "Manual positioning OR d3.tree() layout with custom nodeSize"
+        - "Nodes: rounded rect (rx=8) using diagram_tokens.node_styles"
+        - "Edges: curved paths with d3.linkVertical() or d3.linkHorizontal()"
+        - "Mobile (≤480px): vertical stacking mandatory (horizontal → vertical)"
+        - "Labels inside nodes: ≥14px, centred, white fill, font-weight 500"
+        - "Section spacing: 2rem margin between flow and adjacent content"
+
+    - id: comp-diagram-005
+      name: "D3.js Tree / Mind Map"
+      class: ".cortex-diagram.cortex-diagram--tree"
+      html_element: "<div class='cortex-diagram cortex-diagram--tree'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[tree title]'; aria-describedby pointing to caption"
+      constraints:
+        - "d3.tree() or d3.cluster() layout; radial variant for mind maps"
+        - "Links: d3.linkRadial() or d3.linkHorizontal() with diagram_tokens.edge_styles"
+        - "Leaf nodes: circle r=6; branch nodes: circle r=10"
+        - "Labels: ≥12px, positioned to avoid overlap (dx/dy offsets)"
+        - "Depth colour encoding: branches progressively use secondary → accent colours"
+
+    - id: comp-diagram-006
+      name: "D3.js Sequence Diagram"
+      class: ".cortex-diagram.cortex-diagram--sequence"
+      html_element: "<div class='cortex-diagram cortex-diagram--sequence'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[sequence title]'"
+      constraints:
+        - "Vertical lifelines: dashed lines per actor (diagram_tokens.edge_styles.dashed)"
+        - "Messages: horizontal arrows with text labels ≥12px"
+        - "Actor boxes: top + bottom, rect with node_styles.primary fill"
+        - "Activation bars: narrow rects on lifelines showing execution"
+        - "Mobile: horizontal scroll if > 4 actors; min-width: 600px"
+
+    - id: comp-diagram-007
+      name: "D3.js Donut / Pie Chart"
+      class: ".cortex-diagram.cortex-diagram--donut"
+      html_element: "<div class='cortex-diagram cortex-diagram--donut'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[chart title]'; each arc has <title> with value"
+      constraints:
+        - "d3.pie() + d3.arc() — innerRadius > 0 for donut"
+        - "Colour palette: cycle through [accent-primary, accent-secondary, success, warning, info]"
+        - "Labels: ≥12px, positioned outside arc with leader lines"
+        - "Centre text: total/summary value, ≥18px Space Grotesk"
+        - "Tooltip on hover: glass-card styled div with value + percentage"
+
+    - id: comp-diagram-008
+      name: "D3.js Bar / Grouped Bar Chart"
+      class: ".cortex-diagram.cortex-diagram--bar"
+      html_element: "<div class='cortex-diagram cortex-diagram--bar'><svg></svg></div>"
+      css_file: "inline or glassmorphism.css"
+      aria: "role='img' aria-label='[chart title]'"
+      constraints:
+        - "d3.scaleBand() for x-axis, d3.scaleLinear() for y-axis"
+        - "Bars: fill from accent palette, border-radius 4px top corners"
+        - "Axis labels: ≥12px Inter, tick labels ≥11px"
+        - "Grid lines: rgba(255,255,255,0.05) — subtle, not distracting"
+        - "Mobile: horizontal bars if >6 categories; swap axes"
+
   badges:
     - id: comp-badge-001
       name: "Soon Badge"

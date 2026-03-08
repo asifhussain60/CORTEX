@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-04
 diagram_type: Workflow
 render: ascii
+render_html: true
+d3_method: "d3.tree() — 5-pass pipeline with priority colour encoding"
 ---
 
 # Code Review Orchestrator — 5-Pass Automated Pipeline

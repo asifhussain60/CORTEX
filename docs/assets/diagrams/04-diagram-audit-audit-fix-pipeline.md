@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Workflow
 render: ascii
+render_html: true
+d3_method: "d3.tree() — vertical flowchart with convergence loop"
 ---
 
 # Audit Fix Pipeline — 9-Stage Flow

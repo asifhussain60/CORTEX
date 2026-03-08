@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-04
 diagram_type: Intelligence
 render: ascii
+render_html: true
+d3_method: "d3.pie() + d3.scaleLinear() — 5-dimension radar with trend bars"
 ---
 
 # Quality Analysis Engine — Multi-Dimensional Scoring

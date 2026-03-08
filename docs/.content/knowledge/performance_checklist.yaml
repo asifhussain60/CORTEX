@@ -86,6 +86,34 @@ checks:
       fix: "When diagram images are added, always include width/height attributes"
       priority: P1
 
+    - id: perf-023
+      rule: "SVG diagrams use lazy rendering for below-fold content"
+      current_state: "D3.js diagrams render on page load — below-fold diagrams waste initial CPU"
+      fix: "Use IntersectionObserver to trigger D3.js rendering only when diagram container enters viewport"
+      priority: P1
+      implementation: |
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              renderDiagram(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '200px' });
+        document.querySelectorAll('.cortex-diagram[data-diagram]').forEach(el => observer.observe(el));
+
+    - id: perf-024
+      rule: "D3.js loaded once per page — no duplicate CDN imports"
+      current_state: "Single <script src='d3.v7.min.js'> in business-leader.html ✅"
+      fix: "Ensure all HTML views load D3 exactly once; use defer attribute"
+      priority: P1
+
+    - id: perf-025
+      rule: "SVG diagrams set explicit viewBox to prevent layout shift"
+      current_state: "D3-generated SVGs should include viewBox matching content bounds"
+      fix: "Every <svg> must have viewBox='0 0 {width} {height}' — never rely on auto-sizing"
+      priority: P1
+
   layout_stability:
     - id: perf-030
       rule: "All images have explicit width/height attributes (prevents CLS)"

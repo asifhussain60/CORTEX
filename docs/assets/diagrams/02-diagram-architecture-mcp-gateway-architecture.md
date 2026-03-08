@@ -15,6 +15,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Architecture
 render: ascii
+render_html: true
+d3_method: "d3.tree() — layered SVG with MCP transport flow"
 response_header_enhancement:
   feature: Intent-aligned business/engineering quote in every response header
   library: BLOCK-QUOTE-LIBRARY

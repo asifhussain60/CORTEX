@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Workflow
 render: ascii
+render_html: true
+d3_method: "d3.tree() — 8-strategy pipeline with language badges"
 ---
 
 # Multi-Stack Debug Pipeline — 8 Strategies Across 5 Stacks

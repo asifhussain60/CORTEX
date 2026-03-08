@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Sequence
 render: ascii
+render_html: true
+d3_method: "custom SVG — vertical lifelines with horizontal message arrows"
 ---
 
 # End-to-End Request Sequence — 4-Stage Pipeline

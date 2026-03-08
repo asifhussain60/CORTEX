@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Testing
 render: ascii
+render_html: true
+d3_method: "d3.tree() — stacked pyramid with tier labels"
 ---
 
 # Testing Strategy — Pyramid and Execution Tiers

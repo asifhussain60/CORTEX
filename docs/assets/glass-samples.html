@@ -266,17 +266,21 @@
             margin-top: 1rem;
         }
 
-        .mermaid-container {
-            font-family: 'Fira Code', 'Courier New', monospace;
-            background: rgba(10, 15, 30, 0.8);
+        .d3-diagram-container {
+            background: rgba(10, 15, 30, 0.6);
             border-left: 4px solid var(--accent-purple);
             padding: 1.5rem;
             border-radius: var(--radius-sm);
-            color: #e2e8f0;
             overflow-x: auto;
-            font-size: 0.85rem;
-            line-height: 1.5;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .d3-diagram-container svg {
+            width: 100%;
+            height: auto;
+        }
+        .d3-diagram-container svg text {
+            font-family: 'Inter', sans-serif;
+            fill: #ffffff;
         }
 
         /* Glassmorphism Table */
@@ -636,7 +640,7 @@
                 </header>
                 
                 <div class="grid-max-3">
-                    <!-- Mermaid.js Flowchart -->
+                    <!-- D3.js SVG Flowchart -->
                     <div class="glass-card" style="padding: 0;">
                         <div style="padding: 1.5rem; border-bottom: 1px solid var(--glass-border);">
                             <h4>Request Lifecycle Flow</h4>
@@ -644,18 +648,58 @@
                         </div>
                         
                         <div style="padding: 1.5rem;">
-                            <!-- CRITICAL DOCUMENTATION HINT FOR MERMAID -->
-                            <div class="mermaid-container">
-<pre style="margin:0;"><code>%% Render via Mermaid.js parser %%
-graph TD;
-    A[Incoming Request] --> B{Intent Classifier}
-    B -- "< 40ms" --> C[LENS Analysis]
-    C --> D(Governance Gate)
-    D -- Pass --> E[Test Generation]
-    D -- Block --> F[Remediation Hint]
-    E --> G[Execution]
-    G --> H((Convergence Check))
-</code></pre>
+                            <div class="d3-diagram-container cortex-diagram" role="img" aria-label="Request lifecycle flow from incoming request through intent classification, LENS analysis, governance gate, to execution and convergence check">
+                                <svg viewBox="0 0 360 520" preserveAspectRatio="xMidYMid meet">
+                                    <defs>
+                                        <marker id="arrow-flow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="rgba(160,166,192,0.7)"/>
+                                        </marker>
+                                        <marker id="arrow-accent-flow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,212,255,0.7)"/>
+                                        </marker>
+                                    </defs>
+                                    <title>Request Lifecycle Flow</title>
+                                    <desc>Flowchart showing: Incoming Request → Intent Classifier → LENS Analysis → Governance Gate → Test Generation → Execution → Convergence Check. Governance failures route to Remediation Hint.</desc>
+                                    <!-- Nodes -->
+                                    <rect x="100" y="10" width="160" height="40" rx="8" fill="rgba(26,31,58,0.7)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+                                    <text x="180" y="35" text-anchor="middle" font-size="14" font-weight="500">Incoming Request</text>
+                                    <!-- Diamond: Intent Classifier -->
+                                    <polygon points="180,80 260,115 180,150 100,115" fill="rgba(26,31,58,0.7)" stroke="rgba(123,97,255,0.5)" stroke-width="1.5"/>
+                                    <text x="180" y="120" text-anchor="middle" font-size="13" font-weight="500">Intent Classifier</text>
+                                    <text x="270" y="115" font-size="11" fill="#a0a6c0">&lt; 40ms</text>
+                                    <!-- LENS Analysis -->
+                                    <rect x="110" y="175" width="140" height="40" rx="8" fill="rgba(26,31,58,0.7)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+                                    <text x="180" y="200" text-anchor="middle" font-size="14" font-weight="500">LENS Analysis</text>
+                                    <!-- Governance Gate -->
+                                    <rect x="105" y="245" width="150" height="40" rx="20" fill="rgba(26,31,58,0.5)" stroke="rgba(0,255,136,0.4)" stroke-width="1.5"/>
+                                    <text x="180" y="270" text-anchor="middle" font-size="14" font-weight="500">Governance Gate</text>
+                                    <!-- Test Generation -->
+                                    <rect x="110" y="320" width="140" height="40" rx="8" fill="rgba(26,31,58,0.7)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+                                    <text x="180" y="345" text-anchor="middle" font-size="14" font-weight="500">Test Generation</text>
+                                    <!-- Execution -->
+                                    <rect x="120" y="390" width="120" height="40" rx="8" fill="rgba(26,31,58,0.7)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+                                    <text x="180" y="415" text-anchor="middle" font-size="14" font-weight="500">Execution</text>
+                                    <!-- Convergence Check (circle) -->
+                                    <circle cx="180" cy="475" r="25" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.6)" stroke-width="2"/>
+                                    <text x="180" y="472" text-anchor="middle" font-size="11" font-weight="500">Convergence</text>
+                                    <text x="180" y="484" text-anchor="middle" font-size="11" font-weight="500">Check</text>
+                                    <!-- Remediation Hint (side branch) -->
+                                    <rect x="10" y="310" width="70" height="60" rx="8" fill="rgba(255,68,68,0.15)" stroke="rgba(255,68,68,0.5)" stroke-width="1.5"/>
+                                    <text x="45" y="335" text-anchor="middle" font-size="11" font-weight="500" fill="#ff8888">Remediation</text>
+                                    <text x="45" y="349" text-anchor="middle" font-size="11" font-weight="500" fill="#ff8888">Hint</text>
+                                    <!-- Edges -->
+                                    <line x1="180" y1="50" x2="180" y2="80" stroke="rgba(160,166,192,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                    <line x1="180" y1="150" x2="180" y2="175" stroke="rgba(160,166,192,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                    <line x1="180" y1="215" x2="180" y2="245" stroke="rgba(160,166,192,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                    <!-- Pass -->
+                                    <line x1="180" y1="285" x2="180" y2="320" stroke="rgba(0,255,136,0.5)" stroke-width="1.5" marker-end="url(#arrow-accent-flow)"/>
+                                    <text x="195" y="307" font-size="11" fill="#00ff88">Pass</text>
+                                    <!-- Block -->
+                                    <line x1="105" y1="265" x2="80" y2="310" stroke="rgba(255,68,68,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                    <text x="75" y="290" font-size="11" fill="#ff4444">Block</text>
+                                    <line x1="180" y1="360" x2="180" y2="390" stroke="rgba(160,166,192,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                    <line x1="180" y1="430" x2="180" y2="450" stroke="rgba(160,166,192,0.5)" stroke-width="1.5" marker-end="url(#arrow-flow)"/>
+                                </svg>
                             </div>
                         </div>
                     </div>

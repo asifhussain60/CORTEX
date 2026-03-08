@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Governance
 render: ascii
+render_html: true
+d3_method: "d3.tree() — sweep tracking flowchart with catalogue table"
 ---
 
 # Sweep Completeness — CORE-064 Lifecycle

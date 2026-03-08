@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-04
 diagram_type: Security
 render: ascii
+render_html: true
+d3_method: "d3.treemap() — STRIDE heatmap with DREAD colour encoding"
 ---
 
 # Threat Model Engine — STRIDE Classification Pipeline

@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Governance
 render: ascii
+render_html: true
+d3_method: "d3.tree() — detect-fix-rescan loop with cycle counter"
 ---
 
 # Universal Convergence Gate — CORE-068

@@ -12,6 +12,8 @@ source_of_truth:
 last_verified: 2026-03-03
 diagram_type: Orchestration
 render: ascii
+render_html: true
+d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edges"
 ---
 
 # Intent Classification & Orchestrator Routing

@@ -15,6 +15,8 @@ last_verified: 2026-03-03
 phase_status: "Phase 107 COMPLETE · Phase 109 COMPLETE (diamond flatten deferred to future sprint)"
 diagram_type: Intelligence
 render: ascii
+render_html: true
+d3_method: "d3.tree() — 4-layer pipeline + diamond facade"
 ---
 
 # LENS Intelligence Pipeline — 4-Layer Code Analysis

@@ -102,6 +102,96 @@ animation_classes:
   - ".animation-t3 — stagger 0.3s (tertiary elements)"
   - ".pulse-glow-glass--fast — repeating glow pulse for icons"
 
+diagram_tokens:
+  # Canonical design tokens for D3.js SVG diagrams
+  # Authority: visualization_standards.yaml (detailed rules), this section (token values)
+  node_styles:
+    primary:
+      fill: "rgba(26, 31, 58, 0.7)"
+      stroke: "rgba(0, 212, 255, 0.4)"
+      stroke_width: "1.5px"
+      rx: "8"
+    secondary:
+      fill: "rgba(26, 31, 58, 0.5)"
+      stroke: "rgba(123, 97, 255, 0.4)"
+      stroke_width: "1.5px"
+      rx: "8"
+    highlight:
+      fill: "rgba(0, 212, 255, 0.15)"
+      stroke: "rgba(0, 212, 255, 0.6)"
+      stroke_width: "2px"
+      rx: "8"
+    danger:
+      fill: "rgba(255, 68, 68, 0.15)"
+      stroke: "rgba(255, 68, 68, 0.5)"
+      stroke_width: "1.5px"
+      rx: "8"
+    success:
+      fill: "rgba(0, 255, 136, 0.12)"
+      stroke: "rgba(0, 255, 136, 0.4)"
+      stroke_width: "1.5px"
+      rx: "8"
+  edge_styles:
+    default:
+      stroke: "rgba(160, 166, 192, 0.5)"
+      stroke_width: "1.5px"
+      stroke_dasharray: "none"
+    dashed:
+      stroke: "rgba(160, 166, 192, 0.4)"
+      stroke_width: "1px"
+      stroke_dasharray: "6,4"
+    highlighted:
+      stroke: "rgba(0, 212, 255, 0.6)"
+      stroke_width: "2px"
+      stroke_dasharray: "none"
+  arrow_markers:
+    default:
+      id: "arrow-default"
+      type: "path"
+      d: "M 0 0 L 10 5 L 0 10 Z"
+      fill: "rgba(160, 166, 192, 0.7)"
+    accent:
+      id: "arrow-accent"
+      type: "path"
+      d: "M 0 0 L 10 5 L 0 10 Z"
+      fill: "rgba(0, 212, 255, 0.7)"
+  text_styles:
+    node_label:
+      font_family: "var(--font-family-body)"
+      font_size: "14px"
+      fill: "#ffffff"
+      font_weight: "500"
+    edge_label:
+      font_family: "var(--font-family-body)"
+      font_size: "12px"
+      fill: "var(--text-secondary)"
+      font_weight: "400"
+    title:
+      font_family: "var(--font-family-heading)"
+      font_size: "18px"
+      fill: "#ffffff"
+      font_weight: "600"
+    annotation:
+      font_family: "var(--font-family-mono)"
+      font_size: "11px"
+      fill: "var(--text-muted)"
+      font_weight: "400"
+  container:
+    class: ".cortex-diagram"
+    background: "transparent"
+    padding: "1.5rem"
+    border_radius: "var(--radius-md)"
+    responsive_rules:
+      - "SVG: width='100%', preserveAspectRatio='xMidYMid meet'"
+      - "Container: max-width:100%, overflow-x:auto"
+      - "Mobile (≤480px): font_size +2px, padding 1rem"
+      - "Tablet (481-768px): font_size +1px, padding 1.25rem"
+  glow_effects:
+    node_hover: "filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4))"
+    edge_hover: "filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.3))"
+    max_simultaneous: 3
+    note: "Glow limited to 3 elements to prevent GPU compositing overload"
+
 design_constraints:
   - "NEVER introduce light backgrounds — dark navy is the identity"
   - "Inline style= attributes are ALLOWED — prefer CSS classes for reusable patterns, inline for one-offs"
@@ -109,3 +199,4 @@ design_constraints:
   - "NEVER override blur with raw pixel values — use tier variables"
   - "ALL new components inherit from glass-design-tokens.css"
   - "Glassmorphism effect = backdrop-filter blur + semi-transparent bg + glass-border"
+  - "ALL D3.js SVG diagrams use diagram_tokens above — no inline colour values in diagram code"
