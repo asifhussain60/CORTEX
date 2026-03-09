@@ -543,7 +543,20 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        
+
+    /* ── Tetris-Separation v2 — uniform inter-section rhythm ────────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 section-gap standardisation
+       /* CORTEX-TETRIS-SEPARATION-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+    :root { --section-gap: 5rem; }
+    @media (max-width: 640px)  { :root { --section-gap: 3rem; } }
+    @media (min-width: 641px) and (max-width: 1023px) { :root { --section-gap: 4rem; } }
+
+    /* Remove Tailwind space-y from <main>; inject our token instead */
+    main > section + section { margin-top: var(--section-gap) !important; }
+    main > section { margin-bottom: 0 !important; }
+
     /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
        Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
        Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
@@ -627,7 +640,7 @@
     </header>
 
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 relative">
 
         <div id="tooltip" class="d3-tooltip"></div>
 
@@ -771,7 +784,7 @@
                             margin: 0 0 1.5rem;
                             line-height: 1.2;
                             text-align: center;
-                        ">CORTEX for Software Engineers — See It in Action.</h2>
+                        ">CORTEX for Software Engineers</h2>
 
                         <!-- Monitor frame -->
                         <div aria-label="CORTEX software engineer overview video player" style="position:relative; z-index:2;">
