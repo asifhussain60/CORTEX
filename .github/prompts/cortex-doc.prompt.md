@@ -2,9 +2,9 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-09 (Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added · `serve` argument added — kills port 8000, closes ALL existing Terminal windows, opens single Mac Terminal, launches Chrome) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-09 (Phase 109.3 — `visual-qa-agent.md` added; screenshot-triggered visual audit pipeline wired; "fix this" / "redesign this" + screenshot auto-routes to Vision API audit; Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added · `serve` argument added — kills port 8000, closes ALL existing Terminal windows, opens single Mac Terminal, launches Chrome) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
-**Agents:** 16 modular agents in `.github/agents/docs/`
+**Agents:** 17 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 **State:** `cortex-registry/config/doc-orchestrator-state.yaml` ← durable tracking (last execution timestamp, last GitHub issue ID)
 **Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
@@ -456,6 +456,30 @@ python3 -m cortex.toolkit.tetris_layout analyse --spec '{"container_selector":".
 | `understand_everything` | 2 paragraphs | 4 metric tiles + viz (flex:1) |
 | `empower_everyone` | 2 paragraphs + role-grid (flex:1) | 4 metric tiles + viz (flex:1) |
 | `build_fearlessly` | 2 paragraphs | 4 metric tiles + viz (flex:1) |
+
+---
+
+## 🖼️ Visual QA — MANDATORY Trigger Routing (Phase 109.3)
+
+**Agent:** `.github/agents/docs/visual-qa-agent.md`
+
+### When to Invoke (Auto-Detection — No User Instruction Needed)
+
+Delegate to `visual-qa-agent.md` whenever the user pastes ≥1 screenshot AND says ANY of the following
+(case-insensitive, partial match — do NOT require exact wording):
+
+| User phrase | Interpretation |
+|---|---|
+| `fix this` / `fix it` / `fix these issues` | Visual audit + fix all P0 + P1 issues |
+| `redesign this` / `redesign` / `redesign the page` | Full visual audit + complete redesign |
+| `audit this` / `visual audit` / `QA this` | Audit-only — issue table, no auto-implement |
+| `improve this` / `make this better` / `clean this up` | Audit + focused improvement pass |
+| `what's wrong with this` / `what issues do you see` | Diagnosis only — issue table |
+| `/doc-visual-qa {file}` | Explicit command |
+
+**No screenshot pasted?** Route to standard `/doc-design` flow — never activate on text-only.
+
+**Execution chain:** `visual-qa-agent` → `html-view-designer` → `design-system-enforcer` → `a11y-perf-guardian` → `regression-sentinel`
 
 ---
 
@@ -952,7 +976,47 @@ Image prompts for shared architecture diagrams MUST depict **concepts that will 
 
 ---
 
-## 🖌️ Design + Implement Mode
+## �️ Visual QA Mode — Screenshot-Driven Audit & Redesign (NEW — Phase 109.3)
+
+**Trigger:** User pastes ≥1 screenshot AND uses ANY of these phrases (case-insensitive, partial match):
+
+| User phrase | Interpretation |
+|---|---|
+| `fix this` / `fix it` / `fix these issues` | Visual audit + targeted fix — all P0 + P1 issues |
+| `redesign this` / `redesign` / `redesign the page` | Full visual audit + complete redesign recommendation |
+| `audit this` / `visual audit` / `QA this` | Audit-only report — no automatic implementation |
+| `improve this` / `make this better` / `clean this up` | Audit + focused improvement pass |
+| `what's wrong with this` / `what issues do you see` | Diagnosis only — issue table, no proceed gate |
+| `/doc-visual-qa {file}` | Explicit visual QA command |
+
+**No screenshot pasted?** Route to standard `/doc-design` flow — do NOT activate this mode on text-only requests.
+
+**Routing chain (non-negotiable):**
+
+```
+Screenshot + trigger phrase
+  → visual-qa-agent   (Step 0: knowledge pre-flight, Step 1: Vision API analysis,
+                        Step 2: source-code mapping, Step 3: redesign recommendation + proceed gate)
+  → html-view-designer (Step 2 Propose → Step 3 Implement — armed with visual-qa-agent issue list)
+  → design-system-enforcer → a11y-perf-guardian → regression-sentinel
+```
+
+**What visual-qa-agent covers automatically (no user instruction needed):**
+- Layout imbalance, flex/grid misuse, missing max-width, overflow issues
+- Typography violations (font-size floor, heading hierarchy, passive voice headings)
+- Color/contrast problems, semantic color drift, glassmorphism identity breaks
+- Card height misalignment, border weight inconsistency, icon–text ratio violations
+- Empty/dead space, cramped sections, missing alternating panel rhythm
+- CTA priority ambiguity, affordance weakness, visual noise overload
+- WCAG 2.2 signals (touch target size, focus obscured by sticky nav)
+- Motion artefacts visible in static screenshots
+- Content overload indicators, progressive disclosure violations
+
+**Zero regression contract:** `regression-sentinel` gates all changes. Existing DOM hooks (`id=` attributes), ARIA landmarks, and dark blue glassmorphism identity are preserved.
+
+---
+
+## �🖌️ Design + Implement Mode
 
 **Trigger:** Any request to update, redesign, or improve an HTML view in `docs/`. Keywords: "update the page", "improve the design", "add a section", "fix the layout", "redesign", "HTML view".
 
@@ -984,7 +1048,7 @@ All design-system rules, WCAG gates, typography, visualisation, layout, card pat
 
 | Command | Action | Agents Invoked |
 |---------|--------|----------------|
-| `/doc` | Full autonomous cycle: Discovery → Issues → Drift → Sync → Narrative → Certification | All 16 agents |
+| `/doc` | Full autonomous cycle: Discovery → Issues → Drift → Sync → Narrative → Certification | All 17 agents |
 | `/doc-discover` | Git discovery only — surface changes since last run | `git-discovery-agent` |
 | `/doc-issues` | GitHub issue ingestion only — fetch issues from last processed ID | `github-issue-harvester-agent` |
 | `/doc-drift` | Drift detection only — find orphaned/phantom/stale docs | `drift-detection-agent` |
@@ -995,6 +1059,7 @@ All design-system rules, WCAG gates, typography, visualisation, layout, card pat
 | `/doc-diagrams` | Regenerate all architecture diagrams | `diagram-regeneration-agent` |
 | `/doc-media` | Synthesise steering prompts from live architecture → update `steering-prompts/01–07` | `media-prompt-agent` |
 | `/doc-design {file}` | Design + Implement — WorkflowComposer → `docs-html-design-workflow.yaml` | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
+| `/doc-visual-qa {file}` | **Screenshot-driven visual audit** — paste screenshot + say "fix this" / "redesign this" | `visual-qa-agent` → `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
 | `/doc-harvest` | Harvest best practices from sources → update knowledge YAMLs | `knowledge-harvester-agent` |
 | `/doc-learn-session` | Harvest design patterns from current session → update prompts + agents | `knowledge-harvester-agent` |
 
@@ -1022,6 +1087,7 @@ All documentation agents live in `.github/agents/docs/` with single responsibili
 | **GitHub Issue Harvester** | `github-issue-harvester-agent.md` | Ingest GitHub issues (#14+), extract capabilities, feed into drift/sync pipeline |
 | **Comedy Enhancement** | `comedy-enhancement-agent.md` | Apply comedic writing principles to enhance Awakening of CORTEX chapters (internal only) |
 | **Tetris Layout** | `tetris-layout-agent.md` | Eliminate blank space in multi-column HTML panels using the Tetris-Fit CSS algorithm |
+| **Visual QA** | `visual-qa-agent.md` | Screenshot-driven visual audit — Vision API analysis → issue table → source mapping → redesign recommendation → delegates to `html-view-designer` |
 
 ### Agent Composition — Documentation Certification Pipeline
 

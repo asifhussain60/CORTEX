@@ -198,7 +198,29 @@ These patterns were validated through iterative design sessions and must be appl
 
 ---
 
-## 🔄 Execution Protocol
+## �️ Visual Audit Mode — Screenshot-Triggered Entry (MANDATORY)
+
+**Trigger:** User pastes ≥1 screenshot AND says "fix this", "redesign this", "audit this", "improve this", or any equivalent phrasing.
+
+**This agent does NOT run directly for screenshot-triggered requests.** Screenshot-triggered requests MUST first route through `visual-qa-agent.md`:
+
+```
+User pastes screenshot + "fix this" / "redesign this"
+    → visual-qa-agent (Vision API analysis → issue table → redesign recommendation → proceed gate)
+    → html-view-designer (Step 0 → Step 1 → Step 2 → Step 3, armed with the issue list from visual-qa-agent)
+    → design-system-enforcer → a11y-perf-guardian → regression-sentinel
+```
+
+**After proceed**, `html-view-designer` receives the structured issue list from `visual-qa-agent` and uses it to:
+1. Skip the independent audit (Step 1) — visual-qa-agent has already produced the issue catalogue
+2. Jump directly to **Step 2 — Propose** with the pre-built issue list as input
+3. Implement all P0 fixes first, then P1, then P2 per the redesign recommendation
+
+**If visual-qa-agent is not available or screenshot has no issues:** fall back to the standard Step 0 → Step 1 → Step 2 → Step 3 pipeline below.
+
+---
+
+## �🔄 Execution Protocol
 
 ### Step 0 — Knowledge Pre-Flight (MANDATORY — silent, before any work)
 

@@ -86,7 +86,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 **Directory:** `.github/agents/docs/`
 **Prompt:** `.github/prompts/cortex-doc.prompt.md`
-**Trigger:** `/doc`, `/doc-discover`, `/doc-drift`, `/doc-sync`, `/doc-narrative`, `/doc-audit`, `/doc-release`, `/doc-diagrams`, `/doc-media`
+**Trigger:** `/doc`, `/doc-discover`, `/doc-drift`, `/doc-sync`, `/doc-narrative`, `/doc-audit`, `/doc-release`, `/doc-diagrams`, `/doc-media`, `/doc-visual-qa`
 
 | Agent | Role | Pipeline Phase |
 |-------|------|----------------|
@@ -99,10 +99,14 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **comedy-enhancement-agent.md** | Apply comedic writing principles to chapters (INTERNAL ONLY — sub-agent of narrative-continuity) | 4 — Comedy Enhancement |
 | **coverage-audit-agent.md** | Validate completeness, produce certification | 5 — Certification |
 | **release-notes-agent.md** | Generate changelogs from Git diffs | 5 — Certification |
-| **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
-| **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
-| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup ✅ Phase 86 complete | `/debug`, "trace", "diagnose" |
-| **cortex-learning** (via `cortex_learning` op=`rca`) | Phase 87 RCA Memory Engine: root cause analysis (4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain) | "root cause", "why did it fail", "rca", `/rca` |
+| **html-view-designer.md** | Design + Implement mode — IA, layout proposals, semantic HTML | Design + Implement |
+| **design-system-enforcer.md** | Token validation, CSS layer assignment, theme integrity gate | Design + Implement |
+| **a11y-perf-guardian.md** | WCAG 2.1 + 2.2 gate + Core Web Vitals regression detection | Design + Implement |
+| **regression-sentinel.md** | Diff guard — no theme drift, broken links, ARIA regressions | Design + Implement |
+| **knowledge-harvester-agent.md** | Source → distilled notes → knowledge YAMLs in `.content/knowledge/` | `/doc-harvest`, `/doc-learn-session` |
+| **github-issue-harvester-agent.md** | Ingest GitHub issues (#14+), extract capabilities, feed drift/sync | 1.5 — Issue Ingestion |
+| **tetris-layout-agent.md** | Eliminate blank space in multi-column HTML panels using Tetris-Fit CSS algorithm | Design + Implement |
+| **visual-qa-agent.md** | **Screenshot-driven visual audit** — Vision API analysis, issue table, source mapping, redesign recommendation; auto-triggered by "fix this" / "redesign this" + screenshot | Visual QA → Design + Implement |
 
 ### Support Files
 
