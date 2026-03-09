@@ -12,91 +12,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/cortex.css"/>
     <link rel="icon" href="assets/images/cortex-logo-64.png" type="image/png"/>
     <style>
+        /* Page-specific: Getting Started (Amber theme) */
         :root {
-            --glass-bg: rgba(10, 15, 30, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-amber: #f59e0b;
-            --accent-orange: #f97316;
-            --accent-emerald: #10b981;
-            --accent-violet: #8b5cf6;
-            --accent-cyan: #06b6d4;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            /* ISSA — Inter-Section Spacing Algorithm tokens (SSOT: design_system.yaml § spacing.inter_section_spacing) */
-            --issa-content-content: 3rem;    /* 48px: content→content */
-            --issa-content-panel:   2rem;    /* 32px: content→glass panel */
-            --issa-panel-panel:     1.5rem;  /* 24px: glass→glass (my-4 x2) */
-            --issa-hero-first:      3rem;    /* 48px: hero→first section */
-        }
-        body {
-            background-color: #020617;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.07) 0%, transparent 45%),
-                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 45%);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
-        .hero-title { font-family: 'Space Grotesk', sans-serif; }
-        .section-title { font-size: 1.75rem; line-height: 1.2; }
-        @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
-        .section-desc { font-size: 1rem; line-height: 1.7; color: #94a3b8; }
-        @media (min-width: 768px) { .section-desc { font-size: 1.125rem; } }
-
-        .hero-section-wrapper { position: relative; padding-top: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center; }
-        .hero-robot-container { position: relative; z-index: 10; margin-bottom: -1px; }
-        .hero-divider-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3) 50%, transparent); }
-        .hero-robot-head { width: 320px; max-width: 400px; height: auto; filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.45)); transition: filter 0.5s ease, transform 0.3s ease; }
-        .hero-robot-head:hover { filter: drop-shadow(0 0 55px rgba(245, 158, 11, 0.65)); transform: scale(1.02); }
-
-
-        /* ─── Consistent card heights in all grids ─── */
-        [class*="grid"] > .relative,
-        [class*="grid"] > .relative.group {
-            display: flex;
-            flex-direction: column;
-        }
-        [class*="grid"] > .relative > .glass-card,
-        [class*="grid"] > .relative.group > .glass-card {
-            flex: 1;
-        }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        @media (hover: hover) { .glass-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(245,158,11,0.15); } }
-        .glass-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
-
-        .gradient-text-amber {
-            background: linear-gradient(to right, #f59e0b, #f97316);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            --theme-accent: #f59e0b;
+            --theme-accent-rgb: 245, 158, 11;
         }
 
-        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
-        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
-        .breadcrumb-nav a:hover { color: var(--accent-amber); }
-        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
-        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
-
-        .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
-        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245,158,11,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245,158,11,0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245,158,11,0); } }
-
-        .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
-        .code-kw  { color: #f472b6; }
-        .code-fn  { color: #60a5fa; }
-        .code-str { color: #34d399; }
-        .code-cmt { color: #475569; font-style: italic; }
-        .code-cls { color: #facc15; }
-        .code-dec { color: #a78bfa; }
-
-        /* Step Pipeline */
-        .step-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        @media (min-width: 768px) { .step-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .step-grid { grid-template-columns: repeat(3, 1fr); } }
+        /* IDE Toggle */
+        .ide-toggle { display: flex; gap: 0.25rem; padding: 0.25rem; border-radius: 0.75rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); width: fit-content; margin: 0 auto; }
+        .ide-toggle-btn { padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-size: 0.8125rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; border: none; background: transparent; color: #64748b; display: flex; align-items: center; gap: 0.5rem; }
+        .ide-toggle-btn.active { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+        .ide-toggle-btn:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.03); }
         .step-card { padding: 1.75rem 1.5rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .step-card:hover { border-color: var(--step-color, rgba(245,158,11,0.3)); background: rgba(245,158,11,0.04); transform: translateY(-3px); box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3); }
         .step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: var(--step-color, #f59e0b); }
@@ -109,10 +38,6 @@
         .ide-toggle-btn.active { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
         .ide-toggle-btn:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.03); }
 
-        .ide-panel { display: none; animation: fadePanel 0.35s ease; }
-        .ide-panel.active { display: block; }
-        @keyframes fadePanel { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
         /* Comparison Table */
         .compare-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media (min-width: 768px) { .compare-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -122,8 +47,8 @@
         /* Prereq tags */
         .prereq-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
         .prereq-tag { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 600; color: #94a3b8; transition: all 0.2s ease; cursor: default; }
-        .prereq-tag:hover { border-color: var(--tag-color, rgba(245,158,11,0.4)); color: var(--tag-color, #f59e0b); background: rgba(245,158,11,0.05); transform: translateY(-1px); }
-        .prereq-tag .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tag-color, #f59e0b); flex-shrink: 0; }
+        .prereq-tag:hover { border-color: rgba(var(--theme-accent-rgb), 0.4); color: var(--theme-accent); background: rgba(var(--theme-accent-rgb), 0.05); transform: translateY(-1px); }
+        .prereq-tag .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--theme-accent); flex-shrink: 0; }
 
         /* Checklist */
         .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
@@ -133,46 +58,25 @@
         .check-emerald { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         .check-violet { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.3); }
 
-        /* Command Centre */
+        /* Command Centre hero */
         .cmd-prompt-hero { font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; }
         @media (min-width: 768px) { .cmd-prompt-hero { font-size: 4.5rem; } }
         @media (min-width: 1024px) { .cmd-prompt-hero { font-size: 5.5rem; } }
         .cmd-prompt-cursor { display: inline-block; width: 3px; height: 0.9em; background: #f59e0b; margin-left: 0.15em; animation: blink-cursor 1s steps(1) infinite; vertical-align: text-bottom; }
         @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .cmd-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        @media (min-width: 640px) { .cmd-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .cmd-grid { grid-template-columns: repeat(3, 1fr); } }
-        .cmd-card { padding: 1.5rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.25s ease; position: relative; overflow: hidden; }
-        .cmd-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 1.25rem 1.25rem 0 0; background: var(--cmd-color, #f59e0b); opacity: 0.6; transition: opacity 0.25s ease; }
-        .cmd-card:hover { border-color: var(--cmd-color, rgba(245,158,11,0.4)); background: rgba(245,158,11,0.03); transform: translateY(-3px); box-shadow: 0 12px 30px -6px rgba(0,0,0,0.3); }
-        .cmd-card:hover::before { opacity: 1; }
+
+        /* Featured command card */
         .cmd-card.cmd-featured { border: 2px solid rgba(0,212,255,0.5); background: rgba(0,212,255,0.07); box-shadow: 0 0 20px rgba(0,212,255,0.15), 0 0 50px rgba(0,212,255,0.05); }
         .cmd-card.cmd-featured::before { opacity: 1; height: 4px; background: linear-gradient(90deg, #00d4ff, #7b61ff, #00d4ff); background-size: 200% 100%; animation: featured-shimmer 3s linear infinite; }
         .cmd-card.cmd-featured::after { content: '★ RECOMMENDED'; position: absolute; top: 14px; right: -32px; background: linear-gradient(90deg, #00d4ff, #6366f1); color: #000; font-size: 0.5625rem; font-weight: 900; letter-spacing: 0.1em; padding: 3px 40px; transform: rotate(45deg); z-index: 2; pointer-events: none; }
         .cmd-card.cmd-featured:hover { border-color: rgba(0,212,255,0.7); background: rgba(0,212,255,0.1); transform: translateY(-3px); box-shadow: 0 0 30px rgba(0,212,255,0.25), 0 0 60px rgba(0,212,255,0.08), 0 12px 30px -6px rgba(0,0,0,0.3); }
         @keyframes featured-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .cmd-name { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 800; color: var(--cmd-color, #f59e0b); display: flex; align-items: center; gap: 0.5rem; }
-        .cmd-card-title { font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc; }
-        .cmd-card-desc { font-size: 0.875rem; color: #94a3b8; line-height: 1.65; flex: 1; }
-        .cmd-example { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #64748b; background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.04); margin-top: auto; }
-        .cmd-example span { color: #34d399; }
+
+        /* Command badges */
         .cmd-badge { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
         .cmd-badge-start { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
         .cmd-badge-power { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
         .cmd-badge-essential { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
-
-        /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
-         * SSOT: design_system.yaml § spacing.inter_section_spacing
-         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
-         * ──────────────────────────────────────────────────────────────────*/
-        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
-        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
-
-        /* ── WCAG 2.2 SC 2.4.11 — Focus Not Obscured ───────────────────────
-         * Anchor targets (#onboarding etc.) must not sit hidden under breadcrumb nav.
-         * ──────────────────────────────────────────────────────────────────*/
-        :target { scroll-margin-top: 4rem; }
-        :focus { scroll-margin-top: calc(4rem + 8px); }
     </style>
 </head>
 <body class="min-h-screen">
