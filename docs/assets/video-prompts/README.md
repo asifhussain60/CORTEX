@@ -1,135 +1,128 @@
-# CORTEX Video Prompts — NotebookLM Cinematic Video Overview
-**Updated:** 2026-03-09 | **Format:** NotebookLM Cinematic Video Overview
-**Architecture Verified:** 350+ orchestrators · 40+ MCP tools · 60+ governance rules
+# CORTEX Video Prompts — NotebookLM Cinematic Video System
+**Updated:** 2026-03-09 | **Architecture:** Decoupled — content, diagrams, and prompts update independently
+**Format:** NotebookLM Cinematic Video Overview (Gemini + Veo 3)
 
 ---
 
-## ⚠️ Critical: How NotebookLM Cinematic Video Works
-
-NotebookLM **does not execute scene-by-scene production scripts**. It synthesizes content from your uploaded source documents and uses a short **steering prompt** (~300–700 characters) to guide focus, tone, and structure. Gemini 3 + Veo 3 make all visual and narrative decisions from your content.
-
-### What you provide to NotebookLM:
-1. **Source document** (`.md` file uploaded as a notebook source) — rich content describing the subject
-2. **Steering prompt** (pasted into Customize → Steering Prompt) — concise guidance on focus and tone
-3. **Visual style** (Custom description) — colour palette and visual identity
-
-### What NotebookLM generates:
-- Fluid cinematic animations (Veo 3)
-- Narration (Gemini 3 — auto-selected, not scripted)
-- Visual storytelling — dynamic, not static slides
-
----
-
-## 📂 Directory Structure
+## 🏗️ Architecture: Decoupled Reference System
 
 ```
-video-prompts/
-├── sources/                    ← Upload these into NotebookLM as sources
-│   ├── 01-cortex-overview-source.md          # All roles (Video 01)
-│   ├── 02-leadership-delivery-source.md      # Business Leaders + POs (Video 02)
-│   ├── 03-engineering-quality-source.md      # Engineers + QA (Video 03)
-│   └── 04-security-sre-source.md             # Security + SRE (Video 04)
+docs/assets/video-prompts/
 │
-├── steering-prompts/           ← Paste these into NotebookLM → Customize
-│   ├── 01-steering.md         # Steering prompt + setup checklist for Video 01
-│   ├── 02-steering.md         # Steering prompt + setup checklist for Video 02
-│   ├── 03-steering.md         # Steering prompt + setup checklist for Video 03
-│   └── 04-steering.md         # Steering prompt + setup checklist for Video 04
+├── sources/                    ← Upload ONE file to NotebookLM per video
+│   ├── 01-cortex-overview-source.md          (Video 01 — All roles)
+│   ├── 02-leadership-delivery-source.md      (Video 02 — Leaders + POs)
+│   ├── 03-engineering-quality-source.md      (Video 03 — Engineers + QA)
+│   └── 04-security-sre-source.md             (Video 04 — Security + SRE)
 │
-├── production-scripts/         ← Archive: detailed scene scripts for manual production
-│   ├── 01-video-prompt-what-is-cortex.md
-│   ├── 02-video-prompt-what-is-cortex-business-leaders.md
-│   ├── 03-video-prompt-what-is-cortex-product-owners.md
-│   ├── 04-video-prompt-what-is-cortex-software-engineers.md
-│   ├── 05-video-prompt-what-is-cortex-security-engineers.md
-│   ├── 06-video-prompt-what-is-cortex-quality-engineers.md
-│   └── 07-video-prompt-what-is-cortex-site-reliability-engineers.md
+├── steering-prompts/           ← Paste ONE prompt into NotebookLM → Customize
+│   ├── 01-steering.md
+│   ├── 02-steering.md
+│   ├── 03-steering.md
+│   └── 04-steering.md
 │
-└── videos/                     ← Tutorial video prompts (existing, unchanged)
-    └── tutorials/
+├── videos/                     ← Tutorial video prompts (separate series)
+│   └── tutorials/
+│
+└── README.md                   ← This file
 ```
 
----
+### Independent Update Contract
 
-## 🎬 Video Series: 4-Video Structure
+| Asset | Location | Update Independently | Effect on Other Layers |
+|---|---|---|---|
+| **Architecture diagrams** | `docs/assets/diagrams/*.md` | ✅ Yes | Zero — sources reference by filename |
+| **Best practices YAML** | `cortex-registry/knowledge/best-practices/content/` | ✅ Yes | Zero — steering prompts cite rule IDs |
+| **Source documents** | `sources/*.md` | ✅ Yes | Zero — steering prompts name file only |
+| **Steering prompts** | `steering-prompts/*.md` | ✅ Yes | Zero — sources are standalone |
 
-| Video | Title | Audience | Source | Steering |
-|-------|-------|----------|--------|---------|
-| 01 | What Is CORTEX? | All roles | `01-cortex-overview-source.md` | `01-steering.md` |
-| 02 | CORTEX for Leaders & Delivery | CTOs, VPs, POs | `02-leadership-delivery-source.md` | `02-steering.md` |
-| 03 | CORTEX for Engineering & Quality | Engineers, QA | `03-engineering-quality-source.md` | `03-steering.md` |
-| 04 | CORTEX for Security & SRE | SecEng, SRE | `04-security-sre-source.md` | `04-steering.md` |
-
-**Why 4 videos instead of 7:**
-- Roles 02+03 (Business Leaders + POs) share identical concerns: ROI, predictable delivery, traceability
-- Roles 04+06 (Engineers + QA) share identical tools: TDD, convergence gate, LENS, quality scoring
-- Roles 05+07 (Security + SRE) share identical philosophy: defence-in-depth, institutional memory, operational confidence
-- Fewer videos → deeper per-video content → better NotebookLM synthesis quality
+**Contract:** Diagram files update in place → source documents auto-reflect changes. Steering prompts reference source files by name only. No cascading edits required across layers.
 
 ---
 
-## 🚀 Step-by-Step: Generating a Video in NotebookLM
+## 🎬 Video Series Map
 
-### Prerequisites
-- Google account with NotebookLM access (Cinematic requires Google AI Ultra subscription, 18+)
-- Source `.md` file from `sources/` directory
-- Steering prompt from matching `steering-prompts/` file
+| Video | Title | Source File | Steering File | Narrator | Domain Colour |
+|---|---|---|---|---|---|
+| 01 | What Is CORTEX? | `01-cortex-overview-source.md` | `01-steering.md` | 🎙️ Female | Cyan `#00d4ff` |
+| 02 | CORTEX for Leaders & Delivery | `02-leadership-delivery-source.md` | `02-steering.md` | 🎙️ Male | Purple `#7b61ff` |
+| 03 | CORTEX for Engineering & Quality | `03-engineering-quality-source.md` | `03-steering.md` | 🎙️ Male | Cyan + Gold |
+| 04 | CORTEX for Security & SRE | `04-security-sre-source.md` | `04-steering.md` | 🎙️ Female | Red + Amber |
 
-### Steps
+---
+
+## 🚀 Step-by-Step: Generating a Video
+
 1. Go to [notebooklm.google.com](https://notebooklm.google.com)
-2. Create a new notebook
-3. Upload the source `.md` file (drag and drop or Add Source)
-4. In the Studio panel, click **Video Overview**
-5. Click **Customize**:
-   - **Format:** Cinematic
-   - **Visual Style:** Custom → paste the visual style description from the steering prompt file
-   - **Steering Prompt:** paste the steering prompt text (the text inside the ``` code block)
-6. Click **Generate**
-7. Wait 15–30 minutes (Cinematic takes longer than Explainer or Brief)
-8. Review output — if focus is off, use the Fallback steering prompt in the same file
+2. Create a **new notebook**
+3. Upload the matching `sources/0N-*.md` file as the sole source
+4. In the Studio panel → **Video Overview** → **Customize**:
+   - **Format:** `Cinematic` ← NOT Explainer or Brief
+   - **Visual Style:** `Custom` ← paste visual style block from `steering-prompts/0N-steering.md`
+   - **"What should the AI hosts focus on?"** ← paste steering prompt block from same file
+5. Click **Generate** — allow 20–30 minutes for Cinematic quality
+6. If output misses concepts → use the **Fallback** prompt in the same steering file
 
-### Tips
-- NotebookLM synthesizes from the source document, not from your steering prompt — keep the source rich
-- Steering prompt should guide *what to emphasise*, not describe every scene
-- Cinematic format gives Gemini 3 creative latitude — trust it to choose transitions and pacing
-- If the video is too generic, add one specific constraint to the steering prompt (e.g., "open with a 3 AM incident")
-- Generation time: Brief ~5 min · Explainer ~10 min · Cinematic ~30 min
+> ⚠️ **Critical mis-configurations seen in production:**
+> - Format left as **Explainer** → structured slides, no Veo 3 cinematic motion
+> - Visual Style left as **Auto-select** → CORTEX glassmorphism palette never applied
+> - Focus field left **empty** → AI receives zero narrative guidance
+
+---
+
+## 📐 Diagram Reference Index
+
+Source documents reference diagrams from `docs/assets/diagrams/` **by filename only**. Update the diagram file in place — no edits needed anywhere else.
+
+| Filename | Title | Videos |
+|---|---|---|
+| `01-diagram-architecture-system-architecture-layers.md` | System architecture — layer view | V01, V02 |
+| `02-diagram-architecture-mcp-gateway-architecture.md` | MCP gateway architecture | V01, V03 |
+| `03-diagram-workflow-sdlc-pipeline.md` | SDLC workflow pipeline (7 phases) | V02, V04 |
+| `04-diagram-audit-audit-fix-pipeline.md` | /audit fix pipeline (9 stages) | V02 |
+| `05-diagram-workflow-tdd-cycle-and-fsm.md` | TDD cycle and workflow engine FSM | V03 |
+| `06-diagram-governance-sweep-completeness-core-064.md` | Sweep completeness (CORE-064) | V02, V03 |
+| `07-diagram-testing-testing-strategy-pyramid.md` | Testing strategy pyramid | V03 |
+| `09-diagram-orchestration-request-sequence.md` | End-to-end request sequence | V01 |
+| `11-diagram-intelligence-lens-analysis-pipeline.md` | LENS intelligence pipeline + Diamond | V01–V04 |
+| `12-diagram-governance-convergence-gate-core-068.md` | Universal convergence gate (CORE-068) | V02, V03 |
+| `13-diagram-orchestration-intent-classification-routing.md` | Intent classification and routing | V01 |
+| `14-diagram-debugging-multi-stack-pipeline.md` | Multi-stack debug pipeline (8 strategies) | V03 |
+| `15-diagram-governance-rule-enforcement-tiers.md` | Governance rule enforcement (4-tier) | V02, V04 |
+| `17-diagram-security-threat-model-stride-analysis.md` | Threat Model Engine — STRIDE pipeline | V04 |
+| `18-diagram-quality-analysis-engine-scoring-dashboard.md` | Quality Analysis Engine — scoring | V03 |
+| `19-diagram-orchestration-po-change-intelligence-pipeline.md` | PO Change Intelligence Pipeline | V02 |
+| `20-diagram-intelligence-document-ingest-pipeline.md` | Document Ingest Pipeline (5 components) | V01, V02, V04 |
+| `21-diagram-governance-vacuum-source-protection.md` | Vacuum Source Protection | V04 |
 
 ---
 
 ## 🎨 Domain Colour Reference
 
-| Video | Domain | Accent | Secondary |
-|-------|--------|--------|-----------|
-| 01 | All roles | Cyan `#00d4ff` | Purple `#7b61ff` |
-| 02 | Leadership + Delivery | Purple `#7b61ff` | Emerald `#10b981` |
-| 03 | Engineering + Quality | Cyan `#00d4ff` | Gold `#FFD700` |
-| 04 | Security + SRE | Red `#ff4757` | Amber `#f39c12` |
+| Video | Primary | Secondary | Background |
+|---|---|---|---|
+| 01 | Cyan `#00d4ff` | Purple `#7b61ff` | Navy `#0a0e27` |
+| 02 | Purple `#7b61ff` | Emerald `#10b981` | Navy `#0a0e27` |
+| 03 | Cyan `#00d4ff` | Gold `#FFD700` | Navy `#0a0e27` |
+| 04 | Red `#ff4757` | Amber `#f39c12` | Navy `#0a0e27` |
 
 ---
 
-## 📁 Production Scripts (Archive)
+## 📋 VBP Compliance Layer Map
 
-The `production-scripts/` directory contains the original 7-video scene-by-scene scripts. These are useful as:
-- Reference for detailed scene concepts if doing manual production
-- Visual inspiration catalogue for the "Visual Anchors" sections in each source document
-- Detail reference when writing more specific steering prompts
+Rules from `cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml` are enforced at the layer where they have most leverage. Updating either layer in isolation preserves compliance.
 
-They are **not** used directly by NotebookLM.
-
----
-
-## 📋 VBP Compliance Notes
-
-These videos target NotebookLM Cinematic — visual production is handled by Veo 3. VBP rules still apply as authoring intent for source content:
-
-| Rule | Enforcement Mechanism |
-|------|-----------------------|
-| VBP-001 One Idea Per Source Section | Each source section covers one concept |
-| VBP-002 Hook in 8s | Steering prompts open with the pain/problem |
-| VBP-003 Narration ≠ slide | Source doc is content-rich, not bullet-list |
-| VBP-006 Contrast storytelling | All sources lead with the pain, then the solution |
-| VBP-012 Consistent visuals | Colour reference table maintained here |
-| VBP-017 Narrator voice | Specified per steering prompt (F/M alternating: 01F, 02M, 03M, 04F) |
-| VBP-018 Acronyms | All acronyms expanded on first use in source docs |
-| VBP-019 Colour intelligence | Domain colour specified in source + custom visual style |
+| VBP Rule | Enforced In | Mechanism |
+|---|---|---|
+| VBP-001 One idea per frame | `sources/` | Each `##` section = one concept |
+| VBP-002 Hook in 8s | `steering-prompts/` | Opening line always states the pain |
+| VBP-003 Narration ≠ slide | `sources/` | Prose paragraphs, no bullet-only sections |
+| VBP-006 Contrast storytelling | `sources/` | Problem section always precedes solution |
+| VBP-010 Analogies (≤1 per 2 min) | `sources/` | `## Quotes Worth Using` — max 3 per video |
+| VBP-011 Strategic silence | `steering-prompts/` | Specified after emotional peak |
+| VBP-012 Consistent visuals | `steering-prompts/` | Custom visual style block enforces palette |
+| VBP-015 Breadcrumb navigation | `steering-prompts/` | Three-pillar bar specified in prompt |
+| VBP-016 Bold key words | `steering-prompts/` | Accent colour bolding called out in prompt |
+| VBP-017 Narrator gender | `steering-prompts/` | F/M: V01=F, V02=M, V03=M, V04=F |
+| VBP-018 No unexpanded acronyms | `sources/` | First-use expansion in `## Key Facts` |
+| VBP-019 Colour intelligence | Both layers | Custom style + domain colour header |

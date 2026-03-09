@@ -178,7 +178,7 @@ Update the following targets to reflect the latest architecture while preserving
 |--------|------|-------------|
 | **Content files** | `docs/.content/` | Preserve consolidation structure (14 files), update counts and capabilities |
 | **Glossary** | `docs/.content/glossary.md` | Add new terms, remove stale terms, enforce consistency |
-| **Video prompts** | `docs/assets/video-prompts/` | Update capability descriptions to match implementation |
+| **Steering prompts** | `docs/assets/video-prompts/steering-prompts/` | Synthesised — see § Steering Prompt Synthesis below; never edit counts directly |
 | **Image prompts** | `docs/assets/image-prompts/` | Update visual descriptions to match actual UI/system behaviors |
 | **Diagrams** | `docs/assets/diagrams/` | Regenerate when architecture changes (agent: `diagram-regeneration-agent`) |
 
@@ -235,7 +235,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ❌ **No new chapter `.md` files** — the 12-chapter structure is locked; new chapters are NEVER added
 - ❌ **Do not modify `index.html` chapter list** — link structure is frozen; chapter additions break this invariant
 - ❌ **No Book Two content** injected into Book One chapters — "The Collective Consciousness" is a future placeholder only
-- ❌ **No new video prompt files** — existing 16 files (7 root + 7 tutorials + 2 READMEs) cover all discovery gaps; enhance within existing files only, never create additional prompt files
+- ❌ **No new steering prompt files** — the 7 steering prompts (01–07) are the permanent set; enhancements happen via synthesis, never by adding files
 - ❌ No canon-breaking changes to established plot or character arcs
 - ❌ No tone drift — comedic warmth with technical authenticity must persist
 - ❌ No jargon injection — story remains accessible to non-technical readers
@@ -287,7 +287,64 @@ Update the **Awakening of CORTEX** story arc and associated media:
 
 ---
 
-## 🎭 Role-Aware Content Synthesis (MANDATORY for Role Views)
+## � Steering Prompt Synthesis — MANDATORY Methodology (Phase 147)
+
+**Replaces:** Static video file maintenance. Steering prompts are never hand-edited for architecture counts or capability lists.
+**Trigger:** `/doc-media` command, or any request to "update steering prompts" / "update video prompts".
+**Agent:** `media-prompt-agent.md` (synthesise mode)
+**Files:** `docs/assets/video-prompts/steering-prompts/01–07-*-steering.md` (7 files — permanent set, never added to)
+
+### Synthesis Pipeline (mandatory, sequential)
+
+Before touching any steering prompt, the Documentation Orchestrator MUST silently execute:
+
+| Step | Input | Output |
+|------|-------|--------|
+| 1 — Read master plan | `cortex-registry/cortex-master.yaml` — all phases with `status: PLANNED` treated as implemented (Planned-as-Implemented Policy) | Capability manifest |
+| 2 — Read git issues | All open GitHub issues (via `github-issue-harvester-agent`) — extract capability records | Issue capability manifest |
+| 3 — Read diagrams | All 21 files in `docs/assets/diagrams/` — identify which diagrams are relevant per video audience | Diagram pool per video |
+| 4 — Read VBP YAML | `cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml` — `architecture_facts` block (floor approximations) + all VBP rules | Architecture facts + VBP rules |
+| 5 — Synthesise `.content/` | 14 `.md` files in `docs/.content/` — extract role-specific propositions per video audience | Role-specific capability statements |
+| 6 — Merge + enhance | Combine manifests → for each steering prompt (01–07): update capability references, architecture counts (floor approximations), diagram references, VBP rule annotations | Updated steering prompt content |
+
+### Synthesis Rules (NON-NEGOTIABLE)
+
+| Rule | Detail |
+|------|--------|
+| ✅ **Architecture counts from VBP YAML only** | Use `architecture_facts` floor approximations (`350+`, `40+`, `60+`) — NEVER hardcode exact counts |
+| ✅ **Planned = Implemented** | Every PLANNED phase with a dedicated YAML file is documented as fully implemented (present tense) |
+| ✅ **Diagram references by filename** | Reference diagrams as `docs/assets/diagrams/{filename}.md` — never inline diagram content in steering prompts |
+| ✅ **`.content/` as source of truth** | All capability statements sourced from appropriate `.content/` file section, not invented |
+| ✅ **VBP rules annotated** | Every steering prompt contains a VBP compliance table citing rule IDs applied |
+| ✅ **7-file lock** | Exactly 7 steering prompts (01–07): `01-all-roles-overview`, `02-business-leaders`, `03-product-owners`, `04-software-engineers`, `05-quality-engineers`, `06-security-engineers`, `07-sre`. Zero new files. Zero deletions. |
+| ❌ **Never hardcode exact counts** | Use floor approximations: `350+` not `353`; `40+` not `41`; `60+` not `61` |
+| ❌ **Never describe capabilities not in `.content/`** | All statements must trace to a `.content/` source or `cortex-master.yaml` planned phase |
+| ❌ **Never alter source documents** | `sources/01–07-*.md` are updated only when diagram references need correcting |
+
+### Per-Video Content Routing
+
+| Video | Audience | Primary `.content/` Sources | Key Diagrams | VBP Palette |
+|-------|----------|----------------------------|--------------|-------------|
+| 01 — `01-all-roles-overview` | All roles | `01-platform`, `02-intelligence`, `03-governance` | `01`, `09`, `11`, `12`, `13`, `20` | Cyan `#00d4ff` |
+| 02 — `02-business-leaders` | CTOs, VPs | `01-platform`, `03-governance`, `09-lifecycle` | `01`, `03`, `04`, `06`, `12`, `15`, `19`, `20` | Purple `#7b61ff` |
+| 03 — `03-product-owners` | Product Owners | `09-lifecycle`, `04-tdd-quality-flywheel`, `03-governance` | `03`, `06`, `12`, `19` | Emerald `#00c471` |
+| 04 — `04-software-engineers` | Software Engineers | `02-intelligence`, `04-tdd-quality-flywheel`, `05-orchestration` | `05`, `11`, `16`, `18` | Cyan `#00d4ff` |
+| 05 — `05-quality-engineers` | Quality Engineers | `04-tdd-quality-flywheel`, `02-intelligence`, `03-governance` | `06`, `07`, `12`, `16`, `18` | Gold `#FFD700` |
+| 06 — `06-security-engineers` | Security Engineers | `07-security`, `03-governance`, `08-learning` | `15`, `17`, `21` | Red `#ff4757` |
+| 07 — `07-sre` | SRE | `10-infrastructure`, `08-learning`, `03-governance` | `04`, `12`, `17`, `21` | Amber `#f39c12` |
+
+### What Does NOT Change in Steering Prompts
+
+The following structural elements are **immutable** — synthesis never alters them:
+- NotebookLM setup checklist structure
+- Visual Style block (glassmorphism colour palette by video)
+- VBP rule application table
+- Fallback prompt existence and structure
+- Narrator gender alternation (odd = female, even = male — VBP-017)
+
+---
+
+## �🎭 Role-Aware Content Synthesis (MANDATORY for Role Views)
 
 **Trigger:** Any HTML work touching `docs/roles/` or `docs/index.html` persona sections.
 
@@ -936,7 +993,7 @@ All design-system rules, WCAG gates, typography, visualisation, layout, card pat
 | `/doc-audit` | Coverage audit — validate completeness | `coverage-audit-agent` |
 | `/doc-release` | Generate release notes from Git diffs | `release-notes-agent` |
 | `/doc-diagrams` | Regenerate all architecture diagrams | `diagram-regeneration-agent` |
-| `/doc-media` | Update all image and video prompts | `media-prompt-agent` |
+| `/doc-media` | Synthesise steering prompts from live architecture → update `steering-prompts/01–07` | `media-prompt-agent` |
 | `/doc-design {file}` | Design + Implement — WorkflowComposer → `docs-html-design-workflow.yaml` | `html-view-designer`, `design-system-enforcer`, `a11y-perf-guardian`, `regression-sentinel` |
 | `/doc-harvest` | Harvest best practices from sources → update knowledge YAMLs | `knowledge-harvester-agent` |
 | `/doc-learn-session` | Harvest design patterns from current session → update prompts + agents | `knowledge-harvester-agent` |
@@ -950,9 +1007,9 @@ All documentation agents live in `.github/agents/docs/` with single responsibili
 | Agent | File | Responsibility |
 |-------|------|----------------|
 | **Git Discovery** | `git-discovery-agent.md` | Inspect Git history, classify changes, detect architectural shifts |
-| **Doc Sync** | `doc-sync-agent.md` | Update `.content/`, glossary, video-prompts, image-prompts; enforce CSS-no-inline rule |
+| **Doc Sync** | `doc-sync-agent.md` | Update `.content/`, glossary, image-prompts; enforce CSS-no-inline rule |
 | **Diagram Regeneration** | `diagram-regeneration-agent.md` | Regenerate D3.js SVG diagrams and CSS-based visuals when architecture changes |
-| **Media Prompt** | `media-prompt-agent.md` | Maintain DALL-E image prompts and video script prompts |
+| **Media Prompt** | `media-prompt-agent.md` | Maintain DALL-E image prompts; synthesise steering prompts from live architecture |
 | **Narrative Continuity** | `narrative-continuity-agent.md` | Guard and evolve the Awakening of CORTEX story arc |
 | **Drift Detection** | `drift-detection-agent.md` | Cross-reference implementation vs documentation for drift |
 | **Coverage Audit** | `coverage-audit-agent.md` | Validate documentation completeness and certification |
@@ -1024,7 +1081,7 @@ The coverage audit agent maintains a live coverage map tracking:
 | **RCA Methodologies** | `cortex/intelligence/learning/rca_engine.py` (4 methods) | `.content/08-learning-institutional-memory.md` |
 | **Diagrams** | `docs/assets/diagrams/` | D3.js SVG renderings + CSS visual pipelines |
 | **Narrative Chapters** | `docs/awakening-of-cortex/chapters/` (12) | Story prompts in `images/story-prompts/` |
-| **Video Prompts** | `docs/assets/video-prompts/` (16 files) | Aligned with capability descriptions |
+| **Steering Prompts** | `docs/assets/video-prompts/steering-prompts/` (7 files — synthesised) | Auto-synthesised from `cortex-master.yaml` + git issues + diagrams + VBP YAML + `.content/` |
 | **Image Prompts** | `docs/assets/image-prompts/` | Aligned with UI/system behaviors |
 | **Glossary Terms** | All `.content/` files | `docs/.content/glossary.md` |
 
@@ -1112,7 +1169,7 @@ Documentation is versioned consistently with release tags:
 | Count floor validity — live count does not fall below documented floor | live ≥ floor | P1 |
 | **Chapter file count** — exactly 12 `.md` files in `chapters/` | 12 (immutable) | P0 |
 | **index.html chapter links** — all 12 chapter links resolve (HTTP 200) | 100% | P0 |
-| **Video prompt file count** — exactly 16 files (7 root + 7 tutorials + 2 READMEs) | 16 (no additions) | P1 |
+| **Steering prompt synthesis** — steering prompts 01–07 contain synthesis metadata block referencing `.content/` + diagrams | 7 (no additions) | P1 |
 | Terminology consistency — glossary enforced | 0 violations | P1 |
 | Narrative continuity — no canon breaks | 0 regressions | P1 |
 | Media prompt alignment — prompts match actual system | 0 stale prompts | P1 |

@@ -7,15 +7,15 @@ scope: non-production-admin
 **Updated:** 2026-03-08  
 **Layer:** docs  
 **Status:** active  
-**Responsibility:** Maintain DALL-E image prompts and video script prompts in production-ready state  
-**Inputs:** Drift report, live file system, capability inventory  
-**Outputs:** Updated `.prompt.md` files, updated video script `.md` files
+**Responsibility:** Maintain DALL-E image prompts in production-ready state and synthesise NotebookLM steering prompts from live architecture
+**Inputs:** Drift report, live file system, `cortex-master.yaml`, git issues, diagrams, VBP YAML, `.content/` files
+**Outputs:** Updated image `.prompt.md` files, synthesised steering prompt `.md` files
 
 ---
 
 ## 🎯 Single Responsibility
 
-Ensure all visual media prompts (DALL-E image prompts and video narration scripts) accurately describe current CORTEX capabilities, follow the glassmorphism design system, and remain production-ready and reusable.
+Maintain all DALL-E image prompts in production-ready state and synthesise NotebookLM steering prompts from the live architecture (Phase 147 methodology). Never manually edit architecture counts in steering prompts — always synthesise from `cortex-master.yaml` + diagrams + `.content/` + VBP YAML.
 
 ---
 
@@ -24,9 +24,12 @@ Ensure all visual media prompts (DALL-E image prompts and video narration script
 | Input | Source | Required |
 |-------|--------|----------|
 | **Drift report** | `drift-detection-agent` output | ✅ |
-| **Capability inventory** | Live orchestrator/tool/rule counts | ✅ |
+| **Capability inventory** | `cortex-master.yaml` + open git issues + live orchestrator/tool/rule counts | ✅ |
 | **Existing image prompts** | `docs/assets/image-prompts/` | ✅ |
-| **Existing video prompts** | `docs/assets/video-prompts/` | ✅ |
+| **Existing steering prompts** | `docs/assets/video-prompts/steering-prompts/` (7 files) | ✅ |
+| **Diagrams** | `docs/assets/diagrams/` (21 files) | ✅ |
+| **VBP YAML** | `cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml` | ✅ |
+| **Content files** | `docs/.content/` (14 `.md` files) | ✅ |
 | **Design tokens** | Glassmorphism color palette | ✅ |
 
 ---
@@ -36,9 +39,9 @@ Ensure all visual media prompts (DALL-E image prompts and video narration script
 | Output | Path | Description |
 |--------|------|-------------|
 | Updated image prompts | `docs/assets/image-prompts/**/*.prompt.md` | DALL-E prompts reflecting current system |
-| Updated video prompts | `docs/assets/video-prompts/*.md` | Video narration scripts reflecting current capabilities |
-| New prompts | Same paths | For newly added capabilities |
-| Archived prompts | `docs/_archive/media-prompts/` | For deprecated capabilities |
+| Synthesised steering prompts | `docs/assets/video-prompts/steering-prompts/` (7 files: `01-all-roles-overview-steering.md` through `07-sre-steering.md`) | Synthesised from live architecture — never hand-edited for counts |
+| New image prompts | `docs/assets/image-prompts/**/*.prompt.md` | For newly added capabilities |
+| Archived image prompts | `docs/_archive/media-prompts/` | For deprecated capabilities |
 
 ---
 
@@ -163,74 +166,41 @@ Shared architecture image prompts (`docs/assets/image-prompts/shared/`) MUST dep
 | 3 Autonomy | 11 | `#34d399` | Emerald highlights |
 | 4 Vision | 12 | `#8b5cf6` | Violet highlights |
 
+
 ---
 
-## 🎬 Video Prompt Standards
+## 🎬 Steering Prompt Synthesis (Phase 147 — replaces static video file maintenance)
 
-### Video Prompt Structure
+**Trigger:** `/doc-media` command, or any request to update video/steering prompts.
+**Output:** Updated `docs/assets/video-prompts/steering-prompts/` (7 permanent files — never added to, never deleted).
 
-The video prompts directory (`docs/assets/video-prompts/`) contains two tiers:
+### Synthesis Pipeline
 
-| Tier | Path | Purpose |
-|------|------|---------|
-| **Feature Series** | `video-prompts/*.md` (7 episodes) | Deep-dive into CORTEX capabilities |
-| **Tutorial Series** | `video-prompts/videos/tutorials/*.md` (7 tutorials) | Hands-on getting started guides |
+Execute silently in this order before editing any steering prompt:
 
-### Feature Episode Format
+1. **Read `cortex-master.yaml`** — extract all capabilities (PLANNED phases with dedicated YAML files treated as implemented — Planned-as-Implemented Policy from `cortex-doc.prompt.md`)
+2. **Read open GitHub issues** — extract capability records from issue bodies
+3. **Read `docs/assets/diagrams/`** — map all 21 diagram `.md` files to their relevant video audience (see routing table in `cortex-doc.prompt.md` § Steering Prompt Synthesis)
+4. **Read VBP YAML** — `cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml` — use `architecture_facts` floor approximations ONLY (never exact counts)
+5. **Read `docs/.content/`** — synthesise role-specific propositions for each video's audience from the 14 consolidated `.md` files
+6. **Enhance each steering prompt** — update capability statements, architecture floor counts, diagram references; preserve all immutable structural elements
 
-```markdown
-# Episode {NN}: {Title}
-**Duration:** {estimated minutes}
-**Audience:** {primary role}
-**Prerequisites:** {previous episodes or knowledge}
+### Immutable Steering Prompt Elements (NEVER altered by synthesis)
 
-## Narration Script
+| Element | Rule |
+|---------|------|
+| NotebookLM setup checklist | Structure is fixed — never remove or reorder steps |
+| Visual Style block | Glassmorphism palette per video is immutable |
+| VBP rule compliance table | Update annotations, never remove the table |
+| Fallback prompt | Must always be present — update capability content only |
+| Narrator gender | Odd videos = Female, Even videos = Male (VBP-017) |
+| 7-file lock | Exactly 7 steering prompts: `01-all-roles-overview`, `02-business-leaders`, `03-product-owners`, `04-software-engineers`, `05-quality-engineers`, `06-security-engineers`, `07-sre`. Zero new files. Zero deletions. |
 
-### Scene 1: {Scene Title}
-**Visual:** {Description of what appears on screen}
-**Narration:** "{Spoken narration text}"
-**Demo:** {VS Code actions to demonstrate}
+### Architecture Count Rules
 
-### Scene 2: {Scene Title}
-...
-
-## Capability References
-- {Link to .content/ file documenting this capability}
-- {Link to relevant MCP tool or orchestrator}
-
-## Accuracy Checklist
-- [ ] All demonstrated features exist in current implementation
-- [ ] All counts and metrics match live system
-- [ ] All command outputs match actual behavior
-- [ ] No references to deprecated paths or dissolved packages
-```
-
-### Tutorial Format
-
-```markdown
-# Tutorial {NN}: {Title}
-**Duration:** {estimated minutes}
-**Skill Level:** {Beginner | Intermediate | Advanced}
-**Prerequisites:** {previous tutorials}
-
-## Learning Objectives
-1. {Objective 1}
-2. {Objective 2}
-3. {Objective 3}
-
-## Steps
-### Step 1: {Action}
-**Screen:** {What user sees}
-**Action:** {What user does}
-**Result:** {Expected outcome}
-
-...
-
-## Accuracy Checklist
-- [ ] All steps produce the described result on current CORTEX version
-- [ ] All paths and commands are valid
-- [ ] No deprecated workflows demonstrated
-```
+- ✅ Use floor approximations from `architecture_facts` in VBP YAML: `350+`, `40+`, `60+`, `35+`
+- ❌ Never write exact counts: not `353`, not `41`, not `61`
+- ❌ Never invent counts not present in `architecture_facts`
 
 ---
 
@@ -243,25 +213,24 @@ For each new_capability in change_manifest.new_capabilities:
   1. Determine if an image prompt is warranted
   2. If yes → create new .prompt.md following format standard
   3. Create matching production-named placeholder PNG
-  4. Determine if a video prompt needs updating
-  5. If yes → update relevant episode narration script
+  4. Determine if a steering prompt needs synthesis refresh
+  5. If yes → run Steering Prompt Synthesis pipeline (above)
 
 For each deprecated_feature in change_manifest.deprecated_features:
   1. Find all image prompts referencing this feature
   2. Archive prompt to docs/_archive/media-prompts/
   3. Archive matching placeholder PNG
-  4. Find all video prompts referencing this feature
-  5. Flag for narration script update (do not auto-delete video prompts)
+  4. Run Steering Prompt Synthesis pipeline — deprecated features are naturally excluded
 ```
 
-### When Counts Change
+### When Architecture Counts Change
 
 ```
 For each count_change:
-  1. Grep all video prompts for the old count
-  2. Update to new count
-  3. Grep all image prompt descriptions for the old count
-  4. Update to new count
+  1. Verify the new count against architecture_facts in VBP YAML
+  2. Update architecture_facts floor approximation in VBP YAML if floor now exceeded
+  3. Run Steering Prompt Synthesis — updated floor propagates automatically
+  4. Grep all image prompt descriptions for the old count and update
 ```
 
 ### Reusability Guarantee
@@ -276,7 +245,9 @@ All media prompts MUST be:
 
 ## 🛡️ Safety
 
-- **Archive-first** — deprecated prompts are moved to `_archive/`, never deleted
-- **Parity-checked** — 1:1 prompt-to-placeholder ratio enforced after every sync
+- **Archive-first** — deprecated image prompts are moved to `_archive/`, never deleted
+- **Parity-checked** — 1:1 image prompt-to-placeholder ratio enforced after every sync
 - **Design-system-locked** — all prompts reference canonical color codes
-- **Accuracy-gated** — every prompt includes a capability reference for cross-verification
+- **Accuracy-gated** — every image prompt includes a capability reference for cross-verification
+- **Synthesis-locked** — steering prompts updated only via synthesis pipeline, never manual count edits
+

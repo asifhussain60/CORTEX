@@ -16,9 +16,9 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   last_updated: '2026-03-09T00:00:00Z'
-  total_phases: 127
+  total_phases: 128
   active: 0
-  completed: 112
+  completed: 113
   in_progress: 0
   planned: 13
   governance_rules_total: 37
@@ -32,7 +32,7 @@ metadata:
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed: "phase-139 Cross-Repo Feedback Extractor COMPLETE (SanitizationEngine 8-gate + CrossRepoExtractor 6-stage + FEEDBACK IntentType, 32 TDD tests GREEN — Issue #14 backport chain 135→136→137→138→139 DONE), phase-138 Git Checkpoint Safety COMPLETE (RollbackManager + SubPhaseCheckpointInjector + WorkflowComposer.compose_for_sub_phase(), 28 TDD tests GREEN), phase-137 Deep Intelligence Wiring COMPLETE (33 TDD tests GREEN), phase-136 CAPE COMPLETE (104 TDD tests GREEN), phase-135 KAL COMPLETE (35 TDD tests GREEN)."
-  planned_next: "phases 140–146 PLANNED (Issue #17 backport): Production Hardening (140), Vacuum Source Protection (141), SubPhaseComposer DRY (142), Knowledge Guidance Traceability (143), Document Ingest Pipeline (144), Documentation Intelligence (145), Response Rendering Rules (146). Execution order: 140→141→142→143→144→145→146. phases 129–134 also PLANNED."
+  planned_next: "phases 140–147 PLANNED (Issue #17 backport + video steering synthesis): Production Hardening (140), Vacuum Source Protection (141), SubPhaseComposer DRY (142), Knowledge Guidance Traceability (143), Document Ingest Pipeline (144), Documentation Intelligence (145), Response Rendering Rules (146), Intelligent Video Steering Synthesis (147). Execution order: 140→141→142→143→144→145→146→147. phases 129–134 also PLANNED."
 
 # Phase detail lives in cortex-registry/planning/phases/{planned|completed}/<phase-id>.yaml
 # See phases: section below for the canonical thin-index reference list.
@@ -140,16 +140,16 @@ verification:
   last_verified: '2026-03-05T00:00:00Z'
 
 summary:
-  total_phases: 127
-  completed: 112
+  total_phases: 128
+  completed: 113
   active: 0
   in_progress: 0
   planned: 13
   archived: 4
   playbooks: 1
   completion_percentage: 88
-  consolidation_summary: "2026-03-09 — Issue #17 backport: 7 phases PLANNED (140-146): Production Hardening, Vacuum Source Protection, SubPhaseComposer DRY, Knowledge Guidance Traceability, Document Ingest Pipeline (5 components), Documentation Intelligence (60+ practices), Response Rendering Rules Golden Tests. Execution order: 140→141→142→143→144→145→146. 2026-03-08 — phases 135-139 COMPLETE (Issue #14 backport chain: KAL, CAPE, Deep Intelligence Wiring, Git Checkpoint Safety, Cross-Repo Feedback Extractor). phases 129–134 PLANNED."
-  active_phases: "No active phases. 13 PLANNED: phases 129–134 (existing backport chain) + phases 140–146 (Issue #17 backport). Execution order for Issue #17: 140→141→142→143→144→145→146. Full detail in cortex-registry/planning/phases/planned/."
+  consolidation_summary: "2026-03-09 — Phase 147 COMPLETE (Intelligent Video Steering Synthesis — removed static video file maintenance from cortex-doc.prompt.md + media-prompt-agent.md; added synthesis methodology from cortex-master.yaml + git issues + diagrams + VBP YAML + .content; expanded from 4 combined-audience prompts to 7 role-specific prompts with role-slug filenames (01-all-roles-overview, 02-business-leaders, 03-product-owners, 04-software-engineers, 05-quality-engineers, 06-security-engineers, 07-sre) + floor approximations + verified diagram references; all 5 GAPs CLOSED). Issue #17 backport: 7 phases PLANNED (140-146): Production Hardening, Vacuum Source Protection, SubPhaseComposer DRY, Knowledge Guidance Traceability, Document Ingest Pipeline (5 components), Documentation Intelligence (60+ practices), Response Rendering Rules Golden Tests. 2026-03-08 — phases 135-139 COMPLETE (Issue #14 backport chain: KAL, CAPE, Deep Intelligence Wiring, Git Checkpoint Safety, Cross-Repo Feedback Extractor). phases 129–134 PLANNED."
+  active_phases: "No active phases. 13 PLANNED: phases 129–134 (existing backport chain) + phases 140–146 (Issue #17 backport). Full detail in cortex-registry/planning/phases/planned/."
 
 phases:
   # ── PHASE 139: CROSS-REPO FEEDBACK EXTRACTOR (2026-03-08) ───────────────────
@@ -373,6 +373,17 @@ phases:
     sub_phases: 1
     file: "cortex-registry/planning/phases/planned/phase-146-response-rendering-rules-golden.yaml"
     note: "PLANNED 2026-03-09. Source: Issue #17 FB-006. 14-rule validation for response template YAMLs (atoms, blocks, compositions), cortex-response-templates.md compliance."
+
+  # ── PHASE 147: INTELLIGENT VIDEO STEERING SYNTHESIS (2026-03-09) ─────────────
+  - id: phase-147
+    title: "Intelligent Video Steering Synthesis — Auto-Synthesised from Live Architecture"
+    priority: P1
+    status: COMPLETE
+    sweep_id: SWEEP-147-VIDEO-STEERING-SYNTHESIS
+    gaps: 5
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/completed/phase-147-intelligent-video-steering-synthesis.yaml"
+    note: "COMPLETE 2026-03-09. Source: chat01.md review + Issue #17 assumed complete. Removed standalone video file maintenance from cortex-doc.prompt.md + media-prompt-agent.md. Added Steering Prompt Synthesis methodology: synthesise from cortex-master.yaml + git issues + diagrams + VBP YAML + .content → enhance steering prompts. Expanded from 4 combined-audience files to 7 role-specific prompts with role-slug filenames: 01-all-roles-overview, 02-business-leaders, 03-product-owners, 04-software-engineers, 05-quality-engineers, 06-security-engineers, 07-sre. Each file has full synthesis metadata, VBP compliance table, diagram references, and architecture facts (floor approximations). All sources renamed to match. All 5 GAPs CLOSED."
 
   # ── PHASE 124: PRINCIPLE BLOCK LIBRARY (2026-03-04) ──────────────────────────
   - id: phase-124
