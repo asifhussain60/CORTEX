@@ -3958,51 +3958,54 @@
         </a>
     </section>
 
-    <!-- 8. Action Row — 1×3 Compact Material Cards (Get Started · University · Architecture) -->
-    <section class="container section" id="get-started" aria-labelledby="get-started-heading">
+    <!-- 8. Action Row — 1×3 Compact Material Cards (Architecture · University · Get Started) -->
+    <section class="container section" id="get-started" aria-labelledby="architecture-heading">
         <div class="gs-grid">
 
-            <!-- ══ Card 1 — Get Started (amber) ══ -->
-            <div class="gs-card gs-card--amber">
+            <!-- ══ Card 1 — Architecture Deep Dive (violet) ══ -->
+            <div class="gs-card gs-card--violet">
                 <div class="gs-card__header">
-                    <span class="gs-card__icon"><i class="fas fa-rocket" aria-hidden="true"></i></span>
-                    <span class="gs-card__tag">Quick Start</span>
+                    <span class="gs-card__icon"><i class="fas fa-sitemap" aria-hidden="true"></i></span>
+                    <span class="gs-card__tag">Architecture</span>
                 </div>
-                <h2 class="gs-card__title" id="get-started-heading">Get Started with CORTEX</h2>
-                <p class="gs-card__subtitle">Zero to governed AI in 5 minutes</p>
-                <p class="gs-card__body">Install locally in your IDE — no Docker, no accounts, no cloud dependencies. Just open VS Code and go.</p>
+                <h2 class="gs-card__title" id="architecture-heading">Architecture Deep Dive</h2>
+                <p class="gs-card__subtitle">296 orchestrators · 36 MCP tools · 60 YAMLs</p>
+                <p class="gs-card__body">Explore the full technical blueprint — 14 orchestrator domains, the LENS sensory system, and how every component connects.</p>
 
-                <!-- 3 feature rows — same count as other cards -->
-                <div class="gs-card__list" role="list">
-                    <div class="gs-row" role="listitem">
-                        <span class="gs-row__badge"><i class="fas fa-clock" aria-hidden="true"></i></span>
+                <!-- 3 architecture nav rows -->
+                <nav class="gs-card__list" aria-label="Architecture navigation">
+                    <a href="architecture.html#orchestrators" class="gs-row">
+                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-network-wired" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">5-Minute Install</span>
-                            <span class="gs-row__desc">One pip install, one VS Code extension</span>
+                            <span class="gs-row__label">Orchestrator Domains</span>
+                            <span class="gs-row__desc">14 domains, 296 orchestrators, IOrchestrator protocol</span>
                         </span>
-                    </div>
-                    <div class="gs-row" role="listitem">
-                        <span class="gs-row__badge"><i class="fas fa-robot" aria-hidden="true"></i></span>
+                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="architecture.html#mcp" class="gs-row">
+                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-plug" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">Native Copilot Chat</span>
-                            <span class="gs-row__desc">Runs inside GitHub Copilot — no context switching</span>
+                            <span class="gs-row__label">MCP Tool Registry</span>
+                            <span class="gs-row__desc">36 registered tools, Pylance-style stdio transport</span>
                         </span>
-                    </div>
-                    <div class="gs-row" role="listitem">
-                        <span class="gs-row__badge"><i class="fas fa-cloud-slash" aria-hidden="true"></i></span>
+                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="architecture.html#governance" class="gs-row">
+                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-shield-check" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">Zero Cloud Required</span>
-                            <span class="gs-row__desc">Fully local — your code never leaves your machine</span>
+                            <span class="gs-row__label">Governance Layer</span>
+                            <span class="gs-row__desc">60 YAMLs, convergence gates &amp; sweep contracts</span>
                         </span>
-                    </div>
-                </div>
+                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
 
-                <a href="getting-started.html" class="gs-card__cta">
-                    <i class="fas fa-bolt" aria-hidden="true"></i> Start Building Now
+                <a href="architecture.html" class="gs-card__cta">
+                    <i class="fas fa-diagram-project" aria-hidden="true"></i> View Full Architecture
                 </a>
                 <div class="gs-card__stats">
-                    <span class="gs-card__stat"><i class="fas fa-check-circle" aria-hidden="true"></i> Free &amp; open source</span>
-                    <span class="gs-card__stat"><i class="fas fa-shield-halved" aria-hidden="true"></i> WCAG 2.1 AA</span>
+                    <span class="gs-card__stat"><i class="fas fa-code-branch" aria-hidden="true"></i> 65+ phases</span>
+                    <span class="gs-card__stat"><i class="fas fa-vial" aria-hidden="true"></i> 20,000+ tests</span>
                 </div>
             </div>
 
@@ -4054,50 +4057,47 @@
                 </div>
             </div>
 
-            <!-- ══ Card 3 — Architecture Deep Dive (violet) ══ -->
-            <div class="gs-card gs-card--violet">
+            <!-- ══ Card 3 — Get Started (amber) ══ -->
+            <div class="gs-card gs-card--amber">
                 <div class="gs-card__header">
-                    <span class="gs-card__icon"><i class="fas fa-sitemap" aria-hidden="true"></i></span>
-                    <span class="gs-card__tag">Architecture</span>
+                    <span class="gs-card__icon"><i class="fas fa-rocket" aria-hidden="true"></i></span>
+                    <span class="gs-card__tag">Quick Start</span>
                 </div>
-                <h2 class="gs-card__title" id="architecture-heading">Architecture Deep Dive</h2>
-                <p class="gs-card__subtitle">296 orchestrators · 36 MCP tools · 60 YAMLs</p>
-                <p class="gs-card__body">Explore the full technical blueprint — 14 orchestrator domains, the LENS sensory system, and how every component connects.</p>
+                <h2 class="gs-card__title" id="get-started-heading">Get Started with CORTEX</h2>
+                <p class="gs-card__subtitle">Zero to governed AI in 5 minutes</p>
+                <p class="gs-card__body">Install locally in your IDE — no Docker, no accounts, no cloud dependencies. Just open VS Code and go.</p>
 
-                <!-- 3 architecture nav rows -->
-                <nav class="gs-card__list" aria-label="Architecture navigation">
-                    <a href="architecture.html#orchestrators" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-network-wired" aria-hidden="true"></i></span>
+                <!-- 3 feature rows — same count as other cards -->
+                <div class="gs-card__list" role="list">
+                    <div class="gs-row" role="listitem">
+                        <span class="gs-row__badge"><i class="fas fa-clock" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">Orchestrator Domains</span>
-                            <span class="gs-row__desc">14 domains, 296 orchestrators, IOrchestrator protocol</span>
+                            <span class="gs-row__label">5-Minute Install</span>
+                            <span class="gs-row__desc">One pip install, one VS Code extension</span>
                         </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                    <a href="architecture.html#mcp" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-plug" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="gs-row" role="listitem">
+                        <span class="gs-row__badge"><i class="fas fa-robot" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">MCP Tool Registry</span>
-                            <span class="gs-row__desc">36 registered tools, Pylance-style stdio transport</span>
+                            <span class="gs-row__label">Native Copilot Chat</span>
+                            <span class="gs-row__desc">Runs inside GitHub Copilot — no context switching</span>
                         </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                    <a href="architecture.html#governance" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-shield-check" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="gs-row" role="listitem">
+                        <span class="gs-row__badge"><i class="fas fa-cloud-slash" aria-hidden="true"></i></span>
                         <span class="gs-row__text">
-                            <span class="gs-row__label">Governance Layer</span>
-                            <span class="gs-row__desc">60 YAMLs, convergence gates &amp; sweep contracts</span>
+                            <span class="gs-row__label">Zero Cloud Required</span>
+                            <span class="gs-row__desc">Fully local — your code never leaves your machine</span>
                         </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                </nav>
+                    </div>
+                </div>
 
-                <a href="architecture.html" class="gs-card__cta">
-                    <i class="fas fa-diagram-project" aria-hidden="true"></i> View Full Architecture
+                <a href="getting-started.html" class="gs-card__cta">
+                    <i class="fas fa-bolt" aria-hidden="true"></i> Start Building Now
                 </a>
                 <div class="gs-card__stats">
-                    <span class="gs-card__stat"><i class="fas fa-code-branch" aria-hidden="true"></i> 65+ phases</span>
-                    <span class="gs-card__stat"><i class="fas fa-vial" aria-hidden="true"></i> 20,000+ tests</span>
+                    <span class="gs-card__stat"><i class="fas fa-check-circle" aria-hidden="true"></i> Free &amp; open source</span>
+                    <span class="gs-card__stat"><i class="fas fa-shield-halved" aria-hidden="true"></i> WCAG 2.1 AA</span>
                 </div>
             </div>
 
