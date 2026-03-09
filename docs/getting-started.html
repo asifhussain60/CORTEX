@@ -93,6 +93,411 @@
         .code-cls { color: #facc15; }
         .code-dec { color: #a78bfa; }
 
+        /* ═══════════════════ PATH CHOOSER TILES ═══════════════════ */
+        .path-chooser-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) { .path-chooser-grid { grid-template-columns: 1fr; } }
+
+        .path-tile {
+            position: relative;
+            border-radius: 2rem;
+            padding: 2.5rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1),
+                        box-shadow 0.3s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.3s ease;
+            overflow: hidden;
+            min-height: 340px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Path A — Beginner — amber/orange */
+        .path-tile--newbie {
+            background: linear-gradient(145deg,
+                rgba(245,158,11,0.08) 0%,
+                rgba(10,15,30,0.85) 40%,
+                rgba(249,115,22,0.06) 100%);
+            border-color: rgba(245,158,11,0.18);
+        }
+        /* Path B — Expert — violet/cyan */
+        .path-tile--expert {
+            background: linear-gradient(145deg,
+                rgba(139,92,246,0.10) 0%,
+                rgba(10,15,30,0.85) 40%,
+                rgba(6,182,212,0.06) 100%);
+            border-color: rgba(139,92,246,0.18);
+        }
+
+        /* Glow aura behind tiles */
+        .path-tile::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 2rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .path-tile--newbie::before {
+            background: radial-gradient(ellipse at 30% 20%, rgba(245,158,11,0.25) 0%, transparent 65%);
+        }
+        .path-tile--expert::before {
+            background: radial-gradient(ellipse at 70% 20%, rgba(139,92,246,0.25) 0%, transparent 65%);
+        }
+
+        /* Shimmer top-edge line */
+        .path-tile::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            border-radius: 2rem 2rem 0 0;
+            opacity: 0.5;
+            transition: opacity 0.3s ease, height 0.3s ease;
+        }
+        .path-tile--newbie::after {
+            background: linear-gradient(90deg, transparent, #f59e0b 40%, #f97316 60%, transparent);
+        }
+        .path-tile--expert::after {
+            background: linear-gradient(90deg, transparent, #8b5cf6 40%, #06b6d4 60%, transparent);
+        }
+
+        @media (hover: hover) {
+            .path-tile--newbie:hover {
+                transform: translateY(-6px) scale(1.01);
+                border-color: rgba(245,158,11,0.45);
+                box-shadow: 0 24px 60px -10px rgba(245,158,11,0.20),
+                            0 0 0 1px rgba(245,158,11,0.12);
+            }
+            .path-tile--newbie:hover::before { opacity: 1; }
+            .path-tile--newbie:hover::after  { opacity: 1; height: 3px; }
+
+            .path-tile--expert:hover {
+                transform: translateY(-6px) scale(1.01);
+                border-color: rgba(139,92,246,0.45);
+                box-shadow: 0 24px 60px -10px rgba(139,92,246,0.20),
+                            0 0 0 1px rgba(139,92,246,0.12);
+            }
+            .path-tile--expert:hover::before { opacity: 1; }
+            .path-tile--expert:hover::after  { opacity: 1; height: 3px; }
+        }
+
+        /* Glass backdrop on tiles */
+        .path-tile-glass {
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 2rem;
+            z-index: 0;
+        }
+
+        /* Content sits above glass */
+        .path-tile > * { position: relative; z-index: 1; }
+
+        /* Emoji avatar */
+        .path-tile-avatar {
+            font-size: 3.5rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 18px rgba(245,158,11,0.4));
+        }
+        .path-tile--expert .path-tile-avatar {
+            filter: drop-shadow(0 0 18px rgba(139,92,246,0.4));
+        }
+
+        /* Badge */
+        .path-tile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            width: fit-content;
+        }
+        .path-tile--newbie .path-tile-badge {
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+        .path-tile--expert .path-tile-badge {
+            background: rgba(139,92,246,0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+
+        .path-tile-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+        .path-tile--newbie .path-tile-title { color: #fef3c7; }
+        .path-tile--expert .path-tile-title { color: #ede9fe; }
+
+        .path-tile-tagline {
+            font-size: 1rem;
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        .path-tile--newbie .path-tile-tagline { color: rgba(245,158,11,0.8); }
+        .path-tile--expert .path-tile-tagline { color: rgba(139,92,246,0.8); }
+
+        .path-tile-desc {
+            font-size: 0.9375rem;
+            color: #94a3b8;
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .path-tile-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 900;
+            font-size: 0.9375rem;
+            letter-spacing: -0.01em;
+            transition: all 0.2s ease;
+            width: fit-content;
+        }
+        .path-tile--newbie .path-tile-cta {
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+        .path-tile--expert .path-tile-cta {
+            background: rgba(139,92,246,0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+        @media (hover: hover) {
+            .path-tile--newbie:hover .path-tile-cta {
+                background: rgba(245,158,11,0.25);
+                border-color: rgba(245,158,11,0.5);
+            }
+            .path-tile--expert:hover .path-tile-cta {
+                background: rgba(139,92,246,0.25);
+                border-color: rgba(139,92,246,0.5);
+            }
+        }
+
+        /* Floating sparkle orbs (decorative, aria-hidden) */
+        .path-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+        .path-orb-1 {
+            width: 120px; height: 120px;
+            top: -30px; right: -20px;
+            filter: blur(30px);
+        }
+        .path-tile--newbie .path-orb-1 { background: #f59e0b; }
+        .path-tile--expert .path-orb-1 { background: #8b5cf6; }
+
+        .path-orb-2 {
+            width: 80px; height: 80px;
+            bottom: 20px; right: 30px;
+            filter: blur(20px);
+            opacity: 0.10;
+        }
+        .path-tile--newbie .path-orb-2 { background: #f97316; }
+        .path-tile--expert .path-orb-2 { background: #06b6d4; }
+
+        /* ── FLOATING PATH-SELECT ANIMATION ──
+           Only for no-preference users — vestibular safe per motion_ux_standards.yaml */
+        @media (prefers-reduced-motion: no-preference) {
+            .path-tile--newbie { animation: path-float-a 6s ease-in-out infinite; }
+            .path-tile--expert { animation: path-float-b 6s ease-in-out 1s infinite; }
+        }
+        @keyframes path-float-a {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-5px); }
+        }
+        @keyframes path-float-b {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-5px); }
+        }
+        /* Pause float on hover so tileY-hover feels responsive */
+        @media (hover: hover) {
+            .path-tile--newbie:hover { animation: none; transform: translateY(-6px) scale(1.01); }
+            .path-tile--expert:hover { animation: none; transform: translateY(-6px) scale(1.01); }
+        }
+
+        /* ── PATH VIEW SECTIONS ─────────────────────────────────── */
+        .path-view { display: none; }
+        .path-view.active {
+            display: block;
+            animation: path-reveal 0.35s cubic-bezier(0,0,0.2,1);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            @keyframes path-reveal {
+                from { opacity: 0; transform: translateY(12px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            @keyframes path-reveal { from { opacity: 0; } to { opacity: 1; } }
+        }
+
+        /* ── WIZARD STEPS (Path A) ───────────────────────────────── */
+        .wizard-timeline {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .wizard-timeline::before {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg,
+                rgba(245,158,11,0.5) 0%,
+                rgba(249,115,22,0.3) 60%,
+                rgba(245,158,11,0.05) 100%);
+            border-radius: 1px;
+        }
+        @media (max-width: 640px) {
+            .wizard-timeline::before { left: 1.25rem; }
+        }
+
+        .wizard-step {
+            display: flex;
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+
+        .wizard-step-num {
+            flex-shrink: 0;
+            width: 4rem; height: 4rem;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem; font-weight: 900;
+            position: relative;
+            z-index: 2;
+        }
+        @media (max-width: 640px) { .wizard-step-num { width: 2.5rem; height: 2.5rem; font-size: 0.75rem; } }
+
+        .wizard-step-num--amber {
+            background: radial-gradient(circle, rgba(245,158,11,0.25) 0%, rgba(245,158,11,0.05) 100%);
+            border: 2px solid rgba(245,158,11,0.5);
+            color: #fbbf24;
+            box-shadow: 0 0 20px rgba(245,158,11,0.2);
+        }
+
+        .wizard-step-body { flex: 1; padding-top: 0.5rem; }
+
+        .wizard-step-label {
+            font-size: 0.6875rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: #f59e0b; margin-bottom: 0.25rem;
+        }
+        .wizard-step-title {
+            font-size: 1.25rem; font-weight: 900;
+            letter-spacing: -0.02em; color: #f8fafc;
+            margin-bottom: 0.5rem;
+        }
+        .wizard-step-desc {
+            font-size: 0.9rem; color: #94a3b8; line-height: 1.65;
+            margin-bottom: 0.75rem;
+        }
+
+        /* YouTube link pill */
+        .yt-pill {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 0.875rem;
+            border-radius: 9999px;
+            background: rgba(239,68,68,0.10);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: #fca5a5;
+            font-size: 0.8125rem; font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .yt-pill:hover {
+            background: rgba(239,68,68,0.20);
+            border-color: rgba(239,68,68,0.45);
+            color: #fecaca;
+        }
+        .yt-pill svg { flex-shrink: 0; }
+
+        /* ── FAST-TRACK (Path B) ─────────────────────────────────── */
+        .fasttrack-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) { .fasttrack-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .fasttrack-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .fasttrack-card {
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(139,92,246,0.15);
+            background: rgba(139,92,246,0.04);
+            display: flex; flex-direction: column; gap: 0.6rem;
+            transition: all 0.2s ease;
+            position: relative; overflow: hidden;
+        }
+        .fasttrack-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+        @media (hover: hover) {
+            .fasttrack-card:hover {
+                border-color: rgba(139,92,246,0.35);
+                transform: translateY(-3px);
+                box-shadow: 0 12px 32px -6px rgba(139,92,246,0.2);
+            }
+            .fasttrack-card:hover::before { opacity: 1; }
+        }
+        .fasttrack-step-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 0.1em; color: #8b5cf6;
+        }
+        .fasttrack-title {
+            font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc;
+        }
+        .fasttrack-desc {
+            font-size: 0.875rem; color: #64748b; line-height: 1.6;
+        }
+        .fasttrack-cmd {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem;
+            color: #c4b5fd; background: rgba(0,0,0,0.35); border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem; border: 1px solid rgba(139,92,246,0.15);
+            white-space: pre-wrap; margin-top: auto;
+        }
+        .fasttrack-cmd .kw { color: #f472b6; }
+        .fasttrack-cmd .str { color: #34d399; }
+        .fasttrack-cmd .cmt { color: #475569; font-style: italic; }
+
         /* Step Pipeline */
         .step-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media (min-width: 768px) { .step-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -465,6 +870,479 @@
                         <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">30+</div>
                         <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">MCP Tools Instantly Available</div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ PATH CHOOSER TILES ═══════════════════ -->
+        <section aria-labelledby="path-chooser-heading" style="margin-top:3rem;">
+            <div class="text-center space-y-3 mb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="map" class="w-3.5 h-3.5"></i> Choose Your Path
+                </div>
+                <h2 id="path-chooser-heading" class="section-title font-black tracking-tighter">Which One Are You?</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    Two paths. Same destination. One is a hand-held adventure. The other is a pit stop for people who type fast and feel no fear.
+                </p>
+            </div>
+
+            <div class="path-chooser-grid">
+                <!-- PATH A — Newbie -->
+                <button class="path-tile path-tile--newbie" onclick="selectPath('a')"
+                        aria-controls="path-view-a path-view-b"
+                        aria-label="Path A — Never used VS Code or Visual Studio before. Step-by-step wizard guide."
+                        id="path-btn-a">
+                    <div class="path-tile-glass" aria-hidden="true"></div>
+                    <div class="path-orb path-orb-1" aria-hidden="true"></div>
+                    <div class="path-orb path-orb-2" aria-hidden="true"></div>
+
+                    <div class="path-tile-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        Path A · The Brave Beginner
+                    </div>
+
+                    <div class="path-tile-avatar" aria-hidden="true">🐣</div>
+
+                    <div>
+                        <h3 class="path-tile-title">"I've never opened<br/>VS Code in my life."</h3>
+                        <p class="path-tile-tagline">(And that's perfectly fine — we have snacks.)</p>
+                    </div>
+
+                    <p class="path-tile-desc">
+                        You're new to the whole coding tool universe, or maybe your company just handed you a laptop and said "install CORTEX." Don't panic. We've got a step-by-step wizard that treats you like the intelligent adult you are — while also explaining what a terminal is. No judgment. Minimal existential dread.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2">
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.2);font-weight:700;">📥 Download VS Code</span>
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.2);font-weight:700;">🎬 YouTube guides</span>
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.2);font-weight:700;">🧙 Wizard steps</span>
+                    </div>
+
+                    <div class="path-tile-cta">
+                        Start the Wizard
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </div>
+                </button>
+
+                <!-- PATH B — Expert -->
+                <button class="path-tile path-tile--expert" onclick="selectPath('b')"
+                        aria-controls="path-view-a path-view-b"
+                        aria-label="Path B — Expert, seasoned software engineer. Fast-track setup."
+                        id="path-btn-b">
+                    <div class="path-tile-glass" aria-hidden="true"></div>
+                    <div class="path-orb path-orb-1" aria-hidden="true"></div>
+                    <div class="path-orb path-orb-2" aria-hidden="true"></div>
+
+                    <div class="path-tile-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Path B · The Seasoned Sorcerer
+                    </div>
+
+                    <div class="path-tile-avatar" aria-hidden="true">🧙‍♂️</div>
+
+                    <div>
+                        <h3 class="path-tile-title">"I eat merge conflicts<br/>for breakfast."</h3>
+                        <p class="path-tile-tagline">(Understood. Let's not waste each other's time.)</p>
+                    </div>
+
+                    <p class="path-tile-desc">
+                        You've shipped production code during a power cut and debugged race conditions using only intuition and spite. You don't need someone to explain what <code style="color:#c4b5fd;background:rgba(139,92,246,0.15);padding:1px 5px;border-radius:4px;">git clone</code> does. You need the MCP config, the key commands, and approximately three minutes of your time back.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2">
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(139,92,246,0.1);color:#c4b5fd;border:1px solid rgba(139,92,246,0.2);font-weight:700;">⚡ 5-step fast track</span>
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(139,92,246,0.1);color:#c4b5fd;border:1px solid rgba(139,92,246,0.2);font-weight:700;">🔧 MCP config</span>
+                        <span style="font-size:0.75rem;padding:0.25rem 0.625rem;border-radius:9999px;background:rgba(139,92,246,0.1);color:#c4b5fd;border:1px solid rgba(139,92,246,0.2);font-weight:700;">🚀 First command</span>
+                    </div>
+
+                    <div class="path-tile-cta">
+                        Skip the Fluff
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ PATH A — WIZARD VIEW ═══════════════════ -->
+        <section id="path-view-a" class="path-view" aria-label="Path A: Wizard guide for beginners">
+            <div class="relative py-8 my-4">
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-950/60 via-slate-900/80 to-orange-950/50 border border-amber-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative space-y-10 px-4 md:px-8">
+
+                    <!-- Path A Header -->
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-bold tracking-widest uppercase">
+                            <span aria-hidden="true">🐣</span> Path A · The Brave Beginner
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Your First Day with CORTEX</h2>
+                        <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                            We're going to take you from "what is a terminal?" to a fully operational AI-governed coding environment. Every step has pictures, videos, and zero assumptions. You've got this.
+                        </p>
+                    </div>
+
+                    <!-- WIZARD TIMELINE -->
+                    <div class="wizard-timeline" role="list" aria-label="Setup wizard steps">
+
+                        <!-- Step 1: Download VS Code -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">1</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 1 — The Tool</div>
+                                <h3 class="wizard-step-title">Download VS Code</h3>
+                                <p class="wizard-step-desc">
+                                    VS Code is the free editor made by Microsoft that CORTEX lives inside. Think of it as the cockpit — CORTEX is the AI co-pilot. Go to <strong class="text-amber-400">code.visualstudio.com</strong>, click the big download button, and install it like any other app. It takes about 2 minutes.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:520px;">
+                                    <span class="code-cmt"># The official download page:</span>
+<span class="code-str">https://code.visualstudio.com/download</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="https://www.youtube.com/results?search_query=how+to+install+vscode+beginners" target="_blank" rel="noopener noreferrer" class="yt-pill" aria-label="Watch YouTube: How to install VS Code (opens in new tab)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12z"/></svg>
+                                        Watch: Install VS Code (YouTube)
+                                    </a>
+                                </div>
+                                <div class="glass-card p-4 mt-3 border-amber-500/15" style="max-width:520px;">
+                                    <p class="text-[13px] text-slate-400">💡 <strong class="text-amber-300">Windows users:</strong> choose the "User Installer" (64-bit). <strong class="text-amber-300">Mac users:</strong> drag the app to your Applications folder. <strong class="text-amber-300">Linux:</strong> use the .deb or .rpm package for your distro.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Open VS Code + Terminal -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">2</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 2 — The Command Line</div>
+                                <h3 class="wizard-step-title">Open VS Code &amp; Find the Terminal</h3>
+                                <p class="wizard-step-desc">
+                                    Open VS Code. You'll see a welcome screen — close it (or embrace it, your choice). Now open the integrated terminal. This is where you'll type commands. Don't worry — you'll only need about 6 of them, and we'll tell you exactly what each one does.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:520px;">
+                                    <span class="code-cmt"># Open the terminal inside VS Code:</span>
+<span class="code-cmt"># Mac:     Ctrl + ` (backtick — top-left of keyboard)</span>
+<span class="code-cmt"># Windows: Ctrl + ` (same key)</span>
+<span class="code-cmt"># Or:      View → Terminal from the menu bar</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="https://www.youtube.com/results?search_query=vscode+integrated+terminal+beginners" target="_blank" rel="noopener noreferrer" class="yt-pill" aria-label="Watch YouTube: VS Code integrated terminal guide (opens in new tab)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12z"/></svg>
+                                        Watch: VS Code Terminal Tour
+                                    </a>
+                                </div>
+                                <div class="glass-card p-4 mt-3 border-amber-500/15" style="max-width:520px;">
+                                    <p class="text-[13px] text-slate-400">💡 A terminal is just a text interface to your computer. You type a command, press Enter, and stuff happens. It's been around longer than the internet and it's the most powerful tool a developer has. You're about to join a long and noble tradition.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Install Python -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">3</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 3 — The Language</div>
+                                <h3 class="wizard-step-title">Install Python 3.11</h3>
+                                <p class="wizard-step-desc">
+                                    CORTEX is built in Python. You need Python installed before anything else works. Go to <strong class="text-amber-400">python.org/downloads</strong> and download Python 3.11 (or newer). During the Windows installer, check the box that says <strong class="text-white">"Add Python to PATH"</strong> — this is the single most important checkbox in your setup journey.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:520px;">
+                                    <span class="code-cmt"># After installing, check it worked. In the VS Code terminal, type:</span>
+<span class="code-fn">python3 --version</span>
+<span class="code-cmt"># You should see something like: Python 3.11.8</span>
+<span class="code-cmt"># (Windows users may need to type: python --version)</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="https://www.youtube.com/results?search_query=install+python+windows+mac+beginners+2024" target="_blank" rel="noopener noreferrer" class="yt-pill" aria-label="Watch YouTube: Install Python beginners guide (opens in new tab)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12z"/></svg>
+                                        Watch: Install Python (YouTube)
+                                    </a>
+                                </div>
+                                <div class="glass-card p-4 mt-3 border-amber-500/15" style="max-width:520px;">
+                                    <p class="text-[13px] text-slate-400">💡 <strong class="text-amber-300">The PATH checkbox on Windows is not optional.</strong> If you miss it, Python will install but VS Code won't find it and everything will seem broken. If this happens, uninstall Python and reinstall with the box checked.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Install Git -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">4</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 4 — The Time Machine</div>
+                                <h3 class="wizard-step-title">Install Git</h3>
+                                <p class="wizard-step-desc">
+                                    Git is the software that tracks every change ever made to CORTEX. It's also how you download ("clone") CORTEX to your machine. Go to <strong class="text-amber-400">git-scm.com/downloads</strong> and install it. On Mac, it might already be installed — check first.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:520px;">
+                                    <span class="code-cmt"># Check if Git is already installed:</span>
+<span class="code-fn">git --version</span>
+<span class="code-cmt"># Should say: git version 2.x.x</span>
+<span class="code-cmt"># If it says "command not found" → install from git-scm.com</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="https://www.youtube.com/results?search_query=install+git+beginners+tutorial+windows+mac" target="_blank" rel="noopener noreferrer" class="yt-pill" aria-label="Watch YouTube: Install Git for beginners (opens in new tab)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12z"/></svg>
+                                        Watch: Install Git (YouTube)
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: GitHub Copilot -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">5</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 5 — The Brain</div>
+                                <h3 class="wizard-step-title">Set Up GitHub Copilot</h3>
+                                <p class="wizard-step-desc">
+                                    GitHub Copilot is the AI that CORTEX orchestrates. Your company provides you with a Copilot subscription — you just need to activate it in VS Code. Install the extension and sign in with your GitHub account.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:520px;">
+                                    <span class="code-cmt"># In VS Code:</span>
+<span class="code-cmt"># 1. Click the Extensions icon (left sidebar — looks like 4 squares)</span>
+<span class="code-cmt"># 2. Search: GitHub Copilot</span>
+<span class="code-cmt"># 3. Install BOTH:</span>
+<span class="code-str">   → GitHub Copilot</span>
+<span class="code-str">   → GitHub Copilot Chat</span>
+<span class="code-cmt"># 4. Click "Sign in to GitHub" when prompted</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="https://www.youtube.com/results?search_query=github+copilot+vscode+setup+2024+beginners" target="_blank" rel="noopener noreferrer" class="yt-pill" aria-label="Watch YouTube: GitHub Copilot VS Code setup (opens in new tab)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12z"/></svg>
+                                        Watch: Set Up GitHub Copilot
+                                    </a>
+                                </div>
+                                <div class="glass-card p-4 mt-3 border-amber-500/15" style="max-width:520px;">
+                                    <p class="text-[13px] text-slate-400">💡 Your company's IT team may need to grant you access to the Copilot subscription. If sign-in fails, check with your manager or IT department — they'll have a seat waiting for you.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Clone CORTEX -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">6</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 6 — The Download</div>
+                                <h3 class="wizard-step-title">Clone CORTEX to Your Machine</h3>
+                                <p class="wizard-step-desc">
+                                    "Cloning" just means downloading a copy of CORTEX. Your company gave you a link — it looks like a web address starting with <code class="text-amber-400">https://github.com/...</code>. Use that link in the command below. Once it finishes, open the folder in VS Code.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:540px;">
+                                    <span class="code-cmt"># In the VS Code terminal — paste the link your company gave you:</span>
+<span class="code-fn">git clone</span> <span class="code-str">[the CORTEX link your company gave you]</span>
+
+<span class="code-cmt"># It will create a CORTEX folder. Navigate into it:</span>
+<span class="code-fn">cd</span> CORTEX
+
+<span class="code-cmt"># Then open the folder in VS Code:</span>
+<span class="code-fn">code</span> .
+<span class="code-cmt"># (That's: code [space] [dot] — the dot means "current folder")</span>
+                                </div>
+                                <div class="glass-card p-4 mt-3 border-amber-500/15" style="max-width:540px;">
+                                    <p class="text-[13px] text-slate-400">💡 VS Code will ask "Do you trust the authors of the files in this folder?" — click <strong class="text-white">Yes, I trust the authors</strong>. This is your company's code. It's fine.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 7: Python environment -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">7</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 7 — The Sandbox</div>
+                                <h3 class="wizard-step-title">Create a Python Environment</h3>
+                                <p class="wizard-step-desc">
+                                    A virtual environment keeps CORTEX's packages separate from everything else on your computer. Think of it as a dedicated lunchbox — CORTEX's tools stay in its own container so they don't mix with other stuff.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:540px;">
+                                    <span class="code-cmt"># Create the environment (do this once):</span>
+<span class="code-fn">python3</span> -m venv .venv
+
+<span class="code-cmt"># Activate it — Mac / Linux:</span>
+<span class="code-fn">source</span> .venv/bin/activate
+
+<span class="code-cmt"># Activate it — Windows PowerShell:</span>
+<span class="code-str">.venv\Scripts\activate</span>
+
+<span class="code-cmt"># You'll see (.venv) appear at the start of the terminal line</span>
+<span class="code-cmt"># That means it worked. 🎉</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 8: Install dependencies -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">8</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 8 — The Toolkit</div>
+                                <h3 class="wizard-step-title">Install CORTEX's Tools</h3>
+                                <p class="wizard-step-desc">
+                                    This command reads a shopping list of tools CORTEX needs and installs them all automatically. It takes about 60 seconds and you'll see a stream of text fly by — that's normal, not a problem.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:540px;">
+<span class="code-fn">pip install</span> -r requirements.txt
+<span class="code-cmt"># Sit back. Watch the text go. Maybe get a coffee.</span>
+<span class="code-cmt"># When it says "Successfully installed..." you're done.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 9: MCP setup -->
+                        <div class="wizard-step" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true">9</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label">Step 9 — The Connection</div>
+                                <h3 class="wizard-step-title">Connect CORTEX to Copilot</h3>
+                                <p class="wizard-step-desc">
+                                    This single command auto-detects your operating system and wires CORTEX's AI tools into VS Code. After it finishes, reload VS Code and the magic happens automatically every time you open it.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:540px;">
+<span class="code-fn">python3</span> scripts/setup-mcp.py
+<span class="code-cmt"># Then reload VS Code:</span>
+<span class="code-cmt"># Press Ctrl+Shift+P (or Cmd+Shift+P on Mac)</span>
+<span class="code-cmt"># Type: Reload Window</span>
+<span class="code-cmt"># Press Enter</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 10: Verify -->
+                        <div class="wizard-step" style="padding-bottom:0;" role="listitem">
+                            <div class="wizard-step-num wizard-step-num--amber" aria-hidden="true" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.5);color:#34d399;box-shadow:0 0 20px rgba(16,185,129,0.15);">✓</div>
+                            <div class="wizard-step-body">
+                                <div class="wizard-step-label" style="color:#10b981;">Step 10 — You Made It</div>
+                                <h3 class="wizard-step-title">Say Hello to CORTEX</h3>
+                                <p class="wizard-step-desc">
+                                    Open Copilot Chat in VS Code. Switch it to <strong class="text-white">Agent mode</strong> (dropdown at the top of the chat panel). Click the Tools button — you should see CORTEX tools. Now type your first command and feel the power flow through you.
+                                </p>
+                                <div class="code-block text-sm mb-3" style="max-width:540px;">
+<span class="code-cmt"># In Copilot Chat (Agent mode), type:</span>
+<span class="code-str">"What is CORTEX?"</span>
+<span class="code-cmt"># If CORTEX responds with its header — congratulations.</span>
+<span class="code-cmt"># You are now a CORTEX user. Welcome to the future. 🚀</span>
+                                </div>
+                                <div class="glass-card p-5 border-emerald-500/20" style="max-width:540px;">
+                                    <ul class="checklist">
+                                        <li><span class="check-icon check-emerald">✓</span> VS Code installed and running</li>
+                                        <li><span class="check-icon check-emerald">✓</span> Python 3.11+ in the virtual environment</li>
+                                        <li><span class="check-icon check-emerald">✓</span> GitHub Copilot extension installed &amp; signed in</li>
+                                        <li><span class="check-icon check-emerald">✓</span> CORTEX cloned from your company's link</li>
+                                        <li><span class="check-icon check-emerald">✓</span> MCP wired — tools visible in Copilot Chat</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /wizard-timeline -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════ PATH B — EXPERT FAST-TRACK ═══════════════════ -->
+        <section id="path-view-b" class="path-view" aria-label="Path B: Expert fast-track setup">
+            <div class="relative py-8 my-4">
+                <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-cyan-950/50 border border-violet-500/20 rounded-3xl"></div>
+                <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+                <div class="relative space-y-10 px-4 md:px-8">
+
+                    <!-- Path B Header -->
+                    <div class="text-center space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                            <span aria-hidden="true">🧙‍♂️</span> Path B · The Seasoned Sorcerer
+                        </div>
+                        <h2 class="section-title font-black tracking-tighter">Clone. Configure. Conquer.</h2>
+                        <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                            You know what you're doing. Here's everything you need. No analogies about lunchboxes.
+                        </p>
+                    </div>
+
+                    <!-- Prerequisites fast-track banner -->
+                    <div class="glass-card p-5 border-violet-500/20">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-400 mb-2">Prerequisites (you almost certainly have these)</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="prereq-tag" style="--tag-color:#f59e0b"><span class="tag-dot"></span>Python 3.9+ (3.11 preferred)</span>
+                            <span class="prereq-tag" style="--tag-color:#10b981"><span class="tag-dot"></span>Git 2.30+</span>
+                            <span class="prereq-tag" style="--tag-color:#8b5cf6"><span class="tag-dot"></span>VS Code 1.85+</span>
+                            <span class="prereq-tag" style="--tag-color:#06b6d4"><span class="tag-dot"></span>GitHub Copilot active subscription</span>
+                            <span class="prereq-tag" style="--tag-color:#f97316"><span class="tag-dot"></span>~500 MB disk</span>
+                        </div>
+                    </div>
+
+                    <!-- Fast-track step grid -->
+                    <div class="fasttrack-grid" role="list" aria-label="Expert fast-track steps">
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">Step 1 — Clone</div>
+                            <div class="fasttrack-title">Get the Repository</div>
+                            <div class="fasttrack-desc">Use the CORTEX link your company provided. Each organisation has its own fork/mirror.</div>
+                            <div class="fasttrack-cmd"><span class="kw">git</span> clone <span class="str">[your-company-cortex-url]</span>
+<span class="kw">cd</span> CORTEX</div>
+                        </div>
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">Step 2 — Environment</div>
+                            <div class="fasttrack-title">Isolate &amp; Install</div>
+                            <div class="fasttrack-desc">Standard venv + pip. The setup script handles cross-platform Python path resolution.</div>
+                            <div class="fasttrack-cmd"><span class="kw">python3</span> -m venv .venv
+<span class="kw">source</span> .venv/bin/activate  <span class="cmt"># Windows: .venv\Scripts\activate</span>
+<span class="kw">pip install</span> -r requirements.txt</div>
+                        </div>
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">Step 3 — MCP Wire</div>
+                            <div class="fasttrack-title">Configure the AI Bridge</div>
+                            <div class="fasttrack-desc">Auto-generates <code style="color:#c4b5fd">.vscode/settings.json</code> with the correct stdio transport config for your OS.</div>
+                            <div class="fasttrack-cmd"><span class="kw">python3</span> scripts/setup-mcp.py
+<span class="cmt"># Then: Cmd+Shift+P → Reload Window</span></div>
+                        </div>
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">Step 4 — Validate</div>
+                            <div class="fasttrack-title">Smoke Test</div>
+                            <div class="fasttrack-desc">Runs the critical wiring + test suite. Zero failures = you're operational.</div>
+                            <div class="fasttrack-cmd"><span class="kw">make</span> test-smoke
+<span class="cmt"># Windows: python scripts\run_tests.py smoke</span>
+<span class="cmt"># Target: &lt;60s, green across the board</span></div>
+                        </div>
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">Step 5 — Verify MCP</div>
+                            <div class="fasttrack-title">Confirm Tool Registration</div>
+                            <div class="fasttrack-desc">Agent mode → Tools panel → confirm <code style="color:#c4b5fd">cortex_verify</code>, <code style="color:#c4b5fd">cortex_classify</code> etc. are listed.</div>
+                            <div class="fasttrack-cmd"><span class="cmt"># In Copilot Chat — Agent mode:</span>
+<span class="str">"What is CORTEX?"</span>
+<span class="cmt"># Confirms MCP is active + response header renders</span></div>
+                        </div>
+
+                        <div class="fasttrack-card" role="listitem">
+                            <div class="fasttrack-step-label">First Command</div>
+                            <div class="fasttrack-title">You're Operational</div>
+                            <div class="fasttrack-desc">The Intent Router handles natural language. Commands are shortcuts — not requirements.</div>
+                            <div class="fasttrack-cmd"><span class="str">"/audit fix"</span>         <span class="cmt"># full scan + autonomous fix</span>
+<span class="str">"/onboard [repo]"</span>     <span class="cmt"># LENS analysis of any codebase</span>
+<span class="str">"/implement [feature]"</span> <span class="cmt"># TDD-first build</span>
+<span class="str">"/health"</span>              <span class="cmt"># orchestrator health check</span></div>
+                        </div>
+
+                    </div><!-- /fasttrack-grid -->
+
+                    <!-- MCP config reference -->
+                    <div class="glass-card p-6 space-y-3 border-violet-500/20">
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-violet-400 mb-1">MCP Config — .vscode/settings.json (auto-generated by setup-mcp.py)</div>
+                        <div class="code-block text-sm">{
+  <span class="code-str">"github.copilot.chat.mcpServers"</span>: {
+    <span class="code-str">"cortex"</span>: {
+      <span class="code-str">"command"</span>: <span class="code-str">"python3"</span>,
+      <span class="code-str">"args"</span>: [<span class="code-str">"-m"</span>, <span class="code-str">"cortex.mcp"</span>],
+      <span class="code-str">"transport"</span>: <span class="code-str">"stdio"</span>,
+      <span class="code-str">"cwd"</span>: <span class="code-str">"${workspaceFolder}"</span>
+    }
+  }
+}</div>
+                        <p class="text-sm text-slate-500">Pylance-style stdio transport. No ports exposed. No Docker. Process lifecycle managed by VS Code. 30+ tools auto-register on workspace open.</p>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -1352,6 +2230,38 @@
             lucide.createIcons();
             initIDEToggle();
         };
+
+        /* ─── PATH SELECTION ───────────────────────────────────────── */
+        function selectPath(path) {
+            const viewA  = document.getElementById('path-view-a');
+            const viewB  = document.getElementById('path-view-b');
+            const btnA   = document.getElementById('path-btn-a');
+            const btnB   = document.getElementById('path-btn-b');
+
+            // Hide both, clear active
+            [viewA, viewB].forEach(v => v.classList.remove('active'));
+
+            // Dim non-selected tile
+            [btnA, btnB].forEach(b => b.style.opacity = '0.55');
+
+            if (path === 'a') {
+                viewA.classList.add('active');
+                btnA.style.opacity = '1';
+                btnB.style.opacity = '0.55';
+            } else {
+                viewB.classList.add('active');
+                btnB.style.opacity = '1';
+                btnA.style.opacity = '0.55';
+            }
+
+            // Scroll to the view that just appeared — smooth, offset for sticky nav
+            const targetId = path === 'a' ? 'path-view-a' : 'path-view-b';
+            const target = document.getElementById(targetId);
+            if (target) {
+                const top = target.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        }
 
         function initIDEToggle() {
             const btns = document.querySelectorAll('.ide-toggle-btn');

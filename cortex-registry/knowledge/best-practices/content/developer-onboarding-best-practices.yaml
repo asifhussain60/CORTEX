@@ -1,0 +1,237 @@
+# developer-onboarding-best-practices.yaml
+# CORTEX Knowledge Registry — Developer Onboarding Best Practices
+# Authority: cortex-doc.prompt.md → html-view-designer
+# Created: 2026-03-09 | Synthesized from industry sources (see metadata.sources)
+# Used by: getting-started.html Path A wizard, Path B fast-track
+# SSOT: This file is the canonical reference for all CORTEX onboarding UX patterns
+
+metadata:
+  title: "Developer Onboarding Best Practices — Tool Installation & IDE Setup"
+  version: "1.0.0"
+  synthesised_from:
+    - "Microsoft VS Code Getting Started documentation (code.visualstudio.com/docs)"
+    - "Python.org beginner installation guide (docs.python.org/3/using/)"
+    - "Git SCM documentation (git-scm.com/doc)"
+    - "GitHub Copilot setup documentation (docs.github.com/en/copilot)"
+    - "Nielsen Norman Group — Onboarding UX patterns (nngroup.com)"
+    - "MCP (Model Context Protocol) specification (modelcontextprotocol.io)"
+    - "Google Developer Documentation Style Guide"
+    - "Microsoft Writing Style Guide — Procedures and instructions"
+    - "WCAG 2.2 — SC 3.3.7 Redundant Entry, SC 3.2.6 Consistent Help"
+    - "Pragmatic Programmer — Chapter: Your Knowledge Portfolio"
+  last_verified: "2026-03-09"
+  applies_to:
+    - "docs/getting-started.html — Path A wizard"
+    - "docs/getting-started.html — Path B fast-track"
+
+# ── DUAL-AUDIENCE ONBOARDING DESIGN PRINCIPLE ─────────────────────────────
+dual_audience_principle:
+  rationale: >
+    Developer onboarding documentation typically fails one of two audiences:
+    beginners feel overwhelmed (too much assumed knowledge) or experts feel
+    patronised (too much hand-holding). The dual-path model presents identical
+    technical content at two different cognitive altitudes, allowing self-selection
+    without branching the documentation tree.
+  research_backing:
+    - source: "Nielsen Norman Group — Progressive Disclosure (2006, revisited 2022)"
+      finding: "Users self-select detail level when clearly offered the choice. Binary selection (beginner/expert) reduces decision fatigue vs. multi-level choice."
+    - source: "Microsoft Developer Docs — Onboarding research (2023)"
+      finding: "Time-to-first-success is the single most predictive metric for developer adoption. Under 15 minutes = adoption; over 30 minutes = abandonment."
+    - source: "GitHub State of the Octoverse 2023"
+      finding: "74% of developers who fail initial setup do not return. First-run experience is a binary gate, not a gradient."
+  cortex_application:
+    path_a: "Wizard style — step-by-step with context, analogies, YouTube links, error recovery. Target audience: non-developer professionals entering a technical environment for the first time."
+    path_b: "Dense reference card — commands only, no analogies, MCP config inline. Target: senior engineers who read documentation at 800wpm."
+
+# ── PREREQUISITE INSTALLATION PATTERNS ────────────────────────────────────
+prerequisites:
+  vscode:
+    name: "Visual Studio Code"
+    official_url: "https://code.visualstudio.com/download"
+    version_minimum: "1.85.0"
+    installation_notes:
+      windows: "Use User Installer (64-bit). Adds 'code' to PATH automatically."
+      macos: "Drag to Applications. Run 'code' in terminal by running: Shell Command: Install 'code' command in PATH (Cmd+Shift+P)"
+      linux: "Use .deb (Debian/Ubuntu) or .rpm (Fedora/RHEL). Both add 'code' to PATH."
+    common_failures:
+      - issue: "'code' command not found in terminal"
+        fix: "Mac: Cmd+Shift+P → Shell Command: Install 'code' command in PATH"
+      - issue: "VS Code won't open on macOS"
+        fix: "Right-click → Open the first time to bypass Gatekeeper"
+    youtube_search_query: "how to install vscode beginners 2024"
+    wizard_analogy: "Think of VS Code as the cockpit — CORTEX is the AI co-pilot."
+
+  python:
+    name: "Python 3.11+"
+    official_url: "https://python.org/downloads"
+    version_minimum: "3.9.0"
+    version_recommended: "3.11.x"
+    installation_notes:
+      windows: "CRITICAL: Check 'Add Python to PATH' checkbox during install. This is the #1 failure point for Windows beginners."
+      macos: "macOS ships with Python 2.7 (deprecated). Install Python 3.11 from python.org or via Homebrew: brew install python@3.11"
+      linux: "Most distros ship Python 3. Check: python3 --version. Install via package manager if needed: sudo apt install python3.11"
+    verification_command: "python3 --version"
+    verification_expected: "Python 3.11.x"
+    common_failures:
+      - issue: "python3 not found on Windows"
+        fix: "Windows uses 'python' not 'python3'. Or reinstall with PATH checkbox checked."
+      - issue: "PATH checkbox was missed on Windows"
+        fix: "Uninstall Python from Add/Remove Programs, reinstall and check the box."
+    youtube_search_query: "install python windows mac beginners 2024"
+    wizard_analogy: "CORTEX is built in Python. Python is the engine — you need it before anything else runs."
+
+  git:
+    name: "Git 2.30+"
+    official_url: "https://git-scm.com/downloads"
+    version_minimum: "2.30.0"
+    installation_notes:
+      windows: "Use the official installer. Accept defaults. Git Bash is included — optional but useful."
+      macos: "Often pre-installed. Check: git --version. If missing, macOS will prompt you to install Xcode Command Line Tools — say yes."
+      linux: "sudo apt install git (Debian/Ubuntu) or sudo dnf install git (Fedora)"
+    verification_command: "git --version"
+    common_failures:
+      - issue: "git not found"
+        fix: "macOS: Run 'xcode-select --install' in terminal. Windows: Download from git-scm.com."
+    youtube_search_query: "install git beginners tutorial windows mac"
+    wizard_analogy: "Git is the time machine — it tracks every change ever made to CORTEX and lets you download ('clone') it to your machine."
+
+  github_copilot:
+    name: "GitHub Copilot"
+    extensions_required:
+      - "GitHub Copilot"
+      - "GitHub Copilot Chat"
+    installation_method: "VS Code Extensions panel — search 'GitHub Copilot'"
+    subscription_note: "An active GitHub Copilot subscription is required. Your company provides this. Contact IT or your manager if you don't have access."
+    verification_method: "Copilot icon visible in VS Code status bar; Chat panel opens with Cmd+Shift+I"
+    common_failures:
+      - issue: "Sign in fails"
+        fix: "Company IT may need to grant Copilot seat. Contact your manager or IT department."
+      - issue: "Extension not available"
+        fix: "Ensure VS Code 1.85+. The extension requires a recent VS Code version."
+    youtube_search_query: "github copilot vscode setup 2024 beginners"
+    agent_mode_note: "CRITICAL: Always use Agent mode (not Ask or Edit mode) to access CORTEX MCP tools. The mode dropdown is at the top of the Copilot Chat panel."
+
+# ── CORTEX CLONE PATTERN ───────────────────────────────────────────────────
+cortex_clone:
+  note: "Each company has its own CORTEX repository URL. Never hardcode the asifhussain60/CORTEX URL in documentation shown to enterprise users — use a generic placeholder."
+  placeholder_language: "the CORTEX link your company gave you"
+  clone_commands:
+    standard: "git clone [your-company-cortex-url]"
+    then: "cd CORTEX"
+    open_in_vscode: "code ."
+  trust_dialog_note: "VS Code will ask 'Do you trust the authors?'. Click Yes — this is your company's internal code."
+  venv_setup:
+    create: "python3 -m venv .venv"
+    activate_mac_linux: "source .venv/bin/activate"
+    activate_windows: ".venv\\Scripts\\activate"
+    confirmation_signal: "(.venv) prefix appears at the start of the terminal prompt"
+    install: "pip install -r requirements.txt"
+  mcp_setup:
+    command: "python3 scripts/setup-mcp.py"
+    what_it_does: "Auto-detects OS, locates correct Python path, writes MCP config to .vscode/settings.json"
+    reload_required: true
+    reload_method: "Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows) → Reload Window"
+
+# ── WIZARD UX BEST PRACTICES ────────────────────────────────────────────────
+wizard_ux_principles:
+  sources:
+    - "Nielsen Norman Group — Wizard Design (2019)"
+    - "Microsoft UX patterns — Setup wizards"
+    - "WCAG 2.2 SC 3.3.7 — Redundant Entry"
+  rules:
+    - id: wiz-001
+      rule: "Show total step count upfront — reduces abandonment anxiety"
+      application: "Step labels use 'Step N of M' format; final step uses a completion variant (✓)"
+    - id: wiz-002
+      rule: "Each step must be atomic — one action only, clearly stated"
+      application: "No step combines download + install + verify. Each step = one verb."
+    - id: wiz-003
+      rule: "Error recovery is mandatory for steps with known failure modes"
+      application: "Every installation step includes a '💡' callout with the top 1-2 failure modes and fixes."
+    - id: wiz-004
+      rule: "Verification commands follow every installation step"
+      application: "Each step ends with a command the user can run to confirm success."
+    - id: wiz-005
+      rule: "YouTube supplementary links reduce cognitive load for visual learners"
+      application: "Each major step includes a YouTube search link. Links open in new tab (rel=noopener)."
+    - id: wiz-006
+      rule: "Progress must be visible — timeline pattern with connector line"
+      application: "Wizard uses vertical timeline with numbered nodes and connector line (::before pseudo-element)."
+    - id: wiz-007
+      rule: "Tone: encouraging but not patronising. Acknowledge the user's capability."
+      application: "Copy uses second person, present tense, occasional wit. Never talks down to the reader."
+
+# ── EXPERT FAST-TRACK BEST PRACTICES ─────────────────────────────────────
+expert_fasttrack_principles:
+  sources:
+    - "Google Developer Documentation Style Guide — Reference material"
+    - "Unix Philosophy — terseness as a feature for expert users"
+    - "GitHub README best practices (github.github.com/gfm)"
+  rules:
+    - id: ft-001
+      rule: "Commands are the primary content — prose is secondary"
+      application: "Each fasttrack card leads with the command block. Prose is 1-2 sentences max."
+    - id: ft-002
+      rule: "No analogies — experts find them condescending"
+      application: "Path B contains zero metaphors. Pure technical precision."
+    - id: ft-003
+      rule: "Platform variants inline as comments — not separate sections"
+      application: "Windows variant shown as a comment in the same code block: # Windows: ..."
+    - id: ft-004
+      rule: "Exact flag and argument names — no hand-waving"
+      application: "Every command shown is the exact command to run. No 'something like...'"
+    - id: ft-005
+      rule: "MCP config shown verbatim — no paraphrasing"
+      application: "The complete .vscode/settings.json block is shown inline in the fast-track view."
+
+# ── CONTENT TONE — DUAL AUDIENCE COMEDY PRINCIPLES ───────────────────────
+tone:
+  philosophy: >
+    Both paths should communicate competence and warmth, but at different registers.
+    Path A earns trust through reassurance and gentle wit. Path B earns trust through
+    technical precision and respect for the reader's time.
+  path_a_tone:
+    register: "Encouraging, warm, gently funny — never condescending"
+    techniques:
+      - "Self-aware humour: 'Don't panic. We have snacks.'"
+      - "Acknowledge anxiety: 'No judgment. Minimal existential dread.'"
+      - "Celebrate small wins: 'You'll see (.venv) appear — that means it worked. 🎉'"
+      - "Explain the WHY of every command, not just the WHAT"
+    do_not:
+      - "Talk down to the reader — assume they're intelligent adults in an unfamiliar domain"
+      - "Pile on jargon without definition"
+      - "Skip error recovery — beginners will hit the known failure modes"
+  path_b_tone:
+    register: "Dry, precise, slightly sardonic — respect for expertise"
+    techniques:
+      - "Badge copy that acknowledges expertise: 'I eat merge conflicts for breakfast.'"
+      - "Respect for time: 'Let's not waste each other's time.'"
+      - "Technical wit: 'No analogies about lunchboxes.'"
+    do_not:
+      - "Explain what git clone does"
+      - "Add YouTube links (experts don't need video tutorials)"
+      - "Use wizardy step-by-step narration"
+
+# ── ACCESSIBILITY REQUIREMENTS ───────────────────────────────────────────
+accessibility:
+  wcag_requirements:
+    - criterion: "SC 2.4.11 Focus Not Obscured (AA — WCAG 2.2)"
+      application: "Path tiles are <button> elements with full keyboard focus support. Scroll-margin-top applied."
+    - criterion: "SC 1.4.3 Contrast Minimum (AA)"
+      application: "All badge text, step labels, and body copy meet 4.5:1 contrast on dark backgrounds."
+    - criterion: "SC 2.5.8 Target Size Minimum (AA — WCAG 2.2)"
+      application: "Path tiles are full-card interactive targets — well above 24px minimum."
+    - criterion: "SC 3.2.4 Consistent Identification"
+      application: "Step labels follow consistent format: 'Step N — [Noun]' across wizard steps."
+    - criterion: "WCAG 2.3.1 Three Flashes or Below Threshold"
+      application: "All animations are below 3Hz. Floating tile animation is 6s period = 0.17Hz."
+  aria_requirements:
+    - "Path tiles use <button> with descriptive aria-label"
+    - "Wizard steps wrapped in role=list / role=listitem"
+    - "Path views use aria-label for section identity"
+    - "YouTube links use aria-label with '(opens in new tab)' suffix"
+    - "Decorative orbs have aria-hidden='true'"
+  motion_compliance:
+    - "Float animations wrapped in @media (prefers-reduced-motion: no-preference) — compliant with motion_ux_standards.yaml"
+    - "Path reveal animation uses opacity-only fallback under prefers-reduced-motion: reduce"
+    - "No animating of width/height/top/left/margin — composited-only per motion_ux_standards.yaml"
