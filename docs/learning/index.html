@@ -132,15 +132,8 @@
             text-decoration: none;
             flex-shrink: 0;
         }
-        .cortex-header-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.35));
-            transition: filter 0.3s ease;
-        }
-        .cortex-header-brand:hover .cortex-header-logo {
-            filter: drop-shadow(0 0 14px rgba(0, 212, 255, 0.65));
+        .cortex-header-brand:hover .cortex-header-wordmark {
+            color: rgba(255, 255, 255, 1);
         }
         .cortex-header-wordmark {
             font-family: 'Space Grotesk', sans-serif;
@@ -318,7 +311,6 @@
     <header class="cortex-site-header" role="banner">
         <div class="cortex-header-inner">
             <a href="../index.html" class="cortex-header-brand" aria-label="CORTEX Home">
-                <img src="../assets/images/cortex-logo-64.png" alt="CORTEX" class="cortex-header-logo" width="32" height="32"/>
                 <span class="cortex-header-wordmark">CORTEX<span>AI Engineering Framework</span></span>
             </a>
             <button class="cortex-header-nav-toggle" id="cortex-nav-toggle" aria-controls="cortex-site-nav" aria-expanded="false" aria-label="Toggle navigation">

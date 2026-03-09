@@ -2188,17 +2188,48 @@
             </div>
 
             <!-- Tip callout -->
-            <div class="glass-card p-5 md:p-7 space-y-3 border-amber-500/20">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="lightbulb" class="w-5 h-5"></i></div>
-                    <div>
-                        <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Pro Tip</div>
-                        <h4 class="font-bold text-base tracking-tight">You don't need to memorise these</h4>
+            <div class="relative group mt-6">
+                <!-- Ambient glow backing — composited opacity only; transition declared in style block below -->
+                <div class="absolute -inset-px bg-gradient-to-br from-amber-500/25 via-orange-500/10 to-amber-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100" style="transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);"></div>
+
+                <div class="relative glass-card border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/40 via-slate-900/70 to-amber-950/30 overflow-hidden rounded-2xl">
+                    <!-- Decorative left accent bar -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 via-orange-400 to-amber-600 rounded-l-2xl"></div>
+
+                    <!-- Top-edge shimmer -->
+                    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent"></div>
+
+                    <div class="pl-6 pr-5 md:pr-8 py-5 md:py-7 flex flex-col md:flex-row md:items-start gap-5">
+
+                        <!-- Icon cluster -->
+                        <div class="flex-shrink-0">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center relative" style="background: radial-gradient(circle at 40% 40%, rgba(251,191,36,0.25), rgba(251,191,36,0.08)); border: 1px solid rgba(251,191,36,0.3); box-shadow: 0 0 20px rgba(251,191,36,0.2);">
+                                <i data-lucide="lightbulb" class="w-7 h-7 text-amber-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Text content -->
+                        <div class="flex-1 min-w-0 space-y-2.5">
+                            <!-- Badge + heading row -->
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest text-amber-400 border border-amber-500/40" style="background: rgba(251,191,36,0.12);">
+                                    <i data-lucide="zap" class="w-3 h-3"></i>
+                                    Pro Tip
+                                </span>
+                                <h4 class="text-lg font-bold tracking-tight text-white">You don't need to memorise these</h4>
+                            </div>
+
+                            <!-- Body copy — 16px floor -->
+                            <p class="text-base text-slate-300 leading-relaxed max-w-4xl">
+                                CORTEX understands natural language. Instead of typing
+                                <code class="inline-flex items-center px-2 py-0.5 rounded-md text-sm font-mono font-bold text-amber-300 border border-amber-500/30" style="background: rgba(251,191,36,0.1);">/implement</code>,
+                                you can say
+                                <code class="inline-flex items-center px-2 py-0.5 rounded-md text-sm font-mono font-bold text-amber-300 border border-amber-500/30" style="background: rgba(251,191,36,0.1);">"Build user email verification with TDD"</code>
+                                — the Intent Router classifies your request and routes it to the right orchestrator automatically. The commands above are shortcuts, not requirements.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <p class="text-[14px] text-slate-400 leading-relaxed max-w-4xl">
-                    CORTEX understands natural language. Instead of typing <code class="text-amber-400">/implement</code>, you can say <code class="text-amber-400">"Build user email verification with TDD"</code> — the Intent Router classifies your request and routes it to the right orchestrator automatically. The commands above are shortcuts, not requirements.
-                </p>
             </div>
         </section>
 
