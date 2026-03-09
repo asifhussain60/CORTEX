@@ -28,27 +28,27 @@ Business leaders understand how CORTEX translates engineering discipline into me
 
 ### Scene 1 — The Boardroom Problem (90s) [VBP-002 hook, VBP-006 contrast]
 **Visual:** Animated boardroom dashboard — red KPIs blinking: "Rework: 38%", "Escaped Defects: 12/sprint", "Compliance Gaps: Unknown". A clock ticks. Glass panel cracks form on each metric.
-**Narration:** Your engineering team ships fast. But how much of that velocity is real? Industry data shows 23–42% of engineering effort is rework — code that passed review but failed in production. Without governance, AI amplifies this: faster code, faster mistakes, faster debt.
-**Animation:** Each red KPI shatters and reassembles as a green metric when "CORTEX" text sweeps across: "Rework: 8%", "Escaped Defects: 1/sprint", "Compliance: 100% Auditable". [VBP-016: bold **rework**, **governance**, **debt**]
+**Narration:** Your engineering team ships fast. But how much of that velocity is real? Industry data suggests 23–42% of engineering effort is rework — code that passed review but failed in production. Without governance, AI can amplify this: faster code, faster mistakes, faster debt.
+**Animation:** Each red KPI shatters and reassembles as a green metric when "CORTEX" text sweeps across: "Rework: 8%", "Escaped Defects: 1/sprint", "Compliance: Auditable". [VBP-016: bold **rework**, **governance**, **debt**]
 
 ### Scene 2 — Understand: Full Visibility (100s) [VBP-015 breadcrumb: ●○○]
-**Visual:** Animated org-chart morphs into a real-time intelligence dashboard. LENS pipeline streams data into donut charts: code health, test coverage, security posture. Each metric animates from 0 to its value.
-**Narration:** CORTEX gives leaders what spreadsheets cannot — real-time engineering intelligence. The LENS system — Language, Examination, Navigation, Synthesis — continuously analyses 330+ orchestrator dimensions. You see code health, not status reports. Drucker said: "What gets measured gets managed." CORTEX measures everything.
-**Animation:** Breadcrumb: "Full Visibility" bright, others dim. Dashboard tiles flip from "Unknown" to live values with counting animations.
+**Visual:** Animated org-chart morphs into a real-time intelligence dashboard. LENS pipeline streams data into donut charts: code health, test coverage, security posture. Each metric animates from 0 to its value. A small "Knowledge Base" icon (bookshelf) appears in the dashboard corner — labelled "80+ best practices, 14 domains".
+**Narration:** CORTEX gives leaders what spreadsheets cannot — real-time engineering intelligence. The LENS system — Language, Examination, Navigation, Synthesis — continuously analyses over 350 orchestrator dimensions across your codebase. Behind it sits a curated knowledge repository spanning security, architecture, testing, and compliance — over 80 structured best-practice files that your teams consult automatically, not buried in a wiki. You see code health, not status reports. Drucker said: "What gets measured gets managed." CORTEX is designed to measure what matters.
+**Animation:** Breadcrumb: "Full Visibility" bright, others dim. Dashboard tiles flip from "Unknown" to live values with counting animations. Knowledge bookshelf pulses briefly to reinforce the curated intelligence layer.
 
 ### Scene 3 — Empower: Every Role Delivers (120s) [VBP-015 breadcrumb: ✅●○]
 **Visual:** Four vertical lanes (swim lanes) animate: Business Leader → Product Owner → Engineer → QA. Requests flow top-to-bottom through each lane. At each stage, CORTEX icons (brain, shield, test tube) validate the work. Bottlenecks dissolve with cyan pulse effects.
-**Narration:** CORTEX is not just an engineering tool. Product owners get code-backed estimates — acceptance criteria trace directly to tested implementations. Engineers get governed TDD pipelines. Security gets five-layer protection embedded at every stage. Every role operates from the same source of truth.
-**Animation:** Each lane shows a mini-workflow: PO lane shows AC→code traceability line; Engineer lane shows RED→GREEN→REFACTOR cycle; QA lane shows convergence gate loop; Leader lane shows audit trail scrolling. Covey pill: "Begin with the end in mind."
+**Narration:** CORTEX is not just an engineering tool. Product owners get code-backed estimates — acceptance criteria trace directly to tested implementations. Engineers get governed TDD pipelines. Security gets five-layer protection embedded at every stage. Every role operates from the same source of truth — powered by the same curated knowledge base.
+**Animation:** Each lane shows a mini-workflow: PO lane shows AC→code traceability line; Engineer lane shows RED→GREEN→REFACTOR cycle; QA lane shows convergence gate loop; Leader lane shows audit trail scrolling. Intelligence Diamond (3-tier) appears briefly between the swim lanes — Skull (rules) → Core (patterns) → Cortex (strategy). Covey pill: "Begin with the end in mind."
 
 ### Scene 4 — Build: Zero Escaped Defects (120s) [VBP-015 breadcrumb: ✅✅●]
 **Visual:** 9-stage audit pipeline animates as a horizontal conveyor belt. Each stage is a station with a glowing icon. A "code package" moves through each station — stamps of approval animate at each stage. Final station: green "✅ PRODUCTION READY" seal.
-**Narration:** The 9-stage audit pipeline scans, fixes, and rescans until zero critical violations remain. This is not a one-pass check — it is a convergence guarantee. 60+ governance rules enforced automatically. Every commit carries an audit trail. When regulators ask for evidence, CORTEX delivers it in seconds, not weeks.
+**Narration:** The 9-stage audit pipeline scans, fixes, and rescans until zero critical violations remain. This is not a one-pass check — it is a convergence loop designed to iterate until clean. Over 50 governance rules enforced automatically. Every commit carries an audit trail. When regulators ask for evidence, CORTEX is designed to deliver it in seconds, not weeks.
 **Animation:** Code package pauses at each station: static analysis → test → security → lint → convergence loop (cycles 2x) → certification stamp. Counter: "Violations: 7→3→0". Final seal animation with gold confetti. Collins pill: "Discipline is the bridge between goals and accomplishment."
 
 ### Scene 5 — The ROI (90s) [VBP-011 strategic silence]
 **Visual:** Animated bar chart — "Before CORTEX" (tall red bars: rework, escaped defects, compliance effort) vs "With CORTEX" (short green bars). ROI counter animates upward: "$2.4M/year saved". TCO dashboard materialises below.
-**Narration:** The mathematics is clear. Shift-left economics show that catching a defect in development costs 6x less than in production. Automated compliance eliminates manual audit preparation. Predictable delivery means accurate forecasts — no more last-sprint heroics.
+**Narration:** The mathematics is compelling. Shift-left economics suggest that catching a defect in development costs significantly less than in production. Automated compliance is designed to reduce manual audit preparation. Predictable delivery means accurate forecasts — no more last-sprint heroics.
 **Animation:** [1.5s SILENCE after ROI counter stops]. Tagline: "ROI. Compliance. Predictable Delivery." Logo fade.
 
 ---
@@ -76,6 +76,6 @@ Business leaders understand how CORTEX translates engineering discipline into me
 Corporate ambient ~65 BPM. Confident, not aggressive. Silence at ROI reveal.
 
 ## 🧭 Mission Alignment
-- **Understand Everything:** Scene 2 — LENS-powered dashboards, real-time visibility
-- **Empower Everyone:** Scene 3 — 4 swim lanes, cross-role delivery intelligence
-- **Build Fearlessly:** Scene 4 — 9-stage audit, convergence guarantee, zero escaped defects
+- **Understand Everything:** Scene 2 — LENS-powered dashboards, real-time visibility, curated knowledge repository (80+ files, 14 domains)
+- **Empower Everyone:** Scene 3 — 4 swim lanes, Intelligence Diamond (3-tier), cross-role delivery intelligence
+- **Build Fearlessly:** Scene 4 — 9-stage audit, convergence loop, over 50 governance rules, zero escaped defects

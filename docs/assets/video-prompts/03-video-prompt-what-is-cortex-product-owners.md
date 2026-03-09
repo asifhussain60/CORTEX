@@ -17,7 +17,7 @@
 
 ## 🎯 Learning Objective
 
-Product owners understand how CORTEX transforms the requirements-to-delivery pipeline: acceptance criteria trace to tested code, estimates are code-backed, and sweep completeness guarantees nothing is half-done.
+Product owners understand how CORTEX is designed to transform the requirements-to-delivery pipeline: acceptance criteria trace to tested code, estimates are code-backed, and sweep completeness is engineered to prevent half-done work.
 
 ---
 
@@ -28,27 +28,27 @@ Product owners understand how CORTEX transforms the requirements-to-delivery pip
 
 ### Scene 1 — The PO's Nightmare (90s) [VBP-002 hook, VBP-006 contrast]
 **Visual:** Animated Kanban board. Cards pile up in "In Progress" — none reach "Done". A stakeholder avatar taps foot impatiently. Acceptance criteria float as translucent sticky notes — disconnected from code. Red threads try to connect ACs to code but snap.
-**Narration:** You wrote perfect acceptance criteria. The sprint ends. The demo fails. Why? Because there is no traceable connection between what you defined and what was built. Estimates were guesses. "Done" meant "it compiled." The gap between intent and delivery is where trust erodes.
-**Animation:** Snapping threads animate with red sparks. Then CORTEX logo sweeps in — threads reconnect as solid emerald lines. ACs snap to code blocks with satisfying click animations. [VBP-016: bold **acceptance criteria**, **traceable**, **trust**]
+**Narration:** You wrote perfect acceptance criteria. The sprint ends. The demo fails. Why? Because there was no traceable connection between what you defined and what was built. Estimates were guesses. "Done" meant "it compiled." The gap between intent and delivery is where trust erodes. And the best practices to prevent this? They exist — but they are scattered across wikis, retros, and the memories of engineers who moved on.
+**Animation:** Snapping threads animate with red sparks. Then CORTEX logo sweeps in — threads reconnect as solid emerald lines. ACs snap to code blocks with satisfying click animations. A small knowledge-library icon glows briefly — curated delivery practices, instantly available. [VBP-016: bold **acceptance criteria**, **traceable**, **trust**]
 
 ### Scene 2 — Understand: Requirements Intelligence (100s) [VBP-015 breadcrumb: ●○○]
 **Visual:** A user story card enlarges. CORTEX LENS pipeline analyses it — extracting entities, dependencies, risks. A "Complexity Score" dial animates from 0 to 7. Suggested sub-tasks materialise as child cards connected by emerald lines.
-**Narration:** CORTEX reads your requirements the way a senior architect would — but in seconds. The LENS system — Language, Examination, Navigation, Synthesis — identifies hidden dependencies, estimates complexity, and suggests decomposition. No more sprint-planning poker based on gut feel.
+**Narration:** CORTEX reads your requirements the way a senior architect would — but in seconds. The LENS system — Language, Examination, Navigation, Synthesis — identifies hidden dependencies, estimates complexity, and suggests decomposition. Behind LENS, over 80 curated knowledge files surface best practices for testing, architecture, and integration — matched to your story's context. No more sprint-planning poker based on gut feel.
 **Animation:** Breadcrumb: "Requirements Intelligence" bright. Complexity dial needle swings with physics-based easing. Child cards drop in sequentially with bounce animation. Each shows a mini-icon: test tube, shield, code bracket.
 
 ### Scene 3 — Empower: AC-to-Code Traceability (120s) [VBP-015 breadcrumb: ✅●○]
 **Visual:** Split-screen: LEFT shows acceptance criteria in a glass card. RIGHT shows code editor. As each AC is highlighted on the left, corresponding test code illuminates on the right with a green connection line. A "Coverage: 100%" badge pulses.
-**Narration:** Every acceptance criterion you write becomes a traceable contract. CORTEX generates test scaffolds directly from your ACs. The Definition of Ready becomes a machine-readable gate — not a checkbox ritual. When you ask "is this done?", the system shows you proof: every AC mapped to a passing test.
+**Narration:** Every acceptance criterion you write becomes a traceable contract. CORTEX generates test scaffolds directly from your ACs. The Definition of Ready becomes a machine-readable gate — not a checkbox ritual. The Intelligence Diamond works across three tiers — static rules, pattern recognition, and strategic reasoning — so when you ask "is this done?", the system shows you proof: every AC mapped to a passing test.
 **Animation:** AC text highlights one-by-one in emerald. Connection lines draw from left to right with trail animation. Test results animate: ✅✅✅. Coverage badge fills like a progress ring. Quote pill: "Begin with the end in mind." — Covey
 
 ### Scene 4 — Build: Sweep Completeness (120s) [VBP-015 breadcrumb: ✅✅●]
 **Visual:** Animated pipeline: Requirements → TDD Red → TDD Green → Refactor → Convergence Gate → Certification. A "sweep catalogue" sidebar shows all issues found — each gets a status: OPEN→IN PROGRESS→CLOSED. The list animates from top to bottom, every item reaching CLOSED.
-**Narration:** CORTEX enforces sweep completeness — every issue in a fix or refactor must be resolved, not just the first three. The convergence gate loops: detect, fix, rescan — until zero remain. Partial fixes are governance violations. Your sprint output is either fully done or transparently in progress.
+**Narration:** CORTEX enforces sweep completeness — every issue in a fix or refactor is designed to be resolved, not just the first three. The convergence gate loops: detect, fix, rescan — until zero remain. Partial fixes are governance violations. Your sprint output is either fully done or transparently in progress.
 **Animation:** Pipeline stages light up left-to-right. Sweep catalogue items flip from red OPEN to amber IN PROGRESS to green CLOSED with satisfying card-flip animation. Final counter: "0 remaining". Gold seal stamps "SWEEP COMPLETE". [VBP-016: bold **sweep completeness**, **convergence**, **zero remain**]
 
 ### Scene 5 — The PO Superpower (60s) [VBP-011 strategic silence]
 **Visual:** Kanban board transforms — all cards flow smoothly to "Done". Stakeholder avatar smiles. A delivery metrics dashboard animates: "Sprint Predictability: 94%", "AC Coverage: 100%", "Escaped Defects: 0".
-**Narration:** With CORTEX, you stop being a translator between business and engineering. You become the architect of delivery confidence. Every story has proof. Every sprint has predictability. Every stakeholder meeting has evidence.
+**Narration:** With CORTEX, you stop being a translator between business and engineering. You become the architect of delivery confidence. Every story has proof. Every sprint has predictability. Every stakeholder meeting has evidence. What would you build if you knew nothing would fall through the cracks?
 **Animation:** [1.5s SILENCE]. Tagline: "From Backlog to Verified Delivery." Logo fade.
 
 ---
@@ -76,6 +76,6 @@ Product owners understand how CORTEX transforms the requirements-to-delivery pip
 Bright ambient ~70 BPM. Energetic but controlled. Silence at delivery metrics reveal.
 
 ## 🧭 Mission Alignment
-- **Understand Everything:** Scene 2 — LENS analyses requirements, complexity scoring
-- **Empower Everyone:** Scene 3 — AC-to-code traceability, proof-based "done"
-- **Build Fearlessly:** Scene 4 — Sweep completeness, convergence guarantee, zero partial fixes
+- **Understand Everything:** Scene 2 — LENS analyses requirements, complexity scoring, 80+ curated knowledge files
+- **Empower Everyone:** Scene 3 — AC-to-code traceability, Intelligence Diamond (3-tier), proof-based "done"
+- **Build Fearlessly:** Scene 4 — Sweep completeness, convergence loop, zero partial fixes

@@ -17,7 +17,7 @@
 
 ## 🎯 Learning Objective
 
-Quality engineers understand how CORTEX transforms testing from an afterthought into infrastructure: TDD is mandatory, golden tests solve the right problem, the convergence gate eliminates partial fixes, and quality scoring makes test health measurable.
+Quality engineers understand how CORTEX is designed to transform testing from an afterthought into infrastructure: TDD is mandatory, golden tests guard critical business rules, the convergence gate targets partial fixes, and quality scoring makes test health measurable.
 
 ---
 
@@ -32,13 +32,13 @@ Quality engineers understand how CORTEX transforms testing from an afterthought 
 **Animation:** Inverted pyramid rotates and corrects itself — unit tests grow, E2E shrinks. Flaky icons stop blinking. Skip count drops to 0. Coverage morphs from "34%" to "96%". [VBP-016: bold **confidence**, **flaky**, **meaningful**]
 
 ### Scene 2 — Understand: Quality Intelligence (100s) [VBP-015 breadcrumb: ●○○]
-**Visual:** A test file opens. CORTEX analyses it through 5 quality dimensions — each represented by a radar chart axis: Coverage, Mutation Score, Assertion Density, Edge Case Coverage, Performance. The radar fills in, dimension by dimension. A composite "Quality Score: 87/100" badge materialises with gold glow.
-**Narration:** CORTEX does not count tests — it scores them. Five dimensions of quality: coverage breadth, mutation resistance, assertion density, edge case coverage, and performance regression detection. Every test file gets a composite quality score. You see exactly where your test suite is strong and where it is fragile.
-**Animation:** Breadcrumb: "Quality Intelligence" bright. Radar chart axes extend one-by-one with smooth easing. Score counter animates 0→87. Dimension labels pulse gold on mention. Weak axis (edge cases) flashes amber as a growth opportunity.
+**Visual:** A test file opens. CORTEX analyses it through 5 quality dimensions — each represented by a radar chart axis: Coverage, Mutation Score, Assertion Density, Edge Case Coverage, Performance. The radar fills in, dimension by dimension. A composite "Quality Score: 87/100" badge materialises with gold glow. A knowledge repository callout appears: "Testing best practices, TDD strategy matrix, test category definitions — curated and versioned."
+**Narration:** CORTEX does not count tests — it scores them. Five dimensions of quality: coverage breadth, mutation resistance, assertion density, edge case coverage, and performance regression detection. Every test file gets a composite quality score. Behind this analysis sits a curated testing knowledge base — TDD best practices, test strategy matrices, and test category definitions — drawn from a repository of over 80 best-practice files across 14 engineering domains. You see exactly where your test suite is strong and where it is fragile.
+**Animation:** Breadcrumb: "Quality Intelligence" bright. Radar chart axes extend one-by-one with smooth easing. Score counter animates 0→87. Dimension labels pulse gold on mention. Weak axis (edge cases) flashes amber as a growth opportunity. Knowledge callout pulses briefly.
 
 ### Scene 3 — Empower: Golden Tests + TDD Enforcement (120s) [VBP-015 breadcrumb: ✅●○]
 **Visual:** Split-screen: LEFT shows a "Golden Test" — a test that is architecturally significant, guards a critical business rule. Gold border, gold glow, gold badge: "GOLDEN". RIGHT shows the TDD cycle in miniature: RED (test writes itself from AC), GREEN (implementation satisfies), REFACTOR (optimise). The golden test file has a visible link back to its acceptance criterion.
-**Narration:** Golden tests are not just any test — they guard critical business invariants. CORTEX identifies which tests carry architectural weight and protects them from accidental modification. Meanwhile, TDD enforcement means the test file is always created first. CORE-008 is the most important governance rule: no test, no implementation. Deming said: "Quality is everyone's responsibility." CORTEX makes it enforceable.
+**Narration:** Golden tests are not just any test — they guard critical business invariants. CORTEX identifies which tests carry architectural weight and protects them from accidental modification. Meanwhile, TDD enforcement means the test file is always created first. CORE-008 is the most important governance rule: no test, no implementation. The Intelligence Diamond — three tiers of reasoning — helps determine which tests matter most and which patterns to enforce. Deming said: "Quality is everyone's responsibility." CORTEX is engineered to make it enforceable.
 **Animation:** Golden test card shimmers with subtle gold particle trail. AC→test connection line draws with golden trail. TDD mini-cycle loops: RED flash→GREEN flash→REFACTOR flash. "CORE-008" badge pulses. Deming quote on gold pill.
 
 ### Scene 4 — Build: Convergence + Sweep Completeness (120s) [VBP-015 breadcrumb: ✅✅●]
@@ -48,7 +48,7 @@ Quality engineers understand how CORTEX transforms testing from an afterthought 
 
 ### Scene 5 — Quality as Superpower (60s) [VBP-011 strategic silence]
 **Visual:** Test dashboard: all green. Quality score: 94/100. Zero flaky tests. Zero skipped. A "Confidence Level: HIGH" badge materialises. The QA engineer's avatar nods — the suite tells the truth.
-**Narration:** With CORTEX, quality is not a phase — it is infrastructure. Your test suite becomes documentation. Your coverage becomes confidence. Your team stops asking "did we test enough?" and starts knowing.
+**Narration:** With CORTEX, quality is not a phase — it is infrastructure. Your test suite becomes documentation. Your coverage becomes confidence. Your team stops asking "did we test enough?" and starts knowing. What would your release cycle look like if quality was built into every keystroke?
 **Animation:** [1.5s SILENCE]. Tagline: "Golden Tests. Convergence. Quality as Code." Logo fade.
 
 ---
@@ -77,6 +77,6 @@ Quality engineers understand how CORTEX transforms testing from an afterthought 
 Bright ambient ~65 BPM. Precision-oriented. Gold shimmer sound effects on key metrics. Silence at confidence reveal.
 
 ## 🧭 Mission Alignment
-- **Understand Everything:** Scene 2 — 5-dimension quality scoring, radar analysis
-- **Empower Everyone:** Scene 3 — Golden tests, TDD enforcement, CORE-008
-- **Build Fearlessly:** Scene 4 — Convergence gate, sweep completeness, zero-violation guarantee
+- **Understand Everything:** Scene 2 — 5-dimension quality scoring, radar analysis, curated testing knowledge base (80+ files, 14 domains)
+- **Empower Everyone:** Scene 3 — Golden tests, TDD enforcement, Intelligence Diamond (3-tier), CORE-008
+- **Build Fearlessly:** Scene 4 — Convergence gate, sweep completeness, zero-violation target
