@@ -2640,13 +2640,23 @@
     .ct-video-wrapper {
         position: relative; width: 100%; padding-bottom: 56.25%;
         border-radius: 0.875rem 0.875rem 0 0;
-        overflow: hidden; background: #000; z-index: 2;
+        overflow: hidden; background: #04071a; z-index: 2;
         box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    /* Dark CORTEX-branded placeholder shown before iframe loads */
+    .ct-video-wrapper::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 40%,
+            rgba(0,212,255,0.06) 0%, rgba(4,7,26,1) 70%);
+        z-index: 1; pointer-events: none;
+        border-radius: 0.875rem 0.875rem 0 0;
     }
     .ct-video-wrapper iframe {
         position: absolute; inset: 0;
         width: 100%; height: 100%; border: 0;
         border-radius: 0.875rem 0.875rem 0 0;
+        z-index: 2;
     }
 
     /* ── Chin strip with mock progress bar ── */
@@ -3460,7 +3470,7 @@
                                     <!-- 16:9 YouTube embed -->
                                     <div class="ct-video-wrapper">
                                         <iframe
-                                            src="https://www.youtube.com/embed/ObXKAq-2bIA?rel=0&modestbranding=1&color=white"
+                                            src="https://www.youtube-nocookie.com/embed/HoX1T2D949s?rel=0&modestbranding=1&color=white&iv_load_policy=3"
                                             title="CORTEX — Cognitive Orchestration Real-Time Execution eXpert: Introduction"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen
