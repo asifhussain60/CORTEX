@@ -1657,13 +1657,16 @@
   /* ── Kicker quote ── */
   .macc__kicker {
     font-size: 0.925rem; font-weight: 500; line-height: 1.6;
-    padding: 0.875rem 1rem;
+    padding: 0.875rem 1.25rem;
     border-radius: 0.875rem;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
     display: flex; align-items: flex-start; gap: 0.65rem;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     font-style: italic;
+    /* Full-width when placed directly in macc__body (outside the two-col grid) */
+    width: 100%;
+    box-sizing: border-box;
   }
   .macc__kicker i { font-size: 0.85rem; margin-top: 0.25rem; flex-shrink: 0; opacity: 0.65; }
   .macc[data-accent="cyan"]    .macc__kicker { color: rgba(0,212,255,0.85);   border-color: rgba(0,212,255,0.12);   background: rgba(0,212,255,0.04); }
@@ -2363,13 +2366,8 @@
                       <div class="macc__body-inner">
                         <!-- Left: description -->
                         <div class="macc__desc">
-                          <p>Modern software systems are vast ecosystems — spanning codebases, architectures, dependencies, security risks, workflows, and organisational knowledge. Yet most engineers operate with only fragments of the full picture. CORTEX exists to eliminate that blind spot.</p>
-                          <p>Through universal repository intelligence, architecture analysis, dependency mapping, and contextual knowledge synthesis, CORTEX transforms complex codebases into clear, understandable systems. Engineers gain a 360-degree view of their software — how components interact, where risks exist, and how changes ripple through the system.</p>
-                          <p>Threat models, quality metrics, PR review intelligence, and architectural insights are surfaced automatically — ensuring developers never have to guess about the consequences of their decisions.</p>
-                          <p class="macc__kicker">
-                            <i class="fas fa-quote-left" aria-hidden="true"></i>
-                            It is not enough to do your best; you must know what to do, and then do your best. — W. Edwards Deming
-                          </p>
+                          <p>CORTEX transforms complex codebases into clear, understandable systems. Architecture analysis, dependency mapping, threat modelling, and quality metrics surface automatically — so your team operates with a 360-degree view of every decision, risk, and ripple effect.</p>
+                          <p>LENS — the Language, Examination, Navigation &amp; Synthesis engine — analyses nine quality dimensions in real time. PR review intelligence, security risk surfacing, and architectural insights are delivered without any manual configuration, so engineers never have to guess the consequences of their changes.</p>
                         </div>
                         <!-- Right: metrics + viz -->
                         <div class="macc__metrics-col">
@@ -2400,6 +2398,11 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Full-width kicker — spans both columns -->
+                      <p class="macc__kicker">
+                        <i class="fas fa-quote-left" aria-hidden="true"></i>
+                        It is not enough to do your best; you must know what to do, and then do your best. — W. Edwards Deming
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -2426,36 +2429,32 @@
                     <div class="macc__body">
                       <div class="macc__body-inner">
                         <div class="macc__desc">
-                          <p>Software excellence should not depend on tribal knowledge or senior engineers guarding institutional memory. The most powerful organisations are those where every team member has access to the same intelligence and insight.</p>
-                          <p>CORTEX democratises engineering knowledge. Through curated knowledge libraries, automated best-practice guidance, architectural analysis, and agentic workflows, the platform equips engineers, architects, product leaders, and teams with the insights needed to make informed decisions.</p>
+                          <p>CORTEX democratises engineering knowledge — giving every role access to the same architectural intelligence, best-practice guidance, and governed workflows, regardless of seniority or background.</p>
+                          <p>Through 290+ orchestrators and 30+ intent types, the platform routes each request to the right specialist automatically — so the right knowledge reaches the right person at the right moment.</p>
                           <!-- Role blocks -->
                           <div class="macc__role-grid" aria-label="Role-specific value">
                             <div class="macc__role-block">
                               <span class="macc__role-label"><i class="fas fa-laptop-code" aria-hidden="true"></i> Engineers</span>
-                              <p class="macc__role-text">Automated code review, quality intelligence, and governed delivery — so you focus on creative work, not overhead.</p>
+                              <p class="macc__role-text">Automated code review and governed delivery — so you focus on creative work, not overhead.</p>
                             </div>
                             <div class="macc__role-block">
                               <span class="macc__role-label"><i class="fas fa-drafting-compass" aria-hidden="true"></i> Architects</span>
-                              <p class="macc__role-text">System-level understanding and design validation — architectural decisions stay consistently applied across all implementations.</p>
+                              <p class="macc__role-text">System-level analysis and design validation — architectural decisions stay consistently applied.</p>
                             </div>
                             <div class="macc__role-block">
                               <span class="macc__role-label"><i class="fas fa-user-tie" aria-hidden="true"></i> Product &amp; Leaders</span>
-                              <p class="macc__role-text">Visibility into technical complexity, delivery ROI, and compliance evidence — without needing to read a line of code.</p>
+                              <p class="macc__role-text">Delivery ROI and compliance evidence — no code required.</p>
                             </div>
                           </div>
-                          <p class="macc__kicker">
-                            <i class="fas fa-quote-left" aria-hidden="true"></i>
-                            When knowledge is shared, capability multiplies. — Stephen R. Covey
-                          </p>
                         </div>
                         <div class="macc__metrics-col">
                           <div class="macc__metrics">
                             <div class="macc__metric">
-                              <span class="macc__metric-val">296</span>
+                              <span class="macc__metric-val">290+</span>
                               <span class="macc__metric-label">Orchestrators across 14 domains</span>
                             </div>
                             <div class="macc__metric">
-                              <span class="macc__metric-val">31</span>
+                              <span class="macc__metric-val">30+</span>
                               <span class="macc__metric-label">Intent types auto-routed</span>
                             </div>
                             <div class="macc__metric">
@@ -2476,6 +2475,11 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Full-width kicker — spans both columns -->
+                      <p class="macc__kicker">
+                        <i class="fas fa-quote-left" aria-hidden="true"></i>
+                        When knowledge is shared, capability multiplies. — Stephen R. Covey
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -2502,13 +2506,8 @@
                     <div class="macc__body">
                       <div class="macc__body-inner">
                         <div class="macc__desc">
-                          <p>Fear is one of the hidden forces that slows engineering teams. Fear of breaking production. Fear of introducing security vulnerabilities. Fear of changing legacy systems. Fear of making costly architectural mistakes.</p>
-                          <p>CORTEX removes that fear by embedding intelligence directly into the development process. AI-driven code review orchestrators validate pull requests against security standards and architectural rules. Threat modelling engines evaluate risks before they reach production. Quality analysis engines measure complexity, cohesion, and maintainability across the codebase. Root cause synthesis ensures the same mistakes are never repeated.</p>
-                          <p>Instead of relying on manual review cycles and fragmented tools, CORTEX provides continuous engineering intelligence that guides teams safely through every stage of the development lifecycle — so that experimentation and innovation are not dangerous, they are encouraged.</p>
-                          <p class="macc__kicker">
-                            <i class="fas fa-quote-left" aria-hidden="true"></i>
-                            Technology is an accelerator of momentum, not a creator of it. CORTEX accelerates the momentum of great engineering teams by removing the uncertainty that holds them back. — Jim Collins
-                          </p>
+                          <p>CORTEX embeds intelligence directly into the development process — validating pull requests against security standards, evaluating risks before production, measuring code quality continuously, and synthesising root causes so your team never repeats the same mistake twice.</p>
+                          <p>Every change passes through a Universal Convergence Gate before reaching production: detect, fix, and rescan until zero P0 issues remain. The result is a safety net that makes bold experimentation a rational choice, not a risky one.</p>
                         </div>
                         <div class="macc__metrics-col">
                           <div class="macc__metrics">
@@ -2538,6 +2537,11 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Full-width kicker — spans both columns -->
+                      <p class="macc__kicker">
+                        <i class="fas fa-quote-left" aria-hidden="true"></i>
+                        Technology is an accelerator of momentum. CORTEX accelerates great engineering teams by removing the uncertainty that holds them back. — Jim Collins
+                      </p>
                     </div>
                   </div>
                 </div>
