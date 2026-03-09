@@ -1,0 +1,182 @@
+# Tetris Layout Specification
+# SSOT for: cortex/toolkit/tetris_layout.py, .github/agents/docs/tetris-layout-agent.md
+# Updated: 2026-03-09 (Phase 109.2)
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: tetris-layout-spec
+version: "1.0"
+domain: docs-html-layout
+owner: Documentation Orchestrator
+tool_path: cortex/toolkit/tetris_layout.py
+agent_path: .github/agents/docs/tetris-layout-agent.md
+
+description: >
+  The Tetris-Fit Algorithm eliminates blank space in multi-column HTML panels
+  using pure CSS (no JS, no fixed px). Named after Tetris: every piece fills
+  the available space. No gaps.
+
+trigger_phrases:
+  - "tetris fit"
+  - "tetris layout"
+  - "fill blank space"
+  - "fill the gap"
+  - "no dead space"
+  - "no empty spaces"
+  - "align bottoms"
+  - "stretch to fill"
+  - "remove whitespace"
+  - "everything fits"
+  - "everything should fit"
+  - "fits like tetris"
+  - "no blank spaces"
+  - "no gaps"
+  - "design like tetris"
+  - "content should fill"
+
+algorithm:
+  name: Tetris-Fit v1
+  type: css-only
+  rules:
+    - id: rule-1
+      name: Container stretch
+      css_property: align-items
+      css_value: stretch
+      applies_to: grid or flex container
+      effect: All columns share the tallest sibling height
+
+    - id: rule-2
+      name: Column height fill
+      css_properties:
+        - { property: height, value: "100%" }
+        - { property: display, value: flex }
+        - { property: flex-direction, value: column }
+      applies_to: each column element
+      effect: Column fills its grid cell top-to-bottom
+
+    - id: rule-3
+      name: Flex child absorbs leftover
+      css_properties:
+        - { property: flex, value: "1" }
+        - { property: align-content, value: stretch }
+      applies_to: last/expandable child inside a flex column
+      effect: Child grows to fill remaining column height
+      use_for: [role-grid, chip-list, tag-cloud, any growable block]
+
+    - id: rule-4
+      name: Nested grid row stretch
+      css_properties:
+        - { property: align-content, value: stretch }
+      applies_to: CSS Grid nested inside a flex child
+      effect: Grid rows expand proportionally to fill grid height
+
+    - id: rule-5
+      name: Viz/chart panel fill
+      css_properties:
+        - { property: flex, value: "1" }
+        - { property: justify-content, value: space-between }
+      applies_to: Bottom viz/chart panel inside metric column
+      effect: Chart stretches vertically; internal rows distribute evenly
+
+anti_patterns:
+  - pattern: "height: Npx (fixed px)"
+    severity: P0
+    reason: Breaks at different font sizes and viewport widths
+
+  - pattern: "min-height: Npx on columns"
+    severity: P1
+    reason: Creates overflow instead of true fill
+
+  - pattern: "Empty spacer divs"
+    severity: P1
+    reason: HTML litter — layout is CSS responsibility
+
+  - pattern: "JS ResizeObserver to match heights"
+    severity: P0
+    reason: Causes layout thrash and CLS regression
+
+  - pattern: "position:absolute; bottom:0"
+    severity: P1
+    reason: Removes element from flow; breaks reflow
+
+  - pattern: "Animating height"
+    severity: P1
+    reason: CORTEX motion standard — only transform/opacity allowed
+
+column_roles:
+  prose:
+    description: Text paragraphs. Driven by content height. No special stretch needed.
+    flex_children: [role-grid, chip-list, tag-cloud]
+
+  metric:
+    description: Stat tiles (fixed) + viz bar (flex:1). Right column driver.
+    flex_children: [.macc__viz, .chart-panel, .bar-panel]
+
+  mixed:
+    description: Paragraphs + a growable block (role-grid etc.)
+    flex_children: [.macc__role-grid, .macc__chips, any growable grid]
+
+  role-grid:
+    description: CSS Grid of icon pills/badges. Stretches to fill flex parent.
+    css_overrides:
+      - { property: flex, value: "1" }
+      - { property: align-content, value: stretch }
+
+  custom:
+    description: Caller-defined. Specify flex_children explicitly.
+
+wcag_gates:
+  - criterion: SC 2.5.8
+    severity: P1
+    check: Interactive elements retain min 24×24px touch target after height changes
+
+  - criterion: SC 1.4.4
+    severity: P1
+    check: Content reflows at 320px (single column stacked) without horizontal scroll
+
+  - criterion: SC 2.4.11
+    severity: P1
+    check: Sticky nav does not obscure focused elements after layout height changes
+
+pre_built_variants:
+  - id: understand_everything
+    container: .macc__body-inner
+    columns:
+      - selector: .macc__desc
+        role: prose
+      - selector: .macc__metrics-col
+        role: metric
+        flex_children: [.macc__viz]
+
+  - id: empower_everyone
+    container: .macc__body-inner
+    columns:
+      - selector: .macc__desc
+        role: mixed
+        flex_children: [.macc__role-grid]
+      - selector: .macc__metrics-col
+        role: metric
+        flex_children: [.macc__viz]
+
+  - id: build_fearlessly
+    container: .macc__body-inner
+    columns:
+      - selector: .macc__desc
+        role: prose
+      - selector: .macc__metrics-col
+        role: metric
+        flex_children: [.macc__viz]
+
+reuse_guide:
+  steps:
+    - "1. Identify container selector (CSS grid/flex parent)"
+    - "2. Identify each column selector and its role"
+    - "3. Identify which child absorbs leftover height (flex_children)"
+    - "4. Build PanelSpec via TetrisLayoutEngine.emit_spec_from_dict()"
+    - "5. Call engine.analyse_panel(spec) → TetrisPatch.css"
+    - "6. Paste CSS patch into inline <style> block"
+    - "7. Run WCAG gate checklist"
+
+cli_usage: |
+  python3 -m cortex.toolkit.tetris_layout analyse --variant empower_everyone
+  python3 -m cortex.toolkit.tetris_layout analyse --spec '{"container_selector":".panel","columns":[...]}'
+  echo '{"container_selector":".panel","columns":[...]}' | python3 -m cortex.toolkit.tetris_layout analyse

@@ -2,14 +2,15 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-08 (Phase 109.1 — 3 new UI/UX knowledge YAMLs synthesised from authoritative online sources; WCAG 2.2 delta wired; motion/animation + content writing standards auto-synthesised before any content creation) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-09 (Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
-**Agents:** 15 modular agents in `.github/agents/docs/`
+**Agents:** 16 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 **State:** `cortex-registry/config/doc-orchestrator-state.yaml` ← durable tracking (last execution timestamp, last GitHub issue ID)
 **Workflow (HTML/CSS/Web):** `cortex-registry/workflows/templates/frontend/docs-html-design-workflow.yaml` ← WorkflowComposer entry point for all `docs/` HTML work
 **Knowledge Base:** `docs/.content/knowledge/` (9 YAMLs — doc_best_practices, design_system, components, a11y_checklist, performance_checklist, visualization_standards, **motion_ux_standards**, **wcag22_delta_checklist**, **content_writing_standards**)
 **Content Sources:** `docs/.content/` (14 consolidated `.md` files + glossary + index — auto-routed per role)
+**Tetris Layout Tool:** `cortex/toolkit/tetris_layout.py` | **Agent:** `.github/agents/docs/tetris-layout-agent.md` | **Spec:** `cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml`
 
 ---
 
@@ -339,6 +340,65 @@ When building or enhancing role-specific HTML views, the Documentation Orchestra
 5. MCP Tools — In Your IDE (from `06-mcp-tools` § 36 registered tools)
 6. RCA Memory & Institutional Learning (from `08-learning`)
 7. Governance as Infrastructure (from `03-governance` § three layers, § ten agents)
+
+---
+
+## 🧩 Tetris-Fit Layout — MANDATORY Trigger Routing (Phase 109.2)
+
+**Tool:** `cortex/toolkit/tetris_layout.py` — `TetrisLayoutEngine`
+**Agent:** `.github/agents/docs/tetris-layout-agent.md`
+**Spec (SSOT):** `cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml`
+
+### When to Invoke (Auto-Detection — No User Instruction Needed)
+
+Delegate to `tetris-layout-agent.md` whenever the user says ANY of the following
+(case-insensitive, partial match — do NOT require exact wording):
+
+| User phrase | Interpretation |
+|---|---|
+| `tetris fit` / `tetris layout` / `fits like tetris` | Full Tetris-Fit algorithm on target panel |
+| `fill blank space` / `fill the gap` / `fill empty space` | Fill vertical whitespace below a column |
+| `no dead space` / `no empty spaces` / `no blank spaces` / `no gaps` | Remove all blank canvas areas |
+| `align bottoms` / `stretch to fill` / `remove whitespace` | Make column bottoms align at same height |
+| `everything fits` / `everything should fit` / `content should fill` | All content fills container, no overflow |
+| `design...like tetris` / `fit like tetris` | Full algorithm |
+
+### Tetris-Fit Algorithm (5 CSS Rules — Pure Declarative, No JS, No px)
+
+```
+Rule 1 — Container:    align-items: stretch
+Rule 2 — Each column:  height: 100%; display: flex; flex-direction: column
+Rule 3 — Flex child:   flex: 1; align-content: stretch   ← absorbs leftover height
+Rule 4 — Grid child:   align-content: stretch             ← nested grid rows expand
+Rule 5 — Viz/chart:    flex: 1; justify-content: space-between
+```
+
+**NEVER:** fixed pixel heights · JS/ResizeObserver · empty spacer divs · `height: Npx`
+
+### Execution Steps (MANDATORY when triggered)
+
+1. **Diagnose** — Read HTML, map each column to its CSS selector + role (`prose` | `metric` | `mixed` | `role-grid`)
+2. **Build spec** — Use `TetrisLayoutEngine.emit_spec_from_dict()` or pre-built `cortex_mission_panel(variant)`
+3. **Run engine** — `engine.analyse_panel(spec)` → `TetrisPatch.css`
+4. **Apply CSS** — Patch the inline `<style>` block (never fixed px)
+5. **Content audit** — Trim prose if left column overflows; CSS handles underflow via Rule 3
+6. **Validate** — HTML parse validation → browser preview
+7. **WCAG gate** — SC 2.5.8 touch targets, SC 1.4.4 320px reflow, SC 2.4.11 focus not obscured
+
+### CLI
+
+```bash
+python3 -m cortex.toolkit.tetris_layout analyse --variant empower_everyone
+python3 -m cortex.toolkit.tetris_layout analyse --spec '{"container_selector":".panel","columns":[...]}'
+```
+
+### Pre-Built Variants (CORTEX Mission Panels)
+
+| Variant | Left Column | Right Column |
+|---|---|---|
+| `understand_everything` | 2 paragraphs | 4 metric tiles + viz (flex:1) |
+| `empower_everyone` | 2 paragraphs + role-grid (flex:1) | 4 metric tiles + viz (flex:1) |
+| `build_fearlessly` | 2 paragraphs | 4 metric tiles + viz (flex:1) |
 
 ---
 

@@ -1520,12 +1520,15 @@
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
     padding-top: 1.25rem;
+    /* TETRIS-FIT: both columns stretch to the tallest sibling */
+    align-items: stretch;
   }
   @media (max-width: 720px) { .macc__body-inner { grid-template-columns: 1fr; } }
 
-  /* Description prose */
+  /* Description prose — TETRIS-FIT: left col is a flex column that fills full grid row height */
   .macc__desc {
     display: flex; flex-direction: column; gap: 0.75rem;
+    height: 100%;
   }
   .macc__desc p {
     font-size: 0.9375rem; color: rgba(148,163,184,0.9); line-height: 1.8;
@@ -1534,9 +1537,10 @@
   }
   .macc__desc p strong, .macc__desc strong { color: rgba(255,255,255,0.92); font-weight: 600; }
 
-  /* Right panel: metric tiles stacked */
+  /* Right panel: metric tiles stacked — TETRIS-FIT: stretch to full column height */
   .macc__metrics-col {
     display: flex; flex-direction: column; gap: 0.625rem;
+    height: 100%;
   }
 
   .macc__metrics {
@@ -1586,12 +1590,14 @@
   .macc[data-accent="amber"]   .macc__metric-val { color: #fbbf24; }
   .macc[data-accent="magenta"] .macc__metric-val { color: #e879f9; }
 
-  /* Progress bar viz (from reference) */
+  /* Progress bar viz — TETRIS-FIT: flex:1 expands viz to fill remaining right-col height */
   .macc__viz {
     background: rgba(0,0,0,0.38);
     border: 1px solid rgba(255,255,255,0.04);
     border-radius: 1rem; padding: 1.1rem 1.1rem;
     display: flex; flex-direction: column; gap: 0.75rem;
+    flex: 1;
+    justify-content: space-between;
   }
   .macc__viz-label {
     display: flex; align-items: center; gap: 0.5rem;
@@ -1634,25 +1640,55 @@
   .macc[data-accent="magenta"] .macc__viz-fill { background: linear-gradient(90deg, #c026d3, #e879f9); }
 
   /* ── Three-column role block (item 5) ── */
+  /* ── Role badge pills — icon + label only, compact 2×3 grid ── */
+  /* TETRIS-FIT: flex:1 makes the grid expand to fill remaining left-column height */
   .macc__role-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem; margin-top: 0.25rem;
+    gap: 0.5rem; margin-top: 1rem;
+    flex: 1;                      /* fills leftover height in .macc__desc flex column */
+    align-content: stretch;       /* rows expand to fill the grid's available height */
   }
-  @media (max-width: 640px) { .macc__role-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .macc__role-grid { grid-template-columns: repeat(2, 1fr); } }
   .macc__role-block {
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 0.875rem; padding: 1rem;
-    transition: border-color 0.25s, background 0.25s;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.625rem;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.45rem; text-align: center;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    /* TETRIS-FIT: tiles fill their grid cell height naturally via align-content: stretch */
   }
-  .macc__role-block:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+  .macc__role-block:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+  }
+  .macc__role-icon {
+    width: 32px; height: 32px; border-radius: 0.5rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; flex-shrink: 0;
+  }
   .macc__role-label {
     font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
-    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: #e879f9;
-    display: block; margin-bottom: 0.5rem;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; line-height: 1.3;
+    display: block; margin: 0;
   }
-  .macc__role-text { font-size: 0.875rem; color: rgba(148,163,184,0.85); line-height: 1.65; margin: 0; }
+  /* Per-role colour accents */
+  .macc__role-block[data-role="engineer"]  .macc__role-icon  { background: rgba(0,212,255,0.15);    color: #00d4ff; }
+  .macc__role-block[data-role="engineer"]  .macc__role-label { color: #00d4ff; }
+  .macc__role-block[data-role="architect"] .macc__role-icon  { background: rgba(123,97,255,0.18);   color: #a78bfa; }
+  .macc__role-block[data-role="architect"] .macc__role-label { color: #a78bfa; }
+  .macc__role-block[data-role="leader"]    .macc__role-icon  { background: rgba(251,191,36,0.15);   color: #fbbf24; }
+  .macc__role-block[data-role="leader"]    .macc__role-label { color: #fbbf24; }
+  .macc__role-block[data-role="security"]  .macc__role-icon  { background: rgba(239,68,68,0.15);    color: #f87171; }
+  .macc__role-block[data-role="security"]  .macc__role-label { color: #f87171; }
+  .macc__role-block[data-role="quality"]   .macc__role-icon  { background: rgba(16,185,129,0.15);   color: #10b981; }
+  .macc__role-block[data-role="quality"]   .macc__role-label { color: #10b981; }
+  .macc__role-block[data-role="sre"]       .macc__role-icon  { background: rgba(251,146,60,0.15);   color: #fb923c; }
+  .macc__role-block[data-role="sre"]       .macc__role-label { color: #fb923c; }
 
   /* ── Kicker quote ── */
   .macc__kicker {
@@ -2431,19 +2467,31 @@
                         <div class="macc__desc">
                           <p>CORTEX democratises engineering knowledge — giving every role access to the same architectural intelligence, best-practice guidance, and governed workflows, regardless of seniority or background.</p>
                           <p>Through 290+ orchestrators and 30+ intent types, the platform routes each request to the right specialist automatically — so the right knowledge reaches the right person at the right moment.</p>
-                          <!-- Role blocks -->
-                          <div class="macc__role-grid" aria-label="Role-specific value">
-                            <div class="macc__role-block">
-                              <span class="macc__role-label"><i class="fas fa-laptop-code" aria-hidden="true"></i> Engineers</span>
-                              <p class="macc__role-text">Automated code review and governed delivery — so you focus on creative work, not overhead.</p>
+                          <!-- Role badge pills — icon + label only, 2×3 grid -->
+                          <div class="macc__role-grid" aria-label="Roles served by CORTEX">
+                            <div class="macc__role-block" data-role="engineer">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-laptop-code"></i></div>
+                              <span class="macc__role-label">Engineers</span>
                             </div>
-                            <div class="macc__role-block">
-                              <span class="macc__role-label"><i class="fas fa-drafting-compass" aria-hidden="true"></i> Architects</span>
-                              <p class="macc__role-text">System-level analysis and design validation — architectural decisions stay consistently applied.</p>
+                            <div class="macc__role-block" data-role="architect">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-drafting-compass"></i></div>
+                              <span class="macc__role-label">Architects</span>
                             </div>
-                            <div class="macc__role-block">
-                              <span class="macc__role-label"><i class="fas fa-user-tie" aria-hidden="true"></i> Product &amp; Leaders</span>
-                              <p class="macc__role-text">Delivery ROI and compliance evidence — no code required.</p>
+                            <div class="macc__role-block" data-role="leader">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-user-tie"></i></div>
+                              <span class="macc__role-label">Product &amp; Leaders</span>
+                            </div>
+                            <div class="macc__role-block" data-role="security">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
+                              <span class="macc__role-label">Security</span>
+                            </div>
+                            <div class="macc__role-block" data-role="quality">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-vial-circle-check"></i></div>
+                              <span class="macc__role-label">Quality</span>
+                            </div>
+                            <div class="macc__role-block" data-role="sre">
+                              <div class="macc__role-icon" aria-hidden="true"><i class="fas fa-tower-broadcast"></i></div>
+                              <span class="macc__role-label">SRE</span>
                             </div>
                           </div>
                         </div>
@@ -2507,7 +2555,7 @@
                       <div class="macc__body-inner">
                         <div class="macc__desc">
                           <p>CORTEX embeds intelligence directly into the development process — validating pull requests against security standards, evaluating risks before production, measuring code quality continuously, and synthesising root causes so your team never repeats the same mistake twice.</p>
-                          <p>Every change passes through a Universal Convergence Gate before reaching production: detect, fix, and rescan until zero P0 issues remain. The result is a safety net that makes bold experimentation a rational choice, not a risky one.</p>
+                          <p>Every change passes through a Universal Convergence Gate before reaching production: detect, fix, and rescan until zero P0 issues remain. The result is a safety net that makes bold experimentation a rational choice, not a risky one. From TDD enforcement to post-incident root cause analysis, CORTEX closes the loop so each release is measurably safer than the last.</p>
                         </div>
                         <div class="macc__metrics-col">
                           <div class="macc__metrics">
