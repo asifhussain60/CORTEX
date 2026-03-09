@@ -462,6 +462,16 @@
         .hero-stat-item { width: 45%; }
     }
 
+    /* --- TWO-PANEL WHAT IS / VISION LAYOUT --- */
+    .feature-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+    @media (max-width: 768px) {
+        .feature-grid-2 { grid-template-columns: 1fr; }
+    }
+
     /* --- AWAKENING CINEMATIC CARD --- */
     .awakening-card {
         display: flex; align-items: center; gap: var(--spacing-8); padding: 0;
@@ -2327,6 +2337,54 @@
         </div>
     </section>
 </header>
+
+<!-- Two-Panel Layout: What Is CORTEX + Vision -->
+<div style="max-width: 1200px; margin: var(--issa-hero-first, 3rem) auto var(--spacing-8) auto; padding: 0 var(--spacing-6);">
+    <div class="feature-grid-2">
+        <!-- Left Panel: What Is CORTEX? -->
+        <article class="glass-card" style="padding: 2rem; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <span style="font-size: 3rem;" aria-hidden="true">🧠</span>
+                <h2 style="margin: 0; font-size: 2rem; color: var(--accent-cyan);">What is CORTEX?</h2>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                CORTEX is a <strong style="color: var(--accent-cyan);">multi-agent orchestration system</strong> that transforms GitHub Copilot into an enterprise-grade
+                development platform. The <strong style="color: var(--accent-cyan);">Knowledge Library</strong> enforces organisational best practices, coding standards,
+                and architectural patterns — ensuring consistent, high-quality output across every interaction.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                With intelligent <strong style="color: var(--accent-cyan);">Token Optimisation</strong> reducing AI costs by up to 60%, RAG-enhanced context retrieval,
+                and autonomous workflow orchestration, CORTEX delivers measurable ROI while maintaining long-term memory across sessions,
+                enforcing TDD discipline, and preventing the architectural drift that plagues AI-assisted codebases.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">
+                From <strong style="color: var(--accent-cyan);">automated planning</strong> to <strong style="color: var(--accent-cyan);">Azure DevOps integration</strong>,
+                CORTEX provides the governance layer enterprises need — turning ad-hoc AI assistance into a repeatable, auditable, and scalable development methodology.
+            </p>
+        </article>
+
+        <!-- Right Panel: The CORTEX Vision -->
+        <article class="glass-card" style="padding: 2rem; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <span style="font-size: 3rem;" aria-hidden="true">🚀</span>
+                <h2 style="margin: 0; font-size: 2rem; color: var(--accent-purple);">The CORTEX Vision</h2>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                In the AI era, software engineering is undergoing its most profound transformation since the advent of high-level programming languages.
+                The tedious mechanics of debugging, boilerplate generation, and repetitive coding tasks are being automated at unprecedented scale.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                <strong style="color: var(--accent-purple);">CORTEX elevates developers</strong> from code mechanics to <strong style="color: var(--accent-purple);">strategic architects</strong>.
+                By handling implementation details with intelligent automation, developers reclaim bandwidth for high-value activities:
+                system design, stakeholder collaboration, and solving the complex business problems that drive competitive advantage.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">
+                The future rewards those who <em>architect</em>, <em>strategise</em>, and <em>innovate</em> — while CORTEX orchestrates the precise execution
+                of planning, testing, and continuous refinement with machine-grade consistency and human-grade intelligence.
+            </p>
+        </article>
+    </div>
+</div>
 
 <main id="main-content" role="main">
 
