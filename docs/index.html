@@ -2190,14 +2190,17 @@
     .ct-border-ring {
         position: relative;
         border-radius: 1.75rem;
-        padding: 0;
-        background: none;
+        padding: 2px;
+        background: linear-gradient(135deg,
+            #00d4ff 0%, #7b61ff 25%, #ba55d3 50%, #00ff88 75%, #00d4ff 100%);
+        background-size: 400% 400%;
         box-shadow:
+            0 0 0 1px rgba(0,212,255,0.08),
             0 40px 100px -12px rgba(0,0,0,0.8),
-            0 0 40px rgba(0,212,255,0.06);
+            0 0 80px rgba(0,212,255,0.12);
     }
     @media (prefers-reduced-motion: no-preference) {
-        .ct-border-ring { animation: none; }
+        .ct-border-ring { animation: ctBorderSpin 5s ease infinite; }
     }
 
     /* ── Cinema bezel / chassis ── */
