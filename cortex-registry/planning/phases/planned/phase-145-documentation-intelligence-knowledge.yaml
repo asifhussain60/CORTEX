@@ -1,0 +1,185 @@
+# CORTEX Phase Plan — Phase 145
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-005)
+# Backport Order: 6 of 7 (knowledge corpus expansion)
+
+id: "phase-145"
+title: "Documentation Intelligence Knowledge Domain — 60+ Best Practices"
+created: "2026-03-09"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-005"
+classification: ENHANCED_CAPABILITY
+governance_authority:
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-145-DOCUMENTATION-INTELLIGENCE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Adds a comprehensive documentation intelligence knowledge YAML with 60+ best
+  practices across 10 sub-domains:
+  1. Technical documentation
+  2. API documentation
+  3. ADRs (Architecture Decision Records)
+  4. Runbooks
+  5. Release notes
+  6. Onboarding documentation
+  7. Knowledge management
+  8. Documentation testing
+  9. Accessibility
+  10. Governance
+  
+  Registered in Knowledge INDEX.yaml with domain signal:
+  document|documentation|docs|writing|readme|runbook|adr|release.notes
+  
+  Also adds documentation domain to the signal map configuration.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - cortex-registry/knowledge/best-practices/documentation/documentation-intelligence.yaml
+    - cortex-registry/knowledge/INDEX.yaml
+    - cortex-registry/config/domain-signal-map.yaml
+  design_pattern: "Knowledge Corpus Expansion, Domain Signal Registration"
+  integration_points: |
+    KnowledgeGuidanceEngine (domain resolution)
+    IntelligenceFacade (knowledge queries)
+    LENS (domain signal matching)
+  dependencies: "Existing knowledge YAML infrastructure"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-145-01"
+    title: "Create documentation intelligence YAML"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      No documentation domain knowledge exists in cortex-registry/knowledge/.
+      Need 60+ practices across 10 sub-domains.
+    action_ref: "phase-145-a"
+    status: OPEN
+
+  - id: "GAP-145-02"
+    title: "Register in INDEX.yaml"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      Documentation domain not registered in Knowledge INDEX.yaml.
+    action_ref: "phase-145-b"
+    status: OPEN
+
+  - id: "GAP-145-03"
+    title: "Add domain signal to domain-signal-map.yaml"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      documentation regex pattern missing from domain-signal-map.yaml.
+    action_ref: "phase-145-c"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: false  # YAML/config changes only
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-145-a"
+    title: "Create documentation-intelligence.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-145-01"]
+    governance_authority: "CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    steps:
+      - "Create cortex-registry/knowledge/best-practices/documentation/ directory"
+      - "Create documentation-intelligence.yaml with:"
+      - "  - Title: 'Documentation Intelligence — Best Practices & Patterns'"
+      - "  - Domain: best-practices/documentation"
+      - "  - 60+ practices across 10 sub-domains"
+      - "  - CORTEX alignment metadata: confidence 0.9, verified true"
+    sub_domains:
+      - technical_docs: "API references, README standards, architecture docs"
+      - api_docs: "OpenAPI/Swagger, endpoint documentation, versioning"
+      - adrs: "Architecture Decision Records, RFC format, decision log"
+      - runbooks: "Operational procedures, incident response, troubleshooting"
+      - release_notes: "Changelog format, semantic versioning, migration guides"
+      - onboarding: "Getting started guides, tutorials, quickstarts"
+      - knowledge_management: "Knowledge base organization, search optimization"
+      - documentation_testing: "Doc testing, link checking, example validation"
+      - accessibility: "Alt text, heading hierarchy, plain language"
+      - governance: "Review processes, style guides, freshness audits"
+    completion_gate: "YAML validates, 60+ practices defined"
+
+  - id: "phase-145-b"
+    title: "Register in Knowledge INDEX.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-145-02"]
+    governance_authority: "CORE-064"
+    duration_estimate: "15 minutes"
+    depends_on: ["phase-145-a"]
+    steps:
+      - "Add documentation domain entry to INDEX.yaml"
+      - "Point to documentation-intelligence.yaml"
+      - "Define domain signals: document|documentation|docs|writing|readme|runbook|adr|release.notes"
+    completion_gate: "INDEX.yaml validates, domain resolvable"
+
+  - id: "phase-145-c"
+    title: "Add domain signal to domain-signal-map.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-145-03"]
+    governance_authority: "CORE-064"
+    duration_estimate: "10 minutes"
+    depends_on: ["phase-145-b"]
+    steps:
+      - "Add documentation regex pattern to domain-signal-map.yaml"
+      - "Pattern: document|documentation|docs|writing|readme|runbook|adr|release"
+    completion_gate: "domain-signal-map.yaml validates"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TEST REQUIREMENTS
+# ─────────────────────────────────────────────────────────────────────────────
+test_requirements:
+  test_file: "tests/golden/knowledge/test_documentation_knowledge_golden.py"
+  tests:
+    - "Schema compliance — YAML structure matches knowledge schema"
+    - "Practice count — 60+ practices defined"
+    - "Domain registration — documentation domain resolvable via KnowledgeGuidanceEngine"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "documentation-intelligence.yaml created with 60+ practices"
+  - "10 sub-domains covered (technical, API, ADRs, runbooks, release notes, onboarding, knowledge management, testing, accessibility, governance)"
+  - "Domain registered in INDEX.yaml"
+  - "Domain signal added to domain-signal-map.yaml"
+  - "KnowledgeGuidanceEngine can resolve documentation domain"
+  - "Golden tests pass"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules: []
+  modified_rules:
+    - "Knowledge INDEX.yaml expanded"
+    - "domain-signal-map.yaml expanded"
+  workflow_changes: []

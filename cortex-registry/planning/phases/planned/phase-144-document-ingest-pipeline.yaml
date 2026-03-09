@@ -1,0 +1,299 @@
+# CORTEX Phase Plan — Phase 144
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-001)
+# Backport Order: 5 of 7 (major new capability)
+
+id: "phase-144"
+title: "Document Ingest Pipeline — Office/PDF Reading (5 Components)"
+created: "2026-03-09"
+status: PLANNED
+priority: P0  # Major new capability
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-001"
+classification: NEW_CAPABILITY
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints on all functions
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-144-DOCUMENT-INGEST-PIPELINE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  A full document ingestion pipeline that classifies, extracts, routes, and
+  persists external documents (Word, Excel, PowerPoint, PDF, YAML, Markdown)
+  into cortex-registry/ with full teardown support.
+  
+  Comprises 5 components:
+  1. FileClassifier — PII/binary rejection, 9 categories
+  2. DocumentReader — Office/PDF text extraction via python-docx/openpyxl/python-pptx/pypdf
+  3. KnowledgeExtractor — YAML normalization + text-to-knowledge conversion
+  4. ContentRouter — 14-domain routing table + company content segregation
+  5. DocumentIngestOrchestrator — pipeline coordinator with OPJ integration and teardown
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - cortex/orchestrators/support/ingest/  # New package
+    - cortex/orchestrators/support/ingest/__init__.py
+    - cortex/orchestrators/support/ingest/file_classifier.py
+    - cortex/orchestrators/support/ingest/document_reader.py
+    - cortex/orchestrators/support/ingest/knowledge_extractor.py
+    - cortex/orchestrators/support/ingest/content_router.py
+    - cortex/orchestrators/support/ingest/document_ingest_orchestrator.py
+  design_pattern: |
+    Pipeline Composition (classify→extract→route→persist)
+    Strategy Pattern (format-specific readers)
+    Teardown Pattern (full artifact reversal)
+    Multi-Mixin (OPJMixin + OrchestratorProtocolMixin + WorkflowEnforcementMixin)
+  integration_points: |
+    OPJ (success recording on ingest)
+    FileFactory (safe file creation)
+    cortex-registry/ (destination)
+    Knowledge INDEX.yaml (registration)
+  dependencies: |
+    python-docx (lazy-loaded with graceful degradation)
+    openpyxl (lazy-loaded with graceful degradation)
+    python-pptx (lazy-loaded with graceful degradation)
+    pypdf (lazy-loaded with graceful degradation)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-144-01"
+    title: "Create IngestFileClassifier"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No file classification exists for ingestion pipeline.
+      Need: FileCategory enum (9 categories), ClassifiedFile dataclass,
+      binary extension blocklist, PII detection, classify_directory().
+    action_ref: "phase-144-a"
+    status: OPEN
+
+  - id: "GAP-144-02"
+    title: "Create DocumentReader"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No Office/PDF reading capability exists.
+      Need: DocumentContent dataclass, lazy imports for Office libraries,
+      read_docx(), read_xlsx(), read_pptx(), read_pdf(), unified read() dispatcher.
+    action_ref: "phase-144-b"
+    status: OPEN
+
+  - id: "GAP-144-03"
+    title: "Create IngestKnowledgeExtractor"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No knowledge extraction from documents.
+      Need: ExtractedKnowledge dataclass, extract() method,
+      YAML normalization, text-to-heading/list extraction.
+    action_ref: "phase-144-c"
+    status: OPEN
+
+  - id: "GAP-144-04"
+    title: "Create IngestContentRouter"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No routing logic for ingested content.
+      Need: RoutingDecision dataclass, 14-domain routing table,
+      company content segregation (business-rules → company/ folder).
+    action_ref: "phase-144-d"
+    status: OPEN
+
+  - id: "GAP-144-05"
+    title: "Create DocumentIngestOrchestrator"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No pipeline coordinator for document ingestion.
+      Need: ingest_directory(), teardown(), OPJ success recording,
+      AC marker emission, auto-detect registry root.
+    action_ref: "phase-144-e"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-144-a"
+    title: "Create IngestFileClassifier"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-144-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: []
+    tdd_sequence:
+      red:
+        - test_file_category_enum_has_9_categories
+        - test_classified_file_dataclass
+        - test_binary_extension_rejected
+        - test_pii_filename_rejected
+        - test_classify_directory_returns_result
+        - test_domain_hint_extraction
+      green:
+        - "Define FileCategory(str, Enum): KNOWLEDGE_YAML, ARCHITECTURE_DOC, PROCESS_DOC, TECHNICAL_DOC, RCA_DOC, RELEASE_DOC, REJECTED_PII, REJECTED_BINARY, REJECTED_IRRELEVANT"
+        - "Define ClassifiedFile dataclass: path, category, reason, domain_hint, confidence, size_bytes"
+        - "Define IngestClassificationResult dataclass: processable, rejected, total_scanned"
+        - "Binary extension blocklist: .zip, .mp4, .exe, .dll, .db, .sqlite, etc."
+        - "PII detection via filename pattern matching"
+        - "classify_directory(source_path, recursive) → IngestClassificationResult"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-144-b"
+    title: "Create DocumentReader"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-144-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-144-a"]
+    tdd_sequence:
+      red:
+        - test_document_content_dataclass
+        - test_read_docx_extracts_paragraphs
+        - test_read_xlsx_extracts_cells
+        - test_read_pptx_extracts_slides
+        - test_read_pdf_extracts_pages
+        - test_graceful_degradation_without_libraries
+        - test_unified_read_dispatcher
+      green:
+        - "Define DocumentContent dataclass: path, format, title, text, sections, page_count, error"
+        - "Lazy imports for all Office libraries (graceful degradation)"
+        - "read_docx(path) → extracts paragraphs via python-docx"
+        - "read_xlsx(path) → extracts cell values via openpyxl"
+        - "read_pptx(path) → extracts slide text via python-pptx"
+        - "read_pdf(path) → extracts page text via pypdf"
+        - "Unified read(path) dispatcher by file extension"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-144-c"
+    title: "Create IngestKnowledgeExtractor"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-144-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-144-b"]
+    tdd_sequence:
+      red:
+        - test_extracted_knowledge_dataclass
+        - test_extract_from_yaml_file
+        - test_extract_from_text_file
+        - test_extract_from_office_document
+        - test_cortex_alignment_metadata
+      green:
+        - "Define ExtractedKnowledge dataclass: source_path, domain, title, content_type, best_practices, metadata, raw_yaml"
+        - "extract(classified) → ExtractedKnowledge"
+        - "YAML files → normalization"
+        - "Text files → heading/list extraction"
+        - "Office files → DocumentReader dispatch"
+        - "CORTEX alignment metadata injection (source, confidence, verified flag)"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-144-d"
+    title: "Create IngestContentRouter"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-144-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-144-c"]
+    tdd_sequence:
+      red:
+        - test_routing_decision_dataclass
+        - test_14_domain_routing_table
+        - test_category_fallback_routing
+        - test_company_content_segregation
+        - test_route_returns_decision
+      green:
+        - "Define RoutingDecision dataclass: source, destination_dir, output_filename, output_format, is_company_content"
+        - "14-domain routing table: architecture, backend-python, backend-dotnet, backend-java, frontend, security, testing-validation, devops-infrastructure, performance-optimization, sdlc, business-rules, migration, ai"
+        - "Category-based fallback routing when no domain hint"
+        - "Company content segregation: business-rules → company/ folder"
+        - "route(classified) → RoutingDecision"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-144-e"
+    title: "Create DocumentIngestOrchestrator"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-144-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-064, CORE-068"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-144-d"]
+    tdd_sequence:
+      red:
+        - test_inherits_required_mixins
+        - test_phase90_gateway_exempt
+        - test_ingest_directory_classify_extract_route_persist
+        - test_dry_run_mode
+        - test_teardown_removes_created_files
+        - test_opj_success_recording
+        - test_ac_marker_emission
+        - test_auto_detect_registry_root
+      green:
+        - "Inherits OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMixin"
+        - "Set PHASE90_GATEWAY_EXEMPT = True"
+        - "ingest_directory(source_dir, recursive, dry_run) → IngestResult"
+        - "Pipeline: classify → extract → route → persist (per file)"
+        - "teardown() removes all created files + empty directories in reverse"
+        - "OPJ success recording on completed ingest"
+        - "AC marker emission: AC-INGEST-{timestamp}"
+        - "Auto-detects registry root from file location"
+    completion_gate: "make test-smoke — zero failures"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TEST REQUIREMENTS
+# ─────────────────────────────────────────────────────────────────────────────
+test_requirements:
+  test_files:
+    - path: "tests/support/ingest/test_document_ingest_pipeline.py"
+      description: "Full pipeline integration, classify→extract→route→persist, teardown verification, dry-run mode, error handling"
+    - path: "tests/support/ingest/test_document_reader.py"
+      description: "DocumentReader format dispatching, graceful degradation without Office libraries, content extraction accuracy"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "IngestFileClassifier classifies files into 9 categories"
+  - "DocumentReader extracts text from Word, Excel, PowerPoint, PDF"
+  - "IngestKnowledgeExtractor normalizes content to CORTEX knowledge format"
+  - "IngestContentRouter routes to 14 domains with company segregation"
+  - "DocumentIngestOrchestrator coordinates full pipeline with teardown"
+  - "Graceful degradation when Office libraries not installed"
+  - "All tests pass including integration tests"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules: []
+  modified_rules: []
+  workflow_changes: []
+  dependencies_added:
+    - python-docx
+    - openpyxl
+    - python-pptx
+    - pypdf

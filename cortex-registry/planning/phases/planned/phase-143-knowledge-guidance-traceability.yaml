@@ -1,0 +1,118 @@
+# CORTEX Phase Plan — Phase 143
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-003)
+# Backport Order: 4 of 7 (small wiring addition)
+
+id: "phase-143"
+title: "Knowledge Guidance Decision Traceability Wiring"
+created: "2026-03-09"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-003"
+classification: ENHANCED_CAPABILITY
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-143-KNOWLEDGE-GUIDANCE-TRACEABILITY"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Wires the KnowledgeGuidanceEngine into the Decision Traceability system (QW-006).
+  
+  Every knowledge consultation now emits a DecisionTraceabilityLogger.log_decision()
+  call with RESOLUTION type, recording:
+  - module path
+  - domain
+  - entry count
+  - confidence
+  - rationale
+  
+  Provides auditable evidence of which knowledge was consulted for every
+  guidance resolution.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - cortex/core/knowledge_guidance_engine.py
+  design_pattern: "Decision Audit Trail, Cross-Cutting Traceability"
+  integration_points: |
+    DecisionTraceabilityLogger (from cortex.intelligence.explainability.decision_logger)
+    KnowledgeGuidanceEngine (existing)
+  dependencies: "Existing DecisionTraceabilityLogger, DecisionType, DecisionOutcome"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-143-01"
+    title: "Wire DecisionTraceabilityLogger into KnowledgeGuidanceEngine"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      KnowledgeGuidanceEngine.resolve() does not emit decision traces.
+      QW-006 compliance requires all knowledge consultations to be auditable.
+    action_ref: "phase-143-a"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-143-a"
+    title: "Wire DecisionTraceabilityLogger into KnowledgeGuidanceEngine"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-143-01"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: []
+    tdd_sequence:
+      red:
+        - test_knowledge_guidance_emits_decision_trace
+        - test_decision_trace_contains_module_path
+        - test_decision_trace_contains_domain
+        - test_decision_trace_contains_confidence
+      green:
+        - "Import DecisionTraceabilityLogger, DecisionType, DecisionOutcome"
+        - "Initialize self._decision_logger = DecisionTraceabilityLogger() in __init__"
+        - "After guidance resolution (before caching), call log_decision() with:"
+        - "  - decision_type=DecisionType.RESOLUTION"
+        - "  - context={'module_path': module_path, 'domain': domain, 'entries_count': len(guidance.guidance_entries), 'repo_name': repo_name or ''}"
+        - "  - outcome=DecisionOutcome.APPROVED"
+        - "  - rationale=f'Resolved {len(guidance.guidance_entries)} guidance entries for {domain}/{module_name}'"
+        - "  - confidence=guidance.guidance_confidence"
+    completion_gate: "make test-smoke — zero failures"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "DecisionTraceabilityLogger initialized in KnowledgeGuidanceEngine"
+  - "Every guidance resolution emits a decision trace"
+  - "Decision trace includes: module_path, domain, entries_count, confidence, rationale"
+  - "Existing KnowledgeGuidanceEngine tests pass"
+  - "QW-006 compliance achieved for knowledge guidance"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules: []
+  modified_rules:
+    - "QW-006 compliance — knowledge guidance now has full decision traceability"
+  workflow_changes: []

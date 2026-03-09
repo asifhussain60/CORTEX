@@ -1,0 +1,213 @@
+# CORTEX Phase Plan — Phase 141
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-002)
+# Backport Order: 2 of 7 (safety-critical, standalone)
+
+id: "phase-141"
+title: "Vacuum Source Protection Hardening — PROTECTED_DIRS Expansion + 8 Golden Tests"
+created: "2026-03-09"
+status: PLANNED
+priority: P0  # Safety-critical — source directories must NEVER be modified
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-002"
+classification: ENHANCED_CAPABILITY
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-064  # Sweep Completeness Contract
+  - CORE-068  # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-141-VACUUM-SOURCE-PROTECTION"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Comprehensive source protection hardening for VacuumOrchestrator ensuring it
+  NEVER modifies files inside protected directories (cortex/, tests/, .github/,
+  scripts/, deployment/, .vscode/).
+  
+  Adds validate_safe_run() pre-flight safety check, expands PROTECTED_DIRS
+  constant across 5 internal exclusion lists, and establishes 8 golden tests
+  (GV-012 through GV-019) that enforce source directory immutability.
+  
+  Also hardens RollbackManager with SHA format validation (40-character hex regex).
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - cortex/orchestrators/health/vacuum_orchestrator.py
+    - cortex/orchestrators/health/constants.py
+    - cortex/core/rollback_manager.py
+  design_pattern: |
+    Protected Directory Pattern (expanded exclusion sets)
+    Pre-Flight Validation (validate_safe_run())
+    Golden Test Enforcement (GV-012..GV-019)
+    Input Validation (SHA regex)
+  integration_points: |
+    VacuumOrchestrator all 8 stages (naming, root, empty, orphan, markdown, digest, build, OS)
+    PROTECTED_DIRS constant
+    RollbackManager
+  dependencies: "Existing VacuumOrchestrator infrastructure"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-141-01"
+    title: "Expand PROTECTED_DIRS constant"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      PROTECTED_DIRS in constants.py missing: cortex, tests, scripts, deployment, .vscode
+      All 5 internal exclusion lists need expansion.
+    action_ref: "phase-141-a"
+    status: OPEN
+
+  - id: "GAP-141-02"
+    title: "Add validate_safe_run() pre-flight check"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      No pre-flight safety validation exists. Need:
+      - validate_safe_run() → List[str] (warnings for unsafe operations)
+      - Dry-run with recency_guard_hours=0 to get all planned operations
+      - Inspect each operation's source path against protected directories
+    action_ref: "phase-141-b"
+    status: OPEN
+
+  - id: "GAP-141-03"
+    title: "RollbackManager SHA format validation"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      RollbackManager.rollback_to() accepts any string as SHA.
+      Need: _SHA_PATTERN = re.compile(r"^[a-f0-9]{40}$")
+      Validate target_sha against pattern before git reset --hard.
+    action_ref: "phase-141-c"
+    status: OPEN
+
+  - id: "GAP-141-04"
+    title: "8 golden tests for source protection"
+    severity: P0
+    source: "GitHub Issue #17"
+    evidence: |
+      Missing golden test coverage for source protection invariants.
+      Need: GV-012 through GV-019 in tests/golden/orchestrators/health_vacuum/
+    action_ref: "phase-141-d"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-141-a"
+    title: "Expand PROTECTED_DIRS — constants.py + vacuum_orchestrator.py"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-141-01"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: []
+    tdd_sequence:
+      red:
+        - test_cortex_in_protected_dirs
+        - test_tests_in_protected_dirs
+        - test_scripts_in_protected_dirs
+        - test_deployment_in_protected_dirs
+        - test_vscode_in_protected_dirs
+      green:
+        - "Add to PROTECTED_DIRS: cortex, tests, scripts, deployment, .vscode"
+        - "Update _PROTECTED_ROOTS in _plan_root_clutter_ops()"
+        - "Update _PROTECTED_ROOTS in _plan_empty_cleanup_ops()"
+        - "Update _EXCLUDED_DIRS in _plan_naming_fixes()"
+        - "Update _SKIP_DIRS in _plan_os_artifact_ops() (+ _workspaces)"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-141-b"
+    title: "Add validate_safe_run() method"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-141-02"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-141-a"]
+    tdd_sequence:
+      red:
+        - test_validate_safe_run_returns_empty_for_safe_workspace
+        - test_validate_safe_run_warns_on_protected_paths
+      green:
+        - "Add validate_safe_run() → List[str] method"
+        - "Perform dry-run with recency_guard_hours=0"
+        - "Inspect each operation's source path against PROTECTED_DIRS"
+        - "Return list of warnings (empty = safe)"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-141-c"
+    title: "RollbackManager SHA validation"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-141-03"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "30 minutes"
+    depends_on: []
+    tdd_sequence:
+      red:
+        - test_rollback_to_rejects_invalid_sha_format
+        - test_rollback_to_accepts_valid_40_char_hex
+      green:
+        - "Add _SHA_PATTERN = re.compile(r'^[a-f0-9]{40}$')"
+        - "Validate target_sha in rollback_to() before git reset --hard"
+        - "Raise ValueError with descriptive message on invalid format"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-141-d"
+    title: "8 Golden Tests — GV-012 through GV-019"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-141-04"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-141-a", "phase-141-b", "phase-141-c"]
+    test_requirements:
+      test_file: "tests/golden/orchestrators/health_vacuum/test_vacuum_source_protection_golden.py"
+      tests:
+        - "GV-012: cortex/ source directory never modified by run()"
+        - "GV-013: cortex present in PROTECTED_DIRS constant"
+        - "GV-014: _plan_naming_fixes skips all files inside cortex/"
+        - "GV-015: Empty file cleanup never deletes inside cortex/"
+        - "GV-016: Markdown archival never moves files from cortex/"
+        - "GV-017: tests/ directory never modified by run()"
+        - "GV-018: validate_safe_run() returns empty list for safe workspace"
+        - "GV-019: Non-protected files are still cleaned (no over-protection)"
+    completion_gate: "make test-smoke && python3 -m pytest tests/golden/orchestrators/health_vacuum/ -v"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "PROTECTED_DIRS expanded from 9 to 15 entries"
+  - "All 8 golden tests (GV-012 through GV-019) pass"
+  - "validate_safe_run() method implemented and tested"
+  - "RollbackManager rejects invalid SHA format"
+  - "No source directory files are ever modified by VacuumOrchestrator"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules:
+    - "GV-012 through GV-019 golden tests (P0 — breaks on regression)"
+  modified_rules:
+    - "PROTECTED_DIRS expanded from 9 to 15 entries"
+  workflow_changes: []

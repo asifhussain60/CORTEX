@@ -17,7 +17,7 @@
 
 ## 🎯 Learning Objective
 
-Engineers understand how CORTEX transforms their daily workflow: LENS provides deep codebase comprehension backed by a curated knowledge repository, TDD is enforced not suggested, over 35 MCP tools operate inside the IDE, and the convergence gate is designed to catch issues before they ship.
+Engineers understand how CORTEX transforms their daily workflow: LENS provides deep codebase comprehension backed by a curated knowledge repository, TDD is enforced not suggested, over 40 MCP tools operate inside the IDE, and the convergence gate is designed to catch issues before they ship.
 
 ---
 
@@ -39,7 +39,7 @@ Engineers understand how CORTEX transforms their daily workflow: LENS provides d
 ### Scene 3 — Empower: TDD as Infrastructure (120s) [VBP-015 breadcrumb: ✅●○]
 **Visual:** Animated TDD cycle — three phases as a continuous loop: RED (test file creates, red X marker), GREEN (implementation writes, green check), REFACTOR (code restructures with diff highlights). Each phase has a glassmorphic card with timing: "RED: 12s", "GREEN: 34s", "REFACTOR: 8s".
 **Narration:** CORTEX does not suggest TDD — it enforces it. Write the failing test first, or the system will not proceed. This is CORE-008 — the most important governance rule. The test file is scaffolded from your acceptance criteria. Implementation follows. Then the refactor pass targets code quality. Kent Beck called this: "Make it work, make it right, make it fast."
-**Animation:** TDD loop cycles continuously. RED card: test code types itself with red underlines. GREEN card: implementation fills in, underlines turn green. REFACTOR card: code blocks rearrange with smooth morph animation. "Over 35 MCP tools" badge floats nearby. Beck quote pill.
+**Animation:** TDD loop cycles continuously. RED card: test code types itself with red underlines. GREEN card: implementation fills in, underlines turn green. REFACTOR card: code blocks rearrange with smooth morph animation. "40+ MCP tools" badge floats nearby. Beck quote pill.
 
 ### Scene 4 — Build: Multi-Stack Debug + Convergence (120s) [VBP-015 breadcrumb: ✅✅●]
 **Visual:** Multi-stack debug pipeline: 8 strategy icons arranged in a semicircle (3 Python + 5 multi-stack: Frontend, HTML-Vision, API, SQL, DotNet). A bug icon enters. The correct strategy lights up and captures it. Markers inject → evidence captures → RCA analysis → auto-cleanup. Then convergence gate: detect→fix→rescan loop with violation counter dropping.
@@ -76,6 +76,6 @@ Engineers understand how CORTEX transforms their daily workflow: LENS provides d
 Electronic ambient ~72 BPM. Technical energy. Strategic silence after empowerment moment.
 
 ## 🧭 Mission Alignment
-- **Understand Everything:** Scene 2 — LENS 4-layer pipeline, Intelligence Diamond (3-tier), knowledge repository (80+ files, 14 domains)
-- **Empower Everyone:** Scene 3 — TDD enforcement, over 35 MCP tools, Kent Beck methodology
-- **Build Fearlessly:** Scene 4 — 8 debug strategies, 4 RCA methodologies, convergence gate
+- **Understand Everything:** Scene 2 — LENS 4-layer pipeline, Intelligence Diamond (3-tier), knowledge repository (80+ files, 14 domains), Documentation Intelligence (60+ practices, 10 sub-domains)
+- **Empower Everyone:** Scene 3 — TDD enforcement, 40+ MCP tools, Kent Beck methodology
+- **Build Fearlessly:** Scene 4 — 8 debug strategies, 4 RCA methodologies, convergence gate, Vacuum Source Protection (15 protected dirs)

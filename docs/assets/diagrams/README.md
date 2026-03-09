@@ -57,6 +57,7 @@ Every diagram spec file includes YAML frontmatter:
 
 ### Intelligence (code understanding)
 - `11-diagram-intelligence-lens-analysis-pipeline.md` — 4-layer LENS analysis (git → AST → annotations → patterns) + Diamond Facade architecture (IntelligenceFacade single entry: analyze/synthesize/query) + Phase 109 migration state
+- `20-diagram-intelligence-document-ingest-pipeline.md` — 5-component pipeline: FileClassifier → DocumentReader → KnowledgeExtractor → ContentRouter → DocumentIngestOrchestrator for Word/Excel/PDF ingestion
 
 ### Debugging (multi-stack)
 - `14-diagram-debugging-multi-stack-pipeline.md` — 8 strategies across Python, JS, C#, SQL, .NET with auto-cleanup
@@ -67,6 +68,9 @@ Every diagram spec file includes YAML frontmatter:
 
 ### Security (threat modeling)
 - `17-diagram-security-threat-model-stride-analysis.md` — Threat Model Engine STRIDE classification with DREAD scoring and ranked threat catalogue
+
+### Source Protection (safety guarantees)
+- `21-diagram-governance-vacuum-source-protection.md` — VacuumOrchestrator source protection: 15 PROTECTED_DIRS, validate_safe_run(), SHA validation, 8 golden tests (GV-012..GV-019)
 
 ## Adding a new diagram
 

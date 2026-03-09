@@ -146,6 +146,29 @@ This continuous knowledge update means that CORTEX's recommendations remain rele
 
 ---
 
+## Documentation Intelligence — 60+ Best Practices Across 10 Sub-Domains
+
+The **Documentation Intelligence Knowledge Domain** codifies best practices for creating and maintaining technical documentation. Over 60 practices are organised across 10 sub-domains:
+
+| Sub-Domain | What It Covers |
+|---|---|
+| **Technical Documentation** | Structure, formatting, versioning, audience targeting |
+| **API Documentation** | OpenAPI, endpoint descriptions, authentication, error codes |
+| **Architecture Decision Records (ADRs)** | Decision context, options considered, consequences |
+| **Runbooks** | Incident response, operational procedures, escalation paths |
+| **Release Notes** | Change summaries, breaking changes, migration guides |
+| **Onboarding Documentation** | New developer guides, setup instructions, contribution guidelines |
+| **Knowledge Management** | Organisation, discoverability, freshness policies |
+| **Documentation Testing** | Link checking, example verification, accuracy validation |
+| **Accessibility** | WCAG compliance for docs, screen reader compatibility |
+| **Governance** | Review processes, ownership, update cadence |
+
+This knowledge activates when CORTEX detects documentation-related patterns in a request — signals like "document", "docs", "writing", "readme", "runbook", "adr", or "release.notes" trigger the documentation domain. The Knowledge Guidance Engine resolves documentation-specific best practices and injects them into any documentation-related task.
+
+Every knowledge consultation is traced via the Decision Traceability system — recording which knowledge was consulted, the confidence level, and the rationale for the resolution. This provides full audit compliance for QW-006 (Knowledge Guidance Traceability).
+
+---
+
 ## For Curious Learners
 
 The patterns and knowledge architecture in CORTEX demonstrates a principle that distinguishes senior engineers from junior ones: the ability to recognise structural patterns in unfamiliar code. When an experienced architect reviews a codebase, they don't read every line — they recognise the shapes. "This is a Repository pattern. This is a Strategy pattern. This mediator is incomplete."
@@ -154,4 +177,4 @@ CORTEX codifies that pattern recognition capability. Studying how CORTEX detects
 
 ---
 
-*Pattern knowledge architecture verified against enterprise patterns registry and knowledge engine implementation*
+*Pattern knowledge architecture verified against enterprise patterns registry and knowledge engine implementation · Phase 145 Documentation Intelligence COMPLETE*

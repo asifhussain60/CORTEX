@@ -93,6 +93,10 @@ order: 99
 
 **Distill / DISTILL Intent** — A CORTEX intent type (Phase 129) that reduces a multi-turn conversation to an executable, context-dense prompt. The 5-stage pipeline (segment → reconstruct → reconcile → synthesise → compress) eliminates noise while preserving all goals, decisions, and constraints. Exposed as the `cortex_distill` MCP tool.
 
+**Document Ingest Pipeline** — 5-component system for converting external documents (Word, Excel, PowerPoint, PDF, YAML, Markdown) into structured knowledge within `cortex-registry/`. Components: FileClassifier (9 categories, PII rejection), DocumentReader (lazy-loaded Office/PDF libraries with graceful degradation), KnowledgeExtractor (YAML normalization, text-to-knowledge), ContentRouter (14-domain routing table), DocumentIngestOrchestrator (pipeline coordinator with OPJ integration and teardown support). Phase 144 delivery. Location: `cortex/orchestrators/support/ingest/`.
+
+**Documentation Intelligence** — Knowledge domain containing 60+ best practices across 10 sub-domains: technical documentation, API documentation, ADRs, runbooks, release notes, onboarding documentation, knowledge management, documentation testing, accessibility, and governance. Registered in Knowledge INDEX.yaml with domain signal: `document|documentation|docs|writing|readme|runbook|adr|release.notes`. Phase 145 delivery. Location: `cortex-registry/knowledge/best-practices/documentation/documentation-intelligence.yaml`.
+
 **Domain Brain** — Domain-specific knowledge module that provides context for business logic decisions. Location: `cortex/intelligence/domain_brain/`.
 
 ## E
@@ -143,6 +147,8 @@ order: 99
 
 **Knowledge Base** — Domain knowledge stored in `cortex-registry/knowledge-base/` and managed by `cortex/knowledge/`.
 
+**Knowledge Guidance Traceability** — Decision audit trail system where every knowledge consultation emits a DecisionTraceabilityLogger.log_decision() call with RESOLUTION type, recording module path, domain, entry count, confidence, and rationale. Provides auditable evidence of which knowledge was consulted for every guidance resolution. QW-006 compliance. Phase 143 delivery. Wired into `KnowledgeGuidanceEngine`. Module: `cortex/core/knowledge_guidance_engine.py`.
+
 **Knowledge Hydration** — The process of resolving and injecting domain knowledge into execution context before orchestrator execution. Resolution order: Company overlays → Knowledge base (static) → SDLC knowledge (dynamic) → Pattern registry → LENS real-time analysis. All resolved knowledge is merged into the orchestrator's execution context.
 
 ## L
@@ -179,6 +185,8 @@ order: 99
 
 **Pylance-style MCP** — CORTEX's MCP server auto-starts when VS Code opens the workspace — same pattern as the Pylance language server. No manual startup required.
 
+**PROTECTED_DIRS** — Constant in `cortex/orchestrators/health/constants.py` listing 15 directories that VacuumOrchestrator is permanently forbidden from modifying: cortex/, tests/, .github/, scripts/, deployment/, .vscode/, cortex-registry/, docs/, .git/, node_modules/, venv/, .venv/, __pycache__/, .pytest_cache/, .mypy_cache/. Used across all 8 vacuum stages. Phase 141 delivery.
+
 **pytest-xdist** — pytest plugin for parallel test execution. Used with `-n auto --dist loadscope` for unit tests and `-n 4 --dist loadfile` for integration tests.
 
 ## Q
@@ -200,6 +208,8 @@ order: 99
 **ReinforcementSignal** — Dataclass carrying a typed feedback signal (see SignalType) from an orchestrator back to the learning subsystem. Fields: `signal_type`, `source`, `target_pattern`, `confidence_delta`, `context`, `timestamp`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
 **RequestRephraseOrchestrator** — Orchestrator that clarifies ambiguous or incomplete requests before routing to execution. Location: `cortex/orchestrators/core/`.
+
+**Response Rendering Rules** — 14 mandatory formatting rules enforced on all CORTEX response templates via golden tests: R1 (blank lines after headings), R2 (blank lines around lists), R3 (table formatting), R4 (no empty headers), R5 (no hard-wrap), R6 (single H1), Rule 1 (no tree characters), Rule 3 (no long lines), Rule 4 (max 5 columns). Phase 146 delivery. Tests: `tests/golden/test_response_rendering_rules_golden.py`.
 
 **REVIEW / Code Review Intent** — Intent type routed to the Code Review Orchestrator. Triggers multi-pass code review across the changed-file set: structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance. Reviews are emitted inline as structured comments with severity (P0–P3) and fix suggestions. MCP tool: `cortex_review`. See also: Code Review Orchestrator.
 
@@ -255,9 +265,15 @@ order: 99
 
 **Vacuum Recency Guard** — Safety mechanism within the Vacuum Orchestrator that prevents deletion of recently modified files. Files touched within a configurable grace window (default: 7 days) are excluded from vacuum sweeps even if they match cleanup heuristics. Protects work-in-progress artefacts from aggressive workspace cleaning. Enforced during all 8 vacuum stages. Module: `cortex/orchestrators/health/vacuum_orchestrator.py`.
 
+**Vacuum Source Protection** — Hardened safety system ensuring VacuumOrchestrator NEVER modifies files inside protected directories. Comprises: PROTECTED_DIRS constant (15 directories), validate_safe_run() pre-flight check (dry-run with path verification), RollbackManager SHA validation (40-character hex regex), and 8 golden tests (GV-012..GV-019). Phase 141 delivery. Module: `cortex/orchestrators/health/vacuum_orchestrator.py`, `cortex/orchestrators/health/constants.py`.
+
+**validate_safe_run()** — Pre-flight safety check in VacuumOrchestrator that runs a dry-run with recency_guard_hours=0, inspects all planned operations against PROTECTED_DIRS, and returns a list of warnings. If warnings are non-empty, the vacuum operation aborts. Phase 141 delivery. Module: `cortex/orchestrators/health/vacuum_orchestrator.py`.
+
 ## W
 
 **WAL (Write-Ahead Logging)** — SQLite journaling mode used by CortexAuditDB. Enables concurrent reads during single-writer transactions.
+
+**WorkflowGateway SSOT** — Single Source of Truth pattern for intent→template mappings. WorkflowGateway._MODE_TEMPLATE_MAP is the canonical map; SubPhaseComposer imports from it via get_mode_template_map() rather than maintaining a duplicate. Phase 142 delivery (DRY refactor). Module: `cortex/orchestrators/workflow/workflow_gateway.py`.
 
 **WorkflowEngine** — Executes workflow templates from `cortex-registry/workflows/`. Exposes `load()` to parse YAML templates and `execute_step()` (SDO-compatible API) to run individual steps. Wired to `ScaffoldWriter` so scaffold artefacts are persisted to disk. Module: `cortex/core/workflow_engine.py`.
 

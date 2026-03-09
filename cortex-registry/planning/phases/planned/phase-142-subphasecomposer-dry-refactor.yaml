@@ -1,0 +1,145 @@
+# CORTEX Phase Plan — Phase 142
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-004)
+# Backport Order: 3 of 7 (low risk refactor)
+
+id: "phase-142"
+title: "SubPhaseComposer DRY Refactor — WorkflowGateway SSOT"
+created: "2026-03-09"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-004"
+classification: REFACTORED
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-142-SUBPHASECOMPOSER-DRY"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Eliminates the duplicated intent→template mapping in SubPhaseComposer by making
+  WorkflowGateway the single source of truth (SSOT).
+  
+  SubPhaseComposer now imports get_mode_template_map() from WorkflowGateway and
+  builds its mapping dynamically at module load, with an extension point for
+  SubPhaseComposer-only overrides.
+  
+  Removes 18 hardcoded entries from SubPhaseComposer.
+  Adds get_mode_template_map() public accessor to WorkflowGateway.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - cortex/orchestrators/workflow/sub_phase_composer.py
+    - cortex/orchestrators/workflow/workflow_gateway.py
+  design_pattern: |
+    DRY (Don't Repeat Yourself)
+    SSOT (Single Source of Truth)
+    Lazy Initialization
+  integration_points: |
+    WorkflowGateway._MODE_TEMPLATE_MAP (canonical)
+    SubPhaseComposer.INTENT_TEMPLATE_MAP (derived)
+  dependencies: "Existing WorkflowGateway infrastructure"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-142-01"
+    title: "Add get_mode_template_map() to WorkflowGateway"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      WorkflowGateway._MODE_TEMPLATE_MAP is private.
+      Need public accessor for SubPhaseComposer to import.
+    action_ref: "phase-142-a"
+    status: OPEN
+
+  - id: "GAP-142-02"
+    title: "Refactor SubPhaseComposer to use WorkflowGateway SSOT"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      SubPhaseComposer has 18-entry hardcoded INTENT_TEMPLATE_MAP.
+      Duplicates WorkflowGateway._MODE_TEMPLATE_MAP.
+      Violates CORE-035 (single canonical implementation).
+    action_ref: "phase-142-b"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-142-a"
+    title: "Add get_mode_template_map() to WorkflowGateway"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-142-01"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "30 minutes"
+    depends_on: []
+    tdd_sequence:
+      red:
+        - test_get_mode_template_map_returns_dict
+        - test_get_mode_template_map_returns_copy_not_reference
+      green:
+        - "Add get_mode_template_map() → Dict[str, Optional[str]]"
+        - "Return a copy of _MODE_TEMPLATE_MAP (not reference)"
+    completion_gate: "make test-smoke — zero failures"
+
+  - id: "phase-142-b"
+    title: "Refactor SubPhaseComposer — import from WorkflowGateway"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-142-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-142-a"]
+    tdd_sequence:
+      red:
+        - test_intent_template_map_matches_workflow_gateway
+        - test_subphasecomposer_no_hardcoded_duplicates
+      green:
+        - "Remove 18-entry hardcoded INTENT_TEMPLATE_MAP dictionary"
+        - "Import get_mode_template_map from cortex.orchestrators.workflow.workflow_gateway"
+        - "Add _build_intent_template_map() function that:"
+        - "  - Starts with canonical mappings from WorkflowGateway"
+        - "  - Filters None values"
+        - "  - Applies SubPhaseComposer-only overrides (extension point)"
+        - "Assign INTENT_TEMPLATE_MAP = _build_intent_template_map() at module level"
+    completion_gate: "make test-smoke — zero failures"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "WorkflowGateway exposes get_mode_template_map() public accessor"
+  - "SubPhaseComposer imports canonical mappings from WorkflowGateway"
+  - "18 hardcoded entries removed from SubPhaseComposer"
+  - "Extension point exists for SubPhaseComposer-only overrides"
+  - "Existing SubPhaseComposer tests pass without modification"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules: []
+  modified_rules:
+    - "QW-002 (DRY) compliance — eliminated 18-entry duplication"
+  workflow_changes: []

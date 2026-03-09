@@ -101,10 +101,30 @@ The governance gate coordinates ten specialised agents, each responsible for a s
 | **Output Suppression Agent** | No report files created; all output delivered inline |
 | **Architecture Integrity Agent** | Structural boundaries, dependency directions, layer violations |
 | **Discovery Enforcement Agent** | Single canonical implementations — no duplicates |
-| **Response Validation Agent** | Output format matches established standards |
+| **Response Validation Agent** | Output format matches established standards with 14-rule rendering validation |
 | **Extended Rules Agent** | Database configuration, MCP footprint, plan-first requirements |
 
 When all ten agents pass, the operation proceeds. When any agent raises a blocking violation, the operation stops with a specific explanation — the developer knows exactly what to fix and why.
+
+---
+
+## Response Rendering Rules — Golden Test Enforcement
+
+CORTEX enforces 14 mandatory rendering rules for all response templates using golden tests. These rules ensure consistent Markdown formatting across every response the system produces:
+
+| Rule | What It Enforces |
+|---|---|
+| **R1 — Blank Lines After Headings** | Every `##` or `###` heading must be followed by a blank line |
+| **R2 — Blank Lines Around Lists** | Lists must have blank lines before and after |
+| **R3 — Table Formatting** | Tables must have consistent column alignment |
+| **R4 — No Empty Headers** | Any heading without content below it is a violation |
+| **R5 — No Hard-Wrap** | Paragraphs must not be hard-wrapped mid-sentence |
+| **R6 — Single H1** | Each response has exactly one H1 heading |
+| **Rule 1 — No Tree Characters** | Tree characters (├─ └─) collapse in Copilot Chat and are forbidden |
+| **Rule 3 — No Long Lines** | Long horizontal divider lines are forbidden |
+| **Rule 4 — Max 5 Columns** | Tables must not exceed 5 columns |
+
+The golden tests scan both YAML template files in `cortex-registry/templates/response/` and `cortex-response-templates.md` to ensure no template drift. Any violation fails the governance build.
 
 ---
 

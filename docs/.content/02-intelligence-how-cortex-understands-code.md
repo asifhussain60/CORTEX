@@ -69,6 +69,22 @@ The eight extractors feed their results into LENS analysis, the Archetype Classi
 
 ---
 
+## Document Ingest Pipeline — Office and PDF Knowledge Extraction
+
+CORTEX extends its understanding beyond source code to include external documents. The **Document Ingest Pipeline** is a 5-component system that classifies, extracts, routes, and persists knowledge from Word, Excel, PowerPoint, PDF, YAML, and Markdown files:
+
+| Component | What It Does |
+|---|---|
+| **FileClassifier** | Categorises files into 9 categories, rejects binary files and PII-containing content, applies extension blocklists |
+| **DocumentReader** | Extracts text from Office documents (python-docx, openpyxl, python-pptx) and PDFs (pypdf) with graceful degradation if libraries are unavailable |
+| **KnowledgeExtractor** | Normalises YAML content and converts text to structured knowledge with headings and list extraction |
+| **ContentRouter** | Routes extracted knowledge to the appropriate domain using a 14-domain routing table, segregating company-specific content appropriately |
+| **DocumentIngestOrchestrator** | Coordinates the full pipeline with OPJ integration and supports full teardown — every ingested artefact can be cleanly reversed |
+
+For organisations with extensive documentation — architecture decision records, runbooks, compliance policies, onboarding guides — the Document Ingest Pipeline converts that documentation into structured knowledge that CORTEX consults during code analysis and recommendations.
+
+---
+
 ## Quality Analysis Engine — Scoring Codebase Health
 
 The **Quality Analysis Engine** evaluates codebase quality across multiple dimensions, producing a composite score (0–100) with per-dimension breakdowns:

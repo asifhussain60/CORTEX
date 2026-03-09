@@ -2,6 +2,8 @@
 
 These prompts are designed for **Google Gemini Video Generator** and **NotebookLM Video Editor** to produce a **10-video enterprise intelligence series** that takes viewers from zero knowledge of CORTEX to a complete understanding of its strategic and technical value.
 
+**Architecture Verified (2026-03-09):** 350+ orchestrators across 15 domains | 40+ MCP tools registered | 60+ governance rules | Document Ingest Pipeline (Word/Excel/PDF) | Vacuum Source Protection (15 protected dirs) | Documentation Intelligence (60+ practices, 10 sub-domains) | Response Rendering Validation (14-rule golden tests) | Knowledge Guidance Traceability (QW-006)
+
 ## The Learning Journey
 
 The 10 concept videos follow a **progressive depth curve** — from executive overview to strategic ROI. Each video builds on the previous ones. **Zero content repetition between videos.** The first video inspires the viewer to complete the full journey.

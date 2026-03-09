@@ -1,0 +1,172 @@
+# CORTEX Phase Plan — Phase 146
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-006)
+# Backport Order: 7 of 7 (golden tests — can be backported anytime)
+
+id: "phase-146"
+title: "Response Rendering Rules Golden Tests — 14-Rule Template Validation"
+created: "2026-03-09"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-006"
+classification: NEW_GOVERNANCE
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-146-RESPONSE-RENDERING-RULES"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Establishes golden tests that enforce the 14 Mandatory Rendering Rules for
+  CORTEX response templates.
+  
+  Validates all response composition YAMLs (atoms, blocks, compositions) against:
+  - R1: Blank lines after headings
+  - R2: Blank lines around lists
+  - R3: Table formatting
+  - R4: No empty headers
+  - R5: No hard-wrap in paragraphs
+  - R6: Single H1
+  - Rule 1: No tree characters (├─ └─)
+  - Rule 3: No long horizontal lines
+  - Rule 4: Max 5 table columns
+  
+  Scans both YAML template files and cortex-response-templates.md.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - tests/golden/test_response_rendering_rules_golden.py
+  design_pattern: |
+    Golden Test Pattern
+    Template Schema Enforcement
+    Regex-Based Rendering Rule Validation
+  integration_points: |
+    cortex-registry/templates/response/ (atoms, blocks, compositions)
+    .github/templates/cortex-response-templates.md
+  dependencies: "Existing test infrastructure, PyYAML"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-146-01"
+    title: "Create response rendering rules golden tests"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      No automated validation of rendering rules exists.
+      Response template YAMLs can drift without detection.
+      14 mandatory rendering rules must be enforced.
+    action_ref: "phase-146-a"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-146-a"
+    title: "Create response rendering rules golden tests"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-146-01"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    tdd_sequence:
+      implementation_steps:
+        - "Collect all YAML files from cortex-registry/templates/response/ (atoms, blocks, compositions)"
+        - "For each YAML file, extract string values containing markdown"
+        - "Validate against 14 rendering rules"
+    rules_to_validate:
+      - id: R1
+        description: "Blank line required after every heading (## / ###)"
+        regex: "##[^\\n]*\\n[^\\n]"
+        expected: "No matches (blank line must follow)"
+      - id: R2
+        description: "Blank line before and after every list"
+        regex: "[^\\n]\\n[-*]|[-*][^\\n]*\\n[^-*\\n]"
+        expected: "No matches (lists need surrounding blank lines)"
+      - id: R3
+        description: "Tables require blank line before + header row + separator row"
+        regex: "[^\\n]\\n\\|"
+        expected: "No matches (blank line before table)"
+      - id: R4
+        description: "No empty headers (H2/H3 with no content below)"
+        regex: "##[^#\\n]*\\n\\n##"
+        expected: "No matches (content must follow header)"
+      - id: R5
+        description: "No hard-wrap within paragraphs (newline inside prose)"
+        regex: "[a-z,]\\n[a-z]"
+        expected: "No matches in prose sections"
+      - id: R6
+        description: "One H1 only; all content sections use H2+"
+        check: "Count # at line start; only 1 single-# heading allowed"
+      - id: Rule1
+        description: "Use bullet lists (not tree chars ├─ └─)"
+        regex: "[├└│]"
+        expected: "No matches"
+      - id: Rule3
+        description: "No long horizontal lines (━━━━)"
+        regex: "━{4,}"
+        expected: "No matches"
+      - id: Rule4
+        description: "Max 5 table columns"
+        check: "Count | in header rows; must be ≤6 (5 columns = 6 pipes)"
+    test_cases:
+      - test_r1_blank_line_after_heading
+      - test_r2_blank_line_around_lists
+      - test_r3_table_formatting
+      - test_r4_no_empty_headers
+      - test_r5_no_hard_wrap_paragraphs
+      - test_r6_single_h1
+      - test_no_tree_characters
+      - test_no_long_horizontal_lines
+      - test_max_5_table_columns
+      - test_all_atoms_comply
+      - test_all_blocks_comply
+      - test_all_compositions_comply
+      - test_response_templates_md_complies
+    completion_gate: "make test-smoke — zero failures, all 14 rules validated"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TEST REQUIREMENTS
+# ─────────────────────────────────────────────────────────────────────────────
+test_requirements:
+  test_file: "tests/golden/test_response_rendering_rules_golden.py"
+  description: "All 14 rendering rules validated across all response template files"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "Golden test file created at tests/golden/test_response_rendering_rules_golden.py"
+  - "All 14 rendering rules have corresponding test assertions"
+  - "All YAML files in cortex-registry/templates/response/ scanned"
+  - "cortex-response-templates.md scanned"
+  - "All current templates pass (no existing violations)"
+  - "Test integrates with make test-smoke"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules:
+    - "Response rendering rules golden tests (P1 — breaks on template regression)"
+  modified_rules: []
+  workflow_changes: []

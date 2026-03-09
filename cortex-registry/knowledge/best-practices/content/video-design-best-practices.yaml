@@ -331,15 +331,16 @@ copilot_contrast_narrative:
       video_ref: "V06 Scene 4"
 
 # ─────────────────────────────────────────────────────────────────
-# GROUND-TRUTH ARCHITECTURE FACTS (Live — updated 2026-03-03)
+# GROUND-TRUTH ARCHITECTURE FACTS (Live — updated 2026-03-09)
 # Use these as the ONLY permitted callout numbers in video content.
 # Run `scripts/refresh_prompt_suite.py --counts-only` to revalidate.
+# Reflects Phase 140-146 capabilities (Document Ingest, Vacuum Protection, etc.)
 # ─────────────────────────────────────────────────────────────────
 architecture_facts:
   verified: "2026-03-09"
-  orchestrator_files: 338          # find cortex/orchestrators -name "*.py" | wc -l
-  mcp_tools_registered: 40        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict
-  mcp_tool_files: 60              # find cortex/mcp/tools -name "*.py" | wc -l
+  orchestrator_files: 350          # find cortex/orchestrators -name "*.py" | wc -l (includes Phase 144 ingest orchestrators)
+  mcp_tools_registered: 40         # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict
+  mcp_tool_files: 60               # find cortex/mcp/tools -name "*.py" | wc -l
   intent_types: 35                 # cortex/models/canonical_enums.py IntentType enum
   governance_yamls_core: 26        # find cortex-registry/core -name "*.yaml" | wc -l
   governance_yamls_governance: 34  # find cortex-registry/governance -name "*.yaml" | wc -l
@@ -355,5 +356,15 @@ architecture_facts:
   audit_pipeline_stages: 9         # /audit fix 9-stage convergence pipeline
   sqlite_databases: 7              # .cortex-runtime/ (orchestrator-traces, rca-store, audit, governance, conversations, wiring-audit, intelligence-audit)
   orchestrator_domains: 15         # core:145 domain:39 support:58 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 registry:2 response:6 synthesis:2 tools:2 strategies:1
-  quote_library_count: 32          # BLOCK-QUOTE-LIBRARY in cortex-response-templates.md
+  quote_library_count: 120         # cortex-registry/templates/response/atoms/atom-quote.yaml (SSOT)
   quote_themes: 10                 # quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal
+  # Phase 140-146 capabilities
+  document_ingest_components: 5    # FileClassifier, DocumentReader, KnowledgeExtractor, ContentRouter, DocumentIngestOrchestrator
+  document_ingest_formats: 6       # Word, Excel, PowerPoint, PDF, YAML, Markdown
+  vacuum_protected_dirs: 15        # PROTECTED_DIRS constant in cortex/orchestrators/health/constants.py
+  vacuum_golden_tests: 8           # GV-012 through GV-019 in tests/golden/orchestrators/health_vacuum/
+  documentation_intelligence_practices: 60  # 10 sub-domains: tech docs, API docs, ADRs, runbooks, release notes, onboarding, knowledge mgmt, doc testing, accessibility, governance
+  documentation_intelligence_subdomains: 10
+  response_rendering_rules: 14     # Golden test validation for response template Markdown formatting
+  workflow_gateway_ssot: true      # WorkflowGateway.get_mode_template_map() is SSOT, SubPhaseComposer imports from it
+  knowledge_guidance_traceability: true  # DecisionTraceabilityLogger wired to KnowledgeGuidanceEngine (QW-006)
