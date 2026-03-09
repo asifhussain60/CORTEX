@@ -54,7 +54,7 @@
 <link as="image" href="assets/images/cortex-logo-512.png" rel="preload"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <!-- FontAwesome Icons -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
@@ -462,15 +462,124 @@
         .hero-stat-item { width: 45%; }
     }
 
-    /* --- TWO-PANEL WHAT IS / VISION LAYOUT --- */
+    /* ═══════════════════════════════════════════════════════════
+       TWO-PANEL TETRIS LAYOUT — Unified identical tile structure
+       Both panels share the SAME 3-zone flex column structure AND
+       the SAME Zone 3 tile component. Only accent colour differs.
+         Zone 1 (flex:0 auto): heading row  [icon + h2]
+         Zone 2 (flex:0 auto): prose paragraphs
+         Zone 3 (flex:1):      4 tiles — icon | LABEL / body
+       Tetris Rules 1–4 guarantee zero dead space in both panels.
+       Font: Plus Jakarta Sans — distinct from Inter (body) and Space Grotesk (display).
+             Geometric humanist, consistent cross-device, warm + modern.
+       ═══════════════════════════════════════════════════════════ */
+
+    /* Tetris Rule 1 — outer grid: both columns same height */
     .feature-grid-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
+        align-items: stretch;
     }
     @media (max-width: 768px) {
         .feature-grid-2 { grid-template-columns: 1fr; }
     }
+
+    /* Tetris Rule 2 — each card fills its grid cell top-to-bottom */
+    .tp-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Tetris Rule 3 — body is a flex column; Zone 3 absorbs all leftover height */
+    .tp-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .tp-head  { flex: 0 0 auto; }   /* Zone 1 */
+    .tp-prose { flex: 0 0 auto; }   /* Zone 2 */
+
+    /* Zone 3 — IDENTICAL on both panels: 4-row grid that stretches to fill */
+    .tp-visual {
+        flex: 1;                     /* Tetris Rule 3 */
+        display: grid;
+        grid-template-rows: repeat(4, 1fr);   /* 4 equal rows */
+        align-content: stretch;      /* Tetris Rule 4 — rows expand together */
+        margin-top: 1.25rem;
+        gap: 0.55rem;
+        min-height: 0;
+    }
+
+    /* ── Heading inside panel — override global h2 font ──────────────── */
+    .tp-card h2 {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    /* ── Prose paragraphs inside panel ───────────────────────────────── */
+    .tp-prose p {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 0.97rem;
+        line-height: 1.65;
+        font-weight: 400;
+    }
+
+    /* ── Unified tile — shared by BOTH panels ─────────────────────────── */
+    /* Structure: [icon-col] [text-col: label / body] */
+    .tp-tile {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.7rem;
+        border-radius: 10px;
+        padding: 0.65rem 0.9rem;
+        min-height: 0;               /* allow grid to compress if needed */
+    }
+
+    /* Icon column */
+    .tp-tile-icon {
+        font-size: 1.15rem;
+        flex-shrink: 0;
+        margin-top: 0.05rem;
+        line-height: 1;
+    }
+
+    /* Text column */
+    .tp-tile-content { flex: 1; min-width: 0; }
+
+    .tp-tile-label {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 0.79rem;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.025em;
+        text-transform: uppercase;
+        margin-bottom: 0.18rem;
+    }
+
+    .tp-tile-body {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 0.77rem;
+        color: var(--text-secondary);
+        line-height: 1.45;
+    }
+
+    /* ── Cyan variant — left panel (Copilot challenges) ─────────────── */
+    .tp-tile--cyan {
+        background: rgba(0,212,255,0.06);
+        border: 1px solid rgba(0,212,255,0.18);
+    }
+    .tp-tile--cyan .tp-tile-label { color: var(--accent-cyan); }
+
+    /* ── Purple variant — right panel (CORTEX metrics) ──────────────── */
+    .tp-tile--purple {
+        background: rgba(123,97,255,0.08);
+        border: 1px solid rgba(123,97,255,0.22);
+    }
+    .tp-tile--purple .tp-tile-label { color: var(--accent-purple); }
 
     /* --- AWAKENING CINEMATIC CARD --- */
     .awakening-card {
@@ -2338,51 +2447,128 @@
     </section>
 </header>
 
-<!-- Two-Panel Layout: What Is CORTEX + Vision -->
+<!-- Two-Panel Layout: GitHub Copilot Challenges + CORTEX Vision -->
 <div style="max-width: 1200px; margin: var(--issa-hero-first, 3rem) auto var(--spacing-8) auto; padding: 0 var(--spacing-6);">
     <div class="feature-grid-2">
-        <!-- Left Panel: What Is CORTEX? -->
-        <article class="glass-card" style="padding: 2rem; text-align: left;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
-                <span style="font-size: 3rem;" aria-hidden="true">🧠</span>
-                <h2 style="margin: 0; font-size: 2rem; color: var(--accent-cyan);">What is CORTEX?</h2>
+
+        <!-- ── LEFT PANEL: GitHub Copilot — The Challenge ── -->
+        <article class="glass-card tp-card" style="padding: 2rem; text-align: left;" aria-labelledby="copilot-challenge-heading">
+            <div class="tp-body">
+
+                <!-- Zone 1: Heading -->
+                <div class="tp-head" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.1rem;">
+                    <img src="https://avatars.githubusercontent.com/u/116680982?s=88" alt="GitHub Copilot" width="44" height="44" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;border-radius:8px;">
+                    <h2 id="copilot-challenge-heading" style="margin: 0; font-size: 1.9rem; color: var(--accent-cyan);">GitHub Copilot</h2>
+                </div>
+
+                <!-- Zone 2: Prose -->
+                <div class="tp-prose">
+                    <p style="font-size: 0.97rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.9rem;">
+                        GitHub Copilot accelerates code generation — but <strong style="color: var(--accent-cyan);">ungoverned, it introduces new classes of engineering risk</strong>.
+                        Every session starts cold. Context evaporates. Each interaction is an island with no memory of decisions made, patterns established, or failures
+                        already suffered. Engineers repeat the same mistakes across sprints because Copilot has no institutional knowledge to draw from.
+                    </p>
+                    <p style="font-size: 0.97rem; line-height: 1.7; color: var(--text-secondary);">
+                        AI Agents promise autonomy — but without governance they produce <strong style="color: var(--accent-cyan);">patchwork fixes</strong> that
+                        compound technical debt, skip tests, and bypass architectural boundaries. Powerful individually, agents lack the orchestration layer
+                        that transforms suggestions into <strong style="color: var(--accent-cyan);">auditable, repeatable engineering outcomes</strong>.
+                    </p>
+                </div>
+
+                <!-- Zone 3: 4 challenge tiles — identical structure to right panel, cyan accent -->
+                <div class="tp-visual" role="list" aria-label="Copilot governance challenges">
+                    <div class="tp-tile tp-tile--cyan" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#129504;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">Zero Session Memory</div>
+                            <div class="tp-tile-body">Every conversation resets — no recall of prior decisions, patterns, or failures.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--cyan" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#127754;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">Context Erosion</div>
+                            <div class="tp-tile-body">Long threads collapse under token limits, silently dropping critical architectural context.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--cyan" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#129657;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">Patchwork Fixes</div>
+                            <div class="tp-tile-body">Agents fix symptoms, not root causes — compounding drift with every autonomous change.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--cyan" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#128683;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">No Governance Rail</div>
+                            <div class="tp-tile-body">No TDD enforcement, no sweep contracts, no convergence gates — just unchecked output.</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                CORTEX is a <strong style="color: var(--accent-cyan);">multi-agent orchestration system</strong> that transforms GitHub Copilot into an enterprise-grade
-                development platform. The <strong style="color: var(--accent-cyan);">Knowledge Library</strong> enforces organisational best practices, coding standards,
-                and architectural patterns — ensuring consistent, high-quality output across every interaction.
-            </p>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                With intelligent <strong style="color: var(--accent-cyan);">Token Optimisation</strong> reducing AI costs by up to 60%, RAG-enhanced context retrieval,
-                and autonomous workflow orchestration, CORTEX delivers measurable ROI while maintaining long-term memory across sessions,
-                enforcing TDD discipline, and preventing the architectural drift that plagues AI-assisted codebases.
-            </p>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">
-                From <strong style="color: var(--accent-cyan);">automated planning</strong> to <strong style="color: var(--accent-cyan);">Azure DevOps integration</strong>,
-                CORTEX provides the governance layer enterprises need — turning ad-hoc AI assistance into a repeatable, auditable, and scalable development methodology.
-            </p>
         </article>
 
-        <!-- Right Panel: The CORTEX Vision -->
-        <article class="glass-card" style="padding: 2rem; text-align: left;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
-                <span style="font-size: 3rem;" aria-hidden="true">🚀</span>
-                <h2 style="margin: 0; font-size: 2rem; color: var(--accent-purple);">The CORTEX Vision</h2>
+        <!-- ── RIGHT PANEL: The CORTEX Vision ── -->
+        <article class="glass-card tp-card" style="padding: 2rem; text-align: left;" aria-labelledby="cortex-vision-heading">
+            <div class="tp-body">
+
+                <!-- Zone 1: Heading -->
+                <div class="tp-head" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.1rem;">
+                    <img src="assets/images/cortex-logo-128.png" alt="CORTEX" width="44" height="44" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;">
+                    <h2 id="cortex-vision-heading" style="margin: 0; font-size: 1.9rem; color: var(--accent-purple);">The CORTEX Vision</h2>
+                </div>
+
+                <!-- Zone 2: Prose -->
+                <div class="tp-prose">
+                    <p style="font-size: 0.97rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.9rem;">
+                        CORTEX exists so every engineer on every team can <strong style="color: var(--accent-purple);">understand everything, feel empowered, and build fearlessly</strong> —
+                        without sacrificing quality or security. Where Copilot generates, CORTEX <em>governs</em>: wrapping every interaction in
+                        institutional memory, TDD discipline, architectural sweep contracts, and closed-loop learning that accumulates across every session.
+                    </p>
+                    <p style="font-size: 0.97rem; line-height: 1.7; color: var(--text-secondary);">
+                        CORTEX transforms GitHub Copilot from a <strong style="color: var(--accent-purple);">capable assistant into a governed engineering platform</strong> —
+                        one that enforces convergence gates, prevents architectural drift, and elevates engineers from code mechanics to
+                        <strong style="color: var(--accent-purple);">strategic architects</strong> who design, decide, and deliver at enterprise scale.
+                    </p>
+                </div>
+
+                <!-- Zone 3: 4 metric tiles — identical structure to left panel, purple accent -->
+                <div class="tp-visual" role="list" aria-label="CORTEX governance metrics">
+                    <div class="tp-tile tp-tile--purple" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#129504;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">290+ Orchestrators</div>
+                            <div class="tp-tile-body">290+ agents across 14 domains — every intent precision-routed with zero ambiguity.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--purple" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#9989;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">20K+ Tests</div>
+                            <div class="tp-tile-body">20,000+ tests enforcing every governance contract, sweep rule, and convergence gate.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--purple" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#128200;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">60% Token Savings</div>
+                            <div class="tp-tile-body">RAG-enhanced context retrieval reduces AI token costs by up to 60% per session.</div>
+                        </div>
+                    </div>
+                    <div class="tp-tile tp-tile--purple" role="listitem">
+                        <span class="tp-tile-icon" aria-hidden="true">&#127919;</span>
+                        <div class="tp-tile-content">
+                            <div class="tp-tile-label">31 Intent Types</div>
+                            <div class="tp-tile-body">TDD-first, RCA memory, sweep contracts, and drift prevention — governed end-to-end.</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                In the AI era, software engineering is undergoing its most profound transformation since the advent of high-level programming languages.
-                The tedious mechanics of debugging, boilerplate generation, and repetitive coding tasks are being automated at unprecedented scale.
-            </p>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                <strong style="color: var(--accent-purple);">CORTEX elevates developers</strong> from code mechanics to <strong style="color: var(--accent-purple);">strategic architects</strong>.
-                By handling implementation details with intelligent automation, developers reclaim bandwidth for high-value activities:
-                system design, stakeholder collaboration, and solving the complex business problems that drive competitive advantage.
-            </p>
-            <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary);">
-                The future rewards those who <em>architect</em>, <em>strategise</em>, and <em>innovate</em> — while CORTEX orchestrates the precise execution
-                of planning, testing, and continuous refinement with machine-grade consistency and human-grade intelligence.
-            </p>
         </article>
+
     </div>
 </div>
 
