@@ -921,7 +921,20 @@
         flex-shrink: 0;
     }
 
-    /* --- GET STARTED CTA SECTION --- */
+    /* --- GET STARTED CTA SECTION — 1×2 GRID --- */
+
+    /* Grid wrapper: two equal columns, stretch so both cards fill same height */
+    .gs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+    @media (max-width: 767px) {
+        .gs-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Left card — Getting Started (amber) */
     .get-started-cta {
         position: relative;
         display: flex;
@@ -934,6 +947,8 @@
         border: 1px solid rgba(245, 158, 11, 0.15);
         backdrop-filter: var(--blur-glass);
         overflow: hidden;
+        height: 100%;
+        box-sizing: border-box;
     }
     .get-started-cta::before {
         content: '';
@@ -957,7 +972,7 @@
         border-radius: var(--radius-md);
         text-decoration: none;
         cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         position: relative;
         z-index: 1;
@@ -983,6 +998,140 @@
         color: var(--text-secondary);
     }
     .get-started-stats .gs-stat i { color: var(--accent-amber); font-size: 0.85rem; }
+
+    /* Right card — CORTEX University (teal/violet) */
+    .university-cta {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 3rem 2rem;
+        border-radius: var(--radius-xl);
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.06), rgba(139, 92, 246, 0.04), rgba(20, 184, 166, 0.06));
+        border: 1px solid rgba(20, 184, 166, 0.2);
+        backdrop-filter: var(--blur-glass);
+        overflow: hidden;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    .university-cta::before {
+        content: '';
+        position: absolute;
+        top: -80px; left: 50%; transform: translateX(-50%);
+        width: 320px; height: 320px;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.07), transparent 70%);
+        pointer-events: none;
+    }
+
+    /* Divider between the two cards on desktop */
+    @media (min-width: 768px) {
+        .gs-grid { position: relative; }
+        .gs-grid::after {
+            content: '';
+            position: absolute;
+            top: 15%; bottom: 15%;
+            left: 50%; transform: translateX(-50%);
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent);
+            pointer-events: none;
+        }
+    }
+
+    /* University level path pills */
+    .uni-levels {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 340px;
+        margin: 1.5rem 0;
+        position: relative;
+        z-index: 1;
+    }
+    .uni-level-link {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        padding: 0.75rem 1.125rem;
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        border: 1px solid rgba(255,255,255,0.07);
+        background: rgba(255,255,255,0.03);
+        text-align: left;
+    }
+    .uni-level-link:hover {
+        transform: translateX(4px);
+        background: rgba(20, 184, 166, 0.08);
+        border-color: rgba(20, 184, 166, 0.3);
+    }
+    .uni-level-link:focus {
+        outline: 2px solid rgba(20, 184, 166, 0.6);
+        outline-offset: 2px;
+    }
+    .uni-level-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+    }
+    .uni-level-badge.l1 { background: rgba(20,184,166,0.15); color: #14b8a6; border: 1px solid rgba(20,184,166,0.3); }
+    .uni-level-badge.l2 { background: rgba(123,97,255,0.15); color: #7b61ff; border: 1px solid rgba(123,97,255,0.3); }
+    .uni-level-badge.l3 { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .uni-level-text { flex: 1; }
+    .uni-level-title { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); line-height: 1.2; }
+    .uni-level-desc  { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.125rem; }
+    .uni-level-arrow { color: rgba(255,255,255,0.3); font-size: 0.8rem; transition: color 0.2s ease; }
+    .uni-level-link:hover .uni-level-arrow { color: #14b8a6; }
+
+    .university-cta .cta-btn-teal {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.85rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: var(--font-display);
+        color: #020617;
+        background: linear-gradient(135deg, #14b8a6, #0d9488);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        position: relative;
+        z-index: 1;
+        margin-top: auto;
+    }
+    .university-cta .cta-btn-teal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
+    }
+    .uni-stats {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1.25rem;
+        position: relative;
+        z-index: 1;
+    }
+    .uni-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+    .uni-stat i { color: #14b8a6; font-size: 0.8rem; }
 
     /* --- TAB SYSTEM --- */
     .tab-layout { display: flex; flex-direction: column; gap: var(--spacing-8); }
@@ -1074,6 +1223,7 @@
 
         /* ── Get started CTA ── */
         .get-started-cta { padding: var(--spacing-8) var(--spacing-6); }  /* 2rem 1.5rem */
+        .university-cta  { padding: var(--spacing-8) var(--spacing-6); }  /* 2rem 1.5rem */
 
         /* ── Tab panel ── */
         .tab-content-area { padding: var(--spacing-6); }     /* 1.5rem */
@@ -3777,23 +3927,75 @@
         </a>
     </section>
 
-    <!-- 8. Get Started — Standalone CTA Section -->
+    <!-- 8. Get Started + CORTEX University — 1×2 Grid -->
     <section class="container section" id="get-started" aria-labelledby="get-started-heading">
-        <div class="get-started-cta">
-            <div class="icon-box lg icon-amber m-0 mb-6" aria-hidden="true" style="animation: subtleFloat 6s ease-in-out infinite;"><i class="fas fa-rocket"></i></div>
-            <h2 class="text-3xl text-gradient font-bold m-0 mb-2" id="get-started-heading" style="position:relative;z-index:1;">Get Started with CORTEX</h2>
-            <p class="text-xs font-semibold text-amber uppercase tracking-widest m-0 mb-4" style="position:relative;z-index:1;">Zero to Governed AI in 5 Minutes</p>
-            <p class="text-muted text-lg m-0 mb-8" style="max-width:560px;position:relative;z-index:1;">
-                Experience the framework in your own IDE. Install locally with zero cloud dependencies — no Docker, no accounts, just your editor.
-            </p>
-            <a href="getting-started.html" class="cta-btn">
-                <i class="fas fa-bolt" aria-hidden="true"></i> Start Building Now
-            </a>
-            <div class="get-started-stats">
-                <span class="gs-stat"><i class="fas fa-clock" aria-hidden="true"></i> 5-minute install</span>
-                <span class="gs-stat"><i class="fas fa-robot" aria-hidden="true"></i> Native Copilot Chat</span>
-                <span class="gs-stat"><i class="fas fa-cloud-slash" aria-hidden="true"></i> No cloud required</span>
+        <div class="gs-grid">
+
+            <!-- ── Left: Get Started ── -->
+            <div class="get-started-cta">
+                <div class="icon-box lg icon-amber m-0 mb-6" aria-hidden="true" style="animation: subtleFloat 6s ease-in-out infinite;"><i class="fas fa-rocket"></i></div>
+                <h2 class="text-3xl text-gradient font-bold m-0 mb-2" id="get-started-heading" style="position:relative;z-index:1;">Get Started with CORTEX</h2>
+                <p class="text-xs font-semibold text-amber uppercase tracking-widest m-0 mb-4" style="position:relative;z-index:1;">Zero to Governed AI in 5 Minutes</p>
+                <p class="text-muted text-lg m-0 mb-8" style="max-width:420px;position:relative;z-index:1;">
+                    Experience the framework in your own IDE. Install locally with zero cloud dependencies — no Docker, no accounts, just your editor.
+                </p>
+                <a href="getting-started.html" class="cta-btn">
+                    <i class="fas fa-bolt" aria-hidden="true"></i> Start Building Now
+                </a>
+                <div class="get-started-stats">
+                    <span class="gs-stat"><i class="fas fa-clock" aria-hidden="true"></i> 5-minute install</span>
+                    <span class="gs-stat"><i class="fas fa-robot" aria-hidden="true"></i> Native Copilot Chat</span>
+                    <span class="gs-stat"><i class="fas fa-cloud-slash" aria-hidden="true"></i> No cloud required</span>
+                </div>
             </div>
+
+            <!-- ── Right: CORTEX University ── -->
+            <div class="university-cta">
+                <div class="icon-box lg m-0 mb-6" aria-hidden="true" style="background:rgba(20,184,166,0.12);color:#14b8a6;border-color:rgba(20,184,166,0.25);animation:subtleFloat 7s ease-in-out infinite 1s;"><i class="fas fa-graduation-cap"></i></div>
+                <h2 class="font-bold m-0 mb-2" id="university-heading" style="position:relative;z-index:1;font-size:1.875rem;background:linear-gradient(135deg,#14b8a6,#7b61ff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CORTEX University</h2>
+                <p class="text-xs font-semibold uppercase tracking-widest m-0 mb-4" style="position:relative;z-index:1;color:#14b8a6;">Structured Learning · 3 Levels · 6 Domains</p>
+                <p class="text-muted m-0" style="max-width:380px;position:relative;z-index:1;font-size:1rem;line-height:1.65;">
+                    Progressive paths engineered to take you from first concepts to deep architecture expertise — one level at a time.
+                </p>
+
+                <!-- Three-level navigation paths -->
+                <nav class="uni-levels" aria-label="CORTEX University learning levels">
+                    <a href="learning/index.html#level-1" class="uni-level-link">
+                        <span class="uni-level-badge l1" aria-hidden="true">L1</span>
+                        <span class="uni-level-text">
+                            <span class="uni-level-title">Foundations</span>
+                            <span class="uni-level-desc">Core concepts, mental models &amp; key terminology</span>
+                        </span>
+                        <i class="fas fa-chevron-right uni-level-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="learning/index.html#level-2" class="uni-level-link">
+                        <span class="uni-level-badge l2" aria-hidden="true">L2</span>
+                        <span class="uni-level-text">
+                            <span class="uni-level-title">Practitioner</span>
+                            <span class="uni-level-desc">Workflows, orchestrators &amp; governed delivery</span>
+                        </span>
+                        <i class="fas fa-chevron-right uni-level-arrow" aria-hidden="true"></i>
+                    </a>
+                    <a href="learning/index.html#level-3" class="uni-level-link">
+                        <span class="uni-level-badge l3" aria-hidden="true">L3</span>
+                        <span class="uni-level-text">
+                            <span class="uni-level-title">Advanced</span>
+                            <span class="uni-level-desc">Architecture internals, intelligence &amp; extension points</span>
+                        </span>
+                        <i class="fas fa-chevron-right uni-level-arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
+
+                <a href="learning/index.html" class="cta-btn-teal">
+                    <i class="fas fa-book-open" aria-hidden="true"></i> Explore All Learning Paths
+                </a>
+                <div class="uni-stats">
+                    <span class="uni-stat"><i class="fas fa-layer-group" aria-hidden="true"></i> 3 levels</span>
+                    <span class="uni-stat"><i class="fas fa-cubes" aria-hidden="true"></i> 6 domains</span>
+                    <span class="uni-stat"><i class="fas fa-circle-nodes" aria-hidden="true"></i> 43 concepts</span>
+                </div>
+            </div>
+
         </div>
     </section>
     
