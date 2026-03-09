@@ -2,7 +2,7 @@
 scope: non-production-admin
 ---
 # CORTEX Documentation Orchestrator
-**Updated:** 2026-03-09 (Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added) | **Status:** ✅ PRODUCTION READY
+**Updated:** 2026-03-09 (Phase 109.2 — Tetris Layout Engine added; `tetris-layout-agent.md` wired; `tetris-layout-spec.yaml` in cortex-registry; trigger phrase routing added · `serve` argument added — kills port 8000, closes ALL existing Terminal windows, opens single Mac Terminal, launches Chrome) | **Status:** ✅ PRODUCTION READY
 **Authority:** Autonomous Documentation Governance | **Package:** `cortex` (single canonical)
 **Agents:** 16 modular agents in `.github/agents/docs/`
 **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
@@ -1137,6 +1137,47 @@ When invoked with a specific `/doc-*` command:
 2. Present plan with proceed gate (⚡ Proceed Gate)
 3. Execute after approval
 4. Report with completion state (✅ Completion State)
+
+### `serve` Argument — `/cortex-doc serve`
+
+**Trigger:** User says `/cortex-doc serve` (case-insensitive, exact argument match).
+
+**Purpose:** Kill any process occupying port 8000, launch a new Mac Terminal window (not the VS Code terminal) running `python3 -m http.server 8000` from `docs/`, and open `http://localhost:8000/index.html` in Google Chrome.
+
+**Execution steps (run silently, no proceed gate required):**
+
+1. **Kill port 8000** — run in the VS Code terminal:
+   ```zsh
+   lsof -ti:8000 | xargs kill -9 2>/dev/null; echo "Port 8000 cleared"
+   ```
+2. **Close ALL existing Terminal windows** — quit Terminal entirely via AppleScript so no stale windows remain, then relaunch with a single fresh window:
+   ```zsh
+   osascript -e 'tell application "Terminal" to close every window' 2>/dev/null; true
+   ```
+3. **Launch Mac Terminal + HTTP server** — open exactly ONE new Terminal window via AppleScript, `cd` to `docs/`, start the server:
+   ```zsh
+   osascript -e 'tell application "Terminal" to do script "cd /Users/asifhussain/PROJECTS/CORTEX/docs && python3 -m http.server 8000"'
+   ```
+4. **Open Chrome** — after a 1-second pause to let the server bind:
+   ```zsh
+   sleep 1 && open -a "Google Chrome" http://localhost:8000/index.html
+   ```
+
+**Canonical single-command form (steps 2–4 chained):**
+```zsh
+osascript -e 'tell application "Terminal" to close every window' 2>/dev/null; osascript -e 'tell application "Terminal" to do script "cd /Users/asifhussain/PROJECTS/CORTEX/docs && python3 -m http.server 8000"' && sleep 1 && open -a "Google Chrome" http://localhost:8000/index.html
+```
+
+**Rules:**
+- ✅ ALWAYS close all existing Terminal windows before opening a new one — one window, one server, no duplicates
+- ✅ Always target `docs/` as the server root — never the workspace root
+- ✅ Always open `index.html` specifically — not just `localhost:8000`
+- ✅ Always use Mac Terminal (via `osascript`) — never the VS Code integrated terminal for the server process
+- ✅ Kill port 8000 first, then close Terminal windows, then open the new window — order is mandatory
+- ❌ Never use a fixed `sleep` longer than 2 seconds
+- ❌ Never skip the port-kill step — always clear 8000 first to avoid `Address already in use` errors
+- ❌ Never call `do script` without first calling `close every window` — this is the root cause of multiple Terminal windows
+- ❌ Never open Safari or the default browser — always `open -a "Google Chrome"`
 
 ---
 
