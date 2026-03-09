@@ -66,6 +66,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 
+<!-- D3.js v7 — visualization_standards.yaml: approved engine, CDN-pinned -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
 <!-- 
   =============================================================================
   CORTEX DESIGN SYSTEM: INLINE CSS ARCHITECTURE
@@ -287,8 +292,8 @@
     .text-lg { font-size: 1.125rem; }
     .text-xl { font-size: 1.25rem; }
     .text-2xl { font-size: 1.5rem; }
-    .text-3xl { font-size: 2rem; }
-    .text-4xl { font-size: 2.5rem; }
+    .text-3xl { font-size: clamp(1.375rem, 3.5vw, 2rem); }
+    .text-4xl { font-size: clamp(1.5rem, 4.5vw, 2.5rem); }
     .font-normal { font-weight: 400; }
     .font-semibold { font-weight: 600; }
     .font-bold { font-weight: 700; }
@@ -482,14 +487,17 @@
         margin-bottom: var(--spacing-16);
     }
     .hero-stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .hero-stat-value { font-size: 2rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.25rem; font-family: var(--font-display); }
+    .hero-stat-value { font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.25rem; font-family: var(--font-display); }
     .hero-stat-value.highlight { color: var(--accent-cyan); }
     .hero-stat-label { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-tertiary); font-weight: 600; }
     .hero-stat-divider { width: 1px; height: 32px; background: var(--border-highlight); }
     @media(max-width: 768px) {
         .hero-stats-bar { border-radius: var(--radius-xl); padding: var(--spacing-6); gap: var(--spacing-4); }
         .hero-stat-divider { display: none; }
-        .hero-stat-item { width: 45%; }
+        .hero-stat-item { flex: 1 1 calc(50% - var(--spacing-4)); min-width: 0; }
+    }
+    @media(max-width: 380px) {
+        .hero-stat-item { flex: 1 1 100%; }
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -563,9 +571,13 @@
     }
     /* Lock prose zone to a fixed height so .tp-visual starts at the SAME
        vertical position in both columns — permanent alignment guarantee.
-       Value = ~6 rendered lines at 1rem/1.65 line-height + paragraph gap. */
+       Value = ~6 rendered lines at 1rem/1.65 line-height + paragraph gap.
+       Disabled on mobile (single-column) where height-sync is not needed. */
     .tp-prose {
         min-height: 11rem;
+    }
+    @media (max-width: 768px) {
+        .tp-prose { min-height: unset; }
     }
 
     /* ── Unified tile — shared by BOTH panels ─────────────────────────── */
@@ -1385,10 +1397,11 @@
     /* --- SDLC Pipeline Section --- */
     @media (max-width: 900px) {
         .sdlc-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        .sdlc-guarantees { grid-template-columns: 1fr !important; }
+        .sdlc-guarantees { grid-template-columns: repeat(2, 1fr) !important; }
     }
     @media (max-width: 560px) {
         .sdlc-grid { grid-template-columns: 1fr !important; }
+        .sdlc-guarantees { grid-template-columns: 1fr !important; }
     }
 
     /* --- FOOTER (compact single-row) --- */
@@ -2894,13 +2907,13 @@
     <div class="feature-grid-2">
 
         <!-- ── LEFT PANEL: GitHub Copilot — The Challenge ── -->
-        <article class="glass-card tp-card" style="padding: 2rem; text-align: left;" aria-labelledby="copilot-challenge-heading">
+        <article class="glass-card tp-card" style="text-align: left;" aria-labelledby="copilot-challenge-heading">
             <div class="tp-body">
 
                 <!-- Zone 1: Heading -->
                 <div class="tp-head" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.1rem;">
                     <img src="assets/images/github-copilot-icon.jpeg" alt="GitHub Copilot" width="44" height="44" style="width:44px;height:44px;object-fit:cover;flex-shrink:0;border-radius:8px;">
-                    <h2 id="copilot-challenge-heading" style="margin: 0; font-size: 1.9rem; color: var(--accent-cyan);">GitHub Copilot</h2>
+                    <h2 id="copilot-challenge-heading" style="margin: 0; font-size: clamp(1.25rem, 3vw, 1.9rem); color: var(--accent-cyan);">GitHub Copilot</h2>
                 </div>
 
                 <!-- Zone 2: Prose -->
@@ -2952,7 +2965,7 @@
         </article>
 
         <!-- ── RIGHT PANEL: The CORTEX Vision ── -->
-        <article class="glass-card tp-card" style="padding: 2rem; text-align: left;" aria-labelledby="cortex-vision-heading">
+        <article class="glass-card tp-card" style="text-align: left;" aria-labelledby="cortex-vision-heading">
             <div class="tp-body">
 
                 <!-- Zone 1: Heading -->
@@ -2960,7 +2973,7 @@
                     <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;background:#ffffff;border-radius:50%;flex-shrink:0;">
                         <img src="assets/images/cortex-logo-128.png" alt="CORTEX" width="34" height="34" style="width:34px;height:34px;object-fit:contain;display:block;">
                     </span>
-                    <h2 id="cortex-vision-heading" style="margin: 0; font-size: 1.9rem; color: var(--accent-purple);">The CORTEX Vision</h2>
+                    <h2 id="cortex-vision-heading" style="margin: 0; font-size: clamp(1.25rem, 3vw, 1.9rem); color: var(--accent-purple);">The CORTEX Vision</h2>
                 </div>
 
                 <!-- Zone 2: Prose -->
@@ -3532,42 +3545,10 @@
 
                 </div><!-- /bordered card -->
 
-                <!-- Three pillars -->
-                <div style="display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.25rem;">
-                    <div style="
-                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
-                        background: rgba(255,255,255,0.03);
-                        border: 1px solid rgba(255,255,255,0.07);
-                        border-radius: 0.875rem;
-                        padding: 1.25rem 1rem;
-                    ">
-                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🧠</div>
-                        <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#a5b4fc; margin-bottom:0.35rem;">Orchestrates</div>
-                        <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">290+ orchestrators across 14 domains</div>
-                    </div>
-                    <div style="
-                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
-                        background: rgba(255,255,255,0.03);
-                        border: 1px solid rgba(255,255,255,0.07);
-                        border-radius: 0.875rem;
-                        padding: 1.25rem 1rem;
-                    ">
-                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🛡️</div>
-                        <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#67e8f9; margin-bottom:0.35rem;">Governs</div>
-                        <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">60+ CORE rules enforced at every gate</div>
-                    </div>
-                    <div style="
-                        flex: 1; min-width: min(160px, 100%); max-width: 240px;
-                        background: rgba(255,255,255,0.03);
-                        border: 1px solid rgba(255,255,255,0.07);
-                        border-radius: 0.875rem;
-                        padding: 1.25rem 1rem;
-                    ">
-                        <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">✅</div>
-                        <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#34d399; margin-bottom:0.35rem;">Verifies</div>
-                        <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">20,000+ tests · TDD-first · zero regressions</div>
-                    </div>
-                </div>
+                <!-- Architecture deep-dive link — single sentence, no stat repetition -->
+                <p style="text-align:center;font-size:0.875rem;color:rgba(148,163,184,0.55);margin:0.25rem 0 0;">
+                    Explore the full technical blueprint — <a href="architecture.html" style="color:var(--accent-cyan);text-decoration:none;font-weight:600;">architecture.html <i class="fas fa-arrow-right" style="font-size:0.75rem;" aria-hidden="true"></i></a>
+                </p>
             </div>
         </div>
     </section>
@@ -3587,147 +3568,384 @@
         </div>
 
         <!-- Pipeline visual -->
-        <div class="glass-card-super" style="padding: 2.5rem;">
-            <!-- Phase flow — horizontal on desktop, vertical on mobile -->
-            <div style="
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 1rem;
-                margin-bottom: 2rem;
-            " class="sdlc-grid" role="list" aria-label="CORTEX 7-phase delivery lifecycle">
+        <div class="glass-card-super">
+            <!-- D3 Radial SDLC Pipeline ─────────────────────────────────────
+                 visualization_standards.yaml: cycle_diagrams_via_custom_svg_circular
+                 D3 v7 arc segments around a central "Governed Delivery" hub.
+                 Hover/click any segment to expand a detail panel below the SVG.
+                 prefers-reduced-motion respected via JS matchMedia guard.
+                 WCAG: role="img", aria-label, hidden <desc> for screen readers.
+            ─────────────────────────────────────────────────────────────── -->
+            <style>
+              #sdlc-radial-wrap { position: relative; }
+              #sdlc-radial { display: block; width: 100%; max-height: 520px; cursor: default; }
 
-                <!-- Phase 0 -->
-                <div role="listitem" style="
-                    background: rgba(123,97,255,0.06);
-                    border: 1px solid rgba(123,97,255,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                    position: relative;
-                    overflow: hidden;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(123,97,255,0.7);">Phase 0</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">💡</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Change Intelligence</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">Product Owners decide whether to build — backed by real codebase analysis and ROI projections, not gut feel.</div>
-                </div>
+              /* Detail panel slides in below the SVG */
+              #sdlc-detail {
+                display: none;
+                margin-top: 1.25rem;
+                padding: 1.125rem 1.5rem;
+                border-radius: var(--radius-lg);
+                border: 1px solid rgba(255,255,255,0.1);
+                background: rgba(255,255,255,0.03);
+                backdrop-filter: blur(12px);
+                animation: sdlcFadeIn 0.25s ease;
+              }
+              #sdlc-detail.visible { display: block; }
+              @keyframes sdlcFadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
-                <!-- Phase 1 -->
-                <div role="listitem" style="
-                    background: rgba(0,212,255,0.06);
-                    border: 1px solid rgba(0,212,255,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,212,255,0.7);">Phase 1</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">📋</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Requirements Analysis</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">Ambiguities flagged before design begins. Acceptance criteria and scope documented with full architectural context.</div>
-                </div>
+              #sdlc-detail-label {
+                font-family: var(--font-mono);
+                font-size: 0.6875rem;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 0.4rem;
+              }
+              #sdlc-detail-title {
+                font-weight: 700;
+                font-size: 1.125rem;
+                color: var(--text-primary);
+                margin-bottom: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              }
+              #sdlc-detail-body {
+                font-size: 0.9375rem;
+                color: var(--text-secondary);
+                line-height: 1.65;
+              }
 
-                <!-- Phase 2 -->
-                <div role="listitem" style="
-                    background: rgba(16,185,129,0.06);
-                    border: 1px solid rgba(16,185,129,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(16,185,129,0.7);">Phase 2</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">🏗️</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Solution Design</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">Proposed approaches validated against architectural patterns and security-by-design principles before a line is written.</div>
-                </div>
+              /* ── Outer tick labels — hidden on very narrow screens ── */
+              @media (max-width: 480px) {
+                .sdlc-lbl { display: none; }
+              }
 
-                <!-- Phase 3 -->
-                <div role="listitem" style="
-                    background: rgba(245,158,11,0.06);
-                    border: 1px solid rgba(245,158,11,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,158,11,0.7);">Phase 3</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">⚡</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">TDD Implementation</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">Tests written first — always. Red → Green → Refactor cycle enforced by the convergence gate with no exceptions.</div>
-                </div>
+              /* Mobile: shrink SVG, reduce viewBox height */
+              @media (max-width: 640px) {
+                #sdlc-radial { max-height: 340px; }
+              }
+              @media (max-width: 420px) {
+                /* On very small phones hide outer labels — arcs + hub still readable */
+                #sdlc-radial { max-height: 280px; }
+                .sdlc-seg-label { font-size: 0.85rem; }
+              }
+              /* sdlc-guarantees: 1-col on mobile */
+              @media (max-width: 560px) {
+                #sdlc-radial-wrap + div[style*="grid-template-columns:repeat(3,1fr)"],
+                .sdlc-guarantees { grid-template-columns: 1fr !important; }
+              }
+            </style>
 
-                <!-- Phase 4 -->
-                <div role="listitem" style="
-                    background: rgba(186,85,211,0.06);
-                    border: 1px solid rgba(186,85,211,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(186,85,211,0.7);">Phase 4</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">🔍</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Code Review</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">5-pass automated review: architecture, security, governance, test coverage, and style — each with severity-ranked findings.</div>
-                </div>
+            <div id="sdlc-radial-wrap">
+              <svg id="sdlc-radial"
+                   viewBox="0 0 800 500"
+                   role="img"
+                   aria-label="CORTEX 8-phase governed SDLC pipeline — interactive radial diagram"
+                   aria-describedby="sdlc-radial-desc">
+                <desc id="sdlc-radial-desc">
+                  A radial arc diagram showing CORTEX's 8 delivery phases arranged as coloured
+                  segments around a central Governed Delivery hub. Phase 0: Change Intelligence
+                  (purple). Phase 1: Requirements Analysis (cyan). Phase 2: Solution Design
+                  (emerald). Phase 3: TDD Implementation (amber). Phase 4: Code Review (magenta).
+                  Phase 5: Integration Verification (sky blue). Phase 6: Security Assessment (rose).
+                  Phase 7: Release Readiness (emerald, terminal). Click any segment to read details.
+                </desc>
+                <!-- D3 renders here at runtime -->
+              </svg>
 
-                <!-- Phase 5 -->
-                <div role="listitem" style="
-                    background: rgba(0,212,255,0.06);
-                    border: 1px solid rgba(0,212,255,0.15);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,212,255,0.6);">Phase 5</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">🔗</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Integration Verification</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">Integration seams verified with full architectural context — failures surfaced with component relationships already mapped.</div>
-                </div>
-
-                <!-- Phase 6 -->
-                <div role="listitem" style="
-                    background: rgba(244,63,94,0.06);
-                    border: 1px solid rgba(244,63,94,0.2);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(244,63,94,0.7);">Phase 6</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">🛡️</div>
-                    <div style="font-weight:700;font-size: 1rem;color:var(--text-primary);line-height:1.3;">Security Assessment</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">STRIDE threat modelling, OWASP Top 10 validation, CVE scanning, and SAST — critical findings block release automatically.</div>
-                </div>
-
-                <!-- Phase 7 -->
-                <div role="listitem" style="
-                    background: rgba(16,185,129,0.08);
-                    border: 2px solid rgba(16,185,129,0.35);
-                    border-radius: var(--radius-lg);
-                    padding: 1.25rem 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                    box-shadow: 0 0 20px rgba(16,185,129,0.1);
-                ">
-                    <span style="font-family:var(--font-mono);font-size: 0.6875rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(16,185,129,0.8);">Phase 7</span>
-                    <div style="font-size:1.5rem;" aria-hidden="true">✅</div>
-                    <div style="font-weight:700;font-size: 1rem;color:#34d399;line-height:1.3;">Release Readiness</div>
-                    <div style="font-size: 1rem;color:var(--text-secondary);line-height:1.5;">All 7 phases passed. Governance certificate issued. Documentation verified. Production cleared.</div>
-                </div>
-
+              <!-- Detail panel — populated by D3 on segment click/hover -->
+              <div id="sdlc-detail" role="region" aria-live="polite" aria-label="Phase detail">
+                <div id="sdlc-detail-label"></div>
+                <div id="sdlc-detail-title"></div>
+                <div id="sdlc-detail-body"></div>
+              </div>
             </div>
+
+            <script>
+            (function () {
+              'use strict';
+
+              /* ── Phase data ─────────────────────────────────────────────── */
+              const phases = [
+                { id: 0, label: 'Change Intelligence',     emoji: '💡', color: '#7b61ff',
+                  detail: 'Product Owners decide whether to build — backed by real codebase analysis and ROI projections, not gut feel.' },
+                { id: 1, label: 'Requirements Analysis',   emoji: '📋', color: '#00d4ff',
+                  detail: 'Ambiguities flagged before design begins. Acceptance criteria and scope documented with full architectural context.' },
+                { id: 2, label: 'Solution Design',         emoji: '🏗️', color: '#10b981',
+                  detail: 'Proposed approaches validated against architectural patterns and security-by-design principles before a line is written.' },
+                { id: 3, label: 'TDD Implementation',      emoji: '⚡', color: '#f59e0b',
+                  detail: 'Tests written first — always. Red → Green → Refactor cycle enforced by the convergence gate with no exceptions.' },
+                { id: 4, label: 'Code Review',             emoji: '🔍', color: '#ba55d3',
+                  detail: '5-pass automated review: architecture, security, governance, test coverage, and style — severity-ranked findings.' },
+                { id: 5, label: 'Integration Verification',emoji: '🔗', color: '#38bdf8',
+                  detail: 'Integration seams verified with full architectural context — failures surfaced with component relationships already mapped.' },
+                { id: 6, label: 'Security Assessment',     emoji: '🛡️', color: '#f43f5e',
+                  detail: 'STRIDE threat modelling, OWASP Top 10 validation, CVE scanning, and SAST — critical findings block release automatically.' },
+                { id: 7, label: 'Release Readiness',       emoji: '✅', color: '#34d399', terminal: true,
+                  detail: 'All 7 phases passed. Governance certificate issued. Documentation verified. Production cleared.' }
+              ];
+
+              /* ── Geometry ───────────────────────────────────────────────── */
+              const W = 800, H = 500, cx = W / 2, cy = H / 2 + 10;
+              const outerR = 195, innerR = 92, labelR = 228;
+
+              /* ── Motion guard ───────────────────────────────────────────── */
+              const reducedMotion = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+              const dur = reducedMotion ? 0 : 600;
+
+              /* ── SVG bootstrap ──────────────────────────────────────────── */
+              const svg = d3.select('#sdlc-radial');
+              const g   = svg.append('g').attr('transform', `translate(${cx},${cy})`);
+
+              /* ── Defs: glow filter + radial gradient for hub ──────────────*/
+              const defs = svg.append('defs');
+
+              // Glow filter (used by hub + active segment)
+              const flt = defs.append('filter').attr('id','sdlc-glow').attr('x','-40%').attr('y','-40%').attr('width','180%').attr('height','180%');
+              flt.append('feGaussianBlur').attr('stdDeviation','6').attr('result','blur');
+              flt.append('feComposite').attr('in','SourceGraphic').attr('in2','blur').attr('operator','over');
+
+              // Hub gradient
+              const hubGrad = defs.append('radialGradient').attr('id','sdlc-hub-grad').attr('cx','50%').attr('cy','50%').attr('r','50%');
+              hubGrad.append('stop').attr('offset','0%').attr('stop-color','#7b61ff').attr('stop-opacity','0.35');
+              hubGrad.append('stop').attr('offset','100%').attr('stop-color','#0a0a1a').attr('stop-opacity','0.9');
+
+              // Per-phase arc gradients
+              phases.forEach(ph => {
+                const pg = defs.append('linearGradient')
+                  .attr('id', `sdlc-grad-${ph.id}`)
+                  .attr('gradientUnits', 'userSpaceOnUse');
+                pg.append('stop').attr('offset','0%').attr('stop-color', ph.color).attr('stop-opacity','0.55');
+                pg.append('stop').attr('offset','100%').attr('stop-color', ph.color).attr('stop-opacity','0.9');
+              });
+
+              /* ── Arc generator ──────────────────────────────────────────── */
+              const pieLayout = d3.pie().value(() => 1).padAngle(0.03).sort(null);
+              const arcGen    = d3.arc().innerRadius(innerR).outerRadius(outerR).cornerRadius(4);
+              const arcHover  = d3.arc().innerRadius(innerR).outerRadius(outerR + 14).cornerRadius(5);
+
+              const arcs = pieLayout(phases);
+
+              /* ── Segment groups ─────────────────────────────────────────── */
+              let activeIdx = null;
+
+              const segGs = g.selectAll('.sdlc-seg')
+                .data(arcs)
+                .enter()
+                .append('g')
+                .attr('class', 'sdlc-seg')
+                .style('cursor', 'pointer')
+                .attr('tabindex', '0')
+                .attr('role', 'button')
+                .attr('aria-label', d => `Phase ${d.data.id}: ${d.data.label}`)
+                .on('click', handleActivate)
+                .on('keydown', function(event, d) {
+                  if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleActivate(event, d); }
+                })
+                .on('mouseenter', function(event, d) { onEnter(this, d); })
+                .on('mouseleave', function(event, d) { if (activeIdx !== d.data.id) onLeave(this, d); });
+
+              // Arc paths
+              segGs.append('path')
+                .attr('class', 'sdlc-path')
+                .attr('d', d => {
+                  if (dur === 0) return arcGen(d);
+                  // Animate from zero angle for entry
+                  const i = d3.interpolate({ startAngle: d.startAngle, endAngle: d.startAngle }, d);
+                  return arcGen(i(0));
+                })
+                .attr('fill', d => `url(#sdlc-grad-${d.data.id})`)
+                .attr('stroke', d => d.data.color)
+                .attr('stroke-width', '1')
+                .attr('stroke-opacity', '0.4');
+
+              // Animated entry
+              if (dur > 0) {
+                segGs.selectAll('.sdlc-path')
+                  .transition().duration(dur).delay((d, i) => i * 75).ease(d3.easeCubicOut)
+                  .attrTween('d', function(d) {
+                    const interp = d3.interpolate({ startAngle: d.startAngle, endAngle: d.startAngle }, d);
+                    return t => arcGen(interp(t));
+                  });
+              }
+
+              /* ── Emoji labels on arcs ───────────────────────────────────── */
+              segGs.append('text')
+                .attr('class', 'sdlc-seg-label')
+                .attr('transform', d => {
+                  const [x, y] = arcGen.centroid(d);
+                  return `translate(${x},${y})`;
+                })
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .attr('font-size', '1.25rem')
+                .attr('opacity', dur > 0 ? 0 : 1)
+                .text(d => d.data.emoji)
+                .transition().duration(dur > 0 ? dur + 200 : 0).delay((d, i) => i * 75)
+                .attr('opacity', 1);
+
+              /* ── Outer tick labels ──────────────────────────────────────── */
+              const labelG = g.selectAll('.sdlc-lbl')
+                .data(arcs)
+                .enter()
+                .append('g')
+                .attr('class', 'sdlc-lbl')
+                .attr('pointer-events', 'none');
+
+              labelG.append('text')
+                .attr('transform', d => {
+                  const mid = (d.startAngle + d.endAngle) / 2;
+                  const x = Math.sin(mid) * labelR;
+                  const y = -Math.cos(mid) * labelR;
+                  return `translate(${x},${y})`;
+                })
+                .attr('text-anchor', d => {
+                  const mid = (d.startAngle + d.endAngle) / 2;
+                  const x = Math.sin(mid) * labelR;
+                  return x > 10 ? 'start' : x < -10 ? 'end' : 'middle';
+                })
+                .attr('dominant-baseline', 'middle')
+                .attr('fill', d => d.data.terminal ? '#34d399' : 'rgba(148,163,184,0.85)')
+                .attr('font-size', '0.7rem')
+                .attr('font-family', 'var(--font-mono, monospace)')
+                .attr('letter-spacing', '0.05em')
+                .attr('opacity', dur > 0 ? 0 : 1)
+                .each(function(d) {
+                  const words = d.data.label.split(' ');
+                  const el = d3.select(this);
+                  const mid = (d.startAngle + d.endAngle) / 2;
+                  const x = Math.sin(mid) * labelR;
+                  const anchor = x > 10 ? 'start' : x < -10 ? 'end' : 'middle';
+                  // Phase badge
+                  el.append('tspan')
+                    .attr('x', 0).attr('dy', words.length > 1 ? '-0.65em' : '0')
+                    .attr('fill', d.data.terminal ? '#34d399' : d.data.color)
+                    .attr('font-weight', '700')
+                    .text(`P${d.data.id}`);
+                  // Word-wrap (max 2 tspan lines)
+                  const mid2 = Math.ceil(words.length / 2);
+                  const line1 = words.slice(0, mid2).join(' ');
+                  const line2 = words.slice(mid2).join(' ');
+                  el.append('tspan').attr('x', 0).attr('dy', '1.15em').text(line1);
+                  if (line2) el.append('tspan').attr('x', 0).attr('dy', '1.1em').text(line2);
+                })
+                .transition().duration(dur > 0 ? dur + 300 : 0).delay((d, i) => i * 75)
+                .attr('opacity', 1);
+
+              /* ── Hub — central "Governed Delivery" node ─────────────────── */
+              // Outer pulse ring
+              const pulseRing = g.append('circle')
+                .attr('r', innerR - 4)
+                .attr('fill', 'none')
+                .attr('stroke', '#7b61ff')
+                .attr('stroke-width', '1.5')
+                .attr('stroke-opacity', '0.5');
+
+              if (dur > 0) {
+                (function pulse() {
+                  pulseRing
+                    .transition().duration(2000).ease(d3.easeSinInOut)
+                    .attr('stroke-opacity', 0.15).attr('r', innerR + 8)
+                    .transition().duration(2000).ease(d3.easeSinInOut)
+                    .attr('stroke-opacity', 0.5).attr('r', innerR - 4)
+                    .on('end', pulse);
+                })();
+              }
+
+              // Hub fill circle
+              g.append('circle').attr('r', innerR - 6).attr('fill', 'url(#sdlc-hub-grad)').attr('filter', 'url(#sdlc-glow)');
+
+              // Hub border
+              g.append('circle').attr('r', innerR - 6).attr('fill', 'none').attr('stroke', '#7b61ff').attr('stroke-width', '1').attr('stroke-opacity', '0.5');
+
+              // Hub text
+              const hubText = g.append('g').attr('text-anchor', 'middle');
+              hubText.append('text')
+                .attr('y', -18)
+                .attr('fill', '#fff')
+                .attr('font-size', '1.6rem')
+                .attr('dominant-baseline', 'middle')
+                .text('🏛️');
+              hubText.append('text')
+                .attr('y', 8)
+                .attr('fill', 'rgba(255,255,255,0.9)')
+                .attr('font-size', '0.72rem')
+                .attr('font-family', 'var(--font-mono,monospace)')
+                .attr('font-weight', '700')
+                .attr('letter-spacing', '0.1em')
+                .text('GOVERNED');
+              hubText.append('text')
+                .attr('y', 22)
+                .attr('fill', 'rgba(255,255,255,0.9)')
+                .attr('font-size', '0.72rem')
+                .attr('font-family', 'var(--font-mono,monospace)')
+                .attr('font-weight', '700')
+                .attr('letter-spacing', '0.1em')
+                .text('DELIVERY');
+
+              // Hint text
+              g.append('text')
+                .attr('y', innerR - 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'rgba(148,163,184,0.5)')
+                .attr('font-size', '0.6rem')
+                .attr('font-family', 'var(--font-mono,monospace)')
+                .attr('letter-spacing', '0.08em')
+                .text('click phase to explore');
+
+              /* ── Interaction helpers ────────────────────────────────────── */
+              function onEnter(el, d) {
+                d3.select(el).select('.sdlc-path')
+                  .transition().duration(reducedMotion ? 0 : 150)
+                  .attr('d', arcHover(d))
+                  .attr('filter', 'url(#sdlc-glow)')
+                  .attr('stroke-opacity', '0.9');
+              }
+              function onLeave(el, d) {
+                d3.select(el).select('.sdlc-path')
+                  .transition().duration(reducedMotion ? 0 : 150)
+                  .attr('d', arcGen(d))
+                  .attr('filter', null)
+                  .attr('stroke-opacity', '0.4');
+              }
+
+              function handleActivate(event, d) {
+                const ph = d.data;
+                // Toggle off if same phase
+                if (activeIdx === ph.id) {
+                  activeIdx = null;
+                  // Reset all
+                  segGs.each(function(dd) { onLeave(this, dd); });
+                  document.getElementById('sdlc-detail').classList.remove('visible');
+                  return;
+                }
+                // Reset previous
+                if (activeIdx !== null) {
+                  segGs.filter(dd => dd.data.id === activeIdx).each(function(dd) { onLeave(this, dd); });
+                }
+                activeIdx = ph.id;
+                onEnter(event.currentTarget, d);
+
+                // Populate detail panel
+                const panel = document.getElementById('sdlc-detail');
+                const lbl   = document.getElementById('sdlc-detail-label');
+                const title = document.getElementById('sdlc-detail-title');
+                const body  = document.getElementById('sdlc-detail-body');
+
+                lbl.style.color = ph.color;
+                lbl.textContent = `Phase ${ph.id}`;
+                title.innerHTML = `<span aria-hidden="true">${ph.emoji}</span>${ph.label}`;
+                body.textContent = ph.detail;
+                panel.style.borderColor = ph.color.replace(')', ', 0.3)').replace('rgb', 'rgba').replace('#', '').replace(/([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i, (m,r,g,b)=>`rgba(${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},0.3)`);
+
+                // Simpler border colour approach
+                panel.style.borderColor = `${ph.color}55`;
+                panel.classList.add('visible');
+              }
+            })();
+            </script>
 
             <!-- Connector bar — progress indicator -->
             <div style="
@@ -3742,6 +3960,7 @@
                     rgba(244,63,94,0.7) 85%,
                     rgba(16,185,129,0.9) 100%);
                 border-radius: 9999px;
+                margin-top: 1.25rem;
                 margin-bottom: 1.75rem;
             " aria-hidden="true"></div>
 
@@ -3770,6 +3989,299 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION: Engineered Using Its Own Standards (Dogfooding)
+         Proof-by-construction — CORTEX built with CORTEX.
+         Redesigned 2026-03-09: eliminated stat/tag repetition;
+         integrated dogfooding image in circular frame;
+         collapsed 2×2 cards into timeline inside a unified panel.
+         ═══════════════════════════════════════════════════════ -->
+    <style>
+      /* ── Dogfooding Section — Redesigned ────────────────────────────────── */
+
+      /* Hero split layout: image left, definition right */
+      .dogfood-hero {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 2.5rem;
+        align-items: center;
+        margin-bottom: 2.5rem;
+      }
+      @media (max-width: 720px) {
+        .dogfood-hero { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 1.75rem; }
+      }
+
+      /* Circular image frame */
+      .dogfood-img-wrap {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        flex-shrink: 0;
+      }
+      @media (max-width: 720px) {
+        .dogfood-img-wrap { width: 140px; height: 140px; }
+      }
+
+      /* Animated gradient ring around the circle */
+      .dogfood-img-ring {
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--accent-cyan) 0deg,
+          var(--accent-purple) 120deg,
+          var(--accent-emerald) 240deg,
+          var(--accent-cyan) 360deg
+        );
+        z-index: 0;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .dogfood-img-ring { animation: dogfoodRingSpin 8s linear infinite; }
+      }
+      @keyframes dogfoodRingSpin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+
+      /* White inset gap between ring and image */
+      .dogfood-img-inset {
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        background: var(--bg-canvas);
+        z-index: 1;
+      }
+
+      /* The actual circular image */
+      .dogfood-img {
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        object-fit: cover;
+        z-index: 2;
+        width: calc(100% - 12px);
+        height: calc(100% - 12px);
+      }
+
+      /* Glow shadow beneath the circle */
+      .dogfood-img-glow {
+        position: absolute;
+        bottom: -10px; left: 50%;
+        transform: translateX(-50%);
+        width: 80%; height: 20px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse, rgba(0,212,255,0.35) 0%, transparent 70%);
+        filter: blur(6px);
+        z-index: 0;
+      }
+
+      /* Definition block to the right of the image */
+      .dogfood-def-block { min-width: 0; }
+
+      .dogfood-word-row {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.25rem;
+      }
+
+      /* ── 4-step horizontal timeline inside the glass panel ──────────────── */
+      .dogfood-timeline {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        position: relative;
+        margin-top: 0.5rem;
+      }
+      @media (max-width: 900px) {
+        .dogfood-timeline { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 480px) {
+        .dogfood-timeline { grid-template-columns: 1fr; }
+      }
+
+      /* Horizontal connector line between steps (desktop only) */
+      .dogfood-timeline::before {
+        content: '';
+        position: absolute;
+        top: 28px;                     /* vertically centred on the step icons */
+        left: calc(12.5% + 1rem);      /* starts after first icon */
+        right: calc(12.5% + 1rem);     /* ends before last icon */
+        height: 1px;
+        background: linear-gradient(90deg,
+          rgba(0,212,255,0.3),
+          rgba(123,97,255,0.3),
+          rgba(16,185,129,0.3),
+          rgba(186,85,211,0.3));
+        pointer-events: none;
+        z-index: 0;
+      }
+      @media (max-width: 900px) { .dogfood-timeline::before { display: none; } }
+
+      .dogfood-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1.25rem 0.75rem;
+        position: relative;
+        z-index: 1;
+        border-radius: var(--radius-lg);
+        transition: background 0.2s ease;
+      }
+      .dogfood-step:hover {
+        background: rgba(255,255,255,0.03);
+      }
+
+      .dogfood-step-icon {
+        width: 56px; height: 56px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.35rem;
+        border: 1px solid rgba(255,255,255,0.08);
+        margin-bottom: 0.875rem;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 2;
+        background: var(--bg-canvas);
+      }
+
+      .dogfood-step-num {
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+        opacity: 0.6;
+      }
+
+      .dogfood-step-label {
+        font-family: var(--font-display);
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.3;
+        margin-bottom: 0.35rem;
+      }
+
+      .dogfood-step-body {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.55;
+      }
+
+      /* Per-step accent colours */
+      .dogfood-step--cyan  .dogfood-step-icon { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.08); color: var(--accent-cyan); }
+      .dogfood-step--cyan  .dogfood-step-num  { color: var(--accent-cyan); }
+
+      .dogfood-step--purple .dogfood-step-icon { border-color: rgba(123,97,255,0.3); background: rgba(123,97,255,0.08); color: var(--accent-purple); }
+      .dogfood-step--purple .dogfood-step-num  { color: var(--accent-purple); }
+
+      .dogfood-step--emerald .dogfood-step-icon { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); color: var(--accent-emerald); }
+      .dogfood-step--emerald .dogfood-step-num  { color: var(--accent-emerald); }
+
+      .dogfood-step--magenta .dogfood-step-icon { border-color: rgba(186,85,211,0.3); background: rgba(186,85,211,0.08); color: var(--accent-magenta); }
+      .dogfood-step--magenta .dogfood-step-num  { color: var(--accent-magenta); }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .dogfood-img-ring { animation: none; }
+      }
+    </style>
+
+    <section class="container section" aria-labelledby="dogfood-heading">
+
+      <!-- Section header -->
+      <div class="text-center mb-10">
+        <span style="display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--font-mono);font-size:0.8125rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(148,163,184,0.75);background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;padding:0.375rem 1.1rem;margin-bottom:1.25rem;display:inline-flex;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;flex-shrink:0;" aria-hidden="true"></span>
+          Proof by Construction
+        </span>
+        <h2 id="dogfood-heading" class="text-4xl text-gradient font-bold">Engineered Using Its Own Standards</h2>
+        <p class="text-muted text-xl max-w-3xl mx-auto">CORTEX doesn't just govern your team's work — it governs itself. Every orchestrator, rule, and tool was built using the same TDD workflows, governance gates, and convergence checks available to you.</p>
+      </div>
+
+      <!-- ── Unified glass panel ── -->
+      <div class="glass-card-super">
+
+        <!-- Hero row: circular image + dictionary definition -->
+        <div class="dogfood-hero">
+
+          <!-- Circular dogfooding image -->
+          <div class="dogfood-img-wrap" aria-hidden="true">
+            <div class="dogfood-img-ring"></div>
+            <div class="dogfood-img-inset"></div>
+            <img
+              src="assets/images/dogfooding-concept.svg"
+              alt="Dogfooding illustration — a happy dog eating from its bowl beside a monitor, representing using your own product internally to experience it as a user would"
+              class="dogfood-img"
+              loading="lazy"
+            />
+            <div class="dogfood-img-glow"></div>
+          </div>
+
+          <!-- Dictionary definition -->
+          <div class="dogfood-def-block">
+            <div class="dogfood-word-row">
+              <h3 style="font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.03em;color:var(--text-primary);margin:0;">dogfooding</h3>
+              <span style="font-family:var(--font-mono);font-size:1rem;color:var(--accent-cyan);opacity:0.8;">/ˈdôɡˌfuːdiNG/</span>
+            </div>
+            <p style="font-style:italic;color:var(--text-secondary);font-size:0.9375rem;margin:0 0 0.75rem;">noun · software engineering</p>
+            <p style="font-size:1rem;line-height:1.7;color:var(--text-secondary);margin:0 0 0.875rem;">
+              The practice of using your own product during development — experiencing it as a real user would — to surface issues, validate decisions, and prove reliability before customers do.
+            </p>
+            <div style="display:flex;align-items:flex-start;gap:0.625rem;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.12);border-radius:var(--radius-md);padding:0.875rem 1rem;">
+              <i class="fas fa-quote-left" style="color:var(--accent-cyan);font-size:0.875rem;margin-top:0.2rem;flex-shrink:0;" aria-hidden="true"></i>
+              <p style="margin:0;font-size:0.9375rem;line-height:1.65;color:var(--text-secondary);">
+                CORTEX's orchestrators, governance rules, and core logic were architected, tested, and delivered <em>by CORTEX itself</em> — making every build a live demonstration of the platform's integrity.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hairline separator -->
+        <hr style="border:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:0 0 0.25rem;" aria-hidden="true"/>
+
+        <!-- 4-step delivery lifecycle timeline (replaces repetitive 2×2 cards) -->
+        <div class="dogfood-timeline" role="list" aria-label="How CORTEX builds itself">
+
+          <div class="dogfood-step dogfood-step--cyan" role="listitem">
+            <div class="dogfood-step-icon" aria-hidden="true"><i class="fas fa-brain"></i></div>
+            <div class="dogfood-step-num">Step 01</div>
+            <div class="dogfood-step-label">Governed Planning</div>
+            <p class="dogfood-step-body">Every feature begins inside the CORTEX Planning System — requirements broken into governed tasks with DoR and DoD contracts.</p>
+          </div>
+
+          <div class="dogfood-step dogfood-step--purple" role="listitem">
+            <div class="dogfood-step-icon" aria-hidden="true"><i class="fas fa-vial"></i></div>
+            <div class="dogfood-step-num">Step 02</div>
+            <div class="dogfood-step-label">TDD-First Delivery</div>
+            <p class="dogfood-step-body">Tests are written before implementation — the same Red → Green → Refactor cycle enforced for your team applies to every CORTEX commit.</p>
+          </div>
+
+          <div class="dogfood-step dogfood-step--emerald" role="listitem">
+            <div class="dogfood-step-icon" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
+            <div class="dogfood-step-num">Step 03</div>
+            <div class="dogfood-step-label">Self-Governed Gates</div>
+            <p class="dogfood-step-body">Pre-commit hooks, 60+ CORE rules, and convergence gates validate every change — CORTEX enforcing its own architectural boundaries.</p>
+          </div>
+
+          <div class="dogfood-step dogfood-step--magenta" role="listitem">
+            <div class="dogfood-step-icon" aria-hidden="true"><i class="fas fa-database"></i></div>
+            <div class="dogfood-step-num">Step 04</div>
+            <div class="dogfood-step-label">Institutional Memory</div>
+            <p class="dogfood-step-body">RCA analyses stored in SQLite — 4 methodologies surface prior failure patterns before a similar mistake can reach production again.</p>
+          </div>
+
+        </div>
+
+      </div><!-- /glass-card-super -->
+
     </section>
 
     <!-- ═══════════════════════════════════════════════════════
@@ -3946,25 +4458,6 @@
                     <p style="color:var(--text-tertiary);font-size:1rem;line-height:1.6;font-weight:300;max-width:36rem;margin:0 0 0.25rem 0;">
                         The Intelligence Diamond behind your delivery pipeline — how 290+ orchestrators, the LENS sensory system, and 60+ governance rules enforce quality from intent to deployment.
                     </p>
-                    <!-- Inline Stats -->
-                    <div class="arch-cta-stats">
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">290+</div>
-                            <div class="arch-stat-label">Orchestrators</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">30+</div>
-                            <div class="arch-stat-label">MCP Tools</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">60+</div>
-                            <div class="arch-stat-label">Governance</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">7</div>
-                            <div class="arch-stat-label">Interactive Tabs</div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Arrow -->
@@ -4088,79 +4581,6 @@
                 </div>
             </a>
         </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════
-         AI ADOPTION — Fearless Knowledge CTA
-         Positioned after role identification: users know their
-         role → they see the adoption path built for them.
-         Pure arch-cta pattern — zero inline bg overrides.
-         ═══════════════════════════════════════════════════════ -->
-    <section class="section container">
-        <a href="learning/ai-adoption/index.html" class="arch-cta" aria-labelledby="ai-adopt-heading">
-            <!-- 7-Layer Background System — default navy/indigo (no overrides) -->
-            <div class="arch-cta-bg"></div>
-            <div class="arch-cta-glow-1"></div>
-            <div class="arch-cta-glow-2"></div>
-            <div class="arch-cta-glow-3"></div>
-            <div class="arch-cta-grid"></div>
-            <div class="arch-cta-scanline"></div>
-            <div class="arch-cta-border"></div>
-
-            <!-- Content -->
-            <div class="arch-cta-content">
-                <!-- Animated Icon Cluster — default orbital rings, no overrides -->
-                <div class="arch-cta-icon-cluster">
-                    <div class="arch-icon-ring arch-icon-ring-3"></div>
-                    <div class="arch-icon-ring arch-icon-ring-2"></div>
-                    <div class="arch-icon-ring arch-icon-ring-1"></div>
-                    <div class="arch-icon-core">
-                        <div class="arch-icon-hex">
-                            <i class="fas fa-brain" style="font-size:2rem;color:var(--accent-cyan);" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Copy Block -->
-                <div style="flex:1;min-width:240px;">
-                    <div class="arch-cta-tag">
-                        <span class="arch-tag-dot"></span>
-                        Fearless Knowledge &nbsp;·&nbsp; New
-                    </div>
-                    <h3 id="ai-adopt-heading" style="font-family:var(--font-display);font-size:clamp(1.25rem,2.5vw,1.875rem);font-weight:900;letter-spacing:-0.02em;margin:0.75rem 0 0.5rem 0;color:var(--text-primary);">
-                        Understand AI —
-                        <span style="background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple),var(--accent-emerald));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">fearlessly.</span>
-                    </h3>
-                    <p style="color:var(--text-tertiary);font-size:1rem;line-height:1.6;font-weight:300;max-width:36rem;margin:0 0 0.25rem 0;">
-                        Plain-English explanations of every AI concept your team needs — Agentic AI, Prompt Engineering, orchestration, reasoning, memory &amp; more. No CS degree required.
-                    </p>
-                    <!-- Stats — default arch-stat-value gradient, no overrides -->
-                    <div class="arch-cta-stats">
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">8</div>
-                            <div class="arch-stat-label">Concepts</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">~35m</div>
-                            <div class="arch-stat-label">Read Time</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">All</div>
-                            <div class="arch-stat-label">Roles</div>
-                        </div>
-                        <div class="arch-stat">
-                            <div class="arch-stat-value">0</div>
-                            <div class="arch-stat-label">Prerequisites</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Arrow — default arch-cta-arrow, no overrides -->
-                <div class="arch-cta-arrow" aria-hidden="true">
-                    <i class="fas fa-arrow-right" style="font-size:1.25rem;color:var(--accent-cyan);transition:transform 0.3s ease;"></i>
-                </div>
-            </div>
-        </a>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════

@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#ede8de"/>
+    </radialGradient>
+    <radialGradient id="dogBodyGrad" cx="45%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#c68642"/>
+      <stop offset="100%" stop-color="#9e6524"/>
+    </radialGradient>
+    <radialGradient id="screenGrad" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#2a3a5e"/>
+      <stop offset="100%" stop-color="#0d1929"/>
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.18)"/>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="200" cy="200" r="195" fill="url(#bgGrad)"/>
+
+  <!-- ── MONITOR (right side) ── -->
+  <!-- Monitor stand base -->
+  <rect x="228" y="304" width="56" height="8" rx="4" fill="#1a2744" filter="url(#shadow)"/>
+  <!-- Stand neck -->
+  <rect x="252" y="278" width="8" height="28" rx="2" fill="#1a2744"/>
+  <!-- Monitor bezel -->
+  <rect x="196" y="148" width="140" height="136" rx="12" fill="#1a2744" filter="url(#shadow)"/>
+  <!-- Screen area -->
+  <rect x="204" y="156" width="124" height="112" rx="8" fill="url(#screenGrad)"/>
+  <!-- Screen content: UI bars and blocks -->
+  <!-- Header bar -->
+  <rect x="212" y="164" width="52" height="10" rx="5" fill="#4a90d9" opacity="0.9"/>
+  <!-- Content lines -->
+  <rect x="212" y="182" width="108" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
+  <rect x="212" y="192" width="90" height="6" rx="3" fill="rgba(255,255,255,0.12)"/>
+  <rect x="212" y="202" width="100" height="6" rx="3" fill="rgba(255,255,255,0.12)"/>
+  <!-- Card block right -->
+  <rect x="270" y="164" width="38" height="32" rx="6" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <rect x="276" y="170" width="26" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
+  <rect x="276" y="178" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="276" y="184" width="22" height="3" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+  <!-- Red dot accent (like an alert) -->
+  <circle cx="226" cy="218" r="7" fill="#e05252" opacity="0.9"/>
+  <!-- Bottom content lines -->
+  <rect x="238" y="215" width="70" height="5" rx="2.5" fill="rgba(255,255,255,0.12)"/>
+  <rect x="238" y="223" width="55" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
+  <rect x="238" y="231" width="62" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
+  <!-- Screen glare -->
+  <ellipse cx="240" cy="170" rx="16" ry="6" fill="rgba(255,255,255,0.04)" transform="rotate(-20 240 170)"/>
+
+  <!-- ── DOG (left-centre) ── -->
+  <!-- Dog body -->
+  <ellipse cx="162" cy="272" rx="58" ry="46" fill="url(#dogBodyGrad)" filter="url(#shadow)"/>
+  <!-- Dog head -->
+  <circle cx="138" cy="218" r="44" fill="#c68642" filter="url(#shadow)"/>
+  <!-- Ear left (floppy) -->
+  <ellipse cx="106" cy="206" rx="18" ry="26" fill="#9e6524" transform="rotate(-15 106 206)"/>
+  <!-- Ear right (floppy) -->
+  <ellipse cx="168" cy="202" rx="16" ry="24" fill="#9e6524" transform="rotate(10 168 202)"/>
+  <!-- Snout -->
+  <ellipse cx="138" cy="238" rx="24" ry="16" fill="#b87333" opacity="0.85"/>
+  <!-- Nose -->
+  <ellipse cx="138" cy="228" rx="10" ry="7" fill="#4a2800"/>
+  <!-- Nose highlight -->
+  <ellipse cx="135" cy="226" rx="3" ry="2" fill="rgba(255,255,255,0.3)"/>
+  <!-- Eyes -->
+  <circle cx="124" cy="216" r="7" fill="#2a1800"/>
+  <circle cx="154" cy="216" r="7" fill="#2a1800"/>
+  <!-- Eye shine -->
+  <circle cx="126" cy="214" r="2.5" fill="rgba(255,255,255,0.55)"/>
+  <circle cx="156" cy="214" r="2.5" fill="rgba(255,255,255,0.55)"/>
+  <!-- Tongue -->
+  <ellipse cx="138" cy="248" rx="12" ry="9" fill="#e05878"/>
+  <line x1="138" y1="240" x2="138" y2="256" stroke="#c04060" stroke-width="1.5" opacity="0.6"/>
+  <!-- Dog cheek blush -->
+  <ellipse cx="112" cy="232" rx="8" ry="5" fill="#e07050" opacity="0.25"/>
+  <ellipse cx="164" cy="232" rx="8" ry="5" fill="#e07050" opacity="0.25"/>
+  <!-- Tail (curved behind) -->
+  <path d="M 214 268 Q 240 240 226 220 Q 218 208 224 200" stroke="#9e6524" stroke-width="12" fill="none" stroke-linecap="round" filter="url(#shadow)"/>
+  <!-- Front paws -->
+  <ellipse cx="128" cy="308" rx="20" ry="12" fill="#c68642"/>
+  <ellipse cx="180" cy="310" rx="20" ry="12" fill="#c68642"/>
+  <!-- Paw details -->
+  <circle cx="120" cy="312" r="4" fill="#b87333" opacity="0.6"/>
+  <circle cx="130" cy="314" r="4" fill="#b87333" opacity="0.6"/>
+  <circle cx="140" cy="313" r="4" fill="#b87333" opacity="0.6"/>
+
+  <!-- ── DOG BOWL ── -->
+  <!-- Bowl shadow -->
+  <ellipse cx="140" cy="335" rx="42" ry="8" fill="rgba(0,0,0,0.12)"/>
+  <!-- Bowl body -->
+  <path d="M 100 318 Q 100 345 140 345 Q 180 345 180 318 Z" fill="#e04e38"/>
+  <!-- Bowl rim -->
+  <ellipse cx="140" cy="318" rx="40" ry="10" fill="#c8432e"/>
+  <!-- Bowl content (food) -->
+  <ellipse cx="140" cy="330" rx="28" ry="7" fill="#8b5e3c" opacity="0.85"/>
+  <!-- Food texture dots -->
+  <circle cx="130" cy="329" r="3" fill="#6b4020" opacity="0.7"/>
+  <circle cx="140" cy="332" r="2.5" fill="#6b4020" opacity="0.7"/>
+  <circle cx="150" cy="328" r="3" fill="#6b4020" opacity="0.7"/>
+  <circle cx="135" cy="325" r="2" fill="#6b4020" opacity="0.5"/>
+  <circle cx="145" cy="333" r="2" fill="#6b4020" opacity="0.5"/>
+
+  <!-- ── THREE BULLET POINTS (bottom of circle) ── -->
+  <!-- Removed to keep it as a pure illustration matching the source image -->
+
+  <!-- Subtle inner vignette -->
+  <circle cx="200" cy="200" r="195" fill="none" stroke="rgba(180,160,120,0.15)" stroke-width="3"/>
+</svg>
