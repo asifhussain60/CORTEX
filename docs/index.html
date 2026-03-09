@@ -1049,27 +1049,28 @@
     #cortex-mission { padding: 2.5rem 0 2rem; }
   }
 
-  /* Ambient glow orbs — matching reference design */
+  /* Ambient glow orbs — boosted saturation for visual richness */
   #cortex-mission .m-orb-1 {
     position: absolute; top: -10%; left: -8%;
-    width: 520px; height: 520px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+    width: 640px; height: 640px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,0.22) 0%, rgba(52,211,153,0.1) 40%, transparent 70%);
     filter: blur(80px); pointer-events: none; z-index: 0;
     animation: mOrbFloat 12s ease-in-out infinite;
   }
   #cortex-mission .m-orb-2 {
     position: absolute; bottom: -10%; right: -8%;
-    width: 520px; height: 520px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    width: 640px; height: 640px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.22) 0%, rgba(123,97,255,0.12) 40%, transparent 70%);
     filter: blur(80px); pointer-events: none; z-index: 0;
     animation: mOrbFloat 15s ease-in-out infinite reverse;
   }
   #cortex-mission .m-orb-3 {
     position: absolute; top: 40%; left: 50%;
     transform: translateX(-50%);
-    width: 800px; height: 300px; border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(123,97,255,0.04) 0%, transparent 70%);
+    width: 900px; height: 400px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(123,97,255,0.14) 0%, rgba(232,121,249,0.06) 50%, transparent 70%);
     filter: blur(60px); pointer-events: none; z-index: 0;
+    animation: mOrbFloat 18s ease-in-out infinite 3s;
   }
   @keyframes mOrbFloat {
     0%, 100% { transform: translateY(0) scale(1); }
@@ -1123,15 +1124,17 @@
   }
 
   .mission-outer-inner {
-    background: linear-gradient(160deg, rgba(5,9,22,0.97) 0%, rgba(2,5,16,0.99) 100%);
+    background: linear-gradient(160deg, rgba(8,16,38,0.96) 0%, rgba(5,10,28,0.97) 50%, rgba(3,7,20,0.98) 100%);
     border-radius: calc(2.5rem - 3px);
     overflow: hidden;
-    /* Faint dot-grid texture throughout */
+    /* Dot-grid texture + rich deep navy-indigo tint */
     background-image:
-      linear-gradient(160deg, rgba(5,9,22,0.97) 0%, rgba(2,5,16,0.99) 100%),
-      radial-gradient(rgba(0,212,255,0.04) 1px, transparent 1px);
+      linear-gradient(160deg, rgba(8,16,38,0.96) 0%, rgba(5,10,28,0.97) 50%, rgba(3,7,20,0.98) 100%),
+      radial-gradient(rgba(0,212,255,0.07) 1px, transparent 1px);
     background-size: 100% 100%, 32px 32px;
     background-blend-mode: normal, overlay;
+    /* Subtle inner ambient — gives the section life */
+    box-shadow: inset 0 0 120px rgba(0,212,255,0.04), inset 0 0 200px rgba(123,97,255,0.03);
   }
   @media (max-width: 768px) {
     .mission-outer-inner { border-radius: calc(1.75rem - 3px); }
@@ -1238,17 +1241,17 @@
   }
 
   .mission-frame-inner {
-    background: linear-gradient(160deg, rgba(4,8,20,0.98) 0%, rgba(2,5,15,0.99) 100%);
+    background: linear-gradient(160deg, rgba(6,12,30,0.97) 0%, rgba(4,8,22,0.98) 100%);
     border-radius: 0 0 calc(2.5rem - 6px) calc(2.5rem - 6px); /* flush top, rounded bottom */
     overflow: hidden;
-    /* Subtle grid texture + deep navy tint inside */
+    /* Subtle grid texture + rich indigo tint inside */
     background-image:
-      linear-gradient(160deg, rgba(5,9,22,0.98) 0%, rgba(2,5,16,0.99) 100%),
-      linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);
+      linear-gradient(160deg, rgba(7,13,32,0.97) 0%, rgba(4,8,22,0.98) 100%),
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
     background-size: 100% 100%, 56px 56px, 56px 56px;
     background-blend-mode: normal, overlay, overlay;
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
   }
   @media (max-width: 768px) {
     .mission-frame-inner { border-radius: 0 0 calc(1.75rem - 6px) calc(1.75rem - 6px); }
@@ -1281,8 +1284,8 @@
   .macc {
     position: relative;
     border-radius: 1.25rem;
-    border: 1px solid rgba(255,255,255,0.05);
-    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.035);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     overflow: hidden;
     transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1290,11 +1293,15 @@
     opacity: 0;
     animation: mCardFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
   }
-  /* Glass shimmer sweep on hover */
+  /* Per-accent subtle coloured border tint on each card — always visible */
+  .macc[data-accent="cyan"]    { border-color: rgba(0,212,255,0.12); }
+  .macc[data-accent="violet"]  { border-color: rgba(123,97,255,0.12); }
+  .macc[data-accent="emerald"] { border-color: rgba(16,185,129,0.12); }
+  /* Glass shimmer sweep on hover — more vivid */
   .macc::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+    background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%);
     transform: translateX(-100%);
     transition: transform 0.6s ease;
     pointer-events: none;
@@ -1302,6 +1309,23 @@
     border-radius: inherit;
   }
   .macc:hover::before { transform: translateX(100%); }
+  /* Bottom-left accent glow — gives each closed card colour depth */
+  .macc::after {
+    content: ''; position: absolute;
+    bottom: -20px; left: -20px;
+    width: 140px; height: 140px; border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.12;
+    filter: blur(45px);
+    transition: opacity 0.4s ease;
+    z-index: 0;
+  }
+  .macc:hover::after { opacity: 0.22; }
+  .macc.is-open::after { opacity: 0; } /* corner-glow takes over when open */
+  .macc[data-accent="cyan"]::after    { background: #00d4ff; }
+  .macc[data-accent="violet"]::after  { background: #7b61ff; }
+  .macc[data-accent="emerald"]::after { background: #10b981; }
+
   .macc:nth-child(1) { animation-delay: 0.05s; }
   .macc:nth-child(2) { animation-delay: 0.12s; }
   .macc:nth-child(3) { animation-delay: 0.19s; }
@@ -1312,49 +1336,45 @@
 
   /* Open state — elevated glass card */
   .macc.is-open {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.15);
-    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
     transform: scale(1.012);
     z-index: 5;
   }
 
   /* Hover state for closed cards */
   .macc:not(.is-open):hover {
-    background: rgba(255,255,255,0.04);
-    border-color: rgba(255,255,255,0.1);
-    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.055);
+    border-color: rgba(255,255,255,0.14);
+    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.45);
     transform: scale(1.05);
   }
 
-  /* Coloured top edge on open */
-  .macc::after {
-    content: ''; position: absolute;
-    inset: 0; border-radius: 1.25rem;
-    pointer-events: none;
-    opacity: 0; transition: opacity 0.4s ease;
-  }
-  .macc.is-open::after { opacity: 1; }
-  .macc[data-accent="cyan"].is-open    { border-color: rgba(0,212,255,0.22);   box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(0,212,255,0.08); }
-  .macc[data-accent="violet"].is-open  { border-color: rgba(123,97,255,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(123,97,255,0.08); }
-  .macc[data-accent="emerald"].is-open { border-color: rgba(16,185,129,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(16,185,129,0.08); }
-  .macc[data-accent="amber"].is-open   { border-color: rgba(251,191,36,0.22);  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(251,191,36,0.08); }
-  .macc[data-accent="magenta"].is-open { border-color: rgba(232,121,249,0.22); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.65), 0 0 40px rgba(232,121,249,0.08); }
+  .macc[data-accent="cyan"].is-open    { border-color: rgba(0,212,255,0.35);   box-shadow: 0 24px 64px -12px rgba(0,0,0,0.6), 0 0 60px rgba(0,212,255,0.15),   0 0 0 1px rgba(0,212,255,0.12); background: rgba(0,212,255,0.05); }
+  .macc[data-accent="violet"].is-open  { border-color: rgba(123,97,255,0.35);  box-shadow: 0 24px 64px -12px rgba(0,0,0,0.6), 0 0 60px rgba(123,97,255,0.15),  0 0 0 1px rgba(123,97,255,0.12); background: rgba(123,97,255,0.05); }
+  .macc[data-accent="emerald"].is-open { border-color: rgba(16,185,129,0.35);  box-shadow: 0 24px 64px -12px rgba(0,0,0,0.6), 0 0 60px rgba(16,185,129,0.15),  0 0 0 1px rgba(16,185,129,0.12); background: rgba(16,185,129,0.05); }
+  .macc[data-accent="amber"].is-open   { border-color: rgba(251,191,36,0.35);  box-shadow: 0 24px 64px -12px rgba(0,0,0,0.6), 0 0 60px rgba(251,191,36,0.15),  0 0 0 1px rgba(251,191,36,0.12); background: rgba(251,191,36,0.04); }
+  .macc[data-accent="magenta"].is-open { border-color: rgba(232,121,249,0.35); box-shadow: 0 24px 64px -12px rgba(0,0,0,0.6), 0 0 60px rgba(232,121,249,0.15), 0 0 0 1px rgba(232,121,249,0.12); background: rgba(232,121,249,0.05); }
 
   /* Coloured corner accent glow inside card when open */
   .macc__corner-glow {
     position: absolute; top: 0; right: 0;
-    width: 120px; height: 120px; border-radius: 50%;
+    width: 180px; height: 180px; border-radius: 50%;
     opacity: 0; pointer-events: none;
     transition: opacity 0.5s ease;
-    filter: blur(40px);
+    filter: blur(50px);
   }
-  .macc.is-open .macc__corner-glow { opacity: 0.22; }
-  .macc[data-accent="cyan"]    .macc__corner-glow { background: #00d4ff; }
-  .macc[data-accent="violet"]  .macc__corner-glow { background: #7b61ff; }
-  .macc[data-accent="emerald"] .macc__corner-glow { background: #10b981; }
-  .macc[data-accent="amber"]   .macc__corner-glow { background: #fbbf24; }
-  .macc[data-accent="magenta"] .macc__corner-glow { background: #e879f9; }
+  .macc.is-open .macc__corner-glow { opacity: 0.38; animation: mCornerGlowPulse 4s ease-in-out infinite; }
+  .macc[data-accent="cyan"]    .macc__corner-glow { background: radial-gradient(circle, #00d4ff 0%, rgba(0,212,255,0.4) 60%, transparent 100%); }
+  .macc[data-accent="violet"]  .macc__corner-glow { background: radial-gradient(circle, #7b61ff 0%, rgba(123,97,255,0.4) 60%, transparent 100%); }
+  .macc[data-accent="emerald"] .macc__corner-glow { background: radial-gradient(circle, #10b981 0%, rgba(16,185,129,0.4) 60%, transparent 100%); }
+  .macc[data-accent="amber"]   .macc__corner-glow { background: radial-gradient(circle, #fbbf24 0%, rgba(251,191,36,0.4) 60%, transparent 100%); }
+  .macc[data-accent="magenta"] .macc__corner-glow { background: radial-gradient(circle, #e879f9 0%, rgba(232,121,249,0.4) 60%, transparent 100%); }
+  @keyframes mCornerGlowPulse {
+    0%, 100% { opacity: 0.38; transform: scale(1); }
+    50%       { opacity: 0.55; transform: scale(1.15); }
+  }
 
   /* ── TRIGGER row ── */
   .macc__trigger {
@@ -1397,6 +1417,10 @@
   .macc.is-open .macc__icon-wrap::after { opacity: 1; }
 
   .macc:not(.is-open) .macc__icon-wrap { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+  /* Tinted icon background per accent — always visible even on closed cards */
+  .macc[data-accent="cyan"]:not(.is-open)    .macc__icon-wrap { background: rgba(0,212,255,0.08);   border-color: rgba(0,212,255,0.18); }
+  .macc[data-accent="violet"]:not(.is-open)  .macc__icon-wrap { background: rgba(123,97,255,0.08);  border-color: rgba(123,97,255,0.18); }
+  .macc[data-accent="emerald"]:not(.is-open) .macc__icon-wrap { background: rgba(16,185,129,0.08);  border-color: rgba(16,185,129,0.18); }
   .macc:not(.is-open):hover .macc__icon-wrap { background: rgba(255,255,255,0.09); }
   .macc.is-open .macc__icon-wrap { transform: scale(1.12); }
 
@@ -1669,7 +1693,9 @@
     .mission-eyebrow::before, .mission-status-dot { animation: none !important; }
     .mission-frame { animation: none !important; }
     .mission-outer-wrap { animation: none !important; }
-    .m-orb-1, .m-orb-2 { animation: none !important; }
+    .m-orb-1, .m-orb-2, .m-orb-3 { animation: none !important; }
+    .macc__corner-glow { animation: none !important; }
+    .macc.is-open .macc__corner-glow { opacity: 0.38; }
   }
 </style>
 
