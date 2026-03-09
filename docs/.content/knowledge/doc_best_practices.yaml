@@ -1,8 +1,12 @@
 # doc_best_practices.yaml
 # CORTEX Documentation Best Practices — Distilled Knowledge
 # Authority: html-view-designer, design-system-enforcer, a11y-perf-guardian
-# Updated: 2026-03-02 | Phase 108 — Design+Implement Mode
-# Sources: MDN Web Docs, W3C ARIA APG, WCAG 2.1 AA, GitHub Docs IA patterns
+# Updated: 2026-03-09 | Phase 108+ — Enhanced with full industry coverage
+# Sources: MDN Web Docs, W3C ARIA APG, WCAG 2.1 AA, GitHub Docs IA patterns,
+#          Google Core Web Vitals, Nielsen Norman Group writing guidelines,
+#          Microsoft Writing Style Guide, Google Developer Documentation Style Guide,
+#          OWASP HTML Security, schema.org structured data, OpenGraph protocol,
+#          Butterick's Practical Typography, Every Page is Page One (Mark Baker)
 
 information_architecture:
   principles:
@@ -296,3 +300,616 @@ mission_statement_writing:
       lead_with: "One framework for every role; no coordination overhead"
       avoid: "Single-role framing; implementation depth"
       canonical_expansion: "Statement 5 — One Platform, Every Role"
+
+# =============================================================================
+# SECTION: HTML PERFORMANCE — Core Web Vitals & Page Speed
+# Sources: Google CWV spec, web.dev, MDN Performance API
+# =============================================================================
+html_performance:
+  core_web_vitals_targets:
+    - metric: "LCP (Largest Contentful Paint)"
+      target: "≤ 2.5 seconds"
+      guidance: "Ensure hero image / above-fold text is pre-loaded; avoid render-blocking fonts"
+    - metric: "CLS (Cumulative Layout Shift)"
+      target: "≤ 0.1"
+      guidance: "Always set explicit width and height on <img> and <video>; reserve space for async content"
+    - metric: "INP (Interaction to Next Paint)"
+      target: "≤ 200ms"
+      guidance: "Debounce input handlers; offload heavy JS to Web Workers"
+    - metric: "FCP (First Contentful Paint)"
+      target: "≤ 1.8 seconds"
+      guidance: "Inline critical CSS above the fold; defer non-critical stylesheets"
+
+  resource_hints:
+    - id: perf-001
+      rule: "Preconnect to critical third-party origins (fonts, CDN)"
+      example: "<link rel='preconnect' href='https://fonts.googleapis.com'>"
+      severity: P1
+    - id: perf-002
+      rule: "Preload hero images and critical fonts"
+      example: "<link rel='preload' as='image' href='hero.webp'>"
+      severity: P1
+    - id: perf-003
+      rule: "Use fetchpriority='high' on the LCP image"
+      example: "<img src='hero.webp' fetchpriority='high' alt='...'>"
+      severity: P1
+    - id: perf-004
+      rule: "Defer all non-critical JS with defer or type='module'"
+      example: "<script src='analytics.js' defer></script>"
+      severity: P1
+    - id: perf-005
+      rule: "Use loading='lazy' on all below-fold images"
+      example: "<img src='feature.webp' loading='lazy' alt='...'>"
+      severity: P2
+
+  image_optimisation:
+    - id: img-001
+      rule: "Serve images in WebP or AVIF with JPEG/PNG fallback via <picture>"
+      enforcement: "Use <picture><source type='image/webp'><img></picture> pattern"
+    - id: img-002
+      rule: "Always specify width and height attributes to prevent CLS"
+      enforcement: "html-view-designer rejects any <img> without explicit dimensions"
+    - id: img-003
+      rule: "Use responsive srcset for images displayed at variable sizes"
+      example: "<img srcset='hero-400.webp 400w, hero-800.webp 800w' sizes='(max-width: 600px) 400px, 800px'>"
+    - id: img-004
+      rule: "Never use GIF for animated content — use <video autoplay loop muted playsinline>"
+      enforcement: "GIF > 50KB is a P1 performance violation"
+
+  script_loading:
+    - id: script-001
+      rule: "No render-blocking scripts in <head> without async/defer"
+      severity: P0
+    - id: script-002
+      rule: "Bundle JS per page — load only what the current view needs"
+      severity: P1
+    - id: script-003
+      rule: "Inline only truly critical JS (< 1KB); everything else external + cached"
+      severity: P2
+
+  css_performance:
+    - id: csspf-001
+      rule: "Inline critical CSS for above-fold rendering (≤ 14KB gzipped)"
+      severity: P1
+    - id: csspf-002
+      rule: "Use contain: layout style paint on isolated components"
+      severity: P3
+    - id: csspf-003
+      rule: "Avoid @import in CSS — causes serial fetches; use <link> instead"
+      severity: P1
+    - id: csspf-004
+      rule: "Enable font-display: swap or optional for all web fonts"
+      enforcement: "Prevents invisible text (FOIT) during font load"
+      severity: P1
+
+# =============================================================================
+# SECTION: ACCESSIBILITY (WCAG 2.1 AA — Minimum Standard)
+# Sources: W3C WCAG 2.1, ARIA APG 1.2, MDN Accessibility Guide
+# =============================================================================
+accessibility:
+  standard: "WCAG 2.1 Level AA — mandatory minimum for all CORTEX docs pages"
+
+  colour_and_contrast:
+    - id: a11y-col-001
+      rule: "Normal text contrast ratio ≥ 4.5:1 against background"
+      enforcement: "Test with axe-core or WebAIM Contrast Checker; P0 violation to ship below 4.5:1"
+    - id: a11y-col-002
+      rule: "Large text (≥ 18pt / 14pt bold) contrast ratio ≥ 3:1"
+      severity: P0
+    - id: a11y-col-003
+      rule: "UI components and focus indicators: contrast ≥ 3:1 against adjacent colours"
+      severity: P0
+    - id: a11y-col-004
+      rule: "Never convey information by colour alone — always pair with icon, text, or pattern"
+      enforcement: "Error states must combine red + icon + error text (never red-only)"
+
+  focus_management:
+    - id: a11y-foc-001
+      rule: "All interactive elements must have a visible focus ring (never outline: none without replacement)"
+      enforcement: "Focus indicator must meet 3:1 contrast against surrounding background"
+      severity: P0
+    - id: a11y-foc-002
+      rule: "Tab order must follow visual reading order (left-to-right, top-to-bottom)"
+      severity: P1
+    - id: a11y-foc-003
+      rule: "Modal dialogs must trap focus while open; restore to trigger on close"
+      enforcement: "Use aria-modal='true' + FocusTrap utility"
+      severity: P0
+    - id: a11y-foc-004
+      rule: "Single-page transitions must move focus to the new content heading (h1)"
+      severity: P1
+
+  semantic_html:
+    - id: a11y-sem-001
+      rule: "Use landmark roles: <header>, <main>, <nav>, <footer>, <aside>, <section> — never all <div>"
+      severity: P1
+    - id: a11y-sem-002
+      rule: "One <h1> per page — describes the page, not the site name"
+      severity: P1
+    - id: a11y-sem-003
+      rule: "Use <button> for actions, <a href> for navigation — never swap these"
+      enforcement: "A <div onclick> for an action is a P0 accessibility violation"
+      severity: P0
+    - id: a11y-sem-004
+      rule: "Form inputs must have associated <label> — never use placeholder as the only label"
+      severity: P0
+    - id: a11y-sem-005
+      rule: "Data tables must use <th scope='col|row'> — never layout tables"
+      severity: P1
+
+  aria:
+    - id: a11y-aria-001
+      rule: "First focusable element on every page must be a skip-to-main link"
+      example: "<a href='#main-content' class='skip-link'>Skip to main content</a>"
+      severity: P0
+    - id: a11y-aria-002
+      rule: "Icon-only buttons must have aria-label or visually-hidden text"
+      example: "<button aria-label='Close menu'><svg aria-hidden='true'>…</svg></button>"
+      severity: P0
+    - id: a11y-aria-003
+      rule: "Dynamic content updates must use aria-live regions appropriately"
+      usage: "aria-live='polite' for non-urgent; aria-live='assertive' only for errors"
+      severity: P1
+    - id: a11y-aria-004
+      rule: "Tab panels: use role='tablist', role='tab', role='tabpanel' with aria-selected and aria-controls"
+      severity: P1
+    - id: a11y-aria-005
+      rule: "Do not use ARIA to fix broken semantics — fix the HTML first"
+      enforcement: "aria-role='button' on a <div> is permitted only when a <button> is architecturally impossible"
+
+  motion_and_animation:
+    - id: a11y-mot-001
+      rule: "Respect prefers-reduced-motion media query — disable or reduce all animations"
+      example: "@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; } }"
+      severity: P1
+    - id: a11y-mot-002
+      rule: "No auto-playing video or audio without user consent"
+      severity: P0
+    - id: a11y-mot-003
+      rule: "Flashing content must not exceed 3 flashes per second (photosensitive epilepsy)"
+      severity: P0
+
+# =============================================================================
+# SECTION: SEO & DISCOVERABILITY
+# Sources: Google Search Central, OpenGraph Protocol (ogp.me), schema.org
+# =============================================================================
+seo_and_discoverability:
+  meta_requirements:
+    - id: seo-001
+      rule: "Every page must have a unique, descriptive <title> (50–60 characters)"
+      pattern: "{Page Topic} — {Site Name}"
+      example: "Getting Started — CORTEX Framework"
+      severity: P0
+    - id: seo-002
+      rule: "Every page must have a <meta name='description'> (150–160 characters)"
+      enforcement: "Summarises page purpose; used by search engines as snippet text"
+      severity: P0
+    - id: seo-003
+      rule: "Canonical URL declared on every page to prevent duplicate content penalties"
+      example: "<link rel='canonical' href='https://cortex.dev/getting-started.html'>"
+      severity: P1
+    - id: seo-004
+      rule: "robots.txt at domain root; sitemap.xml linked from robots.txt"
+      severity: P1
+
+  open_graph:
+    - id: og-001
+      rule: "All pages must include og:title, og:description, og:image, og:url, og:type"
+      severity: P1
+    - id: og-002
+      rule: "og:image minimum 1200×630px, ≤ 8MB, and descriptive (not a logo on white)"
+      enforcement: "Social share image must visually represent the page content"
+    - id: og-003
+      rule: "Twitter card meta: twitter:card='summary_large_image', twitter:title, twitter:description"
+      severity: P2
+
+  structured_data:
+    - id: sd-001
+      rule: "Documentation sites should use schema.org TechArticle or SoftwareApplication JSON-LD"
+      example_type: "application/ld+json"
+      severity: P2
+    - id: sd-002
+      rule: "BreadcrumbList structured data on all pages deeper than level 1"
+      severity: P2
+
+  url_hygiene:
+    - id: url-001
+      rule: "URLs are lowercase, hyphen-separated, human-readable — no underscores, no IDs"
+      good: "getting-started.html"
+      bad: "gettingStarted.html, getting_started.html, page?id=42"
+    - id: url-002
+      rule: "Anchor IDs (#section) must be stable across versions — changing them breaks inbound links"
+      enforcement: "Add redirects before removing any anchor that has been live for > 30 days"
+    - id: url-003
+      rule: "Static HTML sites must include a custom 404 page (404.html) with helpful navigation"
+      severity: P1
+
+# =============================================================================
+# SECTION: TYPOGRAPHY & READABILITY
+# Sources: Butterick's Practical Typography, WCAG 1.4.12, Google Fonts best practices
+# =============================================================================
+typography:
+  scale:
+    - id: typ-001
+      rule: "Use a modular type scale — recommended ratio 1.25 (Major Third) or 1.333 (Perfect Fourth)"
+      enforcement: "All heading sizes defined as CSS custom properties in glass-design-tokens.css"
+    - id: typ-002
+      rule: "Base body font size ≥ 16px (1rem); never below 14px for body text"
+      severity: P1
+    - id: typ-003
+      rule: "Line height for body text: 1.5–1.7 (unitless); headings: 1.1–1.3"
+      severity: P1
+
+  line_length:
+    - id: typ-004
+      rule: "Optimal line length: 60–80 characters (45–75 characters for narrow columns)"
+      enforcement: "Use max-width on prose containers — typically max-width: 65ch or 720px"
+      severity: P1
+    - id: typ-005
+      rule: "Never full-width prose on screens wider than 1200px — centred column required"
+      severity: P1
+
+  font_loading:
+    - id: typ-006
+      rule: "Load ≤ 2 font families per page; ≤ 3 weights per family"
+      enforcement: "Every additional font weight is an extra network request"
+    - id: typ-007
+      rule: "Subset fonts to the character sets actually used (Latin for English docs)"
+      example: "Google Fonts: append &subset=latin to font URL"
+    - id: typ-008
+      rule: "Always declare a system font stack fallback before the web font"
+      example: "font-family: 'Inter', system-ui, -apple-system, sans-serif"
+      severity: P1
+
+  readability:
+    - id: typ-009
+      rule: "Paragraph length: 3–5 sentences maximum for documentation prose"
+      enforcement: "Longer paragraphs should be split or converted to a list"
+    - id: typ-010
+      rule: "Avoid justified text in HTML — use text-align: left (ragged right) for readability"
+      severity: P2
+    - id: typ-011
+      rule: "Use em-dashes (—) and curly quotes (' ') in rendered prose — not hyphens or straight quotes"
+      enforcement: "HTML entities or Unicode — never ASCII approximations in published content"
+
+# =============================================================================
+# SECTION: VISUAL DESIGN & COLOUR SYSTEM
+# Sources: Material Design 3, Apple HIG, WCAG 2.1 AA
+# =============================================================================
+visual_design:
+  colour_system:
+    - id: vis-001
+      rule: "Colour palette defined entirely in glass-design-tokens.css — no hardcoded hex values in components"
+      severity: P0
+    - id: vis-002
+      rule: "Minimum palette: primary, secondary, surface, background, error, on-* (text on each)"
+      enforcement: "Each semantic token maps to a base colour — swap base, all semantics update"
+    - id: vis-003
+      rule: "Dark mode supported via prefers-color-scheme media query or data-theme='dark' attribute"
+      severity: P1
+
+  dark_mode:
+    - id: dm-001
+      rule: "Dark mode is opt-in via OS preference AND manually toggleable with a button"
+      enforcement: "Preference stored in localStorage and re-applied on page load without flash (FOUC prevention)"
+    - id: dm-002
+      rule: "Dark mode surfaces use --color-surface-dark, not simple colour inversion"
+      enforcement: "Images and SVGs need dark-mode variants where inverted colours break meaning"
+    - id: dm-003
+      rule: "Glassmorphism effects (backdrop-filter) must degrade gracefully when unsupported"
+      example: "@supports (backdrop-filter: blur(10px)) { .glass { backdrop-filter: blur(10px); } }"
+
+  spacing_system:
+    - id: sp-001
+      rule: "All spacing values use an 8-point grid system (multiples of 8px)"
+      enforcement: "Spacing tokens in glass-design-tokens.css: --space-1 (8px) through --space-10 (80px)"
+    - id: sp-002
+      rule: "Component internal padding uses --space-2 (16px) minimum; --space-3 (24px) preferred"
+    - id: sp-003
+      rule: "Section vertical rhythm: --space-6 (48px) between major page sections"
+
+  iconography:
+    - id: icon-001
+      rule: "Use a single icon strategy per project — emoji OR icon font OR SVG sprite (never mix)"
+      enforcement: "CORTEX docs: emoji-only for content icons; SVG for functional UI icons"
+    - id: icon-002
+      rule: "All inline SVG icons must have aria-hidden='true' when decorative"
+      severity: P0
+    - id: icon-003
+      rule: "Touch targets for icons ≥ 44×44px (WCAG 2.5.5)"
+      severity: P1
+
+  print_styles:
+    - id: print-001
+      rule: "Provide @media print stylesheet or CSS block for technical documentation"
+      enforcement: "Hide nav, footer, and interactive UI; expand <a href> text as visible URL"
+    - id: print-002
+      rule: "page-break-inside: avoid on headings, code blocks, and tables"
+
+# =============================================================================
+# SECTION: BUSINESS WRITING PRINCIPLES
+# Sources: Microsoft Writing Style Guide, Google Developer Style Guide,
+#          The Elements of Style (Strunk & White), Nielsen Norman Group
+#          Plain Language Guidelines (plainlanguage.gov)
+# =============================================================================
+business_writing:
+  foundational_principles:
+    - id: bw-001
+      principle: "Reader-first — every sentence earns its place by serving the reader"
+      description: >
+        Before publishing any sentence, ask: "Does this help the reader do or understand
+        something?" If not, delete it. Documentation that explains the creator's effort
+        serves the creator, not the reader.
+      anti_pattern: "We worked hard to build this feature, which took six months..."
+
+    - id: bw-002
+      principle: "Active voice as the default"
+      description: >
+        Active voice is shorter, clearer, and assigns responsibility. Use passive voice
+        only when the actor is genuinely unknown or irrelevant to the reader.
+      good: "CORTEX enforces governance rules automatically."
+      bad: "Governance rules are enforced automatically by CORTEX."
+      exception: "Passive is acceptable when describing what happens to data: 'The file is parsed...'"
+
+    - id: bw-003
+      principle: "One idea per sentence"
+      description: >
+        Sentences with multiple clauses joined by 'and', 'but', or 'which' should be
+        broken into separate sentences. Each sentence should advance exactly one idea.
+      threshold: "Sentence length > 25 words is a readability warning; > 35 words requires a rewrite"
+
+    - id: bw-004
+      principle: "Front-load the most important information (inverted pyramid)"
+      description: >
+        The conclusion comes first. Supporting detail follows. This matches how readers
+        scan: they read the first sentence of every paragraph and stop when they have
+        enough information. The Nielsen Norman F-pattern study confirms 57% of reading
+        time is spent on the first two paragraphs.
+      enforcement: "Topic sentence of every paragraph must stand alone as a complete summary"
+
+    - id: bw-005
+      principle: "Scannable structure before narrative"
+      description: >
+        Online readers scan before they read. Use headings, bullet lists, bold terms,
+        and short paragraphs to enable scanning. A reader who can scan the structure
+        and understand the content is more likely to read the detail.
+      pattern: "H2 (section) → bold lead sentence → bullet list of specifics → prose expansion if needed"
+
+    - id: bw-006
+      principle: "Consistent terminology — never synonym-rotate"
+      description: >
+        Technical writing is not creative writing. Using 'platform', 'system', and
+        'framework' interchangeably forces the reader to decide if they are different
+        things. Pick one term and use it everywhere.
+      enforcement: "Align with cortex_vocabulary.approved_metaphors in this file"
+
+    - id: bw-007
+      principle: "Plain language over jargon — Flesch-Kincaid Grade ≤ 10"
+      description: >
+        Target a Flesch-Kincaid reading grade level of 10 or below for documentation
+        prose. Technical terms are permitted only when they carry irreplaceable precision
+        and are introduced before use.
+      test: "Flesch Reading Ease score ≥ 50 for documentation body text"
+
+  sentence_patterns:
+    - id: sp-w-001
+      pattern: "Introduce before you define"
+      usage: "State the concept name, then explain it — never explain an unnamed concept"
+      good: "The Sweep Catalogue tracks every detected issue. It opens at the start of an audit..."
+      bad: "A mechanism that tracks every detected issue and closes only when all are resolved is called the Sweep Catalogue."
+
+    - id: sp-w-002
+      pattern: "Parallel structure in lists"
+      usage: "Every item in a list must begin with the same grammatical form"
+      good: "- Enforces governance rules  \\n- Captures institutional knowledge  \\n- Surfaces failure patterns"
+      bad: "- Governance rule enforcement  \\n- Capturing knowledge  \\n- It surfaces failure patterns"
+
+    - id: sp-w-003
+      pattern: "Lead with the action verb in instructions"
+      usage: "Procedural steps begin with imperative verbs — never 'You should' or 'It is recommended'"
+      good: "Run `make test-smoke` before committing."
+      bad: "It is recommended that you run the smoke test before committing."
+
+    - id: sp-w-004
+      pattern: "Second person ('you') in user-facing content"
+      usage: "Address the reader directly — 'you' creates ownership and clarity"
+      good: "You can configure CORTEX by editing .vscode/settings.json."
+      bad: "Users can configure CORTEX by editing their settings file."
+
+  formatting_rules:
+    - id: fmt-001
+      rule: "Headings use title case for H1/H2; sentence case for H3 and below"
+      enforcement: "H1: 'Getting Started With CORTEX' | H3: 'How to configure your environment'"
+    - id: fmt-002
+      rule: "Numbered lists for sequences and procedures; bullet lists for non-ordered items"
+      enforcement: "If step order matters, it must be numbered. Always."
+    - id: fmt-003
+      rule: "Bold for key terms on first introduction and UI element names; never for emphasis alone"
+      enforcement: "Use italics for emphasis; bold for term introduction only"
+    - id: fmt-004
+      rule: "Code references inline in backticks (`cortex_verify`); multi-line code in fenced blocks"
+      enforcement: "Shell commands, file paths, function names, and class names always in code format"
+    - id: fmt-005
+      rule: "Numbers: spell out one through nine; use numerals for 10 and above"
+      exception: "Always use numerals for: measurements, code, percentages, version numbers"
+    - id: fmt-006
+      rule: "Dates in ISO 8601 format for technical content (2026-03-09); written form for prose"
+      good_technical: "2026-03-09"
+      good_prose: "9 March 2026"
+
+  link_and_cta_writing:
+    - id: cta-001
+      rule: "Link text must describe the destination — never 'click here', 'read more', or 'here'"
+      good: "Read the <a href='...'>Getting Started guide</a>"
+      bad: "<a href='...'>Click here</a> to read the Getting Started guide"
+      enforcement: "Screen readers list all links — descriptive text is mandatory for accessibility"
+    - id: cta-002
+      rule: "External links must open in same tab by default; use target='_blank' only for document previews with rel='noopener noreferrer'"
+      severity: P1
+    - id: cta-003
+      rule: "CTAs use action verbs: 'Get started', 'Read the guide', 'View examples' — never nouns alone"
+      bad: "'Documentation', 'Guide', 'Examples' as CTA labels"
+
+  callouts_and_notices:
+    callout_types:
+      - type: "NOTE"
+        usage: "Supplementary information the reader might miss but that doesn't affect outcome"
+        html_class: ".callout--note"
+        icon: "💡"
+      - type: "WARNING"
+        usage: "Information that prevents data loss, security issues, or hard-to-reverse mistakes"
+        html_class: ".callout--warning"
+        icon: "⚠️"
+      - type: "IMPORTANT"
+        usage: "Critical path information — skipping this breaks the workflow"
+        html_class: ".callout--important"
+        icon: "🔴"
+      - type: "TIP"
+        usage: "Optional best practice that improves outcome or saves time"
+        html_class: ".callout--tip"
+        icon: "✨"
+
+    rules:
+      - id: cal-001
+        rule: "Callouts use semantic HTML: <aside role='note'> or <div role='alert'>"
+        severity: P1
+      - id: cal-002
+        rule: "Maximum 2 callouts per page section — overuse dilutes all callout urgency"
+        severity: P2
+      - id: cal-003
+        rule: "Callout body is ≤ 3 sentences — longer content belongs in a section, not a callout"
+
+# =============================================================================
+# SECTION: CODE DOCUMENTATION PATTERNS
+# Sources: Google Developer Documentation Style Guide, Write the Docs community
+# =============================================================================
+code_documentation:
+  code_blocks:
+    - id: cd-001
+      rule: "Every code block must have a language specifier for syntax highlighting"
+      example: "```python  ``` or ```bash  ``` — never plain ``` without language"
+      severity: P1
+    - id: cd-002
+      rule: "Code blocks longer than 30 lines must have a caption or filename label"
+      example: "<figure><figcaption>cortex/mcp/__init__.py — MCP server entry</figcaption><pre><code>...</code></pre></figure>"
+    - id: cd-003
+      rule: "Commands that the reader should run use a $ prompt prefix; output lines do not"
+      example: "$ python3 -m cortex.mcp  \\n# Server started on stdio"
+    - id: cd-004
+      rule: "Highlight the specific lines being discussed when showing partial context"
+      enforcement: "Use HTML data-highlight-line or Prism.js line-highlight plugin"
+
+  api_documentation:
+    - id: api-001
+      rule: "Every public API entry: purpose sentence → parameters table → return value → example"
+      enforcement: "Missing any section is a P1 documentation gap"
+    - id: api-002
+      rule: "Parameters table columns: Name | Type | Required | Default | Description"
+    - id: api-003
+      rule: "All examples must be runnable — never pseudocode unless explicitly labelled"
+    - id: api-004
+      rule: "Show the error case alongside the success case"
+
+  versioning:
+    - id: ver-001
+      rule: "Added-in-version labels on all features (CORTEX Phase or version number)"
+      example: "<span class='badge badge--phase'>Phase 108+</span>"
+    - id: ver-002
+      rule: "Deprecated features marked with class='deprecated' and include the removal target version"
+    - id: ver-003
+      rule: "Changelog maintained in a dedicated CHANGELOG.md or changelog HTML page"
+
+# =============================================================================
+# SECTION: SECURITY HEADERS & HTML SECURITY
+# Sources: OWASP HTML5 Security Cheat Sheet, MDN HTTP Headers
+# =============================================================================
+html_security:
+  content_security_policy:
+    - id: sec-001
+      rule: "Content-Security-Policy header required on all served pages"
+      minimum_policy: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+      severity: P1
+      note: "For static GitHub Pages: implement via <meta http-equiv='Content-Security-Policy'>"
+    - id: sec-002
+      rule: "No inline event handlers (onclick, onerror in HTML attributes) — all event logic in external JS"
+      severity: P1
+    - id: sec-003
+      rule: "Subresource Integrity (SRI) on all third-party script and style CDN links"
+      example: "<script src='cdn.js' integrity='sha384-...' crossorigin='anonymous'></script>"
+      severity: P1
+
+  http_headers:
+    - id: sec-004
+      rule: "X-Frame-Options: DENY (or SAMEORIGIN) to prevent clickjacking"
+      severity: P1
+    - id: sec-005
+      rule: "Referrer-Policy: strict-origin-when-cross-origin to protect URLs"
+      severity: P2
+    - id: sec-006
+      rule: "Permissions-Policy: restrict camera, microphone, geolocation to 'none' unless explicitly needed"
+      severity: P2
+
+  html_sanitisation:
+    - id: sec-007
+      rule: "Never inject user-supplied content into innerHTML without DOMPurify sanitisation"
+      severity: P0
+    - id: sec-008
+      rule: "JSON-LD structured data values must be HTML-escaped before injection"
+      severity: P1
+
+# =============================================================================
+# SECTION: PAGE TEMPLATE CHECKLIST
+# Use this as a pre-publish gate for every new docs HTML page
+# =============================================================================
+page_template_checklist:
+  head_section:
+    - "[ ] charset meta (UTF-8)"
+    - "[ ] viewport meta (width=device-width, initial-scale=1)"
+    - "[ ] Unique <title> (50–60 chars)"
+    - "[ ] meta description (150–160 chars)"
+    - "[ ] canonical <link>"
+    - "[ ] OpenGraph tags (og:title, og:description, og:image, og:url, og:type)"
+    - "[ ] Twitter card meta"
+    - "[ ] JSON-LD structured data (TechArticle or BreadcrumbList)"
+    - "[ ] CSP meta tag"
+    - "[ ] Preconnect to font origins"
+    - "[ ] Preload LCP image"
+    - "[ ] Critical CSS inlined"
+
+  body_structure:
+    - "[ ] Skip-to-main link as first <body> child"
+    - "[ ] <html lang='en'>"
+    - "[ ] <header> with site nav (landmarks)"
+    - "[ ] <main id='main-content'>"
+    - "[ ] One <h1> per page"
+    - "[ ] Breadcrumb <nav aria-label='Breadcrumb'> (pages deeper than level 1)"
+    - "[ ] <footer> with site links and copyright"
+
+  images_and_media:
+    - "[ ] Every <img> has descriptive alt text (or alt='' for purely decorative)"
+    - "[ ] Width and height attributes set on all <img>"
+    - "[ ] Hero image has fetchpriority='high'"
+    - "[ ] Below-fold images have loading='lazy'"
+    - "[ ] No GIF for animation — <video> with autoplay muted loop"
+
+  accessibility:
+    - "[ ] Colour contrast ≥ 4.5:1 for body text"
+    - "[ ] All interactive elements keyboard-accessible"
+    - "[ ] Visible focus rings on all focusable elements"
+    - "[ ] No information conveyed by colour alone"
+    - "[ ] ARIA roles only where native HTML is insufficient"
+    - "[ ] prefers-reduced-motion handled in CSS"
+
+  performance:
+    - "[ ] All JS deferred or async"
+    - "[ ] No render-blocking resources in <head>"
+    - "[ ] WebP/AVIF images with fallback"
+    - "[ ] Font subsetting applied"
+    - "[ ] No @import in CSS"
+
+  content_quality:
+    - "[ ] Active voice dominates (< 20% passive)"
+    - "[ ] No 'click here' or 'read more' link text"
+    - "[ ] All code blocks have language specifier"
+    - "[ ] Heading hierarchy correct (H1 → H2 → H3 — no skips)"
+    - "[ ] No orphaned pages (all pages reachable within 3 clicks from index)"

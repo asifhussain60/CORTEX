@@ -36,6 +36,9 @@
 <meta content="CORTEX — Cognitive Orchestration Real-Time Execution eXpert" property="og:title"/>
 <meta content="A comprehensive orchestrator ecosystem, a growing library of MCP Tools, CORE Governance Rules, and TDD execution. Elevate your development workflow." property="og:description"/>
 <meta content="https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png" property="og:image"/>
+<meta content="512" property="og:image:width"/>
+<meta content="512" property="og:image:height"/>
+<meta content="image/png" property="og:image:type"/>
 <meta content="https://asifhussain60.github.io/CORTEX/" property="og:url"/>
 
 <!-- Twitter Card -->
@@ -52,13 +55,14 @@
 
 <!-- Resource Preloading for Performance -->
 <link as="image" href="assets/images/cortex-logo-512.png" rel="preload"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <!-- FontAwesome Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
-      rel="stylesheet" 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 
@@ -154,6 +158,32 @@
 
     /* Accessibility */
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    /* Skip-to-main link (WCAG 2.4.1 — nav-004, a11y-aria-001) */
+    .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 1rem;
+        z-index: 99999;
+        padding: 0.6rem 1.25rem;
+        background: var(--accent-cyan);
+        color: #000;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border-radius: 0 0 var(--radius-md) var(--radius-md);
+        text-decoration: none;
+        transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+        top: 0;
+        outline: 3px solid #000;
+        outline-offset: 2px;
+    }
+
+    /* Ensure anchored sections aren't obscured by sticky nav on focus/jump */
+    :focus {
+        scroll-margin-top: 1rem;
+    }
 
     /* --- AMBIENT CANVAS BACKGROUND --- */
     .ambient-canvas { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
@@ -1154,6 +1184,34 @@
     .page-footer { padding: var(--spacing-8) 0; border-top: 1px solid var(--border-base); margin-top: var(--spacing-16); background: rgba(0,0,0,0.3); }
     .footer-content { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: var(--spacing-4); }
     @media(min-width: 768px) { .footer-content { flex-direction: row; text-align: left; } }
+
+    /* --- PRINT STYLES --- */
+    @media print {
+        /* Hide interactive / decorative chrome */
+        .skip-link,
+        .ambient-canvas,
+        .site-header,
+        nav,
+        .scroll-to-top,
+        .ct-phone-wrap,
+        .macc__chevron,
+        [aria-hidden="true"] { display: none !important; }
+
+        /* Reset background to white, text to black */
+        body, .site-wrapper { background: #fff !important; color: #000 !important; }
+
+        /* Show href for links */
+        a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; color: #555; }
+        a[href^="#"]::after,
+        a[href^="javascript:"]::after { content: ""; }
+
+        /* Prevent orphaned headings */
+        h1, h2, h3, h4 { page-break-after: avoid; }
+        p, li { orphans: 3; widows: 3; }
+
+        /* Expand accordion panels so content is visible */
+        .macc__panel-wrap { max-height: none !important; overflow: visible !important; }
+    }
 </style>
 
 <!-- ── Mission Accordion styles ── -->
@@ -1350,7 +1408,7 @@
   .mission-subtitle {
     font-size: 1.0625rem; color: rgba(148,163,184,0.85); margin: 0 auto;
     max-width: 54ch; line-height: 1.8;
-    text-align: justify;
+    text-align: left;
     hyphens: auto;
     -webkit-hyphens: auto;
     text-align-last: center; /* keep last (short) line centred */
@@ -2381,9 +2439,53 @@
     }
 </style>
 
+<!-- Structured Data — JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://asifhussain60.github.io/CORTEX/#website",
+      "url": "https://asifhussain60.github.io/CORTEX/",
+      "name": "CORTEX",
+      "description": "A production-grade AI Engineering Framework — cognitive orchestration, MCP tools, TDD-first development, and real-time governance.",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@type": "Person",
+        "name": "Asif Hussain"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://asifhussain60.github.io/CORTEX/#app",
+      "name": "CORTEX",
+      "alternateName": "Cognitive Orchestration Real-Time Execution eXpert",
+      "url": "https://asifhussain60.github.io/CORTEX/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "macOS, Linux, Windows",
+      "description": "A production-grade AI Engineering Framework with 296 orchestrators, 36 MCP tools, TDD-first development, and governance-driven code quality.",
+      "image": "https://asifhussain60.github.io/CORTEX/assets/images/cortex-logo-512.png",
+      "author": {
+        "@type": "Person",
+        "name": "Asif Hussain"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+</script>
+
 </head>
 
 <body>
+
+<!-- Skip-to-main link — first focusable element (WCAG 2.4.1, nav-004, a11y-aria-001) -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Ambient Background for Deep Glassmorphism Effect -->
 <div class="ambient-canvas" aria-hidden="true">
@@ -2637,6 +2739,7 @@
               <li class="macc" data-accent="cyan" id="macc-1">
                 <div class="macc__corner-glow" aria-hidden="true"></div>
                 <button
+                  type="button"
                   class="macc__trigger"
                   aria-expanded="false"
                   aria-controls="macc-panel-1"
@@ -2701,6 +2804,7 @@
               <li class="macc" data-accent="violet" id="macc-2">
                 <div class="macc__corner-glow" aria-hidden="true"></div>
                 <button
+                  type="button"
                   class="macc__trigger"
                   aria-expanded="false"
                   aria-controls="macc-panel-2"
@@ -2790,6 +2894,7 @@
               <li class="macc" data-accent="emerald" id="macc-3">
                 <div class="macc__corner-glow" aria-hidden="true"></div>
                 <button
+                  type="button"
                   class="macc__trigger"
                   aria-expanded="false"
                   aria-controls="macc-panel-3"
@@ -3667,7 +3772,7 @@
                 <p class="text-sm uppercase tracking-widest text-purple font-bold mb-2">Explore the origins</p>
                 <h2 class="text-3xl text-primary font-bold" id="awakening-heading-top">The Awakening Of CORTEX</h2>
                 <p class="text-muted text-lg mb-6 max-w-3xl">Discover how an ambitious goal transformed into a reliable, structured engineering framework — and why it was built from first principles.</p>
-                <span class="awakening-cta"><i class="fas fa-play mr-1" aria-hidden="true"></i> Read the story</span>
+                <span class="awakening-cta"><i class="fas fa-play mr-1" aria-hidden="true"></i> Read The Awakening of CORTEX story</span>
             </div>
         </a>
     </section>
