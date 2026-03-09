@@ -2902,6 +2902,200 @@
     </section>
 </header>
 
+<!-- ═══════════════════════════════════════════════════════════════════════
+     BLUF PANEL — single-statement identity card
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Google Font: Outfit — modern geometric humanist, pairs with glassmorphism -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── BLUF PANEL ─────────────────────────────────────────────────────────── */
+.bluf-panel {
+    max-width: 800px;
+    margin: 1.75rem auto 1.5rem auto;
+    padding: 0 1.5rem;
+}
+
+/* CSS-enhanced animated gradient border via background-clip trick */
+.bluf-border-wrap {
+    position: relative;
+    border-radius: 16px;
+    padding: 1.5px; /* border thickness */
+    background: linear-gradient(
+        120deg,
+        rgba(0, 212, 255, 0.7) 0%,
+        rgba(123, 97, 255, 0.6) 40%,
+        rgba(0, 212, 255, 0.3) 70%,
+        rgba(123, 97, 255, 0.7) 100%
+    );
+    background-size: 300% 300%;
+    /* motion-governed animation: opt-in only for no-preference users */
+}
+
+@keyframes bluf-border-shift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* outer glow that sits beneath the border wrap — composited, no layout impact */
+.bluf-border-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 18px;
+    background: inherit;
+    filter: blur(10px);
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bluf-glass {
+    position: relative;
+    padding: 1.25rem 2rem;
+    background: linear-gradient(
+        125deg,
+        rgba(13, 17, 46, 0.98) 0%,
+        rgba(10, 14, 39, 0.97) 55%,
+        rgba(20, 16, 50, 0.96) 100%
+    );
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 15px; /* 16px wrap - 1.5px padding */
+    /* layered depth shadows */
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.5),
+        0 16px 48px rgba(0, 0, 0, 0.45),
+        0 32px 80px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    overflow: hidden;
+}
+
+/* ── Glass sweep: diagonal light reflection that drifts across the surface */
+.bluf-glass::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -80%;
+    width: 60%;
+    height: 220%;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.045) 50%,
+        transparent 70%
+    );
+    transform: skewX(-15deg);
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .bluf-glass::before {
+        animation: bluf-sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        /* will-change justified: confirmed 60fps composited transform */
+        will-change: transform;
+    }
+}
+
+@keyframes bluf-sweep {
+    0%   { transform: skewX(-15deg) translateX(0); }
+    45%  { transform: skewX(-15deg) translateX(380%); }
+    100% { transform: skewX(-15deg) translateX(380%); }
+}
+
+/* ── Ambient glow: radial pool that breathes in opacity — composited */
+.bluf-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 100% at 50% -10%, rgba(0, 212, 255, 0.09) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .bluf-glass::after {
+        animation: bluf-breathe 4s ease-in-out infinite;
+    }
+}
+
+@keyframes bluf-breathe {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+}
+
+/* ── Entry animation: card fades up once on load */
+@media (prefers-reduced-motion: no-preference) {
+    .bluf-border-wrap {
+        animation: bluf-border-shift 6s ease infinite, bluf-entry 0.6s cubic-bezier(0, 0, 0.2, 1) both;
+    }
+}
+
+@keyframes bluf-entry {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Statement typography — Outfit font */
+.bluf-statement {
+    font-family: 'Outfit', var(--font-family-body, 'Inter'), sans-serif;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(180, 190, 220, 0.92);
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+/* CORTEX — large, prominent, Outfit weight 700 */
+.bluf-wordmark {
+    font-family: 'Outfit', var(--font-family-heading, 'Space Grotesk'), sans-serif;
+    font-size: clamp(1.55rem, 2.6vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #00d4ff 0%, #a78bfa 60%, #00d4ff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .bluf-wordmark {
+        animation: bluf-wordmark-shimmer 4s linear infinite;
+    }
+}
+
+@keyframes bluf-wordmark-shimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* key phrase in gradient */
+.bluf-statement em {
+    font-style: normal;
+    font-weight: 500;
+    background: linear-gradient(90deg, #00d4ff 0%, #7b61ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+</style>
+
+<div class="bluf-panel" role="note" aria-label="What CORTEX is">
+    <div class="bluf-border-wrap">
+        <div class="bluf-glass">
+            <p class="bluf-statement">
+                <span class="bluf-wordmark">CORTEX</span>, an <em>intelligent orchestration framework</em> that wraps GitHub Copilot in a persistent governance layer — routing every engineering intent to a specialist, enforcing quality rules automatically, and learning from every outcome so AI-assisted delivery gets safer with every session.
+            </p>
+        </div>
+    </div>
+</div>
+
 <!-- Two-Panel Layout: GitHub Copilot Challenges + CORTEX Vision -->
 <div style="max-width: 1200px; margin: var(--issa-hero-first, 3rem) auto var(--spacing-8) auto; padding: 0 var(--spacing-6);">
     <div class="feature-grid-2">
