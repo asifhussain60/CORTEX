@@ -48,9 +48,9 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 
 | Capability | What It Means |
 |---|---|
-| **350+ orchestration engines** | Specialised processing engines across 15 domains — each an expert at one category of engineering work |
-| **40+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
-| **60+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime with golden test validation for response templates |
+| **330+ orchestration engines** | Specialised processing engines across 14 domains — each an expert at one category of engineering work |
+| **36+ IDE-accessible tools** | CORTEX capabilities available directly in your coding assistant via voice or text — no context switching |
+| **60+ governance rules** | Automatically enforced quality and compliance standards — enforced at every commit, build, and runtime |
 | **6 programming languages** | Deep code analysis across Python, TypeScript, JavaScript, C#, SQL, and HTML with framework-specific support |
 | **30+ intent types** | CORTEX understands and routes 30+ distinct categories of engineering request — including autonomous planning, PO decision support, and cross-repo extraction |
 | **4 root cause methodologies** | Institutional memory that prevents failures from recurring — Five Whys, Fishbone, Fault Tree, and Causal Chain |
@@ -58,7 +58,7 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 | **3-tier response templates** | Modular LEGO architecture: atoms (identity, quote, principle) → blocks (engagement, metrics) → compositions (8 terminal formats) |
 | **90+ curated SDLC principles** | Intelligent principle injection with anti-repetition ring buffer — TDD, architecture, security, devops, code quality, testing |
 | **AI context intelligence** | 8-vendor AI artifact scanning with PII guard, automatic knowledge dissemination to registry hierarchy |
-| **90+ workflow templates** | Codified best practices across 17 categories — assembled from reusable building blocks like LEGO bricks with WorkflowGateway SSOT |
+| **90+ workflow templates** | Codified best practices across 17 categories — assembled from reusable building blocks like LEGO bricks |
 | **Automated code review** | Multi-pass review with security, governance, test-coverage, and style analysis — surfaced inline with severity and fix suggestions |
 | **Threat modelling** | STRIDE-based threat analysis of entry points, data flows, and trust boundaries — ranked threat catalogue with mitigations |
 | **Quality analysis** | Multi-dimensional codebase quality scoring (0–100) with trend tracking across complexity, coverage, documentation, and compliance |
@@ -68,11 +68,6 @@ CORTEX is a production-grade AI engineering framework built from a single Python
 | **Autonomous planning engine** | CAPE: 11-component pipeline converts requests into governed execution plans — complexity triage, dependency ordering, 5 analysis gates, 7-item machine-checkable checklists |
 | **Knowledge acquisition layer** | KAL: automatically detects knowledge gaps, synthesises domain YAML, validates it, and registers it — triggered when coverage drops below 80% |
 | **Cross-repo extraction** | 6-stage pipeline extracts operational learnings from git history with 8-gate privacy sanitisation for safe cross-workspace transfer |
-| **Document ingest pipeline** | 5-component pipeline ingests Word, Excel, PowerPoint, PDF, YAML, and Markdown — classifies, extracts, routes, and persists knowledge with full teardown support |
-| **Documentation intelligence** | 60+ best practices across 10 documentation sub-domains — technical docs, API docs, ADRs, runbooks, release notes, onboarding, and more |
-| **Knowledge guidance traceability** | Every knowledge consultation emits a decision trace with module path, domain, confidence, and rationale — full audit compliance for QW-006 |
-| **Response rendering validation** | 14-rule golden tests enforce consistent Markdown rendering across all response templates — blank lines, heading structure, table formatting |
-| **Vacuum source protection** | Hardened 8-stage cleanup pipeline with expanded PROTECTED_DIRS (15 directories), validate_safe_run() pre-flight check, and SHA format validation |
 | **Single package** | One canonical Python package — no fragmented modules, no parallel implementations, no version alignment problems |
 
 ---

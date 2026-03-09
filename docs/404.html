@@ -4,21 +4,56 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>404 — Page Not Found | CORTEX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/cortex.css"/>
 <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 <style>
-  /* Page-specific: 404 Error (Cyan theme - standalone fallback) */
-  :root { --theme-accent: #00d4ff; --theme-accent-rgb: 0, 212, 255; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; }
-  .error-container { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 1.5rem; padding: 3rem 2rem; max-width: 480px; backdrop-filter: blur(12px); }
-  .error-code { font-family: 'Space Grotesk', sans-serif; font-size: 5rem; font-weight: 800; color: var(--theme-accent); line-height: 1; margin-bottom: 0.5rem; }
+  :root {
+    --bg-primary: #0a0e27;
+    --text-primary: #e2e8f0;
+    --text-secondary: #78809a;
+    --accent-cyan: #00d4ff;
+    --glass-bg: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+  }
+  .error-container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    max-width: 480px;
+    backdrop-filter: blur(12px);
+  }
+  .error-code {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
   h1 { font-size: 1.5rem; margin-bottom: 1rem; }
-  p { color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
-  a.home-link { display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, rgba(var(--theme-accent-rgb),0.15), rgba(var(--theme-accent-rgb),0.05)); border: 1px solid rgba(var(--theme-accent-rgb),0.3); border-radius: 0.5rem; color: var(--theme-accent); text-decoration: none; font-weight: 600; transition: background 0.2s; }
-  a.home-link:hover { background: rgba(var(--theme-accent-rgb), 0.2); }
+  p { color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
+  a.home-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.05));
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 8px;
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  a.home-link:hover { background: rgba(0,212,255,0.2); }
 </style>
 </head>
 <body>

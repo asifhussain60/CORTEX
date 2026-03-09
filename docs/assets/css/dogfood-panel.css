@@ -1,0 +1,839 @@
+/**
+ * CORTEX — Dogfood Panel (Built With CORTEX — v3)
+ * Standalone stylesheet. Hardcoded values only (no token references)
+ * to guarantee cascade independence regardless of load order.
+ *
+ * Author: Asif Hussain
+ * © 2025–2026 CORTEX Framework. All rights reserved.
+ */
+
+/* ─────────────────────────────────────────────
+   KEYFRAMES
+───────────────────────────────────────────── */
+
+@keyframes df-badge-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0),
+                    0 4px 20px rgba(0, 212, 255, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(0, 212, 255, 0.06),
+                    0 4px 28px rgba(0, 212, 255, 0.3);
+    }
+}
+
+@keyframes df-badge-shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes df-underline-grow {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes df-float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-7px); }
+}
+
+@keyframes df-arrow-flow {
+    0%, 100% { opacity: 0.45; transform: translateX(-3px); }
+    50%       { opacity: 1;    transform: translateX(3px);  }
+}
+
+@keyframes df-shimmer-sweep {
+    0%   { left: -60%; }
+    100% { left: 160%; }
+}
+
+@keyframes df-stat-in {
+    from { opacity: 0; transform: translateY(18px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes df-glow-pulse {
+    0%, 100% { opacity: 0.25; }
+    50%       { opacity: 0.65; }
+}
+
+
+/* ─────────────────────────────────────────────
+   OUTER CONTAINER
+───────────────────────────────────────────── */
+
+.df-panel {
+    position: relative;
+    padding: 3.5rem 3rem;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Animated ambient glows — pure CSS, no JS */
+.df-panel::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -20%;
+    width: 60%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(0, 212, 255, 0.12) 0%, transparent 70%);
+    animation: df-glow-pulse 7s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.df-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    right: -15%;
+    width: 55%;
+    height: 70%;
+    background: radial-gradient(ellipse, rgba(123, 97, 255, 0.09) 0%, transparent 70%);
+    animation: df-glow-pulse 9s ease-in-out infinite reverse;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.df-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ─────────────────────────────────────────────
+   HOOK — "Did you know what dogfooding means?"
+───────────────────────────────────────────── */
+
+.df-hook {
+    text-align: center;
+    margin-bottom: 2.75rem;
+}
+
+.df-hook-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    /* Gradient border via background-clip trick */
+    position: relative;
+    padding: 0.5rem 1.35rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #e2f8ff;
+    margin-bottom: 1.4rem;
+    cursor: default;
+    /* Inner fill */
+    background: rgba(0, 212, 255, 0.07);
+    /* Gradient border via box-shadow layering */
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 212, 255, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 2px 20px rgba(0, 212, 255, 0.18),
+        0 0 0 4px rgba(0, 212, 255, 0.04);
+    animation: df-badge-pulse 3.5s ease-in-out infinite;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Icon dot accent */
+.df-hook-badge-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #7b61ff);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+}
+
+.df-hook-badge i {
+    font-size: 0.8rem;
+    color: #00d4ff;
+    filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.6));
+}
+
+.df-hook-question {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(1.75rem, 3.5vw + 0.5rem, 2.9rem);
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.6rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.df-hook-word {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    background: linear-gradient(100deg, #00d4ff 0%, #7b61ff 60%, #00d4ff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: df-badge-shimmer 4s linear infinite;
+}
+
+.df-hook-word::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2.5px;
+    background: linear-gradient(90deg, #00d4ff, #7b61ff);
+    border-radius: 2px;
+    transform-origin: left center;
+    animation: df-underline-grow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+}
+
+.df-hook-sub {
+    font-size: 1rem;
+    color: #a0a6c0;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+
+/* ─────────────────────────────────────────────
+   DEFINITION CARD
+───────────────────────────────────────────── */
+
+.df-def-card {
+    position: relative;
+    background: rgba(26, 31, 58, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 2rem 2.25rem;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow: hidden;
+}
+
+/* Cyan left accent bar */
+.df-def-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #00d4ff 0%, #7b61ff 100%);
+    border-radius: 16px 0 0 16px;
+}
+
+/* Subtle inner glow */
+.df-def-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.04) 0%, transparent 55%);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.df-def-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #00d4ff;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.df-def-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1.5px;
+    background: #00d4ff;
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+.df-def-term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 700;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.df-def-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #a0a6c0;
+    margin: 0 0 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.df-def-body strong {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.df-def-example {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.df-def-example-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    line-height: 1.6;
+}
+
+.df-def-example p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #a0a6c0;
+    margin: 0;
+}
+
+.df-def-example strong {
+    color: #cbd5e1;
+}
+
+
+/* ─────────────────────────────────────────────
+   SECTION DIVIDER LABEL
+───────────────────────────────────────────── */
+
+.df-section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #6b7280;
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
+.df-section-label::before,
+.df-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+
+/* ─────────────────────────────────────────────
+   DOGFOOD FLOW — 3-STEP STRIP
+───────────────────────────────────────────── */
+
+.df-flow {
+    margin-bottom: 2.75rem;
+}
+
+.df-flow-strip {
+    display: grid;
+    grid-template-columns: 1fr 52px 1fr 52px 1fr;
+    align-items: stretch;
+    gap: 0;
+}
+
+/* Each step card */
+.df-step {
+    background: rgba(26, 31, 58, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.df-step::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.df-step:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 212, 255, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.df-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.18) 0%, rgba(123, 97, 255, 0.18) 100%);
+    border: 1.5px solid rgba(0, 212, 255, 0.45);
+    border-radius: 50%;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #00d4ff;
+    margin: 0 auto 0.85rem;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+    flex-shrink: 0;
+}
+
+.df-step-icon {
+    display: block;
+    font-size: 2.1rem;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+}
+
+.df-step-icon.animate-1 { animation: df-float 4.5s ease-in-out infinite 0s; }
+.df-step-icon.animate-2 { animation: df-float 4.5s ease-in-out infinite 0.8s; }
+.df-step-icon.animate-3 { animation: df-float 4.5s ease-in-out infinite 1.6s; }
+
+.df-step-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+}
+
+.df-step-desc {
+    font-size: 0.82rem;
+    color: #6b7280;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* Arrow connectors — Unicode arrow with pulsing glow */
+.df-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 4px;
+}
+
+.df-connector-arrow {
+    font-size: 1.5rem;
+    line-height: 1;
+    background: linear-gradient(90deg, #00d4ff, #7b61ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: df-arrow-flow 2.4s ease-in-out infinite;
+    display: block;
+    text-align: center;
+    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
+}
+
+
+/* ─────────────────────────────────────────────
+   ACHIEVEMENT DUAL PANELS
+───────────────────────────────────────────── */
+
+.df-built-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #6b7280;
+    margin: 0 0 1.5rem;
+}
+
+.df-built-label::before,
+.df-built-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+.df-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.df-card {
+    position: relative;
+    background: rgba(26, 31, 58, 0.55);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+}
+
+.df-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.45);
+    box-shadow: 0 12px 36px rgba(0, 212, 255, 0.18);
+}
+
+.df-card--secondary {
+    border-color: rgba(123, 97, 255, 0.2);
+}
+
+.df-card--secondary:hover {
+    border-color: rgba(123, 97, 255, 0.45);
+    box-shadow: 0 12px 36px rgba(123, 97, 255, 0.18);
+}
+
+/* Sweeping shimmer top edge */
+.df-card-shimmer {
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.9), transparent);
+    animation: df-shimmer-sweep 4s linear infinite;
+    pointer-events: none;
+}
+
+.df-card--secondary .df-card-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(123, 97, 255, 0.9), transparent);
+    animation-delay: 2s;
+}
+
+.df-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+
+.df-card-icon {
+    font-size: 1.4rem;
+    color: #00d4ff;
+}
+
+.df-card--secondary .df-card-icon {
+    color: #7b61ff;
+}
+
+.df-card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.df-card-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.67rem;
+    font-weight: 600;
+    color: #00d4ff;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.85rem;
+}
+
+.df-card--secondary .df-card-badge {
+    color: #7b61ff;
+}
+
+.df-card-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #a0a6c0;
+    flex: 1;
+    margin: 0 0 1.5rem;
+}
+
+.df-card-body strong {
+    color: #e2e8f0;
+}
+
+.df-card-stats {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin-top: auto;
+}
+
+.df-mini-stat {
+    flex: 1;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.65rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.df-card--secondary .df-mini-stat {
+    border-color: rgba(123, 97, 255, 0.15);
+}
+
+.df-mini-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #00d4ff;
+    line-height: 1;
+    display: block;
+}
+
+.df-card--secondary .df-mini-val {
+    color: #7b61ff;
+}
+
+.df-mini-lbl {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    display: block;
+}
+
+
+/* ─────────────────────────────────────────────
+   STATS GRID
+───────────────────────────────────────────── */
+
+.df-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.df-stat {
+    background: rgba(26, 31, 58, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.df-stat:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 212, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.12);
+}
+
+/* Staggered entrance */
+.df-stat:nth-child(1) { animation: df-stat-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both; }
+.df-stat:nth-child(2) { animation: df-stat-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both; }
+.df-stat:nth-child(3) { animation: df-stat-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both; }
+.df-stat:nth-child(4) { animation: df-stat-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both; }
+
+.df-stat-icon {
+    font-size: 1.75rem;
+    color: #00d4ff;
+    margin-bottom: 0.75rem;
+}
+
+.df-stat-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 0.35rem;
+    line-height: 1;
+}
+
+.df-stat-lbl {
+    font-size: 0.78rem;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.df-stat-bar {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+.df-stat-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #00d4ff, #7b61ff);
+    transition: width 1.8s ease-out;
+}
+
+
+/* ─────────────────────────────────────────────
+   CLOSING LINE
+───────────────────────────────────────────── */
+
+.df-closing {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.df-closing p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1rem, 1.5vw + 0.3rem, 1.25rem);
+    color: #a0a6c0;
+    margin: 0;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.df-closing-highlight {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: normal;
+    font-weight: 700;
+}
+
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+    .df-flow-strip {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1rem;
+    }
+
+    .df-connector {
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.25rem 0;
+        height: auto;
+    }
+
+    .df-connector-arrow {
+        font-size: 1.2rem;
+        transform: rotate(90deg);
+        display: inline-block;
+    }
+
+    .df-dual {
+        grid-template-columns: 1fr;
+    }
+
+    .df-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .df-panel {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .df-hook-question {
+        font-size: 1.6rem;
+    }
+
+    .df-def-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .df-step {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .df-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .df-panel {
+        padding: 2rem 1rem;
+    }
+
+    .df-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .df-card-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .df-hook-word::after,
+    .df-step-icon,
+    .df-connector-arrow,
+    .df-card-shimmer,
+    .df-stat,
+    .df-hook-badge {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .df-hook-word::after {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}

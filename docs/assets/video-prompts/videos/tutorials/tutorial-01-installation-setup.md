@@ -1,7 +1,6 @@
 # NotebookLM Video Prompt — Tutorial 01 — Installation & First Run
 
-**Target `cortex_verify op=mcp` call — green confirmation card materialises. Additional verification: "40+ MCP tools registered" counter animates.
-Narrator: "MCP tools appear in Copilot Chat automatically when the server is configured. You don't start a server. You don't open a port. If you see the tool suggestions, MCP is active. Over 40 MCP tools are registered — from code review to threat modelling to document ingestion."ngth:** ~6 minutes
+**Target length:** ~6 minutes
 **Audience:** First-time users — no prior CORTEX experience
 **Visual Theme:** Warm amber/gold glassmorphism (tutorial series accent)
 **Prerequisite:** None — this is the starting point

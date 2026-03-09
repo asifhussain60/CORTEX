@@ -121,7 +121,7 @@ CORTEX includes a comprehensive production readiness audit that can be triggered
 
 **Orchestrator health** — Verifies that all active orchestrators are healthy, responsive, and correctly configured.
 
-**Cleanup** — Removes accumulated documentation sprawl, stale files, and orphaned artifacts. The Vacuum Recency Guard protects files modified within the last 7 days from deletion, ensuring work-in-progress artefacts are never swept up by aggressive cleanup heuristics. The hardened VacuumOrchestrator enforces source protection with 15 PROTECTED_DIRS entries and a `validate_safe_run()` pre-flight check that verifies no source directories can be touched — cortex/, tests/, .github/, scripts/, deployment/, and .vscode/ are permanently excluded from all 8 vacuum stages.
+**Cleanup** — Removes accumulated documentation sprawl, stale files, and orphaned artifacts. The Vacuum Recency Guard protects files modified within the last 7 days from deletion, ensuring work-in-progress artefacts are never swept up by aggressive cleanup heuristics.
 
 **Meta-audit** — 23 checks against the framework's own internal consistency — ensuring the intelligence layer, prompt system, and configuration files are all in agreement.
 

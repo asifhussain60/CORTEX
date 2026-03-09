@@ -24,19 +24,19 @@ d3_method: "d3.tree() — directory tree with expandable nodes"
  │  REPO ROOT                                                                  │
  │                                                                             │
  │  cortex/                          ← Single canonical Python package         │
- │  ├── orchestrators/               ← 350+ files across 15 domains           │
+ │  ├── orchestrators/               ← 290+ files across 14 domains           │
  │  │   ├── core/                       MasterOrch, IntentRouter, TDD, Enforce │
  │  │   ├── domain/                     Onboarding, Planning, Design           │
- │  │   ├── support/                    Debug, Sweep, Refactoring, Ingest      │
- │  │   ├── health/                     Health, Vacuum (with source protection)│
+ │  │   ├── support/                    Debug, Sweep, Refactoring              │
+ │  │   ├── health/                     Health, Vacuum                         │
  │  │   ├── workflow/                   WorkflowComposer, TemplateComposer     │
  │  │   ├── intelligence/               LENS-backed intelligence orchestrators │
  │  │   ├── git/                        GitOrchestrator, sync pipeline         │
  │  │   ├── persona/                    Role-based persona orchestrators       │
  │  │   ├── validation/                 Contract + wiring validation           │
- │  │   └── ... (15 domains total)                                             │
- │  ├── mcp/                         ← MCP stdio server + 40 registered tools  │
- │  │   └── tools/                      60 tool files                          │
+ │  │   └── ... (14 domains total)                                             │
+ │  ├── mcp/                         ← MCP stdio server + 36 registered tools  │
+ │  │   └── tools/                      58 tool files                          │
  │  ├── lens/                        ← LENS analysis engine (8 analyzers)      │
  │  ├── intelligence/                ← Reasoning, learning, RCA engine         │
  │  │   ├── facade.py               ← IntelligenceFacade — canonical entry (Phase 107) │

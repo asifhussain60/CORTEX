@@ -2,8 +2,7 @@
 
 > **Tool:** NotebookLM Video Editor
 > **Category:** Hands-on walkthrough tutorials -- visually differentiated from concept videos
-> **Updated:** 2026-03-09
-> **Architecture Verified:** 350+ orchestrators, 40+ MCP tools, 60+ governance rules, Document Ingest Pipeline, Vacuum Source Protection, Documentation Intelligence
+> **Updated:** 2026-03-01
 
 ---
 
