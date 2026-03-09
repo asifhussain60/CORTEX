@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CORTEX Glossary | Terminology Reference</title>
+    <meta name="description" content="Alphabetical reference of all CORTEX terms, concepts, and architectural components — verified against live codebase implementation."/>
+    <meta name="author" content="Asif Hussain"/>
+    <script>/* Suppress Tailwind CDN production warning */const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/cortex-logo-64.png" type="image/png"/>
+    <style>
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-amber: #f59e0b;
+            --accent-orange: #f97316;
+            --accent-emerald: #10b981;
+            --accent-violet: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --issa-content-content: 3rem;
+            --issa-content-panel: 2rem;
+            --issa-panel-panel: 1.5rem;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+        
+        .gradient-text-amber {
+            background: linear-gradient(to right, #f59e0b, #f97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        .breadcrumb-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        
+        .breadcrumb-nav a:hover {
+            color: var(--accent-amber);
+        }
+        
+        .breadcrumb-separator {
+            color: rgba(148, 163, 184, 0.4);
+        }
+        
+        .breadcrumb-current {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-amber);
+            background: rgba(26, 31, 58, 0.8);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+        
+        .alpha-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: rgba(26, 31, 58, 0.3);
+            border-radius: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .alpha-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .alpha-link:hover,
+        .alpha-link.active {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+            transform: translateY(-2px);
+        }
+        
+        .letter-section {
+            margin-bottom: 3rem;
+        }
+        
+        .letter-header {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+            display: inline-block;
+        }
+        
+        .term-item {
+            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(26, 31, 58, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .term-item:hover {
+            background: rgba(26, 31, 58, 0.5);
+            border-color: rgba(245, 158, 11, 0.2);
+            transform: translateX(4px);
+        }
+        
+        .term-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .term-definition {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .term-location {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-emerald);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+        }
+        
+        .highlight {
+            background: rgba(245, 158, 11, 0.3);
+            color: var(--text-main);
+            padding: 0 0.2em;
+            border-radius: 0.2em;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.3rem;
+            font-size: 0.9em;
+            color: var(--accent-cyan);
+        }
+        
+        /* Footer Styles - Lean Single Row */
+        .page-footer {
+            padding: 1.25rem 0;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 6rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.8125rem;
+        }
+        
+        @media(min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                gap: 2rem;
+            }
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-main);
+        }
+        
+        .footer-brand strong {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 1.5rem;
+        }
+        
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .footer-link:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .footer-link-highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.65rem;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 0.375rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .footer-link-highlight:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+        
+        .footer-separator {
+            color: var(--text-muted);
+            opacity: 0.3;
+        }
+        
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+            white-space: nowrap;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="index.html">
+            <i data-lucide="home" style="width: 16px; height: 16px;"></i>
+            Home
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Glossary</span>
+    </nav>
+
+    <main id="main-content" class="max-w-5xl mx-auto px-6 py-12">
+        <header class="text-center mb-12">
+            <h1 class="hero-title text-5xl md:text-6xl font-bold mb-4">
+                CORTEX <span class="gradient-text-amber">Glossary</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                Alphabetical reference of all CORTEX terms — verified against live codebase
+            </p>
+        </header>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input 
+                type="search" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Search terms..." 
+                aria-label="Search glossary"
+            />
+        </div>
+
+        <nav class="alpha-nav" aria-label="Alphabetical navigation">
+            <a href="#A" class="alpha-link">A</a>
+            <a href="#B" class="alpha-link">B</a>
+            <a href="#C" class="alpha-link">C</a>
+            <a href="#D" class="alpha-link">D</a>
+            <a href="#E" class="alpha-link">E</a>
+            <a href="#F" class="alpha-link">F</a>
+            <a href="#G" class="alpha-link">G</a>
+            <a href="#H" class="alpha-link">H</a>
+            <a href="#I" class="alpha-link">I</a>
+            <a href="#J" class="alpha-link">J</a>
+            <a href="#K" class="alpha-link">K</a>
+            <a href="#L" class="alpha-link">L</a>
+            <a href="#M" class="alpha-link">M</a>
+            <a href="#N" class="alpha-link">N</a>
+            <a href="#O" class="alpha-link">O</a>
+            <a href="#P" class="alpha-link">P</a>
+            <a href="#Q" class="alpha-link">Q</a>
+            <a href="#R" class="alpha-link">R</a>
+            <a href="#S" class="alpha-link">S</a>
+            <a href="#T" class="alpha-link">T</a>
+            <a href="#U" class="alpha-link">U</a>
+            <a href="#V" class="alpha-link">V</a>
+            <a href="#W" class="alpha-link">W</a>
+        </nav>
+
+        <div id="glossaryContainer">
+            <!-- Letter A -->
+            <section id="A" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">A</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Action Tier</span>
+                    <p class="term-definition">Third intelligence tier. Executes plans produced by the Reasoning tier. Generates code, tests, and transformations.</p>
+                    <span class="term-location">cortex/intelligence/action/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">ADO (Azure DevOps)</span>
+                    <p class="term-definition">The default work item ticketing system integrated with CORTEX. Selected by setting <code>WORK_ITEM_SOURCE=ado</code>. Requires <code>ADO_ORG_URL</code>, <code>ADO_PAT</code>, and <code>ADO_PROJECT</code> environment variables.</p>
+                    <span class="term-location">cortex/repositories/ado/ado_provider.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">AI Context Intelligence</span>
+                    <p class="term-definition">Phase 121 capability that scans, classifies, PII-guards, and disseminates AI artifacts (copilot-instructions.md, .cursorrules, etc.) from external repositories into the CORTEX registry hierarchy. Supports 8 vendors: GitHub Copilot, Cursor, Claude, Windsurf, Cline, Continue, Tabnine, OpenAI.</p>
+                    <span class="term-location">cortex/infrastructure/repositories/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Anti-Repetition Ring Buffer</span>
+                    <p class="term-definition">Deque-based memory (n=10) that prevents the same quote or principle from appearing in consecutive CORTEX responses. Part of PrincipleSelector.</p>
+                    <span class="term-location">cortex/intelligence/principle_selector.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Archetype Classifier</span>
+                    <p class="term-definition">Intelligence component that identifies the structural archetype of a codebase (monolith, modular monolith, microservices, serverless, event-driven, etc.) using LENS analysis signals. The classification drives strategy selection in the Reasoning tier.</p>
+                    <span class="term-location">cortex/intelligence/perception/archetype_classifier.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Audit Database (CortexAuditDB)</span>
+                    <p class="term-definition">SQLite WAL database storing all operation records with hash-chain integrity.</p>
+                    <span class="term-location">.cortex-runtime/ + cortex/infrastructure/audit_db.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Audit Hash Chain</span>
+                    <p class="term-definition">Cryptographic chain linking each audit entry to the previous one, creating a tamper-evident log.</p>
+                    <span class="term-location">cortex/infrastructure/audit_hash_chain.py</span>
+                </article>
+            </section>
+
+            <!-- Letter B -->
+            <section id="B" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">B</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Brain Tiers</span>
+                    <p class="term-definition">Three-layer intelligence architecture: Perception → Reasoning → Action.</p>
+                    <span class="term-location">cortex/intelligence/{perception,reasoning,action}/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Bulkhead</span>
+                    <p class="term-definition">Resilience pattern that partitions resources to prevent one failing component from consuming all capacity.</p>
+                    <span class="term-location">cortex/infrastructure/bulkhead_manager.py</span>
+                </article>
+            </section>
+
+            <!-- Letter C -->
+            <section id="C" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">C</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Circuit Breaker</span>
+                    <p class="term-definition">Resilience pattern that stops calls to failing services. States: Closed → Open → Half-Open.</p>
+                    <span class="term-location">cortex/infrastructure/circuit_breaker.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Code Review Orchestrator</span>
+                    <p class="term-definition">Domain orchestrator that performs structured, multi-stage code review. Examines code quality, security posture, pattern adherence, documentation coverage, and governance compliance in a single coordinated pass. Exposed via the <code>cortex_review</code> MCP tool.</p>
+                    <span class="term-location">cortex/orchestrators/domain/code_review_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Confidence Score</span>
+                    <p class="term-definition">Numerical value (0.0–1.0) produced by IntentRouter indicating certainty of intent classification. Higher scores route to primary orchestrators.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">ConsolidatedTool</span>
+                    <p class="term-definition">Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail.</p>
+                    <span class="term-location">cortex/mcp/mcp_tool_base.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Content Library (EpochShuffler)</span>
+                    <p class="term-definition">Centralised content management facade that provides anti-repetition guarantees across all content pools: quotes (120 entries), principles (90 entries), and analogies. The EpochShuffler algorithm ensures every item in a pool is used exactly once before any item repeats.</p>
+                    <span class="term-location">cortex/intelligence/content_library_facade.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">CORE Rules</span>
+                    <p class="term-definition">Governance rules identified by CORE-nnn IDs. An extensive set of CORE rules active in skull-rules.yaml (+ AC rules), all enforced at pre-commit + CI + runtime.</p>
+                    <span class="term-location">cortex-registry/core/tier0-skull/skull-rules.yaml</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">CORE-064</span>
+                    <p class="term-definition">Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by SweepCatalogueOrchestrator.</p>
+                </article>
+            </section>
+
+            <!-- Letter D -->
+            <section id="D" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">D</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Defence in Depth</span>
+                    <p class="term-definition">Security architecture principle where multiple independent layers of protection ensure no single point of failure can allow a threat to reach production. In CORTEX, five security layers operate at commit time, build time, runtime, static analysis, and release gates.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Definition of Ready (DoR)</span>
+                    <p class="term-definition">Checklist presented in MasterOrchestrator Stage 1. Ensures scope, acceptance criteria, and dependencies are clear before execution.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">DISTILL Intent</span>
+                    <p class="term-definition">A CORTEX intent type (Phase 129) that reduces a multi-turn conversation to an executable, context-dense prompt. The 5-stage pipeline (segment → reconstruct → reconcile → synthesise → compress) eliminates noise while preserving all goals, decisions, and constraints.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Domain Brain</span>
+                    <p class="term-definition">Domain-specific knowledge module that provides context for business logic decisions.</p>
+                    <span class="term-location">cortex/intelligence/domain_brain/</span>
+                </article>
+            </section>
+
+            <!-- Letter E -->
+            <section id="E" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">E</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">EnforcementOrchestrator</span>
+                    <p class="term-definition">Orchestrator that validates code against CORE governance rules. Coordinates multiple enforcement agents.</p>
+                    <span class="term-location">cortex/orchestrators/core/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">EpochShuffler</span>
+                    <p class="term-definition">Anti-repetition algorithm that guarantees every item in a content pool is selected exactly once before any item repeats. Named after the machine-learning concept of epoch-based data shuffling. Powers the Content Library's quote, principle, and analogy pools.</p>
+                    <span class="term-location">cortex/intelligence/content_library_facade.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Evidence Bundle</span>
+                    <p class="term-definition">Collection of audit records, test results, and governance checks packaged as compliance proof.</p>
+                    <span class="term-location">cortex/infrastructure/evidence_bundle.py</span>
+                </article>
+            </section>
+
+            <!-- Letter F -->
+            <section id="F" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">F</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">FEEDBACK Intent</span>
+                    <p class="term-definition">A CORTEX intent type for structured user feedback. When triggered, the FeedbackOrchestrator captures satisfaction signals, improvement suggestions, or correction notes and routes them into the Unified Reinforcement Signal for confidence adjustment.</p>
+                    <span class="term-location">cortex/orchestrators/support/feedback_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Framework Self-Analyzer</span>
+                    <p class="term-definition">Intelligence component that introspects CORTEX's own architecture at runtime — counting orchestrators, MCP tools, governance rules, workflow templates, and intent types. Powers the refresh_prompt_suite.py script.</p>
+                    <span class="term-location">cortex/intelligence/framework_analyzer.py</span>
+                </article>
+            </section>
+
+            <!-- Letter G -->
+            <section id="G" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">G</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Golden Tests</span>
+                    <p class="term-definition">Tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with pytest-xdist parallel execution.</p>
+                    <span class="term-location">tests/golden/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Governance Agents</span>
+                    <p class="term-definition">Specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Graceful Degradation</span>
+                    <p class="term-definition">Resilience pattern returning partial results when non-critical services fail.</p>
+                    <span class="term-location">cortex/infrastructure/graceful_degradation.py</span>
+                </article>
+            </section>
+
+            <!-- Letter H -->
+            <section id="H" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">H</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Hash Chain</span>
+                    <p class="term-definition">See Audit Hash Chain. Cryptographic chain linking audit entries for tamper-evident logging.</p>
+                </article>
+            </section>
+
+            <!-- Letter I -->
+            <section id="I" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">I</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">IntentRouter</span>
+                    <p class="term-definition">Orchestrator that classifies requests into multiple intent types (IMPLEMENT, FIX, REFACTOR, etc.) and routes to appropriate domain orchestrators.</p>
+                    <span class="term-location">cortex/orchestrators/core/intent_router.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">INTRODUCE Intent</span>
+                    <p class="term-definition">A CORTEX intent type for interactive, role-based onboarding. When triggered, CORTEX presents tailored capability overviews for the detected role (Business Leader, Product Owner, Software Engineer, or Curious Learner).</p>
+                </article>
+            </section>
+
+            <!-- Letter J -->
+            <section id="J" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">J</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">JSON-RPC 2.0</span>
+                    <p class="term-definition">Protocol used for MCP communication between IDE clients and CORTEX server. Standard request/response format over stdio transport.</p>
+                </article>
+            </section>
+
+            <!-- Letter K -->
+            <section id="K" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">K</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Knowledge Base</span>
+                    <p class="term-definition">Domain knowledge stored in cortex-registry/knowledge-base/ and managed by cortex/knowledge/.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Knowledge Hydration</span>
+                    <p class="term-definition">The process of resolving and injecting domain knowledge into execution context before orchestrator execution. Resolution order: Company overlays → Knowledge base (static) → SDLC knowledge (dynamic) → Pattern registry → LENS real-time analysis.</p>
+                </article>
+            </section>
+
+            <!-- Letter L -->
+            <section id="L" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">L</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">LEGO Architecture (Response Templates)</span>
+                    <p class="term-definition">3-tier modular system for composing CORTEX responses. Tier 1: Atoms (5 primitives). Tier 2: Blocks (5 composites). Tier 3: Compositions (8 terminal formats). Enables consistent, reusable response structures.</p>
+                    <span class="term-location">cortex-registry/templates/response/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">LENS</span>
+                    <p class="term-definition">Language → Examination → Navigation → Synthesis. Code intelligence system with multiple parallel analyzers producing unified analysis.</p>
+                    <span class="term-location">cortex/lens/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">LENS Analyzers</span>
+                    <p class="term-definition">Parallel analyzers including: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain, and more.</p>
+                </article>
+            </section>
+
+            <!-- Letter M -->
+            <section id="M" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">M</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">MasterOrchestrator</span>
+                    <p class="term-definition">Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution.</p>
+                    <span class="term-location">cortex/orchestrators/core/master_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">MCP (Model Context Protocol)</span>
+                    <p class="term-definition">JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. A growing library of registered tools exposed via stdio transport.</p>
+                </article>
+            </section>
+
+            <!-- Letter O -->
+            <section id="O" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">O</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">OrchestratorBase</span>
+                    <p class="term-definition">Legacy abstract base class used by a small number of orchestrators only. The primary base for all wired orchestrators is OrchestratorProtocolMixin + IOrchestrator protocol.</p>
+                    <span class="term-location">cortex/core/orchestrator_base.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">OrchestratorEventBus</span>
+                    <p class="term-definition">Decoupled communication channel for inter-orchestrator messaging.</p>
+                    <span class="term-location">cortex/infrastructure/orchestrator_event_bus.py</span>
+                </article>
+            </section>
+
+            <!-- Letter P -->
+            <section id="P" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">P</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Perception Tier</span>
+                    <p class="term-definition">First intelligence tier. Observes, parses, and classifies raw input.</p>
+                    <span class="term-location">cortex/intelligence/perception/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Principle Block Library</span>
+                    <p class="term-definition">Curated collection of 90 SDLC principles across 10 domains: TDD, refactoring, architecture, security, API design, testing, observability, code quality, documentation, and devops. Injected into analysis/design responses via PrincipleSelector.</p>
+                    <span class="term-location">cortex-registry/knowledge/sdlc/high-value-principles.yaml</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Pylance-style MCP</span>
+                    <p class="term-definition">CORTEX's MCP server auto-starts when VS Code opens the workspace — same pattern as the Pylance language server. No manual startup required.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">pytest-xdist</span>
+                    <p class="term-definition">pytest plugin for parallel test execution. Used with -n auto --dist loadscope for unit tests and -n 4 --dist loadfile for integration tests.</p>
+                </article>
+            </section>
+
+            <!-- Letter Q -->
+            <section id="Q" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">Q</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Quality Analysis Engine</span>
+                    <p class="term-definition">Intelligence component that evaluates codebase quality across multiple dimensions: structural complexity, test coverage adequacy, documentation completeness, dependency health, and governance compliance posture. Produces a composite quality score (0–100).</p>
+                    <span class="term-location">cortex/intelligence/quality_analysis_engine.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Quote Library</span>
+                    <p class="term-definition">Curated collection of 120 literary quotes across 10 themes (quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal) sourced from engineering and business literature.</p>
+                    <span class="term-location">cortex-registry/templates/response/atoms/atom-quote.yaml</span>
+                </article>
+            </section>
+
+            <!-- Letter R -->
+            <section id="R" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">R</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Reasoning Tier</span>
+                    <p class="term-definition">Second intelligence tier. Analyzes perceptions, assesses risk, and produces execution plans.</p>
+                    <span class="term-location">cortex/intelligence/reasoning/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Red-Green-Refactor (RGR)</span>
+                    <p class="term-definition">The two-level quality cycle in CORTEX. Level 1 (Unit RGR): TDDOrchestrator enforces RED (write failing test) → GREEN (implement minimum) → REFACTOR (clean up). Level 2 (Sweep RGR): SweepCatalogueOrchestrator runs DETECT → FIX → RESCAN loops until p0==0 and p1==0.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">ReinforcementEngine</span>
+                    <p class="term-definition">Core engine that receives ReinforcementSignal emissions, adjusts pattern confidence scores, and manages the promote/quarantine/decay lifecycle.</p>
+                    <span class="term-location">cortex/intelligence/learning/reinforcement_signal.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">REVIEW Intent</span>
+                    <p class="term-definition">Intent type routed to the Code Review Orchestrator. Triggers multi-pass code review across the changed-file set: structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance.</p>
+                </article>
+            </section>
+
+            <!-- Letter S -->
+            <section id="S" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">S</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">SDLC Workflow Engine</span>
+                    <p class="term-definition">The 7-phase software development lifecycle engine powered by SDLCWorkflowOrchestrator. Maps user intents (ANALYZE, DESIGN, IMPLEMENT, TEST, SECURITY, DEPLOY, REVIEW) to corresponding YAML workflow templates.</p>
+                    <span class="term-location">cortex/orchestrators/domain/sdlc_workflow_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">SecurityOrchestrator</span>
+                    <p class="term-definition">Orchestrator handling security analysis, vulnerability detection, and security gate enforcement.</p>
+                    <span class="term-location">cortex/orchestrators/core/</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Security-First Development</span>
+                    <p class="term-definition">CORTEX's 5-layer security architecture ensuring security is embedded at every development stage. Layers (outside-in): Runtime Protection → Audit & Compliance → Governance Enforcement → Code Analysis → Input Validation.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">stdio Transport</span>
+                    <p class="term-definition">Standard input/output process communication. IDE writes JSON-RPC to stdin, CORTEX responds on stdout. No network ports required.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">SweepCatalogueOrchestrator</span>
+                    <p class="term-definition">CORE-064 enforcement engine. Tracks open/resolved items in every FIX/REFACTOR/AUDIT sweep using SQLite WAL. No partial sweep can close without assert_exhausted() or approve_wont_fix().</p>
+                    <span class="term-location">cortex/orchestrators/support/sweep_catalogue_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Synthesis</span>
+                    <p class="term-definition">LENS synthesis phase that merges results from all 8 analyzers into a unified intelligence report.</p>
+                </article>
+            </section>
+
+            <!-- Letter T -->
+            <section id="T" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">T</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">TDD (Test-Driven Development)</span>
+                    <p class="term-definition">Mandatory development methodology (CORE-008). Cycle: RED (write failing test) → GREEN (implement minimum) → REFACTOR (clean up).</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">TDDOrchestrator</span>
+                    <p class="term-definition">Orchestrator enforcing TDD cycle for IMPLEMENT, FIX, and TEST intents.</p>
+                    <span class="term-location">cortex/orchestrators/core/tdd_orchestrator.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Threat Model Engine</span>
+                    <p class="term-definition">Security intelligence component that generates threat models for a given codebase surface. Applies STRIDE classification (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) to entry points, data flows, and trust boundaries.</p>
+                    <span class="term-location">cortex/intelligence/threat_model_engine.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">3-Tier Loading Model</span>
+                    <p class="term-definition">Token optimization architecture with three progressive context tiers: T0 (Auto — copilot-instructions.md, ~300 tokens), T1 (Prompt — user-selected prompt file, ~1,500–2,700 tokens), T2 (Agent — lazy-loaded specialist agents, ~1,000–5,000 tokens each). Reduces session bootstrap from ~50,000 tokens to ~3,000 tokens (94% reduction).</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Token Optimization</span>
+                    <p class="term-definition">The set of strategies CORTEX uses to maximize productive turns in GitHub Copilot Chat sessions. Seven strategies: 3-Tier Loading Model, Lazy Agent Loading, LENS Intelligence Tiering, Request Rephrase compression, Continuation Prompt compression, YAML Lazy Loading with LRU caching, and Silent Autonomous Execution.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">ToolResult</span>
+                    <p class="term-definition">Standard response object from MCP tool execution. Contains content (text), metadata, and audit reference.</p>
+                </article>
+            </section>
+
+            <!-- Letter U -->
+            <section id="U" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">U</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Unified Reinforcement Signal (URS)</span>
+                    <p class="term-definition">Closed-loop learning system where every orchestrator operation emits a typed reinforcement signal that adjusts pattern confidence scores. Five signal strengths (STRONG_REWARD → STRONG_PUNISHMENT). Patterns with high confidence are promoted; patterns with low confidence are quarantined.</p>
+                    <span class="term-location">cortex/intelligence/learning/reinforcement_signal.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Universal Repo Intelligence</span>
+                    <p class="term-definition">Intelligence subsystem that extracts structured understanding from any repository regardless of language or framework. Employs 8 parallel extractors: dependency graph, architecture topology, test coverage map, API surface catalogue, configuration schema, build pipeline model, documentation index, and contributor-ownership matrix.</p>
+                    <span class="term-location">cortex/intelligence/repo_intelligence.py</span>
+                </article>
+            </section>
+
+            <!-- Letter V -->
+            <section id="V" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">V</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">Vacuum Recency Guard</span>
+                    <p class="term-definition">Safety mechanism within the Vacuum Orchestrator that prevents deletion of recently modified files. Files touched within a configurable grace window (default: 7 days) are excluded from vacuum sweeps.</p>
+                    <span class="term-location">cortex/orchestrators/health/vacuum_orchestrator.py</span>
+                </article>
+            </section>
+
+            <!-- Letter W -->
+            <section id="W" class="letter-section">
+                <h2 class="letter-header gradient-text-amber">W</h2>
+                
+                <article class="term-item">
+                    <span class="term-name">WAL (Write-Ahead Logging)</span>
+                    <p class="term-definition">SQLite journaling mode used by CortexAuditDB. Enables concurrent reads during single-writer transactions.</p>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">WorkflowEngine</span>
+                    <p class="term-definition">Executes workflow templates from cortex-registry/workflows/. Exposes load() to parse YAML templates and execute_step() (SDO-compatible API) to run individual steps.</p>
+                    <span class="term-location">cortex/core/workflow_engine.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">WorkItem</span>
+                    <p class="term-definition">Canonical dataclass representing a work item across all ticketing systems. Fields: id, title, description, state, type, tags, url, raw. The raw field carries the full unmodified API response.</p>
+                    <span class="term-location">cortex/repositories/work_item_provider.py</span>
+                </article>
+
+                <article class="term-item">
+                    <span class="term-name">Workflow Templates</span>
+                    <p class="term-definition">YAML-defined execution plans in cortex-registry/workflows/templates/. Multiple categories including sdlc/, audit/, governance/, onboarding/, testing/, security/, and primitives/. Executed by WorkflowEngine.</p>
+                </article>
+            </section>
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <i data-lucide="search-x" style="width: 48px; height: 48px; margin: 0 auto 1rem;"></i>
+            <p class="text-xl">No terms found matching your search</p>
+            <p class="text-sm">Try different keywords or browse alphabetically above</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo" class="page-footer">
+        <div class="footer-content">
+            
+            <!-- Brand -->
+            <div class="footer-brand">
+                <strong>CORTEX</strong>
+                <span class="footer-separator" aria-hidden="true">|</span>
+                <span style="color: var(--text-muted);">Governed AI Engineering</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="getting-started.html" class="footer-link">Getting Started</a>
+                <a href="architecture.html" class="footer-link">Architecture</a>
+                <a href="faq.html" class="footer-link-highlight">FAQ</a>
+                <a href="glossary.html" class="footer-link-highlight">Glossary</a>
+                <span class="footer-separator" aria-hidden="true">|</span>
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+                <a href="SECURITY.html" class="footer-link">Security</a>
+            </nav>
+
+            <!-- Copyright -->
+            <div class="footer-copyright">
+                <span>© 2025–2026 Asif Hussain</span>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const glossaryContainer = document.getElementById('glossaryContainer');
+        const noResults = document.getElementById('noResults');
+        const allTermItems = document.querySelectorAll('.term-item');
+        const allSections = document.querySelectorAll('.letter-section');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let hasResults = false;
+
+            if (searchTerm === '') {
+                // Show all items and sections
+                allTermItems.forEach(item => item.style.display = '');
+                allSections.forEach(section => section.style.display = '');
+                noResults.style.display = 'none';
+                
+                // Remove all highlights
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.outerHTML = el.innerHTML;
+                });
+                return;
+            }
+
+            allSections.forEach(section => {
+                const itemsInSection = section.querySelectorAll('.term-item');
+                let sectionHasVisibleItems = false;
+
+                itemsInSection.forEach(item => {
+                    const termName = item.querySelector('.term-name');
+                    const termDefinition = item.querySelector('.term-definition');
+                    const termLocation = item.querySelector('.term-location');
+                    
+                    const nameText = termName.textContent.toLowerCase();
+                    const definitionText = termDefinition.textContent.toLowerCase();
+                    const locationText = termLocation ? termLocation.textContent.toLowerCase() : '';
+
+                    // Remove previous highlights
+                    termName.innerHTML = termName.textContent;
+                    termDefinition.innerHTML = termDefinition.textContent;
+                    if (termLocation) termLocation.innerHTML = termLocation.textContent;
+
+                    if (nameText.includes(searchTerm) || definitionText.includes(searchTerm) || locationText.includes(searchTerm)) {
+                        item.style.display = '';
+                        sectionHasVisibleItems = true;
+                        hasResults = true;
+
+                        // Highlight matches
+                        if (nameText.includes(searchTerm)) {
+                            termName.innerHTML = highlightText(termName.textContent, searchTerm);
+                        }
+                        if (definitionText.includes(searchTerm)) {
+                            termDefinition.innerHTML = highlightText(termDefinition.textContent, searchTerm);
+                        }
+                        if (locationText.includes(searchTerm) && termLocation) {
+                            termLocation.innerHTML = highlightText(termLocation.textContent, searchTerm);
+                        }
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                section.style.display = sectionHasVisibleItems ? '' : 'none';
+            });
+
+            glossaryContainer.style.display = hasResults ? '' : 'none';
+            noResults.style.display = hasResults ? 'none' : 'block';
+        });
+
+        function highlightText(text, term) {
+            const regex = new RegExp(`(${term})`, 'gi');
+            return text.replace(regex, '<mark class="highlight">$1</mark>');
+        }
+
+        // Alphabetical navigation
+        const alphaLinks = document.querySelectorAll('.alpha-link');
+        
+        alphaLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection && targetSection.style.display !== 'none') {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active state
+                    alphaLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Update active letter on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const letterId = entry.target.id;
+                    alphaLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${letterId}`) {
+                            alphaLinks.forEach(l => l.classList.remove('active'));
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        allSections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
