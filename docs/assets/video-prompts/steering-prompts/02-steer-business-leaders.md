@@ -1,6 +1,6 @@
-# Steering Prompt — Video 02: CORTEX for Leaders & Delivery
+# Steering Prompt — Video 02: What Is CORTEX? (Business Leaders)
 ## NotebookLM Cinematic Video — Setup Guide
-**Source:** `sources/02-leadership-delivery-source.md` | **Format:** Cinematic | **Narrator:** Male
+**File:** `02-steer-business-leaders.md` | **Source:** `sources/02-src-business-leaders.md` | **Format:** Cinematic | **Narrator:** Male
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -12,7 +12,7 @@
 | Architecture facts | `cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml` § `architecture_facts` (verified 2026-03-09) | ✅ Floor approximations applied |
 | Capability manifest | `cortex-registry/cortex-master.yaml` — phases 140–147 all treated as implemented (Planned-as-Implemented policy) | ✅ Applied |
 | Open git issues | All open GitHub issues — capability gaps merged into manifest | ✅ Merged |
-| Content sources | `docs/.content/01-platform-what-is-cortex.md` · `docs/.content/03-governance-quality-that-enforces-itself.md` · `docs/.content/09-lifecycle-managing-delivery-at-scale.md` | ✅ Business propositions synthesised |
+| Content sources | `docs/.content/01-platform-what-is-cortex.md` · `docs/.content/03-governance-quality-that-enforces-itself.md` · `docs/.content/09-lifecycle-from-idea-to-production.md` | ✅ Business leader propositions synthesised |
 | Diagrams referenced | `01` · `03` · `04` · `06` · `12` · `15` · `19` · `20` (filenames from `docs/assets/diagrams/`) | ✅ By filename only — decoupled |
 
 ---
@@ -20,13 +20,13 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/02-leadership-delivery-source.md` as the **only** source
+- [ ] Upload `sources/02-src-business-leaders.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below
 - [ ] **"What should the AI hosts focus on?"** → paste the steering prompt block below
 - [ ] **Generate** → allow 20–30 minutes
-- [ ] If SRE or Engineer content surfaces → use Fallback prompt below
+- [ ] If Product Owner content surfaces → use Fallback prompt below
 
 ---
 
@@ -45,40 +45,39 @@ No talking heads — abstract system animations throughout.
 ## 🎬 Steering Prompt (paste into focus field)
 
 ```
-Cinematic 6–8 minute video for business leaders and product owners. Open
-with a boardroom dashboard bleeding red: rework costs 38%, compliance
-gaps unknown, missed commitments. CORTEX transforms each metric to green.
+Cinematic 6–8 minute video exclusively for CTOs, VPs, and business leaders.
+Open with a boardroom dashboard bleeding red: rework costs 38%, compliance
+gaps unknown, missed commitments quarter after quarter. CORTEX transforms
+each metric to green — live, on screen, without ceremony.
 
-Show two journeys:
-1. A leader watching real-time engineering health replace status reports —
-   9-stage audit pipeline running autonomously, delivering a PRODUCTION READY
-   seal. 60+ governance rules and 7 SQLite audit databases providing evidence
-   on demand, not weeks away. Document Ingest Pipeline converting org documents
-   and PowerPoint decks into structured engineering guidance automatically.
-2. A product owner seeing acceptance criteria trace to passing tests — the
-   full path from business requirement to green CI visible in one view. TDD
-   enforced as infrastructure, not suggestion, with every decision traced to
-   a knowledge principle via DecisionTraceabilityLogger.
+Show the leader's journey:
+1. Real-time engineering health replacing status reports — a single CORTEX
+   dashboard replacing 3 weekly meetings. 9-stage audit pipeline running
+   autonomously, delivering a PRODUCTION READY seal with evidence on demand.
+2. Compliance evidence generated in seconds, not weeks — 60+ governance rules
+   enforced at pre-commit, CI, and runtime. 7 SQLite audit databases maintaining
+   full traceability. Board-ready compliance reports self-assembled.
+3. Document Ingest Pipeline converting org documents, PowerPoint decks, and
+   Word specs into structured engineering guidance automatically — institutional
+   knowledge captured, not lost when people leave.
 
 Animate the ROI counter (38% rework → near-zero). Strategic silence after
-it stops. Male narrator, boardroom gravitas. Message: governed AI makes
-outcomes predictable.
+it stops. Male narrator, boardroom gravitas. The message: CORTEX makes
+engineering outcomes as predictable as financial forecasts.
 ```
 
 ---
 
-## 🔄 Fallback Prompt (if leadership or PO angle is underweighted)
+## 🔄 Fallback Prompt (if operational detail overshadows strategic angle)
 
 ```
-Create a 6–8 minute cinematic video showing how CORTEX gives business leaders
-evidence-based delivery confidence and product owners traceable requirements-to-
-code pipelines. Focus equally on: real-time engineering visibility replacing
-status reports via 9-stage audit pipeline and 60+ automated governance rules,
-automated compliance evidence from seconds not weeks via 7 SQLite audit
-databases, Document Ingest Pipeline converting org documents into engineering
-guidance, and acceptance criteria that prove "done" with passing tests traced
-via DecisionTraceabilityLogger. Purple accent. Male narrator.
-Boardroom-appropriate tone.
+Create a 6–8 minute cinematic video for CTOs and business leaders.
+Focus exclusively on strategic outcomes: real-time engineering health
+replacing status reports via autonomous 9-stage audit pipeline, compliance
+evidence in seconds not weeks via 60+ governance rules and 7 audit databases,
+and Document Ingest Pipeline capturing institutional knowledge from Word,
+PowerPoint, and PDF automatically. ROI counter animation: 38% rework → zero.
+Purple accent. Male narrator. Boardroom-appropriate tone — no code visible.
 ```
 
 ---

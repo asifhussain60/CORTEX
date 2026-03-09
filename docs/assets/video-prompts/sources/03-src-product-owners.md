@@ -8,7 +8,7 @@
 # CORTEX for Product Owners — Source Document
 ## Video 03 · Audience: Product Owners & Delivery Leads
 
-**Purpose:** NotebookLM source for steering prompt `03-product-owners-steering.md`.
+**Purpose:** NotebookLM source for steering prompt `03-steer-product-owners.md`.
 Synthesised from `docs/.content/09-lifecycle-from-idea-to-production.md`,
 `docs/.content/04-tdd-quality-flywheel.md`, and
 `docs/.content/03-governance-quality-that-enforces-itself.md`.

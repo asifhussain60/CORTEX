@@ -1,6 +1,6 @@
-# Steering Prompt — Video 01: What Is CORTEX? (All Roles)
+# Steering Prompt — Video 01: What Is CORTEX? (All Roles Overview)
 ## NotebookLM Cinematic Video — Setup Guide
-**Source:** `sources/01-cortex-overview-source.md` | **Format:** Cinematic | **Narrator:** Female
+**File:** `01-steer-all-roles-overview.md` | **Source:** `sources/01-src-all-roles-overview.md` | **Format:** Cinematic | **Narrator:** Female
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -20,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/01-cortex-overview-source.md` as the **only** source
+- [ ] Upload `sources/01-src-all-roles-overview.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below

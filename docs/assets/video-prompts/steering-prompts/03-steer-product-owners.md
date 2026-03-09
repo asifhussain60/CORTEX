@@ -1,7 +1,6 @@
-````markdown
 # Steering Prompt — Video 03: What Is CORTEX? (Product Owners)
 ## NotebookLM Cinematic Video — Setup Guide
-**File:** `03-product-owners-steering.md` | **Source:** `sources/03-product-owners-source.md` | **Format:** Cinematic | **Narrator:** Female
+**File:** `03-steer-product-owners.md` | **Source:** `sources/03-src-product-owners.md` | **Format:** Cinematic | **Narrator:** Female
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -21,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/03-product-owners-source.md` as the **only** source
+- [ ] Upload `sources/03-src-product-owners.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below
@@ -123,4 +122,3 @@ full engineering partners, not stakeholders.
 | Intent types routed | 35+ | `architecture_facts.intent_types` |
 | Audit pipeline stages | 9 | `architecture_facts.audit_pipeline_stages` |
 | SQLite audit databases | 7 | `architecture_facts.sqlite_databases` |
-````

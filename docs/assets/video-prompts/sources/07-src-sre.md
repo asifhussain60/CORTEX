@@ -8,7 +8,7 @@
 # CORTEX for Site Reliability Engineers — Source Document
 ## Video 07 · Audience: Site Reliability Engineers
 
-**Purpose:** NotebookLM source for steering prompt `07-sre-steering.md`.
+**Purpose:** NotebookLM source for steering prompt `07-steer-sre.md`.
 Synthesised from `docs/.content/10-infrastructure-built-to-last.md`,
 `docs/.content/08-learning-institutional-memory.md`, and
 `docs/.content/03-governance-quality-that-enforces-itself.md`.

@@ -1,6 +1,6 @@
 # Steering Prompt — Video 04: What Is CORTEX? (Software Engineers)
 ## NotebookLM Cinematic Video — Setup Guide
-**File:** `04-software-engineers-steering.md` | **Source:** `sources/04-software-engineers-source.md` | **Format:** Cinematic | **Narrator:** Male
+**File:** `04-steer-software-engineers.md` | **Source:** `sources/04-src-software-engineers.md` | **Format:** Cinematic | **Narrator:** Male
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -20,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/04-software-engineers-source.md` as the **only** source
+- [ ] Upload `sources/04-src-software-engineers.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below

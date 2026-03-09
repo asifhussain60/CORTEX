@@ -1,6 +1,6 @@
 # Steering Prompt — Video 06: What Is CORTEX? (Security Engineers)
 ## NotebookLM Cinematic Video — Setup Guide
-**File:** `06-security-engineers-steering.md` | **Source:** `sources/06-security-engineers-source.md` | **Format:** Cinematic | **Narrator:** Female
+**File:** `06-steer-security-engineers.md` | **Source:** `sources/06-src-security-engineers.md` | **Format:** Cinematic | **Narrator:** Female
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -20,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/06-security-engineers-source.md` as the **only** source
+- [ ] Upload `sources/06-src-security-engineers.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below

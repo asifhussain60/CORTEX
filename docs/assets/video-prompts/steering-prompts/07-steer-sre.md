@@ -1,7 +1,6 @@
-````markdown
 # Steering Prompt — Video 07: What Is CORTEX? (Site Reliability Engineers)
 ## NotebookLM Cinematic Video — Setup Guide
-**File:** `07-sre-steering.md` | **Source:** `sources/07-sre-source.md` | **Format:** Cinematic | **Narrator:** Male
+**File:** `07-steer-sre.md` | **Source:** `sources/07-src-sre.md` | **Format:** Cinematic | **Narrator:** Male
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -21,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/07-sre-source.md` as the **only** source
+- [ ] Upload `sources/07-src-sre.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below
@@ -126,4 +125,4 @@ Amber accent. Male narrator. Calm precision — SRE peer tone.
 | Vacuum golden tests | 8 | `architecture_facts.vacuum_golden_tests` |
 | RCA methodologies | 4 | `architecture_facts.rca_methodologies` |
 | SQLite audit databases | 7 | `architecture_facts.sqlite_databases` |
-````
+`

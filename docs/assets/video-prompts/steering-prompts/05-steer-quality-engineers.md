@@ -1,7 +1,6 @@
-````markdown
 # Steering Prompt — Video 05: What Is CORTEX? (Quality Engineers)
 ## NotebookLM Cinematic Video — Setup Guide
-**File:** `05-quality-engineers-steering.md` | **Source:** `sources/05-quality-engineers-source.md` | **Format:** Cinematic | **Narrator:** Female
+**File:** `05-steer-quality-engineers.md` | **Source:** `sources/05-src-quality-engineers.md` | **Format:** Cinematic | **Narrator:** Female
 **Updated:** 2026-03-09 | **Synthesis:** Phase 147 — auto-synthesised from live architecture
 
 ---
@@ -21,7 +20,7 @@
 ## ✅ NotebookLM Setup Checklist
 
 - [ ] Create new notebook
-- [ ] Upload `sources/05-quality-engineers-source.md` as the **only** source
+- [ ] Upload `sources/05-src-quality-engineers.md` as the **only** source
 - [ ] Studio panel → Video Overview → **Customize**
 - [ ] **Format:** Cinematic ← not Explainer, not Brief
 - [ ] **Visual Style:** Custom → paste the visual style block below
@@ -127,4 +126,4 @@ tone — engineering rigour, not policing.
 | Quality radar dimensions | 5 | `architecture_facts.quality_radar_dimensions` |
 | Intent types routed | 35+ | `architecture_facts.intent_types` |
 | Engineering knowledge domains | 15 | `architecture_facts.orchestrator_domains` |
-````
+`

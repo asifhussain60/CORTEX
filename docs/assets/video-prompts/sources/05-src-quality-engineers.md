@@ -9,7 +9,7 @@
 # CORTEX for Quality Engineers — Source Document
 ## Video 05 · Audience: Quality Engineers & QA Leads
 
-**Purpose:** NotebookLM source for steering prompt `05-quality-engineers-steering.md`.
+**Purpose:** NotebookLM source for steering prompt `05-steer-quality-engineers.md`.
 Synthesised from `docs/.content/04-tdd-quality-flywheel.md`,
 `docs/.content/02-intelligence-how-cortex-understands-code.md`, and
 `docs/.content/03-governance-quality-that-enforces-itself.md`.

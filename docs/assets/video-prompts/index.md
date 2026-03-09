@@ -9,8 +9,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/01-all-roles-overview-steering.md` |
-| **Add to NotebookLM** | `sources/01-all-roles-overview-source.md` |
+| **Steering prompt** | `steering-prompts/01-steer-all-roles-overview.md` |
+| **Add to NotebookLM** | `sources/01-src-all-roles-overview.md` |
 | **Content files** | `docs/.content/01-platform-what-is-cortex.md` |
 | | `docs/.content/02-intelligence-how-cortex-understands-code.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
@@ -21,8 +21,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/02-business-leaders-steering.md` |
-| **Add to NotebookLM** | `sources/02-business-leaders-source.md` |
+| **Steering prompt** | `steering-prompts/02-steer-business-leaders.md` |
+| **Add to NotebookLM** | `sources/02-src-business-leaders.md` |
 | **Content files** | `docs/.content/01-platform-what-is-cortex.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
 | | `docs/.content/09-lifecycle-from-idea-to-production.md` |
@@ -33,8 +33,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/03-product-owners-steering.md` |
-| **Add to NotebookLM** | `sources/03-product-owners-source.md` |
+| **Steering prompt** | `steering-prompts/03-steer-product-owners.md` |
+| **Add to NotebookLM** | `sources/03-src-product-owners.md` |
 | **Content files** | `docs/.content/09-lifecycle-from-idea-to-production.md` |
 | | `docs/.content/04-tdd-quality-flywheel.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
@@ -45,8 +45,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/04-software-engineers-steering.md` |
-| **Add to NotebookLM** | `sources/04-software-engineers-source.md` |
+| **Steering prompt** | `steering-prompts/04-steer-software-engineers.md` |
+| **Add to NotebookLM** | `sources/04-src-software-engineers.md` |
 | **Content files** | `docs/.content/02-intelligence-how-cortex-understands-code.md` |
 | | `docs/.content/04-tdd-quality-flywheel.md` |
 | | `docs/.content/05-orchestration-the-engine-room.md` |
@@ -57,8 +57,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/05-quality-engineers-steering.md` |
-| **Add to NotebookLM** | `sources/05-quality-engineers-source.md` |
+| **Steering prompt** | `steering-prompts/05-steer-quality-engineers.md` |
+| **Add to NotebookLM** | `sources/05-src-quality-engineers.md` |
 | **Content files** | `docs/.content/04-tdd-quality-flywheel.md` |
 | | `docs/.content/02-intelligence-how-cortex-understands-code.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
@@ -69,8 +69,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/06-security-engineers-steering.md` |
-| **Add to NotebookLM** | `sources/06-security-engineers-source.md` |
+| **Steering prompt** | `steering-prompts/06-steer-security-engineers.md` |
+| **Add to NotebookLM** | `sources/06-src-security-engineers.md` |
 | **Content files** | `docs/.content/07-security-built-in-not-bolted-on.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
 | | `docs/.content/08-learning-institutional-memory.md` |
@@ -81,8 +81,8 @@
 
 | | File |
 |---|---|
-| **Steering prompt** | `steering-prompts/07-sre-steering.md` |
-| **Add to NotebookLM** | `sources/07-sre-source.md` |
+| **Steering prompt** | `steering-prompts/07-steer-sre.md` |
+| **Add to NotebookLM** | `sources/07-src-sre.md` |
 | **Content files** | `docs/.content/10-infrastructure-built-to-last.md` |
 | | `docs/.content/08-learning-institutional-memory.md` |
 | | `docs/.content/03-governance-quality-that-enforces-itself.md` |
