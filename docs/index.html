@@ -1361,10 +1361,72 @@
         .sdlc-grid { grid-template-columns: 1fr !important; }
     }
 
-    /* --- FOOTER --- */
-    .page-footer { padding: var(--spacing-8) 0; border-top: 1px solid var(--border-base); margin-top: var(--spacing-16); background: rgba(0,0,0,0.3); }
-    .footer-content { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: var(--spacing-4); }
-    @media(min-width: 768px) { .footer-content { flex-direction: row; text-align: left; } }
+    /* --- FOOTER (compact single-row) --- */
+    .page-footer {
+        border-top: 1px solid rgba(255,255,255,0.07);
+        background: rgba(2,6,23,0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 0.875rem 0;
+        margin-top: var(--spacing-16);
+    }
+    .footer-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+    }
+    .footer-wordmark {
+        font-family: var(--font-display, 'Space Grotesk', sans-serif);
+        font-size: 0.8125rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: rgba(248,250,252,0.55);
+        white-space: nowrap;
+    }
+    .footer-wordmark strong { color: rgba(248,250,252,0.82); }
+    .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .footer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        color: rgba(148,163,184,0.8);
+        background: transparent;
+        border: 1px solid transparent;
+    }
+    .footer-link:hover {
+        color: #f8fafc;
+        background: rgba(255,255,255,0.07);
+        border-color: rgba(255,255,255,0.12);
+        box-shadow: 0 0 12px rgba(0,212,255,0.1);
+    }
+    .footer-link--faq { color: rgba(99,102,241,0.9); }
+    .footer-link--faq:hover { color: #a5b4fc; background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.25); box-shadow: 0 0 12px rgba(99,102,241,0.15); }
+    .footer-link--glossary { color: rgba(0,212,255,0.85); }
+    .footer-link--glossary:hover { color: #67e8f9; background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.22); box-shadow: 0 0 12px rgba(0,212,255,0.12); }
+    .footer-sep { color: rgba(255,255,255,0.12); font-size: 0.7rem; padding: 0 0.1rem; user-select: none; }
+    .footer-copy {
+        font-size: 0.7rem;
+        color: rgba(100,116,139,0.65);
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+    }
+    @media(max-width: 640px) {
+        .footer-content { justify-content: center; text-align: center; }
+        .footer-copy { display: none; }
+    }
 
     /* --- PRINT STYLES --- */
     @media print {
@@ -4106,22 +4168,24 @@
     
 </main>
 
-<!-- Footer with Page Metadata -->
+<!-- ─── Compact single-row footer ─── -->
 <footer role="contentinfo" class="page-footer">
   <div class="container footer-content">
-    <div class="mb-6 md:mb-0">
-        <p class="font-bold text-xl mb-2 text-primary font-display">
-          CORTEX <span class="text-muted font-normal text-lg font-sans">— <em>Cognitive Orchestration Real-Time Execution eXpert</em></span>
-        </p>
-        <p class="text-sm text-muted">
-          Built with <span aria-label="accessibility" class="text-cyan">♿</span> WCAG 2.1 Level AA compliance | Performance optimized
-        </p>
-    </div>
-    <div>
-        <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="glass-pill hover:text-white transition-colors border-none" style="background: rgba(255,255,255,0.08); padding: 0.75rem 1.5rem;">
-            <i class="fab fa-github mr-2" aria-hidden="true"></i> View on GitHub
-        </a>
-    </div>
+    <span class="footer-wordmark"><strong>CORTEX</strong> — Cognitive Orchestration Real-Time Execution eXpert</span>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="faq.html" class="footer-link footer-link--faq" aria-label="Frequently Asked Questions">
+        <i class="fas fa-circle-question" aria-hidden="true"></i> FAQ
+      </a>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <a href="glossary.html" class="footer-link footer-link--glossary" aria-label="CORTEX Glossary">
+        <i class="fas fa-book-open" aria-hidden="true"></i> Glossary
+      </a>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" class="footer-link" aria-label="CORTEX on GitHub">
+        <i class="fab fa-github" aria-hidden="true"></i> GitHub
+      </a>
+    </nav>
+    <span class="footer-copy">&copy; 2025–2026 Asif Hussain · WCAG 2.1 AA</span>
   </div>
 </footer>
 

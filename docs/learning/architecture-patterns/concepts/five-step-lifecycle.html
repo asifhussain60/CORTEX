@@ -39,11 +39,11 @@
 
         .gradient-text-teal { background: linear-gradient(to right, #14b8a6, #10b981); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 0.875rem; color: var(--text-muted); flex-wrap: wrap; }
-        .breadcrumb-nav a { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; display: flex; align-items: center; gap: 0.375rem; }
-        .breadcrumb-nav a:hover { color: var(--accent); }
-        .breadcrumb-separator { color: rgba(148,163,184,0.4); }
-        .breadcrumb-current { color: var(--text-main); font-weight: 600; }
+        
+        
+        
+        
+        
 
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.75; background: rgba(0,0,0,0.45); border-radius: 0.875rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; } .code-yaml-key { color: #60a5fa; } .code-yaml-val { color: #34d399; }
@@ -60,21 +60,202 @@
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
         @media (prefers-reduced-motion: reduce) { .glass-card, .phase-step { transition: none; } }
-    </style>
+    
+        /* ═══════ CORTEX GLASSMORPHIC SITE HEADER ═══════ */
+        .cortex-site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(2, 6, 23, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 4px 32px -4px rgba(0, 0, 0, 0.45);
+        }
+        .cortex-header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .cortex-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .cortex-header-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.35));
+            transition: filter 0.3s ease;
+        }
+        .cortex-header-brand:hover .cortex-header-logo {
+            filter: drop-shadow(0 0 14px rgba(0, 212, 255, 0.65));
+        }
+        .cortex-header-wordmark {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            color: rgba(248, 250, 252, 0.92);
+            white-space: nowrap;
+        }
+        .cortex-header-wordmark span {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            color: rgba(148, 163, 184, 0.65);
+            margin-left: 0.375rem;
+        }
+        .cortex-header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.125rem;
+            flex-shrink: 0;
+        }
+        .cortex-header-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: rgba(148, 163, 184, 0.8);
+            text-decoration: none;
+            transition: color 0.2s ease, background 0.2s ease;
+            white-space: nowrap;
+        }
+        .cortex-header-nav a:hover,
+        .cortex-header-nav a.active {
+            color: rgba(248, 250, 252, 0.95);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .cortex-header-nav a svg { flex-shrink: 0; }
+        .cortex-header-sep {
+            width: 1px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 0.25rem;
+        }
+        /* Breadcrumb strip */
+        .cortex-breadcrumb-strip {
+            background: rgba(2, 6, 23, 0.65);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cortex-breadcrumb-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.78125rem;
+            flex-wrap: wrap;
+        }
+        .cortex-bc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: rgba(148, 163, 184, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 0.125rem 0.375rem;
+            border-radius: 5px;
+        }
+        .cortex-bc-link:hover {
+            color: rgba(248, 250, 252, 0.95);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .cortex-bc-sep {
+            color: rgba(148, 163, 184, 0.3);
+            font-size: 0.7rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .cortex-bc-current {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
+            color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
+            border: 1px solid var(--bc-accent-border, rgba(0, 212, 255, 0.2));
+        }
+        .cortex-bc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+        /* Mobile collapse */
+        .cortex-header-nav-toggle {
+            display: none;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 0.375rem 0.5rem;
+            color: rgba(148, 163, 184, 0.8);
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .cortex-header-wordmark span { display: none; }
+            .cortex-header-nav { display: none; }
+            .cortex-header-nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(2,6,23,0.97); backdrop-filter: blur(20px); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); z-index: 99; }
+            .cortex-header-nav.open a { padding: 0.625rem 0.75rem; font-size: 0.9375rem; }
+            .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
+            .cortex-header-inner { position: relative; }
+        }
+        </style>
 </head>
 <body class="min-h-screen">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
+    <!-- ═══════════════════ CORTEX SITE HEADER ═══════════════════ -->
+    <header class="cortex-site-header" role="banner">
+        <div class="cortex-header-inner">
+            <a href="../../../index.html" class="cortex-header-brand" aria-label="CORTEX Home">
+                <img src="../../../assets/images/cortex-logo-64.png" alt="CORTEX" class="cortex-header-logo" width="32" height="32"/>
+                <span class="cortex-header-wordmark">CORTEX<span>AI Engineering Framework</span></span>
+            </a>
+            <button class="cortex-header-nav-toggle" id="cortex-nav-toggle" aria-controls="cortex-site-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                Menu
+            </button>
+            <nav class="cortex-header-nav" id="cortex-site-nav" aria-label="Main navigation">
+                <a href="../../../index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+                <a href="../../../architecture.html">Architecture</a>
+                <a href="../../../getting-started.html">Getting Started</a>
+                <div class="cortex-header-sep" aria-hidden="true"></div>
+                <a href="../../../index.html#who-is-cortex-for">Roles</a>
+                <a href="../../index.html">University</a>
+            </nav>
+        </div>
+        <div class="cortex-breadcrumb-strip">
+            <nav class="cortex-breadcrumb-inner" aria-label="Breadcrumb">
+            <a href="../../../index.html" class="cortex-bc-link">Home</a>
+            <svg class="cortex-bc-sep" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="../../index.html" class="cortex-bc-link">University</a>
+            <svg class="cortex-bc-sep" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="../index.html" class="cortex-bc-link">Architecture Patterns</a>
+            <svg class="cortex-bc-sep" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <span class="cortex-bc-current" style="--bc-accent-bg:rgba(139,92,246,0.12);--bc-accent-color:rgba(167,139,250,0.95);--bc-accent-border:rgba(139,92,246,0.25)"><span class="cortex-bc-dot"></span>Five-Step Lifecycle</span>
+            </nav>
+        </div>
+    </header>
 
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm" style="scroll-margin-top:4rem">Skip to main content</a>
-
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-        <a href="../../../index.html"><i data-lucide="home" class="w-4 h-4"></i><span>CORTEX</span></a>
-        <span class="breadcrumb-separator">/</span>
-        <a href="../../index.html">University</a>
-        <span class="breadcrumb-separator">/</span>
-        <a href="../index.html">Architecture Patterns</a>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-current">Five-Step Lifecycle</span>
-    </nav>
 
     <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 space-y-12 md:space-y-16 relative">
 
@@ -523,5 +704,18 @@ cycle = <span class="code-str">0</span>
         }
     </script>
 
+
+    <script>
+    (function() {
+        var toggle = document.getElementById('cortex-nav-toggle');
+        var nav = document.getElementById('cortex-site-nav');
+        if (toggle && nav) {
+            toggle.addEventListener('click', function() {
+                nav.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', nav.classList.contains('open'));
+            });
+        }
+    })();
+    </script>
 </body>
 </html>
