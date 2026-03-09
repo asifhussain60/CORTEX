@@ -11,7 +11,7 @@ source_of_truth:
   - cortex/orchestrators/core/complexity_triage_engine.py
   - cortex/orchestrators/domain/auto_plan_generator.py
   - cortex-registry/workflows/templates/po/
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 diagram_type: Orchestration
 render: ascii
 render_html: true

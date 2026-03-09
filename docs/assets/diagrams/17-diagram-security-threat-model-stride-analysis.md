@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/orchestrators/domain/threat_model_engine.py
   - cortex-registry/workflows/templates/security/security-compliance-audit.yaml
-last_verified: 2026-03-04
+last_verified: 2026-03-09
 diagram_type: Security
 render: ascii
 render_html: true

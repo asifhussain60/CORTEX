@@ -4,7 +4,7 @@
 title: CORTEX University — Structured Learning Path Content
 type: learning-content
 audience: [Curious Learners, Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 order: 15
 ---
 
@@ -36,7 +36,7 @@ The domains are:
 
 | Domain | Difficulty | Topics | Duration | What You Learn |
 |--------|-----------|--------|----------|---------------|
-| **Architecture Patterns** | Intermediate | 8 | ~45 min | How 290+ orchestrators coordinate across 14 domains — the structural backbone |
+| **Architecture Patterns** | Intermediate | 8 | ~45 min | How 330+ orchestrators coordinate across 14 domains — the structural backbone |
 | **AI Orchestration** | Intermediate | 7 | ~40 min | Intent routing, LENS intelligence tiers, Perception → Reasoning → Action |
 | **Workflow Automation** | Advanced | 6 | ~35 min | Declarative templates, primitive composition, WorkflowComposer engine |
 | **Governance & Quality** | Beginner | 9 | ~50 min | 60+ self-enforcing rules across pre-commit, CI, and runtime layers |
@@ -49,7 +49,7 @@ Instead of a static list of topics, you explore an interactive concept map. Conc
 
 **Node types:**
 - **Patterns** — Architecture and design patterns used throughout CORTEX
-- **Orchestrators** — The 290+ specialised processing engines
+- **Orchestrators** — The 330+ specialised processing engines
 - **Workflows** — Declarative execution templates
 - **Governance** — Rules, gates, and enforcement mechanisms
 - **Intelligence** — LENS, RCA, URS, and knowledge systems
@@ -81,7 +81,7 @@ CORTEX operates like a large hospital. When a patient (request) arrives, the tri
 
 ### Fourteen Domains
 
-290+ orchestrators are organised across 14 specialised domains:
+330+ orchestrators are organised across 14 specialised domains:
 
 - **Core** (130+) — The command layer: routing, coordination, enforcement, central workflows
 - **Support** (50+) — Operations: health monitoring, cleanup, debugging, onboarding
@@ -146,7 +146,7 @@ KAL enables on-demand domain knowledge synthesis. When knowledge coverage drops 
 
 **Design patterns demonstrated:** Observer (coverage-triggered), Pipeline (6-step), Factory (synthesizer), Registry (index registrar).
 
-### PO Change Intelligence (Phase 142)
+### PO Change Intelligence (Phase 129 — PO Intelligence Suite)
 
 Three new orchestrators extend CORTEX to Product Owner decision support: process discovery via LENS, best-practice comparison with gap analysis, change recommendations with ROI analysis, and structured requirements engineering.
 

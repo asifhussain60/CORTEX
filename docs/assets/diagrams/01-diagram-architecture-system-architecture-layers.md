@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/
   - cortex-registry/
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Architecture
 render: ascii
 render_html: true
@@ -45,7 +45,7 @@ d3_method: "d3.tree() — layered SVG rectangles + connectors"
 │  │(intent map) │   │ RED→GRN→RF │   │ (agents)      │   │ Refactor/Plan/... │          │
 │  └─────────────┘   └────────────┘   └───────────────┘   └───────────────────┘          │
 │                                                                                         │
-│  Wired orchestrators: 290+ files · core · domain · support · health · git · intelligence · persona · validation · workflow · registry · response · synthesis · tools · strategies (14 domains) │
+│  Wired orchestrators: 330+ files · core · domain · support · health · git · intelligence · persona · validation · workflow · registry · response · synthesis · tools · strategies (14 domains) │
 └────────────────────────────────────────────┼────────────────────────────────────────────┘
                                              │
 ┌────────────────────────────────────────────┼────────────────────────────────────────────┐

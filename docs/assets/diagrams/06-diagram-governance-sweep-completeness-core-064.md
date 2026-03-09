@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/orchestrators/support/sweep_catalogue_orchestrator.py
   - cortex-registry/workflows/templates/primitives/
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Governance
 render: ascii
 render_html: true

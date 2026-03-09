@@ -497,7 +497,7 @@ high_value_diagrams:
   - id: orchestrator-domain-treemap
     type: treemaps
     audience: [software_engineers]
-    value: "14 domains, 290+ files — proportional view of the orchestration layer"
+    value: "14 domains, 330+ files — proportional view of the orchestration layer"
     d3_method: "d3.treemap() with domain-coloured cells"
 
   - id: testing-strategy-pyramid

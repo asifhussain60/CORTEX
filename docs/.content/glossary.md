@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---

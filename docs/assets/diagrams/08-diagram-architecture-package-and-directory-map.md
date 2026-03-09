@@ -1,5 +1,5 @@
 ---
-id: architecture-package-and-directory-map
+id: architecture-packa  │  ├── or  │  ├── mcp/                         ← MCP stdio server + 35+ registered tools  │hestrators/               ← 330+ files across 14 domains           │e-and-directory-map
 title: Package and directory map
 purpose: Provide a single diagram showing where every major CORTEX system lives, what it does, and how the pieces connect.
 audience:
@@ -10,7 +10,7 @@ source_of_truth:
   - cortex/
   - cortex-registry/
   - tests/
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Architecture
 render: ascii
 render_html: true

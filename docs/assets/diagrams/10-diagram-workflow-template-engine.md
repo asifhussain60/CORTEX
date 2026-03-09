@@ -10,7 +10,7 @@ source_of_truth:
   - cortex-registry/workflows/templates/
   - cortex/orchestrators/workflow/workflow_composer.py
   - cortex/orchestrators/workflow/template_composer.py
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Workflow
 render: ascii
 render_html: true

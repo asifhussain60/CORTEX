@@ -1,7 +1,7 @@
 ---
 id: orchestration-intent-classification-routing
 title: Intent classification and orchestrator routing
-purpose: Show how CORTEX classifies user requests into 33+ intent types and routes them to specialized orchestrators with confidence-based decisions.
+purpose: Show how CORTEX classifies user requests into 30+ intent types and routes them to specialized orchestrators with confidence-based decisions.
 audience:
   - Business Leaders
   - Product Owners
@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex/orchestrators/core/intent_router.py
   - cortex/models/canonical_enums.py
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 diagram_type: Orchestration
 render: ascii
 render_html: true
@@ -34,7 +34,7 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  Keyword matching + context analysis → confidence score              │
   │                                                                      │
   │  ┌──────────────────────────────────────────────────────────────┐    │
-  │  │  32+ Intent Types:                                           │    │
+  │  │  30+ Intent Types:                                           │    │
   │  │                                                              │    │
   │  │  CODE-TOUCHING          NON-CODE              LIFECYCLE      │    │
   │  │  ⚡ IMPLEMENT           📖 QUERY              📚 DIGEST     │    │
@@ -49,6 +49,7 @@ d3_method: "d3.forceSimulation() — intent nodes with orchestrator routing edge
   │  │                          REVIEWING                           │    │
   │  │                          👁️ REVIEW                           │    │
   │  │                          💬 FEEDBACK                         │    │
+  │  │                          📦 OPTIMIZE                         │    │
   │  └──────────────────────────────────────────────────────────────┘    │
   └──────────────────────────┬───────────────────────────────────────────┘
                              │

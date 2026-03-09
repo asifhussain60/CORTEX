@@ -4,7 +4,7 @@
 title: Enterprise Patterns and Knowledge Architecture
 type: explanation
 audience: [Software Developers, Business Leaders, Product Owners, Curious Learners]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 order: 11
 ---
 

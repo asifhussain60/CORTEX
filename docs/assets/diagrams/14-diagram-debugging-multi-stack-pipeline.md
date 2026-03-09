@@ -9,7 +9,7 @@ source_of_truth:
   - cortex/orchestrators/support/debugger_orchestrator.py
   - cortex/orchestrators/support/debugging/marker_injection_engine.py
   - cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Workflow
 render: ascii
 render_html: true

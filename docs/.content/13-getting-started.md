@@ -4,7 +4,7 @@
 title: Getting Started — Setup, First Steps, and Quick Reference
 type: guide
 audience: [Software Developers]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 order: 13
 ---
 
@@ -139,7 +139,7 @@ Available tasks include all test modes, MCP setup, and the full audit pipeline.
 | Path | What Lives Here |
 |---|---|
 | `cortex/` | All CORTEX source code (the Python package) |
-| `cortex/orchestrators/` | The 290+ orchestrators that handle every request type |
+| `cortex/orchestrators/` | The 330+ orchestrators that handle every request type |
 | `cortex/mcp/tools/` | The 35+ tools exposed to Copilot Chat |
 | `cortex-registry/` | Governance rules, workflow templates, knowledge base (YAML) |
 | `tests/` | The full test suite (mirrors `cortex/` structure) |

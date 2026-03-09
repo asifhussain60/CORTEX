@@ -1,7 +1,7 @@
 ---
 id: architecture-mcp-gateway
 title: MCP gateway architecture (stdio + HTTP transport)
-purpose: Explain how IDE clients invoke CORTEX tools via MCP over stdio, and how authenticated HTTP transport (Phase 99) enables secure programmatic access.
+purpose: Explain how IDE clients invoke CORTEX tools via MCP over stdio, and how authenticated HTTP transport enables secure programmatic access.
 audience:
   - Business Leaders
   - Product Owners
@@ -12,7 +12,7 @@ source_of_truth:
   - cortex/secrets/
   - .vscode/settings.json
   - .github/templates/cortex-response-templates.md
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Architecture
 render: ascii
 render_html: true
@@ -21,7 +21,7 @@ response_header_enhancement:
   feature: Intent-aligned business/engineering quote in every response header
   library: BLOCK-QUOTE-LIBRARY
   library_location: .github/templates/cortex-response-templates.md § BLOCK-QUOTE-LIBRARY
-  quote_count: 32
+  quote_count: 120
   themes: [quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal]
   selection_mechanism: >
     IntentRouter intent classification drives theme selection at response-emit time.
@@ -77,7 +77,7 @@ response_header_enhancement:
 │  │                             TOOL REGISTRY                                  │  │
 │  │                                                                            │  │
 │  │  Categories: routing · governance · intelligence · audit · testing · docs   │
-  │  Tool count: 36 registered tools · 58 tool files in cortex/mcp/tools/     │  │
+  │  Tool count: 35+ registered tools · 58 tool files in cortex/mcp/tools/     │  │
 │  │                                                                            │  │
 │  │  Tool Call Flow:                                                           │  │
 │  │  stdin → JSON parse → tool lookup → validate → orchestrate → stdout        │  │
@@ -85,7 +85,7 @@ response_header_enhancement:
 └──────────────────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│          HTTP TRANSPORT — Phase 99 (Secure Programmatic Access)                  │
+│          HTTP TRANSPORT — Secure Programmatic Access                             │
 │                                                                                  │
 │  External Client ──── HTTPS ───► FastAPI App (cortex/mcp/http_transport.py)     │
 │                        + API Key (X-API-Key header, constant-time validation)    │

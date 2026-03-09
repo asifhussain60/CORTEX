@@ -4,7 +4,7 @@
 title: CORTEX Mission — Why We Built It and What It Stands For
 type: mission
 audience: [Business Leaders, Product Owners, Software Engineers, Curious Learners]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 order: 0
 canonical: true
 ---

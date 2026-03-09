@@ -1,14 +1,13 @@
 # Tools in Your IDE — The MCP Gateway
 
 ---
-title: MCP Gateway — 35+ CORTEX Capabilities Accessible Directly in Your Coding Assistant
-type: explanation
+title: MCP Gateway — 35+ CORTEX Capabilities Accessible Directly in Your Coding Assistanttype: explanation
 audience: [Business Leaders, Product Owners, Software Developers, Curious Learners]
-last_verified: 2026-03-08
+last_verified: 2026-03-09
 order: 6
 ---
 
-> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes 35+ registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. Think of it like a smart home: you speak a command ("turn on the kitchen lights"), and the system routes it to the right device without you knowing the wiring behind the walls. CORTEX works the same way — you speak a request, and the right tool activates instantly. For programmatic access, Phase 99 added a secured HTTP transport with API key authentication.
+> **The central idea:** You don't need to leave your IDE to access any CORTEX capability. The Model Context Protocol makes 35+ registered CORTEX tools available directly in GitHub Copilot Chat, Cursor, or Claude Desktop — with no configuration, no server startup, and no context switching. Think of it like a smart home: you speak a command ("turn on the kitchen lights"), and the system routes it to the right device without you knowing the wiring behind the walls. CORTEX works the same way — you speak a request, and the right tool activates instantly.
 
 ---
 
@@ -59,6 +58,7 @@ These tools expose the review and feedback loop — automated code review and st
 | Tool | What It Does |
 |---|---|
 | **cortex_review** | Runs multi-pass code review across changed files — structural analysis, security audit, governance compliance, test-coverage gap detection, and style conformance — surfaced inline with severity (P0–P3) and fix suggestions |
+| **cortex_feedback** | Captures structured user feedback — satisfaction signals, corrections, improvement suggestions — and routes them into the Unified Reinforcement Signal for confidence adjustment. Linked to the originating request via the audit trail |
 
 ### Governance and Compliance
 
@@ -84,6 +84,7 @@ These tools expose the intelligence layer — code analysis, semantic operations
 | **cortex_learning** | Emits reinforcement signals, queries the learning history, and accesses root cause analysis with four structured methodologies — building institutional memory that prevents recurring failures |
 | **cortex_brain_query** | Queries the CORTEX reinforcement signal engine — retrieve signal history, decay stale patterns, promote high-confidence signals — exposing the continuous learning state directly |
 | **cortex_scan** | Hierarchical file scanning with organisation detection — scans any directory with configurable extensions and pluggable adapters for code, documentation, and media organisation |
+| **cortex_optimize** | Optimises arrays of files (HTML, Markdown, YAML, JSON, chat transcripts) by removing noise and compressing content — 5-stage pipeline that reduces token footprint while preserving all decision-relevant information |
 
 ### Contextually Intelligent Response Headers
 
@@ -146,6 +147,7 @@ These tools connect CORTEX to project planning and repository assessment workflo
 | **cortex_batch_transform** | Batch-processes collections of items with configurable triggers (size or timeout) and selectable transformation operations |
 | **cortex_scaffold_files** | Writes new files from templates, checks for existing artefacts, and lists all scaffolded files — the gateway for creating new modules from canonical templates |
 | **cortex_distill** | Distils a multi-turn conversation into an executable, context-dense prompt via a 5-stage pipeline: segment → reconstruct → reconcile → synthesise → compress. Eliminates noise while preserving goals, decisions, and constraints (Phase 129) |
+| **cortex_content** | Manages CORTEX response content pools — quotes, principles, and AI sparks — using an epoch-based Fisher-Yates shuffle for anti-repetition guarantees. Provides direct access to the ContentLibraryFacade for pool administration |
 
 ### Maintenance
 

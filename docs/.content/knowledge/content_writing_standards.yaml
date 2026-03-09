@@ -32,7 +32,7 @@ voice_and_tone:
   tone_by_context:
     hero_sections:
       tone: "Bold and credible — leads with outcomes, not features"
-      example_good: "CORTEX coordinates 290+ orchestrators in parallel — your AI logic runs at scale"
+      example_good: "CORTEX coordinates 330+ orchestrators in parallel — your AI logic runs at scale"
       example_bad: "CORTEX is an amazing AI framework that will transform your workflow"
     technical_reference:
       tone: "Direct and scannable — verbs first, no preamble"

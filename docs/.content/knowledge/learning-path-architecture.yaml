@@ -9,9 +9,9 @@ metadata:
   version: "1.0.0"
   synthesised_from:
     - "GitHub Issue #14 — CORTEX Feedback 2026-03-08 (12 capability records)"
-    - "GitHub Issue #15 — Phase 142 PO Change Intelligence Orchestration"
+    - "GitHub Issue #15 — Phase 129 PO Intelligence Suite"
     - "_workspaces/recommendations/learning-path.md (source material)"
-  last_verified: "2026-03-08"
+  last_verified: "2026-03-09"
 
 # ── 3-Level Learning Architecture ──────────────────────────────────────
 
@@ -35,7 +35,7 @@ learning_architecture:
         difficulty: "Intermediate"
         topics: 8
         duration: "~45 min"
-        description: "How 290+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX"
+        description: "How 330+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX"
         accent_color: "#14b8a6"
       - id: "ai-orchestration"
         title: "AI Orchestration"
@@ -167,7 +167,7 @@ issue_knowledge:
 
   issue_15_capabilities:
     po_change_intelligence:
-      title: "PO Change Intelligence Orchestration (Phase 142)"
+      title: "PO Change Intelligence Orchestration (Phase 129 — PO Intelligence Suite)"
       summary: |
         3 new orchestrators and 7 reusable Workflow Composer templates enable
         structured PO decision-support workflows. ChangeIntelligenceOrchestrator

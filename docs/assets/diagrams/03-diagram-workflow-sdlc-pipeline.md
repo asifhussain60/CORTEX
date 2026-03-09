@@ -9,7 +9,7 @@ audience:
 source_of_truth:
   - cortex-registry/workflows/templates/sdlc/
   - cortex/orchestrators/domain/
-last_verified: 2026-03-03
+last_verified: 2026-03-09
 diagram_type: Workflow
 render: ascii
 render_html: true
