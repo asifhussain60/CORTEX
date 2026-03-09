@@ -254,7 +254,7 @@ coverage_map:
 
   video_prompts:
     total: 16
-    breakdown: "9 root-level + 7 tutorials under videos/tutorials/"
+    breakdown: "7 root-level + 7 tutorials under videos/tutorials/ + 2 READMEs"
     current: 16
     stale: 0
     file_count_gate: "FROZEN — must equal exactly 16; additions are P0 violations"
@@ -282,7 +282,7 @@ if chapter_count != 12:
   P0 FAIL: "Chapter file count is {chapter_count} — must be exactly 12"
 
 if video_prompt_count != 16:
-  P0 FAIL: "Video prompt file count is {video_prompt_count} — must be exactly 16 (9 root + 7 tutorials)"
+  P0 FAIL: "Video prompt file count is {video_prompt_count} — must be exactly 16 (7 root + 7 tutorials + 2 READMEs)"
 
 # Standard certification logic
 P0_issues = count(orphaned_features) + count(phantom_docs) + count(stale_diagram_nodes) + chapter_count_violation + video_prompt_count_violation

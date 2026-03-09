@@ -235,7 +235,7 @@ Update the **Awakening of CORTEX** story arc and associated media:
 - ❌ **No new chapter `.md` files** — the 12-chapter structure is locked; new chapters are NEVER added
 - ❌ **Do not modify `index.html` chapter list** — link structure is frozen; chapter additions break this invariant
 - ❌ **No Book Two content** injected into Book One chapters — "The Collective Consciousness" is a future placeholder only
-- ❌ **No new video prompt files** — existing 16 files (9 root + 7 tutorials) cover all discovery gaps; enhance within existing files only, never create additional prompt files
+- ❌ **No new video prompt files** — existing 16 files (7 root + 7 tutorials + 2 READMEs) cover all discovery gaps; enhance within existing files only, never create additional prompt files
 - ❌ No canon-breaking changes to established plot or character arcs
 - ❌ No tone drift — comedic warmth with technical authenticity must persist
 - ❌ No jargon injection — story remains accessible to non-technical readers
@@ -773,7 +773,7 @@ const CORTEX_D3_THEME = {
 | 5 | TDD Cycle FSM | State machine | Engineers | `d3.forceSimulation()` circular | RED→GREEN→REFACTOR with states |
 | 6 | Governance Rule Tiers | Sunburst | POs, Security | `d3.partition()` + `d3.arc()` | 60+ rules in 3-tier drill-down |
 | 7 | LENS Intelligence Pipeline | Data flow | Engineers | `d3.sankey()` | 4-layer analysis evidence flow |
-| 8 | Orchestrator Domain Map | Treemap | Engineers | `d3.treemap()` | 14 domains, 290+ files proportional |
+| 8 | Orchestrator Domain Map | Treemap | Engineers | `d3.treemap()` | 15 domains, 330+ files proportional |
 | 9 | Convergence Gate Loop | Cycle diagram | POs, Engineers | Custom SVG circular | Detect→fix→rescan visual loop |
 | 10 | Defect Cost Comparison | Bar chart | Business | `d3.scaleBand()` | ROI evidence — before/after |
 | 11 | Testing Strategy Pyramid | Pyramid | Engineers, QA | Custom SVG trapezoids | 5-tier test confidence model |
@@ -927,7 +927,7 @@ All design-system rules, WCAG gates, typography, visualisation, layout, card pat
 
 | Command | Action | Agents Invoked |
 |---------|--------|----------------|
-| `/doc` | Full autonomous cycle: Discovery → Issues → Drift → Sync → Narrative → Certification | All 15 agents |
+| `/doc` | Full autonomous cycle: Discovery → Issues → Drift → Sync → Narrative → Certification | All 16 agents |
 | `/doc-discover` | Git discovery only — surface changes since last run | `git-discovery-agent` |
 | `/doc-issues` | GitHub issue ingestion only — fetch issues from last processed ID | `github-issue-harvester-agent` |
 | `/doc-drift` | Drift detection only — find orphaned/phantom/stale docs | `drift-detection-agent` |
@@ -964,6 +964,7 @@ All documentation agents live in `.github/agents/docs/` with single responsibili
 | **Knowledge Harvester** | `knowledge-harvester-agent.md` | Source → distilled notes → knowledge YAMLs in `.content/knowledge/` |
 | **GitHub Issue Harvester** | `github-issue-harvester-agent.md` | Ingest GitHub issues (#14+), extract capabilities, feed into drift/sync pipeline |
 | **Comedy Enhancement** | `comedy-enhancement-agent.md` | Apply comedic writing principles to enhance Awakening of CORTEX chapters (internal only) |
+| **Tetris Layout** | `tetris-layout-agent.md` | Eliminate blank space in multi-column HTML panels using the Tetris-Fit CSS algorithm |
 
 ### Agent Composition — Documentation Certification Pipeline
 
@@ -1014,10 +1015,10 @@ The coverage audit agent maintains a live coverage map tracking:
 
 | Dimension | Source of Truth | Documentation Target |
 |-----------|----------------|---------------------|
-| **Orchestrators** | `cortex/orchestrators/` (290+ files) | `.content/05-orchestration-the-engine-room.md` |
-| **MCP Tools** | `cortex/mcp/mcp_registry.py` (36 registered) | `.content/06-mcp-tools-in-your-ide.md` |
+| **Orchestrators** | `cortex/orchestrators/` (330+ files) | `.content/05-orchestration-the-engine-room.md` |
+| **MCP Tools** | `cortex/mcp/mcp_registry.py` (40 registered) | `.content/06-mcp-tools-in-your-ide.md` |
 | **Governance Rules** | `cortex-registry/core/` (60+ YAMLs) | `.content/03-governance-quality-that-enforces-itself.md` |
-| **Intent Types** | `cortex/models/canonical_enums.py` (31 types) | `.content/05-orchestration-the-engine-room.md` |
+| **Intent Types** | `cortex/models/canonical_enums.py` (35 types) | `.content/05-orchestration-the-engine-room.md` |
 | **Workflow Templates** | `cortex-registry/workflows/templates/` | `.content/09-lifecycle-from-idea-to-production.md` |
 | **Debug Strategies** | `cortex/orchestrators/support/debugging/` (8 strategies) | `.content/05-orchestration-the-engine-room.md` |
 | **RCA Methodologies** | `cortex/intelligence/learning/rca_engine.py` (4 methods) | `.content/08-learning-institutional-memory.md` |
@@ -1111,7 +1112,7 @@ Documentation is versioned consistently with release tags:
 | Count floor validity — live count does not fall below documented floor | live ≥ floor | P1 |
 | **Chapter file count** — exactly 12 `.md` files in `chapters/` | 12 (immutable) | P0 |
 | **index.html chapter links** — all 12 chapter links resolve (HTTP 200) | 100% | P0 |
-| **Video prompt file count** — exactly 16 files (9 root + 7 tutorials) | 16 (no additions) | P1 |
+| **Video prompt file count** — exactly 16 files (7 root + 7 tutorials + 2 READMEs) | 16 (no additions) | P1 |
 | Terminology consistency — glossary enforced | 0 violations | P1 |
 | Narrative continuity — no canon breaks | 0 regressions | P1 |
 | Media prompt alignment — prompts match actual system | 0 stale prompts | P1 |
@@ -1183,7 +1184,7 @@ osascript -e 'tell application "Terminal" to close every window' 2>/dev/null; os
 
 ## 📚 Related Documentation
 
-- **Agents:** `.github/agents/docs/` (15 modular agents)
+- **Agents:** `.github/agents/docs/` (16 modular agents)
 - **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **Master Plan:** `cortex-registry/cortex-master.yaml`
 - **Durable State:** `cortex-registry/config/doc-orchestrator-state.yaml`

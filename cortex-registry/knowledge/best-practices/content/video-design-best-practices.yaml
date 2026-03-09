@@ -5,7 +5,7 @@
 # Used by: Visual prompt generation, future video tooling, knowledge synthesis
 # Scope: EXTERNAL — included in /sync; used in cortex-docs video prompt generation
 # Created: 2026-02-27
-# Updated: 2026-03-08 — Counts verified against live architecture (296 orchestrators, 58 MCP tool files, 36 registered, 14 domains, 65 phases complete, 60 governance rules)
+# Updated: 2026-03-09 — Counts verified against live architecture (338 orchestrators, 60 MCP tool files, 40 registered, 15 domains, 65 phases complete, 60 governance rules)
 
 domain: content-production
 type: best-practice
@@ -336,14 +336,14 @@ copilot_contrast_narrative:
 # Run `scripts/refresh_prompt_suite.py --counts-only` to revalidate.
 # ─────────────────────────────────────────────────────────────────
 architecture_facts:
-  verified: "2026-03-03"
-  orchestrator_files: 320          # find cortex/orchestrators -name "*.py" | wc -l
-  mcp_tools_registered: 30        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict
-  mcp_tool_files: 54              # find cortex/mcp/tools -name "*.py" | wc -l
-  intent_types: 29                 # cortex/models/canonical_enums.py IntentType enum
-  governance_yamls_core: 23        # find cortex-registry/core -name "*.yaml" | wc -l
-  governance_yamls_governance: 13  # find cortex-registry/governance -name "*.yaml" | wc -l
-  governance_yamls_total: 36       # core (23) + governance (13)
+  verified: "2026-03-09"
+  orchestrator_files: 338          # find cortex/orchestrators -name "*.py" | wc -l
+  mcp_tools_registered: 40        # defined in cortex/mcp/mcp_registry.py PRODUCTION_TOOLS dict
+  mcp_tool_files: 60              # find cortex/mcp/tools -name "*.py" | wc -l
+  intent_types: 35                 # cortex/models/canonical_enums.py IntentType enum
+  governance_yamls_core: 26        # find cortex-registry/core -name "*.yaml" | wc -l
+  governance_yamls_governance: 34  # find cortex-registry/governance -name "*.yaml" | wc -l
+  governance_yamls_total: 60       # core (26) + governance (34)
   intelligence_entry_point: "cortex/intelligence/facade.py"  # IntelligenceFacade — Phase 107 canonical entry
   intelligence_diamond_layers: 3   # analyze() → LENS pipeline | synthesize() → KnowledgeSynthesisEngine | query() → KnowledgeRegistryProxy
   intelligence_facade_api: "analyze / synthesize / query"  # Three public methods — single entry replaces UnifiedIntelligenceProvider + LENSIntelligenceFacade + KnowledgeRegistryProxy
@@ -354,6 +354,6 @@ architecture_facts:
   sdlc_pipeline_phases: 7          # Requirements → Solution → Implement → Review → Integration → Security → Release
   audit_pipeline_stages: 9         # /audit fix 9-stage convergence pipeline
   sqlite_databases: 7              # .cortex-runtime/ (orchestrator-traces, rca-store, audit, governance, conversations, wiring-audit, intelligence-audit)
-  orchestrator_domains: 15         # core:139 domain:33 support:55 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 registry:2 response:3 synthesis:2 tools:2 strategies:1 _top_level:3
+  orchestrator_domains: 15         # core:145 domain:39 support:58 health:31 intelligence:17 persona:7 workflow:7 validation:13 git:5 registry:2 response:6 synthesis:2 tools:2 strategies:1
   quote_library_count: 32          # BLOCK-QUOTE-LIBRARY in cortex-response-templates.md
   quote_themes: 10                 # quality, improvement, security, architecture, discipline, systems-thinking, strategy, flow, learning, universal

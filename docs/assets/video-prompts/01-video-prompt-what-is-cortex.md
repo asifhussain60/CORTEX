@@ -7,136 +7,76 @@
 **Subtitle:** Governance. Orchestration. Reliability.
 **Audience:** C-suite, VPs of Engineering, business stakeholders — decision-makers who own delivery risk
 **Duration:** 7–10 minutes
-**Narrator:** 🎙️ Female — calm, authoritative, strategic; unhurried pacing; allows philosophical weight of quotes to land
+**Narrator:** 🎙️ Female — calm, authoritative, strategic; unhurried pacing
 **Generator:** Google Gemini Video Generator / NotebookLM Video Editor
-**Last Updated:** 2026-03-08
+**Domain Color:** Cyan `#00d4ff` (primary CORTEX identity)
+**Last Updated:** 2026-03-09
 **VBP Rules Applied:** VBP-001 through VBP-019 (full compliance)
 
 ---
 
 ## 🎯 Learning Objective
 
-By the end of this video, decision-makers understand that CORTEX is not another AI coding tool — it is a governed orchestration layer that eliminates the false choice between velocity and rigour, making AI-assisted development accountable at every step, for every team member, in every commit.
+Decision-makers understand CORTEX is a governed orchestration layer — not another AI coding tool — that eliminates the false choice between velocity and rigour for every role, in every commit.
 
 ---
 
-## 🎬 MANDATORY Hero Intro Slide (VBP-014 — 5 seconds)
+## 🎬 Scene Sequence (7–10 min target)
 
-**Scene:** Full-screen `#0a0e27` deep space navy. Floating cyan and purple particles drift slowly upward.
+### HERO INTRO (VBP-014 — 5s)
+**Visual:** Deep space navy `#0a0e27`. Floating cyan/purple particles. `cortex-logo-512.png` hero-scale with pulsing cyan glow. Title typewriter-reveals: "What Is CORTEX?" → subtitle fades: "Governance. Orchestration. Reliability." Logo shrinks to watermark → Scene 1.
 
-**Centre frame:**
-- `cortex-logo-512.png` — hero-scale, pulsing cyan glow (`0 0 40px rgba(0,212,255,0.4)`)
-- **Above:** "What Is CORTEX?" — Space Grotesk Bold, `#ffffff`, 48px, fade-in
-- **Below:** "Governance. Orchestration. Reliability." — Inter Regular, `#a0a6c0`, 22px, typewriter reveal
+### Scene 1 — The Problem (90s) [VBP-002 hook, VBP-006 contrast]
+**Visual:** Split-screen animation: LEFT shows chaotic code fragments, flashing red warnings, scattered team icons working in silos. RIGHT is black, waiting. A counter ticks up: "Technical Debt: $847K/year" in pulsing red `#ff4757`.
+**Narration:** Modern codebases are vast. Engineers operate with fragments. AI makes us type faster — but speed without guardrails creates invisible debt. The result: fear. Fear of breaking production, changing legacy systems, making costly mistakes.
+**Animation:** Chaos fragments consolidate into a single glowing brain outline → CORTEX logo materialises inside it. RIGHT panel illuminates with calm cyan grid.
 
-**Hold 5 seconds → logo shrinks to bottom-right watermark (15% opacity) → Scene 1 fades in.**
+### Scene 2 — Pillar 1: Understand Everything (120s) [VBP-015 breadcrumb: ●○○]
+**Visual:** LENS Intelligence Pipeline diagram animates layer by layer — Language→Examination→Navigation→Synthesis. Each layer lights up as narration reaches it. Code files stream into the pipeline from the left, structured insights emerge right.
+**Narration:** Before a single line is written, CORTEX reads your entire repository. It understands enterprise patterns, security posture, and domain rules. As Deming observed: "You must know what to do, and then do your best."
+**Animation:** Breadcrumb bar top-of-frame: "Understand Everything" glows full brightness; other two pillars at 30% opacity. Pipeline nodes pulse cyan on mention.
 
----
+### Scene 3 — Pillar 2: Empower Everyone (120s) [VBP-015 breadcrumb: ✅●○]
+**Visual:** Intelligence Diamond (3-tier) spins into frame. Four role cards orbit it: Engineer, Architect, Product Owner, Business Leader. Each card flies forward when its role is narrated, showing a 3-second role-specific micro-animation.
+**Narration:** Software excellence should not depend on tribal knowledge. CORTEX democratises intelligence — 330+ specialised reasoning engines inside the IDE. For Engineers: a senior pair-programmer. For Product Owners: backlog-to-delivery intelligence. For Leaders: compliance and ROI on every commit.
+**Animation:** Role cards: Engineer→code flying into test harness; PO→requirements morphing into delivery plan; Architect→blueprint auto-validating; Leader→dashboard metrics rising green. Covey quote on glass pill: "Empowered individuals lead to collective success."
 
-## 🎙️ Full Script — Read EXACTLY as Written
+### Scene 4 — Pillar 3: Build Fearlessly (120s) [VBP-015 breadcrumb: ✅✅●]
+**Visual:** Universal Convergence Gate — animated loop: detect (red scan)→fix (amber wrench)→rescan (green check). Loop cycles 3 times, each time the violation counter drops: 12→4→0. Confetti burst on zero.
+**Narration:** Governance is infrastructure, not friction. The convergence gate refuses to let code proceed until critical violations resolve. Threat models evaluate risk before production. Root cause analysis ensures no mistake repeats. Collins reminds us: "Technology accelerates momentum, not creates it."
+**Animation:** Each detect-fix-rescan cycle is a distinct animated ring. Violation counter pulses red→amber→green. RCA memory node glows: "Pattern captured. Never again."
 
-> **PRODUCTION NOTE:** Do not improvise, summarize, or alter the wording. Use the visual cues in brackets to time on-screen graphics. Audio: Ambient synth bed ~60 BPM, low and steady — never louder than the narrator. No dramatic trailer stings.
-
----
-
-Modern software ecosystems are vast. Codebases, architectures, dependencies, and security risks form a web of staggering complexity. Yet, most engineers are forced to operate with only fragments of the full picture.
-
-Today, Artificial Intelligence makes us type faster. But speed, without guardrails, creates invisible technical debt. Code passes the sprint board, but fails in production, because every team—and every engineer—applies a different definition of "done."
-
-The result is a hidden force that slows great engineering teams down: Fear. Fear of breaking production. Fear of changing legacy systems. Fear of making costly architectural mistakes.
-
-**[VISUAL: Full screen reveal — System Architecture Layer view (`01-diagram-architecture-system-architecture-layers.md` / `image_58c13f.jpg`)]**
-
-Enter CORTEX.
-
-CORTEX is an advanced orchestration framework. It does not replace your existing AI tools like GitHub Copilot; it sits as an intelligence layer around them. It transforms raw generative AI into a governed engineering partner—one that thinks, enforces, learns, and executes at super speed.
-
-The mission of CORTEX is simple, yet powerful: Empowering teams with complete visibility into their software, systems, and decisions. It rests on three core pillars.
-
-Pillar One: Understand Everything.
-
-**[VISUAL: Highlight code analysis layers — LENS Intelligence Pipeline (`11-diagram-intelligence-lens-analysis-pipeline.md` / `02-lens-intelligence-pipeline.prompt.md`)]**
-
-CORTEX eliminates the engineering blind spot. Before a single line of code is written, it reads your entire repository. It understands your enterprise patterns, your security posture, and your domain rules. It transforms complex, fragmented codebases into clear, understandable systems.
-
-As W. Edwards Deming observed: "It is not enough to do your best; you must know what to do, and then do your best." CORTEX ensures your engineers always know what to do.
-
-**[AUDIO: Brief pause]**
-
-Pillar Two: Empower Everyone.
-
-Software excellence should not depend on tribal knowledge or senior engineers guarding institutional memory. CORTEX democratizes intelligence. Functionally, it is a coordinated network of over two hundred and ninety specialized reasoning engines operating directly inside the IDE. It makes the highest-value proposition in software development a reality: eliminating the false choice between velocity and rigour.
-
-**[VISUAL: Shift to Intelligence Diamond (`05-intelligence-diamond-three-tiers.prompt.md`)]**
-
-For Software Engineers, CORTEX acts as a senior pair-programmer that instills a security and quality-first mindset. Leveraging its Intelligence Diamond for deep codebase context, it guides developers through test-driven development, multi-stack debugging, and safe refactoring. Whether untangling a legacy monolith or rapidly building new GitHub Copilot Agents, CORTEX automates the boilerplate and documentation, empowering engineers to focus purely on solving complex logic.
-
-For Architects, it serves as an automated champion of system design. It continuously synthesizes domain knowledge and recognizes enterprise patterns, ensuring your architectural guardrails are actively applied to every new component.
-
-**[VISUAL: Shift to Product Owner Change Intelligence Pipeline (`19-diagram-orchestration-po-change-intelligence-pipeline.md`)]**
-
-For Product Owners, CORTEX transforms backlog management into actionable intelligence. Through dedicated orchestrators, it handles process discovery, gap analysis, and requirements synthesis. It maps a stakeholder's request directly to a structured delivery plan, maintaining a highly traceable thread from an initial idea straight through to tested, validated code.
-
-And for Business Leaders, it drives AI efficiency through precise token optimization, maximizing the value of your AI investments. Most importantly, it delivers rigorous, demonstrable compliance, security, and full auditability on every single commit.
-
-Stephen R. Covey wrote that "an empowered organization is one in which individuals have the knowledge, skill, desire, and opportunity to personally succeed in a way that leads to collective success." One platform. Every role. Zero coordination overhead.
-
-**[AUDIO: Brief pause]**
-
-Pillar Three: Build Fearlessly.
-
-**[VISUAL: Highlight convergence loop — Universal Convergence Gate CORE-068 (`12-diagram-governance-convergence-gate-core-068.md`)]**
-
-Governance is often seen as friction. In CORTEX, governance is infrastructure. It is a safety net that protects your team's momentum.
-
-Through a strict universal convergence gate, CORTEX refuses to let code proceed until critical quality and security violations are resolved. A continuous loop of detect, fix, and rescan ensures that your standards are met automatically. Threat models evaluate risks before they ever reach production. And if a failure does occur, the system's root cause analysis captures the pattern—helping ensure your team never repeats the same mistake twice.
-
-Jim Collins reminds us that "technology is an accelerator of momentum, not a creator of it." CORTEX accelerates your momentum by removing the uncertainty that holds you back.
-
-**[AUDIO: Brief pause]**
-
-By handling the administration, the compliance, and the safety net, CORTEX fundamentally changes the job description of your engineering team. It empowers your people to stop merely coding... and start envisioning.
-
-**[AUDIO: Strategic Silence — 1.5 seconds]**
-
-CORTEX doesn't make AI smarter. It makes AI-assisted development accountable—at every step, for every team member, in every commit.
-
-**[VISUAL: Fade to logo (`cortex-logo-512.png`)]**
-
-Governance. Orchestration. Reliability.
+### Scene 5 — The Transformation (60s) [VBP-011 strategic silence]
+**Visual:** Split-screen morphs into unified view. Three pillar icons align vertically: eye (Understand)→hands (Empower)→shield (Build). They merge into the CORTEX logo.
+**Narration:** By handling compliance, administration, and the safety net, CORTEX changes the job description. Your team stops merely coding — and starts envisioning. [1.5s SILENCE] CORTEX does not make AI smarter. It makes AI-assisted development accountable.
+**Animation:** Tagline typewriter-reveals: "Governance. Orchestration. Reliability." Logo holds 3s. Fade to black.
 
 ---
 
-## 🎨 Visual Identity Compliance Checklist
+## 🎨 VBP Compliance
 
-| Rule | Applied |
-|------|---------|
+| Rule | Status |
+|------|--------|
 | VBP-001 One Idea Per Frame | ✅ |
-| VBP-002 Hook in 8 seconds | ✅ Complexity/fear hook opens immediately |
-| VBP-003 Narration ≠ slide text | ✅ Visuals reinforce; narration leads |
-| VBP-004 Progressive Disclosure | ✅ Pillar-by-pillar reveal |
-| VBP-005 Z/F pattern | ✅ Architecture layer → LENS → Diamond → Convergence |
-| VBP-006 Contrast storytelling | ✅ Speed without guardrails → CORTEX safety net |
-| VBP-007 2-min visual cycles | ✅ New diagram every pillar transition |
-| VBP-008 Title, duration, chapters | ✅ Hero intro slide + pillar breadcrumbs |
-| VBP-009 Signaling | ✅ Active diagram region glows cyan on cue |
-| VBP-010 Analogy | ✅ Intelligence layer / safety net / accelerator |
-| VBP-011 Strategic Silence | ✅ 1.5s after "start envisioning" |
-| VBP-012 Consistent visual language | ✅ Glassmorphism `#0a0e27` · `#00d4ff` throughout |
-| VBP-014 Hero intro slide | ✅ 5-second title card |
-| VBP-015 Breadcrumb navigation | ✅ Pillar counter overlay (Pillar 1 / 2 / 3) |
-| VBP-016 Bold key words | ✅ `#00d4ff` for pillar titles and quotes |
-| VBP-017 Female narrator | ✅ Odd-numbered video |
-| VBP-018 No unexpanded acronyms | ✅ IDE, CORTEX, TDD, MCP expanded on first use |
-| VBP-019 Strategic colour | ✅ Cyan accent on every diagram highlight |
+| VBP-002 Hook in 8s | ✅ Chaos/fear opens immediately |
+| VBP-003 Narration ≠ slide | ✅ Visuals reinforce; narration leads |
+| VBP-004 Progressive Disclosure | ✅ Pillar-by-pillar |
+| VBP-006 Contrast storytelling | ✅ Chaos → order |
+| VBP-007 2-min cycles | ✅ New scene every 90–120s |
+| VBP-009 Signaling | ✅ Cyan glow on active region |
+| VBP-011 Strategic Silence | ✅ 1.5s after "envisioning" |
+| VBP-012 Consistent visuals | ✅ Glassmorphism throughout |
+| VBP-014 Hero intro | ✅ 5s title card |
+| VBP-015 Breadcrumb | ✅ 3-pillar progress bar |
+| VBP-016 Bold keywords | ✅ Cyan on pillar titles |
+| VBP-017 Female narrator | ✅ Odd-numbered |
+| VBP-018 Acronyms expanded | ✅ All on first use |
+| VBP-019 Strategic colour | ✅ Cyan identity |
 
----
+## 🎵 Audio
+Ambient synth ~60 BPM. Unhurried. Strategic silence at peaks. No trailer stings.
 
-## 🎵 Audio Direction
-
-- **Background:** Ambient synth bed ~60 BPM, low and steady — never louder than narrator; no dramatic trailer stings
-- **Pacing:** Unhurried; allow philosophical weight of Deming, Covey, and Collins quotes to land with silence before and after
-- **Strategic Silence:** 1.5 seconds after "start envisioning" — absolute silence, no music swell
-- **Pillar transitions:** Subtle low-frequency tone shift only — no stings, no crescendos
-- **Closing:** Music fades to near-silence under final tagline; full silence on logo hold
-
+## 🧭 Mission Alignment
+- **Understand Everything:** Scene 2 — LENS pipeline, full-repo comprehension
+- **Empower Everyone:** Scene 3 — 4 roles, Intelligence Diamond, democratised expertise
+- **Build Fearlessly:** Scene 4 — Convergence gate, RCA memory, zero-violation target

@@ -204,19 +204,17 @@ All sync edits MUST maintain the established content voice:
 
 ## 📊 Video Prompt Synchronization
 
-**File Count Contract:** There are exactly **16 video prompt files** (9 root-level + 7 tutorial files under `videos/tutorials/`). This count is FROZEN.
+**File Count Contract:** There are exactly **16 video prompt files** (7 root-level + 7 tutorial files under `videos/tutorials/` + 2 READMEs). This count is FROZEN.
 
-| Root-Level Files (9) | Tutorial Files (7) |
+| Root-Level Files (7) | Tutorial Files (7) |
 |----------------------|--------------------|
-| `01-intro-what-is-cortex.md` | `tutorial-01-installation-setup.md` |
-| `02-intro-copilot-plus-cortex.md` | `tutorial-02-essential-commands.md` |
-| `03-intro-how-cortex-works-architecture-tour.md` | `tutorial-03-building-feature-e2e.md` |
-| `04-product-owner-outcomes.md` | `tutorial-04-onboarding-customization.md` |
-| `05-engineer-tdd-and-convergence.md` | `tutorial-05-getting-started-in-vscode.md` |
-| `06-engineer-mcp-tools-and-workflows.md` | `tutorial-06-first-chat-workflows.md` |
-| `07-curious-users-learn-with-cortex.md` | `tutorial-07-reading-results-and-next-steps.md` |
-| `08-engineer-self-learning-and-root-cause-analysis.md` | |
-| `09-architect-knowledge-domain-synthesis-and-governance.md` | |
+| `01-video-prompt-what-is-cortex.md` | `tutorial-01-installation-setup.md` |
+| `02-video-prompt-what-is-cortex-business-leaders.md` | `tutorial-02-essential-commands.md` |
+| `03-video-prompt-what-is-cortex-product-owners.md` | `tutorial-03-building-feature-e2e.md` |
+| `04-video-prompt-what-is-cortex-software-engineers.md` | `tutorial-04-onboarding-customization.md` |
+| `05-video-prompt-what-is-cortex-security-engineers.md` | `tutorial-05-getting-started-in-vscode.md` |
+| `06-video-prompt-what-is-cortex-quality-engineers.md` | `tutorial-06-first-chat-workflows.md` |
+| `07-video-prompt-what-is-cortex-site-reliability-engineers.md` | `tutorial-07-reading-results-and-next-steps.md` |
 
 **❌ Never add a new video prompt file.** If a new capability needs coverage, extend an existing prompt — the file set is a fixed canonical catalogue. Discovery gaps are filled within existing prompts, not by proliferating new files.
 

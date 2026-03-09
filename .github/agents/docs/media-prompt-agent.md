@@ -173,7 +173,7 @@ The video prompts directory (`docs/assets/video-prompts/`) contains two tiers:
 
 | Tier | Path | Purpose |
 |------|------|---------|
-| **Feature Series** | `video-prompts/*.md` (9 episodes) | Deep-dive into CORTEX capabilities |
+| **Feature Series** | `video-prompts/*.md` (7 episodes) | Deep-dive into CORTEX capabilities |
 | **Tutorial Series** | `video-prompts/videos/tutorials/*.md` (7 tutorials) | Hands-on getting started guides |
 
 ### Feature Episode Format
