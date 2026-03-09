@@ -293,18 +293,6 @@
                 border-top: 1px solid rgba(255,255,255,0.06);
             }
         }
-        /* Inside tab panels: always top-border (not left) since layout is always vertical */
-        .tabs-panel-host .viz-sky    { border-left: none; border-top: 1px solid rgba(14,165,233,0.12); }
-        .tabs-panel-host .viz-violet { border-left: none; border-top: 1px solid rgba(139,92,246,0.12); }
-        .tabs-panel-host .viz-amber  { border-left: none; border-top: 1px solid rgba(245,158,11,0.12); }
-        .tabs-panel-host .viz-purple { border-left: none; border-top: 1px solid rgba(168,85,247,0.12); }
-        /* flip: viz above text → use bottom-border instead */
-        .tabs-panel-host .concept-split.flip .viz-sky,
-        .tabs-panel-host .concept-split.flip .viz-violet,
-        .tabs-panel-host .concept-split.flip .viz-amber,
-        .tabs-panel-host .concept-split.flip .viz-purple {
-            border-top: none;
-        }
 
         /* Concept header inside split */
         .concept-num {
@@ -615,26 +603,6 @@
         }
         .tab-panel { display: none; padding: 1.5rem; }
         .tab-panel[aria-hidden="false"] { display: block; }
-
-        /* Force concept-split articles inside tab panels to stack vertically —
-           the panel itself provides the width context, two columns would be too cramped */
-        .tabs-panel-host .concept-split,
-        .tabs-panel-host .concept-split.flip {
-            grid-template-columns: 1fr;
-        }
-        /* Diagram panel sits below text; restore border to top edge instead of left */
-        .tabs-panel-host .concept-split-viz {
-            border-left: none;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            min-height: 240px;
-        }
-        /* flip variant: viz above text (natural reading order for stacked layout) */
-        .tabs-panel-host .concept-split.flip .concept-split-viz {
-            order: -1;
-            border-top: none;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
         @media (max-width: 640px) {
             .tabs-nav { border-radius: 1rem 1rem 0 0; padding: 0.5rem; }
             .tab-btn { font-size: 0.6875rem; padding: 0.375rem 0.625rem; }
