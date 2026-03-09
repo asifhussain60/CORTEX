@@ -220,7 +220,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -230,7 +230,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -262,7 +262,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -325,21 +373,21 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-teal-600/30 to-emerald-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-teal-500/40 bg-gradient-to-br from-teal-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
                         <div class="text-2xl md:text-3xl font-black text-teal-400 mb-1 drop-shadow-[0_0_12px_rgba(20,184,166,0.6)]">7</div>
-                        <div class="text-[10px] md:text-[11px] text-teal-300/80 uppercase tracking-widest font-bold">Domains</div>
+                        <div class="text-[11px] text-teal-300/80 uppercase tracking-widest font-bold">Domains</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(33%-0.75rem)] md:w-44 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
                         <div class="text-2xl md:text-3xl font-black text-violet-400 mb-1 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">51</div>
-                        <div class="text-[10px] md:text-[11px] text-violet-300/80 uppercase tracking-widest font-bold">Concepts</div>
+                        <div class="text-[11px] text-violet-300/80 uppercase tracking-widest font-bold">Concepts</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(33%-0.75rem)] md:w-44 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-green-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-4 md:px-8 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 w-full flex flex-col justify-center min-h-[100px]">
                         <div class="text-2xl md:text-3xl font-black text-emerald-400 mb-1 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">3</div>
-                        <div class="text-[10px] md:text-[11px] text-emerald-300/80 uppercase tracking-widest font-bold">Depth Levels</div>
+                        <div class="text-[11px] text-emerald-300/80 uppercase tracking-widest font-bold">Depth Levels</div>
                     </div>
                 </div>
             </div>
@@ -367,7 +415,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Level 1</div>
                             <div class="font-bold text-sm text-teal-300">Orientation</div>
-                            <p class="text-[13px] text-slate-500 mt-1">Choose your domain.<br/>Assess your starting point.</p>
+                            <p class="text-sm text-slate-500 mt-1">Choose your domain.<br/>Assess your starting point.</p>
                         </div>
                     </div>
                     <div class="journey-arrow">&#8594;</div>
@@ -378,7 +426,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Level 2</div>
                             <div class="font-bold text-sm text-violet-300">Exploration</div>
-                            <p class="text-[13px] text-slate-500 mt-1">Interactive concept maps.<br/>See how ideas connect.</p>
+                            <p class="text-sm text-slate-500 mt-1">Interactive concept maps.<br/>See how ideas connect.</p>
                         </div>
                     </div>
                     <div class="journey-arrow">&#8594;</div>
@@ -389,7 +437,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Level 3</div>
                             <div class="font-bold text-sm text-emerald-300">Mastery</div>
-                            <p class="text-[13px] text-slate-500 mt-1">Deep-dive explanations.<br/>Diagrams, code, analogies.</p>
+                            <p class="text-sm text-slate-500 mt-1">Deep-dive explanations.<br/>Diagrams, code, analogies.</p>
                         </div>
                     </div>
                 </div>
@@ -416,7 +464,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-teal-300 mb-1">Architecture Patterns</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">How 290+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">How 290+ orchestrators coordinate across 14 domains — the structural backbone of CORTEX.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">8 topics &middot; ~45 min</span>
@@ -431,7 +479,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-violet-300 mb-1">AI Orchestration</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Intent routing, LENS intelligence tiers, and the Perception &#8594; Reasoning &#8594; Action pipeline.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Intent routing, LENS intelligence tiers, and the Perception &#8594; Reasoning &#8594; Action pipeline.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">7 topics &middot; ~40 min</span>
@@ -446,7 +494,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-emerald-300 mb-1">Workflow Automation</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Declarative workflow templates, primitive composition, and the WorkflowComposer engine.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Declarative workflow templates, primitive composition, and the WorkflowComposer engine.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">6 topics &middot; ~35 min</span>
@@ -461,7 +509,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-amber-300 mb-1">Governance &amp; Quality</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">60+ self-enforcing governance rules across pre-commit, CI, and runtime layers.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">60+ self-enforcing governance rules across pre-commit, CI, and runtime layers.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">9 topics &middot; ~50 min</span>
@@ -476,7 +524,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-red-300 mb-1">TDD-First Development</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">The mandatory Red &#8594; Green &#8594; Refactor cycle, test quality scoring, and golden test promotion.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">The mandatory Red &#8594; Green &#8594; Refactor cycle, test quality scoring, and golden test promotion.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">5 topics &middot; ~30 min</span>
@@ -491,7 +539,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-purple-300 mb-1">Intelligence &amp; Learning</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">LENS sensory system, RCA memory engine, URS reinforcement signals, and knowledge acquisition.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">LENS sensory system, RCA memory engine, URS reinforcement signals, and knowledge acquisition.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
                         <span class="font-bold">8 topics &middot; ~45 min</span>
@@ -503,16 +551,16 @@
                     <div class="flex items-center justify-between">
                         <div class="domain-icon-wrap bg-sky-500/20 text-sky-400"><i data-lucide="rocket" class="w-5 h-5"></i></div>
                         <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-black border border-sky-500/25 uppercase tracking-widest">New</span>
+                            <span class="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[11px] font-black border border-sky-500/25 uppercase tracking-widest">New</span>
                             <span class="difficulty-badge difficulty-beginner">Beginner</span>
                         </div>
                     </div>
                     <div>
                         <h3 class="font-black text-base tracking-tight text-sky-300 mb-1">AI Adoption — Fearless Knowledge</h3>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Plain-English explanations of Agentic AI, prompt engineering, context windows, orchestration, memory, and reasoning. Remove fear, build understanding, adopt confidently. For every role — no technical background required.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Plain-English explanations of Agentic AI, prompt engineering, context windows, orchestration, reasoning, memory, and knowledge synthesis. Remove fear, build understanding, adopt confidently. Includes buzzword translator, myth vs reality, role entry points, beginner pathway, interactive concept map, adoption metrics, and real-world scenarios. For every role — no technical background required.</p>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-600">
-                        <span class="font-bold">8 concepts &middot; ~30 min &middot; All roles welcome</span>
+                        <span class="font-bold">8 concepts &middot; ~35 min &middot; All roles welcome</span>
                         <span class="text-sky-400 font-bold">Start here &#8594;</span>
                     </div>
                 </a>
@@ -535,13 +583,13 @@
                     <div class="role-icon-wrap bg-teal-500/20 text-teal-400"><i data-lucide="code-2" class="w-5 h-5"></i></div>
                     <div class="space-y-1.5">
                         <h4 class="font-black text-sm text-teal-300">Software Engineer</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-teal-400">TDD-First Development</strong>, then <strong class="text-teal-400">Architecture Patterns</strong>, then <strong class="text-teal-400">AI Orchestration</strong>. Build muscle memory for the TDD cycle before learning how CORTEX routes and executes.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Start with <strong class="text-teal-400">TDD-First Development</strong>, then <strong class="text-teal-400">Architecture Patterns</strong>, then <strong class="text-teal-400">AI Orchestration</strong>. Build muscle memory for the TDD cycle before learning how CORTEX routes and executes.</p>
                         <div class="flex gap-1.5 mt-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 text-[10px] font-bold">TDD</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[10px] font-bold">Architecture</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[10px] font-bold">AI Orchestration</span>
+                            <span class="px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 text-[11px] font-bold">TDD</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[11px] font-bold">Architecture</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[11px] font-bold">AI Orchestration</span>
                         </div>
                     </div>
                 </div>
@@ -549,13 +597,13 @@
                     <div class="role-icon-wrap bg-violet-500/20 text-violet-400"><i data-lucide="compass" class="w-5 h-5"></i></div>
                     <div class="space-y-1.5">
                         <h4 class="font-black text-sm text-violet-300">Tech Lead / Architect</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-violet-400">Architecture Patterns</strong>, then <strong class="text-violet-400">Governance &amp; Quality</strong>, then <strong class="text-violet-400">Workflow Automation</strong>. Understand the structural backbone before learning how rules enforce and workflows compose.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Start with <strong class="text-violet-400">Architecture Patterns</strong>, then <strong class="text-violet-400">Governance &amp; Quality</strong>, then <strong class="text-violet-400">Workflow Automation</strong>. Understand the structural backbone before learning how rules enforce and workflows compose.</p>
                         <div class="flex gap-1.5 mt-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[10px] font-bold">Architecture</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">Governance</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Workflows</span>
+                            <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-400 text-[11px] font-bold">Architecture</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[11px] font-bold">Governance</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Workflows</span>
                         </div>
                     </div>
                 </div>
@@ -563,11 +611,11 @@
                     <div class="role-icon-wrap bg-amber-500/20 text-amber-400"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
                     <div class="space-y-1.5">
                         <h4 class="font-black text-sm text-amber-300">Product Owner</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-amber-400">Governance &amp; Quality</strong>, then <strong class="text-amber-400">AI Orchestration</strong>. Understand what CORTEX enforces and how it makes decisions — you do not need implementation detail.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Start with <strong class="text-amber-400">Governance &amp; Quality</strong>, then <strong class="text-amber-400">AI Orchestration</strong>. Understand what CORTEX enforces and how it makes decisions — you do not need implementation detail.</p>
                         <div class="flex gap-1.5 mt-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">Governance</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[10px] font-bold">AI Orchestration</span>
+                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[11px] font-bold">Governance</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-violet-500/10 text-violet-400 text-[11px] font-bold">AI Orchestration</span>
                         </div>
                     </div>
                 </div>
@@ -575,11 +623,11 @@
                     <div class="role-icon-wrap bg-emerald-500/20 text-emerald-400"><i data-lucide="sparkles" class="w-5 h-5"></i></div>
                     <div class="space-y-1.5">
                         <h4 class="font-black text-sm text-emerald-300">Curious Learner</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Start anywhere that interests you. Every domain is self-contained. The interactive concept maps in Level 2 help you discover connections naturally as you explore.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Start anywhere that interests you. Every domain is self-contained. The interactive concept maps in Level 2 help you discover connections naturally as you explore.</p>
                         <div class="flex gap-1.5 mt-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Any Domain</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-slate-500/10 text-slate-400 text-[10px] font-bold">Follow the graph</span>
+                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Any Domain</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-slate-500/10 text-slate-400 text-[11px] font-bold">Follow the graph</span>
                         </div>
                     </div>
                 </div>
@@ -588,11 +636,11 @@
                     <div class="role-icon-wrap bg-sky-500/20 text-sky-400"><i data-lucide="building-2" class="w-5 h-5"></i></div>
                     <div class="space-y-1.5">
                         <h4 class="font-black text-sm text-sky-300">Business Leader / New AI Adopter</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Start with <strong class="text-sky-400">AI Adoption — Fearless Knowledge</strong>. Plain-English explanations of every AI concept that matters, with no technical background required. Understand what AI is doing, where humans stay in control, and how adoption is measured honestly.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Start with <strong class="text-sky-400">AI Adoption — Fearless Knowledge</strong>. Plain-English explanations of every AI concept that matters, with no technical background required. Understand what AI is doing, where humans stay in control, and how adoption is measured honestly.</p>
                         <div class="flex gap-1.5 mt-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[10px] font-bold">AI Adoption</span>
-                            <span class="text-slate-600 text-[10px]">&#8594;</span>
-                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">Governance</span>
+                            <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[11px] font-bold">AI Adoption</span>
+                            <span class="text-slate-600 text-[11px]">&#8594;</span>
+                            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[11px] font-bold">Governance</span>
                         </div>
                     </div>
                 </div>
@@ -614,22 +662,22 @@
                     <div class="glass-card p-6 space-y-3 border-emerald-500/20">
                         <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="layers" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-teal-300">Progressive Disclosure</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">You encounter concepts in order of dependency. High-level orientation before architectural detail. Conceptual foundations before implementation specifics.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">You encounter concepts in order of dependency. High-level orientation before architectural detail. Conceptual foundations before implementation specifics.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-violet-500/20">
                         <div class="w-9 h-9 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="mouse-pointer-click" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-violet-300">Active Learning</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Interactive diagrams and explorable concept maps replace passive reading. You engage with the system rather than observing it from a distance.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Interactive diagrams and explorable concept maps replace passive reading. You engage with the system rather than observing it from a distance.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-emerald-500/20">
                         <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400"><i data-lucide="git-fork" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-emerald-300">Visual Knowledge Mapping</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Concept relationship graphs help you see how ideas connect. Architecture patterns link to orchestrators. Governance rules link to enforcement. Every concept exists in a web.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Concept relationship graphs help you see how ideas connect. Architecture patterns link to orchestrators. Governance rules link to enforcement. Every concept exists in a web.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-amber-500/20">
                         <div class="w-9 h-9 bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="bar-chart-3" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-amber-300">Multi-Diagram Teaching</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Different diagrams explain different aspects. Architecture layers use tree layouts. Workflows use pipeline visualizations. Relationships use force-directed graphs.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Different diagrams explain different aspects. Architecture layers use tree layouts. Workflows use pipeline visualizations. Relationships use force-directed graphs.</p>
                     </div>
                 </div>
             </div>
@@ -645,16 +693,16 @@
                 <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">Choose a domain above and begin your journey. Every page is self-contained — start anywhere, explore at your own pace, and follow the concept maps to discover connections.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
                     <a href="ai-adoption/index.html" class="glass-card px-8 py-4 text-center rounded-full border-sky-500/30 hover:border-sky-400/50" style="text-decoration:none;">
-                        <span class="text-[13px] font-bold text-sky-400">New to AI? Start with Adoption &#8594;</span>
+                        <span class="text-sm font-bold text-sky-400">New to AI? Start with Adoption &#8594;</span>
                     </a>
                     <a href="governance-quality/index.html" class="glass-card px-8 py-4 text-center rounded-full border-emerald-500/30 hover:border-emerald-400/50" style="text-decoration:none;">
-                        <span class="text-[13px] font-bold text-emerald-400">Beginner? Start with Governance &#8594;</span>
+                        <span class="text-sm font-bold text-emerald-400">Beginner? Start with Governance &#8594;</span>
                     </a>
                     <a href="architecture-patterns/index.html" class="glass-card px-8 py-4 text-center rounded-full border-teal-500/30 hover:border-teal-400/50" style="text-decoration:none;">
-                        <span class="text-[13px] font-bold text-teal-400">Intermediate? Architecture &#8594;</span>
+                        <span class="text-sm font-bold text-teal-400">Intermediate? Architecture &#8594;</span>
                     </a>
                     <a href="intelligence-learning/index.html" class="glass-card px-8 py-4 text-center rounded-full border-violet-500/30 hover:border-violet-400/50" style="text-decoration:none;">
-                        <span class="text-[13px] font-bold text-violet-400">Advanced? Intelligence &#8594;</span>
+                        <span class="text-sm font-bold text-violet-400">Advanced? Intelligence &#8594;</span>
                     </a>
                 </div>
             </div>

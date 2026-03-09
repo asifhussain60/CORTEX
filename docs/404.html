@@ -54,7 +54,55 @@
     transition: all 0.2s;
   }
   a.home-link:hover { background: rgba(0,212,255,0.2); }
-</style>
+
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body>
 <div class="error-container">

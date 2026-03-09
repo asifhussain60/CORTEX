@@ -399,6 +399,89 @@
 
 
 /* ============================================
+   WCAG FONT-SIZE FLOOR ENFORCEMENT
+   Authority: docs-html-design-workflow.yaml § wcag_font_floors
+   Updated: 2026-03-09 — CORTEX global font-scale standardisation
+   All values satisfy WCAG 2.2 AA minimum thresholds.
+   ============================================ */
+
+:root {
+    /* ── Canonical CORTEX Font Scale ──────────────────────────────────────── */
+    /* body / paragraph / card descriptions: floor 1rem (16px) */
+    --fs-body:        1rem;          /* 16px — body paragraphs, card descriptions */
+    --fs-secondary:   0.875rem;      /* 14px — secondary muted text, list items, step-desc */
+    --fs-badge:       0.6875rem;     /* 11px — badge labels, stat sub-labels (absolute floor) */
+    --fs-mono-sm:     0.8125rem;     /* 13px — code blocks, mono tags, tool names */
+    --fs-mono-xs:     0.75rem;       /* 12px — inline code snippets, footer nav links */
+    --fs-card-title:  1.125rem;      /* 18px — card titles h3/h4 */
+    --fs-section:     1.5rem;        /* 24px — section headings h2 */
+    --fs-hero:        2.25rem;       /* 36px — hero titles h1 */
+    --fs-stat:        1.75rem;       /* 28px — stat counters */
+    --fs-separator:   0.6875rem;     /* 11px — nav separators (aria-hidden) */
+
+    /* ── Forbidden-value aliases (DO NOT USE BELOW THESE) ─────────────────── */
+    /* These override the old xs/sm tokens that were too small at 0.75/0.875 */
+    /* Old --font-size-xs: 0.75rem  → now use --fs-mono-xs for code/mono only */
+    /* Old --font-size-sm: 0.875rem → still valid for secondary text */
+}
+
+/* ── Global element floors ──────────────────────────────────────────────── */
+/* Ensures no element renders below the absolute floor of 11px (0.6875rem)  */
+body { font-size: var(--fs-body); line-height: 1.6; }
+p, li, td, th, blockquote { font-size: var(--fs-body); line-height: 1.6; }
+
+/* ── Tetris-Fit Layout Engine — Global Rules ──────────────────────────────
+   Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+   Algorithm: Tetris-Fit v1 — CSS-only, no JS, no fixed px heights
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Rule 1: Container stretch — all columns share tallest sibling height */
+.tetris-container,
+.macc__body-inner,
+[class*="grid-cols-"],
+.feature-grid,
+.card-grid,
+.role-grid-wrap {
+    align-items: stretch;
+}
+
+/* Rule 2: Column height fill — each column fills its grid cell top-to-bottom */
+.tetris-col,
+.macc__desc,
+.macc__metrics-col,
+.feature-col,
+.card-col {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Rule 3: Flex child absorbs leftover height */
+.tetris-grow,
+.macc__role-grid,
+.macc__chips,
+.macc__viz,
+.chart-panel,
+.bar-panel,
+.role-chip-list {
+    flex: 1;
+    align-content: stretch;
+}
+
+/* Rule 4: Nested grid row stretch */
+.tetris-grid-inner {
+    align-content: stretch;
+}
+
+/* Rule 5: Viz/chart panel fill */
+.tetris-viz,
+.macc__viz,
+.stat-chart-wrap {
+    flex: 1;
+    justify-content: space-between;
+}
+
+/* ============================================
    PERFORMANCE FALLBACK
    ============================================ */
 

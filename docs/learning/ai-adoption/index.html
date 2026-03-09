@@ -8,6 +8,7 @@
     <meta name="author" content="Asif Hussain"/>
     <script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="../../assets/images/cortex-logo-64.png" type="image/png"/>
@@ -174,8 +175,8 @@
         .cortex-breadcrumb-inner { max-width: 1280px; margin: 0 auto; padding: 0.5rem 1.5rem; display: flex; align-items: center; gap: 0.375rem; font-size: 0.78125rem; flex-wrap: wrap; }
         .cortex-bc-link { display: inline-flex; align-items: center; gap: 0.3rem; color: rgba(148,163,184,0.7); text-decoration: none; font-weight: 500; transition: color 0.2s ease; padding: 0.125rem 0.375rem; border-radius: 5px; }
         .cortex-bc-link:hover { color: rgba(248,250,252,0.95); background: rgba(255,255,255,0.05); }
-        .cortex-bc-sep { color: rgba(148,163,184,0.3); font-size: 0.7rem; line-height: 1; flex-shrink: 0; }
-        .cortex-bc-current { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: var(--bc-accent-bg, rgba(14,165,233,0.1)); color: var(--bc-accent-color, rgba(14,165,233,0.9)); border: 1px solid var(--bc-accent-border, rgba(14,165,233,0.2)); }
+        .cortex-bc-sep { color: rgba(148,163,184,0.3); font-size: 0.6875rem; line-height: 1; flex-shrink: 0; }
+        .cortex-bc-current { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.875rem; font-weight: 700; background: var(--bc-accent-bg, rgba(14,165,233,0.1)); color: var(--bc-accent-color, rgba(14,165,233,0.9)); border: 1px solid var(--bc-accent-border, rgba(14,165,233,0.2)); }
         .cortex-bc-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; flex-shrink: 0; }
 
         /* ═══ MOBILE TOGGLE ═══ */
@@ -207,7 +208,7 @@
         .concept-node { padding: 0.875rem 1rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); text-align: center; cursor: default; transition: all 0.2s ease; }
         .concept-node:hover { transform: scale(1.04); }
         .concept-node .cn-icon { font-size: 1.375rem; line-height: 1; margin-bottom: 0.375rem; }
-        .concept-node .cn-label { font-size: 0.75rem; font-weight: 700; }
+        .concept-node .cn-label { font-size: 0.875rem; font-weight: 700; }
         .concept-node .cn-desc { font-size: 0.6875rem; color: #64748b; margin-top: 0.25rem; line-height: 1.4; }
 
         /* ═══ FLOATING GLOW ORBS ═══ */
@@ -219,6 +220,54 @@
         .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
         @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+    
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
     </style>
 </head>
 <body class="min-h-screen">
@@ -360,13 +409,13 @@
                     <div class="fear-col" style="background:rgba(244,63,94,0.03);">
                         <div class="fear-row">
                             <span class="text-rose-400 text-lg mt-0.5" aria-hidden="true">😰</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">"AI will replace my job and make my expertise irrelevant."</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">"AI will replace my job and make my expertise irrelevant."</p>
                         </div>
                     </div>
                     <div class="reality-col">
                         <div class="fear-row">
                             <span class="text-emerald-400 text-lg mt-0.5" aria-hidden="true">✅</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">AI handles repetitive, low-creativity tasks so you spend more time on the work only you can do — the work that requires judgment, context, and human insight.</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">AI handles repetitive, low-creativity tasks so you spend more time on the work only you can do — the work that requires judgment, context, and human insight.</p>
                         </div>
                     </div>
 
@@ -374,13 +423,13 @@
                     <div class="fear-col" style="background:rgba(244,63,94,0.03);">
                         <div class="fear-row">
                             <span class="text-rose-400 text-lg mt-0.5" aria-hidden="true">😰</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">"AI makes things up and you can't trust what it produces."</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">"AI makes things up and you can't trust what it produces."</p>
                         </div>
                     </div>
                     <div class="reality-col">
                         <div class="fear-row">
                             <span class="text-emerald-400 text-lg mt-0.5" aria-hidden="true">✅</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">True for raw AI. CORTEX adds governance, test validation, and sweep completeness checks precisely to catch and reject unreliable outputs before they reach your team.</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">True for raw AI. CORTEX adds governance, test validation, and sweep completeness checks precisely to catch and reject unreliable outputs before they reach your team.</p>
                         </div>
                     </div>
 
@@ -388,13 +437,13 @@
                     <div class="fear-col" style="background:rgba(244,63,94,0.03);">
                         <div class="fear-row">
                             <span class="text-rose-400 text-lg mt-0.5" aria-hidden="true">😰</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">"You have to be a data scientist to use AI tools properly."</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">"You have to be a data scientist to use AI tools properly."</p>
                         </div>
                     </div>
                     <div class="reality-col">
                         <div class="fear-row">
                             <span class="text-emerald-400 text-lg mt-0.5" aria-hidden="true">✅</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">You need to describe what you want clearly. CORTEX classifies the intent, selects the right tools, and executes — you do not need to understand the internals.</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">You need to describe what you want clearly. CORTEX classifies the intent, selects the right tools, and executes — you do not need to understand the internals.</p>
                         </div>
                     </div>
 
@@ -402,13 +451,13 @@
                     <div class="fear-col" style="background:rgba(244,63,94,0.03);">
                         <div class="fear-row" style="border-bottom:none;">
                             <span class="text-rose-400 text-lg mt-0.5" aria-hidden="true">😰</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">"AI is a black box — no-one knows what it's doing or why."</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">"AI is a black box — no-one knows what it's doing or why."</p>
                         </div>
                     </div>
                     <div class="reality-col">
                         <div class="fear-row" style="border-bottom:none;">
                             <span class="text-emerald-400 text-lg mt-0.5" aria-hidden="true">✅</span>
-                            <p class="text-[13px] text-slate-300 leading-relaxed">CORTEX produces full audit trails, AC markers, and activity logs for every operation. Every decision is traceable, reviewable, and correctable by your team.</p>
+                            <p class="text-sm text-slate-300 leading-relaxed">CORTEX produces full audit trails, AC markers, and activity logs for every operation. Every decision is traceable, reviewable, and correctable by your team.</p>
                         </div>
                     </div>
                 </div>
@@ -421,7 +470,7 @@
                     </div>
                     <div>
                         <h3 class="font-black text-sm text-sky-300 mb-1">The Fearless Principle</h3>
-                        <p class="text-[13px] text-slate-400 leading-relaxed">
+                        <p class="text-sm text-slate-400 leading-relaxed">
                             <strong class="text-white">Knowledge Is Power.</strong> Every fear around AI dissolves when you understand what the system is actually doing. This page is designed to give you that understanding — clearly, honestly, and without jargon. CORTEX was built on the belief that teams who <em>understand</em> AI make better decisions than teams who are simply told to trust it.
                         </p>
                     </div>
@@ -458,7 +507,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Autonomous agents</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed">AI that follows a <strong class="text-white">multi-step plan</strong> rather than answering one question. Like asking a skilled contractor to "renovate the kitchen" — they plan, source materials, build, and check quality without you directing each step.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed">AI that follows a <strong class="text-white">multi-step plan</strong> rather than answering one question. Like asking a skilled contractor to "renovate the kitchen" — they plan, source materials, build, and check quality without you directing each step.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -467,7 +516,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Prompt tuning</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed">The art of <strong class="text-white">describing what you want clearly enough</strong> that the AI understands. Like briefing a specialist colleague: the more context and precision you provide, the better the result. CORTEX does this for you automatically.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed">The art of <strong class="text-white">describing what you want clearly enough</strong> that the AI understands. Like briefing a specialist colleague: the more context and precision you provide, the better the result. CORTEX does this for you automatically.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -476,7 +525,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Multi-agent systems</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed"><strong class="text-white">Coordinating multiple specialised tools</strong> to complete a complex task together. Like a hospital where the receptionist, diagnostician, surgeon, and pharmacist each do their part — one coordinator ensures the right expert handles each stage.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed"><strong class="text-white">Coordinating multiple specialised tools</strong> to complete a complex task together. Like a hospital where the receptionist, diagnostician, surgeon, and pharmacist each do their part — one coordinator ensures the right expert handles each stage.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -485,7 +534,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Token limit</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed">The <strong class="text-white">working memory of an AI</strong> — the amount it can "hold in mind" during one conversation. Think of it as desk space: more context = bigger desk = more relevant answers. CORTEX manages this automatically through LENS.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed">The <strong class="text-white">working memory of an AI</strong> — the amount it can "hold in mind" during one conversation. Think of it as desk space: more context = bigger desk = more relevant answers. CORTEX manages this automatically through LENS.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -494,7 +543,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Chain-of-thought</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed">The process of <strong class="text-white">working through a problem step by step</strong> before answering — rather than guessing immediately. Like a good doctor who asks clarifying questions, considers options, and explains their thinking before prescribing.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed">The process of <strong class="text-white">working through a problem step by step</strong> before answering — rather than guessing immediately. Like a good doctor who asks clarifying questions, considers options, and explains their thinking before prescribing.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -503,7 +552,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Persistent memory, RAG</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed"><strong class="text-white">Storing and retrieving past knowledge</strong> so the AI improves over time. CORTEX's RCA Memory Engine records why things failed and surfaces that knowledge the next time someone faces the same problem.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed"><strong class="text-white">Storing and retrieving past knowledge</strong> so the AI improves over time. CORTEX's RCA Memory Engine records why things failed and surfaces that knowledge the next time someone faces the same problem.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -512,7 +561,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Knowledge distillation</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed"><strong class="text-white">Combining information from many sources into one coherent understanding</strong>. Like having a senior colleague read all the documentation, all the code, and all the previous decisions — and then be able to answer any question about your system instantly.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed"><strong class="text-white">Combining information from many sources into one coherent understanding</strong>. Like having a senior colleague read all the documentation, all the code, and all the previous decisions — and then be able to answer any question about your system instantly.</div>
                 </div>
 
                 <div class="buzz-item">
@@ -521,7 +570,7 @@
                         <div class="text-[12px] text-slate-600 mt-0.5">also: Autonomous execution</div>
                     </div>
                     <div class="buzz-arrow text-center">→</div>
-                    <div class="text-[13px] text-slate-300 leading-relaxed"><strong class="text-white">Performing repeatable tasks without manual intervention</strong>. AI automation is no different from CI/CD pipelines your team already trusts — structured, governed, and always checkable. The difference: AI can handle tasks that vary each time.</div>
+                    <div class="text-sm text-slate-300 leading-relaxed"><strong class="text-white">Performing repeatable tasks without manual intervention</strong>. AI automation is no different from CI/CD pipelines your team already trusts — structured, governed, and always checkable. The difference: AI can handle tasks that vary each time.</div>
                 </div>
             </div>
         </section>
@@ -559,13 +608,13 @@
                     </p>
                     <div class="analogy-box" style="background:rgba(14,165,233,0.06); border-color:rgba(14,165,233,0.35);">
                         <div class="text-[11px] font-black uppercase tracking-widest text-sky-500 mb-2">Real-world analogy</div>
-                        <p class="text-[13px] text-slate-300 leading-relaxed">
+                        <p class="text-sm text-slate-300 leading-relaxed">
                             Imagine a doctor who has read every medical paper ever written, every case study, every patient record. When you describe symptoms, they don't "figure it out" from scratch — they match your symptoms to patterns from everything they've read and suggest the most likely diagnosis. They are phenomenally fast and broadly knowledgeable, but they still benefit from your specific context, and they still need a governance layer (medical licensing, peer review) to ensure quality.
                         </p>
                     </div>
                     <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
                         <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
-                        <p class="text-[13px] text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> CORTEX adds the governance layer. It validates every output against your test suite, enforces quality rules, and maintains a full audit trail — so the speed of AI is paired with the rigour your team expects.</p>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> CORTEX adds the governance layer. It validates every output against your test suite, enforces quality rules, and maintains a full audit trail — so the speed of AI is paired with the rigour your team expects.</p>
                     </div>
                 </div>
 
@@ -583,7 +632,7 @@
                     </p>
                     <div class="analogy-box" style="background:rgba(139,92,246,0.06); border-color:rgba(139,92,246,0.35);">
                         <div class="text-[11px] font-black uppercase tracking-widest text-violet-500 mb-2">Real-world analogy</div>
-                        <p class="text-[13px] text-slate-300 leading-relaxed">
+                        <p class="text-sm text-slate-300 leading-relaxed">
                             You email a skilled contractor: "Please renovate the kitchen — new cabinets, updated plumbing, fresh paint." You don't text them instructions for every screw. They assess, plan, order materials, build, inspect, and deliver. That's agentic behaviour. CORTEX orchestrates AI specialists the same way: one request → planned execution → delivered result → audit trail.
                         </p>
                     </div>
@@ -612,7 +661,7 @@
                     </div>
                     <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
                         <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
-                        <p class="text-[13px] text-teal-300 leading-relaxed"><strong>Human control:</strong> You approve before execution starts. You see the plan. You can stop at any point. CORTEX never acts silently on production systems without your confirmation.</p>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>Human control:</strong> You approve before execution starts. You see the plan. You can stop at any point. CORTEX never acts silently on production systems without your confirmation.</p>
                     </div>
                 </div>
 
@@ -631,17 +680,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-2">
                             <div class="text-[11px] font-black uppercase tracking-widest text-rose-400">Vague prompt (poor result)</div>
-                            <p class="text-[13px] text-slate-400 font-mono">"Fix the bug."</p>
+                            <p class="text-sm text-slate-400 font-mono">"Fix the bug."</p>
                             <p class="text-[12px] text-slate-600">The AI doesn't know which bug, which system, what "fixed" means, or what constraints apply.</p>
                         </div>
                         <div class="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-2">
                             <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">Specific prompt (better result)</div>
-                            <p class="text-[13px] text-slate-400 font-mono">"Fix the null-pointer exception in the payment service — the failing test is in test_payment.py line 42 — preserve the existing transaction logging."</p>
+                            <p class="text-sm text-slate-400 font-mono">"Fix the null-pointer exception in the payment service — the failing test is in test_payment.py line 42 — preserve the existing transaction logging."</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
                         <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
-                        <p class="text-[13px] text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> CORTEX's LENS system enriches your request automatically with codebase context — file relationships, recent changes, test coverage — so even a brief request produces a well-grounded response. You don't need to master prompt engineering to get great results.</p>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> CORTEX's LENS system enriches your request automatically with codebase context — file relationships, recent changes, test coverage — so even a brief request produces a well-grounded response. You don't need to master prompt engineering to get great results.</p>
                     </div>
                 </div>
 
@@ -659,13 +708,13 @@
                     </p>
                     <div class="analogy-box" style="background:rgba(245,158,11,0.06); border-color:rgba(245,158,11,0.35);">
                         <div class="text-[11px] font-black uppercase tracking-widest text-amber-500 mb-2">The desk analogy</div>
-                        <p class="text-[13px] text-slate-300 leading-relaxed">
+                        <p class="text-sm text-slate-300 leading-relaxed">
                             A surgeon operating on patient #1 keeps all the relevant notes, scans, and history on their desk. When patient #2 arrives, some of that information gets moved aside. The surgeon doesn't become less skilled — they just need the right notes brought back into view. CORTEX's LENS system is the intelligent filing assistant that brings exactly the right context into view at the right moment.
                         </p>
                     </div>
                     <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
                         <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
-                        <p class="text-[13px] text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> LENS (Language → Examination → Navigation → Synthesis) intelligently selects which files, tests, and patterns belong in context for your specific task. You get relevant answers without needing to manage token limits manually.</p>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> LENS (Language → Examination → Navigation → Synthesis) intelligently selects which files, tests, and patterns belong in context for your specific task. You get relevant answers without needing to manage token limits manually.</p>
                     </div>
                 </div>
 
@@ -683,20 +732,307 @@
                     </p>
                     <div class="analogy-box" style="background:rgba(249,115,22,0.06); border-color:rgba(249,115,22,0.35);">
                         <div class="text-[11px] font-black uppercase tracking-widest text-orange-500 mb-2">A real example: fixing a bug</div>
-                        <p class="text-[13px] text-slate-300 leading-relaxed">
+                        <p class="text-sm text-slate-300 leading-relaxed">
                             When you say "fix this failing test," CORTEX doesn't guess. The MasterOrchestrator routes to the TDD orchestrator. The TDD orchestrator uses LENS to read the codebase context. The EnforcementOrchestrator checks the fix against governance rules. The test runner validates. The audit logger records the operation. Six specialists. One coherent result. You saw none of the coordination.
                         </p>
                     </div>
                     <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
                         <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
-                        <p class="text-[13px] text-teal-300 leading-relaxed"><strong>Why orchestration matters for safety:</strong> When each step is handled by a specialist with defined responsibilities, mistakes are caught earlier. A governance orchestrator checking a fix is more reliable than hoping a single model self-corrects. Specialisation = accountability = trust.</p>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>Why orchestration matters for safety:</strong> When each step is handled by a specialist with defined responsibilities, mistakes are caught earlier. A governance orchestrator checking a fix is more reliable than hoping a single model self-corrects. Specialisation = accountability = trust.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 6: Reasoning -->
+                <div class="concept-explainer glass-card p-6 md:p-8 space-y-5 border-amber-500/20" style="border-left:3px solid rgba(251,191,36,0.5);">
+                    <div class="flex items-start gap-4">
+                        <div class="explainer-emoji" aria-hidden="true">🔍</div>
+                        <div class="space-y-1">
+                            <div class="text-[11px] font-black uppercase tracking-widest text-amber-400">Concept 06</div>
+                            <h3 class="font-black text-lg text-amber-200 tracking-tight">Reasoning — thinking before answering, not guessing fast</h3>
+                        </div>
+                    </div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">
+                        AI "reasoning" is the process of <strong class="text-white">working through a problem step by step</strong> before committing to an answer — rather than pattern-matching to the first plausible response. When a model reasons, it asks itself intermediate questions: "What do I know? What's missing? What are the edge cases? What could go wrong?" This produces more accurate, more defensible outputs — especially for complex or ambiguous tasks like architecture decisions, debugging, and requirements analysis.
+                    </p>
+                    <div class="analogy-box" style="background:rgba(251,191,36,0.06); border-color:rgba(251,191,36,0.3);">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-amber-400 mb-2">Real-world analogy</div>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            A detective doesn't announce the culprit the moment they walk into the scene. They gather clues, eliminate options, follow contradictions, and only reach a conclusion when the evidence supports it. Good AI reasoning follows the same discipline: it considers, eliminates, and confirms — rather than guessing confidently and moving on. CORTEX's orchestration chain is designed to enforce this discipline at every stage.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
+                        <div class="p-3.5 rounded-xl border border-amber-500/15 bg-amber-500/5 text-center space-y-1.5">
+                            <div class="text-xl" aria-hidden="true">❓</div>
+                            <div class="text-[11px] font-black text-amber-300 uppercase tracking-wide">Perceive</div>
+                            <p class="text-[12px] text-slate-600 leading-snug">What is the user actually asking?</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-amber-500/15 bg-amber-500/5 text-center space-y-1.5">
+                            <div class="text-xl" aria-hidden="true">⚖️</div>
+                            <div class="text-[11px] font-black text-amber-300 uppercase tracking-wide">Reason</div>
+                            <p class="text-[12px] text-slate-600 leading-snug">What are the constraints, risks, and options?</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-amber-500/15 bg-amber-500/5 text-center space-y-1.5">
+                            <div class="text-xl" aria-hidden="true">✅</div>
+                            <div class="text-[11px] font-black text-amber-300 uppercase tracking-wide">Act</div>
+                            <p class="text-[12px] text-slate-600 leading-snug">Execute the validated plan with full traceability.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>How CORTEX helps:</strong> Every CORTEX orchestrator runs a Perception → Reasoning → Action cycle. The Intent Reflection step shows you the reasoning before execution. You can intervene, correct, or refine — at the point where intervention costs nothing.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 7: AI Memory -->
+                <div class="concept-explainer glass-card p-6 md:p-8 space-y-5 border-purple-500/20" style="border-left:3px solid rgba(168,85,247,0.5);">
+                    <div class="flex items-start gap-4">
+                        <div class="explainer-emoji" aria-hidden="true">📚</div>
+                        <div class="space-y-1">
+                            <div class="text-[11px] font-black uppercase tracking-widest text-purple-400">Concept 07</div>
+                            <h3 class="font-black text-lg text-purple-200 tracking-tight">AI Memory — knowledge that compounds over time</h3>
+                        </div>
+                    </div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">
+                        Standard AI has no memory — every conversation starts fresh. <strong class="text-white">AI memory</strong> changes that by storing outcomes, patterns, and lessons so the system improves with use. The two types that matter for teams: <em>session memory</em> (what happened earlier in this conversation) and <em>persistent memory</em> (what the system has learned from past failures and successes across all sessions). CORTEX implements persistent memory through its RCA Memory Engine, which records why bugs occurred, what fixes worked, and which patterns to avoid — so the next team member working on a similar problem benefits from everything that came before.
+                    </p>
+                    <div class="analogy-box" style="background:rgba(168,85,247,0.06); border-color:rgba(168,85,247,0.3);">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-purple-400 mb-2">Real-world analogy</div>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            A hospital that learns nothing from its complications is dangerous. A hospital that records every adverse event, analyses root causes, and updates its protocols gets progressively safer. CORTEX's RCA Memory Engine is the incident learning system for your codebase. Each failure creates a prevention rule. Prevention rules surface when similar patterns appear in future work. The system gets measurably better — not just faster.
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2">Memory in practice — what CORTEX stores</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="flex items-start gap-2.5 p-3 rounded-xl border border-purple-500/15 bg-purple-500/5">
+                                <i data-lucide="git-commit" class="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                                <div>
+                                    <div class="text-[11px] font-black text-purple-300">Root Cause Records</div>
+                                    <p class="text-[12px] text-slate-600 mt-0.5 leading-snug">Why bugs occurred, which 4 methodologies were used, what prevention rule was generated.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2.5 p-3 rounded-xl border border-purple-500/15 bg-purple-500/5">
+                                <i data-lucide="trending-up" class="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                                <div>
+                                    <div class="text-[11px] font-black text-purple-300">Reinforcement Signals</div>
+                                    <p class="text-[12px] text-slate-600 mt-0.5 leading-snug">Which orchestrator patterns produced correct results — promoted vs quarantined over time.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2.5 p-3 rounded-xl border border-purple-500/15 bg-purple-500/5">
+                                <i data-lucide="layers" class="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                                <div>
+                                    <div class="text-[11px] font-black text-purple-300">Codebase Knowledge</div>
+                                    <p class="text-[12px] text-slate-600 mt-0.5 leading-snug">Architecture patterns, file relationships, and domain rules — synthesised by LENS per session.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2.5 p-3 rounded-xl border border-purple-500/15 bg-purple-500/5">
+                                <i data-lucide="book-open" class="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                                <div>
+                                    <div class="text-[11px] font-black text-purple-300">Session Conversations</div>
+                                    <p class="text-[12px] text-slate-600 mt-0.5 leading-snug">90-day retention of conversation context for multi-session continuity and audit review.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>Why this matters for your team:</strong> Knowledge that previously lived only in the heads of senior engineers is now captured, queryable, and shared. New team members onboard faster. Recurring bugs stop recurring. The institutional memory your team has always needed — but never had time to document — now builds automatically.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 8: Knowledge Synthesis -->
+                <div class="concept-explainer glass-card p-6 md:p-8 space-y-5 border-rose-500/20" style="border-left:3px solid rgba(244,63,94,0.5);">
+                    <div class="flex items-start gap-4">
+                        <div class="explainer-emoji" aria-hidden="true">🔗</div>
+                        <div class="space-y-1">
+                            <div class="text-[11px] font-black uppercase tracking-widest text-rose-400">Concept 08</div>
+                            <h3 class="font-black text-lg text-rose-200 tracking-tight">Knowledge Synthesis — connecting dots your team can't see</h3>
+                        </div>
+                    </div>
+                    <p class="text-[14px] text-slate-400 leading-relaxed">
+                        <strong class="text-white">Knowledge synthesis</strong> is the ability to combine information from many disconnected sources — code, tests, documentation, commit history, governance rules, past failures — into one coherent understanding, on demand. This is what distinguishes CORTEX from a simple code assistant. A code assistant answers questions about what you show it. CORTEX understands your entire system: the relationships between files, the reasons past decisions were made, the patterns that indicate risk, and the tests that would catch a regression. That synthesis is what makes CORTEX's responses useful rather than merely fluent.
+                    </p>
+                    <div class="analogy-box" style="background:rgba(244,63,94,0.06); border-color:rgba(244,63,94,0.3);">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-rose-400 mb-2">Real-world analogy</div>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Imagine the most experienced engineer at your company: they've reviewed every PR, read every post-mortem, knows why the payment service is structured the way it is, remembers the outage in 2024, and can predict which parts of the system will be affected by a proposed change. Knowledge synthesis gives every team member access to that depth of understanding — instantly, on any task.
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-3">What LENS synthesises for every request</div>
+                        <div class="step-flow">
+                            <div class="step-node" style="background:rgba(244,63,94,0.06); border-color:rgba(244,63,94,0.18);">
+                                <span class="text-base" aria-hidden="true">🗣️</span>
+                                <div class="text-[11px] font-black text-rose-300">Language</div>
+                                <div class="text-[11px] text-slate-600 leading-snug">Parse intent from your words</div>
+                            </div>
+                            <div class="step-node" style="background:rgba(249,115,22,0.06); border-color:rgba(249,115,22,0.18);">
+                                <span class="text-base" aria-hidden="true">🔬</span>
+                                <div class="text-[11px] font-black text-orange-300">Examination</div>
+                                <div class="text-[11px] text-slate-600 leading-snug">Analyse relevant files &amp; tests</div>
+                            </div>
+                            <div class="step-node" style="background:rgba(139,92,246,0.06); border-color:rgba(139,92,246,0.18);">
+                                <span class="text-base" aria-hidden="true">🧭</span>
+                                <div class="text-[11px] font-black text-violet-300">Navigation</div>
+                                <div class="text-[11px] text-slate-600 leading-snug">Map dependencies &amp; relationships</div>
+                            </div>
+                            <div class="step-node" style="background:rgba(16,185,129,0.06); border-color:rgba(16,185,129,0.18);">
+                                <span class="text-base" aria-hidden="true">💡</span>
+                                <div class="text-[11px] font-black text-emerald-300">Synthesis</div>
+                                <div class="text-[11px] text-slate-600 leading-snug">Unified, grounded response</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                        <p class="text-sm text-teal-300 leading-relaxed"><strong>The practical result:</strong> CORTEX answers questions about your system with the specificity of someone who has read every file, every test, every commit — because it has. Not a generic AI answer. A grounded, codebase-aware response that reflects your actual architecture, not a training-data approximation of it.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ═══════════════════════════════════════════════════════════════
-             §5  VISUAL CONCEPT MAP
+             §5  BEGINNER PATHWAY — Curated first-time journey
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="beginner-path" class="reveal" aria-labelledby="beginner-heading">
+            <div class="relative rounded-3xl overflow-hidden py-8 px-5 md:px-10 space-y-8" style="background:linear-gradient(135deg, rgba(14,165,233,0.07) 0%, rgba(139,92,246,0.07) 50%, rgba(249,115,22,0.07) 100%); border:1px solid rgba(14,165,233,0.18);">
+                <!-- Section label -->
+                <div class="text-center space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] font-bold tracking-widest uppercase">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                        Beginner Pathway
+                    </div>
+                    <h2 id="beginner-heading" class="section-title font-black tracking-tighter">
+                        New here? <span style="background:linear-gradient(135deg,#0ea5e9,#8b5cf6);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Follow this path.</span>
+                    </h2>
+                    <p class="section-desc max-w-2xl mx-auto">Five sections, in order. Each one builds on the last. By the end of this path, you will understand AI well enough to adopt it confidently — regardless of your technical background.</p>
+                </div>
+
+                <!-- Pathway steps -->
+                <ol class="space-y-3 max-w-3xl mx-auto" role="list" aria-label="Beginner pathway steps">
+                    <li class="flex items-start gap-4 p-4 rounded-2xl border border-rose-500/20 bg-rose-500/5 transition-all hover:border-rose-500/35 hover:bg-rose-500/8 group">
+                        <div class="w-8 h-8 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true">1</div>
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="font-black text-sm text-rose-300">What people fear vs what AI is actually doing</div>
+                                <a href="#start-here" class="text-[11px] text-rose-400 font-bold hover:text-rose-300 transition-colors whitespace-nowrap">Jump to § ↗</a>
+                            </div>
+                            <p class="text-[12px] text-slate-600 leading-relaxed">Clear the air before anything else. Replace the assumptions with facts.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-2xl border border-violet-500/20 bg-violet-500/5 transition-all hover:border-violet-500/35 group">
+                        <div class="w-8 h-8 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400 font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true">2</div>
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="font-black text-sm text-violet-300">AI jargon, decoded</div>
+                                <a href="#buzzword-translator" class="text-[11px] text-violet-400 font-bold hover:text-violet-300 transition-colors whitespace-nowrap">Jump to § ↗</a>
+                            </div>
+                            <p class="text-[12px] text-slate-600 leading-relaxed">Every intimidating term translated into what it actually means. No prerequisites.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-2xl border border-sky-500/20 bg-sky-500/5 transition-all hover:border-sky-500/35 group">
+                        <div class="w-8 h-8 rounded-xl bg-sky-500/20 flex items-center justify-center text-sky-400 font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true">3</div>
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="font-black text-sm text-sky-300">The big ideas, explained simply</div>
+                                <a href="#concepts" class="text-[11px] text-sky-400 font-bold hover:text-sky-300 transition-colors whitespace-nowrap">Jump to § ↗</a>
+                            </div>
+                            <p class="text-[12px] text-slate-600 leading-relaxed">Eight concepts with analogies, real examples, and plain-English teaching. Read at your own pace — any order works.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 transition-all hover:border-emerald-500/35 group">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true">4</div>
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="font-black text-sm text-emerald-300">You are always in control</div>
+                                <a href="#control" class="text-[11px] text-emerald-400 font-bold hover:text-emerald-300 transition-colors whitespace-nowrap">Jump to § ↗</a>
+                            </div>
+                            <p class="text-[12px] text-slate-600 leading-relaxed">Five specific control points. Understand exactly where humans stay in charge — not just promised, but designed.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 transition-all hover:border-amber-500/35 group">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true">5</div>
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="font-black text-sm text-amber-300">What real adoption progress looks like</div>
+                                <a href="#metrics" class="text-[11px] text-amber-400 font-bold hover:text-amber-300 transition-colors whitespace-nowrap">Jump to § ↗</a>
+                            </div>
+                            <p class="text-[12px] text-slate-600 leading-relaxed">Honest metrics that reflect genuine improvement — not prompt volume, not AI usage rates. Outcome-based measurement.</p>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="text-center pt-2">
+                    <p class="text-[12px] text-slate-600">Or scroll from the top — every section follows naturally from the one before it.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             §5b  FEARLESS PHILOSOPHY — Mission connection
+             ═══════════════════════════════════════════════════════════════ -->
+        <section id="fearless-philosophy" class="reveal" aria-labelledby="philosophy-heading">
+            <div class="relative rounded-3xl overflow-hidden" style="background:linear-gradient(135deg, rgba(14,165,233,0.05) 0%, rgba(139,92,246,0.08) 50%, rgba(249,115,22,0.05) 100%); border:1px solid rgba(139,92,246,0.2);">
+                <!-- Top accent bar -->
+                <div style="height:3px; background:linear-gradient(90deg, #0ea5e9, #8b5cf6, #f97316); border-radius:999px 999px 0 0;"></div>
+                <div class="p-6 md:p-10 space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center gap-5">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl" style="background:linear-gradient(135deg, rgba(14,165,233,0.2), rgba(139,92,246,0.2)); border:1px solid rgba(139,92,246,0.25);" aria-hidden="true">🔓</div>
+                        <div class="space-y-1">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                                <i data-lucide="heart" class="w-3 h-3" aria-hidden="true"></i>
+                                The Fearless Philosophy
+                            </div>
+                            <h2 id="philosophy-heading" class="font-black text-xl md:text-2xl tracking-tight">
+                                <span class="gradient-text-fearless">Knowledge Is Power.</span> That's not a slogan — it's the design principle.
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="space-y-3 p-4 rounded-2xl border border-sky-500/15 bg-sky-500/5">
+                            <div class="text-sky-400 font-black text-[11px] uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="eye" class="w-3.5 h-3.5" aria-hidden="true"></i> Transparency over trust
+                            </div>
+                            <p class="text-sm text-slate-400 leading-relaxed">CORTEX does not ask your team to trust AI. It asks them to <em>verify</em> it — through audit trails, test validation, and approval gates. Trust is earned through evidence, not promised through confidence.</p>
+                        </div>
+                        <div class="space-y-3 p-4 rounded-2xl border border-violet-500/15 bg-violet-500/5">
+                            <div class="text-violet-400 font-black text-[11px] uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="users" class="w-3.5 h-3.5" aria-hidden="true"></i> Understanding before adoption
+                            </div>
+                            <p class="text-sm text-slate-400 leading-relaxed">Teams who understand what AI is doing make better decisions than teams who are simply told to use it. This page exists because understanding is the only sustainable foundation for adoption.</p>
+                        </div>
+                        <div class="space-y-3 p-4 rounded-2xl border border-orange-500/15 bg-orange-500/5">
+                            <div class="text-orange-400 font-black text-[11px] uppercase tracking-widest flex items-center gap-1.5">
+                                <i data-lucide="trending-up" class="w-3.5 h-3.5" aria-hidden="true"></i> Progress over perfection
+                            </div>
+                            <p class="text-sm text-slate-400 leading-relaxed">Adoption is a journey — not a binary state. The four-stage path (Uncertainty → Understanding → Experimentation → Value) is designed to make every step safe, reversible, and measurably worthwhile.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-4 rounded-xl border border-white/[0.07] bg-white/[0.025]">
+                        <i data-lucide="quote" class="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" aria-hidden="true"></i>
+                        <p class="text-sm text-slate-500 leading-relaxed italic">
+                            "The goal is not to make AI less powerful — it is to make the team's understanding of it more powerful. A team that understands AI adopts it safely. A team that fears it avoids it until they're forced. Neither outcome is acceptable."
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 justify-center pt-2">
+                        <a href="#adoption-journey" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-500/15 border border-violet-500/25 text-violet-300 text-[12px] font-bold hover:bg-violet-500/25 transition-colors">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                            See the adoption journey
+                        </a>
+                        <a href="#metrics" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-300 text-[12px] font-bold hover:bg-emerald-500/25 transition-colors">
+                            <i data-lucide="bar-chart-3" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                            See honest metrics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             §6  INTERACTIVE CONCEPT MAP — D3 relationship graph
              ═══════════════════════════════════════════════════════════════ -->
         <section id="concept-map" class="space-y-10 reveal" aria-labelledby="map-heading">
             <div class="text-center space-y-4">
@@ -705,43 +1041,58 @@
                     Concept Map
                 </div>
                 <h2 id="map-heading" class="section-title font-black tracking-tighter">
-                    Every key concept, <span style="background:linear-gradient(to right,#14b8a6,#10b981);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">at a glance</span>
+                    Every key concept, <span style="background:linear-gradient(to right,#14b8a6,#10b981);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">and how they connect</span>
                 </h2>
-                <p class="section-desc max-w-xl mx-auto">Hover any card to see why it matters. Click to jump to the deeper explanation above.</p>
+                <p class="section-desc max-w-xl mx-auto">Drag any node to explore the relationships. Each concept feeds into the next — CORTEX is designed to make all of them work together seamlessly.</p>
             </div>
 
-            <div class="concept-map">
-                <a href="#concepts" class="concept-node" style="border-color:rgba(14,165,233,0.25); background:rgba(14,165,233,0.05);" aria-label="How AI works">
-                    <div class="cn-icon">🧠</div>
-                    <div class="cn-label text-sky-300">How AI Works</div>
-                    <div class="cn-desc">Pattern completion at scale</div>
-                </a>
-                <a href="#concepts" class="concept-node" style="border-color:rgba(139,92,246,0.25); background:rgba(139,92,246,0.05);" aria-label="Agentic AI">
-                    <div class="cn-icon">🤖</div>
-                    <div class="cn-label text-violet-300">Agentic AI</div>
-                    <div class="cn-desc">Multi-step coordinated behaviour</div>
-                </a>
-                <a href="#concepts" class="concept-node" style="border-color:rgba(16,185,129,0.25); background:rgba(16,185,129,0.05);" aria-label="Prompt Engineering">
-                    <div class="cn-icon">💬</div>
-                    <div class="cn-label text-emerald-300">Prompt Engineering</div>
-                    <div class="cn-desc">Clear briefs get great results</div>
-                </a>
-                <a href="#concepts" class="concept-node" style="border-color:rgba(245,158,11,0.25); background:rgba(245,158,11,0.05);" aria-label="Context Windows">
-                    <div class="cn-icon">🗃️</div>
-                    <div class="cn-label text-amber-300">Context Windows</div>
-                    <div class="cn-desc">The AI's working desk</div>
-                </a>
-                <a href="#concepts" class="concept-node" style="border-color:rgba(249,115,22,0.25); background:rgba(249,115,22,0.05);" aria-label="Orchestration">
-                    <div class="cn-icon">🎼</div>
-                    <div class="cn-label text-orange-300">Orchestration</div>
-                    <div class="cn-desc">Specialists, coordinated</div>
-                </a>
-                <a href="#buzzword-translator" class="concept-node" style="border-color:rgba(167,139,250,0.25); background:rgba(167,139,250,0.05);" aria-label="Memory and Learning">
-                    <div class="cn-icon">📚</div>
-                    <div class="cn-label text-purple-300">AI Memory</div>
-                    <div class="cn-desc">Knowledge that compounds</div>
-                </a>
+            <!-- D3 interactive graph -->
+            <div class="glass-card overflow-hidden" style="border-color:rgba(20,184,166,0.2);">
+                <div id="concept-graph-container" style="width:100%; height:420px; position:relative;" aria-label="Interactive concept relationship map" role="img">
+                    <svg id="concept-graph" width="100%" height="420" style="display:block;"></svg>
+                    <div id="concept-tooltip" style="display:none; position:absolute; background:rgba(2,6,23,0.95); border:1px solid rgba(14,165,233,0.3); border-radius:0.75rem; padding:0.75rem 1rem; max-width:220px; pointer-events:none; font-family:'Inter',sans-serif; z-index:20;">
+                        <div id="concept-tooltip-title" style="font-weight:900; font-size:0.8125rem; color:#e2e8f0; margin-bottom:0.25rem;"></div>
+                        <div id="concept-tooltip-desc" style="font-size:0.875rem; color:#64748b; line-height:1.5;"></div>
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-white/[0.06] flex items-center justify-between gap-3 flex-wrap">
+                    <p class="text-[11px] text-slate-600">Drag nodes to explore relationships · Hover for details · Click to scroll to concept</p>
+                    <div class="flex items-center gap-3 text-[11px] text-slate-600">
+                        <span class="flex items-center gap-1.5"><span style="display:inline-block;width:12px;height:2px;background:#14b8a6;border-radius:2px;"></span> feeds into</span>
+                        <span class="flex items-center gap-1.5"><span style="display:inline-block;width:12px;height:2px;background:#8b5cf6;border-radius:2px;"></span> enables</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Static fallback grid for no-JS / small screen -->
+            <noscript>
+                <div class="concept-map mt-6">
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(14,165,233,0.25); background:rgba(14,165,233,0.05);">
+                        <div class="cn-icon">🧠</div><div class="cn-label text-sky-300">How AI Works</div><div class="cn-desc">Pattern completion at scale</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(139,92,246,0.25); background:rgba(139,92,246,0.05);">
+                        <div class="cn-icon">🤖</div><div class="cn-label text-violet-300">Agentic AI</div><div class="cn-desc">Multi-step coordinated behaviour</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(16,185,129,0.25); background:rgba(16,185,129,0.05);">
+                        <div class="cn-icon">💬</div><div class="cn-label text-emerald-300">Prompt Engineering</div><div class="cn-desc">Clear briefs get great results</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(245,158,11,0.25); background:rgba(245,158,11,0.05);">
+                        <div class="cn-icon">🗃️</div><div class="cn-label text-amber-300">Context Windows</div><div class="cn-desc">The AI's working desk</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(249,115,22,0.25); background:rgba(249,115,22,0.05);">
+                        <div class="cn-icon">🎼</div><div class="cn-label text-orange-300">Orchestration</div><div class="cn-desc">Specialists, coordinated</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(251,191,36,0.25); background:rgba(251,191,36,0.05);">
+                        <div class="cn-icon">🔍</div><div class="cn-label text-amber-200">Reasoning</div><div class="cn-desc">Thinking step by step</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(168,85,247,0.25); background:rgba(168,85,247,0.05);">
+                        <div class="cn-icon">📚</div><div class="cn-label text-purple-300">AI Memory</div><div class="cn-desc">Knowledge that compounds</div>
+                    </a>
+                    <a href="#concepts" class="concept-node" style="border-color:rgba(244,63,94,0.25); background:rgba(244,63,94,0.05);">
+                        <div class="cn-icon">🔗</div><div class="cn-label text-rose-300">Knowledge Synthesis</div><div class="cn-desc">Connecting dots at scale</div>
+                    </a>
+                </div>
+            </noscript>
         </section>
 
         <!-- ═══════════════════════════════════════════════════════════════
@@ -767,7 +1118,7 @@
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="myth-badge reality flex-shrink-0">Reality</span>
-                        <p class="text-[13px] text-slate-400 leading-relaxed">AI identifies structural and semantic patterns in code — it doesn't truly "understand" intent the way a human does. It excels at consistency, pattern recall, and breadth. It requires human judgment for business context, edge cases, and decisions that depend on organisational history. That's why CORTEX always asks for your approval before execution — and why the governance layer is non-negotiable.</p>
+                        <p class="text-sm text-slate-400 leading-relaxed">AI identifies structural and semantic patterns in code — it doesn't truly "understand" intent the way a human does. It excels at consistency, pattern recall, and breadth. It requires human judgment for business context, edge cases, and decisions that depend on organisational history. That's why CORTEX always asks for your approval before execution — and why the governance layer is non-negotiable.</p>
                     </div>
                 </div>
 
@@ -779,7 +1130,7 @@
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="myth-badge reality flex-shrink-0">Reality</span>
-                        <p class="text-[13px] text-slate-400 leading-relaxed">CORTEX's TDD-first mandate means every change has a failing test written before the fix. If the AI produces incorrect code, the test fails — caught immediately, before any merge. Governance rules run before every operation. The convergence gate loops until 0 critical issues remain. The system is designed to catch AI mistakes at the earliest possible moment.</p>
+                        <p class="text-sm text-slate-400 leading-relaxed">CORTEX's TDD-first mandate means every change has a failing test written before the fix. If the AI produces incorrect code, the test fails — caught immediately, before any merge. Governance rules run before every operation. The convergence gate loops until 0 critical issues remain. The system is designed to catch AI mistakes at the earliest possible moment.</p>
                     </div>
                 </div>
 
@@ -791,7 +1142,7 @@
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="myth-badge reality flex-shrink-0">Reality</span>
-                        <p class="text-[13px] text-slate-400 leading-relaxed">CORTEX increases visibility rather than reducing it. Every operation emits AC_START and AC_COMPLETE markers logged to SQLite. Every change is committed to Git with traceable context. Every governance check is recorded. You have more audit evidence with CORTEX than without it — and you always hold the commit approval.</p>
+                        <p class="text-sm text-slate-400 leading-relaxed">CORTEX increases visibility rather than reducing it. Every operation emits AC_START and AC_COMPLETE markers logged to SQLite. Every change is committed to Git with traceable context. Every governance check is recorded. You have more audit evidence with CORTEX than without it — and you always hold the commit approval.</p>
                     </div>
                 </div>
 
@@ -803,7 +1154,7 @@
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="myth-badge reality flex-shrink-0">Reality</span>
-                        <p class="text-[13px] text-slate-400 leading-relaxed">CORTEX measures adoption through <em>meaningful outcomes</em>: test hardening, documentation quality, reduction in repeated bugs, governance compliance rate, and commit history that shows progressive improvement. Not prompt volume. See the Adoption Metrics section below for details.</p>
+                        <p class="text-sm text-slate-400 leading-relaxed">CORTEX measures adoption through <em>meaningful outcomes</em>: test hardening, documentation quality, reduction in repeated bugs, governance compliance rate, and commit history that shows progressive improvement. Not prompt volume. See the Adoption Metrics section below for details.</p>
                     </div>
                 </div>
             </div>
@@ -832,13 +1183,13 @@
                         </div>
                         <div class="space-y-1.5">
                             <h4 class="font-black text-sm text-sky-300">Software Engineer</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed">Focus on how CORTEX accelerates your TDD cycle, catches regressions, and enriches your PR context automatically. Start with the <strong class="text-sky-400">Agentic AI</strong> and <strong class="text-sky-400">Orchestration</strong> concepts to understand what CORTEX is doing when you type <code class="text-xs bg-white/5 px-1 rounded">/fix</code>.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed">Focus on how CORTEX accelerates your TDD cycle, catches regressions, and enriches your PR context automatically. Start with the <strong class="text-sky-400">Agentic AI</strong> and <strong class="text-sky-400">Orchestration</strong> concepts to understand what CORTEX is doing when you type <code class="text-xs bg-white/5 px-1 rounded">/fix</code>.</p>
                             <div class="flex gap-1.5 mt-2 flex-wrap">
-                                <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[10px] font-bold">Concept 02</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-400 text-[10px] font-bold">Concept 05</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Adoption Metrics</span>
+                                <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[11px] font-bold">Concept 02</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-400 text-[11px] font-bold">Concept 05</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Adoption Metrics</span>
                             </div>
                         </div>
                     </div>
@@ -849,13 +1200,13 @@
                         </div>
                         <div class="space-y-1.5">
                             <h4 class="font-black text-sm text-violet-300">Product Owner / Business Analyst</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed">Focus on what AI adoption means for delivery predictability, quality evidence, and knowledge preservation. Start with <strong class="text-violet-400">Fear vs Reality</strong> and <strong class="text-violet-400">Myth vs Reality</strong>, then jump to <strong class="text-violet-400">Adoption Metrics</strong>.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed">Focus on what AI adoption means for delivery predictability, quality evidence, and knowledge preservation. Start with <strong class="text-violet-400">Fear vs Reality</strong> and <strong class="text-violet-400">Myth vs Reality</strong>, then jump to <strong class="text-violet-400">Adoption Metrics</strong>.</p>
                             <div class="flex gap-1.5 mt-2 flex-wrap">
-                                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 text-[10px] font-bold">§ Fear vs Reality</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 text-[10px] font-bold">§ Myths</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">§ Metrics</span>
+                                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 text-[11px] font-bold">§ Fear vs Reality</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 text-[11px] font-bold">§ Myths</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">§ Metrics</span>
                             </div>
                         </div>
                     </div>
@@ -866,13 +1217,13 @@
                         </div>
                         <div class="space-y-1.5">
                             <h4 class="font-black text-sm text-amber-300">Leader / Exec / Decision Maker</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed">Focus on organisational risk, governance evidence, and ROI. Read the <strong class="text-amber-400">Fearless Principle</strong>, the <strong class="text-amber-400">Control &amp; Transparency</strong> section, and <strong class="text-amber-400">Adoption Metrics</strong>. No technical background required for these sections.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed">Focus on organisational risk, governance evidence, and ROI. Read the <strong class="text-amber-400">Fearless Principle</strong>, the <strong class="text-amber-400">Control &amp; Transparency</strong> section, and <strong class="text-amber-400">Adoption Metrics</strong>. No technical background required for these sections.</p>
                             <div class="flex gap-1.5 mt-2 flex-wrap">
-                                <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[10px] font-bold">§ Fearless Principle</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">§ Control</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[10px] font-bold">§ Metrics</span>
+                                <span class="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 text-[11px] font-bold">§ Fearless Principle</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">§ Control</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-[11px] font-bold">§ Metrics</span>
                             </div>
                         </div>
                     </div>
@@ -883,13 +1234,13 @@
                         </div>
                         <div class="space-y-1.5">
                             <h4 class="font-black text-sm text-emerald-300">New Adopter / Curious Learner</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed">Read this entire page top to bottom — it was designed for you. Every section builds on the previous one. By the end, you'll understand more about AI than 90% of people who claim to use it daily.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed">Read this entire page top to bottom — it was designed for you. Every section builds on the previous one. By the end, you'll understand more about AI than 90% of people who claim to use it daily.</p>
                             <div class="flex gap-1.5 mt-2 flex-wrap">
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Start at the top</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Read everything</span>
-                                <span class="text-slate-600 text-[10px]">→</span>
-                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Try CORTEX</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Start at the top</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Read everything</span>
+                                <span class="text-slate-600 text-[11px]">→</span>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Try CORTEX</span>
                             </div>
                         </div>
                     </div>
@@ -919,35 +1270,35 @@
                     <div class="journey-dot bg-sky-500/20 border-2 border-sky-500/40 text-sky-400">1</div>
                     <div class="space-y-1.5 pt-1">
                         <div class="font-black text-sm text-sky-300">Intent Reflection — before anything runs</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX shows you its interpretation of your request and the plan of action before executing. You can correct misunderstandings, add constraints, or cancel. Nothing runs without your approval.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX shows you its interpretation of your request and the plan of action before executing. You can correct misunderstandings, add constraints, or cancel. Nothing runs without your approval.</p>
                     </div>
                 </div>
                 <div class="journey-node" role="listitem">
                     <div class="journey-dot bg-violet-500/20 border-2 border-violet-500/40 text-violet-400">2</div>
                     <div class="space-y-1.5 pt-1">
                         <div class="font-black text-sm text-violet-300">Git checkpoint — safe rollback before every change</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Before any file changes, CORTEX creates a Git commit checkpoint. If you dislike the result, one command restores your exact previous state. You never lose work.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Before any file changes, CORTEX creates a Git commit checkpoint. If you dislike the result, one command restores your exact previous state. You never lose work.</p>
                     </div>
                 </div>
                 <div class="journey-node" role="listitem">
                     <div class="journey-dot bg-orange-500/20 border-2 border-orange-500/40 text-orange-400">3</div>
                     <div class="space-y-1.5 pt-1">
                         <div class="font-black text-sm text-orange-300">Governance gate — quality enforced, not hoped for</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Every change passes through 60+ governance rules automatically. Security gaps, naming violations, and coverage regressions are caught before they can be committed. No manual checklist required.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Every change passes through 60+ governance rules automatically. Security gaps, naming violations, and coverage regressions are caught before they can be committed. No manual checklist required.</p>
                     </div>
                 </div>
                 <div class="journey-node" role="listitem">
                     <div class="journey-dot bg-emerald-500/20 border-2 border-emerald-500/40 text-emerald-400">4</div>
                     <div class="space-y-1.5 pt-1">
                         <div class="font-black text-sm text-emerald-300">Audit trail — everything is traceable</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Every operation logs an AC_START and AC_COMPLETE marker to SQLite. Every decision is recorded. Every change is committed to Git. You have complete traceability — more evidence than any manual process produces.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Every operation logs an AC_START and AC_COMPLETE marker to SQLite. Every decision is recorded. Every change is committed to Git. You have complete traceability — more evidence than any manual process produces.</p>
                     </div>
                 </div>
                 <div class="journey-node" role="listitem">
                     <div class="journey-dot bg-teal-500/20 border-2 border-teal-500/40 text-teal-400">5</div>
                     <div class="space-y-1.5 pt-1">
                         <div class="font-black text-sm text-teal-300">Commit approval — you always merge</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX never pushes to main. You hold the commit. Your team holds the merge. The AI prepares, validates, and proposes — your team decides and commits. That boundary is permanent and by design.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX never pushes to main. You hold the commit. Your team holds the merge. The AI prepares, validates, and proposes — your team decides and commits. That boundary is permanent and by design.</p>
                     </div>
                 </div>
             </div>
@@ -975,7 +1326,7 @@
                     <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
                         <i data-lucide="help-circle" class="w-5 h-5" aria-hidden="true"></i>
                     </div>
-                    <div class="text-[10px] font-black uppercase tracking-widest text-rose-500">Stage 1</div>
+                    <div class="text-[11px] font-black uppercase tracking-widest text-rose-500">Stage 1</div>
                     <div class="font-black text-sm text-rose-300">Uncertainty</div>
                     <p class="text-[12px] text-slate-600 leading-relaxed">Not sure what AI can do. Concerned about risk. Watching from a distance. Reading this page is Stage 1.</p>
                 </div>
@@ -983,7 +1334,7 @@
                     <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
                         <i data-lucide="eye" class="w-5 h-5" aria-hidden="true"></i>
                     </div>
-                    <div class="text-[10px] font-black uppercase tracking-widest text-amber-500">Stage 2</div>
+                    <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Stage 2</div>
                     <div class="font-black text-sm text-amber-300">Understanding</div>
                     <p class="text-[12px] text-slate-600 leading-relaxed">Concepts are clear. Fear is replaced by curiosity. You understand what the AI is doing and why it's safe to experiment.</p>
                 </div>
@@ -991,7 +1342,7 @@
                     <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center mx-auto">
                         <i data-lucide="play" class="w-5 h-5" aria-hidden="true"></i>
                     </div>
-                    <div class="text-[10px] font-black uppercase tracking-widest text-sky-500">Stage 3</div>
+                    <div class="text-[11px] font-black uppercase tracking-widest text-sky-500">Stage 3</div>
                     <div class="font-black text-sm text-sky-300">Safe Experimentation</div>
                     <p class="text-[12px] text-slate-600 leading-relaxed">Running real tasks. Checking results. Building trust through evidence. CORTEX's governance layer makes this stage low-risk by design.</p>
                 </div>
@@ -999,7 +1350,7 @@
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
                         <i data-lucide="bar-chart-3" class="w-5 h-5" aria-hidden="true"></i>
                     </div>
-                    <div class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Stage 4</div>
+                    <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Stage 4</div>
                     <div class="font-black text-sm text-emerald-300">Measurable Value</div>
                     <p class="text-[12px] text-slate-600 leading-relaxed">Faster delivery. Fewer recurring bugs. Better documentation. Governance metrics showing continuous improvement.</p>
                 </div>
@@ -1121,7 +1472,7 @@
                         </div>
                         <h3 class="font-black text-sm text-sky-300">Documentation assistance</h3>
                     </div>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX reads a function, understands its purpose from context, and generates a docstring that explains what it does, what the parameters mean, and what callers should know. Humans review and approve. Documentation debt erodes without the team noticing.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">CORTEX reads a function, understands its purpose from context, and generates a docstring that explains what it does, what the parameters mean, and what callers should know. Humans review and approve. Documentation debt erodes without the team noticing.</p>
                     <div class="text-[11px] text-sky-500 font-bold">→ Relevant concepts: Context Window, Prompt Engineering</div>
                 </div>
 
@@ -1132,7 +1483,7 @@
                         </div>
                         <h3 class="font-black text-sm text-violet-300">Requirements analysis</h3>
                     </div>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">A product owner pastes a user story. CORTEX analyses it against the existing codebase, identifies which components are affected, flags ambiguities that would cause rework, and produces a structured acceptance criteria proposal. The PO reviews and refines.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">A product owner pastes a user story. CORTEX analyses it against the existing codebase, identifies which components are affected, flags ambiguities that would cause rework, and produces a structured acceptance criteria proposal. The PO reviews and refines.</p>
                     <div class="text-[11px] text-violet-500 font-bold">→ Relevant concepts: AI Orchestration, Knowledge Synthesis</div>
                 </div>
 
@@ -1143,7 +1494,7 @@
                         </div>
                         <h3 class="font-black text-sm text-emerald-300">Change impact analysis</h3>
                     </div>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Before a significant refactor, CORTEX maps every file that references the changed component, identifies tests that cover each path, and produces a risk-ranked impact list. What took hours of manual tracing takes seconds — with higher completeness.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Before a significant refactor, CORTEX maps every file that references the changed component, identifies tests that cover each path, and produces a risk-ranked impact list. What took hours of manual tracing takes seconds — with higher completeness.</p>
                     <div class="text-[11px] text-emerald-500 font-bold">→ Relevant concepts: Agentic AI, Context Window</div>
                 </div>
 
@@ -1154,7 +1505,7 @@
                         </div>
                         <h3 class="font-black text-sm text-amber-300">Training material generation</h3>
                     </div>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">A tech lead asks CORTEX to generate onboarding documentation for a new service. CORTEX reads the code, the tests, the commit history, and existing docs — then produces a structured guide matched to the complexity level of the reader. Knowledge transfer that previously took weeks now takes hours.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">A tech lead asks CORTEX to generate onboarding documentation for a new service. CORTEX reads the code, the tests, the commit history, and existing docs — then produces a structured guide matched to the complexity level of the reader. Knowledge transfer that previously took weeks now takes hours.</p>
                     <div class="text-[11px] text-amber-500 font-bold">→ Relevant concepts: AI Memory, Knowledge Synthesis</div>
                 </div>
             </div>
@@ -1211,7 +1562,7 @@
                 </div>
 
                 <div class="text-center">
-                    <a href="../index.html" class="inline-flex items-center gap-2 text-[13px] text-slate-500 hover:text-slate-300 transition-colors font-semibold">
+                    <a href="../index.html" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors font-semibold">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5" aria-hidden="true"></i>
                         Back to all University domains
                     </a>
@@ -1268,6 +1619,157 @@
             });
         }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+    })();
+    </script>
+
+    <!-- D3 Interactive Concept Map -->
+    <script>
+    (function() {
+        var container = document.getElementById('concept-graph-container');
+        var svg = document.getElementById('concept-graph');
+        if (!container || !svg || typeof d3 === 'undefined') return;
+
+        var W = container.offsetWidth || 700;
+        var H = 420;
+
+        var nodes = [
+            { id: 'ai',       label: 'How AI Works',         icon: '🧠', color: '#0ea5e9', anchor: '#concepts',           desc: 'Pattern-completion at scale. The foundation of everything.' },
+            { id: 'prompt',   label: 'Prompt Engineering',   icon: '💬', color: '#10b981', anchor: '#concepts',           desc: 'How you communicate with AI clearly and precisely.' },
+            { id: 'context',  label: 'Context Windows',      icon: '🗃️', color: '#f59e0b', anchor: '#concepts',           desc: 'The AI\'s working memory — managed by LENS automatically.' },
+            { id: 'agentic',  label: 'Agentic AI',           icon: '🤖', color: '#8b5cf6', anchor: '#concepts',           desc: 'Multi-step coordinated behaviour. Planned, not magic.' },
+            { id: 'orchestr', label: 'Orchestration',        icon: '🎼', color: '#f97316', anchor: '#concepts',           desc: 'Specialised components working as one coherent system.' },
+            { id: 'reason',   label: 'Reasoning',            icon: '🔍', color: '#fbbf24', anchor: '#concepts',           desc: 'Thinking step by step before committing to an answer.' },
+            { id: 'memory',   label: 'AI Memory',            icon: '📚', color: '#a855f7', anchor: '#concepts',           desc: 'Knowledge that compounds across sessions and failures.' },
+            { id: 'synth',    label: 'Knowledge Synthesis',  icon: '🔗', color: '#f43f5e', anchor: '#concepts',           desc: 'Connecting dots across your entire codebase — instantly.' },
+        ];
+
+        // Edge colour: teal = "feeds into", violet = "enables"
+        var links = [
+            { source: 'ai',      target: 'agentic',  type: 'feeds' },
+            { source: 'ai',      target: 'reason',   type: 'feeds' },
+            { source: 'prompt',  target: 'context',  type: 'feeds' },
+            { source: 'prompt',  target: 'orchestr', type: 'feeds' },
+            { source: 'context', target: 'synth',    type: 'enables' },
+            { source: 'agentic', target: 'orchestr', type: 'feeds' },
+            { source: 'reason',  target: 'orchestr', type: 'enables' },
+            { source: 'orchestr',target: 'memory',   type: 'enables' },
+            { source: 'memory',  target: 'synth',    type: 'enables' },
+            { source: 'synth',   target: 'orchestr', type: 'enables' },
+        ];
+
+        var svgEl = d3.select('#concept-graph')
+            .attr('width', W)
+            .attr('height', H);
+
+        // Defs: arrowhead markers
+        var defs = svgEl.append('defs');
+        ['feeds','enables'].forEach(function(t) {
+            defs.append('marker')
+                .attr('id', 'arrow-' + t)
+                .attr('viewBox', '0 -5 10 10')
+                .attr('refX', 28)
+                .attr('refY', 0)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+              .append('path')
+                .attr('d', 'M0,-5L10,0L0,5')
+                .attr('fill', t === 'feeds' ? '#14b8a6' : '#8b5cf6')
+                .attr('opacity', 0.7);
+        });
+
+        var simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(120).strength(0.6))
+            .force('charge', d3.forceManyBody().strength(-320))
+            .force('center', d3.forceCenter(W / 2, H / 2))
+            .force('collision', d3.forceCollide(52));
+
+        var linkEl = svgEl.append('g').selectAll('line')
+            .data(links).enter().append('line')
+            .attr('stroke', function(d) { return d.type === 'feeds' ? '#14b8a6' : '#8b5cf6'; })
+            .attr('stroke-opacity', 0.45)
+            .attr('stroke-width', 1.5)
+            .attr('marker-end', function(d) { return 'url(#arrow-' + d.type + ')'; });
+
+        var nodeEl = svgEl.append('g').selectAll('g')
+            .data(nodes).enter().append('g')
+            .style('cursor', 'pointer')
+            .call(d3.drag()
+                .on('start', function(event, d) {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x; d.fy = d.y;
+                })
+                .on('drag', function(event, d) { d.fx = event.x; d.fy = event.y; })
+                .on('end', function(event, d) {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null; d.fy = null;
+                })
+            )
+            .on('click', function(event, d) {
+                var target = document.querySelector(d.anchor);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            })
+            .on('mouseenter', function(event, d) {
+                var tt = document.getElementById('concept-tooltip');
+                document.getElementById('concept-tooltip-title').textContent = d.icon + ' ' + d.label;
+                document.getElementById('concept-tooltip-desc').textContent = d.desc;
+                var rect = container.getBoundingClientRect();
+                var ex = event.clientX - rect.left;
+                var ey = event.clientY - rect.top;
+                tt.style.left = (ex + 14) + 'px';
+                tt.style.top  = (ey - 10) + 'px';
+                tt.style.display = 'block';
+            })
+            .on('mouseleave', function() {
+                document.getElementById('concept-tooltip').style.display = 'none';
+            });
+
+        // Node circle
+        nodeEl.append('circle')
+            .attr('r', 26)
+            .attr('fill', function(d) { return d.color + '18'; })
+            .attr('stroke', function(d) { return d.color; })
+            .attr('stroke-width', 1.5)
+            .attr('stroke-opacity', 0.6);
+
+        // Node emoji
+        nodeEl.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '0.4em')
+            .attr('font-size', '16px')
+            .text(function(d) { return d.icon; });
+
+        // Node label below
+        nodeEl.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '2.8em')
+            .attr('font-size', '11px')
+            .attr('font-weight', '900')
+            .attr('font-family', "'Inter', sans-serif")
+            .attr('letter-spacing', '0.03em')
+            .attr('fill', function(d) { return d.color; })
+            .attr('fill-opacity', 0.9)
+            .text(function(d) { return d.label; });
+
+        simulation.on('tick', function() {
+            linkEl
+                .attr('x1', function(d) { return d.source.x; })
+                .attr('y1', function(d) { return d.source.y; })
+                .attr('x2', function(d) { return d.target.x; })
+                .attr('y2', function(d) { return d.target.y; });
+            nodeEl.attr('transform', function(d) {
+                return 'translate(' + Math.max(32, Math.min(W - 32, d.x)) + ',' + Math.max(36, Math.min(H - 36, d.y)) + ')';
+            });
+        });
+
+        // Reflow on resize
+        window.addEventListener('resize', function() {
+            var newW = container.offsetWidth || 700;
+            if (Math.abs(newW - W) < 20) return;
+            W = newW;
+            d3.select('#concept-graph').attr('width', W);
+            simulation.force('center', d3.forceCenter(W / 2, H / 2)).alpha(0.3).restart();
+        });
     })();
     </script>
 

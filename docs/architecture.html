@@ -256,7 +256,7 @@
             border: 1px solid rgba(123,97,255,0.35);
             color: rgba(196,181,253,0.95);
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.875rem;
             font-weight: 700;
             letter-spacing: 0.07em;
             text-transform: uppercase;
@@ -429,7 +429,7 @@
             box-shadow: 0 0 10px rgba(123, 97, 255, 0.55);
         }
         .tab-nav-label {
-            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+            font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em;
             text-transform: uppercase;
             color: rgba(148, 163, 184, 0.65);
             white-space: nowrap;
@@ -567,7 +567,7 @@
         }
         @media (max-width: 640px) {
             .tab-hint-panel { margin: 1.25rem 1rem 0; padding: 0.85rem 1.1rem; gap: 0.65rem; }
-            .tab-hint-text  { font-size: 0.85rem; }
+            .tab-hint-text  { font-size: 1rem; }
             .tab-hint-icon  { font-size: 1.05rem; }
         }
 
@@ -621,7 +621,7 @@
         .tdd-phase--green:hover { transform: translateY(-4px); box-shadow: 0 12px 30px -6px rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); }
         .tdd-phase--blue:hover  { transform: translateY(-4px); box-shadow: 0 12px 30px -6px rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.4); }
         .tdd-phase-icon  { font-size: 2.75rem; line-height: 1; }
-        .tdd-phase-label { font-size: 0.8125rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+        .tdd-phase-label { font-size: 0.875rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
         .tdd-phase-desc  { font-size: 0.875rem; color: #64748b; line-height: 1.6; max-width: 24ch; }
 
         /* MCP Tool Grid */
@@ -635,7 +635,7 @@
         }
         .mcp-tool:hover { border-color: rgba(123,97,255,0.3); background: rgba(123,97,255,0.05); transform: translateY(-2px); }
         .mcp-tool-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: var(--accent-cyan); }
-        .mcp-tool-desc { font-size: 0.8125rem; color: #475569; line-height: 1.4; }
+        .mcp-tool-desc { font-size: 0.875rem; color: #475569; line-height: 1.4; }
 
         /* Gov Layer Stack */
         .gov-layers { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -698,7 +698,7 @@
             width: 2rem; height: 2rem; border-radius: 50%;
             background: rgba(123,97,255,0.15); border: 1px solid rgba(123,97,255,0.3);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; color: #a78bfa;
+            font-size: 0.875rem; color: #a78bfa;
         }
 
         .brain-signal-flow {
@@ -918,7 +918,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -928,7 +928,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -960,7 +960,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -1101,19 +1149,19 @@
                             <div class="space-y-6">
                                 <div class="flex gap-4 md:gap-6 group">
                                     <div class="shrink-0 w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black transition-all"><i data-lucide="eye" class="w-5 h-5"></i></div>
-                                    <div><h4 class="text-sm md:text-base font-bold">LENS — Sensory System</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Nine parallel analyzers read structure, history, security, patterns, and complexity before every execution.</p></div>
+                                    <div><h4 class="text-sm md:text-base font-bold">LENS — Sensory System</h4><p class="text-sm md:text-sm text-slate-500 leading-relaxed">Nine parallel analyzers read structure, history, security, patterns, and complexity before every execution.</p></div>
                                 </div>
                                 <div class="flex gap-4 md:gap-6 group">
                                     <div class="shrink-0 w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-black transition-all"><i data-lucide="brain" class="w-5 h-5"></i></div>
-                                    <div><h4 class="text-sm md:text-base font-bold">Brain — Strategy Selection</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Three cognitive tiers: Perception (pattern recognition), Reasoning (strategy selection), Action (execution plans).</p></div>
+                                    <div><h4 class="text-sm md:text-base font-bold">Brain — Strategy Selection</h4><p class="text-sm md:text-sm text-slate-500 leading-relaxed">Three cognitive tiers: Perception (pattern recognition), Reasoning (strategy selection), Action (execution plans).</p></div>
                                 </div>
                                 <div class="flex gap-4 md:gap-6 group">
                                     <div class="shrink-0 w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400 group-hover:bg-violet-500 group-hover:text-black transition-all"><i data-lucide="activity" class="w-5 h-5"></i></div>
-                                    <div><h4 class="text-sm md:text-base font-bold">Orchestration — Execution Motor</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">296 specialised engines across 14 domains with TDD-first execution on every code change.</p></div>
+                                    <div><h4 class="text-sm md:text-base font-bold">Orchestration — Execution Motor</h4><p class="text-sm md:text-sm text-slate-500 leading-relaxed">296 specialised engines across 14 domains with TDD-first execution on every code change.</p></div>
                                 </div>
                                 <div class="flex gap-4 md:gap-6 group">
                                     <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-all"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
-                                    <div><h4 class="text-sm md:text-base font-bold">Governance — Immune System</h4><p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">60+ CORE rules enforced at pre-commit, CI, and runtime — no human reviewer required.</p></div>
+                                    <div><h4 class="text-sm md:text-base font-bold">Governance — Immune System</h4><p class="text-sm md:text-sm text-slate-500 leading-relaxed">60+ CORE rules enforced at pre-commit, CI, and runtime — no human reviewer required.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -1373,7 +1421,7 @@
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
                                     <div>
-                                        <div class="text-[10px] font-black uppercase tracking-widest text-cyan-500">Tier 1 — Reads LENS signals</div>
+                                        <div class="text-[11px] font-black uppercase tracking-widest text-cyan-500">Tier 1 — Reads LENS signals</div>
                                         <h3 class="font-black text-xl tracking-tighter text-cyan-200">Perception</h3>
                                     </div>
                                 </div>
@@ -1422,7 +1470,7 @@
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
                                     <div>
-                                        <div class="text-[10px] font-black uppercase tracking-widest text-violet-500">Tier 2 — Selects strategy</div>
+                                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 2 — Selects strategy</div>
                                         <h3 class="font-black text-xl tracking-tighter text-violet-200">Reasoning</h3>
                                     </div>
                                 </div>
@@ -1477,7 +1525,7 @@
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
                                     <div>
-                                        <div class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Tier 3 — Builds execution plan</div>
+                                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 3 — Builds execution plan</div>
                                         <h3 class="font-black text-xl tracking-tighter text-emerald-200">Action</h3>
                                     </div>
                                 </div>
@@ -1485,11 +1533,11 @@
                                 <p class="text-[14px] text-slate-400 leading-relaxed">Every entry and exit point emits an <span class="text-emerald-300 font-mono font-bold">AC_START</span> / <span class="text-emerald-300 font-mono font-bold">AC_COMPLETE</span> marker, persisted to SQLite — making every Brain decision auditable and replayable.</p>
                                 <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 pt-2">Action Plan Guarantees</div>
                                 <div class="space-y-2">
-                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Failing test written before any code changes (CORE-008)</p></div>
-                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Holistic validation gate cleared before mutation (CORE-048)</p></div>
-                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">Detect → Fix → Rescan loop until P0/P1 = 0 (CORE-068)</p></div>
-                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">AC markers emitted to SQLite audit trail on every step</p></div>
-                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-[13px] text-slate-400">URS reward / penalty signal emitted on completion</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-sm text-slate-400">Failing test written before any code changes (CORE-008)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-sm text-slate-400">Holistic validation gate cleared before mutation (CORE-048)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-sm text-slate-400">Detect → Fix → Rescan loop until P0/P1 = 0 (CORE-068)</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-sm text-slate-400">AC markers emitted to SQLite audit trail on every step</p></div>
+                                    <div class="flex gap-3 items-start"><div class="w-5 h-5 mt-0.5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-3 h-3 text-emerald-400"></i></div><p class="text-sm text-slate-400">URS reward / penalty signal emitted on completion</p></div>
                                 </div>
                             </div>
                             <div class="space-y-4">
@@ -1545,19 +1593,19 @@
                                         <span class="text-2xl">🏆</span>
                                         <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400">MILD_REWARD (+1.0)</div>
                                     </div>
-                                    <p class="text-[13px] text-slate-400 leading-relaxed">Emitted when an execution completes without governance violations, test failures, or regressions. The pattern's confidence score increases, making it more likely to be selected on similar future contexts.</p>
+                                    <p class="text-sm text-slate-400 leading-relaxed">Emitted when an execution completes without governance violations, test failures, or regressions. The pattern's confidence score increases, making it more likely to be selected on similar future contexts.</p>
                                 </div>
                                 <div class="glass-card p-5 border-2 border-rose-500/25 bg-gradient-to-br from-rose-950/30 to-slate-900/80 space-y-2">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">⚠️</span>
                                         <div class="text-[11px] font-black uppercase tracking-widest text-rose-400">MILD_PUNISHMENT (−1.0)</div>
                                     </div>
-                                    <p class="text-[13px] text-slate-400 leading-relaxed">Emitted when an execution produces P0/P1 violations, test failures, or regressions. Confidence decreases. After 3 failures, the pattern is demoted. After 5, it is quarantined from recommendations.</p>
+                                    <p class="text-sm text-slate-400 leading-relaxed">Emitted when an execution produces P0/P1 violations, test failures, or regressions. Confidence decreases. After 3 failures, the pattern is demoted. After 5, it is quarantined from recommendations.</p>
                                 </div>
                             </div>
                             <div class="p-5 rounded-xl bg-slate-900/60 border border-indigo-500/20 space-y-3">
                                 <div class="text-[11px] font-bold uppercase tracking-widest text-indigo-400">Cross-Team Signal Propagation</div>
-                                <p class="text-[13px] text-slate-400 leading-relaxed">URS signals are stored in <span class="font-mono text-indigo-300">cortex_learning</span> MCP tool with scope-isolated domains. When Team A discovers a root cause, the generated PreventionRule is immediately available to all other teams — without post-mortems or knowledge-base updates.</p>
+                                <p class="text-sm text-slate-400 leading-relaxed">URS signals are stored in <span class="font-mono text-indigo-300">cortex_learning</span> MCP tool with scope-isolated domains. When Team A discovers a root cause, the generated PreventionRule is immediately available to all other teams — without post-mortems or knowledge-base updates.</p>
                                 <div class="code-block text-[12px]"><span class="code-cmt"># Emit after success</span>
 <span class="code-fn">cortex_learning</span>(
   op=<span class="code-str">"emit"</span>,
@@ -1579,23 +1627,23 @@
                 </div>
                 <div class="glass-card p-6 md:p-8 space-y-6">
                     <div class="brain-signal-flow">
-                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.3);color:#00d4ff;background:rgba(0,212,255,0.05)">LENS Output<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Workspace signals</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.3);color:#00d4ff;background:rgba(0,212,255,0.05)">LENS Output<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">Workspace signals</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.25);color:#67e8f9;background:rgba(0,212,255,0.04)">Pattern<br/>Scoring<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">0.0–1.0</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(0,212,255,0.25);color:#67e8f9;background:rgba(0,212,255,0.04)">Pattern<br/>Scoring<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">0.0–1.0</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.3);color:#a78bfa;background:rgba(123,97,255,0.05)">RCA History<br/>Consult<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">PLIP-001</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.3);color:#a78bfa;background:rgba(123,97,255,0.05)">RCA History<br/>Consult<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">PLIP-001</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.25);color:#c4b5fd;background:rgba(123,97,255,0.04)">Strategy<br/>Selection<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">QUICK|TARGET|FULL</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(123,97,255,0.25);color:#c4b5fd;background:rgba(123,97,255,0.04)">Strategy<br/>Selection<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">QUICK|TARGET|FULL</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(99,102,241,0.3);color:#818cf8;background:rgba(99,102,241,0.05)">Master<br/>Orchestrator<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Route + AC_START</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(99,102,241,0.3);color:#818cf8;background:rgba(99,102,241,0.05)">Master<br/>Orchestrator<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">Route + AC_START</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.3);color:#34d399;background:rgba(16,185,129,0.05)">TDD<br/>Execution<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">RED→GREEN→REFACTOR</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.3);color:#34d399;background:rgba(16,185,129,0.05)">TDD<br/>Execution<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">RED→GREEN→REFACTOR</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(245,158,11,0.3);color:#fbbf24;background:rgba(245,158,11,0.05)">Convergence<br/>Gate<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">CORE-068</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(245,158,11,0.3);color:#fbbf24;background:rgba(245,158,11,0.05)">Convergence<br/>Gate<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">CORE-068</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(244,63,94,0.3);color:#fb7185;background:rgba(244,63,94,0.05)">URS<br/>Signal<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Reward / Penalty</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(244,63,94,0.3);color:#fb7185;background:rgba(244,63,94,0.05)">URS<br/>Signal<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">Reward / Penalty</span></div>
                         <div class="brain-signal-arrow">→</div>
-                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.4);color:#10b981;background:rgba(16,185,129,0.08)">AC_COMPLETE<br/>✅<br/><span style="font-size:0.7rem;color:#64748b;font-weight:400">Audit logged</span></div>
+                        <div class="brain-signal-node" style="border-color:rgba(16,185,129,0.4);color:#10b981;background:rgba(16,185,129,0.08)">AC_COMPLETE<br/>✅<br/><span style="font-size: 0.875rem;color:#64748b;font-weight:400">Audit logged</span></div>
                     </div>
                     <p class="text-center text-[12px] text-slate-600 font-medium">← Scroll to see full flow on mobile →</p>
                 </div>
@@ -1614,10 +1662,10 @@
                             <h4 class="font-black text-lg tracking-tighter text-cyan-200">LENS — The Sensory System</h4>
                         </div>
                         <div class="space-y-3">
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Reads</strong> — scans files, git history, dependencies, and security surfaces</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Produces</strong> — structured signal objects passed to the Brain</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Never decides</strong> — it is a pure observation layer with no strategy</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-cyan-300">Location</strong> — <span class="font-mono text-xs">cortex/lens/</span> — 9 parallel analyzers</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-cyan-300">Reads</strong> — scans files, git history, dependencies, and security surfaces</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-cyan-300">Produces</strong> — structured signal objects passed to the Brain</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-cyan-300">Never decides</strong> — it is a pure observation layer with no strategy</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-cyan-300">Location</strong> — <span class="font-mono text-xs">cortex/lens/</span> — 9 parallel analyzers</p></div>
                         </div>
                     </div>
                     <div class="glass-card p-6 md:p-8 space-y-5 border-2 border-purple-500/25 bg-gradient-to-br from-purple-950/30 to-slate-900/80">
@@ -1626,10 +1674,10 @@
                             <h4 class="font-black text-lg tracking-tighter text-purple-200">Brain — The Decision System</h4>
                         </div>
                         <div class="space-y-3">
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Decides</strong> — selects patterns, strategies, and execution plans</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Learns</strong> — URS signals update confidence on every execution</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Prevents</strong> — consults RCA history before every mutation</p></div>
-                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-[13px] text-slate-400"><strong class="text-purple-300">Location</strong> — <span class="font-mono text-xs">cortex/intelligence/facade.py</span> — IntelligenceFacade</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-purple-300">Decides</strong> — selects patterns, strategies, and execution plans</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-purple-300">Learns</strong> — URS signals update confidence on every execution</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-purple-300">Prevents</strong> — consults RCA history before every mutation</p></div>
+                            <div class="flex gap-3"><div class="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"></div><p class="text-sm text-slate-400"><strong class="text-purple-300">Location</strong> — <span class="font-mono text-xs">cortex/intelligence/facade.py</span> — IntelligenceFacade</p></div>
                         </div>
                     </div>
                 </div>
@@ -1691,11 +1739,11 @@
                         <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">27</span><span class="db-name" style="font-size:0.55rem;margin-top:0.2rem">health</span></div>
                         <div class="domain-bubble" style="--bubble-color:#6366f1;--bubble-glow:rgba(99,102,241,0.2);width:68px;height:68px;background:rgba(99,102,241,0.06)"><span class="db-count" style="font-size:1.1rem">16</span><span class="db-name" style="font-size:0.52rem;margin-top:0.15rem">intelligence</span></div>
                         <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">12</span><span class="db-name" style="font-size:0.52rem;margin-top:0.15rem">validation</span></div>
-                        <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">6</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">persona</span></div>
-                        <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">6</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">workflow</span></div>
-                        <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.2);width:50px;height:50px;background:rgba(0,212,255,0.05)"><span class="db-count" style="font-size:0.9rem">4</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">git</span></div>
+                        <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size: 1rem">6</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">persona</span></div>
+                        <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size: 1rem">6</span><span class="db-name" style="font-size:0.5rem;margin-top:0.1rem">workflow</span></div>
+                        <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.2);width:50px;height:50px;background:rgba(0,212,255,0.05)"><span class="db-count" style="font-size: 1rem">4</span><span class="db-name" style="font-size:0.48rem;margin-top:0.1rem">git</span></div>
                     </div>
-                    <p class="text-center text-[13px] text-slate-600 font-medium">Bubble size proportional to file count.</p>
+                    <p class="text-center text-sm text-slate-600 font-medium">Bubble size proportional to file count.</p>
                 </div>
             </section>
 
@@ -2061,16 +2109,16 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Linear root cause tracing — best for technology failures with clear sequential cause chains.</p></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys</div><p class="text-[12px] md:text-sm text-slate-500 leading-normal">Linear root cause tracing — best for technology failures with clear sequential cause chains.</p></div>
                         </div>
                         <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Multi-factor analysis across People, Process, Technology, and Data failure axes.</p></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone</div><p class="text-[12px] md:text-sm text-slate-500 leading-normal">Multi-factor analysis across People, Process, Technology, and Data failure axes.</p></div>
                         </div>
                         <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-teal-600/20 to-emerald-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">AND/OR gate analysis surfacing the minimum set of conditions for failure.</p></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree</div><p class="text-[12px] md:text-sm text-slate-500 leading-normal">AND/OR gate analysis surfacing the minimum set of conditions for failure.</p></div>
                         </div>
                         <div class="relative group"><div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Causal Chain</div><p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Temporal event correlation — reveals triggering events that precede the visible symptom.</p></div>
+                            <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all"><div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div><div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Causal Chain</div><p class="text-[12px] md:text-sm text-slate-500 leading-normal">Temporal event correlation — reveals triggering events that precede the visible symptom.</p></div>
                         </div>
                     </div>
                 </div>
@@ -2121,13 +2169,13 @@
                             <h4 class="text-2xl md:text-3xl font-black tracking-tight">Learning Loop</h4>
                             <p class="text-slate-400 text-xs md:text-sm font-light leading-relaxed">Every success and failure updates confidence scores. Approaches that consistently work are recommended first. Chronic failures are quarantined.</p>
                             <div class="flex justify-center lg:justify-start gap-6">
-                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Reward</div></div>
-                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
+                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-sm text-slate-500 uppercase tracking-widest">Reward</div></div>
+                                <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-sm text-slate-500 uppercase tracking-widest">Penalty</div></div>
                             </div>
                         </div>
                         <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20"><div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div><p class="text-[13px] text-slate-400 leading-relaxed">When Team A discovers a root cause, the prevention rule is available to Teams B, C, and D immediately — without post-mortems or wiki pages.</p></div>
-                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20"><div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Pattern Quarantine</div><p class="text-[13px] text-slate-400 leading-relaxed">Chronically unsuccessful patterns are excluded from recommendations until explicitly rehabilitated. No noise from stale failures.</p></div>
+                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20"><div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div><p class="text-sm text-slate-400 leading-relaxed">When Team A discovers a root cause, the prevention rule is available to Teams B, C, and D immediately — without post-mortems or wiki pages.</p></div>
+                            <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20"><div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Pattern Quarantine</div><p class="text-sm text-slate-400 leading-relaxed">Chronically unsuccessful patterns are excluded from recommendations until explicitly rehabilitated. No noise from stale failures.</p></div>
                         </div>
                     </div>
                 </div>
@@ -2291,21 +2339,21 @@
     <!-- ═══════════════════ FOOTER ═══════════════════ -->
     <footer role="contentinfo" style="border-top:1px solid rgba(255,255,255,0.07);background:rgba(2,6,23,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0.875rem 0;">
       <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem 1.5rem;">
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:0.8125rem;font-weight:700;letter-spacing:0.04em;color:rgba(248,250,252,0.55);white-space:nowrap;"><strong style="color:rgba(248,250,252,0.82);">CORTEX</strong> — Cognitive Orchestration Real-Time Execution eXpert</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:0.875rem;font-weight:700;letter-spacing:0.04em;color:rgba(248,250,252,0.55);white-space:nowrap;"><strong style="color:rgba(248,250,252,0.82);">CORTEX</strong> — Cognitive Orchestration Real-Time Execution eXpert</span>
         <nav style="display:flex;align-items:center;gap:0.25rem;" aria-label="Footer navigation">
-          <a href="faq.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(99,102,241,0.9);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)';this.style.borderColor='rgba(99,102,241,0.25)';this.style.color='#a5b4fc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(99,102,241,0.9)'" aria-label="Frequently Asked Questions">
+          <a href="faq.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(99,102,241,0.9);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)';this.style.borderColor='rgba(99,102,241,0.25)';this.style.color='#a5b4fc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(99,102,241,0.9)'" aria-label="Frequently Asked Questions">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ
           </a>
-          <span style="color:rgba(255,255,255,0.12);font-size:0.7rem;padding:0 0.1rem;" aria-hidden="true">|</span>
-          <a href="glossary.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(0,212,255,0.85);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.08)';this.style.borderColor='rgba(0,212,255,0.22)';this.style.color='#67e8f9'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(0,212,255,0.85)'" aria-label="CORTEX Glossary">
+          <span style="color:rgba(255,255,255,0.12);font-size: 0.875rem;padding:0 0.1rem;" aria-hidden="true">|</span>
+          <a href="glossary.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(0,212,255,0.85);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.08)';this.style.borderColor='rgba(0,212,255,0.22)';this.style.color='#67e8f9'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(0,212,255,0.85)'" aria-label="CORTEX Glossary">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Glossary
           </a>
-          <span style="color:rgba(255,255,255,0.12);font-size:0.7rem;padding:0 0.1rem;" aria-hidden="true">|</span>
-          <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(148,163,184,0.8);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#f8fafc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(148,163,184,0.8)'" aria-label="CORTEX on GitHub">
+          <span style="color:rgba(255,255,255,0.12);font-size: 0.875rem;padding:0 0.1rem;" aria-hidden="true">|</span>
+          <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(148,163,184,0.8);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#f8fafc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(148,163,184,0.8)'" aria-label="CORTEX on GitHub">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub
           </a>
         </nav>
-        <span style="font-size:0.7rem;color:rgba(100,116,139,0.65);white-space:nowrap;letter-spacing:0.02em;">&copy; 2025–2026 Asif Hussain · WCAG 2.1 AA</span>
+        <span style="font-size:0.875rem;color:rgba(100,116,139,0.65);white-space:nowrap;letter-spacing:0.02em;">&copy; 2025–2026 Asif Hussain · WCAG 2.1 AA</span>
       </div>
     </footer>
 
@@ -2451,7 +2499,7 @@
                     .text(t.label);
                 // Sub
                 g.append('text').attr('x',74).attr('y',54).attr('fill','#64748b')
-                    .attr('font-size','10px').attr('font-weight','500').attr('font-family','Inter, sans-serif')
+                    .attr('font-size', '11px').attr('font-weight','500').attr('font-family','Inter, sans-serif')
                     .text(t.sub);
                 // Accent bar
                 g.append('rect').attr('x',0).attr('y',80).attr('width',w-40).attr('height',3)
@@ -2468,7 +2516,7 @@
                 .attr('points',`${arrowX-5},78 ${arrowX+5},78 ${arrowX},62`)
                 .attr('fill','rgba(245,158,11,0.5)');
             svg.append('text').attr('x',arrowX+7).attr('y',220).attr('fill','#b45309')
-                .attr('font-size','9px').attr('font-weight','700').attr('font-family','Inter, sans-serif')
+                .attr('font-size', '11px').attr('font-weight','700').attr('font-family','Inter, sans-serif')
                 .attr('transform',`rotate(90,${arrowX+7},220)`).text('URS FEEDBACK');
         }
 
@@ -2526,7 +2574,7 @@
                 g.append('circle').attr('r',32).attr('fill',n.color+'12').attr('stroke',n.color+'40').attr('stroke-width',1.5);
                 g.append('text').attr('y',-4).attr('text-anchor','middle').attr('font-size','18').text(n.icon);
                 g.append('text').attr('y',14).attr('text-anchor','middle').attr('fill',n.color)
-                    .attr('font-size','9px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text(n.label.toUpperCase());
+                    .attr('font-size', '11px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text(n.label.toUpperCase());
                 g.append('text').attr('y',26).attr('text-anchor','middle').attr('fill','#475569')
                     .attr('font-size','8px').attr('font-family','Inter,sans-serif').text(n.sub);
             });
@@ -2537,7 +2585,7 @@
             svg.append('text').attr('x',cx).attr('y',cy-6).attr('text-anchor','middle')
                 .attr('fill','#c4b5fd').attr('font-size','11px').attr('font-weight','800').attr('font-family','Space Grotesk,Inter,sans-serif').text('CORTEX');
             svg.append('text').attr('x',cx).attr('y',cy+8).attr('text-anchor','middle')
-                .attr('fill','#475569').attr('font-size','9px').attr('font-family','Inter,sans-serif').text('Learning Loop');
+                .attr('fill','#475569').attr('font-size', '11px').attr('font-family','Inter,sans-serif').text('Learning Loop');
         }
 
         // ─── PCB Bars — animate confidence fills on tab activation ───
@@ -2588,7 +2636,7 @@
             svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 22)
                 .attr('fill', 'rgba(123,97,255,0.1)').attr('stroke', 'rgba(123,97,255,0.3)').attr('stroke-width', 1.5);
             svg.append('text').attr('x', cx).attr('y', cy+4).attr('text-anchor', 'middle')
-                .attr('fill', '#c4b5fd').attr('font-size', '10px').attr('font-weight', '700').text('CORTEX');
+                .attr('fill', '#c4b5fd').attr('font-size', '11px').attr('font-weight', '700').text('CORTEX');
 
             // Nodes
             const nodeG = svg.selectAll('.dn').data(nodes).enter().append('g')

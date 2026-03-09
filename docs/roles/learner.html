@@ -68,12 +68,12 @@
     margin-bottom: 0.5rem;
 }
 .cl-step-desc {
-    font-size: 0.9rem; color: #94a3b8; line-height: 1.65;
+    font-size: 1rem; color: #94a3b8; line-height: 1.65;
     margin-bottom: 0.875rem;
 }
 .cl-step-code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem; line-height: 1.75;
+    font-size: 1rem; line-height: 1.75;
     color: #a0a6c0;
     background: rgba(0,0,0,0.35);
     border: 1px solid rgba(255,255,255,0.07);
@@ -110,7 +110,7 @@
 .cl-faq-icon {
     display: flex; align-items: center; justify-content: center;
     width: 1.25rem; height: 1.25rem;
-    color: #00d4ff; font-size: 0.7rem;
+    color: #00d4ff; font-size: 0.875rem;
     transition: transform 0.22s ease;
     flex-shrink: 0;
 }
@@ -165,7 +165,7 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
     margin-bottom: 0.375rem;
 }
 .cl-principle-caption {
-    font-size: 0.8rem; color: #64748b; line-height: 1.5;
+    font-size: 1rem; color: #64748b; line-height: 1.5;
 }
 .cl-principle-divider {
     background: rgba(255,255,255,0.07);
@@ -190,7 +190,7 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
 }
 .cl-principle-rule-code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem; font-weight: 800;
+    font-size: 0.875rem; font-weight: 800;
     white-space: nowrap;
 }
 .cl-principle-rule-text {
@@ -238,7 +238,7 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
 }
 .cl-footer-link:hover { color: #00d4ff; }
 .cl-footer-copy {
-    font-size: 0.75rem; color: #374151;
+    font-size: 0.875rem; color: #374151;
 }
 
 /* ── ISSA Responsive overrides (SSOT: design_system.yaml § spacing) ─── */
@@ -364,7 +364,7 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -374,7 +374,7 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -406,7 +406,55 @@ details[open] .cl-faq-icon { transform: rotate(90deg); }
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -1352,7 +1400,7 @@ if (typeof mermaid !== 'undefined') {
             g.append('rect').attr('x', 0).attr('y', yOff).attr('width', x(val)).attr('height', rowH)
                 .attr('rx', 5).attr('fill', colors[t]).attr('opacity', 0.72);
             g.append('text').attr('x', x(val) + 5).attr('y', yOff + rowH / 2 + 4)
-                .attr('fill', colors[t]).attr('font-size', '10px').attr('font-weight', '700')
+                .attr('fill', colors[t]).attr('font-size', '11px').attr('font-weight', '700')
                 .attr('font-family', 'Inter, sans-serif').text(val + '%');
         });
     });
@@ -1396,7 +1444,7 @@ if (typeof mermaid !== 'undefined') {
         .attr('fill','#ffffff').attr('font-size','2rem').attr('font-weight','800')
         .attr('font-family','Inter, sans-serif').text('35');
     var cSub = g.append('text').attr('text-anchor','middle').attr('dy','1.9em')
-        .attr('fill','#a0a6c0').attr('font-size','0.68rem').attr('font-weight','600')
+        .attr('fill','#a0a6c0').attr('font-size','0.875rem').attr('font-weight','600')
         .attr('letter-spacing','0.06em').attr('font-family','Inter, sans-serif').text('Modules Total');
     g.selectAll('.arc').data(pie(domains)).enter().append('path')
         .attr('d', arc).attr('fill', function(d){ return d.data.color; })
@@ -1591,7 +1639,7 @@ if (typeof mermaid !== 'undefined') {
         var parts = p.label.split('\n');
         var lt = g.append('text').attr('x', x(mid)).attr('y', 10)
             .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.2)')
-            .attr('font-size', '9px').attr('font-weight', '600')
+            .attr('font-size', '11px').attr('font-weight', '600')
             .attr('font-family', 'Inter, sans-serif').attr('letter-spacing', '0.04em');
         parts.forEach(function (p2, i) {
             lt.append('tspan').attr('x', x(mid)).attr('dy', i === 0 ? 0 : '1.2em').text(p2);
@@ -1622,7 +1670,7 @@ if (typeof mermaid !== 'undefined') {
         var last = t.pts[t.pts.length - 1];
         g.append('text')
             .attr('x', x(last.w) + 6).attr('y', y(last.v) + 4)
-            .attr('fill', t.color).attr('font-size', '10px').attr('font-weight', '700')
+            .attr('fill', t.color).attr('font-size', '11px').attr('font-weight', '700')
             .attr('font-family', 'Inter, sans-serif').text(t.label);
     });
 
@@ -1631,12 +1679,12 @@ if (typeof mermaid !== 'undefined') {
         d3.axisBottom(x).ticks(6).tickFormat(function (d) { return 'Wk ' + d; })
     );
     xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.08)');
-    xAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif');
+    xAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
     xAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.06)');
 
     var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function (d) { return d + '%'; }));
     yAxis.select('.domain').remove();
-    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '10px').attr('font-family', 'Inter, sans-serif');
+    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
     yAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
 })();
 </script>

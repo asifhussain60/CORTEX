@@ -58,7 +58,7 @@
 
         #domain-bubble { width: 100%; height: 480px; border-radius: 1rem; }
         @media (min-width: 768px) { #domain-bubble { height: 540px; } }
-        .d3-tooltip { position: absolute; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); white-space: nowrap; }
+        .d3-tooltip { position: absolute; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); white-space: nowrap; }
 
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
@@ -180,7 +180,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -190,7 +190,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -222,7 +222,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -304,64 +352,64 @@
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400 text-xl">🏥</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-teal-600">Hospital ER</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-teal-600">Hospital ER</div>
                                 <div class="font-bold text-sm text-teal-300">core domain</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Emergency intake, routing, and triage. In CORTEX this is <code class="text-teal-400 text-[12px]">core/</code> — 132 files handling IntentRouter, MasterOrchestrator, and TDDOrchestrator. Every request starts here.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Emergency intake, routing, and triage. In CORTEX this is <code class="text-teal-400 text-[12px]">core/</code> — 132 files handling IntentRouter, MasterOrchestrator, and TDDOrchestrator. Every request starts here.</p>
                     </div>
                     <div class="analogy-card" style="border-color: rgba(139,92,246,0.2); background: rgba(139,92,246,0.04);">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400 text-xl">🔬</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-violet-600">Diagnostic Lab</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-violet-600">Diagnostic Lab</div>
                                 <div class="font-bold text-sm text-violet-300">intelligence domain</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Runs tests, produces results, feeds back to clinicians. CORTEX's <code class="text-violet-400 text-[12px]">intelligence/</code> — 16 files — runs LENS analysis, RCA Engine, and URS learning signals.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Runs tests, produces results, feeds back to clinicians. CORTEX's <code class="text-violet-400 text-[12px]">intelligence/</code> — 16 files — runs LENS analysis, RCA Engine, and URS learning signals.</p>
                     </div>
                     <div class="analogy-card" style="border-color: rgba(245,158,11,0.2); background: rgba(245,158,11,0.04);">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 text-xl">📋</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-amber-600">Administration</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-amber-600">Administration</div>
                                 <div class="font-bold text-sm text-amber-300">governance domain</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Records, compliance, policies. CORTEX's <code class="text-amber-400 text-[12px]">validation/</code> — 12 files — enforces CORE rules, pre-commit gates, and governance YAMLs at every stage.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Records, compliance, policies. CORTEX's <code class="text-amber-400 text-[12px]">validation/</code> — 12 files — enforces CORE rules, pre-commit gates, and governance YAMLs at every stage.</p>
                     </div>
                     <div class="analogy-card" style="border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.04);">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl">💊</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Pharmacy &amp; Support</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-emerald-600">Pharmacy &amp; Support</div>
                                 <div class="font-bold text-sm text-emerald-300">support domain</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Fulfils prescriptions from clinicians. CORTEX's <code class="text-emerald-400 text-[12px]">support/</code> — 54 files — runs the debugger, RCA engine, and multi-stack debug pipeline on demand.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Fulfils prescriptions from clinicians. CORTEX's <code class="text-emerald-400 text-[12px]">support/</code> — 54 files — runs the debugger, RCA engine, and multi-stack debug pipeline on demand.</p>
                     </div>
                     <div class="analogy-card" style="border-color: rgba(244,114,182,0.2); background: rgba(244,114,182,0.04);">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-xl">🫀</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-pink-600">ICU / Monitoring</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-pink-600">ICU / Monitoring</div>
                                 <div class="font-bold text-sm text-pink-300">health domain</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Continuous patient monitoring with 22 endpoints. CORTEX's <code class="text-pink-400 text-[12px]">health/</code> — 27 files — runs HealthOrchestrator and VacuumOrchestrator to keep the system clean.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Continuous patient monitoring with 22 endpoints. CORTEX's <code class="text-pink-400 text-[12px]">health/</code> — 27 files — runs HealthOrchestrator and VacuumOrchestrator to keep the system clean.</p>
                     </div>
                     <div class="analogy-card" style="border-color: rgba(99,102,241,0.2); background: rgba(99,102,241,0.04);">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">🧬</div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-indigo-600">Specialist Wards</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-indigo-600">Specialist Wards</div>
                                 <div class="font-bold text-sm text-indigo-300">domain orchestrators</div>
                             </div>
                         </div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Cardiology, oncology, neurology — each ward handles specific conditions. CORTEX's <code class="text-indigo-400 text-[12px]">domain/</code> — 29 files — handles Git, C#, TypeScript, and frontend stacks.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Cardiology, oncology, neurology — each ward handles specific conditions. CORTEX's <code class="text-indigo-400 text-[12px]">domain/</code> — 29 files — handles Git, C#, TypeScript, and frontend stacks.</p>
                     </div>
                 </div>
-                <p class="text-center text-[13px] text-slate-600 italic">The hospital coordinator (MasterOrchestrator) knows which department to send you to — but never does their job for them.</p>
+                <p class="text-center text-sm text-slate-600 italic">The hospital coordinator (MasterOrchestrator) knows which department to send you to — but never does their job for them.</p>
             </div>
         </section>
 
@@ -506,15 +554,15 @@ handler = registry.<span class="code-fn">get</span>(intent_type)
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                     <div class="p-4 rounded-xl border border-teal-500/15 bg-teal-500/5 space-y-2">
                         <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Why</div>
-                        <p class="text-[13px] text-slate-400">Enables every orchestrator to be tested in isolation with a mock MasterOrchestrator — no test dependency on 295 other files.</p>
+                        <p class="text-sm text-slate-400">Enables every orchestrator to be tested in isolation with a mock MasterOrchestrator — no test dependency on 295 other files.</p>
                     </div>
                     <div class="p-4 rounded-xl border border-emerald-500/15 bg-emerald-500/5 space-y-2">
                         <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">How it's enforced</div>
-                        <p class="text-[13px] text-slate-400">EnforcementOrchestrator runs a pre-commit import graph scan. Any direct cross-domain import is a P0 governance violation — commit is blocked.</p>
+                        <p class="text-sm text-slate-400">EnforcementOrchestrator runs a pre-commit import graph scan. Any direct cross-domain import is a P0 governance violation — commit is blocked.</p>
                     </div>
                     <div class="p-4 rounded-xl border border-violet-500/15 bg-violet-500/5 space-y-2">
                         <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Benefit</div>
-                        <p class="text-[13px] text-slate-400">You can add an entirely new domain without touching any existing orchestrator. The registry auto-discovers it at next boot.</p>
+                        <p class="text-sm text-slate-400">You can add an entirely new domain without touching any existing orchestrator. The registry auto-discovers it at next boot.</p>
                     </div>
                 </div>
             </div>
@@ -525,14 +573,14 @@ handler = registry.<span class="code-fn">get</span>(intent_type)
             <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-slate-500/20 hover:border-teal-500/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Back to Domain</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Back to Domain</div>
                     <div class="text-sm font-bold text-slate-300">Architecture Patterns</div>
                 </div>
             </a>
             <a href="five-step-lifecycle.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-teal-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Next Deep Dive</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-teal-500">Next Deep Dive</div>
                     <div class="text-sm font-bold text-teal-300">Five-Step Lifecycle</div>
                 </div>
             </a>

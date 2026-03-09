@@ -206,7 +206,7 @@
             .diamond-node { width: 68px; height: 68px; }
         }
 
-        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(0,212,255,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(0,212,255,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
 
         @media (max-width: 768px) {
             .hero-robot-head { width: 200px; }
@@ -347,7 +347,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -357,7 +357,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -389,7 +389,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -715,7 +763,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-cyan-400 mb-1">AI Token Optimisation</div>
                             <h4 class="font-black text-base tracking-tight">40%+ Reduction in LLM Operating Cost</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed mt-1">CORTEX optimises every prompt for token efficiency before dispatch. Redundant context is stripped, responses are cached where safe, and model selection is matched to task complexity. Organisations running high-volume AI workloads recover material cost within weeks of adoption.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed mt-1">CORTEX optimises every prompt for token efficiency before dispatch. Redundant context is stripped, responses are cached where safe, and model selection is matched to task complexity. Organisations running high-volume AI workloads recover material cost within weeks of adoption.</p>
                         </div>
                     </div>
                 </div>
@@ -725,7 +773,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400 mb-1">Quality &amp; Security First Mindset</div>
                             <h4 class="font-black text-base tracking-tight">Security and Quality Built In — Not Bolted On</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed mt-1">CORTEX establishes quality and security as architectural invariants enforced before code is written, not after it ships. This isn't a cultural aspiration — it's a structural property enforced by TDD laws, convergence gates, and a 5-layer security immune system at every stage of the SDLC.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed mt-1">CORTEX establishes quality and security as architectural invariants enforced before code is written, not after it ships. This isn't a cultural aspiration — it's a structural property enforced by TDD laws, convergence gates, and a 5-layer security immune system at every stage of the SDLC.</p>
                         </div>
                     </div>
                 </div>
@@ -735,7 +783,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-violet-400 mb-1">TDD Flywheel ROI</div>
                             <h4 class="font-black text-base tracking-tight">71% Bug-Fix Overhead Eliminated</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed mt-1">Test-Driven Development enforced as an architectural constraint — not a team agreement — redirects engineering effort from defect remediation to feature delivery. 20,000+ tests across a parallel test suite replace manual QA regression cycles, compressing release timelines and freeing sprint capacity for innovation.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed mt-1">Test-Driven Development enforced as an architectural constraint — not a team agreement — redirects engineering effort from defect remediation to feature delivery. 20,000+ tests across a parallel test suite replace manual QA regression cycles, compressing release timelines and freeing sprint capacity for innovation.</p>
                         </div>
                     </div>
                 </div>
@@ -745,7 +793,7 @@
                         <div>
                             <div class="text-[11px] font-black uppercase tracking-widest text-amber-400 mb-1">AI PR Code Reviewer</div>
                             <h4 class="font-black text-base tracking-tight">Every Pull Request Reviewed in Seconds</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed mt-1">The AI Code Reviewer analyses every PR across 6 stages — semantic diff, risk scoring, STRIDE threat modelling, 8-dimension quality scoring, OWASP compliance check — and issues an APPROVE or BLOCK verdict with evidence. Senior engineers spend review cycles on architecture decisions, not style and security hygiene.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed mt-1">The AI Code Reviewer analyses every PR across 6 stages — semantic diff, risk scoring, STRIDE threat modelling, 8-dimension quality scoring, OWASP compliance check — and issues an APPROVE or BLOCK verdict with evidence. Senior engineers spend review cycles on architecture decisions, not style and security hygiene.</p>
                         </div>
                     </div>
                 </div>
@@ -755,16 +803,16 @@
                         <div class="flex-1">
                             <div class="text-[11px] font-black uppercase tracking-widest text-teal-400 mb-1">8-Dimension Quality Scoring</div>
                             <h4 class="font-black text-base tracking-tight">Objective Quality Evidence on Every Merge</h4>
-                            <p class="text-[13px] text-slate-500 leading-relaxed mt-1">Every code change receives a composite quality score across 8 measurable dimensions: Impact, Likelihood, Detection, Efficiency, Maintainability, Test Coverage, Security Exposure, and Architectural Alignment. Quality is no longer a subjective conversation — it is a number with a breakdown.</p>
+                            <p class="text-sm text-slate-500 leading-relaxed mt-1">Every code change receives a composite quality score across 8 measurable dimensions: Impact, Likelihood, Detection, Efficiency, Maintainability, Test Coverage, Security Exposure, and Architectural Alignment. Quality is no longer a subjective conversation — it is a number with a breakdown.</p>
                             <div class="flex flex-wrap gap-2 mt-3">
-                                <span class="px-2 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold tracking-wider">Impact</span>
-                                <span class="px-2 py-1 rounded-full bg-teal-500/15 border border-teal-500/25 text-teal-400 text-[10px] font-bold tracking-wider">Likelihood</span>
-                                <span class="px-2 py-1 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-400 text-[10px] font-bold tracking-wider">Detection</span>
-                                <span class="px-2 py-1 rounded-full bg-violet-500/15 border border-violet-500/25 text-violet-400 text-[10px] font-bold tracking-wider">Efficiency</span>
-                                <span class="px-2 py-1 rounded-full bg-red-500/15 border border-red-500/25 text-red-400 text-[10px] font-bold tracking-wider">Maintainability</span>
-                                <span class="px-2 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-400 text-[10px] font-bold tracking-wider">Test Coverage</span>
-                                <span class="px-2 py-1 rounded-full bg-rose-500/15 border border-rose-500/25 text-rose-400 text-[10px] font-bold tracking-wider">Security Exposure</span>
-                                <span class="px-2 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/25 text-cyan-400 text-[10px] font-bold tracking-wider">Arch Alignment</span>
+                                <span class="px-2 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 text-[11px] font-bold tracking-wider">Impact</span>
+                                <span class="px-2 py-1 rounded-full bg-teal-500/15 border border-teal-500/25 text-teal-400 text-[11px] font-bold tracking-wider">Likelihood</span>
+                                <span class="px-2 py-1 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-400 text-[11px] font-bold tracking-wider">Detection</span>
+                                <span class="px-2 py-1 rounded-full bg-violet-500/15 border border-violet-500/25 text-violet-400 text-[11px] font-bold tracking-wider">Efficiency</span>
+                                <span class="px-2 py-1 rounded-full bg-red-500/15 border border-red-500/25 text-red-400 text-[11px] font-bold tracking-wider">Maintainability</span>
+                                <span class="px-2 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-400 text-[11px] font-bold tracking-wider">Test Coverage</span>
+                                <span class="px-2 py-1 rounded-full bg-rose-500/15 border border-rose-500/25 text-rose-400 text-[11px] font-bold tracking-wider">Security Exposure</span>
+                                <span class="px-2 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/25 text-cyan-400 text-[11px] font-bold tracking-wider">Arch Alignment</span>
                             </div>
                         </div>
                     </div>
@@ -790,29 +838,29 @@
                     <div class="glass-card p-6 space-y-3 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50 transition-all">
                         <div class="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="bot" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-violet-300">Agentic Development with CORTEX</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">290+ orchestrators coordinate autonomously — breaking work into phases, selecting the right specialist for each task, self-verifying results, and escalating only when human judgment is genuinely required. End-to-end feature delivery without per-step prompting.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">290+ orchestrators coordinate autonomously — breaking work into phases, selecting the right specialist for each task, self-verifying results, and escalating only when human judgment is genuinely required. End-to-end feature delivery without per-step prompting.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900/80 hover:border-indigo-400/50 transition-all">
                         <div class="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-indigo-300">Generative AI — Orchestrated, Not Raw</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX does not expose raw LLM access to engineering workflows. Every generative AI call is governed, context-enriched with LENS analysis, and validated against governance rules before the output reaches the codebase. Generative capability without generative risk.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX does not expose raw LLM access to engineering workflows. Every generative AI call is governed, context-enriched with LENS analysis, and validated against governance rules before the output reaches the codebase. Generative capability without generative risk.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
                         <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400"><i data-lucide="message-square" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-blue-300">Prompt Engineering as Architecture</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX's prompt suite is a governed, version-controlled, self-refreshing asset — not a collection of ad-hoc instructions. Prompts are introspected against the live codebase and regenerated automatically. The organisation's AI behaviour is codified, auditable, and drift-free.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX's prompt suite is a governed, version-controlled, self-refreshing asset — not a collection of ad-hoc instructions. Prompts are introspected against the live codebase and regenerated automatically. The organisation's AI behaviour is codified, auditable, and drift-free.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/40 to-slate-900/80 hover:border-purple-400/50 transition-all md:col-span-2 lg:col-span-1">
                         <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400"><i data-lucide="brain-circuit" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-purple-300">RCA Synthesis — Prevention Over Reaction</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">The RCA Memory Engine applies four analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) to every significant failure, then generates an automated prevention rule shared organisation-wide. Root cause analysis becomes a continuous process, not a quarterly retrospective.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">The RCA Memory Engine applies four analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) to every significant failure, then generates an automated prevention rule shared organisation-wide. Root cause analysis becomes a continuous process, not a quarterly retrospective.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-fuchsia-500/30 bg-gradient-to-br from-fuchsia-950/40 to-slate-900/80 hover:border-fuchsia-400/50 transition-all lg:col-span-2">
                         <div class="flex flex-col md:flex-row gap-5 items-start">
                             <div class="w-10 h-10 shrink-0 bg-fuchsia-500/20 rounded-xl flex items-center justify-center text-fuchsia-400"><i data-lucide="workflow" class="w-5 h-5"></i></div>
                             <div>
                                 <h4 class="font-black text-sm tracking-tight text-fuchsia-300 mb-1">End-to-End Agentic Workflow — TotalRecall</h4>
-                                <p class="text-[13px] text-slate-500 leading-relaxed">The <code class="text-fuchsia-400 text-[11px]">/totalrecall</code> command launches a 10-phase autonomous pipeline: delta analysis → drift detection → regression testing → optimisation → wiring validation → memory consolidation → workspace cleanup → database maintenance → security hardening → production certification. A complete engineering cycle, unattended, in a single command.</p>
+                                <p class="text-sm text-slate-500 leading-relaxed">The <code class="text-fuchsia-400 text-[11px]">/totalrecall</code> command launches a 10-phase autonomous pipeline: delta analysis → drift detection → regression testing → optimisation → wiring validation → memory consolidation → workspace cleanup → database maintenance → security hardening → production certification. A complete engineering cycle, unattended, in a single command.</p>
                                 <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-[11px] text-slate-600">
                                     <span>① Delta</span><span>② Drift</span><span>③ Regression</span><span>④ Optimise</span><span>⑤ Wire</span><span>⑥ Memory</span><span>⑦ Vacuum</span><span>⑧ DB</span><span>⑨ Harden</span><span class="text-emerald-500 font-bold">⑩ Certify ✅</span>
                                 </div>
@@ -839,27 +887,27 @@
                 <div class="glass-card p-6 text-center space-y-2 border-cyan-500/20 transition-all hover:border-cyan-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-cyan-400">290+</div>
                     <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Orchestrator Files</div>
-                    <div class="text-[13px] text-slate-600">across 14 domains</div>
+                    <div class="text-sm text-slate-600">across 14 domains</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-violet-500/20 transition-all hover:border-violet-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-violet-400">55+</div>
                     <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
-                    <div class="text-[13px] text-slate-600">registered &amp; live</div>
+                    <div class="text-sm text-slate-600">registered &amp; live</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-amber-500/20 transition-all hover:border-amber-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-amber-400">60+</div>
                     <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
-                    <div class="text-[13px] text-slate-600">enforced automatically</div>
+                    <div class="text-sm text-slate-600">enforced automatically</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-emerald-500/20 transition-all hover:border-emerald-400/40 hover:-translate-y-1">
                     <div class="text-3xl md:text-4xl font-black text-emerald-400">19k+</div>
                     <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Tests Collected</div>
-                    <div class="text-[13px] text-slate-600">parallel execution</div>
+                    <div class="text-sm text-slate-600">parallel execution</div>
                 </div>
                 <div class="glass-card p-6 text-center space-y-2 border-red-500/20 transition-all hover:border-red-400/40 hover:-translate-y-1 col-span-2 md:col-span-1">
                     <div class="text-3xl md:text-4xl font-black text-red-400">9</div>
                     <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
-                    <div class="text-[13px] text-slate-600">converging to zero violations</div>
+                    <div class="text-sm text-slate-600">converging to zero violations</div>
                 </div>
             </div>
 
@@ -876,13 +924,13 @@
                     <div class="domain-bubble" style="--bubble-color:#10b981;--bubble-glow:rgba(16,185,129,0.25);width:80px;height:80px;background:rgba(16,185,129,0.07)"><span class="db-count" style="font-size:1.3rem">31</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">health</span></div>
                     <div class="domain-bubble" style="--bubble-color:#a78bfa;--bubble-glow:rgba(167,139,250,0.2);width:68px;height:68px;background:rgba(167,139,250,0.06)"><span class="db-count" style="font-size:1.1rem">17</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.15rem">intelligence</span></div>
                     <div class="domain-bubble" style="--bubble-color:#34d399;--bubble-glow:rgba(52,211,153,0.2);width:63px;height:63px;background:rgba(52,211,153,0.06)"><span class="db-count" style="font-size:1rem">13</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.15rem">validation</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">persona</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size:0.95rem">7</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">workflow</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">response</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size:0.9rem">5</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">git</span></div>
-                    <div class="domain-bubble" style="--bubble-color:#94a3b8;--bubble-glow:rgba(148,163,184,0.15);width:45px;height:45px;background:rgba(148,163,184,0.04)"><span class="db-count" style="font-size:0.85rem">2</span><span class="db-name" style="font-size:0.625rem;margin-top:0.1rem">registry</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#67e8f9;--bubble-glow:rgba(103,232,249,0.2);width:54px;height:54px;background:rgba(103,232,249,0.05)"><span class="db-count" style="font-size: 1rem">7</span><span class="db-name" style="font-size: 0.6875rem;margin-top:0.1rem">persona</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#fbbf24;--bubble-glow:rgba(251,191,36,0.2);width:54px;height:54px;background:rgba(251,191,36,0.05)"><span class="db-count" style="font-size: 1rem">7</span><span class="db-name" style="font-size: 0.6875rem;margin-top:0.1rem">workflow</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#f472b6;--bubble-glow:rgba(244,114,182,0.2);width:50px;height:50px;background:rgba(244,114,182,0.05)"><span class="db-count" style="font-size: 1rem">5</span><span class="db-name" style="font-size: 0.6875rem;margin-top:0.1rem">response</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#4ade80;--bubble-glow:rgba(74,222,128,0.2);width:50px;height:50px;background:rgba(74,222,128,0.05)"><span class="db-count" style="font-size: 1rem">5</span><span class="db-name" style="font-size: 0.6875rem;margin-top:0.1rem">git</span></div>
+                    <div class="domain-bubble" style="--bubble-color:#94a3b8;--bubble-glow:rgba(148,163,184,0.15);width:45px;height:45px;background:rgba(148,163,184,0.04)"><span class="db-count" style="font-size: 1rem">2</span><span class="db-name" style="font-size: 0.6875rem;margin-top:0.1rem">registry</span></div>
                 </div>
-                <p class="text-center text-[13px] text-slate-600 font-medium">Bubble size proportional to file count.</p>
+                <p class="text-center text-sm text-slate-600 font-medium">Bubble size proportional to file count.</p>
             </div>
         </section>
 
@@ -909,7 +957,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">LENS — Sensory System</h4>
-                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Eliminates technical blind spots through deep codebase awareness before every execution.</p>
+                                    <p class="text-sm md:text-sm text-slate-500 leading-relaxed">Eliminates technical blind spots through deep codebase awareness before every execution.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -918,7 +966,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">REASONING — Strategy Selection</h4>
-                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Matches task complexity to three tiers of intelligence: Quick, Targeted, Full.</p>
+                                    <p class="text-sm md:text-sm text-slate-500 leading-relaxed">Matches task complexity to three tiers of intelligence: Quick, Targeted, Full.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -927,7 +975,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">ORCHESTRATION — Execution Motor</h4>
-                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Coordinates 290+ specialised engines with structural Test-Driven Development.</p>
+                                    <p class="text-sm md:text-sm text-slate-500 leading-relaxed">Coordinates 290+ specialised engines with structural Test-Driven Development.</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 md:gap-6 group">
@@ -936,7 +984,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm md:text-base font-bold">GOVERNANCE — The Immune System</h4>
-                                    <p class="text-[13px] md:text-sm text-slate-500 leading-relaxed">Automatic enforcement of 60+ CORE rules across 5 discrete security layers.</p>
+                                    <p class="text-sm md:text-sm text-slate-500 leading-relaxed">Automatic enforcement of 60+ CORE rules across 5 discrete security layers.</p>
                                 </div>
                             </div>
                         </div>
@@ -993,7 +1041,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400"><i data-lucide="git-merge" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-violet-300">Five-Whys Chain</div>
-                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Linear root cause tracing for core logic failures across technology domains.</p>
+                        <p class="text-[12px] md:text-sm text-slate-500 leading-normal">Linear root cause tracing for core logic failures across technology domains.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -1001,7 +1049,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-blue-300">Fishbone Matrix</div>
-                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Categorization across People, Process, and Technology failure axes.</p>
+                        <p class="text-[12px] md:text-sm text-slate-500 leading-normal">Categorization across People, Process, and Technology failure axes.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -1009,7 +1057,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-teal-300">Fault Tree Logic</div>
-                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Surfaces single points of failure via probability mapping across layers.</p>
+                        <p class="text-[12px] md:text-sm text-slate-500 leading-normal">Surfaces single points of failure via probability mapping across layers.</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -1017,7 +1065,7 @@
                     <div class="glass-card p-6 text-center space-y-3 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all">
                         <div class="w-10 h-10 mx-auto bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400"><i data-lucide="history" class="w-5 h-5"></i></div>
                         <div class="font-bold text-xs md:text-sm uppercase tracking-tighter text-amber-300">Temporal Chain</div>
-                        <p class="text-[12px] md:text-[13px] text-slate-500 leading-normal">Correlation of events pinpointing trigger conditions across time horizons.</p>
+                        <p class="text-[12px] md:text-sm text-slate-500 leading-normal">Correlation of events pinpointing trigger conditions across time horizons.</p>
                     </div>
                 </div>
             </div>
@@ -1030,18 +1078,18 @@
                             CORTEX rewards successful patterns with higher confidence scores. Recurring defects trigger automated Prevention Advisories that prevent recurrence organisation-wide.
                         </p>
                         <div class="flex justify-center lg:justify-start gap-6">
-                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Reward</div></div>
-                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-[13px] text-slate-500 uppercase tracking-widest">Penalty</div></div>
+                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-emerald-400">+1.0</div><div class="text-sm text-slate-500 uppercase tracking-widest">Reward</div></div>
+                            <div class="text-center"><div class="text-xl md:text-2xl font-black text-red-400">-1.0</div><div class="text-sm text-slate-500 uppercase tracking-widest">Penalty</div></div>
                         </div>
                     </div>
                     <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20">
                             <div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
-                            <p class="text-[13px] text-slate-400 leading-relaxed">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire portfolio.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire portfolio.</p>
                         </div>
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20">
                             <div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
-                            <p class="text-[13px] text-slate-400 leading-relaxed">All learning and enforcement recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">All learning and enforcement recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
                         </div>
                     </div>
                 </div>
@@ -1139,32 +1187,32 @@
                     <div class="glass-card p-6 space-y-3 border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900/80 hover:border-emerald-400/50 transition-all">
                         <div class="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-emerald-300">Self-Governing Enforcement</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">60+ governance rules run automatically at every commit, every build, and every runtime operation. No team member audits compliance manually. Standards either enforce themselves or block automatically — no exceptions, no overrides without a recorded reason.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">60+ governance rules run automatically at every commit, every build, and every runtime operation. No team member audits compliance manually. Standards either enforce themselves or block automatically — no exceptions, no overrides without a recorded reason.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-slate-900/80 hover:border-cyan-400/50 transition-all">
                         <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400"><i data-lucide="plug" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-cyan-300">Self-Extending Architecture</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Teams add their own orchestrators, agents, and workflow templates using a single defined protocol. CORTEX detects them automatically, routes requests correctly, and governs them under the same rules as every built-in capability — no core code changes required.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Teams add their own orchestrators, agents, and workflow templates using a single defined protocol. CORTEX detects them automatically, routes requests correctly, and governs them under the same rules as every built-in capability — no core code changes required.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50 transition-all">
                         <div class="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="heart-pulse" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-violet-300">Self-Healing Health Checks</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">22 orchestrator health endpoints verify every component is correctly wired, importable, and operational. A single command surfaces exactly what is missing and why — without requiring an engineer to diagnose the framework manually.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">22 orchestrator health endpoints verify every component is correctly wired, importable, and operational. A single command surfaces exactly what is missing and why — without requiring an engineer to diagnose the framework manually.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/40 to-slate-900/80 hover:border-amber-400/50 transition-all">
                         <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="refresh-cw" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-amber-300">Self-Refreshing Documentation</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">The prompt refresh engine introspects the live codebase and regenerates all documentation, governance prompts, and agent definitions to match reality. Architecture documentation never drifts from the code it describes — a problem that plagues every manually-maintained platform.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">The prompt refresh engine introspects the live codebase and regenerates all documentation, governance prompts, and agent definitions to match reality. Architecture documentation never drifts from the code it describes — a problem that plagues every manually-maintained platform.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-400"><i data-lucide="brain" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-teal-300">Self-Learning from Outcomes</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Every success and every failure feeds the reinforcement signal engine. Confidence scores update continuously. Prevention rules generate automatically from root cause analyses. CORTEX improves with every operation — no retrospective meetings, no manual tuning cycles.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Every success and every failure feeds the reinforcement signal engine. Confidence scores update continuously. Prevention rules generate automatically from root cause analyses. CORTEX improves with every operation — no retrospective meetings, no manual tuning cycles.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-red-500/30 bg-gradient-to-br from-red-950/40 to-slate-900/80 hover:border-red-400/50 transition-all">
                         <div class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400"><i data-lucide="database" class="w-5 h-5"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-red-300">Self-Managing Data Hygiene</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">7 SQLite databases maintain 30-day retention automatically, pruning orphaned records and running VACUUM cycles on schedule. Audit data stays current, compliant, and lean — without a DBA or scheduled maintenance window.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">7 SQLite databases maintain 30-day retention automatically, pruning orphaned records and running VACUUM cycles on schedule. Audit data stays current, compliant, and lean — without a DBA or scheduled maintenance window.</p>
                     </div>
                 </div>
 
@@ -1202,15 +1250,15 @@
         <!-- ═══════════════════ FOOTER ═══════════════════ -->
     <footer role="contentinfo" style="border-top:1px solid rgba(255,255,255,0.07);background:rgba(2,6,23,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0.875rem 0;margin-top:3rem;">
       <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem 1.5rem;">
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:0.8125rem;font-weight:700;letter-spacing:0.04em;color:rgba(248,250,252,0.55);white-space:nowrap;"><strong style="color:rgba(248,250,252,0.82);">CORTEX</strong> — Cognitive Orchestration Real-Time Execution eXpert</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:0.875rem;font-weight:700;letter-spacing:0.04em;color:rgba(248,250,252,0.55);white-space:nowrap;"><strong style="color:rgba(248,250,252,0.82);">CORTEX</strong> — Cognitive Orchestration Real-Time Execution eXpert</span>
         <nav style="display:flex;align-items:center;gap:0.25rem;" aria-label="Footer navigation">
-          <a href="../faq.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(99,102,241,0.9);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)';this.style.borderColor='rgba(99,102,241,0.25)';this.style.color='#a5b4fc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(99,102,241,0.9)'" aria-label="Frequently Asked Questions"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ</a>
-          <span style="color:rgba(255,255,255,0.12);font-size:0.7rem;padding:0 0.1rem;" aria-hidden="true">|</span>
-          <a href="../glossary.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(0,212,255,0.85);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.08)';this.style.borderColor='rgba(0,212,255,0.22)';this.style.color='#67e8f9'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(0,212,255,0.85)'" aria-label="CORTEX Glossary"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Glossary</a>
-          <span style="color:rgba(255,255,255,0.12);font-size:0.7rem;padding:0 0.1rem;" aria-hidden="true">|</span>
-          <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;text-decoration:none;color:rgba(148,163,184,0.8);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#f8fafc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(148,163,184,0.8)'" aria-label="CORTEX on GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub</a>
+          <a href="../faq.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(99,102,241,0.9);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)';this.style.borderColor='rgba(99,102,241,0.25)';this.style.color='#a5b4fc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(99,102,241,0.9)'" aria-label="Frequently Asked Questions"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ</a>
+          <span style="color:rgba(255,255,255,0.12);font-size: 0.875rem;padding:0 0.1rem;" aria-hidden="true">|</span>
+          <a href="../glossary.html" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(0,212,255,0.85);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.08)';this.style.borderColor='rgba(0,212,255,0.22)';this.style.color='#67e8f9'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(0,212,255,0.85)'" aria-label="CORTEX Glossary"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Glossary</a>
+          <span style="color:rgba(255,255,255,0.12);font-size: 0.875rem;padding:0 0.1rem;" aria-hidden="true">|</span>
+          <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.875rem;font-weight:600;text-decoration:none;color:rgba(148,163,184,0.8);border:1px solid transparent;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.07)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#f8fafc'" onmouseout="this.style.background='';this.style.borderColor='transparent';this.style.color='rgba(148,163,184,0.8)'" aria-label="CORTEX on GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub</a>
         </nav>
-        <span style="font-size:0.7rem;color:rgba(100,116,139,0.65);white-space:nowrap;letter-spacing:0.02em;">© 2025–2026 Asif Hussain · WCAG 2.1 AA</span>
+        <span style="font-size:0.875rem;color:rgba(100,116,139,0.65);white-space:nowrap;letter-spacing:0.02em;">© 2025–2026 Asif Hussain · WCAG 2.1 AA</span>
       </div>
     </footer>
 
@@ -1261,13 +1309,13 @@
                 .attr('x', d => x(d.stage) + x.bandwidth() / 2)
                 .attr('y', d => y(d.cost) - 7)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '10px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '11px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
                 .text(d => `${d.cost}×`);
 
             svg.append('g').attr('transform', `translate(0,${height})`)
                 .call(d3.axisBottom(x).tickSize(0))
                 .selectAll('text')
-                .attr('fill', '#64748b').attr('font-size', '9px').attr('font-weight', 'bold')
+                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', 'bold')
                 .attr('font-family', 'Inter, sans-serif').attr('dy', '1.2em');
             svg.selectAll('.domain').remove();
         }

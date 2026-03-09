@@ -28,7 +28,7 @@
          
         .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .concept-card:hover { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.04); transform: translateY(-2px); }
-        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #475569; }
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; }
 
@@ -161,7 +161,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -171,7 +171,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -203,7 +203,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -281,7 +329,7 @@
                         <div class="layer-icon"><i data-lucide="git-commit" class="w-5 h-5"></i></div>
                         <div class="flex-1">
                             <div class="font-bold text-sm text-amber-300">Pre-Commit</div>
-                            <p class="text-[13px] text-slate-500 mt-0.5">Runs before code enters the repository. Catches naming violations, missing docstrings, orphaned imports. Instant developer feedback.</p>
+                            <p class="text-sm text-slate-500 mt-0.5">Runs before code enters the repository. Catches naming violations, missing docstrings, orphaned imports. Instant developer feedback.</p>
                         </div>
                         <div class="flex flex-wrap gap-1.5">
                             <span class="rule-badge">CORE-028</span>
@@ -293,7 +341,7 @@
                         <div class="layer-icon"><i data-lucide="circle-dot" class="w-5 h-5"></i></div>
                         <div class="flex-1">
                             <div class="font-bold text-sm text-red-300">CI Pipeline</div>
-                            <p class="text-[13px] text-slate-500 mt-0.5">Runs in GitHub Actions. Full test suite, compliance scans, architecture drift detection. Blocks merge if any P0/P1 violation exists.</p>
+                            <p class="text-sm text-slate-500 mt-0.5">Runs in GitHub Actions. Full test suite, compliance scans, architecture drift detection. Blocks merge if any P0/P1 violation exists.</p>
                         </div>
                         <div class="flex flex-wrap gap-1.5">
                             <span class="rule-badge" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2);color:#ef4444;">CORE-048</span>
@@ -304,7 +352,7 @@
                         <div class="layer-icon"><i data-lucide="zap" class="w-5 h-5"></i></div>
                         <div class="flex-1">
                             <div class="font-bold text-sm text-violet-300">Runtime</div>
-                            <p class="text-[13px] text-slate-500 mt-0.5">Enforced during orchestrator execution. AC markers, convergence loops, sweep completeness — validated in real-time by the EnforcementOrchestrator.</p>
+                            <p class="text-sm text-slate-500 mt-0.5">Enforced during orchestrator execution. AC markers, convergence loops, sweep completeness — validated in real-time by the EnforcementOrchestrator.</p>
                         </div>
                         <div class="flex flex-wrap gap-1.5">
                             <span class="rule-badge" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.2);color:#a78bfa;">CORE-068</span>
@@ -335,47 +383,47 @@
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">01</span>
                     <h3 class="font-bold text-sm text-amber-300">60+ YAML Rules</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">26 core + 34 governance rules defined in <code class="text-[11px] text-teal-400">cortex-registry/</code>. Each specifies ID, severity, description, and check trigger.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">26 core + 34 governance rules defined in <code class="text-[11px] text-teal-400">cortex-registry/</code>. Each specifies ID, severity, description, and check trigger.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">02</span>
                     <h3 class="font-bold text-sm text-amber-300">Priority System</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">P0 = hard-stop (blocks everything), P1 = must-fix before merge, P2 = advisory. Severity drives convergence loop behaviour.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">P0 = hard-stop (blocks everything), P1 = must-fix before merge, P2 = advisory. Severity drives convergence loop behaviour.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">03</span>
                     <h3 class="font-bold text-sm text-amber-300">EnforcementOrchestrator</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">The runtime compliance engine — validates every orchestrator invocation against active rules before AC_COMPLETE fires.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">The runtime compliance engine — validates every orchestrator invocation against active rules before AC_COMPLETE fires.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(239,68,68,0.2);">
                     <span class="concept-number">04</span>
                     <h3 class="font-bold text-sm text-red-300">CORE-048 — Holistic Gate</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Mandatory pre-execution validation for every IMPLEMENT, FIX, and REFACTOR. No code-modifying operation starts without this gate.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Mandatory pre-execution validation for every IMPLEMENT, FIX, and REFACTOR. No code-modifying operation starts without this gate.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(239,68,68,0.2);">
                     <span class="concept-number">05</span>
                     <h3 class="font-bold text-sm text-red-300">CORE-064 — Sweep Completeness</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Every FIX, REFACTOR, and AUDIT must exhaust its full issue catalogue. No partial sweeps — the sweep catalogue must close clean.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Every FIX, REFACTOR, and AUDIT must exhaust its full issue catalogue. No partial sweeps — the sweep catalogue must close clean.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(239,68,68,0.2);">
                     <span class="concept-number">06</span>
                     <h3 class="font-bold text-sm text-red-300">CORE-068 — Convergence Gate</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Detect → fix → rescan until zero P0/P1 violations (max 3 cycles). Not a single pass — guaranteed convergence before completion.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Detect → fix → rescan until zero P0/P1 violations (max 3 cycles). Not a single pass — guaranteed convergence before completion.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">07</span>
                     <h3 class="font-bold text-sm text-violet-300">AC Markers</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">AC_START at entry, AC_COMPLETE on exit. Every orchestrator invocation is tracked. No orphaned starts — a P0 violation.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">AC_START at entry, AC_COMPLETE on exit. Every orchestrator invocation is tracked. No orphaned starts — a P0 violation.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">08</span>
                     <h3 class="font-bold text-sm text-violet-300">Meta-Audit Pipeline</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">CORTEX audits itself — 23+ automated checks verify the governance system's own integrity, including prompt drift and SQLite health.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">CORTEX audits itself — 23+ automated checks verify the governance system's own integrity, including prompt drift and SQLite health.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">09</span>
                     <h3 class="font-bold text-sm text-violet-300">7 SQLite Databases</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Traces, RCA, audit, governance, conversations, wiring, intelligence — all activity is recorded, auditable, and has 30-day retention with VACUUM.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Traces, RCA, audit, governance, conversations, wiring, intelligence — all activity is recorded, auditable, and has 30-day retention with VACUUM.</p>
                 </div>
             </div>
         </section>
@@ -384,11 +432,11 @@
         <section class="flex flex-col sm:flex-row justify-between gap-4">
             <a href="../workflow-automation/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-emerald-500/20 hover:border-emerald-400/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-emerald-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Previous</div><div class="text-sm font-bold text-emerald-300">Workflow Automation</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-emerald-500">Previous</div><div class="text-sm font-bold text-emerald-300">Workflow Automation</div></div>
             </a>
             <a href="../tdd-development/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-red-500/20 hover:border-red-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-red-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-red-500">Next Domain</div><div class="text-sm font-bold text-red-300">TDD Development</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-red-500">Next Domain</div><div class="text-sm font-bold text-red-300">TDD Development</div></div>
             </a>
         </section>
     </main>

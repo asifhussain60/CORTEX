@@ -28,7 +28,7 @@
          
         .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .concept-card:hover { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.04); transform: translateY(-2px); }
-        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #475569; }
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; }
 
@@ -164,7 +164,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -174,7 +174,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -206,7 +206,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -341,42 +389,42 @@
                 <a href="concepts/lens-sensory-system.html" class="concept-card" style="border-color: rgba(167,139,250,0.2); text-decoration:none; color: inherit;">
                     <span class="concept-number">01 · Deep Dive →</span>
                     <h3 class="font-bold text-sm text-purple-300">LENS Sensory System</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">9 analysers build AnalysisContext: Language → Examination → Navigation → Synthesis. The workspace perception layer.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">9 analysers build AnalysisContext: Language → Examination → Navigation → Synthesis. The workspace perception layer.</p>
                 </a>
                 <div class="concept-card" style="border-color: rgba(167,139,250,0.2);">
                     <span class="concept-number">02</span>
                     <h3 class="font-bold text-sm text-purple-300">IntelligenceFacade</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Single canonical entry point replacing 3 legacy facades (Phase 107). Coordinates LENS, domain brain, and knowledge synthesis.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Single canonical entry point replacing 3 legacy facades (Phase 107). Coordinates LENS, domain brain, and knowledge synthesis.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(59,130,246,0.2);">
                     <span class="concept-number">03</span>
                     <h3 class="font-bold text-sm text-blue-300">URS — Reinforcement Signals</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Closed-loop learning: MILD_REWARD on success, MILD_PUNISHMENT on failure. Signals emit, decay, promote, or quarantine.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Closed-loop learning: MILD_REWARD on success, MILD_PUNISHMENT on failure. Signals emit, decay, promote, or quarantine.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(59,130,246,0.2);">
                     <span class="concept-number">04</span>
                     <h3 class="font-bold text-sm text-blue-300">RCA Memory Engine</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">4 root cause methodologies: Five-Whys, Fishbone (Ishikawa), Fault-Tree, Causal-Chain. Each analysis generates prevention rules.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">4 root cause methodologies: Five-Whys, Fishbone (Ishikawa), Fault-Tree, Causal-Chain. Each analysis generates prevention rules.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
                     <span class="concept-number">05</span>
                     <h3 class="font-bold text-sm text-teal-300">KAL — Knowledge Acquisition</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">6-step pipeline: coverage assessor, gap analyser, source ranker, acquisition planner, integration validator, knowledge scorer.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">6-step pipeline: coverage assessor, gap analyser, source ranker, acquisition planner, integration validator, knowledge scorer.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
                     <span class="concept-number">06</span>
                     <h3 class="font-bold text-sm text-teal-300">CAPE — Complexity Planning</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Complexity triage → auto plan → 5 execution gates → loop. Adapts planning depth to task complexity — simple tasks skip deep analysis.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Complexity triage → auto plan → 5 execution gates → loop. Adapts planning depth to task complexity — simple tasks skip deep analysis.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">07</span>
                     <h3 class="font-bold text-sm text-amber-300">PLIP — Prompt-Layer Protocol</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Before every code-modifying operation: query history, check prevention rules, surface prior failure patterns. After: emit reward or punishment.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Before every code-modifying operation: query history, check prevention rules, surface prior failure patterns. After: emit reward or punishment.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">08</span>
                     <h3 class="font-bold text-sm text-amber-300">Deep Intelligence (Phase 144)</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">CCL query engine, capability verifier, facade extension — making intelligence queryable and self-aware.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">CCL query engine, capability verifier, facade extension — making intelligence queryable and self-aware.</p>
                 </div>
             </div>
         </section>
@@ -395,11 +443,11 @@
         <section class="flex flex-col sm:flex-row justify-between gap-4">
             <a href="../tdd-development/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-red-500/20 hover:border-red-400/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-red-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-red-500">Previous</div><div class="text-sm font-bold text-red-300">TDD Development</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-red-500">Previous</div><div class="text-sm font-bold text-red-300">TDD Development</div></div>
             </a>
             <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="layout-grid" class="w-4 h-4 text-teal-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Back to</div><div class="text-sm font-bold text-teal-300">All Domains</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-teal-500">Back to</div><div class="text-sm font-bold text-teal-300">All Domains</div></div>
             </a>
         </section>
     </main>

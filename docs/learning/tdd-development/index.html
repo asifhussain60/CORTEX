@@ -28,7 +28,7 @@
          
         .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .concept-card:hover { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.04); transform: translateY(-2px); }
-        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #475569; }
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; }
 
@@ -162,7 +162,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -172,7 +172,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -204,7 +204,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -342,27 +390,27 @@
                 <div class="concept-card" style="border-color: rgba(239,68,68,0.2);">
                     <span class="concept-number">01</span>
                     <h3 class="font-bold text-sm text-red-300">CORE-008 — TDD Mandatory</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Write a failing test first, then implement. No exceptions. The TDDOrchestrator enforces this for every IMPLEMENT and FIX intent.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Write a failing test first, then implement. No exceptions. The TDDOrchestrator enforces this for every IMPLEMENT and FIX intent.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(239,68,68,0.2);">
                     <span class="concept-number">02</span>
                     <h3 class="font-bold text-sm text-red-300">TDDOrchestrator</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">The orchestrator that drives test-first workflows — generates test stubs, runs them to confirm red, guides implementation to green.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">The orchestrator that drives test-first workflows — generates test stubs, runs them to confirm red, guides implementation to green.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(59,130,246,0.2);">
                     <span class="concept-number">03</span>
                     <h3 class="font-bold text-sm text-blue-300">Test Quality Scoring</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Tests are scored on coverage, isolation, determinism, and speed. The quality gate prevents merging if scores drop below threshold.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Tests are scored on coverage, isolation, determinism, and speed. The quality gate prevents merging if scores drop below threshold.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(59,130,246,0.2);">
                     <span class="concept-number">04</span>
                     <h3 class="font-bold text-sm text-blue-300">Golden Test Promotion</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">High-scoring tests are promoted to "golden" status — they become regression anchors that are never skipped or weakened.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">High-scoring tests are promoted to "golden" status — they become regression anchors that are never skipped or weakened.</p>
                 </div>
                 <div class="concept-card md:col-span-2" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">05</span>
                     <h3 class="font-bold text-sm text-violet-300">3-Layer Acceleration</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Layer 1: <code class="text-teal-400 text-[11px]">pytest-xdist</code> (parallel, 3–4× faster). Layer 2: <code class="text-teal-400 text-[11px]">pytest-testmon</code> (smart, only changed). Layer 3: <code class="text-teal-400 text-[11px]">--import-mode=importlib</code> (cuts cold collection 17s → 7s).</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Layer 1: <code class="text-teal-400 text-[11px]">pytest-xdist</code> (parallel, 3–4× faster). Layer 2: <code class="text-teal-400 text-[11px]">pytest-testmon</code> (smart, only changed). Layer 3: <code class="text-teal-400 text-[11px]">--import-mode=importlib</code> (cuts cold collection 17s → 7s).</p>
                 </div>
             </div>
         </section>
@@ -381,11 +429,11 @@
         <section class="flex flex-col sm:flex-row justify-between gap-4">
             <a href="../governance-quality/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-amber-500/20 hover:border-amber-400/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-amber-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-amber-500">Previous</div><div class="text-sm font-bold text-amber-300">Governance &amp; Quality</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-amber-500">Previous</div><div class="text-sm font-bold text-amber-300">Governance &amp; Quality</div></div>
             </a>
             <a href="../intelligence-learning/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-purple-500/20 hover:border-purple-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-purple-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-purple-500">Next Domain</div><div class="text-sm font-bold text-purple-300">Intelligence &amp; Learning</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-purple-500">Next Domain</div><div class="text-sm font-bold text-purple-300">Intelligence &amp; Learning</div></div>
             </a>
         </section>
     </main>

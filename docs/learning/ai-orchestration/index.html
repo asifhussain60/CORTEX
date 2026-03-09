@@ -28,14 +28,14 @@
          
         .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .concept-card:hover { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.04); transform: translateY(-2px); }
-        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #475569; }
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; }
         .tier-pipeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; } @media (max-width: 768px) { .tier-pipeline { grid-template-columns: 1fr; } }
         .tier-step { padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .tier-step:hover { transform: translateY(-4px); }
         #orchestration-graph { width: 100%; height: 420px; border-radius: 1rem; }
-        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
         @media (prefers-reduced-motion: reduce) { .glass-card, .concept-card, .tier-step { transition: none; } }
@@ -156,7 +156,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -166,7 +166,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -198,7 +198,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -274,7 +322,7 @@
                         <div class="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400"><i data-lucide="eye" class="w-6 h-6"></i></div>
                         <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Tier 1</div>
                         <div class="font-bold text-base text-teal-300">Perception</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">LENS scans 9 dimensions simultaneously. Matches your codebase against canonical patterns with confidence scores 0–1.0.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">LENS scans 9 dimensions simultaneously. Matches your codebase against canonical patterns with confidence scores 0–1.0.</p>
                         <div class="code-block text-[12px] text-left mt-2"><span class="code-cmt"># 9 parallel analyzers</span>
 <span class="code-fn">lens.scan</span>(<span class="code-str">"structural"</span>)
 <span class="code-fn">lens.scan</span>(<span class="code-str">"security"</span>)
@@ -285,7 +333,7 @@
                         <div class="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400"><i data-lucide="cpu" class="w-6 h-6"></i></div>
                         <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Tier 2</div>
                         <div class="font-bold text-base text-violet-300">Reasoning</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">IntelligenceFacade selects Quick, Targeted, or Full strategy based on complexity and historical success rates.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">IntelligenceFacade selects Quick, Targeted, or Full strategy based on complexity and historical success rates.</p>
                         <div class="code-block text-[12px] text-left mt-2"><span class="code-cls">IntelligenceFacade</span>
   .<span class="code-fn">select_strategy</span>(ctx)
 <span class="code-cmt"># → QUICK | TARGETED | FULL</span>
@@ -295,7 +343,7 @@
                         <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i data-lucide="activity" class="w-6 h-6"></i></div>
                         <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Tier 3</div>
                         <div class="font-bold text-base text-emerald-300">Action</div>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">MasterOrchestrator routes to intent-specialised orchestrators with convergence loops until zero P0/P1 violations.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">MasterOrchestrator routes to intent-specialised orchestrators with convergence loops until zero P0/P1 violations.</p>
                         <div class="code-block text-[12px] text-left mt-2"><span class="code-fn">AC_START</span>(<span class="code-str">"AC-IMPL-001"</span>)
 <span class="code-cls">MasterOrchestrator</span>
   .<span class="code-fn">route</span>(IMPLEMENT)
@@ -314,40 +362,40 @@
                 <a href="concepts/lens-sensory-system.html" class="concept-card" style="text-decoration:none; border-color: rgba(139,92,246,0.2);">
                     <div class="flex items-center justify-between">
                         <span class="concept-number">01</span>
-                        <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Deep Dive →</span>
+                        <span class="text-[11px] font-bold text-violet-400 uppercase tracking-widest">Deep Dive →</span>
                     </div>
                     <h3 class="font-bold text-sm text-violet-300">LENS — The Sensory System</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">9 parallel analyzers build a complete workspace picture in under one second. Structure, history, security, patterns, complexity.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">9 parallel analyzers build a complete workspace picture in under one second. Structure, history, security, patterns, complexity.</p>
                 </a>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">02</span>
                     <h3 class="font-bold text-sm text-violet-300">Three Intelligence Tiers</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Quick (&lt;200ms), Targeted (&lt;2s), Full (&lt;10s). Each tier matches request complexity to analysis depth.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Quick (&lt;200ms), Targeted (&lt;2s), Full (&lt;10s). Each tier matches request complexity to analysis depth.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
                     <span class="concept-number">03</span>
                     <h3 class="font-bold text-sm text-teal-300">IntelligenceFacade</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">The single canonical entry point with 12+ methods and null-object fallbacks for graceful degradation.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">The single canonical entry point with 12+ methods and null-object fallbacks for graceful degradation.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(20,184,166,0.2);">
                     <span class="concept-number">04</span>
                     <h3 class="font-bold text-sm text-teal-300">Intent Classification</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">31 intent types classified in under 40ms. From IMPLEMENT to AUDIT to DEBUG — every request maps to a specialised handler.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">31 intent types classified in under 40ms. From IMPLEMENT to AUDIT to DEBUG — every request maps to a specialised handler.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
                     <span class="concept-number">05</span>
                     <h3 class="font-bold text-sm text-emerald-300">Session Context Chain</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Prior 5 requests injected into each LENS run. SHA-256 hashed, parent-linked, status-tracked in SQLite.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Prior 5 requests injected into each LENS run. SHA-256 hashed, parent-linked, status-tracked in SQLite.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
                     <span class="concept-number">06</span>
                     <h3 class="font-bold text-sm text-emerald-300">MCP Tool Registry</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">36 MCP tools registered via Pylance-style stdio server. Auto-discovered by VS Code Copilot Chat. Zero manual startup.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">36 MCP tools registered via Pylance-style stdio server. Auto-discovered by VS Code Copilot Chat. Zero manual startup.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">07</span>
                     <h3 class="font-bold text-sm text-amber-300">KAL — Knowledge Acquisition</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">On-demand knowledge synthesis. Coverage scoring triggers automatic gap identification and YAML knowledge generation.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">On-demand knowledge synthesis. Coverage scoring triggers automatic gap identification and YAML knowledge generation.</p>
                 </div>
             </div>
         </section>
@@ -376,11 +424,11 @@
         <section class="flex flex-col sm:flex-row justify-between gap-4">
             <a href="../architecture-patterns/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-teal-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Previous</div><div class="text-sm font-bold text-teal-300">Architecture Patterns</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-teal-500">Previous</div><div class="text-sm font-bold text-teal-300">Architecture Patterns</div></div>
             </a>
             <a href="../workflow-automation/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-emerald-500/20 hover:border-emerald-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400"></i>
-                <div><div class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Next Domain</div><div class="text-sm font-bold text-emerald-300">Workflow Automation</div></div>
+                <div><div class="text-[11px] font-bold uppercase tracking-widest text-emerald-500">Next Domain</div><div class="text-sm font-bold text-emerald-300">Workflow Automation</div></div>
             </a>
         </section>
     </main>

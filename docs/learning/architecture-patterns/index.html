@@ -47,14 +47,14 @@
 
         .concept-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 0.75rem; transition: all 0.2s ease; }
         .concept-card:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.04); transform: translateY(-2px); }
-        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #475569; }
+        .concept-number { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #475569; }
 
         .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.7; background: rgba(0,0,0,0.4); border-radius: 0.75rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto; white-space: pre; }
         .code-kw { color: #f472b6; } .code-fn { color: #60a5fa; } .code-str { color: #34d399; } .code-cmt { color: #475569; font-style: italic; } .code-cls { color: #facc15; } .code-dec { color: #a78bfa; }
 
         #concept-graph { width: 100%; height: 400px; border-radius: 1rem; }
         @media (min-width: 768px) { #concept-graph { height: 500px; } }
-        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
 
         .lifecycle-pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; }
         @media (max-width: 768px) { .lifecycle-pipeline { grid-template-columns: 1fr; } }
@@ -181,7 +181,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -191,7 +191,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -223,7 +223,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -318,48 +366,48 @@
                 <a href="concepts/orchestrator-domains.html" class="concept-card" style="text-decoration:none; border-color: rgba(20,184,166,0.2);">
                     <div class="flex items-center justify-between">
                         <span class="concept-number">01</span>
-                        <span class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
+                        <span class="text-[11px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
                     </div>
                     <h3 class="font-bold text-sm text-teal-300">The 14 Orchestrator Domains</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">How CORTEX organises 290+ orchestrators into specialised domains — the hospital analogy that makes the architecture intuitive.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">How CORTEX organises 290+ orchestrators into specialised domains — the hospital analogy that makes the architecture intuitive.</p>
                 </a>
                 <a href="concepts/five-step-lifecycle.html" class="concept-card" style="text-decoration:none; border-color: rgba(20,184,166,0.2);">
                     <div class="flex items-center justify-between">
                         <span class="concept-number">02</span>
-                        <span class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
+                        <span class="text-[11px] font-bold text-teal-400 uppercase tracking-widest">Deep Dive →</span>
                     </div>
                     <h3 class="font-bold text-sm text-teal-300">The Five-Step Lifecycle</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Every orchestrator follows Prepare → Govern → Execute → Validate → Close. This lifecycle is what makes CORTEX auditable and predictable.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Every orchestrator follows Prepare → Govern → Execute → Validate → Close. This lifecycle is what makes CORTEX auditable and predictable.</p>
                 </a>
                 <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
                     <span class="concept-number">03</span>
                     <h3 class="font-bold text-sm text-emerald-300">Intent Routing</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">How IntentRouter classifies 31 intent types and dispatches to specialised orchestrators in under 40ms.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">How IntentRouter classifies 31 intent types and dispatches to specialised orchestrators in under 40ms.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(16,185,129,0.2);">
                     <span class="concept-number">04</span>
                     <h3 class="font-bold text-sm text-emerald-300">Domain Separation</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">Why orchestrators never communicate directly — all inter-orchestrator calls flow through a central coordinator.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Why orchestrators never communicate directly — all inter-orchestrator calls flow through a central coordinator.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">05</span>
                     <h3 class="font-bold text-sm text-violet-300">The IOrchestrator Protocol</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">The protocol mixin that every orchestrator implements. Declare intent keywords, drop a file, and CORTEX discovers it at startup.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">The protocol mixin that every orchestrator implements. Declare intent keywords, drop a file, and CORTEX discovers it at startup.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(139,92,246,0.2);">
                     <span class="concept-number">06</span>
                     <h3 class="font-bold text-sm text-violet-300">AC Markers &amp; Audit Trail</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">AC_START and AC_COMPLETE markers create a tamper-proof audit trail for every operation, stored in SQLite.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">AC_START and AC_COMPLETE markers create a tamper-proof audit trail for every operation, stored in SQLite.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">07</span>
                     <h3 class="font-bold text-sm text-amber-300">CAPE — Autonomous Planning</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">5-dimension complexity scoring, auto plan generation, 5 mandatory analysis gates, and topological execution. Strategy + Builder + Pipeline patterns.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">5-dimension complexity scoring, auto plan generation, 5 mandatory analysis gates, and topological execution. Strategy + Builder + Pipeline patterns.</p>
                 </div>
                 <div class="concept-card" style="border-color: rgba(245,158,11,0.2);">
                     <span class="concept-number">08</span>
                     <h3 class="font-bold text-sm text-amber-300">Self-Sustaining Architecture</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">How CORTEX manages itself — zero-drift documentation, 22 health endpoints, refresh scripts that introspect live code.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">How CORTEX manages itself — zero-drift documentation, 22 health endpoints, refresh scripts that introspect live code.</p>
                 </div>
             </div>
         </section>
@@ -413,14 +461,14 @@
             <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-slate-500/20 hover:border-teal-500/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Back</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Back</div>
                     <div class="text-sm font-bold text-slate-300">All Domains</div>
                 </div>
             </a>
             <a href="../ai-orchestration/index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-violet-500/20 hover:border-violet-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-violet-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-violet-500">Next Domain</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-violet-500">Next Domain</div>
                     <div class="text-sm font-bold text-violet-300">AI Orchestration</div>
                 </div>
             </a>
@@ -502,7 +550,7 @@
 
             const linkLabel = svg.append('g').selectAll('text').data(links).enter().append('text')
                 .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.2)')
-                .attr('font-size', '10px').attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
                 .text(d => d.label);
 
             const node = svg.append('g').selectAll('g').data(nodes).enter().append('g')

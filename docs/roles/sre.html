@@ -104,7 +104,7 @@
         .health-ep:hover { border-color: rgba(45,212,191,0.3); background: rgba(45,212,191,0.04); }
         .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
         .health-dot--green { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
-        .health-path { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #e2e8f0; font-size: 0.75rem; }
+        .health-path { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #e2e8f0; font-size: 0.875rem; }
         .health-checks { color: #64748b; font-size: 0.6875rem; margin-left: auto; }
 
         .rca-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -112,7 +112,7 @@
         .rca-card { padding: 1.25rem 1.5rem; border-radius: 1rem; border-left: 3px solid var(--rca-color, #2dd4bf); background: rgba(255,255,255,0.02); transition: background 0.2s ease; }
         .rca-card:hover { background: rgba(45,212,191,0.04); }
         .rca-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 800; color: var(--rca-color, #2dd4bf); }
-        .rca-trigger { font-size: 0.75rem; color: #64748b; margin-top: 0.125rem; }
+        .rca-trigger { font-size: 0.875rem; color: #64748b; margin-top: 0.125rem; }
         .rca-desc { font-size: 0.8125rem; color: #94a3b8; line-height: 1.6; margin-top: 0.5rem; }
 
         .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.625rem; }
@@ -120,24 +120,24 @@
         .metric-card { padding: 1rem; border-radius: 0.875rem; text-align: center; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); transition: all 0.2s ease; cursor: default; }
         .metric-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
         .metric-name { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; color: var(--accent-teal); font-weight: 700; word-break: break-all; }
-        .metric-type { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
-        .metric-badge { display: inline-block; margin-top: 0.375rem; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.125rem 0.5rem; border-radius: 4px; }
+        .metric-type { font-size: 0.875rem; color: #64748b; margin-top: 0.25rem; }
+        .metric-badge { display: inline-block; margin-top: 0.375rem; font-size: 0.6875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.125rem 0.5rem; border-radius: 4px; }
 
         .vacuum-stage { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 1rem; border-radius: 0.625rem; transition: transform 0.2s ease; }
         .vacuum-stage:hover { transform: translateX(4px); }
         .vacuum-num { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 800; color: #2dd4bf; min-width: 28px; }
         .vacuum-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; color: #e2e8f0; }
-        .vacuum-desc { font-size: 0.75rem; color: #64748b; margin-left: auto; }
+        .vacuum-desc { font-size: 0.875rem; color: #64748b; margin-left: auto; }
 
         .slo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.625rem; }
         @media (max-width: 640px) { .slo-grid { grid-template-columns: repeat(2, 1fr); } }
         .slo-card { padding: 1rem; border-radius: 0.875rem; text-align: center; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); transition: all 0.2s ease; cursor: default; }
         .slo-card:hover { border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
         .slo-target { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 900; color: #2dd4bf; }
-        .slo-label { font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; }
-        .slo-scope { font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; color: #475569; margin-top: 0.25rem; }
+        .slo-label { font-size: 0.875rem; color: #94a3b8; margin-top: 0.25rem; }
+        .slo-scope { font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; color: #475569; margin-top: 0.25rem; }
 
-        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(45,212,191,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .d3-tooltip { position: absolute; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(45,212,191,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
 
         @media (max-width: 768px) { .hero-robot-head { width: 200px; } .glass-card { border-radius: 1.25rem; } }
 
@@ -264,7 +264,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -274,7 +274,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -306,7 +306,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -455,7 +503,7 @@
                 </div>
             </div>
             <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
-                <div class="code-block text-[13px]"><span class="code-cmt"># RCA via cortex_learning MCP tool</span>
+                <div class="code-block text-sm"><span class="code-cmt"># RCA via cortex_learning MCP tool</span>
 <span class="code-fn">cortex_learning</span> op=<span class="code-str">rca</span> rca_action=<span class="code-str">analyze</span> \
   failure_id=<span class="code-str">"PROD-2026-0342"</span> \
   symptom=<span class="code-str">"API P99 latency spike to 800ms"</span> \
@@ -588,7 +636,7 @@
                     </div>
                 </div>
                 <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
-                    <div class="code-block text-[13px]"><span class="code-cmt"># Enable OTLP export (Jaeger, Tempo, etc.)</span>
+                    <div class="code-block text-sm"><span class="code-cmt"># Enable OTLP export (Jaeger, Tempo, etc.)</span>
 <span class="code-kw">export</span> OTEL_EXPORTER_OTLP_ENDPOINT=<span class="code-str">http://localhost:4318/v1/traces</span>
 
 <span class="code-cmt"># Prometheus scrape config (deployment/prometheus.yml)</span>
@@ -637,24 +685,24 @@ scrape_configs:
                     <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
                         <thead>
                             <tr>
-                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Database</th>
-                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Path</th>
-                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Purpose</th>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Database</th>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Path</th>
+                                <th style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">Purpose</th>
                             </tr>
                         </thead>
                         <tbody style="font-size: 0.8125rem; color: #94a3b8;">
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">orchestrator-traces</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">traces/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">AC markers, stage logs, workflow runs</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">rca-store</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">rca/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">RCA analyses + prevention rules</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">audit.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Audit events + governance checks</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">governance</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">governance.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Scaffolder audit log</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">conversations</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">state/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Session state (90-day retention)</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">wiring-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">wiring/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Contract validation audit</td></tr>
-                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">intelligence-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">intelligence/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Intelligence layer traces</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">orchestrator-traces</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">traces/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">AC markers, stage logs, workflow runs</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">rca-store</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">rca/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">RCA analyses + prevention rules</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">audit.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Audit events + governance checks</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">governance</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">governance.db</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Scaffolder audit log</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">conversations</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">state/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Session state (90-day retention)</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">wiring-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">wiring/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Contract validation audit</td></tr>
+                            <tr><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 600; color: #e2e8f0;">intelligence-audit</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">intelligence/</td><td style="padding: 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);">Intelligence layer traces</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="glass-card p-5 md:p-6 max-w-2xl mx-auto">
-                    <div class="code-block text-[13px]"><span class="code-cmt"># Cleanup — 30-day retention + VACUUM all 7 databases</span>
+                    <div class="code-block text-sm"><span class="code-cmt"># Cleanup — 30-day retention + VACUUM all 7 databases</span>
 <span class="code-fn">python3</span> scripts/refresh_prompt_suite.py <span class="code-str">--db-cleanup</span>
 
 <span class="code-cmt"># Skip in CI environments</span>
@@ -684,17 +732,17 @@ scrape_configs:
                     <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="database" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-teal-300">Data Hygiene Without Intervention</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">30-day retention enforced, orphaned records pruned, all 7 databases VACUUMed on a single command: <code class="text-teal-400 text-[11px]">refresh_prompt_suite.py --db-cleanup</code>. No custom scripts. No scheduled tasks to maintain.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">30-day retention enforced, orphaned records pruned, all 7 databases VACUUMed on a single command: <code class="text-teal-400 text-[11px]">refresh_prompt_suite.py --db-cleanup</code>. No custom scripts. No scheduled tasks to maintain.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-slate-900/80 hover:border-cyan-400/50 transition-all">
                         <div class="w-9 h-9 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400"><i data-lucide="activity" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-cyan-300">22 Health Endpoints, Zero Manual Checks</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">Every orchestrator domain exposes structured health probes. One command — <code class="text-cyan-400 text-[11px]">/health</code> — surfaces pass/fail status across the entire framework. Prometheus scrape config is included. Grafana dashboards ship with the repo.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Every orchestrator domain exposes structured health probes. One command — <code class="text-cyan-400 text-[11px]">/health</code> — surfaces pass/fail status across the entire framework. Prometheus scrape config is included. Grafana dashboards ship with the repo.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
                         <div class="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-blue-300">Extensions Register Themselves</h4>
-                        <p class="text-[13px] text-slate-500 leading-relaxed">New orchestrators added by the engineering team auto-register their health probes via the IOrchestrator protocol. SREs don't update dashboards for new services — the observability surface grows with the system.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">New orchestrators added by the engineering team auto-register their health probes via the IOrchestrator protocol. SREs don't update dashboards for new services — the observability surface grows with the system.</p>
                     </div>
                 </div>
             </div>
@@ -791,7 +839,7 @@ scrape_configs:
             svg.selectAll('.ep-label').data(data).enter().append('text')
                 .attr('x', -8).attr('y', d => y(d.ep) + y.bandwidth() / 2 + 4)
                 .attr('text-anchor', 'end').attr('fill', '#94a3b8')
-                .attr('font-size', '10px').attr('font-weight', '600')
+                .attr('font-size', '11px').attr('font-weight', '600')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.ep);
         }
@@ -846,7 +894,7 @@ scrape_configs:
                 .attr('fill', '#f8fafc').attr('font-size', '28px').attr('font-weight', '900')
                 .attr('font-family', 'Space Grotesk, sans-serif').text('6');
             svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.3em')
-                .attr('fill', '#64748b').attr('font-size', '10px').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', '600')
                 .attr('font-family', 'Inter, sans-serif').text('METRICS');
         }
 
@@ -907,18 +955,18 @@ scrape_configs:
                 .attr('x', d => x(d.stage) + x.bandwidth() / 2)
                 .attr('y', d => y(d.impact) - 6)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '10px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                .attr('font-size', '11px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.impact);
 
             svg.append('g').attr('transform', `translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill', '#64748b').attr('font-size', '9px')
+                .selectAll('text').attr('fill', '#64748b').attr('font-size', '11px')
                 .attr('font-weight', 'bold').attr('font-family', 'Inter, sans-serif').attr('dy', '1.4em');
             svg.selectAll('.domain').remove();
 
             svg.append('text').attr('transform', 'rotate(-90)')
                 .attr('y', -52).attr('x', -h / 2).attr('text-anchor', 'middle')
-                .attr('fill', '#475569').attr('font-size', '9px').attr('font-family', 'Inter, sans-serif')
+                .attr('fill', '#475569').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
                 .text('Files cleaned (typical)');
         }
 

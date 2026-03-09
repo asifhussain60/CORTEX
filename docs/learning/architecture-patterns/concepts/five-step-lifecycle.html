@@ -51,11 +51,11 @@
         .phase-step { border-radius: 1.25rem; border: 1px solid rgba(255,255,255,0.07); padding: 1.5rem; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
         @media (hover: hover) { .phase-step:hover { transform: translateY(-3px); } }
 
-        .primitive-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; border: 1px solid; }
+        .primitive-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; font-weight: 700; border: 1px solid; }
 
         #lifecycle-diagram { width: 100%; height: 420px; border-radius: 1rem; }
         @media (min-width: 768px) { #lifecycle-diagram { height: 480px; } }
-        .d3-tooltip { position: absolute; padding: 10px 14px; font-size: 12px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); white-space: nowrap; }
+        .d3-tooltip { position: absolute; padding: 10px 14px; font-size: 13px; font-weight: 500; background: rgba(15,23,42,0.95); color: #fff; border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(4px); white-space: nowrap; }
 
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
@@ -177,7 +177,7 @@
         }
         .cortex-bc-sep {
             color: rgba(148, 163, 184, 0.3);
-            font-size: 0.7rem;
+            font-size: 0.6875rem;
             line-height: 1;
             flex-shrink: 0;
         }
@@ -187,7 +187,7 @@
             gap: 0.3rem;
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: var(--bc-accent-bg, rgba(0, 212, 255, 0.1));
             color: var(--bc-accent-color, rgba(0, 212, 255, 0.9));
@@ -219,7 +219,55 @@
             .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
             .cortex-header-inner { position: relative; }
         }
-        </style>
+        
+    /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
+       Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
+       Injected: 2026-03-09 — Phase 109.3 font/layout standardisation
+       /* CORTEX-TETRIS-FIT-APPLIED */
+       ─────────────────────────────────────────────────────────────────────── */
+
+    /* Rule 1: Container stretch — all columns share tallest sibling */
+    .feature-grid-2,
+    .gs-cards-grid,
+    .role-tiles-grid,
+    .card-grid-3,
+    .tetris-container {
+        align-items: stretch;
+    }
+
+    /* Rule 2: Column fills grid cell top-to-bottom */
+    .tp-card,
+    .gs-card,
+    .role-tile,
+    .tetris-col {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Rule 3: Last/growable child absorbs leftover height */
+    .gs-card__list,
+    .tp-visual,
+    .tp-body,
+    .tetris-grow {
+        flex: 1;
+        align-content: stretch;
+    }
+
+    /* Rule 4: Nested grid rows expand proportionally */
+    .tp-visual {
+        align-content: stretch;
+    }
+
+    /* Rule 5: Viz/chart panel fills column bottom */
+    .macc__viz,
+    .stat-chart-wrap,
+    .tetris-viz {
+        flex: 1;
+        justify-content: space-between;
+    }
+
+    </style>
 </head>
 <body class="min-h-screen">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
@@ -299,31 +347,31 @@
                 <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
                     <div class="text-center p-4 rounded-xl border border-teal-500/20 bg-teal-500/5 space-y-2">
                         <div class="text-2xl">🩺</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-teal-500">Pre-op</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-teal-500">Pre-op</div>
                         <div class="text-xs text-teal-300 font-bold">Prepare</div>
                         <p class="text-[11px] text-slate-500">Patient history, consent, equipment check</p>
                     </div>
                     <div class="text-center p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
                         <div class="text-2xl">📝</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-amber-500">Sign-off</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-amber-500">Sign-off</div>
                         <div class="text-xs text-amber-300 font-bold">Govern</div>
                         <p class="text-[11px] text-slate-500">Ethics approval, WHO checklist, risk gate</p>
                     </div>
                     <div class="text-center p-4 rounded-xl border border-violet-500/20 bg-violet-500/5 space-y-2">
                         <div class="text-2xl">🔪</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-violet-500">Operation</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-violet-500">Operation</div>
                         <div class="text-xs text-violet-300 font-bold">Execute</div>
                         <p class="text-[11px] text-slate-500">The surgical work — specialised, precise</p>
                     </div>
                     <div class="text-center p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-2">
                         <div class="text-2xl">🫀</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Recovery</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-emerald-500">Recovery</div>
                         <div class="text-xs text-emerald-300 font-bold">Validate</div>
                         <p class="text-[11px] text-slate-500">Vitals monitored until stable — zero P0</p>
                     </div>
                     <div class="text-center p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 space-y-2">
                         <div class="text-2xl">📋</div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-pink-500">Discharge</div>
+                        <div class="text-[11px] font-black uppercase tracking-widest text-pink-500">Discharge</div>
                         <div class="text-xs text-pink-300 font-bold">Close</div>
                         <p class="text-[11px] text-slate-500">Records updated, patient signed out</p>
                     </div>
@@ -363,7 +411,7 @@
                                 <i data-lucide="settings" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-teal-600">Phase 1</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-teal-600">Phase 1</div>
                                 <div class="text-xl font-black text-teal-300">Prepare</div>
                             </div>
                         </div>
@@ -389,7 +437,7 @@
                                 <i data-lucide="shield-check" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-amber-600">Phase 2</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-amber-600">Phase 2</div>
                                 <div class="text-xl font-black text-amber-300">Govern</div>
                             </div>
                         </div>
@@ -418,7 +466,7 @@ violations = <span class="code-fn">scan_all_governance_rules</span>()
                                 <i data-lucide="play" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-violet-600">Phase 3</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-violet-600">Phase 3</div>
                                 <div class="text-xl font-black text-violet-300">Execute</div>
                             </div>
                         </div>
@@ -445,7 +493,7 @@ violations = <span class="code-fn">scan_all_governance_rules</span>()
                                 <i data-lucide="check-circle" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Phase 4</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-emerald-600">Phase 4</div>
                                 <div class="text-xl font-black text-emerald-300">Validate</div>
                             </div>
                         </div>
@@ -476,7 +524,7 @@ cycle = <span class="code-str">0</span>
                                 <i data-lucide="flag" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] font-black uppercase tracking-widest text-pink-600">Phase 5</div>
+                                <div class="text-[11px] font-black uppercase tracking-widest text-pink-600">Phase 5</div>
                                 <div class="text-xl font-black text-pink-300">Close</div>
                             </div>
                         </div>
@@ -559,14 +607,14 @@ cycle = <span class="code-str">0</span>
             <a href="orchestrator-domains.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-slate-500/20 hover:border-teal-500/30" style="text-decoration:none;">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Previous Deep Dive</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Previous Deep Dive</div>
                     <div class="text-sm font-bold text-slate-300">Orchestrator Domains</div>
                 </div>
             </a>
             <a href="../index.html" class="glass-card px-6 py-4 flex items-center gap-3 rounded-2xl border-teal-500/20 hover:border-teal-400/30 sm:flex-row-reverse sm:text-right" style="text-decoration:none;">
                 <i data-lucide="arrow-right" class="w-4 h-4 text-teal-400"></i>
                 <div>
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-teal-500">Back to Domain</div>
+                    <div class="text-[11px] font-bold uppercase tracking-widest text-teal-500">Back to Domain</div>
                     <div class="text-sm font-bold text-teal-300">Architecture Patterns</div>
                 </div>
             </a>
@@ -699,7 +747,7 @@ cycle = <span class="code-str">0</span>
             nodeG.append('text')
                 .attr('text-anchor', 'middle').attr('dy', nodeR + 18)
                 .attr('fill', 'rgba(148,163,184,0.4)')
-                .attr('font-size', '10px').attr('font-family', 'JetBrains Mono, monospace')
+                .attr('font-size', '11px').attr('font-family', 'JetBrains Mono, monospace')
                 .text((d, i) => `0${i + 1}`);
         }
     </script>
