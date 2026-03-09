@@ -3096,6 +3096,350 @@
     </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════════════════
+     CORTEX OVERVIEW INFOGRAPHIC — Problem → Solution visual bridge
+     Placement: after BLUF identity card, before Two-Panel feature grid
+     Source: generated/shared/03-cortex-overview-infographic.png
+     ═══════════════════════════════════════════════════════════════════════ -->
+<style>
+/* ── Overview Infographic Section ───────────────────────────────────────── */
+.overview-infographic-section {
+    max-width: 1100px;
+    margin: 2.75rem auto 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Outer animated gradient border — same technique as BLUF panel */
+.overview-infographic-border {
+    position: relative;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 212, 255, 0.65)  0%,
+        rgba(123, 97, 255, 0.55) 35%,
+        rgba(168, 85, 247, 0.45) 65%,
+        rgba(0, 212, 255, 0.65) 100%
+    );
+    background-size: 300% 300%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .overview-infographic-border {
+        animation: infographic-border-drift 8s ease infinite;
+    }
+}
+
+@keyframes infographic-border-drift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Diffuse glow halo beneath the card */
+.overview-infographic-border::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 24px;
+    background: inherit;
+    filter: blur(18px);
+    opacity: 0.28;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Glass card surface */
+.overview-infographic-glass {
+    position: relative;
+    border-radius: 19px;
+    background: linear-gradient(
+        145deg,
+        rgba(13, 17, 46, 0.97) 0%,
+        rgba(18, 12, 48, 0.96) 55%,
+        rgba(10, 14, 39, 0.97) 100%
+    );
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.55),
+        0 20px 64px rgba(0, 0, 0, 0.45),
+        0 48px 96px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Diagonal glass sheen — composited transform only */
+.overview-infographic-glass::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        108deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.04) 50%,
+        transparent 70%
+    );
+    transform: skewX(-12deg);
+    pointer-events: none;
+    z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .overview-infographic-glass::before {
+        animation: infographic-sheen 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        will-change: transform; /* confirmed 60fps composited */
+    }
+}
+
+@keyframes infographic-sheen {
+    0%   { transform: skewX(-12deg) translateX(0); }
+    42%  { transform: skewX(-12deg) translateX(430%); }
+    100% { transform: skewX(-12deg) translateX(430%); }
+}
+
+/* Ambient radial bloom at the top */
+.overview-infographic-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 70% 50% at 20% -5%,  rgba(0, 212, 255, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 105%, rgba(123, 97, 255, 0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Inner padding wrapper — sits above pseudo-element layers */
+.overview-infographic-inner {
+    position: relative;
+    z-index: 2;
+    padding: 2rem 2rem 1.5rem;
+}
+
+/* ── Header row: eyebrow + title + subtitle ─── */
+.overview-infographic-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.overview-infographic-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 9999px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    color: rgba(0, 212, 255, 0.9);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+}
+
+.overview-infographic-eyebrow-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #00d4ff;
+    box-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .overview-infographic-eyebrow-dot {
+        animation: eyebrow-pulse 2.2s ease-in-out infinite;
+    }
+}
+
+@keyframes eyebrow-pulse {
+    0%, 100% { opacity: 1;   box-shadow: 0 0 6px rgba(0,212,255,0.8); }
+    50%       { opacity: 0.5; box-shadow: 0 0 2px rgba(0,212,255,0.3); }
+}
+
+.overview-infographic-title {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+}
+
+.overview-infographic-title span {
+    background: linear-gradient(90deg, #00d4ff 0%, #a78bfa 60%, #00d4ff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .overview-infographic-title span {
+        animation: title-shimmer 5s linear infinite;
+    }
+}
+
+@keyframes title-shimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+.overview-infographic-subtitle {
+    font-size: 0.9375rem;
+    color: rgba(160, 166, 192, 0.8);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+/* ── Image frame ─────────────────────────────────────────────────────────── */
+.overview-infographic-frame {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    /* Subtle inner border to separate image from glass surface */
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.07),
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 24px 64px rgba(0, 0, 0, 0.35);
+    /* Hover lift — composited transform only */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overview-infographic-frame:hover {
+    transform: translateY(-3px) scale(1.003);
+    box-shadow:
+        0 0 0 1px rgba(0, 212, 255, 0.18),
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 32px 80px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(0, 212, 255, 0.06);
+}
+
+/* Tinted overlay on the image — subtle depth */
+.overview-infographic-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(13, 17, 46, 0.04) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(13, 17, 46, 0.12) 100%
+    );
+    pointer-events: none;
+    border-radius: 12px;
+}
+
+.overview-infographic-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    /* Force crisp rendering on HiDPI */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* ── Caption row ─────────────────────────────────────────────────────────── */
+.overview-infographic-caption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+    font-size: 0.8125rem;
+    color: rgba(160, 166, 192, 0.5);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+.overview-infographic-caption svg {
+    flex-shrink: 0;
+    opacity: 0.45;
+}
+
+/* ── Entry animation ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+    .overview-infographic-section {
+        animation: infographic-entry 0.7s cubic-bezier(0, 0, 0.2, 1) 0.1s both;
+    }
+}
+
+@keyframes infographic-entry {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .overview-infographic-inner {
+        padding: 1.25rem 1rem 1rem;
+    }
+    .overview-infographic-section {
+        padding: 0 0.75rem;
+    }
+}
+</style>
+
+<section
+    class="overview-infographic-section"
+    aria-labelledby="overview-infographic-heading"
+    role="region"
+>
+    <div class="overview-infographic-border">
+        <div class="overview-infographic-glass">
+            <div class="overview-infographic-inner">
+
+                <!-- Header -->
+                <header class="overview-infographic-header">
+                    <div class="overview-infographic-eyebrow" aria-hidden="true">
+                        <span class="overview-infographic-eyebrow-dot"></span>
+                        The Engineering Problem &amp; The Solution
+                    </div>
+                    <h2 id="overview-infographic-heading" class="overview-infographic-title">
+                        Why CORTEX Exists — <span>Three Pillars of Governed Execution</span>
+                    </h2>
+                    <p class="overview-infographic-subtitle">
+                        23–42% of engineering effort is spent on rework from ungoverned AI. CORTEX eliminates that waste with three interlocking pillars: understand everything, empower everyone, build fearlessly.
+                    </p>
+                </header>
+
+                <!-- Image -->
+                <figure class="overview-infographic-frame" role="img" aria-label="CORTEX overview diagram showing the AI Velocity Paradox and the Three Pillars of Governed Execution: LENS (understand everything), Intelligence Diamond (empower everyone), and Convergence Gate (build fearlessly)">
+                    <img
+                        class="overview-infographic-img"
+                        src="assets/images/generated/shared/03-cortex-overview-infographic.png"
+                        alt="CORTEX: The Engineering Operating System for Governed AI. Left panel shows the AI Velocity Paradox — 23–42% of engineering effort is spent on rework due to failures, fragmented institutional memory, and speed without guardrails. Right panel shows the Three Pillars of Governed Execution: Pillar 1 — Understand Everything (LENS pipeline analyses code structure, patterns, and dependencies in real-time); Pillar 2 — Empower Everyone (350+ specialised reasoning engines orchestrating expert delivery); Pillar 3 — Build Fearlessly (detect → fix → rescan loop iterates until zero critical violations remain)."
+                        width="1200"
+                        height="675"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                </figure>
+
+                <!-- Caption -->
+                <p class="overview-infographic-caption" aria-hidden="true">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    CORTEX Overview · Generated via NotebookLM · © 2025–2026 Asif Hussain
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Two-Panel Layout: GitHub Copilot Challenges + CORTEX Vision -->
 <div style="max-width: 1200px; margin: var(--issa-hero-first, 3rem) auto var(--spacing-8) auto; padding: 0 var(--spacing-6);">
     <div class="feature-grid-2">
@@ -4385,6 +4729,37 @@
       @media (prefers-reduced-motion: reduce) {
         .dogfood-img-ring { animation: none; }
       }
+
+      /* ── Quote box enhancements ─────────────────────────────────────────── */
+      .dogfood-quote-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        background: rgba(0,212,255,0.06);
+        border: 1px solid rgba(0,212,255,0.18);
+        border-radius: var(--radius-md);
+        padding: 1.1rem 1.25rem;
+      }
+
+      .dogfood-quote-text {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(1rem, 2vw, 1.175rem);
+        font-weight: 700;
+        line-height: 1.6;
+        color: var(--text-primary);
+        letter-spacing: -0.01em;
+      }
+
+      .dogfood-quote-text em {
+        font-style: normal;
+        color: var(--accent-cyan);
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .dogfood-img-ring { animation: none; }
+      }
     </style>
 
     <section class="container section" aria-labelledby="dogfood-heading">
@@ -4428,10 +4803,10 @@
             <p style="font-size:1rem;line-height:1.7;color:var(--text-secondary);margin:0 0 0.875rem;">
               The practice of using your own product during development — experiencing it as a real user would — to surface issues, validate decisions, and prove reliability before customers do.
             </p>
-            <div style="display:flex;align-items:flex-start;gap:0.625rem;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.12);border-radius:var(--radius-md);padding:0.875rem 1rem;">
-              <i class="fas fa-quote-left" style="color:var(--accent-cyan);font-size:0.875rem;margin-top:0.2rem;flex-shrink:0;" aria-hidden="true"></i>
-              <p style="margin:0;font-size:0.9375rem;line-height:1.65;color:var(--text-secondary);">
-                CORTEX's orchestrators, governance rules, and core logic were architected, tested, and delivered <em>by CORTEX itself</em> — making every build a live demonstration of the platform's integrity.
+            <div class="dogfood-quote-box">
+              <i class="fas fa-quote-left" style="color:var(--accent-cyan);font-size:1rem;margin-top:0.3rem;flex-shrink:0;" aria-hidden="true"></i>
+              <p class="dogfood-quote-text">
+                Every orchestrator, governance rule, and line of core logic inside the CORTEX AI framework was planned, written, tested, and shipped <em>by CORTEX itself</em> — the same intelligence that governs your team's delivery, applied without exception to its own. Every commit, every phase, every architectural decision: self-governed, self-validated, self-delivered.<span aria-hidden="true" style="display:inline;margin-left:0.3em;color:var(--accent-cyan);font-size:0.85em;vertical-align:middle;"><i class="fas fa-quote-right"></i></span>
               </p>
             </div>
           </div>

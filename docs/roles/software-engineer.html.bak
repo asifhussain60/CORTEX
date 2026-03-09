@@ -137,10 +137,10 @@
 
         /* ── ISSA Responsive Section Gap Overrides ─────────────────────────
          * SSOT: design_system.yaml § spacing.inter_section_spacing
-         * Mobile (≤640px): 32px · Tablet (641–1023px): 48px · Desktop: 64px
+         * Scoped to .main-content — full rules live in Tetris-Separation v3 block below.
+         * These media-query overrides mirror the Tetris block for cascade safety.
          * ──────────────────────────────────────────────────────────────────*/
-        @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
-        @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
+        /* (Handled by Tetris-Separation v3 below — no duplicates here) */
 
     /* ══════════════════════════════════════════════════════════════════════
        CT: Cinema Theatre — YouTube Embed (Software Engineer role page)
@@ -544,18 +544,28 @@
             .cortex-header-inner { position: relative; }
         }
 
-    /* ── Tetris-Separation v2 — uniform inter-section rhythm ────────────────
+    /* ── Tetris-Separation v3 — uniform inter-section rhythm ────────────────
        Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
-       Injected: 2026-03-09 — Phase 109.3 section-gap standardisation
+       v3: 2026-03-09 — layout tokens consolidated; shell-pt owns top spacing.
        /* CORTEX-TETRIS-SEPARATION-APPLIED */
        ─────────────────────────────────────────────────────────────────────── */
-    :root { --section-gap: 5rem; }
-    @media (max-width: 640px)  { :root { --section-gap: 3rem; } }
-    @media (min-width: 641px) and (max-width: 1023px) { :root { --section-gap: 4rem; } }
 
-    /* Remove Tailwind space-y from <main>; inject our token instead */
-    main > section + section { margin-top: var(--section-gap) !important; }
-    main > section { margin-bottom: 0 !important; }
+    /* Section gap tokens — extend the :root layout token block above */
+    :root {
+        --section-gap:    5rem;   /* 80px desktop */
+        --section-gap-md: 4rem;   /* 64px tablet  */
+        --section-gap-sm: 3rem;   /* 48px mobile  */
+    }
+    @media (max-width: 640px)                        { :root { --section-gap: var(--section-gap-sm); } }
+    @media (min-width: 641px) and (max-width: 1023px){ :root { --section-gap: var(--section-gap-md); } }
+
+    /* Primary section rhythm — single rule, !important beats all Tailwind utilities */
+    .main-content > section + section { margin-top: var(--section-gap) !important; }
+    .main-content > section           { margin-bottom: 0 !important; }
+
+    /* ISSA responsive overrides (mirror the token changes above for specificity safety) */
+    @media (max-width: 640px)                        { .main-content > section + section { margin-top: var(--section-gap-sm) !important; } }
+    @media (min-width: 641px) and (max-width: 1023px){ .main-content > section + section { margin-top: var(--section-gap-md) !important; } }
 
     /* ── Tetris-Fit v1 — zero dead space in multi-column panels ──────────────
        Authority: cortex-registry/knowledge/sdlc/tetris-layout-spec.yaml
@@ -604,47 +614,57 @@
         justify-content: space-between;
     }
 
-
     /* ══════════════════════════════════════════════════════════════════════
-       TWO-COLUMN PAGE SHELL — Sticky Section Rail + Fluid Main Content
-       Strategy: .page-shell is a CSS Grid wrapper around <aside> + <main>.
-       The existing `main > section + section` Tetris selector still fires
-       correctly because <main> is still the direct parent of all <section>s.
-       WCAG 2.2 SC 2.4.11: scroll-margin-top on all section[id] anchors.
+       TWO-COLUMN PAGE SHELL — Section Rail + Main Content
+       New template: replaces single-column max-w-7xl layout.
+       Eliminates blank-left-space issue; rail anchors the left column.
+       WCAG 2.2 SC 2.4.11: scroll-margin-top on all section anchors.
+       Composited-only: rail uses transform only for active indicator.
        ══════════════════════════════════════════════════════════════════════ */
 
-    /* Chrome height tokens */
+    /* ── Layout tokens — single source of truth ─────────────────────────────
+       --hdr-h    : site nav bar height (56px)
+       --bc-h     : breadcrumb strip height (34px, measured)
+       --chrome-h : total sticky chrome above page-shell
+       --shell-pt : breathing room between chrome and hero content
+       ─────────────────────────────────────────────────────────────────────── */
     :root {
-        --hdr-h:    56px;   /* site nav */
-        --bc-h:     34px;   /* breadcrumb strip */
-        --chrome-h: calc(var(--hdr-h) + var(--bc-h)); /* 90px total */
-        --rail-w:   220px;
+        --hdr-h:    56px;
+        --bc-h:     34px;
+        --chrome-h: calc(var(--hdr-h) + var(--bc-h));  /* 90px */
+        --shell-pt: 2.5rem;   /* 40px top breathing room inside page-shell */
     }
 
-    /* Outer grid wrapper */
+    /* Page shell: rail (fixed width) + fluid content */
     .page-shell {
         display: grid;
-        grid-template-columns: var(--rail-w) 1fr;
-        align-items: start;
+        grid-template-columns: 220px 1fr;
+        grid-template-rows: 1fr;
         max-width: 1380px;
         margin: 0 auto;
+        padding: var(--shell-pt) 1.5rem 0 1rem; /* top breathing room; right/left gutter */
+        gap: 0;
+        align-items: start;
+        min-height: calc(100vh - var(--chrome-h));
     }
 
-    /* Left sticky rail */
+    /* Left rail */
     .section-rail {
         position: sticky;
-        top: calc(var(--chrome-h) + 1rem);
+        top: calc(var(--chrome-h) + 1rem); /* sticky below full chrome + 1rem gap */
         height: fit-content;
         max-height: calc(100vh - var(--chrome-h) - 2rem);
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: none;
-        padding: 1.5rem 0 2rem 0;
+        padding: 0 0 2rem 0;   /* no top pad — shell-pt owns the top */
         flex-shrink: 0;
     }
     .section-rail::-webkit-scrollbar { display: none; }
 
-    .rail-inner { padding: 0 1rem; }
+    .rail-inner {
+        padding: 0 1rem;
+    }
 
     .rail-label {
         font-size: 0.6875rem;
@@ -655,7 +675,12 @@
         margin-bottom: 0.75rem;
         padding-left: 0.5rem;
     }
-    .rail-nav { display: flex; flex-direction: column; gap: 0.125rem; }
+
+    .rail-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
 
     .rail-link {
         display: flex;
@@ -664,33 +689,47 @@
         padding: 0.4rem 0.625rem;
         border-radius: 0.5rem;
         text-decoration: none;
-        color: rgba(148,163,184,0.7);
-        font-size: 0.8125rem;
-        font-weight: 500;
-        white-space: nowrap;
-        transition: color 150ms ease, background 150ms ease;
+        transition: color 150ms cubic-bezier(0.4,0,0.2,1),
+                    background 150ms cubic-bezier(0.4,0,0.2,1);
         cursor: pointer;
+        position: relative;
     }
     .rail-link:hover {
         background: rgba(255,255,255,0.04);
         color: rgba(248,250,252,0.9);
     }
-    .rail-link.active { background: rgba(20,184,166,0.08); }
-    .rail-link.active .rail-text { color: #5eead4; font-weight: 700; }
+    .rail-link.active {
+        background: rgba(20,184,166,0.08);
+    }
+    .rail-link.active .rail-text {
+        color: #5eead4;
+        font-weight: 700;
+    }
 
     .rail-dot {
-        width: 5px; height: 5px; border-radius: 50%;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
         background: rgba(148,163,184,0.3);
         flex-shrink: 0;
-        transition: background 150ms ease, transform 150ms ease;
+        transition: background 150ms cubic-bezier(0.4,0,0.2,1),
+                    transform 150ms cubic-bezier(0.4,0,0.2,1);
     }
     .rail-link.active .rail-dot {
         background: #14b8a6;
         box-shadow: 0 0 6px rgba(20,184,166,0.6);
         transform: scale(1.4);
     }
-    .rail-text { line-height: 1.2; }
 
+    .rail-text {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: rgba(148,163,184,0.7);
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    /* Quick commands block at the bottom of the rail */
     .rail-commands {
         margin-top: 1.5rem;
         padding: 0.875rem 0.75rem;
@@ -699,25 +738,59 @@
         border: 1px solid rgba(255,255,255,0.06);
     }
     .rail-commands-label {
-        font-size: 0.625rem; font-weight: 900; letter-spacing: 0.14em;
-        text-transform: uppercase; color: rgba(148,163,184,0.35); margin-bottom: 0.5rem;
+        font-size: 0.625rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(148,163,184,0.35);
+        margin-bottom: 0.5rem;
     }
     .rail-cmd {
         padding: 0.25rem 0;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.75rem; color: rgba(52,211,153,0.7);
-        border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.7;
+        font-size: 0.75rem;
+        color: rgba(52,211,153,0.7);
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        line-height: 1.7;
     }
     .rail-cmd:last-child { border-bottom: none; }
+    .rail-cmd code { font-family: inherit; }
 
-    /* Right: <main> keeps its own padding; top cleared by pt-4 md:pt-6 */
-    /* section[id] anchors get scroll offset so sticky chrome doesn't cover them */
-    main section[id] { scroll-margin-top: calc(var(--chrome-h) + 8px); }
+    /* Right: main content column */
+    .main-content {
+        min-width: 0;           /* prevent overflow in grid */
+        padding: 0 1rem 6rem 2rem; /* top=0: page-shell owns top via --shell-pt */
+    }
 
-    /* Hide rail on narrow viewports */
+    /* Section anchor scroll offset (WCAG 2.2 SC 2.4.11 — Focus Not Obscured) */
+    /* chrome=90px + 8px buffer = 98px */
+    .main-content section[id] {
+        scroll-margin-top: calc(var(--chrome-h) + 8px);
+    }
+
+    /* Hero: no extra top pad needed — shell-pt already gives 2.5rem clearance */
+    .main-content > section#hero {
+        padding-top: 1rem;  /* subtle internal top pad for hero content */
+    }
+
+    /* ── Responsive collapse: hide rail below 900px ── */
     @media (max-width: 900px) {
-        .page-shell { display: block; }
-        .section-rail { display: none; }
+        :root {
+            --shell-pt: 1.5rem;
+        }
+        .page-shell {
+            grid-template-columns: 1fr;
+            padding: var(--shell-pt) 1rem 0;
+        }
+        .section-rail {
+            display: none;
+        }
+        .main-content {
+            padding: 0 1rem 4rem;
+        }
+        .main-content > section#hero {
+            padding-top: 0.5rem;
+        }
     }
 
     </style>
@@ -805,6 +878,7 @@
                         <span class="rail-text">Self-Managing</span>
                     </a>
                 </nav>
+                <!-- Quick commands pill -->
                 <div class="rail-commands">
                     <div class="rail-commands-label">Quick commands</div>
                     <div class="rail-cmd"><code>/audit fix</code></div>
@@ -814,13 +888,13 @@
             </div>
         </aside>
 
-        <!-- RIGHT: Main content — keeps existing max-w + padding intact -->
-        <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 md:pt-6 pb-8 md:pb-16 relative" id="main-content">
+        <!-- RIGHT: Main content -->
+        <main class="main-content" id="main-content">
 
         <div id="tooltip" class="d3-tooltip"></div>
 
         <!-- HERO -->
-        <section id="hero" class="text-center space-y-6 md:space-y-8" aria-label="Hero overview">
+        <section id="hero" class="text-center space-y-6 md:space-y-8" aria-label="Hero">
             <div class="hero-section-wrapper">
                 <div class="hero-robot-container">
                     <a href="../index.html" title="Back to CORTEX Home">
@@ -1286,7 +1360,7 @@
         </section>
 
         <!-- GOVERNANCE — Glass Panel -->
-        <section id="governance" class="relative py-8 my-4" aria-label="Governance as Infrastructure">
+        <section id="governance" class="relative py-8 my-4" aria-label="Governance">
             <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-teal-950/40 to-slate-900/90 border border-teal-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -1397,7 +1471,7 @@
         </section>
 
         <!-- BUILD YOUR OWN AGENTS — New Glass Panel -->
-        <section id="agents" class="relative py-8 my-4" aria-label="Build Your Own Agents">
+        <section id="agents" class="relative py-8 my-4" aria-label="Build Agents">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-purple-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-10 px-4 md:px-8">
@@ -1567,7 +1641,7 @@ cortex_verify op=agents
         </section>
 
         <!-- SELF-SUSTAINING ARCHITECTURE -->
-        <section id="self-sustaining" class="space-y-10" aria-label="Self-Sustaining Architecture">
+        <section id="self-sustaining" class="space-y-10" aria-label="Self-Managing Architecture">
             <div class="text-center space-y-4">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
                     <i data-lucide="settings" class="w-3.5 h-3.5"></i> Zero Framework Overhead
@@ -1642,7 +1716,7 @@ cortex_verify op=agents
             </div>
         </section>
 
-    </main>
+    </main><!-- /main-content -->
     </div><!-- /page-shell -->
 
     <footer class="py-12 md:py-20 border-t border-white/5 text-center space-y-6">
@@ -1763,34 +1837,55 @@ cortex_verify op=agents
             });
         }
     })();
+    </script>
 
-    /* ── Section-rail scroll-spy ─────────────────────────────── */
+    <script>
+    /* ── Section Rail Scroll Spy ── */
     (function () {
-        const railLinks = document.querySelectorAll('.rail-link[data-section]');
-        const sections  = document.querySelectorAll('main section[id]');
-        if (!railLinks.length || !sections.length) return;
+        var railLinks = document.querySelectorAll('.rail-link[data-section]');
+        if (!railLinks.length) return;
 
-        const activate = (id) => {
-            railLinks.forEach(l => {
-                const active = l.dataset.section === id;
-                l.classList.toggle('active', active);
+        var sections = [];
+        railLinks.forEach(function (link) {
+            var id = link.dataset.section;
+            var el = document.getElementById(id);
+            if (el) sections.push({ id: id, el: el, link: link });
+        });
+
+        function onScroll() {
+            var scrollY = window.scrollY || window.pageYOffset;
+            var navOffset = 56 + 32 + 24; /* header + breadcrumb + buffer */
+            var active = null;
+
+            for (var i = sections.length - 1; i >= 0; i--) {
+                var top = sections[i].el.getBoundingClientRect().top + scrollY - navOffset;
+                if (scrollY >= top - 20) {
+                    active = sections[i].id;
+                    break;
+                }
+            }
+            if (!active && sections.length) active = sections[0].id;
+
+            railLinks.forEach(function (link) {
+                var isActive = link.dataset.section === active;
+                link.classList.toggle('active', isActive);
             });
-        };
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) activate(e.target.id);
-            });
-        }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
 
-        sections.forEach(s => observer.observe(s));
-
-        /* Smooth-scroll on click */
-        railLinks.forEach(link => {
+        /* Smooth scroll on rail click */
+        railLinks.forEach(function (link) {
             link.addEventListener('click', function (e) {
+                var href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                var target = document.getElementById(href.slice(1));
+                if (!target) return;
                 e.preventDefault();
-                const target = document.getElementById(this.dataset.section);
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                var navOffset = 56 + 32 + 16;
+                var top = target.getBoundingClientRect().top + window.scrollY - navOffset;
+                window.scrollTo({ top: top, behavior: 'smooth' });
             });
         });
     })();

@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Workflow Composer — How CORTEX Executes | CORTEX AI Engineering Framework</title>
+    <meta name="description" content="Understand how the CORTEX Workflow Composer turns a single intent into a governed, audited, TDD-first engineering pipeline — from MCP tool invocation to AC_COMPLETE."/>
+    <meta name="author" content="Asif Hussain"/>
+    <meta name="robots" content="index, follow"/>
+    <link rel="canonical" href="https://cortex.asifhussain.dev/workflow-composer.html"/>
+    <meta property="og:title" content="Workflow Composer — How CORTEX Executes"/>
+    <meta property="og:description" content="A progressive architecture journey: from user intent to governed execution — D3-powered visualisations at every layer."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://cortex.asifhussain.dev/workflow-composer.html"/>
+    <link rel="icon" href="assets/images/cortex-logo-64.png" type="image/png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <script>const _tw=console.warn;console.warn=function(){if(arguments[0]&&typeof arguments[0]==='string'&&arguments[0].includes('cdn.tailwindcss.com'))return;_tw.apply(console,arguments)};</script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <style>
+        /* ── Design Tokens (SSOT: design_system.yaml) ── */
+        :root {
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-violet: #7b61ff;
+            --accent-purple: #a855f7;
+            --accent-cyan: #00d4ff;
+            --accent-indigo: #6366f1;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-teal: #14b8a6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            /* Glassmorphism motion identity */
+            --dur-micro: 100ms;
+            --dur-fast: 150ms;
+            --dur-base: 200ms;
+            --dur-moderate: 300ms;
+            --dur-slow: 400ms;
+            --dur-cinematic: 500ms;
+            --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-decel: cubic-bezier(0, 0, 0.2, 1);
+            --ease-accel: cubic-bezier(0.4, 0, 1, 1);
+            /* Nav height for WCAG 2.2 SC 2.4.11 */
+            --nav-height: 56px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            background-color: #020617;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(123, 97, 255, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* WCAG 2.2 SC 2.4.11 — sticky nav offset */
+        :focus { scroll-margin-top: calc(var(--nav-height) + 8px); }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── Glass Card ── */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--dur-moderate) var(--ease-standard),
+                        border-color var(--dur-moderate) var(--ease-standard),
+                        box-shadow var(--dur-moderate) var(--ease-standard);
+        }
+        .glass-card::after {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+        @media (hover: hover) {
+            .glass-card:hover {
+                border-color: rgba(123,97,255,0.3);
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px -10px rgba(123,97,255,0.15);
+            }
+        }
+
+        /* ── Typography ── */
+        .gradient-text-violet {
+            background: linear-gradient(to right, #7b61ff, #a855f7);
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-cyan {
+            background: linear-gradient(to right, #00d4ff, #10b981);
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-title { font-size: 1.75rem; line-height: 1.2; font-weight: 900; letter-spacing: -0.03em; }
+        @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
+        .section-desc { font-size: 1rem; line-height: 1.75; color: #94a3b8; }
+        @media (min-width: 768px) { .section-desc { font-size: 1.0625rem; } }
+
+        /* ── Site Header (mirrors architecture.html) ── */
+        .cortex-site-header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(2, 6, 23, 0.82);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 4px 32px -4px rgba(0,0,0,0.45);
+        }
+        .cortex-header-inner {
+            max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
+            height: 56px; display: flex; align-items: center;
+            justify-content: space-between; gap: 1rem;
+        }
+        .cortex-header-brand {
+            display: flex; align-items: center; gap: 0.625rem;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .cortex-header-logo {
+            width: 32px; height: 32px; border-radius: 8px;
+            filter: drop-shadow(0 0 8px rgba(0,212,255,0.35));
+            transition: filter var(--dur-moderate) var(--ease-standard);
+        }
+        .cortex-header-brand:hover .cortex-header-logo { filter: drop-shadow(0 0 14px rgba(0,212,255,0.65)); }
+        .cortex-header-wordmark {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9375rem; font-weight: 800;
+            letter-spacing: 0.06em; color: rgba(248,250,252,0.92); white-space: nowrap;
+        }
+        .cortex-header-wordmark span {
+            font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.03em;
+            color: rgba(148,163,184,0.65); margin-left: 0.375rem;
+        }
+        .cortex-header-nav {
+            display: flex; align-items: center; gap: 0.125rem; flex-shrink: 0;
+        }
+        .cortex-header-nav a {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.375rem 0.75rem; border-radius: 8px;
+            font-size: 0.8125rem; font-weight: 600;
+            color: rgba(148,163,184,0.8); text-decoration: none;
+            transition: color var(--dur-fast) var(--ease-standard),
+                        background var(--dur-fast) var(--ease-standard);
+            white-space: nowrap; min-width: 24px; min-height: 24px;
+        }
+        .cortex-header-nav a:hover, .cortex-header-nav a.active {
+            color: rgba(248,250,252,0.95); background: rgba(255,255,255,0.06);
+        }
+        .cortex-header-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.1); margin: 0 0.25rem; }
+        .cortex-breadcrumb-strip { background: rgba(2,6,23,0.65); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .cortex-breadcrumb-inner {
+            max-width: 1280px; margin: 0 auto; padding: 0.5rem 1.5rem;
+            display: flex; align-items: center; gap: 0.375rem;
+            font-size: 0.78125rem; flex-wrap: wrap;
+        }
+        .cortex-bc-link {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            color: rgba(148,163,184,0.7); text-decoration: none; font-weight: 500;
+            transition: color var(--dur-fast) var(--ease-standard);
+            padding: 0.125rem 0.375rem; border-radius: 5px;
+        }
+        .cortex-bc-link:hover { color: rgba(248,250,252,0.95); background: rgba(255,255,255,0.05); }
+        .cortex-bc-sep { color: rgba(148,163,184,0.3); font-size: 0.6875rem; flex-shrink: 0; }
+        .cortex-bc-current {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.2rem 0.6rem; border-radius: 999px;
+            font-size: 0.875rem; font-weight: 700;
+            background: rgba(0,212,255,0.1); color: rgba(0,212,255,0.9);
+            border: 1px solid rgba(0,212,255,0.2);
+        }
+        .cortex-bc-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; flex-shrink: 0; }
+        .cortex-header-nav-toggle {
+            display: none; background: none;
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+            padding: 0.375rem 0.5rem; color: rgba(148,163,184,0.8); cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .cortex-header-wordmark span { display: none; }
+            .cortex-header-nav { display: none; }
+            .cortex-header-nav.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 56px; left: 0; right: 0;
+                background: rgba(2,6,23,0.97); backdrop-filter: blur(20px);
+                padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); z-index: 99;
+            }
+            .cortex-header-nav.open a { padding: 0.625rem 0.75rem; font-size: 0.9375rem; }
+            .cortex-header-nav-toggle { display: flex; align-items: center; gap: 0.375rem; }
+            .cortex-header-inner { position: relative; }
+        }
+
+        /* ── Pulse dot ── */
+        .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring {
+            0%   { box-shadow: 0 0 0 0 rgba(123,97,255,0.7); }
+            70%  { box-shadow: 0 0 0 8px rgba(123,97,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(123,97,255,0); }
+        }
+
+        /* ── Section divider ── */
+        .section-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(123,97,255,0.25) 50%, transparent);
+            margin: 0 auto;
+        }
+
+        /* ── Step Journey Pills ── */
+        .journey-step {
+            display: flex; align-items: flex-start; gap: 1.25rem;
+            padding: 1.5rem; border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            transition: border-color var(--dur-moderate) var(--ease-standard),
+                        background var(--dur-moderate) var(--ease-standard);
+        }
+        .journey-step:hover { border-color: rgba(123,97,255,0.25); background: rgba(123,97,255,0.04); }
+        .journey-step-num {
+            flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.625rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.875rem; font-weight: 900;
+            background: rgba(123,97,255,0.15); color: #a78bfa;
+            border: 1px solid rgba(123,97,255,0.3);
+        }
+
+        /* ── Tier Cards ── */
+        .tier-card {
+            border-radius: 1.25rem; padding: 1.75rem;
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: transform var(--dur-moderate) var(--ease-standard),
+                        box-shadow var(--dur-moderate) var(--ease-standard),
+                        border-color var(--dur-moderate) var(--ease-standard);
+        }
+        .tier-card:hover { transform: translateY(-3px); }
+
+        /* ── Code block ── */
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem; line-height: 1.7;
+            background: rgba(0,0,0,0.45); border-radius: 0.75rem;
+            padding: 1.25rem 1.5rem; border: 1px solid rgba(255,255,255,0.07);
+            overflow-x: auto; white-space: pre;
+        }
+        .code-kw  { color: #f472b6; }
+        .code-fn  { color: #60a5fa; }
+        .code-str { color: #34d399; }
+        .code-cmt { color: #475569; font-style: italic; }
+        .code-op  { color: #a78bfa; }
+
+        /* ── Intent routing table ── */
+        .intent-table { width: 100%; border-collapse: separate; border-spacing: 0 0.375rem; }
+        .intent-table th {
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #64748b;
+            padding: 0.5rem 0.875rem; text-align: left;
+        }
+        .intent-table td {
+            padding: 0.625rem 0.875rem; font-size: 0.875rem;
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .intent-table td:first-child { border-left: 1px solid rgba(255,255,255,0.04); border-radius: 0.5rem 0 0 0.5rem; }
+        .intent-table td:last-child  { border-right: 1px solid rgba(255,255,255,0.04); border-radius: 0 0.5rem 0.5rem 0; }
+        .intent-table tr:hover td { background: rgba(123,97,255,0.05); }
+        .intent-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.6rem; border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .intent-badge--implement { background: rgba(123,97,255,0.15); color: #a78bfa; border: 1px solid rgba(123,97,255,0.3); }
+        .intent-badge--fix       { background: rgba(244,63,94,0.12);  color: #fda4af; border: 1px solid rgba(244,63,94,0.25); }
+        .intent-badge--refactor  { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+        .intent-badge--audit     { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+        .intent-badge--debug     { background: rgba(6,182,212,0.12);  color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+        .intent-badge--other     { background: rgba(100,116,139,0.12);color: #94a3b8; border: 1px solid rgba(100,116,139,0.2); }
+
+        /* ── MCP op pill ── */
+        .mcp-op {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan);
+            background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+            padding: 0.15rem 0.5rem; border-radius: 0.375rem; white-space: nowrap;
+        }
+
+        /* ── AC Marker trace ── */
+        .ac-trace-row {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.625rem 0.875rem; border-radius: 0.625rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+        }
+        .ac-trace-row + .ac-trace-row { margin-top: 0.375rem; }
+        .ac-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ── Primitive badge row ── */
+        .primitive-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.75rem; border-radius: 0.5rem;
+            font-size: 0.8125rem; font-weight: 600;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+            color: #94a3b8; white-space: nowrap;
+            transition: border-color var(--dur-fast) var(--ease-standard),
+                        color var(--dur-fast) var(--ease-standard);
+        }
+        .primitive-badge:hover { border-color: rgba(123,97,255,0.35); color: #c4b5fd; }
+
+        /* ── Footer ── */
+        .cortex-footer {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            background: rgba(2,6,23,0.7);
+            backdrop-filter: blur(12px);
+            padding: 2rem 1.5rem;
+            margin-top: 5rem;
+        }
+        .cortex-footer-inner {
+            max-width: 1280px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+
+        /* ── Scroll-to-top robot (identical to architecture.html) ── */
+        #cortex-robot-top {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+            width: 62px; height: 62px; cursor: pointer;
+            border: none; background: transparent; padding: 0;
+            opacity: 0; transform: translateY(16px) scale(0.92);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+        }
+        #cortex-robot-top.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .robot-body-wrap { transition: transform 0.22s ease; display: flex; flex-direction: column; align-items: center; }
+        .robot-glow { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 44px; height: 10px; border-radius: 50%; background: radial-gradient(ellipse, rgba(123,97,255,0.55) 0%, transparent 70%); filter: blur(4px); }
+        .robot-head { width: 38px; height: 28px; background: linear-gradient(160deg,#1e1b4b,#312e81 60%,#1a1040); border: 1.5px solid rgba(123,97,255,0.55); border-radius: 8px 8px 6px 6px; position: relative; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .robot-head::before { content:''; position: absolute; top:-9px; left:50%; transform:translateX(-50%); width:2.5px; height:9px; background:linear-gradient(to top,rgba(123,97,255,0.7),rgba(167,139,250,0.9)); border-radius:2px; }
+        .robot-head::after { content:''; position:absolute; top:-13px; left:50%; transform:translateX(-50%); width:7px; height:7px; border-radius:50%; background:radial-gradient(circle,#a78bfa 30%,#7b61ff 100%); box-shadow:0 0 8px rgba(167,139,250,0.9); animation:cortex-pulse 2s ease-in-out infinite; }
+        @keyframes cortex-pulse { 0%,100%{box-shadow:0 0 6px rgba(167,139,250,0.8);} 50%{box-shadow:0 0 14px rgba(167,139,250,1),0 0 20px rgba(123,97,255,0.5);} }
+        .robot-eye { width:8px; height:8px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#00d4ff,#06b6d4 60%,#0e7490); box-shadow:0 0 6px rgba(0,212,255,0.7); animation:eye-blink 4s ease-in-out infinite; }
+        .robot-eye:nth-child(2){animation-delay:0.12s;}
+        @keyframes eye-blink{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(0.12);}}
+        .robot-mouth { position:absolute; bottom:5px; left:50%; transform:translateX(-50%); width:22px; height:4px; border-radius:2px; background:rgba(123,97,255,0.18); border:1px solid rgba(123,97,255,0.3); overflow:hidden; }
+        .robot-mouth::after { content:''; position:absolute; left:-100%; top:0; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(0,212,255,0.8),transparent); animation:scan 2.4s linear infinite; }
+        @keyframes scan{0%{left:-60%;}100%{left:110%;}}
+        .robot-body { width:46px; height:26px; background:linear-gradient(160deg,#1e1b4b,#1a1040); border:1.5px solid rgba(123,97,255,0.45); border-top:none; border-radius:0 0 10px 10px; display:flex; align-items:center; justify-content:center; }
+        .robot-chest-arrow { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-bottom:9px solid rgba(123,97,255,0.55); filter:drop-shadow(0 0 4px rgba(123,97,255,0.6)); animation:chest-throb 1.8s ease-in-out infinite; }
+        @keyframes chest-throb{0%,100%{opacity:0.75;transform:translateY(0);}50%{opacity:1;transform:translateY(-2px);}}
+        #cortex-robot-top .robot-tooltip { position:absolute; right:70px; top:50%; transform:translateY(-50%); background:rgba(10,15,30,0.92); border:1px solid rgba(123,97,255,0.35); color:rgba(196,181,253,0.95); font-family:'Inter',sans-serif; font-size:0.875rem; font-weight:700; padding:0.35rem 0.75rem; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+        #cortex-robot-top:hover .robot-tooltip { opacity:1; }
+        #cortex-robot-top:hover .robot-body-wrap { transform:translateY(-4px); }
+
+        /* ── prefers-reduced-motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ── D3 chart containers ── */
+        .d3-wrap { width: 100%; overflow: hidden; }
+        .d3-wrap svg { display: block; width: 100%; }
+        .d3-tooltip {
+            position: absolute; pointer-events: none;
+            background: rgba(10,15,30,0.95); border: 1px solid rgba(123,97,255,0.35);
+            color: #e2d9ff; font-family: 'Inter', sans-serif; font-size: 0.8125rem;
+            padding: 0.5rem 0.875rem; border-radius: 0.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            max-width: 200px; line-height: 1.5;
+            transition: opacity var(--dur-fast) var(--ease-standard);
+        }
+
+        /* ── Responsive tweaks ── */
+        @media (max-width: 640px) { .section-title { font-size: 1.5rem; } }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Skip link (WCAG 2.2 AA P0) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:bg-teal-500 focus:text-black focus:rounded-lg focus:font-bold focus:text-sm">Skip to main content</a>
+
+    <!-- ═══════════════════ SITE HEADER ═══════════════════ -->
+    <header class="cortex-site-header" role="banner">
+        <div class="cortex-header-inner">
+            <a href="index.html" class="cortex-header-brand" aria-label="CORTEX Home">
+                <img src="assets/images/cortex-logo-64.png" alt="CORTEX" class="cortex-header-logo" width="32" height="32" loading="eager" fetchpriority="high"/>
+                <span class="cortex-header-wordmark">CORTEX<span>AI Engineering Framework</span></span>
+            </a>
+            <button class="cortex-header-nav-toggle" id="cortex-nav-toggle" aria-controls="cortex-site-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                Menu
+            </button>
+            <nav class="cortex-header-nav" id="cortex-site-nav" aria-label="Main navigation">
+                <a href="index.html">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
+                <a href="architecture.html">Architecture</a>
+                <a href="workflow-composer.html" class="active" aria-current="page">Workflow Composer</a>
+                <a href="getting-started.html">Getting Started</a>
+                <div class="cortex-header-sep" aria-hidden="true"></div>
+                <a href="index.html#who-is-cortex-for">Roles</a>
+                <a href="learning/index.html">University</a>
+            </nav>
+        </div>
+        <div class="cortex-breadcrumb-strip">
+            <nav class="cortex-breadcrumb-inner" aria-label="Breadcrumb">
+                <a href="index.html" class="cortex-bc-link">Home</a>
+                <svg class="cortex-bc-sep" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                <a href="architecture.html" class="cortex-bc-link">Architecture</a>
+                <svg class="cortex-bc-sep" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                <span class="cortex-bc-current"><span class="cortex-bc-dot"></span>Workflow Composer</span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <header class="max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-8 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-violet-400 pulse-dot"></span>
+            Declarative Execution Engine
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-black tracking-tighter leading-tight" style="font-family:'Space Grotesk',sans-serif;">
+            From Intent<br/><span class="gradient-text-violet">to Governed Execution.</span>
+        </h1>
+
+        <p class="text-base md:text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed">
+            The Workflow Composer is CORTEX's <span class="text-violet-300 font-semibold">declarative execution layer</span> — it translates a single user intent into an audited, TDD-enforced, governance-checked engineering pipeline. Every command you type triggers a precisely orchestrated sequence of primitives, gates, and specialist engines.
+        </p>
+
+        <!-- Hero stat strip -->
+        <div class="flex flex-wrap justify-center gap-3 pt-4">
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/25 text-violet-200 text-sm font-bold">
+                <span class="text-xl font-black text-violet-400">3</span> Workflow Tiers
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/25 text-cyan-200 text-sm font-bold">
+                <span class="text-xl font-black text-cyan-400">24+</span> Intent Routes
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-200 text-sm font-bold">
+                <span class="text-xl font-black text-emerald-400">8</span> Universal Primitives
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200 text-sm font-bold">
+                <span class="text-xl font-black text-amber-400">36+</span> MCP Tools
+            </div>
+        </div>
+
+        <!-- Hero D3 — MCP pulse ring -->
+        <div class="relative mx-auto" style="max-width:480px; height:200px;" aria-label="Animated diagram showing MCP tool invocation flowing to orchestrators and producing governed output" role="img">
+            <div id="hero-pulse-chart" class="d3-wrap" style="height:200px;"></div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6 pb-16 space-y-20">
+
+        <!-- ══════════ SECTION 1 — WHAT IS IT? ══════════ -->
+        <section id="what-is-it" aria-labelledby="s1-heading">
+            <div class="section-divider mb-12"></div>
+            <div class="grid lg:grid-cols-2 gap-10 items-center">
+                <!-- Left: prose -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        The Core Concept
+                    </div>
+                    <h2 id="s1-heading" class="section-title">No inline logic. Pure declaration.</h2>
+                    <p class="section-desc">
+                        Before the Workflow Composer existed, each orchestrator contained its own execution logic — creating drift, duplication, and governance gaps. The Composer solved this by moving all execution into <strong class="text-slate-200 font-semibold">YAML workflow templates</strong>. Orchestrators now declare <em>what</em> to do; the Composer decides <em>how</em> to do it.
+                    </p>
+                    <p class="section-desc">
+                        Think of it as the difference between a script and a playbook. A script is brittle. A playbook is reproducible, auditable, and learnable.
+                    </p>
+
+                    <!-- Key facts -->
+                    <div class="space-y-3 pt-2">
+                        <div class="journey-step">
+                            <span class="journey-step-num">1</span>
+                            <div>
+                                <p class="font-semibold text-sm text-slate-200">Intent arrives via MCP or Copilot Chat</p>
+                                <p class="text-sm text-slate-500 mt-0.5">The IntentRouter classifies your request into one of 31 intent types — IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, and more.</p>
+                            </div>
+                        </div>
+                        <div class="journey-step">
+                            <span class="journey-step-num">2</span>
+                            <div>
+                                <p class="font-semibold text-sm text-slate-200">Workflow template is selected</p>
+                                <p class="text-sm text-slate-500 mt-0.5">Each intent maps to a YAML template in <code class="mcp-op">cortex-registry/workflows/templates/</code>. No ambiguity, no guessing.</p>
+                            </div>
+                        </div>
+                        <div class="journey-step">
+                            <span class="journey-step-num">3</span>
+                            <div>
+                                <p class="font-semibold text-sm text-slate-200">Universal primitives inject governance</p>
+                                <p class="text-sm text-slate-500 mt-0.5">Eight atomic steps — git checkpoints, TDD gates, sweep catalogues, convergence loops — wrap every execution automatically.</p>
+                            </div>
+                        </div>
+                        <div class="journey-step">
+                            <span class="journey-step-num">4</span>
+                            <div>
+                                <p class="font-semibold text-sm text-slate-200">AC markers trace every milestone</p>
+                                <p class="text-sm text-slate-500 mt-0.5"><code class="mcp-op">AC_START</code> and <code class="mcp-op">AC_COMPLETE</code> are emitted at every orchestrator boundary, written to SQLite, and auditable on demand.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: D3 three-tier hierarchy tree -->
+                <div class="glass-card p-6 space-y-3">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Three-Tier Hierarchy</p>
+                    <div id="tier-tree-chart" class="d3-wrap" style="height:340px;" aria-label="Collapsible tree showing three tiers: Primitives at top, Mode Workflows in middle, Composite Pipelines at bottom" role="img"></div>
+                    <p class="text-xs text-slate-600 text-center">Click any node to expand</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ SECTION 2 — INTENT ROUTING ══════════ -->
+        <section id="intent-routing" aria-labelledby="s2-heading">
+            <div class="section-divider mb-12"></div>
+
+            <div class="text-center space-y-4 mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Intent → Workflow Routing
+                </div>
+                <h2 id="s2-heading" class="section-title">Every command has a template.</h2>
+                <p class="section-desc max-w-2xl mx-auto">
+                    CORTEX maps 31 intent types to dedicated workflow templates. Below are the most-used routes. The Sankey diagram shows volume weighting across intent categories.
+                </p>
+            </div>
+
+            <!-- Two-column: table left, D3 Sankey right -->
+            <div class="grid lg:grid-cols-2 gap-8 items-start">
+                <!-- Table -->
+                <div class="glass-card p-5 overflow-x-auto">
+                    <table class="intent-table" aria-label="Intent to workflow template routing table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Intent</th>
+                                <th scope="col">Workflow Template</th>
+                                <th scope="col">Pre-Gate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--implement">IMPLEMENT</span></td>
+                                <td class="text-slate-400"><code>sdlc/implement-workflow.yaml</code></td>
+                                <td><span class="text-emerald-400 text-xs font-bold">✓ Holistic</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--fix">FIX</span></td>
+                                <td class="text-slate-400"><code>sdlc/fix-workflow.yaml</code></td>
+                                <td><span class="text-emerald-400 text-xs font-bold">✓ Holistic</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--refactor">REFACTOR</span></td>
+                                <td class="text-slate-400"><code>quality/refactor-workflow.yaml</code></td>
+                                <td><span class="text-emerald-400 text-xs font-bold">✓ Holistic</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--audit">AUDIT</span></td>
+                                <td class="text-slate-400"><code>audit/audit-fix-pipeline.yaml</code></td>
+                                <td><span class="text-slate-500 text-xs">—</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--debug">DEBUG</span></td>
+                                <td class="text-slate-400"><code>debugging/multi-stack-debug.yaml</code></td>
+                                <td><span class="text-slate-500 text-xs">—</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--audit">HEALTH</span></td>
+                                <td class="text-slate-400"><code>maintenance/health-check-workflow.yaml</code></td>
+                                <td><span class="text-slate-500 text-xs">—</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--other">VACUUM</span></td>
+                                <td class="text-slate-400"><code>maintenance/vacuum-workflow.yaml</code></td>
+                                <td><span class="text-slate-500 text-xs">—</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--other">TDD</span></td>
+                                <td class="text-slate-400"><code>tdd/tdd-workflow.yaml</code></td>
+                                <td><span class="text-emerald-400 text-xs font-bold">✓ Holistic</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--other">TOTALRECALL</span></td>
+                                <td class="text-slate-400"><code>lifecycle/totalrecall-workflow.yaml</code></td>
+                                <td><span class="text-slate-500 text-xs">—</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="intent-badge intent-badge--other">FRONTEND</span></td>
+                                <td class="text-slate-400"><code>frontend/html-view-lifecycle.yaml</code></td>
+                                <td><span class="text-emerald-400 text-xs font-bold">✓ Holistic</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- D3 Sankey -->
+                <div class="glass-card p-5 space-y-3">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Intent Volume Distribution</p>
+                    <div id="sankey-chart" class="d3-wrap" style="height:320px;" aria-label="Sankey diagram showing intents flowing into workflow categories: SDLC, Quality, Debug, Maintenance, Lifecycle" role="img"></div>
+                    <p class="text-xs text-slate-600 text-center">Hover nodes for detail</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ SECTION 3 — MCP-FIRST ══════════ -->
+        <section id="mcp-first" aria-labelledby="s3-heading">
+            <div class="section-divider mb-12"></div>
+
+            <div class="grid lg:grid-cols-2 gap-10 items-start">
+                <!-- Left: D3 chord diagram -->
+                <div class="glass-card p-5 space-y-3">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">MCP Tools → Orchestrator Domains</p>
+                    <div id="chord-chart" class="d3-wrap" style="height:360px;" aria-label="Chord diagram showing connections between MCP tool groups and orchestrator domains" role="img"></div>
+                    <p class="text-xs text-slate-600 text-center">Hover arcs to explore connections</p>
+                </div>
+
+                <!-- Right: prose + op patterns -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        MCP-First Architecture
+                    </div>
+                    <h2 id="s3-heading" class="section-title">Pylance-style. Zero setup.</h2>
+                    <p class="section-desc">
+                        CORTEX's MCP server starts automatically when you open the workspace in VS Code — exactly like Pylance starts automatically for Python. There is no server to launch, no port to remember. The 36+ registered tools are available the moment Copilot Chat opens.
+                    </p>
+                    <p class="section-desc">
+                        Every Workflow Composer execution is exposed as an MCP tool call. You can trigger the entire <code class="mcp-op">implement-workflow</code> pipeline with a single tool invocation — or compose workflows programmatically.
+                    </p>
+
+                    <!-- MCP config block -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Auto-start configuration</p>
+                        <div class="code-block"><span class="code-cmt">// .vscode/settings.json</span>
+<span class="code-op">{</span>
+  <span class="code-str">"github.copilot.chat.mcpServers"</span>: <span class="code-op">{</span>
+    <span class="code-str">"cortex"</span>: <span class="code-op">{</span>
+      <span class="code-str">"command"</span>: <span class="code-str">"python3"</span>,
+      <span class="code-str">"args"</span>: [<span class="code-str">"-m"</span>, <span class="code-str">"cortex.mcp"</span>],
+      <span class="code-str">"transport"</span>: <span class="code-str">"stdio"</span>
+    <span class="code-op">}</span>
+  <span class="code-op">}</span>
+<span class="code-op">}</span></div>
+                    </div>
+
+                    <!-- Key MCP tools -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Key workflow tools</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="ac-trace-row" style="font-family:'Inter',sans-serif;font-size:0.8125rem;">
+                                <span class="ac-dot" style="background:#7b61ff;"></span>
+                                <div><p class="font-bold text-violet-300 text-xs">cortex_workflow</p><p class="text-slate-500 text-xs">Execute any workflow template</p></div>
+                            </div>
+                            <div class="ac-trace-row" style="font-family:'Inter',sans-serif;font-size:0.8125rem;">
+                                <span class="ac-dot" style="background:#00d4ff;"></span>
+                                <div><p class="font-bold text-cyan-300 text-xs">cortex_learning</p><p class="text-slate-500 text-xs">emit · history · rca · promote</p></div>
+                            </div>
+                            <div class="ac-trace-row" style="font-family:'Inter',sans-serif;font-size:0.8125rem;">
+                                <span class="ac-dot" style="background:#10b981;"></span>
+                                <div><p class="font-bold text-emerald-300 text-xs">cortex_validate</p><p class="text-slate-500 text-xs">compliance · governance checks</p></div>
+                            </div>
+                            <div class="ac-trace-row" style="font-family:'Inter',sans-serif;font-size:0.8125rem;">
+                                <span class="ac-dot" style="background:#f59e0b;"></span>
+                                <div><p class="font-bold text-amber-300 text-xs">cortex_verify</p><p class="text-slate-500 text-xs">MCP health · tool registry status</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ SECTION 4 — UNIVERSAL PRIMITIVES ══════════ -->
+        <section id="primitives" aria-labelledby="s4-heading">
+            <div class="section-divider mb-12"></div>
+
+            <div class="text-center space-y-4 mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 22 22 7 12 2"/></svg>
+                    Universal Primitives
+                </div>
+                <h2 id="s4-heading" class="section-title">Governance by construction.</h2>
+                <p class="section-desc max-w-2xl mx-auto">
+                    Eight atomic workflow primitives inject governance into every code-modifying execution. You never need to remember to add them — the Workflow Composer wraps every pipeline automatically.
+                </p>
+            </div>
+
+            <!-- 8 primitive cards in a 4x2 grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                <div class="tier-card" style="background:rgba(16,185,129,0.05);border-color:rgba(16,185,129,0.2);">
+                    <div class="text-2xl mb-3">🏁</div>
+                    <h3 class="font-bold text-sm text-emerald-300 mb-1">AC Markers</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Emit <code class="mcp-op" style="font-size:0.65rem;">AC_START</code> and <code class="mcp-op" style="font-size:0.65rem;">AC_COMPLETE</code> at every orchestrator boundary — written to SQLite.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(123,97,255,0.05);border-color:rgba(123,97,255,0.2);">
+                    <div class="text-2xl mb-3">🔀</div>
+                    <h3 class="font-bold text-sm text-violet-300 mb-1">Git Checkpoint</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Creates a safe rollback point before any file change. Every execution is reversible.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(245,158,11,0.05);border-color:rgba(245,158,11,0.2);">
+                    <div class="text-2xl mb-3">📋</div>
+                    <h3 class="font-bold text-sm text-amber-300 mb-1">DOR Display</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Definition of Ready rendered before execution begins — sets explicit acceptance criteria.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(6,182,212,0.05);border-color:rgba(6,182,212,0.2);">
+                    <div class="text-2xl mb-3">🔍</div>
+                    <h3 class="font-bold text-sm text-cyan-300 mb-1">Holistic Validation</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">CORE-048 pre-execution gate — scans codebase state before any change is made.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(99,102,241,0.05);border-color:rgba(99,102,241,0.2);">
+                    <div class="text-2xl mb-3">⚡</div>
+                    <h3 class="font-bold text-sm text-indigo-300 mb-1">Challenge Gate</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Risk-based alternative presentation — surfaces trade-offs before committing.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(244,63,94,0.05);border-color:rgba(244,63,94,0.2);">
+                    <div class="text-2xl mb-3">📂</div>
+                    <h3 class="font-bold text-sm text-rose-300 mb-1">Sweep Catalogue</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">CORE-064 open/close tracking — no partial sweeps, every issue catalogued and closed.</p>
+                </div>
+                <div class="tier-card" style="background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.2);">
+                    <div class="text-2xl mb-3">🔄</div>
+                    <h3 class="font-bold text-sm text-purple-300 mb-1">Convergence Loop</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">CORE-068 detect→fix→rescan until zero P0/P1 violations remain (max 3 cycles).</p>
+                </div>
+                <div class="tier-card" style="background:rgba(20,184,166,0.05);border-color:rgba(20,184,166,0.2);">
+                    <div class="text-2xl mb-3">🧪</div>
+                    <h3 class="font-bold text-sm text-teal-300 mb-1">TDD Gate</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">CORE-008 enforced — failing test written before implementation on every code-modifying intent.</p>
+                </div>
+            </div>
+
+            <!-- Primitive flow visualisation (D3 timeline) -->
+            <div class="glass-card p-6 space-y-4">
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Primitive injection order — IMPLEMENT workflow</p>
+                <div id="pipeline-timeline" class="d3-wrap" style="height:120px;" aria-label="Horizontal timeline showing the sequence of primitives injected during an IMPLEMENT workflow execution" role="img"></div>
+                <div class="flex flex-wrap gap-2 justify-center mt-2">
+                    <span class="primitive-badge">🏁 AC_START</span>
+                    <span class="primitive-badge">🔀 Git Checkpoint</span>
+                    <span class="primitive-badge">📋 DOR Display</span>
+                    <span class="primitive-badge">🔍 Holistic Validation</span>
+                    <span class="primitive-badge">⚡ Challenge Gate</span>
+                    <span class="primitive-badge">📂 Sweep Open</span>
+                    <span class="primitive-badge">🧪 TDD Gate</span>
+                    <span class="primitive-badge">🔄 Convergence Loop</span>
+                    <span class="primitive-badge">📂 Sweep Close</span>
+                    <span class="primitive-badge">🏁 AC_COMPLETE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ SECTION 5 — LIVE EXECUTION WALKTHROUGH ══════════ -->
+        <section id="live-execution" aria-labelledby="s5-heading">
+            <div class="section-divider mb-12"></div>
+
+            <div class="text-center space-y-4 mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold tracking-widest uppercase">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                    Live Execution Walkthrough
+                </div>
+                <h2 id="s5-heading" class="section-title">What happens when you say <span class="gradient-text-cyan">proceed</span>.</h2>
+                <p class="section-desc max-w-2xl mx-auto">
+                    Follow a single <code class="mcp-op">/implement</code> command through its complete lifecycle — from intent classification to a verified, audited result stored in SQLite.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10 items-start">
+                <!-- Left: step-by-step prose -->
+                <div class="space-y-4">
+                    <div class="journey-step" style="border-color:rgba(123,97,255,0.3);background:rgba(123,97,255,0.05);">
+                        <span class="journey-step-num" style="background:rgba(123,97,255,0.25);color:#c4b5fd;">①</span>
+                        <div>
+                            <p class="font-bold text-sm text-violet-200">IntentRouter classifies → IMPLEMENT</p>
+                            <p class="text-xs text-slate-500 mt-1">Your message is parsed by the IntentRouter. Keywords, context, and prior patterns route to the correct intent type. This takes &lt;50ms.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step" style="border-color:rgba(0,212,255,0.25);background:rgba(0,212,255,0.04);">
+                        <span class="journey-step-num" style="background:rgba(0,212,255,0.15);color:#67e8f9;">②</span>
+                        <div>
+                            <p class="font-bold text-sm text-cyan-200">LENS analyses the codebase (9 parallel analyzers)</p>
+                            <p class="text-xs text-slate-500 mt-1">Structure, history, security, complexity, patterns, dependencies, test coverage, style, and semantics — read in parallel before any plan is formed.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step" style="border-color:rgba(245,158,11,0.25);background:rgba(245,158,11,0.04);">
+                        <span class="journey-step-num" style="background:rgba(245,158,11,0.15);color:#fcd34d;">③</span>
+                        <div>
+                            <p class="font-bold text-sm text-amber-200">Holistic Validation Gate runs (CORE-048)</p>
+                            <p class="text-xs text-slate-500 mt-1">Pre-execution scan. If P0 violations exist in the target area, CORTEX flags them before touching code. No surprises mid-execution.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step" style="border-color:rgba(244,63,94,0.25);background:rgba(244,63,94,0.04);">
+                        <span class="journey-step-num" style="background:rgba(244,63,94,0.15);color:#fda4af;">④</span>
+                        <div>
+                            <p class="font-bold text-sm text-rose-200">Failing test written first (CORE-008)</p>
+                            <p class="text-xs text-slate-500 mt-1">TDD is not optional. Before a single line of implementation is touched, a red test is committed — creating an explicit success criterion.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step" style="border-color:rgba(16,185,129,0.25);background:rgba(16,185,129,0.04);">
+                        <span class="journey-step-num" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">⑤</span>
+                        <div>
+                            <p class="font-bold text-sm text-emerald-200">Implementation → convergence loop (CORE-068)</p>
+                            <p class="text-xs text-slate-500 mt-1">Code is written, tests run, violations detected. The loop repeats until zero P0/P1 remain — never stops at first pass.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step" style="border-color:rgba(99,102,241,0.25);background:rgba(99,102,241,0.04);">
+                        <span class="journey-step-num" style="background:rgba(99,102,241,0.15);color:#a5b4fc;">⑥</span>
+                        <div>
+                            <p class="font-bold text-sm text-indigo-200">AC_COMPLETE emitted → SQLite persisted</p>
+                            <p class="text-xs text-slate-500 mt-1">Every execution leaves a durable trace. Timing, phase, violations, resolution — all written to <code class="mcp-op" style="font-size:0.65rem;">orchestrator-traces.db</code> for audit.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: AC trace + animated timeline -->
+                <div class="space-y-5">
+                    <!-- D3 animated execution timeline -->
+                    <div class="glass-card p-5 space-y-3">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Execution timeline</p>
+                        <div id="exec-timeline" class="d3-wrap" style="height:200px;" aria-label="Animated horizontal bar chart showing execution duration of each IMPLEMENT workflow phase" role="img"></div>
+                    </div>
+
+                    <!-- AC trace log -->
+                    <div class="glass-card p-5 space-y-3">
+                        <p class="text-xs font-bold uppercase tracking-widest text-slate-500">AC audit trace (live example)</p>
+                        <div class="space-y-1">
+                            <div class="ac-trace-row">
+                                <span class="ac-dot" style="background:#7b61ff;"></span>
+                                <span style="color:#a78bfa;">AC-IMPL-001</span>
+                                <span class="text-slate-500">AC_START</span>
+                                <span class="text-slate-600 ml-auto text-xs">0ms</span>
+                            </div>
+                            <div class="ac-trace-row">
+                                <span class="ac-dot" style="background:#00d4ff;"></span>
+                                <span style="color:#67e8f9;">AC-LENS-001</span>
+                                <span class="text-slate-500">LENS analysis complete</span>
+                                <span class="text-slate-600 ml-auto text-xs">+43ms</span>
+                            </div>
+                            <div class="ac-trace-row">
+                                <span class="ac-dot" style="background:#f59e0b;"></span>
+                                <span style="color:#fcd34d;">AC-GATE-001</span>
+                                <span class="text-slate-500">Holistic validation ✓</span>
+                                <span class="text-slate-600 ml-auto text-xs">+91ms</span>
+                            </div>
+                            <div class="ac-trace-row">
+                                <span class="ac-dot" style="background:#f43f5e;"></span>
+                                <span style="color:#fda4af;">AC-TDD-001</span>
+                                <span class="text-slate-500">Failing test committed</span>
+                                <span class="text-slate-600 ml-auto text-xs">+280ms</span>
+                            </div>
+                            <div class="ac-trace-row">
+                                <span class="ac-dot" style="background:#10b981;"></span>
+                                <span style="color:#6ee7b7;">AC-CONV-003</span>
+                                <span class="text-slate-500">Convergence loop cycle 3 — 0 P0/P1</span>
+                                <span class="text-slate-600 ml-auto text-xs">+1,840ms</span>
+                            </div>
+                            <div class="ac-trace-row" style="border-color:rgba(16,185,129,0.3);">
+                                <span class="ac-dot" style="background:#10b981;box-shadow:0 0 8px rgba(16,185,129,0.7);"></span>
+                                <span style="color:#6ee7b7;font-weight:900;">AC-IMPL-001</span>
+                                <span class="text-emerald-400 font-bold">AC_COMPLETE ✅</span>
+                                <span class="text-slate-600 ml-auto text-xs">+1,921ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ SECTION 6 — DEEP REFERENCE ══════════ -->
+        <section id="deep-reference" aria-labelledby="s6-heading">
+            <div class="section-divider mb-12"></div>
+
+            <div class="text-center space-y-4 mb-10">
+                <h2 id="s6-heading" class="section-title">Go deeper.</h2>
+                <p class="section-desc max-w-xl mx-auto">Each aspect of the Workflow Composer is backed by a YAML specification, a Python implementation, and governance tests.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <a href="architecture.html" class="glass-card p-6 space-y-3 block no-underline group" style="text-decoration:none;">
+                    <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400 group-hover:bg-violet-500 group-hover:text-black transition-all" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-sm text-violet-300">Full Architecture</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">The Intelligence Diamond, all 14 orchestrator domains, LENS, Brain, and Governance — full interactive deep dive.</p>
+                </a>
+                <a href="getting-started.html" class="glass-card p-6 space-y-3 block no-underline group" style="text-decoration:none;">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black transition-all" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                    </div>
+                    <h3 class="font-bold text-sm text-cyan-300">Getting Started</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Install MCP, run your first /implement command, and see the Workflow Composer execute live in under 5 minutes.</p>
+                </a>
+                <a href="learning/index.html" class="glass-card p-6 space-y-3 block no-underline group" style="text-decoration:none;">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-all" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-sm text-emerald-300">CORTEX University</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Structured learning paths for engineers, architects, and team leads — from concepts to advanced orchestration.</p>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer class="cortex-footer" role="contentinfo">
+        <div class="cortex-footer-inner">
+            <div class="flex items-center gap-2">
+                <img src="assets/images/cortex-logo-64.png" alt="" width="24" height="24" aria-hidden="true" style="border-radius:6px;opacity:0.6;"/>
+                <span style="font-size:0.875rem;color:rgba(100,116,139,0.65);">&copy; 2025–2026 Asif Hussain · CORTEX Framework · WCAG 2.2 AA</span>
+            </div>
+            <nav aria-label="Footer navigation" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                <a href="index.html" style="font-size:0.8125rem;color:rgba(148,163,184,0.7);text-decoration:none;padding:0.25rem 0.5rem;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='rgba(148,163,184,0.7)'">Home</a>
+                <span style="color:rgba(255,255,255,0.1);" aria-hidden="true">|</span>
+                <a href="architecture.html" style="font-size:0.8125rem;color:rgba(148,163,184,0.7);text-decoration:none;padding:0.25rem 0.5rem;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='rgba(148,163,184,0.7)'">Architecture</a>
+                <span style="color:rgba(255,255,255,0.1);" aria-hidden="true">|</span>
+                <a href="getting-started.html" style="font-size:0.8125rem;color:rgba(148,163,184,0.7);text-decoration:none;padding:0.25rem 0.5rem;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='rgba(148,163,184,0.7)'">Getting Started</a>
+                <span style="color:rgba(255,255,255,0.1);" aria-hidden="true">|</span>
+                <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer" style="font-size:0.8125rem;color:rgba(148,163,184,0.7);text-decoration:none;padding:0.25rem 0.5rem;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='rgba(148,163,184,0.7)'">GitHub</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════ SCROLL-TO-TOP ROBOT ═══════════════════ -->
+    <button id="cortex-robot-top" aria-label="Scroll to top" title="Back to top">
+        <span class="robot-tooltip">Back to top</span>
+        <span class="robot-glow"></span>
+        <span class="robot-body-wrap">
+            <span class="robot-head">
+                <span class="robot-eye"></span>
+                <span class="robot-eye"></span>
+                <span class="robot-mouth"></span>
+            </span>
+            <span class="robot-body">
+                <span class="robot-chest-arrow"></span>
+            </span>
+        </span>
+    </button>
+
+    <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+    <script>
+    // ── Mobile nav toggle ──
+    (function () {
+        var toggle = document.getElementById('cortex-nav-toggle');
+        var nav    = document.getElementById('cortex-site-nav');
+        if (toggle && nav) {
+            toggle.addEventListener('click', function () {
+                nav.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', nav.classList.contains('open'));
+            });
+        }
+    })();
+
+    // ── Robot scroll-to-top ──
+    (function () {
+        var btn = document.getElementById('cortex-robot-top');
+        var THRESHOLD = 320;
+        var ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(function () {
+                    btn.classList.toggle('visible', window.scrollY > THRESHOLD);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    })();
+    </script>
+
+    <script>
+    // ══════════════════════════════════════════════════════════════
+    // D3 VISUALISATIONS — all guarded by prefers-reduced-motion
+    // ══════════════════════════════════════════════════════════════
+    window.addEventListener('load', function () {
+        if (typeof d3 === 'undefined') return;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var COLORS = {
+            violet: '#7b61ff', purple: '#a855f7', cyan: '#00d4ff',
+            emerald: '#10b981', amber: '#f59e0b', rose: '#f43f5e',
+            indigo: '#6366f1', teal: '#14b8a6', blue: '#3b82f6',
+            muted: '#64748b', glass: 'rgba(255,255,255,0.04)'
+        };
+
+        // ─── Tooltip helper ──────────────────────────────────────
+        var tip = d3.select('body').append('div').attr('class', 'd3-tooltip').style('opacity', 0).style('z-index', 9999);
+        function showTip(html, event) {
+            tip.html(html).style('opacity', 1)
+               .style('left', (event.pageX + 14) + 'px')
+               .style('top',  (event.pageY - 28) + 'px');
+        }
+        function hideTip() { tip.style('opacity', 0); }
+
+        // ─── 1. HERO PULSE RING ───────────────────────────────────
+        (function buildHeroPulse() {
+            var el = document.getElementById('hero-pulse-chart');
+            if (!el) return;
+            var W = el.clientWidth || 480, H = 200;
+            var cx = W / 2, cy = H / 2;
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H)
+                .attr('aria-hidden', 'true');
+
+            var nodes = [
+                { id: 'user',  label: 'You',        x: cx - 160, y: cy, r: 28, color: COLORS.muted,   sub: 'Intent' },
+                { id: 'mcp',   label: 'MCP',         x: cx - 60,  y: cy, r: 32, color: COLORS.cyan,    sub: '36+ Tools' },
+                { id: 'wc',    label: 'Workflow',     x: cx + 50,  y: cy, r: 36, color: COLORS.violet,  sub: 'Composer' },
+                { id: 'out',   label: 'Governed',     x: cx + 170, y: cy, r: 30, color: COLORS.emerald, sub: 'Output' }
+            ];
+
+            // Gradient defs
+            var defs = svg.append('defs');
+            nodes.forEach(function (n) {
+                var grad = defs.append('radialGradient').attr('id', 'hpg-' + n.id)
+                    .attr('cx', '35%').attr('cy', '35%').attr('r', '65%');
+                grad.append('stop').attr('offset', '0%').attr('stop-color', n.color).attr('stop-opacity', 0.35);
+                grad.append('stop').attr('offset', '100%').attr('stop-color', n.color).attr('stop-opacity', 0.06);
+            });
+
+            // Arrows between nodes
+            defs.append('marker').attr('id', 'arrowhead').attr('markerWidth', 8).attr('markerHeight', 6)
+                .attr('refX', 8).attr('refY', 3).attr('orient', 'auto')
+                .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'rgba(123,97,255,0.5)');
+
+            for (var i = 0; i < nodes.length - 1; i++) {
+                var a = nodes[i], b = nodes[i + 1];
+                var dx = b.x - a.x, gap = a.r + 6;
+                var x1 = a.x + gap, x2 = b.x - b.r - 10;
+                svg.append('line')
+                    .attr('x1', x1).attr('y1', a.y).attr('x2', x2).attr('y2', b.y)
+                    .attr('stroke', 'rgba(123,97,255,0.4)').attr('stroke-width', 1.5)
+                    .attr('marker-end', 'url(#arrowhead)');
+            }
+
+            // Pulse rings (reduced-motion: skip)
+            if (!prefersReducedMotion) {
+                nodes.forEach(function (n, idx) {
+                    function pulse() {
+                        svg.append('circle')
+                            .attr('cx', n.x).attr('cy', n.y).attr('r', n.r)
+                            .attr('fill', 'none').attr('stroke', n.color).attr('stroke-opacity', 0.5).attr('stroke-width', 1.5)
+                            .transition().duration(1200).delay(idx * 220)
+                            .attr('r', n.r + 28).attr('stroke-opacity', 0)
+                            .remove();
+                    }
+                    setInterval(pulse, 2000);
+                    pulse();
+                });
+            }
+
+            // Node circles
+            var nodeG = svg.selectAll('.hp-node').data(nodes).enter().append('g').attr('class', 'hp-node')
+                .attr('transform', function (d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+
+            nodeG.append('circle').attr('r', function (d) { return d.r; })
+                .attr('fill', function (d) { return 'url(#hpg-' + d.id + ')'; })
+                .attr('stroke', function (d) { return d.color; }).attr('stroke-width', 1.5)
+                .attr('stroke-opacity', 0.6);
+
+            nodeG.append('text').attr('text-anchor', 'middle').attr('y', -3)
+                .attr('fill', function (d) { return d.color; }).attr('font-size', '11px').attr('font-weight', '800')
+                .attr('font-family', 'Inter, sans-serif').text(function (d) { return d.label; });
+
+            nodeG.append('text').attr('text-anchor', 'middle').attr('y', 11)
+                .attr('fill', '#64748b').attr('font-size', '9px').attr('font-family', 'Inter, sans-serif')
+                .text(function (d) { return d.sub; });
+        })();
+
+        // ─── 2. THREE-TIER COLLAPSIBLE TREE ──────────────────────
+        (function buildTierTree() {
+            var el = document.getElementById('tier-tree-chart');
+            if (!el) return;
+            var W = el.clientWidth || 420, H = 340;
+
+            var treeData = {
+                name: 'Workflow Composer', color: COLORS.violet, sub: 'Entry Point',
+                children: [
+                    {
+                        name: 'Tier 1: Primitives', color: COLORS.emerald, sub: 'Atomic steps',
+                        children: [
+                            { name: 'AC Markers',     color: COLORS.emerald, sub: 'Audit trail' },
+                            { name: 'Git Checkpoint', color: COLORS.emerald, sub: 'Rollback' },
+                            { name: 'TDD Gate',       color: COLORS.emerald, sub: 'CORE-008' },
+                            { name: 'Convergence',    color: COLORS.emerald, sub: 'CORE-068' }
+                        ]
+                    },
+                    {
+                        name: 'Tier 2: Mode Workflows', color: COLORS.cyan, sub: 'Per-intent',
+                        children: [
+                            { name: 'implement-workflow', color: COLORS.cyan, sub: 'sdlc/' },
+                            { name: 'fix-workflow',       color: COLORS.cyan, sub: 'sdlc/' },
+                            { name: 'refactor-workflow',  color: COLORS.cyan, sub: 'quality/' },
+                            { name: 'tdd-workflow',       color: COLORS.cyan, sub: 'tdd/' }
+                        ]
+                    },
+                    {
+                        name: 'Tier 3: Composites', color: COLORS.amber, sub: 'Multi-mode',
+                        children: [
+                            { name: 'audit-fix-pipeline',        color: COLORS.amber, sub: '9 stages' },
+                            { name: 'totalrecall-workflow',      color: COLORS.amber, sub: '10 phases' },
+                            { name: 'multi-stack-debug-pipeline', color: COLORS.amber, sub: '5 phases' }
+                        ]
+                    }
+                ]
+            };
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H).attr('aria-hidden', 'true');
+
+            var g = svg.append('g').attr('transform', 'translate(20, 20)');
+
+            var root = d3.hierarchy(treeData);
+            root.x0 = H / 2 - 20;
+            root.y0 = 0;
+
+            // Collapse children by default (show tier level, hide leaves)
+            root.children && root.children.forEach(function (d) {
+                if (d.children) { d._children = d.children; d.children = null; }
+            });
+
+            var treeFn = d3.tree().size([H - 40, W - 60]);
+
+            function update(source) {
+                var treeLayout = treeFn(root);
+                var nodes = treeLayout.descendants();
+                var links = treeLayout.links();
+
+                nodes.forEach(function (d) { d.y = d.depth * 110; });
+
+                var duration = prefersReducedMotion ? 0 : 300;
+
+                // Links
+                var link = g.selectAll('.t-link').data(links, function (d) { return d.target.data.name; });
+                link.enter().append('path').attr('class', 't-link')
+                    .attr('fill', 'none').attr('stroke', 'rgba(123,97,255,0.25)').attr('stroke-width', 1.5)
+                    .attr('d', function (d) {
+                        var o = { x: source.x0 || 0, y: source.y0 || 0 };
+                        return 'M' + o.y + ',' + o.x + 'C' + (o.y + 55) + ',' + o.x + ' ' + (o.y + 55) + ',' + o.x + ' ' + o.y + ',' + o.x;
+                    })
+                    .merge(link)
+                    .transition().duration(duration)
+                    .attr('d', function (d) {
+                        return 'M' + d.source.y + ',' + d.source.x + 'C' + (d.source.y + 55) + ',' + d.source.x + ' ' + (d.target.y - 55) + ',' + d.target.x + ' ' + d.target.y + ',' + d.target.x;
+                    });
+
+                link.exit().transition().duration(duration).remove();
+
+                // Nodes
+                var node = g.selectAll('.t-node').data(nodes, function (d) { return d.data.name; });
+
+                var nodeEnter = node.enter().append('g').attr('class', 't-node')
+                    .attr('transform', function (d) { return 'translate(' + (source.y0 || 0) + ',' + (source.x0 || 0) + ')'; })
+                    .style('cursor', 'pointer')
+                    .on('click', function (event, d) {
+                        if (d.children) { d._children = d.children; d.children = null; }
+                        else if (d._children) { d.children = d._children; d._children = null; }
+                        update(d);
+                    })
+                    .on('mouseover', function (event, d) { showTip('<strong>' + d.data.name + '</strong><br/>' + (d.data.sub || ''), event); })
+                    .on('mouseout', hideTip);
+
+                nodeEnter.append('circle').attr('r', 0).attr('fill', function (d) { return (d.data.color || COLORS.violet) + '22'; })
+                    .attr('stroke', function (d) { return d.data.color || COLORS.violet; }).attr('stroke-width', 1.5);
+
+                nodeEnter.append('text').attr('x', 12).attr('dy', '0.35em')
+                    .attr('fill', function (d) { return d.data.color || COLORS.violet; })
+                    .attr('font-size', '10px').attr('font-weight', '700').attr('font-family', 'Inter, sans-serif')
+                    .text(function (d) { return d.data.name; });
+
+                var nodeMerge = nodeEnter.merge(node);
+                nodeMerge.transition().duration(duration)
+                    .attr('transform', function (d) { return 'translate(' + d.y + ',' + d.x + ')'; });
+
+                nodeMerge.select('circle').transition().duration(duration).attr('r', 7);
+
+                node.exit().transition().duration(duration)
+                    .attr('transform', function (d) { return 'translate(' + source.y + ',' + source.x + ')'; })
+                    .remove();
+
+                nodes.forEach(function (d) { d.x0 = d.x; d.y0 = d.y; });
+            }
+
+            update(root);
+        })();
+
+        // ─── 3. INTENT SANKEY ────────────────────────────────────
+        (function buildSankey() {
+            var el = document.getElementById('sankey-chart');
+            if (!el) return;
+            var W = el.clientWidth || 380, H = 320;
+            var pad = { top: 20, right: 10, bottom: 20, left: 10 };
+
+            var categories = [
+                { name: 'IMPLEMENT', color: COLORS.violet, value: 35, cat: 'SDLC' },
+                { name: 'FIX',       color: COLORS.rose,   value: 28, cat: 'SDLC' },
+                { name: 'REFACTOR',  color: COLORS.emerald,value: 18, cat: 'Quality' },
+                { name: 'AUDIT',     color: COLORS.amber,  value: 12, cat: 'Governance' },
+                { name: 'DEBUG',     color: COLORS.cyan,   value: 10, cat: 'Debug' },
+                { name: 'HEALTH',    color: COLORS.teal,   value: 8,  cat: 'Maintenance' },
+                { name: 'VACUUM',    color: COLORS.indigo, value: 5,  cat: 'Maintenance' },
+                { name: 'TDD',       color: COLORS.purple, value: 14, cat: 'Quality' }
+            ];
+
+            var destMap = { 'SDLC': COLORS.violet, 'Quality': COLORS.emerald, 'Governance': COLORS.amber, 'Debug': COLORS.cyan, 'Maintenance': COLORS.teal };
+            var dests = Object.keys(destMap);
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H).attr('aria-hidden', 'true');
+
+            var iW = W - pad.left - pad.right;
+            var iH = H - pad.top - pad.bottom;
+            var srcX = pad.left + 20, dstX = W - pad.right - 80;
+
+            // Source bars (left)
+            var total = d3.sum(categories, function (d) { return d.value; });
+            var srcScale = d3.scaleLinear().domain([0, total]).range([0, iH]);
+            var srcY = pad.top;
+            var srcPositions = {};
+
+            categories.forEach(function (d) {
+                var h = Math.max(srcScale(d.value), 8);
+                srcPositions[d.name] = { y: srcY, h: h };
+
+                svg.append('rect').attr('x', srcX).attr('y', srcY)
+                    .attr('width', 48).attr('height', h)
+                    .attr('fill', d.color).attr('fill-opacity', 0.25)
+                    .attr('stroke', d.color).attr('stroke-width', 1.5).attr('rx', 3)
+                    .style('cursor', 'default')
+                    .on('mouseover', function (event) { showTip('<strong>' + d.name + '</strong><br/>Weight: ' + d.value, event); })
+                    .on('mouseout', hideTip);
+
+                svg.append('text').attr('x', srcX - 5).attr('y', srcY + h / 2 + 1)
+                    .attr('text-anchor', 'end').attr('fill', d.color)
+                    .attr('font-size', '8px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .text(d.name);
+
+                srcY += h + 3;
+            });
+
+            // Destination bars (right) — aggregate by category
+            var destTotals = {};
+            dests.forEach(function (k) { destTotals[k] = 0; });
+            categories.forEach(function (d) { destTotals[d.cat] = (destTotals[d.cat] || 0) + d.value; });
+
+            var dstScale = d3.scaleLinear().domain([0, total]).range([0, iH]);
+            var dstY = pad.top;
+            var dstPositions = {};
+            dests.forEach(function (k) {
+                var h = Math.max(dstScale(destTotals[k]), 12);
+                dstPositions[k] = { y: dstY, h: h };
+                svg.append('rect').attr('x', dstX).attr('y', dstY)
+                    .attr('width', 48).attr('height', h)
+                    .attr('fill', destMap[k]).attr('fill-opacity', 0.25)
+                    .attr('stroke', destMap[k]).attr('stroke-width', 1.5).attr('rx', 3)
+                    .on('mouseover', function (event) { showTip('<strong>' + k + '</strong><br/>' + destTotals[k] + ' intents', event); })
+                    .on('mouseout', hideTip);
+                svg.append('text').attr('x', dstX + 54).attr('y', dstY + h / 2 + 1)
+                    .attr('fill', destMap[k]).attr('font-size', '8px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .text(k);
+                dstY += h + 6;
+            });
+
+            // Flow paths
+            var dstFillY = {};
+            dests.forEach(function (k) { dstFillY[k] = dstPositions[k].y; });
+
+            categories.forEach(function (d) {
+                var sp = srcPositions[d.name];
+                var dp = dstPositions[d.cat];
+                var dfy = dstFillY[d.cat];
+                var fh = Math.max(dstScale(d.value), 4);
+
+                svg.append('path')
+                    .attr('d', 'M' + (srcX + 48) + ',' + (sp.y + sp.h * 0.5) + ' C' + ((srcX + dstX) / 2) + ',' + (sp.y + sp.h * 0.5) + ' ' + ((srcX + dstX) / 2) + ',' + (dfy + fh * 0.5) + ' ' + dstX + ',' + (dfy + fh * 0.5))
+                    .attr('fill', 'none').attr('stroke', d.color)
+                    .attr('stroke-width', Math.max(fh * 0.6, 2)).attr('stroke-opacity', 0.2);
+
+                dstFillY[d.cat] += fh + 2;
+            });
+        })();
+
+        // ─── 4. MCP CHORD DIAGRAM ────────────────────────────────
+        (function buildChord() {
+            var el = document.getElementById('chord-chart');
+            if (!el) return;
+            var W = el.clientWidth || 380, H = 360;
+            var r = Math.min(W, H) / 2 - 50;
+
+            var groups = ['Learning', 'Validate', 'Workflow', 'Health', 'Debug', 'Verify'];
+            var groupColors = [COLORS.cyan, COLORS.emerald, COLORS.violet, COLORS.teal, COLORS.amber, COLORS.indigo];
+
+            // Simplified matrix: each row/col = a group, values = connection strength
+            var matrix = [
+                [0, 8, 6, 4, 5, 3],  // Learning
+                [8, 0, 9, 6, 4, 5],  // Validate
+                [6, 9, 0, 7, 6, 4],  // Workflow
+                [4, 6, 7, 0, 3, 8],  // Health
+                [5, 4, 6, 3, 0, 4],  // Debug
+                [3, 5, 4, 8, 4, 0]   // Verify
+            ];
+
+            var chord = d3.chord().padAngle(0.08).sortSubgroups(d3.descending);
+            var chords = chord(matrix);
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H).attr('aria-hidden', 'true')
+                .append('g').attr('transform', 'translate(' + W/2 + ',' + H/2 + ')');
+
+            var arc = d3.arc().innerRadius(r).outerRadius(r + 18);
+            var ribbon = d3.ribbon().radius(r - 4);
+
+            // Arcs
+            svg.append('g').selectAll('path').data(chords.groups).enter().append('path')
+                .attr('d', arc)
+                .attr('fill', function (d) { return groupColors[d.index] + '30'; })
+                .attr('stroke', function (d) { return groupColors[d.index]; })
+                .attr('stroke-width', 1.5)
+                .style('cursor', 'pointer')
+                .on('mouseover', function (event, d) { showTip('<strong>' + groups[d.index] + ' Tools</strong><br/>Connects to ' + (groups.length - 1) + ' domains', event); })
+                .on('mouseout', hideTip);
+
+            // Labels
+            svg.append('g').selectAll('text').data(chords.groups).enter().append('text')
+                .each(function (d) { d.angle = (d.startAngle + d.endAngle) / 2; })
+                .attr('dy', '0.35em')
+                .attr('transform', function (d) {
+                    return 'rotate(' + (d.angle * 180 / Math.PI - 90) + ') translate(' + (r + 26) + ') ' + (d.angle > Math.PI ? 'rotate(180)' : '');
+                })
+                .attr('text-anchor', function (d) { return d.angle > Math.PI ? 'end' : 'start'; })
+                .attr('fill', function (d) { return groupColors[d.index]; })
+                .attr('font-size', '9px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                .text(function (d) { return groups[d.index]; });
+
+            // Ribbons
+            svg.append('g').attr('fill-opacity', 0.15).selectAll('path').data(chords).enter().append('path')
+                .attr('d', ribbon)
+                .attr('fill', function (d) { return groupColors[d.source.index]; })
+                .attr('stroke', function (d) { return groupColors[d.source.index]; })
+                .attr('stroke-width', 0.5).attr('stroke-opacity', 0.3)
+                .on('mouseover', function (event, d) {
+                    showTip(groups[d.source.index] + ' ↔ ' + groups[d.target.index] + '<br/>Strength: ' + matrix[d.source.index][d.target.index], event);
+                })
+                .on('mouseout', hideTip);
+        })();
+
+        // ─── 5. PIPELINE TIMELINE (primitive injection order) ────
+        (function buildPipelineTimeline() {
+            var el = document.getElementById('pipeline-timeline');
+            if (!el) return;
+            var W = el.clientWidth || 700, H = 120;
+
+            var steps = [
+                { label: 'AC_START',    color: COLORS.emerald, x: 0 },
+                { label: 'Git',          color: COLORS.violet,  x: 1 },
+                { label: 'DOR',          color: COLORS.amber,   x: 2 },
+                { label: 'Holistic',     color: COLORS.cyan,    x: 3 },
+                { label: 'Challenge',    color: COLORS.indigo,  x: 4 },
+                { label: 'Sweep Open',   color: COLORS.rose,    x: 5 },
+                { label: 'TDD',          color: COLORS.purple,  x: 6 },
+                { label: 'Converge',     color: COLORS.teal,    x: 7 },
+                { label: 'Sweep Close',  color: COLORS.rose,    x: 8 },
+                { label: 'AC_COMPLETE',  color: COLORS.emerald, x: 9 }
+            ];
+
+            var n = steps.length;
+            var pad = 20;
+            var slotW = (W - pad * 2) / n;
+            var cy = H / 2;
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H).attr('aria-hidden', 'true');
+
+            // Track line
+            svg.append('line')
+                .attr('x1', pad + slotW * 0.5).attr('y1', cy)
+                .attr('x2', pad + slotW * (n - 0.5)).attr('y2', cy)
+                .attr('stroke', 'rgba(123,97,255,0.2)').attr('stroke-width', 2);
+
+            steps.forEach(function (s, i) {
+                var cx = pad + slotW * (i + 0.5);
+
+                // Connector tick
+                if (i < n - 1) {
+                    svg.append('line')
+                        .attr('x1', cx + 14).attr('y1', cy)
+                        .attr('x2', cx + slotW - 14).attr('y2', cy)
+                        .attr('stroke', s.color).attr('stroke-opacity', 0.35).attr('stroke-width', 1.5);
+                }
+
+                // Node circle — animate in if motion OK
+                var circle = svg.append('circle')
+                    .attr('cx', cx).attr('cy', cy).attr('r', 0)
+                    .attr('fill', s.color + '20').attr('stroke', s.color).attr('stroke-width', 1.5);
+
+                if (!prefersReducedMotion) {
+                    circle.transition().delay(i * 80).duration(200).attr('r', 14);
+                } else {
+                    circle.attr('r', 14);
+                }
+
+                // Label
+                svg.append('text').attr('x', cx).attr('y', cy + 28)
+                    .attr('text-anchor', 'middle').attr('fill', s.color)
+                    .attr('font-size', '7.5px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .text(s.label);
+            });
+        })();
+
+        // ─── 6. EXECUTION TIMELINE (horizontal Gantt-style) ──────
+        (function buildExecTimeline() {
+            var el = document.getElementById('exec-timeline');
+            if (!el) return;
+            var W = el.clientWidth || 420, H = 200;
+            var pad = { top: 15, right: 20, bottom: 15, left: 90 };
+            var iW = W - pad.left - pad.right;
+            var iH = H - pad.top - pad.bottom;
+
+            var phases = [
+                { label: 'Intent Route',     ms: 48,   color: COLORS.muted },
+                { label: 'LENS Analysis',    ms: 43,   color: COLORS.cyan },
+                { label: 'Holistic Gate',    ms: 48,   color: COLORS.amber },
+                { label: 'TDD — Red',        ms: 189,  color: COLORS.rose },
+                { label: 'Implementation',   ms: 820,  color: COLORS.violet },
+                { label: 'Convergence ×3',   ms: 560,  color: COLORS.emerald },
+                { label: 'AC_COMPLETE',      ms: 81,   color: COLORS.emerald }
+            ];
+
+            var totalMs = d3.sum(phases, function (d) { return d.ms; });
+            var xScale = d3.scaleLinear().domain([0, totalMs]).range([0, iW]);
+            var yScale = d3.scaleBand().domain(phases.map(function (d) { return d.label; })).range([0, iH]).padding(0.25);
+
+            var svg = d3.select(el).append('svg')
+                .attr('width', W).attr('height', H).attr('aria-hidden', 'true')
+                .append('g').attr('transform', 'translate(' + pad.left + ',' + pad.top + ')');
+
+            // Y axis labels
+            svg.selectAll('.yl').data(phases).enter().append('text').attr('class', 'yl')
+                .attr('x', -6).attr('y', function (d) { return yScale(d.label) + yScale.bandwidth() / 2 + 1; })
+                .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+                .attr('fill', '#64748b').attr('font-size', '8px').attr('font-family', 'Inter, sans-serif').attr('font-weight', '600')
+                .text(function (d) { return d.label; });
+
+            // Bars
+            var offset = 0;
+            phases.forEach(function (d) {
+                var xStart = xScale(offset);
+                var barW = xScale(d.ms);
+
+                var bar = svg.append('rect')
+                    .attr('x', xStart).attr('y', yScale(d.label))
+                    .attr('height', yScale.bandwidth()).attr('rx', 3)
+                    .attr('fill', d.color).attr('fill-opacity', 0.25)
+                    .attr('stroke', d.color).attr('stroke-width', 1);
+
+                if (!prefersReducedMotion) {
+                    bar.attr('width', 0).transition().delay(offset / totalMs * 600).duration(Math.max(barW / iW * 600, 80))
+                       .attr('width', barW);
+                } else {
+                    bar.attr('width', barW);
+                }
+
+                // ms label inside bar
+                if (barW > 28) {
+                    svg.append('text')
+                        .attr('x', xStart + barW / 2).attr('y', yScale(d.label) + yScale.bandwidth() / 2 + 1)
+                        .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+                        .attr('fill', d.color).attr('font-size', '7.5px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                        .text(d.ms + 'ms');
+                }
+
+                offset += d.ms;
+            });
+        })();
+
+    }); // end window.load
+    </script>
+</body>
+</html>
