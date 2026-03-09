@@ -1141,6 +1141,15 @@
     /* Mobile responsive */
     @media (max-width: 640px) { .arch-cta-glow-1, .arch-cta-glow-2 { width: 250px; height: 250px; } .arch-cta-glow-3 { width: 180px; height: 180px; } .arch-icon-ring-2, .arch-icon-ring-3 { display: none; } .arch-cta-icon-cluster { width: 100px; height: 100px; } .arch-icon-hex { width: 60px; height: 60px; } .arch-stat-value { font-size: 1.25rem; } .arch-cta-arrow { width: 44px; height: 44px; } }
 
+    /* --- SDLC Pipeline Section --- */
+    @media (max-width: 900px) {
+        .sdlc-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        .sdlc-guarantees { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 560px) {
+        .sdlc-grid { grid-template-columns: 1fr !important; }
+    }
+
     /* --- FOOTER --- */
     .page-footer { padding: var(--spacing-8) 0; border-top: 1px solid var(--border-base); margin-top: var(--spacing-16); background: rgba(0,0,0,0.3); }
     .footer-content { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: var(--spacing-4); }
@@ -2425,22 +2434,22 @@
         <!-- Hero Stats Bar -->
         <div class="hero-stats-bar">
             <div class="hero-stat-item">
-                <span class="hero-stat-value">258</span>
+                <span class="hero-stat-value">290+</span>
                 <span class="hero-stat-label">Orchestrators</span>
             </div>
             <div class="hero-stat-divider" aria-hidden="true"></div>
             <div class="hero-stat-item">
-                <span class="hero-stat-value">30</span>
+                <span class="hero-stat-value">30+</span>
                 <span class="hero-stat-label">MCP Tools</span>
             </div>
             <div class="hero-stat-divider" aria-hidden="true"></div>
             <div class="hero-stat-item">
-                <span class="hero-stat-value">32</span>
+                <span class="hero-stat-value">60+</span>
                 <span class="hero-stat-label">CORE Rules</span>
             </div>
             <div class="hero-stat-divider" aria-hidden="true"></div>
             <div class="hero-stat-item">
-                <span class="hero-stat-value highlight">18k+</span>
+                <span class="hero-stat-value highlight">20,000+</span>
                 <span class="hero-stat-label">Tests Passing</span>
             </div>
         </div>
@@ -2920,7 +2929,10 @@
     })();
     </script>
 
-    <!-- What is CORTEX? — unified intro + role video showcase -->
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION A: What is CORTEX? — Definition + Video
+         Anchors reader with a clear answer before capabilities.
+         ═══════════════════════════════════════════════════════ -->
     <section class="section container" aria-label="What is CORTEX?" aria-labelledby="what-is-cortex-heading">
         <div style="
             background: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(15,23,42,0.65) 100%);
@@ -3203,147 +3215,219 @@
         </div>
     </section>
 
-    <!-- 4. The Awakening Of CORTEX -->
-    <section class="container section" aria-labelledby="awakening-heading-top">
-        <a href="awakening-of-cortex/index.html" class="awakening-card">
-            <div class="awakening-image-wrapper">
-                <img alt="Visual representation of The Awakening of CORTEX" class="awakening-image" fetchpriority="low" loading="lazy" src="assets/images/Awakening-200.png?v=4.0.1" onerror="this.style.display='none'"/>
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION B: How It Works — 7-Phase SDLC Pipeline
+         Builds context: now user understands WHAT, sees HOW.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="container section" id="how-it-works" aria-labelledby="how-it-works-heading">
+        <div class="text-center mb-12">
+            <span style="display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--font-mono);font-size:0.72rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(148,163,184,0.75);background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;padding:0.375rem 1.1rem;margin-bottom:1.25rem;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;flex-shrink:0;" aria-hidden="true"></span>
+                The Governed SDLC
+            </span>
+            <h2 class="text-4xl text-gradient font-bold" id="how-it-works-heading">From Intent to Production</h2>
+            <p class="text-muted text-xl max-w-3xl mx-auto">Every request passes through a structured 7-phase lifecycle — with knowledge, governance gates, and security checks at every transition.</p>
+        </div>
+
+        <!-- Pipeline visual -->
+        <div class="glass-card-super" style="padding: 2.5rem;">
+            <!-- Phase flow — horizontal on desktop, vertical on mobile -->
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+                margin-bottom: 2rem;
+            " class="sdlc-grid" role="list" aria-label="CORTEX 7-phase delivery lifecycle">
+
+                <!-- Phase 0 -->
+                <div role="listitem" style="
+                    background: rgba(123,97,255,0.06);
+                    border: 1px solid rgba(123,97,255,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(123,97,255,0.7);">Phase 0</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">💡</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Change Intelligence</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Product Owners decide whether to build — backed by real codebase analysis and ROI projections, not gut feel.</div>
+                </div>
+
+                <!-- Phase 1 -->
+                <div role="listitem" style="
+                    background: rgba(0,212,255,0.06);
+                    border: 1px solid rgba(0,212,255,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,212,255,0.7);">Phase 1</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">📋</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Requirements Analysis</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Ambiguities flagged before design begins. Acceptance criteria and scope documented with full architectural context.</div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div role="listitem" style="
+                    background: rgba(16,185,129,0.06);
+                    border: 1px solid rgba(16,185,129,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(16,185,129,0.7);">Phase 2</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">🏗️</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Solution Design</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Proposed approaches validated against architectural patterns and security-by-design principles before a line is written.</div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div role="listitem" style="
+                    background: rgba(245,158,11,0.06);
+                    border: 1px solid rgba(245,158,11,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,158,11,0.7);">Phase 3</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">⚡</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">TDD Implementation</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Tests written first — always. Red → Green → Refactor cycle enforced by the convergence gate with no exceptions.</div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div role="listitem" style="
+                    background: rgba(186,85,211,0.06);
+                    border: 1px solid rgba(186,85,211,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(186,85,211,0.7);">Phase 4</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">🔍</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Code Review</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">5-pass automated review: architecture, security, governance, test coverage, and style — each with severity-ranked findings.</div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div role="listitem" style="
+                    background: rgba(0,212,255,0.06);
+                    border: 1px solid rgba(0,212,255,0.15);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,212,255,0.6);">Phase 5</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">🔗</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Integration Verification</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Integration seams verified with full architectural context — failures surfaced with component relationships already mapped.</div>
+                </div>
+
+                <!-- Phase 6 -->
+                <div role="listitem" style="
+                    background: rgba(244,63,94,0.06);
+                    border: 1px solid rgba(244,63,94,0.2);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(244,63,94,0.7);">Phase 6</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">🛡️</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text-primary);line-height:1.3;">Security Assessment</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">STRIDE threat modelling, OWASP Top 10 validation, CVE scanning, and SAST — critical findings block release automatically.</div>
+                </div>
+
+                <!-- Phase 7 -->
+                <div role="listitem" style="
+                    background: rgba(16,185,129,0.08);
+                    border: 2px solid rgba(16,185,129,0.35);
+                    border-radius: var(--radius-lg);
+                    padding: 1.25rem 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                    box-shadow: 0 0 20px rgba(16,185,129,0.1);
+                ">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(16,185,129,0.8);">Phase 7</span>
+                    <div style="font-size:1.5rem;" aria-hidden="true">✅</div>
+                    <div style="font-weight:700;font-size:0.95rem;color:#34d399;line-height:1.3;">Release Readiness</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">All 7 phases passed. Governance certificate issued. Documentation verified. Production cleared.</div>
+                </div>
+
             </div>
-            <div class="awakening-content">
-                <p class="text-sm uppercase tracking-widest text-purple font-bold mb-2">Explore the origins...</p>
-                <h2 class="text-3xl text-primary font-bold" id="awakening-heading-top">The Awakening Of CORTEX</h2>
-                <p class="text-muted text-lg mb-6 max-w-3xl">Discover how an ambitious goal transformed into a reliable, structured engineering framework.</p>
-                <span class="awakening-cta"><i class="fas fa-play mr-1" aria-hidden="true"></i> Read the story</span>
+
+            <!-- Connector bar — progress indicator -->
+            <div style="
+                height: 4px;
+                background: linear-gradient(90deg,
+                    rgba(123,97,255,0.7) 0%,
+                    rgba(0,212,255,0.7) 14%,
+                    rgba(16,185,129,0.7) 28%,
+                    rgba(245,158,11,0.7) 42%,
+                    rgba(186,85,211,0.7) 57%,
+                    rgba(0,212,255,0.5) 71%,
+                    rgba(244,63,94,0.7) 85%,
+                    rgba(16,185,129,0.9) 100%);
+                border-radius: 9999px;
+                margin-bottom: 1.75rem;
+            " aria-hidden="true"></div>
+
+            <!-- Key guarantee callouts — 3 columns -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;" class="sdlc-guarantees">
+                <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);">
+                    <i class="fas fa-check-circle" style="color:#10b981;font-size:1.1rem;flex-shrink:0;margin-top:0.1rem;" aria-hidden="true"></i>
+                    <div>
+                        <div style="font-weight:700;font-size:0.875rem;color:var(--text-primary);margin-bottom:0.2rem;">Knowledge Flows Forward</div>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Context from each phase — decisions, constraints, ACs — is injected automatically into the next. Nothing is lost between handoffs.</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);">
+                    <i class="fas fa-check-circle" style="color:#10b981;font-size:1.1rem;flex-shrink:0;margin-top:0.1rem;" aria-hidden="true"></i>
+                    <div>
+                        <div style="font-weight:700;font-size:0.875rem;color:var(--text-primary);margin-bottom:0.2rem;">Universal Convergence Gate</div>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Detect → Fix → Rescan loops until zero P0/P1 issues remain. Every release is measurably safer than the last.</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);">
+                    <i class="fas fa-check-circle" style="color:#10b981;font-size:1.1rem;flex-shrink:0;margin-top:0.1rem;" aria-hidden="true"></i>
+                    <div>
+                        <div style="font-weight:700;font-size:0.875rem;color:var(--text-primary);margin-bottom:0.2rem;">Governance Certificate</div>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">Every merged change carries a cryptographically recorded certificate of all automated checks passing at a specific point in time.</div>
+                    </div>
+                </div>
             </div>
-        </a>
+        </div>
     </section>
-    
-    <!-- 5. Engineered Using Its Own Standards (Dogfooding) -->
-    <section class="container section" aria-labelledby="dogfood-heading">
-        <div class="text-center mb-10">
-            <h2 id="dogfood-heading" class="text-4xl text-gradient font-bold">Engineered Using Its Own Standards</h2>
-            <p class="text-muted text-xl max-w-3xl mx-auto mb-10">Discover how CORTEX utilizes its own capabilities to maintain high structural integrity.</p>
-        </div>
 
-        <!-- Dictionary Definition Card for Dogfooding -->
-        <div class="dictionary-card">
-            <div class="dictionary-header">
-                <h3 class="dictionary-word">dogfooding</h3>
-                <span class="dictionary-phonetic">/ˈdôɡˌfuːdiNG/</span>
-            </div>
-            <div class="dictionary-part-of-speech">noun (software engineering)</div>
-            <div class="dictionary-definition">
-                The practice of an organization using its own product during development to test and improve it. By "eating your own dog food," creators directly experience the realities, flaws, and capabilities of their software before users do.
-            </div>
-            <div class="dictionary-context">
-                <strong>In Context:</strong> CORTEX isn't just a platform; it was built <em>using</em> itself. The orchestrators, governance rules, and core logic you see were architected, tested, and validated by CORTEX's own internal systems, proving its reliability at scale.
-            </div>
-        </div>
-
-        <!-- Process Cards (2x2 Grid) -->
-        <div class="grid-2 mb-16">
-            <div class="glass-card interactive glow-corner glow-cyan">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-brain"></i></div>
-                    <h4 class="text-xl m-0 font-bold">Intelligent Planning</h4>
-                </div>
-                <p class="text-muted mb-0">Features begin within the CORTEX Planning System—breaking requirements into manageable, governed tasks with clear Definitions of Ready and Done.</p>
-            </div>
-            <div class="glass-card interactive glow-corner glow-purple">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-bolt"></i></div>
-                    <h4 class="text-xl m-0 font-bold">TDD Execution</h4>
-                </div>
-                <p class="text-muted mb-0">Emphasizing a Test-Driven Development approach. Orchestrators, tools, and rules were developed utilizing the same guided methodologies available to your team.</p>
-            </div>
-            <div class="glass-card interactive glow-corner glow-emerald">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="icon-box sm icon-emerald m-0 shrink-0" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
-                    <h4 class="text-xl m-0 font-bold">Governance</h4>
-                </div>
-                <p class="text-muted mb-0">Enforced by a robust suite of governance policies, CORTEX continuously validates its own codebase to maintain security and architectural alignment.</p>
-            </div>
-            <div class="glass-card interactive glow-corner glow-magenta">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="icon-box sm icon-magenta m-0 shrink-0" aria-hidden="true"><i class="fas fa-dna"></i></div>
-                    <h4 class="text-xl m-0 font-bold">Institutional Memory</h4>
-                </div>
-                <p class="text-muted mb-0">Analyzes execution patterns and stores historical context, ensuring architectural decisions remain consistently applied and mistakes aren't repeated.</p>
-            </div>
-        </div>
-
-        <!-- Platform Achievements -->
-        <div class="glass-card mb-16" style="padding: var(--spacing-12);">
-            <div class="flex items-center justify-between flex-wrap gap-8">
-                
-                <div class="flex-1" style="min-width: 300px;">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-server"></i></div>
-                        <h4 class="text-2xl font-bold m-0 text-primary">The Core Platform</h4>
-                    </div>
-                    <p class="text-muted text-lg mb-6">The orchestrators and governance rules operate via an automated quality lifecycle designed to ensure comprehensive testing before deployment.</p>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="cortex-tag m-0"><i class="fas fa-network-wired text-purple" aria-hidden="true"></i> 290+ Orchestrators</span>
-                        <span class="cortex-tag m-0"><i class="fas fa-plug text-magenta" aria-hidden="true"></i> 35+ MCP Tools</span>
-                        <span class="cortex-tag m-0"><i class="fas fa-shield-alt text-emerald" aria-hidden="true"></i> 60+ Gov. Policies</span>
-                    </div>
-                </div>
-
-                <div class="glass-divider md:hidden w-full m-0" aria-hidden="true"></div>
-
-                <div class="flex-1" style="min-width: 300px;">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="icon-box sm icon-magenta m-0 shrink-0" aria-hidden="true"><i class="fas fa-book-open"></i></div>
-                        <h4 class="text-2xl font-bold m-0 text-primary">Documentation Ecosystem</h4>
-                    </div>
-                    <p class="text-muted text-lg mb-6">Our structured, consistent documentation pages were generated with the assistance of the CORTEX platform, showcasing reliable presentation output.</p>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="cortex-tag m-0"><i class="fas fa-file-alt text-cyan" aria-hidden="true"></i> 40+ Structured Pages</span>
-                        <span class="cortex-tag m-0"><i class="fas fa-project-diagram text-purple" aria-hidden="true"></i> Detailed Traceability</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Single Row Stats Pill -->
-        <div class="stats-pill">
-            <div class="stats-item">
-                <div class="icon-box sm icon-cyan m-0 shrink-0 rounded-full" aria-hidden="true"><i class="fas fa-vial"></i></div>
-                <div>
-                    <div class="stats-val text-cyan">19k+</div>
-                    <div class="stats-lbl">Tests Passing</div>
-                </div>
-            </div>
-            <div class="stats-divider" aria-hidden="true"></div>
-            <div class="stats-item">
-                <div class="icon-box sm icon-purple m-0 shrink-0 rounded-full" aria-hidden="true"><i class="fas fa-network-wired"></i></div>
-                <div>
-                    <div class="stats-val text-purple">322</div>
-                    <div class="stats-lbl">Orchestrators</div>
-                </div>
-            </div>
-            <div class="stats-divider" aria-hidden="true"></div>
-            <div class="stats-item">
-                <div class="icon-box sm icon-magenta m-0 shrink-0 rounded-full" aria-hidden="true"><i class="fas fa-plug"></i></div>
-                <div>
-                    <div class="stats-val text-magenta">30</div>
-                    <div class="stats-lbl">MCP Tools</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. Platform Capabilities Segment -->
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION C: Platform Capabilities — Governance + Intelligence
+         User now knows WHAT → HOW → sees the capability depth.
+         ═══════════════════════════════════════════════════════ -->
     <section class="container section" id="platform-capabilities" aria-labelledby="capabilities-heading">
         <div class="text-center mb-12">
             <h2 class="text-4xl text-gradient font-bold" id="capabilities-heading">Platform Capabilities</h2>
-            <p class="text-muted text-xl max-w-3xl mx-auto">A unified framework providing strict governance and deep codebase intelligence.</p>
+            <p class="text-muted text-xl max-w-3xl mx-auto">A unified framework combining deep code intelligence with governance that enforces itself at every gate.</p>
         </div>
 
         <!-- Super Panel -->
         <div class="glass-card-super">
-            
+
             <!-- Governance Domain -->
             <div class="mb-12">
                 <div class="domain-header-flex">
@@ -3351,103 +3435,111 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <div>
-                        <h3 class="text-3xl text-primary font-bold m-0 mb-2">Governance & Audit</h3>
-                        <p class="text-muted text-lg m-0 max-w-3xl">Designed around strict CORE rules, cryptographic evidence hashing, and GitBackedRegistry for confident enforcement.</p>
+                        <h3 class="text-3xl text-primary font-bold m-0 mb-2">Governance &amp; Audit</h3>
+                        <p class="text-muted text-lg m-0 max-w-3xl">60+ CORE rules enforced at every commit, build, and runtime — with tamper-evident audit trails and automatic evidence bundles.</p>
                     </div>
                 </div>
-                
+
                 <!-- Bento Grid (3-column layout) -->
                 <div class="grid-3">
                     <div class="bento-item">
-                        <i class="fas fa-receipt bento-icon-watermark text-cyan" aria-hidden="true"></i>
+                        <i class="fas fa-layer-group bento-icon-watermark text-cyan" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-receipt"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">Multi-Tier Architecture</h4>
+                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-layer-group"></i></div>
+                            <h4 class="text-xl m-0 font-bold text-primary">CORE Rules Engine</h4>
                         </div>
-                        <p class="text-muted mb-0">Structured to merge overarching SKULL rules with business and engineering constraints.</p>
+                        <p class="text-muted mb-0">60+ governance rules enforced across three tiers — overarching engineering standards, business constraints, and domain-specific policies — all applied automatically.</p>
                     </div>
                     <div class="bento-item">
                         <i class="fas fa-link bento-icon-watermark text-cyan" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-link"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">Hash-Chain Trails</h4>
+                            <h4 class="text-xl m-0 font-bold text-primary">Tamper-Evident Audit Trails</h4>
                         </div>
-                        <p class="text-muted mb-0">EnhancedAuditLogger records sensitive operations using a tamper-evident design.</p>
+                        <p class="text-muted mb-0">Every governance-sensitive operation logged with hash-chained entries — making each audit trail cryptographically verifiable and built to surface in compliance reviews.</p>
                     </div>
                     <div class="bento-item">
-                        <i class="fas fa-save bento-icon-watermark text-cyan" aria-hidden="true"></i>
+                        <i class="fas fa-box-open bento-icon-watermark text-cyan" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-save"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">State Management</h4>
+                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-box-open"></i></div>
+                            <h4 class="text-xl m-0 font-bold text-primary">Evidence Bundles</h4>
                         </div>
-                        <p class="text-muted mb-0">Designed for safe transitions, file locking, and safe rollback capabilities.</p>
+                        <p class="text-muted mb-0">Execution data compiled into structured artefacts per release — test results, governance check outcomes, and security findings — ready for auditors on demand.</p>
                     </div>
                     <div class="bento-item">
-                        <i class="fas fa-sync bento-icon-watermark text-cyan" aria-hidden="true"></i>
+                        <i class="fas fa-sync-alt bento-icon-watermark text-cyan" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-sync"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">Lifecycle Flow</h4>
+                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-sync-alt"></i></div>
+                            <h4 class="text-xl m-0 font-bold text-primary">Sweep Completeness</h4>
                         </div>
-                        <p class="text-muted mb-0">Progressing from IDLE to ACTIVE states while enforcing specific entry criteria.</p>
+                        <p class="text-muted mb-0">Every fix, refactor, and audit exhausts its full issue catalogue before closing — no partial sweeps, no silent skips.</p>
                     </div>
                     <div class="bento-item">
                         <i class="fas fa-file-contract bento-icon-watermark text-cyan" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-file-contract"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">Evidence Bundles</h4>
+                            <h4 class="text-xl m-0 font-bold text-primary">Governance Certificates</h4>
                         </div>
-                        <p class="text-muted mb-0">Compiles execution data into structured bundles for historical traceability.</p>
+                        <p class="text-muted mb-0">Each merged change carries a recorded certificate confirming all automated checks passed — forming a permanent, searchable compliance record.</p>
+                    </div>
+                    <div class="bento-item">
+                        <i class="fas fa-shield-halved bento-icon-watermark text-cyan" aria-hidden="true"></i>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="icon-box sm icon-cyan m-0 shrink-0" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
+                            <h4 class="text-xl m-0 font-bold text-primary">Pre-commit Enforcement</h4>
+                        </div>
+                        <p class="text-muted mb-0">Governance rules run at the pre-commit hook — catching violations before they reach version control rather than after they reach production.</p>
                     </div>
                 </div>
             </div>
 
             <hr class="glass-divider my-12" style="opacity: 0.5;" aria-hidden="true"/>
 
-            <!-- Discovery Domain -->
+            <!-- Intelligence Domain -->
             <div>
                 <div class="domain-header-flex">
                     <div class="icon-box xl icon-purple shrink-0" aria-hidden="true">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
                     <div>
-                        <h3 class="text-3xl text-primary font-bold m-0 mb-2">Discovery & Toolkit</h3>
-                        <p class="text-muted text-lg m-0 max-w-3xl">Code intelligence via AST, Git history analysis, and seamless MCP integration mapped directly to your IDE.</p>
+                        <h3 class="text-3xl text-primary font-bold m-0 mb-2">Intelligence &amp; Discovery</h3>
+                        <p class="text-muted text-lg m-0 max-w-3xl">LENS analyses 9 code quality dimensions in real time — surfacing architecture topology, security risks, and test gaps without any manual setup.</p>
                     </div>
                 </div>
-                
+
                 <!-- Bento Grid (3-column layout) -->
                 <div class="grid-3">
                     <div class="bento-item">
-                        <i class="fas fa-code bento-icon-watermark text-purple" aria-hidden="true"></i>
+                        <i class="fas fa-eye bento-icon-watermark text-purple" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-code"></i></div>
+                            <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-eye"></i></div>
                             <h4 class="text-xl m-0 font-bold text-primary">CORTEX LENS</h4>
                         </div>
-                        <p class="text-muted mb-4 flex-grow">Utilizes language parsing, commit insights, and security modeling to help surface structural context.</p>
+                        <p class="text-muted mb-4 flex-grow">Language, Examination, Navigation &amp; Synthesis — 9 quality dimensions tracked via AST analysis, commit history, and Vision API, surface automatically on every change.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
                             <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-microchip text-purple" aria-hidden="true"></i> AST</span>
                             <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-eye text-purple" aria-hidden="true"></i> Vision API</span>
                         </div>
                     </div>
                     <div class="bento-item">
-                        <i class="fas fa-toolbox bento-icon-watermark text-purple" aria-hidden="true"></i>
+                        <i class="fas fa-brain bento-icon-watermark text-purple" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-toolbox"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">Reporting</h4>
+                            <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-brain"></i></div>
+                            <h4 class="text-xl m-0 font-bold text-primary">Institutional Memory</h4>
                         </div>
-                        <p class="text-muted mb-4 flex-grow">Generates readable Epic Plans, Architecture Diagrams, and Duplication Dashboards.</p>
+                        <p class="text-muted mb-4 flex-grow">Root cause analyses stored persistently — 4 RCA methodologies automatically surface historical failure patterns before a similar mistake is made again.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-list-alt text-purple" aria-hidden="true"></i> Plan Viewer</span>
-                            <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-chart-bar text-purple" aria-hidden="true"></i> D3.js Charts</span>
+                            <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-history text-purple" aria-hidden="true"></i> Five Whys</span>
+                            <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-sitemap text-purple" aria-hidden="true"></i> Fault Tree</span>
                         </div>
                     </div>
                     <div class="bento-item">
                         <i class="fas fa-plug bento-icon-watermark text-purple" aria-hidden="true"></i>
                         <div class="flex items-center gap-4 mb-4">
                             <div class="icon-box sm icon-purple m-0 shrink-0" aria-hidden="true"><i class="fas fa-plug"></i></div>
-                            <h4 class="text-xl m-0 font-bold text-primary">IDE Execution</h4>
+                            <h4 class="text-xl m-0 font-bold text-primary">30+ MCP Tools in Your IDE</h4>
                         </div>
-                        <p class="text-muted mb-4 flex-grow">Directly access validation, git, and refactor tools without leaving your editor via MCP.</p>
+                        <p class="text-muted mb-4 flex-grow">Access validation, refactoring, git checkpoints, and health monitoring directly from GitHub Copilot Chat — no context switching, no terminal required.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
                             <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-check text-purple" aria-hidden="true"></i> Verify</span>
                             <span class="cortex-tag m-0 text-xs border-none"><i class="fas fa-tools text-purple" aria-hidden="true"></i> Refactor</span>
@@ -3504,7 +3596,7 @@
                             <div class="arch-stat-label">Orchestrators</div>
                         </div>
                         <div class="arch-stat">
-                            <div class="arch-stat-value">55+</div>
+                            <div class="arch-stat-value">30+</div>
                             <div class="arch-stat-label">MCP Tools</div>
                         </div>
                         <div class="arch-stat">
@@ -3526,11 +3618,14 @@
         </a>
     </section>
 
-    <!-- 7. Who is CORTEX For? — 6 Role Tiles (3×2 grid) -->
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION D: Who is CORTEX For? — 6 Role Tiles
+         After seeing capabilities, reader maps them to their role.
+         ═══════════════════════════════════════════════════════ -->
     <section class="container section" id="who-is-cortex-for" aria-labelledby="persona-section-heading">
         <div class="text-center mb-16">
             <h2 class="text-4xl text-gradient font-bold" id="persona-section-heading">Who is CORTEX For?</h2>
-            <p class="text-muted text-xl max-w-2xl mx-auto">Tailored experiences designed to support diverse technical and leadership roles.</p>
+            <p class="text-muted text-xl max-w-2xl mx-auto">Tailored experiences designed to support every technical and leadership role across the delivery lifecycle.</p>
         </div>
         
         <div class="role-grid">
@@ -3636,6 +3731,24 @@
                 </div>
             </a>
         </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SECTION E: The Awakening of CORTEX — Story Card
+         Placed near end: deep-engagement content for curious users.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="container section" aria-labelledby="awakening-heading-top">
+        <a href="awakening-of-cortex/index.html" class="awakening-card">
+            <div class="awakening-image-wrapper">
+                <img alt="Visual representation of The Awakening of CORTEX" class="awakening-image" fetchpriority="low" loading="lazy" src="assets/images/Awakening-200.png?v=4.0.1" onerror="this.style.display='none'"/>
+            </div>
+            <div class="awakening-content">
+                <p class="text-sm uppercase tracking-widest text-purple font-bold mb-2">Explore the origins</p>
+                <h2 class="text-3xl text-primary font-bold" id="awakening-heading-top">The Awakening Of CORTEX</h2>
+                <p class="text-muted text-lg mb-6 max-w-3xl">Discover how an ambitious goal transformed into a reliable, structured engineering framework — and why it was built from first principles.</p>
+                <span class="awakening-cta"><i class="fas fa-play mr-1" aria-hidden="true"></i> Read the story</span>
+            </div>
+        </a>
     </section>
 
     <!-- 8. Get Started — Standalone CTA Section -->
