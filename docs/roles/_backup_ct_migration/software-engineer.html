@@ -142,138 +142,250 @@
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
 
-        /* ══════════════════════════════════════════════════════════════════════
-           CT: Immersive Video Embed — role-specific palette
-           Design: Single-layer, border-minimal, player blends into page
-           Motion: prefers-reduced-motion compliant (opt-in via no-preference)
-           Composited-only: transform + opacity only
-           VBP compliance: VBP-001 (one frame), VBP-005 (hierarchy), VBP-008 (control)
-           ══════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════════════
+       CT: Cinema Theatre — YouTube Embed (Software Engineer role page)
+       Motion: prefers-reduced-motion compliant (opt-in via no-preference)
+       Composited-only animations: transform + opacity only (P1 compliant)
+       ══════════════════════════════════════════════════════════════════════ */
 
-        @keyframes ctGlowPulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50%      { opacity: 0.85; transform: scale(1.04); }
-        }
-        @keyframes ctDotPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50%      { opacity: 0.3; transform: scale(0.7); }
-        }
-        @keyframes ctShimmer {
-            0%   { background-position: -300% center; }
-            100% { background-position:  300% center; }
-        }
-        @keyframes ctBorderFade {
-            0%, 100% { opacity: 0.6; }
-            50%      { opacity: 1; }
-        }
+    @keyframes ctBorderSpin {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes ctGlowBreath {
+        0%, 100% { opacity: 0.7; }
+        50%      { opacity: 1; }
+    }
+    @keyframes ctScanline {
+        0%   { transform: translateY(-100%); opacity: 0; }
+        8%   { opacity: 0.8; }
+        92%  { opacity: 0.8; }
+        100% { transform: translateY(2000%); opacity: 0; }
+    }
+    @keyframes ctDotPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%      { opacity: 0.3; transform: scale(0.7); }
+    }
+    @keyframes ctBadgeSheen {
+        0%   { background-position: -300% center; }
+        100% { background-position:  300% center; }
+    }
+    @keyframes ctFloat {
+        0%, 100% { transform: translateY(0px); }
+        50%      { transform: translateY(-8px); }
+    }
+    @keyframes ctOrb1Drift {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.4; }
+        50%      { transform: translate(-40px, 25px) scale(1.2); opacity: 0.6; }
+    }
+    @keyframes ctOrb2Drift {
+        0%, 100% { transform: translate(0,0) scale(1); opacity: 0.3; }
+        50%      { transform: translate(30px, -30px) scale(1.15); opacity: 0.5; }
+    }
+    @keyframes ctCornerPulse {
+        0%, 100% { opacity: 0.45; }
+        50%      { opacity: 1; }
+    }
+    @keyframes ctProgressShimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            .ct-glow-orb, .ct-live-dot, .ct-badge,
-            .ct-player-border { animation: none !important; }
-        }
+    @media (prefers-reduced-motion: reduce) {
+        .ct-float, .ct-border-ring, .ct-orb-a, .ct-orb-b,
+        .ct-scanline, .ct-live-dot, .ct-badge, .ct-corner,
+        .ct-progress-bar, .ct-progress-fill { animation: none !important; }
+        .ct-glow-layer { animation: none !important; }
+    }
 
-        /* Ambient orbs — atmosphere only, no hard borders */
-        .ct-orb-a {
-            position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(20,184,166,0.10) 0%, transparent 68%);
-            top: -120px; left: -140px;
-        }
-        .ct-orb-b {
-            position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 68%);
-            bottom: -80px; right: -100px;
-        }
+    .ct-scene { position: relative; padding: 2.5rem 2rem 3rem; overflow: hidden; }
+    .ct-orb-a {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 420px; height: 420px;
+        background: radial-gradient(circle, rgba(20,184,166,0.12) 0%, transparent 70%);
+        top: -80px; left: -100px;
+    }
+    .ct-orb-b {
+        position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+        width: 360px; height: 360px;
+        background: radial-gradient(circle, rgba(16,185,129,0.11) 0%, transparent 70%);
+        bottom: -60px; right: -80px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-orb-a { animation: ctOrb1Drift 10s ease-in-out infinite alternate; }
+        .ct-orb-b { animation: ctOrb2Drift 12s ease-in-out infinite alternate; }
+    }
+    .ct-badge {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 0.875rem; font-weight: 700;
+        letter-spacing: 0.22em; text-transform: uppercase; color: #14b8a6;
+        border: 1px solid rgba(20,184,166,0.3);
+        border-radius: 100px; padding: 0.35rem 1.1rem;
+        background: linear-gradient(90deg,
+            rgba(20,184,166,0) 0%, rgba(20,184,166,0.12) 35%,
+            rgba(16,185,129,0.15) 65%, rgba(20,184,166,0) 100%);
+        background-size: 300% auto;
+        box-shadow: 0 0 20px rgba(20,184,166,0.1), inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-badge { animation: ctBadgeSheen 4s linear infinite; }
+    }
+    .ct-live-dot {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: #00ff88;
+        box-shadow: 0 0 8px rgba(0,255,136,0.9), 0 0 18px rgba(0,255,136,0.5);
+        display: inline-block; flex-shrink: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-live-dot { animation: ctDotPulse 2s ease-in-out infinite; }
+    }
+    .ct-float { will-change: transform; }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-float { animation: ctFloat 6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+    }
+    .ct-border-ring {
+        position: relative; border-radius: 1.75rem; padding: 2px;
+        background: linear-gradient(135deg, #14b8a6 0%, #10b981 25%, #6ee7b7 50%, #8b5cf6 75%, #14b8a6 100%);
+        background-size: 400% 400%;
+        box-shadow: 0 0 0 1px rgba(20,184,166,0.08), 0 40px 100px -12px rgba(0,0,0,0.8), 0 0 80px rgba(20,184,166,0.12);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-border-ring { animation: ctBorderSpin 5s ease infinite; }
+    }
+    .ct-bezel {
+        border-radius: 1.625rem;
+        background: linear-gradient(170deg, rgba(10,15,40,0.99) 0%, rgba(4,7,22,1) 60%, rgba(8,12,30,1) 100%);
+        padding: 1.25rem 1.25rem 0;
+        overflow: hidden; position: relative;
+    }
+    .ct-glow-layer {
+        position: absolute; inset: 0; pointer-events: none; border-radius: 1.625rem;
+        background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(20,184,166,0.1) 0%, transparent 60%);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-glow-layer { animation: ctGlowBreath 4s ease-in-out infinite; }
+    }
+    .ct-scanline {
+        position: absolute; left: 0; right: 0; top: 0; height: 1.5px;
+        background: linear-gradient(90deg, transparent 0%, rgba(20,184,166,0.5) 30%, rgba(16,185,129,0.35) 70%, transparent 100%);
+        pointer-events: none; z-index: 30; border-radius: 100px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-scanline { animation: ctScanline 6s linear infinite; }
+    }
+    .ct-titlebar {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1rem; padding: 0 0.15rem; position: relative; z-index: 10;
+    }
+    .ct-traffic-lights { display: flex; align-items: center; gap: 0.4rem; }
+    .ct-dot {
+        width: 11px; height: 11px; border-radius: 50%; display: block;
+        transition: transform 150ms cubic-bezier(0.4,0,0.2,1);
+    }
+    .ct-dot:hover { transform: scale(1.25); }
+    .ct-dot-r { background: #ff5f57; box-shadow: 0 0 8px rgba(255,95,87,0.8); }
+    .ct-dot-y { background: #febc2e; box-shadow: 0 0 8px rgba(254,188,46,0.8); }
+    .ct-dot-g { background: #28c840; box-shadow: 0 0 8px rgba(40,200,64,0.8); }
+    .ct-window-title {
+        position: absolute; left: 50%; transform: translateX(-50%);
+        font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(200,215,245,0.85);
+        text-shadow: 0 0 14px rgba(20,184,166,0.5);
+        white-space: nowrap; pointer-events: none;
+    }
+    .ct-pin-btn {
+        width: 28px; height: 28px; border-radius: 50%;
+        background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.35);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 12px rgba(20,184,166,0.2);
+        transition: background 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms cubic-bezier(0.4,0,0.2,1);
+    }
+    .ct-pin-btn:hover { background: rgba(20,184,166,0.2); box-shadow: 0 0 20px rgba(20,184,166,0.35); }
+    .ct-corner {
+        position: absolute; width: 20px; height: 20px;
+        pointer-events: none; border-radius: 3px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-corner { animation: ctCornerPulse 2.8s ease-in-out infinite; }
+    }
+    .ct-screen-glow {
+        position: absolute; inset: 3.8rem 0.65rem 1.4rem;
+        border-radius: 0.875rem 0.875rem 0 0;
+        background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(20,184,166,0.12) 0%, transparent 70%);
+        pointer-events: none; z-index: 0;
+    }
+    .ct-video-wrapper {
+        position: relative; width: 100%; padding-bottom: 56.25%;
+        border-radius: 0.875rem 0.875rem 0 0;
+        overflow: hidden; background: #04071a; z-index: 2;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .ct-video-wrapper::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20,184,166,0.06) 0%, rgba(4,7,26,1) 70%);
+        z-index: 1; pointer-events: none;
+        border-radius: 0.875rem 0.875rem 0 0;
+    }
+    .ct-video-wrapper iframe {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%; border: 0;
+        border-radius: 0.875rem 0.875rem 0 0;
+        z-index: 2;
+    }
+    .ct-chin {
+        height: 2rem;
+        background: linear-gradient(180deg, rgba(6,10,26,1) 0%, rgba(3,6,16,1) 100%);
+        border-top: 1px solid rgba(20,184,166,0.1);
+        border-radius: 0 0 1.25rem 1.25rem;
+        display: flex; align-items: center;
+        padding: 0 1rem; gap: 0.75rem; position: relative; z-index: 3;
+    }
+    .ct-progress-track {
+        flex: 1; height: 3px; border-radius: 100px;
+        background: rgba(255,255,255,0.06);
+        overflow: hidden; position: relative;
+    }
+    .ct-progress-fill {
+        height: 100%; border-radius: 100px; transform-origin: left;
+        background: linear-gradient(90deg, #14b8a6 0%, #10b981 50%, #8b5cf6 100%);
+        background-size: 200% auto;
+        transform: scaleX(0.62);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .ct-progress-fill { animation: ctProgressShimmer 3s linear infinite; }
+    }
+    .ct-chin-time {
+        font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 600;
+        color: rgba(148,163,184,0.6); letter-spacing: 0.05em; white-space: nowrap;
+    }
+    .ct-chin-icon { color: rgba(20,184,166,0.5); font-size: 0.6875rem; flex-shrink: 0; }
+    .ct-stand-neck {
+        width: 40px; height: 14px; margin: 0 auto;
+        background: linear-gradient(180deg, rgba(8,12,28,0.98), rgba(4,6,16,0.95));
+        border-left: 1px solid rgba(20,184,166,0.1);
+        border-right: 1px solid rgba(20,184,166,0.1);
+    }
+    .ct-stand-base {
+        width: 130px; height: 8px; margin: 0 auto;
+        background: linear-gradient(90deg, transparent, rgba(20,184,166,0.1) 20%, rgba(16,185,129,0.1) 80%, transparent);
+        border-top: 1px solid rgba(20,184,166,0.15);
+        border-radius: 0 0 8px 8px;
+    }
+    .ct-floor-glow {
+        position: absolute; bottom: -12px; left: 10%; right: 10%; height: 24px;
+        background: linear-gradient(180deg, rgba(20,184,166,0.12) 0%, transparent 100%);
+        filter: blur(10px); border-radius: 50%; pointer-events: none;
+    }
+    @media (max-width: 640px) {
+        .ct-scene { padding: 1.5rem 1rem 2rem; }
+        .ct-border-ring { border-radius: 1.25rem; }
+        .ct-bezel { border-radius: 1.125rem; padding: 0.9rem 0.9rem 0; }
+    }
 
-        /* Live badge */
-        .ct-badge {
-            display: inline-flex; align-items: center; gap: 0.45rem;
-            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
-            letter-spacing: 0.2em; text-transform: uppercase; color: rgba(94,234,212,0.85);
-            padding: 0.3rem 0.9rem;
-            border-radius: 100px;
-            background: rgba(20,184,166,0.08);
-        }
-        @media (prefers-reduced-motion: no-preference) {
-            .ct-badge { animation: ctShimmer 5s linear infinite; background-size: 300% auto; }
-        }
-
-        .ct-live-dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: #14b8a6;
-            box-shadow: 0 0 6px rgba(20,184,166,0.9), 0 0 14px rgba(20,184,166,0.4);
-            display: inline-block; flex-shrink: 0;
-        }
-        @media (prefers-reduced-motion: no-preference) {
-            .ct-live-dot { animation: ctDotPulse 2s ease-in-out infinite; }
-        }
-
-        /* Player wrapper — the single border/glow layer */
-        .ct-player-wrap {
-            position: relative;
-            max-width: 840px;
-            margin: 0 auto;
-            border-radius: 1rem;
-            overflow: hidden;
-            /* Single soft glow instead of stacked borders */
-            box-shadow:
-                0 0 0 1px rgba(20,184,166,0.18),
-                0 0 60px -10px rgba(20,184,166,0.25),
-                0 32px 80px -16px rgba(0,0,0,0.7);
-        }
-        @media (prefers-reduced-motion: no-preference) {
-            .ct-player-wrap {
-                animation: ctBorderFade 4s ease-in-out infinite;
-            }
-        }
-
-        /* Bleed glow underneath the player — ties it to the page background */
-        .ct-player-glow {
-            position: absolute;
-            inset: 10% 5% -30px;
-            background: radial-gradient(ellipse, rgba(20,184,166,0.18) 0%, transparent 70%);
-            filter: blur(24px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* 16:9 iframe container — no bezel, no chin, no stand */
-        .ct-video-wrapper {
-            position: relative; width: 100%; padding-bottom: 56.25%;
-            border-radius: 1rem;
-            overflow: hidden;
-            background: #0a0a12;
-        }
-        .ct-video-wrapper iframe {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%; border: 0;
-            border-radius: 1rem;
-        }
-
-        /* Thin accent line above player — single decorative touch */
-        .ct-accent-line {
-            height: 2px;
-            background: linear-gradient(90deg,
-                transparent 0%, rgba(20,184,166,0.6) 20%, rgba(16,185,129,0.5) 50%, rgba(20,184,166,0.6) 80%, transparent 100%);
-            border-radius: 100px;
-            margin-bottom: 1.5rem;
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Stat pills below the player */
-        .ct-stat-pill {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            padding: 0.35rem 0.875rem;
-            border-radius: 100px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.07);
-            font-size: 0.8125rem; font-weight: 600; color: #94a3b8;
-        }
-        .ct-stat-pill strong { color: #5eead4; font-weight: 800; }
-
+        /* ═══════ CORTEX GLASSMORPHIC SITE HEADER ═══════ */
         .cortex-site-header {
             position: sticky;
             top: 0;
@@ -756,78 +868,211 @@
 
         <!-- ═══════════════════════════════════════════════════════
              VIDEO PANEL — See CORTEX in Action (Software Engineer)
-             Design: Immersive / border-minimal (VBP-001, VBP-005, VBP-008)
+             Cinema Theatre (CT) panel — teal/emerald palette
+             YouTube: https://youtu.be/LSFz6zhlUUI
              ═══════════════════════════════════════════════════════ -->
         <section aria-label="CORTEX in action — software engineer overview" aria-labelledby="se-video-heading">
-            <div style="position:relative; overflow:hidden; padding: 3rem 1.5rem 3.5rem; text-align:center; border-radius:1.5rem; border:1px solid rgba(20,184,166,0.18); background:rgba(20,184,166,0.03);">
+            <div style="
+                background: linear-gradient(145deg, rgba(20,184,166,0.07) 0%, rgba(15,23,42,0.65) 100%);
+                border: 1px solid rgba(255,255,255,0.08);
+                border-top: 1px solid rgba(20,184,166,0.35);
+                border-radius: 1.5rem;
+                backdrop-filter: blur(32px);
+                -webkit-backdrop-filter: blur(32px);
+                box-shadow: 0 0 0 1px rgba(20,184,166,0.1), 0 24px 60px -12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+                overflow: hidden;
+                position: relative;
+            ">
+                <!-- Radial glow -->
+                <div aria-hidden="true" style="
+                    position: absolute; inset: 0; z-index: 0;
+                    background: radial-gradient(ellipse at 50% 0%, rgba(20,184,166,0.1) 0%, transparent 65%);
+                    pointer-events: none;
+                "></div>
 
-                <!-- Ambient orbs — atmosphere, no hard edges -->
-                <div class="ct-orb-a" aria-hidden="true"></div>
-                <div class="ct-orb-b" aria-hidden="true"></div>
+                <!-- Top: intro header + monitor frame -->
+                <div style="position: relative; z-index: 1; padding: 2.75rem 2.5rem 2rem; text-align: center;">
 
-                <!-- Live badge -->
-                <div style="margin-bottom:1rem; display:flex; justify-content:center;">
-                    <span class="ct-badge">
-                        <span class="ct-live-dot" aria-hidden="true"></span>
-                        CORTEX LIVE DEMO
-                    </span>
-                </div>
+                    <!-- Bordered card — heading + video frame -->
+                    <div style="
+                        display: block;
+                        position: relative;
+                        max-width: 860px;
+                        width: 100%;
+                        margin: 0 auto 2rem;
+                        padding: 2rem 2rem 2rem;
+                        border-radius: 1.125rem;
+                        background: rgba(20,184,166,0.03);
+                        border: 1px solid transparent;
+                        background-clip: padding-box;
+                        box-shadow:
+                            0 0 0 1px rgba(20,184,166,0.22),
+                            0 0 0 2px rgba(16,185,129,0.08),
+                            inset 0 1px 0 rgba(255,255,255,0.05),
+                            0 8px 32px -8px rgba(20,184,166,0.18);
+                    ">
+                        <!-- Corner accent — top-left -->
+                        <span aria-hidden="true" style="
+                            position: absolute; top: -1px; left: -1px;
+                            width: 48px; height: 48px;
+                            border-top: 2px solid #5eead4;
+                            border-left: 2px solid #5eead4;
+                            border-radius: 1.125rem 0 0 0;
+                            pointer-events: none;
+                        "></span>
+                        <!-- Corner accent — top-right -->
+                        <span aria-hidden="true" style="
+                            position: absolute; top: -1px; right: -1px;
+                            width: 48px; height: 48px;
+                            border-top: 2px solid #6ee7b7;
+                            border-right: 2px solid #6ee7b7;
+                            border-radius: 0 1.125rem 0 0;
+                            pointer-events: none;
+                        "></span>
+                        <!-- Corner accent — bottom-left -->
+                        <span aria-hidden="true" style="
+                            position: absolute; bottom: -1px; left: -1px;
+                            width: 48px; height: 48px;
+                            border-bottom: 2px solid #6ee7b7;
+                            border-left: 2px solid #6ee7b7;
+                            border-radius: 0 0 0 1.125rem;
+                            pointer-events: none;
+                        "></span>
+                        <!-- Corner accent — bottom-right -->
+                        <span aria-hidden="true" style="
+                            position: absolute; bottom: -1px; right: -1px;
+                            width: 48px; height: 48px;
+                            border-bottom: 2px solid #5eead4;
+                            border-right: 2px solid #5eead4;
+                            border-radius: 0 0 1.125rem 0;
+                            pointer-events: none;
+                        "></span>
 
-                <!-- Heading -->
-                <h2 id="se-video-heading" style="
-                    position:relative; z-index:1;
-                    font-size: clamp(1.75rem, 3vw, 2.5rem);
-                    font-weight: 900;
-                    letter-spacing: -0.03em;
-                    background: linear-gradient(135deg, #fff 25%, #fca5a5 60%, #f87171 100%);
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                    margin: 0 0 0.625rem;
-                    line-height: 1.15;
-                ">See CORTEX in Action</h2>
-                <p style="
-                    position:relative; z-index:1;
-                    font-size: 1rem; color: #64748b;
-                    margin: 0 auto 2rem; max-width: 560px; line-height: 1.65;
-                ">Watch how CORTEX enforces TDD-first workflows, automates governance, and keeps your codebase production-ready — without slowing you down.</p>
+                        <!-- Heading -->
+                        <h2 id="se-video-heading" style="
+                            font-size: clamp(1.5rem, 2.5vw, 2rem);
+                            font-weight: 800;
+                            letter-spacing: -0.03em;
+                            background: linear-gradient(135deg, #fff 30%, #5eead4 65%, #6ee7b7 100%);
+                            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                            margin: 0 0 1.5rem;
+                            line-height: 1.2;
+                            text-align: center;
+                        ">CORTEX for Software Engineers</h2>
 
-                <!-- Single accent line — replaces all previous nested borders -->
-                <div class="ct-accent-line" aria-hidden="true"></div>
+                        <!-- Monitor frame -->
+                        <div aria-label="CORTEX software engineer overview video player" style="position:relative; z-index:2;">
+                            <div class="ct-float" style="margin-bottom:0;">
 
-                <!-- Player: single container, glow-only framing -->
-                <div style="position:relative; z-index:1; max-width:840px; margin:0 auto;">
-                    <!-- Bleed glow ties player to page background -->
-                    <div class="ct-player-glow" aria-hidden="true"></div>
+                                <!-- Animated chromatic border ring -->
+                                <div class="ct-border-ring">
 
-                    <!-- Player wrapper — one border/glow layer only -->
-                    <div class="ct-player-wrap">
-                        <div class="ct-video-wrapper" aria-label="CORTEX in action — software engineer overview video player">
-                            <iframe
-                                src="https://www.youtube-nocookie.com/embed/LSFz6zhlUUI?rel=0&modestbranding=1&color=white&iv_load_policy=3"
-                                title="CORTEX — TDD-First Engineering for Software Engineers"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                                loading="lazy"
-                            ></iframe>
+                                    <!-- Monitor bezel / chassis -->
+                                    <div class="ct-bezel">
+
+                                        <!-- Inner glow layer -->
+                                        <div class="ct-glow-layer" aria-hidden="true"></div>
+
+                                        <!-- Scanline sweep -->
+                                        <div class="ct-scanline" aria-hidden="true"></div>
+
+                                        <!-- Title bar -->
+                                        <div class="ct-titlebar">
+                                            <div class="ct-traffic-lights" aria-hidden="true">
+                                                <span class="ct-dot ct-dot-r"></span>
+                                                <span class="ct-dot ct-dot-y"></span>
+                                                <span class="ct-dot ct-dot-g"></span>
+                                            </div>
+                                            <div class="ct-window-title" aria-hidden="true">CORTEX-ENGINEER.MP4 &nbsp;·&nbsp; HD</div>
+                                            <div class="ct-pin-btn" aria-hidden="true">
+                                                <i class="fas fa-thumbtack" style="font-size: 0.6875rem;color:#14b8a6;transform:rotate(45deg);"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Corner bracket decorators -->
+                                        <span class="ct-corner" aria-hidden="true" style="top:3.9rem;left:0.6rem;border-top:2px solid rgba(20,184,166,0.9);border-left:2px solid rgba(20,184,166,0.9);box-shadow:-2px -2px 10px rgba(20,184,166,0.45);"></span>
+                                        <span class="ct-corner" aria-hidden="true" style="top:3.9rem;right:0.6rem;border-top:2px solid rgba(16,185,129,0.9);border-right:2px solid rgba(16,185,129,0.9);box-shadow:2px -2px 10px rgba(16,185,129,0.45);"></span>
+                                        <span class="ct-corner" aria-hidden="true" style="bottom:2.4rem;left:0.6rem;border-bottom:2px solid rgba(52,211,153,0.65);border-left:2px solid rgba(52,211,153,0.65);box-shadow:-2px 2px 10px rgba(52,211,153,0.3);"></span>
+                                        <span class="ct-corner" aria-hidden="true" style="bottom:2.4rem;right:0.6rem;border-bottom:2px solid rgba(139,92,246,0.65);border-right:2px solid rgba(139,92,246,0.65);box-shadow:2px 2px 10px rgba(139,92,246,0.3);"></span>
+
+                                        <!-- Screen inner glow -->
+                                        <div class="ct-screen-glow" aria-hidden="true"></div>
+
+                                        <!-- 16:9 YouTube embed — https://youtu.be/LSFz6zhlUUI -->
+                                        <div class="ct-video-wrapper">
+                                            <iframe
+                                                src="https://www.youtube-nocookie.com/embed/LSFz6zhlUUI?rel=0&modestbranding=1&color=white&iv_load_policy=3"
+                                                title="CORTEX — AI Engineering Orchestration for Software Engineers"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowfullscreen
+                                                loading="lazy"
+                                            ></iframe>
+                                        </div>
+
+                                        <!-- Chin strip -->
+                                        <div class="ct-chin">
+                                            <i class="fas fa-play ct-chin-icon" aria-hidden="true"></i>
+                                            <div class="ct-progress-track" role="presentation" aria-hidden="true">
+                                                <div class="ct-progress-fill"></div>
+                                            </div>
+                                            <span class="ct-chin-time" aria-hidden="true">0:00 / 4:30</span>
+                                        </div>
+
+                                    </div><!-- /bezel -->
+                                </div><!-- /border ring -->
+
+                                <!-- Monitor stand -->
+                                <div class="ct-stand-neck"></div>
+                                <div class="ct-stand-base"></div>
+
+                            </div><!-- /float -->
+
+                            <!-- Stage floor glow -->
+                            <div class="ct-floor-glow" aria-hidden="true"></div>
+                        </div><!-- /monitor frame -->
+
+                    </div><!-- /bordered card -->
+
+                    <!-- Three engineer-specific pillars -->
+                    <div style="display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.25rem;">
+                        <div style="
+                            flex: 1; min-width: min(160px, 100%); max-width: 240px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(20,184,166,0.15);
+                            border-radius: 0.875rem;
+                            padding: 1.25rem 1rem;
+                        ">
+                            <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🧠</div>
+                            <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#5eead4; margin-bottom:0.35rem;">LENS Engine</div>
+                            <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">9 parallel analyzers — your codebase, your context</div>
+                        </div>
+                        <div style="
+                            flex: 1; min-width: min(160px, 100%); max-width: 240px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(16,185,129,0.15);
+                            border-radius: 0.875rem;
+                            padding: 1.25rem 1rem;
+                        ">
+                            <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🔴🟢♻️</div>
+                            <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#6ee7b7; margin-bottom:0.35rem;">TDD-First</div>
+                            <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">Tests before code — enforced, not suggested</div>
+                        </div>
+                        <div style="
+                            flex: 1; min-width: min(160px, 100%); max-width: 240px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(139,92,246,0.15);
+                            border-radius: 0.875rem;
+                            padding: 1.25rem 1rem;
+                        ">
+                            <div style="font-size:2.25rem; margin-bottom:0.5rem; line-height:1;">🛠️</div>
+                            <div style="font-size:0.875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#c4b5fd; margin-bottom:0.35rem;">36 MCP Tools</div>
+                            <div style="font-size:0.875rem; color:#94a3b8; line-height:1.5;">Pylance-style auto-start — zero configuration</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Minimal stat pills below — VBP-008 context before play -->
-                <div style="
-                    position:relative; z-index:1;
-                    display:flex; flex-wrap:wrap; justify-content:center; gap:0.625rem;
-                    margin-top:1.75rem;
-                " role="list" aria-label="Video context">
-                    <span class="ct-stat-pill" role="listitem"><strong>TDD</strong> enforced</span>
-                    <span class="ct-stat-pill" role="listitem"><strong>4-tier</strong> test runner</span>
-                    <span class="ct-stat-pill" role="listitem"><strong>296+</strong> orchestrators</span>
-                    <span class="ct-stat-pill" role="listitem"><strong>Zero</strong> governance drift</span>
-                </div>
-
             </div>
         </section>
-
 
         <!-- LENS — Glass Panel -->
         <section id="lens" class="relative py-8 my-4" aria-label="LENS Engine">
