@@ -1405,7 +1405,7 @@
                         </div>
                     </div>
                     <!-- D3 pipeline replaces the text pill strip -->
-                    <div id="agentic-pipeline-chart" class="d3-chart-host" style="height:130px;width:100%;" aria-label="TotalRecall 10-phase pipeline: Delta, Drift, Regression, Optimise, Wire, Memory, Vacuum, DB, Harden, Certify"></div>
+                    <div id="agentic-pipeline-chart" class="d3-chart-host" style="height:150px;width:100%;" aria-label="TotalRecall 10-phase pipeline: Delta, Drift, Regression, Optimise, Wire, Memory, Vacuum, DB, Harden, Certify"></div>
                 </div>
 
             </div>
@@ -2271,6 +2271,17 @@
         const FONT = 'Inter, sans-serif';
         const MONO = 'JetBrains Mono, monospace';
 
+        /* ── D3 Font Scale — standardised across ALL charts ────────────────
+           FS_NUM    = phase/sequence numbers inside nodes
+           FS_SMALL  = axis tick labels, node labels, legend items
+           FS_BODY   = main labels, row labels, primary data text
+           FS_CAPTION= chart captions, bottom annotations
+           ─────────────────────────────────────────────────────────────── */
+        const FS_NUM     = '11px';
+        const FS_SMALL   = '11px';
+        const FS_BODY    = '13px';
+        const FS_CAPTION = '12px';
+
         window.onload = function () {
             lucide.createIcons();
             buildHeroTrend();
@@ -2285,118 +2296,108 @@
             buildAgenticFunnel();
         };
 
-        // ── Agentic Pipeline — compact horizontal step-flow inside TotalRecall card ─
+        // ── Agentic Pipeline — circle nodes, readable labels, inside TotalRecall card ─
         function buildAgenticPipeline() {
             const el = document.getElementById('agentic-pipeline-chart');
             if (!el) return;
 
             requestAnimationFrame(() => {
                 el.innerHTML = '';
-                const W = Math.max(el.getBoundingClientRect().width, 320);
-                const H = 130;
-                const m = { top: 10, right: 6, bottom: 28, left: 6 };
-                const w = W - m.left - m.right;
-                const h = H - m.top - m.bottom;
+                const W  = Math.max(el.getBoundingClientRect().width, 360);
+                const H  = 130;
+                const m  = { top: 8, right: 8, bottom: 30, left: 8 };
+                const w  = W - m.left - m.right;
+                const h  = H - m.top - m.bottom;
 
                 const phases = [
-                    { label: 'Delta',      color: '#00d4ff', num: '01' },
-                    { label: 'Drift',      color: '#8b5cf6', num: '02' },
-                    { label: 'Regression', color: '#a78bfa', num: '03' },
-                    { label: 'Optimise',   color: '#f59e0b', num: '04' },
-                    { label: 'Wire',       color: '#34d399', num: '05' },
-                    { label: 'Memory',     color: '#06b6d4', num: '06' },
-                    { label: 'Vacuum',     color: '#f43f5e', num: '07' },
-                    { label: 'DB',         color: '#7c3aed', num: '08' },
-                    { label: 'Harden',     color: '#ef4444', num: '09' },
-                    { label: 'Certify',    color: '#10b981', num: '10' }
+                    { label: 'Delta',     color: '#00d4ff' },
+                    { label: 'Drift',     color: '#8b5cf6' },
+                    { label: 'Regress',   color: '#a78bfa' },
+                    { label: 'Optimise',  color: '#f59e0b' },
+                    { label: 'Wire',      color: '#34d399' },
+                    { label: 'Memory',    color: '#06b6d4' },
+                    { label: 'Vacuum',    color: '#f43f5e' },
+                    { label: 'DB',        color: '#7c3aed' },
+                    { label: 'Harden',    color: '#ef4444' },
+                    { label: 'Certify',   color: '#10b981' }
                 ];
 
-                const n = phases.length;
+                const n    = phases.length;
                 const step = w / n;
-                const nodeW = Math.max(Math.floor(step) - 6, 24);
-                const nodeH = h - 18;
-                const nodeY = 6;
+                const R    = Math.min(Math.floor(step * 0.38), 22);
+                const cy   = h / 2 - 6;
 
                 const svg = d3.select(el).append('svg')
                     .attr('width', '100%').attr('height', H)
                     .attr('viewBox', `0 0 ${W} ${H}`)
-                    .attr('role', 'img')
                     .attr('aria-hidden', 'true')
                     .append('g').attr('transform', `translate(${m.left},${m.top})`);
 
-                // Connector track
+                // Connector track behind circles
                 svg.append('line')
-                    .attr('x1', step * 0.5).attr('y1', nodeY + nodeH / 2)
-                    .attr('x2', w - step * 0.5).attr('y2', nodeY + nodeH / 2)
-                    .attr('stroke', 'rgba(255,255,255,0.06)')
-                    .attr('stroke-width', 2)
-                    .attr('stroke-dasharray', '3,3');
+                    .attr('x1', step * 0.5).attr('y1', cy)
+                    .attr('x2', w - step * 0.5).attr('y2', cy)
+                    .attr('stroke', 'rgba(255,255,255,0.08)')
+                    .attr('stroke-width', 1.5)
+                    .attr('stroke-dasharray', '3,4');
 
                 phases.forEach((p, i) => {
                     const cx = step * i + step / 2;
-                    const x  = cx - nodeW / 2;
+                    const isLast = i === n - 1;
 
-                    const g = svg.append('g')
-                        .attr('transform', `translate(${x},${nodeY})`)
-                        .attr('opacity', reducedMotion ? 1 : 0);
+                    const g = svg.append('g').attr('opacity', reducedMotion ? 1 : 0);
 
-                    // Filled rect
-                    g.append('rect')
-                        .attr('width', nodeW).attr('height', nodeH)
-                        .attr('rx', 7)
-                        .attr('fill', `${p.color}16`)
-                        .attr('stroke', i === 9 ? p.color : `${p.color}50`)
-                        .attr('stroke-width', i === 9 ? 1.5 : 1);
+                    // Glow circle (background)
+                    g.append('circle')
+                        .attr('cx', cx).attr('cy', cy).attr('r', R + 4)
+                        .attr('fill', `${p.color}10`);
 
-                    // Phase number
+                    // Main circle
+                    g.append('circle')
+                        .attr('cx', cx).attr('cy', cy).attr('r', R)
+                        .attr('fill', `${p.color}20`)
+                        .attr('stroke', isLast ? p.color : `${p.color}70`)
+                        .attr('stroke-width', isLast ? 2 : 1.5);
+
+                    // Phase number inside circle
                     g.append('text')
-                        .attr('x', nodeW / 2).attr('y', 13)
-                        .attr('text-anchor', 'middle')
+                        .attr('x', cx).attr('y', cy + 1)
+                        .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
                         .attr('fill', p.color)
-                        .attr('font-size', '7px').attr('font-weight', '900')
+                        .attr('font-size', FS_NUM).attr('font-weight', '900')
                         .attr('font-family', MONO)
-                        .text(p.num);
+                        .text(String(i + 1));
 
-                    // Short label
-                    const short = p.label.length > 5 ? p.label.slice(0, 5) : p.label;
+                    // Label below circle
                     g.append('text')
-                        .attr('x', nodeW / 2).attr('y', nodeH - 5)
-                        .attr('text-anchor', 'middle')
-                        .attr('fill', i === 9 ? '#34d399' : '#475569')
-                        .attr('font-size', '6.5px').attr('font-weight', '700')
+                        .attr('x', cx).attr('y', cy + R + 11)
+                        .attr('text-anchor', 'middle').attr('dominant-baseline', 'hanging')
+                        .attr('fill', isLast ? '#34d399' : '#94a3b8')
+                        .attr('font-size', FS_SMALL).attr('font-weight', isLast ? '800' : '600')
                         .attr('font-family', FONT)
-                        .text(short.toUpperCase());
+                        .text(p.label);
 
-                    // Certify checkmark
-                    if (i === 9) {
-                        g.append('text')
-                            .attr('x', nodeW / 2).attr('y', nodeH / 2 + 3)
+                    // Arrow chevron between nodes
+                    if (!isLast) {
+                        svg.append('text')
+                            .attr('x', cx + step / 2).attr('y', cy + 1)
                             .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
-                            .attr('font-size', '13px')
-                            .text('✅');
+                            .attr('fill', 'rgba(255,255,255,0.18)')
+                            .attr('font-size', '12px').attr('font-weight', '900')
+                            .text('›');
                     }
 
                     if (!reducedMotion) {
-                        g.transition().duration(250).delay(50 + i * 70).attr('opacity', 1);
-                    }
-
-                    // Arrow
-                    if (i < n - 1) {
-                        svg.append('text')
-                            .attr('x', cx + step / 2).attr('y', nodeY + nodeH / 2 + 4)
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', 'rgba(255,255,255,0.12)')
-                            .attr('font-size', '9px').attr('font-weight', '900')
-                            .text('›');
+                        g.transition().duration(280).delay(40 + i * 65).attr('opacity', 1);
                     }
                 });
 
                 // Bottom caption
                 svg.append('text')
-                    .attr('x', w / 2).attr('y', h + 20)
-                    .attr('text-anchor', 'middle')
+                    .attr('x', w / 2).attr('y', h + 22)
+                    .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
                     .attr('fill', '#10b981')
-                    .attr('font-size', '10px').attr('font-weight', '800')
+                    .attr('font-size', FS_CAPTION).attr('font-weight', '800')
                     .attr('font-family', FONT)
                     .text('Single command → 10 autonomous phases → ✅ Production Certified');
             });
@@ -2471,39 +2472,35 @@
                     g.append('text')
                         .attr('x', bx + 18).attr('y', by + bh / 2 + 1)
                         .attr('dominant-baseline', 'middle').attr('text-anchor', 'middle')
-                        .attr('font-size', '15px')
+                        .attr('font-size', '16px')
                         .text(s.icon);
 
                     // Label
                     g.append('text')
-                        .attr('x', bx + 36).attr('y', by + bh / 2 - 5)
+                        .attr('x', bx + 36).attr('y', by + bh / 2 - 6)
                         .attr('dominant-baseline', 'middle')
                         .attr('fill', isLast ? '#34d399' : s.color)
-                        .attr('font-size', '12px').attr('font-weight', '800')
+                        .attr('font-size', FS_BODY).attr('font-weight', '800')
                         .attr('font-family', FONT)
                         .text(s.label);
 
                     // Sub-label
                     g.append('text')
-                        .attr('x', bx + 36).attr('y', by + bh / 2 + 11)
+                        .attr('x', bx + 36).attr('y', by + bh / 2 + 10)
                         .attr('dominant-baseline', 'middle')
-                        .attr('fill', '#64748b')
-                        .attr('font-size', '10px').attr('font-weight', '500')
+                        .attr('fill', '#94a3b8')
+                        .attr('font-size', FS_SMALL).attr('font-weight', '500')
                         .attr('font-family', FONT)
                         .text(s.sub);
 
                     // Connector arrow to next step
                     if (!isLast) {
                         const arrowY = by + bh + gap / 2;
-                        svg.append('line')
-                            .attr('x1', w / 2).attr('y1', arrowY - 1)
-                            .attr('x2', w / 2).attr('y2', arrowY + 1)
-                            .attr('stroke', `${s.color}40`).attr('stroke-width', 1);
                         svg.append('text')
                             .attr('x', w / 2).attr('y', arrowY + 2)
                             .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
-                            .attr('fill', `${s.color}50`)
-                            .attr('font-size', '10px').attr('font-weight', '900')
+                            .attr('fill', `${s.color}60`)
+                            .attr('font-size', '13px').attr('font-weight', '900')
                             .text('↓');
                     }
 
@@ -2999,7 +2996,7 @@
             svg.selectAll('.method-label').data(data).enter().append('text')
                 .attr('x', w + 4).attr('y', d => y(d.cat) + y.bandwidth() / 2)
                 .attr('dominant-baseline','middle')
-                .attr('fill','#475569').attr('font-size','8px').attr('font-family', MONO)
+                .attr('fill','#64748b').attr('font-size', FS_SMALL).attr('font-family', MONO)
                 .text(d => d.method);
         }
 
@@ -3060,7 +3057,7 @@
                     .attr('x', Math.cos(midA) * labelR)
                     .attr('y', Math.sin(midA) * labelR)
                     .attr('text-anchor','middle').attr('dominant-baseline','middle')
-                    .attr('fill', c.color).attr('font-size','8px').attr('font-weight','700')
+                    .attr('fill', c.color).attr('font-size', FS_SMALL).attr('font-weight','700')
                     .attr('font-family', FONT).text(c.label);
             });
 
