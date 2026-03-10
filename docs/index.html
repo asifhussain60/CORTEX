@@ -1834,9 +1834,31 @@
   .mission-title {
     font-family: var(--font-family-heading, 'Space Grotesk', sans-serif);
     font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800;
-    line-height: 1.1; letter-spacing: -0.025em;
+    line-height: 1.15; letter-spacing: -0.025em;
     margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1em;
   }
+  /* Line 1: CORTEX — full size */
+  .mission-title .t-cortex {
+    background: linear-gradient(135deg, #34d399 0%, #00d4ff 55%, #7b61ff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 28px rgba(52,211,153,0.18));
+    display: block;
+    line-height: 1.05;
+  }
+  /* Line 2: Mission Statement — 10% smaller, white gradient */
+  .mission-title .mission-title-sub {
+    font-size: 0.9em;
+    background: linear-gradient(180deg, #fff 0%, rgba(148,163,184,0.7) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: block;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  /* Keep legacy .t-white and .accent-cyan working on other pages */
   .mission-title .t-white {
     background: linear-gradient(180deg, #fff 0%, rgba(148,163,184,0.7) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -1868,10 +1890,10 @@
   .mission-subtitle {
     font-size: 1.0625rem; color: rgba(148,163,184,0.85); margin: 0 auto;
     max-width: 54ch; line-height: 1.8;
-    text-align: left;
+    text-align: justify;
     hyphens: auto;
     -webkit-hyphens: auto;
-    text-align-last: center; /* keep last (short) line centred */
+    text-align-last: center;
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -3695,7 +3717,8 @@
               <header class="mission-header">
                 <span class="mission-eyebrow"><i class="fas fa-satellite-dish" aria-hidden="true"></i>&nbsp; Core Principles</span>
                 <h2 id="mission-heading" class="mission-title">
-                  <span class="t-white">Mission</span>&nbsp;<span class="accent-cyan">Statement</span>
+                  <span class="t-cortex">CORTEX</span>
+                  <span class="mission-title-sub">Mission Statement</span>
                 </h2>
                 <div class="mission-title-rule" aria-hidden="true">
                   <div class="mission-title-rule-dot"></div>
