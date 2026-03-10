@@ -1325,85 +1325,89 @@
         </section>
 
         <!-- SECTION 2b: CORTEX MVP — Agentic Intelligence ★ (MVP — top priority) -->
-        <section class="relative py-8" style="border-radius:1.5rem; overflow:hidden;">
-            <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-indigo-950/60 border border-violet-500/20 rounded-3xl"></div>
-            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
+        <section aria-labelledby="bl-agentic-heading" class="relative py-8" style="border-radius:1.5rem; overflow:hidden;">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-indigo-950/60 border border-violet-500/20 rounded-3xl" aria-hidden="true"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl" aria-hidden="true"></div>
             <div class="relative space-y-8 px-4 md:px-8">
+
+                <!-- Header -->
                 <div class="text-center space-y-4">
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[12px] font-bold tracking-widest uppercase">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> ★ CORTEX MVP — Agentic Intelligence
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5" aria-hidden="true"></i> ★ CORTEX MVP — Agentic Intelligence
                     </div>
-                    <h2 class="section-title font-black tracking-tighter">Agentic Development.<br/><span class="gradient-text-cyan">Delivered and In Production.</span></h2>
+                    <h2 id="bl-agentic-heading" class="section-title font-black tracking-tighter">Agentic Development.<br/><span class="gradient-text-cyan">Delivered and In Production.</span></h2>
                     <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
-                        CORTEX goes beyond AI assistance to <strong class="text-white">agentic development</strong> — multi-step, autonomous engineering workflows designed to plan, implement, test, review, and certify without constant human prompting. This is the production architecture.
+                        CORTEX goes beyond AI assistance to <strong class="text-white">agentic development</strong> — autonomous engineering workflows designed to plan, implement, test, review, and certify without per-step human prompting.
                     </p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <div class="glass-card p-6 space-y-3 border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-400/50 transition-all">
-                        <div class="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                        <h4 class="font-black text-sm tracking-tight text-violet-300">Agentic Development with CORTEX</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">290+ orchestrators coordinate autonomously — breaking work into phases, selecting the right specialist for each task, self-verifying results, and escalating only when human judgment is genuinely required. End-to-end feature delivery without per-step prompting.</p>
+
+                <!-- Stat bar -->
+                <div class="glass-card px-6 py-5 border-violet-500/15 bg-violet-950/20" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;">
+                    <div class="text-center" style="padding:0.5rem 1rem;border-right:1px solid rgba(255,255,255,0.07);">
+                        <div class="text-3xl md:text-4xl font-black text-violet-400" aria-label="290 plus orchestrators">290+</div>
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mt-1">Specialist Orchestrators</div>
                     </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 to-slate-900/80 hover:border-indigo-400/50 transition-all">
-                        <div class="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                        <h4 class="font-black text-sm tracking-tight text-indigo-300">Generative AI — Orchestrated, Not Raw</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX does not expose raw LLM access to engineering workflows. Every generative AI call is governed, context-enriched with LENS analysis, and validated against governance rules before the output reaches the codebase. Generative capability without generative risk.</p>
+                    <div class="text-center" style="padding:0.5rem 1rem;border-right:1px solid rgba(255,255,255,0.07);">
+                        <div class="text-3xl md:text-4xl font-black text-fuchsia-400" aria-label="31 intent types">31</div>
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mt-1">Routable Intent Types</div>
                     </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
-                        <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400"><i data-lucide="message-square" class="w-5 h-5"></i></div>
-                        <h4 class="font-black text-sm tracking-tight text-blue-300">Prompt Engineering as Architecture</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">CORTEX's prompt suite is a governed, version-controlled, self-refreshing asset — not a collection of ad-hoc instructions. Prompts are introspected against the live codebase and regenerated automatically. The organisation's AI behaviour is codified, auditable, and drift-free.</p>
+                    <div class="text-center" style="padding:0.5rem 1rem;">
+                        <div class="text-3xl md:text-4xl font-black text-emerald-400" aria-label="10 TotalRecall phases">10</div>
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mt-1">TotalRecall Phases</div>
                     </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-purple-500/30 bg-gradient-to-br from-purple-950/40 to-slate-900/80 hover:border-purple-400/50 transition-all md:col-span-2 lg:col-span-1">
-                        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400"><i data-lucide="brain-circuit" class="w-5 h-5"></i></div>
-                        <h4 class="font-black text-sm tracking-tight text-purple-300">RCA Synthesis — Prevention Over Reaction</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">The RCA Memory Engine applies four analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) to every significant failure, then generates an automated prevention rule shared organisation-wide. Root cause analysis becomes a continuous process, not a quarterly retrospective.</p>
+                </div>
+
+                <!-- Split: D3 orchestration funnel left · 3 concept cards right -->
+                <div class="bl-split" style="gap:2rem;align-items:stretch;">
+
+                    <!-- Left: D3 orchestration funnel -->
+                    <div class="glass-card p-5 border-violet-500/20 bg-gradient-to-br from-violet-950/30 to-slate-900/80 bl-viz" style="display:flex;flex-direction:column;">
+                        <div class="text-[11px] font-bold uppercase tracking-widest text-violet-400 mb-3">How CORTEX Orchestrates Every Request</div>
+                        <div id="agentic-funnel-chart" class="d3-chart-host" style="height:280px;width:100%;flex:1;"></div>
                     </div>
-                    <div class="glass-card p-6 space-y-3 border-2 border-fuchsia-500/30 bg-gradient-to-br from-fuchsia-950/40 to-slate-900/80 hover:border-fuchsia-400/50 transition-all lg:col-span-2">
-                        <div class="flex flex-col md:flex-row gap-5 items-start">
-                            <div class="w-10 h-10 shrink-0 bg-fuchsia-500/20 rounded-xl flex items-center justify-center text-fuchsia-400"><i data-lucide="workflow" class="w-5 h-5"></i></div>
-                            <div>
-                                <h4 class="font-black text-sm tracking-tight text-fuchsia-300 mb-1">End-to-End Agentic Workflow — TotalRecall</h4>
-                                <p class="text-sm text-slate-500 leading-relaxed">The <code class="text-fuchsia-400 text-[12px]">/totalrecall</code> command launches a 10-phase autonomous pipeline: delta analysis → drift detection → regression testing → optimisation → wiring validation → memory consolidation → workspace cleanup → database maintenance → security hardening → production certification. A complete engineering cycle, unattended, in a single command.</p>
-                                <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-[12px] text-slate-600">
-                                    <span>① Delta</span><span>② Drift</span><span>③ Regression</span><span>④ Optimise</span><span>⑤ Wire</span><span>⑥ Memory</span><span>⑦ Vacuum</span><span>⑧ DB</span><span>⑨ Harden</span><span class="text-emerald-500 font-bold">⑩ Certify ✅</span>
-                                </div>
+
+                    <!-- Right: 3 concept cards -->
+                    <div style="display:flex;flex-direction:column;gap:1rem;">
+                        <div class="glass-card p-5 space-y-2 border-violet-500/25 bg-gradient-to-br from-violet-950/35 to-slate-900/80 hover:border-violet-400/45 transition-all" style="flex:1;">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 bg-violet-500/20 rounded-lg flex items-center justify-center text-violet-400 shrink-0"><i data-lucide="bot" class="w-4 h-4" aria-hidden="true"></i></div>
+                                <h4 class="font-black text-sm tracking-tight text-violet-300">Autonomous, Phase-by-Phase Delivery</h4>
                             </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">290+ orchestrators coordinate without per-step prompting — selecting the right specialist, self-verifying outputs, and escalating only when human judgment is genuinely required.</p>
+                        </div>
+                        <div class="glass-card p-5 space-y-2 border-indigo-500/25 bg-gradient-to-br from-indigo-950/35 to-slate-900/80 hover:border-indigo-400/45 transition-all" style="flex:1;">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center text-indigo-400 shrink-0"><i data-lucide="cpu" class="w-4 h-4" aria-hidden="true"></i></div>
+                                <h4 class="font-black text-sm tracking-tight text-indigo-300">Governed AI — Not Raw LLM Access</h4>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">Every AI call is context-enriched with LENS analysis and validated against governance rules before output reaches your codebase. Generative capability without generative risk.</p>
+                        </div>
+                        <div class="glass-card p-5 space-y-2 border-blue-500/25 bg-gradient-to-br from-blue-950/35 to-slate-900/80 hover:border-blue-400/45 transition-all" style="flex:1;">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 shrink-0"><i data-lucide="shield-check" class="w-4 h-4" aria-hidden="true"></i></div>
+                                <h4 class="font-black text-sm tracking-tight text-blue-300">Prompt Suite as a Governed Asset</h4>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">CORTEX prompts are version-controlled and auto-regenerated against the live codebase. Your organisation's AI behaviour is codified, auditable, and drift-free — not a collection of ad-hoc instructions.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Agentic Pipeline Visual — D3 horizontal flow + command stats -->
-                <div class="glass-card p-6 md:p-8 border-violet-500/15 bg-gradient-to-br from-violet-950/20 to-slate-900/80">
-                    <div class="bl-split" style="gap:2.5rem;align-items:center;">
-                        <!-- Left: command-to-outcome stats -->
-                        <div style="display:flex;flex-direction:column;gap:1.25rem;">
-                            <div class="text-[12px] font-bold uppercase tracking-widest text-violet-400">Single Command → Full Pipeline</div>
-                            <p class="text-sm text-slate-400 leading-relaxed" style="flex:1;">CORTEX orchestrates 290+ specialist engines in sequence — each phase validated, each output governance-checked. No human prompting between steps. One command triggers the entire delivery chain.</p>
-                            <div class="flex flex-wrap gap-x-6 gap-y-3 pt-1">
-                                <div class="text-center">
-                                    <div class="text-2xl font-black text-violet-400">290+</div>
-                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Orchestrators</div>
-                                </div>
-                                <div style="width:1px;background:rgba(255,255,255,0.07);align-self:stretch;" aria-hidden="true"></div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-black text-fuchsia-400">31</div>
-                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Intent Types</div>
-                                </div>
-                                <div style="width:1px;background:rgba(255,255,255,0.07);align-self:stretch;" aria-hidden="true"></div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-black text-emerald-400">10</div>
-                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">TotalRecall Phases</div>
-                                </div>
+                <!-- TotalRecall: full-width card with embedded D3 pipeline -->
+                <div class="glass-card p-6 md:p-7 border-fuchsia-500/25 bg-gradient-to-br from-fuchsia-950/30 to-slate-900/85" style="border-width:1.5px;">
+                    <div class="flex items-start gap-4 mb-5">
+                        <div class="w-10 h-10 shrink-0 bg-fuchsia-500/20 rounded-xl flex items-center justify-center text-fuchsia-400"><i data-lucide="workflow" class="w-5 h-5" aria-hidden="true"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h4 class="font-black text-base tracking-tight text-fuchsia-300">End-to-End Agentic Workflow</h4>
+                                <code class="text-fuchsia-400/80 text-[12px] font-mono bg-fuchsia-950/50 border border-fuchsia-500/25 px-2 py-0.5 rounded-md">/totalrecall</code>
                             </div>
-                        </div>
-                        <!-- Right: D3 agentic pipeline flow chart -->
-                        <div class="bl-viz" style="display:flex;flex-direction:column;align-items:center;">
-                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Agentic pipeline — /totalrecall phases</div>
-                            <div id="agentic-pipeline-chart" class="d3-chart-host" style="height:200px;width:100%;"></div>
+                            <p class="text-sm text-slate-400 leading-relaxed mt-1 max-w-2xl">A complete engineering cycle — delta analysis through production certification — unattended, in a single command. Each phase validates the previous before proceeding.</p>
                         </div>
                     </div>
+                    <!-- D3 pipeline replaces the text pill strip -->
+                    <div id="agentic-pipeline-chart" class="d3-chart-host" style="height:130px;width:100%;" aria-label="TotalRecall 10-phase pipeline: Delta, Drift, Regression, Optimise, Wire, Memory, Vacuum, DB, Harden, Certify"></div>
                 </div>
+
             </div>
         </section>
         <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2278,9 +2282,10 @@
             buildSelfSustainChart();
             buildOnboardingAccel();
             buildAgenticPipeline();
+            buildAgenticFunnel();
         };
 
-        // ── Agentic Pipeline — horizontal step-flow with D3 ───────────────
+        // ── Agentic Pipeline — compact horizontal step-flow inside TotalRecall card ─
         function buildAgenticPipeline() {
             const el = document.getElementById('agentic-pipeline-chart');
             if (!el) return;
@@ -2288,51 +2293,44 @@
             requestAnimationFrame(() => {
                 el.innerHTML = '';
                 const W = Math.max(el.getBoundingClientRect().width, 320);
-                const H = 200;
-                const m = { top: 18, right: 8, bottom: 36, left: 8 };
+                const H = 130;
+                const m = { top: 10, right: 6, bottom: 28, left: 6 };
                 const w = W - m.left - m.right;
                 const h = H - m.top - m.bottom;
 
                 const phases = [
-                    { label: 'Delta',      icon: '⊿', color: '#00d4ff' },
-                    { label: 'Drift',      icon: '↷', color: '#8b5cf6' },
-                    { label: 'Regression', icon: '✓', color: '#a78bfa' },
-                    { label: 'Optimise',   icon: '⚡', color: '#f59e0b' },
-                    { label: 'Wire',       icon: '⟶', color: '#34d399' },
-                    { label: 'Memory',     icon: '🧠', color: '#06b6d4' },
-                    { label: 'Vacuum',     icon: '✦', color: '#f43f5e' },
-                    { label: 'DB',         icon: '⬡', color: '#7c3aed' },
-                    { label: 'Harden',     icon: '🛡', color: '#ef4444' },
-                    { label: 'Certify',    icon: '✅', color: '#10b981' }
+                    { label: 'Delta',      color: '#00d4ff', num: '01' },
+                    { label: 'Drift',      color: '#8b5cf6', num: '02' },
+                    { label: 'Regression', color: '#a78bfa', num: '03' },
+                    { label: 'Optimise',   color: '#f59e0b', num: '04' },
+                    { label: 'Wire',       color: '#34d399', num: '05' },
+                    { label: 'Memory',     color: '#06b6d4', num: '06' },
+                    { label: 'Vacuum',     color: '#f43f5e', num: '07' },
+                    { label: 'DB',         color: '#7c3aed', num: '08' },
+                    { label: 'Harden',     color: '#ef4444', num: '09' },
+                    { label: 'Certify',    color: '#10b981', num: '10' }
                 ];
 
                 const n = phases.length;
-                const nodeW = Math.max(Math.floor(w / n) - 4, 28);
-                const nodeH = 56;
-                const step  = w / n;
-                const nodeY = (h - nodeH) / 2;
+                const step = w / n;
+                const nodeW = Math.max(Math.floor(step) - 6, 24);
+                const nodeH = h - 18;
+                const nodeY = 6;
 
                 const svg = d3.select(el).append('svg')
                     .attr('width', '100%').attr('height', H)
                     .attr('viewBox', `0 0 ${W} ${H}`)
+                    .attr('role', 'img')
+                    .attr('aria-hidden', 'true')
                     .append('g').attr('transform', `translate(${m.left},${m.top})`);
 
-                const defs = svg.append('defs');
-
-                // Glow filter
-                const filt = defs.append('filter').attr('id', 'ag-glow').attr('x', '-30%').attr('y', '-30%').attr('width', '160%').attr('height', '160%');
-                filt.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'blur');
-                const feMerge = filt.append('feMerge');
-                feMerge.append('feMergeNode').attr('in', 'blur');
-                feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-                // Connector line (full width, behind nodes)
+                // Connector track
                 svg.append('line')
                     .attr('x1', step * 0.5).attr('y1', nodeY + nodeH / 2)
                     .attr('x2', w - step * 0.5).attr('y2', nodeY + nodeH / 2)
-                    .attr('stroke', 'rgba(255,255,255,0.07)')
+                    .attr('stroke', 'rgba(255,255,255,0.06)')
                     .attr('stroke-width', 2)
-                    .attr('stroke-dasharray', '4,3');
+                    .attr('stroke-dasharray', '3,3');
 
                 phases.forEach((p, i) => {
                     const cx = step * i + step / 2;
@@ -2340,69 +2338,179 @@
 
                     const g = svg.append('g')
                         .attr('transform', `translate(${x},${nodeY})`)
-                        .attr('opacity', 0);
+                        .attr('opacity', reducedMotion ? 1 : 0);
 
-                    // Background rect
+                    // Filled rect
                     g.append('rect')
                         .attr('width', nodeW).attr('height', nodeH)
-                        .attr('rx', 8)
-                        .attr('fill', `${p.color}18`)
-                        .attr('stroke', `${p.color}55`)
-                        .attr('stroke-width', 1);
+                        .attr('rx', 7)
+                        .attr('fill', `${p.color}16`)
+                        .attr('stroke', i === 9 ? p.color : `${p.color}50`)
+                        .attr('stroke-width', i === 9 ? 1.5 : 1);
 
                     // Phase number
                     g.append('text')
-                        .attr('x', nodeW / 2).attr('y', 14)
+                        .attr('x', nodeW / 2).attr('y', 13)
                         .attr('text-anchor', 'middle')
                         .attr('fill', p.color)
-                        .attr('font-size', '8px').attr('font-weight', '900')
+                        .attr('font-size', '7px').attr('font-weight', '900')
                         .attr('font-family', MONO)
-                        .text(`${String(i + 1).padStart(2, '0')}`);
+                        .text(p.num);
 
-                    // Icon
+                    // Short label
+                    const short = p.label.length > 5 ? p.label.slice(0, 5) : p.label;
                     g.append('text')
-                        .attr('x', nodeW / 2).attr('y', 32)
-                        .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
-                        .attr('fill', p.color)
-                        .attr('font-size', nodeW > 36 ? '14px' : '11px')
-                        .text(p.icon);
-
-                    // Label
-                    const shortLabel = p.label.length > 6 ? p.label.slice(0, 6) : p.label;
-                    g.append('text')
-                        .attr('x', nodeW / 2).attr('y', nodeH - 6)
+                        .attr('x', nodeW / 2).attr('y', nodeH - 5)
                         .attr('text-anchor', 'middle')
-                        .attr('fill', '#64748b')
-                        .attr('font-size', '7px').attr('font-weight', '700')
+                        .attr('fill', i === 9 ? '#34d399' : '#475569')
+                        .attr('font-size', '6.5px').attr('font-weight', '700')
                         .attr('font-family', FONT)
-                        .text(shortLabel.toUpperCase());
+                        .text(short.toUpperCase());
 
-                    // Animate in
-                    if (!reducedMotion) {
-                        g.transition().duration(300).delay(i * 90).attr('opacity', 1);
-                    } else {
-                        g.attr('opacity', 1);
+                    // Certify checkmark
+                    if (i === 9) {
+                        g.append('text')
+                            .attr('x', nodeW / 2).attr('y', nodeH / 2 + 3)
+                            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+                            .attr('font-size', '13px')
+                            .text('✅');
                     }
 
-                    // Arrow between nodes
+                    if (!reducedMotion) {
+                        g.transition().duration(250).delay(50 + i * 70).attr('opacity', 1);
+                    }
+
+                    // Arrow
                     if (i < n - 1) {
                         svg.append('text')
                             .attr('x', cx + step / 2).attr('y', nodeY + nodeH / 2 + 4)
                             .attr('text-anchor', 'middle')
-                            .attr('fill', 'rgba(255,255,255,0.15)')
-                            .attr('font-size', '10px').attr('font-weight', '900')
+                            .attr('fill', 'rgba(255,255,255,0.12)')
+                            .attr('font-size', '9px').attr('font-weight', '900')
                             .text('›');
                     }
                 });
 
-                // Bottom label
+                // Bottom caption
                 svg.append('text')
-                    .attr('x', w / 2).attr('y', h + 26)
+                    .attr('x', w / 2).attr('y', h + 20)
                     .attr('text-anchor', 'middle')
-                    .attr('fill', '#34d399')
-                    .attr('font-size', '11px').attr('font-weight', '800')
+                    .attr('fill', '#10b981')
+                    .attr('font-size', '10px').attr('font-weight', '800')
                     .attr('font-family', FONT)
-                    .text('Single command → autonomous 10-phase delivery → ✅ Production Certified');
+                    .text('Single command → 10 autonomous phases → ✅ Production Certified');
+            });
+        }
+
+        // ── Agentic Funnel — vertical orchestration flow diagram ──────────
+        function buildAgenticFunnel() {
+            const el = document.getElementById('agentic-funnel-chart');
+            if (!el) return;
+
+            requestAnimationFrame(() => {
+                el.innerHTML = '';
+                const W = Math.max(el.getBoundingClientRect().width, 220);
+                const H = 280;
+                const m = { top: 8, right: 12, bottom: 8, left: 12 };
+                const w = W - m.left - m.right;
+                const h = H - m.top - m.bottom;
+
+                const steps = [
+                    { label: 'Human Request',        sub: 'Any intent — implement, fix, audit…', color: '#a78bfa', icon: '👤', w: 1.0  },
+                    { label: 'Intent Router',         sub: '31 intent types classified',          color: '#8b5cf6', icon: '🧭', w: 0.88 },
+                    { label: '290+ Specialist Agents',sub: 'Right expert selected per phase',     color: '#7c3aed', icon: '⚙️', w: 0.76 },
+                    { label: 'LENS + Governance',     sub: 'Context-enriched, rules validated',   color: '#6d28d9', icon: '🛡', w: 0.65 },
+                    { label: '✅ Certified Output',   sub: 'Governance-checked & committed',      color: '#10b981', icon: '✅', w: 0.58 }
+                ];
+
+                const rowH = Math.floor(h / steps.length);
+                const gap  = 6;
+                const svg  = d3.select(el).append('svg')
+                    .attr('width', '100%').attr('height', H)
+                    .attr('viewBox', `0 0 ${W} ${H}`)
+                    .attr('role', 'img')
+                    .attr('aria-hidden', 'true')
+                    .append('g').attr('transform', `translate(${m.left},${m.top})`);
+
+                const defs = svg.append('defs');
+
+                steps.forEach((s, i) => {
+                    const bw   = w * s.w;
+                    const bx   = (w - bw) / 2;
+                    const by   = i * rowH;
+                    const bh   = rowH - gap;
+                    const isLast = i === steps.length - 1;
+
+                    // Gradient per step
+                    const gId = `ag-funnelgrad-${i}`;
+                    const grad = defs.append('linearGradient').attr('id', gId).attr('x1','0').attr('x2','1').attr('y1','0').attr('y2','0');
+                    grad.append('stop').attr('offset','0%').attr('stop-color', s.color).attr('stop-opacity', isLast ? 0.28 : 0.14);
+                    grad.append('stop').attr('offset','100%').attr('stop-color', s.color).attr('stop-opacity', isLast ? 0.18 : 0.08);
+
+                    const g = svg.append('g')
+                        .attr('opacity', reducedMotion ? 1 : 0);
+
+                    // Background rect
+                    g.append('rect')
+                        .attr('x', bx).attr('y', by)
+                        .attr('width', bw).attr('height', bh)
+                        .attr('rx', 8)
+                        .attr('fill', `url(#${gId})`)
+                        .attr('stroke', isLast ? s.color : `${s.color}45`)
+                        .attr('stroke-width', isLast ? 1.5 : 1);
+
+                    // Left accent bar
+                    g.append('rect')
+                        .attr('x', bx).attr('y', by)
+                        .attr('width', 3).attr('height', bh)
+                        .attr('rx', 2)
+                        .attr('fill', s.color)
+                        .attr('opacity', 0.8);
+
+                    // Icon
+                    g.append('text')
+                        .attr('x', bx + 18).attr('y', by + bh / 2 + 1)
+                        .attr('dominant-baseline', 'middle').attr('text-anchor', 'middle')
+                        .attr('font-size', '15px')
+                        .text(s.icon);
+
+                    // Label
+                    g.append('text')
+                        .attr('x', bx + 36).attr('y', by + bh / 2 - 5)
+                        .attr('dominant-baseline', 'middle')
+                        .attr('fill', isLast ? '#34d399' : s.color)
+                        .attr('font-size', '12px').attr('font-weight', '800')
+                        .attr('font-family', FONT)
+                        .text(s.label);
+
+                    // Sub-label
+                    g.append('text')
+                        .attr('x', bx + 36).attr('y', by + bh / 2 + 11)
+                        .attr('dominant-baseline', 'middle')
+                        .attr('fill', '#64748b')
+                        .attr('font-size', '10px').attr('font-weight', '500')
+                        .attr('font-family', FONT)
+                        .text(s.sub);
+
+                    // Connector arrow to next step
+                    if (!isLast) {
+                        const arrowY = by + bh + gap / 2;
+                        svg.append('line')
+                            .attr('x1', w / 2).attr('y1', arrowY - 1)
+                            .attr('x2', w / 2).attr('y2', arrowY + 1)
+                            .attr('stroke', `${s.color}40`).attr('stroke-width', 1);
+                        svg.append('text')
+                            .attr('x', w / 2).attr('y', arrowY + 2)
+                            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+                            .attr('fill', `${s.color}50`)
+                            .attr('font-size', '10px').attr('font-weight', '900')
+                            .text('↓');
+                    }
+
+                    if (!reducedMotion) {
+                        g.transition().duration(300).delay(i * 120).attr('opacity', 1);
+                    }
+                });
             });
         }
 
@@ -2963,11 +3071,11 @@
 
         // Resize
         function rebuildAll() {
-            ['roi-chart','hero-trend-chart','ccp-risk-chart','quality-radar-chart','arch-donut-chart','rca-bar-chart','self-sustain-chart','onboard-accel-chart','agentic-pipeline-chart'].forEach(id => {
+            ['roi-chart','hero-trend-chart','ccp-risk-chart','quality-radar-chart','arch-donut-chart','rca-bar-chart','self-sustain-chart','onboard-accel-chart','agentic-pipeline-chart','agentic-funnel-chart'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
-            buildHeroTrend(); buildRoiChart(); buildCcpRiskChart(); buildQualityRadar(); buildArchDonut(); buildRcaBar(); buildSelfSustainChart(); buildOnboardingAccel(); buildAgenticPipeline();
+            buildHeroTrend(); buildRoiChart(); buildCcpRiskChart(); buildQualityRadar(); buildArchDonut(); buildRcaBar(); buildSelfSustainChart(); buildOnboardingAccel(); buildAgenticPipeline(); buildAgenticFunnel();
         }
         let _resizeTimer;
         window.addEventListener('resize', () => { clearTimeout(_resizeTimer); _resizeTimer = setTimeout(rebuildAll, 220); });
