@@ -528,6 +528,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        text-align: left;              /* base alignment — prose overrides to justify */
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
@@ -568,6 +569,9 @@
         font-size: 1rem;
         line-height: 1.65;
         font-weight: 400;
+        text-align: justify;
+        text-align-last: left;          /* keep last line flush-left */
+        hyphens: auto;                  /* soften ragged gaps in narrow columns */
     }
     /* Lock prose zone to a fixed height so .tp-visual starts at the SAME
        vertical position in both columns — permanent alignment guarantee.
@@ -578,6 +582,7 @@
     }
     @media (max-width: 768px) {
         .tp-prose { min-height: unset; }
+        .tp-prose p { text-align: left; hyphens: none; }
     }
 
     /* ── Unified tile — shared by BOTH panels ─────────────────────────── */
@@ -641,6 +646,127 @@
             grid-template-columns: 1fr;
             grid-template-rows: repeat(4, auto);
         }
+    }
+
+    /* ── Image variant — replaces tile grid with a full-bleed panel image ── */
+    .tp-visual--image {
+        display: block;
+        grid-template-columns: unset;
+        grid-template-rows: unset;
+        padding: 0;
+        margin-top: 1.25rem;
+    }
+
+    .tp-img-frame {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        min-height: 220px;
+    }
+
+    /* Glassmorphic border glow — cyan for left, purple for right */
+    .tp-img-frame--cyan {
+        box-shadow:
+            0 0 0 1px rgba(0,212,255,0.30),
+            0 8px 32px rgba(0,212,255,0.12),
+            inset 0 0 0 1px rgba(0,212,255,0.10);
+    }
+    .tp-img-frame--purple {
+        box-shadow:
+            0 0 0 1px rgba(123,97,255,0.32),
+            0 8px 32px rgba(123,97,255,0.14),
+            inset 0 0 0 1px rgba(123,97,255,0.10);
+    }
+
+    .tp-img-frame img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        border-radius: 11px;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                    filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .tp-img-frame:hover img {
+            transform: scale(1.025);
+            filter: brightness(1.08);
+        }
+    }
+
+    /* Subtle gradient overlay at the bottom — blends into the card */
+    .tp-img-frame::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 42%;
+        background: linear-gradient(to bottom, transparent, rgba(8,12,28,0.72));
+        pointer-events: none;
+        border-radius: 0 0 11px 11px;
+    }
+
+    /* Caption label pinned to bottom-left of image frame */
+    .tp-img-caption {
+        position: absolute;
+        bottom: 0.65rem;
+        left: 0.8rem;
+        right: 0.8rem;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.82);
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    /* ── Swiss Army unison connector — spans full two-column width ──── */
+    .tp-unison-bar {
+        grid-column: 1 / -1;           /* spans both columns */
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.85rem 1.25rem;
+        border-radius: 10px;
+        background: linear-gradient(
+            135deg,
+            rgba(0,212,255,0.07) 0%,
+            rgba(123,97,255,0.09) 100%
+        );
+        border: 1px solid rgba(255,255,255,0.09);
+        margin-bottom: 1.5rem;
+    }
+
+    .tp-unison-bar-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        line-height: 1;
+    }
+
+    .tp-unison-bar-text {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--text-secondary);
+        text-align: center;
+        flex: 1;
+    }
+
+    .tp-unison-bar-text strong {
+        background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+        .tp-unison-bar { flex-direction: column; text-align: center; gap: 0.6rem; }
+        .tp-unison-bar-text { text-align: center; }
     }
 
     /* --- AWAKENING CINEMATIC CARD --- */
@@ -3444,8 +3570,19 @@
 <div style="max-width: 1200px; margin: var(--issa-hero-first, 3rem) auto var(--spacing-8) auto; padding: 0 var(--spacing-6);">
     <div class="feature-grid-2">
 
+        <!-- ── UNISON CONNECTOR — spans full grid width ── -->
+        <div class="tp-unison-bar" role="note" aria-label="Contrast: Copilot disconnected agents versus CORTEX unified orchestration">
+            <span class="tp-unison-bar-icon" aria-hidden="true">⚔️</span>
+            <p class="tp-unison-bar-text">
+                Copilot agents operate in <strong>isolation — each blade separate, with no shared context</strong>.
+                CORTEX works like a <strong>Swiss Army knife in unison</strong> — 296 orchestrators, one governed platform,
+                every intent precision-routed with persistent memory and full convergence guarantees.
+            </p>
+            <span class="tp-unison-bar-icon" aria-hidden="true">🛡️</span>
+        </div>
+
         <!-- ── LEFT PANEL: GitHub Copilot — The Challenge ── -->
-        <article class="glass-card tp-card" style="text-align: left;" aria-labelledby="copilot-challenge-heading">
+        <article class="glass-card tp-card" aria-labelledby="copilot-challenge-heading">
             <div class="tp-body">
 
                 <!-- Zone 1: Heading -->
@@ -3467,43 +3604,26 @@
                     </p>
                 </div>
 
-                <!-- Zone 3: 4 challenge tiles — 2×2 grid, cyan accent -->
-                <div class="tp-visual" role="list" aria-label="Copilot governance challenges">
-                    <div class="tp-tile tp-tile--cyan" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#129504;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">Zero Session Memory</div>
-                            <div class="tp-tile-body">Resets cold — no recall of prior decisions or failures.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--cyan" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#127754;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">Context Erosion</div>
-                            <div class="tp-tile-body">Token limits silently drop critical architectural context.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--cyan" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#129657;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">Patchwork Fixes</div>
-                            <div class="tp-tile-body">Agents fix symptoms — compounding drift every sprint.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--cyan" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#128683;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">No Governance Rail</div>
-                            <div class="tp-tile-body">No TDD, no sweep contracts — unchecked output only.</div>
-                        </div>
-                    </div>
+                <!-- Zone 3: Disconnected agents diagram — cyan frame -->
+                <div class="tp-visual tp-visual--image" aria-label="Diagram: GitHub Copilot disconnected agents mode">
+                    <figure class="tp-img-frame tp-img-frame--cyan" style="margin:0;">
+                        <img
+                            src="assets/images/copilot-disonnected-agents.png"
+                            alt="GitHub Copilot disconnected agents mode — each agent operates in isolation with zero session memory, context erosion, patchwork fixes, and no governance rail. Arrows show fragmented, ungoverned AI outputs with no orchestration layer."
+                            width="800"
+                            height="480"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <span class="tp-img-caption">Copilot · Disconnected Agents Mode</span>
+                    </figure>
                 </div>
 
             </div>
         </article>
 
         <!-- ── RIGHT PANEL: The CORTEX Vision ── -->
-        <article class="glass-card tp-card" style="text-align: left;" aria-labelledby="cortex-vision-heading">
+        <article class="glass-card tp-card" aria-labelledby="cortex-vision-heading">
             <div class="tp-body">
 
                 <!-- Zone 1: Heading -->
@@ -3527,36 +3647,19 @@
                     </p>
                 </div>
 
-                <!-- Zone 3: 4 metric tiles — 2×2 grid, purple accent -->
-                <div class="tp-visual" role="list" aria-label="CORTEX governance metrics">
-                    <div class="tp-tile tp-tile--purple" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#129504;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">290+ Orchestrators</div>
-                            <div class="tp-tile-body">14 domains — every intent precision-routed.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--purple" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#9989;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">20K+ Tests</div>
-                            <div class="tp-tile-body">Every governance contract enforced automatically.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--purple" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#128200;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">60% Token Savings</div>
-                            <div class="tp-tile-body">RAG-enhanced retrieval cuts AI costs per session.</div>
-                        </div>
-                    </div>
-                    <div class="tp-tile tp-tile--purple" role="listitem">
-                        <span class="tp-tile-icon" aria-hidden="true">&#127919;</span>
-                        <div class="tp-tile-content">
-                            <div class="tp-tile-label">31 Intent Types</div>
-                            <div class="tp-tile-body">TDD-first, RCA memory — governed end-to-end.</div>
-                        </div>
-                    </div>
+                <!-- Zone 3: CORTEX orchestration diagram — purple frame -->
+                <div class="tp-visual tp-visual--image" aria-label="Diagram: CORTEX Swiss Army orchestration capabilities">
+                    <figure class="tp-img-frame tp-img-frame--purple" style="margin:0;">
+                        <img
+                            src="assets/images/cortex-siwss-army.png"
+                            alt="CORTEX Swiss Army orchestration capabilities — 296 orchestrators across 14 domains, 36 MCP tools, 31 intent types, and 20K+ tests forming a fully governed AI engineering platform. Every intent precision-routed with TDD-first RCA memory and 60% token savings."
+                            width="800"
+                            height="480"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <span class="tp-img-caption">CORTEX · Orchestration Capabilities</span>
+                    </figure>
                 </div>
 
             </div>
