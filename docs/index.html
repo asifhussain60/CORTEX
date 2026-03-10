@@ -662,8 +662,11 @@
         border-radius: 12px;
         overflow: hidden;
         width: 100%;
-        height: 100%;
-        min-height: 220px;
+        /* Enforce identical 16:9 dimensions on BOTH panel images —
+           removes height dependency on parent row / prose content height.
+           aspect-ratio is composited: no layout thrash. */
+        aspect-ratio: 16 / 9;
+        height: auto;
     }
 
     /* Glassmorphic border glow — cyan for left, purple for right */
@@ -723,6 +726,38 @@
         pointer-events: none;
         z-index: 2;
     }
+
+    /* ── Per-panel quote blocks — sit below the image frame ─────────── */
+    .tp-quote {
+        margin-top: 1rem;
+        padding: 0.8rem 1rem 0.8rem 1.1rem;
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        font-style: italic;
+    }
+    .tp-quote--cyan {
+        border-left: 3px solid rgba(0,212,255,0.55);
+        background: rgba(0,212,255,0.05);
+    }
+    .tp-quote--purple {
+        border-left: 3px solid rgba(123,97,255,0.6);
+        background: rgba(123,97,255,0.06);
+    }
+    .tp-quote p {
+        margin: 0 0 0.3rem;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.8);
+        text-align: left;
+        hyphens: none;
+    }
+    .tp-quote cite {
+        font-size: 0.78rem;
+        font-style: normal;
+        font-weight: 600;
+        font-family: var(--font-mono);
+    }
+    .tp-quote--cyan cite { color: rgba(0,212,255,0.8); }
+    .tp-quote--purple cite { color: rgba(123,97,255,0.85); }
 
     /* ── Swiss Army unison connector — spans full two-column width ──── */
     .tp-unison-bar {
@@ -3818,14 +3853,20 @@
                     </p>
                 </div>
 
-                <!-- Zone 3: Disconnected agents diagram — cyan frame -->
+                <!-- Quote: stateless AI repeats the same failures session after session -->
+                <blockquote class="tp-quote tp-quote--cyan">
+                    <p>"Those who cannot remember the past are condemned to repeat it."</p>
+                    <cite>— George Santayana, <em>The Life of Reason</em></cite>
+                </blockquote>
+
+                <!-- Zone 3: Disconnected agents diagram — cyan frame, fixed 16:9 -->
                 <div class="tp-visual tp-visual--image" aria-label="Diagram: GitHub Copilot disconnected agents mode">
                     <figure class="tp-img-frame tp-img-frame--cyan" style="margin:0;">
                         <img
                             src="assets/images/copilot-disonnected-agents.png"
                             alt="GitHub Copilot disconnected agents mode — each agent operates in isolation with zero session memory, context erosion, patchwork fixes, and no governance rail. Arrows show fragmented, ungoverned AI outputs with no orchestration layer."
                             width="800"
-                            height="480"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
@@ -3861,14 +3902,20 @@
                     </p>
                 </div>
 
-                <!-- Zone 3: CORTEX orchestration diagram — purple frame -->
+                <!-- Quote: leadership works ON the system, not just in it -->
+                <blockquote class="tp-quote tp-quote--purple">
+                    <p>"Management works in the system; leadership works on the system."</p>
+                    <cite>— Stephen R. Covey</cite>
+                </blockquote>
+
+                <!-- Zone 3: CORTEX orchestration diagram — purple frame, fixed 16:9 -->
                 <div class="tp-visual tp-visual--image" aria-label="Diagram: CORTEX Swiss Army orchestration capabilities">
                     <figure class="tp-img-frame tp-img-frame--purple" style="margin:0;">
                         <img
                             src="assets/images/cortex-siwss-army.png"
                             alt="CORTEX Swiss Army orchestration capabilities — 296 orchestrators across 14 domains, 36 MCP tools, 31 intent types, and 20K+ tests forming a fully governed AI engineering platform. Every intent precision-routed with TDD-first RCA memory and 60% token savings."
                             width="800"
-                            height="480"
+                            height="450"
                             loading="lazy"
                             decoding="async"
                         />
@@ -4146,7 +4193,7 @@
                       <!-- Full-width kicker — spans both columns -->
                       <p class="macc__kicker">
                         <i class="fas fa-quote-left" aria-hidden="true"></i>
-                        Technology is an accelerator of momentum. CORTEX accelerates great engineering teams by removing the uncertainty that holds them back. — Jim Collins
+                        Good is the enemy of great. — Jim Collins
                       </p>
                     </div>
                   </div>
