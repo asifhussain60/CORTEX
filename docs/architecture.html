@@ -2361,6 +2361,17 @@
 
     <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
     <script>
+        /* ── D3 Font Scale — standardised across ALL charts ─────────────────
+           FS_NUM    = phase/sequence numbers inside nodes
+           FS_SMALL  = axis tick labels, node labels, legend items
+           FS_BODY   = main labels, row labels, primary data text
+           FS_CAPTION= chart captions, bottom annotations
+           ──────────────────────────────────────────────────────────────── */
+        const FS_NUM     = '11px';
+        const FS_SMALL   = '11px';
+        const FS_BODY    = '13px';
+        const FS_CAPTION = '12px';
+
         window.onload = function() {
             lucide.createIcons();
             buildDiamondChart();
@@ -2577,7 +2588,7 @@
                 g.append('text').attr('y',14).attr('text-anchor','middle').attr('fill',n.color)
                     .attr('font-size', '12px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text(n.label.toUpperCase());
                 g.append('text').attr('y',26).attr('text-anchor','middle').attr('fill','#475569')
-                    .attr('font-size','8px').attr('font-family','Inter,sans-serif').text(n.sub);
+                    .attr('font-size', FS_SMALL).attr('font-family','Inter,sans-serif').text(n.sub);
             });
 
             // Centre label
@@ -2647,7 +2658,7 @@
             nodeG.append('text').attr('y', 4).attr('text-anchor', 'middle')
                 .attr('fill', d => d.color).attr('font-size', '12px').attr('font-weight', '700').text(d => d.label);
             nodeG.append('text').attr('y', 55).attr('text-anchor', 'middle')
-                .attr('fill', '#64748b').attr('font-size', '8px').text(d => d.sub);
+                .attr('fill', '#64748b').attr('font-size', FS_SMALL).text(d => d.sub);
         }
     </script>
 

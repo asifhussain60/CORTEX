@@ -993,6 +993,17 @@
         if (typeof d3 === 'undefined') return;
         if (typeof lucide !== 'undefined') lucide.createIcons();
 
+        /* ── D3 Font Scale — standardised across ALL charts ─────────────────
+           FS_NUM    = phase/sequence numbers inside nodes
+           FS_SMALL  = axis tick labels, node labels, legend items
+           FS_BODY   = main labels, row labels, primary data text
+           FS_CAPTION= chart captions, bottom annotations
+           ──────────────────────────────────────────────────────────────── */
+        var FS_NUM     = '11px';
+        var FS_SMALL   = '11px';
+        var FS_BODY    = '13px';
+        var FS_CAPTION = '12px';
+
         var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var COLORS = {
             violet: '#7b61ff', purple: '#a855f7', cyan: '#00d4ff',
@@ -1251,7 +1262,7 @@
 
                 svg.append('text').attr('x', srcX - 5).attr('y', srcY + h / 2 + 1)
                     .attr('text-anchor', 'end').attr('fill', d.color)
-                    .attr('font-size', '8px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .attr('font-size', FS_SMALL).attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
                     .text(d.name);
 
                 srcY += h + 3;
@@ -1275,7 +1286,7 @@
                     .on('mouseover', function (event) { showTip('<strong>' + k + '</strong><br/>' + destTotals[k] + ' intents', event); })
                     .on('mouseout', hideTip);
                 svg.append('text').attr('x', dstX + 54).attr('y', dstY + h / 2 + 1)
-                    .attr('fill', destMap[k]).attr('font-size', '8px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .attr('fill', destMap[k]).attr('font-size', FS_SMALL).attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
                     .text(k);
                 dstY += h + 6;
             });
@@ -1421,7 +1432,7 @@
                 // Label
                 svg.append('text').attr('x', cx).attr('y', cy + 28)
                     .attr('text-anchor', 'middle').attr('fill', s.color)
-                    .attr('font-size', '7.5px').attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
+                    .attr('font-size', FS_SMALL).attr('font-weight', '800').attr('font-family', 'Inter, sans-serif')
                     .text(s.label);
             });
         })();
@@ -1457,7 +1468,7 @@
             svg.selectAll('.yl').data(phases).enter().append('text').attr('class', 'yl')
                 .attr('x', -6).attr('y', function (d) { return yScale(d.label) + yScale.bandwidth() / 2 + 1; })
                 .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
-                .attr('fill', '#64748b').attr('font-size', '8px').attr('font-family', 'Inter, sans-serif').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', FS_SMALL).attr('font-family', 'Inter, sans-serif').attr('font-weight', '600')
                 .text(function (d) { return d.label; });
 
             // Bars
@@ -1484,7 +1495,7 @@
                     svg.append('text')
                         .attr('x', xStart + barW / 2).attr('y', yScale(d.label) + yScale.bandwidth() / 2 + 1)
                         .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
-                        .attr('fill', d.color).attr('font-size', '7.5px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                        .attr('fill', d.color).attr('font-size', FS_SMALL).attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
                         .text(d.ms + 'ms');
                 }
 

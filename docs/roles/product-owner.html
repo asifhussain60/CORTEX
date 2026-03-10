@@ -2173,6 +2173,17 @@
     </footer>
 
     <script>
+        /* ── D3 Font Scale — standardised across ALL charts ─────────────────
+           FS_NUM    = phase/sequence numbers inside nodes
+           FS_SMALL  = axis tick labels, node labels, legend items
+           FS_BODY   = main labels, row labels, primary data text
+           FS_CAPTION= chart captions, bottom annotations
+           ──────────────────────────────────────────────────────────────── */
+        const FS_NUM     = '11px';
+        const FS_SMALL   = '11px';
+        const FS_BODY    = '13px';
+        const FS_CAPTION = '12px';
+
         // Initialize Icons
         window.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') {
@@ -2558,7 +2569,7 @@
             filtG.append('text')
                 .attr('x', midX).attr('y', filtY + filtH * 0.72)
                 .attr('text-anchor', 'middle').attr('fill', '#a855f7')
-                .attr('font-size', isMobile ? '8px' : '10px').attr('font-weight', '600')
+                .attr('font-size', isMobile ? FS_SMALL : '10px').attr('font-weight', '600')
                 .attr('letter-spacing', '0.05em')
                 .text('Business Logic Extractor');
 
@@ -2593,7 +2604,7 @@
                     outG.append('text')
                         .attr('x', outColX + outW / 2).attr('y', o.y + 12)
                         .attr('text-anchor', 'middle').attr('fill', '#475569')
-                        .attr('font-size', '8px').attr('font-weight', '500')
+                        .attr('font-size', FS_SMALL).attr('font-weight', '500')
                         .text(o.sub);
                 }
 
@@ -2619,7 +2630,7 @@
                 .attr('x', noiseX + noiseW / 2)
                 .attr('y', noiseY + noiseH / 2 + (isMobile ? 3 : 4))
                 .attr('text-anchor', 'middle').attr('fill', '#64748b')
-                .attr('font-size', isMobile ? '8px' : '9.5px').attr('font-weight', '600')
+                .attr('font-size', FS_SMALL).attr('font-weight', '600')
                 .text('✂️ Formatting Noise Discarded');
             if (!reducedMotion) {
                 noiseG.transition().duration(300).delay(700).attr('opacity', 1);

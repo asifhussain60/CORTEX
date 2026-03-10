@@ -1657,6 +1657,17 @@ cortex_verify op=agents
     </footer>
 
     <script>
+        /* ── D3 Font Scale — standardised across ALL charts ─────────────────
+           FS_NUM    = phase/sequence numbers inside nodes
+           FS_SMALL  = axis tick labels, node labels, legend items
+           FS_BODY   = main labels, row labels, primary data text
+           FS_CAPTION= chart captions, bottom annotations
+           ──────────────────────────────────────────────────────────────── */
+        const FS_NUM     = '11px';
+        const FS_SMALL   = '11px';
+        const FS_BODY    = '13px';
+        const FS_CAPTION = '12px';
+
         window.onload = function () {
             lucide.createIcons();
             buildTestChart();
