@@ -1090,17 +1090,15 @@
     /* ── Accent token set — one per card ── */
     .gs-card--amber  { --card-accent: 245, 158, 11;  --card-accent-hex: #f59e0b; }
     .gs-card--teal   { --card-accent: 20,  184, 166; --card-accent-hex: #14b8a6; }
-    .gs-card--violet { --card-accent: 139, 92,  246; --card-accent-hex: #8b5cf6; }
 
     /* ── Grid ── */
     .gs-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;          /* sp-001: 8pt multiple */
         align-items: stretch;
     }
-    @media (max-width: 1023px) { .gs-grid { grid-template-columns: 1fr; } }
-    @media (min-width: 640px) and (max-width: 1023px) { .gs-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 767px) { .gs-grid { grid-template-columns: 1fr; } }
 
     /* ── Shared card shell ── */
     .gs-card {
@@ -1261,7 +1259,6 @@
     /* Override per-level colour for University card */
     .gs-row__badge--l2 { background: rgba(123,97,255,0.14); color: #7b61ff; border-color: rgba(123,97,255,0.25); }
     .gs-row__badge--l3 { background: rgba(239,68,68,0.12);  color: #f87171; border-color: rgba(239,68,68,0.22); }
-    .gs-row__badge--violet { background: rgba(139,92,246,0.14); color: #8b5cf6; border-color: rgba(139,92,246,0.25); }
     /* Right arrow */
     .gs-row__arrow { margin-left: auto; color: rgba(255,255,255,0.22); font-size: 0.875rem; flex-shrink: 0; transition: color 0.15s ease; }
     a.gs-row:hover .gs-row__arrow { color: var(--card-accent-hex); }
@@ -5297,56 +5294,9 @@
         </a>
     </section>
 
-    <!-- 8. Action Row — 1×3 Compact Material Cards (Architecture · University · Get Started) -->
-    <section class="container section" id="get-started" aria-labelledby="architecture-heading">
+    <!-- 8. Action Row — 1×2 Compact Material Cards (University · Get Started) -->
+    <section class="container section" id="get-started" aria-labelledby="university-heading">
         <div class="gs-grid">
-
-            <!-- ══ Card 1 — Architecture Deep Dive (violet) ══ -->
-            <div class="gs-card gs-card--violet">
-                <div class="gs-card__header">
-                    <span class="gs-card__icon"><i class="fas fa-sitemap" aria-hidden="true"></i></span>
-                    <span class="gs-card__tag">Architecture</span>
-                </div>
-                <h2 class="gs-card__title" id="architecture-heading">Architecture Deep Dive</h2>
-                <p class="gs-card__subtitle">296 orchestrators · 36 MCP tools · 60 YAMLs</p>
-                <p class="gs-card__body">Explore the full technical blueprint — 14 orchestrator domains, the LENS sensory system, and how every component connects.</p>
-
-                <!-- 3 architecture nav rows -->
-                <nav class="gs-card__list" aria-label="Architecture navigation">
-                    <a href="architecture.html#orchestrators" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-network-wired" aria-hidden="true"></i></span>
-                        <span class="gs-row__text">
-                            <span class="gs-row__label">Orchestrator Domains</span>
-                            <span class="gs-row__desc">14 domains, 296 orchestrators, IOrchestrator protocol</span>
-                        </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                    <a href="architecture.html#mcp" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-plug" aria-hidden="true"></i></span>
-                        <span class="gs-row__text">
-                            <span class="gs-row__label">MCP Tool Registry</span>
-                            <span class="gs-row__desc">36 registered tools, Pylance-style stdio transport</span>
-                        </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                    <a href="architecture.html#governance" class="gs-row">
-                        <span class="gs-row__badge gs-row__badge--violet"><i class="fas fa-shield-check" aria-hidden="true"></i></span>
-                        <span class="gs-row__text">
-                            <span class="gs-row__label">Governance Layer</span>
-                            <span class="gs-row__desc">60 YAMLs, convergence gates &amp; sweep contracts</span>
-                        </span>
-                        <i class="fas fa-chevron-right gs-row__arrow" aria-hidden="true"></i>
-                    </a>
-                </nav>
-
-                <a href="architecture.html" class="gs-card__cta">
-                    <i class="fas fa-diagram-project" aria-hidden="true"></i> View Full Architecture
-                </a>
-                <div class="gs-card__stats">
-                    <span class="gs-card__stat"><i class="fas fa-code-branch" aria-hidden="true"></i> 65+ phases</span>
-                    <span class="gs-card__stat"><i class="fas fa-vial" aria-hidden="true"></i> 20,000+ tests</span>
-                </div>
-            </div>
 
             <!-- ══ Card 2 — CORTEX University (teal) ══ -->
             <div class="gs-card gs-card--teal">
