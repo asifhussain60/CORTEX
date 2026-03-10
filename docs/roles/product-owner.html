@@ -1057,110 +1057,207 @@
         </section>
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <!-- 4. INGEST CYCLE — 3-Pipeline Knowledge Ingestion               -->
+        <!-- 4. MVP: DOCUMENT INTELLIGENCE — Business Knowledge Extraction  -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section class="space-y-8">
+        <section id="document-intelligence">
+            <!-- ── Unified section container ── -->
+            <div class="relative rounded-3xl border border-violet-500/25 bg-gradient-to-br from-violet-950/30 via-slate-900/70 to-fuchsia-950/20 backdrop-blur-sm shadow-2xl shadow-violet-900/20 overflow-hidden">
+
+                <!-- top accent line -->
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent"></div>
+                <!-- bottom accent line -->
+                <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/30 to-transparent"></div>
+                <!-- subtle corner glows -->
+                <div class="absolute -top-20 -left-20 w-64 h-64 bg-violet-600/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+                <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-fuchsia-600/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+                <div class="relative space-y-8 p-6 md:p-10">
+
+            <!-- ── Section header — centred badge + title + description ── -->
+            <div class="text-center space-y-4 pb-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                    <i data-lucide="file-search-2" class="w-3.5 h-3.5"></i> Document Intelligence
+                </div>
+                <h2 class="section-title font-black tracking-tighter">Turn Documents into<br/>Actionable Business Knowledge</h2>
+                <p class="section-desc max-w-2xl mx-auto font-light leading-relaxed">
+                    Give CORTEX any Word doc, PDF, or PowerPoint and it extracts structured business knowledge — domain rules, requirements, compliance obligations, and process flows. No manual classification. No data entry. Knowledge persists into the registry for every future sprint.
+                </p>
+            </div>
+
+            <!-- Section header card -->
             <div class="relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10 rounded-2xl blur-2xl"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-fuchsia-500/10 rounded-2xl blur-2xl"></div>
                 <div class="relative glass-card p-8 md:p-10">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                                <i data-lucide="inbox" class="w-7 h-7 text-white"></i>
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                                <i data-lucide="file-search-2" class="w-7 h-7 text-white"></i>
                             </div>
                             <div>
-                                <div class="text-amber-400 font-bold badge-text uppercase tracking-widest mb-1">Ingest Cycle</div>
-                                <h2 class="section-title">Feed Knowledge In, Get Intelligence Out</h2>
+                                <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[10px] font-black tracking-widest uppercase mb-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-violet-400 pulse-dot"></span> MVP Capability
+                                </div>
+                                <h3 class="text-lg md:text-xl font-bold text-slate-200 tracking-tight">Drop a Document. Extract Business Intelligence.</h3>
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-3">
-                            <div class="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                                <div class="text-xs text-amber-400 uppercase tracking-wider font-bold mb-0.5">3 Pipelines</div>
-                                <div class="text-sm text-amber-300">Auto-Selected</div>
+                        <div class="flex flex-wrap gap-3 shrink-0">
+                            <div class="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/30">
+                                <div class="text-xs text-violet-400 uppercase tracking-wider font-bold mb-0.5">3 Formats</div>
+                                <div class="text-sm text-violet-300">DOCX · PDF · PPTX</div>
                             </div>
-                            <div class="px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30">
-                                <div class="text-xs text-orange-400 uppercase tracking-wider font-bold mb-0.5">80+ YAMLs</div>
-                                <div class="text-sm text-orange-300">Knowledge Base</div>
+                            <div class="px-4 py-2 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/30">
+                                <div class="text-xs text-fuchsia-400 uppercase tracking-wider font-bold mb-0.5">Output</div>
+                                <div class="text-sm text-fuchsia-300">Structured YAML</div>
+                            </div>
+                            <div class="px-4 py-2 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                                <div class="text-xs text-purple-400 uppercase tracking-wider font-bold mb-0.5">Auto-routed</div>
+                                <div class="text-sm text-purple-300">3-Pipeline Engine</div>
                             </div>
                         </div>
                     </div>
-                    <p class="section-desc max-w-3xl mt-4 font-light leading-relaxed">
-                        Every conversation, code review, external document, and repo analysis feeds CORTEX's institutional memory. The <code class="text-amber-300/80">/digest</code> command scores content automatically and routes it through the right pipeline — no manual classification needed.
-                    </p>
                 </div>
             </div>
 
-            <!-- D3.js Ingest Cycle Radial Visualization -->
-            <div class="relative">
-                <div class="absolute -inset-2 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 rounded-3xl blur-xl opacity-40"></div>
-                <div class="glass-card p-6 md:p-8 w-full h-[400px] md:h-[480px] flex flex-col justify-center relative overflow-hidden" role="img" aria-label="Ingest Cycle: 3-pipeline radial flow — Chat Sessions, Repo Content, and External Knowledge all converge into the CORTEX Knowledge Registry">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-amber-600/10 blur-[120px] pointer-events-none"></div>
-                    <div id="ingest-cycle-chart" class="w-full h-full relative z-10"></div>
-                </div>
-            </div>
-
-            <!-- Pipeline Detail Cards -->
+            <!-- Document format capability cards -->
             <div class="grid md:grid-cols-3 gap-6">
+                <!-- DOCX -->
                 <div class="relative group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-yellow-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="glass-card p-6 space-y-4 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all h-full">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/25 to-indigo-600/25 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="glass-card p-6 space-y-4 relative border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/50 to-slate-900/80 hover:border-blue-400/60 transition-all h-full">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/30">
-                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16zm0-6h3v1.5H8V10z"/></svg>
                             </div>
                             <div>
-                                <div class="text-xs text-amber-400 uppercase tracking-wider font-bold">Pipeline 1</div>
-                                <h3 class="card-title text-amber-300">Chat Sessions</h3>
+                                <div class="text-xs text-blue-400 uppercase tracking-wider font-bold">.docx</div>
+                                <h3 class="card-title text-blue-300">Word Documents</h3>
                             </div>
                         </div>
-                        <p class="card-body leading-relaxed">Copilot Chat transcripts scored by markers (AC codes, tool calls, progress bars). Extracts drifts, patterns, tool usage, and enhancement proposals.</p>
-                        <div class="code-snippet text-amber-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-amber-500/20">/digest chat-session.md</div>
+                        <p class="card-body leading-relaxed">Requirements specs, SOW documents, BRDs, and meeting minutes. CORTEX extracts stakeholder needs, acceptance criteria drafts, and business rules.</p>
+                        <ul class="space-y-1.5 text-sm">
+                            <li class="flex items-center gap-2 text-blue-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400 shrink-0"></i>Business requirements</li>
+                            <li class="flex items-center gap-2 text-blue-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400 shrink-0"></i>Stakeholder decisions</li>
+                            <li class="flex items-center gap-2 text-blue-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-blue-400 shrink-0"></i>Process definitions</li>
+                        </ul>
+                        <div class="code-snippet text-blue-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-blue-500/20 text-xs">/digest requirements.docx</div>
                     </div>
                 </div>
+
+                <!-- PDF -->
                 <div class="relative group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-rose-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="glass-card p-6 space-y-4 relative border-2 border-orange-500/30 bg-gradient-to-br from-orange-950/50 to-slate-900/80 hover:border-orange-400/50 transition-all h-full">
+                    <div class="absolute inset-0 bg-gradient-to-br from-rose-600/25 to-orange-600/25 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="glass-card p-6 space-y-4 relative border-2 border-rose-500/30 bg-gradient-to-br from-rose-950/50 to-slate-900/80 hover:border-rose-400/60 transition-all h-full">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-rose-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
-                                <i data-lucide="folder-git-2" class="w-5 h-5"></i>
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-orange-600 flex items-center justify-center shadow-lg shadow-rose-500/30">
+                                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM9 13.5c0 .83-.67 1.5-1.5 1.5H7v1.5H5.5V11H7.5c.83 0 1.5.67 1.5 1.5v1zm4.5 2a1.5 1.5 0 0 1-1.5 1.5H10V11h2.5A1.5 1.5 0 0 1 14 12.5v3zm4-3.5H16v1h1.5V14H16v2h-1.5v-5H18v1.5z"/></svg>
                             </div>
                             <div>
-                                <div class="text-xs text-orange-400 uppercase tracking-wider font-bold">Pipeline 2</div>
-                                <h3 class="card-title text-orange-300">Repo Content</h3>
+                                <div class="text-xs text-rose-400 uppercase tracking-wider font-bold">.pdf</div>
+                                <h3 class="card-title text-rose-300">PDF Documents</h3>
                             </div>
                         </div>
-                        <p class="card-body leading-relaxed">Source files analyzed with LENS intelligence. Extracts domain knowledge, best practices, anti-patterns, and architectural decisions from any codebase.</p>
-                        <div class="code-snippet text-orange-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-orange-500/20">/digest src/ → domain YAMLs</div>
+                        <p class="card-body leading-relaxed">Strategy papers, vendor proposals, compliance frameworks, and RFP responses. CORTEX identifies obligations, constraints, and domain vocabulary.</p>
+                        <ul class="space-y-1.5 text-sm">
+                            <li class="flex items-center gap-2 text-rose-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>Compliance obligations</li>
+                            <li class="flex items-center gap-2 text-rose-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>Vendor SLA terms</li>
+                            <li class="flex items-center gap-2 text-rose-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>Strategic objectives</li>
+                        </ul>
+                        <div class="code-snippet text-rose-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-rose-500/20 text-xs">/digest strategy.pdf</div>
                     </div>
                 </div>
+
+                <!-- PPTX -->
                 <div class="relative group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-rose-600/20 to-pink-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="glass-card p-6 space-y-4 relative border-2 border-rose-500/30 bg-gradient-to-br from-rose-950/50 to-slate-900/80 hover:border-rose-400/50 transition-all h-full">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-600/25 to-yellow-600/25 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="glass-card p-6 space-y-4 relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/60 transition-all h-full">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg shadow-rose-500/30">
-                                <i data-lucide="globe" class="w-5 h-5"></i>
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 11h4.5a2.5 2.5 0 0 1 0 5H9.5V18H8v-7zm1.5 3.5H12a1 1 0 0 0 0-2H9.5v2z"/></svg>
                             </div>
                             <div>
-                                <div class="text-xs text-rose-400 uppercase tracking-wider font-bold">Pipeline 3</div>
-                                <h3 class="card-title text-rose-300">External Knowledge</h3>
+                                <div class="text-xs text-amber-400 uppercase tracking-wider font-bold">.pptx</div>
+                                <h3 class="card-title text-amber-300">PowerPoint Decks</h3>
                             </div>
                         </div>
-                        <p class="card-body leading-relaxed">Articles, vendor docs, RFPs, compliance frameworks — anything without CORTEX markers. Converts unstructured content into structured YAML knowledge artifacts.</p>
-                        <div class="code-snippet text-rose-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-rose-500/20">/digest vendor-api.pdf → YAML</div>
+                        <p class="card-body leading-relaxed">PI Planning decks, executive roadmaps, sprint review presentations, and architecture proposals. CORTEX extracts slide-level business insights and decision context.</p>
+                        <ul class="space-y-1.5 text-sm">
+                            <li class="flex items-center gap-2 text-amber-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>Roadmap commitments</li>
+                            <li class="flex items-center gap-2 text-amber-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>PI objectives</li>
+                            <li class="flex items-center gap-2 text-amber-300/80"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>Architecture decisions</li>
+                        </ul>
+                        <div class="code-snippet text-amber-400 font-mono bg-slate-900/60 px-3 py-2 rounded-lg border border-amber-500/20 text-xs">/digest pi-planning.pptx</div>
                     </div>
                 </div>
             </div>
 
-            <!-- PO Value Proposition -->
-            <div class="glass-card p-6 md:p-8">
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="lightbulb" class="w-5 h-5 text-amber-400"></i></div>
-                    <div>
-                        <div class="text-base font-bold text-slate-200 mb-1">Why This Matters for Product Owners</div>
-                        <p class="card-body leading-relaxed">Every sprint retrospective, stakeholder conversation, and vendor evaluation becomes <strong class="text-amber-300">searchable institutional memory</strong>. When a team member leaves, their knowledge stays. When a new PO inherits a product, they inherit every decision that shaped it — not a blank Confluence page.</p>
+            <!-- D3.js Document Ingest Flow Diagram -->
+            <div class="relative">
+                <div class="absolute -inset-2 bg-gradient-to-r from-violet-500/20 via-purple-500/20 to-fuchsia-500/20 rounded-3xl blur-xl opacity-40"></div>
+                <div class="glass-card p-6 md:p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent"></div>
+
+                    <!-- Diagram label -->
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500"></div>
+                            <div>
+                                <div class="text-xs text-violet-400 uppercase tracking-widest font-bold">D3 · Live Diagram</div>
+                                <div class="text-sm font-bold text-slate-200">Document Ingest → Business Knowledge Extraction Pipeline</div>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/25 bg-violet-500/10">
+                            <span class="w-1.5 h-1.5 rounded-full bg-violet-400 pulse-dot"></span>
+                            <span class="text-xs text-violet-300 font-semibold">Auto-filtered · Business logic only</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-[300px] md:h-[340px] relative" role="img" aria-label="Document ingest pipeline: Word, PDF, and PowerPoint documents enter CORTEX, pass through the Intelligent Filter that discards formatting noise, and produce structured business knowledge artifacts including domain rules, requirements, compliance obligations, and process flows">
+                        <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+                            <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-violet-600/8 blur-[80px] rounded-full"></div>
+                            <div class="absolute top-1/2 right-1/4 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-fuchsia-600/8 blur-[80px] rounded-full"></div>
+                        </div>
+                        <div id="doc-ingest-chart" class="w-full h-full relative z-10"></div>
                     </div>
                 </div>
             </div>
+
+            <!-- What gets extracted — knowledge output grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="glass-card p-5 space-y-3 border border-violet-500/25 bg-gradient-to-br from-violet-950/40 to-slate-900/80 hover:border-violet-500/50 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-violet-500/15 flex items-center justify-center text-violet-400 text-lg">📋</div>
+                    <h4 class="font-bold text-violet-300 text-sm">Domain Rules</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Business logic, validation constraints, and domain-specific terminology captured as reusable YAML knowledge.</p>
+                </div>
+                <div class="glass-card p-5 space-y-3 border border-purple-500/25 bg-gradient-to-br from-purple-950/40 to-slate-900/80 hover:border-purple-500/50 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-purple-500/15 flex items-center justify-center text-purple-400 text-lg">🎯</div>
+                    <h4 class="font-bold text-purple-300 text-sm">Requirements</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Stakeholder needs decomposed into structured acceptance criteria, ready for sprint planning and TDD enforcement.</p>
+                </div>
+                <div class="glass-card p-5 space-y-3 border border-fuchsia-500/25 bg-gradient-to-br from-fuchsia-950/40 to-slate-900/80 hover:border-fuchsia-500/50 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-fuchsia-500/15 flex items-center justify-center text-fuchsia-400 text-lg">🔒</div>
+                    <h4 class="font-bold text-fuchsia-300 text-sm">Compliance</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Regulatory obligations, audit requirements, and SLA commitments extracted and cross-referenced against your codebase.</p>
+                </div>
+                <div class="glass-card p-5 space-y-3 border border-pink-500/25 bg-gradient-to-br from-pink-950/40 to-slate-900/80 hover:border-pink-500/50 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-pink-500/15 flex items-center justify-center text-pink-400 text-lg">🔄</div>
+                    <h4 class="font-bold text-pink-300 text-sm">Process Flows</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">End-to-end business processes documented as structured workflows — comparable against code-discovered actual state.</p>
+                </div>
+            </div>
+
+            <!-- PO insight callout -->
+            <div class="glass-card p-6 md:p-8 border border-violet-500/20 bg-gradient-to-r from-violet-950/30 via-slate-900/60 to-fuchsia-950/30">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-violet-500/15 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="lightbulb" class="w-5 h-5 text-violet-400"></i></div>
+                    <div>
+                        <div class="text-base font-bold text-slate-200 mb-1">Why this transforms planning for Product Owners</div>
+                        <p class="card-body leading-relaxed">Every stakeholder workshop output, strategy session deck, and vendor document you ingest becomes <strong class="text-violet-300">searchable institutional memory</strong>. When a team member leaves, their knowledge stays. When you inherit a product, you inherit every decision that shaped it — not a blank Confluence page. Requirements that took a day to write take seconds to extract.</p>
+                    </div>
+                </div>
+            </div>
+
+                </div><!-- /inner space-y-8 -->
+            </div><!-- /unified section container -->
         </section>
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2083,18 +2180,18 @@
             }
             setTimeout(() => {
                 initChangeIntelligenceChart();
-                initIngestCycleChart();
+                initDocIngestChart();
                 initVelocityChart();
             }, 100);
         });
 
         window.addEventListener('resize', () => {
             d3.select('#change-intelligence-chart').selectAll('*').remove();
-            d3.select('#ingest-cycle-chart').selectAll('*').remove();
+            d3.select('#doc-ingest-chart').selectAll('*').remove();
             d3.select('#donut-before').selectAll('*').remove();
             d3.select('#donut-after').selectAll('*').remove();
             initChangeIntelligenceChart();
-            initIngestCycleChart();
+            initDocIngestChart();
             initVelocityChart();
         });
 
@@ -2259,207 +2356,352 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-         * D3.js — Ingest Cycle Radial Visualization (3-pipeline convergence)
+         * D3.js — Document Ingest → Business Knowledge Extraction
+         * MVP Section: DOCX/PDF/PPTX → Intelligent Filter → YAML Output
+         * SSOT: doc_best_practices.yaml § visualization_standards
+         * Motion: prefers-reduced-motion compliant (composited-only)
          * ═══════════════════════════════════════════════════════════════ */
-        function initIngestCycleChart() {
-            const container = d3.select('#ingest-cycle-chart');
+        function initDocIngestChart() {
+            const container = d3.select('#doc-ingest-chart');
             if (container.empty()) return;
 
-            const width = container.node().getBoundingClientRect().width;
-            const height = container.node().getBoundingClientRect().height;
-            const svg = container.append('svg')
-                .attr('width', width)
-                .attr('height', height)
-                .style('overflow', 'visible');
+            const W = container.node().getBoundingClientRect().width;
+            const H = container.node().getBoundingClientRect().height;
+            if (W < 10 || H < 10) return;
 
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const isMobile = width < 768;
-            const cx = width / 2;
-            const cy = height / 2;
-            const outerR = Math.min(cx, cy) * (isMobile ? 0.85 : 0.78);
-            const innerR = outerR * 0.32;
+            const isMobile = W < 640;
 
-            // Arrow marker
-            svg.append('defs').append('marker')
-                .attr('id', 'arrow-ingest')
-                .attr('viewBox', '0 -5 10 10')
-                .attr('refX', 8).attr('refY', 0)
-                .attr('markerWidth', 5).attr('markerHeight', 5)
-                .attr('orient', 'auto')
-                .append('path')
-                .attr('d', 'M0,-5L10,0L0,5')
-                .attr('fill', '#f59e0b');
+            const svg = container.append('svg')
+                .attr('width', W).attr('height', H)
+                .attr('role', 'img')
+                .attr('aria-hidden', 'true')
+                .style('overflow', 'visible');
 
-            // Central hub — Knowledge Registry
-            svg.append('circle')
-                .attr('cx', cx).attr('cy', cy).attr('r', innerR)
-                .attr('fill', 'rgba(245, 158, 11, 0.08)')
-                .attr('stroke', '#f59e0b')
-                .attr('stroke-width', 2)
-                .attr('opacity', 0.9);
+            // ── Layout constants — content fills full H with padY breathing room ──
+            const padY   = isMobile ? 14 : 18;   // top/bottom breathing room (px)
+            const padX   = isMobile ? 10 : 16;   // left/right breathing room (px)
+            const midX   = W / 2;
+            const midY   = H / 2;
 
-            // Central hub glow
-            svg.append('circle')
-                .attr('cx', cx).attr('cy', cy).attr('r', innerR + 8)
-                .attr('fill', 'none')
-                .attr('stroke', 'rgba(245, 158, 11, 0.15)')
-                .attr('stroke-width', 1);
+            // doc nodes
+            const docW   = isMobile ? 50  : 72;
+            const docH   = isMobile ? 60  : 86;
+            const docColX = padX;
 
-            // Hub label
-            const hubLines = isMobile ? ['Knowledge', 'Registry'] : ['Knowledge', 'Registry', '80+ YAMLs'];
-            hubLines.forEach((line, i) => {
-                svg.append('text')
-                    .attr('x', cx)
-                    .attr('y', cy + (i - (hubLines.length - 1) / 2) * (isMobile ? 13 : 16))
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', i === hubLines.length - 1 && !isMobile ? '#94a3b8' : '#f59e0b')
-                    .attr('font-size', i === hubLines.length - 1 && !isMobile ? '10px' : (isMobile ? '11px' : '13px'))
-                    .attr('font-weight', i === hubLines.length - 1 && !isMobile ? '500' : 'bold')
-                    .text(line);
-            });
+            // filter box — centred, slightly wider than before
+            const filtW  = isMobile ? 96  : 140;
+            const filtH  = isMobile ? 62  : 78;
+            const filterColX = midX - filtW / 2;
+            const filtY  = midY - filtH / 2;
 
-            // 3 pipelines positioned radially
-            const pipelines = [
-                { label: 'Chat Sessions', sub: 'Marker Score ≥ 5', color: '#f59e0b', accent: '#d97706', icon: '💬', angle: -90 },
-                { label: 'Repo Content', sub: 'LENS Analysis', color: '#f97316', accent: '#ea580c', icon: '📂', angle: 30 },
-                { label: 'External Knowledge', sub: 'Unstructured → YAML', color: '#fb7185', accent: '#e11d48', icon: '🌐', angle: 150 }
+            // output nodes — right column
+            const outW   = isMobile ? 90  : 126;
+            const outH   = isMobile ? 42  : 50;
+            const outColX = W - padX - outW;
+
+            // ── Vertical spread: distribute 3 docs symmetrically around midY ──
+            // Use (H - 2*padY) as usable height so nodes never clip edges
+            const usableH = H - 2 * padY;
+            const docSpacing = isMobile ? Math.min(usableH / 3, 72) : Math.min(usableH / 3, 104);
+            const docYs = [
+                midY - docSpacing,
+                midY,
+                midY + docSpacing
             ];
 
-            // Output domains positioned further out
-            const outputs = [
-                { label: 'Drifts &\nPatterns', color: '#fbbf24', angle: -130 },
-                { label: 'Best\nPractices', color: '#fb923c', angle: -20 },
-                { label: 'Domain\nKnowledge', color: '#f472b6', angle: 90 }
+            // ── Vertical spread: distribute 4 outputs symmetrically around midY ──
+            const outSpacing = isMobile ? Math.min(usableH / 4.5, 54) : Math.min(usableH / 4.5, 66);
+            const outYs = [
+                midY - outSpacing * 1.5,
+                midY - outSpacing * 0.5,
+                midY + outSpacing * 0.5,
+                midY + outSpacing * 1.5
             ];
 
-            const nodeW = isMobile ? 80 : 120;
-            const nodeH = isMobile ? 44 : 52;
+            // Colours
+            const colours = {
+                docx      : { fill: '#1e40af', stroke: '#60a5fa', glow: '#3b82f6' },
+                pdf       : { fill: '#9f1239', stroke: '#fb7185', glow: '#f43f5e' },
+                pptx      : { fill: '#92400e', stroke: '#fbbf24', glow: '#f59e0b' },
+                filter    : { fill: '#2e1065', stroke: '#a855f7', glow: '#9333ea' },
+                out       : { fill: '#064e3b', stroke: '#34d399', glow: '#10b981' },
+                noise     : { fill: '#1e293b', stroke: '#475569', glow: '#334155' },
+                arrow     : '#818cf8',
+                arrowOut  : '#34d399',
+                arrowNoise: '#475569'
+            };
 
-            // Draw connecting lines from pipelines to center
-            pipelines.forEach((p, i) => {
-                const rad = p.angle * Math.PI / 180;
-                const startX = cx + Math.cos(rad) * outerR;
-                const startY = cy + Math.sin(rad) * outerR;
-                const endX = cx + Math.cos(rad) * (innerR + 12);
-                const endY = cy + Math.sin(rad) * (innerR + 12);
+            // ── Defs: arrow markers + glow filters ───────────────────────
+            const defs = svg.append('defs');
 
-                const line = svg.append('line')
-                    .attr('x1', startX).attr('y1', startY)
-                    .attr('x2', reducedMotion ? endX : startX)
-                    .attr('y2', reducedMotion ? endY : startY)
-                    .attr('stroke', p.accent)
-                    .attr('stroke-width', 2)
-                    .attr('stroke-dasharray', '6,3')
-                    .attr('marker-end', 'url(#arrow-ingest)')
-                    .attr('opacity', 0.7);
+            const makeArrow = (id, color) => {
+                defs.append('marker')
+                    .attr('id', id)
+                    .attr('viewBox', '0 -4 9 8')
+                    .attr('refX', 8).attr('refY', 0)
+                    .attr('markerWidth', 5).attr('markerHeight', 5)
+                    .attr('orient', 'auto')
+                    .append('path').attr('d', 'M0,-4L9,0L0,4Z').attr('fill', color);
+            };
+            makeArrow('arr-in',    colours.arrow);
+            makeArrow('arr-out',   colours.arrowOut);
+            makeArrow('arr-noise', colours.arrowNoise);
+
+            const makeGlow = (id, color, stdDev) => {
+                const f = defs.append('filter').attr('id', id).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+                f.append('feGaussianBlur').attr('in', 'SourceGraphic').attr('stdDeviation', stdDev).attr('result', 'blur');
+                f.append('feFlood').attr('flood-color', color).attr('flood-opacity', '0.4').attr('result', 'colour');
+                f.append('feComposite').attr('in', 'colour').attr('in2', 'blur').attr('operator', 'in').attr('result', 'coloured');
+                const merge = f.append('feMerge');
+                merge.append('feMergeNode').attr('in', 'coloured');
+                merge.append('feMergeNode').attr('in', 'SourceGraphic');
+            };
+            makeGlow('glow-filter', colours.filter.glow, 8);
+            makeGlow('glow-doc',    colours.docx.glow,   5);
+            makeGlow('glow-out',    colours.out.glow,    6);
+            makeGlow('glow-noise',  colours.noise.glow,  4);
+
+            // ── Helper: rounded-rect path ─────────────────────────────────
+            const rr = (x, y, w, h, r) =>
+                `M${x+r},${y} h${w-2*r} a${r},${r} 0 0 1 ${r},${r} v${h-2*r} a${r},${r} 0 0 1 -${r},${r} h-${w-2*r} a${r},${r} 0 0 1 -${r},-${r} v-${h-2*r} a${r},${r} 0 0 1 ${r},-${r}z`;
+
+            // ── Helper: doc-file icon shape ───────────────────────────────
+            const docPath = (x, y, w, h) => {
+                const fold = w * 0.28;
+                return `M${x},${y+h} V${y} h${w-fold} L${x+w},${y+fold} V${y+h} Z M${x+w-fold},${y} v${fold} h${fold}`;
+            };
+
+            // ── Document nodes (left column) ──────────────────────────────
+            const docs = [
+                { key: 'docx', label: 'DOCX', ext: '.docx', y: docYs[0], c: colours.docx },
+                { key: 'pdf',  label: 'PDF',  ext: '.pdf',  y: docYs[1], c: colours.pdf  },
+                { key: 'pptx', label: 'PPTX', ext: '.pptx', y: docYs[2], c: colours.pptx }
+            ];
+
+            docs.forEach((d, i) => {
+                const gDoc = svg.append('g').attr('class', 'doc-node');
+
+                // glow halo
+                gDoc.append('ellipse')
+                    .attr('cx', docColX + docW / 2).attr('cy', d.y)
+                    .attr('rx', docW * 0.65).attr('ry', docH * 0.38)
+                    .attr('fill', d.c.glow).attr('opacity', 0.11)
+                    .attr('filter', 'url(#glow-doc)');
+
+                // file shape
+                const fileG = gDoc.append('g').attr('opacity', reducedMotion ? 1 : 0);
+
+                fileG.append('path')
+                    .attr('d', docPath(docColX, d.y - docH / 2, docW, docH))
+                    .attr('fill', d.c.fill).attr('stroke', d.c.stroke)
+                    .attr('stroke-width', 1.5).attr('stroke-linejoin', 'round');
+
+                // extension badge — positioned inside lower third of icon
+                const badgeW = isMobile ? 34 : 46;
+                const badgeH = isMobile ? 11 : 13;
+                fileG.append('rect')
+                    .attr('x', docColX + 4)
+                    .attr('y', d.y + docH / 2 - badgeH - (isMobile ? 5 : 6))
+                    .attr('width', badgeW).attr('height', badgeH)
+                    .attr('rx', 3).attr('fill', d.c.stroke).attr('opacity', 0.92);
+                fileG.append('text')
+                    .attr('x', docColX + 4 + badgeW / 2)
+                    .attr('y', d.y + docH / 2 - (isMobile ? 9 : 10))
+                    .attr('text-anchor', 'middle').attr('fill', '#000')
+                    .attr('font-size', isMobile ? '7px' : '8.5px')
+                    .attr('font-weight', '800').attr('letter-spacing', '0.04em')
+                    .text(d.ext);
+
+                // label above doc (tight gap)
+                fileG.append('text')
+                    .attr('x', docColX + docW / 2)
+                    .attr('y', d.y - docH / 2 - (isMobile ? 4 : 5))
+                    .attr('text-anchor', 'middle').attr('fill', d.c.stroke)
+                    .attr('font-size', isMobile ? '9px' : '11px').attr('font-weight', '700')
+                    .text(d.label);
 
                 if (!reducedMotion) {
-                    line.transition()
-                        .duration(800)
-                        .delay(i * 250 + 200)
-                        .attr('x2', endX)
-                        .attr('y2', endY);
+                    fileG.transition().duration(400).delay(i * 150).attr('opacity', 1);
                 }
             });
 
-            // Draw pipeline nodes
-            pipelines.forEach((p, i) => {
-                const rad = p.angle * Math.PI / 180;
-                const nx = cx + Math.cos(rad) * outerR - nodeW / 2;
-                const ny = cy + Math.sin(rad) * outerR - nodeH / 2;
+            // ── Centre filter box ─────────────────────────────────────────
+            // ambient glow behind filter
+            svg.append('ellipse')
+                .attr('cx', midX).attr('cy', midY)
+                .attr('rx', filtW * 0.75).attr('ry', filtH * 0.75)
+                .attr('fill', colours.filter.glow).attr('opacity', 0.09)
+                .attr('filter', 'url(#glow-filter)');
 
-                const g = svg.append('g')
-                    .attr('transform', 'translate(' + nx + ',' + ny + ')');
+            const filtG = svg.append('g').attr('opacity', reducedMotion ? 1 : 0);
 
-                // Node glow
-                g.append('rect')
-                    .attr('width', nodeW).attr('height', nodeH)
-                    .attr('rx', 10)
-                    .attr('fill', p.accent)
-                    .attr('opacity', 0.08)
-                    .attr('filter', 'blur(6px)');
+            filtG.append('path')
+                .attr('d', rr(filterColX, filtY, filtW, filtH, isMobile ? 8 : 12))
+                .attr('fill', colours.filter.fill)
+                .attr('stroke', colours.filter.stroke)
+                .attr('stroke-width', 2);
 
-                // Node rect
-                const rect = g.append('rect')
-                    .attr('width', nodeW).attr('height', nodeH)
-                    .attr('rx', 10)
-                    .attr('fill', 'rgba(15, 23, 42, 0.92)')
-                    .attr('stroke', p.accent)
-                    .attr('stroke-width', 2)
-                    .attr('opacity', reducedMotion ? 1 : 0);
+            // separator line
+            filtG.append('line')
+                .attr('x1', filterColX + 10).attr('y1', filtY + filtH * 0.52)
+                .attr('x2', filterColX + filtW - 10).attr('y2', filtY + filtH * 0.52)
+                .attr('stroke', colours.filter.stroke).attr('stroke-opacity', 0.25).attr('stroke-width', 1);
 
-                if (!reducedMotion) {
-                    rect.transition().duration(500).delay(i * 250).attr('opacity', 1);
-                }
+            filtG.append('text')
+                .attr('x', midX).attr('y', filtY + filtH * 0.34)
+                .attr('text-anchor', 'middle').attr('fill', '#e9d5ff')
+                .attr('font-size', isMobile ? '10px' : '13px').attr('font-weight', '800')
+                .attr('letter-spacing', '-0.01em')
+                .text('🔍 Intelligent Filter');
 
-                // Icon
-                g.append('text')
-                    .attr('x', isMobile ? 8 : 12)
-                    .attr('y', nodeH / 2 + (isMobile ? 4 : 5))
-                    .attr('font-size', isMobile ? '14px' : '18px')
-                    .text(p.icon);
+            filtG.append('text')
+                .attr('x', midX).attr('y', filtY + filtH * 0.72)
+                .attr('text-anchor', 'middle').attr('fill', '#a855f7')
+                .attr('font-size', isMobile ? '8px' : '10px').attr('font-weight', '600')
+                .attr('letter-spacing', '0.05em')
+                .text('Business Logic Extractor');
 
-                // Label
-                g.append('text')
-                    .attr('x', isMobile ? 26 : 36)
-                    .attr('y', nodeH / 2 - (isMobile ? 2 : 4))
-                    .attr('fill', p.color)
-                    .attr('font-size', isMobile ? '10px' : '12px')
-                    .attr('font-weight', 'bold')
-                    .text(p.label);
-
-                // Sub-label
-                if (!isMobile) {
-                    g.append('text')
-                        .attr('x', 36)
-                        .attr('y', nodeH / 2 + 12)
-                        .attr('fill', '#64748b')
-                        .attr('font-size', '10px')
-                        .text(p.sub);
-                }
-            });
-
-            // Draw output labels (smaller, positioned between pipelines)
-            if (!isMobile) {
-                outputs.forEach((o, i) => {
-                    const rad = o.angle * Math.PI / 180;
-                    const ox = cx + Math.cos(rad) * (outerR * 0.58);
-                    const oy = cy + Math.sin(rad) * (outerR * 0.58);
-
-                    const lines = o.label.split('\n');
-                    lines.forEach((line, li) => {
-                        svg.append('text')
-                            .attr('x', ox)
-                            .attr('y', oy + (li - (lines.length - 1) / 2) * 13)
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', o.color)
-                            .attr('font-size', '10px')
-                            .attr('font-weight', '600')
-                            .attr('opacity', 0.7)
-                            .text(line);
-                    });
-                });
+            if (!reducedMotion) {
+                filtG.transition().duration(500).delay(350).attr('opacity', 1);
             }
 
-            // Title
-            svg.append('text')
-                .attr('x', isMobile ? 10 : 20)
-                .attr('y', 20)
-                .text('Ingest Cycle — 3 Pipelines')
-                .attr('fill', '#f59e0b')
-                .attr('font-size', isMobile ? '11px' : '14px')
-                .attr('font-weight', 'bold')
-                .attr('opacity', 0.8);
+            // ── Output nodes (right column) ───────────────────────────────
+            const outputs = [
+                { label: '📋 Domain Rules',  sub: 'YAML → knowledge/', y: outYs[0] },
+                { label: '🎯 Requirements',  sub: 'YAML → AC ready',   y: outYs[1] },
+                { label: '🔒 Compliance',    sub: 'YAML → obligations/',y: outYs[2] },
+                { label: '🔄 Process Flows', sub: 'YAML → workflows/',  y: outYs[3] }
+            ];
 
-            if (!isMobile) {
-                svg.append('text')
-                    .attr('x', width - 20)
-                    .attr('y', 20)
-                    .attr('text-anchor', 'end')
-                    .text('Auto-scored · Auto-routed · Persisted to cortex-registry/')
-                    .attr('fill', '#475569')
-                    .attr('font-size', '11px')
-                    .attr('font-style', 'italic');
+            outputs.forEach((o, i) => {
+                const outG = svg.append('g').attr('opacity', reducedMotion ? 1 : 0);
+
+                outG.append('path')
+                    .attr('d', rr(outColX, o.y - outH / 2, outW, outH, isMobile ? 5 : 8))
+                    .attr('fill', colours.out.fill).attr('stroke', colours.out.stroke)
+                    .attr('stroke-width', 1.5).attr('filter', 'url(#glow-out)');
+
+                outG.append('text')
+                    .attr('x', outColX + outW / 2)
+                    .attr('y', o.y - (isMobile ? 3 : 4))
+                    .attr('text-anchor', 'middle').attr('fill', '#6ee7b7')
+                    .attr('font-size', isMobile ? '8.5px' : '10.5px').attr('font-weight', '700')
+                    .text(o.label);
+
+                if (!isMobile) {
+                    outG.append('text')
+                        .attr('x', outColX + outW / 2).attr('y', o.y + 12)
+                        .attr('text-anchor', 'middle').attr('fill', '#475569')
+                        .attr('font-size', '8px').attr('font-weight', '500')
+                        .text(o.sub);
+                }
+
+                if (!reducedMotion) {
+                    outG.transition().duration(400).delay(600 + i * 110).attr('opacity', 1);
+                }
+            });
+
+            // ── Noise / discard node — snug directly below filter ─────────
+            const noiseH = isMobile ? 28 : 34;
+            const noiseW = isMobile ? 80 : 112;
+            const noiseX = midX - noiseW / 2;
+            // pin noise node 10px below filter bottom edge
+            const noiseY = filtY + filtH + (isMobile ? 10 : 12);
+
+            const noiseG = svg.append('g').attr('opacity', reducedMotion ? 1 : 0);
+            noiseG.append('path')
+                .attr('d', rr(noiseX, noiseY, noiseW, noiseH, isMobile ? 4 : 6))
+                .attr('fill', colours.noise.fill).attr('stroke', colours.noise.stroke)
+                .attr('stroke-width', 1).attr('stroke-dasharray', '4,3')
+                .attr('filter', 'url(#glow-noise)');
+            noiseG.append('text')
+                .attr('x', noiseX + noiseW / 2)
+                .attr('y', noiseY + noiseH / 2 + (isMobile ? 3 : 4))
+                .attr('text-anchor', 'middle').attr('fill', '#64748b')
+                .attr('font-size', isMobile ? '8px' : '9.5px').attr('font-weight', '600')
+                .text('✂️ Formatting Noise Discarded');
+            if (!reducedMotion) {
+                noiseG.transition().duration(300).delay(700).attr('opacity', 1);
+            }
+
+            // ── Connecting arrows: docs → filter ─────────────────────────
+            docs.forEach((d, i) => {
+                const x1 = docColX + docW;
+                const x2 = filterColX;
+                const y1 = d.y;
+                const y2 = filtY + (filtH / (docs.length + 1)) * (i + 1);
+                const cx1 = x1 + (x2 - x1) * 0.45;
+
+                const pathD = `M${x1},${y1} C${cx1},${y1} ${cx1},${y2} ${x2},${y2}`;
+                const path = svg.append('path')
+                    .attr('fill', 'none')
+                    .attr('stroke', d.c.stroke)
+                    .attr('stroke-width', isMobile ? 1.5 : 2)
+                    .attr('stroke-opacity', 0.72)
+                    .attr('marker-end', 'url(#arr-in)')
+                    .attr('d', reducedMotion ? pathD : `M${x1},${y1} C${x1},${y1} ${x1},${y1} ${x1},${y1}`);
+
+                if (!reducedMotion) {
+                    path.transition().duration(600).delay(i * 150 + 200).attr('d', pathD);
+                }
+            });
+
+            // ── Connecting arrows: filter → outputs ──────────────────────
+            outputs.forEach((o, i) => {
+                const x1 = filterColX + filtW;
+                const x2 = outColX;
+                const y1 = filtY + (filtH / (outputs.length + 1)) * (i + 1);
+                const y2 = o.y;
+                const cx1 = x1 + (x2 - x1) * 0.45;
+
+                const pathD = `M${x1},${y1} C${cx1},${y1} ${cx1},${y2} ${x2},${y2}`;
+                const path = svg.append('path')
+                    .attr('fill', 'none')
+                    .attr('stroke', colours.arrowOut)
+                    .attr('stroke-width', isMobile ? 1.5 : 2)
+                    .attr('stroke-opacity', 0.68)
+                    .attr('marker-end', 'url(#arr-out)')
+                    .attr('d', reducedMotion ? pathD : `M${x1},${y1} C${x1},${y1} ${x1},${y1} ${x1},${y1}`);
+
+                if (!reducedMotion) {
+                    path.transition().duration(600).delay(500 + i * 110).attr('d', pathD);
+                }
+            });
+
+            // ── Arrow: filter → noise (short vertical drop) ──────────────
+            const nx = midX;
+            const ny1 = filtY + filtH;
+            const ny2 = noiseY;
+            svg.append('line')
+                .attr('x1', nx).attr('y1', reducedMotion ? ny2 : ny1)
+                .attr('x2', nx).attr('y2', reducedMotion ? ny2 : ny1)
+                .attr('stroke', colours.arrowNoise)
+                .attr('stroke-width', 1.5).attr('stroke-dasharray', '4,3')
+                .attr('marker-end', 'url(#arr-noise)').attr('opacity', 0.5)
+                .transition().duration(350).delay(720)
+                .attr('y2', ny2);
+
+            // ── Particle animation: doc → filter (reduced-motion safe) ────
+            if (!reducedMotion) {
+                docs.forEach((d, i) => {
+                    const x1 = docColX + docW, x2 = filterColX;
+                    const y1 = d.y, y2 = filtY + (filtH / (docs.length + 1)) * (i + 1);
+                    const cx1 = x1 + (x2 - x1) * 0.45;
+                    const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathEl.setAttribute('d', `M${x1},${y1} C${cx1},${y1} ${cx1},${y2} ${x2},${y2}`);
+                    const particle = svg.append('circle')
+                        .attr('r', 3).attr('fill', d.c.stroke).attr('opacity', 0);
+                    let t = 0;
+                    const total = pathEl.getTotalLength();
+                    const step = () => {
+                        t = (t + 0.012) % 1;
+                        const pt = pathEl.getPointAtLength(t * total);
+                        particle.attr('cx', pt.x).attr('cy', pt.y).attr('opacity', 0.82);
+                        requestAnimationFrame(step);
+                    };
+                    setTimeout(step, i * 380 + 950);
+                });
             }
         }
 

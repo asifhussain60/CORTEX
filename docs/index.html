@@ -4167,7 +4167,7 @@
               @media (max-width: 420px) {
                 /* On very small phones hide outer labels — arcs + hub still readable */
                 #sdlc-radial { max-height: 280px; }
-                .sdlc-seg-label { font-size: 0.85rem; }
+                .sdlc-seg-label { font-size: 1.7rem; }
               }
               /* sdlc-guarantees: 1-col on mobile */
               @media (max-width: 560px) {
@@ -4318,7 +4318,7 @@
                 })
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'middle')
-                .attr('font-size', '1.25rem')
+                .attr('font-size', '2.5rem')
                 .attr('opacity', dur > 0 ? 0 : 1)
                 .text(d => d.data.emoji)
                 .transition().duration(dur > 0 ? dur + 200 : 0).delay((d, i) => i * 75)
@@ -4804,10 +4804,11 @@
               The practice of using your own product during development — experiencing it as a real user would — to surface issues, validate decisions, and prove reliability before customers do.
             </p>
             <div class="dogfood-quote-box">
-              <i class="fas fa-quote-left" style="color:var(--accent-cyan);font-size:1rem;margin-top:0.3rem;flex-shrink:0;" aria-hidden="true"></i>
+              <i class="fas fa-quote-left" style="color:var(--accent-cyan);font-size:1rem;margin-top:0.3rem;flex-shrink:0;align-self:flex-start;" aria-hidden="true"></i>
               <p class="dogfood-quote-text">
-                Every orchestrator, governance rule, and line of core logic inside the CORTEX AI framework was planned, written, tested, and shipped <em>by CORTEX itself</em> — the same intelligence that governs your team's delivery, applied without exception to its own. Every commit, every phase, every architectural decision: self-governed, self-validated, self-delivered.<span aria-hidden="true" style="display:inline;margin-left:0.3em;color:var(--accent-cyan);font-size:0.85em;vertical-align:middle;"><i class="fas fa-quote-right"></i></span>
+                Every orchestrator, governance rule, and line of core logic inside the CORTEX AI framework was planned, written, tested, and shipped <em>by CORTEX itself</em> — the same intelligence that governs your team's delivery, applied without exception to its own. Every commit, every phase, every architectural decision: self-governed, self-validated, self-delivered.
               </p>
+              <i class="fas fa-quote-right" style="color:var(--accent-cyan);font-size:1rem;margin-bottom:0.3rem;flex-shrink:0;align-self:flex-end;" aria-hidden="true"></i>
             </div>
           </div>
 
