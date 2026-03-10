@@ -12,6 +12,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          rel="stylesheet"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"/>
     <style>
         :root {
             --glass-bg: rgba(10, 15, 30, 0.7);
@@ -146,8 +151,142 @@
          * ──────────────────────────────────────────────────────────────────*/
         @media (max-width: 640px) { main > * + * { margin-top: 2rem !important; } }
         @media (min-width: 641px) and (max-width: 1023px) { main > * + * { margin-top: 3rem !important; } }
-    
-        /* ═══════ CORTEX GLASSMORPHIC SITE HEADER ═══════ */
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CT: Immersive Video Embed — Security Engineer (rose palette)
+           Design: Single-layer, border-minimal, player blends into page
+           Motion: prefers-reduced-motion compliant (opt-in via no-preference)
+           Composited-only: transform + opacity only
+           VBP compliance: VBP-001 (one frame), VBP-005 (hierarchy), VBP-008 (control)
+           ══════════════════════════════════════════════════════════════════════ */
+
+        @keyframes ctGlowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%      { opacity: 0.85; transform: scale(1.04); }
+        }
+        @keyframes ctDotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.3; transform: scale(0.7); }
+        }
+        @keyframes ctShimmer {
+            0%   { background-position: -300% center; }
+            100% { background-position:  300% center; }
+        }
+        @keyframes ctBorderFade {
+            0%, 100% { opacity: 0.6; }
+            50%      { opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ct-glow-orb, .ct-live-dot, .ct-badge,
+            .ct-player-border { animation: none !important; }
+        }
+
+        /* Ambient orbs — atmosphere only, no hard borders */
+        .ct-orb-a {
+            position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(244,63,94,0.10) 0%, transparent 68%);
+            top: -120px; left: -140px;
+        }
+        .ct-orb-b {
+            position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 68%);
+            bottom: -80px; right: -100px;
+        }
+
+        /* Live badge */
+        .ct-badge {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 0.2em; text-transform: uppercase; color: rgba(252,165,165,0.85);
+            padding: 0.3rem 0.9rem;
+            border-radius: 100px;
+            background: rgba(244,63,94,0.08);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .ct-badge { animation: ctShimmer 5s linear infinite; background-size: 300% auto; }
+        }
+
+        .ct-live-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #f43f5e;
+            box-shadow: 0 0 6px rgba(244,63,94,0.9), 0 0 14px rgba(244,63,94,0.4);
+            display: inline-block; flex-shrink: 0;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .ct-live-dot { animation: ctDotPulse 2s ease-in-out infinite; }
+        }
+
+        /* Player wrapper — the single border/glow layer */
+        .ct-player-wrap {
+            position: relative;
+            max-width: 840px;
+            margin: 0 auto;
+            border-radius: 1rem;
+            overflow: hidden;
+            /* Single soft glow instead of stacked borders */
+            box-shadow:
+                0 0 0 1px rgba(244,63,94,0.15),
+                0 0 60px -10px rgba(244,63,94,0.25),
+                0 32px 80px -16px rgba(0,0,0,0.7);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .ct-player-wrap {
+                animation: ctBorderFade 4s ease-in-out infinite;
+            }
+        }
+
+        /* Bleed glow underneath the player — ties it to the page */
+        .ct-player-glow {
+            position: absolute;
+            inset: 10% 5% -30px;
+            background: radial-gradient(ellipse, rgba(244,63,94,0.18) 0%, transparent 70%);
+            filter: blur(24px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 16:9 iframe container — no bezel, no chin, no stand */
+        .ct-video-wrapper {
+            position: relative; width: 100%; padding-bottom: 56.25%;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #0a0a12;
+        }
+        .ct-video-wrapper iframe {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%; border: 0;
+            border-radius: 1rem;
+        }
+
+        /* Thin accent line above player — single decorative touch */
+        .ct-accent-line {
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(244,63,94,0.6) 20%,
+                rgba(249,115,22,0.5) 50%,
+                rgba(244,63,94,0.6) 80%,
+                transparent 100%);
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+            max-width: 840px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Stat pills below the player */
+        .ct-stat-pill {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.875rem;
+            border-radius: 100px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.8125rem; font-weight: 600; color: #94a3b8;
+        }
+        .ct-stat-pill strong { color: #fca5a5; font-weight: 800; }
         .cortex-site-header {
             position: sticky;
             top: 0;
@@ -420,6 +559,79 @@
             </div>
         </section>
 
+        <!-- ═══════════════════════════════════════════════════════
+             See CORTEX in Action — Video Demonstration
+             Design: Immersive / border-minimal (VBP-001, VBP-005, VBP-008)
+             ═══════════════════════════════════════════════════════ -->
+        <section aria-label="CORTEX in action — security engineer overview" aria-labelledby="se-video-heading">
+            <div style="position:relative; overflow:hidden; padding: 3rem 1.5rem 3.5rem; text-align:center; border-radius:1.5rem; border:1px solid rgba(244,63,94,0.18); background:rgba(244,63,94,0.03);">
+
+                <!-- Ambient orbs — atmosphere, no hard edges -->
+                <div class="ct-orb-a" aria-hidden="true"></div>
+                <div class="ct-orb-b" aria-hidden="true"></div>
+
+                <!-- Live badge -->
+                <div style="margin-bottom:1rem; display:flex; justify-content:center;">
+                    <span class="ct-badge">
+                        <span class="ct-live-dot" aria-hidden="true"></span>
+                        CORTEX LIVE DEMO
+                    </span>
+                </div>
+
+                <!-- Heading -->
+                <h2 id="se-video-heading" style="
+                    position:relative; z-index:1;
+                    font-size: clamp(1.75rem, 3vw, 2.5rem);
+                    font-weight: 900;
+                    letter-spacing: -0.03em;
+                    background: linear-gradient(135deg, #fff 25%, #fca5a5 60%, #f87171 100%);
+                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin: 0 0 0.625rem;
+                    line-height: 1.15;
+                ">See CORTEX in Action</h2>
+                <p style="
+                    position:relative; z-index:1;
+                    font-size: 1rem; color: #64748b;
+                    margin: 0 auto 2rem; max-width: 560px; line-height: 1.65;
+                ">Watch how CORTEX detects vulnerabilities, enforces governance, and certifies your codebase — without a single manual security review.</p>
+
+                <!-- Single accent line — replaces all previous nested borders -->
+                <div class="ct-accent-line" aria-hidden="true"></div>
+
+                <!-- Player: single container, glow-only framing -->
+                <div style="position:relative; z-index:1; max-width:840px; margin:0 auto;">
+                    <!-- Bleed glow ties player to page background -->
+                    <div class="ct-player-glow" aria-hidden="true"></div>
+
+                    <!-- Player wrapper — one border/glow layer only -->
+                    <div class="ct-player-wrap">
+                        <div class="ct-video-wrapper" aria-label="CORTEX security engineer overview video player">
+                            <iframe
+                                src="https://www.youtube-nocookie.com/embed/xcVTO9yAFI0?rel=0&modestbranding=1&color=white&iv_load_policy=3"
+                                title="CORTEX — Shift-Left Security for Security Engineers"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                loading="lazy"
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimal stat pills below — VBP-008 context before play -->
+                <div style="
+                    position:relative; z-index:1;
+                    display:flex; flex-wrap:wrap; justify-content:center; gap:0.625rem;
+                    margin-top:1.75rem;
+                " role="list" aria-label="Video context">
+                    <span class="ct-stat-pill" role="listitem"><strong>OWASP Top 10</strong> detection</span>
+                    <span class="ct-stat-pill" role="listitem"><strong>40+</strong> secret patterns</span>
+                    <span class="ct-stat-pill" role="listitem"><strong>STRIDE</strong> threat modelling</span>
+                    <span class="ct-stat-pill" role="listitem"><strong>Zero</strong> manual gates</span>
+                </div>
+
+            </div>
+        </section>
         <!-- 2. SECURITY SCANNING PIPELINE — Glass Panel -->
         <section class="relative py-8 my-4">
             <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-rose-950/40 via-slate-900/60 to-slate-950/80 border border-rose-500/10"></div>
