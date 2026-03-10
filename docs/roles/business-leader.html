@@ -153,22 +153,26 @@
         .ccp-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px -8px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.12); }
         .ccp-card-before {
             padding: 1rem 1.125rem 0.875rem;
-            background: rgba(239,68,68,0.07);
-            border-bottom: 1px solid rgba(239,68,68,0.14);
+            background: rgba(239,68,68,0.12);
+            border-bottom: 1px solid rgba(239,68,68,0.25);
         }
         .ccp-card-after {
             padding: 1rem 1.125rem 0.875rem;
-            background: rgba(16,185,129,0.06);
+            background: rgba(16,185,129,0.10);
             flex: 1;
         }
-        .ccp-id { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; display: block; margin-bottom: 0.35rem; }
-        .ccp-card-before .ccp-id { color: #f87171; }
-        .ccp-card-after  .ccp-id { color: #34d399; }
-        .ccp-card-before p { color: #fca5a5; font-size: 0.875rem; line-height: 1.5; margin: 0; }
-        .ccp-card-after  p { color: #6ee7b7; font-size: 0.875rem; line-height: 1.5; margin: 0; }
+        /* ccp-id: Before panel = code-id small + title larger; After panel = solution title */
+        .ccp-id { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; display: block; margin-bottom: 0.4rem; }
+        .ccp-card-before .ccp-id { color: #f87171; font-size: 0.75rem; font-weight: 700; }
+        .ccp-card-after  .ccp-id { color: #6ee7b7; font-size: 0.9rem; font-weight: 900; letter-spacing: 0.02em; font-family: 'Inter', sans-serif; }
+        .ccp-card-before p { color: #fca5a5; font-size: 0.9375rem; line-height: 1.55; margin: 0; }
+        .ccp-card-after  p { color: #6ee7b7; font-size: 0.9375rem; line-height: 1.55; margin: 0; }
         .ccp-divider { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.2); }
-        .ccp-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
-        .ccp-divider-arrow { font-size: 0.8125rem; color: rgba(255,255,255,0.2); font-weight: 900; }
+        .ccp-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+        .ccp-divider-arrow { font-size: 0.9rem; color: rgba(0,212,255,0.6); font-weight: 900; text-shadow: 0 0 8px rgba(0,212,255,0.4); }
+        /* Icon wrapper inside ccp-card-before */
+        .ccp-icon { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .ccp-icon-dot { width: 1.5rem; height: 1.5rem; border-radius: 0.375rem; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
         /* SDLC Pipeline — 2-row grid */
         .sdlc-pipeline {
@@ -1550,11 +1554,11 @@
 
         <!-- SECTION 3: Cost of Ungoverned AI — Glass Panel -->
         <section class="relative py-8" style="border-radius:1.5rem; overflow:hidden;">
-            <div class="absolute inset-0 bg-gradient-to-br from-red-950/50 via-slate-900/80 to-rose-950/50 border border-red-500/20 rounded-3xl"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-red-950/70 via-slate-900/80 to-rose-950/70 border border-red-500/35 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[12px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[13px] font-bold tracking-widest uppercase">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> The Problem Space
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The Cost of Ungoverned AI</h2>
@@ -1563,74 +1567,95 @@
                     </p>
                 </div>
 
+                <!-- D3 Defect Escape Cost Area Chart — hero visualization ABOVE the cards -->
+                <div class="glass-card p-6 md:p-7 border-red-500/20 bg-gradient-to-br from-red-950/25 to-slate-900/80">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <div class="text-[13px] font-bold uppercase tracking-widest text-red-400 mb-1">Governance gap = exponential risk</div>
+                            <p class="text-sm text-slate-400 leading-relaxed max-w-xl">Each failure mode compounds across the delivery cycle. Automated enforcement designed to contain the cost at the keyboard — before it reaches QA or production.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[13px] font-bold">All 8 addressed by CORTEX</span>
+                        </div>
+                    </div>
+                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-2">Compounding defect escape cost — keyboard → production</div>
+                    <div id="ccp-risk-chart" class="d3-chart-host" style="height:260px;"></div>
+                </div>
+
                 <div class="glass-card p-5 md:p-8">
-                    <div class="flex justify-between items-center mb-5 pb-4 border-b border-white/5">
-                        <div class="flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-red-400">
+                    <div class="flex justify-between items-center mb-5 pb-4 border-b border-white/8">
+                        <div class="flex items-center gap-2 text-[13px] font-black uppercase tracking-widest text-red-400">
                             <span class="text-base">❌</span> Without CORTEX
                         </div>
-                        <div class="text-[12px] font-black uppercase tracking-widest text-slate-600">8 failure modes</div>
-                        <div class="flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-emerald-400">
+                        <div class="text-[13px] font-black uppercase tracking-widest text-slate-400">8 failure modes</div>
+                        <div class="flex items-center gap-2 text-[13px] font-black uppercase tracking-widest text-emerald-400">
                             With CORTEX <span class="text-base">✅</span>
                         </div>
                     </div>
                     <div class="ccp-grid">
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-001 · Session Amnesia</span><p>No memory between sessions. Every conversation starts from zero — context, decisions, and prior work vanish.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="brain" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-001 · Session Amnesia</span></div>
+                                <p>No memory between sessions. Every conversation starts from zero — context, decisions, and prior work vanish.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Persistent Memory</span><p>Orchestrator traces, 7 SQLite databases, and RCA history carry full context across every session indefinitely.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-002 · No Enforcement</span><p>AI suggestions violate standards silently. Governance lives only in documents nobody reads at commit time.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="shield-off" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-002 · No Enforcement</span></div>
+                                <p>AI suggestions violate standards silently. Governance lives only in documents nobody reads at commit time.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Tiered Enforcement</span><p>60+ governance rules enforced automatically at pre-commit, CI pipeline, and runtime — no human reviewer required.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-003 · Implementation First</span><p>Code ships without tests. Regressions surface in production weeks after the causal change.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="flask-conical" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-003 · Implementation First</span></div>
+                                <p>Code ships without tests. Regressions surface in production weeks after the causal change.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Mandatory TDD</span><p>CORE-008 mandates RED → GREEN → REFACTOR on every change. No implementation proceeds without a failing test.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-004 · Invisible Audit Trail</span><p>Who changed what, when, and why? No traceable decision log. Compliance evidence reconstructed manually.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="eye-off" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-004 · Invisible Audit Trail</span></div>
+                                <p>Who changed what, when, and why? No traceable decision log. Compliance evidence reconstructed manually.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Full Traceability</span><p>AC_START/AC_COMPLETE markers log every operation — hash-chained and tamper-evident from keystroke to release.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-005 · Single-Pass Execution</span><p>One-shot AI responses with no convergence loop. Defects survive review because nothing rescans after a fix.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="repeat" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-005 · Single-Pass Execution</span></div>
+                                <p>One-shot AI responses with no convergence loop. Defects survive review because nothing rescans after a fix.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Convergence Loops</span><p>CORE-068: detect → fix → rescan cycles repeat autonomously until zero P0/P1 violations remain — up to 3 passes.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-006 · Context Blindness</span><p>AI responds without workspace awareness. Suggestions ignore existing architecture, history, and coupling.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="telescope" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-006 · Context Blindness</span></div>
+                                <p>AI responds without workspace awareness. Suggestions ignore existing architecture, history, and coupling.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">LENS Intelligence</span><p>9 parallel analyzers scan structure, history, dependencies, security, and patterns before every single response.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-007 · Knowledge Drain</span><p>Expertise leaves when engineers leave. No pattern library. Institutional knowledge lives in Slack threads.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="book-open" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-007 · Knowledge Drain</span></div>
+                                <p>Expertise leaves when engineers leave. No pattern library. Institutional knowledge lives in Slack threads.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">Living Knowledge Base</span><p>Pattern library, domain knowledge, and RCA prevention rules persist and compound over time — cross-team.</p></div>
                         </div>
                         <div class="ccp-card">
-                            <div class="ccp-card-before"><span class="ccp-id">CCP-008 · Security Afterthought</span><p>Security reviewed at end-of-cycle in a separate scanner. Vulnerabilities routinely reach production. No threat modelling at design stage.</p></div>
+                            <div class="ccp-card-before">
+                                <div class="ccp-icon"><div class="ccp-icon-dot"><i data-lucide="shield-alert" class="w-3 h-3 text-red-400" aria-hidden="true"></i></div><span class="ccp-id">CCP-008 · Security Afterthought</span></div>
+                                <p>Security reviewed at end-of-cycle in a separate scanner. Vulnerabilities routinely reach production. No threat modelling at design stage.</p>
+                            </div>
                             <div class="ccp-divider"><div class="ccp-divider-line"></div><span class="ccp-divider-arrow">↓</span><div class="ccp-divider-line"></div></div>
                             <div class="ccp-card-after"><span class="ccp-id">5-Layer Security + STRIDE/DREAD</span><p>PII blocks, governance integrity, LENS scans, CVE analysis, OWASP gate — plus automated STRIDE threat modelling and DREAD risk scoring on every PR.</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- D3 Defect Escape Cost Area Chart — visualises the CCP failure impact -->
-                <div class="glass-card p-6 md:p-8 mt-6 border-red-500/15 bg-gradient-to-br from-red-950/20 to-slate-900/80">
-                    <div class="bl-split" style="gap:2rem;align-items:stretch;">
-                        <div style="display:flex;flex-direction:column;gap:1rem;">
-                            <div class="text-[12px] font-bold uppercase tracking-widest text-red-400">Governance gap = exponential risk</div>
-                            <p class="text-sm text-slate-400 leading-relaxed" style="flex:1;">Each CCP failure mode compounds over time. Without automated enforcement, the cost of a single ungoverned AI decision grows exponentially as it propagates through review, QA, and production.</p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="px-2 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[12px] font-bold">8 failure modes</span>
-                                <span class="px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] font-bold">All addressed by CORTEX</span>
-                            </div>
-                        </div>
-                        <div class="bl-viz">
-                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Compounding risk over delivery phases</div>
-                            <div id="ccp-risk-chart" class="d3-chart-host" style="height:180px;"></div>
                         </div>
                     </div>
                 </div>

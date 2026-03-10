@@ -3057,188 +3057,383 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ── BLUF PANEL ─────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════
+   BLUF PANEL — Golden Glassmorphism · Swiss Army Identity Card  (v4)
+   Theme  : muted warm gold / champagne on deep obsidian
+   Layout : single full-width text column · image as centred background emboss
+   Image  : position:absolute, centred, scale(1.25), opacity 18%
+            mix-blend-mode:screen vaporises white background on dark glass
+            text floats above with full card width — no layout competition
+   Motion : prefers-reduced-motion opt-in · composited transform/opacity only
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Outer container ── */
 .bluf-panel {
-    max-width: 800px;
+    max-width: 1040px;
     margin: 1.75rem auto 1.5rem auto;
     padding: 0 1.5rem;
 }
 
-/* CSS-enhanced animated gradient border via background-clip trick */
+/* ── Animated border — refined gold accent, 2px ── */
 .bluf-border-wrap {
     position: relative;
-    border-radius: 16px;
-    padding: 1.5px; /* border thickness */
+    border-radius: 18px;
+    padding: 2px;
     background: linear-gradient(
         120deg,
-        rgba(0, 212, 255, 0.7) 0%,
-        rgba(123, 97, 255, 0.6) 40%,
-        rgba(0, 212, 255, 0.3) 70%,
-        rgba(123, 97, 255, 0.7) 100%
+        rgba(251, 191, 36, 0.90)  0%,
+        rgba(245, 158, 11, 0.60) 40%,
+        rgba(253, 224, 71,  0.80) 60%,
+        rgba(245, 158, 11, 0.90) 100%
     );
     background-size: 300% 300%;
-    /* motion-governed animation: opt-in only for no-preference users */
+    /* tight single-layer glow — contained, not bleeding */
+    box-shadow:
+        0 0  6px  2px rgba(251, 191, 36, 0.35),
+        0 0 18px  6px rgba(245, 158, 11, 0.15);
 }
 
 @keyframes bluf-border-shift {
-    0%   { background-position: 0% 50%; }
+    0%   { background-position: 0%   50%; }
     50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    100% { background-position: 0%   50%; }
 }
 
-/* outer glow that sits beneath the border wrap — composited, no layout impact */
+/* Subtle gold bloom beneath the card — contained */
 .bluf-border-wrap::before {
     content: '';
     position: absolute;
-    inset: -3px;
-    border-radius: 18px;
+    inset: -4px;
+    border-radius: 22px;
     background: inherit;
     filter: blur(10px);
-    opacity: 0.35;
+    opacity: 0.28;
     z-index: -1;
     pointer-events: none;
 }
 
+/* ── Glass card — full padding all sides, overflow clips the bg image ── */
 .bluf-glass {
     position: relative;
-    padding: 1.25rem 2rem;
+    padding: 2rem 2.5rem;
     background: linear-gradient(
-        125deg,
-        rgba(13, 17, 46, 0.98) 0%,
-        rgba(10, 14, 39, 0.97) 55%,
-        rgba(20, 16, 50, 0.96) 100%
+        135deg,
+        rgba(22, 16,  8, 0.72) 0%,
+        rgba(18, 13,  5, 0.75) 50%,
+        rgba(26, 19,  8, 0.70) 100%
     );
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-radius: 15px; /* 16px wrap - 1.5px padding */
-    /* layered depth shadows */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
     box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.5),
-        0 16px 48px rgba(0, 0, 0, 0.45),
-        0 32px 80px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.055);
-    overflow: hidden;
+        0 2px  8px  rgba(0, 0, 0, 0.45),
+        0 12px 32px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(251, 191, 36, 0.12);
+    overflow: hidden;   /* clips embossed image to rounded card boundary */
 }
 
-/* ── Glass sweep: diagonal light reflection that drifts across the surface */
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMBOSSED BACKGROUND IMAGE
+   Technique: absolute-positioned <img> centred in the card, scaled 125%,
+   opacity 18%, mix-blend-mode:screen (white → transparent on dark surface).
+   Radial vignette via ::after darkens the edges so text at the perimeter
+   is always readable.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.bluf-bg-img-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    /* screen blend: white background pixels → transparent on dark glass */
+    mix-blend-mode: screen;
+    z-index: 0;
+    /* shift image to lower-right so bright blade/CORTEX text clears prose */
+    transform: translate(18%, 22%);
+}
+
+.bluf-bg-img {
+    /* 100% fill — image positioned via wrapper translate, not oversized */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    /* 13% opacity — visible watermark texture now that card bg is lighter */
+    opacity: 0.13;
+    display: block;
+    /* static transform — animation handled separately below */
+    transform: scale(1.0);
+}
+
+/* Slow breathing scale — opt-in, composited transform only */
+@media (prefers-reduced-motion: no-preference) {
+    .bluf-bg-img {
+        animation: bluf-bg-breathe 10s ease-in-out infinite;
+        will-change: transform;
+    }
+}
+
+@keyframes bluf-bg-breathe {
+    0%, 100% { transform: scale(1.0); }
+    50%       { transform: scale(1.02); }
+}
+
+/* Radial vignette — darkens card edges so text stays legible at periphery */
+.bluf-bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 75% 80% at 50% 50%,
+        transparent 8%,
+        rgba(16, 11, 4, 0.78) 75%,
+        rgba(14,  9, 3, 0.93) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Diagonal glass sheen — composited, subtle gold tint ── */
 .bluf-glass::before {
     content: '';
     position: absolute;
     top: -60%;
     left: -80%;
-    width: 60%;
+    width: 50%;
     height: 220%;
     background: linear-gradient(
         105deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.045) 50%,
-        transparent 70%
+        transparent 35%,
+        rgba(251, 191, 36, 0.03) 50%,
+        transparent 65%
     );
     transform: skewX(-15deg);
     pointer-events: none;
+    z-index: 2;
 }
 
 @media (prefers-reduced-motion: no-preference) {
     .bluf-glass::before {
-        animation: bluf-sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        /* will-change justified: confirmed 60fps composited transform */
+        animation: bluf-sweep 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         will-change: transform;
     }
 }
 
 @keyframes bluf-sweep {
-    0%   { transform: skewX(-15deg) translateX(0); }
-    45%  { transform: skewX(-15deg) translateX(380%); }
-    100% { transform: skewX(-15deg) translateX(380%); }
+    0%   { transform: skewX(-15deg) translateX(0);    }
+    40%  { transform: skewX(-15deg) translateX(400%); }
+    100% { transform: skewX(-15deg) translateX(400%); }
 }
 
-/* ── Ambient glow: radial pool that breathes in opacity — composited */
+/* Ambient gold bloom top-left — static */
 .bluf-glass::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 80% 100% at 50% -10%, rgba(0, 212, 255, 0.09) 0%, transparent 65%);
+    background: radial-gradient(
+        ellipse 60% 60% at 15% -5%,
+        rgba(251, 191, 36, 0.05) 0%,
+        transparent 65%
+    );
     pointer-events: none;
+    z-index: 2;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .bluf-glass::after {
-        animation: bluf-breathe 4s ease-in-out infinite;
-    }
+/* ── Content layer — sits above all background layers ── */
+.bluf-content {
+    position: relative;
+    z-index: 3;
 }
 
-@keyframes bluf-breathe {
-    0%, 100% { opacity: 0.6; }
-    50%       { opacity: 1; }
-}
-
-/* ── Entry animation: card fades up once on load */
+/* ── Entry animation ── */
 @media (prefers-reduced-motion: no-preference) {
     .bluf-border-wrap {
-        animation: bluf-border-shift 6s ease infinite, bluf-entry 0.6s cubic-bezier(0, 0, 0.2, 1) both;
+        animation:
+            bluf-border-shift 9s ease infinite,
+            bluf-entry 0.5s cubic-bezier(0, 0, 0.2, 1) both;
     }
 }
 
 @keyframes bluf-entry {
     from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* ── Statement typography — Outfit font */
-.bluf-statement {
-    font-family: 'Outfit', var(--font-family-body, 'Inter'), sans-serif;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    font-weight: 300;
-    line-height: 1.65;
-    color: rgba(180, 190, 220, 0.92);
-    margin: 0;
-    letter-spacing: 0.01em;
+/* ── Eyebrow label ── */
+.bluf-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(245, 158, 11, 0.55);
+    margin-bottom: 0.65rem;
 }
 
-/* CORTEX — large, prominent, Outfit weight 700 */
+.bluf-eyebrow-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.70);
+    flex-shrink: 0;
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+/* ── CORTEX wordmark ── */
 .bluf-wordmark {
-    font-family: 'Outfit', var(--font-family-heading, 'Space Grotesk'), sans-serif;
-    font-size: clamp(1.55rem, 2.6vw, 2rem);
+    font-family: 'Outfit', 'Space Grotesk', sans-serif;
+    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    background: linear-gradient(90deg, #00d4ff 0%, #a78bfa 60%, #00d4ff 100%);
-    background-size: 200% auto;
+    background: linear-gradient(90deg, #e8a82a 0%, #f5c842 50%, #d4900a 100%);
+    background-size: 100% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline;
+    margin-right: 0.1em;
 }
 
 @media (prefers-reduced-motion: no-preference) {
     .bluf-wordmark {
-        animation: bluf-wordmark-shimmer 4s linear infinite;
+        background-size: 220% auto;
+        animation: bluf-wordmark-shimmer 8s ease-in-out infinite alternate;
     }
 }
 
 @keyframes bluf-wordmark-shimmer {
-    0%   { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0%   { background-position: 0%   center; }
+    100% { background-position: 100% center; }
 }
 
-/* key phrase in gradient */
+/* ── Main statement ── */
+.bluf-statement {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-weight: 300;
+    line-height: 1.72;
+    color: rgba(220, 205, 175, 0.88);
+    margin: 0;
+    letter-spacing: 0.01em;
+    /* max-width keeps line length readable — text doesn't stretch full 1040px */
+    max-width: 72ch;
+}
+
+/* em phrases — warm gold, plain colour (no gradient clip noise) */
 .bluf-statement em {
     font-style: normal;
     font-weight: 500;
-    background: linear-gradient(90deg, #00d4ff 0%, #7b61ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: rgba(245, 180, 60, 0.92);
+    -webkit-text-fill-color: rgba(245, 180, 60, 0.92);
+}
+
+/* ── Thin separator rule ── */
+.bluf-rule {
+    margin: 1rem 0 0 0;
+    border: none;
+    border-top: 1px solid rgba(245, 158, 11, 0.12);
+    /* rule only spans text width — not full card */
+    max-width: 72ch;
+}
+
+/* ── Capability pills ── */
+.bluf-caps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+}
+
+.bluf-cap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 0.70rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(245, 158, 11, 0.85);
+    background: rgba(245, 158, 11, 0.06);
+    border: 1px solid rgba(245, 158, 11, 0.14);
+    border-radius: 999px;
+    padding: 0.22rem 0.65rem;
+    white-space: nowrap;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    min-height: 28px; /* WCAG 2.2 SC 2.5.8 touch target */
+}
+
+.bluf-cap:hover {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.28);
+    color: rgba(251, 191, 36, 0.90);
+}
+.bluf-cap i {
+    font-size: 0.62rem;
+    opacity: 0.75;
+}
+
+/* ── Responsive — mobile ── */
+@media (max-width: 560px) {
+    .bluf-glass {
+        padding: 1.5rem;
+    }
+    .bluf-statement {
+        font-size: 0.95rem;
+        max-width: 100%;
+    }
+    .bluf-rule {
+        max-width: 100%;
+    }
 }
 </style>
 
 <div class="bluf-panel" role="note" aria-label="What CORTEX is">
     <div class="bluf-border-wrap">
         <div class="bluf-glass">
-            <p class="bluf-statement">
-                <span class="bluf-wordmark">CORTEX</span>, an <em>intelligent orchestration framework</em> that wraps GitHub Copilot in a persistent governance layer — routing every engineering intent to a specialist, enforcing quality rules automatically, and learning from every outcome so AI-assisted delivery gets safer with every session.
-            </p>
-        </div>
-    </div>
+
+            <!-- ── Embossed background image — centred, 18% opacity, screen blend ── -->
+            <div class="bluf-bg-img-wrap" aria-hidden="true">
+                <img
+                    class="bluf-bg-img"
+                    src="assets/images/swiss-nobg.png"
+                    alt=""
+                    role="presentation"
+                    loading="eager"
+                    draggable="false"
+                >
+            </div>
+            <!-- Radial vignette keeps edges dark so text stays legible -->
+            <div class="bluf-bg-vignette" aria-hidden="true"></div>
+
+            <!-- ── Foreground text content ── -->
+            <div class="bluf-content">
+                <div class="bluf-eyebrow">
+                    <span class="bluf-eyebrow-dot" aria-hidden="true"></span>
+                    Orchestration Framework
+                </div>
+
+                <p class="bluf-statement">
+                    <span class="bluf-wordmark">CORTEX</span> is a <em>highly customizable orchestration framework</em> that elevates GitHub Copilot into a governed engineering intelligence platform — routing every engineering intent to specialist capabilities, automatically enforcing quality and security standards, and <em>learning from outcomes</em> while adapting to each team's workflows to make AI-assisted development safer and more reliable with every session.
+                </p>
+
+                <hr class="bluf-rule" aria-hidden="true">
+
+                <div class="bluf-caps" role="list" aria-label="Core capabilities">
+                    <span class="bluf-cap" role="listitem"><i class="fa-solid fa-route" aria-hidden="true"></i> Intent Routing</span>
+                    <span class="bluf-cap" role="listitem"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Governance</span>
+                    <span class="bluf-cap" role="listitem"><i class="fa-solid fa-brain" aria-hidden="true"></i> Adaptive Learning</span>
+                    <span class="bluf-cap" role="listitem"><i class="fa-solid fa-flask-vial" aria-hidden="true"></i> TDD-First</span>
+                    <span class="bluf-cap" role="listitem"><i class="fa-solid fa-plug" aria-hidden="true"></i> 36 MCP Tools</span>
+                </div>
+            </div><!-- /.bluf-content -->
+
+        </div><!-- /.bluf-glass -->
+    </div><!-- /.bluf-border-wrap -->
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
