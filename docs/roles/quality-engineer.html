@@ -766,7 +766,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Autonomous Quality Governance
                     </div>
                     <h2 class="section-title font-black tracking-tighter">Quality Gates Enforce Themselves.<br/>You Set the Standard.</h2>
@@ -885,13 +885,13 @@
             svg.selectAll('.dim-label').data(data).enter().append('text')
                 .attr('x', -8).attr('y', d => y(d.dim) + y.bandwidth() / 2 + 4)
                 .attr('text-anchor', 'end').attr('fill', '#94a3b8')
-                .attr('font-size', '11px').attr('font-weight', '700')
+                .attr('font-size', '12px').attr('font-weight', '700')
                 .attr('font-family', 'Inter, sans-serif')
                 .text(d => d.dim);
 
             svg.append('text').attr('x', w / 2).attr('y', h + 10)
                 .attr('text-anchor', 'middle').attr('fill', '#475569')
-                .attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
                 .text('Score = Impact + Likelihood + Detection + Efficiency − Maintenance  (Range: 0–9)');
         }
 
@@ -951,25 +951,25 @@
                 .attr('x', d => x(d.tier) + x.bandwidth() / 2)
                 .attr('y', d => y2(d.coverage) - 10)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '11px').attr('font-weight', '700').attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px').attr('font-weight', '700').attr('font-family', 'Inter, sans-serif')
                 .text(d => `${d.coverage}%`);
 
             svg.selectAll('.time-label').data(data).enter().append('text')
                 .attr('x', d => x(d.tier) + x.bandwidth() / 2)
                 .attr('y', d => y(d.time) - 6)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '11px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                .attr('font-size', '12px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.time < 60 ? `${d.time}s` : `${Math.round(d.time/60)}min`);
 
             svg.append('g').attr('transform', `translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill', '#64748b').attr('font-size', '11px')
+                .selectAll('text').attr('fill', '#64748b').attr('font-size', '12px')
                 .attr('font-weight', 'bold').attr('font-family', 'Inter, sans-serif').attr('dy', '1.4em');
             svg.selectAll('.domain').remove();
 
             svg.append('text').attr('transform', 'rotate(-90)')
                 .attr('y', -42).attr('x', -h / 2).attr('text-anchor', 'middle')
-                .attr('fill', '#475569').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .attr('fill', '#475569').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
                 .text('Execution time (s)');
         }
 
@@ -1003,7 +1003,7 @@
             svg.selectAll('.arc-label').data(pie(data)).enter().append('text')
                 .attr('transform', d => `translate(${arc.centroid(d)})`)
                 .attr('text-anchor', 'middle').attr('dy', '0.35em')
-                .attr('fill', '#fff').attr('font-size', '11px').attr('font-weight', '800')
+                .attr('fill', '#fff').attr('font-size', '12px').attr('font-weight', '800')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => `${d.data.level.split(' ')[0]} (${d.data.count})`);
 
@@ -1011,7 +1011,7 @@
                 .attr('fill', '#f8fafc').attr('font-size', '26px').attr('font-weight', '900')
                 .attr('font-family', 'Space Grotesk, sans-serif').text('19');
             svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.3em')
-                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '600')
                 .attr('font-family', 'Inter, sans-serif').text('CHECKS');
         }
 

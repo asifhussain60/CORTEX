@@ -720,7 +720,7 @@ scrape_configs:
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Self-Managing Infrastructure
                     </div>
                     <h2 class="section-title font-black tracking-tighter">CORTEX Operates Itself.<br/>SREs Operate What Matters.</h2>
@@ -732,12 +732,12 @@ scrape_configs:
                     <div class="glass-card p-6 space-y-3 border-2 border-teal-500/30 bg-gradient-to-br from-teal-950/40 to-slate-900/80 hover:border-teal-400/50 transition-all">
                         <div class="w-9 h-9 bg-teal-500/20 rounded-lg flex items-center justify-center text-teal-400"><i data-lucide="database" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-teal-300">Data Hygiene Without Intervention</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">30-day retention enforced, orphaned records pruned, all 7 databases VACUUMed on a single command: <code class="text-teal-400 text-[11px]">refresh_prompt_suite.py --db-cleanup</code>. No custom scripts. No scheduled tasks to maintain.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">30-day retention enforced, orphaned records pruned, all 7 databases VACUUMed on a single command: <code class="text-teal-400 text-[12px]">refresh_prompt_suite.py --db-cleanup</code>. No custom scripts. No scheduled tasks to maintain.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-slate-900/80 hover:border-cyan-400/50 transition-all">
                         <div class="w-9 h-9 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400"><i data-lucide="activity" class="w-4 h-4"></i></div>
                         <h4 class="font-black text-sm tracking-tight text-cyan-300">22 Health Endpoints, Zero Manual Checks</h4>
-                        <p class="text-sm text-slate-500 leading-relaxed">Every orchestrator domain exposes structured health probes. One command — <code class="text-cyan-400 text-[11px]">/health</code> — surfaces pass/fail status across the entire framework. Prometheus scrape config is included. Grafana dashboards ship with the repo.</p>
+                        <p class="text-sm text-slate-500 leading-relaxed">Every orchestrator domain exposes structured health probes. One command — <code class="text-cyan-400 text-[12px]">/health</code> — surfaces pass/fail status across the entire framework. Prometheus scrape config is included. Grafana dashboards ship with the repo.</p>
                     </div>
                     <div class="glass-card p-6 space-y-3 border-2 border-blue-500/30 bg-gradient-to-br from-blue-950/40 to-slate-900/80 hover:border-blue-400/50 transition-all">
                         <div class="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
@@ -772,7 +772,7 @@ scrape_configs:
             <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
             <i data-lucide="activity" class="w-5 h-5 cursor-pointer hover:text-white transition-colors"></i>
         </div>
-        <div class="text-[11px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
+        <div class="text-[12px] md:text-[12px] text-slate-600 uppercase font-black tracking-[0.15em] md:tracking-[0.2em] px-4 leading-loose">
             &copy; 2026 CORTEX | AI Engineering Orchestration Framework | Site Reliability Engineer
         </div>
     </footer>
@@ -832,14 +832,14 @@ scrape_configs:
                 .attr('x', d => x(d.checks) + 8)
                 .attr('y', d => y(d.ep) + y.bandwidth() / 2 + 4)
                 .attr('fill', d => d.color)
-                .attr('font-size', '11px').attr('font-weight', '800')
+                .attr('font-size', '12px').attr('font-weight', '800')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.checks);
 
             svg.selectAll('.ep-label').data(data).enter().append('text')
                 .attr('x', -8).attr('y', d => y(d.ep) + y.bandwidth() / 2 + 4)
                 .attr('text-anchor', 'end').attr('fill', '#94a3b8')
-                .attr('font-size', '11px').attr('font-weight', '600')
+                .attr('font-size', '12px').attr('font-weight', '600')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.ep);
         }
@@ -886,7 +886,7 @@ scrape_configs:
             svg.selectAll('.arc-label').data(pie(data)).enter().append('text')
                 .attr('transform', d => `translate(${arc.centroid(d)})`)
                 .attr('text-anchor', 'middle').attr('dy', '0.35em')
-                .attr('fill', '#fff').attr('font-size', '11px').attr('font-weight', '800')
+                .attr('fill', '#fff').attr('font-size', '12px').attr('font-weight', '800')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.data.type);
 
@@ -894,7 +894,7 @@ scrape_configs:
                 .attr('fill', '#f8fafc').attr('font-size', '28px').attr('font-weight', '900')
                 .attr('font-family', 'Space Grotesk, sans-serif').text('6');
             svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.3em')
-                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '600')
                 .attr('font-family', 'Inter, sans-serif').text('METRICS');
         }
 
@@ -955,18 +955,18 @@ scrape_configs:
                 .attr('x', d => x(d.stage) + x.bandwidth() / 2)
                 .attr('y', d => y(d.impact) - 6)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '11px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
+                .attr('font-size', '12px').attr('font-weight', '800').attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.impact);
 
             svg.append('g').attr('transform', `translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill', '#64748b').attr('font-size', '11px')
+                .selectAll('text').attr('fill', '#64748b').attr('font-size', '12px')
                 .attr('font-weight', 'bold').attr('font-family', 'Inter, sans-serif').attr('dy', '1.4em');
             svg.selectAll('.domain').remove();
 
             svg.append('text').attr('transform', 'rotate(-90)')
                 .attr('y', -52).attr('x', -h / 2).attr('text-anchor', 'middle')
-                .attr('fill', '#475569').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .attr('fill', '#475569').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
                 .text('Files cleaned (typical)');
         }
 

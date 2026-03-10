@@ -1382,7 +1382,7 @@ if (typeof mermaid !== 'undefined') {
         var lx = i * 140;
         lg.append('rect').attr('x', lx).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill', colors[t]).attr('opacity', 0.85);
         var label = t.charAt(0).toUpperCase() + t.slice(1);
-        lg.append('text').attr('x', lx + 18).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif').text(label);
+        lg.append('text').attr('x', lx + 18).attr('y', 10.5).attr('fill', '#a0a6c0').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif').text(label);
     });
 
     var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -1400,7 +1400,7 @@ if (typeof mermaid !== 'undefined') {
             g.append('rect').attr('x', 0).attr('y', yOff).attr('width', x(val)).attr('height', rowH)
                 .attr('rx', 5).attr('fill', colors[t]).attr('opacity', 0.72);
             g.append('text').attr('x', x(val) + 5).attr('y', yOff + rowH / 2 + 4)
-                .attr('fill', colors[t]).attr('font-size', '11px').attr('font-weight', '700')
+                .attr('fill', colors[t]).attr('font-size', '12px').attr('font-weight', '700')
                 .attr('font-family', 'Inter, sans-serif').text(val + '%');
         });
     });
@@ -1517,28 +1517,28 @@ if (typeof mermaid !== 'undefined') {
             .attr('width', x1.bandwidth()).attr('height', h - y(d.depth))
             .attr('rx', 5).attr('fill', 'url(#cl-bar-' + i + 'b)').attr('stroke', d.color).attr('stroke-width', 1).attr('stroke-opacity', 0.25);
         g.append('text').attr('x', xG + x1('depth') + x1.bandwidth() / 2).attr('y', y(d.depth) - 6)
-            .attr('text-anchor','middle').attr('fill', d.color).attr('font-size','11px').attr('font-weight','600')
+            .attr('text-anchor','middle').attr('fill', d.color).attr('font-size','12px').attr('font-weight','600')
             .attr('font-family','Inter, sans-serif').text(d.depth + '%');
     });
 
     var xAxis = g.append('g').attr('transform','translate(0,' + h + ')').call(d3.axisBottom(x0).tickSize(0));
     xAxis.select('.domain').attr('stroke','rgba(255,255,255,0.08)');
-    xAxis.selectAll('text').attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif')
+    xAxis.selectAll('text').attr('fill','#a0a6c0').attr('font-size','12px').attr('font-family','Inter, sans-serif')
         .each(function(d) {
             var el = d3.select(this); var parts = d.split('\n'); el.text('');
             parts.forEach(function(p, i) { el.append('tspan').attr('x', 0).attr('dy', i === 0 ? '1.2em' : '1.2em').text(p); });
         });
     var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function(d){ return d + '%'; }));
     yAxis.select('.domain').remove();
-    yAxis.selectAll('text').attr('fill','#78809a').attr('font-size','11px').attr('font-family','Inter, sans-serif');
+    yAxis.selectAll('text').attr('fill','#78809a').attr('font-size','12px').attr('font-family','Inter, sans-serif');
     yAxis.selectAll('line').attr('stroke','rgba(255,255,255,0.04)');
 
     /* Legend */
     var lgY = h + 62;
     g.append('rect').attr('x', w/2 - 120).attr('y', lgY).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill','rgba(255,255,255,0.25)');
-    g.append('text').attr('x', w/2 - 104).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif').text('Modules (count)');
+    g.append('text').attr('x', w/2 - 104).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','12px').attr('font-family','Inter, sans-serif').text('Modules (count)');
     g.append('rect').attr('x', w/2 + 10).attr('y', lgY).attr('width', 13).attr('height', 13).attr('rx', 3).attr('fill','rgba(255,255,255,0.12)').attr('stroke','rgba(255,255,255,0.3)').attr('stroke-width',1);
-    g.append('text').attr('x', w/2 + 26).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','11px').attr('font-family','Inter, sans-serif').text('Skill depth index');
+    g.append('text').attr('x', w/2 + 26).attr('y', lgY + 10).attr('fill','#a0a6c0').attr('font-size','12px').attr('font-family','Inter, sans-serif').text('Skill depth index');
 })();
 </script>
 
@@ -1639,7 +1639,7 @@ if (typeof mermaid !== 'undefined') {
         var parts = p.label.split('\n');
         var lt = g.append('text').attr('x', x(mid)).attr('y', 10)
             .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.2)')
-            .attr('font-size', '11px').attr('font-weight', '600')
+            .attr('font-size', '12px').attr('font-weight', '600')
             .attr('font-family', 'Inter, sans-serif').attr('letter-spacing', '0.04em');
         parts.forEach(function (p2, i) {
             lt.append('tspan').attr('x', x(mid)).attr('dy', i === 0 ? 0 : '1.2em').text(p2);
@@ -1670,7 +1670,7 @@ if (typeof mermaid !== 'undefined') {
         var last = t.pts[t.pts.length - 1];
         g.append('text')
             .attr('x', x(last.w) + 6).attr('y', y(last.v) + 4)
-            .attr('fill', t.color).attr('font-size', '11px').attr('font-weight', '700')
+            .attr('fill', t.color).attr('font-size', '12px').attr('font-weight', '700')
             .attr('font-family', 'Inter, sans-serif').text(t.label);
     });
 
@@ -1679,12 +1679,12 @@ if (typeof mermaid !== 'undefined') {
         d3.axisBottom(x).ticks(6).tickFormat(function (d) { return 'Wk ' + d; })
     );
     xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.08)');
-    xAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
+    xAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif');
     xAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.06)');
 
     var yAxis = g.append('g').call(d3.axisLeft(y).ticks(5).tickFormat(function (d) { return d + '%'; }));
     yAxis.select('.domain').remove();
-    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif');
+    yAxis.selectAll('text').attr('fill', '#78809a').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif');
     yAxis.selectAll('line').attr('stroke', 'rgba(255,255,255,0.04)');
 })();
 </script>

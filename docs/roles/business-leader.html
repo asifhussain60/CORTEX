@@ -256,6 +256,38 @@
         .radar-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; justify-content: center; margin-top: 0.75rem; }
         .radar-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 700; color: #94a3b8; }
         .radar-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ── Onboarding Orchestrator — Dashboard Tab Strip ── */
+        .ob-tab-strip {
+            display: flex; flex-wrap: wrap; gap: 0.5rem;
+            padding: 0.875rem; border-radius: 1rem;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+        }
+        .ob-tab {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 0.5rem;
+            font-size: 0.75rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.03em; cursor: default; transition: background 0.2s ease, border-color 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.08); color: #94a3b8;
+            background: rgba(255,255,255,0.03);
+        }
+        .ob-tab:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.14); color: #e2e8f0; }
+        .ob-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ── Onboarding benefit cards ── */
+        .ob-benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        @media (max-width: 900px) { .ob-benefit-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .ob-benefit-grid { grid-template-columns: 1fr; } }
+        .ob-benefit-card {
+            padding: 1.25rem 1.25rem 1rem; border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.02);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .ob-benefit-card:hover { transform: translateY(-3px); border-color: var(--ob-card-border, rgba(255,255,255,0.14)); box-shadow: 0 12px 28px -8px var(--ob-card-glow, rgba(0,0,0,0.4)); }
+        .ob-benefit-icon { width: 2.25rem; height: 2.25rem; border-radius: 0.625rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; flex-shrink: 0; }
+        .ob-benefit-title { font-size: 0.8125rem; font-weight: 800; line-height: 1.3; margin-bottom: 0.35rem; }
+        .ob-benefit-body { font-size: 0.8125rem; color: #64748b; line-height: 1.6; }
     
         /* ═══════ CORTEX GLASSMORPHIC SITE HEADER ═══════ */
         .cortex-site-header {
@@ -1063,7 +1095,7 @@
             </div>
 
             <div class="space-y-4 md:space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
                     <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></div>
                     AI Engineering Orchestration Framework
                 </div>
@@ -1080,42 +1112,42 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/30 to-teal-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-5 md:px-8 py-5 md:py-6 text-center relative border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 to-slate-900/90 hover:border-cyan-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-cyan-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(0,212,255,0.6)]">100×</div>
-                        <div class="text-[11px] md:text-[12px] text-cyan-300/80 uppercase tracking-widest font-bold">Defect Cost Ratio: Keyboard vs Production</div>
+                        <div class="text-[12px] md:text-[12px] text-cyan-300/80 uppercase tracking-widest font-bold">Defect Cost Ratio: Keyboard vs Production</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-52 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/30 to-teal-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-5 md:px-8 py-5 md:py-6 text-center relative border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 to-slate-900/90 hover:border-emerald-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-emerald-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)]">94%</div>
-                        <div class="text-[11px] md:text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">Defects Caught at Keyboard</div>
+                        <div class="text-[12px] md:text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">Defects Caught at Keyboard</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-52 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-violet-600/30 to-purple-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-5 md:px-8 py-5 md:py-6 text-center relative border-2 border-violet-500/40 bg-gradient-to-br from-violet-950/80 to-slate-900/90 hover:border-violet-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-violet-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(139,92,246,0.6)]">Zero</div>
-                        <div class="text-[11px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">Governance Violations in Production</div>
+                        <div class="text-[12px] md:text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">Governance Violations in Production</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-52 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-600/30 to-orange-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-5 md:px-8 py-5 md:py-6 text-center relative border-2 border-amber-500/40 bg-gradient-to-br from-amber-950/80 to-slate-900/90 hover:border-amber-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-amber-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">8-Dim</div>
-                        <div class="text-[11px] md:text-[12px] text-amber-300/80 uppercase tracking-widest font-bold">Quality Score — Every Change</div>
+                        <div class="text-[12px] md:text-[12px] text-amber-300/80 uppercase tracking-widest font-bold">Quality Score — Every Change</div>
                     </div>
                 </div>
                 <div class="relative group w-[calc(50%-0.5rem)] md:w-52 flex">
                     <div class="absolute inset-0 bg-gradient-to-br from-teal-600/30 to-cyan-600/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                     <div class="glass-card px-5 md:px-8 py-5 md:py-6 text-center relative border-2 border-teal-500/40 bg-gradient-to-br from-teal-950/80 to-slate-900/90 hover:border-teal-400/60 transition-all w-full flex flex-col justify-center min-h-[120px]">
                         <div class="text-2xl md:text-4xl font-black text-teal-400 mb-1 md:mb-2 drop-shadow-[0_0_12px_rgba(20,184,166,0.6)]">40%+</div>
-                        <div class="text-[11px] md:text-[12px] text-teal-300/80 uppercase tracking-widest font-bold">AI Token Cost Reduction via Optimisation</div>
+                        <div class="text-[12px] md:text-[12px] text-teal-300/80 uppercase tracking-widest font-bold">AI Token Cost Reduction via Optimisation</div>
                     </div>
                 </div>
             </div>
 
             <!-- D3 Governance Trend — inline with hero; visual anchor for the page -->
             <div class="mt-8 glass-card p-6 md:p-8 border-cyan-500/20 bg-gradient-to-br from-cyan-950/20 to-slate-900/80" style="margin-top:2rem;">
-                <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Engineering Quality Trajectory — Governed vs Ungoverned AI</div>
+                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Engineering Quality Trajectory — Governed vs Ungoverned AI</div>
                 <div id="hero-trend-chart" class="w-full" style="height:220px;"></div>
             </div>
         </div>
@@ -1334,7 +1366,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> The Problem Space
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The Cost of Ungoverned AI</h2>
@@ -1345,11 +1377,11 @@
 
                 <div class="glass-card p-5 md:p-8">
                     <div class="flex justify-between items-center mb-5 pb-4 border-b border-white/5">
-                        <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-red-400">
+                        <div class="flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-red-400">
                             <span class="text-base">❌</span> Without CORTEX
                         </div>
-                        <div class="text-[11px] font-black uppercase tracking-widest text-slate-600">8 failure modes</div>
-                        <div class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-400">
+                        <div class="text-[12px] font-black uppercase tracking-widest text-slate-600">8 failure modes</div>
+                        <div class="flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-emerald-400">
                             With CORTEX <span class="text-base">✅</span>
                         </div>
                     </div>
@@ -1401,15 +1433,15 @@
                 <div class="glass-card p-6 md:p-8 mt-6 border-red-500/15 bg-gradient-to-br from-red-950/20 to-slate-900/80">
                     <div class="bl-split" style="gap:2rem;align-items:stretch;">
                         <div style="display:flex;flex-direction:column;gap:1rem;">
-                            <div class="text-[11px] font-bold uppercase tracking-widest text-red-400">Governance gap = exponential risk</div>
+                            <div class="text-[12px] font-bold uppercase tracking-widest text-red-400">Governance gap = exponential risk</div>
                             <p class="text-sm text-slate-400 leading-relaxed" style="flex:1;">Each CCP failure mode compounds over time. Without automated enforcement, the cost of a single ungoverned AI decision grows exponentially as it propagates through review, QA, and production.</p>
                             <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="px-2 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold">8 failure modes</span>
-                                <span class="px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold">All addressed by CORTEX</span>
+                                <span class="px-2 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[12px] font-bold">8 failure modes</span>
+                                <span class="px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] font-bold">All addressed by CORTEX</span>
                             </div>
                         </div>
                         <div class="bl-viz">
-                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Compounding risk over delivery phases</div>
+                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Compounding risk over delivery phases</div>
                             <div id="ccp-risk-chart" class="d3-chart-host" style="height:180px;"></div>
                         </div>
                     </div>
@@ -1420,7 +1452,7 @@
         <!-- SECTION 3: The Governed SDLC Pipeline -->
         <section>
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> End-to-End Governance
                 </div>
                 <h2 class="section-title font-black tracking-tighter">The Governed SDLC Pipeline</h2>
@@ -1478,15 +1510,15 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[11px] font-bold tracking-widest uppercase">Definition of Ready</div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[12px] font-bold tracking-widest uppercase">Definition of Ready</div>
                     <p class="text-[14px] text-slate-400 leading-relaxed">No work begins until acceptance criteria, security scope, and test plan are formally captured — not assumed.</p>
                 </div>
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[11px] font-bold tracking-widest uppercase">Convergence Gate</div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[12px] font-bold tracking-widest uppercase">Convergence Gate</div>
                     <p class="text-[14px] text-slate-400 leading-relaxed">CORE-068 enforces detect → fix → rescan loops until zero P0/P1 violations remain — max 3 autonomous cycles per operation.</p>
                 </div>
                 <div class="glass-card p-5 space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold tracking-widest uppercase">Definition of Done</div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] font-bold tracking-widest uppercase">Definition of Done</div>
                     <p class="text-[14px] text-slate-400 leading-relaxed">Release certified only after all gates pass, audit trail is hash-linked, and DoD checklist is fully closed.</p>
                 </div>
             </div>
@@ -1498,7 +1530,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Shift-Left Economics
                     </div>
                     <h2 class="section-title font-black tracking-tighter">The Shift-Left Dividend</h2>
@@ -1511,9 +1543,9 @@
                     <div class="relative group">
                         <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-blue-600/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="glass-card p-6 md:p-8 relative border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 to-slate-900/80 hover:border-cyan-400/50 transition-all">
-                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Cost Multiplier: Defect Escape by Stage</div>
+                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-4">Cost Multiplier: Defect Escape by Stage</div>
                             <div id="roi-chart" class="h-52 md:h-64 w-full"></div>
-                            <div class="text-center text-[11px] text-emerald-400 font-bold uppercase tracking-widest mt-3">← CORTEX designed to catch 94% at the keyboard</div>
+                            <div class="text-center text-[12px] text-emerald-400 font-bold uppercase tracking-widest mt-3">← CORTEX designed to catch 94% at the keyboard</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -1521,28 +1553,28 @@
                             <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-teal-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 to-slate-900/80 hover:border-emerald-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-emerald-400 mb-2">4.2×</div>
-                                <div class="text-[11px] text-emerald-300/80 uppercase tracking-widest font-bold">Velocity Multiplier</div>
+                                <div class="text-[12px] text-emerald-300/80 uppercase tracking-widest font-bold">Velocity Multiplier</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-blue-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 to-slate-900/80 hover:border-cyan-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-cyan-400 mb-2">60%</div>
-                                <div class="text-[11px] text-cyan-300/80 uppercase tracking-widest font-bold">Innovation Focus</div>
+                                <div class="text-[12px] text-cyan-300/80 uppercase tracking-widest font-bold">Innovation Focus</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-violet-500/30 bg-gradient-to-br from-violet-950/50 to-slate-900/80 hover:border-violet-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-violet-400 mb-2">40%</div>
-                                <div class="text-[11px] text-violet-300/80 uppercase tracking-widest font-bold">Cost Reduction / Feature</div>
+                                <div class="text-[12px] text-violet-300/80 uppercase tracking-widest font-bold">Cost Reduction / Feature</div>
                             </div>
                         </div>
                         <div class="relative group">
                             <div class="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="glass-card p-6 text-center relative border-2 border-amber-500/30 bg-gradient-to-br from-amber-950/50 to-slate-900/80 hover:border-amber-400/50 transition-all">
                                 <div class="text-3xl md:text-4xl font-black text-amber-400 mb-2">Day 1</div>
-                                <div class="text-[11px] text-amber-300/80 uppercase tracking-widest font-bold">Audit-Ready Compliance</div>
+                                <div class="text-[12px] text-amber-300/80 uppercase tracking-widest font-bold">Audit-Ready Compliance</div>
                             </div>
                         </div>
                     </div>
@@ -1553,7 +1585,7 @@
         <!-- SECTION 5: High-Value Business KPIs -->
         <section>
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
                     <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Executive KPIs
                 </div>
                 <h2 class="section-title font-black tracking-tighter">Business Value You Can Measure</h2>
@@ -1565,17 +1597,17 @@
             <div class="glass-card p-6 md:p-8 mt-8 border-teal-500/15 bg-gradient-to-br from-teal-950/20 to-slate-900/80">
                 <div class="bl-split" style="gap:2.5rem;">
                     <div style="display:flex;flex-direction:column;gap:1rem;">
-                        <div class="text-[11px] font-bold uppercase tracking-widest text-teal-400">8-Dimension Quality Score</div>
+                        <div class="text-[12px] font-bold uppercase tracking-widest text-teal-400">8-Dimension Quality Score</div>
                         <p class="text-sm text-slate-400 leading-relaxed" style="flex:1;">Every code change receives a composite quality score across 8 measurable dimensions. Quality becomes a number with a breakdown — not a subjective conversation at the end of a sprint.</p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold">Impact</span>
-                            <span class="px-2 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-[11px] font-bold">Likelihood</span>
-                            <span class="px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold">Detection</span>
-                            <span class="px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[11px] font-bold">Efficiency</span>
-                            <span class="px-2 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[11px] font-bold">Maintainability</span>
-                            <span class="px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold">Test Coverage</span>
-                            <span class="px-2 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold">Security</span>
-                            <span class="px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[11px] font-bold">Arch Alignment</span>
+                            <span class="px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] font-bold">Impact</span>
+                            <span class="px-2 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-[12px] font-bold">Likelihood</span>
+                            <span class="px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[12px] font-bold">Detection</span>
+                            <span class="px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[12px] font-bold">Efficiency</span>
+                            <span class="px-2 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[12px] font-bold">Maintainability</span>
+                            <span class="px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[12px] font-bold">Test Coverage</span>
+                            <span class="px-2 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[12px] font-bold">Security</span>
+                            <span class="px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[12px] font-bold">Arch Alignment</span>
                         </div>
                     </div>
                     <div class="bl-viz" style="display:flex;flex-direction:column;align-items:center;">
@@ -1588,7 +1620,7 @@
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 shrink-0 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400"><i data-lucide="coins" class="w-5 h-5"></i></div>
                         <div>
-                            <div class="text-[11px] font-black uppercase tracking-widest text-cyan-400 mb-1">AI Token Optimisation</div>
+                            <div class="text-[12px] font-black uppercase tracking-widest text-cyan-400 mb-1">AI Token Optimisation</div>
                             <h4 class="font-black text-base tracking-tight">40%+ Reduction in LLM Operating Cost</h4>
                             <p class="text-sm text-slate-500 leading-relaxed mt-1">CORTEX optimises every prompt for token efficiency before dispatch. Redundant context is stripped, responses are cached where safe, and model selection is matched to task complexity. Organisations running high-volume AI workloads recover material cost within weeks of adoption.</p>
                         </div>
@@ -1598,7 +1630,7 @@
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 shrink-0 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
                         <div>
-                            <div class="text-[11px] font-black uppercase tracking-widest text-emerald-400 mb-1">Quality &amp; Security First Mindset</div>
+                            <div class="text-[12px] font-black uppercase tracking-widest text-emerald-400 mb-1">Quality &amp; Security First Mindset</div>
                             <h4 class="font-black text-base tracking-tight">Security and Quality Built In — Not Bolted On</h4>
                             <p class="text-sm text-slate-500 leading-relaxed mt-1">CORTEX establishes quality and security as architectural invariants enforced before code is written, not after it ships. This isn't a cultural aspiration — it's a structural property enforced by TDD laws, convergence gates, and a 5-layer security immune system at every stage of the SDLC.</p>
                         </div>
@@ -1608,7 +1640,7 @@
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 shrink-0 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400"><i data-lucide="test-tube" class="w-5 h-5"></i></div>
                         <div>
-                            <div class="text-[11px] font-black uppercase tracking-widest text-violet-400 mb-1">TDD Flywheel ROI</div>
+                            <div class="text-[12px] font-black uppercase tracking-widest text-violet-400 mb-1">TDD Flywheel ROI</div>
                             <h4 class="font-black text-base tracking-tight">71% Bug-Fix Overhead Eliminated</h4>
                             <p class="text-sm text-slate-500 leading-relaxed mt-1">Test-Driven Development enforced as an architectural constraint — not a team agreement — redirects engineering effort from defect remediation to feature delivery. 20,000+ tests across a parallel test suite replace manual QA regression cycles, compressing release timelines and freeing sprint capacity for innovation.</p>
                         </div>
@@ -1618,7 +1650,7 @@
                     <div class="flex items-start gap-4">
                         <div class="w-10 h-10 shrink-0 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400"><i data-lucide="git-pull-request" class="w-5 h-5"></i></div>
                         <div>
-                            <div class="text-[11px] font-black uppercase tracking-widest text-amber-400 mb-1">AI PR Code Reviewer</div>
+                            <div class="text-[12px] font-black uppercase tracking-widest text-amber-400 mb-1">AI PR Code Reviewer</div>
                             <h4 class="font-black text-base tracking-tight">Every Pull Request Reviewed in Seconds</h4>
                             <p class="text-sm text-slate-500 leading-relaxed mt-1">The AI Code Reviewer analyses every PR across 6 stages — semantic diff, risk scoring, STRIDE threat modelling, 8-dimension quality scoring, OWASP compliance check — and issues an APPROVE or BLOCK verdict with evidence. Senior engineers spend review cycles on architecture decisions, not style and security hygiene.</p>
                         </div>
@@ -1721,13 +1753,151 @@
             </a>
         </section>
 
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 5c: Onboarding Orchestrator — Hours, Not Weeks        -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section aria-labelledby="bl-onboard-heading" class="relative py-8" style="border-radius:1.5rem; overflow:hidden;">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-950/55 via-slate-900/80 to-teal-950/50 border border-cyan-500/20 rounded-3xl" aria-hidden="true"></div>
+            <div class="absolute inset-0 backdrop-blur-sm rounded-3xl" aria-hidden="true"></div>
+            <div class="relative space-y-8 px-4 md:px-8">
+
+                <!-- Header -->
+                <div class="text-center space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-500/25 text-cyan-300 text-[12px] font-bold tracking-widest uppercase">
+                        <i data-lucide="users" class="w-3.5 h-3.5" aria-hidden="true"></i> Engineering Onboarding
+                    </div>
+                    <h2 id="bl-onboard-heading" class="section-title font-black tracking-tighter">
+                        New Engineers Productive<br/><span class="gradient-text-cyan">in Hours, Not Weeks.</span>
+                    </h2>
+                    <p class="section-desc max-w-3xl mx-auto font-light leading-relaxed">
+                        Every time a new engineer joins, your most experienced people carry an invisible tax: weeks of hand-holding, context transfer, repeated explanations, and the costly mistakes that come from incomplete mental models. CORTEX is designed to eliminate that tax with a single command.
+                    </p>
+                </div>
+
+                <!-- Split: narrative left, D3 journey chart right -->
+                <div class="glass-card p-6 md:p-8 border-cyan-500/15 bg-gradient-to-br from-cyan-950/20 to-slate-900/80">
+                    <div class="bl-split" style="gap:2.5rem;align-items:center;">
+
+                        <!-- Left: Business narrative -->
+                        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+                            <div>
+                                <p class="text-[12px] font-bold uppercase tracking-widest text-cyan-400 mb-2">Industry Standard — Not Generic Summaries</p>
+                                <p class="text-sm text-slate-400 leading-relaxed">
+                                    CORTEX does <strong class="text-white">not</strong> generate generic documentation or boilerplate summaries. The Onboarding Orchestrator applies <strong class="text-white">industry-standard best practices</strong> from CORTEX knowledge YAMLs — synthesising actual code understanding into a structured, reverse-engineered intelligence profile that reflects how the system truly works.
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-[12px] font-bold uppercase tracking-widest text-teal-400 mb-2">Reverse-Engineered, Not Guessed</p>
+                                <p class="text-sm text-slate-400 leading-relaxed">
+                                    Eight parallel LENS extractors analyse the codebase before a single word of documentation is produced — reading architecture patterns, dependency graphs, test coverage, security posture, and workflow conventions directly from the source. The result is a <strong class="text-white">code intelligence dashboard</strong> that a new engineer can trust from day one.
+                                </p>
+                            </div>
+                            <!-- Stats row -->
+                            <div class="flex flex-wrap gap-x-5 gap-y-3 pt-1">
+                                <div class="text-center">
+                                    <div class="text-2xl font-black text-cyan-400">~mins</div>
+                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Time to Profile</div>
+                                </div>
+                                <div style="width:1px;background:rgba(255,255,255,0.07);align-self:stretch;" aria-hidden="true"></div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-black text-teal-400">9</div>
+                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Intelligence Tabs</div>
+                                </div>
+                                <div style="width:1px;background:rgba(255,255,255,0.07);align-self:stretch;" aria-hidden="true"></div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-black text-emerald-400">$0</div>
+                                    <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Manual Config</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: D3 onboarding dumbbell chart -->
+                        <div class="bl-viz" style="display:flex;flex-direction:column;align-items:center;">
+                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Onboarding Time-to-Contribution (days)</div>
+                            <div id="onboard-accel-chart" class="d3-chart-host" style="height:240px;width:100%;min-width:0;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9-Tab Intelligence Dashboard strip -->
+                <div class="glass-card p-5 md:p-6 border-cyan-500/10 bg-gradient-to-br from-cyan-950/10 to-slate-900/60">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-[12px] font-bold uppercase tracking-widest text-cyan-400">9-Tab Code Intelligence Dashboard</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Generated from live code analysis · Zero manual input · Hosted as static HTML</p>
+                        </div>
+                        <code class="text-cyan-300/80 text-[12px] font-mono bg-cyan-950/40 border border-cyan-500/20 px-2 py-1 rounded-md">/onboard</code>
+                    </div>
+                    <div class="ob-tab-strip" role="list" aria-label="Onboarding dashboard intelligence tabs">
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#00d4ff;" aria-hidden="true"></span>01 · Overview</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#8b5cf6;" aria-hidden="true"></span>02 · Architecture</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#f59e0b;" aria-hidden="true"></span>03 · Governance</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#10b981;" aria-hidden="true"></span>04 · Testing</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#ef4444;" aria-hidden="true"></span>05 · Dependencies</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#f43f5e;" aria-hidden="true"></span>06 · Security</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#a78bfa;" aria-hidden="true"></span>07 · Metrics</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#34d399;" aria-hidden="true"></span>08 · Knowledge</div>
+                        <div class="ob-tab" role="listitem"><span class="ob-tab-dot" style="background:#7b61ff;" aria-hidden="true"></span>09 · Dev Workflow</div>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-3 leading-relaxed">Each tab is populated from actual code — not templates. Architecture patterns are detected, not assumed. Security findings are verified, not suggested. The dashboard gives new engineers the mental model that previously took weeks to build organically.</p>
+                </div>
+
+                <!-- Benefit cards -->
+                <div class="ob-benefit-grid">
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(0,212,255,0.2);--ob-card-glow:rgba(0,212,255,0.15);">
+                        <div class="ob-benefit-icon bg-cyan-500/15">
+                            <i data-lucide="zap" class="w-4 h-4 text-cyan-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-cyan-300">Faster Onboarding</p>
+                        <p class="ob-benefit-body">New team members inherit a complete architectural map on day one — replacing weeks of tribal knowledge transfer with a structured, up-to-date intelligence profile.</p>
+                    </div>
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(52,211,153,0.2);--ob-card-glow:rgba(52,211,153,0.15);">
+                        <div class="ob-benefit-icon bg-emerald-500/15">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-emerald-300">Fewer Costly Mistakes</p>
+                        <p class="ob-benefit-body">Incomplete mental models are the primary cause of new-engineer regressions. The dashboard surfaces architectural constraints, security boundaries, and test conventions before the first commit.</p>
+                    </div>
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(167,139,250,0.2);--ob-card-glow:rgba(167,139,250,0.15);">
+                        <div class="ob-benefit-icon bg-violet-500/15">
+                            <i data-lucide="brain" class="w-4 h-4 text-violet-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-violet-300">Reduced Senior Burden</p>
+                        <p class="ob-benefit-body">Your most experienced engineers spend their cognitive capacity on architecture and delivery — not answering "where does X go?" for the third time this sprint.</p>
+                    </div>
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(251,191,36,0.2);--ob-card-glow:rgba(251,191,36,0.15);">
+                        <div class="ob-benefit-icon bg-amber-500/15">
+                            <i data-lucide="book-open" class="w-4 h-4 text-amber-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-amber-300">Better Architectural Understanding</p>
+                        <p class="ob-benefit-body">The dashboard organises system understanding across 9 dimensions — from dependency risk to governance compliance — so new contributors build correct mental models, not approximations.</p>
+                    </div>
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(244,114,182,0.2);--ob-card-glow:rgba(244,114,182,0.15);">
+                        <div class="ob-benefit-icon bg-pink-500/15">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-pink-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-pink-300">Consistent Team Ramp-Up</p>
+                        <p class="ob-benefit-body">Every engineer receives the same structured onboarding experience — not a random walk through wikis and Slack threads. Consistency means predictable productivity curves and measurable time-to-contribution.</p>
+                    </div>
+                    <div class="ob-benefit-card" style="--ob-card-border:rgba(99,102,241,0.2);--ob-card-glow:rgba(99,102,241,0.15);">
+                        <div class="ob-benefit-icon bg-indigo-500/15">
+                            <i data-lucide="database" class="w-4 h-4 text-indigo-400" aria-hidden="true"></i>
+                        </div>
+                        <p class="ob-benefit-title text-indigo-300">Institutional Memory from Day One</p>
+                        <p class="ob-benefit-body">Root cause analyses, prevention rules, and delivery patterns persist in SQLite — new engineers inherit the hard-won lessons of every team that operated this codebase before them.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         <!-- SECTION 6: CORTEX MVP — Agentic Intelligence ★ -->
         <section class="relative py-8" style="border-radius:1.5rem; overflow:hidden;">
             <div class="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-900/80 to-indigo-950/60 border border-violet-500/20 rounded-3xl"></div>
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> ★ CORTEX MVP — Agentic Intelligence
                     </div>
                     <h2 class="section-title font-black tracking-tighter">Agentic Development.<br/><span class="gradient-text-cyan">Delivered and In Production.</span></h2>
@@ -1761,8 +1931,8 @@
                             <div class="w-10 h-10 shrink-0 bg-fuchsia-500/20 rounded-xl flex items-center justify-center text-fuchsia-400"><i data-lucide="workflow" class="w-5 h-5"></i></div>
                             <div>
                                 <h4 class="font-black text-sm tracking-tight text-fuchsia-300 mb-1">End-to-End Agentic Workflow — TotalRecall</h4>
-                                <p class="text-sm text-slate-500 leading-relaxed">The <code class="text-fuchsia-400 text-[11px]">/totalrecall</code> command launches a 10-phase autonomous pipeline: delta analysis → drift detection → regression testing → optimisation → wiring validation → memory consolidation → workspace cleanup → database maintenance → security hardening → production certification. A complete engineering cycle, unattended, in a single command.</p>
-                                <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-[11px] text-slate-600">
+                                <p class="text-sm text-slate-500 leading-relaxed">The <code class="text-fuchsia-400 text-[12px]">/totalrecall</code> command launches a 10-phase autonomous pipeline: delta analysis → drift detection → regression testing → optimisation → wiring validation → memory consolidation → workspace cleanup → database maintenance → security hardening → production certification. A complete engineering cycle, unattended, in a single command.</p>
+                                <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-[12px] text-slate-600">
                                     <span>① Delta</span><span>② Drift</span><span>③ Regression</span><span>④ Optimise</span><span>⑤ Wire</span><span>⑥ Memory</span><span>⑦ Vacuum</span><span>⑧ DB</span><span>⑨ Harden</span><span class="text-emerald-500 font-bold">⑩ Certify ✅</span>
                                 </div>
                             </div>
@@ -1775,7 +1945,7 @@
         <!-- SECTION 7: Architecture Proof -->
         <section>
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[12px] font-bold tracking-widest uppercase">
                     <i data-lucide="database" class="w-3.5 h-3.5"></i> Proven at Scale
                 </div>
                 <h2 class="section-title font-black tracking-tighter">The Architecture Behind the Promise</h2>
@@ -1791,33 +1961,33 @@
                         <div class="grid grid-cols-2 gap-3" style="flex:1;">
                             <div class="glass-card p-4 text-center space-y-1 border-cyan-500/20 hover:border-cyan-400/40 hover:-translate-y-1 transition-all">
                                 <div class="text-2xl font-black text-cyan-400">290+</div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Orchestrators</div>
-                                <div class="text-[11px] text-slate-600">14 domains</div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Orchestrators</div>
+                                <div class="text-[12px] text-slate-600">14 domains</div>
                             </div>
                             <div class="glass-card p-4 text-center space-y-1 border-violet-500/20 hover:border-violet-400/40 hover:-translate-y-1 transition-all">
                                 <div class="text-2xl font-black text-violet-400">36+</div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
-                                <div class="text-[11px] text-slate-600">registered &amp; live</div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">MCP Tools</div>
+                                <div class="text-[12px] text-slate-600">registered &amp; live</div>
                             </div>
                             <div class="glass-card p-4 text-center space-y-1 border-amber-500/20 hover:border-amber-400/40 hover:-translate-y-1 transition-all">
                                 <div class="text-2xl font-black text-amber-400">60+</div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
-                                <div class="text-[11px] text-slate-600">auto-enforced</div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Governance Rules</div>
+                                <div class="text-[12px] text-slate-600">auto-enforced</div>
                             </div>
                             <div class="glass-card p-4 text-center space-y-1 border-emerald-500/20 hover:border-emerald-400/40 hover:-translate-y-1 transition-all">
                                 <div class="text-2xl font-black text-emerald-400">20k+</div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Tests</div>
-                                <div class="text-[11px] text-slate-600">parallel execution</div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Tests</div>
+                                <div class="text-[12px] text-slate-600">parallel execution</div>
                             </div>
                             <div class="glass-card p-4 text-center space-y-1 border-red-500/20 hover:border-red-400/40 hover:-translate-y-1 transition-all col-span-2">
                                 <div class="text-2xl font-black text-red-400">9</div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
-                                <div class="text-[11px] text-slate-600">converging to zero violations</div>
+                                <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500">Audit Stages</div>
+                                <div class="text-[12px] text-slate-600">converging to zero violations</div>
                             </div>
                         </div>
                     </div>
                     <div class="bl-viz" style="display:flex;flex-direction:column;align-items:center;">
-                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Orchestrator domains by file count</div>
+                        <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Orchestrator domains by file count</div>
                         <div id="arch-donut-chart" class="d3-chart-host" style="height:260px;width:100%;"></div>
                     </div>
                 </div>
@@ -1826,8 +1996,8 @@
             <!-- Domain Bubble Grid -->
             <div class="glass-card p-6 md:p-8 mt-6 space-y-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains</span>
-                    <span class="text-[11px] font-bold text-cyan-400">14 domains · 290+ files</span>
+                    <span class="text-[12px] font-bold uppercase tracking-widest text-slate-400">Orchestrator Domains</span>
+                    <span class="text-[12px] font-bold text-cyan-400">14 domains · 290+ files</span>
                 </div>
                 <div class="domain-grid">
                     <div class="domain-bubble" style="--bubble-color:#00d4ff;--bubble-glow:rgba(0,212,255,0.25);width:110px;height:110px;background:rgba(0,212,255,0.07)"><span class="db-count" style="font-size:2rem">139</span><span class="db-name" style="font-size:0.6875rem;margin-top:0.2rem">core</span></div>
@@ -1854,7 +2024,7 @@
                 <div class="grid lg:grid-cols-2 gap-8 md:gap-16 items-center py-4">
                     <div class="space-y-8 md:space-y-10">
                         <div class="space-y-2">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[12px] font-bold tracking-widest uppercase">
                                 <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Corporate Resilience
                             </div>
                             <h2 class="section-title font-black tracking-tighter">The Intelligence Diamond</h2>
@@ -1910,19 +2080,19 @@
                             </svg>
                             <div class="diamond-node top-0 left-1/2 -translate-x-1/2 -mt-8 border-cyan-500/50 shadow-[0_0_30px_rgba(0,212,255,0.2)]">
                                 <i data-lucide="eye" class="text-cyan-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Sensory</span>
+                                <span class="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">Sensory</span>
                             </div>
                             <div class="diamond-node top-1/2 right-0 -translate-y-1/2 -mr-8 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                                 <i data-lucide="brain" class="text-emerald-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Logic</span>
+                                <span class="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">Logic</span>
                             </div>
                             <div class="diamond-node bottom-0 left-1/2 -translate-x-1/2 -mb-8 border-violet-500/50 shadow-[0_0_30px_rgba(139,92,246,0.2)]">
                                 <i data-lucide="activity" class="text-violet-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Motor</span>
+                                <span class="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">Motor</span>
                             </div>
                             <div class="diamond-node top-1/2 left-0 -translate-y-1/2 -ml-8 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
                                 <i data-lucide="shield-alert" class="text-red-400 mb-1 w-5 h-5"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Immune</span>
+                                <span class="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">Immune</span>
                             </div>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-20 h-20 rounded-full bg-slate-900 border-2 border-cyan-500/30 flex items-center justify-center shadow-[0_0_50px_rgba(0,212,255,0.15)]">
@@ -1938,7 +2108,7 @@
         <!-- SECTION 9: Institutional Memory & RCA -->
         <section>
             <div class="text-center space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] font-bold tracking-widest uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[12px] font-bold tracking-widest uppercase">
                     <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Corporate Memory
                 </div>
                 <h2 class="section-title font-black tracking-tighter">Institutional Muscle Memory</h2>
@@ -1951,28 +2121,28 @@
             <div class="glass-card p-6 md:p-8 mt-8 border-violet-500/15 bg-gradient-to-br from-violet-950/20 to-slate-900/80">
                 <div class="bl-split" style="gap:2rem;">
                     <div class="bl-viz">
-                        <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">RCA Coverage by failure category</div>
+                        <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">RCA Coverage by failure category</div>
                         <div id="rca-bar-chart" class="d3-chart-host" style="height:200px;width:100%;"></div>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:0.75rem;flex:1;">
-                        <div class="text-[11px] font-bold uppercase tracking-widest text-violet-400">4 Analysis Methodologies</div>
+                        <div class="text-[12px] font-bold uppercase tracking-widest text-violet-400">4 Analysis Methodologies</div>
                         <p class="text-sm text-slate-400 leading-relaxed">Auto-selected by failure category. Each completed analysis generates a Prevention Advisory distributed organisation-wide.</p>
                         <div class="grid grid-cols-2 gap-3" style="flex:1;">
                             <div class="p-3 bg-slate-900/80 rounded-xl border border-violet-500/20">
-                                <div class="text-[10px] font-bold text-violet-300 mb-1 uppercase tracking-widest">Five-Whys</div>
-                                <div class="text-[11px] text-slate-500">Technology failures — linear root tracing</div>
+                                <div class="text-[12px] font-bold text-violet-300 mb-1 uppercase tracking-widest">Five-Whys</div>
+                                <div class="text-[12px] text-slate-500">Technology failures — linear root tracing</div>
                             </div>
                             <div class="p-3 bg-slate-900/80 rounded-xl border border-blue-500/20">
-                                <div class="text-[10px] font-bold text-blue-300 mb-1 uppercase tracking-widest">Fishbone</div>
-                                <div class="text-[11px] text-slate-500">Process &amp; people — multi-axis categorisation</div>
+                                <div class="text-[12px] font-bold text-blue-300 mb-1 uppercase tracking-widest">Fishbone</div>
+                                <div class="text-[12px] text-slate-500">Process &amp; people — multi-axis categorisation</div>
                             </div>
                             <div class="p-3 bg-slate-900/80 rounded-xl border border-teal-500/20">
-                                <div class="text-[10px] font-bold text-teal-300 mb-1 uppercase tracking-widest">Fault Tree</div>
-                                <div class="text-[11px] text-slate-500">Single point failures via probability mapping</div>
+                                <div class="text-[12px] font-bold text-teal-300 mb-1 uppercase tracking-widest">Fault Tree</div>
+                                <div class="text-[12px] text-slate-500">Single point failures via probability mapping</div>
                             </div>
                             <div class="p-3 bg-slate-900/80 rounded-xl border border-amber-500/20">
-                                <div class="text-[10px] font-bold text-amber-300 mb-1 uppercase tracking-widest">Causal Chain</div>
-                                <div class="text-[11px] text-slate-500">Data failures — event correlation over time</div>
+                                <div class="text-[12px] font-bold text-amber-300 mb-1 uppercase tracking-widest">Causal Chain</div>
+                                <div class="text-[12px] text-slate-500">Data failures — event correlation over time</div>
                             </div>
                         </div>
                     </div>
@@ -2028,11 +2198,11 @@
                     </div>
                     <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-emerald-500/20">
-                            <div class="text-[11px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
+                            <div class="text-[12px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Cross-Team Signal</div>
                             <p class="text-sm text-slate-400 leading-relaxed">Institutional knowledge is shared instantly. If one team fixes a security gap, CORTEX prevents its re-introduction across the entire portfolio.</p>
                         </div>
                         <div class="p-6 bg-slate-900/80 rounded-2xl border border-cyan-500/20">
-                            <div class="text-[11px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
+                            <div class="text-[12px] font-bold text-cyan-400 mb-2 uppercase tracking-widest">Auditability</div>
                             <p class="text-sm text-slate-400 leading-relaxed">All learning and enforcement recorded in the CortexAuditDB with tamper-evident hash-chaining. Compliance is proof-based, not conversational.</p>
                         </div>
                     </div>
@@ -2046,7 +2216,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="settings" class="w-3.5 h-3.5"></i> Self-Sustaining by Design
                     </div>
                     <h2 class="section-title font-black tracking-tighter">No Platform Team Required.</h2>
@@ -2092,11 +2262,11 @@
                     <div class="bl-split" style="gap:2rem;align-items:center;">
                         <div style="display:flex;flex-direction:column;gap:1rem;text-align:center;">
                             <div class="text-5xl font-black text-emerald-400">$0</div>
-                            <div class="text-[11px] font-black uppercase tracking-widest text-slate-400">Dedicated Platform Engineering Headcount</div>
+                            <div class="text-[12px] font-black uppercase tracking-widest text-slate-400">Dedicated Platform Engineering Headcount</div>
                             <p class="text-sm text-slate-500 max-w-xs mx-auto leading-relaxed">Engineering investment flows entirely into product delivery — not into keeping the framework alive.</p>
                         </div>
                         <div class="bl-viz">
-                            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Self-sustaining capabilities</div>
+                            <div class="text-[12px] font-bold uppercase tracking-widest text-slate-500 text-center mb-3">Self-sustaining capabilities</div>
                             <div id="self-sustain-chart" class="d3-chart-host" style="height:180px;width:100%;"></div>
                         </div>
                     </div>
@@ -2144,7 +2314,142 @@
             buildArchDonut();
             buildRcaBar();
             buildSelfSustainChart();
+            buildOnboardingAccel();
         };
+
+        // ── Onboarding: horizontal dumbbell chart (before → after) ────────
+        // Replaces grouped bar — fixes: width=0 at paint time, label clipping,
+        // tiny font, near-zero bar invisibility for "after" values.
+        function buildOnboardingAccel() {
+            const el = document.getElementById('onboard-accel-chart');
+            if (!el) return;
+
+            // Defer one rAF so the split layout has painted and getBCR is real
+            requestAnimationFrame(() => {
+                el.innerHTML = '';   // clear any previous render
+
+                const W = Math.max(el.getBoundingClientRect().width, 260);
+                const H = 240;
+                const m = { top: 14, right: 56, bottom: 40, left: 26 };
+                const w = W - m.left - m.right;
+                const h = H - m.top - m.bottom;
+
+                // Rows: label | before | after
+                const rows = [
+                    { label: 'Understand Codebase',      before: 21, after: 1  },
+                    { label: 'First Safe Contribution',  before: 35, after: 5  },
+                    { label: 'Full Productivity',        before: 56, after: 14 }
+                ];
+                const MAX_VAL = 60;
+
+                const x = d3.scaleLinear().domain([0, MAX_VAL]).range([0, w]);
+                const y = d3.scaleBand().domain(rows.map(r => r.label)).range([0, h]).padding(0.55);
+
+                const svg = d3.select(el).append('svg')
+                    .attr('width', '100%').attr('height', H)
+                    .attr('viewBox', `0 0 ${W} ${H}`)
+                    .append('g').attr('transform', `translate(${m.left},${m.top})`);
+
+                // Subtle vertical grid lines
+                svg.append('g')
+                    .call(d3.axisBottom(x).ticks(5).tickSize(h).tickFormat(''))
+                    .attr('transform', 'translate(0,0)')
+                    .selectAll('line').attr('stroke', 'rgba(255,255,255,0.05)').attr('stroke-dasharray', '3,3');
+                svg.selectAll('.domain').remove();
+
+                // Defs — gradients
+                const defs = svg.append('defs');
+                const gB = defs.append('linearGradient').attr('id', 'ob2-before').attr('x1','0').attr('y1','0').attr('x2','1').attr('y2','0');
+                gB.append('stop').attr('offset','0%').attr('stop-color','#ef4444').attr('stop-opacity', 0.25);
+                gB.append('stop').attr('offset','100%').attr('stop-color','#ef4444').attr('stop-opacity', 0.85);
+
+                rows.forEach((r, i) => {
+                    const cy = y(r.label) + y.bandwidth() / 2;
+                    const trackH = Math.max(y.bandwidth() * 0.28, 6);
+
+                    // Row label (left of chart, top-aligned to row)
+                    svg.append('text')
+                        .attr('x', 0)
+                        .attr('y', y(r.label) - 2)
+                        .attr('fill', '#94a3b8')
+                        .attr('font-size', '12px')
+                        .attr('font-weight', '600')
+                        .attr('font-family', FONT)
+                        .text(r.label);
+
+                    // Background track (full width)
+                    svg.append('rect')
+                        .attr('x', 0).attr('y', cy - trackH / 2)
+                        .attr('width', w).attr('height', trackH)
+                        .attr('rx', trackH / 2)
+                        .attr('fill', 'rgba(255,255,255,0.04)');
+
+                    // "Before" filled segment (red → right)
+                    svg.append('rect')
+                        .attr('x', 0).attr('y', cy - trackH / 2)
+                        .attr('height', trackH).attr('rx', trackH / 2)
+                        .attr('fill', 'url(#ob2-before)').attr('width', 0)
+                        .transition().duration(DURATION_SLOW).delay(i * 150).ease(d3.easeCubicOut)
+                        .attr('width', x(r.before));
+
+                    // "After" filled segment (cyan, short)
+                    svg.append('rect')
+                        .attr('x', 0).attr('y', cy - trackH / 2)
+                        .attr('height', trackH).attr('rx', trackH / 2)
+                        .attr('fill', '#00d4ff').attr('opacity', 0.9).attr('width', 0)
+                        .transition().duration(DURATION_SLOW).delay(i * 150 + 120).ease(d3.easeCubicOut)
+                        .attr('width', x(r.after));
+
+                    // "After" end-cap dot
+                    svg.append('circle')
+                        .attr('cx', x(r.after)).attr('cy', cy)
+                        .attr('r', 0)
+                        .attr('fill', '#00d4ff')
+                        .attr('stroke', '#020617').attr('stroke-width', 2)
+                        .transition().duration(200).delay(i * 150 + DURATION_SLOW)
+                        .attr('r', 5);
+
+                    // "Before" value label — right of before bar
+                    svg.append('text')
+                        .attr('x', x(r.before) + 6)
+                        .attr('y', cy + 1)
+                        .attr('dominant-baseline', 'middle')
+                        .attr('fill', '#f87171')
+                        .attr('font-size', '12px').attr('font-weight', '800').attr('font-family', MONO)
+                        .text(`${r.before}d`);
+
+                    // "After" value label — above end-cap dot
+                    svg.append('text')
+                        .attr('x', x(r.after))
+                        .attr('y', cy - trackH / 2 - 6)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#00d4ff')
+                        .attr('font-size', '12px').attr('font-weight', '800').attr('font-family', MONO)
+                        .text(`${r.after}d`);
+
+                    // Reduction badge (×N faster) — far right
+                    const factor = Math.round(r.before / r.after);
+                    svg.append('text')
+                        .attr('x', w + m.right - 4)
+                        .attr('y', cy + 1)
+                        .attr('dominant-baseline', 'middle')
+                        .attr('text-anchor', 'end')
+                        .attr('fill', '#34d399')
+                        .attr('font-size', '12px').attr('font-weight', '900').attr('font-family', MONO)
+                        .text(`${factor}× faster`);
+                });
+
+                // Bottom legend
+                const legY = h + 24;
+                const legCx = w / 2;
+                // Red swatch
+                svg.append('rect').attr('x', legCx - 106).attr('y', legY - 5).attr('width', 12).attr('height', 8).attr('rx', 2).attr('fill', '#ef4444').attr('opacity', 0.8);
+                svg.append('text').attr('x', legCx - 90).attr('y', legY + 1).attr('dominant-baseline', 'middle').attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '700').attr('font-family', FONT).text('Without CORTEX');
+                // Cyan swatch
+                svg.append('rect').attr('x', legCx + 14).attr('y', legY - 5).attr('width', 12).attr('height', 8).attr('rx', 2).attr('fill', '#00d4ff').attr('opacity', 0.85);
+                svg.append('text').attr('x', legCx + 30).attr('y', legY + 1).attr('dominant-baseline', 'middle').attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '700').attr('font-family', FONT).text('With CORTEX');
+            });
+        }
 
         // ── Hero trend: Governed vs Ungoverned quality trajectory ─────────
         function buildHeroTrend() {
@@ -2196,12 +2501,12 @@
             svg.append('path').datum(dataGov).attr('fill','none').attr('stroke','#00d4ff').attr('stroke-width',2.5).attr('d', lineGov);
 
             // Baseline label
-            svg.append('text').attr('x', x('Q1')).attr('y', y(100)-6).attr('fill','rgba(148,163,184,0.5)').attr('font-size','10px').attr('font-family', MONO).text('Baseline');
+            svg.append('text').attr('x', x('Q1')).attr('y', y(100)-6).attr('fill','rgba(148,163,184,0.5)').attr('font-size','12px').attr('font-family', MONO).text('Baseline');
 
             // Axis
             svg.append('g').attr('transform',`translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill','#64748b').attr('font-size','10px').attr('font-family', FONT).attr('dy','1.2em');
+                .selectAll('text').attr('fill','#64748b').attr('font-size','12px').attr('font-family', FONT).attr('dy','1.2em');
             svg.selectAll('.domain').remove();
 
             // Legend (inside SVG, centred below x-axis)
@@ -2210,11 +2515,11 @@
             // Ungoverned swatch
             svg.append('line').attr('x1', legCx - 110).attr('y1', legY).attr('x2', legCx - 90).attr('y2', legY)
                 .attr('stroke','#ef4444').attr('stroke-width',2);
-            svg.append('text').attr('x', legCx - 86).attr('y', legY + 4).attr('fill','#64748b').attr('font-size','11px').attr('font-weight','700').attr('font-family', FONT).text('Ungoverned AI drift');
+            svg.append('text').attr('x', legCx - 86).attr('y', legY + 4).attr('fill','#64748b').attr('font-size','12px').attr('font-weight','700').attr('font-family', FONT).text('Ungoverned AI drift');
             // Governed swatch
             svg.append('line').attr('x1', legCx + 18).attr('y1', legY).attr('x2', legCx + 38).attr('y2', legY)
                 .attr('stroke','#00d4ff').attr('stroke-width',2.5);
-            svg.append('text').attr('x', legCx + 42).attr('y', legY + 4).attr('fill','#64748b').attr('font-size','11px').attr('font-weight','700').attr('font-family', FONT).text('CORTEX-governed');
+            svg.append('text').attr('x', legCx + 42).attr('y', legY + 4).attr('fill','#64748b').attr('font-size','12px').attr('font-weight','700').attr('font-family', FONT).text('CORTEX-governed');
         }
 
         // ── ROI bar chart (existing, enhanced) ─────────────────────────────
@@ -2252,11 +2557,11 @@
                 .attr('x', d => x(d.stage) + x.bandwidth() / 2)
                 .attr('y', d => y(d.cost) - 7)
                 .attr('text-anchor','middle').attr('fill', d => d.color)
-                .attr('font-size','11px').attr('font-weight','800').attr('font-family', FONT)
+                .attr('font-size','12px').attr('font-weight','800').attr('font-family', FONT)
                 .text(d => `${d.cost}×`);
             svg.append('g').attr('transform',`translate(0,${height})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill','#64748b').attr('font-size','11px').attr('font-weight','bold')
+                .selectAll('text').attr('fill','#64748b').attr('font-size','12px').attr('font-weight','bold')
                 .attr('font-family', FONT).attr('dy','1.2em');
             svg.selectAll('.domain').remove();
         }
@@ -2302,12 +2607,12 @@
             svg.append('path').datum(dataU).attr('fill','none').attr('stroke','#ef4444').attr('stroke-width',2).attr('d', line()(dataU));
             svg.append('path').datum(dataG).attr('fill','none').attr('stroke','#10b981').attr('stroke-width',2).attr('stroke-dasharray','4,3').attr('d', line()(dataG));
 
-            svg.append('text').attr('x', x('18 months') + 4).attr('y', y(100)).attr('fill','#ef4444').attr('font-size','9px').attr('font-family',MONO).attr('font-weight','700').text('ungoverned');
-            svg.append('text').attr('x', x('18 months') + 4).attr('y', y(8)).attr('fill','#10b981').attr('font-size','9px').attr('font-family',MONO).attr('font-weight','700').text('CORTEX');
+            svg.append('text').attr('x', x('18 months') + 4).attr('y', y(100)).attr('fill','#ef4444').attr('font-size','12px').attr('font-family',MONO).attr('font-weight','700').text('ungoverned');
+            svg.append('text').attr('x', x('18 months') + 4).attr('y', y(8)).attr('fill','#10b981').attr('font-size','12px').attr('font-family',MONO).attr('font-weight','700').text('CORTEX');
 
             svg.append('g').attr('transform',`translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill','#475569').attr('font-size','9px').attr('font-family', FONT).attr('dy','1.2em');
+                .selectAll('text').attr('fill','#475569').attr('font-size','12px').attr('font-family', FONT).attr('dy','1.2em');
             svg.selectAll('.domain').remove();
         }
 
@@ -2372,16 +2677,16 @@
                 const shortLabel = d.length > 10 ? d.replace(' ','') : d;
                 svg.append('text').attr('x', lp.x).attr('y', lp.y)
                     .attr('text-anchor','middle').attr('dominant-baseline','middle')
-                    .attr('fill','#64748b').attr('font-size','9px').attr('font-weight','700')
+                    .attr('fill','#64748b').attr('font-size','12px').attr('font-weight','700')
                     .attr('font-family', FONT).text(shortLabel);
             });
 
             // Legend
             const leg = svg.append('g').attr('transform',`translate(${cx - 60}, ${size - 20})`);
             leg.append('line').attr('x1',0).attr('y1',0).attr('x2',16).attr('y2',0).attr('stroke','#00d4ff').attr('stroke-width',2);
-            leg.append('text').attr('x',20).attr('y',4).attr('fill','#64748b').attr('font-size','9px').attr('font-family',FONT).text('CORTEX');
+            leg.append('text').attr('x',20).attr('y',4).attr('fill','#64748b').attr('font-size','12px').attr('font-family',FONT).text('CORTEX');
             leg.append('line').attr('x1',68).attr('y1',0).attr('x2',84).attr('y2',0).attr('stroke','rgba(239,68,68,0.5)').attr('stroke-width',1.5);
-            leg.append('text').attr('x',88).attr('y',4).attr('fill','#64748b').attr('font-size','9px').attr('font-family',FONT).text('Ungoverned');
+            leg.append('text').attr('x',88).attr('y',4).attr('fill','#64748b').attr('font-size','12px').attr('font-family',FONT).text('Ungoverned');
         }
 
         // ── Architecture Donut Chart ────────────────────────────────────────
@@ -2426,7 +2731,7 @@
             svg.append('text').attr('x', cx).attr('y', cy - 8).attr('text-anchor','middle')
                 .attr('fill','#f8fafc').attr('font-size','22px').attr('font-weight','900').attr('font-family',FONT).text('290+');
             svg.append('text').attr('x', cx).attr('y', cy + 10).attr('text-anchor','middle')
-                .attr('fill','#64748b').attr('font-size','9px').attr('font-weight','700').attr('font-family',MONO).text('ORCHESTRATORS');
+                .attr('fill','#64748b').attr('font-size','12px').attr('font-weight','700').attr('font-family',MONO).text('ORCHESTRATORS');
 
             // Callout for core
             const coreD = pie(data)[0];
@@ -2434,7 +2739,7 @@
             const lx = cx + (cx * 0.96) * Math.cos(midAngle);
             const ly = cy + (cx * 0.96) * Math.sin(midAngle);
             svg.append('text').attr('x', lx).attr('y', ly).attr('text-anchor','middle').attr('dominant-baseline','middle')
-                .attr('fill','rgba(0,212,255,0.7)').attr('font-size','9px').attr('font-weight','700').attr('font-family',MONO).text('core:139');
+                .attr('fill','rgba(0,212,255,0.7)').attr('font-size','12px').attr('font-weight','700').attr('font-family',MONO).text('core:139');
         }
 
         // ── RCA horizontal bar chart ────────────────────────────────────────
@@ -2483,14 +2788,14 @@
                 .attr('x', d => x(d.pct) + 6)
                 .attr('y', d => y(d.cat) + y.bandwidth() / 2)
                 .attr('dominant-baseline','middle')
-                .attr('fill', d => d.color).attr('font-size','11px').attr('font-weight','800')
+                .attr('fill', d => d.color).attr('font-size','12px').attr('font-weight','800')
                 .attr('font-family', FONT).text(d => `${d.pct}%`);
 
             // Category labels
             svg.selectAll('.cat-label').data(data).enter().append('text')
                 .attr('x', -8).attr('y', d => y(d.cat) + y.bandwidth() / 2)
                 .attr('text-anchor','end').attr('dominant-baseline','middle')
-                .attr('fill','#94a3b8').attr('font-size','10px').attr('font-weight','700')
+                .attr('fill','#94a3b8').attr('font-size','12px').attr('font-weight','700')
                 .attr('font-family', FONT).text(d => d.cat);
 
             // Method tags on right
@@ -2569,11 +2874,11 @@
 
         // Resize
         function rebuildAll() {
-            ['roi-chart','hero-trend-chart','ccp-risk-chart','quality-radar-chart','arch-donut-chart','rca-bar-chart','self-sustain-chart'].forEach(id => {
+            ['roi-chart','hero-trend-chart','ccp-risk-chart','quality-radar-chart','arch-donut-chart','rca-bar-chart','self-sustain-chart','onboard-accel-chart'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
-            buildHeroTrend(); buildRoiChart(); buildCcpRiskChart(); buildQualityRadar(); buildArchDonut(); buildRcaBar(); buildSelfSustainChart();
+            buildHeroTrend(); buildRoiChart(); buildCcpRiskChart(); buildQualityRadar(); buildArchDonut(); buildRcaBar(); buildSelfSustainChart(); buildOnboardingAccel();
         }
         let _resizeTimer;
         window.addEventListener('resize', () => { clearTimeout(_resizeTimer); _resizeTimer = setTimeout(rebuildAll, 220); });

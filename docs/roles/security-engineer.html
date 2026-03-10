@@ -798,7 +798,7 @@
             <div class="absolute inset-0 backdrop-blur-sm rounded-3xl"></div>
             <div class="relative space-y-8 px-4 md:px-8">
                 <div class="text-center space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[11px] font-bold tracking-widest uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[12px] font-bold tracking-widest uppercase">
                         <i data-lucide="shield" class="w-3.5 h-3.5"></i> Continuous Security Posture
                     </div>
                     <h2 class="section-title font-black tracking-tighter">Security Rules Self-Enforce.<br/>No Scheduling Required.</h2>
@@ -913,19 +913,19 @@
                 .attr('x', d => x(d.id) + x.bandwidth() / 2)
                 .attr('y', d => y(d.cwes) - 8)
                 .attr('text-anchor', 'middle').attr('fill', d => d.color)
-                .attr('font-size', '11px').attr('font-weight', '800')
+                .attr('font-size', '12px').attr('font-weight', '800')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => d.cwes);
 
             svg.append('g').attr('transform', `translate(0,${h})`)
                 .call(d3.axisBottom(x).tickSize(0))
-                .selectAll('text').attr('fill', '#64748b').attr('font-size', '11px')
+                .selectAll('text').attr('fill', '#64748b').attr('font-size', '12px')
                 .attr('font-weight', 'bold').attr('font-family', 'JetBrains Mono, monospace').attr('dy', '1.2em');
             svg.selectAll('.domain').remove();
 
             svg.append('text').attr('transform', 'rotate(-90)')
                 .attr('y', -38).attr('x', -h / 2).attr('text-anchor', 'middle')
-                .attr('fill', '#475569').attr('font-size', '11px').attr('font-family', 'Inter, sans-serif')
+                .attr('fill', '#475569').attr('font-size', '12px').attr('font-family', 'Inter, sans-serif')
                 .text('CWE Count');
         }
 
@@ -979,7 +979,7 @@
                 .attr('fill', '#f8fafc').attr('font-size', '28px').attr('font-weight', '900')
                 .attr('font-family', 'Space Grotesk, sans-serif').text('40+');
             svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.2em')
-                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '600')
                 .attr('font-family', 'Inter, sans-serif').text('PATTERNS');
         }
 
@@ -1012,7 +1012,7 @@
             svg.selectAll('.arc-label').data(pie(data)).enter().append('text')
                 .attr('transform', d => `translate(${arc.centroid(d)})`)
                 .attr('text-anchor', 'middle').attr('dy', '0.35em')
-                .attr('fill', '#fff').attr('font-size', '11px').attr('font-weight', '800')
+                .attr('fill', '#fff').attr('font-size', '12px').attr('font-weight', '800')
                 .attr('font-family', 'JetBrains Mono, monospace')
                 .text(d => `${d.data.severity} (${d.data.count})`);
 
@@ -1020,7 +1020,7 @@
                 .attr('fill', '#f8fafc').attr('font-size', '26px').attr('font-weight', '900')
                 .attr('font-family', 'Space Grotesk, sans-serif').text('14');
             svg.append('text').attr('text-anchor', 'middle').attr('dy', '1.3em')
-                .attr('fill', '#64748b').attr('font-size', '11px').attr('font-weight', '600')
+                .attr('fill', '#64748b').attr('font-size', '12px').attr('font-weight', '600')
                 .attr('font-family', 'Inter, sans-serif').text('RULES');
         }
 
