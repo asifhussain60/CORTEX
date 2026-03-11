@@ -1,0 +1,6 @@
+Deep space navy (#0a0e27). Emerald green (#00c471) as primary accent
+representing delivery confidence and passing tests. Purple (#7b61ff) as
+secondary for governance and traceability. Glassmorphism backlog panels
+and sprint boards with frosted blur. User story cards animate from idea
+to green CI badge. Acceptance criteria glow when matched to a passing test.
+No talking heads — requirement-to-code flow animations throughout.

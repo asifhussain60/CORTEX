@@ -1,0 +1,19 @@
+Cinematic 6–8 minute video exclusively for security engineers. Open with a
+CVE cascade flooding a dashboard — 1 vulnerability, then 10, then 50, each
+glowing red. A secrets leak slips through a commit undetected. A compliance
+audit arrives with no evidence trail. CORTEX activates a five-layer defence.
+
+Show the security engineer's toolkit:
+1. Pre-commit secrets detection stops the leak before it reaches the repo.
+   STRIDE threat modelling surfaces every attack vector before code ships.
+   CVE scanning runs on every dependency update — automated, not periodic.
+2. 60+ governance rules enforced at pre-commit, CI, and runtime — not
+   checklists, enforced gates. Every security decision logged to a knowledge
+   principle via DecisionTraceabilityLogger (Phase 143), so the reasoning
+   behind every rule is permanently traceable. Compliance evidence assembled
+   in seconds, not weeks.
+3. Five concentric security rings as a glowing defence tower — each layer
+   blocking a different threat class. Counter: "Threats blocked: 5/5".
+   CVE dashboard: 50 → 0. Compliance report: self-assembled in 4 seconds.
+
+Female narrator, calm authority. Message: security is architecture, not audit.

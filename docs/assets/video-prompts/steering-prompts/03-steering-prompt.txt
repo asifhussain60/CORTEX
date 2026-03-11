@@ -1,0 +1,20 @@
+Cinematic 6–8 minute video exclusively for product owners and delivery leads.
+Open with the PO's nightmare: a story marked Done that fails in production —
+acceptance criteria were never validated, "done" was a guess. CORTEX
+illuminates the full path from requirement to proof.
+
+Show the product owner's journey:
+1. Acceptance criteria written in plain language trace automatically to
+   passing tests. The full chain — user story → acceptance criterion → test →
+   green CI — is visible in a single animated flow. TDD enforced as
+   infrastructure means every story has a test before a line of code is
+   written. The PO can see proof of "done", not take it on faith.
+2. PO Change Intelligence pipeline (Phase 140): a change in requirements
+   propagates through the dependency graph, surfacing affected tests and
+   stories instantly. Impact is quantified before commitment is made.
+3. DecisionTraceabilityLogger links every engineering decision back to the
+   knowledge principle that justified it. The PO can trace why a technical
+   choice was made, months after the sprint closed.
+
+Female narrator, collaborative tone. POs should feel empowered, not excluded.
+Message: CORTEX makes "done" mean done.

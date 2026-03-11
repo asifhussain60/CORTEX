@@ -1,0 +1,21 @@
+Cinematic 6–8 minute video exclusively for software engineers. Open with AI
+generating code at zero context — CI fails, the terminal floods with errors,
+the engineer stares at output that means nothing. CORTEX activates: LENS
+pipeline illuminates the codebase layer by layer, context fills to 100%
+from 140+ knowledge files across 15 engineering domains before a single
+line is written.
+
+Show three capabilities every software engineer gains:
+1. TDD as a glowing neon loop (RED→GREEN→REFACTOR), enforced as infrastructure
+   via CORE-008 — not suggested, not optional. SubPhaseComposer DRY refactor
+   means every workflow step is composed once and reused everywhere.
+   WorkflowGateway is the single source of truth for all step definitions,
+   eliminating fork drift across the codebase.
+2. 40+ MCP tools surfaced directly in VS Code — context, governance, and
+   intent routing available without leaving the editor. 35+ intent types
+   routed to the right orchestrator automatically.
+3. Convergence gate dropping violations from 15 to zero — detect, fix, rescan
+   loop (CORE-068) stamping SWEEP COMPLETE. Not a one-pass check. Eight debug
+   injection strategies covering Python, Frontend, API, SQL, and .NET.
+
+Male narrator, peer-to-peer tone. Engineers should feel understood, not sold to.

@@ -1,0 +1,5 @@
+Deep space navy (#0a0e27). Glassmorphism panels with frosted blur and cyan
+(#00d4ff) borders. Floating particle systems and animated data-flow streams.
+Purple (#7b61ff) secondary accent for orchestrator connections. No static
+text slides — all information reveals through animation. Cinematic camera
+moves between abstract system visualisations.

@@ -1,0 +1,5 @@
+Deep space navy (#0a0e27). Cyan (#00d4ff) as engineering accent with gold
+(#FFD700) for quality and golden tests. Glassmorphism code panels with
+frosted blur and neon borders. TDD phases as distinct animated neon rings:
+red, then green, then cyan refactor. Data streams through the LENS pipeline
+with particle animations. Code transforms and morphs — nothing is static.

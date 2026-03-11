@@ -1,0 +1,21 @@
+Cinematic overview of CORTEX for all engineering roles, 6–8 minutes. Open
+with chaos: red error cascades, AI generating code with zero context,
+engineers overwhelmed. CORTEX activates — structured, glowing, calm.
+
+Show three pillars:
+1. LENS pipeline illuminating the codebase layer by layer — Language,
+   Examination, Navigation, Synthesis — backed by 140+ structured knowledge
+   files across 15 engineering domains and a Document Ingest Pipeline
+   converting Word, Excel, PowerPoint, PDF, YAML, and Markdown into
+   structured engineering guidance automatically.
+2. Intelligence Diamond rotating — three tiers empowering every role:
+   Skull layer (static rules and 60+ governance thresholds), Core layer
+   (anti-pattern and drift detection), Cortex layer (strategic reasoning
+   across 350+ specialised engines). Each role receives tailored insight.
+3. Universal Convergence Gate counting violations to zero — detect, fix,
+   rescan loop engineered to iterate until clean. Not a one-pass check.
+   Four RCA methodologies capture every incident into institutional memory.
+   15 permanently protected source directories guarded by SHA validation.
+
+End with eye, hands, shield icons merging into one logo. Female narrator,
+authoritative. Message: the false choice between speed and rigour is over.

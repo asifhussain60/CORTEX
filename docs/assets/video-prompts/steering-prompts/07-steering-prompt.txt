@@ -1,0 +1,25 @@
+Cinematic 6–8 minute video exclusively for site reliability engineers. Open
+with a glowing green health dashboard — 350+ components pulsing steady.
+Then one amber warning. Then ten. Then critical red cascade — prod is down,
+MTTR ticks past 60 minutes, on-call engineer searches runbooks that no longer
+match the system. The same failure that killed Friday night deploy 6 months
+ago. CORTEX RCA Memory identifies the pattern in 12 minutes and blocks
+recurrence permanently.
+
+Show three capabilities every SRE gains:
+1. Health Orchestrator monitoring 350+ components in real time — not periodic
+   polling but continuous signal. Anomaly surfaces before it becomes incident.
+   The dashboard shows health, not just uptime.
+2. RCA Memory Engine identifies root cause in 12 minutes using four
+   methodologies — Five-Whys, Fishbone, Fault-Tree, Causal-Chain — matched
+   automatically to incident category. Every RCA generates a Prevention Rule
+   stored in institutional memory. The same incident pattern is automatically
+   blocked next time. MTTR drops to 12 minutes. Recurrence: zero.
+3. Vacuum pipeline (Phase 141): 8-stage self-healing workspace guardian
+   running autonomously — naming, root clutter, empty files, orphan modules,
+   markdown sprawl, build artefacts, OS artefacts. 15 permanently protected
+   source directories guarded by SHA validation and 8 golden tests. Rollback
+   checkpoint before every sweep. Workspace health: 100%.
+
+Male narrator, SRE peer tone. Calm precision under pressure. Message: CORTEX
+turns institutional memory into a system component, not a person.

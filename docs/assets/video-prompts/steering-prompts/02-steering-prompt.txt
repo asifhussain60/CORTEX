@@ -1,0 +1,19 @@
+Cinematic 6–8 minute video exclusively for CTOs, VPs, and business leaders.
+Open with a boardroom dashboard bleeding red: rework costs 38%, compliance
+gaps unknown, missed commitments quarter after quarter. CORTEX transforms
+each metric to green — live, on screen, without ceremony.
+
+Show the leader's journey:
+1. Real-time engineering health replacing status reports — a single CORTEX
+   dashboard replacing 3 weekly meetings. 9-stage audit pipeline running
+   autonomously, delivering a PRODUCTION READY seal with evidence on demand.
+2. Compliance evidence generated in seconds, not weeks — 60+ governance rules
+   enforced at pre-commit, CI, and runtime. 7 SQLite audit databases maintaining
+   full traceability. Board-ready compliance reports self-assembled.
+3. Document Ingest Pipeline converting org documents, PowerPoint decks, and
+   Word specs into structured engineering guidance automatically — institutional
+   knowledge captured, not lost when people leave.
+
+Animate the ROI counter (38% rework → near-zero). Strategic silence after
+it stops. Male narrator, boardroom gravitas. The message: CORTEX makes
+engineering outcomes as predictable as financial forecasts.

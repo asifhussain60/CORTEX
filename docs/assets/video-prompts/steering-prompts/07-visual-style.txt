@@ -1,0 +1,6 @@
+Deep space navy (#0a0e27). Amber (#f39c12) as primary accent for operational
+awareness, alert states, and the self-healing Vacuum pipeline. Emerald green
+(#00c471) for resolved incidents and healthy system states. Incident timeline
+animates as a dark tense bar that resolves to calm green. RCA tree builds
+itself with branching node animations. Health dashboard with 350+ monitored
+components pulses in real time. No talking heads — abstract ops motion.

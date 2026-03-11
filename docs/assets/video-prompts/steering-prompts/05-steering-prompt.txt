@@ -1,0 +1,22 @@
+Cinematic 6–8 minute video exclusively for quality engineers and QA leads.
+Open with the quality engineer's burden: manual test matrices, flaky tests
+nobody trusts, a regression suite that takes 4 hours and still misses bugs.
+CORTEX transforms quality from gatekeeping into engineering.
+
+Show three capabilities every quality engineer gains:
+1. Golden tests as first-class citizens — each golden test card glows and
+   traces directly back to its acceptance criterion and the business rule it
+   protects. The golden test is the proof of correct behaviour, not the
+   assertion. Quality radar chart fills five dimensions to a composite score
+   of 87/100, with the weakest dimension highlighted as a growth opportunity.
+2. Response Rendering Rules (Phase 146) validate all 14 response formatting
+   constraints before output leaves CORTEX — quality gates at the output
+   layer, not just the input. Multi-pass code review pipeline with explicit
+   quality gates before merge.
+3. Convergence gate (CORE-068) dropping violations from 15 to zero — detect,
+   fix, rescan loop that iterates until the sweep is clean. SWEEP COMPLETE
+   seal stamps in gold. Sweep Completeness Contract (CORE-064) ensures no
+   partial sweeps — every issue in the catalogue must be CLOSED.
+
+Female narrator, quality-focused peer tone. QEs should feel their craft
+is respected. Message: quality is architecture, not afterthought.
