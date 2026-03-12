@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX DB Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-05 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
+**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-db-agent.md`
 **Role:** SQLite integrity enforcement, schema optimization, self-healing migrations, stale data cleanup
 
 ---

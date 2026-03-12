@@ -59,6 +59,9 @@ fix_command: |
   echo "Fix: update DatabaseHealthVerifier.verify_all() to cover all DB_REGISTRY entries"
 
 preflight_test: "tests/unit/infrastructure/test_check51_database_wiring_health.py"
+test_file: "tests/unit/infrastructure/test_check51_database_wiring_health.py"
+ci_gate: true
+created: "2026-03-12"
 
 references:
   - cortex/infrastructure/env_initializer.py

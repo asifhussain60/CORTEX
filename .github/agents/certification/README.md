@@ -1,7 +1,7 @@
 # CORTEX Certification Agents
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-02 | **Authority:** `.github/agents/certification/`
+**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/`
 
 ---
 

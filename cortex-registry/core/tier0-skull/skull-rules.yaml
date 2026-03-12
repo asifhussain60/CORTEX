@@ -2411,6 +2411,82 @@ rules:
       remediation_status: "✅ COMPLETE — Phase 94 implementation"
       AC_COMPLETE: "AC-P94-CORE068-001 ✅"
 
+  # CORE-069: Database Wiring Health (Phase 148 — 2026-03-12)
+  - rule_id: CORE-069
+    title: "Database Wiring Health — DatabaseHealthVerifier must cover all DB_REGISTRY entries"
+    tier: P0
+    severity: blocked
+    phase_introduced: "phase-148"
+    category: infrastructure
+    description: |
+      All databases declared in DB_REGISTRY (cortex/infrastructure/env_initializer.py)
+      MUST be reachable and verifiable via DatabaseHealthVerifier.verify_all().
+      The verifier performs a 4-layer check (file existence, table access, round-trip
+      write/read, PRAGMA integrity_check) for every registered database.
+
+      Prevents:
+      - New databases added to DB_REGISTRY without health verification coverage
+      - DatabaseHealthVerifier being deleted or renamed without updating this lock
+      - DB_REGISTRY entries whose path diverges from what verify_all() resolves
+    enforcement:
+      pre_commit: true
+      ci_gate: true
+      drift_lock: "check-51-database-wiring-health-lock.yaml"
+    acceptance_criteria:
+      - id: "AC-069-A"
+        test_name: "test_check51_database_wiring_health"
+        assertion: "DatabaseHealthVerifier.verify_all() covers all DB_REGISTRY entries"
+      - id: "AC-069-B"
+        test_name: "test_database_health_verifier_4_layers"
+        assertion: "All 4 health layers (file, tables, round-trip, integrity) pass for all 7 DBs"
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-035 (Single canonical)"
+      enables: "SQLite integrity guarantee for all 7 canonical databases"
+      remediation_status: "✅ COMPLETE — Phase 148 implementation"
+      AC_COMPLETE: "AC-P148-CORE069-001 ✅"
+
+  # CORE-071: DoR Hard Gate (Phase 150 — 2026-03-12)
+  - rule_id: CORE-071
+    title: "DoR Hard Gate — DoRApprovalGate.is_ready() must return approved before IMPLEMENT"
+    tier: P0
+    severity: blocked
+    phase_introduced: "phase-150"
+    category: workflow_gates
+    description: |
+      Before any IMPLEMENT workflow begins, DoRApprovalGate.is_ready(DoRScore) must
+      return approved=True. DoRScore evaluates 5 weighted dimensions:
+        - req_completeness: 30%
+        - arch_clarity: 25%
+        - dep_resolution: 20%
+        - test_readability: 15%
+        - risk_assessment: 10%
+      All dimensions must collectively reach the approval threshold (composite score=1.0
+      in strict mode) before implementation is permitted.
+
+      Prevents:
+      - Premature implementation before requirements are fully defined
+      - Architecture ambiguity entering the implementation phase
+      - Skipping Definition of Ready discipline in IMPLEMENT workflows
+    enforcement:
+      pre_commit: false
+      ci_gate: true
+      drift_lock: "check-50-phase-file-integrity-lock.yaml"
+    acceptance_criteria:
+      - id: "AC-071-A"
+        test_name: "test_dor_approval_gate_is_ready"
+        assertion: "DoRApprovalGate.is_ready(DoRScore with all=1.0) returns approved=True"
+      - id: "AC-071-B"
+        test_name: "test_dor_score_5_dimensions"
+        assertion: "DoRScore dataclass has all 5 weighted dimensions declared"
+      - id: "AC-071-C"
+        test_name: "test_dor_hard_gate_blocks_incomplete"
+        assertion: "DoRApprovalGate.is_ready() returns approved=False when any dimension < threshold"
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-048 (Holistic Validation Gate)"
+      enables: "Definition of Ready enforcement — no premature IMPLEMENT invocations"
+      remediation_status: "✅ COMPLETE — Phase 150 implementation"
+      AC_COMPLETE: "AC-P150-CORE071-001 ✅"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================

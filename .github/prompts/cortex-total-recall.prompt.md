@@ -40,7 +40,7 @@ token_cost_estimate: 6200
 # CORTEX Total Recall — Production Certification Authority
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-12 | **Phases Complete:** 152 | **Architecture:** 312 Orchestrators · 36 MCP Tools · 60 Governance YAMLs
+**Updated:** 2026-03-12 | **Phases Complete:** 152 | **Architecture:** 314 Orchestrators · 36 MCP Tools · 61 Governance YAMLs
 **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
 
 ---
@@ -158,7 +158,7 @@ Phase 10: CERTIFICATION        → Cert Agent         → Scorecard + sign-off +
 - Configuration P1 (settings.json / pytest.ini delta)
 - Dependency P1 (requirements.txt unreviewed additions)
 - Registry Schema P0 (YAML files failing schema validation — Phase 128-b)
-- Drift Lock P0 (checks #30–#49 failing — Phase 126/128)
+- Drift Lock P0 (checks #30–#51 failing — Phase 126/128/148/151)
 
 **Phase 3 — REGRESSION SCAN:** Test regression against baseline (preflight: 446+, total: 20,897+ collected). Governance suite (244+ tests), sweep domain tests (140+ across 8 domains A–H), dead code detection, bloat, duplicates, import health.
 
@@ -200,13 +200,13 @@ ssot_ownership:
   quick_commands:          CORTEX.prompt.md
   modes:                   cortex-registry/config/modes.yaml
   intelligence_facade:     cortex/intelligence/facade.py
-  drift_locks:             tests/preflight/ + tests/governance/     # checks #30-#49
+  drift_locks:             tests/preflight/ + tests/governance/     # checks #30-#51
   registry_schema:         cortex-registry/                         # enforced by test_registry_yaml_schema_cohesion.py
   workflow_templates:      cortex-registry/workflows/templates/     # enforced by test_workflow_template_convergence.py
   sweep_domains:           cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml
   dor_tracking:            cortex/orchestrators/core/dor_tracker.py           # DoRScore + DoRApprovalGate (CORE-071, Phase 150)
   knowledge_acquisition:   cortex/orchestrators/domain/knowledge_acquisition_orchestrator.py  # KAL (Phase 135)
-  dashboard_intelligence:  cortex/intelligence/dashboard/dashboard_intelligence_orchestrator.py  # Phase 152
+  dashboard_intelligence:  cortex/dashboards/intelligence_orchestrator.py  # Phase 152
   document_ingest:         cortex/orchestrators/domain/document_ingest_orchestrator.py  # Phase 144
   feedback_extractor:      cortex/orchestrators/support/feedback_orchestrator.py        # Phase 139
 ```
@@ -244,7 +244,7 @@ ssot_ownership:
 | H10 | Intent type coverage — all 32 intent types routed | P0 | Original |
 | H11 | Workflow template coverage — all code-touching modes resolve to YAML | P1 | Original |
 | H12 | Test count ≥ baseline (preflight: 446+, total: 20,897+) | P0 | Original |
-| H13 | Drift lock integrity — checks #30–#49 all pass | P0 | Phase 128 |
+| H13 | Drift lock integrity — checks #30–#51 all pass | P0 | Phase 128/148/151 |
 | H14 | Registry schema cohesion — all YAMLs pass schema validation | P0 | Phase 128-b |
 | H15 | Workflow template convergence — no orphans or duplicates | P1 | Phase 128-d |
 | H16 | Governance rule coverage — all CORE-XXX refs defined in skull-rules.yaml | P0 | Phase 128-f |
@@ -303,11 +303,11 @@ ssot_ownership:
 | `.github/agents/certification/` | Agent directory (8 specialist agents) |
 | `cortex-registry/workflows/templates/lifecycle/totalrecall-workflow.yaml` | Workflow template |
 | `cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml` | Sweep domains A–H (Phase 128) |
-| `cortex-registry/planning/phases/completed/phase-152-dashboard-intelligence-pipeline.yaml` | DashboardIntelligenceOrchestrator 7-stage pipeline |
-| `cortex-registry/planning/phases/completed/phase-151-vacuum-source-protection-persona-dashboard.yaml` | VACUUM_PROTECTED_ROOTS + GV-028..034 |
-| `cortex-registry/planning/phases/completed/phase-150-dor-hard-gate-personality-layer.yaml` | DoRScore + PersonalityLayer (CORE-071) |
-| `cortex-registry/planning/phases/completed/phase-149-knowledge-intelligence-enhancement.yaml` | ContextSynthesisGateway best_practices injection |
-| `cortex-registry/planning/phases/completed/phase-148-infrastructure-foundation.yaml` | DatabaseHealthVerifier 4-layer check |
+| `cortex-registry/planning/phases/planned/phase-152-dashboard-intelligence-pipeline.yaml` | DashboardIntelligenceOrchestrator 7-stage pipeline |
+| `cortex-registry/planning/phases/planned/phase-151-vacuum-source-protection-persona-dashboard.yaml` | VACUUM_PROTECTED_ROOTS + GV-028..034 |
+| `cortex-registry/planning/phases/planned/phase-150-dor-hard-gate-personality-layer.yaml` | DoRScore + PersonalityLayer (CORE-071) |
+| `cortex-registry/planning/phases/planned/phase-149-knowledge-intelligence-enhancement.yaml` | ContextSynthesisGateway best_practices injection |
+| `cortex-registry/planning/phases/planned/phase-148-infrastructure-foundation.yaml` | DatabaseHealthVerifier 4-layer check |
 | `cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml` | Drift locks #30–#41 |
 | `scripts/refresh_prompt_suite.py` | Self-healing prompt suite |
 | `.github/templates/cortex-response-templates.md` | Response formatting SSOT |

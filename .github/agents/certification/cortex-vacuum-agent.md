@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Vacuum Agent — Workspace Cleanup Specialist
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-04
+**Updated:** 2026-03-12
 **Authority:** `.github/agents/certification/cortex-vacuum-agent.md`
 **Phase:** 7 (WORKSPACE CLEANUP) within Total Recall pipeline
 **Orchestrator:** `cortex/orchestrators/health/vacuum_orchestrator.py`
@@ -32,6 +32,18 @@ production-ready state with zero detritus.
 - Build artifacts (`__pycache__`, `.pyc`, `dist/`, `build/`, `*.egg-info`)
 - OS artifacts (`.DS_Store`, `Thumbs.db`, `desktop.ini`, `._*`)
 - **Backup files** (`.bak`, `.orig`, `.backup` — Phase 128 addition)
+
+### VACUUM_PROTECTED_ROOTS (NEVER delete)
+
+`VACUUM_PROTECTED_ROOTS` frozenset in `cortex/orchestrators/health/constants.py` — enforced across all 8 stages via `_is_protected()` guard in `VacuumOrchestrator`:
+- `cortex/` — source package
+- `cortex-registry/` — governance YAMLs
+- `tests/` — test suite
+- `.github/` — prompts, agents, CI
+- `scripts/` — tooling
+- `cortex-docs/` — docs site assets
+
+`validate_safe_run()` is called before every stage — verifies target dir is not in `VACUUM_PROTECTED_ROOTS`. Any violation raises `VacuumSafetyError` and halts the pipeline.
 
 ### Out of Scope (other agents own)
 

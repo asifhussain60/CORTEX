@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Certification Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-certification-agent.md`
+**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-certification-agent.md`
 **Role:** Production hardening validation, certification scoring, release sign-off
 
 ---
@@ -57,7 +57,17 @@ and issue the release sign-off (or block).
 | H19 | Path depth contracts | P1 | `python3 -m pytest tests/governance/test_master_yaml_path_contracts.py tests/governance/test_path_separator_contracts.py tests/governance/test_playbook_path_contracts.py -q` — parents[N] verified |
 | H20 | Sweep domain regression | P0 | All 25 Phase 128 test files (140+ tests) GREEN |
 
-### Quick H13–H20 Verification Command
+#### Phase 148–152 Hardened Checks (H21–H25)
+
+| # | Check | Severity | Method |
+|---|-------|----------|--------|
+| H21 | DatabaseHealthVerifier 4-layer check | P0 | `from cortex.infrastructure.database_health_verifier import DatabaseHealthVerifier; v=DatabaseHealthVerifier(); ok,issues=v.verify_all(); assert ok, issues` — all 7 databases pass exist→tables→roundtrip→integrity | 
+| H22 | VACUUM_PROTECTED_ROOTS enforcement | P0 | `grep -n "VACUUM_PROTECTED_ROOTS" cortex/orchestrators/health/constants.py` — frozenset must contain cortex/,cortex-registry/,tests/,.github/,scripts/; `validate_safe_run()` present in `VacuumOrchestrator` |
+| H23 | DoRApprovalGate + DoRScore wired (CORE-071) | P1 | `from cortex.orchestrators.core.dor_tracker import DoRScore, DoRApprovalGate; g=DoRApprovalGate(); r=g.is_ready(DoRScore(req_completeness=1.0,arch_clarity=1.0,dep_resolution=1.0,test_readability=1.0,risk_assessment=1.0)); assert r.approved` — must return approved |
+| H24 | ContextSynthesisGateway best_practices injection | P0 | `python3 -m pytest tests/orchestrators/core/test_exit_gate_wiring.py -q` — best_practices key injected into context output |
+| H25 | DashboardIntelligenceOrchestrator 7-stage pipeline | P1 | `python3 -m pytest tests/intelligence/ -k dashboard -q` — DashboardDataCollector, VisualizationSelector, NarrativeEngine, DashboardQualityGate all GREEN |
+
+### Quick H13–H25 Verification Command
 
 ```bash
 python3 -m pytest \
@@ -70,6 +80,8 @@ python3 -m pytest \
   tests/governance/test_master_yaml_path_contracts.py \
   tests/governance/test_orchestrator_wiring_integrity.py \
   tests/preflight/test_stub_governance.py \
+  tests/preflight/test_e2e_database_population.py \
+  tests/orchestrators/core/test_exit_gate_wiring.py \
   -q --tb=short
 ```
 

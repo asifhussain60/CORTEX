@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Refactor Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-refactor-agent.md`
+**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-refactor-agent.md`
 **Role:** Prompt/agent optimization, redundancy elimination, Intelligence Diamond wiring validation
 
 ---

@@ -1,4 +1,4 @@
-updated: '2026-03-05'
+updated: '2026-03-12'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -16,18 +16,18 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   last_updated: '2026-03-12T00:00:00Z'
-  total_phases: 133
+  total_phases: 149
   active: 0
-  completed: 123
+  completed: 147
   in_progress: 0
-  planned: 8
+  planned: 0
   governance_rules_total: 37
   digests: 1
   last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
-    smoke: 2775
-    preflight: 424
-    governance: 197
+    smoke: 2791
+    preflight: 446
+    governance: 244
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
@@ -52,17 +52,17 @@ phase_detail_files:
   # Issue #17 Backport Phases (2026-03-09) — 7 capabilities from cortex-sts feedback extraction
   - { id: phase-140, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-140-PRODUCTION-HARDENING, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/completed/phase-140-production-hardening-dependency-audit.yaml", note: "Production Hardening COMPLETE 2026-03-12: 13 unnecessary packages removed (aiofiles, alembic, argparse-dataclass, gevent, greenlet, httptools, pandas, playwright, psycopg2-binary, torch, transformers, websockets, wsproto), 4 doc-ingest packages added (python-docx, openpyxl, python-pptx, pypdf), MCP tool file count drift 56→58 fixed across copilot-instructions/AGENT-INDEX/cortex-architect, Deleted Constructs deduplicated in cortex-digest+cortex-sts-refactoring, STAGE-0-GOVERNANCE-AUDIT-SPEC.md deleted, phases 130-133 file pointers moved to completed/, .bak artifact removed. Source: Issue #17 FB-007." }
   - { id: phase-141, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-141-VACUUM-SOURCE-PROTECTION, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-141-vacuum-source-protection-hardening.yaml", note: "Vacuum Source Protection COMPLETE 2026-03-12: PROTECTED_DIRS expanded 9→15 (.git,.venv,venv,env,.cortex-runtime,node_modules added), validate_safe_run() implemented, RollbackManager SHA format validation, 8 golden tests GV-012..GV-019 all pass. Source: Issue #17 FB-002." }
-  - { id: phase-142, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-142-SUBPHASECOMPOSER-DRY, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-142-subphasecomposer-dry-refactor.yaml", note: "SubPhaseComposer DRY Refactor COMPLETE 2026-03-12: WorkflowGateway.get_mode_template_map() SSOT, SubPhaseComposer.INTENT_TEMPLATE_MAP derived at module load, 18 hardcoded entries removed. CORE-035 compliance." }
-  - { id: phase-143, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-143-KNOWLEDGE-GUIDANCE-TRACEABILITY, gaps: 1, sub_phases: 1, file: "cortex-registry/planning/phases/planned/phase-143-knowledge-guidance-traceability.yaml", note: "Knowledge Guidance Traceability COMPLETE 2026-03-12: DecisionTraceabilityLogger wired into KnowledgeGuidanceEngine.resolve(), QW-006 compliance, decision_type=RESOLUTION emitted per guidance resolution. Source: Issue #17 FB-003." }
-  - { id: phase-144, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-144-DOCUMENT-INGEST-PIPELINE, gaps: 5, sub_phases: 5, file: "cortex-registry/planning/phases/planned/phase-144-document-ingest-pipeline.yaml", note: "Document Ingest Pipeline COMPLETE 2026-03-12: 5 components (IngestFileClassifier 9 categories, DocumentReader Office/PDF lazy-load, IngestKnowledgeExtractor, IngestContentRouter 14 domains, DocumentIngestOrchestrator teardown+OPJ). 30 TDD tests GREEN. Source: Issue #17 FB-001." }
-  - { id: phase-145, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-145-DOCUMENTATION-INTELLIGENCE, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-145-documentation-intelligence-knowledge.yaml", note: "Documentation Intelligence Knowledge COMPLETE 2026-03-12: 66 practices across 10 sub-domains in documentation-intelligence.yaml, INDEX.yaml registration, domain-signal-map.yaml signal added. Source: Issue #17 FB-005." }
-  - { id: phase-146, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-146-RESPONSE-RENDERING-RULES, gaps: 1, sub_phases: 1, file: "cortex-registry/planning/phases/planned/phase-146-response-rendering-rules-golden.yaml", note: "Response Rendering Rules Golden Tests COMPLETE 2026-03-12: 25 tests in test_response_rendering_rules_golden.py validating 14 rendering rules (R1-R6 + Rule1/3/4/DECL). All GREEN. Source: Issue #17 FB-006." }
+  - { id: phase-142, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-142-SUBPHASECOMPOSER-DRY, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/completed/phase-142-subphasecomposer-dry-refactor.yaml", note: "SubPhaseComposer DRY Refactor COMPLETE 2026-03-12: WorkflowGateway.get_mode_template_map() SSOT, SubPhaseComposer.INTENT_TEMPLATE_MAP derived at module load, 18 hardcoded entries removed. CORE-035 compliance." }
+  - { id: phase-143, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-143-KNOWLEDGE-GUIDANCE-TRACEABILITY, gaps: 1, sub_phases: 1, file: "cortex-registry/planning/phases/completed/phase-143-knowledge-guidance-traceability.yaml", note: "Knowledge Guidance Traceability COMPLETE 2026-03-12: DecisionTraceabilityLogger wired into KnowledgeGuidanceEngine.resolve(), QW-006 compliance, decision_type=RESOLUTION emitted per guidance resolution. Source: Issue #17 FB-003." }
+  - { id: phase-144, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-144-DOCUMENT-INGEST-PIPELINE, gaps: 5, sub_phases: 5, file: "cortex-registry/planning/phases/completed/phase-144-document-ingest-pipeline.yaml", note: "Document Ingest Pipeline COMPLETE 2026-03-12: 5 components (IngestFileClassifier 9 categories, DocumentReader Office/PDF lazy-load, IngestKnowledgeExtractor, IngestContentRouter 14 domains, DocumentIngestOrchestrator teardown+OPJ). 30 TDD tests GREEN. Source: Issue #17 FB-001." }
+  - { id: phase-145, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-145-DOCUMENTATION-INTELLIGENCE, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/completed/phase-145-documentation-intelligence-knowledge.yaml", note: "Documentation Intelligence Knowledge COMPLETE 2026-03-12: 66 practices across 10 sub-domains in documentation-intelligence.yaml, INDEX.yaml registration, domain-signal-map.yaml signal added. Source: Issue #17 FB-005." }
+  - { id: phase-146, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-146-RESPONSE-RENDERING-RULES, gaps: 1, sub_phases: 1, file: "cortex-registry/planning/phases/completed/phase-146-response-rendering-rules-golden.yaml", note: "Response Rendering Rules Golden Tests COMPLETE 2026-03-12: 25 tests in test_response_rendering_rules_golden.py validating 14 rendering rules (R1-R6 + Rule1/3/4/DECL). All GREEN. Source: Issue #17 FB-006." }
   # Issue #18 Backport Phases (2026-03-12) — 9 capabilities from feature/day-zero-setup (Phases 147–150)
-  - { id: phase-148, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-148-INFRASTRUCTURE-FOUNDATION, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-148-infrastructure-foundation.yaml", note: "Infrastructure Foundation COMPLETE 2026-03-12: DatabaseHealthVerifier (4-layer SQLite: exist+tables+roundtrip+integrity), cortex/knowledge/best_practices/ canonical path verified (KnowledgeRegistryProxy-backed), check-51 drift-lock + 25 unit tests + 9 preflight E2E tests GREEN. Source: Issue #18 FB-003+FB-009." }
-  - { id: phase-149, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-149-KNOWLEDGE-INTELLIGENCE-ENHANCEMENT, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-149-knowledge-intelligence-enhancement.yaml", note: "Knowledge Intelligence Enhancement COMPLETE 2026-03-12: best_practices injected via ContextSynthesisGateway._get_best_practices_for() exit gate (context['best_practices'] key), CortexFrameworkAnalyzer.analyze_metadata() regex stats from copilot-instructions.md, RegistryMaterializer + framework-context.yaml, 38 golden injection tests + 6 exit gate wiring tests GREEN. Source: Issue #18 FB-002+FB-008." }
-  - { id: phase-150, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-150-DOR-HARD-GATE-PERSONALITY, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-150-dor-hard-gate-personality-layer.yaml", note: "DoR Hard Gate + PersonalityLayer COMPLETE 2026-03-12: DoRScore dataclass (5-dim weighted: req_completeness 30%, arch_clarity 25%, dep_res 20%, test_read 15%, risk_assess 10%) in dor_tracker.py, DoRApprovalGate.is_ready() CORE-071, personality_layer.py voiced methods, atom-dor-prompt.yaml (skip_when: silent/dor≥0.75). Source: Issue #18 FB-004+FB-005." }
-  - { id: phase-151, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-151-VACUUM-SOURCE-PROTECTION-PERSONA-DASHBOARD, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-151-vacuum-source-protection-persona-dashboard.yaml", note: "Vacuum Source Protection + Persona Dashboard COMPLETE 2026-03-12: VACUUM_PROTECTED_ROOTS frozenset (cortex/cortex-registry/tests/.github/scripts/cortex-docs) in constants.py, _is_protected() guard in VacuumOrchestrator (all 8 stages), GV-028..034 in capabilities-manifest.yaml, TabRenderer + PersonaLayer in cortex/orchestrators/support/onboarding/, 17 tests GREEN. Source: Issue #18 FB-006+FB-007." }
-  - { id: phase-152, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-152-DASHBOARD-INTELLIGENCE-PIPELINE, gaps: 6, sub_phases: 6, file: "cortex-registry/planning/phases/planned/phase-152-dashboard-intelligence-pipeline.yaml", note: "Dashboard Intelligence Pipeline COMPLETE 2026-03-12: 7-stage pipeline — DashboardDataCollector, KnowledgeOverlayEngine, VisualizationSelector (5-sec rule + F-pattern heuristics), NarrativeEngine (≥150 words/tab), DashboardQualityGate (6 rules: dead-sections/duplication/F-pattern/progressive-disclosure/5-sec/narrative-150), DashboardIntelligenceOrchestrator (backward-compat wrapper). 46 tests GREEN. Source: Issue #18 FB-001." }
+  - { id: phase-148, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-148-INFRASTRUCTURE-FOUNDATION, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/completed/phase-148-infrastructure-foundation.yaml", note: "Infrastructure Foundation COMPLETE 2026-03-12: DatabaseHealthVerifier (4-layer SQLite: exist+tables+roundtrip+integrity), cortex/knowledge/best_practices/ canonical path verified (KnowledgeRegistryProxy-backed), check-51 drift-lock + 25 unit tests + 9 preflight E2E tests GREEN. Source: Issue #18 FB-003+FB-009." }
+  - { id: phase-149, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-149-KNOWLEDGE-INTELLIGENCE-ENHANCEMENT, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-149-knowledge-intelligence-enhancement.yaml", note: "Knowledge Intelligence Enhancement COMPLETE 2026-03-12: best_practices injected via ContextSynthesisGateway._get_best_practices_for() exit gate (context['best_practices'] key), CortexFrameworkAnalyzer.analyze_metadata() regex stats from copilot-instructions.md, RegistryMaterializer + framework-context.yaml, 38 golden injection tests + 6 exit gate wiring tests GREEN. Source: Issue #18 FB-002+FB-008." }
+  - { id: phase-150, status: COMPLETE, completed_date: "2026-03-12", priority: P0, sweep_id: SWEEP-150-DOR-HARD-GATE-PERSONALITY, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-150-dor-hard-gate-personality-layer.yaml", note: "DoR Hard Gate + PersonalityLayer COMPLETE 2026-03-12: DoRScore dataclass (5-dim weighted: req_completeness 30%, arch_clarity 25%, dep_res 20%, test_read 15%, risk_assess 10%) in dor_tracker.py, DoRApprovalGate.is_ready() CORE-071, personality_layer.py voiced methods, atom-dor-prompt.yaml (skip_when: silent/dor≥0.75). Source: Issue #18 FB-004+FB-005." }
+  - { id: phase-151, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-151-VACUUM-SOURCE-PROTECTION-PERSONA-DASHBOARD, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-151-vacuum-source-protection-persona-dashboard.yaml", note: "Vacuum Source Protection + Persona Dashboard COMPLETE 2026-03-12: VACUUM_PROTECTED_ROOTS frozenset (cortex/cortex-registry/tests/.github/scripts/cortex-docs) in constants.py, _is_protected() guard in VacuumOrchestrator (all 8 stages), GV-028..034 in capabilities-manifest.yaml, TabRenderer + PersonaLayer in cortex/orchestrators/support/onboarding/, 17 tests GREEN. Source: Issue #18 FB-006+FB-007." }
+  - { id: phase-152, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-152-DASHBOARD-INTELLIGENCE-PIPELINE, gaps: 6, sub_phases: 6, file: "cortex-registry/planning/phases/completed/phase-152-dashboard-intelligence-pipeline.yaml", note: "Dashboard Intelligence Pipeline COMPLETE 2026-03-12: 7-stage pipeline — DashboardDataCollector, KnowledgeOverlayEngine, VisualizationSelector (5-sec rule + F-pattern heuristics), NarrativeEngine (≥150 words/tab), DashboardQualityGate (6 rules: dead-sections/duplication/F-pattern/progressive-disclosure/5-sec/narrative-150), DashboardIntelligenceOrchestrator (backward-compat wrapper). 46 tests GREEN. Source: Issue #18 FB-001." }
   - { id: phase-128, status: COMPLETE, completed_date: "2026-03-05", priority: P0, sweep_id: SWEEP-128-CONFLICT-DRIFT-ERADICATION, gaps: 24, sub_phases: 9, completed_sub_phases: 9, file: "cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml", note: "Conflict & Drift Eradication: 9/9 sub-phases complete (128-a through 128-i), 97+ violations fixed, 42 new tests, 8 drift locks checks #42-#49." }
   - { id: phase-127, status: COMPLETE, completed_date: "2026-03-05", priority: P1, sweep_id: SWEEP-127-DETERMINISTIC-SYNC, gaps: 6, file: "cortex-registry/planning/phases/completed/phase-127-deterministic-sync-engine.yaml", note: "Deterministic Safe Windows-First Sync Engine: 6/6 GAPs CLOSED. cortex/tools/cortex_sync.py (stdlib-only), SSOT policy, three-way merge, baseline tracking, danger scan, 23 golden tests GREEN." }
   - { id: phase-126, status: COMPLETE, completed_date: "2026-03-04", priority: P0, sweep_id: SWEEP-126-HARDENING, gaps: 12, sub_phases: 13, file: "cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml", note: "Audit-&-Fix Production Hardening Checklist Engine: 41-point check suite (#30-#41), 12 drift locks, all 12 GAPs CLOSED." }
@@ -122,38 +122,41 @@ health_status:
       status: "PASS single-process | FLAKY under xdist"
 
 production_readiness:
-  status: "✅ Phase 47 registered (Memory Tier Migration — completed 2026-02-28, previously unregistered in master). Phase 120 + 119 COMPLETE. planned: 0. Smoke: 2,388. Preflight: 258."
+  status: "✅ Phases 148-152 COMPLETE (Issue #18 backport chain — all 5 phases: Infrastructure Foundation + Knowledge Intelligence Enhancement + DoR Hard Gate + Vacuum Source Protection + Dashboard Intelligence Pipeline). Preflight: 446 GREEN. 2026-03-12."
   overall_score: 97%
-  deployment_date: '2026-03-04'
+  deployment_date: '2026-03-12'
   score_evidence: |
-    Post Phase 119 + Phase 120 completion evidence (2026-03-04):
-    - Smoke: 2,388 passed (phase-120 certified baseline)
-    - Preflight: 258 passed, 9 skipped in 5.37s
-    - Phase 119: 4/4 GAPs CLOSED — AST audit complete, all 266 class duplicates triaged
-    - Phase 120: 3-Tier LEGO architecture, 26 YAMLs, 49 golden tests, 8 terminal compositions
+    Post Phase 152 completion evidence (2026-03-12):
+    - Preflight: 446 passed, 10 skipped in 6.16s
+    - Total tests collected: 21,264+
+    - Issue #18 complete: phases 148-152 all COMPLETE (DatabaseHealthVerifier, ContextSynthesisGateway, DoRScore, VACUUM_PROTECTED_ROOTS, DashboardIntelligenceOrchestrator)
+    - Issue #17 complete: phases 140-147 all COMPLETE
+    - Issue #14 complete: phases 135-139 all COMPLETE
+    - Backport chains 129-134 COMPLETE
     - F811 duplicate methods: All checks passed (ruff)
     - F401 unused imports: All checks passed (ruff)
-    - Intelligence layer: IntelligenceFacade.analyze/synthesize/query OK
+    - Intelligence layer: IntelligenceFacade.analyze/synthesize/query/acquire/threat_assessment/quality_baseline/guidance OK
     - Ghost directories: None found
     - OS artifacts: 0 .DS_Store, 0 bin/obj
-    - SQLite AC markers: AC_START=1,657 WF_RUNS=1,420 — paired OK
-    - CLI entry point: python -m cortex works with full command menu
+    - VACUUM_PROTECTED_ROOTS frozenset: enforced across all 8 vacuum stages
+    - DoRApprovalGate (CORE-071): DoRScore 5-dim weighted scoring active
+    - DatabaseHealthVerifier: 4-layer (exist→tables→roundtrip→integrity) for all 7 databases
+    - DashboardIntelligenceOrchestrator: 7-stage pipeline GREEN
     - planned phases: 0 — all phases COMPLETE
-    - phase-111a/111b/111c sub-phase files: moved planned/→completed/
 
 verification:
   method: git_history + code_inspection + test_verification + live_checks
-  last_verified: '2026-03-05T00:00:00Z'
+  last_verified: '2026-03-12T00:00:00Z'
 
 summary:
-  total_phases: 133
-  completed: 123
+  total_phases: 149
+  completed: 147
   active: 0
   in_progress: 0
-  planned: 8
+  planned: 0
   archived: 4
   playbooks: 1
-  completion_percentage: 93
+  completion_percentage: 99
   consolidation_summary: "2026-03-12 — Phases 148-152 COMPLETE (Issue #18 backport chain — all 5 phases). Phase 147 COMPLETE (Video Steering Synthesis). Phases 140-146 COMPLETE (Issue #17 backport chain). 2026-03-08 — phases 135-139 COMPLETE (Issue #14 backport chain). phases 129–134 COMPLETE."
   active_phases: "No active phases. Issue #17 and Issue #18 backport chains 100% complete. Await new issue backport (Issue #19+) or user-directed phase creation."
 
@@ -341,7 +344,7 @@ phases:
     sweep_id: SWEEP-142-SUBPHASECOMPOSER-DRY
     gaps: 2
     sub_phases: 2
-    file: "cortex-registry/planning/phases/planned/phase-142-subphasecomposer-dry-refactor.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-142-subphasecomposer-dry-refactor.yaml"
     note: "COMPLETE 2026-03-12. WorkflowGateway.get_mode_template_map() public SSOT, SubPhaseComposer.INTENT_TEMPLATE_MAP derived at module load (18 hardcoded entries removed). CORE-035 compliance."
 
   # ── PHASE 143: KNOWLEDGE GUIDANCE TRACEABILITY (COMPLETE 2026-03-12) ─────────
@@ -353,7 +356,7 @@ phases:
     sweep_id: SWEEP-143-KNOWLEDGE-GUIDANCE-TRACEABILITY
     gaps: 1
     sub_phases: 1
-    file: "cortex-registry/planning/phases/planned/phase-143-knowledge-guidance-traceability.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-143-knowledge-guidance-traceability.yaml"
     note: "COMPLETE 2026-03-12. DecisionTraceabilityLogger wired into KnowledgeGuidanceEngine.resolve(), QW-006 compliance, RESOLUTION decision trace emitted per knowledge consultation."
 
   # ── PHASE 144: DOCUMENT INGEST PIPELINE (COMPLETE 2026-03-12) ───────────────
@@ -365,7 +368,7 @@ phases:
     sweep_id: SWEEP-144-DOCUMENT-INGEST-PIPELINE
     gaps: 5
     sub_phases: 5
-    file: "cortex-registry/planning/phases/planned/phase-144-document-ingest-pipeline.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-144-document-ingest-pipeline.yaml"
     note: "COMPLETE 2026-03-12. IngestFileClassifier (9 cats), DocumentReader (Office/PDF lazy-load), IngestKnowledgeExtractor, IngestContentRouter (14 domains), DocumentIngestOrchestrator (teardown+OPJ). 30 TDD tests GREEN."
 
   # ── PHASE 145: DOCUMENTATION INTELLIGENCE KNOWLEDGE (COMPLETE 2026-03-12) ────
@@ -377,7 +380,7 @@ phases:
     sweep_id: SWEEP-145-DOCUMENTATION-INTELLIGENCE
     gaps: 3
     sub_phases: 3
-    file: "cortex-registry/planning/phases/planned/phase-145-documentation-intelligence-knowledge.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-145-documentation-intelligence-knowledge.yaml"
     note: "COMPLETE 2026-03-12. 66 practices across 10 sub-domains in documentation-intelligence.yaml, registered in INDEX.yaml, domain-signal-map.yaml signal added."
 
   # ── PHASE 146: RESPONSE RENDERING RULES GOLDEN TESTS (COMPLETE 2026-03-12) ───
@@ -389,7 +392,7 @@ phases:
     sweep_id: SWEEP-146-RESPONSE-RENDERING-RULES
     gaps: 1
     sub_phases: 1
-    file: "cortex-registry/planning/phases/planned/phase-146-response-rendering-rules-golden.yaml"
+    file: "cortex-registry/planning/phases/completed/phase-146-response-rendering-rules-golden.yaml"
     note: "COMPLETE 2026-03-12. 25 golden tests validating 14 rendering rules (R1-R6 + Rule1/3/4/DECL) in test_response_rendering_rules_golden.py. All GREEN."
 
   # ── PHASE 147: INTELLIGENT VIDEO STEERING SYNTHESIS (2026-03-09) ─────────────
@@ -412,61 +415,66 @@ phases:
   - id: phase-148
     title: "Infrastructure Foundation — DatabaseHealthVerifier + Canonical Path Cleanup + Drift Lock #51"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     depends_on: []
     sweep_id: SWEEP-148-INFRASTRUCTURE-FOUNDATION
     gaps: 3
     sub_phases: 3
-    file: "cortex-registry/planning/phases/planned/phase-148-infrastructure-foundation.yaml"
-    note: "PLANNED 2026-03-12. Source: Issue #18 FB-003+FB-009. DatabaseHealthVerifier 4-layer (exist+tables+roundtrip+integrity), dead cortex/knowledge/best_practices/ deletion + 20 phantom import repoints, drift-lock check-51. Unblocks 149–152."
+    file: "cortex-registry/planning/phases/completed/phase-148-infrastructure-foundation.yaml"
+    note: "COMPLETE 2026-03-12. Source: Issue #18 FB-003+FB-009. DatabaseHealthVerifier 4-layer (exist+tables+roundtrip+integrity), best_practices canonical path verified, drift-lock check-51. 25 unit tests + 9 preflight E2E tests GREEN."
 
   # ── PHASE 149: KNOWLEDGE INTELLIGENCE ENHANCEMENT (Issue #18) ───────────────
   - id: phase-149
     title: "Knowledge Intelligence Enhancement — Best Practices Injection + Framework Analyzer Metadata + Registry Materializer"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     depends_on: ["phase-148"]
     sweep_id: SWEEP-149-KNOWLEDGE-INTELLIGENCE-ENHANCEMENT
     gaps: 4
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-149-knowledge-intelligence-enhancement.yaml"
-    note: "PLANNED 2026-03-12. Source: Issue #18 FB-002+FB-008. load_cortex_best_practices() wired to ContextSynthesisGateway exit gate (800 tok, max 12), CortexFrameworkAnalyzer.analyze_metadata() regex-based, RegistryMaterializer → cortex-frame-context/framework-context.yaml, IntelligenceFacade.registry_index() wiring, 38 golden injection tests."
+    file: "cortex-registry/planning/phases/completed/phase-149-knowledge-intelligence-enhancement.yaml"
+    note: "COMPLETE 2026-03-12. Source: Issue #18 FB-002+FB-008. best_practices injected via ContextSynthesisGateway exit gate (context['best_practices'] key), CortexFrameworkAnalyzer.analyze_metadata(), RegistryMaterializer + framework-context.yaml, 38 golden injection tests + 6 exit gate wiring tests GREEN."
 
   # ── PHASE 150: DOR HARD GATE + PERSONALITY LAYER (Issue #18) ─────────────────
   - id: phase-150
     title: "DoR Hard Gate (CORE-071) + PersonalityLayer — DoRScore Enforcement + Voiced Response Templates"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     depends_on: ["phase-149"]
     sweep_id: SWEEP-150-DOR-HARD-GATE-PERSONALITY
     gaps: 4
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-150-dor-hard-gate-personality-layer.yaml"
-    note: "PLANNED 2026-03-12. Source: Issue #18 FB-004+FB-005. DoRScore 5-dim (req_completeness 30%/arch_clarity 25%/dep_resolution 20%/test_readiness 15%/risk_assessment 10%), DoRApprovalGate.is_ready() composite≥100, dor-display.yaml 5-state machine, PersonalityLayer voiced wired to InteractionOrchestrator, atom-dor-prompt.yaml skip_when=[silent/dor≥0.75]."
+    file: "cortex-registry/planning/phases/completed/phase-150-dor-hard-gate-personality-layer.yaml"
+    note: "COMPLETE 2026-03-12. Source: Issue #18 FB-004+FB-005. DoRScore 5-dim weighted in dor_tracker.py, DoRApprovalGate.is_ready() CORE-071, personality_layer.py voiced methods, atom-dor-prompt.yaml skip_when=[silent/dor≥0.75]. GREEN."
 
   # ── PHASE 151: VACUUM SOURCE PROTECTION + PERSONA DASHBOARD (Issue #18) ──────
   - id: phase-151
     title: "Vacuum Source Protection (GV-028..034) + Persona-Layered Dashboard Tab Renderers"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     depends_on: ["phase-149", "phase-150"]
     sweep_id: SWEEP-151-VACUUM-SOURCE-PROTECTION-PERSONA-DASHBOARD
     gaps: 4
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-151-vacuum-source-protection-persona-dashboard.yaml"
-    note: "PLANNED 2026-03-12. Source: Issue #18 FB-006+FB-007. VACUUM_PROTECTED_ROOTS frozenset fail-safe in all 8 vacuum stages, GV-028..034 in capabilities-manifest.yaml, TabRenderer+PersonaLayer in new onboarding package (personas: engineer/architect/manager), DashboardGenerator wired to TabRenderer→PersonaLayer."
+    file: "cortex-registry/planning/phases/completed/phase-151-vacuum-source-protection-persona-dashboard.yaml"
+    note: "COMPLETE 2026-03-12. Source: Issue #18 FB-006+FB-007. VACUUM_PROTECTED_ROOTS frozenset in constants.py, _is_protected() guard across all 8 vacuum stages, GV-028..034 in capabilities-manifest.yaml, TabRenderer + PersonaLayer in cortex/orchestrators/support/onboarding/. 17 tests GREEN."
 
   # ── PHASE 152: DASHBOARD INTELLIGENCE PIPELINE (Issue #18) ──────────────────
   - id: phase-152
     title: "Dashboard Intelligence Pipeline — 7-Stage Orchestrated HTML Generation"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     depends_on: ["phase-148", "phase-149", "phase-150", "phase-151"]
     sweep_id: SWEEP-152-DASHBOARD-INTELLIGENCE-PIPELINE
     gaps: 6
     sub_phases: 6
-    file: "cortex-registry/planning/phases/planned/phase-152-dashboard-intelligence-pipeline.yaml"
-    note: "PLANNED 2026-03-12. Source: Issue #18 FB-001. 6 new files: DashboardDataCollector, KnowledgeOverlayEngine, VisualizationSelector (DataShape+ChartType+5-sec+F-pattern), NarrativeEngine (≥150 words/tab), DashboardQualityGate (6 rules), DashboardIntelligenceOrchestrator (7-stage + Phase 53 backward compat). DashboardPipelineResult.success gated on errors=[] AND quality_report.passed."
+    file: "cortex-registry/planning/phases/completed/phase-152-dashboard-intelligence-pipeline.yaml"
+    note: "COMPLETE 2026-03-12. Source: Issue #18 FB-001. 7-stage pipeline — DashboardDataCollector, KnowledgeOverlayEngine, VisualizationSelector (5-sec rule + F-pattern), NarrativeEngine (≥150 words/tab), DashboardQualityGate (6 rules), DashboardIntelligenceOrchestrator (backward-compat wrapper). 46 tests GREEN."
 
   # ── PHASE 124: PRINCIPLE BLOCK LIBRARY (2026-03-04) ──────────────────────────
   - id: phase-124

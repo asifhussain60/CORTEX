@@ -65,7 +65,7 @@ Pipeline: Discovery → Drift → Sync → Narrative → Certification
 P0 Issues: 0  │  P1 Issues: 1  │  P2 Issues: 3
 
 Details:
-  P1: Video prompt episode 06 references 29 MCP tools — now 30
+  P1: Video prompt episode 06 references outdated MCP tool count — updated to 36
   P2: Glossary missing entry for "IntelligenceFacade"
   P2: Chapter 14 references "51 orchestrators" — narrative acceptable (historical)
   P2: Image prompt shared/architecture-overview.prompt.md — version stale

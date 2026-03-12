@@ -1198,9 +1198,9 @@ Canonical section emission sequence for composable responses:
 
 **What sets me apart:**
 
-- ⚡ **312 Orchestrators** working in concert — each specialized, all coordinated
+- ⚡ **314 Orchestrators** working in concert — each specialized, all coordinated
 - 🔍 **LENS Intelligence** — I analyze your actual code (git history, AST, patterns) before acting
-- 🛡️ **60 Governance Rules** enforced automatically — security, quality, compliance built-in
+- 🛡️ **61 Governance Rules** enforced automatically — security, quality, compliance built-in
 - ✅ **TDD-First Always** — tests before code, no exceptions, no shortcuts
 - 🔄 **Convergence Guarantee** — I don't stop until every P0/P1 issue is resolved
 - 🐛 **Multi-Stack Debugging** — Python, JavaScript, C#, SQL, .NET — 8 strategies
@@ -1310,7 +1310,7 @@ Here's how CORTEX enforces security at every layer:
 
 | Capability | Security Impact | Try It |
 |-----------|----------------|--------|
-| ️ **60 Governance Rules** | Enforced pre-commit, CI, and runtime — no bypasses | `/rca` |
+| ️ **61 Governance Rules** | Enforced pre-commit, CI, and runtime — no bypasses | `/rca` |
 | 🧠 **Root Cause Analysis** | Prevent recurrence with 4 RCA methodologies | `/rca` |
 | 🔄 **Privacy-Safe Sync** | One-way sanitized sync to company repos | `/sync target={path}` |
 | 📊 **Full Audit Trail** | Every decision logged to SQLite — full traceability | `/digest {path}` |

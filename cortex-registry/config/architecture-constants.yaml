@@ -6,7 +6,7 @@
 #   python3 scripts/validate-architecture-counts.py
 # Pre-commit hook enforces this automatically.
 #
-# Updated: 2026-02-26 (Token Optimization Audit — numeric alignment)
+# Updated: 2026-03-12 (Total Recall Certification — phase 148-152 complete)
 # Governance: CORE-035 (single canonical implementation)
 
 architecture:
@@ -20,8 +20,8 @@ architecture:
   orchestrators_git: 4
 
   # MCP Tools
-  mcp_tools_active: 29             # registered in cortex/mcp/mcp_registry.py
-  mcp_tools_target: 39             # 29 registered + 10 planned in active phases
+  mcp_tools_active: 36             # registered in cortex/mcp/mcp_registry.py (verified 2026-03-12)
+  mcp_tools_target: 36             # all 36 registered — backport chain complete
   mcp_tools_deprecated: 2          # two tools removed during Phase 54 MCP consolidation (kept in registry comment only)
 
   # Governance Rules
@@ -35,10 +35,10 @@ architecture:
 
   # Package
   canonical_packages: 1            # cortex.* only
-  top_level_dirs: 20               # canonical dirs under cortex/
+  top_level_dirs: 21               # canonical dirs under cortex/ (verified 2026-03-12)
 
   # Testing
-  test_count_collected: 16942      # pytest --collect-only (as of 2026-02-26)
+  test_count_collected: 21264      # pytest --collect-only (as of 2026-03-12)
   test_coverage_floor: 80          # % minimum for IMPLEMENT/FIX gate
   test_coverage_target: 95         # % target for batch run completion
 
@@ -53,7 +53,7 @@ architecture:
   priority_support_max: 199
 
   # Counts updated as of:
-  last_verified: "2026-02-27"
+  last_verified: "2026-03-12"
   verified_by: "Total Recall — grep + pytest --collect-only"
   git_ref: "CORTEX branch"
 
@@ -67,12 +67,12 @@ string_patterns:
       - "51 wired"
       - "Orchestrators (51 wired)"
   mcp_tools_active:
-    canonical: "29 MCP Tools"
+    canonical: "36 MCP Tools"
     alternates:
-      - "29 active tools"
-      - "29 MCP tools"
-      - "29 registered"
-      - "MCP Tools (29"
+      - "36 active tools"
+      - "36 MCP tools"
+      - "36 registered"
+      - "MCP Tools (36"
   mcp_tools_target:
     canonical: "39 MCP Tools"
     alternates:

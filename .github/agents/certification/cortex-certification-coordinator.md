@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Certification Coordinator Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-04 | **Authority:** `.github/agents/certification/cortex-certification-coordinator.md`
+**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-certification-coordinator.md`
 **Role:** Pipeline orchestrator for the Total Recall certification system
 
 ---

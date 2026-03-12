@@ -13,7 +13,7 @@ scope: non-production-admin
 
 **Architecture (Post-Refactor):**
 - 51 wired orchestrators in `cortex/orchestrators/` (4 tiers: core, domain, support, git)
-- 29 MCP tools registered in `cortex/mcp/tools/`
+- 36 MCP tools registered in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---

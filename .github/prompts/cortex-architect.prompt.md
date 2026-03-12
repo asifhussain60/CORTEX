@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-12 | **Architecture:** 312 Orchestrator files · 36 MCP Tools · 60 Governance YAMLs · 32 Intent Types · 1 Package  
+**Updated:** 2026-03-12 | **Architecture:** 314 Orchestrator files · 36 MCP Tools · 61 Governance YAMLs · 32 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
