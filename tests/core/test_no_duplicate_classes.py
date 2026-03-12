@@ -32,6 +32,19 @@ INTENTIONAL_DUPLICATES: dict[str, str] = {
     "SpanStatus": "opentelemetry_tracing.py is a stdlib shim alongside infrastructure/tracing.py",
     # Pydantic Config inner class is top-level in some files by design
     # (excluded by top-level-only scan, but listing here for reference)
+    # Phase 129-130 domain-isolation boundaries — distinct result types for different pipelines
+    "OptimizationResult": (
+        "content_optimization_orchestrator defines file-level OptimizationResult; "
+        "response_optimizer defines LLM response-level OptimizationResult — distinct domains"
+    ),
+    "DistillationResult": (
+        "distillation_orchestrator (Phase 129) and token_distillation_engine are "
+        "independent pipelines with domain-isolated result types"
+    ),
+    "EpochShuffler": (
+        "content_library_facade and content_library_engine co-define EpochShuffler "
+        "via facade+engine pattern — intentional co-ownership"
+    ),
 }
 
 # Classes exempt due to annotated files (CORE-035 governance comment)

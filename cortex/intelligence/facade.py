@@ -792,6 +792,39 @@ class IntelligenceFacade:
 
         logger.debug("IntelligenceFacade.invalidate_cache: all caches cleared")
 
+    def analyze_repository(
+        self,
+        repo_path: "Path",
+    ) -> "Dict[str, Any]":
+        """Run Universal Repo Intelligence analysis on a repository.
+
+        Orchestrates all registered extractors (SolutionTopology, CastleWindsor,
+        NHibernate, NServiceBus, Angular, AspNetRoute, BoundedContext,
+        TfmClassifier) against ``repo_path`` and returns a results dict.
+
+        Args:
+            repo_path: Path to the repository root to analyse.
+
+        Returns:
+            Dict with ``extractor_results`` (mapping of extractor name to its
+            result dict) and ``summary`` (high-level narrative string).
+        """
+        try:
+            from pathlib import Path as _Path
+            from cortex.intelligence.repo_intelligence import UniversalRepoIntelligenceEngine
+            engine = UniversalRepoIntelligenceEngine()
+            manifest = engine.analyze(_Path(repo_path))
+            return {
+                "extractor_results": manifest.extractor_results,
+                "summary": manifest.summary,
+            }
+        except Exception as exc:  # pragma: no cover
+            logger.debug("IntelligenceFacade.analyze_repository: %s", exc)
+            return {
+                "extractor_results": {},
+                "summary": f"analysis failed: {exc}",
+            }
+
     def query(
         self,
         query: str = "",

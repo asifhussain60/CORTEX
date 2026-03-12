@@ -164,6 +164,7 @@ When invoked **without an explicit user request**, this prompt executes a full d
 
 1. Cross-reference implementation (`cortex/`) against documentation (`docs/`)
 2. Detect **orphaned features** — implemented but undocumented capabilities
+   - Scan includes: `code_review_orchestrator.py`, `content_library_engine.py`, `archetype_classifier.py`, `cortex_framework_analyzer.py`, `ado_context_synthesizer.py`, `feedback_orchestrator.py`
 3. Detect **phantom documentation** — documented features with no implementation
 4. Detect **stale references** — docs referencing deleted paths, dissolved packages, old counts
 5. Detect **terminology drift** — inconsistent naming across prompts, agents, and docs

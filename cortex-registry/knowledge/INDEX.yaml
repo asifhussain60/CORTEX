@@ -5,13 +5,13 @@
 #   2. cortex-registry/knowledge-base/      (runtime knowledge)
 #   3. docs/.content/knowledge/             (docs site UI/UX knowledge — see docs-site-ux section)
 #
-# Total: 44 YAML files across 11 domains (+ 9 docs-site-ux knowledge files)
+# Total: 45 YAML files across 12 domains (+ 9 docs-site-ux knowledge files)
 # Cross-reference authority: This INDEX is the SSOT for all knowledge relationships.
 # Individual knowledge YAMLs do NOT cross-reference each other — only this INDEX does.
-# Updated: 2026-03-08 (docs-site-ux section added — 3 new YAMLs synthesized from online sources)
+# Updated: 2026-03-09 (documentation domain added — Phase 145, 66 practices across 10 sub-domains)
 
 created: "2026-02-09"
-updated: "2026-03-08"
+updated: "2026-03-09"
 
 # ─── Best-Practice Guides (cortex-registry/knowledge/) ───────────────
 
@@ -256,6 +256,28 @@ ai-context:
         - "windsurf"
         - "amazon-q"
         - "ai-vendor"
+
+# ─── Documentation Intelligence Knowledge (Phase 145) ───────────────────────
+# 66 best practices across 10 sub-domains of documentation engineering.
+# Added: 2026-03-09 | Source: GitHub Issue #17 (FB-2026-03-09-074435-005)
+
+documentation:
+  guides:
+    - path: "best-practices/documentation/documentation-intelligence.yaml"
+      title: "Documentation Intelligence — Best Practices & Patterns"
+      keywords:
+        - "document"
+        - "documentation"
+        - "docs"
+        - "writing"
+        - "readme"
+        - "runbook"
+        - "adr"
+        - "release-notes"
+        - "onboarding"
+        - "knowledge-management"
+        - "accessibility"
+        - "api-docs"
 
 # ─── Internal-Only Knowledge (never synced or released) ──────────────────────
 # CORTEX-internal knowledge. internal_only: true — excluded from all sync and

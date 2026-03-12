@@ -126,6 +126,7 @@ patterns:
     knowledge_file: "performance/performance-patterns.yaml"
 
   # ── Docs / Documentation ──────────────────────────────────────────────────
-  - pattern: "sphinx|mkdocs|docstring|readme|changelog|swagger.ui|openapi.spec"
+  # Phase 145: Expanded from sphinx|mkdocs|... to comprehensive documentation signal
+  - pattern: "document|documentation|docs|writing|readme|runbook|adr|release.notes|changelog|docstring|sphinx|mkdocs|openapi.spec"
     domain: "documentation"
-    knowledge_file: "documentation/documentation-practices.yaml"
+    knowledge_file: "best-practices/documentation/documentation-intelligence.yaml"

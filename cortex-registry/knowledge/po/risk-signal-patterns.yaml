@@ -1,0 +1,61 @@
+id: risk-signal-patterns
+version: "1.0"
+description: "Risk signal patterns for the PO Risk Register (GAP-129-12)"
+governance_authority: "CORE-012, CORE-028"
+
+patterns:
+  - signal: external_dependency
+    pattern: "\\bexternal\\b|\\bthird.party\\b|\\bvendor\\b|\\bapi.key\\b"
+    likelihood: 4
+    impact: 4
+    category: DEPENDENCY
+    description: "Work item depends on external party or third-party API"
+
+  - signal: compliance_tag
+    pattern: "\\bcompliance\\b|\\bgdpr\\b|\\bsox\\b|\\bpci\\b|\\baudit\\b|\\bregulatory\\b"
+    likelihood: 3
+    impact: 5
+    category: COMPLIANCE
+    description: "Work item has regulatory or compliance implications"
+
+  - signal: blocked_item
+    pattern: "\\bblocked\\b|\\bimpediment\\b|\\bwaiting.on\\b|\\bon.hold\\b"
+    likelihood: 4
+    impact: 3
+    category: PROCESS
+    description: "Work item is blocked or waiting on another team"
+
+  - signal: scope_expansion
+    pattern: "\\bin.scope\\b|\\bexpand\\b|\\badd.to.this\\b|\\balso.include\\b|\\badditionally\\b"
+    likelihood: 3
+    impact: 3
+    category: PROCESS
+    description: "Work item shows signs of scope creep or expansion"
+
+  - signal: missing_ac
+    pattern: "\\bno.acceptance.criteria\\b|\\bac.not.defined\\b|\\btbd\\b|\\bto.be.defined\\b"
+    likelihood: 3
+    impact: 4
+    category: QUALITY
+    description: "Work item lacks defined acceptance criteria"
+
+  - signal: security_concern
+    pattern: "\\bsecurity\\b|\\bauth(?:entication|orization)?\\b|\\bpermission\\b|\\bvulnerability\\b|\\brole\\b"
+    likelihood: 2
+    impact: 5
+    category: SECURITY
+    description: "Work item has security implications requiring extra review"
+
+  - signal: integration_risk
+    pattern: "\\bintegrate\\b|\\bintegration\\b|\\bapi.change\\b|\\bbreaking.change\\b|\\bmigration\\b"
+    likelihood: 3
+    impact: 4
+    category: TECHNICAL
+    description: "Work item involves integration with risk of breaking changes"
+
+  - signal: deadline_pressure
+    pattern: "\\burgent\\b|\\bdeadline\\b|\\basap\\b|\\bcritical.path\\b|\\bmust.have\\b"
+    likelihood: 4
+    impact: 4
+    category: PROCESS
+    description: "Work item has tight deadline or high urgency which increases risk"

@@ -15,11 +15,15 @@ Author: Asif Hussain
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
 import subprocess
 from typing import Optional
 
 logger = logging.getLogger(__name__)
+
+_SHA_PATTERN = re.compile(r"^[a-f0-9]{40}$")
+"""Valid 40-character hexadecimal SHA-1 pattern."""
 
 
 class RollbackManager:
@@ -68,6 +72,12 @@ class RollbackManager:
         Returns:
             True if rollback succeeded, False otherwise (including non-git).
         """
+        if not _SHA_PATTERN.match(target_sha):
+            raise ValueError(
+                f"RollbackManager: invalid SHA format '{target_sha}' — "
+                "expected 40-character lowercase hexadecimal string."
+            )
+
         if not self._is_git_workspace():
             logger.debug("RollbackManager: not a git workspace — skip rollback")
             return False

@@ -2,7 +2,7 @@
 
 **Updated:** 2026-03-08 (Documentation Sync) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 65 completed, 22 planned | **Tests:** ~20,565 | **Intent Types:** 31
+**Phases:** 60 completed, 16 planned | **Tests:** ~20,897 | **Intent Types:** 32
 
 ---
 
@@ -38,12 +38,12 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrator files | **296** across 14 domains (`core:132 domain:29 support:54 health:27 intelligence:16 persona:6 workflow:6 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) |
-| MCP Tools | **36 registered** in `mcp_registry.py`; 58 tool files in `cortex/mcp/tools/` |
+| Orchestrator files | **312** across 14 domains (`core:137 domain:34 support:59 health:27 intelligence:16 persona:6 workflow:7 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) |
+| MCP Tools | **36 registered** in `mcp_registry.py`; 56 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **60** across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) |
 | Package | `cortex` (single) |
-| Tests | **~20,565** collected |
-| Intent Types | **31** (see `cortex/models/canonical_enums.py`) |
+| Tests | **~20,897** collected |
+| Intent Types | **32** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
 | PLIP-001 | Prompt-Layer Intelligence Protocol — all code-modifying prompts/agents consult failure history before action and record outcomes after (SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`) |
@@ -51,6 +51,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Debug Strategies | 8 total: 3 Python + 5 multi-stack (Frontend/HTML-Vision/API/SQL/DotNet) |
 | Response Format | phase-list+bar mandatory; SSOT: `.github/templates/cortex-response-templates.md` |
 | Engagement Sections | 🧭 Routing Breadcrumb, ⏱️ Engagement Timeline, 🗺️ Phase Roadmap |
+| Content Library | EpochShuffler anti-repetition across 3 pools (quotes + principles + AI sparks, 800 items) — `cortex_content` MCP tool (`select\|history\|reset\|stats`) |
 | SQLite Databases | 7 in `.cortex-runtime/` — cleanup: `python3 scripts/refresh_prompt_suite.py --db-cleanup` |
 | Prompt Refresh | `python3 scripts/refresh_prompt_suite.py` — self-healing, architecture-introspecting |
 
@@ -82,6 +83,8 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-content-optimizer.md** | Multi-file content optimization — batch noise removal, compression, in-place rewrite | `/optimize`, "compress files", "batch optimize" (Phase 130) |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
 | **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
+| **cortex-review-agent.md** | PR-scoped code review: 6-stage pipeline, OWASP security, APPROVE/REQUEST_CHANGES/BLOCK verdict | `/review {pr}`, "code review", "pull request review" |
+| **cortex-feedback-agent.md** | Cross-repo capability extraction with 8 sanitization gates (G1–G8) | `/feedback`, "backport", "capability extraction" |
 ### Documentation Agents
 
 **Directory:** `.github/agents/docs/`
@@ -114,7 +117,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 |------|---------|
 | **phase-creation-standards.md** | Standards for new phases |
 | **cleanup-audit-guide.md** | Cleanup procedure reference |
-| **STAGE-0-GOVERNANCE-AUDIT-SPEC.md** | Governance audit specification |
+
 
 ### Certification Agents (Total Recall)
 
@@ -213,7 +216,7 @@ are resolved or explicitly approved as WONT-FIX.
 
 ```
 /audit fix
-  Stage 1: Stage 0 Governance Pre-Flight      → STAGE-0-GOVERNANCE-AUDIT-SPEC.md
+  Stage 1: Stage 0 Governance Pre-Flight      → stage0-preflight-workflow.yaml
   Stage 2: 24-Point Production Scan           → cortex-auditor.md (Checks #1–#24)
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()

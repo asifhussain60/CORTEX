@@ -42,6 +42,12 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
+from cortex.intelligence.explainability.decision_logger import (
+    DecisionTraceabilityLogger,
+    DecisionType,
+    DecisionOutcome,
+)
+
 # =============================================================================
 # ENUMERATIONS & CONSTANTS
 # =============================================================================
@@ -152,6 +158,7 @@ class KnowledgeGuidanceEngine:
         # workspace_root is the registry base (default: two levels above cortex/)
         self._workspace_root: Path = workspace_root or Path(__file__).parent.parent.parent
         self._cache: Dict[str, ModuleGuidance] = {}
+        self._decision_logger = DecisionTraceabilityLogger()
         self._load_tier_mappings()
 
     def _load_tier_mappings(self) -> None:
@@ -265,6 +272,23 @@ class KnowledgeGuidanceEngine:
 
         # Score overall confidence
         guidance.guidance_confidence = self._calculate_confidence(guidance)
+
+        # Phase 143: emit decision traceability record (QW-006)
+        self._decision_logger.log_decision(
+            decision_type=DecisionType.RESOLUTION,
+            context={
+                "module_path": module_path,
+                "domain": domain,
+                "entries_count": len(guidance.guidance_entries),
+                "repo_name": repo_name or "",
+            },
+            outcome=DecisionOutcome.APPROVED,
+            rationale=(
+                f"Resolved {len(guidance.guidance_entries)} guidance entries "
+                f"for {domain}/{module_name}"
+            ),
+            confidence=guidance.guidance_confidence,
+        )
 
         # Cache result
         self._cache[cache_key] = guidance

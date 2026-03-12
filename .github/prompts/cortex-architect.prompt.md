@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-08 | **Architecture:** 296 Orchestrator files · 36 MCP Tools · 60 Governance YAMLs · 31 Intent Types · 1 Package  
+**Updated:** 2026-03-12 | **Architecture:** 312 Orchestrator files · 36 MCP Tools · 60 Governance YAMLs · 32 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
@@ -17,7 +17,6 @@
 - **Phase Template:** `cortex-registry/planning/phases/_template.yaml`
 - **Phase Lifecycle:** `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
 - **Wiring Contract:** `cortex-registry/core/specifications/` (`orchestration-master-wiring.yaml`, `core-orchestrator-wiring.yaml`, `domain-orchestrator-wiring.yaml`, `support-orchestrator-wiring.yaml`)
-- **Stage 0 Spec:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
 - **Agent Index:** `.github/agents/AGENT-INDEX.md` (lazy-load: 1-2 agents per intent)
 - **Prompt Refresh:** `scripts/refresh_prompt_suite.py` (self-healing prompt suite)
 
@@ -48,7 +47,7 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (36 registered) | `cortex/mcp/tools/` (58 tool files) |
+| MCP Tools (36 registered) | `cortex/mcp/tools/` (56 tool files) |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -156,7 +155,7 @@ Work is **NEVER** considered complete in one pass. The detect→fix→rescan loo
 
 **Trigger:** Every user request, automatically, before intent routing.
 **Workflow Template:** `cortex-registry/workflows/templates/governance/stage0-preflight-workflow.yaml`
-**Spec authority:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
+**Spec authority:** `cortex-registry/workflows/templates/governance/stage0-preflight-workflow.yaml`
 **Implemented in:** `RequestRephraseOrchestrator._run_stage_0_audit()`
 
 ### Pipeline Position
@@ -879,7 +878,51 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-## 🔧 QUICK COMMANDS
+## � REVIEW MODE — PR Code Review Pipeline
+
+**Trigger:** `/review`, "review pr", "code review", "pull request review"
+**Orchestrator:** `CodeReviewOrchestrator` in `cortex/orchestrators/domain/`
+**MCP tool:** `cortex_review` (ops: `review`, `findings`, `history`, `patterns`, `health`)
+**Agent:** `.github/agents/support/cortex-review-agent.md`
+
+**6-Stage Pipeline:**
+1. **PR Context** — load diff, commit messages, linked work items, reviewer history
+2. **Intelligence Diamond** — LENS analysis on changed files (AST, complexity, imports)
+3. **Security Analysis** — OWASP Top 10 scan via `cortex-registry/knowledge/security/` YAMLs
+4. **Quality Analysis** — type coverage, docstrings, test coverage delta, complexity thresholds
+5. **RCA Cross-Reference** — query `cortex_learning op=history` for patterns in changed modules
+6. **Learning** — emit `cortex_learning op=emit` (MILD_REWARD on APPROVE, MILD_PUNISHMENT on BLOCK)
+
+**Verdict Logic:**
+- P0 finding present → **BLOCK** (do not merge)
+- P1+ findings only → **REQUEST_CHANGES** (must fix before merge)
+- No P0/P1 findings → **APPROVE**
+
+**PLIP-001:** Consult `cortex_learning op=history` before review; emit after verdict. Scope lock: `code-review`.
+
+---
+
+## 📣 FEEDBACK MODE — Capability Extraction Pipeline
+
+**Trigger:** `/feedback`, "backport", "capability extraction"
+**Orchestrator:** `FeedbackOrchestrator` in `cortex/orchestrators/support/`
+**Agent:** `.github/agents/support/cortex-feedback-agent.md`
+**PLIP-001:** Exempt (FEEDBACK intent is exempt per protocol).
+
+**6-Stage Pipeline:**
+1. **Scope** — identify session boundaries and candidate capability signals
+2. **Filter** — discard noise: greetings, clarifications, trivial exchanges
+3. **Classify** — tag each capability signal: IMPLEMENT / FIX / PATTERN / INSIGHT
+4. **Extract** — distil executable capability descriptions from classified signals
+5. **Sanitize** — apply 8 privacy gates (G1–G8): strip client names, PII, repo paths, credentials, project codes, timestamps, internal URLs, proprietary terminology
+6. **Generate** — produce structured backport instructions in `_workspaces/_feedback/`
+
+**Output:** Restricted to `_workspaces/_feedback/` — never written outside this directory.
+**Scope lock:** `feedback` domain.
+
+---
+
+## �🔧 QUICK COMMANDS
 
 | Command | What It Does | Stages |
 |---------|-------------|--------|
@@ -893,6 +936,8 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/recall {feature}` | Feature discovery | — |
+| `/review {pr}` | PR-scoped code review: security + quality + APPROVE/BLOCK verdict | 6 stages |
+| `/feedback` | Cross-repo capability extraction with sanitized backport instructions | 6 stages |
 | `/totalrecall` | Production certification — 10-phase autonomous pipeline | 10 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder (4-gate: PULL→DIFF→SANITIZE→MERGE) | — |
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup (8 strategies) | 5 phases |

@@ -184,3 +184,17 @@ This ordering ensures that even a catastrophic pipeline failure produces a compl
 ---
 
 *RCA engine verified against live implementation · Knowledge base verified against registry contents*
+
+---
+
+## Repository Intelligence — Archetype-Driven Knowledge Routing
+
+When CORTEX onboards a new repository, it does not apply generic guidance. It first classifies the repository into one of its canonical archetypes — using a weighted signal-scoring model that analyses directory structure, dependency patterns, technology stack fingerprints, and naming conventions. This classification drives automated knowledge domain routing: the archetype determines which SDLC patterns, security checklists, and workflow templates are most relevant for that specific codebase.
+
+A repository classified as a microservices backend receives different default governance rules than one classified as a data pipeline or a frontend application. The routing is automatic — no manual configuration required. The archetype is re-evaluated on each LENS scan so that repositories that evolve over time receive updated knowledge routing as their shape changes.
+
+### Self-Aware Onboarding — CORTEX Detecting CORTEX
+
+When CORTEX is onboarding a repository that is itself another CORTEX instance, the CortexFrameworkAnalyzer detects this and tailors the intelligence profile accordingly. Rather than applying standard onboarding heuristics, it activates a CORTEX-aware analysis path that accounts for the framework's governance patterns, orchestrator structure, and registry layout. This prevents false-positive drift alerts and ensures that CORTEX does not misclassify its own architectural patterns as violations.
+
+This self-aware capability is particularly useful in enterprise environments where multiple CORTEX instances run across different teams and the CORTEX codebase itself is under active development alongside client projects.

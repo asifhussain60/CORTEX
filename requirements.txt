@@ -95,11 +95,6 @@ jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLI
 # Note: CORTEX uses custom JSON-RPC 2.0 implementation (cortex/mcp/protocol.py)
 # Reason: Official mcp SDK requires Python 3.10+; we support 3.9+
 
-# WebSocket and async communication
-websockets==12.0           # WebSocket protocol (MCP server communication) [PREFLIGHT]
-aiofiles==23.2.0           # Async file I/O for streaming responses [PREFLIGHT]
-httptools==0.7.1           # C-accelerated HTTP parsing (performance) [PREFLIGHT]
-wsproto==1.1.0             # WebSocket subprotocol layer [PREFLIGHT]
 
 # ============================================================================
 # API & WEB FRAMEWORK (FastAPI + Uvicorn) [PREFLIGHT CRITICAL]
@@ -132,8 +127,19 @@ anthropic>=0.21.0          # Anthropic Claude 3 (Opus, Sonnet, Haiku) [OPTIONAL]
 
 sentence-transformers>=2.2.0  # Sentence embeddings for semantic similarity [OPTIONAL]
 # scikit-learn pinned once below in DATA SCIENCE section (scikit-learn==1.3.2) — CORE-035: single declaration
-torch>=2.0.0                  # PyTorch for transformer models (CPU) [OPTIONAL]
-transformers>=4.30.0          # HuggingFace transformers (BART, T5 for Phase 36) [OPTIONAL]
+
+# ============================================================================
+# MULTI-LANGUAGE AST PARSING (ENH-017 Phase 1) [OPTIONAL]
+# ============================================================================
+
+# ============================================================================
+# DOCUMENT PROCESSING (Phase 144: Document Ingest Pipeline) [OPTIONAL]
+# ============================================================================
+
+python-docx>=0.8.11        # Word document (.docx) reading [OPTIONAL]
+openpyxl>=3.1.0            # Excel spreadsheet (.xlsx) reading [OPTIONAL]
+python-pptx>=0.6.21        # PowerPoint (.pptx) reading [OPTIONAL]
+pypdf>=3.0.0               # PDF document reading [OPTIONAL]
 
 # ============================================================================
 # MULTI-LANGUAGE AST PARSING (ENH-017 Phase 1) [OPTIONAL]
@@ -153,7 +159,6 @@ tree-sitter-typescript>=0.21.0 # TypeScript grammar for LENS TypeScript adapter 
 # ============================================================================
 # Used for: orchestrator analytics, performance metrics, usage patterns
 
-pandas==2.0.3              # Data analysis and manipulation [OPTIONAL]
 numpy==1.24.4              # Numerical computing foundation [OPTIONAL]
 scikit-learn==1.3.2        # Machine learning for recommendations/analytics [OPTIONAL]
 
@@ -189,12 +194,9 @@ python-dotenv==1.0.0       # .env file loading for local development [PREFLIGHT]
 
 # CLI framework
 click==8.1.7               # Command-line interface builder [PREFLIGHT]
-argparse-dataclass==1.0.0  # Dataclass-based CLI argument parsing
-
 # System utilities
 psutil==5.9.6              # System and process information [PREFLIGHT]
 dependency-injector==4.40.0  # Dependency injection framework (CORTEX core pattern) [PREFLIGHT]
-playwright==1.40.0         # Browser automation for E2E testing
 
 # Monitoring and observability
 prometheus-client==0.19.0  # Prometheus metrics exporter [PREFLIGHT] — installed 0.19.0
@@ -221,9 +223,7 @@ prometheus-client==0.19.0  # Prometheus metrics exporter [PREFLIGHT] — install
 # DATABASE & ORM
 # ============================================================================
 
-sqlalchemy==2.0.23        # ORM and database abstraction
-alembic==1.12.1           # Database migrations
-psycopg2-binary==2.9.9    # PostgreSQL adapter
+sqlalchemy==2.0.23        # ORM and database abstraction (query builder; CORTEX uses SQLite directly)
 
 # ============================================================================
 # SECURITY & CRYPTOGRAPHY
@@ -232,13 +232,6 @@ psycopg2-binary==2.9.9    # PostgreSQL adapter
 cryptography==41.0.7      # Cryptographic library (hash chains, encryption)
 python-jose==3.3.0        # JWT token handling
 pycryptodome==3.19.0      # Additional crypto primitives
-
-# ============================================================================
-# ASYNC & CONCURRENCY [PREFLIGHT]
-# ============================================================================
-
-greenlet==3.0.1           # Lightweight concurrency [PREFLIGHT]
-gevent==23.9.1            # Concurrency alternative [PREFLIGHT]
 
 # ============================================================================
 # LOGGING & OBSERVABILITY [PREFLIGHT]

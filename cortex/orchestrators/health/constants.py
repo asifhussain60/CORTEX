@@ -90,14 +90,19 @@ ALLOWED_MARKDOWN_PREFIXES: FrozenSet[str] = frozenset({
 """Markdown files whose stem (uppercase) starts with these are allowed in root."""
 
 PROTECTED_DIRS: FrozenSet[str] = frozenset({
-    ".github",
-    "docs",
-    "cortex-registry",
-    "_workspaces",
-    "scripts",
-    "deployment",
+    # Core source directories — NEVER modified by Vacuum
+    "cortex",
     "tests",
+    "scripts",
+    # Configuration and governance
+    ".github",
+    ".vscode",
+    "cortex-registry",
+    # Documentation and deployment
     "docs",
+    "deployment",
+    # Workspace and workspace-adjacent
+    "_workspaces",
 })
 """Directories that VacuumOrchestrator must never touch — no renames, deletes,
 relocations, or markdown archival inside these trees.

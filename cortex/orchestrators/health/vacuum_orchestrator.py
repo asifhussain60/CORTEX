@@ -128,6 +128,36 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         dry_run: bool = parameters.get("dry_run", False)
         return self.run(dry_run=dry_run)
 
+    def validate_safe_run(self) -> List[str]:
+        """Pre-flight safety check — return warnings for any operation targeting a protected path.
+
+        Performs a dry-run pass and inspects each planned operation's source path
+        against PROTECTED_DIRS. Returns an empty list when all operations are safe.
+
+        Returns:
+            List of warning strings (empty list = safe to proceed).
+        """
+        warnings: List[str] = []
+        try:
+            report = self.run(dry_run=True)
+            for op in report.operations:
+                src = op.source
+                if src is None:
+                    continue
+                src_path = Path(src) if not isinstance(src, Path) else src
+                try:
+                    rel = src_path.relative_to(self.workspace_root)
+                except ValueError:
+                    continue
+                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                    warnings.append(
+                        f"UNSAFE: Planned operation '{op.op_type}' targets protected "
+                        f"directory '{rel.parts[0]}': {src_path}"
+                    )
+        except Exception as exc:  # noqa: BLE001
+            warnings.append(f"validate_safe_run: dry-run failed — {exc}")
+        return warnings
+
     def run(self, *, dry_run: bool = False) -> VacuumReport:
         """Standalone mode — quick-scan + execute all cleanup ops.
 
@@ -427,6 +457,8 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             ".git", ".github", ".venv", "venv", "env",
             "_workspaces", ".cortex-runtime", "docs",
             "cortex-registry", "node_modules",
+            # Phase-141: source directories are protected
+            "cortex", "tests", "scripts", "deployment", ".vscode",
         })
 
         results: List[OperationResult] = []
@@ -532,7 +564,11 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         _OS_JUNK_NAMES: frozenset = frozenset({
             ".DS_Store", ".ds-store", "Thumbs.db", "desktop.ini",
         })
-        _PROTECTED_ROOTS: frozenset = frozenset({".git", ".venv", "venv", "env"})
+        _PROTECTED_ROOTS: frozenset = frozenset({
+            ".git", ".venv", "venv", "env",
+            # Phase-141: source directories are protected
+            "cortex", "tests", "scripts", "deployment", ".vscode", ".github",
+        })
 
         results: List[OperationResult] = []
         import os as _os
@@ -1407,7 +1443,11 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         _SUFFIX_PATTERN = re.compile(r"[-_]v\d+(?=\.[^.]+$|$)", re.IGNORECASE)
         _SEMVER_PATTERN = re.compile(r"-\d+\.\d+(\.\d+)?")
         _S_NUMBER_PATTERN = re.compile(r"test_.*_s\d+_.*\.py$")
-        _EXCLUDED_DIRS = {".git", "_workspaces", "node_modules", ".venv", "venv", "__pycache__"}
+        _EXCLUDED_DIRS = {
+            ".git", "_workspaces", "node_modules", ".venv", "venv", "__pycache__",
+            # Phase-141: source directories must never be renamed
+            "cortex", "tests", "scripts", "deployment", ".vscode", ".github",
+        }
 
         results: List[OperationResult] = []
         root = Path(self.workspace_root)

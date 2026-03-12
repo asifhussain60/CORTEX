@@ -68,7 +68,6 @@ template: |
 
   ---
 
-  ### 💡 Principle: {title}    ← RETIRED — use blockquote format below
   > 💡 **Principle: {title}**
   > {body}
 

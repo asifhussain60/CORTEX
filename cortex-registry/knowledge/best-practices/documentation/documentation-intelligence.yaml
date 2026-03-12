@@ -1,0 +1,772 @@
+# documentation-intelligence.yaml
+# CORTEX Knowledge Registry — Documentation Intelligence Best Practices
+# Phase: 145 (GitHub Issue #17 — FB-2026-03-09-074435-005)
+# Authority: CORE-064 (Sweep Completeness Contract)
+# Created: 2026-03-09
+# SSOT: cortex-registry/knowledge/best-practices/documentation/documentation-intelligence.yaml
+
+title: "Documentation Intelligence — Best Practices & Patterns"
+domain: "best-practices/documentation"
+category: "documentation"
+version: "1.0.0"
+created: "2026-03-09"
+cortex_alignment:
+  confidence: 0.9
+  verified: true
+  phase: "phase-145"
+
+# ─── Metadata ──────────────────────────────────────────────────────────────
+metadata:
+  sub_domain_count: 10
+  practice_count: 62
+  sub_domains:
+    - technical_docs
+    - api_docs
+    - adrs
+    - runbooks
+    - release_notes
+    - onboarding
+    - knowledge_management
+    - documentation_testing
+    - accessibility
+    - governance
+
+# ─── Practices ─────────────────────────────────────────────────────────────
+# 66 practices across 10 sub-domains (6–7 per sub-domain)
+# Each practice: id, title, subdomain, rationale, guidance, priority
+
+practices:
+
+  # ── 1. Technical Documentation ───────────────────────────────────────────
+  - id: "doc-td-001"
+    subdomain: "technical_docs"
+    title: "README First — every module must have a README"
+    rationale: >
+      A README is the contract between author and consumer. Missing READMEs
+      are a leading cause of re-implementation and tribal knowledge loss.
+    guidance: >
+      Every repository, service, and Python package must have a README.md
+      covering: What it does, how to install, how to run, how to test,
+      and a link to architecture docs.
+    priority: P1
+
+  - id: "doc-td-002"
+    subdomain: "technical_docs"
+    title: "Architecture Decision Records (ADRs) for all non-trivial decisions"
+    rationale: >
+      Without ADRs, future engineers repeat past mistakes. ADRs create
+      an audit trail of the design rationale.
+    guidance: >
+      Every architectural decision (technology choice, structural pattern,
+      integration approach) must produce an ADR in docs/decisions/ within
+      one sprint of the decision.
+    priority: P1
+
+  - id: "doc-td-003"
+    subdomain: "technical_docs"
+    title: "Docs-as-code: keep documentation in the same repo as code"
+    rationale: >
+      Documentation that lives outside the codebase drifts. Docs-as-code
+      ensures reviews, diffs, and CI gates apply to documentation too.
+    guidance: >
+      Store all module-level docs in docs/ or inline docstrings. Use
+      Markdown. CI must run a broken-link checker on every pull request.
+    priority: P1
+
+  - id: "doc-td-004"
+    subdomain: "technical_docs"
+    title: "Use active voice and present tense in all technical writing"
+    rationale: >
+      Passive voice and future tense introduce ambiguity. Active present
+      tense is clear, direct, and easier to translate.
+    guidance: >
+      Write 'The function returns X' not 'X is returned by the function'.
+      Automated linting (Vale, alex) can enforce style consistency.
+    priority: P2
+
+  - id: "doc-td-005"
+    subdomain: "technical_docs"
+    title: "Include runnable code examples in all API references"
+    rationale: >
+      Code examples reduce integration time. Without examples, consumers
+      reverse-engineer intent from method signatures.
+    guidance: >
+      Every public API function must have a docstring example block that
+      is validated by doctest or equivalent in CI.
+    priority: P1
+
+  - id: "doc-td-006"
+    subdomain: "technical_docs"
+    title: "Version-stamp all documentation with 'Last verified' dates"
+    rationale: >
+      Stale documentation is worse than no documentation because it
+      builds false confidence. Date stamps enable freshness audits.
+    guidance: >
+      Add 'Last verified: YYYY-MM-DD' to every architecture diagram,
+      runbook, and getting-started guide. Trigger a freshness review
+      alert after 90 days.
+    priority: P2
+
+  - id: "doc-td-007"
+    subdomain: "technical_docs"
+    title: "Separate conceptual, reference, and tutorial content"
+    rationale: >
+      Mixing content types is the leading cause of documentation sprawl.
+      The Diátaxis framework (tutorials, how-tos, reference, explanation)
+      prevents this.
+    guidance: >
+      Structure docs/ using the Diátaxis taxonomy. Tutorials teach;
+      How-tos guide; Reference informs; Explanation contextualises.
+    priority: P2
+
+  # ── 2. API Documentation ─────────────────────────────────────────────────
+  - id: "doc-api-001"
+    subdomain: "api_docs"
+    title: "OpenAPI/Swagger spec is the SSOT for REST API documentation"
+    rationale: >
+      Manually written API docs diverge immediately. A machine-readable
+      OpenAPI spec is the single source of truth for request/response
+      contracts.
+    guidance: >
+      All REST endpoints must have an OpenAPI 3.1 spec. Generate human
+      docs from spec (not the reverse). Run spectral lint on every PR.
+    priority: P0
+
+  - id: "doc-api-002"
+    subdomain: "api_docs"
+    title: "API versioning strategy must be documented before first release"
+    rationale: >
+      Undocumented versioning leads to breaking changes that surprise
+      consumers. A published versioning policy is a contract.
+    guidance: >
+      Document whether you use URL versioning (/v1/), header versioning,
+      or semver. State the deprecation policy (12 months minimum notice).
+    priority: P1
+
+  - id: "doc-api-003"
+    subdomain: "api_docs"
+    title: "Document all error codes with remediation guidance"
+    rationale: >
+      Generic 'Unknown error' messages waste engineering hours. Error
+      codes with remediation steps reduce mean time to resolution (MTTR).
+    guidance: >
+      Every API error response must include: HTTP status, error code
+      string, human message, and a docs URL with troubleshooting steps.
+    priority: P1
+
+  - id: "doc-api-004"
+    subdomain: "api_docs"
+    title: "Provide a Postman/Bruno collection alongside the OpenAPI spec"
+    rationale: >
+      OpenAPI specs are read by machines. Collections are used by humans
+      exploring the API. Both serve distinct consumer needs.
+    guidance: >
+      Export and commit a Postman collection or Bruno folder. Keep it
+      in sync with the OpenAPI spec via CI validation.
+    priority: P2
+
+  - id: "doc-api-005"
+    subdomain: "api_docs"
+    title: "Rate limits and SLA must be in the API reference"
+    rationale: >
+      Consumers cannot design reliable integrations without knowing
+      rate limits, timeouts, and SLA targets.
+    guidance: >
+      Add a 'Limits and SLA' section to every API reference: requests
+      per second caps, payload size limits, P99 latency targets.
+    priority: P1
+
+  - id: "doc-api-006"
+    subdomain: "api_docs"
+    title: "Authentication flow must be documented with sequence diagrams"
+    rationale: >
+      Auth is the most complex integration point. A sequence diagram
+      prevents misimplementation that causes security vulnerabilities.
+    guidance: >
+      Document OAuth2/JWT/API-key flows with PlantUML or Mermaid diagrams.
+      Include token refresh, revocation, and error paths.
+    priority: P1
+
+  # ── 3. Architecture Decision Records (ADRs) ────────────────────────────
+  - id: "doc-adr-001"
+    subdomain: "adrs"
+    title: "Use MADR format (Markdown Any Decision Records) as the standard"
+    rationale: >
+      A consistent ADR format reduces cognitive load when reading historic
+      decisions and enables automated tooling.
+    guidance: >
+      All ADRs must use MADR 3.0 format: Title, Status, Context, Decision,
+      Consequences. Store in docs/decisions/NNNN-title.md.
+    priority: P1
+
+  - id: "doc-adr-002"
+    subdomain: "adrs"
+    title: "ADR status must be one of: proposed, accepted, deprecated, superseded"
+    rationale: >
+      ADR lifecycle management prevents zombie decisions from misleading
+      future readers.
+    guidance: >
+      Update ADR status when decisions change. When superseding a decision,
+      link to the new ADR in the deprecated one's 'Status' field.
+    priority: P1
+
+  - id: "doc-adr-003"
+    subdomain: "adrs"
+    title: "ADRs must list considered alternatives with trade-offs"
+    rationale: >
+      Decisions without alternatives look arbitrary. Listing alternatives
+      documents the reasoning and prevents relitigating past debates.
+    guidance: >
+      Include at least two alternatives per ADR. For each: describe the
+      approach, list pros and cons, and explain why it was not chosen.
+    priority: P1
+
+  - id: "doc-adr-004"
+    subdomain: "adrs"
+    title: "Trigger an ADR for every technology change above a risk threshold"
+    rationale: >
+      Not every technology choice needs an ADR. A risk threshold prevents
+      ADR fatigue while capturing consequential decisions.
+    guidance: >
+      Require an ADR when: changing a language/framework, adding a
+      new dependency above 100K weekly downloads, or modifying a public API
+      contract.
+    priority: P2
+
+  - id: "doc-adr-005"
+    subdomain: "adrs"
+    title: "Review ADRs in pull requests before merge"
+    rationale: >
+      ADRs written after a decision lack context and accuracy. Pre-merge
+      review ensures captured intent is accurate.
+    guidance: >
+      Add ADR review to the PR template checklist. Require at least
+      one reviewer who was not involved in the decision.
+    priority: P2
+
+  - id: "doc-adr-006"
+    subdomain: "adrs"
+    title: "Link ADRs to the code they affect via inline comments"
+    rationale: >
+      Traceability from code to decision enables future engineers to
+      find context without a full document search.
+    guidance: >
+      In files affected by an ADR, add a top-level comment:
+      '# Decision: docs/decisions/0042-event-sourcing.md'. Automate
+      with a pre-commit hook that validates the link target exists.
+    priority: P2
+
+  # ── 4. Runbooks ─────────────────────────────────────────────────────────
+  - id: "doc-rb-001"
+    subdomain: "runbooks"
+    title: "Every production service must have a runbook before go-live"
+    rationale: >
+      Services without runbooks force on-call engineers to improvise
+      during incidents, increasing MTTR and error risk.
+    guidance: >
+      Gate production deployments on runbook existence. Runbook must
+      include: service overview, startup/shutdown, health checks,
+      common failure modes, escalation path.
+    priority: P0
+
+  - id: "doc-rb-002"
+    subdomain: "runbooks"
+    title: "Write runbooks for the most tired version of the reader"
+    rationale: >
+      Runbooks are read at 3am during a P0 incident. Cognitive load must
+      be minimal. Step-by-step with copy-paste commands reduces errors.
+    guidance: >
+      Use numbered steps. Include exact commands (not paraphrases).
+      Flag destructive commands with a ⚠️ warning. Avoid jargon.
+    priority: P1
+
+  - id: "doc-rb-003"
+    subdomain: "runbooks"
+    title: "Test runbooks in a staging environment quarterly"
+    rationale: >
+      Untested runbooks fail in production. Quarterly drills catch
+      command drift before an actual incident.
+    guidance: >
+      Schedule runbook drills in the team calendar. Record any steps
+      that fail and update the runbook before the drill is marked
+      complete.
+    priority: P1
+
+  - id: "doc-rb-004"
+    subdomain: "runbooks"
+    title: "Include decision trees for ambiguous failure scenarios"
+    rationale: >
+      Linear runbooks fail when symptoms overlap. Decision trees
+      route responders to the right fix faster.
+    guidance: >
+      For services with multiple failure modes, add a 'Symptom → Action'
+      table at the top of the runbook. Each symptom maps to a specific
+      runbook section.
+    priority: P2
+
+  - id: "doc-rb-005"
+    subdomain: "runbooks"
+    title: "Link runbooks from Grafana dashboards and PagerDuty alerts"
+    rationale: >
+      During incidents, engineers start at alerts and dashboards.
+      Runbook links at alert-level eliminate search time.
+    guidance: >
+      Add runbook_url to all PagerDuty rules. Embed runbook links in
+      Grafana panel descriptions and alert annotations.
+    priority: P1
+
+  - id: "doc-rb-006"
+    subdomain: "runbooks"
+    title: "Document rollback procedures for every deployment runbook"
+    rationale: >
+      Deployments without documented rollback plans are bets. A clear
+      rollback path reduces the cost of failed releases.
+    guidance: >
+      Every deployment runbook must have a 'Rollback' section: how to
+      detect a bad deploy, the exact rollback command, and success
+      criteria.
+    priority: P1
+
+  # ── 5. Release Notes ─────────────────────────────────────────────────────
+  - id: "doc-rn-001"
+    subdomain: "release_notes"
+    title: "Follow semantic versioning (semver) for all released components"
+    rationale: >
+      Arbitrary version numbers make dependency management impossible.
+      Semver communicates breaking-change risk to consumers.
+    guidance: >
+      MAJOR: breaking API change. MINOR: backward-compatible feature.
+      PATCH: backward-compatible bug fix. Use automated semver tooling
+      (semantic-release, conventional commits).
+    priority: P0
+
+  - id: "doc-rn-002"
+    subdomain: "release_notes"
+    title: "Release notes must use a consistent changelog format (Keep a Changelog)"
+    rationale: >
+      Inconsistent changelog formats hide breaking changes and increase
+      upgrade risk for consumers.
+    guidance: >
+      Use the Keep a Changelog format: sections for Added, Changed,
+      Deprecated, Removed, Fixed, Security. Generate from conventional
+      commits where possible.
+    priority: P1
+
+  - id: "doc-rn-003"
+    subdomain: "release_notes"
+    title: "Publish migration guides for every major (breaking) version"
+    rationale: >
+      Breaking changes without migration guides cause abandonment.
+      Step-by-step migration guides protect the consumer relationship.
+    guidance: >
+      Tag all breaking changes in commits with 'BREAKING:'. On major
+      release, auto-generate a migration guide stub and require manual
+      completion before release.
+    priority: P1
+
+  - id: "doc-rn-004"
+    subdomain: "release_notes"
+    title: "Security fixes must appear in release notes with CVE references"
+    rationale: >
+      Consumers need to know when a release fixes a vulnerability so
+      they can prioritise upgrades.
+    guidance: >
+      Include CVE ID, CVSS score, and affected versions for every
+      security fix. Follow responsible disclosure timing.
+    priority: P0
+
+  - id: "doc-rn-005"
+    subdomain: "release_notes"
+    title: "Deprecation notices must appear in release notes for two versions before removal"
+    rationale: >
+      Surprise removals break consumer code. Two-version deprecation
+      warnings give consumers time to migrate.
+    guidance: >
+      Add deprecation notices in both the changelog and as runtime
+      Python DeprecationWarning. Remove only after the second
+      changelog cycle.
+    priority: P1
+
+  - id: "doc-rn-006"
+    subdomain: "release_notes"
+    title: "Link each release note entry to the relevant PR or issue"
+    rationale: >
+      Release notes without references are unverifiable. Links enable
+      consumers to understand full context and verify claims.
+    guidance: >
+      Use conventional commits with issue references (#123). Changelog
+      generators (e.g. git-cliff, release-please) auto-link from
+      commit metadata.
+    priority: P2
+
+  # ── 6. Onboarding Documentation ─────────────────────────────────────────
+  - id: "doc-ob-001"
+    subdomain: "onboarding"
+    title: "Time-to-first-success must be under 15 minutes for new engineers"
+    rationale: >
+      First-run experience predicts long-term adoption. If setup
+      takes more than 15 minutes, engineers make errors that compound.
+    guidance: >
+      Measure time-to-first-success quarterly using new joiners as
+      test subjects. Optimise the setup script until the P90 time
+      is under 15 minutes.
+    priority: P1
+
+  - id: "doc-ob-002"
+    subdomain: "onboarding"
+    title: "Onboarding documentation must have a dual-path (beginner vs expert)"
+    rationale: >
+      Single-path guides fail one group. Beginners need hand-holding;
+      experts need dense reference cards. A dual-path serves both.
+    guidance: >
+      Offer a wizard path (step-by-step, analogies) and a fast-track
+      path (command reference, minimal prose). Self-selection upfront
+      reduces abandonment.
+    priority: P1
+
+  - id: "doc-ob-003"
+    subdomain: "onboarding"
+    title: "Document all prerequisite tools with exact version requirements"
+    rationale: >
+      Vague prerequisites cause setup failures. Exact version requirements
+      prevent 'works on my machine' defects.
+    guidance: >
+      List every tool with minimum version, recommended version, install
+      command, and verification command. Include common failure modes
+      for each platform.
+    priority: P1
+
+  - id: "doc-ob-004"
+    subdomain: "onboarding"
+    title: "Include a 'first contribution' tutorial in every open project"
+    rationale: >
+      The first contribution is the hardest. A guided first-contribution
+      path converts observers into contributors.
+    guidance: >
+      Create a CONTRIBUTING.md with: fork instructions, branch naming
+      convention, commit message format, PR process, and a 'good first
+      issue' tag on backlog items.
+    priority: P1
+
+  - id: "doc-ob-005"
+    subdomain: "onboarding"
+    title: "Embed YouTube / video links in onboarding guides for complex setup steps"
+    rationale: >
+      Text instructions fail for complex visual setup (IDE configuration,
+      certificate installation). Video supplements reduce support tickets.
+    guidance: >
+      For multi-step visual operations (e.g. VS Code extension install,
+      SSH key generation), link to a YouTube search query or internal
+      Loom recording.
+    priority: P3
+
+  - id: "doc-ob-006"
+    subdomain: "onboarding"
+    title: "After 60 days, new joiners must review and update the onboarding docs"
+    rationale: >
+      New joiners are the most accurate auditors of onboarding quality.
+      Their fresh experience catches stale steps before they become
+      institutional knowledge.
+    guidance: >
+      Add 'Day 60: Review onboarding docs' to the standard onboarding
+      checklist. Any gaps found must produce a PR before the task is
+      marked complete.
+    priority: P2
+
+  # ── 7. Knowledge Management ──────────────────────────────────────────────
+  - id: "doc-km-001"
+    subdomain: "knowledge_management"
+    title: "Define a single authoritative location for each knowledge domain"
+    rationale: >
+      Multiple locations for the same knowledge create conflicting
+      information, increasing cognitive load and trust erosion.
+    guidance: >
+      Use a SSOT map (e.g. knowledge INDEX.yaml) that declares one
+      canonical location per domain. All other references must link
+      to the SSOT, not duplicate it.
+    priority: P1
+
+  - id: "doc-km-002"
+    subdomain: "knowledge_management"
+    title: "Apply tags and structured metadata to every knowledge artifact"
+    rationale: >
+      Untagged knowledge is undiscoverable. Structured metadata enables
+      programmatic search and AI-assisted retrieval.
+    guidance: >
+      Every knowledge YAML must have: title, domain, keywords (list),
+      created date, last-verified date. Run a CI check for missing
+      metadata.
+    priority: P1
+
+  - id: "doc-km-003"
+    subdomain: "knowledge_management"
+    title: "Archive, do not delete, deprecated knowledge artifacts"
+    rationale: >
+      Deleted knowledge cannot be recovered and loses historical context.
+      Archived knowledge is searchable with deprecation markers.
+    guidance: >
+      Move deprecated YAMLs to a knowledge/archive/ directory. Add a
+      deprecated: true field and a superseded_by link. Never hard-delete
+      from git history.
+    priority: P2
+
+  - id: "doc-km-004"
+    subdomain: "knowledge_management"
+    title: "Rotate knowledge review assignments every 6 months"
+    rationale: >
+      Static ownership creates single points of failure. Rotation
+      distributes knowledge and cross-trains the team.
+    guidance: >
+      Assign each knowledge domain a Primary and Secondary owner.
+      Swap Secondary to Primary and assign a new Secondary every
+      6 months.
+    priority: P2
+
+  - id: "doc-km-005"
+    subdomain: "knowledge_management"
+    title: "Measure knowledge base usage via analytics and prune dead content"
+    rationale: >
+      Unused knowledge grows technical debt without providing value.
+      Analytics-driven pruning keeps the knowledge base lean.
+    guidance: >
+      Track read frequency for all knowledge artifacts. Archive any
+      resource with zero reads in 12 months after a team review.
+    priority: P3
+
+  - id: "doc-km-006"
+    subdomain: "knowledge_management"
+    title: "Cross-link related knowledge artifacts via a centralised index"
+    rationale: >
+      Isolated knowledge silos prevent synthesis. Cross-linking via
+      a central index creates a knowledge graph.
+    guidance: >
+      Each knowledge YAML may list related_domains: []. The INDEX.yaml
+      is the SSOT for cross-domain relationships — individual YAMLs
+      do not cross-reference each other directly.
+    priority: P2
+
+  # ── 8. Documentation Testing ─────────────────────────────────────────────
+  - id: "doc-dt-001"
+    subdomain: "documentation_testing"
+    title: "Run a link checker on every documentation PR"
+    rationale: >
+      Broken links are the most common documentation defect and the
+      easiest to detect automatically.
+    guidance: >
+      Integrate lychee or broken-link-checker into CI. Fail PRs with
+      any broken internal links. Warn on broken external links.
+    priority: P1
+
+  - id: "doc-dt-002"
+    subdomain: "documentation_testing"
+    title: "Validate all doctest examples in CI against the installed library version"
+    rationale: >
+      Doctest examples that compile against an old API version mislead
+      consumers. CI validation ensures examples stay current.
+    guidance: >
+      Run 'python3 -m doctest' or pytest --doctest-modules in CI.
+      Fail the build if any doctest example raises an unexpected
+      exception.
+    priority: P1
+
+  - id: "doc-dt-003"
+    subdomain: "documentation_testing"
+    title: "Spell-check all user-facing documentation in CI"
+    rationale: >
+      Spelling errors erode trust in documentation quality.
+      Automated spell-checking is low-cost and high-signal.
+    guidance: >
+      Integrate cspell or aspell into CI. Maintain a project-specific
+      word list (cspell.config.yaml) for domain terms that are not
+      standard English.
+    priority: P2
+
+  - id: "doc-dt-004"
+    subdomain: "documentation_testing"
+    title: "Validate OpenAPI specs against spectral rules on every PR"
+    rationale: >
+      OpenAPI specs without linting accumulate inconsistencies that
+      break generated SDKs and client libraries.
+    guidance: >
+      Run spectral lint on all openapi.yaml files in CI. Maintain a
+      .spectral.yaml ruleset aligned to the team's API conventions.
+    priority: P1
+
+  - id: "doc-dt-005"
+    subdomain: "documentation_testing"
+    title: "Test that every public function has a docstring in CI"
+    rationale: >
+      Missing docstrings on public APIs are invisible until a consumer
+      needs to understand usage. CI enforcement prevents the gap.
+    guidance: >
+      Use pydocstyle or ruff (select D rules) in CI to enforce
+      docstrings on all public functions and classes (CORE-012).
+    priority: P1
+
+  - id: "doc-dt-006"
+    subdomain: "documentation_testing"
+    title: "Run YAML schema validation on all knowledge base files in CI"
+    rationale: >
+      Invalid YAML in the knowledge base silently breaks AI-assisted
+      retrieval. Schema validation catches errors before they reach
+      production.
+    guidance: >
+      Validate all cortex-registry/knowledge/**/*.yaml against a
+      JSON Schema on every PR. Gate merge on zero validation errors.
+    priority: P1
+
+  # ── 9. Accessibility ─────────────────────────────────────────────────────
+  - id: "doc-a11y-001"
+    subdomain: "accessibility"
+    title: "All images must have meaningful alt text"
+    rationale: >
+      Screen readers skip images without alt text. Missing alt text
+      excludes visually impaired readers from documentation content.
+    guidance: >
+      Every <img> and Markdown image must have descriptive alt text.
+      Empty alt (alt="") is valid for decorative images only. Run
+      pa11y or axe in CI to enforce.
+    priority: P1
+
+  - id: "doc-a11y-002"
+    subdomain: "accessibility"
+    title: "Maintain WCAG 2.1 AA colour contrast in all documentation sites"
+    rationale: >
+      Low-contrast text fails readers with low vision and in
+      bright-light conditions. WCAG AA (4.5:1) is the legal minimum
+      in most jurisdictions.
+    guidance: >
+      Test colour combinations with WebAIM Contrast Checker. Enforce
+      in CI with lighthouse --assert-failures (contrast). Never use
+      placeholder grey text below 4.5:1 contrast ratio.
+    priority: P1
+
+  - id: "doc-a11y-003"
+    subdomain: "accessibility"
+    title: "Use semantic heading hierarchy (H1 → H2 → H3, no skipping)"
+    rationale: >
+      Screen readers navigate by heading hierarchy. Skipped levels
+      (H1 → H3) break document outline for AT users.
+    guidance: >
+      Each page has exactly one H1. Subheadings follow strict nesting.
+      Use a linter (markdownlint MD001) to enforce heading hierarchy.
+    priority: P1
+
+  - id: "doc-a11y-004"
+    subdomain: "accessibility"
+    title: "Avoid directional language ('click the button on the right')"
+    rationale: >
+      Directional language fails for users with spatial cognition
+      differences, responsive layouts, and screen magnification.
+    guidance: >
+      Refer to UI elements by label, not position. 'Click Submit'
+      not 'click the blue button on the right'. Add a Vale style
+      rule to flag directional terms.
+    priority: P2
+
+  - id: "doc-a11y-005"
+    subdomain: "accessibility"
+    title: "Provide text alternatives for all diagrams"
+    rationale: >
+      Architecture diagrams and flowcharts are inaccessible to
+      screen reader users without a textual equivalent.
+    guidance: >
+      For every diagram, add a collapsible text description below it.
+      The description must convey the same information as the visual.
+    priority: P2
+
+  - id: "doc-a11y-006"
+    subdomain: "accessibility"
+    title: "Test documentation with keyboard-only navigation"
+    rationale: >
+      Users who cannot use a mouse rely on keyboard navigation.
+      Documentation sites frequently fail keyboard traps and focus issues.
+    guidance: >
+      Tab through every interactive element in the docs site. Verify
+      focus is visible at every step. Use playwright or Cypress with
+      keyboard event simulation.
+    priority: P2
+
+  # ── 10. Documentation Governance ────────────────────────────────────────
+  - id: "doc-gov-001"
+    subdomain: "governance"
+    title: "Adopt a team-endorsed style guide before writing documentation at scale"
+    rationale: >
+      Inconsistent style creates maintenance overhead and reduces trust.
+      A style guide established early prevents expensive retrofitting.
+    guidance: >
+      Adopt Google Developer Style Guide or Microsoft Writing Style Guide
+      as the baseline. Document any team-specific overrides in a
+      STYLE.md file. Enforce with Vale linter.
+    priority: P1
+
+  - id: "doc-gov-002"
+    subdomain: "governance"
+    title: "Require documentation updates in the definition of done for every feature"
+    rationale: >
+      Documentation added retroactively is incomplete. Including docs
+      in the definition of done ensures completeness at the source.
+    guidance: >
+      Add 'Documentation updated' as a mandatory checkbox in the PR
+      template. Block merge if the checkbox is unchecked for feature
+      branches.
+    priority: P1
+
+  - id: "doc-gov-003"
+    subdomain: "governance"
+    title: "Conduct quarterly documentation freshness audits"
+    rationale: >
+      Documentation drifts from reality every time code changes
+      without a corresponding doc update. Quarterly audits catch drift.
+    guidance: >
+      Assign a documentation owner (rotating). Each quarter, the owner
+      walks through all P0/P1 docs, verifies accuracy, and raises
+      update PRs for any gaps.
+    priority: P1
+
+  - id: "doc-gov-004"
+    subdomain: "governance"
+    title: "Documentation changes must go through code review"
+    rationale: >
+      Documentation errors propagate invisibly. Code review on docs
+      catches factual errors, unclear explanations, and missing context.
+    guidance: >
+      All documentation in the repository goes through the standard PR
+      review process. Require at least one technical approver for
+      architecture docs.
+    priority: P1
+
+  - id: "doc-gov-005"
+    subdomain: "governance"
+    title: "Archive documentation for end-of-life products for 5 years"
+    rationale: >
+      Customers on old product versions need historic documentation.
+      Deletion causes support burden and potential legal risk.
+    guidance: >
+      When retiring a product, move its docs to a versioned archive
+      (e.g. docs/archive/v2/). Redirect docs URLs to the archive.
+      Set a calendar reminder to delete after 5 years.
+    priority: P2
+
+  - id: "doc-gov-006"
+    subdomain: "governance"
+    title: "Measure documentation coverage as a team KPI"
+    rationale: >
+      What gets measured gets managed. Including documentation coverage
+      in team KPIs creates accountability for quality.
+    guidance: >
+      Track: public API docstring coverage %, README presence %, runbook
+      coverage per service. Report monthly in team health dashboards.
+    priority: P2
+
+  - id: "doc-gov-007"
+    subdomain: "governance"
+    title: "Internally-only knowledge must be clearly marked and excluded from public release"
+    rationale: >
+      Internal knowledge (pricing, roadmap, client-specific implementation)
+      leaked in public docs creates business and legal risk.
+    guidance: >
+      Mark all internal knowledge artifacts with internal_only: true.
+      CI must validate that internal_only: true files are not included
+      in public documentation builds.
+    priority: P0

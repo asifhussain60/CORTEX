@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-03-08 | **Architecture:** 296 Orchestrator files · 36 MCP Tools · 60 Governance YAMLs · 31 Intent Types · 1 Package
+**Updated:** 2026-03-12 | **Architecture:** 312 Orchestrator files · 36 MCP Tools · 60 Governance YAMLs · 32 Intent Types · 1 Package
 
 ---
 
@@ -8,7 +8,7 @@
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
-**Orchestrators:** 296 files across 14 domains in `cortex/orchestrators/`  
+**Orchestrators:** 312 files across 14 domains in `cortex/orchestrators/`  
 **MCP Tools:** 36 registered in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
@@ -195,7 +195,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 
 | Type | Location |
 |------|----------|
-| Orchestrators (296 files) | `cortex/orchestrators/{domain}/` |
+| Orchestrators (312 files) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (36 registered) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
@@ -223,6 +223,8 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | `/rca` | Root cause analysis (4 methodologies) |
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
+| `/review {pr}` | PR-scoped code review: security + quality + APPROVE/BLOCK verdict |
+| `/feedback` | Cross-repo capability extraction with sanitized backport instructions |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder |
 
 Every operation:

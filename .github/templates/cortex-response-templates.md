@@ -1198,7 +1198,7 @@ Canonical section emission sequence for composable responses:
 
 **What sets me apart:**
 
-- ⚡ **296 Orchestrators** working in concert — each specialized, all coordinated
+- ⚡ **312 Orchestrators** working in concert — each specialized, all coordinated
 - 🔍 **LENS Intelligence** — I analyze your actual code (git history, AST, patterns) before acting
 - 🛡️ **60 Governance Rules** enforced automatically — security, quality, compliance built-in
 - ✅ **TDD-First Always** — tests before code, no exceptions, no shortcuts
@@ -1815,7 +1815,7 @@ BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLO
 - ❌ NEVER render a separate `*🧭 Classifier → ...*` italic block — `🧭 Orchestration:` in Zone 3 already serves this role
 - ❌ Never use `**Via:**` label — the canonical label is `🧭 Orchestration:` (Phase 120 rename)
 - ❌ Never use `**Route:**` prefix
-- ❌ Never use tree characters (├─ └─ │) — Copilot Chat rendering rule
+- ❌ Never use tree characters (`├─ └─ │`) — Copilot Chat rendering rule
 
 **Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (collapsible timing detail), BLOCK-STAGE-PROGRESS (in-progress pulse)
 

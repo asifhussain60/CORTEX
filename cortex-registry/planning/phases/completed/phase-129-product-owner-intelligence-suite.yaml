@@ -1,0 +1,419 @@
+id: phase-129
+title: "Product Owner Intelligence Suite — SAFe/Scrum Decision Support, ROI Calculator, Change Recommendation Engine"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: []
+sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE
+estimated_effort: "3 days"
+
+description: |
+  Standalone phase — no dependencies on the backport pipeline (130–134). Delivers a
+  comprehensive Product Owner Intelligence Suite that transforms CORTEX from a
+  developer-centric tool into a full-team AI engineering platform. Addresses the gap
+  where POs using CORTEX for work item management, sprint planning, and stakeholder
+  reporting must rely on external tools.
+
+  13 capabilities across 6 functional areas:
+  1. Process Intelligence — Process Gap Analyzer + Requirements Engineer
+  2. Financial Intelligence — ROI Calculator + Sprint Capacity Calculator
+  3. Decision Intelligence — Change Recommendation Engine + Risk Register
+  4. Vocabulary & Training — SAFe/Scrum Vocabulary + Training Doc Generator
+  5. Integration — Work Item Integration (ADO/Jira) + PO Metrics Dashboard
+  6. Reporting — Executive Summary Generator + Feature Dependency Graph
+  7. Presentation — HTML View Enhancement (PO-specific dashboard tab)
+
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE — 13 GAPs
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  - id: GAP-129-01
+    title: "Process Gap Analyzer — identify process anti-patterns from ADO/Jira work item history"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      POs have no automated way to detect process anti-patterns (scope creep,
+      cycle time spikes, recurring blocked states) in their work item history.
+      A ProcessGapAnalyzer reading from ADO/Jira history and the RCA engine
+      can surface repeating patterns and recommend SAFe/Scrum process corrections.
+    action_ref: "phase-129-a"
+    files_to_create:
+      - cortex/intelligence/po/process_gap_analyzer.py
+    test_file: "tests/intelligence/po/test_process_gap_analyzer.py"
+
+  - id: GAP-129-02
+    title: "Requirements Engineer — AC scenario generation from feature descriptions"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      POs write user stories without structured acceptance criteria. The
+      RequirementsEngineer agent can parse a feature description and generate
+      Gherkin-format AC scenarios, reducing review cycles and missed edge cases.
+    action_ref: "phase-129-b"
+    files_to_create:
+      - cortex/intelligence/po/requirements_engineer.py
+    test_file: "tests/intelligence/po/test_requirements_engineer.py"
+
+  - id: GAP-129-03
+    title: "Training Doc Generator — auto-generate PO onboarding docs from sprint data"
+    severity: P2
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      New POs joining a team have no automated way to understand team conventions,
+      velocity baselines, or historical decisions. TrainingDocGenerator synthesizes
+      sprint retrospective themes, team norms, and definition-of-done criteria
+      into a structured onboarding document.
+    action_ref: "phase-129-c"
+    files_to_create:
+      - cortex/intelligence/po/training_doc_generator.py
+    test_file: "tests/intelligence/po/test_training_doc_generator.py"
+
+  - id: GAP-129-04
+    title: "ROI Calculator — feature value vs implementation cost analysis"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      POs cannot quickly estimate ROI for competing features. An ROICalculator
+      that takes business value score, implementation effort (story points),
+      risk score, and strategic alignment score produces a prioritization ranking
+      aligned with WSJF (Weighted Shortest Job First) for SAFe teams.
+    action_ref: "phase-129-d"
+    files_to_create:
+      - cortex/intelligence/po/roi_calculator.py
+    test_file: "tests/intelligence/po/test_roi_calculator.py"
+
+  - id: GAP-129-05
+    title: "Change Recommendation Engine — impact analysis for scope changes"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      When stakeholders request scope changes mid-sprint, POs lack an automated
+      impact analysis. ChangeRecommendationEngine scores change requests against
+      sprint capacity, dependency graph, and risk register to produce a structured
+      ACCEPT / DEFER / REJECT recommendation with justification.
+    action_ref: "phase-129-e"
+    files_to_create:
+      - cortex/intelligence/po/change_recommendation_engine.py
+    test_file: "tests/intelligence/po/test_change_recommendation_engine.py"
+
+  - id: GAP-129-06
+    title: "SAFe/Scrum Vocabulary — intent-aware terminology and ceremony guidance"
+    severity: P2
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      CORTEX responses use developer terminology (orchestrators, LENS, MCP) that
+      is opaque to POs. A SAFeVocabulary YAML + terminology adapter translates
+      CORTEX concepts into SAFe/Scrum language and provides ceremony guidance
+      (PI Planning, Sprint Review, Retrospective facilitation) on request.
+    action_ref: "phase-129-f"
+    files_to_create:
+      - cortex-registry/knowledge/po/safe-scrum-vocabulary.yaml
+      - cortex/intelligence/po/vocabulary_adapter.py
+    test_file: "tests/intelligence/po/test_vocabulary_adapter.py"
+
+  - id: GAP-129-07
+    title: "Work Item Integration Foundation — ADO + Jira unified interface"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      Phase-131 delivers cortex_ado for ADO. The PO suite needs a unified
+      WorkItemClient abstraction that normalizes ADO and Jira data models,
+      enabling all PO intelligence components to be work-tracker agnostic.
+    action_ref: "phase-129-g"
+    files_to_create:
+      - cortex/intelligence/po/work_item_client.py     # ABC: fetch_story, search, update_status
+      - cortex/intelligence/po/ado_work_item_adapter.py
+      - cortex/intelligence/po/jira_work_item_adapter.py
+    files_to_modify:
+      - cortex-registry/config/ado-integration.yaml    # add jira section (created in phase-131)
+    test_file: "tests/intelligence/po/test_work_item_client.py"
+
+  - id: GAP-129-08
+    title: "PO Metrics Dashboard — velocity, cycle time, predictability HTML tab"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      The existing 10-tab onboarding dashboard has no PO-specific metrics view.
+      A new Tab 11 (PO Dashboard) shows velocity trend (last 6 sprints), cycle
+      time distribution, predictability score, and top blocked themes. Data is
+      sourced from the unified WorkItemClient.
+    action_ref: "phase-129-h"
+    files_to_create:
+      - cortex/intelligence/po/po_metrics_dashboard.py
+      - docs/data/po-metrics-schema.json
+    test_file: "tests/intelligence/po/test_po_metrics_dashboard.py"
+
+  - id: GAP-129-09
+    title: "Executive Summary Generator — sprint-end stakeholder report"
+    severity: P2
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      POs spend 1–2 hours after each sprint composing executive summaries.
+      ExecutiveSummaryGenerator synthesizes completed stories, velocity delta,
+      risk escalations, and next-sprint commitments into a structured 1-page
+      summary using the CORTEX report template.
+    action_ref: "phase-129-i"
+    files_to_create:
+      - cortex/intelligence/po/executive_summary_generator.py
+    test_file: "tests/intelligence/po/test_executive_summary_generator.py"
+
+  - id: GAP-129-10
+    title: "Sprint Capacity Calculator — team availability × velocity baseline"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      Sprint planning lacks automated capacity calculation. SprintCapacityCalculator
+      takes team member availability (days × focus factor) and historical velocity
+      to produce a committed story point budget with confidence interval.
+    action_ref: "phase-129-j"
+    files_to_create:
+      - cortex/intelligence/po/sprint_capacity_calculator.py
+    test_file: "tests/intelligence/po/test_sprint_capacity_calculator.py"
+
+  - id: GAP-129-11
+    title: "Feature Dependency Graph — cross-feature blocking dependency visualization"
+    severity: P2
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      POs cannot see cross-feature dependencies without manually tracing work items.
+      FeatureDependencyGraph builds a directed graph of feature → blocking feature
+      relationships and exposes it as a D3.js-compatible JSON structure for the
+      PO Dashboard tab.
+    action_ref: "phase-129-k"
+    files_to_create:
+      - cortex/intelligence/po/feature_dependency_graph.py
+    test_file: "tests/intelligence/po/test_feature_dependency_graph.py"
+
+  - id: GAP-129-12
+    title: "Risk Register — automated risk detection and scoring from work items"
+    severity: P1
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      Risk management is manual and inconsistently applied. RiskRegister scans
+      work item descriptions and comments for risk signals (blocked keywords,
+      external dependencies, compliance tags) and maintains a scored risk list
+      with likelihood × impact matrix.
+    action_ref: "phase-129-l"
+    files_to_create:
+      - cortex/intelligence/po/risk_register.py
+      - cortex-registry/knowledge/po/risk-signal-patterns.yaml
+    test_file: "tests/intelligence/po/test_risk_register.py"
+
+  - id: GAP-129-13
+    title: "HTML View Enhancement — PO Dashboard Tab 11 integration"
+    severity: P2
+    status: OPEN
+    source: "Phase 129 planning session 2026-03-07"
+    evidence: |
+      The onboarding dashboard HTML (docs/index.html and architecture.html) has
+      10 tabs. The PO suite requires Tab 11 with velocity chart, capacity gauge,
+      risk matrix, and dependency graph. Uses D3.js (already loaded on the page)
+      and the po-metrics-schema.json data contract.
+    action_ref: "phase-129-m"
+    files_to_modify:
+      - docs/index.html      # add Tab 11 PO Dashboard navigation + panel
+      - docs/architecture.html  # add PO metrics section if applicable
+    test_file: "tests/cortex_docs/test_po_dashboard_tab.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (sequential, TDD-gated, ROI-ordered)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: phase-129-a
+    title: "Work Item Integration Foundation — enables all other PO components (GAP-129-07)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-07"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "make test-preflight GREEN; phase-131 completion gate PASSED (cortex_ado available)"
+    tdd_cycle:
+      red:
+        action: "Write test_work_item_client.py — assert WorkItemClient ABC enforces fetch_story/search/update_status contract, assert ADOWorkItemAdapter maps ADO fields to canonical model, assert JiraWorkItemAdapter maps Jira fields"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement WorkItemClient ABC, ADOWorkItemAdapter, JiraWorkItemAdapter. Update ado-integration.yaml to add jira section."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Confirm adapter pattern is consistent. Verify Jira adapter handles missing fields gracefully."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + work item client tests GREEN"
+
+  - id: phase-129-b
+    title: "ROI Calculator + Sprint Capacity Calculator (GAP-129-04, GAP-129-10)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-04", "GAP-129-10"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-a"]
+    tdd_cycle:
+      red:
+        action: "Write test_roi_calculator.py + test_sprint_capacity_calculator.py — assert WSJF ranking, assert capacity confidence interval, assert edge cases (zero availability, zero velocity)"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement ROICalculator (WSJF: CoD + RRoE + OE + Job Size). Implement SprintCapacityCalculator (team member × focus factor × velocity baseline with CI)."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Ensure formulas are YAML-configurable (no hardcoded weights). Verify confidence interval uses standard statistical approach."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + calculator tests GREEN"
+
+  - id: phase-129-c
+    title: "Process Gap Analyzer + Change Recommendation Engine + Risk Register (GAP-129-01, GAP-129-05, GAP-129-12)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-01", "GAP-129-05", "GAP-129-12"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-b"]
+    tdd_cycle:
+      red:
+        action: "Write test_process_gap_analyzer.py + test_change_recommendation_engine.py + test_risk_register.py — assert anti-pattern detection, assert ACCEPT/DEFER/REJECT logic, assert risk scoring"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement ProcessGapAnalyzer (integrates with RCA engine from phase-87). Implement ChangeRecommendationEngine (capacity + dependency + risk scoring). Implement RiskRegister + risk-signal-patterns.yaml."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify RCA engine integration uses cortex_learning op=rca interface. Confirm risk-signal-patterns.yaml follows YAML governance standards."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + analyzer + engine + register tests GREEN"
+
+  - id: phase-129-d
+    title: "Requirements Engineer + SAFe/Scrum Vocabulary (GAP-129-02, GAP-129-06)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-02", "GAP-129-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-129-c"]
+    tdd_cycle:
+      red:
+        action: "Write test_requirements_engineer.py + test_vocabulary_adapter.py — assert Gherkin AC generation, assert SAFe term translation, assert ceremony guidance outputs"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement RequirementsEngineer (Gherkin AC generator). Create safe-scrum-vocabulary.yaml. Implement VocabularyAdapter."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify Gherkin output uses Given/When/Then format consistently."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + requirements + vocabulary tests GREEN"
+
+  - id: phase-129-e
+    title: "PO Metrics Dashboard + Feature Dependency Graph + Executive Summary (GAP-129-08, GAP-129-11, GAP-129-09)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-129-08", "GAP-129-11", "GAP-129-09"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-129-d"]
+    tdd_cycle:
+      red:
+        action: "Write test_po_metrics_dashboard.py + test_feature_dependency_graph.py + test_executive_summary_generator.py"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement POMetricsDashboard + po-metrics-schema.json. Implement FeatureDependencyGraph (networkx or stdlib-only adjacency list). Implement ExecutiveSummaryGenerator."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "If networkx used, add to requirements.txt. Verify D3.js-compatible JSON schema for dependency graph."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + dashboard + graph + summary tests GREEN"
+
+  - id: phase-129-f
+    title: "Training Doc Generator (GAP-129-03)"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-129-e"]
+    tdd_cycle:
+      red:
+        action: "Write test_training_doc_generator.py — assert onboarding doc contains team conventions section, velocity baseline section, definition-of-done section"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Implement TrainingDocGenerator consuming sprint history from WorkItemClient and team norms from knowledge registry."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify inline output only (CORE-002 — no .md/.txt files written to disk)."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + training doc tests GREEN"
+
+  - id: phase-129-g
+    title: "HTML View Enhancement — PO Dashboard Tab 11 (GAP-129-13)"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-129-13"]
+    governance_authority: "CORE-028, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-129-f"]
+    tdd_cycle:
+      red:
+        action: "Write test_po_dashboard_tab.py — assert Tab 11 nav item present in docs/index.html, assert D3 velocity chart div exists, assert po-metrics-schema.json data contract is referenced"
+        gate: "make test-changed — all new tests FAIL"
+      green:
+        action: "Add Tab 11 PO Dashboard to docs/index.html. Implement velocity chart, capacity gauge, risk matrix panel, and dependency graph panel using D3.js."
+        gate: "make test-changed — all new tests PASS"
+      refactor:
+        action: "Verify HTML passes W3C validation concepts (no broken tags). Confirm Tab 11 does not break existing Tab 1–10 layout."
+        gate: "make test-smoke GREEN"
+    completion_gate: "make test-smoke GREEN + PO dashboard tab tests GREEN + docs/index.html has Tab 11"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - all_13_gaps_closed: true
+  - smoke_gate: "make test-smoke GREEN (≥2775 baseline — zero regressions)"
+  - preflight_gate: "make test-preflight GREEN"
+  - work_item_integration: "WorkItemClient ABC with ADO + Jira adapters operational"
+  - roi_calculator: "ROICalculator produces WSJF ranking; SprintCapacityCalculator produces confidence interval"
+  - process_gap_analyzer: "ProcessGapAnalyzer detects ≥3 anti-pattern categories"
+  - change_recommendation: "ChangeRecommendationEngine produces ACCEPT/DEFER/REJECT verdict"
+  - risk_register: "RiskRegister scans work items and produces scored risk list"
+  - requirements_engineer: "RequirementsEngineer generates Gherkin AC from feature descriptions"
+  - vocabulary: "VocabularyAdapter translates ≥20 developer terms to SAFe/Scrum language"
+  - metrics_dashboard: "POMetricsDashboard serializes to po-metrics-schema.json contract"
+  - feature_graph: "FeatureDependencyGraph produces D3-compatible JSON"
+  - executive_summary: "ExecutiveSummaryGenerator produces 1-page sprint summary"
+  - training_docs: "TrainingDocGenerator produces structured onboarding document inline"
+  - html_tab: "docs/index.html has Tab 11 PO Dashboard with velocity + capacity + risk + dependency panels"
+  - inline_only: "No .md/.txt report files created (CORE-002)"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+governance:
+  core_rules_applied: [CORE-002, CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-049, CORE-064, CORE-068]
+  plip_scope_lock: "orchestration"
+  tdd_applies: true
+  test_gate: "make test-smoke"
+  test_dir: "tests/intelligence/po/"

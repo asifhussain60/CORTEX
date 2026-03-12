@@ -43,12 +43,12 @@ phase_detail_files:
   - { id: phase-137, status: COMPLETE, completed_date: "2026-03-08", priority: P1, sweep_id: SWEEP-137-DEEP-INTELLIGENCE-WIRING, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-137-deep-intelligence-wiring.yaml", note: "Deep Intelligence Wiring COMPLETE 2026-03-08: CCLQueryEngine (CORE rule→business-language via ccl-governance-crystal.yaml), CapabilityVerifier (import drift detection), IntelligenceFacade 3 methods (threat_assessment/quality_baseline/guidance + null fallbacks), URS emission in routing_core_mixin. 33 TDD tests GREEN." }
   - { id: phase-136, status: COMPLETE, completed_date: "2026-03-08", priority: P1, sweep_id: SWEEP-136-CAPE, gaps: 5, sub_phases: 5, file: "cortex-registry/planning/phases/completed/phase-136-cape.yaml", note: "CAPE COMPLETE 2026-03-08: ComplexityTriageEngine (5-dim CDR → SIMPLE/MODERATE/COMPLEX), AutoPlanGenerator + PhaseFileScaffolder + RoadmapPatternSelector (5 templates), PlanAnalysisGateRunner (3 blocking + 2 informational gates), PlanExecutionLoop (Kahn topo sort) + PlanStabilizationInjector (9-check holistic), GoldenTestGenerator + TestPriorityClassifier + RepoFrameworkDetector. 104 TDD tests GREEN. Ruff clean." }
   - { id: phase-135, status: COMPLETE, completed_date: "2026-03-08", priority: P1, sweep_id: SWEEP-135-KAL, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/completed/phase-135-kal.yaml", note: "KAL COMPLETE 2026-03-08: DomainSignalExtractor + KnowledgeCoverageAssessor (GAP-01/02) + KnowledgeTemplateSynthesizer + KnowledgeSchemaValidator + KnowledgeIndexRegistrar (GAP-03) + KnowledgeAcquisitionOrchestrator 6-step + IntelligenceFacade.acquire() + invalidate_cache() + BUG-1 fix (GAP-04). 35 TDD tests GREEN. Ruff clean. No regressions." }
-  - { id: phase-134, status: PLANNED, priority: P1, sweep_id: SWEEP-134-KNOWLEDGE-SYNC-PROMPT-WIRING, gaps: 11, sub_phases: 6, file: "cortex-registry/planning/phases/planned/phase-134-knowledge-sync-and-prompt-wiring.yaml", note: "Knowledge Sync & Prompt Wiring: post-backport alignment of copilot-instructions.md, AGENT-INDEX.md, cortex-doc.prompt.md, CORTEX.prompt.md, cortex-architect.prompt.md, all docs/.content/ files, and 2 new support agents (cortex-review-agent, cortex-feedback-agent). Depends on phases 130-133." }
-  - { id: phase-133, status: PLANNED, priority: P1, sweep_id: SWEEP-133-META-AND-TEMPLATES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-133-meta-and-templates.yaml", note: "Backport Phase 4 — FEEDBACK intent + FeedbackOrchestrator + cortex-feedback.prompt.md (FB-008); 15 workflow template YAMLs + composer spec update (FB-010). Depends on phase-132." }
-  - { id: phase-132, status: PLANNED, priority: P1, sweep_id: SWEEP-132-CORE-CAPABILITIES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-132-core-capabilities.yaml", note: "Backport Phase 3 — Universal Repo Intelligence Engine with 8 extractors + manifest + dashboard (FB-003); CodeReviewOrchestrator + REVIEW intent + cortex_review MCP tool (FB-001). Depends on phase-131." }
-  - { id: phase-131, status: PLANNED, priority: P1, sweep_id: SWEEP-131-INTELLIGENCE-LAYER, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-131-intelligence-layer.yaml", note: "Backport Phase 2 — Archetype Classifier + definitions YAML (FB-005); CortexFrameworkAnalyzer LENS analyzer (FB-009); ADO synthesizer + enhanced ops + cortex_ado MCP (FB-004). Depends on phase-130." }
-  - { id: phase-130, status: PLANNED, priority: P1, sweep_id: SWEEP-130-FOUNDATION-BACKPORT, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-130-foundation-backport.yaml", note: "Backport Phase 1 — Vacuum recency guard + _workspaces/ protection (FB-007); Quote-principle separation atoms + trigger policy (FB-006); Content Library Engine + EpochShuffler + cortex_content MCP (FB-002). Standalone, no dependencies." }
-  - { id: phase-129, status: PLANNED, priority: P1, sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE, gaps: 13, sub_phases: 13, file: "cortex-registry/planning/phases/planned/phase-129-product-owner-intelligence-suite.yaml", note: "Product Owner Intelligence Suite: SAFe/Scrum decision support, ROI calculator, change recommendation engine, training doc generator, work item integration foundation, PO metrics dashboard." }
+  - { id: phase-134, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-134-KNOWLEDGE-SYNC-PROMPT-WIRING, gaps: 11, sub_phases: 6, file: "cortex-registry/planning/phases/completed/phase-134-knowledge-sync-and-prompt-wiring.yaml", note: "COMPLETE 2026-03-12. All 11 GAPs closed: /review+/feedback in copilot-instructions+CORTEX.prompt.md+cortex-architect, display names, AGENT-INDEX rows + ContentLib row, cortex-doc drift scope, 08-learning archetype content." }
+  - { id: phase-133, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-133-META-AND-TEMPLATES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-133-meta-and-templates.yaml", note: "COMPLETE 2026-03-12. cortex_version 1.0→3.9, feedback agent metadata, 62 tests GREEN." }
+  - { id: phase-132, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-132-CORE-CAPABILITIES, gaps: 2, sub_phases: 2, file: "cortex-registry/planning/phases/planned/phase-132-core-capabilities.yaml", note: "COMPLETE 2026-03-12. IntelligenceFacade.analyze_repository() added, 42 repo intelligence tests GREEN." }
+  - { id: phase-131, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-131-INTELLIGENCE-LAYER, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-131-intelligence-layer.yaml", note: "COMPLETE 2026-03-12. All components existed: archetype_classifier, cortex_framework_analyzer, ado_context_synthesizer, cortex_ado MCP." }
+  - { id: phase-130, status: COMPLETE, completed_date: "2026-03-12", priority: P1, sweep_id: SWEEP-130-FOUNDATION-BACKPORT, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-130-foundation-backport.yaml", note: "COMPLETE 2026-03-12. All components existed: vacuum recency guard, content library engine, EpochShuffler, cortex_content MCP, principle-trigger-policy." }
+  - { id: phase-129, status: COMPLETE, priority: P1, sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE, gaps: 13, sub_phases: 13, completed_date: "2026-03-12", file: "cortex-registry/planning/phases/completed/phase-129-product-owner-intelligence-suite.yaml", note: "Product Owner Intelligence Suite: SAFe/Scrum decision support, ROI calculator, change recommendation engine, training doc generator, work item integration foundation, PO metrics dashboard." }
   # Issue #17 Backport Phases (2026-03-09) — 7 capabilities from cortex-sts feedback extraction
   - { id: phase-140, status: PLANNED, priority: P1, sweep_id: SWEEP-140-PRODUCTION-HARDENING, gaps: 3, sub_phases: 3, file: "cortex-registry/planning/phases/planned/phase-140-production-hardening-dependency-audit.yaml", note: "Production Hardening: dependency audit (13 packages removed), prompt/agent alignment (orchestrator/MCP/intent counts), deprecated spec cleanup. Source: Issue #17 FB-007." }
   - { id: phase-141, status: PLANNED, priority: P0, sweep_id: SWEEP-141-VACUUM-SOURCE-PROTECTION, gaps: 4, sub_phases: 4, file: "cortex-registry/planning/phases/planned/phase-141-vacuum-source-protection-hardening.yaml", note: "Vacuum Source Protection: PROTECTED_DIRS expansion (9→15), validate_safe_run(), RollbackManager SHA validation, 8 golden tests (GV-012..GV-019). Source: Issue #17 FB-002." }
@@ -226,13 +226,13 @@ phases:
   - id: phase-134
     title: "Knowledge Sync & Prompt Wiring — Post-Backport Documentation & Prompt Alignment"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     depends_on: ["phase-130", "phase-131", "phase-132", "phase-133"]
     sweep_id: SWEEP-134-KNOWLEDGE-SYNC-PROMPT-WIRING
     gaps: 11
     sub_phases: 6
-    file: "cortex-registry/planning/phases/planned/phase-134-knowledge-sync-and-prompt-wiring.yaml"
-    note: "PLANNED 2026-03-07. 11 GAPs: copilot-instructions.md metrics, AGENT-INDEX.md counts + new rows, cortex-doc.prompt.md drift scope, 3 docs/.content/ updates (01/05/06 platform+orchestration+MCP), CORTEX.prompt.md quick commands, cortex-architect.prompt.md new mode sections, 2 new support agents (cortex-review-agent.md + cortex-feedback-agent.md), ContentLibraryOrchestrator AGENT-INDEX row, docs/.content/08 learning update. YAML/MD only — no Python source changes."
+    file: "cortex-registry/planning/phases/completed/phase-134-knowledge-sync-and-prompt-wiring.yaml"
+    note: "COMPLETE 2026-03-12. All 11 GAPs closed: display names + /review /feedback in copilot-instructions, AGENT-INDEX specialist rows + Content Library row, CORTEX.prompt.md + cortex-architect.prompt.md REVIEW/FEEDBACK modes, cortex-doc.prompt.md drift scope, docs/.content/08 archetype/CortexFrameworkAnalyzer content."
 
   # ── PHASE 133: META & TEMPLATES BACKPORT (2026-03-07) ────────────────────────
   - id: phase-133
@@ -281,16 +281,17 @@ phases:
     file: "cortex-registry/planning/phases/planned/phase-130-foundation-backport.yaml"
     note: "PLANNED 2026-03-07. FB-007: VacuumOrchestrator recency guard + _workspaces/ protection + health/constants.py shared constants. FB-006: atom-proceed-principle.yaml + atom-principle.yaml update + principle-trigger-policy.yaml + response composition copilot_chat_compatible flag. FB-002: ContentLibraryEngine + EpochShuffler + ContentLibraryOrchestrator + cortex_content MCP + content-library-routing.yaml. No dependencies — standalone."
 
-  # ── PHASE 129: PRODUCT OWNER INTELLIGENCE SUITE (2026-03-07) ─────────────────
+  # ── PHASE 129: PRODUCT OWNER INTELLIGENCE SUITE (COMPLETE 2026-03-12) ─────────
   - id: phase-129
     title: "Product Owner Intelligence Suite — SAFe/Scrum Decision Support, ROI Calculator, Change Recommendation Engine"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed_date: "2026-03-12"
     sweep_id: SWEEP-129-PO-INTELLIGENCE-SUITE
     gaps: 13
     sub_phases: 13
-    file: "cortex-registry/planning/phases/planned/phase-129-product-owner-intelligence-suite.yaml"
-    note: "PLANNED 2026-03-07. 13 GAPs identified: Process Gap Analyzer, Requirements Engineer, Training Doc Generator, ROI Calculator, Change Recommendation Engine, SAFe/Scrum Vocabulary, Work Item Integration (ADO/Jira), PO Metrics Dashboard, Executive Summary Generator, Sprint Capacity Calculator, Feature Dependency Graph, Risk Register, HTML View Enhancement."
+    file: "cortex-registry/planning/phases/completed/phase-129-product-owner-intelligence-suite.yaml"
+    note: "COMPLETE 2026-03-12. All 13 GAPs implemented: ProcessGapAnalyzer, RequirementsEngineer, TrainingDocGenerator, ROICalculator, ChangeRecommendationEngine, VocabularyAdapter, WorkItemClient (ADO+Jira), POMetricsDashboard, ExecutiveSummaryGenerator, SprintCapacityCalculator, FeatureDependencyGraph, RiskRegister, Tab 11 HTML + po-metrics-schema.json. 160 tests GREEN."
 
   # ══════════════════════════════════════════════════════════════════════════════
   # ISSUE #17 BACKPORT PHASES (2026-03-09) — 7 capabilities from cortex-sts

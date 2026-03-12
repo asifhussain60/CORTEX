@@ -91,15 +91,8 @@ Do not duplicate the completion report inline here. (CORE-035: single canonical 
 
 ---
 
-## ⛔ Deleted Constructs — Never Reference
-
-- `cortex/brain/` — dissolved post-refactor
-- `cortex_intelligence/` — merged into `cortex/intelligence/`
-- `cortex_lens/` — merged into `cortex/lens/`
-- `cortex_process_request` — removed MCP tool
-- `cortex_lens_analyze` — removed MCP tool
-- Phase 49 / CCL / CrystallizedContext — removed
-- `_archive/` — deleted directory
+## ⛔ Deleted Constructs
+See `AGENT-INDEX.md` § ⛔ Deleted Constructs for the full list. Key: `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`, `cortex_process_request`, `cortex_lens_analyze`.
 
 ---
 

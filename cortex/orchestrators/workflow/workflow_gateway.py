@@ -168,6 +168,26 @@ class WorkflowGateway:
 
         return template_id
 
+    @staticmethod
+    def get_mode_template_map() -> Dict[str, Optional[str]]:
+        """Return a copy of the canonical mode→template mapping.
+
+        Provides read-only access to ``_MODE_TEMPLATE_MAP`` for downstream
+        consumers (e.g. SubPhaseComposer) so there is a single source of truth.
+        The copy prevents callers from mutating the canonical map.
+
+        Returns:
+            Dict mapping mode strings (e.g. ``"IMPLEMENT"``) to template IDs
+            (e.g. ``"sdlc/implement-workflow"``) or ``None`` for non-code-touching modes.
+
+        Example::
+
+            mapping = WorkflowGateway.get_mode_template_map()
+            assert "IMPLEMENT" in mapping
+            assert mapping["QUERY"] is None
+        """
+        return dict(_MODE_TEMPLATE_MAP)
+
     def _assert_template_yaml_exists(self, template_id: str) -> None:
         """Verify the template YAML file exists on disk; raise if missing.
 

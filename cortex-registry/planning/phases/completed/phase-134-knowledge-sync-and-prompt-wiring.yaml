@@ -1,0 +1,366 @@
+id: phase-134
+title: "Knowledge Sync & Prompt Wiring — Backport Documentation Alignment"
+status: PLANNED
+priority: P1
+created: "2026-03-07"
+depends_on: ["phase-130", "phase-131", "phase-132", "phase-133"]
+sweep_id: SWEEP-134-KNOWLEDGE-SYNC-PROMPT-WIRING
+estimated_effort: "0.5 day"
+
+description: |
+  After phases 130–133 land all 10 backport capabilities, CORTEX's governance
+  artifacts — docs/.content/, cortex-doc.prompt.md, AGENT-INDEX.md,
+  copilot-instructions.md, and individual prompts/agents — must be brought into
+  full alignment with the new architecture. This phase ensures zero prompt drift,
+  accurate metric counts, complete MCP tool documentation, new intent type
+  routing, and doc-agent awareness of new orchestrators.
+
+  This is the "seal the loop" phase: new code without updated prompts creates
+  invisible capabilities that agents cannot discover or route to.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── GAP 01: copilot-instructions.md — Architecture Metrics ─────────────────
+  - id: GAP-134-01
+    title: "copilot-instructions.md — Architecture metrics + intent count update"
+    status: OPEN
+    priority: P0
+    target_file: ".github/copilot-instructions.md"
+    description: |
+      After phases 130–133 complete, the following counts in copilot-instructions.md
+      will be stale and must be updated to reflect live architecture:
+      - Orchestrator files: currently 296 → recalculate post-backport
+      - MCP Tools registered: 30 → 33 (+cortex_review, +cortex_content, +cortex_ado)
+      - Intent Types: 29 → 31 (+REVIEW, +FEEDBACK)
+      - Governance YAMLs: 37 → recalculate (new workflow templates from FB-010 +
+        content-library-routing.yaml from FB-002 + principle-trigger-policy update from FB-006)
+      - Quick Command Reference table: add /review and /feedback commands
+      - Orchestrator display name map: add CodeReviewOrchestrator → "Code Reviewer",
+        FeedbackOrchestrator → "Capability Extractor", ContentLibraryOrchestrator →
+        "Content Librarian"
+      - Pre-built Orchestration values: add /review → "Classifier → Code Reviewer"
+      - File Organization table: confirm cortex/orchestrators/domain/ row covers
+        code_review_orchestrator.py placement
+      - Key Entry Points table: add CodeReviewOrchestrator entry
+    acceptance_criteria:
+      - All numeric counts match live file system values
+      - /review and /feedback appear in Quick Command Reference
+      - New orchestrators appear in display name map and key entry points
+      - No stale references to 29-intent or 30-MCP-tool counts
+
+  # ── GAP 02: AGENT-INDEX.md — Architecture Quick Reference ──────────────────
+  - id: GAP-134-02
+    title: "AGENT-INDEX.md — Quick Reference counts, new agent rows, intent list"
+    status: OPEN
+    priority: P0
+    target_file: ".github/agents/AGENT-INDEX.md"
+    description: |
+      AGENT-INDEX.md is the token-efficient source of truth that all agents load
+      first. It must reflect post-backport reality:
+      - Architecture Quick Reference table:
+          Orchestrator files: 296 (current live)
+          MCP Tools: 36 registered (current live)
+          Intent Types: 31 (current live)
+          Tests: ~20,565 (current live) → recalculate post-backport
+      - Specialist Agents table: add row for cortex-review-agent.md (if created)
+        and cortex-feedback-agent.md (if created in phase-133)
+      - Documentation Agents table: no new docs agents; verify existing rows
+        still accurate (release-notes-agent, etc.)
+      - Date header: update "Updated:" timestamp to post-133 completion date
+      - Intent Types comment: update "29 intent types" note to 31
+    acceptance_criteria:
+      - All counts match live values verified by refresh_prompt_suite.py --counts-only
+      - New specialist agent rows present if agent files were created
+      - Header "Updated:" date is current
+      - Intent count note reads 31
+
+  # ── GAP 03: cortex-doc.prompt.md — New orchestrator awareness ──────────────
+  - id: GAP-134-03
+    title: "cortex-doc.prompt.md — Drift detection scope + new capability surface"
+    status: OPEN
+    priority: P1
+    target_file: ".github/prompts/cortex-doc.prompt.md"
+    description: |
+      The Documentation Orchestrator's drift-detection and synchronization phases
+      must know about the new capabilities so they can document them correctly:
+      - Phase 2 Drift Detection: extend orphaned feature scan to include
+        code_review_orchestrator.py, content_library_engine.py,
+        archetype_classifier.py, cortex_framework_analyzer.py,
+        ado_synthesizer.py, feedback_orchestrator.py — these are new
+        implemented capabilities that need documentation coverage
+      - Phase 3 Synchronization targets: confirm .content/ files are in scope
+        for the new capabilities (see GAP-134-04 through 06)
+      - Architecture Detection (Per-Page Styling) section: no changes needed
+        unless new HTML role pages are created in phase-132 (onboarding dashboard)
+      - Count Floor-Approximation Policy table: after backport, MCP tools
+        floor moves from 30+ to 30+ (unchanged — 33 rounds down to 30 with 5-unit
+        rule). Intent types: 31 → "30+" floor (unchanged). Update only if floors change.
+      - PLIP-001 Scope Lock stays "documentation" — no cross-domain leakage
+    acceptance_criteria:
+      - Drift detection phase 2 explicitly lists new orchestrators/engines in scope
+      - Count floor table is accurate for post-backport values
+      - No stale class names or file paths referenced
+
+  # ── GAP 04: docs/.content/01-platform — Platform at a Glance table ─────────
+  - id: GAP-134-04
+    title: "01-platform-what-is-cortex.md — Platform at a Glance + intent count"
+    status: OPEN
+    priority: P1
+    target_file: "docs/.content/01-platform-what-is-cortex.md"
+    description: |
+      Platform at a Glance table needs two updates after backport:
+      - "290+ orchestration engines" row: recount post-backport. If total crosses
+        300, update to "300+" per floor approximation policy. If still <300,
+        keep "290+".
+      - "30 intent types" row: update to "30+ intent types" (31 actual →
+        floor rounds down to 30 with 5-unit rule, same floor value — verify)
+      - "35+ IDE-accessible tools" row: after +3 MCP tools (cortex_review,
+        cortex_content, cortex_ado), recount total. Currently documents 35+;
+        if live count is now 33, floor is still 30+ — BUT current wording is
+        "35+" which implies a different floor. Audit actual registered tool count
+        and apply correct floor.
+      - What CORTEX Does for Each Role — Software Engineers section: add mention
+        of PR code review capability (CodeReviewOrchestrator) and repository
+        archetype intelligence (ArchetypeClassifier).
+      - What CORTEX Does for Each Role — Product Owners section: add mention of
+        token-optimized ADO context synthesis (ADOContextSynthesizer).
+    acceptance_criteria:
+      - All numeric values in Platform at a Glance use correct floor approximations
+      - Software Engineer and Product Owner role descriptions mention new capabilities
+      - last_verified date updated to current date
+
+  # ── GAP 05: docs/.content/05-orchestration — Intent types table ────────────
+  - id: GAP-134-05
+    title: "05-orchestration-the-engine-room.md — 30→31 intents + new intent rows"
+    status: OPEN
+    priority: P1
+    target_file: "docs/.content/05-orchestration-the-engine-room.md"
+    description: |
+      Two updates required:
+      1. File header boilerplate: "290+ orchestrators" — recount post-backport
+      2. The 30 Intent Types section title and table: rename to "31 Intent Types"
+         (or "30+" per floor policy — confirm which the file uses). Add new
+         intents to the table:
+         - REVIEW: "Code Reviewer" → add under "Auditing" category
+         - FEEDBACK: "Capability Extractor" → add under new "Meta" category or
+           extend "Collaborating"
+      3. Architecture — Fourteen Domains: if Domain count changes post-backport
+         due to new orchestrators in domain/, update "25+ orchestrators" row.
+      4. Core domain table: add CodeReviewOrchestrator row (it is in domain/,
+         not core/ — confirm placement in phase-132 and update accordingly).
+    acceptance_criteria:
+      - Intent count header matches actual count (31)
+      - REVIEW and FEEDBACK intents present in the intent types table
+      - Domain orchestrator count reflects post-backport reality
+      - last_verified date updated
+
+  # ── GAP 06: docs/.content/06-mcp-tools — New tools table rows ─────────────
+  - id: GAP-134-06
+    title: "06-mcp-tools-in-your-ide.md — Add cortex_review, cortex_content, cortex_ado"
+    status: OPEN
+    priority: P1
+    target_file: "docs/.content/06-mcp-tools-in-your-ide.md"
+    description: |
+      Three new MCP tools need documentation rows added in the appropriate
+      category sections:
+      - cortex_review → "Planning and Audit" section (or new "Code Review" section)
+        Operations: review, findings, history, patterns, health
+        One-line description: "Runs a PR-scoped code review pipeline — OWASP
+        security analysis, quality gate, and APPROVE / REQUEST_CHANGES / BLOCK verdict"
+      - cortex_content → "Intelligence and Code Analysis" section
+        Operations: select, history, reset, stats
+        One-line description: "Selects a quote, principle, or AI insight for a
+        given intent — powered by EpochShuffler anti-repetition across 800 items"
+      - cortex_ado → "Planning and Audit" section
+        Operations: get_story, get_full, get_tests, search, health
+        One-line description: "Fetches token-optimized Azure DevOps work item
+        context — AC scenarios, comment themes, and child task hierarchy in ≤2000 tokens"
+      - File header: "35+ registered tools" — recount and update floor if needed.
+        Live count will be 33 after backport. Floor = 30+. Update if current
+        floor wording overstates.
+      - "Understanding and Routing" section: cortex_classify still shows "30 intent
+        types" → update to "31 intent types" or "30+" per floor policy.
+    acceptance_criteria:
+      - All three new tools documented with operations and one-line descriptions
+      - Tool count floor in header is accurate
+      - Intent type reference in cortex_classify description is updated
+
+  # ── GAP 07: CORTEX.prompt.md — Quick Commands table ───────────────────────
+  - id: GAP-134-07
+    title: "CORTEX.prompt.md — /review and /feedback quick commands"
+    status: OPEN
+    priority: P1
+    target_file: ".github/prompts/CORTEX.prompt.md"
+    description: |
+      Quick Commands table needs two new rows after backport:
+      - /review {pr} → "PR-scoped code review: security + quality + APPROVE/BLOCK verdict"
+      - /feedback → "Cross-repo capability extraction with sanitized backport instructions"
+      Intent Routing section: reference to IntentRouter must mention 31 intent types
+      (currently says 29). The authoritative count lives in copilot-instructions.md;
+      CORTEX.prompt.md should defer to that (e.g. "29+" or just "30+").
+      MCP section: Tier 0 (BLOCK) list — confirm REVIEW and FEEDBACK classification
+      (REVIEW = Tier 0 since code-modifying; FEEDBACK = Tier 1 WARN or Tier 0,
+      evaluate during phase-133 implementation).
+    acceptance_criteria:
+      - /review and /feedback appear in Quick Commands table
+      - Intent type count is not stale (≥ 29)
+      - MCP tier assignment for REVIEW and FEEDBACK documented
+
+  # ── GAP 08: cortex-architect.prompt.md — REVIEW and FEEDBACK modes ─────────
+  - id: GAP-134-08
+    title: "cortex-architect.prompt.md — REVIEW mode section + FEEDBACK mode section"
+    status: OPEN
+    priority: P1
+    target_file: ".github/prompts/cortex-architect.prompt.md"
+    description: |
+      cortex-architect.prompt.md is the SSOT for expanded execution mode details
+      (per CORTEX.prompt.md § CORE-035). Two new mode sections needed:
+      REVIEW MODE:
+        - Trigger: /review, "review pr", "code review", "pull request review"
+        - 6-stage pipeline: PR Context → Intelligence Diamond → Security Analysis
+          → Quality Analysis → RCA Cross-Reference → Learning
+        - Verdict logic: P0 → BLOCK; P1+ → REQUEST_CHANGES; else → APPROVE
+        - OWASP knowledge YAMLs and code-review-checklist references
+        - OPJ learning record after each review
+      FEEDBACK MODE:
+        - Trigger: /feedback, "backport", "capability extraction"
+        - 6-stage pipeline: scope → filter → classify → extract → sanitize → generate
+        - 8 sanitization gates (G1–G8) for privacy compliance
+        - Output restricted to _workspaces/_feedback/ directory
+        - Context: FeedbackOrchestrator → FeedbackAgent delegation
+    acceptance_criteria:
+      - ## 🔧 REVIEW MODE section present with pipeline, verdict logic, knowledge refs
+      - ## 🔧 FEEDBACK MODE section present with pipeline, sanitization gate count
+      - Both sections follow existing mode section format (Trigger + Key facts)
+
+  # ── GAP 09: New support agents for REVIEW and FEEDBACK ─────────────────────
+  - id: GAP-134-09
+    title: "Create cortex-review-agent.md and cortex-feedback-agent.md"
+    status: OPEN
+    priority: P1
+    target_files:
+      - ".github/agents/support/cortex-review-agent.md"
+      - ".github/agents/support/cortex-feedback-agent.md"
+    description: |
+      Two new support agents to route the REVIEW and FEEDBACK intents:
+      cortex-review-agent.md:
+        - Mode: REVIEW
+        - Trigger: /review, "code review", "review pr", "pull request review"
+        - Pipeline: 6 stages (PR Context → Intel Diamond → Security → Quality → RCA → Learning)
+        - Orchestrator: CodeReviewOrchestrator in cortex/orchestrators/domain/
+        - MCP tool: cortex_review (ops: review, findings, history, patterns, health)
+        - Verdict: APPROVE / REQUEST_CHANGES / BLOCK based on P0/P1 finding counts
+        - PLIP-001: consult cortex_learning op=history before review; emit MILD_REWARD on APPROVE
+        - Scope lock: "code-review" domain
+      cortex-feedback-agent.md:
+        - Mode: FEEDBACK
+        - Trigger: /feedback, "backport", "capability extraction"
+        - Pipeline: 6 stages (scope → filter → classify → extract → sanitize → generate)
+        - Orchestrator: FeedbackOrchestrator in cortex/orchestrators/support/
+        - 8 sanitization gates (G1–G8)
+        - Output: _workspaces/_feedback/ directory only
+        - PLIP-001: exempt (FEEDBACK intent is exempt per protocol)
+        - Scope lock: "feedback" domain
+      Both agents follow the standard agent template format used by cortex-debugger.md
+      and cortex-vacuum.md as reference.
+    acceptance_criteria:
+      - Both agent files exist and follow standard format
+      - AGENT-INDEX.md Specialist Agents table updated (GAP-134-02 dependency)
+      - PLIP-001 scope locks declared in each agent
+      - MCP tool and orchestrator references are accurate
+
+  # ── GAP 10: ContentLibraryOrchestrator response agent doc ──────────────────
+  - id: GAP-134-10
+    title: "docs/agents response directory — ContentLibraryOrchestrator awareness"
+    status: OPEN
+    priority: P2
+    target_file: ".github/agents/AGENT-INDEX.md"
+    description: |
+      The ContentLibraryOrchestrator (FB-002) sits in cortex/orchestrators/response/
+      and is invoked at MasterOrchestrator Stage 4 for all response enrichment.
+      No dedicated agent file is needed (it is infrastructure, not a user-facing intent
+      orchestrator), but AGENT-INDEX.md should reference it in the Architecture Quick
+      Reference section under "Response Format" so agents know it exists and can route
+      content injection questions correctly.
+      Add to Architecture Quick Reference table:
+        Content Library | EpochShuffler anti-repetition across 3 pools (quotes +
+        principles + AI sparks, 800 items) — cortex_content MCP tool
+        (select|history|reset|stats)
+    acceptance_criteria:
+      - Architecture Quick Reference table has Content Library row
+      - cortex_content MCP tool operations documented inline
+      - No new agent file created (infrastructure-only component)
+
+  # ── GAP 11: docs/.content/ — New capability cross-references ───────────────
+  - id: GAP-134-11
+    title: "docs/.content/08-learning — Archetype classifier + RCA cross-ref"
+    status: OPEN
+    priority: P2
+    target_file: "docs/.content/08-learning-institutional-memory.md"
+    description: |
+      The ArchetypeClassifier (FB-005) feeds repo-specific knowledge routing.
+      The CortexFrameworkAnalyzer (FB-009) enables self-aware analysis.
+      Both contribute to CORTEX's institutional learning posture and should be
+      referenced in the learning content file:
+      - Add to the relevant section: mention that repository archetype classification
+        (weighted signal scoring across canonical archetypes) drives automated
+        knowledge domain routing and workflow recommendation for new repos.
+      - Add: CortexFrameworkAnalyzer enables CORTEX to detect other CORTEX
+        instances during onboarding and tailor the intelligence profile accordingly.
+      Apply count floor-approximation policy: do not introduce exact numbers;
+      use "90+ principles", "4 RCA methodologies" (already exact and stable).
+    acceptance_criteria:
+      - Archetype classifier concept present in learning content
+      - CortexFrameworkAnalyzer mentioned in onboarding/learning context
+      - No exact counts added that would require frequent sync
+      - last_verified date updated
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXECUTION ORDER
+# ─────────────────────────────────────────────────────────────────────────────
+execution_order:
+  - step: 1
+    gaps: [GAP-134-01, GAP-134-02]
+    rationale: "Architecture metric files first — all downstream prompts/agents read these"
+  - step: 2
+    gaps: [GAP-134-09]
+    rationale: "New agent files must exist before AGENT-INDEX rows can link them"
+  - step: 3
+    gaps: [GAP-134-07, GAP-134-08]
+    rationale: "Prompt updates reference new agent files and MCP tools"
+  - step: 4
+    gaps: [GAP-134-03]
+    rationale: "cortex-doc.prompt.md updated after new capabilities are documented"
+  - step: 5
+    gaps: [GAP-134-04, GAP-134-05, GAP-134-06, GAP-134-11]
+    rationale: ".content/ files — can be updated in parallel, no inter-dependency"
+  - step: 6
+    gaps: [GAP-134-10]
+    rationale: "AGENT-INDEX content library row — final cleanup pass"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA (PHASE GATE)
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - all_gaps_closed: true
+  - metric_drift: "python3 scripts/refresh_prompt_suite.py --counts-only shows zero drift"
+  - prompt_validation: "python3 scripts/refresh_prompt_suite.py --dry-run reports no stale references"
+  - agent_routing: "REVIEW and FEEDBACK intents have dedicated agent files and AGENT-INDEX rows"
+  - mcp_documentation: "cortex_review, cortex_content, cortex_ado documented in 06-mcp-tools"
+  - no_regression: "make test-smoke GREEN (existing tests unaffected — this phase touches only YAML/MD/prompt files)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE
+# ─────────────────────────────────────────────────────────────────────────────
+governance:
+  core_rules_applied: [CORE-002, CORE-028, CORE-035, CORE-049]
+  prohibited_outputs: "No .md report files. All work inline per CORE-002."
+  count_policy: "SSOT: cortex-doc.prompt.md § Count Floor-Approximation Policy"
+  plip_scope_lock: "documentation — agents and prompts only; no cross-domain pattern emission"
+  test_gate: "make test-smoke — smoke only (no Python source changes in this phase)"
+  tdd_applies: false
+  reason: "This phase modifies only YAML/Markdown/prompt files — no Python source changes.
+           TDD mandatory rule (CORE-008) does not apply to documentation-only phases."

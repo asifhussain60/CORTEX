@@ -173,6 +173,9 @@ This gives users a real-time signal showing which orchestrator is responding and
 | InteractionOrchestrator | Stage 1 Comprehension |
 | LearningOrchestrator | Learning Engine |
 | GitOrchestrator | Git Manager |
+| CodeReviewOrchestrator | Code Reviewer |
+| FeedbackOrchestrator | Capability Extractor |
+| ContentLibraryOrchestrator | Content Librarian |
 
 **Pre-built `🧭 Orchestration:` values for common commands:**
 
@@ -188,6 +191,8 @@ This gives users a real-time signal showing which orchestrator is responding and
 | `/rca` | `Classifier → Learning Engine → Root Cause Analyst` |
 | `/sync` | `Classifier → Git Manager → Workflow Engine` |
 | `/distill {file}` | `Classifier → Distillation Engine` |
+| `/review` | `Classifier → Code Reviewer` |
+| `/feedback` | `Classifier → Capability Extractor` |
 
 ### ⏱️ Engagement Timeline (collapsible, 3+ step operations)
 
@@ -203,8 +208,8 @@ Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for 
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **296 Orchestrator files** across 14 domains (`core:132 domain:29 support:54 health:27 intelligence:16 persona:6 workflow:6 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) — all satisfy IOrchestrator protocol
-- **36 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 58 tool files in `cortex/mcp/tools/`
+- **312 Orchestrator files** across 14 domains (`core:137 domain:34 support:59 health:27 intelligence:16 persona:6 workflow:7 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) — all satisfy IOrchestrator protocol
+- **36 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 56 tool files in `cortex/mcp/tools/`
 - **60 Governance YAMLs** across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -213,7 +218,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 - **RCA Memory Engine** — 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; `cortex/intelligence/learning/rca_engine.py`
 - **Multi-Stack Debug Pipeline** — 8 injection strategies (3 Python + 5 multi-stack: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, auto-cleanup
 - **Self-Healing Prompt Suite** — `scripts/refresh_prompt_suite.py` introspects live architecture + SQLite audit logs to regenerate all prompts/agents with zero drift
-- **31 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`) — including REVIEW, FEEDBACK, OPTIMIZE, and INTRODUCE
+- **32 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`) — including REVIEW, FEEDBACK, OPTIMIZE, and INTRODUCE
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 - **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models
 - **Intelligence Facade** — `cortex/intelligence/facade.py` — `IntelligenceFacade` is the single canonical entry point replacing 3 legacy facades (Phase 107 Sub-Phase C)
@@ -225,15 +230,15 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrator files | 296 across 14 domains in `cortex/orchestrators/` |
-| MCP Tools | 36 registered in `mcp_registry.py`; 58 tool files in `cortex/mcp/tools/` |
+| Orchestrator files | 312 across 14 domains in `cortex/orchestrators/` |
+| MCP Tools | 36 registered in `mcp_registry.py`; 56 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 21 under `cortex/` |
 | Governance YAMLs | 60 across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) |
-| Test Suite | ~20,565 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
+| Test Suite | ~20,897 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
-| Phases | 65 completed, 22 planned |
-| Master YAML | 608/800 lines (THIN INDEX CONTRACT) |
-| Intent Types | 31 (see `cortex/models/canonical_enums.py`) |
+| Phases | 60 completed, 16 planned |
+| Master YAML | 714/800 lines (THIN INDEX CONTRACT) |
+| Intent Types | 32 (see `cortex/models/canonical_enums.py`) |
 | SQLite Databases | 7 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 | **Intelligence Facade** | `cortex/intelligence/facade.py` — `IntelligenceFacade` canonical entry (Phase 107) |
 
@@ -387,8 +392,8 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (21 dirs)
-  orchestrators/     ← 296 orchestrator files across 14 domains (core:132 domain:29 support:54 health:27 intelligence:16 +more)
-  mcp/tools/         ← 36 registered MCP tools (58 tool files)
+  orchestrators/     ← 312 orchestrator files across 14 domains (core:137 domain:34 support:59 health:27 intelligence:16 +more)
+  mcp/tools/         ← 36 registered MCP tools (56 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -470,6 +475,8 @@ docs/         ← User-facing documentation (HTML/CSS only)
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/totalrecall` | Production certification — 10-phase autonomous pipeline (delta→drift→regression→optimize→wire→memory→vacuum→db→harden→certify) | 10 phases |
+| `/review {pr}` | PR-scoped code review: security + quality + APPROVE/BLOCK verdict | 6 stages |
+| `/feedback` | Cross-repo capability extraction with sanitized backport instructions | 6 stages |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
 | `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies: 3 Python + 5 multi-stack) | INJECT |

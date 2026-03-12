@@ -228,3 +228,128 @@ class TestWorkflowGatewayTracing:
             assert "REFACTOR" in call_repr or "refactor" in call_repr.lower(), (
                 "Trace row must record the operation mode"
             )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# CLUSTER 5: Phase 142 — get_mode_template_map() public accessor
+# ════════════════════════════════════════════════════════════════════════════
+
+
+class TestGetModeTemplateMap:
+    """Phase 142-a: WorkflowGateway.get_mode_template_map() SSOT accessor."""
+
+    def test_get_mode_template_map_returns_dict(self) -> None:
+        """get_mode_template_map() must return a dict."""
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        result = WorkflowGateway.get_mode_template_map()
+        assert isinstance(result, dict), "get_mode_template_map() must return dict"
+
+    def test_get_mode_template_map_contains_implement(self) -> None:
+        """Canonical IMPLEMENT mode must be in the returned map."""
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        result = WorkflowGateway.get_mode_template_map()
+        assert "IMPLEMENT" in result, "IMPLEMENT must be in mode→template map"
+        assert result["IMPLEMENT"] == "sdlc/implement-workflow"
+
+    def test_get_mode_template_map_returns_copy_not_reference(self) -> None:
+        """Mutating the returned dict must not affect the canonical map."""
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        a = WorkflowGateway.get_mode_template_map()
+        a["FAKE_MODE"] = "fake/template"
+        b = WorkflowGateway.get_mode_template_map()
+        assert "FAKE_MODE" not in b, (
+            "get_mode_template_map() must return a copy, not the internal reference"
+        )
+
+    def test_get_mode_template_map_none_for_query(self) -> None:
+        """QUERY is a non-code-touching mode — must map to None."""
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        result = WorkflowGateway.get_mode_template_map()
+        assert "QUERY" in result
+        assert result["QUERY"] is None, "QUERY must map to None (non-code-touching)"
+
+    def test_get_mode_template_map_callable_as_static(self) -> None:
+        """get_mode_template_map() must be callable without instantiating the class."""
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        # Must not raise — no instance needed
+        result = WorkflowGateway.get_mode_template_map()
+        assert isinstance(result, dict)
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# CLUSTER 6: Phase 142-b — SubPhaseComposer uses WorkflowGateway SSOT
+# ════════════════════════════════════════════════════════════════════════════
+
+
+class TestSubPhaseComposerDRY:
+    """Phase 142-b: SubPhaseComposer derives intent→template map from WorkflowGateway."""
+
+    def test_subphasecomposer_importable(self) -> None:
+        """SubPhaseComposer must be importable from canonical location."""
+        from cortex.orchestrators.workflow.sub_phase_composer import SubPhaseComposer
+        assert SubPhaseComposer is not None
+
+    def test_intent_template_map_matches_workflow_gateway(self) -> None:
+        """SubPhaseComposer.INTENT_TEMPLATE_MAP must agree with WorkflowGateway for all shared keys."""
+        from cortex.orchestrators.workflow.sub_phase_composer import SubPhaseComposer
+        from cortex.orchestrators.workflow.workflow_gateway import WorkflowGateway
+
+        gateway_map = WorkflowGateway.get_mode_template_map()
+        composer_map = SubPhaseComposer.INTENT_TEMPLATE_MAP
+
+        # Every key in composer_map that exists in gateway_map must have the same value
+        for mode, template in composer_map.items():
+            if mode in gateway_map and gateway_map[mode] is not None:
+                assert template == gateway_map[mode], (
+                    f"INTENT_TEMPLATE_MAP[{mode!r}]={template!r} disagrees with "
+                    f"WorkflowGateway[{mode!r}]={gateway_map[mode]!r}"
+                )
+
+    def test_subphasecomposer_no_hardcoded_duplicates(self) -> None:
+        """SubPhaseComposer must not re-declare entries already in WorkflowGateway."""
+        import ast
+        import pathlib
+
+        src = pathlib.Path(
+            "cortex/orchestrators/workflow/sub_phase_composer.py"
+        ).read_text()
+        # The file must NOT contain a large hardcoded dict literal reproducing _MODE_TEMPLATE_MAP
+        # Heuristic: count "sdlc/implement-workflow" literal — if present inline, it's a duplicate
+        assert "sdlc/implement-workflow" not in src or "get_mode_template_map" in src, (
+            "SubPhaseComposer must not hardcode template IDs already in WorkflowGateway. "
+            "Use get_mode_template_map() instead."
+        )
+
+    def test_subphasecomposer_exposes_intent_template_map(self) -> None:
+        """SubPhaseComposer.INTENT_TEMPLATE_MAP must be a non-empty dict."""
+        from cortex.orchestrators.workflow.sub_phase_composer import SubPhaseComposer
+
+        assert hasattr(SubPhaseComposer, "INTENT_TEMPLATE_MAP")
+        assert isinstance(SubPhaseComposer.INTENT_TEMPLATE_MAP, dict)
+        assert len(SubPhaseComposer.INTENT_TEMPLATE_MAP) >= 10, (
+            "INTENT_TEMPLATE_MAP should have at least 10 entries (from WorkflowGateway)"
+        )
+
+    def test_subphasecomposer_get_template_for_mode(self) -> None:
+        """SubPhaseComposer.get_template_for_mode() must resolve via the canonical map."""
+        from cortex.orchestrators.workflow.sub_phase_composer import SubPhaseComposer
+
+        composer = SubPhaseComposer()
+        result = composer.get_template_for_mode("IMPLEMENT")
+        assert result == "sdlc/implement-workflow", (
+            f"Expected 'sdlc/implement-workflow', got {result!r}"
+        )
+
+    def test_subphasecomposer_returns_none_for_unknown_mode(self) -> None:
+        """SubPhaseComposer.get_template_for_mode() returns None for unrecognised modes."""
+        from cortex.orchestrators.workflow.sub_phase_composer import SubPhaseComposer
+
+        composer = SubPhaseComposer()
+        result = composer.get_template_for_mode("TOTALLY_UNKNOWN_MODE")
+        assert result is None
+
