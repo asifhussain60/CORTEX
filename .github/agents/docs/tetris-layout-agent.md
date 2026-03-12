@@ -9,8 +9,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 name: tetris-layout-agent
-version: "1.0"
-scope: docs-html-layout
+scope: non-production-admin
 parent_prompt: cortex-doc.prompt.md
 tool: cortex.toolkit.tetris_layout.TetrisLayoutEngine
 

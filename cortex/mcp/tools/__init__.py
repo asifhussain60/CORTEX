@@ -140,6 +140,9 @@ from cortex.mcp.tools.cortex_content import CortexContent
 # Phase 131-c — ADO Context Synthesizer (Azure DevOps work item synthesis)
 from cortex.mcp.tools.cortex_ado import CortexAdo
 
+# Phase 132-b — PR Code Review Pipeline (6-stage OWASP-aligned review)
+from cortex.mcp.tools.cortex_review import CortexReview
+
 
 # All tool classes for registration
 # WAVE-101 consolidation: CortexProcessRequest (deprecated) and
@@ -208,6 +211,8 @@ ALL_TOOLS = [
     CortexContent,
     # ADO Context Synthesizer (1) - Phase 131-c — Azure DevOps work item synthesis
     CortexAdo,
+    # Code Review Pipeline (1) - Phase 132-b — 6-stage OWASP-aligned PR review
+    CortexReview,
 ]
 
 

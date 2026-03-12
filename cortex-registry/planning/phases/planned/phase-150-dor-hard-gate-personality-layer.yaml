@@ -1,7 +1,7 @@
 id: "phase-150"
 title: "DoR Hard Gate (CORE-071) + PersonalityLayer — Definition of Ready Enforcement + Engaging Response Templates"
 created: "2026-03-12"
-status: PLANNED
+status: COMPLETE
 priority: P0
 source_issue: "GitHub Issue #18 — FB-20260312-004 (DoR Enforcement Gate Primitive) + FB-20260312-005 (Engaging Response Templates — PersonalityLayer + DoR Atoms)"
 governance_authority:

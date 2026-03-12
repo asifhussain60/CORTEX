@@ -14,10 +14,9 @@ AC-ID: AC-136-CAPE-005c
 
 from __future__ import annotations
 
-import glob
 import json
-import os
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass
@@ -61,20 +60,22 @@ class RepoFrameworkDetector:
         Returns:
             :class:`FrameworkDetectionResult` with language and test runner.
         """
+        root = Path(repo_root)
+
         # 1. Python — requirements.txt
-        req_path = os.path.join(repo_root, "requirements.txt")
-        if os.path.isfile(req_path):
-            runner = self._detect_python_runner(req_path)
+        req_path = root / "requirements.txt"
+        if req_path.is_file():
+            runner = self._detect_python_runner(str(req_path))
             return FrameworkDetectionResult(language="Python", test_runner=runner)
 
         # 2. Node — package.json
-        pkg_path = os.path.join(repo_root, "package.json")
-        if os.path.isfile(pkg_path):
-            language, runner = self._detect_node(pkg_path)
+        pkg_path = root / "package.json"
+        if pkg_path.is_file():
+            language, runner = self._detect_node(str(pkg_path))
             return FrameworkDetectionResult(language=language, test_runner=runner)
 
         # 3. C# — any *.csproj
-        csproj_files = glob.glob(os.path.join(repo_root, "*.csproj"))
+        csproj_files = list(root.glob("*.csproj"))
         if csproj_files:
             return FrameworkDetectionResult(language="C#", test_runner="dotnet-test")
 

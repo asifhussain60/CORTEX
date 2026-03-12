@@ -11,7 +11,6 @@ AC-ID: AC-136-CAPE-002c
 
 from __future__ import annotations
 
-import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -106,8 +105,8 @@ class AutoPlanGenerator:
             gaps=gaps,
         )
 
-        os.makedirs(self._output_dir, exist_ok=True)
-        file_path = os.path.join(self._output_dir, f"{phase_id}.yaml")
+        Path(self._output_dir).mkdir(parents=True, exist_ok=True)
+        file_path = str(Path(self._output_dir) / f"{phase_id}.yaml")
         with open(file_path, "w", encoding="utf-8") as fh:
             fh.write(yaml_content)
 

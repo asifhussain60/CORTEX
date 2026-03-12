@@ -13,8 +13,6 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List
 
-from cortex.orchestrators.support.onboarding.tab_renderers import PersonaLayer, TabRenderer
-
 logger = logging.getLogger(__name__)
 
 
@@ -28,6 +26,9 @@ class DashboardGenerator:  # CORE-035-scoped — domain-specific variant
     def __init__(self) -> None:
         """Initialize dashboard generator."""
         self.logger = logging.getLogger("cortex.infrastructure.deployment.dashboard")
+        # Lazy import to avoid DAG violation (infrastructure must not module-level
+        # import from orchestrators — CORE-035 layering rule).
+        from cortex.orchestrators.support.onboarding.tab_renderers import PersonaLayer, TabRenderer  # noqa: PLC0415
         self._tab_renderer = TabRenderer()
         self._persona_layer = PersonaLayer()
 

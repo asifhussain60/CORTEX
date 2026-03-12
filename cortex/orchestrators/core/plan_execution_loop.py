@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import os
 from collections import defaultdict, deque
+from pathlib import Path
 from typing import Any, Dict, List
 
 import yaml
@@ -99,7 +100,7 @@ class PlanExecutionLoop:
         Returns:
             True if the file exists and is a regular file.
         """
-        return os.path.isfile(file_path)
+        return Path(file_path).is_file()
 
     # ------------------------------------------------------------------
     # Policy gate
@@ -133,8 +134,8 @@ class PlanExecutionLoop:
         Returns:
             Absolute path to the moved file in ``completed_dir``.
         """
-        filename = os.path.basename(src_path)
-        dest_path = os.path.join(completed_dir, filename)
+        filename = Path(src_path).name
+        dest_path = str(Path(completed_dir) / filename)
 
         # Read, update status, write to destination
         with open(src_path, encoding="utf-8") as fh:
