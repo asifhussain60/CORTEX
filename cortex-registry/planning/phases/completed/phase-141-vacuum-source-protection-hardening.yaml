@@ -5,7 +5,8 @@
 id: "phase-141"
 title: "Vacuum Source Protection Hardening — PROTECTED_DIRS Expansion + 8 Golden Tests"
 created: "2026-03-09"
-status: PLANNED
+status: COMPLETE
+completed_date: "2026-03-12"
 priority: P0  # Safety-critical — source directories must NEVER be modified
 source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-002"
 classification: ENHANCED_CAPABILITY
@@ -61,7 +62,7 @@ sweep_catalogue:
       PROTECTED_DIRS in constants.py missing: cortex, tests, scripts, deployment, .vscode
       All 5 internal exclusion lists need expansion.
     action_ref: "phase-141-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-141-02"
     title: "Add validate_safe_run() pre-flight check"
@@ -73,7 +74,7 @@ sweep_catalogue:
       - Dry-run with recency_guard_hours=0 to get all planned operations
       - Inspect each operation's source path against protected directories
     action_ref: "phase-141-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-141-03"
     title: "RollbackManager SHA format validation"
@@ -84,7 +85,7 @@ sweep_catalogue:
       Need: _SHA_PATTERN = re.compile(r"^[a-f0-9]{40}$")
       Validate target_sha against pattern before git reset --hard.
     action_ref: "phase-141-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-141-04"
     title: "8 golden tests for source protection"
@@ -94,7 +95,7 @@ sweep_catalogue:
       Missing golden test coverage for source protection invariants.
       Need: GV-012 through GV-019 in tests/golden/orchestrators/health_vacuum/
     action_ref: "phase-141-d"
-    status: OPEN
+    status: CLOSED
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT
@@ -114,7 +115,7 @@ phases:
   - id: "phase-141-a"
     title: "Expand PROTECTED_DIRS — constants.py + vacuum_orchestrator.py"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-141-01"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "1 hour"
@@ -137,7 +138,7 @@ phases:
   - id: "phase-141-b"
     title: "Add validate_safe_run() method"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-141-02"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "1 hour"
@@ -156,7 +157,7 @@ phases:
   - id: "phase-141-c"
     title: "RollbackManager SHA validation"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-141-03"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "30 minutes"
@@ -174,7 +175,7 @@ phases:
   - id: "phase-141-d"
     title: "8 Golden Tests — GV-012 through GV-019"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-141-04"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "2 hours"

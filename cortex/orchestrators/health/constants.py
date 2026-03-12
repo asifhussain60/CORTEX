@@ -103,13 +103,30 @@ PROTECTED_DIRS: FrozenSet[str] = frozenset({
     "deployment",
     # Workspace and workspace-adjacent
     "_workspaces",
+    # Version-control internals
+    ".git",
+    # Virtual environments
+    ".venv",
+    "venv",
+    "env",
+    # Runtime data (logs, traces, DBs)
+    ".cortex-runtime",
+    # Node.js dependencies
+    "node_modules",
 })
 """Directories that VacuumOrchestrator must never touch — no renames, deletes,
 relocations, or markdown archival inside these trees.
 
+Expanded from 9 → 15 entries (Phase 141 — SWEEP-141-VACUUM-SOURCE-PROTECTION).
+
 Includes:
+- ``cortex``         — Python source package
+- ``tests``          — test mirror tree
+- ``scripts``        — cross-platform runner scripts
+- ``deployment``     — Prometheus/Grafana/health-check configs
 - ``.github``        — agents, prompts, copilot instructions, CI
-- ``docs``    — user-facing HTML documentation
+- ``.vscode``        — VS Code workspace settings
+- ``docs``           — user-facing HTML documentation
 - ``cortex-registry``— YAML governance rules and registry
 - ``_workspaces``    — intentional workspace area; ALL subfolders are protected:
                          • ``approved-orchestrator-view/`` — approved orchestrator dashboard
@@ -117,10 +134,10 @@ Includes:
                          • ``prompts/``                    — workspace-scoped prompt overrides
                          • ``.chats/``                     — chat session logs
                          • ``cortex-sts/`` — STS demo material (relocated from root)
-- ``scripts``        — cross-platform runner scripts
-- ``deployment``     — Prometheus/Grafana/health-check configs
-- ``tests``          — test mirror tree
-- ``docs``           — generic docs directories
+- ``.git``           — version control internals
+- ``.venv`` / ``venv`` / ``env`` — virtual environment directories
+- ``.cortex-runtime``— runtime data (logs, traces, SQLite DBs)
+- ``node_modules``   — Node.js dependencies
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
