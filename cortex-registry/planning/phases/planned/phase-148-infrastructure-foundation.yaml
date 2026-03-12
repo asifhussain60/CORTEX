@@ -1,0 +1,305 @@
+id: "phase-148"
+title: "Infrastructure Foundation — Database Health Verifier (CORE-069/070) + Canonical Best-Practices Path Consolidation"
+created: "2026-03-12"
+status: PLANNED
+priority: P0
+source_issue: "GitHub Issue #18 — FB-20260312-003 (Database Wiring Health Verifier) + FB-20260312-009 (Best Practices Canonical Path)"
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+  - CORE-069   # NEW: Database Wiring Health (INSERT/SELECT verification required for all registered DBs)
+  - CORE-070   # NEW: DDL Consolidation — all CREATE TABLE statements in env_initializer.py only
+sweep_catalogue_id: "SWEEP-148-INFRASTRUCTURE-FOUNDATION"
+
+background: |
+  Source: GitHub Issue #18 (2026-03-12) — Feedback from Phases 147–150 of feature/day-zero-setup branch.
+  Two foundational prerequisite capabilities must land before any downstream phase (149–152) can proceed:
+    1. DatabaseHealthVerifier (FB-003): env_initializer.py already contains DB_REGISTRY (line 616+) but
+       no programmatic 4-layer health verifier exists. cortex_verify MCP tool lacks the op:health DB path.
+       Audit check #51 was identified in Issue #18 but has no corresponding drift lock yet.
+    2. Best Practices Canonical Path (FB-009): cortex/knowledge/best_practices/ contains 5 empty __init__.py
+       sub-packages. Audit check #26 (CORE-035 duplicate class implementations) flags this as dead code
+       causing 20 phantom import references in standards_resolver.py, knowledge_guidance_engine.py,
+       plan_enrichment.py, staleness_checker.py, yaml_resolver.py, knowledge_synthesizer.py, and MCP/
+       orchestrator files. These dead imports must be eliminated before Phase 149 adds new knowledge consumers.
+  Smoke baseline: 2,775 (pre-phase baseline — run make test-smoke to confirm before starting).
+  Git prerequisite: feature/phase-148-infra or main — no unresolved merge conflicts.
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sweep_catalogue:
+  - id: "GAP-148-01"
+    title: "DatabaseHealthVerifier — 4-layer verification for all 7 SQLite databases"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-003"
+    evidence: |
+      cortex/infrastructure/database_health_verifier.py — does not exist.
+      cortex/infrastructure/env_initializer.py:616 — DB_REGISTRY exists but verify_all() absent.
+      cortex_verify MCP tool — no op:health database path.
+      Drift lock check-51 — not created yet.
+    action_ref: "phase-148-a"
+    status: OPEN
+
+  - id: "GAP-148-02"
+    title: "Dead cortex/knowledge/best_practices/ package deletion + 20 phantom import repoints"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-009"
+    evidence: |
+      find cortex/knowledge/best_practices -name "*.py" → 5 empty __init__.py files.
+      grep -rn "cortex.knowledge.best_practices" cortex/ → ~20 phantom import references.
+      Audit check #26 (CORE-035): dead package constitutes a second "implementation" of best practices.
+      Canonical path: cortex.intelligence.knowledge.knowledge_synthesis_engine
+    action_ref: "phase-148-b"
+    status: OPEN
+
+  - id: "GAP-148-03"
+    title: "Drift lock check-51 for database wiring health"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-003 + CORE-068"
+    evidence: |
+      cortex-registry/governance/drift-locks/ — no check-51 file.
+      tests/preflight/ — no test_database_wiring_health.py.
+      Issue #18 specifies: check-51-database-wiring-health-lock.yaml required.
+    action_ref: "phase-148-c"
+    status: OPEN
+
+phases:
+  # ── Sub-phase A: DatabaseHealthVerifier ──────────────────────────────────────
+  - id: "phase-148-a"
+    title: "DatabaseHealthVerifier — 4-layer SQLite health check (exist + tables + roundtrip + integrity)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-148-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-069, CORE-070"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥2775 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/infrastructure/database_health_verifier.py"
+      - "tests/unit/infrastructure/test_database_health_verifier.py"
+      - "tests/preflight/test_e2e_database_population.py"
+
+    implementation_guide: |
+      1. Create cortex/infrastructure/database_health_verifier.py
+         Import DB_REGISTRY from cortex.infrastructure.env_initializer.
+         Define: TableHealthResult, DatabaseHealthResult, VerificationReport dataclasses.
+         Define DatabaseHealthVerifier(workspace_root: Path):
+           verify_all() -> VerificationReport  # iterates DB_REGISTRY, calls verify_one per db
+           verify_one(db_name: str) -> DatabaseHealthResult  # 4 layers: exist + tables + roundtrip + integrity
+           _roundtrip(conn, table) -> bool  # INSERT uuid probe row, SELECT back, DELETE
+         PRAGMA integrity_check must return "ok".
+         Probe row uses uuid.uuid4() so it can be located and cleaned without touching real data.
+
+      2. Wire into cortex_verify MCP tool
+         In cortex/mcp/tools/ verify tool file, add op="health" sub-handler:
+           Instantiate DatabaseHealthVerifier(workspace_root=Path("."))
+           Return VerificationReport.to_dict()
+
+    tdd_cycle:
+      red:
+        action: "Write all tests in tdd_sequence.red BEFORE any implementation"
+        gate: "python3 scripts/run_tests.py file tests/unit/infrastructure/test_database_health_verifier.py — ALL tests FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Implement DatabaseHealthVerifier with 4 verification layers"
+        gate: "python3 scripts/run_tests.py file tests/unit/infrastructure/test_database_health_verifier.py — ALL tests PASS"
+        blocker: "No REFACTOR until GREEN gate passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), verify no duplicate implementations"
+        gate: "python3 scripts/run_tests.py dir tests/unit/infrastructure/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_verify_all_returns_report — VerificationReport has passed attribute"
+        - "test_verify_one_missing_db_returns_failed — returns passed=False when db file missing"
+        - "test_verify_one_healthy_db_returns_passed — all 4 layers pass on a fresh temp db"
+        - "test_roundtrip_inserts_then_deletes — probe row absent after roundtrip"
+        - "test_integrity_check_passes_clean — PRAGMA integrity_check returns ok"
+        - "test_verify_all_seven_dbs — iterates all 7 entries in DB_REGISTRY"
+      green:
+        - "Implement DatabaseHealthVerifier with verify_all, verify_one, _roundtrip"
+        - "Implement _check_tables, _check_integrity helper methods"
+      refactor:
+        - "Add type hints to all signatures"
+        - "Add docstrings to public methods (CORE-012)"
+        - "Confirm single canonical implementation (CORE-035)"
+
+    acceptance_criteria:
+      - "DatabaseHealthVerifier.verify_all() returns VerificationReport with passed=True against .cortex-runtime/"
+      - "verify_one() returns passed=False with error='missing' when db file does not exist"
+      - "_roundtrip() inserts UUID probe row, selects it back, then deletes — leaving table unchanged"
+      - "cortex_verify MCP tool op=health returns database health results without raising"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/infrastructure/"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: false  # GAP-148-01 closed here; 148-02 and 148-03 handled in later sub-phases
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: Dead Package Deletion + Import Repoints ─────────────────────
+  - id: "phase-148-b"
+    title: "Delete cortex/knowledge/best_practices/ dead package + repoint 20 phantom imports to canonical path"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-148-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-148-a"]
+    prerequisite: "phase-148-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "tests/knowledge/test_best_practices_canonical_path.py"
+
+    files_to_modify:
+      - "cortex/core/common/standards_resolver.py"
+      - "cortex/core/knowledge_guidance_engine.py"
+      - "cortex/intelligence/knowledge/yaml_resolver.py"
+      - "cortex/mcp/tools/intelligence.py"
+      # Additional files as grep reveals — run: grep -rn "cortex.knowledge.best_practices" cortex/
+
+    implementation_guide: |
+      1. Run: grep -rn "from cortex.knowledge.best_practices" cortex/ --include="*.py"
+         Record all files with phantom imports.
+      2. For each file found: replace import path with cortex.intelligence.knowledge.knowledge_synthesis_engine.*
+      3. Delete: rm -rf cortex/knowledge/best_practices/
+      4. Verify deletion: find cortex/knowledge/best_practices -name "*.py" → empty
+      5. Create tests/knowledge/test_best_practices_canonical_path.py with 8 drift lock tests:
+           def test_no_import_from_dead_package(): assert no Python file imports from cortex.knowledge.best_practices
+
+    tdd_cycle:
+      red:
+        action: "Write 8 drift lock tests asserting no imports from dead package — all should FAIL initially (dead imports exist)"
+        gate: "python3 scripts/run_tests.py file tests/knowledge/test_best_practices_canonical_path.py — ≥1 test FAIL"
+        blocker: "Deletion not allowed until tests written"
+      green:
+        action: "Delete dead package + repoint all phantom imports to canonical path"
+        gate: "python3 scripts/run_tests.py file tests/knowledge/test_best_practices_canonical_path.py — ALL 8 PASS"
+        blocker: "No REFACTOR until gate passes"
+      refactor:
+        action: "Verify updated imports are used correctly; run ruff on modified files"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_no_import_from_dead_package — no Python file imports cortex.knowledge.best_practices"
+        - "test_dead_directory_absent — cortex/knowledge/best_practices/ does not exist"
+        - "test_standards_resolver_canonical_import — uses cortex.intelligence.knowledge path"
+        - "test_knowledge_guidance_engine_canonical_import — uses cortex.intelligence.knowledge path"
+        - "test_yaml_resolver_canonical_import — uses cortex.intelligence.knowledge path"
+        - "test_mcp_intelligence_canonical_import — uses cortex.intelligence.knowledge path"
+        - "test_no_empty_init_packages — no empty __init__.py without real module content in cortex/knowledge/"
+        - "test_canonical_path_importable — cortex.intelligence.knowledge.knowledge_synthesis_engine importable"
+
+    acceptance_criteria:
+      - "cortex/knowledge/best_practices/ directory does not exist"
+      - "Zero Python files import from cortex.knowledge.best_practices.*"
+      - "All 8 drift lock tests pass"
+      - "make test-smoke passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/knowledge/test_best_practices_canonical_path.py"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: Drift Lock check-51 ─────────────────────────────────────────
+  - id: "phase-148-c"
+    title: "Drift lock check-51 — database wiring health permanent guardrail"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-148-03"]
+    governance_authority: "CORE-008, CORE-064, CORE-068"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-148-b"]
+    prerequisite: "phase-148-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py preflight — zero new failures"
+
+    new_files:
+      - "cortex-registry/governance/drift-locks/check-51-database-wiring-health-lock.yaml"
+      - "tests/preflight/test_drift_lock_check_51.py"
+
+    implementation_guide: |
+      1. Create cortex-registry/governance/drift-locks/check-51-database-wiring-health-lock.yaml
+         lock_id: "LOCK-CHECK-51-2026-03-12"
+         check_id: "check-51"
+         domain: "database-wiring"
+         detect_command: |
+           python3 -c "from cortex.infrastructure.database_health_verifier import DatabaseHealthVerifier;
+           from pathlib import Path; r=DatabaseHealthVerifier(Path('.')).verify_all();
+           print('PASS' if r.passed else 'FAIL')"
+         pass_criteria: "PASS"
+         severity: P0
+         ci_gate: true
+         auto_fix: "python3 -m cortex.infrastructure.env_initializer"
+         created: "2026-03-12"
+         source_gap: "GAP-148-01"
+
+      2. Create tests/preflight/test_drift_lock_check_51.py
+         @pytest.mark.preflight — runs in every preflight gate
+         Runs detect_command via subprocess. Asserts output == "PASS".
+
+    tdd_cycle:
+      red:
+        action: "Write preflight test before drift lock YAML exists (will fail on import)"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_drift_lock_check_51.py — FAIL"
+        blocker: "No drift lock YAML until test written"
+      green:
+        action: "Create drift lock YAML with correct detect_command"
+        gate: "python3 scripts/run_tests.py file tests/preflight/test_drift_lock_check_51.py — PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Validate YAML schema matches drift-lock-emit.yaml primitive schema; verify ci_gate: true"
+        gate: "python3 scripts/run_tests.py preflight — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_drift_lock_check_51_passes — DatabaseHealthVerifier returns PASS on live .cortex-runtime/"
+      green:
+        - "Create check-51-database-wiring-health-lock.yaml with correct schema"
+      refactor:
+        - "Confirm ci_gate: true present"
+        - "Confirm source_gap references GAP-148-01"
+
+    acceptance_criteria:
+      - "check-51-database-wiring-health-lock.yaml exists in drift-locks/"
+      - "tests/preflight/test_drift_lock_check_51.py is tagged @pytest.mark.preflight"
+      - "Preflight gate passes after check-51 addition"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py preflight"
+      min_tests_pass: 425
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # final sub-phase
+
+final_sub_phase: "phase-148-c"
+
+final_validation:
+  smoke_gate: "python3 scripts/run_tests.py smoke — ≥2775 baseline"
+  preflight_gate: "python3 scripts/run_tests.py preflight — ≥425 (baseline +1 drift lock)"
+  drift_lock_count: "ls cortex-registry/governance/drift-locks/ | wc -l — must be 22 (was 21)"
+  canonical_path_check: "grep -rn 'cortex.knowledge.best_practices' cortex/ | wc -l — must be 0"
+  db_verifier_check: "python3 -c 'from cortex.infrastructure.database_health_verifier import DatabaseHealthVerifier; print(\"OK\")'"
+  master_yaml_line_check: "wc -l cortex-registry/cortex-master.yaml — must be ≤ 850"
+
+completion_signal:
+  move_to: "cortex-registry/planning/phases/completed/phase-148-infrastructure-foundation.yaml"
+  master_yaml_update: "status: PLANNED → COMPLETE, completed_date: {date}"
+  urs_signal: "cortex_learning op=emit signal_type=MILD_REWARD pattern_id=implement"

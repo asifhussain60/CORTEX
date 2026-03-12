@@ -1,0 +1,457 @@
+id: "phase-150"
+title: "DoR Hard Gate (CORE-071) + PersonalityLayer — Definition of Ready Enforcement + Engaging Response Templates"
+created: "2026-03-12"
+status: PLANNED
+priority: P0
+source_issue: "GitHub Issue #18 — FB-20260312-004 (DoR Enforcement Gate Primitive) + FB-20260312-005 (Engaging Response Templates — PersonalityLayer + DoR Atoms)"
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+  - CORE-071   # NEW: DoR Enforcement Gate — implementation workflows BLOCKED until DoR = 100%
+sweep_catalogue_id: "SWEEP-150-DOR-HARD-GATE-PERSONALITY"
+
+background: |
+  Source: GitHub Issue #18 (2026-03-12) — FB-20260312-004 and FB-20260312-005.
+  Phase 149 enriched the intelligence context. Phase 150 uses that enrichment in two capabilities:
+    1. DoR Hard Gate (CORE-071) (FB-004): The existing dor_tracker.py tracks challenge-based
+       DoR using an old Wave 7 design (decision-tracking, not readiness scoring). Issue #18 introduces
+       a NEW DoRScore dataclass with 5 weighted dimensions (requirement_completeness 30%,
+       architecture_clarity 25%, dependency_resolution 20%, test_readiness 15%, risk_assessment 10%)
+       and a DoRApprovalGate.is_ready(score: DoRScore) -> bool that gates implementation workflows.
+       dor-display.yaml primitive already exists but needs updating to include the 5-dimension scoring
+       state machine (DRAFT → REFINEMENT → READINESS_VALIDATION → GATE_OPEN → TDD_IMPLEMENTATION).
+    2. PersonalityLayer + DoR Atoms (FB-005): personality_layer.py is entirely absent.
+       atom-intent-reflection.yaml exists (Phase 120 LEGO system). atom-dor-prompt.yaml is absent.
+       PersonalityLayer voiced_summary(), voiced_dod_items(), voiced_context_header() must be
+       injected as self._personality in InteractionOrchestrator and wired to voiced output paths.
+  IMPORTANT: The new DoRScore is ADDITIVE — the existing dor_tracker.py (challenge-based tracking)
+  is NOT replaced. Both coexist. DoRScore is a new dataclass, DoRApprovalGate gets an overloaded
+  is_ready(score: DoRScore) method alongside the existing interface.
+  Git prerequisite: Phase 149 completion_gate PASSED.
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sweep_catalogue:
+  - id: "GAP-150-01"
+    title: "DoRScore (5 weighted dimensions) + DoRApprovalGate.is_ready(DoRScore) for CORE-071"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-004"
+    evidence: |
+      cortex/core/dor_tracker.py — existing class tracks challenge decisions (Wave 7 design), NOT DoRScore.
+      cortex/orchestrators/core/dor_approval_gate.py — existing class has ApprovalDecision, IntentReflection.
+      Issue #18 AC-004-01: DoRApprovalGate.is_ready() returns False when composite < 100.
+      DoRScore composite formula: int(round(req_completeness*30 + arch_clarity*25 + dep_res*20 + test_read*15 + risk_assess*10))
+    action_ref: "phase-150-a"
+    status: OPEN
+
+  - id: "GAP-150-02"
+    title: "dor-display.yaml update — 5-dimension scoring + state machine + bifurcated response paths"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-004"
+    evidence: |
+      cortex-registry/workflows/templates/primitives/governance/dor-display.yaml — exists but has old design.
+      Issue #18 requires: state machine DRAFT→REFINEMENT→READINESS_VALIDATION→GATE_OPEN→TDD_IMPLEMENTATION.
+      block-dor-guidance template (score < 100) and block-dor-gate-open template (score = 100) must be defined.
+      All code-modifying workflow YAMLs (implement, fix, refactor, etc.) must reference dor-display as Step 0.
+    action_ref: "phase-150-b"
+    status: OPEN
+
+  - id: "GAP-150-03"
+    title: "PersonalityLayer — voiced_summary, voiced_dod_items, voiced_context_header + InteractionOrchestrator wiring"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-005"
+    evidence: |
+      cortex/orchestrators/core/personality_layer.py — does not exist.
+      InteractionOrchestrator.__init__ — no self._personality instantiation.
+      Issue #18 AC-005-01: PersonalityLayer.voiced_summary([]) returns ''.
+      Issue #18 AC-005-02: voiced_context_header() falls back to mechanical input on internal error.
+    action_ref: "phase-150-c"
+    status: OPEN
+
+  - id: "GAP-150-04"
+    title: "atom-dor-prompt.yaml creation + response template registry update"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-005"
+    evidence: |
+      cortex-registry/templates/response/atoms/atom-dor-prompt.yaml — does not exist.
+      atom-intent-reflection.yaml already exists (Phase 120 LEGO).
+      Issue #18 AC-005-03: atom-dor-prompt.yaml defines skip_when: [silent_autonomous_mode, dor_completeness_score >= 0.75].
+      cortex-registry/templates/response/_registry.yaml — needs new atom registration.
+    action_ref: "phase-150-d"
+    status: OPEN
+
+phases:
+  # ── Sub-phase A: DoRScore + DoRApprovalGate CORE-071 ─────────────────────────
+  - id: "phase-150-a"
+    title: "DoRScore dataclass (5 weighted dimensions) + DoRApprovalGate.is_ready() for CORE-071"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-150-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-071"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "Phase 149 completion_gate PASSED. smoke tests green."
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex/core/dor_tracker.py"  # add DoRScore dataclass + DoRTracker.evaluate(request, lens_context) method
+      - "cortex/orchestrators/core/dor_approval_gate.py"  # add is_ready(score: DoRScore), missing_dimensions(score)
+
+    implementation_guide: |
+      IMPORTANT: Both existing files retain their current public interface.
+      New additions are ADDITIVE only — no existing code deleted.
+
+      In cortex/core/dor_tracker.py, add:
+        @dataclass
+        class DoRScore:
+            requirement_completeness: float  # weight 30%
+            architecture_clarity: float       # weight 25%
+            dependency_resolution: float      # weight 20%
+            test_readiness: float             # weight 15%
+            risk_assessment: float            # weight 10%
+
+            @property
+            def composite(self) -> int:
+                return round(
+                    self.requirement_completeness * 30 +
+                    self.architecture_clarity * 25 +
+                    self.dependency_resolution * 20 +
+                    self.test_readiness * 15 +
+                    self.risk_assessment * 10
+                )
+
+        Then add evaluate(request: str, lens_context: dict) -> DoRScore to DoRTracker (or new DoRScoringTracker).
+
+      In cortex/orchestrators/core/dor_approval_gate.py, add:
+        def is_ready(self, score: "DoRScore") -> bool:
+            return score.composite >= 100
+
+        def missing_dimensions(self, score: "DoRScore") -> list[str]:
+            dims = {"requirement_completeness": 30, "architecture_clarity": 25,
+                    "dependency_resolution": 20, "test_readiness": 15, "risk_assessment": 10}
+            return [k for k, _ in dims.items() if getattr(score, k, 0.0) < 1.0]
+
+    tdd_cycle:
+      red:
+        action: "Write DoRScore + gate tests before adding any code"
+        gate: "python3 scripts/run_tests.py file tests/unit/orchestrators/core/test_plan_gate.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Add DoRScore dataclass + is_ready() overload to DoRApprovalGate"
+        gate: "python3 scripts/run_tests.py file tests/unit/orchestrators/core/test_plan_gate.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify type hints; composite property returns int; missing_dimensions correct"
+        gate: "python3 scripts/run_tests.py dir tests/unit/orchestrators/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_dor_score_composite_all_ones — composite returns 100 when all dimensions = 1.0"
+        - "test_dor_score_composite_all_zeros — composite returns 0 when all dimensions = 0.0"
+        - "test_dor_score_composite_partial — composite correctly weights partial scores"
+        - "test_dor_score_composite_is_int — composite property is int, not float"
+        - "test_is_ready_true_when_composite_100 — is_ready() True when composite == 100"
+        - "test_is_ready_false_when_composite_99 — is_ready() False when composite == 99"
+        - "test_missing_dimensions_returns_low_dims — returns names of dimensions < 1.0"
+        - "test_is_ready_edge_case_float_rounding — composite 99.5 rounds to 100 (is_ready True)"
+      green:
+        - "Add DoRScore dataclass to dor_tracker.py"
+        - "Add is_ready(DoRScore) and missing_dimensions() to DoRApprovalGate"
+      refactor:
+        - "Ensure DoRScore uses __post_init__ validation that all dimensions in [0.0, 1.0]"
+        - "Type hints: is_ready(self, score: DoRScore) -> bool"
+
+    acceptance_criteria:
+      - "DoRApprovalGate.is_ready() returns False when any single dimension drops composite below 100"
+      - "DoRScore.composite property returns int (not float)"
+      - "missing_dimensions() returns correct list of dimension names below threshold"
+      - "All gate state machine tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/unit/orchestrators/core/test_plan_gate.py"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: dor-display.yaml Update ─────────────────────────────────────
+  - id: "phase-150-b"
+    title: "Update dor-display.yaml — 5-dimension state machine + bifurcated response paths + workflow Step 0 injection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-150-02"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-150-a"]
+    prerequisite: "phase-150-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex-registry/workflows/templates/primitives/governance/dor-display.yaml"
+      - "cortex-registry/workflows/templates/sdlc/implement-workflow.yaml"
+      - "cortex-registry/workflows/templates/sdlc/fix-workflow.yaml"
+      - "cortex-registry/workflows/templates/quality/refactor-workflow.yaml"
+      # Check all other code-modifying workflows for dor-display Step 0 injection
+
+    implementation_guide: |
+      Update dor-display.yaml with:
+        scoring_dimensions: [requirement_completeness, architecture_clarity, dependency_resolution, test_readiness, risk_assessment]
+        state_machine:
+          states: [DRAFT, REFINEMENT, READINESS_VALIDATION, GATE_OPEN, TDD_IMPLEMENTATION]
+          transitions:
+            - from: DRAFT, to: REFINEMENT, trigger: initial_request_received
+            - from: REFINEMENT, to: READINESS_VALIDATION, trigger: dor_dimensions_collected
+            - from: READINESS_VALIDATION, to: GATE_OPEN, trigger: composite_ge_100
+            - from: READINESS_VALIDATION, to: REFINEMENT, trigger: composite_lt_100
+            - from: GATE_OPEN, to: TDD_IMPLEMENTATION, trigger: user_confirms_proceed
+        response_paths:
+          below_threshold:
+            template: block-dor-guidance
+            suppress_proceed_gate: true
+          at_threshold:
+            template: block-dor-gate-open
+            render_proceed_gate: true
+
+      Add as Step 0 to all code-modifying workflow YAMLs (before existing Step 1).
+      Verify: grep "dor-display" cortex-registry/workflows/templates/**/*.yaml
+
+    tdd_cycle:
+      red:
+        action: "Write golden assertion that dor-display is Step 0 in implement + fix + refactor workflows"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_reflection_before_execution.py — ≥1 FAIL"
+        blocker: "No YAML updates until test written"
+      green:
+        action: "Update dor-display.yaml + add dor-display as Step 0 in all code-modifying workflows"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_reflection_before_execution.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Validate all YAML files parse correctly; run yaml.safe_load on each"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_dor_display_is_step_0_implement — implement-workflow.yaml has dor-display as step 0"
+        - "test_dor_display_is_step_0_fix — fix-workflow.yaml has dor-display as step 0"
+        - "test_dor_display_is_step_0_refactor — refactor-workflow.yaml has dor-display as step 0"
+        - "test_dor_display_has_state_machine — dor-display.yaml defines 5-state machine"
+        - "test_block_dor_guidance_suppresses_proceed — below_threshold.suppress_proceed_gate: true"
+      green:
+        - "Update dor-display.yaml with state machine and response paths"
+        - "Inject dor-display as Step 0 in all code-modifying workflows"
+      refactor:
+        - "YAML syntax validation on all modified files"
+
+    acceptance_criteria:
+      - "All 5 code-modifying workflow YAML files reference dor-display as their first step"
+      - "dor-display.yaml defines 5-dimension scoring + 5-state state machine"
+      - "block-dor-guidance suppresses ⚡ Proceed Gate (suppress_proceed_gate: true)"
+      - "Golden reflection test passes"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/golden/test_reflection_before_execution.py"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: PersonalityLayer ─────────────────────────────────────────────
+  - id: "phase-150-c"
+    title: "Create PersonalityLayer + wire into InteractionOrchestrator"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-150-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-049"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-150-b"]
+    prerequisite: "phase-150-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/orchestrators/core/personality_layer.py"
+      - "tests/golden/response/test_phase_150_dor_reflection_golden.py"
+
+    files_to_modify:
+      - "cortex/orchestrators/core/interaction_orchestrator.py"  # add self._personality + wiring
+
+    implementation_guide: |
+      Create cortex/orchestrators/core/personality_layer.py:
+
+        class PersonalityLayer:
+            def __init__(self, persona: str = "cortex") -> None:
+                self.persona = persona
+
+            def voiced_summary(self, request_texts: list[Any]) -> str:
+                """Convert chronological request list to narrative progress sentence. Returns '' for empty."""
+                try:
+                    if not request_texts:
+                        return ""
+                    # Build narrative: "I'm helping you {summarize last request}..." etc.
+                    ...
+                except Exception:
+                    return ""  # CORE-049 silent degradation
+
+            def voiced_dod_items(self, raw_dod: list[str]) -> list[str]:
+                """Transform mechanical DoD items to action-oriented narrative bullets."""
+                try:
+                    ...
+                except Exception:
+                    return raw_dod  # fallback to mechanical format
+
+            def voiced_context_header(self, context_summary: str) -> str:
+                """Transform a mechanical context dump to a voiced CORTEX header line."""
+                try:
+                    ...
+                except Exception:
+                    return context_summary  # CORE-049: fallback to mechanical input
+
+      In InteractionOrchestrator.__init__():
+        from cortex.orchestrators.core.personality_layer import PersonalityLayer
+        self._personality = PersonalityLayer()
+
+      In build_context_summary() call path:
+        voiced_header = self._personality.voiced_context_header(raw_summary)
+
+      NOTE: All methods wrap logic in try/except and fall back to mechanical format (CORE-049 silent degradation).
+
+    tdd_cycle:
+      red:
+        action: "Write PersonalityLayer tests before creating the file"
+        gate: "python3 scripts/run_tests.py file tests/golden/response/test_phase_150_dor_reflection_golden.py — ALL FAIL"
+        blocker: "No PersonalityLayer code until RED gate passes"
+      green:
+        action: "Create personality_layer.py + wire into InteractionOrchestrator"
+        gate: "python3 scripts/run_tests.py file tests/golden/response/test_phase_150_dor_reflection_golden.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify CORE-049 degradation paths; type hints; docstrings"
+        gate: "python3 scripts/run_tests.py dir tests/golden/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_voiced_summary_empty_returns_empty_string — voiced_summary([]) returns ''"
+        - "test_voiced_summary_single_request — returns non-empty for one request"
+        - "test_voiced_dod_items_empty_returns_empty — voiced_dod_items([]) returns []"
+        - "test_voiced_context_header_fallback — falls back to mechanical input on internal error"
+        - "test_voiced_summary_fallback_on_error — falls back to '' on internal error"
+        - "test_personality_layer_instantiates_in_interaction_orchestrator — self._personality set"
+        - "test_voiced_context_header_wired_to_build_context_summary — wiring test"
+        - "test_personality_layer_persona_default_cortex — persona attribute = 'cortex'"
+      green:
+        - "Create PersonalityLayer with 3 voiced methods + CORE-049 fallbacks"
+        - "Wire into InteractionOrchestrator.__init__ and build_context_summary"
+      refactor:
+        - "Type hints: voiced_summary(request_texts: list[Any]) -> str"
+        - "Docstrings on all 3 public methods"
+
+    acceptance_criteria:
+      - "PersonalityLayer.voiced_summary([]) returns empty string, not exception"
+      - "PersonalityLayer.voiced_context_header() falls back to mechanical input string on any internal error"
+      - "InteractionOrchestrator instantiates PersonalityLayer as self._personality"
+      - "All 8 golden response tests pass"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/golden/response/test_phase_150_dor_reflection_golden.py"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase D: atom-dor-prompt.yaml + registry update ──────────────────────
+  - id: "phase-150-d"
+    title: "Create atom-dor-prompt.yaml + update _registry.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-150-04"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "45 minutes"
+    depends_on: ["phase-150-c"]
+    prerequisite: "phase-150-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex-registry/templates/response/atoms/atom-dor-prompt.yaml"
+
+    files_to_modify:
+      - "cortex-registry/templates/response/_registry.yaml"  # register new atom
+
+    implementation_guide: |
+      atom-dor-prompt.yaml structure:
+        atom_id: "atom-dor-prompt"
+        type: atom
+        description: "Surfaces ≤3 targeted clarifying questions as a blockquote when DoR dimensions are missing"
+        trigger_conditions:
+          - "dor_completeness_score < 0.75"
+        max_questions: 3
+        skip_when:
+          - "silent_autonomous_mode"
+          - "dor_completeness_score >= 0.75"
+        position: "after atom-intent-reflection, before work content PATH A only"
+        format: "blockquote with 1–3 targeted clarifying questions"
+        never_render_during: ["silent_autonomous_mode", "CORE-049 execution"]
+
+      Update _registry.yaml to include atom-dor-prompt in atoms list.
+
+    tdd_cycle:
+      red:
+        action: "Write YAML validation test before creating atom file"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_response_template_format_canon.py — ≥1 new assertion FAIL"
+        blocker: "No YAML until test written"
+      green:
+        action: "Create atom-dor-prompt.yaml + register in _registry.yaml"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_response_template_format_canon.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Validate YAML parses cleanly; skip_when list complete; position documented"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_atom_dor_prompt_skip_when_silent — skip_when includes 'silent_autonomous_mode'"
+        - "test_atom_dor_prompt_skip_when_high_dor — skip_when includes 'dor_completeness_score >= 0.75'"
+        - "test_atom_dor_prompt_max_questions_3 — max_questions: 3"
+        - "test_atom_dor_prompt_registered — appears in _registry.yaml atoms list"
+      green:
+        - "Create atom-dor-prompt.yaml"
+        - "Update _registry.yaml"
+      refactor:
+        - "YAML syntax validation"
+
+    acceptance_criteria:
+      - "atom-dor-prompt.yaml defines skip_when: ['silent_autonomous_mode', 'dor_completeness_score >= 0.75']"
+      - "atom-dor-prompt.yaml registered in _registry.yaml"
+      - "max_questions: 3 enforced"
+      - "Golden response template canon tests all pass"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2800
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # final sub-phase
+
+final_sub_phase: "phase-150-d"
+
+final_validation:
+  smoke_gate: "python3 scripts/run_tests.py smoke — ≥2800 baseline"
+  dor_score_check: "python3 -c \"from cortex.core.dor_tracker import DoRScore; s=DoRScore(1.0,1.0,1.0,1.0,1.0); assert s.composite==100; print('OK')\""
+  personality_check: "python3 -c \"from cortex.orchestrators.core.personality_layer import PersonalityLayer; assert PersonalityLayer().voiced_summary([])=='' ; print('OK')\""
+  atom_dor_check: "python3 -c \"from pathlib import Path; import yaml; yaml.safe_load(open('cortex-registry/templates/response/atoms/atom-dor-prompt.yaml')); print('OK')\""
+  core_071_check: "grep 'CORE-071' cortex-registry/core/ -rn | wc -l  # must be > 0"
+
+completion_signal:
+  move_to: "cortex-registry/planning/phases/completed/phase-150-dor-hard-gate-personality-layer.yaml"
+  master_yaml_update: "status: PLANNED → COMPLETE, completed_date: {date}"

@@ -1,0 +1,387 @@
+id: "phase-149"
+title: "Knowledge Intelligence Enhancement — Context Synthesis Exit Gate (Knowledge Injection) + Framework Self-Aware Analyzer Enhancement"
+created: "2026-03-12"
+status: PLANNED
+priority: P0
+source_issue: "GitHub Issue #18 — FB-20260312-002 (Knowledge Injection Pipeline) + FB-20260312-008 (CORTEX Framework Self-Aware Analyzer)"
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+sweep_catalogue_id: "SWEEP-149-KNOWLEDGE-INTELLIGENCE"
+
+background: |
+  Source: GitHub Issue #18 (2026-03-12) — FB-20260312-002 and FB-20260312-008.
+  Phase 148 established the canonical best-practices import path and database health verification.
+  Phase 149 extends the intelligence layer in two complementary directions:
+    1. Knowledge Injection Pipeline (FB-002): cortex/intelligence/knowledge/knowledge_synthesis_engine/loaders.py
+       already contains load_cortex_best_practices() foundation (Phase 103-g). cortex-registry/knowledge/INDEX.yaml
+       already exists. The missing piece: ContextSynthesisGateway.synthesize() does not inject knowledge into
+       the synthesis context before GitHub Copilot handoff. This phase wires the exit gate.
+    2. Framework Self-Aware Analyzer Enhancement (FB-008): CortexFrameworkAnalyzer (Phase 131) uses path-based
+       weight scoring to detect CORTEX repos. Issue #18 extends it with regex-based metadata extraction
+       (orchestrator/MCP/intent counts from copilot-instructions.md), prompt+agent file inventories, and
+       materialization of framework-context.yaml to cortex-registry/knowledge/cortex-frame-context/.
+       IntelligenceFacade.registry_index("cortex-frame-context") must return this materialized data.
+  Smoke baseline: will be updated after Phase 148 gate passes.
+  Git prerequisite: Phase 148 completion_gate PASSED.
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sweep_catalogue:
+  - id: "GAP-149-01"
+    title: "load_cortex_best_practices() wired into ContextSynthesisGateway exit gate"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-002"
+    evidence: |
+      cortex/orchestrators/core/context_synthesis_gateway.py — grep "load_cortex_best_practices" returns 0
+      cortex/intelligence/knowledge/knowledge_synthesis_engine/loaders.py — function exists (Phase 103-g)
+      cortex-registry/knowledge/INDEX.yaml — exists
+      Issue #18 AC-002-02: ContextSynthesisGateway.synthesize() context["knowledge_injection"] non-empty
+    action_ref: "phase-149-a"
+    status: OPEN
+
+  - id: "GAP-149-02"
+    title: "CortexFrameworkAnalyzer enhancement — regex-based metadata extraction from copilot-instructions.md"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-008"
+    evidence: |
+      cortex/lens/analyzers/cortex_framework_analyzer.py — Phase 131 version uses path-based weight scoring.
+      Issue #18 requires: regex extraction of orchestrator/MCP/intent counts from copilot-instructions.md
+      (8KB read cap), prompt file inventory (.github/prompts/*.prompt.md), agent file inventory by category.
+      Current analyze() returns is_cortex_framework bool + weight score only — no metadata extraction.
+    action_ref: "phase-149-b"
+    status: OPEN
+
+  - id: "GAP-149-03"
+    title: "RegistryMaterializer → cortex-registry/knowledge/cortex-frame-context/framework-context.yaml"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-008"
+    evidence: |
+      cortex-registry/knowledge/cortex-frame-context/ directory — does not exist.
+      RegistryMaterializer class — check cortex/orchestrators/support/ (may be absent entirely).
+      IntelligenceFacade.registry_index("cortex-frame-context") — must return materialized YAML data.
+    action_ref: "phase-149-c"
+    status: OPEN
+
+  - id: "GAP-149-04"
+    title: "E2E exit-gate wiring test and 38 knowledge injection golden tests"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-002"
+    evidence: |
+      tests/orchestrators/core/test_exit_gate_wiring.py — does not exist.
+      tests/orchestrators/core/test_context_synthesis_knowledge_injection.py — does not exist (38 tests).
+      Issue #18 AC-002-02: 38 golden injection tests must be GREEN.
+    action_ref: "phase-149-d"
+    status: OPEN
+
+phases:
+  # ── Sub-phase A: Knowledge Injection Exit Gate ────────────────────────────────
+  - id: "phase-149-a"
+    title: "Wire load_cortex_best_practices() into ContextSynthesisGateway.synthesize() exit gate"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-149-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "Phase 148 completion_gate PASSED. smoke tests green."
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex/orchestrators/core/context_synthesis_gateway.py"
+      - "cortex/intelligence/provider.py"
+      - "cortex/intelligence/facade.py"
+      - "cortex/intelligence/knowledge/knowledge_synthesis_engine/loaders.py"  # may need load_cortex_best_practices() signature update
+
+    implementation_guide: |
+      1. In cortex/orchestrators/core/context_synthesis_gateway.py, add lazy import at module level:
+           try:
+               from cortex.intelligence.knowledge.knowledge_synthesis_engine.loaders import load_cortex_best_practices
+           except Exception:
+               load_cortex_best_practices = None  # safe degradation
+
+         _KNOWLEDGE_TOKEN_BUDGET = 800
+         _KNOWLEDGE_MAX_PRACTICES = 12
+
+      2. Inside synthesize(), before returning SynthesizedContext, add:
+           if load_cortex_best_practices is not None and orchestrator_name:
+               try:
+                   knowledge = load_cortex_best_practices(intent_type, max_practices=_KNOWLEDGE_MAX_PRACTICES)
+                   context["knowledge_injection"] = knowledge
+               except Exception:
+                   context["knowledge_injection"] = {}  # graceful degradation
+
+      3. In cortex/intelligence/facade.py, add:
+           def load_best_practices(self, intent: str) -> dict:
+               """Delegate to KnowledgeSynthesisEngine.load_cortex_best_practices()."""
+
+      4. Verify cortex-registry/knowledge/INDEX.yaml domains structure is compatible with loaders.py
+         (domains: ai, architecture, security, sdlc, testing-validation)
+
+    tdd_cycle:
+      red:
+        action: "Write exit gate wiring tests before adding gateway injection code"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_exit_gate_wiring.py — ALL FAIL"
+        blocker: "No gateway modification until RED gate passes"
+      green:
+        action: "Wire load_cortex_best_practices() into ContextSynthesisGateway.synthesize()"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_exit_gate_wiring.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify lazy import guard, token budget constants, graceful degradation fallback"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/core/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_exit_gate_injects_knowledge — synthesize() context contains knowledge_injection key"
+        - "test_exit_gate_degrades_gracefully — returns empty dict when load_cortex_best_practices is None"
+        - "test_exit_gate_missing_index_yaml_degrades — returns empty dict when INDEX.yaml missing"
+        - "test_load_best_practices_returns_non_empty_for_implement — load_cortex_best_practices('IMPLEMENT') returns non-empty dict"
+        - "test_knowledge_token_budget_respected — returned practices fit within 800 token budget"
+      green:
+        - "Add lazy import guard to context_synthesis_gateway.py"
+        - "Add knowledge injection block inside synthesize() before return"
+        - "Add IntelligenceFacade.load_best_practices() delegation method"
+      refactor:
+        - "Type hints on all modified method signatures"
+        - "Docstrings on IntelligenceFacade.load_best_practices() (CORE-012)"
+
+    acceptance_criteria:
+      - "load_cortex_best_practices(intent_type='IMPLEMENT') returns non-empty dict without raising"
+      - "ContextSynthesisGateway.synthesize() result context['knowledge_injection'] is non-empty for any intent"
+      - "Knowledge injection degrades gracefully (empty dict, no exception) on missing INDEX.yaml"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/core/"
+      min_tests_pass: 20
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: CortexFrameworkAnalyzer Enhancement ─────────────────────────
+  - id: "phase-149-b"
+    title: "Extend CortexFrameworkAnalyzer with regex metadata extraction from .github/ artifacts"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-149-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-149-a"]
+    prerequisite: "phase-149-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex/lens/analyzers/cortex_framework_analyzer.py"  # additive — new analyze_metadata() method
+
+    implementation_guide: |
+      The Phase 131 CortexFrameworkAnalyzer uses weight-based path detection.
+      Issue #18 adds a second extraction pass: regex-based metadata from copilot-instructions.md.
+      ADDITIVE: add analyze_metadata(repo_path) method, not replacing analyze(repo_path).
+
+      New class-level constants:
+        _ORCHESTRATOR_RE = re.compile(r"(\d+)\s+[Oo]rchestrator\s+files?", re.IGNORECASE)
+        _MCP_TOOL_RE = re.compile(r"(\d+)\s+MCP\s+[Tt]ools?\s+registered", re.IGNORECASE)
+        _INTENT_TYPE_RE = re.compile(r"(\d+)\s+[Ii]ntent\s+[Tt]ypes?", re.IGNORECASE)
+        _CORE_RULE_RE = re.compile(r"CORE-(\d{3})", re.IGNORECASE)
+        _MAX_CONTENT_BYTES = 8192  # cap reads to avoid unbounded memory
+
+      New method: analyze_metadata(repo_path: str | Path) -> dict[str, Any]:
+        - Reads .github/copilot-instructions.md first 8192 bytes
+        - Extracts orchestrator_count, mcp_tool_count, intent_type_count via regex
+        - Lists .github/prompts/*.prompt.md (inventory)
+        - Lists .github/agents/**/*.md by subdirectory category
+        - Returns structured dict with is_cortex_repository: True (gated on .github/copilot-instructions.md existing)
+        - Returns {} for repos with no .github/ (graceful non-CORTEX path)
+
+    tdd_cycle:
+      red:
+        action: "Write analyzer metadata tests before extending the class"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_cortex_framework_analyzer.py — ≥5 FAIL"
+        blocker: "No class modification until RED gate passes"
+      green:
+        action: "Add analyze_metadata() method to CortexFrameworkAnalyzer"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_cortex_framework_analyzer.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify _MAX_CONTENT_BYTES enforced; type hints; no unbounded file reads"
+        gate: "python3 scripts/run_tests.py dir tests/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_analyze_metadata_returns_empty_for_no_github_dir — returns {} for non-CORTEX repo"
+        - "test_analyze_metadata_extracts_orchestrator_count — parses '312 Orchestrator files' from copilot-instructions.md"
+        - "test_analyze_metadata_extracts_mcp_tool_count — parses '36 MCP Tools registered'"
+        - "test_analyze_metadata_extracts_intent_type_count — parses '32 Intent Types'"
+        - "test_analyze_metadata_capped_at_8192_bytes — reads no more than _MAX_CONTENT_BYTES"
+        - "test_analyze_metadata_is_cortex_repository_true — set when copilot-instructions.md exists"
+        - "test_analyze_metadata_prompt_inventory_lists_prompts — lists .github/prompts/*.prompt.md"
+        - "test_analyze_metadata_agent_inventory_by_category — groups agents by subdirectory"
+      green:
+        - "Add regex constants to CortexFrameworkAnalyzer"
+        - "Implement analyze_metadata() method"
+      refactor:
+        - "Enforce _MAX_CONTENT_BYTES cap via [:_MAX_CONTENT_BYTES]"
+        - "Add type hints and docstring"
+
+    acceptance_criteria:
+      - "analyze_metadata(non_cortex_path) returns {} when no .github/ directory"
+      - "analyze_metadata(cortex_repo) returns is_cortex_repository: True with counts > 0"
+      - "File reads capped at _MAX_CONTENT_BYTES = 8192 per file"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/support/onboarding/test_cortex_framework_analyzer.py"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: RegistryMaterializer + framework-context.yaml ───────────────
+  - id: "phase-149-c"
+    title: "RegistryMaterializer — materialize framework-context.yaml to cortex-registry/knowledge/"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-149-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-149-b"]
+    prerequisite: "phase-149-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex-registry/knowledge/cortex-frame-context/"  # directory
+      - "cortex-registry/knowledge/cortex-frame-context/framework-context.yaml"  # generated
+
+    files_to_modify:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"  # wire RegistryMaterializer call
+      - "cortex/intelligence/facade.py"  # registry_index("cortex-frame-context") delegation
+
+    implementation_guide: |
+      1. Locate or create RegistryMaterializer in cortex/orchestrators/support/onboarding/:
+         def write_framework_knowledge_yaml(self, framework_context: dict, output_path: Path) -> None:
+             """Write framework_context dict as YAML to output_path."""
+             Creates parent dirs, writes yaml.safe_dump() output.
+
+      2. In LensIntegration (or onboarding orchestrator), after CortexFrameworkAnalyzer.analyze_metadata():
+           materializer.write_framework_knowledge_yaml(
+               framework_context,
+               Path("cortex-registry/knowledge/cortex-frame-context/framework-context.yaml")
+           )
+
+      3. In IntelligenceFacade, verify registry_index("cortex-frame-context") loads from
+         cortex-registry/knowledge/cortex-frame-context/ and returns the YAML data dict.
+
+    tdd_cycle:
+      red:
+        action: "Write materializer test before implementation"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_registry_materializer.py — ALL FAIL"
+        blocker: "No materializer code until RED gate passes"
+      green:
+        action: "Implement write_framework_knowledge_yaml(); wire into onboarding orchestrator"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_registry_materializer.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify parent dir creation; YAML output is deterministic; no unsafe write paths"
+        gate: "python3 scripts/run_tests.py dir tests/support/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_write_framework_knowledge_yaml_creates_file — output path exists after write"
+        - "test_write_framework_knowledge_yaml_idempotent — second write overwrites cleanly"
+        - "test_registry_index_cortex_frame_context_returns_data — IntelligenceFacade.registry_index returns non-empty"
+        - "test_materializer_creates_parent_dirs — works even when cortex-frame-context/ absent"
+      green:
+        - "Implement write_framework_knowledge_yaml()"
+        - "Wire into onboarding orchestrator after analyze_metadata() call"
+      refactor:
+        - "Type hints; docstring; CORE-035 check"
+
+    acceptance_criteria:
+      - "cortex-registry/knowledge/cortex-frame-context/framework-context.yaml created after onboarding run"
+      - "IntelligenceFacade.registry_index('cortex-frame-context') returns framework data dict"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/support/onboarding/"
+      min_tests_pass: 15
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase D: 38 Knowledge Injection Golden Tests ─────────────────────────
+  - id: "phase-149-d"
+    title: "38 knowledge injection golden tests — E2E exit gate wiring validation"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-149-04"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-149-c"]
+    prerequisite: "phase-149-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "tests/orchestrators/core/test_context_synthesis_knowledge_injection.py"
+      - "tests/preflight/test_e2e_orchestration_scenarios.py"
+
+    tdd_cycle:
+      red:
+        action: "Write 38 golden injection tests before golden validation runs"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_context_synthesis_knowledge_injection.py — ≥30 FAIL"
+        blocker: "No golden test adjustments until RED gate is verified"
+      green:
+        action: "Ensure all wiring from sub-phases A-C makes 38 tests GREEN"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_context_synthesis_knowledge_injection.py — ALL 38 PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Parametrize intent coverage test; add docstrings to test module"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_inject_for_implement — knowledge_injection non-empty for IMPLEMENT intent"
+        - "test_inject_for_fix — knowledge_injection non-empty for FIX intent"
+        - "test_inject_for_refactor — knowledge_injection non-empty for REFACTOR intent"
+        - "test_inject_for_audit — knowledge_injection non-empty for AUDIT intent"
+        - "test_inject_for_design — knowledge_injection non-empty for DESIGN intent"
+        - "test_token_budget_enforced — total practices within 800 tokens"
+        - "test_max_practices_cap — no more than 12 practices returned"
+        - "test_domain_filter_applied — only relevant domains returned for intent"
+        - "test_graceful_on_corrupt_index — returns empty dict on corrupt INDEX.yaml"
+        - "test_graceful_on_missing_knowledge_file — returns partial result on missing domain YAML"
+        # ... 28 additional golden assertions covering all 32 intent types, edge cases, budget enforcement
+
+    acceptance_criteria:
+      - "All 38 tests in test_context_synthesis_knowledge_injection.py pass"
+      - "E2E orchestration scenario tests pass including knowledge injection path"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/orchestrators/core/test_context_synthesis_knowledge_injection.py"
+      min_tests_pass: 38
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # final sub-phase
+
+final_sub_phase: "phase-149-d"
+
+final_validation:
+  smoke_gate: "python3 scripts/run_tests.py smoke — ≥2800 (baseline + Phase 148 + Phase 149 tests)"
+  injection_check: "python3 -c \"from cortex.intelligence.knowledge.knowledge_synthesis_engine.loaders import load_cortex_best_practices; assert load_cortex_best_practices('IMPLEMENT'); print('OK')\""
+  analyzer_check: "python3 -c \"from cortex.lens.analyzers.cortex_framework_analyzer import CortexFrameworkAnalyzer; r=CortexFrameworkAnalyzer().analyze_metadata('.'); print('OK' if isinstance(r, dict) else 'FAIL')\""
+  materializer_check: "python3 -c \"from pathlib import Path; assert Path('cortex-registry/knowledge/cortex-frame-context/framework-context.yaml').exists(); print('OK')\""
+
+completion_signal:
+  move_to: "cortex-registry/planning/phases/completed/phase-149-knowledge-intelligence-enhancement.yaml"
+  master_yaml_update: "status: PLANNED → COMPLETE, completed_date: {date}"

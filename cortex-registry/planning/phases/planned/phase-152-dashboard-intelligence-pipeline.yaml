@@ -1,0 +1,713 @@
+id: "phase-152"
+title: "Dashboard Intelligence Pipeline — 7-Stage Orchestrated HTML Generation with Knowledge Overlay + Quality Gate"
+created: "2026-03-12"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #18 — FB-20260312-001 (Dashboard Intelligence Pipeline)"
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-049   # Silent autonomous execution where applicable
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+  - GV-031     # Persona-aware output never raises
+  - GV-032     # No tab renderer bypasses DashboardGenerator orchestration
+sweep_catalogue_id: "SWEEP-152-DASHBOARD-INTELLIGENCE-PIPELINE"
+
+background: |
+  Source: GitHub Issue #18 (2026-03-12) — FB-20260312-001.
+  This is the highest-complexity capability in Issue #18. It depends on ALL prior phases:
+    Phase 148: Clean import paths (canonical cortex.intelligence.knowledge paths)
+    Phase 149: KnowledgeOverlayEngine, CortexFrameworkAnalyzer enhanced, framework-context.yaml
+    Phase 150: DoR gate must pass before dashboard generation begins
+    Phase 151: TabRenderer + PersonaLayer pipeline wired into DashboardGenerator
+
+  Current state: cortex/dashboards/ has output_manager.py, renderers.py, spa.py (+more from Phase 53).
+  The existing DashboardOrchestrator (Phase 53) generates static HTML.
+  FB-001 adds a 7-stage INTELLIGENCE PIPELINE on top:
+    Stage 1 — COLLECT:     DashboardDataCollector.collect(manifest) → DashboardManifest
+    Stage 2 — OVERLAY:     KnowledgeOverlayEngine.overlay(manifest) → KnowledgeOverlay
+    Stage 3 — SELECT:      VisualizationSelector.select(tab_id, data) → list[VisualizationChoice]
+    Stage 4 — NARRATE:     NarrativeEngine.narrate(manifest, overlay) → dict[str, str]
+    Stage 5 — RENDER:      TabRenderer.render_tab() → PersonaLayer.adapt() (Phase 151 pipeline)
+    Stage 6 — QUALITY:     DashboardQualityGate.evaluate(result) → QualityReport
+    Stage 7 — EMIT:        DashboardIntelligenceOrchestrator.emit() writes HTML, logs quality report
+
+  DashboardIntelligenceOrchestrator wraps Phase 53 DashboardOrchestrator for backward compatibility.
+  All 6 new files go in cortex/dashboards/ — none replace existing files.
+
+  Git prerequisite: Phase 151 final_validation PASSED.
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sweep_catalogue:
+  - id: "GAP-152-01"
+    title: "DashboardDataCollector + DashboardManifest dataclass"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/data_collector.py — does not exist.
+      Issue #18 AC-001-01: DashboardManifest(repo_name, repo_path, tabs, archetype, metadata)
+      DashboardDataCollector.collect(manifest: OnboardingManifest) -> DashboardManifest
+    action_ref: "phase-152-a"
+    status: OPEN
+
+  - id: "GAP-152-02"
+    title: "KnowledgeOverlayEngine + tab→domain YAML map"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/knowledge_overlay_engine.py — does not exist.
+      Issue #18 requires: KnowledgeOverlay dataclass + KnowledgeOverlayEngine.overlay(manifest) → KnowledgeOverlay.
+      tab→domain map: {"overview": "cortex-frame-context", "architecture": "sdlc-patterns", etc.}
+    action_ref: "phase-152-b"
+    status: OPEN
+
+  - id: "GAP-152-03"
+    title: "VisualizationSelector — DataShape enum, ChartType enum, 5-second rule heuristics"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/visualization_selector.py — does not exist.
+      Issue #18 requires: ChartType enum, DataShape enum (RELATIONAL, TEMPORAL, PROPORTIONAL, CATEGORICAL, SCALAR).
+      VisualizationChoice dataclass + VisualizationSelector.select(tab_id, tab_data) -> list[VisualizationChoice].
+      5-Second Rule: primary metric scannable in 5 sec. F-Pattern layout heuristics.
+    action_ref: "phase-152-c"
+    status: OPEN
+
+  - id: "GAP-152-04"
+    title: "NarrativeEngine — generates ≥150 word narrative per tab"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/narrative_engine.py — does not exist.
+      Issue #18 requires: NarrativeEngine.narrate(manifest, overlay) -> dict[str, str].
+      Narrative quality gate: ≥150 words per non-empty tab section.
+    action_ref: "phase-152-d"
+    status: OPEN
+
+  - id: "GAP-152-05"
+    title: "DashboardQualityGate — 6-rule quality evaluation, QualityReport dataclass"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/quality_gate.py — does not exist.
+      Issue #18 AC-001-04: QualityIssue + QualityReport dataclasses.
+      6 rules: 5-Second Rule, F-Pattern, progressive disclosure, no cross-tab duplication,
+               no dead sections, min 150 words per narrative.
+      DashboardQualityGate.evaluate(result: DashboardPipelineResult) -> QualityReport
+    action_ref: "phase-152-e"
+    status: OPEN
+
+  - id: "GAP-152-06"
+    title: "DashboardIntelligenceOrchestrator — 7-stage pipeline + backward-compat wrapper"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-001"
+    evidence: |
+      cortex/dashboards/intelligence_orchestrator.py — does not exist.
+      Issue #18 AC-001-05: DashboardPipelineResult(html_path, dashboard_manifest, knowledge_overlay,
+        narratives, viz_selections, quality_report, errors). success property: bool.
+      DashboardIntelligenceOrchestrator.generate(manifest: OnboardingManifest) -> DashboardPipelineResult.
+      Must remain backward compatible with Phase 53 DashboardOrchestrator.
+    action_ref: "phase-152-f"
+    status: OPEN
+
+phases:
+  # ── Sub-phase A: DashboardDataCollector + DashboardManifest ──────────────────
+  - id: "phase-152-a"
+    title: "Create DashboardDataCollector + DashboardManifest dataclass"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-152-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "1.5 hours"
+    depends_on: []
+    prerequisite: "Phase 151 final_validation PASSED. smoke tests green."
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/data_collector.py"
+      - "tests/dashboards/test_dashboard_data_collector.py"
+
+    implementation_guide: |
+      cortex/dashboards/data_collector.py:
+
+        @dataclass
+        class DashboardManifest:
+            repo_name: str
+            repo_path: str
+            tabs: dict[str, dict]   # tab_id → tab data dict
+            archetype: str
+            metadata: dict[str, Any]
+
+        class DashboardDataCollector:
+            def collect(self, manifest: "OnboardingManifest") -> DashboardManifest:
+                \"""Extract structured dashboard data from OnboardingManifest.\"""
+                ...
+
+      collect() must tolerate None or partial OnboardingManifest fields (graceful degradation).
+      Never raises outside of explicit @dataclass validation.
+
+    tdd_cycle:
+      red:
+        action: "Write DashboardManifest + collect() tests before creating file"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_data_collector.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create data_collector.py with DashboardManifest + DashboardDataCollector"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_data_collector.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Type hints; dataclass field types; graceful degradation on None fields"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_dashboard_manifest_instantiates — DashboardManifest(name, path, {}, archetype, {}) works"
+        - "test_dashboard_manifest_success_property_false_no_tabs — tabs={} → no crash"
+        - "test_data_collector_collect_returns_dashboard_manifest — collect() returns DashboardManifest"
+        - "test_data_collector_collect_tolerates_empty_manifest — no exception on minimal manifest"
+        - "test_data_collector_collect_populates_repo_name — repo_name extracted correctly"
+        - "test_data_collector_collect_populates_tabs — tabs dict populated"
+      green:
+        - "Create DashboardManifest dataclass"
+        - "Create DashboardDataCollector.collect()"
+      refactor:
+        - "Type hints: collect(self, manifest: OnboardingManifest) -> DashboardManifest"
+
+    acceptance_criteria:
+      - "DashboardManifest has: repo_name, repo_path, tabs, archetype, metadata fields"
+      - "DashboardDataCollector.collect() returns DashboardManifest"
+      - "No exception on minimal/empty OnboardingManifest"
+      - "6 collector tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_data_collector.py"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: KnowledgeOverlayEngine ──────────────────────────────────────
+  - id: "phase-152-b"
+    title: "Create KnowledgeOverlayEngine + tab→domain YAML map"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-152-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-152-a"]
+    prerequisite: "phase-152-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/knowledge_overlay_engine.py"
+      - "cortex-registry/knowledge/cortex-frame-context/tab-domain-map.yaml"
+      - "tests/dashboards/test_knowledge_overlay_engine.py"
+
+    implementation_guide: |
+      cortex/dashboards/knowledge_overlay_engine.py:
+
+        TAB_DOMAIN_MAP: dict[str, str] = {
+            "overview": "cortex-frame-context",
+            "architecture": "sdlc-patterns",
+            "quality": "quality",
+            "security": "security",
+            "observability": "observability",
+            # extend per registry
+        }
+
+        @dataclass
+        class KnowledgeOverlay:
+            tab_id: str
+            domain: str
+            knowledge_entries: list[dict[str, Any]]
+            source_yaml: str
+
+        class KnowledgeOverlayEngine:
+            def overlay(self, manifest: DashboardManifest) -> dict[str, KnowledgeOverlay]:
+                \"""Return map of tab_id → KnowledgeOverlay for each tab in manifest.\"""
+                ...
+
+      Uses IntelligenceFacade.registry_index() (Phase 149 output).
+      Graceful degradation: returns empty KnowledgeOverlay for unknown tabs or missing YAMLs.
+
+    tdd_cycle:
+      red:
+        action: "Write KnowledgeOverlay + overlay() tests before creating file"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_knowledge_overlay_engine.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create knowledge_overlay_engine.py + tab-domain-map.yaml"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_knowledge_overlay_engine.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Graceful degradation; type hints; TAB_DOMAIN_MAP documented"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_knowledge_overlay_instantiates — KnowledgeOverlay(tab_id, domain, [], 'path') works"
+        - "test_overlay_engine_returns_dict — overlay() returns dict[str, KnowledgeOverlay]"
+        - "test_overlay_engine_unknown_tab_returns_empty_overlay — no crash on unknown tab_id"
+        - "test_overlay_engine_overview_maps_to_cortex_frame — 'overview' → 'cortex-frame-context'"
+        - "test_overlay_engine_graceful_on_missing_yaml — no exception if domain YAML absent"
+      green:
+        - "Create KnowledgeOverlay dataclass"
+        - "Create KnowledgeOverlayEngine.overlay()"
+        - "Create tab-domain-map.yaml"
+      refactor:
+        - "Type hints: overlay(self, manifest: DashboardManifest) -> dict[str, KnowledgeOverlay]"
+
+    acceptance_criteria:
+      - "KnowledgeOverlayEngine.overlay() returns dict per tab (never raises)"
+      - "TAB_DOMAIN_MAP maps 'overview' → 'cortex-frame-context'"
+      - "Unknown tabs return empty KnowledgeOverlay (graceful)"
+      - "5 overlay engine tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_knowledge_overlay_engine.py"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: VisualizationSelector ───────────────────────────────────────
+  - id: "phase-152-c"
+    title: "Create VisualizationSelector — DataShape, ChartType, 5-second rule heuristics"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-152-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-152-b"]
+    prerequisite: "phase-152-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/visualization_selector.py"
+      - "tests/dashboards/test_visualization_selector.py"
+
+    implementation_guide: |
+      cortex/dashboards/visualization_selector.py:
+
+        class DataShape(str, Enum):
+            RELATIONAL = "relational"
+            TEMPORAL = "temporal"
+            PROPORTIONAL = "proportional"
+            CATEGORICAL = "categorical"
+            SCALAR = "scalar"
+
+        class ChartType(str, Enum):
+            BAR = "bar"
+            LINE = "line"
+            PIE = "pie"
+            TABLE = "table"
+            METRIC_CARD = "metric_card"
+            HEATMAP = "heatmap"
+            SCATTER = "scatter"
+            SANKEY = "sankey"
+
+        @dataclass
+        class VisualizationChoice:
+            tab_id: str
+            chart_type: ChartType
+            data_shape: DataShape
+            five_second_primary: bool   # True if primary metric visible in 5 sec
+            f_pattern_position: str     # "top-left", "top-right", "body-full", etc.
+
+        class VisualizationSelector:
+            def select(self, tab_id: str, tab_data: dict) -> list[VisualizationChoice]:
+                \"""Return ranked viz choices for tab_id given tab_data.\"""
+                ...
+
+      5-Second Rule heuristic: primary metric always ChartType.METRIC_CARD with five_second_primary=True.
+      F-Pattern: most important info in top-left area (f_pattern_position="top-left").
+      Graceful: returns [VisualizationChoice(tab_id, METRIC_CARD, SCALAR, True, "top-left")] for unknown tabs.
+
+    tdd_cycle:
+      red:
+        action: "Write VisualizationSelector tests before creating file"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_visualization_selector.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create visualization_selector.py with all enums + VisualizationSelector"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_visualization_selector.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Type hints; heuristic logic documented; graceful fallback"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_data_shape_enum_members — DataShape has RELATIONAL, TEMPORAL, PROPORTIONAL, CATEGORICAL, SCALAR"
+        - "test_chart_type_enum_members — ChartType has at least 5 members"
+        - "test_visualization_choice_instantiates — VisualizationChoice(tab, chart, shape, True, 'top-left')"
+        - "test_selector_select_returns_list — select() returns list"
+        - "test_selector_select_unknown_tab_returns_default — unknown tab → METRIC_CARD fallback"
+        - "test_selector_five_second_rule — at least one VisualizationChoice has five_second_primary=True"
+        - "test_selector_f_pattern_top_left — at least one choice has f_pattern_position='top-left'"
+      green:
+        - "Create DataShape, ChartType enums"
+        - "Create VisualizationChoice dataclass"
+        - "Create VisualizationSelector.select()"
+      refactor:
+        - "Type hints: select(self, tab_id: str, tab_data: dict) -> list[VisualizationChoice]"
+
+    acceptance_criteria:
+      - "DataShape: RELATIONAL, TEMPORAL, PROPORTIONAL, CATEGORICAL, SCALAR"
+      - "ChartType: at least BAR, LINE, PIE, TABLE, METRIC_CARD"
+      - "VisualizationSelector.select() always returns a non-empty list (never raises)"
+      - "5-Second Rule: at least one choice has five_second_primary=True per tab"
+      - "7 visualization tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_visualization_selector.py"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase D: NarrativeEngine ─────────────────────────────────────────────
+  - id: "phase-152-d"
+    title: "Create NarrativeEngine — ≥150 word narrative generation per tab"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-152-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-152-c"]
+    prerequisite: "phase-152-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/narrative_engine.py"
+      - "tests/dashboards/test_narrative_engine.py"
+
+    implementation_guide: |
+      cortex/dashboards/narrative_engine.py:
+
+        class NarrativeEngine:
+            MIN_WORD_COUNT: int = 150
+
+            def narrate(
+                self,
+                manifest: DashboardManifest,
+                overlay: dict[str, KnowledgeOverlay],
+            ) -> dict[str, str]:
+                \"""Generate narrative text per tab (tab_id → narrative string).\"""
+                narratives: dict[str, str] = {}
+                for tab_id, tab_data in manifest.tabs.items():
+                    narratives[tab_id] = self._narrate_tab(tab_id, tab_data, overlay.get(tab_id))
+                return narratives
+
+            def _narrate_tab(self, tab_id: str, tab_data: dict, overlay: KnowledgeOverlay | None) -> str:
+                \"""Build contextual narrative for a single tab. Returns a string ≥ MIN_WORD_COUNT words.\"""
+                ...
+
+      Narrative construction pulls from: manifest tab data, knowledge overlay entries, archetype.
+      No external LLM calls — narrative assembled from structured template + manifest values.
+      If resulting narrative < 150 words, pad with contextual knowledge overlay sentences.
+
+    tdd_cycle:
+      red:
+        action: "Write NarrativeEngine tests before creating file"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_narrative_engine.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create narrative_engine.py with NarrativeEngine.narrate()"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_narrative_engine.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Word count enforcement; type hints; no LLM calls"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_narrate_returns_dict_per_tab — narrate(manifest, overlay) returns dict"
+        - "test_narrate_empty_tabs_returns_empty — no tabs → empty dict"
+        - "test_narrate_tab_word_count_gte_150 — non-empty tab narrative ≥ 150 words"
+        - "test_narrate_no_exception_on_none_overlay — no crash when overlay entry is None"
+        - "test_narrate_includes_tab_id_in_narrative — tab_id contextualizes narrative"
+      green:
+        - "Create NarrativeEngine with MIN_WORD_COUNT = 150"
+        - "Create _narrate_tab with word-count enforcement"
+        - "Create narrate() returning dict[str, str]"
+      refactor:
+        - "Type hints: narrate(manifest: DashboardManifest, overlay: dict[str, KnowledgeOverlay]) -> dict[str, str]"
+
+    acceptance_criteria:
+      - "NarrativeEngine.narrate() returns dict[str, str] — one entry per manifest tab"
+      - "All non-empty tab narratives are ≥ 150 words (MIN_WORD_COUNT enforced)"
+      - "No exception raised when KnowledgeOverlay is None for a tab"
+      - "5 narrative engine tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_narrative_engine.py"
+      min_tests_pass: 5
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase E: DashboardQualityGate ────────────────────────────────────────
+  - id: "phase-152-e"
+    title: "Create DashboardQualityGate — 6 quality rules + QualityReport dataclass"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-152-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-152-d"]
+    prerequisite: "phase-152-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/quality_gate.py"
+      - "tests/dashboards/test_dashboard_quality_gate.py"
+
+    implementation_guide: |
+      cortex/dashboards/quality_gate.py:
+
+        class QualityRuleId(str, Enum):
+            FIVE_SECOND_RULE = "5-second-rule"
+            F_PATTERN = "f-pattern"
+            PROGRESSIVE_DISCLOSURE = "progressive-disclosure"
+            NO_CROSS_TAB_DUPLICATION = "no-cross-tab-duplication"
+            NO_DEAD_SECTIONS = "no-dead-sections"
+            MIN_NARRATIVE_LENGTH = "min-narrative-length"
+
+        @dataclass
+        class QualityIssue:
+            rule_id: QualityRuleId
+            tab_id: str
+            description: str
+            severity: str  # "P0" | "P1" | "P2"
+
+        @dataclass
+        class QualityReport:
+            issues: list[QualityIssue]
+            passed: bool            # True if no P0 issues
+            score: int              # 0–100 quality score (100 = zero issues)
+
+        class DashboardQualityGate:
+            def evaluate(self, result: "DashboardPipelineResult") -> QualityReport:
+                \"""Evaluate 6 quality rules against the pipeline result.\"""
+                issues: list[QualityIssue] = []
+                # Apply each of the 6 rules
+                issues.extend(self._check_five_second_rule(result))
+                issues.extend(self._check_f_pattern(result))
+                issues.extend(self._check_progressive_disclosure(result))
+                issues.extend(self._check_no_cross_tab_duplication(result))
+                issues.extend(self._check_no_dead_sections(result))
+                issues.extend(self._check_min_narrative_length(result))
+                p0_count = sum(1 for i in issues if i.severity == "P0")
+                score = max(0, 100 - (p0_count * 20 + len(issues) * 5))
+                return QualityReport(issues=issues, passed=(p0_count == 0), score=score)
+
+      MIN_NARRATIVE_LENGTH rule: checks NarrativeEngine output ≥ 150 words.
+      NO_DEAD_SECTIONS rule: any tab with empty narrative is a P0.
+
+    tdd_cycle:
+      red:
+        action: "Write quality gate tests before creating file"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_quality_gate.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create quality_gate.py with all 6 rule checks"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_quality_gate.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Type hints; score calculation; rule separation"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_quality_report_passed_true_no_p0 — passed=True when no P0 issues"
+        - "test_quality_report_passed_false_with_p0 — passed=False when P0 issue present"
+        - "test_quality_score_100_no_issues — score=100 for zero issues"
+        - "test_quality_score_decreases_per_issue — score < 100 when issues exist"
+        - "test_five_second_rule_fires_on_no_metric_card — missing METRIC_CARD in overview"
+        - "test_min_narrative_rule_fires_on_short_narrative — narrative < 150 words → P0"
+        - "test_no_dead_sections_fires_on_empty_narrative — empty narrative string → P0"
+        - "test_quality_issue_has_rule_id_tab_severity — QualityIssue fields correct"
+      green:
+        - "Create QualityIssue + QualityReport dataclasses"
+        - "Create DashboardQualityGate with 6 rule methods"
+      refactor:
+        - "Type hints: evaluate(self, result: DashboardPipelineResult) -> QualityReport"
+        - "score ∈ [0, 100]"
+
+    acceptance_criteria:
+      - "QualityReport.passed = True only when no P0 issues"
+      - "QualityReport.score = 100 for zero issues; decreases per issue"
+      - "All 6 quality rules implemented and testable in isolation"
+      - "8 quality gate tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_quality_gate.py"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase F: DashboardIntelligenceOrchestrator (7-stage pipeline) ─────────
+  - id: "phase-152-f"
+    title: "Create DashboardIntelligenceOrchestrator — 7-stage pipeline with DashboardPipelineResult"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-152-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-049"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-152-e"]
+    prerequisite: "phase-152-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/dashboards/intelligence_orchestrator.py"
+      - "tests/dashboards/test_dashboard_intelligence_pipeline.py"
+
+    implementation_guide: |
+      cortex/dashboards/intelligence_orchestrator.py:
+
+        @dataclass
+        class DashboardPipelineResult:
+            html_path: str
+            dashboard_manifest: DashboardManifest
+            knowledge_overlay: dict[str, KnowledgeOverlay]
+            narratives: dict[str, str]
+            viz_selections: dict[str, list[VisualizationChoice]]
+            quality_report: QualityReport
+            errors: list[str]
+
+            @property
+            def success(self) -> bool:
+                return not self.errors and self.quality_report.passed
+
+        class DashboardIntelligenceOrchestrator:
+            def __init__(self) -> None:
+                self._collector = DashboardDataCollector()
+                self._overlay_engine = KnowledgeOverlayEngine()
+                self._viz_selector = VisualizationSelector()
+                self._narrative_engine = NarrativeEngine()
+                self._quality_gate = DashboardQualityGate()
+
+            def generate(self, manifest: "OnboardingManifest") -> DashboardPipelineResult:
+                \"""Execute 7-stage intelligence pipeline. Returns DashboardPipelineResult.\"""
+                errors: list[str] = []
+                try:
+                    # Stage 1 — COLLECT
+                    dashboard_manifest = self._collector.collect(manifest)
+                    # Stage 2 — OVERLAY
+                    overlay = self._overlay_engine.overlay(dashboard_manifest)
+                    # Stage 3 — SELECT
+                    viz = {tab: self._viz_selector.select(tab, data) for tab, data in dashboard_manifest.tabs.items()}
+                    # Stage 4 — NARRATE
+                    narratives = self._narrative_engine.narrate(dashboard_manifest, overlay)
+                    # Stage 5 — RENDER (delegates to DashboardGenerator → TabRenderer → PersonaLayer)
+                    html_path = self._render(dashboard_manifest, narratives, viz)
+                    # Stage 6 — QUALITY
+                    result = DashboardPipelineResult(html_path, dashboard_manifest, overlay, narratives, viz, None, errors)
+                    quality_report = self._quality_gate.evaluate(result)
+                    result = replace(result, quality_report=quality_report)
+                    # Stage 7 — EMIT: log quality_report summary
+                    self._emit(result)
+                    return result
+                except Exception as exc:
+                    errors.append(str(exc))
+                    return DashboardPipelineResult("", DashboardManifest("", "", {}, "", {}), {}, {}, {}, QualityReport([], False, 0), errors)
+
+      Backward compatibility: existing DashboardOrchestrator (Phase 53) must still function.
+      DashboardIntelligenceOrchestrator delegates Stage 5 RENDER to DashboardGenerator (which now
+      uses TabRenderer + PersonaLayer from Phase 151).
+
+    tdd_cycle:
+      red:
+        action: "Write pipeline integration tests before creating intelligence_orchestrator.py"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_intelligence_pipeline.py — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create DashboardPipelineResult + DashboardIntelligenceOrchestrator with 7 stages"
+        gate: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_intelligence_pipeline.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Backward compat: existing DashboardOrchestrator tests still pass; type hints; CORE-049 error logging"
+        gate: "python3 scripts/run_tests.py dir tests/dashboards/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_pipeline_result_success_true_on_clean_run — success=True when no errors + QR.passed"
+        - "test_pipeline_result_success_false_on_quality_fail — success=False when quality_report.passed=False"
+        - "test_pipeline_result_success_false_on_errors — success=False when errors list non-empty"
+        - "test_generate_returns_pipeline_result — generate() returns DashboardPipelineResult"
+        - "test_generate_collects_stage_1 — _collector.collect() called (spy)"
+        - "test_generate_overlays_stage_2 — _overlay_engine.overlay() called"
+        - "test_generate_selects_stage_3 — _viz_selector.select() called per tab"
+        - "test_generate_narrates_stage_4 — _narrative_engine.narrate() called"
+        - "test_generate_quality_stage_6 — _quality_gate.evaluate() called"
+        - "test_generate_returns_result_on_graceful_error — error captured in errors list, not raised"
+        - "test_phase53_dashboard_orchestrator_still_importable — backward compat check"
+      green:
+        - "Create DashboardPipelineResult with success property"
+        - "Create DashboardIntelligenceOrchestrator with 7-stage generate() method"
+      refactor:
+        - "Type hints: generate(self, manifest: OnboardingManifest) -> DashboardPipelineResult"
+        - "CORE-049: errors are logged silently, not raised"
+        - "replace(result, quality_report=quality_report) via dataclasses.replace"
+
+    acceptance_criteria:
+      - "DashboardPipelineResult.success = True only when errors=[] AND quality_report.passed=True"
+      - "All 7 stages execute in order within generate()"
+      - "Graceful error capture: generate() returns DashboardPipelineResult (never raises)"
+      - "Phase 53 DashboardOrchestrator still importable (backward compat)"
+      - "11 pipeline integration tests PASS"
+      - "Issue #18 AC-001-01 through AC-001-05 all satisfied"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/dashboards/test_dashboard_intelligence_pipeline.py"
+      min_tests_pass: 11
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # final sub-phase
+
+final_sub_phase: "phase-152-f"
+
+final_validation:
+  smoke_gate: "python3 scripts/run_tests.py smoke — ≥2800 baseline"
+  import_check: |
+    python3 -c "
+    from cortex.dashboards.data_collector import DashboardDataCollector, DashboardManifest
+    from cortex.dashboards.knowledge_overlay_engine import KnowledgeOverlayEngine
+    from cortex.dashboards.visualization_selector import VisualizationSelector, DataShape, ChartType
+    from cortex.dashboards.narrative_engine import NarrativeEngine
+    from cortex.dashboards.quality_gate import DashboardQualityGate
+    from cortex.dashboards.intelligence_orchestrator import DashboardIntelligenceOrchestrator, DashboardPipelineResult
+    print('All 6 new dashboard modules import OK')
+    "
+  backward_compat_check: "python3 -c \"from cortex.dashboards.intelligence_orchestrator import DashboardIntelligenceOrchestrator; print('OK')\""
+  pipeline_result_check: |
+    python3 -c "
+    from cortex.dashboards.quality_gate import QualityReport
+    from cortex.dashboards.data_collector import DashboardManifest
+    from cortex.dashboards.intelligence_orchestrator import DashboardPipelineResult
+    r = DashboardPipelineResult('', DashboardManifest('', '', {}, '', {}), {}, {}, {}, QualityReport([], True, 100), [])
+    assert r.success is True, 'success property broken'
+    print('DashboardPipelineResult.success OK')
+    "
+
+completion_signal:
+  move_to: "cortex-registry/planning/phases/completed/phase-152-dashboard-intelligence-pipeline.yaml"
+  master_yaml_update: "status: PLANNED → COMPLETE, completed_date: {date}"

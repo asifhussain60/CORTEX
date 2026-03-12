@@ -1,0 +1,453 @@
+id: "phase-151"
+title: "Vacuum Source Protection (GV-028..034) + Persona-Layered Dashboard Tab Renderers"
+created: "2026-03-12"
+status: PLANNED
+priority: P1
+source_issue: "GitHub Issue #18 — FB-20260312-006 (VacuumOrchestrator Source Protection + GV-028..034) + FB-20260312-007 (Persona-Layered Dashboard Tab Renderers)"
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+  - CORE-068   # Universal Convergence Gate
+  - GV-028     # NEW: vacuum protected roots list is immutable frozenset
+  - GV-029     # NEW: all destructive vacuum ops must call _is_protected() before execution
+  - GV-030     # NEW: tab renderers require PersonaLayer.adapt() call
+  - GV-031     # NEW: persona-aware output never raises; fallback to plain HTML
+  - GV-032     # NEW: no tab renderer bypasses DashboardGenerator orchestration
+  - GV-033     # NEW: VACUUM_PROTECTED_ROOTS is the canonical root guard (PROTECTED_DIRS remains subordinate path guard)
+  - GV-034     # NEW: tab renderer contracts: render_tab(tab_id: str, manifest: DashboardManifest) -> str
+sweep_catalogue_id: "SWEEP-151-VACUUM-SOURCE-PROTECTION-PERSONA-DASHBOARD"
+
+background: |
+  Source: GitHub Issue #18 (2026-03-12) — FB-20260312-006 and FB-20260312-007.
+  Phase 141 added PROTECTED_DIRS (9→15 entries), a path-level guard inside VacuumOrchestrator.
+  FB-006 adds a HIGHER-LEVEL guard: VACUUM_PROTECTED_ROOTS — a frozenset at the root abstraction
+  level that blocks vacuum from even entering protected trees. These are complementary:
+    VACUUM_PROTECTED_ROOTS — root/tree-level guard (Phase 151): {"cortex", "cortex-registry", etc.}
+    PROTECTED_DIRS         — path-level guard (Phase 141): specific subdirectory patterns
+  Both guards must pass before any destructive vacuum operation proceeds.
+
+  FB-007 adds persona-layered dashboard tab renderers.
+  cortex/orchestrators/support/onboarding/tab_renderers.py does NOT exist.
+  The DashboardGenerator class currently renders tabs with static HTML.
+  Tab renderers need a PersonaLayer class within the onboarding package that adapts HTML fragments
+  for 3 engineering personas: engineer, architect, manager.
+
+  IMPORTANT: phase-150-c created PersonalityLayer (voiced output for responses).
+  PersonaLayer (phase-151-c) is a SEPARATE class for dashboard HTML adaptation — different purpose.
+  PersonalityLayer → response text. PersonaLayer → HTML fragment persona adaptation.
+
+  Git prerequisite: Phase 150 final_validation PASSED.
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+sweep_catalogue:
+  - id: "GAP-151-01"
+    title: "VACUUM_PROTECTED_ROOTS frozenset + _is_protected() guard in VacuumOrchestrator"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-006"
+    evidence: |
+      cortex/orchestrators/health/constants.py — no VACUUM_PROTECTED_ROOTS constant found.
+      VacuumOrchestrator — all 8 destructive stages lack a root-level protection guard.
+      Issue #18 AC-006-01: VACUUM_PROTECTED_ROOTS = frozenset({"cortex", "cortex-registry", "tests", ".github", "scripts", "cortex-docs"})
+      Issue #18 AC-006-02: _is_protected(path: Path) -> bool prevents destructive ops on protected roots.
+    action_ref: "phase-151-a"
+    status: OPEN
+
+  - id: "GAP-151-02"
+    title: "GV-028..034 governance rules in capabilities-manifest.yaml"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-006, FB-20260312-007"
+    evidence: |
+      cortex-registry/core/capabilities-manifest.yaml — GV-028 through GV-034 do not exist.
+      Must add 7 new governance rules documenting the contracts above.
+    action_ref: "phase-151-b"
+    status: OPEN
+
+  - id: "GAP-151-03"
+    title: "TabRenderer + PersonaLayer in cortex/orchestrators/support/onboarding/ (new package)"
+    severity: P0
+    source: "GitHub Issue #18 FB-20260312-007"
+    evidence: |
+      cortex/orchestrators/support/onboarding/ — directory does not exist.
+      tab_renderers.py and persona_layer.py do not exist.
+      Issue #18 AC-007-01: TabRenderer.render_tab(tab_id: str, manifest: DashboardManifest) -> str
+      Issue #18 AC-007-02: PersonaLayer.adapt(html_fragment: str, persona: str) -> str returns plain HTML on error.
+    action_ref: "phase-151-c"
+    status: OPEN
+
+  - id: "GAP-151-04"
+    title: "DashboardGenerator wired to TabRenderer → PersonaLayer pipeline"
+    severity: P1
+    source: "GitHub Issue #18 FB-20260312-007"
+    evidence: |
+      DashboardGenerator renders tab HTML directly without TabRenderer.
+      Must refactor DashboardGenerator.render_tab() to call TabRenderer().render_tab() → PersonaLayer.adapt().
+      Current DashboardGenerator location: cortex/dashboards/ (identify exact file).
+    action_ref: "phase-151-d"
+    status: OPEN
+
+phases:
+  # ── Sub-phase A: VACUUM_PROTECTED_ROOTS + _is_protected() ────────────────────
+  - id: "phase-151-a"
+    title: "VACUUM_PROTECTED_ROOTS constant + _is_protected() guard injected into all 8 destructive vacuum stages"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-151-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-035, GV-028, GV-029, GV-033"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "Phase 150 final_validation PASSED. smoke tests green."
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex/orchestrators/health/constants.py"  # add VACUUM_PROTECTED_ROOTS frozenset
+      - "cortex/orchestrators/health/vacuum_orchestrator.py"  # add _is_protected() + guard all destructive methods
+
+    implementation_guide: |
+      In cortex/orchestrators/health/constants.py, add after PROTECTED_DIRS:
+        VACUUM_PROTECTED_ROOTS: frozenset[str] = frozenset({
+            "cortex",
+            "cortex-registry",
+            "tests",
+            ".github",
+            "scripts",
+            "cortex-docs",
+        })
+
+      In VacuumOrchestrator, add guard method:
+        def _is_protected(self, path: Path) -> bool:
+            \"""Return True if path falls within any VACUUM_PROTECTED_ROOT tree.\"""
+            try:
+                rel = path.relative_to(self._workspace_root)
+                return rel.parts[0] in VACUUM_PROTECTED_ROOTS
+            except (ValueError, IndexError):
+                return True  # fail-safe: unknown paths are treated as protected
+
+      Guard ALL 8 destructive stage methods. At top of each:
+        if self._is_protected(target_path):
+            self._log_skipped(target_path, reason="VACUUM_PROTECTED_ROOTS")
+            return
+
+      IMPORTANT: _is_protected uses fail-safe semantics — unknown paths return True (protected).
+      This is the OPPOSITE of PROTECTED_DIRS which is an allowlist pattern.
+
+    tdd_cycle:
+      red:
+        action: "Write canonical vacuum protection golden test before any implementation"
+        gate: "python3 scripts/run_tests.py file tests/golden/orchestrators/health_vacuum/test_vacuum_canonical_protection_golden.py — ALL FAIL"
+        blocker: "No code changes until RED gate passes"
+      green:
+        action: "Add VACUUM_PROTECTED_ROOTS + _is_protected() + guards in all 8 stages"
+        gate: "python3 scripts/run_tests.py file tests/golden/orchestrators/health_vacuum/test_vacuum_canonical_protection_golden.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify fail-safe semantics; type hints; ensure PROTECTED_DIRS + VACUUM_PROTECTED_ROOTS both active"
+        gate: "python3 scripts/run_tests.py dir tests/golden/orchestrators/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_vacuum_protected_roots_is_frozenset — VACUUM_PROTECTED_ROOTS type is frozenset"
+        - "test_vacuum_protected_roots_contains_cortex — 'cortex' in VACUUM_PROTECTED_ROOTS"
+        - "test_vacuum_protected_roots_contains_tests — 'tests' in VACUUM_PROTECTED_ROOTS"
+        - "test_is_protected_returns_true_for_cortex_subpath — Path('cortex/foo') is protected"
+        - "test_is_protected_returns_false_for_temp — Path('.cortex-runtime/temp') is not protected"
+        - "test_is_protected_unknown_path_returns_true — fail-safe: unknown path returns True"
+        - "test_vacuum_skips_cortex_source_directory — vacuum does not modify cortex/ tree"
+        - "test_vacuum_skips_tests_directory — vacuum does not modify tests/ tree"
+        - "test_vacuum_skips_github_directory — vacuum does not modify .github/ tree"
+      green:
+        - "Add VACUUM_PROTECTED_ROOTS to constants.py"
+        - "Add _is_protected() to VacuumOrchestrator"
+        - "Add guard at top of all 8 destructive stage methods"
+      refactor:
+        - "Type hints: _is_protected(self, path: Path) -> bool"
+        - "Fail-safe: except block returns True"
+
+    new_files:
+      - "tests/golden/orchestrators/health_vacuum/test_vacuum_canonical_protection_golden.py"
+
+    acceptance_criteria:
+      - "VACUUM_PROTECTED_ROOTS = frozenset({'cortex', 'cortex-registry', 'tests', '.github', 'scripts', 'cortex-docs'})"
+      - "_is_protected() uses fail-safe semantics (unknown paths → True)"
+      - "All 8 destructive vacuum stages guard-gated with _is_protected()"
+      - "Canonical protection golden test: 9 tests ALL PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/golden/orchestrators/health_vacuum/test_vacuum_canonical_protection_golden.py"
+      min_tests_pass: 9
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase B: GV-028..034 governance rules ─────────────────────────────────
+  - id: "phase-151-b"
+    title: "Add GV-028..034 to capabilities-manifest.yaml"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-151-02"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-151-a"]
+    prerequisite: "phase-151-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex-registry/core/capabilities-manifest.yaml"
+
+    implementation_guide: |
+      Add 7 new governance rules to capabilities-manifest.yaml governance_rules section:
+        GV-028: VACUUM_PROTECTED_ROOTS is an immutable frozenset — no runtime mutation allowed
+        GV-029: All destructive vacuum operations must call _is_protected() before execution
+        GV-030: Tab renderers require PersonaLayer.adapt() call before HTML emission
+        GV-031: Persona-aware output never raises; must include try/except with plain HTML fallback
+        GV-032: No tab renderer bypasses DashboardGenerator orchestration
+        GV-033: VACUUM_PROTECTED_ROOTS is the canonical root guard; PROTECTED_DIRS is the subordinate path guard
+        GV-034: TabRenderer.render_tab() contract: (tab_id: str, manifest: DashboardManifest) -> str
+
+    tdd_cycle:
+      red:
+        action: "Write YAML parse + rule count validation test"
+        gate: "python3 scripts/run_tests.py file tests/governance/test_capabilities_manifest.py — ≥1 new assertion FAIL"
+        blocker: "No YAML edit until test written"
+      green:
+        action: "Add GV-028 through GV-034 to capabilities-manifest.yaml"
+        gate: "python3 scripts/run_tests.py file tests/governance/test_capabilities_manifest.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Validate YAML parses cleanly; all 7 rules have id, description, and enforcement fields"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_gv028_defined — GV-028 present in capabilities-manifest.yaml"
+        - "test_gv029_defined — GV-029 present"
+        - "test_gv030_defined — GV-030 present"
+        - "test_gv031_defined — GV-031 present"
+        - "test_gv032_defined — GV-032 present"
+        - "test_gv033_defined — GV-033 present"
+        - "test_gv034_defined — GV-034 present"
+      green:
+        - "Add GV-028…GV-034 to capabilities-manifest.yaml"
+      refactor:
+        - "YAML syntax validation"
+
+    acceptance_criteria:
+      - "All 7 governance rules GV-028..GV-034 present in capabilities-manifest.yaml"
+      - "Each rule has: id, description, enforcement, source_phase fields"
+      - "YAML parses cleanly"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2800
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase C: TabRenderer + PersonaLayer (new onboarding package) ──────────
+  - id: "phase-151-c"
+    title: "Create cortex/orchestrators/support/onboarding/ package with TabRenderer + PersonaLayer"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-151-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, GV-030, GV-031, GV-034"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-151-b"]
+    prerequisite: "phase-151-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - "cortex/orchestrators/support/onboarding/__init__.py"
+      - "cortex/orchestrators/support/onboarding/tab_renderers.py"
+      - "tests/support/onboarding/__init__.py"
+      - "tests/support/onboarding/test_tab_renderers.py"
+      - "tests/support/onboarding/test_persona_layer.py"
+
+    implementation_guide: |
+      cortex/orchestrators/support/onboarding/tab_renderers.py:
+
+        class TabRenderer:
+            def render_tab(self, tab_id: str, manifest: "DashboardManifest") -> str:
+                \"""Dispatch to per-tab method by tab_id; fallback to generic card if tab unknown.\"""
+                method = getattr(self, f"_render_{tab_id.replace('-', '_')}", self._render_generic)
+                return method(manifest)
+
+            def _render_01_overview(self, manifest: "DashboardManifest") -> str: ...
+            # one method per tab (up to 10); return HTML str
+
+            def _render_generic(self, manifest: "DashboardManifest") -> str:
+                return self._no_data_card("Tab content unavailable")
+
+            def _esc(self, value: str) -> str:
+                \"""HTML-escape value to prevent XSS.\"""
+                import html; return html.escape(str(value))
+
+            def _no_data_card(self, label: str) -> str:
+                return f"<div class='no-data'>{self._esc(label)}</div>"
+
+        class PersonaLayer:
+            PERSONAS: frozenset[str] = frozenset({"engineer", "architect", "manager"})
+
+            def adapt(self, html_fragment: str, persona: str) -> str:
+                \"""Adapt html_fragment for the target persona. Returns plain html_fragment on error.\"""
+                try:
+                    if persona not in self.PERSONAS:
+                        return html_fragment  # unknown persona: passthrough
+                    return self._adapt_for(html_fragment, persona)
+                except Exception:
+                    return html_fragment  # GV-031: never raise; plain HTML fallback
+
+            def _adapt_for(self, html_fragment: str, persona: str) -> str:
+                # persona-specific adaptation logic (e.g., inject persona-class, reorder sections)
+                ...
+
+      Note: _esc() uses html.escape() — no XSS vectors.
+      Note: PersonaLayer.adapt() always returns a str; never raises (GV-031).
+
+    tdd_cycle:
+      red:
+        action: "Write TabRenderer + PersonaLayer tests before creating files"
+        gate: "python3 scripts/run_tests.py dir tests/support/onboarding/ — ALL FAIL"
+        blocker: "No implementation until RED gate passes"
+      green:
+        action: "Create tab_renderers.py with TabRenderer + PersonaLayer"
+        gate: "python3 scripts/run_tests.py dir tests/support/onboarding/ — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "XSS safety via html.escape; type hints; docstrings; GV-031 fallback paths"
+        gate: "python3 scripts/run_tests.py dir tests/support/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_tab_renderer_render_tab_returns_str — render_tab() returns a str"
+        - "test_tab_renderer_unknown_tab_returns_generic_card — fallback to _no_data_card"
+        - "test_tab_renderer_esc_escapes_html — _esc('<script>') returns '&lt;script&gt;'"
+        - "test_tab_renderer_esc_escapes_ampersand — _esc('a&b') = 'a&amp;b'"
+        - "test_persona_layer_adapt_engineer_returns_str — PersonaLayer().adapt(html, 'engineer') returns str"
+        - "test_persona_layer_adapt_unknown_persona_passthrough — unknown persona returns html unchanged"
+        - "test_persona_layer_adapt_never_raises — even on internal error returns str"
+        - "test_persona_layer_adapt_empty_html_returns_empty — adapt('', 'engineer') returns ''"
+        - "test_persona_layer_adapt_architect_returns_str"
+        - "test_persona_layer_adapt_manager_returns_str"
+        - "test_persona_layer_personas_is_frozenset — PERSONAS type is frozenset"
+      green:
+        - "Create onboarding package __init__.py (empty)"
+        - "Create tab_renderers.py with TabRenderer + PersonaLayer"
+      refactor:
+        - "Type hints: render_tab(tab_id: str, manifest: DashboardManifest) -> str"
+        - "XSS safety: _esc uses html.escape()"
+        - "GV-031 compliance: adapt() has try/except fallback"
+
+    acceptance_criteria:
+      - "TabRenderer.render_tab() dispatches to per-tab method or falls back to _no_data_card"
+      - "TabRenderer._esc() uses html.escape — no raw user data in HTML"
+      - "PersonaLayer.adapt() never raises — returns html_fragment on any error (GV-031)"
+      - "PersonaLayer.PERSONAS = frozenset({'engineer', 'architect', 'manager'})"
+      - "11 onboarding tests ALL PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/support/onboarding/"
+      min_tests_pass: 11
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── Sub-phase D: DashboardGenerator wiring ────────────────────────────────────
+  - id: "phase-151-d"
+    title: "Wire DashboardGenerator → TabRenderer → PersonaLayer pipeline"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-151-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-035, GV-030, GV-032"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-151-c"]
+    prerequisite: "phase-151-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_modify:
+      - "cortex/dashboards/"  # identify DashboardGenerator file and wire TabRenderer
+      # Note: locate DashboardGenerator exact file before implementation:
+      # grep -r "class DashboardGenerator" cortex/dashboards/
+
+    implementation_guide: |
+      In DashboardGenerator (locate file with grep):
+        from cortex.orchestrators.support.onboarding.tab_renderers import TabRenderer, PersonaLayer
+
+        def __init__(self, ...) -> None:
+            ...
+            self._tab_renderer = TabRenderer()
+            self._persona_layer = PersonaLayer()
+
+        def render_tab(self, tab_id: str, manifest: ..., persona: str = "engineer") -> str:
+            raw_html = self._tab_renderer.render_tab(tab_id, manifest)
+            return self._persona_layer.adapt(raw_html, persona)
+
+      GV-032: No dashboard HTML tab output bypasses this pipeline.
+      All existing tab render call sites must route through render_tab() above.
+
+    tdd_cycle:
+      red:
+        action: "Write DashboardGenerator wiring test before any imports added"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_dashboard_generator_wiring.py — ALL FAIL"
+        blocker: "No code changes until RED gate passes"
+      green:
+        action: "Wire TabRenderer + PersonaLayer into DashboardGenerator"
+        gate: "python3 scripts/run_tests.py file tests/support/onboarding/test_dashboard_generator_wiring.py — ALL PASS"
+        blocker: "No REFACTOR until GREEN"
+      refactor:
+        action: "Verify GV-032: no tab render calls bypass pipeline; type hints"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
+
+    new_files:
+      - "tests/support/onboarding/test_dashboard_generator_wiring.py"
+
+    tdd_sequence:
+      red:
+        - "test_dashboard_generator_has_tab_renderer — DashboardGenerator has _tab_renderer attribute"
+        - "test_dashboard_generator_has_persona_layer — DashboardGenerator has _persona_layer attribute"
+        - "test_render_tab_routes_through_tab_renderer — TabRenderer.render_tab() called"
+        - "test_render_tab_routes_through_persona_layer — PersonaLayer.adapt() called"
+        - "test_render_tab_default_persona_engineer — default persona is 'engineer'"
+      green:
+        - "Wire TabRenderer + PersonaLayer into DashboardGenerator"
+      refactor:
+        - "Type hints on render_tab()"
+        - "GV-032: scan for any remaining direct HTML construction in DashboardGenerator tab methods"
+
+    acceptance_criteria:
+      - "DashboardGenerator.render_tab() routes through _tab_renderer.render_tab() → _persona_layer.adapt()"
+      - "Default persona is 'engineer'"
+      - "GV-032: no tab HTML emitted outside this pipeline"
+      - "All 5 wiring tests PASS"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2800
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false  # final sub-phase
+
+final_sub_phase: "phase-151-d"
+
+final_validation:
+  smoke_gate: "python3 scripts/run_tests.py smoke — ≥2800 baseline"
+  protected_roots_check: "python3 -c \"from cortex.orchestrators.health.constants import VACUUM_PROTECTED_ROOTS; assert 'cortex' in VACUUM_PROTECTED_ROOTS; print('OK')\""
+  tab_renderer_check: "python3 -c \"from cortex.orchestrators.support.onboarding.tab_renderers import TabRenderer, PersonaLayer; assert PersonaLayer().adapt('', 'bad') == ''; print('OK')\""
+  gv028_check: "grep 'GV-028' cortex-registry/core/capabilities-manifest.yaml | wc -l  # must be > 0"
+  gv034_check: "grep 'GV-034' cortex-registry/core/capabilities-manifest.yaml | wc -l  # must be > 0"
+
+completion_signal:
+  move_to: "cortex-registry/planning/phases/completed/phase-151-vacuum-source-protection-persona-dashboard.yaml"
+  master_yaml_update: "status: PLANNED → COMPLETE, completed_date: {date}"
