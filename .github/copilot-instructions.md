@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-03-04 (Production Readiness Audit) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
+**Updated:** 2026-03-12 (Skill Decomposition — 655→361 lines) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 ---
 
@@ -274,120 +274,6 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 
 ---
 
-## Development Standards
-
-| Rule | Description |
-|---|---|
-| CORE-002 | All output inline — never create .md/.txt report files |
-| CORE-008 | TDD mandatory — write failing test first, then implement |
-| CORE-011 | Type hints on all functions |
-| CORE-012 | Docstrings on all public APIs |
-| CORE-028 | File naming: snake_case only |
-| CORE-035 | Single canonical implementation — no duplicates |
-| CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
-| CORE-049 | Silent autonomous execution (progress bars only) |
-| CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full catalogue |
-| CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
-
-**Prompt-Layer Intelligence Protocol (PLIP-001 — SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`):**
-- ✅ Before every code-modifying operation: call `cortex_learning op=history` to surface prior failure patterns
-- ✅ Before every code-modifying operation: call `cortex_learning op=rca rca_action=query` to check prevention rules
-- ✅ If prior failures exist (confidence ≥ 0.4): surface in `## 🔍 Analysis` as `⚠️ Prior failure pattern: {description} (confidence: {score})`
-- ✅ After success: `cortex_learning op=emit signal_type=MILD_REWARD`
-- ✅ After failure: `cortex_learning op=emit signal_type=MILD_PUNISHMENT`
-- ✅ **Scope Lock (P1):** Every `op=history` and `op=emit` call MUST include a `scope` or `pattern_id` matching the prompt/agent's declared domain. Cross-domain pattern leakage is a P1 violation. Each prompt has a `🔒 Scope Lock` line declaring its allowed scopes. Agents inherit scope from their parent prompt. See `prompt-learning-protocol.yaml` § `scope_isolation` for the full domain map.
-- ❌ Exempt intents (no consult/record): QUERY, REPHRASE, INTRODUCE, DIGEST, DESIGN, PLAN, RCA
-- ❌ Never emit signals during silent autonomous execution dry-runs
-- ❌ Never query or emit patterns outside the prompt/agent's declared scope lock (P1 — PLIP-SCOPE audit check)
-
-**Principle Injection Policy (CORE-PRINCIPLE-TRIGGER — SSOT: `cortex-registry/core/principle-trigger-policy.yaml`):**
-- ✅ Principles render **only** for: QUERY, DESIGN, PLAN, INVESTIGATE, ONBOARD, INTRODUCE intents
-- ✅ One principle per response maximum — rendered as **FIRST element inside `## 🔍 Analysis`** (NOT in Zone 3 of the response header)
-- ✅ Render template (verbatim — blockquote format so it renders with the same left-accent bar as the header quote):
-  ```
-  ## 🔍 Analysis
-
-  > 💡 **Principle: {title}**
-  > {body}
-
-  {rest of analysis…}
-  ```
-- ✅ Body ≤200 characters — trim at word boundary if needed
-- ✅ Select from **`cortex-registry/knowledge/sdlc/high-value-principles.yaml`** (90 principles, 10 domains) — match domain to intent; prefer unused principles across consecutive responses (ring buffer n=20)
-- ✅ Complexity gate: suppress for requests ≤8 words with no analytical signal
-- ❌ Principles **never** in Zone 3 of the response header — they are analysis content, not page furniture
-- ❌ Principles **never** render for: IMPLEMENT, FIX, REFACTOR, DEBUG, AUDIT, HEALTH, VACUUM
-- ❌ Principles **never** render during silent autonomous execution (CORE-049)
-- ❌ Principles **never** render for simple one-line queries (≤8 words, no analytical signal)
-- ❌ **No inline principle list in `cortex-response-templates.md`** — the 12-principle sub-library has been removed. `high-value-principles.yaml` is the ONE approved source.
-- 🔒 Audit check P2-004 detects operational composition drift; drift-lock tests in `tests/intelligence/test_principle_drift_locks.py`
-
-**MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
-call `validate_orchestrator_context(orchestrator_context)` must guard the call:
-```python
-if orchestrator_context is not None:
-    validate_orchestrator_context(orchestrator_context)
-```
-This allows direct test invocation without a `MasterOrchestrator` context while still
-enforcing routing in production (where context is always supplied).
-
----
-
-## Workflow Composer Architecture
-
-**All code-touching operations flow through declarative workflow templates** — no inline procedural logic in prompts or agents.
-
-**Specification:** `cortex-registry/workflows/workflow-composer-spec.yaml`
-
-### 3-Tier Hierarchy
-
-| Tier | Purpose | Location |
-|------|---------|----------|
-| **Tier 1: Primitives** | Atomic, reusable steps (gates, loops, markers) | `cortex-registry/workflows/templates/primitives/` |
-| **Tier 2: Mode Workflows** | One per execution mode (IMPLEMENT, FIX, REFACTOR, etc.) | `cortex-registry/workflows/templates/{category}/` |
-| **Tier 3: Composite Pipelines** | Multi-mode compositions (audit-fix, totalrecall) | `cortex-registry/workflows/templates/composites/` |
-
-### Intent → Workflow Routing (SSOT: `workflow-composer-spec.yaml` § intent_routing)
-
-| Intent | Workflow Template | Pre-Gate |
-|--------|------------------|----------|
-| IMPLEMENT | `sdlc/implement-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| FIX | `sdlc/fix-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| REFACTOR | `quality/refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| AUDIT | `audit/audit-fix-pipeline.yaml` | — |
-| VACUUM | `maintenance/vacuum-workflow.yaml` | — |
-| HEALTH | `maintenance/health-check-workflow.yaml` | — |
-| DEBUG | `debugging/multi-stack-debug-pipeline.yaml` | — |
-| DIGEST | `lifecycle/digest-workflow.yaml` | — |
-| DISTILL | `lifecycle/distill-workflow.yaml` | — |
-| TOTALRECALL | `lifecycle/totalrecall-workflow.yaml` | — |
-| SYNC | `lifecycle/sync-workflow.yaml` | — |
-| TRAIN | `lifecycle/train-workflow.yaml` | — |
-| META-AUDIT | `governance/meta-audit-workflow.yaml` | — |
-| **FRONTEND** | **`frontend/html-view-lifecycle.yaml`** (generic HTML views) · **`frontend/docs-html-design-workflow.yaml`** (docs/ HTML/CSS/web) | **`primitives/governance/holistic-validation-gate.yaml`** |
-| TDD | `tdd/tdd-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| TYPESCRIPT | `frontend/typescript-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| CSHARP_REFACTOR | `backend/csharp-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| CSHARP_SECURITY | `backend/csharp-security-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-| SECURITY_AUDIT | `security/security-compliance-audit.yaml` | — |
-| ONBOARD | `lifecycle/onboarding-workflow.yaml` | — |
-| DECOMPOSE | `lifecycle/service-decomposition-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
-
-### Universal Primitives (injected into every code-modifying workflow)
-
-| Primitive | Purpose |
-|-----------|---------|
-| `primitives/execution/ac-marker-emit.yaml` | AC_START / AC_COMPLETE markers |
-| `primitives/execution/git-checkpoint.yaml` | Safe rollback point before changes |
-| `primitives/governance/dor-display.yaml` | Definition of Ready display |
-| `primitives/governance/holistic-validation-gate.yaml` | CORE-048 pre-execution gate |
-| `primitives/governance/challenge-gate.yaml` | Risk-based alternative presentation |
-| `primitives/governance/sweep-catalogue-open.yaml` | CORE-064 sweep tracking open |
-| `primitives/governance/sweep-catalogue-close.yaml` | CORE-064 sweep tracking close |
-| `primitives/validation/detect-fix-rescan-loop.yaml` | CORE-068 convergence gate |
-
----
-
 ## File Organization
 
 ```
@@ -427,123 +313,6 @@ docs/         ← User-facing documentation (HTML/CSS only)
 
 ---
 
-## Cross-Cutting Intelligence (Universal — All Orchestrators)
-
-**Every orchestrator invocation must emit AC markers** — handled by the `primitives/execution/ac-marker-emit.yaml` workflow primitive.
-
-**Primitive:** `cortex-registry/workflows/templates/primitives/execution/ac-marker-emit.yaml`
-**Persistence:** `.cortex-runtime/traces/orchestrator-traces.db`
-**Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate` (op: `compliance`)
-**Audited by:** Check #19 (SQLite activity log health) + Meta-Audit Check #23
-
-**AC Marker Format Standard:** `AC-{DOMAIN}-{SEQUENCE}` (e.g. `AC-P89-001`, `AC-CORE-042`). Domain is the phase or module identifier; sequence is a 3-digit zero-padded counter.
-
-**AC Marker Rules:**
-- `AC_START` at entry point of every public orchestrator method
-- `AC_COMPLETE` on success with ✅ + timing (ms)
-- `AC_COMPLETE` on failure with ❌ + error classification
-- No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation)
-
-**SQLite Activity Logging:** 7 databases in `.cortex-runtime/`:
-
-| Database | Path | Tables | Purpose |
-|---|---|---|---|
-| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`, `trace_*` | Primary trace store |
-| rca-store | `rca/rca_store.db` | `rca_analyses`, `prevention_rules`, `recurrence_*` | Root cause analysis |
-| audit | `audit.db` | `audit_events`, `orchestrator_traces`, `governance_checks`, `phase_progress` | Audit events |
-| governance | `governance.db` | `scaffolder_audit_log` | Scaffolder audit |
-| conversations | `state/conversations.db` | `conversations`, `turn_records` | Session state |
-| wiring-audit | `wiring/contract_validation_audit.db` | `validation_audit`, `contract_versions` | Wiring contracts |
-| intelligence-audit | `intelligence/intelligence_audit.db` | `intelligence_audit` | Intelligence traces |
-
-**Cleanup:** `python3 scripts/refresh_prompt_suite.py --db-cleanup` (30-day retention + VACUUM). Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip (CI environments).
-
----
-
-## ⚡ Quick Command Reference
-
-| Command | What It Does | Stages |
-|---------|-------------|--------|
-| **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages (see below) |
-| `/audit` | Scan only, no auto-fix | Stages 1–6 |
-| `/vacuum` | Markdown sprawl + root clutter + OS artifacts + build artifacts cleanup | Stage 5 only |
-| `/health` | All 22 orchestrator health endpoints | Stage 4 only |
-| `/healthcheck` | Full test suite (all tiers, parallel) | On-demand |
-| `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
-| `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
-| `/distill {file}` | Chat transcript distillation → synthesised executable prompt | — |
-| `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
-| `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
-| `/totalrecall` | Production certification — 10-phase autonomous pipeline (delta→drift→regression→optimize→wire→memory→vacuum→db→harden→certify) | 10 phases |
-| `/review {pr}` | PR-scoped code review: security + quality + APPROVE/BLOCK verdict | 6 stages |
-| `/feedback` | Cross-repo capability extraction with sanitized backport instructions | 6 stages |
-| `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
-| `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
-| `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies: 3 Python + 5 multi-stack) | INJECT |
-| `/debug-cleanup` | Remove all CORTEX_DEBUG markers across all languages | CLEANUP |
-| `cortex_workflow` MCP | Execute a workflow template with convergence loop directly — `op=execute`, `template_id=sdlc/implement-workflow` | MCP tool |
-
-**Phase 85 — Response Format (canonical):** Every progress display uses the **phase-list+bar** format (not bar-only). SSOT: `.github/templates/cortex-response-templates.md`. Engagement blocks: `BLOCK-ENGAGEMENT-BREADCRUMB` (routing chain, always rendered), `BLOCK-ENGAGEMENT-TIMELINE` (collapsible timing), `BLOCK-PHASE-ROADMAP` (full journey at operation start).
-
-**Phase 86 — Debug strategies (8 total):**
-- `TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy` — existing Python strategies
-- `FrontendConsoleStrategy` (JS/TS/React/Angular/Vue), `HtmlVisionMappingStrategy` (Vision API + DOM), `ApiTraceStrategy` (REST/GraphQL/gRPC), `SqlTraceStrategy` (SQL Server/Oracle/PostgreSQL), `DotNetTraceStrategy` (C#/.NET) — Phase 86 additions
-
-**Phase 87 — RCA Memory Engine (121 GREEN tests):**
-- `RCAEngine` — 4 methodologies: Five-Whys, Fishbone (Ishikawa), Fault-Tree, Causal-Chain
-- `RCAStore` — SQLite-backed persistence at `.cortex-runtime/traces/rca.db`
-- Exposed via `cortex_learning` MCP tool (op=`rca`, sub-actions: `analyze|query|list`)
-- Category → methodology auto-selection: TECHNOLOGY→Five-Whys, PROCESS/PEOPLE→Fishbone, DATA→Causal-Chain
-- Each completed RCA generates a `PreventionRule` (ADVISORY by default)
-
-### `/audit fix` — 9-Stage Pipeline
-
-**Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
-**Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
-**Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
-**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db`
-**Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
-
----
-
-## 📋 Master Plan Decomposition — THIN INDEX CONTRACT
-
-**`cortex-master.yaml` is a REFERENCE INDEX only — never a detail document.**
-
-| Rule | Detail |
-|------|--------|
-| **Max size** | ≤ 800 lines (alarm at 700) |
-| **Prohibited inline** | `phases`, `gap_catalogue`, `tdd_sequence`, `rewrites`, `new_files`, `files_to_edit`, `implementation`, `code_snippets` |
-| **Allowed per entry** | `id`, `title`, `status`, `priority`, `sweep_id`, `gaps`, `sub_phases`, `file`, `note`, `phases` (list of IDs only) |
-| **Detail location** | `cortex-registry/planning/phases/planned/<phase-id>.yaml` (active/upcoming) |
-| **Completed detail** | `cortex-registry/planning/phases/completed/<phase-id>.yaml` |
-| **Template** | `cortex-registry/planning/phases/_template.yaml` |
-| **Lifecycle governance** | `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml` |
-
-### Decomposition Checks — Run at TWO points:
-
-**① BEFORE adding any phase to cortex-master.yaml (checkpoint_create):**
-1. Create dedicated file first at `cortex-registry/planning/phases/planned/<phase-id>.yaml`
-2. Use `cortex-registry/planning/phases/_template.yaml` as scaffold
-3. Write ALL detail in the dedicated file (gap catalogue, TDD sequences, acceptance criteria)
-4. Add ONLY a thin reference entry to `cortex-master.yaml`
-5. Verify `cortex-master.yaml` is still ≤ 800 lines: `wc -l cortex-registry/cortex-master.yaml`
-6. Validate YAML: `python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"`
-
-**② BEFORE marking any phase COMPLETE in the pipeline (checkpoint_complete):**
-1. All gaps in `sweep_catalogue` have `status: CLOSED` (CORE-064)
-2. All acceptance criteria documented with ✅ in the dedicated file
-3. Move dedicated file from `planned/` → `completed/`
-4. Update `file:` reference in `cortex-master.yaml` to point to `completed/`
-5. Update `status: COMPLETE` in both `cortex-master.yaml` entry and dedicated file
-6. Run smoke gate: `make test-smoke`
-7. Verify `cortex-master.yaml` remains ≤ 800 lines
-
-### Why This Exists:
-`cortex-master.yaml` grew from ~150L to 3,007L because inline phase detail was written directly to it. This caused: 40+ YAML syntax errors, un-reviewable diffs, context exhaustion when loading the file, and no single-file accountability for each phase's detail. The THIN INDEX CONTRACT prevents recurrence.
-
----
-
 ## References
 
 - Architecture: `docs/architecture-recommendation.md`
@@ -559,90 +328,27 @@ docs/         ← User-facing documentation (HTML/CSS only)
 
 ---
 
-## ⛔ Test Execution — MANDATORY RULES
+## Domain Skills (on-demand — loaded only when relevant)
 
-**Four-tier optimised execution. Never bypass `run_tests.py`.**
+Detail that was previously in this file is now available through domain skills (loaded automatically by the model when matched):
 
-| Mode | Command (macOS/Linux) | Command (Windows) | When to use |
-|---|---|---|---|
-| **preflight** | `make test-preflight` | `python scripts\run_tests.py preflight` | `/audit fix` Stage 9 — critical wiring (< 10s) |
-| **changed** | `make test-changed` | `python scripts\run_tests.py changed` | TDD inner loop — after every save |
-| **smoke** | `make test-smoke` | `python scripts\run_tests.py smoke` | Quick sanity before commit (< 60s) |
-| **unit** | `make test` | `python scripts\run_tests.py unit` | Default local dev |
-| **parallel** | `make test-parallel` | `python scripts\run_tests.py parallel` | Pre-commit full speed |
-| **healthcheck** | `make test-healthcheck` | `python scripts\run_tests.py healthcheck` | Full suite on-demand (parallel) |
-| **batch** | `make test-batch` | `python scripts\run_tests.py batch` | CI gate (sequential) |
-
-**Three Layers:**
-- **Layer 1 — Parallel:** `pytest-xdist` with `-n auto --dist loadscope`. 10 cores → ~3–4× faster. Falls back to sequential if xdist is absent.
-- **Layer 2 — Smart:** `pytest-testmon` with `--testmon`. Runs only tests covering changed source files. Ideal for TDD. Incompatible with xdist (runs sequentially). Set `CORTEX_DISABLE_TESTMON=true` for a clean full run.
-- **Layer 3 — Import:** `--import-mode=importlib` in `pytest.ini`. Cuts cold collection from ~17s → ~7s.
-
-| ✅ DO — Canonical Methods | ❌ NEVER — Forbidden Patterns |
+| Skill | Covers |
 |---|---|
-| `make test-preflight` / `make test-smoke` | `python3 -m pytest tests/ -x -q` |
-| `python3 scripts/run_tests.py {mode}` | `pytest --tb=no -q` (silences batch reporter) |
-| VS Code tasks (tasks.json) — all modes | `pytest -o addopts=` (wipes import-mode + sugar settings) |
-| `CORTEX_WORKERS=4 make test-parallel` | `.venv/bin/python -m pytest` (hard-codes Unix venv path) |
+| `/cortex` | Intent classification gateway, command reference, overlap disambiguation |
+| `/cortex-tdd` | IMPLEMENT/FIX/REFACTOR, TDD cycle, workflow templates, convergence gates |
+| `/cortex-audit` | `/audit fix`, `/health`, 9-stage pipeline, 29+12 checks, drift locks |
+| `/cortex-debug` | `/debug`, 8 injection strategies, multi-stack pipeline |
+| `/cortex-rca` | `/rca`, 4 methodologies, URS learning, prevention rules |
+| `/cortex-plan` | Master plan, THIN INDEX CONTRACT, `/totalrecall`, `/digest`, phase lifecycle |
+| `cortex-governance` | CORE rules, AC markers, enforcement, dissolved packages *(auto-loaded, not in slash menu)* |
 
-**When running tests in a terminal, always use:**
-```
-make test-preflight  # fastest — audit gate (< 10s)
-make test-changed    # TDD loop (testmon)
-make test-smoke      # sanity gate (< 60s)
-```
-or a VS Code task from `tasks.json`.
-
-**Windows users:** All `make` commands have VS Code Task equivalents in `tasks.json`.
-Use `python scripts\run_tests.py {mode}` in PowerShell/cmd — `python3` may not be on PATH.
-
-**Environment overrides:**
-- `CORTEX_WORKERS=4` — cap xdist to 4 workers (CI with limited cores)
-- `CORTEX_DISABLE_PARALLEL=true` — force sequential (any mode)
-- `CORTEX_DISABLE_TESTMON=true` — skip testmon DB (clean run after large refactor)
-
----
-
-## 🔄 Self-Healing Prompt Suite — Repeatable Refresh Playbook
-
-**Script:** `python3 scripts/refresh_prompt_suite.py`
-**Purpose:** Regenerate `copilot-instructions.md`, `AGENT-INDEX.md`, and validate all prompts/agents against live architecture.
-
-### Playbook Steps (execute in order)
-
-| Step | Command | What It Does |
-|---|---|---|
-| 1 | `python3 scripts/refresh_prompt_suite.py --counts-only` | Introspect live architecture: orchestrators, MCP tools, tests, governance |
-| 2 | `python3 scripts/refresh_prompt_suite.py --db-cleanup` | Enforce 30-day retention, delete orphaned AC_START, VACUUM all 7 databases |
-| 3 | `python3 scripts/refresh_prompt_suite.py` | Full refresh: cleanup → counts → validate → report |
-| 4 | `python3 scripts/refresh_prompt_suite.py --dry-run` | Preview all changes without writing |
-
-### When to Run
-
-- **After every phase completion** — counts drift, new orchestrators/tools added
-- **After `/audit fix`** — validates prompt/agent accuracy against live state
-- **After major refactoring** — ensures no stale references to deleted files
-- **Monthly maintenance** — SQLite cleanup + VACUUM
-
-### SQLite Cleanup Details
-
-| Database | Retention | Cleanup Actions |
-|---|---|---|
-| orchestrator-traces | 30 days | Delete old traces, orphaned AC_START, VACUUM |
-| rca-store | 30 days | Retain analyses, prune old prevention rules |
-| conversations | 90 days | Longer retention for session continuity |
-| All others | 30 days | Standard retention + VACUUM |
-
-**Guard:** Set `CORTEX_DISABLE_DB_CLEANUP=true` to skip cleanup in CI environments.
-
-### Architecture Drift Detection
-
-The playbook detects drift between documentation and live code:
-- Orchestrator file count mismatch → P0 violation
-- MCP tool registry vs tool files mismatch → P1 violation
-- Intent types in `canonical_enums.py` not covered in agent routing → P1 violation
-- `cortex-master.yaml` exceeding 500 lines → P0 violation
-- Stray `.db` files outside `.cortex-runtime/` → P1 violation
+**File-scoped instructions** (auto-injected when matching files are open):
+- `cortex-python.instructions.md` → `cortex/**/*.py`
+- `cortex-tests.instructions.md` → `tests/**/*.py`
+- `cortex-yaml.instructions.md` → `cortex-registry/**/*.yaml`
+- `cortex-prompts.instructions.md` → `.github/**/*.md`
+- `cortex-html.instructions.md` → `docs/**/*.html`
+- `cortex-workflows.instructions.md` → `cortex-registry/workflows/**/*.yaml`
 
 ---
 

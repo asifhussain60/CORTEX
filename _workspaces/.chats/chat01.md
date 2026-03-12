@@ -1,95 +1,222 @@
-asifhussain60: Follow instructions in [cortex-doc.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-doc.prompt.md).
-redesign the #file:product-owner.html using #file:doc_best_practices.yaml. Create a visual balance of content, text and d3.js visulization. All should be high value. Add mvp sections for the following ensure there is no duplicate:
-- Ingest cycle
-- business knowledge yamls for letters, emails, documentation, templates - can create on demand.
-Review all CORTEX capabilies holistically and systematically and create a design a high value view without duplication, repetition. Content and visulizations should flow naturally building understanding of CORTEX specifically for PO. Showcase  only PO related aspect of CORTEX
+User: Follow instructions in [create-skill.prompt.md](file:///Users/asifhussain/.vscode/extensions/github.copilot-chat-0.39.0/assets/prompts/create-skill.prompt.md).
 
-GitHub Copilot: # 🧠 CORTEX Designing
+GitHub Copilot: # 🧠 CORTEX Introducing
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
 
 ---
 
-> *"Good design is as little design as possible."*
-> — Dieter Rams, **Ten Principles for Good Design**
+> *"Before software can be reusable it first has to be usable."*
+> — Ralph Johnson, **Patterns of Enterprise Application Architecture**
 
 ---
 
-🧭 Orchestration: Classifier → Architect → Documentation Orchestrator
+Let me load the `agent-customization` skill first to follow the correct template and principles. 
 
-Let me gather all the context I need before redesigning. 
+Read skill [agent-customization](copilot-skill:/agent-customization/SKILL.md?vscodeLinkType%3Dskill)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/doc_best_practices.yaml#1-1), lines 1 to 100
+Read skill `agent-customization`: [](copilot-skill:/agent-customization/references/skills.md)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1-1), lines 1 to 100
+No prior workflow emerged from the conversation to generalize. Let me interview you to design the right skill. 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/doc_best_practices.yaml#100-100), lines 100 to 300
+Analyzing your answers...
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#100-100), lines 100 to 400
+Good. Let me explore the existing .github structure to avoid duplication and understand what's already there. 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#400-400), lines 400 to 700
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/doc_best_practices.yaml#300-300), lines 300 to 500
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#700-700), lines 700 to 1100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/agents)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/knowledge/doc_best_practices.yaml#600-600), lines 600 to 916
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/scripts)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1100-1100), lines 1100 to 1500
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/scripts)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles/product-owner.html#1500-1500), lines 1500 to 2121
+No existing `skills/` directory. I have everything I need to draft a comprehensive skill. Building now. 
 
-Now I have a complete picture of the existing file. Let me also check the other role pages and content files for reference patterns before building the redesign. 
+Created 3 todos
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/roles)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content)
+Starting: *Validate YAML frontmatter and file structure* (2/3)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/09-lifecycle-from-idea-to-production.md#1-1), lines 1 to 80
+Ran terminal command:  python3 -c "
+import yaml, re
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/08-learning-institutional-memory.md#1-1), lines 1 to 80
+with open('/Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md', 'r') as f:
+    content = f.read()
 
-Now I have full context. Let me check the ingest cycle and business knowledge YAML capabilities in CORTEX: 
+# Extract frontmatter
+fm_match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+if fm_match:
+    try:
+        fm = yaml.safe_load(fm_match.group(1))
+        print('✅ Frontmatter valid')
+        print(f'  name: {fm[\"name\"]}')
+        print(f'  description length: {len(fm[\"description\"])} / 1024 chars')
+        print(f'  argument-hint: {fm.get(\"argument-hint\", \"(none)\")}')
+    except yaml.YAMLError as e:
+        print(f'❌ YAML error: {e}')
+else:
+    print('❌ No frontmatter found')
 
-Searched text for `ingest|digest|business.*yaml|knowledge.*yaml|template.*yaml|letter|email.*template` (`**/docs/.content/**`), 20 results
+# Check folder name matches
+import os
+folder = os.path.basename(os.path.dirname('/Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md'))
+if folder == fm.get('name'):
+    print(f'✅ Folder name matches name field: {folder}')
+else:
+    print(f'❌ Mismatch: folder={folder}, name={fm.get(\"name\")}')
 
-Searched for files matching `**/cortex-registry/knowledge/best-practices/**`, 7 matches
+# Line count
+lines = content.count('\n')
+print(f'✅ Line count: {lines} / 500 recommended max')
+"
 
-Searched text for `business.*knowledge|company.*yaml|letter|email.*template|letter.*template|on-demand.*doc|document.*generate` (`**/cortex-registry/**`), 20 results
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/.content/16-knowledge-repository.md#1-1), lines 1 to 80
+All validations pass. Let me now identify and address any weak spots. 
 
-Now I have everything I need. Let me also check the digest / ingest pipeline content: 
+Starting: *Review weak spots and refine* (3/3)
 
-Searched text for `digest.*pipeline|ingest.*pipeline|3-pipeline|content.*ingest` (`**/docs/.content/**`), 1 result
+The most ambiguous parts of the current draft are:
 
-I now have complete context. I'll build the fully redesigned page. The key design decisions:
+1. **Description keyword coverage** — `/frontend`, `/typescript`, `/csharp`, `/decompose`, `/train`, `/meta-audit` commands are missing from the description trigger list (agents search descriptions).
+2. **Branching logic depth** — the Intent Classification Gateway table is good but could have a Decision Tree for when multiple intents overlap (e.g., "fix a failing test" → FIX or DEBUG?).
+3. **`MCP tool: validate_orchestrator_context` guard** — the MCP authoring rule is missing from the Governance section.
 
-1. **7 high-value sections** with no duplication — each builds on the last
-2. **3 D3.js visualisations** — ingest cycle radial, sprint capacity donut pair, delivery timeline
-3. **New sections**: Ingest Cycle + Business Knowledge YAMLs (on-demand document generation)
-4. **Removed**: redundant ROI stats section (merged into Change Report), redundant DoR/DoD steps (consolidated into governance pipeline), redundant command list (one clear table) 
+Let me fix all three now:  
 
-asifhussain60: @agent Try Again
+Using "Multi-Replace String in Files"
 
-GitHub Copilot: Searched text for `digest.*3.*pipeline|three.*pipeline|ingest.*cycle|knowledge.*ingest`, 20 results
+Replacing 1 lines with 1 lines in [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/workflows/templates/lifecycle/digest-workflow.yaml#1-1), lines 1 to 120
 
-I now have all the context I need. Let me build the complete redesigned product-owner.html. The design will have these sections in a natural PO journey:
+```
 
-1. **Hero** — outcome-led, evidence-first
-2. **CORTEX for POs** — what it is (D3 radar chart showing PO superpowers)
-3. **Ingest Cycle** — new section: 3-pipeline knowledge ingestion
-4. **Business Knowledge YAMLs** — on-demand letters, emails, docs, templates
-5. **Change Intelligence Pipeline** — D3 animated flow
-6. **Agile Intelligence** — AC + SWAGs (2-col)
-7. **Requirements Engineering** — 4-stage pipeline
-8. **DoR→DoD Governance** — 4-card flow
-9. **Institutional Memory / RCA** — D3 donut + table
-10. **Velocity Analytics** — D3 donut charts
-11. **PO Command Reference**
-12. **CTA** 
+```
 
-asifhussain60: @agent Try Again
 
-GitHub Copilot: I now have everything needed. Let me build the complete redesign: 
+Replacing 3 lines with 15 lines in [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md)
+
+
+```
+
+```
+
+
+Replacing 2 lines with 40 lines in [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md)
+
+
+```
+
+```
+
+
+Ran terminal command:  python3 -c "
+import yaml, re
+with open('/Users/asifhussain/PROJECTS/CORTEX/.github/skills/cortex/SKILL.md') as f:
+    content = f.read()
+fm = yaml.safe_load(re.match(r'^---\n(.*?)\n---', content, re.DOTALL).group(1))
+print(f'description length: {len(fm[\"description\"])} / 1024')
+print(f'line count: {content.count(chr(10))} (max 500 rec)')
+"
+
+
+532 lines — slightly over the 500 recommended soft limit, but within acceptable range for a framework this comprehensive. The 500 line cap is a guideline, not hard enforcement. Description is well within the 1024 char limit at 548. 
+
+Completed: *Review weak spots and refine* (3/3)
+
+---
+
+The skill is created and validated at SKILL.md.
+
+**What it produces:**
+- A slash command cortex (and auto-loaded on any CORTEX-related request) that gives agents a structured routing guide across all 17+ CORTEX commands
+- Intent Classification Gateway table — routes to the right section instantly
+- Overlap Disambiguation table — resolves ambiguous cases (e.g. "failing test" → `/debug` vs `/fix`)
+- Full procedure steps per command: audit, debug, implement, refactor, test, review, RCA, totalrecall, domain-specific workflows
+- Embedded governance rules (CORE-002 through CORE-068) and MCP authoring guard
+
+**Example prompts to try:**
+```
+/cortex audit          → routes to Audit & Quality section
+/cortex debug          → routes to Debugging Pipeline with 8 strategies
+/cortex implement      → routes to TDD workflow with CORE-008 enforcement
+/cortex                → shows Intent Classification Gateway
+```
+
+**Suggested next customizations:**
+1. **`.github/skills/cortex-tdd/SKILL.md`** — a dedicated TDD skill with the full red-green-refactor cycle and test tier guidance
+2. **`.github/skills/cortex-rca/SKILL.md`** — deep-dive RCA skill with methodology selection trees and prevention rule templates
+3. **`.github/instructions/cortex-governance.instructions.md`** — always-on governance rules applied to every file edit (applyTo: `cortex/**/*.py`)
+
+✅ **All work is complete.** The skill is live and will be auto-discovered by Copilot Chat when any CORTEX command or workflow is mentioned.
+
+Made changes.
+
+User: how do the skills work?
+
+GitHub Copilot: # 🧠 CORTEX Answering
+**Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
+
+---
+
+> *"Simplicity is prerequisite for reliability."*
+> — Edsger W. Dijkstra, **Selected Writings on Computing**
+
+---
+
+## 🔍 Analysis
+
+> 💡 **Principle: Progressive Disclosure**
+> Surface only what's needed at each stage. Overloading agents with context upfront burns tokens and degrades precision.
+
+Skills use a **3-stage progressive loading** model:
+
+### Stage 1 — Discovery (~100 tokens)
+When you type in Copilot Chat, the agent reads only the `name` and `description` fields from every SKILL.md frontmatter. This is how it decides whether to load a skill — the description is the **discovery surface**. If your keywords aren't in it, the skill is invisible.
+
+### Stage 2 — Load (<5,000 tokens)
+When the description matches the request, the agent loads the full SKILL.md body into context. This contains procedures, tables, commands, decision trees.
+
+### Stage 3 — Resources (on demand)
+Additional files (scripts, reference docs, templates) are loaded **only when explicitly referenced** from within SKILL.md — e.g. `[See reference](./references/deep-dive.md)`. They are never loaded unless needed.
+
+---
+
+### Invocation — two ways
+
+| Method | How |
+|---|---|
+| **Slash command** | Type cortex in chat → appears in the `/` menu |
+| **Auto-loaded** | Agent detects the description matches → loads silently |
+
+Control this with frontmatter:
+
+```yaml
+user-invocable: false          # hides from slash menu, still auto-loads
+disable-model-invocation: true # appears in slash menu, never auto-loads
+# both omitted = default: slash command + auto-load both on
+```
+
+---
+
+### File layout
+
+```
+.github/skills/cortex/
+├── SKILL.md           ← frontmatter (discovery) + body (procedures)
+├── scripts/           ← executable assets loaded on demand
+├── references/        ← deep-dive docs, loaded only when linked
+└── assets/            ← templates / boilerplate
+```
+
+The `name` field in frontmatter **must match the folder name** exactly — a mismatch causes silent failure with no error.
+
+---
+
+### Why it beats putting everything in copilot-instructions.md
+
+copilot-instructions.md is always-on — it burns context on every interaction regardless of relevance. Skills only load when relevant, keeping the context window lean for unrelated tasks.
+
+✅ **All work is complete.**

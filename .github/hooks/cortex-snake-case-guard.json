@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python3 scripts/hooks/snake-case-guard.py",
+        "timeout": 10
+      }
+    ]
+  }
+}

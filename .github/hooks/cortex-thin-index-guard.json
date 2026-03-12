@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python3 scripts/hooks/thin-index-guard.py",
+        "timeout": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python3 scripts/hooks/import-guard.py",
+        "timeout": 10
+      }
+    ]
+  }
+}
