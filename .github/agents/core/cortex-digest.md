@@ -287,16 +287,8 @@ Score the source content. If score >= 5 -> auto-activate Pipeline 1. Score 3-4 -
 
 ---
 
-## Deleted Constructs -- Never Reference
-
-- `cortex/brain/` -- dissolved into `cortex/orchestrators/`, `cortex/intelligence/`, `cortex/governance/`
-- `cortex_intelligence/` -- merged into `cortex/intelligence/`
-- `cortex_lens/` -- merged into `cortex/lens/`
-- `cortex_digest_session` -- removed MCP tool (use `cortex_bulk_digest_files`)
-- `cortex_capture_metrics` -- use `cortex_metrics` (op: `capture`)
-- `cortex_query_governance` -- use `cortex_governance` (op: `query`)
-- Phase 49 / CCL / CrystallizedContext -- removed constructs
-- `_archive/` -- deleted directory
+## ⛔ Deleted Constructs
+See `AGENT-INDEX.md` § ⛔ Deleted Constructs for the full list. Key: `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`, `cortex_process_request`, `cortex_lens_analyze`.
 
 ---
 
@@ -306,6 +298,6 @@ Score the source content. If score >= 5 -> auto-activate Pipeline 1. Score 3-4 -
 - BulkDigestOrchestrator: `cortex/orchestrators/support/bulk_digest_orchestrator.py`
 - DigestSessionOrchestrator: `cortex/orchestrators/support/digest_session_orchestrator.py`
 - Intelligence Engine: `cortex/intelligence/learning/digest/`
-- MCP: 29 registered (39 target) tools in `cortex/mcp/tools/`
+- MCP: 36 registered tools in `cortex/mcp/tools/` (58 tool files)
 
 > **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

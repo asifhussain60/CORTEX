@@ -6,10 +6,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
-try:
-    import yaml
-except ImportError:
-    yaml = None  # type: ignore[assignment]
+import yaml
 
 _PATTERNS_FILE = (
     Path(__file__).parent.parent.parent.parent

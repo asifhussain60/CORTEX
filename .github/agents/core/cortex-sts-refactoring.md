@@ -321,10 +321,5 @@ P1 violations → proceed with mandatory inline remediation plan.
 
 ---
 
-## ⛔ Deleted Constructs — Never Reference
-
-- `cortex/brain/` — dissolved
-- `cortex_intelligence/` — merged into `cortex/intelligence/`
-- `cortex_lens/` — merged into `cortex/lens/`
-- `_archive/` — deleted directory
-- Phase 49 / CCL / CrystallizedContext — removed
+## ⛔ Deleted Constructs
+See `AGENT-INDEX.md` § ⛔ Deleted Constructs for the full list. Key: `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`, `cortex_process_request`, `cortex_lens_analyze`.

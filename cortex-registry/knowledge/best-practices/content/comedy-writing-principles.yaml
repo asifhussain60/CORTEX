@@ -703,13 +703,13 @@ comic_design_principles:
       but text must stay within safe zone.
     severity: P1
 
-  character_consistency_rules:
-    - rule: "P0 — ALL prompts MUST reference CHARACTER-CONSISTENCY-SHEET.md and copy canonical face/body blocks verbatim"
-    - rule: "P0 — Asif's face proportions (round cheeks, thick glasses, wild hair) are IDENTICAL across all 28+ images"
-    - rule: "P0 — Miss G's face (canonical block) is copied EXACTLY — no paraphrasing, no 'similar' descriptions"
-    - rule: "P0 — CB's dome shape, chassis proportions, and LED eyes are consistent — only dome CONTENTS evolve"
-    - rule: "P1 — Miss G's outfit MUST be a different national dress in EVERY image — no repeats within same chapter"
-    - rule: "P1 — Miss G's hair style MUST change per image — rotating through curly style variations"
-    - rule: "P1 — Each prompt must specify VISUAL DISTINCTION FROM sibling variants (a vs b vs c)"
-    - rule: "P2 — Background details accumulate but never disappear (whiteboard annotations, sticky notes, coffee stains)"
+character_consistency_rules:
+  - rule: "P0 — ALL prompts MUST reference CHARACTER-CONSISTENCY-SHEET.md and copy canonical face/body blocks verbatim"
+  - rule: "P0 — Asif's face proportions (round cheeks, thick glasses, wild hair) are IDENTICAL across all 28+ images"
+  - rule: "P0 — Miss G's face (canonical block) is copied EXACTLY — no paraphrasing, no 'similar' descriptions"
+  - rule: "P0 — CB's dome shape, chassis proportions, and LED eyes are consistent — only dome CONTENTS evolve"
+  - rule: "P1 — Miss G's outfit MUST be a different national dress in EVERY image — no repeats within same chapter"
+  - rule: "P1 — Miss G's hair style MUST change per image — rotating through curly style variations"
+  - rule: "P1 — Each prompt must specify VISUAL DISTINCTION FROM sibling variants (a vs b vs c)"
+  - rule: "P2 — Background details accumulate but never disappear (whiteboard annotations, sticky notes, coffee stains)"
 

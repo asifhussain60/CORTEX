@@ -339,11 +339,24 @@ layout:
       hero_to_first_section:    { token: "--space-2xl", px: 48, tailwind: "pb-12 + pt-12 on first section" }
       glass_panel_to_glass_panel: { token: "--space-lg", px: 24, tailwind: "my-6 (existing convention)" }
     tailwind_px_map:
-      pt-4: 16  pt-6: 24  pt-8: 32  pt-10: 40  pt-12: 48
-      pb-4: 16  pb-6: 24  pb-8: 32  pb-10: 40  pb-12: 48
-      mt-4: 16  mt-6: 24  mt-8: 32
-      mb-4: 16  mb-6: 24  mb-8: 32
-      "space-y-16": 64  "space-y-24": 96
+      pt-4: 16
+      pt-6: 24
+      pt-8: 32
+      pt-10: 40
+      pt-12: 48
+      pb-4: 16
+      pb-6: 24
+      pb-8: 32
+      pb-10: 40
+      pb-12: 48
+      mt-4: 16
+      mt-6: 24
+      mt-8: 32
+      mb-4: 16
+      mb-6: 24
+      mb-8: 32
+      space-y-16: 64
+      space-y-24: 96
     enforcement:
       p1_threshold_px: 4   # deviation ±4px → P1 FLAG
       p0_threshold_px: 8   # deviation >8px → P0 BLOCK

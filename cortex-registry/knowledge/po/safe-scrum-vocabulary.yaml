@@ -1,5 +1,6 @@
 id: safe-scrum-vocabulary
 version: "1.0"
+domain: "product-management"
 description: "SAFe/Scrum terminology translation for CORTEX PO suite (GAP-129-06)"
 governance_authority: "CORE-012, CORE-028"
 

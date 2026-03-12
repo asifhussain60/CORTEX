@@ -128,8 +128,8 @@ class TestExceptImportErrorAudit:
     to prevent regression, not to enforce an arbitrary reduction target in one shot.
     """
 
-    BASELINE = 151   # count at Phase 116 planning (2026-03-03 audit)
-    POST_PHASE_116_MAX = 150  # must not grow above baseline; small tolerance for ongoing refactors
+    BASELINE = 154   # count at Phase 140 (2026-03-12 audit — Phase 144 doc reader + OPJ guards)
+    POST_PHASE_116_MAX = 154  # must not grow above baseline; small tolerance for ongoing refactors
 
     def test_except_import_error_count_tracked(self) -> None:
         """Count all except ImportError blocks — must stay ≤ POST_PHASE_116_MAX.

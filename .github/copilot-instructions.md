@@ -209,7 +209,7 @@ Phase-list+bar format is MANDATORY — bar-only is a P1 violation. See SSOT for 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **312 Orchestrator files** across 14 domains (`core:137 domain:34 support:59 health:27 intelligence:16 persona:6 workflow:7 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) — all satisfy IOrchestrator protocol
-- **36 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 56 tool files in `cortex/mcp/tools/`
+- **36 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 58 tool files in `cortex/mcp/tools/`
 - **60 Governance YAMLs** across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -231,7 +231,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |---|---|
 | Package | `cortex` (single canonical) |
 | Orchestrator files | 312 across 14 domains in `cortex/orchestrators/` |
-| MCP Tools | 36 registered in `mcp_registry.py`; 56 tool files in `cortex/mcp/tools/` |
+| MCP Tools | 36 registered in `mcp_registry.py`; 58 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 21 under `cortex/` |
 | Governance YAMLs | 60 across `cortex-registry/core/` (26) and `cortex-registry/governance/` (34) |
 | Test Suite | ~20,897 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
@@ -393,7 +393,7 @@ enforcing routing in production (where context is always supplied).
 ```
 cortex/              ← Python source (21 dirs)
   orchestrators/     ← 312 orchestrator files across 14 domains (core:137 domain:34 support:59 health:27 intelligence:16 +more)
-  mcp/tools/         ← 36 registered MCP tools (56 tool files)
+  mcp/tools/         ← 36 registered MCP tools (58 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

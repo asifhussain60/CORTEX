@@ -1,5 +1,6 @@
 id: risk-signal-patterns
 version: "1.0"
+domain: "product-management"
 description: "Risk signal patterns for the PO Risk Register (GAP-129-12)"
 governance_authority: "CORE-012, CORE-028"
 

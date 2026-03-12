@@ -1,0 +1,154 @@
+# CORTEX Phase Plan — Phase 140
+# Source: GitHub Issue #17 (FB-2026-03-09-074435-007)
+# Backport Order: 1 of 7 (standalone, no dependencies)
+
+id: "phase-140"
+title: "Production Hardening — Dependency Audit + Prompt/Agent Alignment"
+created: "2026-03-09"
+status: COMPLETE
+priority: P1
+source_issue: "GitHub Issue #17 — FB-2026-03-09-074435-007"
+classification: ENHANCED_CAPABILITY
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-140-PRODUCTION-HARDENING"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: GitHub Issue #17 (cortex-sts feedback extraction 2026-03-09)
+  Two production hardening passes:
+  1. Dependency audit removing 13 unnecessary packages from requirements.txt
+     while retaining all required dependencies (python-docx, openpyxl,
+     python-pptx, pypdf for Document Ingest Pipeline)
+  2. Holistic prompt/agent/instruction alignment audit fixing cross-layer
+     metric drift, deduplicating sections, removing deprecated specs,
+     aligning orchestrator counts, MCP tool counts, and intent type counts
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHITECTURAL CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+architectural_context:
+  affected_components:
+    - requirements.txt
+    - .github/agents/
+    - .github/prompts/
+    - .github/templates/
+    - scripts/refresh_prompt_suite.py
+  design_pattern: "Architecture Drift Remediation, Cross-Layer Consistency Enforcement"
+  integration_points: "All prompt/agent/instruction files (P0 alignment gate)"
+  dependencies: "Existing prompt suite infrastructure"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-140-01"
+    title: "Dependency audit — remove 13 unnecessary packages"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      requirements.txt contains packages not required by source code imports.
+      New dependencies needed: python-docx, openpyxl, python-pptx, pypdf
+    action_ref: "phase-140-a"
+    status: OPEN
+
+  - id: "GAP-140-02"
+    title: "Prompt/agent alignment — orchestrator/MCP/intent counts"
+    severity: P1
+    source: "GitHub Issue #17"
+    evidence: |
+      Cross-layer metric drift between copilot-instructions.md, CORTEX.prompt.md,
+      AGENT-INDEX.md, cortex-response-templates.md, and 6 core agent files.
+      Counts to align: orchestrator files, MCP tools, intent types.
+    action_ref: "phase-140-b"
+    status: OPEN
+
+  - id: "GAP-140-03"
+    title: "Remove deprecated spec and deduplicate sections"
+    severity: P2
+    source: "GitHub Issue #17"
+    evidence: |
+      STAGE-0-GOVERNANCE-AUDIT-SPEC.md deprecated.
+      "Deleted Constructs" sections duplicated across agent specs.
+    action_ref: "phase-140-c"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: false  # Config/doc changes only — no Python source
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-140-a"
+    title: "Dependency Audit — requirements.txt cleanup"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-140-01"]
+    governance_authority: "CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: []
+    prerequisite: "smoke tests green"
+    steps:
+      - "Remove 13 unnecessary packages from requirements.txt"
+      - "Verify all remaining packages are required by source code imports"
+      - "Add new dependencies: python-docx, openpyxl, python-pptx, pypdf"
+    completion_gate: "pip check passes, no import errors"
+
+  - id: "phase-140-b"
+    title: "Prompt/Agent Alignment — cross-layer metrics"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-140-02"]
+    governance_authority: "CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-140-a"]
+    steps:
+      - "Align orchestrator file count across all prompt/instruction files"
+      - "Align MCP tool count (registered vs tool files)"
+      - "Align intent type count"
+      - "Fix cross-layer metric drift in response templates"
+    completion_gate: "refresh_prompt_suite.py --counts-only shows consistent metrics"
+
+  - id: "phase-140-c"
+    title: "Cleanup — deprecated specs and duplications"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-140-03"]
+    governance_authority: "CORE-064"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-140-b"]
+    steps:
+      - "Remove deprecated STAGE-0-GOVERNANCE-AUDIT-SPEC.md"
+      - "Deduplicate 'Deleted Constructs' sections in agent specs"
+    completion_gate: "No duplicate sections, deprecated spec removed"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+acceptance_criteria:
+  - "requirements.txt contains only required packages"
+  - "New Office/PDF dependencies added (python-docx, openpyxl, python-pptx, pypdf)"
+  - "All prompt/agent files show consistent architecture metrics"
+  - "No deprecated specs remain in .github/"
+  - "Existing preflight and golden tests pass"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GOVERNANCE IMPACT
+# ─────────────────────────────────────────────────────────────────────────────
+governance_impact:
+  new_rules: []
+  modified_rules:
+    - "Cross-layer metric alignment enforced"
+  workflow_changes: []

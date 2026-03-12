@@ -5,8 +5,11 @@
 # Used by: getting-started.html Path A wizard, Path B fast-track
 # SSOT: This file is the canonical reference for all CORTEX onboarding UX patterns
 
+domain: "onboarding"
+
 metadata:
   title: "Developer Onboarding Best Practices — Tool Installation & IDE Setup"
+  domain: "onboarding"
   version: "1.0.0"
   synthesised_from:
     - "Microsoft VS Code Getting Started documentation (code.visualstudio.com/docs)"
