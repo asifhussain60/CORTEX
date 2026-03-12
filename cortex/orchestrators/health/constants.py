@@ -141,6 +141,43 @@ Includes:
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
+# VACUUM_PROTECTED_ROOTS — root-level tree guard  (Phase 151, GV-028, GV-033)
+# ─────────────────────────────────────────────────────────────────────────────
+
+VACUUM_PROTECTED_ROOTS: FrozenSet[str] = frozenset({
+    # Core Python source
+    "cortex",
+    # YAML governance / registry
+    "cortex-registry",
+    # All tests
+    "tests",
+    # CI / agents / prompts
+    ".github",
+    # Cross-platform scripts
+    "scripts",
+    # User-facing HTML documentation
+    "cortex-docs",
+})
+"""Canonical root-level protection guard (GV-028, GV-033) — Phase 151.
+
+VACUUM_PROTECTED_ROOTS is the **highest-priority** guard: if the top-level
+directory of a path appears in this frozenset, NO destructive vacuum operation
+may proceed — regardless of any other config.
+
+Complements PROTECTED_DIRS (the path-level guard added in Phase 141).  Both
+guards are active simultaneously:
+
+  VACUUM_PROTECTED_ROOTS  →  root/tree-level (Phase 151, GV-028/033)
+  PROTECTED_DIRS          →  path-level       (Phase 141, GV-012..GV-019)
+
+GV-033 contract: VACUUM_PROTECTED_ROOTS is the *canonical* root guard.
+PROTECTED_DIRS remains the *subordinate* path guard.
+
+This frozenset is **immutable at runtime** — never add/remove entries via
+code; always update this constant and commit (GV-028).
+"""
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Naming conventions  (CORE-028)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -224,6 +261,7 @@ __all__ = [
     "PROTECTED_ROOT_EXTENSIONS",
     "ALLOWED_MARKDOWN_PREFIXES",
     "PROTECTED_DIRS",
+    "VACUUM_PROTECTED_ROOTS",
     "KEBAB_MAX_LEN",
     "PYTHON_EXTENSIONS",
     "NON_PYTHON_EXTENSIONS",

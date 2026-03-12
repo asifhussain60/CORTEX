@@ -13,6 +13,8 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List
 
+from cortex.orchestrators.support.onboarding.tab_renderers import PersonaLayer, TabRenderer
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,6 +28,25 @@ class DashboardGenerator:  # CORE-035-scoped — domain-specific variant
     def __init__(self) -> None:
         """Initialize dashboard generator."""
         self.logger = logging.getLogger("cortex.infrastructure.deployment.dashboard")
+        self._tab_renderer = TabRenderer()
+        self._persona_layer = PersonaLayer()
+
+    def render_tab(self, tab_id: str, manifest: Any, persona: str = "engineer") -> str:  # noqa: ANN401
+        """Render a single dashboard tab through the TabRenderer → PersonaLayer pipeline.
+
+        GV-032: All tab HTML must flow through this method — no tab HTML may be
+        emitted outside this pipeline.
+
+        Args:
+            tab_id:   Tab identifier (e.g. ``"01-overview"``).
+            manifest: Dashboard data manifest (dict or DashboardManifest).
+            persona:  Target engineering persona. Defaults to ``"engineer"``.
+
+        Returns:
+            Persona-adapted HTML string.
+        """
+        raw_html = self._tab_renderer.render_tab(tab_id, manifest)
+        return self._persona_layer.adapt(raw_html, persona)
 
     def generate_dashboard(self, metrics: Dict[str, Any]) -> str:
         """Generate complete deployment analytics dashboard.

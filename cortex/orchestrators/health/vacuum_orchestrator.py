@@ -34,6 +34,7 @@ from .constants import (
     LEGACY_ROOT_FOLDERS_RELOCATION,
     PROTECTED_DIRS,
     PROTECTED_FILES,
+    VACUUM_PROTECTED_ROOTS,
     VACUUM_RECENCY_GUARD_HOURS,
 )
 from .file_context import FileContext
@@ -117,6 +118,31 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
             Template ID: 'maintenance/vacuum-workflow'
         """
         return "maintenance/vacuum-workflow"
+
+    # ─────────────────────────────────────────────────────────────────────
+    # ROOT-LEVEL PROTECTION GUARD (Phase 151, GV-028, GV-029, GV-033)
+    # ─────────────────────────────────────────────────────────────────────
+
+    def _is_protected(self, path: Path) -> bool:
+        """Return True if *path* falls within any VACUUM_PROTECTED_ROOTS tree.
+
+        Fail-safe semantics: any path that cannot be made relative to
+        ``workspace_root`` (e.g. external paths, ValueError) returns True
+        (treated as protected).  Unknown/empty paths also return True.
+
+        Args:
+            path: Absolute or relative path to check.
+
+        Returns:
+            True when the path is inside a protected root tree, False otherwise.
+        """
+        try:
+            rel = path.relative_to(self.workspace_root)
+            if not rel.parts:
+                return True  # workspace root itself — protected
+            return rel.parts[0] in VACUUM_PROTECTED_ROOTS
+        except (ValueError, IndexError):
+            return True  # fail-safe: unknown path is protected
 
     # ─────────────────────────────────────────────────────────────────────
     # STANDALONE PUBLIC API

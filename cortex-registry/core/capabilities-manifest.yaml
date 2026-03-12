@@ -873,6 +873,56 @@ governance:
   total_core_rules: 35
   total_ac_rules: 2
   total_rules: 37
+  governance_rules:
+    - id: GV-028
+      description: >-
+        VACUUM_PROTECTED_ROOTS must be an immutable frozenset — no runtime
+        mutation is allowed. The constant is defined in
+        cortex.orchestrators.health.constants and is the canonical root guard.
+      enforcement: P0
+      source_phase: "151"
+    - id: GV-029
+      description: >-
+        All destructive vacuum operations must call _is_protected(path) before
+        execution. If _is_protected returns True the operation is skipped with a
+        VACUUM_PROTECTED_ROOTS log entry. Fail-safe: unknown paths return True.
+      enforcement: P0
+      source_phase: "151"
+    - id: GV-030
+      description: >-
+        Tab renderers must call PersonaLayer.adapt(html_fragment, persona) before
+        emitting any HTML fragment. Rendering without persona adaptation is a P1
+        violation.
+      enforcement: P1
+      source_phase: "151"
+    - id: GV-031
+      description: >-
+        Persona-aware output (PersonaLayer.adapt) must never raise an unhandled
+        exception. All PersonaLayer methods must include a try/except that returns
+        plain HTML on error.
+      enforcement: P1
+      source_phase: "151"
+    - id: GV-032
+      description: >-
+        No tab renderer may bypass DashboardGenerator orchestration. All tab HTML
+        must flow through DashboardGenerator.render_tab() → TabRenderer →
+        PersonaLayer pipeline.
+      enforcement: P1
+      source_phase: "151"
+    - id: GV-033
+      description: >-
+        VACUUM_PROTECTED_ROOTS is the canonical root-level guard (Phase 151).
+        PROTECTED_DIRS (Phase 141) is the subordinate path-level guard. Both are
+        active simultaneously. VACUUM_PROTECTED_ROOTS takes precedence.
+      enforcement: P0
+      source_phase: "151"
+    - id: GV-034
+      description: >-
+        TabRenderer.render_tab() contract: signature is render_tab(tab_id: str,
+        manifest: DashboardManifest) -> str. Any tab renderer that deviates from
+        this signature is a P1 contract violation.
+      enforcement: P1
+      source_phase: "151"
 runtime:
   traces_db: .cortex-runtime/traces/orchestrator-traces.db
   sweeps_dir: .cortex-runtime/sweeps/
