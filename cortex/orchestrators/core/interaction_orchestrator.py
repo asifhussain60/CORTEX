@@ -107,6 +107,13 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         self._request_log_manager: Any = None
         self._prior_context_limit: int = 5  # default: last 5 requests
 
+        # Phase 150-c: Personality layer for voiced orchestrator output
+        try:
+            from cortex.orchestrators.core.personality_layer import PersonalityLayer
+            self._personality: Any = PersonalityLayer(persona="default")
+        except Exception:
+            self._personality = None  # graceful degradation
+
     def set_request_log_manager(self, manager: Any) -> None:
         """
         Inject a RequestLogManager for prior-request context chain (Phase 113-C).

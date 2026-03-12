@@ -88,3 +88,76 @@ steps:
     on_approval:
       action: 'set_silent_mode'
       description: 'Enable CORE-049 silent autonomous execution'
+
+# =============================================================================
+# Phase 150-b: DoR State Machine
+# =============================================================================
+# Five-state lifecycle enforced before any code-modifying operation.
+# A request MUST reach GATE_OPEN before execution proceeds.
+# DoRScore.composite ≥ 70 is required to transition from
+# READINESS_VALIDATION → GATE_OPEN.
+# =============================================================================
+
+state_machine:
+  id: dor-lifecycle
+  description: |
+    Five-state DoR lifecycle. Every IMPLEMENT/FIX/REFACTOR workflow
+    enters at DRAFT and must reach GATE_OPEN before execution.
+    Managed by DoRApprovalGate (cortex/core/dor_tracker.py).
+  initial_state: DRAFT
+  gate_state: GATE_OPEN
+  gate_class: cortex.core.dor_tracker.DoRApprovalGate
+  gate_min_score: 70
+
+  states:
+    - id: DRAFT
+      label: 'Draft — intent captured, not yet analysed'
+      transitions:
+        - to: REFINEMENT
+          trigger: intent_classified
+          guard: null
+
+    - id: REFINEMENT
+      label: 'Refinement — scope being clarified'
+      transitions:
+        - to: READINESS_VALIDATION
+          trigger: scope_confirmed
+          guard: null
+
+    - id: READINESS_VALIDATION
+      label: 'Readiness Validation — DoRScore computed'
+      transitions:
+        - to: GATE_OPEN
+          trigger: score_computed
+          guard: 'dor_score.composite >= gate_min_score'
+        - to: REFINEMENT
+          trigger: score_computed
+          guard: 'dor_score.composite < gate_min_score'
+
+    - id: GATE_OPEN
+      label: 'Gate Open — approved for TDD implementation'
+      transitions:
+        - to: TDD_IMPLEMENTATION
+          trigger: user_confirms_proceed
+          guard: null
+
+    - id: TDD_IMPLEMENTATION
+      label: 'TDD Implementation — CORE-008 execution underway'
+      transitions: []
+
+  dor_score_dimensions:
+    - name: requirement_completeness
+      weight: 0.30
+      description: 'Requirements are complete and unambiguous'
+    - name: architecture_clarity
+      weight: 0.25
+      description: 'Architecture decisions are clear and documented'
+    - name: dependency_resolution
+      weight: 0.20
+      description: 'All dependencies are identified and available'
+    - name: test_readiness
+      weight: 0.15
+      description: 'Acceptance criteria allow TDD test authoring'
+    - name: risk_assessment
+      weight: 0.10
+      description: 'Risks identified and mitigations planned'

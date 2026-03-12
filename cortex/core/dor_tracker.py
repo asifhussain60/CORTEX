@@ -291,3 +291,111 @@ class DoRTracker:
             List of turn dictionaries
         """
         return [t.to_dict() for t in self.turns]
+
+
+# =============================================================================
+# Phase 150-a: DoRScore + DoRApprovalGate
+# =============================================================================
+
+@dataclass
+class DoRScore:
+    """
+    Weighted composite Definition-of-Ready score.
+
+    All dimension scores are in [0.0, 1.0].  ``composite`` returns an integer
+    in [0, 100] computed as the weighted sum.
+
+    Weights (must sum to 1.0):
+      requirement_completeness  30 %
+      architecture_clarity      25 %
+      dependency_resolution     20 %
+      test_readiness            15 %
+      risk_assessment           10 %
+
+    Phase: 150-a (GAP-150-01)
+    """
+
+    requirement_completeness: float  # 30 %
+    architecture_clarity: float      # 25 %
+    dependency_resolution: float     # 20 %
+    test_readiness: float            # 15 %
+    risk_assessment: float           # 10 %
+
+    @property
+    def composite(self) -> int:
+        """Weighted composite score in [0, 100] (int, not float)."""
+        return round(
+            self.requirement_completeness * 30
+            + self.architecture_clarity * 25
+            + self.dependency_resolution * 20
+            + self.test_readiness * 15
+            + self.risk_assessment * 10
+        )
+
+    def as_dict(self) -> Dict[str, Any]:
+        """Return score breakdown + composite as a dict."""
+        return {
+            "requirement_completeness": self.requirement_completeness,
+            "architecture_clarity": self.architecture_clarity,
+            "dependency_resolution": self.dependency_resolution,
+            "test_readiness": self.test_readiness,
+            "risk_assessment": self.risk_assessment,
+            "composite": self.composite,
+        }
+
+
+class DoRApprovalGate:
+    """
+    Hard gate that blocks execution when ``DoRScore.composite`` is below threshold.
+
+    Default threshold is 70 / 100.  Instantiate with a custom ``min_score`` to
+    adjust per-workflow requirements.
+
+    Phase: 150-a (GAP-150-01)
+    """
+
+    DEFAULT_MIN_SCORE: int = 70
+
+    def __init__(self, min_score: int = DEFAULT_MIN_SCORE) -> None:
+        if not 0 <= min_score <= 100:
+            raise ValueError(f"min_score must be in [0, 100], got {min_score}")
+        self.min_score = min_score
+
+    def approve(self, score: DoRScore) -> bool:
+        """Return True if ``score.composite`` meets the gate threshold."""
+        return score.composite >= self.min_score
+
+    def evaluate(self, score: DoRScore) -> Dict[str, Any]:
+        """Return full gate evaluation with pass/fail and weak dimensions.
+
+        Args:
+            score: A populated ``DoRScore`` instance.
+
+        Returns:
+            Dict with:
+            - ``approved`` (bool): True when gate passes.
+            - ``composite`` (int): Composite score (0–100).
+            - ``min_score`` (int): Required minimum score.
+            - ``gap`` (int): Points below threshold (0 when passing).
+            - ``weak_dimensions`` (list[str]): Dimension names below 0.7.
+        """
+        approved = self.approve(score)
+        _DIM_THRESHOLD = 0.70
+        weak = [
+            dim
+            for dim, val in [
+                ("requirement_completeness", score.requirement_completeness),
+                ("architecture_clarity", score.architecture_clarity),
+                ("dependency_resolution", score.dependency_resolution),
+                ("test_readiness", score.test_readiness),
+                ("risk_assessment", score.risk_assessment),
+            ]
+            if val < _DIM_THRESHOLD
+        ]
+        return {
+            "approved": approved,
+            "composite": score.composite,
+            "min_score": self.min_score,
+            "gap": max(0, self.min_score - score.composite),
+            "weak_dimensions": weak,
+        }

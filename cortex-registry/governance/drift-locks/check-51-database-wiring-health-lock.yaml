@@ -1,0 +1,67 @@
+id: "check-51-database-wiring-health-lock"
+check_number: 51
+phase: "phase-148"
+gap_id: "GAP-148-01"
+status: "ACTIVE"
+enforcement_tier: "P0"
+title: "Database Wiring Health — DatabaseHealthVerifier covers all DB_REGISTRY entries"
+description: |
+  All 7 databases declared in DB_REGISTRY (cortex/infrastructure/env_initializer.py)
+  MUST be reachable and verifiable via DatabaseHealthVerifier.verify_all().
+
+  This drift lock prevents:
+  - A new database added to DB_REGISTRY without a corresponding health verification path
+  - DatabaseHealthVerifier being deleted or renamed without updating this lock
+  - DB_REGISTRY entries whose path calculation diverges from what verify_all() resolves
+
+  Root cause (Phase 148): DB_REGISTRY was authoritative but had no 4-layer health check.
+  DatabaseHealthVerifier was introduced in Phase 148-a to provide:
+    Layer 1: File existence (is_file)
+    Layer 2: Tables accessible (sqlite_master query)
+    Layer 3: Round-trip write/read (probe table create/insert/select/drop)
+    Layer 4: PRAGMA integrity_check returns 'ok'
+
+detect_command: |
+  python3 -c "
+  import sys
+  sys.path.insert(0, '.')
+  from cortex.infrastructure.env_initializer import DB_REGISTRY
+  from cortex.infrastructure.database_health_verifier import (
+      DatabaseHealthVerifier, DatabaseHealthReport
+  )
+  from pathlib import Path
+
+  # Verify DatabaseHealthVerifier can be instantiated
+  v = DatabaseHealthVerifier()
+  report = v.verify_all()
+  if not isinstance(report, DatabaseHealthReport):
+      print('DRIFT: verify_all() did not return DatabaseHealthReport')
+      sys.exit(1)
+
+  if len(report.results) != len(DB_REGISTRY):
+      print(f'DRIFT: verify_all() checked {len(report.results)} DBs but DB_REGISTRY has {len(DB_REGISTRY)}')
+      sys.exit(1)
+
+  covered = {r.db_name for r in report.results}
+  expected = set(DB_REGISTRY.keys())
+  missing = expected - covered
+  if missing:
+      print(f'DRIFT: these DB_REGISTRY entries are not verified: {missing}')
+      sys.exit(1)
+
+  print(f'OK: DatabaseHealthVerifier covers all {len(DB_REGISTRY)} registered databases')
+  "
+
+fix_command: |
+  # If this check fails, ensure DatabaseHealthVerifier.verify_all() iterates all DB_REGISTRY entries.
+  # File: cortex/infrastructure/database_health_verifier.py
+  # The verify_all() method must loop: for db_name, db_spec in DB_REGISTRY.items()
+  echo "Fix: update DatabaseHealthVerifier.verify_all() to cover all DB_REGISTRY entries"
+
+preflight_test: "tests/unit/infrastructure/test_check51_database_wiring_health.py"
+
+references:
+  - cortex/infrastructure/env_initializer.py
+  - cortex/infrastructure/database_health_verifier.py
+  - tests/unit/infrastructure/test_database_health_verifier.py
+  - cortex-registry/planning/phases/planned/phase-148-infrastructure-foundation.yaml

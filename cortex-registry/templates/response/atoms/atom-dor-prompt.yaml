@@ -1,0 +1,112 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# ATOM: DoR Prompt — Definition of Ready scored prompt block
+# ID: atom-dor-prompt
+# Tier: 1 (Atom — smallest renderable unit)
+#
+# PURPOSE: Renders the DoRScore-backed "Definition of Ready" prompt block
+#          before any code-modifying operation. Shows the weighted composite
+#          score, individual dimension scores, gate status, and (if blocked)
+#          the gap and weak dimensions.
+#
+# WHEN TO USE: Inject as Step 0 in all IMPLEMENT/FIX/REFACTOR/TDD workflows.
+#              Controlled by dor-display.yaml state machine (Phase 150-b).
+#
+# SSOT: cortex-registry/workflows/templates/primitives/governance/dor-display.yaml
+# Phase: 150-d (GAP-150-04)
+# Author: Asif Hussain | © 2025-2026 CORTEX Framework
+# ──────────────────────────────────────────────────────────────────────────────
+
+id: atom-dor-prompt
+type: atom
+phase: "150"
+
+# ─── Rendering Rules ──────────────────────────────────────────────────────────
+rendering_rules:
+  copilot_chat_compatible: true
+  heading_level: 3
+  element: "collapsible-block"
+  position: "Step 0 — before any code-modifying work begins"
+  zone: "body-top"
+  forbidden:
+    - "inline code snippets"
+    - "file paths in the gate summary"
+    - "raw float scores (format as percentages)"
+
+# ─── Template ─────────────────────────────────────────────────────────────────
+template: |
+  ### 📋 Definition of Ready
+
+  | Dimension | Score | Weight |
+  |-----------|-------|--------|
+  | Requirement completeness | {{requirement_completeness_pct}}% | 30% |
+  | Architecture clarity | {{architecture_clarity_pct}}% | 25% |
+  | Dependency resolution | {{dependency_resolution_pct}}% | 20% |
+  | Test readiness | {{test_readiness_pct}}% | 15% |
+  | Risk assessment | {{risk_assessment_pct}}% | 10% |
+
+  **Composite DoR score: {{composite}}/100** — Gate: {{gate_status}}
+
+  {{#if gate_blocked}}
+  > ⚠️ **Gate blocked** — score is {{gap}} points below the threshold of {{min_score}}.
+  > Weak dimensions: {{weak_dimensions_list}}.
+  > Address the above before proceeding.
+  {{/if}}
+
+# ─── Parameters ───────────────────────────────────────────────────────────────
+parameters:
+  required:
+    - name: requirement_completeness_pct
+      type: int
+      description: "requirement_completeness * 100, rounded"
+    - name: architecture_clarity_pct
+      type: int
+      description: "architecture_clarity * 100, rounded"
+    - name: dependency_resolution_pct
+      type: int
+      description: "dependency_resolution * 100, rounded"
+    - name: test_readiness_pct
+      type: int
+      description: "test_readiness * 100, rounded"
+    - name: risk_assessment_pct
+      type: int
+      description: "risk_assessment * 100, rounded"
+    - name: composite
+      type: int
+      description: "DoRScore.composite (0–100)"
+  optional:
+    - name: gate_status
+      type: str
+      default: "✅ OPEN"
+      description: "One of: '✅ OPEN', '🔴 BLOCKED'"
+    - name: gate_blocked
+      type: bool
+      default: false
+      description: "True when DoRApprovalGate.approve() returned False"
+    - name: gap
+      type: int
+      default: 0
+      description: "Points below threshold (0 when passing)"
+    - name: min_score
+      type: int
+      default: 70
+      description: "DoRApprovalGate min composite threshold"
+    - name: weak_dimensions_list
+      type: str
+      default: ""
+      description: "Comma-separated weak dimension names"
+
+# ─── Source Classes ────────────────────────────────────────────────────────────
+source_classes:
+  - class: cortex.core.dor_tracker.DoRScore
+    method: composite
+    description: "Provides composite score (int) and per-dimension floats"
+  - class: cortex.core.dor_tracker.DoRApprovalGate
+    method: evaluate
+    description: "Provides approved, gap, weak_dimensions, min_score"
+
+# ─── Injection Points (Step 0 in all code-modifying workflows) ────────────────
+injection_points:
+  - cortex-registry/workflows/templates/sdlc/implement-workflow.yaml
+  - cortex-registry/workflows/templates/sdlc/fix-workflow.yaml
+  - cortex-registry/workflows/templates/quality/refactor-workflow.yaml
+  - cortex-registry/workflows/templates/tdd/tdd-workflow.yaml

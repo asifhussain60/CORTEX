@@ -27,7 +27,7 @@ Updated: 2026-02-06 (v1.0 - Initial Implementation)
 import logging
 import time
 from dataclasses import dataclass, replace
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from cortex.core.context_synthesizer import ContextSynthesizer
 from cortex.core.copilot_context_optimizer import CopilotContextOptimizer
@@ -35,6 +35,24 @@ from cortex.orchestrators.core.context_cache_layer import ContextCacheLayer
 from cortex.orchestrators.core.context_metrics_collector import ContextMetricsCollector
 
 logger = logging.getLogger(__name__)
+
+# Map orchestrator names to best-practice knowledge domain keys
+_ORCHESTRATOR_DOMAIN_MAP: Dict[str, str] = {
+    "InteractionOrchestrator": "architecture",
+    "TDDOrchestrator": "testing-validation",
+    "RefactoringOrchestrator": "backend-python",
+    "EnforcementOrchestrator": "governance",
+    "DebuggerOrchestrator": "backend-python",
+    "PlanningOrchestrator": "architecture",
+    "HealthOrchestrator": "performance-optimization",
+    "VacuumOrchestrator": "governance",
+    "AuditOrchestrator": "governance",
+    "MasterOrchestrator": "architecture",
+}
+
+# Max best-practice entries to inject (token budget guard)
+_BEST_PRACTICES_MAX_ENTRIES = 12
+_BEST_PRACTICES_TOKEN_BUDGET = 800
 
 
 @dataclass
@@ -267,7 +285,8 @@ class ContextSynthesisGateway:
                 "synthesized_content": synthesized_content,
                 "original_orchestrator": orchestrator_name,
                 "compression_strategy": synthesis_strategy,
-                "metadata": synthesis_metadata
+                "metadata": synthesis_metadata,
+                "best_practices": self._get_best_practices_for(orchestrator_name),
             }
 
             result = SynthesizedContext(
@@ -373,6 +392,22 @@ class ContextSynthesisGateway:
         if session_id in self._session_tokens:
             del self._session_tokens[session_id]
             logger.info("Gateway: Session reset (session=%s)", session_id)
+
+    def _get_best_practices_for(self, orchestrator_name: str) -> List[Dict[str, Any]]:
+        """
+        Return up to 12 best-practice entries relevant to *orchestrator_name*.
+
+        Gracefully degrades — never raises; returns [] on any error.
+        Token budget: ≤800 tokens enforced by the 12-entry cap.
+        """
+        try:
+            from cortex.knowledge.best_practices import get_best_practices
+
+            domain = _ORCHESTRATOR_DOMAIN_MAP.get(orchestrator_name)
+            practices: List[Dict[str, Any]] = get_best_practices(domain=domain)
+            return practices[:_BEST_PRACTICES_MAX_ENTRIES]
+        except Exception:  # pragma: no cover — graceful degradation
+            return []
 
     def _calculate_size(self, obj: Any) -> int:
         """Calculate approximate size in bytes."""

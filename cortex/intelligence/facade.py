@@ -531,6 +531,27 @@ class IntelligenceFacade:
             logger.debug("IntelligenceFacade.registry_index: %s", exc)
             return []
 
+    def framework_context(self) -> "Dict[str, Any]":
+        """Return live CORTEX framework metadata from RegistryMaterializer.
+
+        Reads counts from ``.github/copilot-instructions.md`` via regex — no
+        YAML parse or filesystem scan required.  Gracefully returns an empty
+        dict on any error (CORE-049).
+
+        Returns:
+            Dict with ``orchestrator_count``, ``mcp_tool_count``,
+            ``intent_type_count``, ``instructions_found``, ``materialized_at``.
+
+        Phase: 149-c (GAP-149-03 — RegistryMaterializer entry point)
+        """
+        try:
+            from cortex.intelligence.registry_materializer import RegistryMaterializer
+
+            return RegistryMaterializer().get_metadata()
+        except Exception as exc:
+            logger.debug("IntelligenceFacade.framework_context: %s", exc)
+            return {}
+
     def _scan_registry_tree(self) -> "List[Any]":
         """Scan the cortex-registry/ directory tree and build the index.
 

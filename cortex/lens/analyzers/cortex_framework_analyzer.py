@@ -30,7 +30,7 @@ from __future__ import annotations
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +49,13 @@ _SIGNAL_SPECS: List[Tuple[str, int, str]] = [
 
 _TOTAL_WEIGHT: int = sum(s[1] for s in _SIGNAL_SPECS)
 _MIN_SIGNALS_FOR_POSITIVE: int = 2  # must match at least 2 distinct signals
+
+# ─── Regexes for analyze_metadata() ───────────────────────────────────────────
+_ORCHESTRATOR_RE = re.compile(r"\*\*(\d+)\s+Orchestrator\b")
+_MCP_TOOL_RE = re.compile(r"\*\*(\d+)\s+MCP Tools?\s+registered\b")
+_INTENT_TYPE_RE = re.compile(r"\*\*(\d+)\s+Intent Types?\b")
+
+_DEFAULT_INSTRUCTIONS = Path(".github/copilot-instructions.md")
 
 
 class CortexFrameworkAnalyzer:
@@ -128,6 +135,60 @@ class CortexFrameworkAnalyzer:
             True when the repository contains ≥ ``min_signals`` CORTEX markers.
         """
         return self.analyze(repo_path)["is_cortex_framework"]
+
+    def analyze_metadata(
+        self, instructions_path: Optional[Path] = None
+    ) -> Dict[str, Any]:
+        """Extract framework metadata metrics from copilot-instructions.md.
+
+        Reads the instructions file and uses regex patterns to extract:
+        - ``orchestrator_count``: number of registered orchestrator files
+        - ``mcp_tool_count``: number of registered MCP tools
+        - ``intent_type_count``: number of registered intent types
+
+        Gracefully degrades — returns all-None counts if the file is missing
+        or the patterns are not found.
+
+        Args:
+            instructions_path: Path to ``copilot-instructions.md``.
+                Defaults to ``.github/copilot-instructions.md`` relative to cwd.
+
+        Returns:
+            Dict with:
+            - ``orchestrator_count`` (int | None)
+            - ``mcp_tool_count`` (int | None)
+            - ``intent_type_count`` (int | None)
+            - ``instructions_found`` (bool): True when the file was readable.
+
+        Phase: 149-b (GAP-149-02 — CortexFrameworkAnalyzer.analyze_metadata)
+        """
+        path = instructions_path or _DEFAULT_INSTRUCTIONS
+        result: Dict[str, Any] = {
+            "orchestrator_count": None,
+            "mcp_tool_count": None,
+            "intent_type_count": None,
+            "instructions_found": False,
+        }
+        try:
+            text = path.read_text(encoding="utf-8")
+            result["instructions_found"] = True
+
+            orch_m = _ORCHESTRATOR_RE.search(text)
+            if orch_m:
+                result["orchestrator_count"] = int(orch_m.group(1))
+
+            mcp_m = _MCP_TOOL_RE.search(text)
+            if mcp_m:
+                result["mcp_tool_count"] = int(mcp_m.group(1))
+
+            intent_m = _INTENT_TYPE_RE.search(text)
+            if intent_m:
+                result["intent_type_count"] = int(intent_m.group(1))
+
+        except (OSError, IOError):
+            pass  # Graceful degradation — returns all-None
+
+        return result
 
     # ── Private helpers ───────────────────────────────────────────────────────
 
