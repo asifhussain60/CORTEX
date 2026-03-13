@@ -1,0 +1,78 @@
+---
+# intent-routing: Intent Routing Matrix for Phase F Integration
+# AC-ID: AC-PHASE-F-ROUTING-001
+# Authority: CORTEX Architecture (Phase F Production Validation Gate)
+# Version: 1.0
+# Purpose: Intent-to-orchestrator routing matrix used for Phase B/C integration validation.
+# SSOT: cortex-registry/core/specifications/intent-routing-rules.yaml
+
+routing_matrix:
+  IMPLEMENT:
+    handler: "TDDOrchestrator"
+    confidence_threshold: 0.75
+    pre_gate: "gate_tdd"
+    fallback: "InteractionOrchestrator"
+    description: "Create new functionality — TDD required"
+
+  FIX:
+    handler: "TDDOrchestrator"
+    confidence_threshold: 0.70
+    pre_gate: "gate_tdd"
+    fallback: "InteractionOrchestrator"
+    description: "Resolve bugs and issues — TDD required"
+
+  REFACTOR:
+    handler: "RefactoringOrchestrator"
+    confidence_threshold: 0.70
+    pre_gate: "gate_holistic"
+    fallback: "TDDOrchestrator"
+    description: "Improve code without adding functionality"
+
+  AUDIT:
+    handler: "AuditOrchestrator"
+    confidence_threshold: 0.65
+    pre_gate: "gate_governance"
+    fallback: "HealthOrchestrator"
+    description: "Run 9-stage audit pipeline (29+12 checks)"
+
+  DEBUG:
+    handler: "DebuggerOrchestrator"
+    confidence_threshold: 0.72
+    pre_gate: "gate_debug"
+    fallback: "InteractionOrchestrator"
+    description: "Multi-stack debug pipeline — 8 injection strategies"
+
+  PLAN:
+    handler: "PlanningOrchestrator"
+    confidence_threshold: 0.68
+    pre_gate: "gate_governance"
+    fallback: "MasterOrchestrator"
+    description: "Master plan management and phase lifecycle"
+
+  DESIGN:
+    handler: "MasterOrchestrator"
+    confidence_threshold: 0.65
+    pre_gate: "gate_holistic"
+    fallback: "InteractionOrchestrator"
+    description: "Architecture design and system planning"
+
+  REVIEW:
+    handler: "EnforcementOrchestrator"
+    confidence_threshold: 0.68
+    pre_gate: "gate_governance"
+    fallback: "InteractionOrchestrator"
+    description: "Code review and governance validation"
+
+  VACUUM:
+    handler: "VacuumOrchestrator"
+    confidence_threshold: 0.80
+    pre_gate: "gate_vacuum"
+    fallback: "HealthOrchestrator"
+    description: "8-stage workspace cleanup pipeline"
+
+  QUERY:
+    handler: "InteractionOrchestrator"
+    confidence_threshold: 0.60
+    pre_gate: null
+    fallback: "MasterOrchestrator"
+    description: "Information retrieval and Q&A operations"

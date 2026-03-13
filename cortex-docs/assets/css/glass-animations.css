@@ -1,0 +1,124 @@
+/**
+ * glass-animations.css — CORTEX Motion Design System
+ * Authority: html-view-lifecycle.yaml · CORE-002
+ * Phase 76: Index HTML Redesign — AC-76-INDEX-HTML-REDESIGN-20260225
+ *
+ * All animation durations are ≤ 500ms for non-infinite sequences (subtle, professional).
+ * Infinite ambient animations may use longer durations for smooth looping.
+ */
+
+/* ── Keyframe Definitions ───────────────────────────────────────────────────── */
+
+@keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+    from { opacity: 0; transform: translateY(-24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.15); }
+    50%       { box-shadow: 0 0 40px rgba(0, 212, 255, 0.35); }
+}
+
+@keyframes gradient-shift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+    to   { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+}
+
+/* ── Utility Animation Classes ──────────────────────────────────────────────── */
+
+.animate-fade-in {
+    animation: fade-in 250ms var(--easing-smooth, ease) both;
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 350ms var(--easing-smooth, ease) both;
+}
+
+.animate-fade-in-up--delay-1 { animation-delay: 100ms; }
+.animate-fade-in-up--delay-2 { animation-delay: 200ms; }
+.animate-fade-in-up--delay-3 { animation-delay: 300ms; }
+
+.animate-scale-in {
+    animation: scale-in 300ms var(--easing-smooth, ease) both;
+}
+
+.animate-glow-pulse {
+    animation: glow-pulse 2500ms ease-in-out infinite;
+}
+
+.animate-float {
+    animation: float 3000ms ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+    background-size: 200% 200%;
+    animation: gradient-shift 5000ms ease infinite;
+}
+
+/* ── Stagger Helpers (for card/item arrays) ─────────────────────────────────── */
+
+.stagger > *:nth-child(1) { animation-delay:  50ms; }
+.stagger > *:nth-child(2) { animation-delay: 100ms; }
+.stagger > *:nth-child(3) { animation-delay: 150ms; }
+.stagger > *:nth-child(4) { animation-delay: 200ms; }
+.stagger > *:nth-child(5) { animation-delay: 250ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ── Hover Transform Helpers ────────────────────────────────────────────────── */
+
+.hover-lift {
+    transition: transform 250ms ease;
+}
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.hover-glow {
+    transition: box-shadow 250ms ease;
+}
+.hover-glow:hover {
+    box-shadow: 0 0 28px rgba(0, 212, 255, 0.3);
+}
+
+/* ── Reduced-Motion Accessibility ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration:        0.01ms !important;
+        animation-iteration-count: 1      !important;
+        transition-duration:       0.01ms !important;
+        scroll-behavior:           auto   !important;
+    }
+}

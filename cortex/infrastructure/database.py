@@ -9,7 +9,8 @@ See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 """
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,8 @@ class DatabaseConfig:
     password: str = ""
     pool_size: int = 5
     max_overflow: int = 10
+    db_path: Optional[Path] = None
+    timeout: float = 30.0
 
 
 class DatabaseManager:
@@ -38,19 +41,20 @@ class DatabaseManager:
 
     _instance: Optional['DatabaseManager'] = None
 
-    def __new__(cls) -> 'DatabaseManager':
+    def __new__(cls, config: Optional['DatabaseConfig'] = None) -> 'DatabaseManager':
         """Singleton pattern for backward compatibility."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self) -> None:
+    def __init__(self, config: Optional['DatabaseConfig'] = None) -> None:
         """Initialize stub database manager."""
-        if self._initialized:
+        if self._initialized and config is None:
             return
         self._initialized = True
-        self._data: Dict[str, Any] = {}
+        self._data: Dict[str, Any] = getattr(self, '_data', {})
+        self.config: 'DatabaseConfig' = config if config is not None else DatabaseConfig()
         logger.debug("DatabaseManager stub initialized (MCP-first: no SQLite)")
 
     def execute(self, query: str, params: tuple = ()) -> None:

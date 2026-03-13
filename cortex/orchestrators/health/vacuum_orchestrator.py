@@ -478,13 +478,15 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         # Legacy directories superseded by .cortex-runtime/
         _LEGACY_DIRS: frozenset = frozenset({".cortex"})
 
-        # Directories that must NEVER be touched
+        # Directories that must NEVER be touched by build artifact cleanup.
+        # Source directories (cortex/, tests/, scripts/) are NOT protected here
+        # because they can legitimately contain build outputs (e.g. Roslyn bin/obj,
+        # __pycache__) that must be cleaned. Source rename/relocation protection
+        # lives in _plan_naming_fixes / _plan_root_cleanup (PROTECTED_DIRS).
         _PROTECTED_ROOTS: frozenset = frozenset({
             ".git", ".github", ".venv", "venv", "env",
             "_workspaces", ".cortex-runtime", "docs",
             "cortex-registry", "node_modules",
-            # Phase-141: source directories are protected
-            "cortex", "tests", "scripts", "deployment", ".vscode",
         })
 
         results: List[OperationResult] = []
@@ -590,10 +592,12 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         _OS_JUNK_NAMES: frozenset = frozenset({
             ".DS_Store", ".ds-store", "Thumbs.db", "desktop.ini",
         })
+        # Only exclude externally-managed dirs where OS junk files must not be touched.
+        # Source directories (cortex/, scripts/, etc.) may accumulate .DS_Store etc.
+        # and should be cleaned. Phase-141 source protection applies to
+        # rename/relocate operations, not OS artifact deletion.
         _PROTECTED_ROOTS: frozenset = frozenset({
             ".git", ".venv", "venv", "env",
-            # Phase-141: source directories are protected
-            "cortex", "tests", "scripts", "deployment", ".vscode", ".github",
         })
 
         results: List[OperationResult] = []
@@ -658,14 +662,20 @@ class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, Wo
         """
         results: List[OperationResult] = []
 
+        # Only protect dirs where chat-* files are legitimately stored.
+        # PROTECTED_DIRS guards source code (cortex/, tests/, etc.) from
+        # rename/delete/relocate, but chat-* files in cortex/intelligence/state/
+        # are stale runtime artefacts that must be cleaned up.
+        _DIGEST_SKIP_DIRS = {"_workspaces", ".github"}
+
         for chat_file in sorted(self.workspace_root.rglob("chat-*")):
             if not chat_file.is_file():
                 continue
 
-            # Skip files inside protected directories
+            # Skip files inside digest-protected directories only
             try:
                 rel = chat_file.relative_to(self.workspace_root)
-                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                if rel.parts and rel.parts[0] in _DIGEST_SKIP_DIRS:
                     continue
             except ValueError:
                 continue

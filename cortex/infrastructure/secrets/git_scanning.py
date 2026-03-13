@@ -6,12 +6,15 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, List
 
+from .errors import StorageError
+
 
 # Patterns that indicate a secret
 _SECRET_PATTERNS = [
     re.compile(r'(?i)(password|passwd|secret|token|api_key|apikey)\s*=\s*["\']?\S+'),
     re.compile(r'(?i)aws_access_key_id\s*=\s*[A-Z0-9]{20}'),
     re.compile(r'(?i)-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----'),
+    re.compile(r'(?i)(postgresql|mysql|mongodb|redis|sqlite)://(\w+):(\S+)@\S+'),
 ]
 
 
@@ -137,6 +140,24 @@ class PreCommitHookScanner(SecretsScanner):
         """
         hook_path = Path(self.repo_path) / ".git" / "hooks" / "pre-commit"
         return hook_path.exists()
+
+    def scan_content(self, filename: str, content: str) -> None:
+        """Scan string content for secrets and raise StorageError if found.
+
+        Args:
+            filename: Logical filename (used in error messages).
+            content: The text content to scan.
+
+        Raises:
+            StorageError: If any secret pattern is detected.
+        """
+        findings = self.scan_text(content)
+        if findings:
+            patterns = ", ".join({f.get('pattern', '') for f in findings})
+            raise StorageError(
+                f"Secret detected in '{filename}': {patterns}. "
+                "Remove the secret and rotate credentials before committing."
+            )
 
 
 class SecretsRemediator:

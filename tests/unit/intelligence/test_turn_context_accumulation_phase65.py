@@ -174,7 +174,7 @@ class TestProviderSessionManagement:
     @pytest.fixture
     def provider(self):
         """Create provider with mocked dependencies."""
-        with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
+        with patch('cortex.lens.lens_orchestrator.LENSOrchestrator'), \
              patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
              patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
@@ -232,7 +232,7 @@ class TestCrossDomainSynthesis:
     @pytest.fixture
     def provider(self):
         """Create provider with mocked dependencies."""
-        with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
+        with patch('cortex.lens.lens_orchestrator.LENSOrchestrator'), \
              patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
              patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
@@ -311,7 +311,7 @@ class TestAccumulatedContextIntegration:
     @pytest.fixture
     def provider(self):
         """Create provider with turn context."""
-        with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
+        with patch('cortex.lens.lens_orchestrator.LENSOrchestrator'), \
              patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
              patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()

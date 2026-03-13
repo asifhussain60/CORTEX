@@ -1,0 +1,265 @@
+/**
+ * glass-ui-components.css — CORTEX Glassmorphism UI Component Library
+ * Authority: html-view-lifecycle.yaml · CORE-002
+ * Phase 76: Index HTML Redesign — AC-76-INDEX-HTML-REDESIGN-20260225
+ */
+
+@import url('./glass-design-tokens.css');
+
+/* ── Base Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Page Loading Overlay ───────────────────────────────────────────────────── */
+.page-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-bg-base);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: opacity var(--duration-slow) var(--easing-smooth);
+}
+
+.page-loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.page-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(0, 212, 255, 0.2);
+    border-top-color: var(--color-brand-primary);
+    border-radius: 50%;
+    animation: spinner-rotate 0.8s linear infinite;
+}
+
+/* ── Glass Card ─────────────────────────────────────────────────────────────── */
+.glass-card {
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
+    padding: var(--spacing-lg);
+    transition: transform var(--duration-normal) var(--easing-smooth),
+                box-shadow var(--duration-normal) var(--easing-smooth);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glass-shadow), var(--glass-shadow-glow);
+}
+
+.glass-card--glow {
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* ── Navigation Cards Grid ──────────────────────────────────────────────────── */
+.nav-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.nav-card {
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: var(--spacing-lg);
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition: transform var(--duration-normal) var(--easing-smooth),
+                box-shadow var(--duration-normal) var(--easing-smooth),
+                border-color var(--duration-normal) var(--easing-smooth);
+}
+
+.nav-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--glass-shadow), var(--glass-shadow-glow);
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.nav-card__icon {
+    font-size: 2rem;
+    color: var(--color-brand-primary);
+    margin-bottom: 1rem;
+}
+
+.nav-card__title {
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-h4-size);
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.nav-card__description {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+/* ── CORTEX Tab Navigation ──────────────────────────────────────────────────── */
+.cortex-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 1.5rem;
+}
+
+.cortex-tab {
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-family-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.cortex-tab:hover {
+    color: var(--color-text-primary);
+}
+
+.cortex-tab.is-active,
+.cortex-tab[aria-selected="true"] {
+    color: var(--color-brand-primary);
+    border-bottom-color: var(--color-brand-primary);
+}
+
+.cortex-tab-panel {
+    display: none;
+}
+
+.cortex-tab-panel.is-active {
+    display: block;
+}
+
+/* ── Glass Header / Hero ────────────────────────────────────────────────────── */
+.glass-hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    overflow: hidden;
+}
+
+.glass-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-brand-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+/* ── Feature Grid ───────────────────────────────────────────────────────────── */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-card {
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: var(--spacing-lg);
+    transition: transform var(--duration-normal) var(--easing-smooth);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ── Governance Stat Cards ──────────────────────────────────────────────────── */
+.governance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.governance-stat-card {
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.governance-stat-card__number {
+    font-family: var(--font-family-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    display: block;
+}
+
+/* ── Notification / Toast ───────────────────────────────────────────────────── */
+.toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 8000;
+    max-width: 360px;
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--glass-shadow);
+}
+
+/* ── Responsive Breakpoints ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .nav-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    .governance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .nav-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .glass-hero {
+        min-height: 90vh;
+    }
+}

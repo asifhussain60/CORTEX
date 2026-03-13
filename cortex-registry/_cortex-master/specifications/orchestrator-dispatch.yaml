@@ -1,0 +1,294 @@
+---
+# orchestrator-dispatch: Orchestrator Registration & Dispatch Specification
+# AC-ID: AC-PHASE-F-DISPATCH-001
+# Authority: CORTEX Architecture (Phase F Production Validation Gate)
+# Version: 1.0
+# Purpose: Unified orchestrator registration, entry points, capabilities, and
+#          SQLite trace configuration for production wiring validation.
+# SSOT: cortex-registry/core/specifications/ (source truth for individual wiring specs)
+
+registration_summary:
+  version: "1.0"
+  total_orchestrators: 25
+  wiring_complete: true
+  all_traces_configured: true
+  last_updated: "2026-03-12"
+  authority: "CORTEX Production Certification (Phase F)"
+
+core_orchestrators:
+  MasterOrchestrator:
+    entry_point: "cortex.orchestrators.core.master_orchestrator:MasterOrchestrator"
+    capabilities:
+      - request_coordination
+      - domain_delegation
+      - operation_aggregation
+      - governance_enforcement
+    sqlite_trace: "orchestrator_traces"
+    description: "Top-level coordinator delegating to domain orchestrators"
+    phase: "CORE"
+
+  InteractionOrchestrator:
+    entry_point: "cortex.orchestrators.core.interaction_orchestrator:InteractionOrchestrator"
+    capabilities:
+      - conversation_flow
+      - intent_classification
+      - response_formatting
+      - context_injection
+    sqlite_trace: "interaction_traces"
+    description: "Stage 1 LENS per-turn comprehension and interaction management"
+    phase: "CORE"
+
+  IntentRouter:
+    entry_point: "cortex.orchestrators.core.intent_router_impl:IntentRouter"
+    capabilities:
+      - intent_detection
+      - routing_logic
+      - fallback_handling
+      - confidence_scoring
+    sqlite_trace: "intent_routing_traces"
+    description: "Routes 32 intent types to appropriate orchestrators"
+    phase: "CORE"
+
+  LENSSynthesis:
+    entry_point: "cortex.orchestrators.core.lens_context_provider:LENSContextProvider"
+    capabilities:
+      - lens_analysis
+      - context_synthesis
+      - workspace_awareness
+      - navigation_support
+    sqlite_trace: "lens_synthesis_traces"
+    description: "Language-Examination-Navigation-Synthesis context pipeline"
+    phase: "CORE"
+
+  EnforcementOrchestrator:
+    entry_point: "cortex.orchestrators.core.enforcement_orchestrator:EnforcementOrchestrator"
+    capabilities:
+      - rule_enforcement
+      - governance_validation
+      - core_rule_checks
+      - violation_reporting
+    sqlite_trace: "enforcement_traces"
+    description: "Enforces CORE governance rules across all operations"
+    phase: "CORE"
+
+  TDDOrchestrator:
+    entry_point: "cortex.orchestrators.core.tdd_orchestrator:TDDOrchestrator"
+    capabilities:
+      - test_driven_development
+      - red_green_refactor_cycle
+      - holistic_validation
+      - convergence_gate
+    sqlite_trace: "tdd_traces"
+    description: "TDD-first development workflow (CORE-008)"
+    phase: "CORE"
+
+  IncrementalTaskDecomposer:
+    entry_point: "cortex.orchestrators.core.tdd_orchestrator:IncrementalTaskDecomposer"
+    capabilities:
+      - task_decomposition
+      - incremental_execution
+      - phase_management
+      - complexity_reduction
+    sqlite_trace: "decomposer_traces"
+    description: "Decomposes complex tasks into incremental executable phases"
+    phase: "CORE"
+
+  WorkflowOrchestrator:
+    entry_point: "cortex.orchestrators.core.workflow_orchestrator:WorkflowOrchestrator"
+    capabilities:
+      - workflow_composition
+      - template_resolution
+      - stage_management
+      - rollback_support
+    sqlite_trace: "workflow_traces"
+    description: "Composes and executes YAML-backed workflow templates"
+    phase: "CORE"
+
+domain_orchestrators:
+  RefactoringOrchestrator:
+    entry_point: "cortex.orchestrators.domain.refactoring_orchestrator:RefactoringOrchestrator"
+    capabilities:
+      - code_improvement
+      - pattern_detection
+      - refactoring_execution
+      - quality_assessment
+    sqlite_trace: "refactoring_traces"
+    description: "Manages code refactoring operations with sweep completeness"
+    phase: "DOMAIN"
+
+  PlanningOrchestrator:
+    entry_point: "cortex.orchestrators.domain.planning_orchestrator:PlanningOrchestrator"
+    capabilities:
+      - roadmap_planning
+      - phase_lifecycle
+      - master_plan_management
+      - thin_index_contract
+    sqlite_trace: "planning_traces"
+    description: "Manages CORTEX master plan and phase lifecycle"
+    phase: "DOMAIN"
+
+  DomainOrchestrator:
+    entry_point: "cortex.orchestrators.domain.domain_orchestrator:DomainOrchestrator"
+    capabilities:
+      - domain_coordination
+      - cross_domain_synthesis
+      - plugin_management
+      - domain_routing
+    sqlite_trace: "domain_traces"
+    description: "Cross-domain coordination and plugin management"
+    phase: "DOMAIN"
+
+  ConversationOrchestrator:
+    entry_point: "cortex.orchestrators.core.conversation_orchestrator:ConversationOrchestrator"
+    capabilities:
+      - conversation_management
+      - session_continuity
+      - context_preservation
+      - multi_turn_handling
+    sqlite_trace: "conversation_traces"
+    description: "Manages multi-turn conversation sessions with context"
+    phase: "DOMAIN"
+
+  DocumentationOrchestrator:
+    entry_point: "cortex.orchestrators.support.cortex_docs_orchestrator:CortexDocsOrchestrator"
+    capabilities:
+      - documentation_generation
+      - pipeline_execution
+      - content_navigation
+      - build_mode_selection
+    sqlite_trace: "documentation_traces"
+    description: "Documentation generation and navigation pipeline"
+    phase: "DOMAIN"
+
+  ChallengeEngine:
+    entry_point: "cortex.orchestrators.validation.challenge_engine:ChallengeEngine"
+    capabilities:
+      - code_analysis_challenges
+      - validation_gates
+      - quality_challenges
+      - challenge_scoring
+    sqlite_trace: "challenge_traces"
+    description: "Code analysis challenge generation and validation"
+    phase: "DOMAIN"
+
+support_orchestrators:
+  HealthOrchestrator:
+    entry_point: "cortex.orchestrators.health.health_orchestrator:HealthOrchestrator"
+    capabilities:
+      - health_monitoring
+      - component_status
+      - drift_detection
+      - remediation_reporting
+    sqlite_trace: "health_traces"
+    description: "Monitors workspace and orchestrator health"
+    phase: "HEALTH"
+
+  VacuumOrchestrator:
+    entry_point: "cortex.orchestrators.health.vacuum_orchestrator:VacuumOrchestrator"
+    capabilities:
+      - workspace_cleanup
+      - naming_enforcement
+      - orphan_detection
+      - artifact_removal
+    sqlite_trace: "vacuum_traces"
+    description: "8-stage workspace cleanup pipeline with protected roots"
+    phase: "HEALTH"
+
+  AuditOrchestrator:
+    entry_point: "cortex.orchestrators.core.audit_orchestrator:AuditOrchestrator"
+    capabilities:
+      - audit_coordination
+      - check_execution
+      - drift_analysis
+      - report_generation
+    sqlite_trace: "audit_traces"
+    description: "9-stage audit pipeline (29+12 checks)"
+    phase: "SUPPORT"
+
+  DebuggerOrchestrator:
+    entry_point: "cortex.orchestrators.support.debugger_orchestrator:DebuggerOrchestrator"
+    capabilities:
+      - debug_injection
+      - marker_insertion
+      - vision_api
+      - auto_cleanup
+    sqlite_trace: "debug_traces"
+    description: "Multi-stack debug pipeline (8 injection strategies)"
+    phase: "SUPPORT"
+
+  GitOrchestrator:
+    entry_point: "cortex.orchestrators.git.git_orchestrator:GitOrchestrator"
+    capabilities:
+      - git_operations
+      - sync_management
+      - branch_handling
+      - commit_composition
+    sqlite_trace: "git_traces"
+    description: "Git operations and workspace synchronization"
+    phase: "GIT"
+
+  FeedbackOrchestrator:
+    entry_point: "cortex.orchestrators.support.feedback_orchestrator:FeedbackOrchestrator"
+    capabilities:
+      - capability_extraction
+      - feedback_processing
+      - pattern_learning
+      - signal_emission
+    sqlite_trace: "feedback_traces"
+    description: "Capability extraction and feedback processing pipeline"
+    phase: "SUPPORT"
+
+  DistillationOrchestrator:
+    entry_point: "cortex.orchestrators.support.distillation_orchestrator:DistillationOrchestrator"
+    capabilities:
+      - content_distillation
+      - document_synthesis
+      - knowledge_extraction
+      - digest_generation
+    sqlite_trace: "distillation_traces"
+    description: "Content distillation and knowledge digest pipeline"
+    phase: "SUPPORT"
+
+  LearningOrchestrator:
+    entry_point: "cortex.orchestrators.intelligence.learning_orchestrator:LearningOrchestrator"
+    capabilities:
+      - adaptive_learning
+      - pattern_tracking
+      - urs_signal_emission
+      - rca_analysis
+    sqlite_trace: "learning_traces"
+    description: "Unified Reinforcement Signal (URS) learning engine"
+    phase: "INTELLIGENCE"
+
+  RCAEngine:
+    entry_point: "cortex.orchestrators.intelligence.rca_engine:RCAEngine"
+    capabilities:
+      - five_whys_analysis
+      - fishbone_analysis
+      - fault_tree_analysis
+      - causal_chain_analysis
+    sqlite_trace: "rca_traces"
+    description: "4-methodology Root Cause Analysis engine (Phase 87)"
+    phase: "INTELLIGENCE"
+
+  CodeReviewOrchestrator:
+    entry_point: "cortex.orchestrators.domain.code_review_orchestrator:CodeReviewOrchestrator"
+    capabilities:
+      - code_review_coordination
+      - pr_analysis
+      - review_comment_generation
+      - quality_assessment
+    sqlite_trace: "review_traces"
+    description: "Code review coordination and PR analysis pipeline"
+    phase: "DOMAIN"
+
+  ContentLibraryOrchestrator:
+    entry_point: "cortex.orchestrators.support.content_library_orchestrator:ContentLibraryOrchestrator"
+    capabilities:
+      - content_cataloguing
+      - library_management
+      - knowledge_organization
+      - retrieval_indexing
+    sqlite_trace: "content_library_traces"
+    description: "Content library management and knowledge organization"
+    phase: "SUPPORT"

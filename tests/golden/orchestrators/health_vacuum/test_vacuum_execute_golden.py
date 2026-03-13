@@ -178,7 +178,16 @@ class TestGV010StandaloneRootCleanup:
     """GV-010: Standalone run_root_cleanup() — relocate root files independently."""
 
     def test_run_root_cleanup(self, workspace: Path) -> None:
+        import os
+        import time
         from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
+
+        # Backdate scratch_notes.txt to bypass the 24-hour recency guard.
+        # The guard protects in-progress work during live runs; golden tests
+        # use tmp_path fixtures that are always "new" but represent stale artefacts.
+        scratch = workspace / "scratch_notes.txt"
+        old_time = time.time() - (25 * 3600)  # 25 hours ago
+        os.utime(scratch, (old_time, old_time))
 
         vac = VacuumOrchestrator(workspace)
         ops = vac.run_root_cleanup()
@@ -193,9 +202,17 @@ class TestGV011StandaloneNamingFix:
     def test_run_naming_fix(self, workspace: Path) -> None:
         from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
 
+        # Place a naming-violation file outside PROTECTED_DIRS so it can be renamed.
+        # cortex/ is in PROTECTED_DIRS (Phase 141, GV-013/GV-014) — files there
+        # are never renamed by the vacuum planner to preserve source integrity.
+        fix_target = workspace / "my-helper.py"
+        fix_target.write_text("x = 1\n")
+
         vac = VacuumOrchestrator(workspace)
         ops = vac.run_naming_fix()
         assert isinstance(ops, list)
-        # my-module.py should have been renamed to my_module.py
-        assert (workspace / "cortex" / "my_module.py").exists()
-        assert not (workspace / "cortex" / "my-module.py").exists()
+        # my-helper.py at root should be renamed to my_helper.py (snake_case)
+        assert (workspace / "my_helper.py").exists()
+        assert not fix_target.exists()
+        # my-module.py inside cortex/ must NOT be renamed (PROTECTED_DIRS, GV-014)
+        assert (workspace / "cortex" / "my-module.py").exists()

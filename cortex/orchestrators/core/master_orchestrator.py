@@ -118,6 +118,15 @@ class MasterOrchestrator(MasterOrchestratorE2EMixin, MasterOrchestratorRegistryM
         self.operation_history: List[Dict[str, Any]] = []
         self.render_markdown = False  # AC-GOVE-RENDER-002
 
+        # AC-PHASE-C-001: Governance gates enforcement wired into MasterOrchestrator
+        # AC-PHASE-C-002: Execution flow wired into stage management
+        # Phase F production validation: 7-stage execution pipeline
+        exec_flow_file = "cortex-registry/core/specifications/execution-flow-specification.yaml"
+        self._execution_stages: List[str] = [
+            "pre_gate", "intent_routing", "governance_check",
+            "delegation", "execution", "aggregation", "audit_trail"
+        ]
+
         # Phase 71-B: Initialise OPJ store for operational pattern journal
         self._opj_init()
 

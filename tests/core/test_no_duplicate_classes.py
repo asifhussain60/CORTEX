@@ -45,6 +45,18 @@ INTENTIONAL_DUPLICATES: dict[str, str] = {
         "content_library_facade and content_library_engine co-define EpochShuffler "
         "via facade+engine pattern — intentional co-ownership"
     ),
+    # Domain-isolated quality types — different schemas for different domains
+    "QualityIssue": (
+        "dashboards/quality_gate.py defines dashboard-rule-violation QualityIssue "
+        "(rule_id, tab_id, severity, message); "
+        "intelligence/analysis/comment_analyzer.py defines comment-analysis QualityIssue "
+        "(type, message, line_number, severity) — distinct domain schemas"
+    ),
+    "QualityReport": (
+        "dashboards/quality_gate.py defines aggregated dashboard QualityReport (issues, passed, score); "
+        "testing/test_quality_validator.py defines test-assessment QualityReport "
+        "(test_id, overall_score, coverage_score, etc.) — distinct domain schemas"
+    ),
 }
 
 # Classes exempt due to annotated files (CORE-035 governance comment)

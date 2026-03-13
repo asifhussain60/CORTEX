@@ -1,0 +1,222 @@
+---
+# exec-flow: CORTEX Execution Flow Specification (7-Stage Pipeline)
+# AC-ID: AC-PHASE-C-002
+# Authority: CORTEX Architecture (Phase F Production Validation Gate)
+# Version: 1.0
+# Purpose: 7-stage execution pipeline wiring for Phase B/C integration validation.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Execution Stages
+# ─────────────────────────────────────────────────────────────────────────────
+execution_stages:
+  STAGE_1_COMPREHENSION:
+    orchestrator: "InteractionOrchestrator"
+    description: "LENS-powered per-turn intent comprehension"
+    subtasks:
+      lens_analysis: "Workspace-aware code intelligence pass"
+      context_accumulation: "Multi-turn session context build-up"
+    output: "comprehension_context"
+
+  STAGE_2_INTENT_VERIFICATION:
+    orchestrator: "IntentRouter"
+    description: "32-type intent classification and routing"
+    subtasks:
+      intent_classification: "Classify user intent from 32 canonical types"
+      routing_decision: "Select target orchestrator chain"
+    output: "routed_intent"
+
+  STAGE_3_APPROVAL_GATES:
+    orchestrator: "EnforcementOrchestrator"
+    description: "Pre-execution governance gate validation"
+    subtasks:
+      dor_gate: "Definition-of-Ready approval check"
+      challenge_gate: "ChallengeEngine code-analysis gate"
+      governance_gate: "CORE rule enforcement validation"
+    output: "gate_decision"
+
+  STAGE_4_PRE_EXECUTION:
+    orchestrator: "WorkflowComposer"
+    description: "Pre-execution setup and context initialization"
+    subtasks:
+      context_hydration: "Load workspace context and prior state"
+      tool_selection: "Select MCP tools and execution strategy"
+    output: "execution_plan"
+
+  STAGE_5_EXECUTION:
+    orchestrator: "MasterOrchestrator"
+    description: "Primary task execution via delegated orchestrators"
+    subtasks:
+      delegation: "Delegate to specialized domain orchestrator"
+      execution: "Execute planned operations with TDD enforcement"
+    output: "execution_result"
+
+  STAGE_6_VALIDATION:
+    orchestrator: "AuditOrchestrator"
+    description: "Post-execution validation and quality gates"
+    subtasks:
+      holistic_validation: "CORE-048 holistic scan"
+      convergence_gate: "CORE-068 convergence check"
+      sweep_completeness: "CORE-064 catalogue exhaustion"
+    output: "validation_report"
+
+  STAGE_7_CONTEXT_SYNTHESIS:
+    orchestrator: "ContextSynthesisGateway"
+    description: "Synthesize learnings into persistent context"
+    subtasks:
+      urs_emission: "Emit URS signal to LearningOrchestrator"
+      context_update: "Update session and workspace context"
+      audit_trail: "Write immutable audit record to SQLite"
+    output: "synthesized_context"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Intent-Specific Stage Flows
+# ─────────────────────────────────────────────────────────────────────────────
+intent_stage_flows:
+  IMPLEMENT:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_3_APPROVAL_GATES
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_6_VALIDATION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "TDDOrchestrator"
+    execution_mode: "tdd_red_green_refactor"
+
+  FIX:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_3_APPROVAL_GATES
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_6_VALIDATION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "TDDOrchestrator"
+    execution_mode: "regression_test_first"
+
+  REFACTOR:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_3_APPROVAL_GATES
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_6_VALIDATION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "RefactoringOrchestrator"
+    execution_mode: "holistic_validation"
+
+  ANALYZE:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "IntelligenceFacade"
+    execution_mode: "analysis_only"
+
+  AUDIT:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_3_APPROVAL_GATES
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_6_VALIDATION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "AuditOrchestrator"
+    execution_mode: "9_stage_audit_pipeline"
+
+  PLAN:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "PlanningOrchestrator"
+    execution_mode: "roadmap_planning"
+
+  ONBOARD:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "InteractionOrchestrator"
+    execution_mode: "onboarding_flow"
+
+  DEBUG:
+    stages:
+      - STAGE_1_COMPREHENSION
+      - STAGE_2_INTENT_VERIFICATION
+      - STAGE_3_APPROVAL_GATES
+      - STAGE_4_PRE_EXECUTION
+      - STAGE_5_EXECUTION
+      - STAGE_6_VALIDATION
+      - STAGE_7_CONTEXT_SYNTHESIS
+    primary_orchestrator: "DebuggerOrchestrator"
+    execution_mode: "8_strategy_debug_pipeline"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Error Handling — per stage
+# ─────────────────────────────────────────────────────────────────────────────
+error_handling:
+  STAGE_1_failure:
+    action: "abort_with_context_error"
+    fallback: "return_raw_input"
+    retry: false
+
+  STAGE_2_failure:
+    action: "route_to_query_default"
+    fallback: "MasterOrchestrator"
+    retry: true
+    max_retries: 1
+
+  STAGE_3_failure:
+    action: "block_execution_gate_rejected"
+    fallback: "surface_gate_failure_to_user"
+    retry: false
+
+  STAGE_4_failure:
+    action: "abort_with_setup_error"
+    fallback: "attempt_minimal_context"
+    retry: true
+    max_retries: 1
+
+  STAGE_5_failure:
+    action: "abort_with_execution_error"
+    fallback: "surface_error_with_rollback"
+    retry: false
+
+  STAGE_6_failure:
+    action: "warn_validation_degraded"
+    fallback: "proceed_with_warning"
+    retry: false
+
+  STAGE_7_failure:
+    action: "warn_context_not_persisted"
+    fallback: "continue_without_persistence"
+    retry: true
+    max_retries: 2
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SQLite Tracing Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+tracing:
+  enabled: true
+  table_name: "execution_flow_stages"
+  retention_days: 90
+  columns:
+    - stage_id
+    - intent
+    - orchestrator
+    - duration_ms
+    - success
+    - error_message
+    - session_id
+    - timestamp

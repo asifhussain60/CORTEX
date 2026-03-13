@@ -90,6 +90,11 @@ class RollbackResult:
     files_restored: int
     errors: List[str] = field(default_factory=list)
 
+    @property
+    def is_success(self) -> bool:
+        """Return True if rollback completed without errors."""
+        return self.status == "SUCCESS"
+
 
 # =============================================================================
 # CLEANER INTERFACE

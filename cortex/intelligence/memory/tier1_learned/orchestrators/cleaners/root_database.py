@@ -15,6 +15,7 @@ Author: CORTEX Architect
 Date: 2026-02-15
 """
 
+import shutil
 from typing import Dict, Any
 from .base import (
     CleanerInterface,
@@ -97,10 +98,11 @@ class RootDatabaseCleaner(CleanerInterface):
                 else:
                     actions.append(db_name)
 
-        # Check for unknown .db files in root (warn only)
+        # Check for unknown .db files in root — these are also issues to flag
         for db_file in self.repo_root.glob("*.db"):
             files_scanned += 1
             if db_file.name not in self.KNOWN_ROOT_DATABASES:
+                files_to_delete.append(db_file.name)
                 warnings.append(f"{db_file.name}: Unknown database file in root")
 
         plan = {
@@ -115,17 +117,23 @@ class RootDatabaseCleaner(CleanerInterface):
             for warning in warnings:
                 self._log(f"WARNING: {warning}")
 
+        logs = [
+            f"Scanned {files_scanned} database files",
+            f"Found {len(files_to_delete)} to delete",
+            f"Generated {len(warnings)} warnings",
+        ]
+        for f in files_to_delete:
+            logs.append(f"Flagged for deletion: {f}")
+        for w in warnings:
+            logs.append(f"WARNING: {w}")
+
         return Analysis(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
             files_scanned=files_scanned,
             issues_found=len(files_to_delete),
             plan=plan,
-            logs=[
-                f"Scanned {files_scanned} database files",
-                f"Found {len(files_to_delete)} to delete",
-                f"Generated {len(warnings)} warnings",
-            ],
+            logs=logs,
         )
 
     def execute(self, plan: Dict[str, Any]) -> Report:
@@ -146,16 +154,23 @@ class RootDatabaseCleaner(CleanerInterface):
         errors = []
         logs = []
 
+        # Create snapshot directory before any deletions (non-dry-run only)
+        snapshot_dir = self.repo_root / ".vacuum_snapshots" / "root_database"
+        if files_to_delete and not self.dry_run:
+            snapshot_dir.mkdir(parents=True, exist_ok=True)
+
         for db_name in files_to_delete:
+            # Support both plain filenames and full paths in the plan
             db_path = self.repo_root / db_name
 
             if self.dry_run:
                 logs.append(f"[DRY RUN] Would delete: {db_name}")
-                deleted_count += 1
                 continue
 
             try:
                 if db_path.exists():
+                    # Snapshot before deletion
+                    shutil.copy2(db_path, snapshot_dir / db_path.name)
                     db_path.unlink()
                     deleted_count += 1
                     logs.append(f"Deleted: {db_name}")
@@ -172,9 +187,14 @@ class RootDatabaseCleaner(CleanerInterface):
         for warning in warnings:
             logs.append(f"WARNING: {warning}")
 
-        status = "SUCCESS" if len(errors) == 0 else "PARTIAL"
-        if deleted_count == 0 and len(errors) > 0:
+        if self.dry_run:
+            status = "DRY_RUN"
+        elif len(errors) == 0:
+            status = "SUCCESS"
+        elif deleted_count == 0:
             status = "FAILED"
+        else:
+            status = "PARTIAL"
 
         return Report(
             cleaner_id=self.domain,
@@ -188,17 +208,38 @@ class RootDatabaseCleaner(CleanerInterface):
 
     def rollback(self) -> RollbackResult:
         """
-        Rollback database cleanup.
-
-        Note: Rollback not supported for deletions (no backup made).
+        Rollback database cleanup by restoring files from snapshot.
 
         Returns:
-            RollbackResult indicating no rollback possible
+            RollbackResult with restoration status
         """
+        snapshot_dir = self.repo_root / ".vacuum_snapshots" / "root_database"
+
+        if not snapshot_dir.exists():
+            return RollbackResult(
+                cleaner_id=self.domain,
+                timestamp=self._timestamp(),
+                status="SUCCESS",
+                files_restored=0,
+                errors=[],
+            )
+
+        restored = 0
+        errors = []
+        for snapshot_file in snapshot_dir.iterdir():
+            dest = self.repo_root / snapshot_file.name
+            try:
+                shutil.copy2(snapshot_file, dest)
+                restored += 1
+                self._log(f"Restored: {snapshot_file.name}")
+            except Exception as e:
+                errors.append(f"Failed to restore {snapshot_file.name}: {e}")
+
+        status = "SUCCESS" if not errors else "PARTIAL"
         return RollbackResult(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
-            status="FAILED",
-            files_restored=0,
-            errors=["Rollback not supported for database cleanup (no backups)"],
+            status=status,
+            files_restored=restored,
+            errors=errors,
         )

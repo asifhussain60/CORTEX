@@ -340,7 +340,7 @@ Detail that was previously in this file is now available through domain skills (
 | `/cortex-debug` | `/debug`, 8 injection strategies, multi-stack pipeline |
 | `/cortex-rca` | `/rca`, 4 methodologies, URS learning, prevention rules |
 | `/cortex-plan` | Master plan, THIN INDEX CONTRACT, `/totalrecall`, `/digest`, phase lifecycle |
-| `cortex-governance` | CORE rules, AC markers, enforcement, dissolved packages *(auto-loaded, not in slash menu)* |
+| `cortex-governance` | CORE rules, AC markers (`AC-{DOMAIN}-{FEATURE}-{SEQ}` format, e.g. `AC-{DOMAIN}-001`), enforcement, dissolved packages *(auto-loaded, not in slash menu)* |
 
 **File-scoped instructions** (auto-injected when matching files are open):
 - `cortex-python.instructions.md` → `cortex/**/*.py`

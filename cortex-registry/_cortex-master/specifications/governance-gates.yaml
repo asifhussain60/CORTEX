@@ -1,0 +1,123 @@
+---
+# governance-gates: Governance Gate Configuration for Phase F Integration
+# AC-ID: AC-PHASE-F-GATES-001
+# Authority: CORTEX Architecture (Phase F Production Validation Gate)
+# Version: 1.0
+# Purpose: Intent gate configuration used for Phase B/C integration validation.
+# SSOT: cortex-registry/core/specifications/governance-validation-gates.yaml
+
+intent_gate_configuration:
+  IMPLEMENT:
+    gate_id: "gate_tdd"
+    rule: "CORE-008"
+    severity: "BLOCKING"
+    checks:
+      - test_file_exists
+      - test_count_minimum_3
+      - docstring_present
+    description: "TDD gate — tests must exist before implementation"
+
+  FIX:
+    gate_id: "gate_tdd"
+    rule: "CORE-008"
+    severity: "BLOCKING"
+    checks:
+      - test_file_exists
+      - regression_test_added
+      - test_count_minimum_3
+    description: "TDD gate — regression test required before fix"
+
+  REFACTOR:
+    gate_id: "gate_holistic"
+    rule: "CORE-048"
+    severity: "BLOCKING"
+    checks:
+      - holistic_validation
+      - test_coverage_maintained
+      - no_behavior_change
+    description: "Holistic validation gate — no structural changes without full scan"
+
+  AUDIT:
+    gate_id: "gate_governance"
+    rule: "CORE-064"
+    severity: "BLOCKING"
+    checks:
+      - sweep_completeness
+      - no_partial_sweeps
+      - full_catalogue_exhausted
+    description: "Sweep completeness gate — exhaustive audit catalogue coverage"
+
+  DEBUG:
+    gate_id: "gate_debug"
+    rule: "CORE-035"
+    severity: "WARNING"
+    checks:
+      - single_implementation
+      - no_version_drift
+      - cleanup_registered
+    description: "Debug gate — single canonical implementation, auto-cleanup registered"
+
+  PLAN:
+    gate_id: "gate_governance"
+    rule: "CORE-071"
+    severity: "BLOCKING"
+    checks:
+      - dor_approval_gate
+      - dor_score_minimum_100
+      - is_ready_composite
+    description: "DoR Hard Gate — DoRApprovalGate.is_ready() must return True"
+
+  DESIGN:
+    gate_id: "gate_holistic"
+    rule: "CORE-048"
+    severity: "WARNING"
+    checks:
+      - holistic_validation
+      - regression_scan
+      - backward_compatibility
+    description: "Design gate — holistic validation before structural changes"
+
+  REVIEW:
+    gate_id: "gate_governance"
+    rule: "CORE-035"
+    severity: "WARNING"
+    checks:
+      - single_implementation
+      - no_dead_references
+      - import_health
+    description: "Review gate — governance rule coverage validation"
+
+  VACUUM:
+    gate_id: "gate_vacuum"
+    rule: "CORE-035"
+    severity: "BLOCKING"
+    checks:
+      - protected_roots_enforcement
+      - validate_safe_run
+      - no_source_deletion
+    description: "Vacuum gate — protected roots enforced (VACUUM_PROTECTED_ROOTS)"
+
+  QUERY:
+    gate_id: null
+    rule: null
+    severity: "NONE"
+    checks: []
+    description: "Query gate — no pre-execution validation required"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SQLite Audit Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+audit_configuration:
+  enabled: true
+  table_name: "governance_gates_audit"
+  retention_days: 90
+  columns:
+    - intent
+    - gate_id
+    - rule
+    - severity
+    - checks_passed
+    - checks_failed
+    - timestamp
+    - orchestrator
+    - session_id

@@ -114,6 +114,13 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
         except Exception:
             self._personality = None  # graceful degradation
 
+        # Phase 65-S5-T4: Intelligence provider for interactive mode enrichment
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            self._intelligence_provider: Any = get_intelligence_provider()
+        except Exception:
+            self._intelligence_provider = None  # graceful degradation
+
     def set_request_log_manager(self, manager: Any) -> None:
         """
         Inject a RequestLogManager for prior-request context chain (Phase 113-C).

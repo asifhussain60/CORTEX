@@ -43,10 +43,10 @@ class InformationalFileAgent(BaseHealthAgent):
             ".github/scripts/",
             "README.md",  # Root only
             "docs/",
+            "cortex-docs/",  # CORTEX user-facing documentation (Phase 151)
             "cortex-registry/",
             "_workspaces/",  # EXCEPTION per request
             ".cortex-runtime/",
-            "docs/",
             ".venv/",
             ".git/",
             "_archives/",  # Will be deleted separately
