@@ -130,6 +130,172 @@ def _build_vscode_settings(workspace_root: Path, python_cmd: str) -> dict:
     }
 
 
+def _strip_jsonc_comments(jsonc: str) -> str:
+    """Strip // line-comments from a JSONC string, preserving string content.
+
+    Implements BUG-001 fix: only strips // that appear OUTSIDE quoted strings,
+    so glob patterns like "**/*-summary.md" are never corrupted.
+
+    Args:
+        jsonc: JSONC text (JSON with // comments).
+
+    Returns:
+        Valid JSON string with comments removed.
+    """
+    import re as _re
+    result = []
+    in_string = False
+    i = 0
+    while i < len(jsonc):
+        ch = jsonc[i]
+        if in_string:
+            result.append(ch)
+            if ch == '\\' and i + 1 < len(jsonc):
+                # Escaped character — consume next char too
+                i += 1
+                result.append(jsonc[i])
+            elif ch == '"':
+                in_string = False
+        else:
+            if ch == '"':
+                in_string = True
+                result.append(ch)
+            elif ch == '/' and i + 1 < len(jsonc) and jsonc[i + 1] == '/':
+                # Line comment — skip to end of line
+                while i < len(jsonc) and jsonc[i] != '\n':
+                    i += 1
+                continue
+            else:
+                result.append(ch)
+        i += 1
+    return ''.join(result)
+
+
+def _write_settings_safely(path: "Path", key: str, value: object, original_content: str) -> None:
+    """Write a key/value into a JSONC settings file, preserving comments.
+
+    Implements BUG-001 fix: always writes back the original JSONC text (with
+    comments) rather than a round-tripped JSON parse, updating only the target
+    key's value via regex substitution.
+
+    Args:
+        path: Path to the .json / .jsonc settings file to update.
+        key: Dot-notation key to set (e.g. "python.linting").
+        value: New value to write.
+        original_content: The original file content (with comments) as a string.
+    """
+    import json as _json
+    import re as _re
+
+    value_json = _json.dumps(value, indent=2)
+
+    # Strategy: find the key in the JSONC source and replace its entire value
+    # block (which may span multiple lines for nested objects).
+    # We work on the stripped JSON to locate positions, then map back.
+    clean = _strip_jsonc_comments(original_content)
+    key_pattern = r'"' + _re.escape(key) + r'"\s*:\s*'
+    m = _re.search(key_pattern, clean)
+
+    if m:
+        # Parse out the entire value from the clean JSON starting at m.end()
+        # Use json.JSONDecoder.raw_decode to find where the value ends
+        try:
+            decoder = _json.JSONDecoder()
+            _, end_idx = decoder.raw_decode(clean, m.end())
+        except _json.JSONDecodeError:
+            end_idx = m.end()
+
+        # Indent the new value to match surrounding context
+        indent = "  "
+        if isinstance(value, (dict, list)):
+            new_val_lines = value_json.splitlines()
+            indented_val = ("\n" + indent).join(new_val_lines)
+        else:
+            indented_val = value_json
+
+        # Build the replacement: key: value
+        replacement_segment = f'"{key}": {indented_val}'
+        updated = clean[:m.start()] + replacement_segment + clean[end_idx:]
+
+        # Re-inject original comments: prefix the updated JSON with any leading
+        # comments from the original JSONC source.
+        comment_lines = []
+        for line in original_content.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("//"):
+                comment_lines.append(line)
+            else:
+                break
+        prefix = "\n".join(comment_lines) + "\n" if comment_lines else ""
+
+        # Write: leading comments + updated JSON body (which has no comments)
+        path.write_text(prefix + updated, encoding="utf-8")
+    else:
+        # Key not present — inject before closing brace
+        clean_stripped = clean.rstrip()
+        if clean_stripped.endswith("}"):
+            body = clean_stripped[:-1].rstrip()
+            if body and not body.endswith(","):
+                body += ","
+            if isinstance(value, (dict, list)):
+                body += f'\n  "{key}": {value_json}'
+            else:
+                body += f'\n  "{key}": {value_json}'
+            updated = body + "\n}"
+        else:
+            updated = clean + f'\n  "{key}": {value_json}\n'
+
+        # Re-inject leading comments
+        comment_lines = []
+        for line in original_content.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("//"):
+                comment_lines.append(line)
+            else:
+                break
+        prefix = "\n".join(comment_lines) + "\n" if comment_lines else ""
+        path.write_text(prefix + updated, encoding="utf-8")
+
+
+def _merge_mcp_servers_safely(path: "Path", server_name: str, config: dict) -> None:
+    """Merge an MCP server entry into github.copilot.chat.mcpServers in settings.
+
+    Preserves all existing comments (BUG-002 fix).
+
+    Args:
+        path: Path to the .json / .jsonc settings file to update.
+        server_name: Key name for the MCP server (e.g. "cortex").
+        config: Config dict for the server.
+    """
+    import json as _json
+
+    original = path.read_text(encoding="utf-8")
+    clean = _strip_jsonc_comments(original)
+    existing: dict = {}
+    try:
+        existing = _json.loads(clean)
+    except _json.JSONDecodeError:
+        existing = {}
+
+    servers: dict = existing.get("github.copilot.chat.mcpServers", {})
+    servers.setdefault(server_name, {})
+    servers[server_name].update(config)
+
+    _write_settings_safely(path, "github.copilot.chat.mcpServers", servers, original)
+
+
+def disable_pylance_mcp(path: "Path") -> None:
+    """Set pylance.mcpServer.enabled to false in a JSONC settings file.
+
+    Preserves all existing comments in the file.
+
+    Args:
+        path: Path to the .json / .jsonc settings file to update.
+    """
+    original = path.read_text(encoding="utf-8")
+    _write_settings_safely(path, "pylance.mcpServer.enabled", False, original)
+
+
 def _write_vscode_settings(workspace_root: Path, settings: dict, logger: logging.Logger) -> bool:
     """Write or merge MCP settings into .vscode/settings.json.
 

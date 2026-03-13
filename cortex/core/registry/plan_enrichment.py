@@ -169,57 +169,48 @@ class GitLensEnricher:
             }
 
         try:
-            # Count commits in last 30 days
-            result_count = subprocess.run(
-                ["git", "log", "--oneline", "--since=30 days ago"],
+            # Single git log call to get all needed data bounded to 50 commits
+            result = subprocess.run(
+                [
+                    "git", "log",
+                    "--since=30 days ago",
+                    "--max-count=50",
+                    "--format=AUTHOR:%an",
+                    "--name-only",
+                ],
                 cwd=str(repo_root),
                 capture_output=True,
                 text=True,
-                timeout=10,
+                timeout=5,
             )
-            commits_30_days = len(result_count.stdout.strip().splitlines()) if result_count.returncode == 0 else 0
 
-            # Derive change velocity
+            recent_authors: List[str] = []
+            recent_files: List[str] = []
+            commits_30_days = 0
+            seen_authors: set = set()
+            seen_files: set = set()
+
+            if result.returncode == 0:
+                for line in result.stdout.splitlines():
+                    stripped = line.strip()
+                    if stripped.startswith("AUTHOR:"):
+                        commits_30_days += 1
+                        author = stripped[7:].strip()
+                        if author and author not in seen_authors:
+                            seen_authors.add(author)
+                            recent_authors.append(author)
+                    elif stripped and len(recent_files) < 20:
+                        if stripped not in seen_files:
+                            seen_files.add(stripped)
+                            recent_files.append(stripped)
+
+            # Derive change velocity from commit count
             if commits_30_days >= 200:
                 change_velocity = "high"
             elif commits_30_days >= 30:
                 change_velocity = "medium"
             else:
                 change_velocity = "low"
-
-            # Get recent authors (last 30 days)
-            result_authors = subprocess.run(
-                ["git", "log", "--since=30 days ago", "--format=%an"],
-                cwd=str(repo_root),
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            recent_authors: List[str] = []
-            if result_authors.returncode == 0:
-                seen = set()
-                for author in result_authors.stdout.strip().splitlines():
-                    author = author.strip()
-                    if author and author not in seen:
-                        seen.add(author)
-                        recent_authors.append(author)
-
-            # Get recently modified files (last 30 days, top 20)
-            result_files = subprocess.run(
-                ["git", "log", "--since=30 days ago", "--name-only", "--format="],
-                cwd=str(repo_root),
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            recent_files: List[str] = []
-            if result_files.returncode == 0:
-                seen_files: set = set()
-                for line in result_files.stdout.strip().splitlines():
-                    f = line.strip()
-                    if f and f not in seen_files and len(recent_files) < 20:
-                        seen_files.add(f)
-                        recent_files.append(f)
 
             return {
                 "recent_files": recent_files,
@@ -237,22 +228,15 @@ class GitLensEnricher:
             }
 
     def _find_repo_root(self) -> "Path | None":
-        """Locate the git repository root starting from cwd.
+        """Locate the git repository root by walking up from this file.
 
         Returns:
             Path to repo root, or None if not inside a git repository.
         """
-        try:
-            result = subprocess.run(
-                ["git", "rev-parse", "--show-toplevel"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-            )
-            if result.returncode == 0:
-                return Path(result.stdout.strip())
-        except Exception:
-            pass
+        here = Path(__file__).resolve()
+        for parent in [here, *here.parents]:
+            if (parent / ".git").exists():
+                return parent
         return None
 
 class CodeLensEnricher:
@@ -302,14 +286,12 @@ class CodeLensEnricher:
         risk_areas: List[str] = []
 
         # Resolve scan root: cortex/ package relative to repo root
-        try:
-            result = subprocess.run(
-                ["git", "rev-parse", "--show-toplevel"],
-                capture_output=True, text=True, timeout=5,
-            )
-            repo_root = Path(result.stdout.strip()) if result.returncode == 0 else Path(os.getcwd())
-        except Exception:
-            repo_root = Path(os.getcwd())
+        here = Path(__file__).resolve()
+        repo_root = Path(os.getcwd())
+        for parent in [here, *here.parents]:
+            if (parent / ".git").exists():
+                repo_root = parent
+                break
 
         cortex_dir = repo_root / "cortex"
         if not cortex_dir.exists():
@@ -319,12 +301,12 @@ class CodeLensEnricher:
                 "risk_areas": [],
             }
 
-        # Walk cortex/ — cap at 200 files to bound execution time
+        # Walk cortex/ — cap at 30 files to bound execution time
         scanned = 0
         for py_file in cortex_dir.rglob("*.py"):
             if "__pycache__" in py_file.parts:
                 continue
-            if scanned >= 200:
+            if scanned >= 30:
                 break
             scanned += 1
             rel = str(py_file.relative_to(repo_root))

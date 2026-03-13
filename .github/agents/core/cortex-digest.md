@@ -1,6 +1,7 @@
 ---
 scope: non-production-admin
 agent_id: cortex-digest
+version: "1.0"
 status: active
 layer: core
 modes_served:

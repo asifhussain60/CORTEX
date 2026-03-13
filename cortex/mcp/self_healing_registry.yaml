@@ -1,0 +1,64 @@
+# MCP Self-Healing Issue Registry
+# Authority: cortex/mcp/self_healing.py § _load_registry
+# Each entry maps an error pattern (regex) to a known issue with fix strategy.
+
+issues:
+  - issue_id: MCP-ERR-001
+    name: MCP Content Not Iterable
+    pattern: "r\\.content is not iterable"
+    severity: CRITICAL
+    root_cause: MCP response content field is not in expected iterable format
+    fix_strategy: restart_mcp_server
+    auto_fix: true
+    retry_count: 2
+    estimated_fix_duration_ms: 3000
+    fix_steps:
+      - Stop MCP server process
+      - Clear response buffer
+      - Restart MCP server
+    success_rate: 0.92
+
+  - issue_id: MCP-ERR-002
+    name: MCP Connection Refused
+    pattern: "Connection refused"
+    severity: HIGH
+    root_cause: MCP server is not running or listening on the expected port
+    fix_strategy: restart_mcp_server
+    auto_fix: true
+    retry_count: 3
+    estimated_fix_duration_ms: 5000
+    fix_steps:
+      - Check if MCP server process is running
+      - Start MCP server if not running
+      - Wait for server to be ready
+      - Retry connection
+    success_rate: 0.88
+
+  - issue_id: MCP-ERR-003
+    name: MCP Request Timeout
+    pattern: "timed out"
+    severity: MEDIUM
+    root_cause: MCP request exceeded timeout threshold
+    fix_strategy: retry_with_backoff
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 10000
+    fix_steps:
+      - Wait for backoff period
+      - Retry request with extended timeout
+    success_rate: 0.75
+
+  - issue_id: MCP-ERR-004
+    name: Python Module Not Found
+    pattern: "ModuleNotFoundError"
+    severity: HIGH
+    root_cause: Python package or module missing from environment
+    fix_strategy: reconfigure_python_path
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 8000
+    fix_steps:
+      - Identify missing module
+      - Add module path to sys.path or install package
+      - Restart MCP server
+    success_rate: 0.80

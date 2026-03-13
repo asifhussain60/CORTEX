@@ -24,10 +24,24 @@ AC_START: AC-AUDIT-MODELS-5901
 """
 from __future__ import annotations
 
+import os
+import secrets
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Optional
+
+
+def _thread_safe_uuid4() -> str:
+    """Generate a unique entry ID using secrets — thread-safe on all platforms.
+
+    Uses secrets.token_hex which relies on os.urandom and avoids the native
+    libuuid C extension (which can segfault on macOS Python 3.9 in threads).
+    """
+    raw = secrets.token_bytes(16)
+    # Format as UUID-like string for backward compatibility
+    hex_str = raw.hex()
+    return f"{hex_str[:8]}-{hex_str[8:12]}-4{hex_str[13:16]}-{hex_str[16:20]}-{hex_str[20:]}"
 
 __all__ = ["AuditEntry"]
 
@@ -66,7 +80,7 @@ class AuditEntry:
     """
 
     # ── Mandatory ──────────────────────────────────────────────────────────
-    entry_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    entry_id: str = field(default_factory=_thread_safe_uuid4)
 
     # ── Core audit fields ──────────────────────────────────────────────────
     operation: str = ""
@@ -103,6 +117,10 @@ class AuditEntry:
     description: str = ""
     previous_value: Optional[dict[str, Any]] = None
     new_value: Optional[dict[str, Any]] = None
+
+    # ── Legacy / audit_db compat ───────────────────────────────────────────
+    event_type: str = ""        # DB audit event type (audit_db.py compatibility)
+    metadata: Optional[dict[str, Any]] = None  # Legacy metadata field (audit_db.py compatibility)
 
     # ── Backward-compat shims ──────────────────────────────────────────────
 

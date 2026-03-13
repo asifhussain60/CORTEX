@@ -89,10 +89,8 @@ class CortexDebug(ConsolidatedTool):
 
     async def execute(self, **params) -> ToolResult:
         """Execute debug operation."""
-        # ENFORCEMENT: Validate orchestrator routing
-        _oc = params.get("orchestrator_context")
-        if _oc is not None:
-            validate_orchestrator_context(_oc)
+        # ENFORCEMENT: Validate orchestrator routing — raises ValueError on direct calls
+        validate_orchestrator_context(params.get("orchestrator_context"))
 
         operation = params.get("operation", "analyze")
         target = params.get("target")

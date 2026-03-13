@@ -17,12 +17,12 @@ from cortex.mcp.mcp_tool_base import ToolCategory
 
 # Live tool count — updated each time tools are added.
 # Run: python3 -c "from cortex.mcp.mcp_registry import get_registry; print(len(get_registry().to_mcp_schema()))"
-_EXPECTED_TOOL_COUNT = 35  # Phase 131-c: +cortex_ado (ADOContextSynthesizer MCP tool) → 35
+_EXPECTED_TOOL_COUNT = 36  # Phase 131-c: +cortex_ado (ADOContextSynthesizer MCP tool) → 35; +lens_tools → 36
 
 # Expected category distribution — Phase 130-c actuals (34 tools)
 _EXPECTED_DISTRIBUTION = {
     "core": 3,
-    "intelligence": 7,   # knowledge, git, generate_tests, brain_query, learning, content, ado
+    "intelligence": 8,   # knowledge, git, generate_tests, brain_query, learning, content, ado, lens
     "governance": 5,
     "operations": 11,    # +scaffold_files, +master_plan
     "utilities": 9,

@@ -315,8 +315,8 @@ class TestCortexContentMcpTool:
         """Total registered tool count must be 34 after adding cortex_content."""
         from cortex.mcp.mcp_registry import PRODUCTION_TOOLS
 
-        assert len(PRODUCTION_TOOLS) == 34, (
-            f"Expected 34 tools in PRODUCTION_TOOLS, got {len(PRODUCTION_TOOLS)}"
+        assert len(PRODUCTION_TOOLS) == 36, (
+            f"Expected 36 tools in PRODUCTION_TOOLS, got {len(PRODUCTION_TOOLS)}"
         )
 
     def test_content_library_routing_yaml_exists(self) -> None:

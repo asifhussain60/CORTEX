@@ -1,5 +1,28 @@
 ---
 scope: non-production-admin
+agent_id: cortex-auditor
+version: "1.0"
+status: active
+layer: core
+capabilities:
+  - codebase_health_scanning
+  - audit_coordination
+  - production_readiness_scanning
+  - enforcement_validation
+modes_served:
+  - AUDIT
+  - PRE-FLIGHT
+mcp_tools:
+  - cortex_audit
+  - cortex_validate
+collaborators:
+  - cortex-meta-auditor
+  - cortex-holistic-validator
+priority: P0
+token_cost_estimate: 4000
+created_date: "2026-02-20"
+last_updated: "2026-02-20"
+maintainer: "Asif Hussain"
 ---
 # CORTEX Auditor
 

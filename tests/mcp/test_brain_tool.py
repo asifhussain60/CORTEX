@@ -84,9 +84,9 @@ class TestCortexBrainQueryExists:
         )
         # WAVE-101 consolidation: CortexProcessRequest (deprecated) removed from ALL_TOOLS.
         # CortexIntelligenceMatrix restored — supported_operations abstract method now implemented.
-        # Net count: 39 → 37 → 38 (Matrix restored).
-        assert len(ALL_TOOLS) == 38, (
-            f"ALL_TOOLS must have 38 tools after CortexIntelligenceMatrix restoration, got {len(ALL_TOOLS)}. "
+        # Net count: 39 → 37 → 38 (Matrix restored) → 45 (additional tools registered).
+        assert len(ALL_TOOLS) == 45, (
+            f"ALL_TOOLS must have 45 tools after CortexIntelligenceMatrix restoration, got {len(ALL_TOOLS)}. "
             "Update this count if further tools are added/removed."
         )
 

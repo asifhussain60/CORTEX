@@ -1,7 +1,24 @@
 ---
 scope: non-production-admin
+agent_id: cortex-holistic-validator
+version: "1.0"
+status: active
+layer: support
+capabilities:
+  - holistic_validation
+  - cross_system_validation
+  - block_verdict_enforcement
+modes_served:
+  - AUDIT
+  - PRE-FLIGHT
+mcp_tools:
+  - cortex_validate
+priority: P2
+token_cost_estimate: 1500
+created_date: "2026-02-20"
+last_updated: "2026-02-20"
+maintainer: "Asif Hussain"
 ---
-# CORTEX Holistic Validator Agent
 
 **Updated:** 2026-02-20 | ## Role
 

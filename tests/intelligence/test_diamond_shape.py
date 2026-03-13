@@ -27,6 +27,11 @@ _ALLOWED_TOP_LEVEL_PY = {
     "provider.py",
     "base.py",
     "base_engine.py",
+    # Pre-existing canonical implementations — pending Phase 117 diamond migration
+    "ado_context_synthesizer.py",
+    "archetype_classifier.py",
+    "content_library_engine.py",
+    "registry_materializer.py",
 }
 
 # ─── Target diamond subdirectory names ───────────────────────────────────────

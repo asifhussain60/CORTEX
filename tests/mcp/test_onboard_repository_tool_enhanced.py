@@ -129,20 +129,16 @@ class TestMCPErrorHandling:
 class TestMCPResponseFormat:
     """Test MCP response format standards."""
 
-    @patch("cortex.mcp.tools.onboard_repository.UniversalLearningLoop")
-    @patch("cortex.mcp.tools.onboard_repository.OnboardingOrchestrator")
+    @patch("cortex.mcp.tools.onboard_repository.EnhancedOnboardingOrchestrator")
     def test_response_has_required_fields(
         self,
         mock_orch_class: Mock,
-        mock_loop_class: Mock,
         mock_onboarding_orchestrator: Mock,
-        mock_learning_loop: Mock,
         orchestrator_context: Dict[str, Any]
     ) -> None:
         """Test MCP response has all required fields."""
         # Setup
         mock_orch_class.return_value = mock_onboarding_orchestrator
-        mock_loop_class.return_value = mock_learning_loop
 
         # Execute
         result = onboard_repository_tool(
@@ -165,14 +161,11 @@ class TestMCPResponseFormat:
         assert isinstance(result["status"], str)
         assert isinstance(result["repository_path"], str)
 
-    @patch("cortex.mcp.tools.onboard_repository.UniversalLearningLoop")
-    @patch("cortex.mcp.tools.onboard_repository.OnboardingOrchestrator")
+    @patch("cortex.mcp.tools.onboard_repository.EnhancedOnboardingOrchestrator")
     def test_response_is_json_serializable(
         self,
         mock_orch_class: Mock,
-        mock_loop_class: Mock,
         mock_onboarding_orchestrator: Mock,
-        mock_learning_loop: Mock,
         orchestrator_context: Dict[str, Any]
     ) -> None:
         """Test MCP response is JSON serializable."""
@@ -180,7 +173,6 @@ class TestMCPResponseFormat:
         
         # Setup
         mock_orch_class.return_value = mock_onboarding_orchestrator
-        mock_loop_class.return_value = mock_learning_loop
 
         # Execute
         result = onboard_repository_tool(

@@ -1,7 +1,23 @@
 ---
 scope: non-production-admin
+agent_id: cortex-environment-setup
+version: "1.0"
+status: active
+layer: support
+capabilities:
+  - environment_validation
+  - preflight_checks
+  - dependency_verification
+modes_served:
+  - PRE-FLIGHT
+mcp_tools:
+  - cortex_verify
+priority: P2
+token_cost_estimate: 1200
+created_date: "2026-02-20"
+last_updated: "2026-02-20"
+maintainer: "Asif Hussain"
 ---
-# CORTEX Environment Setup Agent
 
 **Updated:** 2026-02-20 | ## Role
 

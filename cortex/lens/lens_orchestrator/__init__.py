@@ -16,6 +16,10 @@ from cortex.lens.lens_orchestrator._coordinator import (
     LENSOrchestrator,
     get_lens_orchestrator,
 )
+# Re-exported for test patching at cortex.lens.lens_orchestrator.* namespace
+from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.comment_extractor import CommentExtractor
+from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 
 __all__ = [
     "LENSContext",
@@ -26,4 +30,7 @@ __all__ = [
     "LensVisionMixin",
     "LENSOrchestrator",
     "get_lens_orchestrator",
+    "ASTAnalyzer",
+    "CommentExtractor",
+    "GitHistoryAnalyzer",
 ]

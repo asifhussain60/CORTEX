@@ -33,7 +33,8 @@ def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
     if not context:
         raise ValueError(
             "BLOCKED: Missing orchestrator_context. All requests MUST route "
-            "through MasterOrchestrator via cortex_request_lifecycle entry point."
+            "through MasterOrchestrator via cortex_process_request or "
+            "cortex_request_lifecycle entry point."
         )
 
     source = context.get("source")

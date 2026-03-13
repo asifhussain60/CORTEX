@@ -141,8 +141,12 @@ class TestCoreStructure:
         assert self.CORE_ROOT.is_dir(), "core/ should be directory"
     
     def test_core_subdirectories_exist(self):
-        """Verify core subdirectories exist."""
-        expected = ["governance", "config", "specifications", "wiring"]
+        """Verify core subdirectories exist.
+
+        Note: governance/ and config/ were merged to top-level namespaces by
+        Phase 108 (GAP-108-04, GAP-108-05) and no longer live under core/.
+        """
+        expected = ["specifications", "wiring"]
         for subdir in expected:
             path = self.CORE_ROOT / subdir
             assert path.exists(), f"Missing core/{subdir}"

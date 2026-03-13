@@ -27,7 +27,7 @@ def _seed(root: Path, outcome: str, orch: str, op: str, **kw) -> None:
     """Seed a minimal OPJ entry directly into the YAML shard."""
     from datetime import datetime, timezone
     snake = _snake_test(orch)
-    d = root / "integration" / "patterns" / outcome
+    d = root / "patterns" / outcome
     d.mkdir(parents=True, exist_ok=True)
     f = d / f"{snake}.yaml"
     entry = {

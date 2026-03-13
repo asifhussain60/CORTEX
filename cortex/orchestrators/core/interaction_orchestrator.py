@@ -115,9 +115,10 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
             self._personality = None  # graceful degradation
 
         # Phase 65-S5-T4: Intelligence provider for interactive mode enrichment
+        # Phase 107: Use IntelligenceFacade (canonical entry point — not direct provider)
         try:
-            from cortex.intelligence.provider import get_intelligence_provider
-            self._intelligence_provider: Any = get_intelligence_provider()
+            from cortex.intelligence.facade import IntelligenceFacade
+            self._intelligence_provider: Any = IntelligenceFacade()
         except Exception:
             self._intelligence_provider = None  # graceful degradation
 

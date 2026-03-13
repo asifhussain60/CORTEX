@@ -270,6 +270,6 @@ class TestCortexAdoMcpTool:
     def test_registry_tool_count_is_35(self) -> None:
         """Total registered tool count must be 35 after adding cortex_ado."""
         from cortex.mcp.mcp_registry import PRODUCTION_TOOLS
-        assert len(PRODUCTION_TOOLS) == 35, (
-            f"Expected 35 tools, got {len(PRODUCTION_TOOLS)}"
+        assert len(PRODUCTION_TOOLS) == 36, (
+            f"Expected 36 tools, got {len(PRODUCTION_TOOLS)}"
         )

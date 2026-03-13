@@ -73,8 +73,8 @@ class TemplateContentValidator:
             errors.append("Content is empty")
 
         return ValidationResult(
-            valid=len(errors) == 0,
-            errors=errors,
+            passed=len(errors) == 0,
+            violations=errors,
             warnings=warnings,
         )
 
@@ -105,8 +105,8 @@ class TemplateContentValidator:
             errors.append(f"Unmatched braces: {open_count} open, {close_count} close")
 
         return ValidationResult(
-            valid=len(errors) == 0,
-            errors=errors,
+            passed=len(errors) == 0,
+            violations=errors,
             warnings=warnings,
         )
 
@@ -131,8 +131,8 @@ class TemplateContentValidator:
             warnings.append("Unclosed code block detected")
 
         return ValidationResult(
-            valid=len(errors) == 0,
-            errors=errors,
+            passed=len(errors) == 0,
+            violations=errors,
             warnings=warnings,
         )
 
@@ -146,7 +146,7 @@ class TemplateContentValidator:
             Validation result.
         """
         # Basic validation - always passes for now
-        return ValidationResult(valid=True, errors=[], warnings=[])
+        return ValidationResult(passed=True)
 
     def validate_inheritance(self, template_id: str) -> ValidationResult:
         """Validate template inheritance chain.
@@ -158,7 +158,7 @@ class TemplateContentValidator:
             Validation result.
         """
         # Basic validation - always passes for now
-        return ValidationResult(valid=True, errors=[], warnings=[])
+        return ValidationResult(passed=True)
 
     def validate_all(self) -> ValidationReport:
         """Validate all templates in registry.
@@ -185,14 +185,14 @@ class TemplateContentValidator:
 
                 # Validate content
                 content_result = self.validate_content(content)
-                if not content_result.valid:
-                    errors.extend([f"{template_id}: {e}" for e in content_result.errors])
+                if not content_result.is_valid:
+                    errors.extend([f"{template_id}: {e}" for e in content_result.violations])
                 warnings.extend([f"{template_id}: {w}" for w in content_result.warnings])
 
                 # Validate variables
                 var_result = self.validate_variables(content)
-                if not var_result.valid:
-                    errors.extend([f"{template_id}: {e}" for e in var_result.errors])
+                if not var_result.is_valid:
+                    errors.extend([f"{template_id}: {e}" for e in var_result.violations])
                 warnings.extend([f"{template_id}: {w}" for w in var_result.warnings])
 
         return ValidationReport(

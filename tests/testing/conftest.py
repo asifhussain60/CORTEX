@@ -3,6 +3,23 @@ import pytest
 from pathlib import Path
 
 
+try:
+    from playwright.sync_api import Page  # type: ignore[import]
+    _PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    _PLAYWRIGHT_AVAILABLE = False
+    Page = None  # type: ignore[assignment,misc]
+
+
+@pytest.fixture
+def page():
+    """Playwright Page fixture — skips when Playwright is not installed."""
+    if not _PLAYWRIGHT_AVAILABLE:
+        pytest.skip("Playwright not installed — skipping browser test")
+    # If playwright-pytest is installed, it replaces this fixture automatically
+    pytest.skip("Playwright browser fixture requires pytest-playwright plugin")
+
+
 @pytest.fixture(scope="session")
 def e2e_environment():
     """Set up E2E test environment."""

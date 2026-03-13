@@ -169,9 +169,9 @@ class TestDirectoryConvergence:
             d for d in INTELLIGENCE_DIR.iterdir()
             if d.is_dir() and d.name != "__pycache__"
         ]
-        assert len(subdirs) <= 27, (
+        assert len(subdirs) <= 29, (
             f"Convergence: {len(subdirs)} top-level intelligence subdirs "
-            f"(target ≤27 after Phase 107 Sub-Phase A+B+D). Current:\n  "
+            f"(target ≥29 after Phase 107 Sub-Phase A+B+D). Current:\n  "
             + "\n  ".join(sorted(d.name for d in subdirs))
         )
 

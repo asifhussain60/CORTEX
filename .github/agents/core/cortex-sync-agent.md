@@ -1,11 +1,12 @@
 ---
 scope: non-production-admin
 agent_id: cortex-sync-agent
+version: "1.0"
 status: active
 layer: core
-phase: 127
 modes_served:
   - SYNC
+  - AUDIT
 capabilities:
   - deterministic_sync
   - allow_deny_policy
@@ -15,10 +16,9 @@ capabilities:
   - conflict_surface
   - patch_proposals
   - proof_manifest
-  - windows_path_safety
-engine: cortex/tools/cortex_sync.py
-workflow: cortex-registry/workflows/templates/lifecycle/sync-workflow.yaml
-response_template: "cortex-response-templates.md § 🔄 SYNC Mode"
+mcp_tools:
+  - cortex_sync
+  - cortex_validate
 priority: P0
 token_cost_estimate: 3200
 created_date: "2026-03-04"

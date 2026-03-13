@@ -241,6 +241,7 @@ class IntentType(Enum):
     DISTILL = "distill"            # Conversational entropy reduction to executable prompt
     OPTIMIZE = "optimize"          # Multi-file content optimization and compression
     FEEDBACK = "feedback"          # Cross-repo feedback extraction + backport (phase-139)
+    REVIEW = "review"              # Code review analysis and feedback
     UNKNOWN = "unknown"
 
 

@@ -39,9 +39,11 @@ class CortexAuditDB:
         Args:
             db_path: Path to SQLite database file (str or Path).
         """
+        import threading
         self.db_path = Path(db_path) if isinstance(db_path, str) else db_path
         self.logger = logging.getLogger("cortex.audit")
         self._connection: Optional[sqlite3.Connection] = None
+        self._write_lock = threading.Lock()  # Serializes concurrent writes
         self._initialize_db()
 
     def _initialize_db(self) -> None:
@@ -152,27 +154,28 @@ class CortexAuditDB:
         Returns:
             Row ID of inserted event.
         """
-        conn = self._get_connection()
-        cursor = conn.cursor()
+        with self._write_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
 
-        metadata_json = json.dumps(entry.metadata) if entry.metadata else None
+            metadata_json = json.dumps(entry.metadata) if entry.metadata else None
 
-        cursor.execute("""
-            INSERT INTO audit_events
-            (timestamp, event_type, orchestrator_id, status, duration_ms, error_message, metadata)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (
-            entry.timestamp.isoformat() if entry.timestamp else None,
-            entry.event_type,
-            entry.orchestrator_id,
-            entry.status,
-            entry.duration_ms,
-            entry.error_message,
-            metadata_json,
-        ))
+            cursor.execute("""
+                INSERT INTO audit_events
+                (timestamp, event_type, orchestrator_id, status, duration_ms, error_message, metadata)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                entry.timestamp.isoformat() if entry.timestamp else None,
+                entry.event_type,
+                entry.orchestrator_id,
+                entry.status,
+                entry.duration_ms,
+                entry.error_message,
+                metadata_json,
+            ))
 
-        conn.commit()
-        return cursor.lastrowid
+            conn.commit()
+            return cursor.lastrowid
 
     def query_events(
         self,

@@ -44,6 +44,11 @@ class ValidationResult:
         """Alias for ``passed`` — convenience property for callers using is_valid."""
         return self.passed
 
+    @property
+    def valid(self) -> bool:
+        """Alias for ``passed`` — convenience property for callers using valid."""
+        return self.passed
+
     @classmethod
     def ok(cls, warnings: Optional[List[str]] = None, **kwargs: Any) -> "ValidationResult":
         """Create a passing ValidationResult.
