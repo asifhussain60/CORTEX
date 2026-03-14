@@ -1,0 +1,262 @@
+# Claude Code Agent Development Reference
+# Patterns for building effective agents, teams, and orchestration
+# Last verified: 2026-03-14
+
+metadata:
+  title: Claude Code Agent Development
+  version: "1.0"
+  source: code.claude.com/docs/en + CORTEX agent/orchestrator architecture
+  audience: [Intermediate, Advanced]
+
+agent_anatomy:
+  description: "A Claude Code agent is a .md file inside .claude/agents/"
+  frontmatter_fields:
+    - field: name
+      required: true
+      description: "Unique identifier for the agent"
+    - field: description
+      required: true
+      description: "What the agent does — shown in agent selection"
+    - field: tools
+      required: false
+      description: "Allowed tools (Read, Write, Bash, Grep, Glob, MCP servers)"
+      example: "[Read, Write, Bash(npm test:*), Grep, Glob]"
+    - field: skills
+      required: false
+      description: "Skills to auto-load when agent activates"
+      example: "[tdd-workflow, code-conventions]"
+    - field: permissionMode
+      required: false
+      description: "Permission level (default or bypassPermissions)"
+      warning: "bypassPermissions should be reserved for trusted guardian agents only"
+    - field: mcpServers
+      required: false
+      description: "MCP servers this agent can access"
+
+agent_archetypes:
+  - id: AA-001
+    name: "Executor Agent"
+    description: "Implements features, fixes bugs, writes code"
+    cortex_analogy: "TDDOrchestrator — executes red-green-refactor cycles"
+    tools: "[Read, Write, Bash(npm test:*, npx tsc:*), Grep, Glob]"
+    skills: "[tdd-workflow, code-conventions]"
+    template: |
+      ---
+      name: feature-builder
+      description: Implement features using TDD workflow
+      tools: [Read, Write, Bash(npm test:*, npx tsc:*), Grep, Glob]
+      skills: [tdd-workflow, code-conventions]
+      ---
+
+      You implement features using test-driven development.
+
+      ## Workflow
+      1. Understand the requirement
+      2. Write failing tests first
+      3. Implement minimum code to pass
+      4. Refactor while tests stay green
+      5. Verify full test suite passes
+
+  - id: AA-002
+    name: "Reviewer Agent"
+    description: "Reviews code for quality, security, and conventions"
+    cortex_analogy: "CodeReviewOrchestrator — 6-stage PR review pipeline"
+    tools: "[Read, Grep, Glob]"
+    skills: "[code-conventions, security-checklist]"
+    template: |
+      ---
+      name: code-reviewer
+      description: Multi-stage code review
+      tools: [Read, Grep, Glob]
+      skills: [code-conventions, security-checklist]
+      ---
+
+      Review code in these stages:
+      1. **Structure**: File organization, naming, imports
+      2. **Logic**: Correctness, edge cases, error handling
+      3. **Security**: OWASP top 10, secrets, input validation
+      4. **Performance**: N+1 queries, unnecessary allocations
+      5. **Style**: Conventions compliance, readability
+      6. **Tests**: Coverage, edge cases, assertion quality
+
+  - id: AA-003
+    name: "Guardian Agent"
+    description: "Enforces rules and blocks non-compliant operations"
+    cortex_analogy: "EnforcementOrchestrator — governance enforcement at boundaries"
+    tools: "[Read, Grep, Glob, Bash(npm test:*, npx eslint:*)]"
+    permission: "bypassPermissions (trusted)"
+    template: |
+      ---
+      name: quality-gate
+      description: Pre-commit quality enforcement
+      tools: [Read, Grep, Glob, Bash(npm test:*, npx eslint:*)]
+      permissionMode: bypassPermissions
+      ---
+
+      Before any commit, verify ALL of these pass:
+      1. Tests: `npm test`
+      2. Lint: `npx eslint src/`
+      3. Types: `npx tsc --noEmit`
+      4. No secrets in diff
+      5. No TODO/FIXME in committed code
+
+      If ANY check fails, report the issue and BLOCK the operation.
+
+  - id: AA-004
+    name: "Router Agent"
+    description: "Classifies intent and delegates to specialist agents"
+    cortex_analogy: "IntentRouter — 33 intent types routed to domain orchestrators"
+    tools: "[Read, Grep, Glob]"
+    template: |
+      ---
+      name: request-router
+      description: Classify user requests and delegate to specialists
+      tools: [Read, Grep, Glob]
+      ---
+
+      Analyze the user's request and delegate:
+      - Security concerns → @security-auditor
+      - Feature implementation → @feature-builder
+      - Code review requests → @code-reviewer
+      - Bug fixes → @bug-fixer
+      - Documentation → @doc-writer
+
+      If unclear, ask the user to clarify before delegating.
+
+  - id: AA-005
+    name: "Explorer Agent"
+    description: "Read-only codebase analysis and research"
+    cortex_analogy: "IntelligenceFacade / LENS — code intelligence and analysis"
+    tools: "[Read, Grep, Glob]"
+    template: |
+      ---
+      name: codebase-explorer
+      description: Analyze codebase structure, patterns, and dependencies
+      tools: [Read, Grep, Glob]
+      ---
+
+      You are a read-only research agent. You NEVER modify files.
+
+      ## Capabilities
+      - Map project structure and architecture
+      - Trace data flow through the codebase
+      - Identify patterns and anti-patterns
+      - Find all usages of a symbol
+      - Analyze dependency relationships
+
+  - id: AA-006
+    name: "Coordinator Agent"
+    description: "Manages multi-agent pipelines and collects results"
+    cortex_analogy: "MasterOrchestrator — 4-stage pipeline coordination"
+    tools: "[Read, Grep, Glob]"
+    template: |
+      ---
+      name: tech-lead
+      description: Coordinate specialist agents for complex requests
+      tools: [Read, Grep, Glob]
+      ---
+
+      You coordinate work across specialists:
+      1. Analyze the request scope
+      2. Identify required specialists
+      3. Delegate to each specialist sequentially
+      4. Review and synthesize outputs
+      5. Present unified result to user
+
+orchestration_patterns:
+  - id: OP-001
+    name: "Sequential Pipeline"
+    agents: ["analyzer", "implementer", "verifier"]
+    description: "Each agent completes before the next starts"
+    flow: "Analyze → Implement → Verify"
+    cortex_analogy: "Interaction → Intent → Intelligence → Execution pipeline"
+
+  - id: OP-002
+    name: "Fan-Out / Fan-In"
+    agents: ["coordinator", "worker-1", "worker-2", "worker-3"]
+    description: "Parallel work distributed then collected"
+    flow: "Coordinator fans out → Workers execute in parallel → Coordinator collects"
+    cortex_analogy: "Total Recall certification pipeline — diamond pattern"
+
+  - id: OP-003
+    name: "Gate Pattern"
+    agents: ["executor", "guardian"]
+    description: "Guardian blocks operations that fail quality checks"
+    flow: "Executor works → Guardian validates at boundaries"
+    cortex_analogy: "EnforcementOrchestrator + CORE governance rules"
+
+  - id: OP-004
+    name: "Convergence Loop"
+    agents: ["scanner", "fixer"]
+    description: "Iterative fix-and-recheck until clean"
+    flow: "Scan → Fix → Re-scan → (loop until clean or max cycles)"
+    cortex_analogy: "CORE-068 convergence gate — re-run until zero issues"
+
+  - id: OP-005
+    name: "Lazy-Loading Registry"
+    agents: ["index", "specialist-1", "specialist-n"]
+    description: "Lightweight index maps to full agents loaded on demand"
+    flow: "Index classifies → Load specific agent → Execute"
+    cortex_analogy: "AGENT-INDEX.md (~200 tokens) → full agent (1-2.5K tokens)"
+
+team_design_principles:
+  - principle: "Single Responsibility"
+    description: "Each agent owns one domain. No god-agents."
+  - principle: "Minimum Privilege"
+    description: "Grant only the tools an agent needs. Read-only for reviewers."
+  - principle: "Fail Loudly"
+    description: "Guardian agents should clearly report what failed and why."
+  - principle: "Stateless Agents"
+    description: "Agents should not assume state from prior invocations. Pass context explicitly."
+  - principle: "Token Budget Awareness"
+    description: "Keep agent definitions under 2K tokens. Use skills for detailed procedures."
+  - principle: "Test Your Agents"
+    description: "Run agents against known scenarios. Verify routing, tool access, and output quality."
+
+cortex_to_claude_migration:
+  description: "Converting CORTEX agents to Claude Code agents"
+  field_mapping:
+    - cortex: "agent_id"
+      claude_code: "name"
+    - cortex: "scope"
+      claude_code: "description (first line)"
+    - cortex: "capabilities"
+      claude_code: "skills"
+    - cortex: "mcp_tools"
+      claude_code: "tools"
+    - cortex: "collaborators"
+      claude_code: "@agent delegation in body"
+    - cortex: "priority"
+      claude_code: "ordering in router agent"
+    - cortex: "token_cost_estimate"
+      claude_code: "(not needed — Claude manages context)"
+  steps:
+    - step: 1
+      action: "Identify the CORTEX agent in .github/agents/"
+    - step: 2
+      action: "Create .claude/agents/{name}.md with mapped frontmatter"
+    - step: 3
+      action: "Convert orchestrator logic to natural language instructions"
+    - step: 4
+      action: "Map MCP tool references to Claude Code tool patterns"
+    - step: 5
+      action: "Convert governance rules to hook configurations"
+    - step: 6
+      action: "Test agent invocation and verify routing works correctly"
+
+anti_patterns:
+  - name: "God Agent"
+    symptom: "One agent with all tools, all skills, handling everything"
+    fix: "Split into domain specialists with scoped tools"
+  - name: "Circular Delegation"
+    symptom: "Agent A delegates to B, B delegates back to A"
+    fix: "Define strict hierarchy — no circular references"
+  - name: "Over-Permissioned Guardian"
+    symptom: "Guardian agent has Write/Bash tools it doesn't need"
+    fix: "Guardians should be read-only + specific test commands only"
+  - name: "Context Hog"
+    symptom: "Agent definition > 3K tokens with inline procedures"
+    fix: "Move procedures to skills, keep agent definition lean"
+  - name: "Phantom Router"
+    symptom: "Router agent that re-does the work instead of delegating"
+    fix: "Router should ONLY classify and delegate, never execute"

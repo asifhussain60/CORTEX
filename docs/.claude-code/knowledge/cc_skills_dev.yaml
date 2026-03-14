@@ -1,0 +1,185 @@
+# Claude Code Skills Development Reference
+# Patterns for building effective SKILL.md files and skill hierarchies
+# Last verified: 2026-03-14
+
+metadata:
+  title: Claude Code Skills Development
+  version: "1.0"
+  source: code.claude.com/docs/en + CORTEX skill architecture
+  audience: [Intermediate, Advanced]
+
+skill_anatomy:
+  description: "A Claude Code skill is a SKILL.md file inside .claude/skills/{name}/"
+  required_fields:
+    - field: name
+      description: "Unique identifier for the skill"
+      example: "tdd-workflow"
+    - field: description
+      description: "What the skill does — also used for auto-matching"
+      example: "Test-driven development workflow for feature implementation"
+  optional_fields:
+    - field: argument-hint
+      description: "Hint shown to user for expected input"
+      example: "Describe the feature to implement"
+    - field: user-invocable
+      description: "Whether user can invoke directly (default true)"
+      values: [true, false]
+
+skill_directory_structure:
+  minimal:
+    description: "Single SKILL.md — good for simple procedures"
+    layout: |
+      .claude/skills/my-skill/
+      └── SKILL.md
+
+  standard:
+    description: "SKILL.md + supporting reference files"
+    layout: |
+      .claude/skills/my-skill/
+      ├── SKILL.md
+      ├── checklist.md
+      └── examples.md
+
+  advanced:
+    description: "Full skill with references, templates, and data"
+    layout: |
+      .claude/skills/my-skill/
+      ├── SKILL.md
+      ├── references/
+      │   ├── checklist.md
+      │   └── patterns.md
+      ├── templates/
+      │   └── component-template.md
+      └── data/
+          └── config-defaults.yaml
+
+patterns:
+  - id: SP-001
+    name: "Gateway Skill"
+    description: "Routes requests to domain-specific skills based on intent signals"
+    cortex_analogy: "cortex/SKILL.md — gateway skill with intent classification"
+    template: |
+      ---
+      name: project-gateway
+      description: Classify requests and load appropriate domain skill
+      ---
+
+      ## Intent Classification
+      | Signal | Domain Skill |
+      |--------|-------------|
+      | implement, build, feature | tdd-workflow |
+      | security, vuln, OWASP | security-audit |
+      | review, PR, quality | code-review |
+      | deploy, release, CI | deployment |
+
+      When the user's request matches a signal, load that skill.
+    when_to_use: "Projects with 3+ skills that need coordination"
+
+  - id: SP-002
+    name: "Procedural Skill"
+    description: "Step-by-step workflow that agents execute in order"
+    cortex_analogy: "cortex-tdd SKILL.md — TDD cycle as ordered steps"
+    template: |
+      ---
+      name: tdd-workflow
+      description: Red-Green-Refactor TDD cycle
+      ---
+
+      ## Procedure
+      1. **RED**: Write a failing test for the requirement
+      2. **GREEN**: Write minimum code to pass the test
+      3. **REFACTOR**: Clean up while keeping tests green
+      4. **VERIFY**: Run full test suite
+
+      ## Rules
+      - Never write implementation before the test
+      - Each cycle addresses ONE requirement
+      - Refactor only when tests pass
+    when_to_use: "Repeatable workflows with defined steps"
+
+  - id: SP-003
+    name: "Reference Skill"
+    description: "Knowledge base skill that provides context without procedures"
+    cortex_analogy: "cortex-governance SKILL.md — rule reference loaded when needed"
+    template: |
+      ---
+      name: api-conventions
+      description: REST API design conventions for this project
+      ---
+
+      ## URL Patterns
+      - Resources: /api/v1/{resource}
+      - Actions: /api/v1/{resource}/{id}/{action}
+
+      ## Response Format
+      - Always use { data, error, meta } envelope
+      - HTTP 200 for success, 4xx for client errors, 5xx for server
+
+      ## Authentication
+      - Bearer token in Authorization header
+      - Rate limiting: 100 req/min per token
+    when_to_use: "Conventions and standards that agents reference during work"
+
+  - id: SP-004
+    name: "Checklist Skill"
+    description: "Verification checklist that agents run through"
+    cortex_analogy: "cortex-audit references/checks.md — 41-point audit checklist"
+    template: |
+      ---
+      name: security-checklist
+      description: Security verification checklist for code changes
+      ---
+
+      ## Pre-Merge Security Checklist
+      - [ ] No hardcoded secrets or API keys
+      - [ ] Input validation on all user inputs
+      - [ ] SQL queries use parameterized statements
+      - [ ] XSS protection on rendered output
+      - [ ] CORS configured correctly
+      - [ ] Dependencies audited (npm audit / pip audit)
+      - [ ] Auth tokens have expiration
+      - [ ] Error messages don't leak internals
+    when_to_use: "Quality gates and compliance verification"
+
+  - id: SP-005
+    name: "Composite Skill"
+    description: "Skill that references other skills and supporting files"
+    cortex_analogy: "CORTEX skills with references/ subdirectory"
+    template: |
+      ---
+      name: full-feature-workflow
+      description: Complete feature workflow from spec to deployment
+      ---
+
+      ## Workflow
+      1. Load skill: tdd-workflow (for implementation)
+      2. Load skill: security-checklist (for verification)
+      3. Load skill: code-conventions (for standards)
+
+      ## Supporting Files
+      - See ./templates/feature-spec.md for spec template
+      - See ./references/arch-decisions.md for architecture context
+    when_to_use: "Complex workflows that combine multiple domains"
+
+skill_quality_checklist:
+  - check: "SKILL.md under 300 lines (move details to supporting files)"
+  - check: "Clear name and description for auto-matching"
+  - check: "Single domain responsibility"
+  - check: "Procedures are numbered for sequential execution"
+  - check: "References are in separate files, not inline"
+  - check: "No hardcoded paths — use relative references"
+  - check: "Committed to git and reviewed in PRs"
+
+cortex_to_claude_migration:
+  description: "Converting CORTEX skills to Claude Code skills"
+  steps:
+    - step: 1
+      action: "Copy .github/skills/{name}/SKILL.md to .claude/skills/{name}/SKILL.md"
+    - step: 2
+      action: "Convert frontmatter: keep name and description, drop CORTEX-specific fields"
+    - step: 3
+      action: "Copy references/ directory if present"
+    - step: 4
+      action: "Replace CORTEX orchestrator references with Claude Code agent references"
+    - step: 5
+      action: "Test: invoke the skill in Claude Code and verify it loads correctly"

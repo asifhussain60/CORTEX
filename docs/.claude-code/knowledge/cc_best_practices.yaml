@@ -1,0 +1,150 @@
+# Claude Code Best Practices
+# Synthesised from code.claude.com/docs + production patterns
+# Last verified: 2026-03-14
+
+metadata:
+  title: Claude Code Best Practices
+  version: "1.0"
+  source: code.claude.com/docs/en + CORTEX governance patterns
+  audience: [Basic, Intermediate, Advanced]
+
+categories:
+  - id: claude-md
+    name: "CLAUDE.md Configuration"
+    practices:
+      - id: BP-CM-001
+        title: "Keep CLAUDE.md lean"
+        description: "CLAUDE.md loads into every context window. Keep it under 500 lines. Move detailed procedures into skills."
+        priority: P0
+        anti_pattern: "Putting entire style guides, API references, or runbooks directly in CLAUDE.md"
+        recommendation: "Project context + routing rules in CLAUDE.md; procedures in .claude/skills/"
+
+      - id: BP-CM-002
+        title: "Use hierarchical CLAUDE.md placement"
+        description: "Place workspace-level context in root CLAUDE.md, module-specific context in subdirectory CLAUDE.md files (CLAUDE.local.md for personal, untracked overrides)."
+        priority: P1
+
+      - id: BP-CM-003
+        title: "Define explicit routing rules"
+        description: "Map request types to agents or skills in CLAUDE.md so Claude routes correctly without ambiguity."
+        priority: P1
+        example: "Security requests → @security-auditor, Feature requests → @feature-builder"
+
+      - id: BP-CM-004
+        title: "Include build and test commands"
+        description: "Always document how to build, test, lint, and deploy. Claude uses these for verification."
+        priority: P0
+
+  - id: skills
+    name: "Skill Development"
+    practices:
+      - id: BP-SK-001
+        title: "One skill per domain"
+        description: "Each skill should own a single domain (TDD, security, deployment). Avoid multi-domain skills."
+        priority: P0
+        anti_pattern: "A 'do-everything' skill with mixed TDD + security + deployment instructions"
+
+      - id: BP-SK-002
+        title: "Include supporting reference files"
+        description: "Place checklists, templates, and examples alongside SKILL.md in the same skill directory."
+        priority: P1
+        example: ".claude/skills/security/SKILL.md + owasp-top-10.md + security-checklist.md"
+
+      - id: BP-SK-003
+        title: "Use argument hints"
+        description: "Add descriptive text in the skill description so Claude knows when to auto-load it."
+        priority: P2
+
+      - id: BP-SK-004
+        title: "Version skill content"
+        description: "Commit skills to git. Review skill changes in PRs just like code."
+        priority: P1
+
+  - id: agents
+    name: "Agent Design"
+    practices:
+      - id: BP-AG-001
+        title: "Scope tools to minimum required"
+        description: "Only grant tools an agent actually needs. A read-only reviewer should not have Write or Bash tools."
+        priority: P0
+        anti_pattern: "Giving every agent access to all tools and all MCP servers"
+
+      - id: BP-AG-002
+        title: "Use permissionMode wisely"
+        description: "Only use bypassPermissions for fully trusted, well-tested guardian agents. Default to standard permissions."
+        priority: P0
+
+      - id: BP-AG-003
+        title: "Define clear agent boundaries"
+        description: "Each agent should have a specific responsibility. Avoid agents that try to do everything."
+        priority: P1
+
+      - id: BP-AG-004
+        title: "Create a lazy-loading agent index"
+        description: "Use a lightweight index (agent-directory) listing all agents. Load full agent definitions only when needed."
+        priority: P1
+
+  - id: hooks
+    name: "Hook Configuration"
+    practices:
+      - id: BP-HK-001
+        title: "Hook only critical operations"
+        description: "Pre-commit, pre-push, and API calls are good hook targets. Do not hook every file read."
+        priority: P0
+        anti_pattern: "Adding hooks to Read, Glob, or Grep tools — causes excessive overhead"
+
+      - id: BP-HK-002
+        title: "Use command hooks for fast checks"
+        description: "For simple validations (lint, test), use command hooks. Reserve agent hooks for complex analysis."
+        priority: P1
+
+      - id: BP-HK-003
+        title: "Set reasonable timeouts"
+        description: "All hooks should have explicit timeouts to prevent hanging."
+        priority: P1
+
+  - id: security
+    name: "Security"
+    practices:
+      - id: BP-SEC-001
+        title: "Never allow unrestricted Bash"
+        description: "Use tool patterns like Bash(npm test:*) instead of unrestricted Bash access."
+        priority: P0
+
+      - id: BP-SEC-002
+        title: "Scan for secrets in hooks"
+        description: "Add a pre-commit hook that scans for API keys, tokens, and passwords."
+        priority: P0
+
+      - id: BP-SEC-003
+        title: "Restrict MCP server access per agent"
+        description: "Each agent should only connect to the MCP servers it needs. Scope via agent frontmatter."
+        priority: P1
+
+      - id: BP-SEC-004
+        title: "Audit agent permissions regularly"
+        description: "Review agent tool access and permissions as your project evolves."
+        priority: P2
+
+  - id: performance
+    name: "Context & Performance"
+    practices:
+      - id: BP-PERF-001
+        title: "Monitor context window usage"
+        description: "Use /cost and /compact regularly. If context approaches 80%, compact or start a new session."
+        priority: P1
+
+      - id: BP-PERF-002
+        title: "Use Explore subagent for research"
+        description: "Delegate codebase exploration to the built-in Explore subagent to save main context."
+        priority: P1
+
+      - id: BP-PERF-003
+        title: "Prefer skills over inline instructions"
+        description: "Skills load on demand; inline CLAUDE.md content loads always. Move verbose content to skills."
+        priority: P1
+
+      - id: BP-PERF-004
+        title: "Use headless mode for CI"
+        description: "In CI/CD, use claude -p with --allowedTools and --output-format json for deterministic, non-interactive execution."
+        priority: P1
