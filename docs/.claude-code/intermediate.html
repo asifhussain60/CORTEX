@@ -102,7 +102,84 @@ h1,h2,h3,h4{margin:0;font-family:var(--font-display);line-height:1.2}
 .footer-inner a:hover{color:var(--gold-primary)}
 .back-link{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:999px;font-size:0.8125rem;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:all var(--dur-moderate);margin-bottom:1rem}
 .back-link:hover{color:var(--text-main);background:rgba(255,255,255,0.08)}
+
+/* ─── Phase content sections ─── */
+.phases-wrapper{max-width:1680px;margin:0 auto}
+.phase-sec{padding:2.75rem 2rem 1.5rem;border-top:1px solid rgba(255,255,255,0.04)}
+.phase-sec:first-child{border-top:none}
+.phase-sec-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin-bottom:1.5rem}
+.phase-icon{width:3rem;height:3rem;border-radius:.875rem;display:flex;align-items:center;justify-content:center;font-size:1.375rem;flex-shrink:0;margin-top:.125rem}
+.phase-meta .phase-tag{font-size:.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:.25rem}
+.phase-meta h2{font-size:1.625rem;font-weight:800;letter-spacing:-.02em;margin-bottom:0;font-family:var(--font-display)}
+.phase-intro{font-size:1rem;color:var(--text-muted);line-height:1.8;max-width:840px;margin-bottom:1.75rem}
+.phase-intro strong{color:var(--text-main);font-weight:600}
+.phase-intro code{color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-size:.875em;font-family:var(--font-mono)}
+.phase-h3{font-size:1.0625rem;font-weight:700;margin:1.75rem 0 .75rem;color:var(--text-main);font-family:var(--font-display)}
+.phase-p{font-size:.9375rem;color:var(--text-muted);line-height:1.8;margin:0 0 1.25rem}
+.phase-p strong{color:var(--text-main);font-weight:600}
+.phase-p code{color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-size:.875em;font-family:var(--font-mono)}
+/* Phase accent colours */
+.ph1-icon{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.22)}.ph1{color:#f59e0b}
+.ph2-icon{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.22)}.ph2{color:#3b82f6}
+.ph3-icon{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.22)}.ph3{color:#10b981}
+.ph4-icon{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.22)}.ph4{color:#8b5cf6}
+.ph5-icon{background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.22)}.ph5{color:#d4a017}
+/* ─── Sidenote analogy blocks ─── */
+.sidenote{margin:1.75rem 0;padding:1.25rem 1.5rem 1.25rem 1.875rem;border-radius:1rem;background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(212,160,23,.03));border:1px solid rgba(245,158,11,.18);position:relative;overflow:hidden}
+.sidenote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3.5px;background:linear-gradient(180deg,#f59e0b,#d4a017);border-radius:3px 0 0 3px}
+.sidenote-tag{display:inline-flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--amber-primary);margin-bottom:.5rem}
+.sidenote-tag::before{content:'✦';font-size:.5625rem}
+.sidenote p{margin:0 0 .5rem;font-size:.9375rem;font-style:italic;color:var(--text-muted);line-height:1.85}
+.sidenote p:last-child{margin:0}
+.sidenote p strong{color:var(--gold-light);font-style:normal;font-weight:600}
+.sidenote p code{font-style:normal;color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-size:.8125rem;font-family:var(--font-mono)}
+/* ─── Code blocks ─── */
+.p-code{position:relative;margin:1.25rem 0 1.75rem;border-radius:.875rem;overflow:hidden;background:rgba(8,12,24,.85);border:1px solid rgba(255,255,255,.06)}
+.p-code-hdr{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1rem;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.05);font-size:.6875rem;font-weight:600;color:#64748b;letter-spacing:.04em}
+.p-code-lang{display:flex;align-items:center;gap:.375rem;color:#64748b}
+.p-code-lang::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber-primary);margin-right:.25rem;vertical-align:middle}
+.p-code-body{padding:1rem 1.25rem;overflow-x:auto;font-family:var(--font-mono);font-size:.8125rem;line-height:1.8;color:#c9d1d9;tab-size:4;white-space:pre}
+.p-code-body .c{color:#475569;font-style:italic}.p-code-body .k{color:#ff7b72}.p-code-body .s{color:#a5d6ff}.p-code-body .g{color:#34d399}.p-code-body .m{color:#f59e0b}
+.p-copy{background:none;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:.2rem .6rem;font-size:.6875rem;font-weight:600;color:#64748b;cursor:pointer;transition:all 150ms;font-family:var(--font-sans)}
+.p-copy:hover{color:#f8fafc;border-color:rgba(255,255,255,.2)}
+/* ─── Callouts ─── */
+.p-callout{margin:1.5rem 0;padding:1rem 1.25rem;border-radius:.875rem;border-left:3px solid;display:flex;gap:.75rem}
+.p-callout-icon{font-size:1.125rem;flex-shrink:0;margin-top:.125rem}
+.p-callout-body{flex:1;font-size:.875rem;line-height:1.7;color:var(--text-muted)}
+.p-callout-body strong{display:block;margin-bottom:.25rem;font-size:.8125rem;text-transform:uppercase;letter-spacing:.04em}
+.p-callout-body code{font-size:.8125rem;color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-family:var(--font-mono)}
+.p-callout.tip{background:rgba(59,130,246,.06);border-color:#3b82f6}.p-callout.tip strong{color:#3b82f6}
+.p-callout.try{background:rgba(16,185,129,.06);border-color:#10b981}.p-callout.try strong{color:#10b981}
+.p-callout.key{background:rgba(139,92,246,.06);border-color:#8b5cf6}.p-callout.key strong{color:#8b5cf6}
+/* ─── Tables ─── */
+.p-table{width:100%;margin:1.25rem 0 1.75rem;border-collapse:separate;border-spacing:0;border-radius:.875rem;overflow:hidden;border:1px solid rgba(255,255,255,.06);font-size:.875rem}
+.p-table th{background:rgba(255,255,255,.04);color:var(--text-muted);font-weight:700;text-align:left;padding:.625rem 1rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06)}
+.p-table td{padding:.625rem 1rem;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top;line-height:1.6}
+.p-table tr:last-child td{border-bottom:none}.p-table tr:hover td{background:rgba(255,255,255,.02)}
+.p-table td code{color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-size:.8125rem;font-family:var(--font-mono)}
+.p-table td strong{color:var(--text-main)}
+/* ─── Viz containers ─── */
+.p-viz{margin:1.75rem 0;border-radius:1rem;background:rgba(8,12,24,.6);border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.p-viz-hdr{padding:.625rem 1.25rem;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.04);font-size:.75rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em}
+.p-viz-body{padding:1.25rem;display:flex;justify-content:center;min-height:120px}
+.p-viz-body svg{width:100%;height:auto;max-width:780px}
+/* ─── Steps ─── */
+.p-steps{margin:1.5rem 0}
+.p-step{display:grid;grid-template-columns:2.25rem 1fr;gap:.75rem;margin-bottom:.875rem}
+.p-step-num{width:1.875rem;height:1.875rem;border-radius:50%;background:rgba(245,158,11,.12);border:1.5px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.6875rem;font-weight:800;color:#f59e0b;flex-shrink:0;margin-top:.2rem}
+.p-step-body h4{font-size:.9375rem;font-weight:700;color:var(--text-main);margin-bottom:.25rem;font-family:var(--font-display)}
+.p-step-body p{font-size:.875rem;color:var(--text-muted);margin:0 0 .25rem;line-height:1.7}
+.p-step-body strong{color:var(--text-main)}
+.p-step-body code{font-size:.8125rem;color:#34d399;background:rgba(16,185,129,.08);padding:.1em .35em;border-radius:3px;font-family:var(--font-mono)}
+/* ─── File tree ─── */
+.p-tree{margin:1rem 0 1.5rem;padding:1rem 1.25rem;border-radius:.875rem;background:rgba(8,12,24,.7);border:1px solid rgba(255,255,255,.06);font-family:var(--font-mono);font-size:.8125rem;line-height:2;color:var(--text-dim);white-space:pre}
+.p-tree .fd{color:#3b82f6;font-weight:600}.p-tree .fh{color:#34d399;font-weight:600}
+/* ─── Phase module mini-grids ─── */
+.phase-mods-lbl{display:flex;align-items:center;gap:.75rem;margin:2.25rem 0 1rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.04)}
+.phase-mods-lbl span{font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim)}
+.phase-mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;padding-bottom:1rem}
 </style>
+
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -151,11 +228,329 @@ h1,h2,h3,h4{margin:0;font-family:var(--font-display);line-height:1.2}
 
 <div class="section-divider" aria-hidden="true"></div>
 
-<section class="modules-section">
-    <h2>All 23 Modules</h2>
-    <p class="section-desc">Prerequisite: Complete the Beginner path. Every module extends your TaskFlow project with production-grade customisations.</p>
-    <div class="modules-grid" id="modulesGrid"></div>
+<div class="phases-wrapper">
+
+<!-- ═══ PHASE 1: SKILLS ═══ -->
+<section class="phase-sec" id="skills-phase">
+    <div class="phase-sec-hdr">
+        <div class="phase-icon ph1-icon">🎓</div>
+        <div class="phase-meta">
+            <span class="phase-tag ph1">Phase 1 · Modules 1–5</span>
+            <h2>Skills — Packaging Expertise Once</h2>
+        </div>
+    </div>
+    <p class="phase-intro">Every Claude session starts with no memory of how your team works. <strong>Skills solve this permanently.</strong> A <code>SKILL.md</code> file packages a domain of knowledge — coding conventions, testing workflows, deployment rules — into a named unit that Claude loads on demand based on intent signals in your request. Write it once; every future session benefits automatically.</p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — The Specialist's Handbook</div>
+        <p>When a new specialist joins your team, you don't explain the entire company from scratch. You hand them the <strong>handbook for their domain</strong>: a security specialist gets the security rules; a frontend developer gets the UI conventions guide. <em>Claude's skills work identically</em> — the right handbook, loaded at the right moment, without you repeating it every session.</p>
+    </div>
+    <h3 class="phase-h3">SKILL.md anatomy</h3>
+    <p class="phase-p">A <code>SKILL.md</code> has two parts: <strong>YAML frontmatter</strong> controlling how Claude discovers and loads it, and a <strong>Markdown body</strong> with the actual instructions. The <code>description</code> field is the most critical element — Claude pattern-matches request keywords against it to decide which skill to load automatically.</p>
+    <div class="p-viz">
+        <div class="p-viz-hdr">📋 Skill Match Flow — How "implement recurring tasks" Loads the TDD Skill</div>
+        <div class="p-viz-body" id="skill-flow-viz" role="img" aria-label="Three-stage flow: user request is matched against skill descriptions, then the matched skill is loaded into context"></div>
+    </div>
+    <div class="p-code">
+        <div class="p-code-hdr"><span class="p-code-lang">SKILL.md</span><span style="color:var(--text-dim)">.claude/skills/taskflow-tdd/SKILL.md</span><button class="p-copy">Copy</button></div>
+        <div class="p-code-body"><span class="c">---
+name: taskflow-tdd
+description: TDD workflow for TaskFlow — triggered by "implement", "add feature", "build"
+argument-hint: "Describe the feature to implement"
+---</span>
+<span class="k"># TaskFlow TDD Workflow</span>
+
+<span class="c">## Rules (always follow)</span>
+- Write the failing test BEFORE any implementation code
+- Run <span class="g">npm test -- --testPathPattern {file}</span> after each step
+- Commit only when full suite passes: <span class="g">npm test</span>
+- Models → <span class="s">src/models/</span>  ·  Services → <span class="s">src/services/</span>
+
+<span class="c">## Workflow</span>
+1. <span class="k">RED</span>:      Write a failing test in <span class="s">tests/</span> mirroring the <span class="s">src/</span> path
+2. <span class="k">GREEN</span>:    Write minimum code in <span class="s">src/</span> to make the test pass
+3. <span class="k">REFACTOR</span>: Clean up while keeping tests green
+4. <span class="k">VERIFY</span>:   <span class="g">npm test</span> — full suite must pass before committing</div>
+    </div>
+    <h3 class="phase-h3">Three skill patterns</h3>
+    <table class="p-table">
+        <thead><tr><th>Pattern</th><th>Purpose</th><th>TaskFlow example</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Procedural</strong></td><td>Step-by-step workflows — TDD, deployments, PR creation</td><td><code>taskflow-tdd/SKILL.md</code> — ordered RED → GREEN → REFACTOR steps</td></tr>
+            <tr><td><strong>Reference</strong></td><td>Knowledge domains — API conventions, naming rules, architecture decisions</td><td><code>taskflow-conventions/SKILL.md</code> — naming patterns, import rules</td></tr>
+            <tr><td><strong>Gateway</strong></td><td>Top-level skill that routes requests to the right domain skill via intent signals</td><td><code>taskflow/SKILL.md</code> — maps "implement" → TDD skill, "review" → conventions skill</td></tr>
+        </tbody>
+    </table>
+    <div class="p-callout try">
+        <span class="p-callout-icon">🧪</span>
+        <div class="p-callout-body">
+            <strong>Module 1 in practice</strong>
+            Create <code>.claude/skills/taskflow-tdd/SKILL.md</code> with the code above. In your next session, say "implement a recurring task feature" — Claude matches "implement" and "feature" against the skill's description and loads it automatically. No explicit invocation needed.
+        </div>
+    </div>
+    <div class="phase-mods-lbl"><span>📋 Phase 1 Modules — Skills</span></div>
+    <div class="phase-mini-grid" id="skills-modules"></div>
 </section>
+
+<!-- ═══ PHASE 2: AGENTS ═══ -->
+<section class="phase-sec" id="agents-phase">
+    <div class="phase-sec-hdr">
+        <div class="phase-icon ph2-icon">🤖</div>
+        <div class="phase-meta">
+            <span class="phase-tag ph2">Phase 2 · Modules 6–9</span>
+            <h2>Agents — Scoped Assistants</h2>
+        </div>
+    </div>
+    <p class="phase-intro">An agent is a <strong>Claude instance with a defined role, limited tools, and targeted instructions</strong>. Instead of one Claude doing everything, you build a team: a read-only reviewer that physically cannot edit files, a scoped deployer that cannot touch production data, a security auditor with exactly the access its role requires — and not one tool more.</p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — Security Clearance Levels</div>
+        <p>Think of a large facility: the HVAC contractor has access to mechanical rooms but not the server room. The network engineer has server room access but not the executive suite. <strong>Nobody gets more access than their job requires.</strong> Your Claude agents work identically — each one has exactly the tools its role needs and is physically incapable of using anything beyond those bounds.</p>
+    </div>
+    <h3 class="phase-h3">Agent anatomy</h3>
+    <p class="phase-p">Every agent lives in <code>.claude/agents/</code> as a Markdown file with YAML frontmatter that controls tools, loaded skills, and permission mode. The Markdown body defines how the agent behaves when invoked.</p>
+    <div class="p-tree"><span class="fd">.claude/</span>
+├── CLAUDE.md                   <span style="color:#475569"># global rules + routing</span>
+└── <span class="fd">agents/</span>
+    ├── <span class="fh">taskflow-reviewer.md</span>    <span style="color:#475569"># [Read, Grep, Glob] — reads only</span>
+    ├── <span class="fh">taskflow-builder.md</span>     <span style="color:#475569"># [Read, Write, Bash(npm test:*)]</span>
+    └── <span class="fh">taskflow-deployer.md</span>    <span style="color:#475569"># [Bash(npm run deploy:*)] only</span></div>
+    <div class="p-code">
+        <div class="p-code-hdr"><span class="p-code-lang">Agent definition</span><span style="color:var(--text-dim)">.claude/agents/taskflow-reviewer.md</span><button class="p-copy">Copy</button></div>
+        <div class="p-code-body"><span class="c">---
+name: taskflow-reviewer
+description: Code quality reviewer — invoked for review, PR, quality check requests
+tools: [Read, Grep, Glob]
+skills: [taskflow-conventions]
+# No Write or Bash — this agent can only read. Restriction is framework-enforced.
+---</span>
+<span class="k"># TaskFlow Code Reviewer</span>
+
+Review all code changes in this order:
+1. <span class="k">Structure</span>:  File organization, import paths, naming conventions
+2. <span class="k">Logic</span>:      Correctness, edge cases, null/undefined handling
+3. <span class="k">Security</span>:   No hardcoded secrets, all inputs validated, no injection risk
+4. <span class="k">Tests</span>:      Coverage present, edge cases covered, assertions meaningful
+
+Standards (from loaded taskflow-conventions skill):
+- Models: singular PascalCase in <span class="s">src/models/</span>
+- Services: camelCase + plural in <span class="s">src/services/</span>
+- Never catch-and-swallow errors — log them or rethrow</div>
+    </div>
+    <div class="p-viz">
+        <div class="p-viz-hdr">🤖 Three TaskFlow Agent Archetypes — Tool Access Comparison</div>
+        <div class="p-viz-body" id="agent-arch-viz" role="img" aria-label="Three agent types side by side: Reviewer with Read, Grep, Glob; Builder with Read Write Bash; Deployer with Bash deploy only"></div>
+    </div>
+    <h3 class="phase-h3">Tool scoping strategy</h3>
+    <table class="p-table">
+        <thead><tr><th>Agent role</th><th>Grant these tools</th><th>Why the restriction matters</th></tr></thead>
+        <tbody>
+            <tr><td>Code Reviewer</td><td><code>Read, Grep, Glob</code></td><td>Cannot accidentally edit source during a review pass</td></tr>
+            <tr><td>Feature Builder</td><td><code>Read, Write, Bash(npm test:*)</code></td><td>Can write and test but cannot push or deploy</td></tr>
+            <tr><td>Quality Gate</td><td><code>Read, Bash(npm test, eslint)</code></td><td>Validates without modifying source files</td></tr>
+            <tr><td>DB Administrator</td><td><code>Bash(npm run db:*)</code> + DB MCP</td><td>DB access isolated completely from application source</td></tr>
+        </tbody>
+    </table>
+    <div class="p-callout try">
+        <span class="p-callout-icon">🧪</span>
+        <div class="p-callout-body">
+            <strong>Module 6 in practice</strong>
+            Create <code>.claude/agents/taskflow-reviewer.md</code> with <code>tools: [Read, Grep, Glob]</code>. Ask it to review your last commit. Notice it produces a detailed multi-stage review but cannot accidentally modify anything — the tool restriction is enforced at the framework level, not by trust.
+        </div>
+    </div>
+    <div class="phase-mods-lbl"><span>📋 Phase 2 Modules — Agents</span></div>
+    <div class="phase-mini-grid" id="agents-modules"></div>
+</section>
+
+<!-- ═══ PHASE 3: HOOKS ═══ -->
+<section class="phase-sec" id="hooks-phase">
+    <div class="phase-sec-hdr">
+        <div class="phase-icon ph3-icon">🔗</div>
+        <div class="phase-meta">
+            <span class="phase-tag ph3">Phase 3 · Modules 10–13</span>
+            <h2>Hooks — Automated Quality Gates</h2>
+        </div>
+    </div>
+    <p class="phase-intro">Hooks are <strong>event-triggered interceptors</strong> that fire at defined moments in the Claude tool-use lifecycle. They run tests after every file edit, block dangerous commands before they execute, send alerts when Claude needs attention — all without interrupting workflow or requiring you to remind Claude to verify its own work.</p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — Airport Security Checkpoints</div>
+        <p>Each hook activates at a specific point in the journey: check-in (<code>PreToolUse</code>), boarding gate (<code>PostToolUse</code>), arrival (<code>Stop</code>). <strong>The checkpoint doesn't stop the journey — it verifies the passenger is safe to proceed.</strong> A <code>PreToolUse</code> hook that blocks a destructive <code>git push --force</code> is exactly a boarding agent checking your ticket before you step on the plane.</p>
+    </div>
+    <h3 class="phase-h3">The five hook events</h3>
+    <div class="p-viz">
+        <div class="p-viz-hdr">⏱️ Hook Event Timeline — When Each Hook Fires in the Claude Lifecycle</div>
+        <div class="p-viz-body" id="hook-timeline-viz" role="img" aria-label="Linear timeline: Session start, PreToolUse hook, Tool executes, PostToolUse hook, Task done, Stop hook, Session end"></div>
+    </div>
+    <table class="p-table">
+        <thead><tr><th>Hook event</th><th>Fires when</th><th>Typical TaskFlow use</th></tr></thead>
+        <tbody>
+            <tr><td><code>PreToolUse</code></td><td>Before any tool executes</td><td>Block <code>git push --force</code>, validate inputs before writes</td></tr>
+            <tr><td><code>PostToolUse</code></td><td>After each tool completes</td><td>Run tests after every file edit, log all changes</td></tr>
+            <tr><td><code>Notification</code></td><td>When Claude needs your attention</td><td>Desktop alert, Slack notification via webhook</td></tr>
+            <tr><td><code>Stop</code></td><td>When the session ends</td><td>Generate session summary, cleanup temp files</td></tr>
+            <tr><td><code>SubagentStop</code></td><td>When a subagent finishes</td><td>Collect and merge results from parallel agents</td></tr>
+        </tbody>
+    </table>
+    <h3 class="phase-h3">Building the TaskFlow quality gate</h3>
+    <p class="phase-p">The highest-value hook: automatically run the related tests after every source file edit. Claude detects failures immediately at each change — not after building three more things on a broken foundation.</p>
+    <div class="p-code">
+        <div class="p-code-hdr"><span class="p-code-lang">Hook config</span><span style="color:var(--text-dim)">Add to CLAUDE.md</span><button class="p-copy">Copy</button></div>
+        <div class="p-code-body"><span class="c">## Hooks</span>
+<span class="k">hooks:</span>
+  - <span class="k">event:</span> PostToolUse
+    <span class="k">matcher:</span>
+      <span class="k">tool:</span> Write
+      <span class="k">path:</span> <span class="s">"src/**/*.ts"</span>          <span class="c"># Only fires on TaskFlow source edits</span>
+    <span class="k">action:</span>
+      <span class="k">type:</span> command
+      <span class="k">command:</span> <span class="g">npm test -- --testPathPattern "$CLAUDE_TOOL_FILE"</span>
+      <span class="k">timeout:</span> 30
+      <span class="k">blocking:</span> <span class="m">true</span>               <span class="c"># Pause Claude if tests fail — lets it self-correct</span></div>
+    </div>
+    <div class="p-callout tip">
+        <span class="p-callout-icon">💡</span>
+        <div class="p-callout-body">
+            <strong>Blocking vs non-blocking</strong>
+            <code>blocking: true</code> pauses Claude until the hook exits with code 0. Use this for quality gates. <code>blocking: false</code> (default) fires in the background — use for notifications and logging. A failing blocking hook sends its stdout back to Claude as context so it can self-correct automatically.
+        </div>
+    </div>
+    <div class="p-callout try">
+        <span class="p-callout-icon">🧪</span>
+        <div class="p-callout-body">
+            <strong>Module 13 in practice</strong>
+            Add the PostToolUse hook above to your TaskFlow CLAUDE.md. Ask Claude to implement a feature without TDD discipline. The hook fires after each file write, runs the affected tests, and if a test fails, Claude receives the error and corrects the code before continuing — automatically enforcing TDD without you policing it.
+        </div>
+    </div>
+    <div class="phase-mods-lbl"><span>📋 Phase 3 Modules — Hooks</span></div>
+    <div class="phase-mini-grid" id="hooks-modules"></div>
+</section>
+
+<!-- ═══ PHASE 4: CONTEXT & PROMPTING ═══ -->
+<section class="phase-sec" id="context-phase">
+    <div class="phase-sec-hdr">
+        <div class="phase-icon ph4-icon">🧠</div>
+        <div class="phase-meta">
+            <span class="phase-tag ph4">Phase 4 · Modules 14–17</span>
+            <h2>Context &amp; Prompting</h2>
+        </div>
+    </div>
+    <p class="phase-intro">The context window is your most finite resource — every file Claude reads, every message in the conversation, every tool output consumes tokens. <strong>Expert developers don't just know what to ask; they know how to ask it efficiently</strong>, in the right session structure, using patterns that extract maximum value with minimum waste.</p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — The Working Whiteboard</div>
+        <p>The context window is a <strong>shared whiteboard at the start of a working session</strong>. It begins clean and everything fits clearly. As the session progresses, it fills with notes, diagrams, and code. When nearly full, you can erase it (<code>/clear</code>) or ask someone to summarize the key points before erasing (<code>/compact</code>). <strong>The discipline is noticing the whiteboard getting cluttered and acting before it's too late to think clearly.</strong></p>
+    </div>
+    <div class="p-viz">
+        <div class="p-viz-hdr">📊 Where Tokens Go — Typical TaskFlow Feature Session</div>
+        <div class="p-viz-body" id="token-dist-viz" role="img" aria-label="Horizontal bars showing token distribution: file reads 38%, conversation 22%, tool output 18%, CLAUDE.md and skills 15%, prompt 7%"></div>
+    </div>
+    <h3 class="phase-h3">Five prompting principles</h3>
+    <table class="p-table">
+        <thead><tr><th>#</th><th>Principle</th><th>TaskFlow application</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td><strong>Verify Work</strong> — always tell Claude to check its output</td><td>"Add recurring tasks and run <code>npm test</code> to verify before finishing"</td></tr>
+            <tr><td>2</td><td><strong>Explore First</strong> — read context before writing code</td><td>"Read <code>src/models/task.ts</code> carefully before making any changes to it"</td></tr>
+            <tr><td>3</td><td><strong>Be Specific</strong> — scope beats vagueness every time</td><td>"Update only <code>src/commands/add.ts</code> — touch no other files"</td></tr>
+            <tr><td>4</td><td><strong>Provide Context</strong> — paste errors, reference specific files</td><td>"Fix the error in <code>@src/services/taskService.ts:47</code>: TypeError…"</td></tr>
+            <tr><td>5</td><td><strong>Iterate Small</strong> — one focused task per session beats marathons</td><td>One feature per session; use <code>/clear</code> between unrelated tasks</td></tr>
+        </tbody>
+    </table>
+    <h3 class="phase-h3">Four prompting patterns</h3>
+    <div class="p-steps">
+        <div class="p-step">
+            <div class="p-step-num">I</div>
+            <div class="p-step-body">
+                <h4>Interview — let Claude surface the questions</h4>
+                <p>"Before implementing recurring tasks, ask me 3 clarifying questions about requirements." Use this when requirements are unclear or to discover hidden complexity <em>before</em> any code is written.</p>
+            </div>
+        </div>
+        <div class="p-step">
+            <div class="p-step-num">C</div>
+            <div class="p-step-body">
+                <h4>Constraint — define explicit limits upfront</h4>
+                <p>"Implement recurring tasks. <strong>Constraint:</strong> don't change the database schema — add a scheduler service only." Prevents scope-creep and protects critical parts of the codebase from unintended changes.</p>
+            </div>
+        </div>
+        <div class="p-step">
+            <div class="p-step-num">T</div>
+            <div class="p-step-body">
+                <h4>Teaching — explain before you execute</h4>
+                <p>"Explain how you'd structure the recurring task scheduler before writing any code." Forces Claude to articulate a plan first, surfacing flawed assumptions before they become bugs in production.</p>
+            </div>
+        </div>
+        <div class="p-step">
+            <div class="p-step-num">Co</div>
+            <div class="p-step-body">
+                <h4>Comparison — evaluate before committing to an approach</h4>
+                <p>"Compare cron-based vs. event-driven scheduling for TaskFlow recurring tasks. Then implement the better option and explain your reasoning." Gets Claude to reason about trade-offs before writing a single line.</p>
+            </div>
+        </div>
+    </div>
+    <div class="phase-mods-lbl"><span>📋 Phase 4 Modules — Context &amp; Prompting</span></div>
+    <div class="phase-mini-grid" id="context-modules"></div>
+</section>
+
+<!-- ═══ PHASE 5: MASTERY ═══ -->
+<section class="phase-sec" id="mastery-phase">
+    <div class="phase-sec-hdr">
+        <div class="phase-icon ph5-icon">🏆</div>
+        <div class="phase-meta">
+            <span class="phase-tag ph5">Phase 5 · Modules 18–23</span>
+            <h2>Mastery — The Complete Customisation Stack</h2>
+        </div>
+    </div>
+    <p class="phase-intro">Mastery is not about knowing individual features — it's about <strong>composing them into a coherent, self-managing system</strong>: a gateway skill that routes intent automatically, a library of domain skills, agents with precisely scoped tool access, and hooks that enforce quality without human intervention. Together they transform Claude from a helpful assistant into a project-aware development partner.</p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — A Well-Run Hospital</div>
+        <p>A hospital doesn't have one doctor who does everything. It has <strong>departments</strong> (domain skills), a <strong>reception desk</strong> (gateway skill) that routes each patient to the right department, <strong>qualified staff</strong> (agents with tool allowlists), and <strong>safety protocols</strong> (hooks) that fire automatically at defined checkpoints. <em>Nobody has to know everything. The system routes, delegates, and verifies on its own.</em></p>
+    </div>
+    <h3 class="phase-h3">The gateway skill pattern</h3>
+    <p class="phase-p">Instead of one large overloaded <code>SKILL.md</code>, create a lightweight gateway that reads intent signals and routes to the appropriate domain skill. Each domain skill stays focused, minimal, and easy to update independently.</p>
+    <div class="p-code">
+        <div class="p-code-hdr"><span class="p-code-lang">Gateway skill</span><span style="color:var(--text-dim)">.claude/skills/taskflow/SKILL.md</span><button class="p-copy">Copy</button></div>
+        <div class="p-code-body"><span class="c">---
+name: taskflow
+description: TaskFlow project gateway — routes all requests to domain skills
+---</span>
+<span class="k"># TaskFlow Gateway Skill</span>
+
+<span class="c">## Intent routing</span>
+| Signal words                          | Load this skill           |
+|---------------------------------------|---------------------------|
+| implement, add feature, build         | <span class="s">taskflow-tdd</span>              |
+| review, PR, check quality             | <span class="s">taskflow-conventions</span>      |
+| deploy, release, publish              | <span class="s">taskflow-deploy</span>           |
+| security, vuln, OWASP                 | <span class="s">taskflow-security</span>         |
+| bug, broken, test failing             | <span class="s">taskflow-debug</span>            |
+
+When a signal word matches, load the domain skill and follow its workflow exactly.</div>
+    </div>
+    <div class="p-viz">
+        <div class="p-viz-hdr">🗺️ TaskFlow Skill Library — Gateway Routing Architecture</div>
+        <div class="p-viz-body" id="skill-lib-viz" role="img" aria-label="Hub and spoke: gateway SKILL.md at center, five domain skills on spokes — TDD, conventions, deploy, security, debug"></div>
+    </div>
+    <h3 class="phase-h3">The complete intermediate stack</h3>
+    <p class="phase-p">By the end of this path, your TaskFlow project should have all five layers configured and working together:</p>
+    <div class="p-tree"><span class="fd">.claude/</span>
+├── CLAUDE.md                               <span style="color:#475569"># ≤150 lines · @path imports skills &amp; docs</span>
+├── <span class="fd">skills/</span>
+│   ├── <span class="fh">taskflow/SKILL.md</span>               <span style="color:#475569"># Gateway — routes to domain skills</span>
+│   ├── <span class="fh">taskflow-tdd/SKILL.md</span>           <span style="color:#475569"># Procedural: RED → GREEN → REFACTOR</span>
+│   ├── <span class="fh">taskflow-conventions/SKILL.md</span>   <span style="color:#475569"># Reference: naming, imports, patterns</span>
+│   └── <span class="fh">taskflow-deploy/SKILL.md</span>        <span style="color:#475569"># Procedural: release checklist</span>
+└── <span class="fd">agents/</span>
+    ├── <span class="fh">taskflow-reviewer.md</span>            <span style="color:#475569"># [Read, Grep, Glob] — code reviews</span>
+    └── <span class="fh">taskflow-builder.md</span>             <span style="color:#475569"># [Read, Write, Bash(npm test:*)]</span></div>
+    <div class="p-callout try">
+        <span class="p-callout-icon">🧪</span>
+        <div class="p-callout-body">
+            <strong>Module 23 — mastery checkpoint</strong>
+            Verify your completed stack: gateway skill routes 4+ intents, at least 2 scoped agents exist, a PostToolUse quality gate fires on file edits, CLAUDE.md is under 150 lines. All four in place? You're ready for the Advanced orchestration path.
+        </div>
+    </div>
+    <div class="phase-mods-lbl"><span>📋 Phase 5 Modules — Mastery</span></div>
+    <div class="phase-mini-grid" id="mastery-modules"></div>
+</section>
+
+</div><!-- /phases-wrapper -->
+
 </main>
 
 <footer class="site-footer">
@@ -193,11 +588,22 @@ document.addEventListener('DOMContentLoaded', function() {
         { num:23, title:'Intermediate Checkpoint', desc:'Review all skills, agents, hooks, and prompting patterns. Self-assessment and bridge to the Advanced orchestration path.', tags:['review','checkpoint'], example:'Complete the TaskFlow intermediate mastery audit' }
     ];
 
-    var grid = document.getElementById('modulesGrid');
+    /* ── Phase-aware module rendering ── */
+    var phaseDefs = [
+        {id:'skills-modules', range:[1,5]},
+        {id:'agents-modules', range:[6,9]},
+        {id:'hooks-modules', range:[10,13]},
+        {id:'context-modules', range:[14,17]},
+        {id:'mastery-modules', range:[18,23]}
+    ];
     modules.forEach(function(m, i) {
+        var phase = phaseDefs.find(function(p){ return m.num >= p.range[0] && m.num <= p.range[1]; });
+        if (!phase) return;
+        var grid = document.getElementById(phase.id);
+        if (!grid) return;
         var card = document.createElement('article');
         card.className = 'module-card';
-        card.style.animationDelay = (i * 50) + 'ms';
+        card.style.animationDelay = (i * 35) + 'ms';
         card.innerHTML =
             '<div class="module-num">' + String(m.num).padStart(2,'0') + '</div>' +
             '<h3 class="module-title">' + m.title + '</h3>' +
@@ -209,54 +615,245 @@ document.addEventListener('DOMContentLoaded', function() {
         grid.appendChild(card);
     });
 
+    /* ── Copy buttons for phase code blocks ── */
+    document.querySelectorAll('.p-copy').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var code = this.closest('.p-code').querySelector('.p-code-body');
+            if (!code || !navigator.clipboard) return;
+            navigator.clipboard.writeText(code.textContent);
+            this.textContent = 'Copied!';
+            var self = this;
+            setTimeout(function(){ self.textContent = 'Copy'; }, 1500);
+        });
+    });
+
     setTimeout(function(){ document.getElementById('progressFill').style.width = '0%'; }, 300);
 
-    // D3 path diagram
-    var container = document.getElementById('path-diagram');
-    if (!container || typeof d3 === 'undefined') return;
-    var w = Math.min(container.offsetWidth, 900), h = 120;
-    var svg = d3.select('#path-diagram').append('svg')
-        .attr('viewBox', '0 0 ' + w + ' ' + h)
-        .attr('role', 'img')
-        .attr('aria-label', 'Intermediate path phases: Skills (1-5), Agents (6-9), Hooks (10-13), Context & Prompt (14-17), Mastery (18-23)');
+    /* ── D3 Path Diagram ── */
+    (function() {
+        var container = document.getElementById('path-diagram');
+        if (!container || typeof d3 === 'undefined') return;
+        var w = Math.min(container.offsetWidth, 900), h = 120;
+        var svg = d3.select('#path-diagram').append('svg')
+            .attr('viewBox', '0 0 ' + w + ' ' + h)
+            .attr('role', 'img')
+            .attr('aria-label', 'Intermediate path phases: Skills (1-5), Agents (6-9), Hooks (10-13), Context & Prompt (14-17), Mastery (18-23)');
 
-    var phases = [
-        { label:'Skills', range:'1–5', x:w*0.1, color:'#f59e0b' },
-        { label:'Agents', range:'6–9', x:w*0.3, color:'#f59e0b' },
-        { label:'Hooks', range:'10–13', x:w*0.5, color:'#f59e0b' },
-        { label:'Context', range:'14–17', x:w*0.7, color:'#f59e0b' },
-        { label:'Mastery', range:'18–23', x:w*0.9, color:'#f59e0b' }
-    ];
+        var phases = [
+            { label:'Skills', range:'1–5', x:w*0.1, color:'#f59e0b' },
+            { label:'Agents', range:'6–9', x:w*0.3, color:'#f59e0b' },
+            { label:'Hooks', range:'10–13', x:w*0.5, color:'#f59e0b' },
+            { label:'Context', range:'14–17', x:w*0.7, color:'#f59e0b' },
+            { label:'Mastery', range:'18–23', x:w*0.9, color:'#f59e0b' }
+        ];
 
-    var defs = svg.append('defs');
-    defs.append('marker').attr('id','arr').attr('viewBox','0 0 10 10').attr('refX',10).attr('refY',5)
-        .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto')
-        .append('path').attr('d','M 0 0 L 10 5 L 0 10 Z').attr('fill','rgba(245,158,11,0.4)');
+        var defs = svg.append('defs');
+        defs.append('marker').attr('id','arr').attr('viewBox','0 0 10 10').attr('refX',10).attr('refY',5)
+            .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto')
+            .append('path').attr('d','M 0 0 L 10 5 L 0 10 Z').attr('fill','rgba(245,158,11,0.4)');
 
-    for (var i = 0; i < phases.length - 1; i++) {
-        svg.append('line')
-            .attr('x1', phases[i].x + 40).attr('y1', h/2)
-            .attr('x2', phases[i+1].x - 40).attr('y2', h/2)
-            .attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',2)
-            .attr('stroke-dasharray','6,4').attr('marker-end','url(#arr)');
-    }
+        for (var i = 0; i < phases.length - 1; i++) {
+            svg.append('line')
+                .attr('x1', phases[i].x + 40).attr('y1', h/2)
+                .attr('x2', phases[i+1].x - 40).attr('y2', h/2)
+                .attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',2)
+                .attr('stroke-dasharray','6,4').attr('marker-end','url(#arr)');
+        }
 
-    var g = svg.selectAll('.phase').data(phases).enter().append('g');
-    g.append('rect')
-        .attr('x',function(d){return d.x-35}).attr('y',h/2-22)
-        .attr('width',70).attr('height',44).attr('rx',12)
-        .attr('fill','rgba(245,158,11,0.08)').attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',1.5);
-    g.append('text')
-        .attr('x',function(d){return d.x}).attr('y',h/2-4)
-        .attr('text-anchor','middle').attr('fill','#f59e0b')
-        .attr('font-size','10px').attr('font-weight','700').attr('font-family','Inter,sans-serif')
-        .text(function(d){return d.label});
-    g.append('text')
-        .attr('x',function(d){return d.x}).attr('y',h/2+12)
-        .attr('text-anchor','middle').attr('fill','#64748b')
-        .attr('font-size','8px').attr('font-weight','600').attr('font-family','Inter,sans-serif')
-        .text(function(d){return 'Mod ' + d.range});
+        var g = svg.selectAll('.phase').data(phases).enter().append('g');
+        g.append('rect').attr('x',function(d){return d.x-35}).attr('y',h/2-22)
+            .attr('width',70).attr('height',44).attr('rx',12)
+            .attr('fill','rgba(245,158,11,0.08)').attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',1.5);
+        g.append('text').attr('x',function(d){return d.x}).attr('y',h/2-4)
+            .attr('text-anchor','middle').attr('fill','#f59e0b')
+            .attr('font-size','10px').attr('font-weight','700').attr('font-family','Inter,sans-serif')
+            .text(function(d){return d.label});
+        g.append('text').attr('x',function(d){return d.x}).attr('y',h/2+12)
+            .attr('text-anchor','middle').attr('fill','#64748b')
+            .attr('font-size','8px').attr('font-weight','600').attr('font-family','Inter,sans-serif')
+            .text(function(d){return 'Mod ' + d.range});
+    })();
+
+    /* ══ PHASE D3 VISUALIZATIONS ══ */
+    if (typeof d3 === 'undefined') return;
+
+    /* ── Skill Flow Viz ── */
+    (function() {
+        var c = document.getElementById('skill-flow-viz');
+        if (!c) return;
+        var w = 700, h = 110;
+        var svg = d3.select('#skill-flow-viz').append('svg').attr('viewBox','0 0 '+w+' '+h);
+        var defs = svg.append('defs');
+        defs.append('marker').attr('id','sf-arr').attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+            .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+            .append('path').attr('d','M 0 2 L 9 5 L 0 8 Z').attr('fill','rgba(245,158,11,0.35)');
+        var nodes = [
+            {label:'"implement\nrecurring tasks"', sub:'User request', x:110, color:'#3b82f6'},
+            {label:'Matches "implement"\nkeyword in description', sub:'Skill discovery', x:350, color:'#f59e0b'},
+            {label:'taskflow-tdd\nloaded into context', sub:'Skill active ✓', x:590, color:'#10b981'}
+        ];
+        for (var i = 0; i < nodes.length-1; i++) {
+            svg.append('line').attr('x1',nodes[i].x+90).attr('y1',h/2-10)
+                .attr('x2',nodes[i+1].x-90).attr('y2',h/2-10)
+                .attr('stroke','rgba(245,158,11,0.22)').attr('stroke-width',1.5)
+                .attr('stroke-dasharray','5,3').attr('marker-end','url(#sf-arr)');
+        }
+        var ng = svg.selectAll('.sfn').data(nodes).enter().append('g')
+            .attr('transform',function(d){return 'translate('+d.x+','+(h/2-10)+')'});
+        ng.append('rect').attr('x',-82).attr('y',-32).attr('width',164).attr('height',64).attr('rx',12)
+            .attr('fill',function(d){return d.color+'10'}).attr('stroke',function(d){return d.color+'30'}).attr('stroke-width',1.5);
+        ng.each(function(d) {
+            var lines = d.label.split('\n'), el = d3.select(this);
+            lines.forEach(function(line,li) {
+                el.append('text').attr('y',(li-(lines.length-1)/2)*14)
+                    .attr('text-anchor','middle').attr('fill',d.color)
+                    .attr('font-size','9.5px').attr('font-weight','700').attr('font-family','Inter,sans-serif').text(line);
+            });
+            el.append('text').attr('y',36).attr('text-anchor','middle').attr('fill','#475569')
+                .attr('font-size','8px').attr('font-weight','600').attr('font-family','Inter,sans-serif').text(d.sub);
+        });
+    })();
+
+    /* ── Agent Archetypes Viz ── */
+    (function() {
+        var c = document.getElementById('agent-arch-viz');
+        if (!c) return;
+        var w = 700, h = 166;
+        var svg = d3.select('#agent-arch-viz').append('svg').attr('viewBox','0 0 '+w+' '+h);
+        var agents = [
+            {name:'taskflow-reviewer', tools:['Read','Grep','Glob'], x:116, color:'#3b82f6', icon:'🔍', role:'Read-only reviewer'},
+            {name:'taskflow-builder', tools:['Read','Write','Bash(test:*)'], x:350, color:'#f59e0b', icon:'🛠️', role:'Feature builder'},
+            {name:'taskflow-deployer', tools:['Bash(deploy:*)'], x:584, color:'#10b981', icon:'🚀', role:'Deploy specialist'}
+        ];
+        var ag = svg.selectAll('.ag').data(agents).enter().append('g').attr('transform',function(d){return 'translate('+d.x+',83)'});
+        ag.append('rect').attr('x',-102).attr('y',-64).attr('width',204).attr('height',138).attr('rx',14)
+            .attr('fill',function(d){return d.color+'0d'}).attr('stroke',function(d){return d.color+'28'}).attr('stroke-width',1.5);
+        ag.append('text').attr('y',-42).attr('text-anchor','middle').attr('font-size','20px').text(function(d){return d.icon});
+        ag.append('text').attr('y',-20).attr('text-anchor','middle').attr('fill',function(d){return d.color})
+            .attr('font-size','8.5px').attr('font-weight','800').attr('font-family','JetBrains Mono,monospace').text(function(d){return d.name});
+        ag.append('text').attr('y',-6).attr('text-anchor','middle').attr('fill','#475569')
+            .attr('font-size','8px').attr('font-family','Inter,sans-serif').text(function(d){return d.role});
+        ag.each(function(d) {
+            var el = d3.select(this);
+            d.tools.forEach(function(tool,ti) {
+                var gy = 8 + ti * 26;
+                el.append('rect').attr('x',-70).attr('y',gy).attr('width',140).attr('height',18).attr('rx',9)
+                    .attr('fill',d.color+'18').attr('stroke',d.color+'30').attr('stroke-width',1);
+                el.append('text').attr('x',0).attr('y',gy+9).attr('text-anchor','middle').attr('dominant-baseline','central')
+                    .attr('fill',d.color).attr('font-size','8px').attr('font-weight','700').attr('font-family','JetBrains Mono,monospace').text(tool);
+            });
+        });
+    })();
+
+    /* ── Hook Timeline Viz ── */
+    (function() {
+        var c = document.getElementById('hook-timeline-viz');
+        if (!c) return;
+        var w = 700, h = 120;
+        var svg = d3.select('#hook-timeline-viz').append('svg').attr('viewBox','0 0 '+w+' '+h);
+        var defs = svg.append('defs');
+        defs.append('marker').attr('id','ht-arr').attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+            .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+            .append('path').attr('d','M 0 2 L 9 5 L 0 8 Z').attr('fill','rgba(255,255,255,0.12)');
+        svg.append('line').attr('x1',25).attr('y1',h/2).attr('x2',w-25).attr('y2',h/2)
+            .attr('stroke','rgba(255,255,255,0.05)').attr('stroke-width',2);
+        var events = [
+            {x:50,  label:'Start\nSession',   color:'#64748b', hook:false},
+            {x:178, label:'PreToolUse\nHook', color:'#ef4444', hook:true},
+            {x:295, label:'Tool\nExecutes',   color:'#3b82f6', hook:false},
+            {x:416, label:'PostToolUse\nHook',color:'#f59e0b', hook:true},
+            {x:534, label:'Task\nDone',        color:'#10b981', hook:false},
+            {x:655, label:'Stop\nHook',        color:'#8b5cf6', hook:true}
+        ];
+        for (var i = 0; i < events.length-1; i++) {
+            svg.append('line').attr('x1',events[i].x+24).attr('y1',h/2)
+                .attr('x2',events[i+1].x-24).attr('y2',h/2)
+                .attr('stroke','rgba(255,255,255,0.08)').attr('stroke-width',1.5)
+                .attr('stroke-dasharray',events[i+1].hook?'4,3':'none')
+                .attr('marker-end','url(#ht-arr)');
+        }
+        var eg = svg.selectAll('.ev').data(events).enter().append('g').attr('transform',function(d){return 'translate('+d.x+','+h/2+')'});
+        eg.append('circle').attr('r',function(d){return d.hook?23:16})
+            .attr('fill',function(d){return d.color+(d.hook?'18':'12')})
+            .attr('stroke',function(d){return d.color+(d.hook?'45':'28')})
+            .attr('stroke-width',function(d){return d.hook?2:1.5});
+        eg.each(function(d) {
+            var lines = d.label.split('\n'), el = d3.select(this);
+            lines.forEach(function(line,li) {
+                el.append('text').attr('y',(li-(lines.length-1)/2)*11)
+                    .attr('text-anchor','middle').attr('dominant-baseline','central')
+                    .attr('fill',d.color).attr('font-size',d.hook?'7.5px':'8px').attr('font-weight','700')
+                    .attr('font-family','Inter,sans-serif').text(line);
+            });
+        });
+    })();
+
+    /* ── Token Distribution Viz ── */
+    (function() {
+        var c = document.getElementById('token-dist-viz');
+        if (!c) return;
+        var w = 700, h = 145;
+        var svg = d3.select('#token-dist-viz').append('svg').attr('viewBox','0 0 '+w+' '+h);
+        var segments = [
+            {label:'File reads (src, tests, docs)',    pct:38, color:'#8b5cf6'},
+            {label:'Conversation history',             pct:22, color:'#3b82f6'},
+            {label:'Tool output (test runs, lint)',    pct:18, color:'#f59e0b'},
+            {label:'CLAUDE.md + loaded skills',        pct:15, color:'#10b981'},
+            {label:'Current prompt',                   pct:7,  color:'#64748b'}
+        ];
+        var tx = 168, ty = 20, tw = 490, rh = 21, gap = 5;
+        segments.forEach(function(s, i) {
+            var y = ty + i * (rh + gap);
+            svg.append('text').attr('x',tx-8).attr('y',y+rh/2+1).attr('text-anchor','end')
+                .attr('dominant-baseline','central').attr('fill','#94a3b8')
+                .attr('font-size','9px').attr('font-weight','600').attr('font-family','Inter,sans-serif').text(s.label);
+            svg.append('rect').attr('x',tx).attr('y',y).attr('width',tw).attr('height',rh).attr('rx',4)
+                .attr('fill','rgba(255,255,255,0.04)');
+            svg.append('rect').attr('x',tx).attr('y',y).attr('width',tw*s.pct/100).attr('height',rh).attr('rx',4)
+                .attr('fill',s.color+'28').attr('stroke',s.color+'40').attr('stroke-width',1);
+            svg.append('text').attr('x',tx+tw*s.pct/100+6).attr('y',y+rh/2+1)
+                .attr('dominant-baseline','central').attr('fill',s.color)
+                .attr('font-size','8.5px').attr('font-weight','800').attr('font-family','JetBrains Mono,monospace').text(s.pct+'%');
+        });
+    })();
+
+    /* ── Skill Library Hub-Spoke Viz ── */
+    (function() {
+        var c = document.getElementById('skill-lib-viz');
+        if (!c) return;
+        var w = 700, h = 210;
+        var svg = d3.select('#skill-lib-viz').append('svg').attr('viewBox','0 0 '+w+' '+h);
+        var cx = w/2, cy = h/2, r = 80;
+        svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',44)
+            .attr('fill','rgba(245,158,11,0.08)').attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',1.5);
+        svg.append('text').attr('x',cx).attr('y',cy-6).attr('text-anchor','middle')
+            .attr('fill','#f59e0b').attr('font-size','9px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text('Gateway');
+        svg.append('text').attr('x',cx).attr('y',cy+8).attr('text-anchor','middle')
+            .attr('fill','#f59e0b').attr('font-size','9px').attr('font-weight','800').attr('font-family','Inter,sans-serif').text('SKILL.md');
+        var spokes = [
+            {label:'tf-tdd',          desc:'TDD workflow',  angle:-90,  color:'#10b981'},
+            {label:'tf-conventions',  desc:'Code quality',  angle:-18,  color:'#3b82f6'},
+            {label:'tf-deploy',       desc:'Release ops',   angle:54,   color:'#f59e0b'},
+            {label:'tf-security',     desc:'OWASP rules',   angle:126,  color:'#ef4444'},
+            {label:'tf-debug',        desc:'Bug tracing',   angle:198,  color:'#8b5cf6'}
+        ];
+        spokes.forEach(function(s) {
+            var rad = s.angle * Math.PI / 180;
+            var ex = cx + r * Math.cos(rad), ey = cy + r * Math.sin(rad);
+            svg.append('line').attr('x1',cx+44*Math.cos(rad)).attr('y1',cy+44*Math.sin(rad))
+                .attr('x2',ex).attr('y2',ey).attr('stroke',s.color+'30').attr('stroke-width',1.5).attr('stroke-dasharray','4,3');
+            svg.append('circle').attr('cx',ex).attr('cy',ey).attr('r',32)
+                .attr('fill',s.color+'10').attr('stroke',s.color+'28').attr('stroke-width',1.5);
+            svg.append('text').attr('x',ex).attr('y',ey-4).attr('text-anchor','middle')
+                .attr('fill',s.color).attr('font-size','7.5px').attr('font-weight','800')
+                .attr('font-family','JetBrains Mono,monospace').text(s.label);
+            svg.append('text').attr('x',ex).attr('y',ey+10).attr('text-anchor','middle')
+                .attr('fill','#475569').attr('font-size','7px').attr('font-family','Inter,sans-serif').text(s.desc);
+        });
+    })();
+
 });
 </script>
+
 </body>
 </html>

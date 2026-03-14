@@ -263,9 +263,87 @@ code{font-family:var(--font-mono);font-size:0.875em}
 .footer-inner a{color:var(--gold-light);transition:color var(--dur-fast)}
 .footer-inner a:hover{color:var(--gold-primary)}
 
+/* ── Before/After Session Cards ── */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+@media(max-width:640px){.ba-grid{grid-template-columns:1fr}}
+.ba-card{border-radius:0.875rem;overflow:hidden;border:1px solid}
+.ba-bad{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.2)}
+.ba-good{background:rgba(16,185,129,0.05);border-color:rgba(16,185,129,0.2)}
+.ba-label{display:flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.05)}
+.ba-bad .ba-label{color:var(--red-primary)}.ba-good .ba-label{color:var(--green-primary)}
+.ba-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ba-dot-bad{background:var(--red-primary)}.ba-dot-good{background:var(--green-primary)}
+.ba-chat{padding:1rem;display:flex;flex-direction:column;gap:0.5rem;min-height:130px}
+.ba-msg{padding:0.5rem 0.75rem;border-radius:0.75rem;font-size:0.8125rem;line-height:1.6;max-width:92%}
+.ba-user{background:rgba(255,255,255,0.06);color:var(--text-muted);align-self:flex-end;border:1px solid rgba(255,255,255,0.06)}
+.ba-ai{background:rgba(139,92,246,0.08);color:var(--text-muted);align-self:flex-start;border:1px solid rgba(139,92,246,0.15)}
+.ba-ai code{font-size:0.75rem;color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.3em;border-radius:3px}
+.ba-cost{padding:0.5rem 1rem 0.75rem;font-size:0.8125rem;font-weight:600;border-top:1px solid rgba(255,255,255,0.05)}
+.ba-bad .ba-cost{color:var(--red-primary)}.ba-good .ba-cost{color:var(--green-primary)}
+
+/* ── @path Import Chain ── */
+.import-chain-viz{margin:1.5rem 0;padding:1.5rem 1.5rem 1.25rem;border-radius:0.875rem;background:rgba(8,12,24,0.55);border:1px solid rgba(255,255,255,0.06)}
+.ic-root{display:flex;justify-content:center;margin-bottom:1.25rem}
+.ic-file{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.25rem;border-radius:0.625rem;font-family:var(--font-mono);font-size:0.8125rem;font-weight:600}
+.ic-root-file{background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:var(--purple-primary)}
+.ic-ref-file{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18);color:var(--blue-primary);font-size:0.75rem}
+.ic-tag{font-family:var(--font-sans);font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:0.1rem 0.4rem;border-radius:999px;background:rgba(139,92,246,0.2);color:rgba(139,92,246,0.9);margin-left:0.25rem}
+.ic-branches{display:flex;flex-direction:column;gap:0.625rem}
+.ic-branch{display:flex;align-items:flex-start;gap:0.875rem}
+.ic-connector{display:flex;align-items:center;padding-top:0.4rem;flex-shrink:0}
+.ic-line{width:28px;height:1px;background:rgba(255,255,255,0.12)}
+.ic-arrow{width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(255,255,255,0.18)}
+.ic-import{display:flex;flex-direction:column;gap:0.2rem}
+.ic-content{font-size:0.75rem;color:var(--text-dim);padding-left:0.25rem;line-height:1.5}
+.ic-budget{text-align:center;margin-top:1rem;padding-top:0.875rem;border-top:1px solid rgba(255,255,255,0.05)}
+.ic-budget-label{font-size:0.75rem;color:var(--text-dim);font-weight:500}
+
+/* ── Auto-memory grid ── */
+.auto-mem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+.auto-mem-card{padding:1.125rem;border-radius:0.875rem;background:rgba(8,12,24,0.55);border:1px solid rgba(255,255,255,0.07)}
+.auto-mem-icon{font-size:1.25rem;margin-bottom:0.375rem}
+.auto-mem-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);margin-bottom:0.75rem}
+.auto-mem-entries{display:flex;flex-direction:column;gap:0.375rem}
+.auto-mem-row{display:flex;align-items:baseline;gap:0.5rem;font-size:0.75rem}
+.auto-mem-key{color:var(--text-dim);min-width:74px;flex-shrink:0;font-weight:600}
+.auto-mem-row code{color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.35em;border-radius:3px;font-size:0.7rem;font-family:var(--font-mono)}
+
 /* ── Animation ── */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{opacity:0;animation:fadeInUp 0.5s var(--ease-decel) both}
+
+/* ── Sidenote Analogy Blocks ── */
+.sidenote{margin:2rem 0;padding:1.375rem 1.5rem 1.375rem 1.875rem;border-radius:1rem;background:linear-gradient(135deg,rgba(212,160,23,0.07),rgba(245,158,11,0.03));border:1px solid rgba(212,160,23,0.2);position:relative;overflow:hidden}
+.sidenote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3.5px;background:linear-gradient(180deg,var(--gold-primary),var(--gold-warm));border-radius:3px 0 0 3px}
+.sidenote-tag{display:inline-flex;align-items:center;gap:0.375rem;font-size:0.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold-primary);margin-bottom:0.625rem}
+.sidenote-tag::before{content:'✦';font-size:0.625rem}
+.sidenote p{margin:0 0 0.5rem;font-size:0.9375rem;font-style:italic;color:var(--text-muted);line-height:1.85}
+.sidenote p:last-child{margin-bottom:0}
+.sidenote p strong{color:var(--gold-light);font-style:normal;font-weight:600}
+.sidenote p code{font-style:normal;color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.35em;border-radius:3px;font-size:0.8125rem}
+
+/* ── Token budget bar ── */
+.token-budget{margin:1.5rem 0;display:flex;flex-direction:column;gap:0.5rem}
+.tb-row{display:flex;align-items:center;gap:0.875rem}
+.tb-label{font-size:0.8125rem;font-weight:600;color:var(--text-muted);min-width:170px;flex-shrink:0}
+.tb-track{flex:1;height:8px;background:rgba(255,255,255,0.05);border-radius:999px;overflow:hidden}
+.tb-fill{height:100%;border-radius:999px;transition:width 0.9s var(--ease-decel)}
+.tb-pct{font-size:0.75rem;font-weight:700;color:var(--text-dim);min-width:2.5rem;text-align:right}
+
+/* ── Annotated structure viz ── */
+.struct-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+@media(max-width:700px){.struct-grid{grid-template-columns:1fr}}
+.struct-card{border-radius:0.875rem;overflow:hidden;border:1px solid}
+.struct-card-hdr{padding:0.5rem 1rem;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06)}
+.struct-card-body{padding:0.875rem 1rem;font-size:0.8125rem;line-height:1.9;font-family:var(--font-mono);color:var(--text-dim)}
+.struct-card.do{background:rgba(16,185,129,0.04);border-color:rgba(16,185,129,0.18)}
+.struct-card.do .struct-card-hdr{background:rgba(16,185,129,0.08);color:var(--green-primary)}
+.struct-card.dont{background:rgba(239,68,68,0.04);border-color:rgba(239,68,68,0.18)}
+.struct-card.dont .struct-card-hdr{background:rgba(239,68,68,0.08);color:var(--red-primary)}
+.struct-card .hl-green{color:var(--green-light)}
+.struct-card .hl-red{color:var(--red-primary)}
+.struct-card .hl-amber{color:var(--amber-primary)}
+.struct-card .hl-blue{color:#a5d6ff}
 </style>
 </head>
 <body>
@@ -599,108 +677,525 @@ code{font-family:var(--font-mono);font-size:0.875em}
     </div>
 
     <p>
-        Sessions come and go, but your project knowledge should stick around.
-        Claude Code has <strong>two memory systems</strong> that work together to carry knowledge
-        across every session — one that you write, and one that Claude writes for itself.
+        Claude starts every session with a blank slate — no memory of yesterday's work.
+        Without a memory file, you'd spend the first five minutes re-explaining your
+        stack, conventions, and rules every single time. <strong>CLAUDE.md eliminates that
+        friction permanently.</strong>
     </p>
+
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — The Day-One Briefing</div>
+        <p>Imagine hiring a <strong>senior contractor for a 3-month engagement</strong>. On day one, you don't hand them the entire company history — you give them a focused briefing: the project goals, the tools in use, the conventions to follow, and the landmines to avoid. They become productive in hours instead of weeks.</p>
+        <p>That briefing document is your <code>CLAUDE.md</code>. Every session, Claude reads it first. Every session, it starts at full productivity — no warm-up questions, no context re-establishment.</p>
+    </div>
+
+    <div class="callout key">
+        <div class="callout-icon">🧠</div>
+        <div class="callout-body">
+            <strong>Mental model</strong>
+            Think of <code>CLAUDE.md</code> as the briefing document you'd hand a senior contractor
+            on day one — what the project does, the tools in use, the conventions to follow,
+            and the patterns to avoid. They contribute immediately instead of asking basics.
+        </div>
+    </div>
+
+    <!-- ── Before / After comparison ── -->
+    <h3>Without vs. with CLAUDE.md</h3>
+    <p>Here's what the first exchange of a session looks like in both scenarios:</p>
+
+    <div class="ba-grid">
+        <div class="ba-card ba-bad">
+            <div class="ba-label"><span class="ba-dot ba-dot-bad"></span>Without CLAUDE.md</div>
+            <div class="ba-chat">
+                <div class="ba-msg ba-user">Fix the failing auth test</div>
+                <div class="ba-msg ba-ai">Sure! Which testing framework are you using? Where are the tests located? What's the command to run them?</div>
+                <div class="ba-msg ba-user">Jest. tests/ directory. npm test.</div>
+                <div class="ba-msg ba-ai">Got it. And are you using ESM imports or CommonJS?</div>
+            </div>
+            <div class="ba-cost">⏱️ ~4 minutes re-establishing context every session</div>
+        </div>
+        <div class="ba-card ba-good">
+            <div class="ba-label"><span class="ba-dot ba-dot-good"></span>With CLAUDE.md</div>
+            <div class="ba-chat">
+                <div class="ba-msg ba-user">Fix the failing auth test</div>
+                <div class="ba-msg ba-ai">On it. Running <code>npm test -- tests/auth</code> to isolate the failure first, then I'll trace the root cause from there.</div>
+            </div>
+            <div class="ba-cost">⚡ Productive from message one — every session</div>
+        </div>
+    </div>
+
+    <!-- ── Two memory systems ── -->
+    <h3>Two memory systems working together</h3>
+    <p>
+        Claude Code uses two memory systems simultaneously — one that <em>you</em> author
+        to persist project knowledge, one that <em>Claude</em> maintains to record what it discovers:
+    </p>
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — Personal Diary vs Company Wiki</div>
+        <p>Your <code>CLAUDE.md</code> is the <strong>company wiki</strong>: shared, versioned in Git, available to every teammate and every Claude session that joins the project. It holds the rules everyone must follow.</p>
+        <p>Claude's auto-memory is its <strong>personal field notebook</strong>: the notes it takes while working — build commands it discovered, architecture patterns it observed, test quirks it learned. It fills this in automatically, and you can review or clear it with <code>/memory</code> anytime.</p>
+    </div>
 
     <div class="mem-diagram">
         <div class="mem-box you-write">
             <h4>📝 CLAUDE.md — You Write</h4>
             <ul>
-                <li>Project <code>./CLAUDE.md</code> (shared via Git)</li>
-                <li>User <code>~/.claude/CLAUDE.md</code> (local)</li>
-                <li>Org policy (managed by IT)</li>
-                <li>Scoped rules in <code>.claude/rules/</code></li>
+                <li>Project <code>./CLAUDE.md</code> — shared via Git, visible to the whole team</li>
+                <li>User <code>~/.claude/CLAUDE.md</code> — personal preferences, stays local</li>
+                <li>Org policy file — managed by IT, always enforced</li>
+                <li>Scoped rules <code>.claude/rules/</code> — topic-focused sub-guides</li>
             </ul>
         </div>
         <div class="mem-box claude-writes">
             <h4>🤖 Auto Memory — Claude Writes</h4>
             <ul>
-                <li>Build commands discovered</li>
-                <li>Debugging insights learned</li>
-                <li>Architecture patterns observed</li>
-                <li>First 200 lines loaded per session</li>
+                <li>Build commands it discovered working</li>
+                <li>Test runner and patterns it observed</li>
+                <li>Architecture insights from files it has read</li>
+                <li>First 200 lines loaded automatically each session</li>
             </ul>
         </div>
     </div>
 
-    <h3>Writing an effective CLAUDE.md</h3>
+    <!-- ── Memory Loading Priority D3 Viz ── -->
+    <h3>Memory loading priority</h3>
     <p>
-        Think of <code>CLAUDE.md</code> as a brief onboarding doc for a new team member.
-        Keep it <strong>under 200 lines</strong>. Include things Claude can't guess from reading
-        your code; skip what it already knows.
+        When a session starts, Claude loads memory from four sources in a specific order.
+        Sources loaded <em>later</em> take priority — your project <code>CLAUDE.md</code> and
+        scoped rules always have the final say over any upstream defaults:
     </p>
 
-    <div class="code-block">
-        <div class="code-header"><span class="code-lang">CLAUDE.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
-        <div class="code-body"><span class="comment"># Code style</span>
-- Use ES modules (import/export), not CommonJS (require)
-- Destructure imports when possible
-
-<span class="comment"># Workflow</span>
-- Be sure to typecheck when done making code changes
-- Prefer running single tests, not the whole suite
-
-<span class="comment"># Architecture</span>
-- API handlers live in src/api/handlers/
-- Database models use Drizzle ORM
-- Tests mirror src/ structure under tests/
-
-<span class="comment"># Build commands</span>
-- <span class="cmd">npm run dev</span>     → start dev server
-- <span class="cmd">npm test</span>        → run test suite
-- <span class="cmd">npm run lint</span>    → check linting</div>
+    <div class="viz-container">
+        <div class="viz-header">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 2a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm4.5 0a.5.5 0 000 1h7a.5.5 0 000-1h-7zM2 5.5a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 012 8.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/></svg>
+            Session Start — Memory Load Order
+        </div>
+        <div class="viz-body" id="memory-hierarchy-viz" role="img" aria-label="Memory load order: Org policy loads first with lowest priority, then user settings, then project CLAUDE.md, then scoped rules with highest priority"></div>
     </div>
 
-    <div class="callout tip">
-        <div class="callout-icon">💡</div>
-        <div class="callout-body">
-            <strong>Pro tip</strong>
-            You can import external files into CLAUDE.md using <code>@path</code> syntax:
-            <code>See @docs/git-workflow.md for branch conventions.</code>
-            Maximum 5 hops of recursive imports.
+    <!-- ── Writing CLAUDE.md — tabbed examples ── -->
+    <h3>Writing an effective CLAUDE.md</h3>
+    <p>
+        Keep your <code>CLAUDE.md</code> <strong>under 200 lines</strong> — that's the auto-load budget
+        per session. Include what Claude can't infer from reading your code. Skip what it already knows.
+    </p>
+
+    <!-- Token budget visual -->
+    <div class="token-budget" aria-label="What consumes context window tokens">
+        <div class="tb-row">
+            <span class="tb-label">CLAUDE.md + skills loaded</span>
+            <div class="tb-track"><div class="tb-fill" style="width:15%;background:var(--green-primary)"></div></div>
+            <span class="tb-pct tb-green">~15%</span>
+        </div>
+        <div class="tb-row">
+            <span class="tb-label">Conversation history</span>
+            <div class="tb-track"><div class="tb-fill" style="width:22%;background:var(--blue-primary)"></div></div>
+            <span class="tb-pct">~22%</span>
+        </div>
+        <div class="tb-row">
+            <span class="tb-label">File reads during session</span>
+            <div class="tb-track"><div class="tb-fill" style="width:38%;background:var(--purple-primary)"></div></div>
+            <span class="tb-pct">~38%</span>
+        </div>
+        <div class="tb-row">
+            <span class="tb-label">Tool output (test runs, etc.)</span>
+            <div class="tb-track"><div class="tb-fill" style="width:18%;background:var(--amber-primary)"></div></div>
+            <span class="tb-pct">~18%</span>
+        </div>
+        <div class="tb-row">
+            <span class="tb-label">Current prompt</span>
+            <div class="tb-track"><div class="tb-fill" style="width:7%;background:var(--gold-primary)"></div></div>
+            <span class="tb-pct">~7%</span>
+        </div>
+    </div>
+    <p style="font-size:0.8125rem;color:var(--text-dim);margin-top:-0.5rem;margin-bottom:1.5rem">Approximate token distribution in a typical 2-hour feature session. File reads dominate — keep sessions focused.</p>
+
+    <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="claude-ts">Node.js / TypeScript</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="claude-py">Python / FastAPI</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="claude-taskflow">TaskFlow (running example)</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="claude-tips">What to include</button>
+        </div>
+        <div class="tab-panel active" id="tab-claude-ts" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">CLAUDE.md — Node.js / TypeScript project</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment"># Acme Commerce API — TypeScript, Node 20, PostgreSQL + Drizzle ORM</span>
+
+<span class="comment">## Code style</span>
+- ES modules only — never use require() or CommonJS
+- Destructure imports: <span class="string">`import { foo } from './bar'`</span>
+- Strict TypeScript — no implicit any; fix type errors immediately
+
+<span class="comment">## Workflow</span>
+- Typecheck after every change: <span class="cmd">npm run type-check</span>
+- Run a single test, not the full suite: <span class="cmd">npm test -- path/to/test</span>
+- Never commit directly to main — open a PR
+
+<span class="comment">## Architecture</span>
+- API handlers: <span class="string">src/api/handlers/</span>
+- Database schema: <span class="string">src/db/schema/</span> (Drizzle ORM)
+- Business logic: <span class="string">src/services/</span> — keep handlers thin
+- Tests mirror src/ structure under <span class="string">tests/</span>
+
+<span class="comment">## Build commands</span>
+- <span class="cmd">npm run dev</span>        → start dev server (port 3000)
+- <span class="cmd">npm test</span>           → Jest test suite
+- <span class="cmd">npm run type-check</span> → tsc --noEmit
+- <span class="cmd">npm run lint</span>       → ESLint + Prettier check
+
+<span class="comment">## Off-limits</span>
+- Don't modify src/db/migrations/ directly — use Drizzle migrate commands
+- Don't add console.log — use the logger in src/lib/logger.ts</div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-claude-py" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">CLAUDE.md — Python / FastAPI project</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment"># Acme Data Service — Python 3.12, FastAPI, SQLAlchemy, PostgreSQL</span>
+
+<span class="comment">## Environment</span>
+- Activate venv: <span class="cmd">source .venv/bin/activate</span>
+- Dependency manager: uv (never use pip install directly)
+- Python 3.12: use match/case and walrus operator freely
+
+<span class="comment">## Code style</span>
+- Type hints required on all function signatures
+- Pydantic v2 models for validation — never return raw dicts from endpoints
+- Async by default — all route handlers must be <span class="keyword">async def</span>
+- Black formatter + isort: run <span class="cmd">make fmt</span> before committing
+
+<span class="comment">## Architecture</span>
+- Routes: <span class="string">app/routes/</span> (thin — delegate to services)
+- Business logic: <span class="string">app/services/</span>
+- DB models: <span class="string">app/models/</span> (SQLAlchemy)
+- Schemas: <span class="string">app/schemas/</span> (Pydantic)
+
+<span class="comment">## Commands</span>
+- <span class="cmd">make dev</span>                          → uvicorn with --reload
+- <span class="cmd">make test</span>                         → pytest with coverage
+- <span class="cmd">make test-one f=path/to/test.py</span>   → single test file
+- <span class="cmd">make lint</span>                         → ruff + mypy
+
+<span class="comment">## Conventions</span>
+- All errors use HTTPException with structured detail schema
+- Logging via structlog — no print() statements
+- DB sessions injected via Depends(get_db)</div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-claude-taskflow" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">CLAUDE.md — TaskFlow app (running tutorial example)</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment"># TaskFlow — Task Management CLI · Node 20 · TypeScript · SQLite</span>
+
+<span class="comment">## Stack quick-reference</span>
+- Runtime: Node 20 (ESM modules only — never require())
+- DB: SQLite via <span class="string">better-sqlite3</span> — schema in <span class="string">src/db/schema.ts</span>
+- Tests: Vitest — co-located as <span class="string">*.test.ts</span> next to source files
+- CLI entry: <span class="string">src/cli/index.ts</span> → commands in <span class="string">src/commands/</span>
+
+<span class="comment">## Commands</span>
+- <span class="cmd">npm run dev</span>          → ts-node watch mode
+- <span class="cmd">npm test</span>             → Vitest (all tests)
+- <span class="cmd">npm test -- task</span>     → run only task-related tests
+- <span class="cmd">npm run type-check</span>   → tsc --noEmit
+- <span class="cmd">npm run build</span>        → esbuild bundle → dist/
+
+<span class="comment">## Architecture</span>
+- Models: <span class="string">src/models/</span> (singular PascalCase: Task, Project, Tag)
+- Services: <span class="string">src/services/</span> (plural camelCase: tasksService.ts)
+- Commands: <span class="string">src/commands/</span> (thin — delegate all logic to services)
+- DB queries: only in services — never in commands or models
+
+<span class="comment">## Conventions</span>
+- TDD strictly: write failing Vitest test first, then implement
+- All functions strongly typed — no implicit any
+- Errors throw typed exceptions — never return null for failures
+- Use Zod for all CLI input validation
+
+<span class="comment">## Off-limits</span>
+- Don't alter <span class="string">src/db/migrations/</span> — always add a new migration file
+- Don't add console.log — use the <span class="string">src/lib/logger.ts</span> module</div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-claude-tips" role="tabpanel">
+            <table class="comparison">
+                <thead><tr><th>✅ Include in CLAUDE.md</th><th>❌ Skip — Claude already knows</th></tr></thead>
+                <tbody>
+                    <tr><td>Build, test, and lint command names</td><td>What language the project uses (Claude reads manifests)</td></tr>
+                    <tr><td>Which directories hold what</td><td>Standard syntax rules for the language</td></tr>
+                    <tr><td>Things that are off-limits or dangerous</td><td>Files in .gitignore (Claude skips them)</td></tr>
+                    <tr><td>Non-obvious project conventions</td><td>Generic advice like &ldquo;write clean code&rdquo;</td></tr>
+                    <tr><td>PR and commit workflow rules</td><td>Exhaustive style guides (link them with @path instead)</td></tr>
+                    <tr><td>Known footguns and sharp edges</td><td>Full dependency list (Claude reads package.json / pyproject.toml)</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- ── CLAUDE.md do / don't side-by-side ── -->
+    <h3>Structure that works — and structure that wastes tokens</h3>
+    <div class="struct-grid">
+        <div class="struct-card do">
+            <div class="struct-card-hdr">✅ Effective — focused &amp; actionable</div>
+            <div class="struct-card-body"><span class="hl-green"># TaskFlow CLI</span>
+
+<span class="hl-amber">## Commands</span>
+- dev: <span class="hl-green">npm run dev</span>
+- test: <span class="hl-green">npm test -- {file}</span>
+- types: <span class="hl-green">npm run type-check</span>
+
+<span class="hl-amber">## Architecture</span>
+- Models: src/models/ (singular)
+- Services: src/services/ (logic)
+
+<span class="hl-amber">## Rules</span>
+- TDD — test first, always
+- No console.log — use logger</div>
+        </div>
+        <div class="struct-card dont">
+            <div class="struct-card-hdr">❌ Ineffective — vague &amp; verbose</div>
+            <div class="struct-card-body"><span class="hl-red"># Our Project</span>
+
+This is a great project that does
+many things. Please write clean
+code and follow best practices.
+Always be careful. Make sure to
+test your code thoroughly.
+
+<span class="hl-red">## Dependencies</span>
+(lists all 47 npm packages)
+...
+
+<span class="hl-red">## Full TypeScript guide</span>
+(copies entire TS handbook)
+...</div>
+        </div>
+    </div>
+
+    <!-- ── @path imports ── -->
+    <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+            <strong>@path imports — keep docs DRY</strong>
+            Reference any external file from CLAUDE.md using the <code>@path</code> syntax:
+            <code>See @docs/git-workflow.md for branch conventions.</code>
+            Claude resolves up to <strong>5 hops</strong> of recursive imports, so specialized docs
+            stay in their natural home and get pulled in on demand — no duplication.
+        </div>
+    </div>
+
+    <!-- @path import chain CSS visualization -->
+    <div class="import-chain-viz" aria-label="Example showing CLAUDE.md importing three external documents via @path">
+        <div class="ic-root">
+            <div class="ic-file ic-root-file">
+                <span>📄</span>
+                <span>CLAUDE.md</span>
+                <span class="ic-tag">root</span>
+            </div>
+        </div>
+        <div class="ic-branches">
+            <div class="ic-branch">
+                <div class="ic-connector"><div class="ic-line"></div><div class="ic-arrow"></div></div>
+                <div class="ic-import">
+                    <div class="ic-file ic-ref-file"><span>📄</span><span>@docs/git-workflow.md</span></div>
+                    <div class="ic-content">Branch naming · commit format · PR template · merge strategy</div>
+                </div>
+            </div>
+            <div class="ic-branch">
+                <div class="ic-connector"><div class="ic-line"></div><div class="ic-arrow"></div></div>
+                <div class="ic-import">
+                    <div class="ic-file ic-ref-file"><span>📄</span><span>@.claude/api-conventions.md</span></div>
+                    <div class="ic-content">Error formats · auth headers · versioning rules · rate limiting</div>
+                </div>
+            </div>
+            <div class="ic-branch">
+                <div class="ic-connector"><div class="ic-line"></div><div class="ic-arrow"></div></div>
+                <div class="ic-import">
+                    <div class="ic-file ic-ref-file"><span>📄</span><span>@docs/security.md</span></div>
+                    <div class="ic-content">OWASP rules · secret handling · input validation · audit logging</div>
+                </div>
+            </div>
+        </div>
+        <div class="ic-budget">
+            <span class="ic-budget-label">Max 5 import hops &nbsp;·&nbsp; all references resolved and inlined at session start</span>
+        </div>
+    </div>
+
+    <!-- ── Auto-memory ── -->
+    <h3>Auto-memory — what Claude discovers itself</h3>
+    <p>
+        Alongside your <code>CLAUDE.md</code>, Claude maintains its own memory file, updated
+        automatically as it works in your project. You don't write it — Claude does. Here's
+        the kind of knowledge it accumulates across sessions:
+    </p>
+
+    <div class="auto-mem-grid">
+        <div class="auto-mem-card">
+            <div class="auto-mem-icon">🔧</div>
+            <div class="auto-mem-label">Build Commands</div>
+            <div class="auto-mem-entries">
+                <div class="auto-mem-row"><span class="auto-mem-key">dev server</span><code>npm run dev</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">test runner</span><code>npm test -- --watchAll=false</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">type check</span><code>npm run type-check</code></div>
+            </div>
+        </div>
+        <div class="auto-mem-card">
+            <div class="auto-mem-icon">🏗️</div>
+            <div class="auto-mem-label">Architecture Facts</div>
+            <div class="auto-mem-entries">
+                <div class="auto-mem-row"><span class="auto-mem-key">ORM</span><code>Drizzle — src/db/schema/</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">Auth</span><code>JWT via src/lib/auth.ts</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">Logger</span><code>pino — src/lib/logger.ts</code></div>
+            </div>
+        </div>
+        <div class="auto-mem-card">
+            <div class="auto-mem-icon">📋</div>
+            <div class="auto-mem-label">Learned Patterns</div>
+            <div class="auto-mem-entries">
+                <div class="auto-mem-row"><span class="auto-mem-key">imports</span><code>ES modules only</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">errors</span><code>AppError class pattern</code></div>
+                <div class="auto-mem-row"><span class="auto-mem-key">tests</span><code>co-located with source</code></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+            <strong>Auto-memory budget</strong>
+            Claude loads only the <strong>first 200 lines</strong> of its auto-memory file per session.
+            Use <code>/memory</code> inside a session to browse what's stored and toggle files on or off.
+            If auto-memory grows stale, ask Claude directly: <em>&ldquo;Clean up your memory — remove anything outdated.&rdquo;</em>
+        </div>
+    </div>
+
+    <div class="sidenote">
+        <div class="sidenote-tag">Analogy — The @import in CSS</div>
+        <p>The <code>@path</code> syntax works exactly like <code>@import</code> in CSS or <code>include</code> in C. Your <code>CLAUDE.md</code> stays thin like a stylesheet that delegates to <strong>component stylesheets</strong> — a git-workflow file, a security rules file, an API conventions file. Each lives where it makes sense. Claude resolves them all at session start.</p>
+        <p>The key insight: <strong>you don't duplicate anything</strong>. Docs live in their natural home and get pulled in only when needed. No copy-paste maintenance nightmares.</p>
+    </div>
+
+    <!-- ── Scoped rules ── -->
     <h3>Scoped rules for larger projects</h3>
     <p>
-        For bigger codebases, split your instructions into focused topic files under
-        <code>.claude/rules/</code>. Use YAML frontmatter to scope rules to specific file paths:
+        Once your project grows, a single <code>CLAUDE.md</code> becomes cluttered.
+        Split instructions into focused files under <code>.claude/rules/</code> and use
+        YAML frontmatter to <strong>activate rules only when editing matching file paths</strong>.
+        Claude loads only the rules relevant to the code it's currently working on.
     </p>
 
     <div class="file-tree"><span class="dir">.claude/</span>
-├── <span class="highlight">CLAUDE.md</span>              <span class="output">← main instructions</span>
+├── <span class="highlight">CLAUDE.md</span>              <span class="output">← always loaded (global rules)</span>
 └── <span class="dir">rules/</span>
-    ├── <span class="file">code-style.md</span>      <span class="output">← style guidelines</span>
-    ├── <span class="file">testing.md</span>          <span class="output">← testing conventions</span>
-    └── <span class="file">security.md</span>         <span class="output">← security requirements</span></div>
+    ├── <span class="file">api.md</span>             <span class="output">← paths: src/api/**</span>
+    ├── <span class="file">database.md</span>        <span class="output">← paths: src/db/**</span>
+    ├── <span class="file">frontend.md</span>        <span class="output">← paths: src/components/**</span>
+    └── <span class="file">security.md</span>        <span class="output">← no paths = always loaded</span></div>
 
-    <div class="code-block">
-        <div class="code-header"><span class="code-lang">.claude/rules/api-rules.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
-        <div class="code-body"><span class="comment">---</span>
+    <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="rule-api">API Rules</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="rule-db">Database Rules</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="rule-fe">Frontend Rules</button>
+        </div>
+        <div class="tab-panel active" id="tab-rule-api" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">.claude/rules/api.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment">---</span>
 <span class="keyword">paths:</span>
   - <span class="string">"src/api/**/*.ts"</span>
 <span class="comment">---</span>
 
 <span class="comment"># API Development Rules</span>
-- All endpoints must include input validation
-- Use standard error response format
-- Include OpenAPI documentation comments</div>
+- Every route validates input with Zod before any processing
+- Standard error format: <span class="string">{ error: string, code: string, requestId: string }</span>
+- Log all 5xx errors with request ID via logger.error()
+- Returns: 201 for creates, 200 for updates — never conflate the two
+- OpenAPI JSDoc comment required on every public route</div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-rule-db" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">.claude/rules/database.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment">---</span>
+<span class="keyword">paths:</span>
+  - <span class="string">"src/db/**"</span>
+<span class="comment">---</span>
+
+<span class="comment"># Database Rules</span>
+- NEVER write raw SQL — use the Drizzle ORM query builder exclusively
+- Schema changes require a migration: <span class="cmd">npm run db:migrate</span>
+- Never modify existing migrations — always create a new one
+- All timestamps: created_at, updated_at in snake_case, stored as UTC
+- Soft deletes only — add deleted_at column, never hard-delete rows</div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-rule-fe" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">.claude/rules/frontend.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="comment">---</span>
+<span class="keyword">paths:</span>
+  - <span class="string">"src/components/**/*.tsx"</span>
+  - <span class="string">"src/pages/**/*.tsx"</span>
+<span class="comment">---</span>
+
+<span class="comment"># Frontend Rules</span>
+- Use Server Components by default — add 'use client' only when required
+- Tailwind CSS only — no inline style attributes or CSS-in-JS
+- All images via next/image with explicit width and height
+- Forms use React Hook Form + Zod schema for validation
+- Loading states required on every async user action</div>
+            </div>
+        </div>
     </div>
 
     <p>
-        Rules without <code>paths</code> frontmatter load unconditionally. Path-scoped rules only
-        activate when Claude reads files matching those patterns — keeping context lean.
+        Rules without a <code>paths</code> key load unconditionally — every session, every file.
+        Path-scoped rules activate only when Claude reads files matching those patterns,
+        keeping the context window lean on large codebases.
     </p>
+
+    <!-- ── Managing memory mid-session ── -->
+    <h3>Managing memory inside a session</h3>
+    <p>
+        Three in-session commands give you real-time control over what Claude has loaded:
+    </p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-marker">1</div>
+            <div class="step-content">
+                <h4>Browse loaded files — <code>/memory</code></h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">in-session</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body">/memory</div></div>
+                <p>Lists every loaded memory file with line count and load order. Toggle any file off without restarting.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker">2</div>
+            <div class="step-content">
+                <h4>Generate memory from scratch — <code>/init</code></h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">in-session</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body">/init</div></div>
+                <p>Claude inspects your project, generates a starter <code>CLAUDE.md</code>, and places it in the repo root. Best for new or unmemoried projects.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker">3</div>
+            <div class="step-content">
+                <h4>Ask Claude to update it directly</h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">prompt</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body">Update CLAUDE.md — we switched from Jest to Vitest last week</div></div>
+                <p>Claude edits the file in place. The update takes effect next session. Commit it to share with your team.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="callout try">
         <div class="callout-icon">🧪</div>
         <div class="callout-body">
             <strong>Try it yourself</strong>
-            Create a <code>CLAUDE.md</code> in any project with 5–10 lines of instructions, then start a
-            session and ask Claude <em>"What do you know about this project?"</em> — it should
-            reflect your instructions back.
+            In any project, run <code>/init</code> to generate a starter <code>CLAUDE.md</code>.
+            Then open a fresh session and ask: <em>&ldquo;What do you know about this project?&rdquo;</em> —
+            Claude reflects your file's content back, confirming it was loaded correctly.
         </div>
     </div>
 </section>
@@ -1287,6 +1782,109 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('font-size', '8px').attr('font-weight', '600')
             .attr('font-family', 'Inter,sans-serif')
             .text(function(d){ return d.mode; });
+    })();
+
+    /* ── Memory Loading Hierarchy ── */
+    (function() {
+        var container = document.getElementById('memory-hierarchy-viz');
+        if (!container) return;
+        var w = 700, h = 200;
+        var svg = d3.select('#memory-hierarchy-viz').append('svg')
+            .attr('viewBox', '0 0 ' + w + ' ' + h)
+            .attr('role', 'img')
+            .attr('aria-label', 'Memory load order: Org policy loads first with lowest priority, user settings second, project CLAUDE.md third, scoped rules last with highest priority');
+
+        var layers = [
+            { label: 'Org Policy',       path: '(managed by IT)',    order: '1', color: '#3b82f6', icon: '🏢', scope: 'All developers',  note: 'lowest priority' },
+            { label: 'User Settings',    path: '~/.claude/CLAUDE.md', order: '2', color: '#8b5cf6', icon: '👤', scope: 'Personal only',   note: '' },
+            { label: 'Project CLAUDE.md', path: './CLAUDE.md',       order: '3', color: '#10b981', icon: '📁', scope: 'Team (in Git)',    note: '' },
+            { label: 'Scoped Rules',     path: '.claude/rules/',     order: '4', color: '#f59e0b', icon: '🎯', scope: 'File-specific',   note: 'highest priority' }
+        ];
+
+        var bw = 130, bh = 108, gap = 22;
+        var totalW = layers.length * bw + (layers.length - 1) * gap;
+        var startX = (w - totalW) / 2;
+        var cy = h / 2 - 10;
+
+        var defs = svg.append('defs');
+        defs.append('marker').attr('id', 'mem-arr').attr('viewBox', '0 0 10 10').attr('refX', 8).attr('refY', 5)
+            .attr('markerWidth', 6).attr('markerHeight', 6).attr('orient', 'auto')
+            .append('path').attr('d', 'M 0 2 L 8 5 L 0 8 Z').attr('fill', 'rgba(255,255,255,0.2)');
+
+        layers.forEach(function(l, i) {
+            var x = startX + i * (bw + gap);
+
+            /* Arrow to next */
+            if (i < layers.length - 1) {
+                svg.append('line')
+                    .attr('x1', x + bw + 2).attr('y1', cy)
+                    .attr('x2', x + bw + gap - 2).attr('y2', cy)
+                    .attr('stroke', 'rgba(255,255,255,0.12)').attr('stroke-width', 1.5)
+                    .attr('marker-end', 'url(#mem-arr)');
+            }
+
+            /* Card */
+            svg.append('rect')
+                .attr('x', x).attr('y', cy - bh / 2)
+                .attr('width', bw).attr('height', bh).attr('rx', 10)
+                .attr('fill', l.color + '0e').attr('stroke', l.color + '38').attr('stroke-width', 1.5);
+
+            /* Load order badge */
+            svg.append('circle')
+                .attr('cx', x + 16).attr('cy', cy - bh / 2 + 15).attr('r', 10)
+                .attr('fill', l.color + '20').attr('stroke', l.color + '55').attr('stroke-width', 1);
+            svg.append('text')
+                .attr('x', x + 16).attr('y', cy - bh / 2 + 15)
+                .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+                .attr('fill', l.color).attr('font-size', '9px').attr('font-weight', '800')
+                .attr('font-family', 'Inter,sans-serif').text(l.order);
+
+            /* Icon */
+            svg.append('text')
+                .attr('x', x + bw / 2).attr('y', cy - 28)
+                .attr('text-anchor', 'middle').attr('font-size', '20px').text(l.icon);
+
+            /* Label */
+            svg.append('text')
+                .attr('x', x + bw / 2).attr('y', cy + 2)
+                .attr('text-anchor', 'middle').attr('fill', l.color)
+                .attr('font-size', '10px').attr('font-weight', '700').attr('font-family', 'Inter,sans-serif')
+                .text(l.label);
+
+            /* Path */
+            svg.append('text')
+                .attr('x', x + bw / 2).attr('y', cy + 18)
+                .attr('text-anchor', 'middle').attr('fill', '#3d4f70')
+                .attr('font-size', '8px').attr('font-family', 'JetBrains Mono,monospace')
+                .text(l.path);
+
+            /* Scope */
+            svg.append('text')
+                .attr('x', x + bw / 2).attr('y', cy + 33)
+                .attr('text-anchor', 'middle').attr('fill', '#475569')
+                .attr('font-size', '8px').attr('font-weight', '500').attr('font-family', 'Inter,sans-serif')
+                .text(l.scope);
+
+            /* Priority note */
+            if (l.note) {
+                svg.append('text')
+                    .attr('x', x + bw / 2).attr('y', cy + bh / 2 - 6)
+                    .attr('text-anchor', 'middle').attr('fill', l.color + 'bb')
+                    .attr('font-size', '7.5px').attr('font-weight', '700').attr('font-family', 'Inter,sans-serif')
+                    .text('← ' + l.note);
+            }
+        });
+
+        /* Axis labels */
+        svg.append('text')
+            .attr('x', startX).attr('y', h - 4)
+            .attr('fill', '#2d3a55').attr('font-size', '9px').attr('font-weight', '600')
+            .attr('font-family', 'Inter,sans-serif').text('loads first · lowest priority →');
+        svg.append('text')
+            .attr('x', startX + totalW).attr('y', h - 4)
+            .attr('text-anchor', 'end')
+            .attr('fill', '#2d3a55').attr('font-size', '9px').attr('font-weight', '600')
+            .attr('font-family', 'Inter,sans-serif').text('← loads last · highest priority');
     })();
 });
 </script>
