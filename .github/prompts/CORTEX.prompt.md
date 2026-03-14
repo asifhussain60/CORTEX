@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-03-12 | **Architecture:** 314 Orchestrator files · 36 MCP Tools · 61 Governance YAMLs · 32 Intent Types · 1 Package
+**Updated:** 2026-03-14 | **Architecture:** 314 Orchestrator files · 36 MCP Tools (59 tool files) · 61 Governance YAMLs · 33 Intent Types · 1 Package
 
 ---
 
@@ -196,7 +196,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | Type | Location |
 |------|----------|
 | Orchestrators (314 files) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (36 registered) | `cortex/mcp/tools/` |
+| MCP Tools (36 registered, 59 files) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

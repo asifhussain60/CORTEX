@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-03-12 | **Architecture:** 314 Orchestrator files · 36 MCP Tools · 61 Governance YAMLs · 32 Intent Types · 1 Package  
+**Updated:** 2026-03-14 | **Architecture:** 314 Orchestrator files · 36 MCP Tools (59 tool files) · 61 Governance YAMLs · 33 Intent Types · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
@@ -47,7 +47,7 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (36 registered) | `cortex/mcp/tools/` (58 tool files) |
+| MCP Tools (36 registered) | `cortex/mcp/tools/` (59 tool files) |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -232,7 +232,7 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 |---------------------|---------|---------|
 | **AST (Python)** | `ast` (stdlib) | Python code analysis, stub detection, import rewriting |
 | **LENS** | `cortex/lens/` | 8 analyzers: Language → Examination → Navigation → Synthesis |
-| **Intelligence Facade** | `cortex/intelligence/facade.py` | `IntelligenceFacade` — canonical single entry: `analyze()`, `synthesize()`, `query()` (Phase 107 Sub-Phase C) |
+| **Intelligence Facade** | `cortex/intelligence/facade.py` | `IntelligenceFacade` — canonical single entry: `analyze()`, `synthesize()`, `query()`, `acquire()`, `invalidate_cache()`, `threat_assessment()`, `quality_baseline()`, `guidance()`, `analyze_repository()`, `classify_archetype()`, `framework_context()`, `is_cortex_framework()`, `load_governance()`, `load_patterns()`, `load_plans()`, `load_workflows()`, `registry_index()` (17 public methods) |
 | **Roslyn (C#)** | `cortex/orchestrators/support/roslyn/` | C#/.NET semantic analysis (requires `dotnet` CLI) |
 | **tree-sitter** | `tree-sitter>=0.21.0` | Multi-language parsing (Python, C#, TypeScript) |
 | **ruff** | `ruff>=0.3.0` | Python linting + auto-fix (PostRefactorLintGate) |
@@ -336,7 +336,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 26 | **Duplicate class implementations (CORE-035)** — same class name defined in more than one non-test `cortex/` file; Python silently uses the last import, making earlier definitions dead code | `python3 -c "import ast,pathlib,collections; locs=collections.defaultdict(list); [locs[n.name].append(str(f)) for f in pathlib.Path('cortex').rglob('*.py') if '__pycache__' not in str(f) for n in ast.walk(ast.parse(f.read_text())) if isinstance(n,ast.ClassDef)]; dups={k:v for k,v in locs.items() if len(v)>1}; print(f'DUPLICATES={len(dups)}'); [print(k,v) for k,v in dups.items()]"` — must return `DUPLICATES=0` | ✅ Identify canonical file for each pair; merge or delete the shadow copy; update all imports; run `make test-smoke` |
 | 27 | **Stale test directory mirror** — `tests/` dirs whose corresponding `cortex/` source was dissolved (e.g. `tests/cortex_brain/` with no `cortex/brain/`); test-source mirror integrity. **DISSOLVED PACKAGE GUARD:** Any test dir matching a name in `DISSOLVED_PACKAGES` (`cortex_brain`, `cortex_intelligence`, `cortex_lens`) must be DELETED, never relocated — the source package no longer exists. SSOT: `DISSOLVED_PACKAGES` in `cortex/orchestrators/health/constants.py` | `python3 -c "import pathlib; td={d.name for d in pathlib.Path('tests').iterdir() if d.is_dir()}; sd={d.name for d in pathlib.Path('cortex').iterdir() if d.is_dir()}; stale=[t for t in td if t not in sd and 'cortex_'+t not in sd]; print('STALE='+str(len(stale))); [print('  tests/'+s) for s in stale]"` — must return `STALE=0` after accounting for known exceptions; also recursively scan `tests/unit/`, `tests/integration/` for dissolved package subdirs | ✅ `rm -rf` dirs matching dissolved packages; `git mv tests/{stale_dir}/ tests/{correct_mirror_path}/` for non-dissolved stale dirs; update conftest.py references |
 | 28 | **AC marker persistence gap** — `trace_master.action` column must receive `AC_START` / `AC_COMPLETE` entries whenever orchestrators run; symptom: `workflow_runs` has rows but `AC_START_COUNT == 0` means emission is silently broken | `python3 -c "import sqlite3; conn=sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); n=conn.execute(\"SELECT COUNT(*) FROM trace_master WHERE action LIKE 'AC_START%'\").fetchone()[0]; wf=conn.execute('SELECT COUNT(*) FROM workflow_runs').fetchone()[0]; print('AC_START='+str(n)+' WF_RUNS='+str(wf)); print('GAP' if wf>0 and n==0 else 'OK')"` — must print `OK` | 🟡 Trace `OrchestratorProtocolMixin.emit_ac_marker()` routing; ensure `OrchestratorTraceLogger._write_to_db()` inserts into `trace_master` with `action='AC_START'`/`'AC_COMPLETE'`; run `make test-smoke` to confirm |
-| 29 | **Intelligence layer health** — `IntelligenceFacade` importable; `analyze()`, `synthesize()`, `query()` methods present; `UnifiedIntelligenceContext` importable from `cortex.intelligence.models.context`; compat shims in `cortex/intelligence/base.py` resolve correctly (Phase 107 consolidation) | `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; from cortex.intelligence.models.context import UnifiedIntelligenceContext; assert hasattr(IntelligenceFacade,'analyze') and hasattr(IntelligenceFacade,'synthesize') and hasattr(IntelligenceFacade,'query'); print('OK')"` — must print `OK` | ✅ Verify `cortex/intelligence/facade.py` exists and exports `IntelligenceFacade`; verify compat shims `cortex/intelligence/base.py` and `cortex/intelligence/base_engine.py` re-export from canonical `cortex.intelligence.models`; run `make test-smoke` |
+| 29 | **Intelligence layer health** — `IntelligenceFacade` importable; 17 public methods present (`analyze`, `synthesize`, `query`, `acquire`, `invalidate_cache`, `threat_assessment`, `quality_baseline`, `guidance`, `analyze_repository`, `classify_archetype`, `framework_context`, `is_cortex_framework`, `load_governance`, `load_patterns`, `load_plans`, `load_workflows`, `registry_index`); `UnifiedIntelligenceContext` importable from `cortex.intelligence.models.context`; compat shims in `cortex/intelligence/base.py` resolve correctly (Phase 107/131/132/135/137 consolidation) | `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; assert len([m for m in dir(IntelligenceFacade) if not m.startswith('_') and callable(getattr(IntelligenceFacade,m))]) >= 17; print('OK')"` — must print `OK` | ✅ Verify `cortex/intelligence/facade.py` exists and exports all 17 methods |
 
 ### Extended Hardening Checks — Phase 126 Production Hardening Engine (Checks #30–#41)
 
@@ -359,7 +359,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 38 | **cortex-registry cohesion** — `RegistryYAMLReader.validate_integrity()` returns `orphans=0, broken_refs=0, duplicate_ids=0, circular_refs=0`; all YAML `path:` fields use Windows-compatible forward-slash patterns | `python3 -c "from cortex.repositories.yaml_reader import RegistryYAMLReader; r=RegistryYAMLReader(); rep=r.validate_integrity(); assert rep['orphans']==0 and rep['broken_refs']==0 and rep['duplicate_ids']==0, rep; print('OK')"` — must print `OK` | OK | ✅ Remove orphans; fix broken refs; deduplicate IDs |
 | 39 | **cortex-sync non-production markers** — every `.github/prompts/*.prompt.md` and `.github/agents/**/*.md` EXCEPT production core files contains `scope: non-production-admin` frontmatter; `cortex-sync.prompt.md` has `production_files` exclusion list | `python3 tests/preflight/test_sync_non_production_markers.py` — must print `ALL PASS` | ALL PASS | ✅ Inject `scope: non-production-admin` in frontmatter |
 | 40 | **Production Readiness Orchestrator (Green Gate)** — single `python3 scripts/run_tests.py preflight` command runs all 41 checks end-to-end; emits JSON evidence report to `.cortex-runtime/traces/production-readiness-evidence.json`; completes in < 120s; Intelligence Diamond integration test passes; approval gate blocks if any check fails | `python3 scripts/run_tests.py preflight` — ≥258 tests, all GREEN, runtime < 120s; `cat .cortex-runtime/traces/production-readiness-evidence.json \| python3 -c "import json,sys; r=json.load(sys.stdin); assert all(c['status']=='PASS' for c in r['checks']), r"` | All 41 checks PASS | ✅ CORE-068 loop |
-| 41 | **Drift Lock System** — every gap close emits: (1) `cortex-registry/governance/drift-locks/<check-id>-lock.yaml` with `ci_gate: true`; (2) `tests/preflight/test_drift_lock_<check-id>.py` that runs detect_command and asserts pass_criteria; drift-lock-emit.yaml primitive wired into audit-fix Stage 8 | `ls cortex-registry/governance/drift-locks/ \| wc -l` — must be ≥11; `python3 scripts/run_tests.py preflight` drift lock tests all GREEN | ≥11 locks, all GREEN | ✅ Auto-emit from `drift-lock-emit.yaml` primitive |
+| 41 | **Drift Lock System** — every gap close emits: (1) `cortex-registry/governance/drift-locks/<check-id>-lock.yaml` with `ci_gate: true`; (2) `tests/preflight/test_drift_lock_<check-id>.py` that runs detect_command and asserts pass_criteria; drift-lock-emit.yaml primitive wired into audit-fix Stage 8 | `ls cortex-registry/governance/drift-locks/ \| wc -l` — must be ≥22; `python3 scripts/run_tests.py preflight` drift lock tests all GREEN | ≥22 locks, all GREEN | ✅ Auto-emit from `drift-lock-emit.yaml` primitive |
 
 ### Drift Lock Protocol (Check #41 — Permanent Guardrail)
 
@@ -988,8 +988,8 @@ Progress bar + stage bullet list. See templates SSOT.
 
 | Type | Location |
 |------|----------|
-| Orchestrators (296 files) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (36 registered) | `cortex/mcp/tools/` |
+| Orchestrators (314 files) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (36 registered) | `cortex/mcp/tools/` (59 tool files) |
 | Tests | `tests/` (mirrors `cortex/` structure — excludes dissolved packages: `cortex_brain`, `cortex_intelligence`, `cortex_lens`) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |

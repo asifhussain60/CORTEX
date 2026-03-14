@@ -1,7 +1,6 @@
 ---
 scope: non-production-admin
 agent_id: cortex-digest
-version: "1.0"
 status: active
 layer: core
 modes_served:
@@ -299,6 +298,6 @@ See `AGENT-INDEX.md` § ⛔ Deleted Constructs for the full list. Key: `cortex/b
 - BulkDigestOrchestrator: `cortex/orchestrators/support/bulk_digest_orchestrator.py`
 - DigestSessionOrchestrator: `cortex/orchestrators/support/digest_session_orchestrator.py`
 - Intelligence Engine: `cortex/intelligence/learning/digest/`
-- MCP: 36 registered tools in `cortex/mcp/tools/` (58 tool files)
+- MCP: 36 registered tools in `cortex/mcp/tools/` (59 tool files)
 
 > **Governance:** This agent MUST operate within CORTEX governance boundaries. NEVER skip TDD (CORE-008). ALWAYS emit AC markers.

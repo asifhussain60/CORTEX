@@ -1,7 +1,6 @@
 ---
 scope: non-production-admin
 agent_id: "cortex-meta-auditor"
-version: "1.0"
 status: "active"
 layer: "core"
 capabilities:
@@ -138,12 +137,12 @@ All `.github/` documentation MUST use these values:
 | Metric | Canonical Value | Derivation Command |
 |--------|-----------------|-------------------|
 | **Wired Orchestrators** | 51 unique | `{ grep '  - name:' cortex-registry/core/specifications/*-wiring.yaml; } \| grep -v 'governance_registry\|audit_logger\|state_manager' \| sort -u \| wc -l` |
-| **MCP Tools** | 36 registered; 56 tool files | `python3 -c "from cortex.mcp.mcp_registry import PRODUCTION_TOOLS; print(len(PRODUCTION_TOOLS))"` |
+| **MCP Tools** | 36 registered; 59 tool files | `python3 -c \"from cortex.mcp.mcp_registry import PRODUCTION_TOOLS; print(len(PRODUCTION_TOOLS))\"` |
 | **CORE Rules** | 60 (core:26 + governance:34) | `find cortex-registry/core cortex-registry/governance -name '*.yaml' \| wc -l` |
 | **Top-level Dirs** | 21 dirs | `ls -d cortex/*/ \| grep -v __pycache__ \| wc -l` |
 | **Orchestrator Subdirs** | 14 subdirs | `ls -d cortex/orchestrators/*/ \| grep -v __pycache__ \| wc -l` |
 | **Package Name** | `cortex` (single) | No alternatives allowed |
-| **Test Count** | ~20,897 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
+| **Test Count** | ~21,269 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
 
 **Numeric Drift Detection Protocol:**
 1. Extract all numeric claims from docs: `grep -rn '{pattern}' .github/ --include="*.md"`
@@ -229,11 +228,11 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 
 | Metric | Canonical Value |
 |--------|----------------|
-| Orchestrators | **296 files** across 14 domains |
-| MCP Tools | **36 registered**; 58 tool files |
+| Orchestrators | **314 files** across 14 domains |
+| MCP Tools | **36 registered**; 59 tool files |
 | CORE Rules | **60 active** (core:26 + governance:34) |
 | Package | **`cortex`** (single) |
-| Tests | **~20,565 collected** (run `python3 -m pytest --collect-only -q` for current count) |
+| Tests | **~21,269 collected** (run `python3 -m pytest --collect-only -q` for current count) |
 | Audit Checks | **28-Point** production readiness (Checks #1–#28) |
 | Meta-Audit Checks | **25 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |

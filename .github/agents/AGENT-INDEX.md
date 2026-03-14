@@ -1,8 +1,8 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-03-08 (Documentation Sync) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
+**Updated:** 2026-03-14 (System Check Sync) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 60 completed, 16 planned | **Tests:** ~20,897 | **Intent Types:** 32
+**Phases:** 147 completed, 0 planned | **Tests:** ~21,269 | **Intent Types:** 33
 
 ---
 
@@ -39,11 +39,11 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Metric | Value |
 |--------|-------|
 | Orchestrator files | **314** across 14 domains (`core:138 domain:34 support:60 health:27 intelligence:16 persona:6 workflow:7 validation:12 git:4 response:5 _top_level:2 registry:1 synthesis:1 tools:1`) |
-| MCP Tools | **36 registered** in `mcp_registry.py`; 58 tool files in `cortex/mcp/tools/` |
+| MCP Tools | **36 registered** in `mcp_registry.py`; 59 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **61** across `cortex-registry/core/` (26) and `cortex-registry/governance/` (35) |
 | Package | `cortex` (single) |
-| Tests | **~20,897** collected |
-| Intent Types | **32** (see `cortex/models/canonical_enums.py`) |
+| Tests | **~21,269** collected |
+| Intent Types | **33** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
 | URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
 | PLIP-001 | Prompt-Layer Intelligence Protocol — all code-modifying prompts/agents consult failure history before action and record outcomes after (SSOT: `cortex-registry/core/prompt-learning-protocol.yaml`) |

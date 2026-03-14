@@ -1,7 +1,6 @@
 ---
 scope: non-production-admin
 agent_id: cortex-sync-agent
-version: "1.0"
 status: active
 layer: core
 modes_served:

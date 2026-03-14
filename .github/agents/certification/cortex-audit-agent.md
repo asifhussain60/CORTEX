@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Audit Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-audit-agent.md`
+**Updated:** 2026-03-14 | **Authority:** `.github/agents/certification/cortex-audit-agent.md`
 **Role:** Git delta analysis, drift detection, registry schema cohesion, drift lock verification
 
 ---
@@ -73,11 +73,15 @@ ok, issues = verify_runtime_environment()
 
 Compare documented counts against live:
 
-- Orchestrator file count: `find cortex/orchestrators -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l`
-- MCP tool file count: `find cortex/mcp/tools -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l`
-- Governance YAML count: `find cortex-registry/core cortex-registry/governance -name "*.yaml" | wc -l`
-- Test count: `python3 -m pytest --collect-only -q 2>/dev/null | tail -1`
-- Intent types: `grep -c "^    [A-Z_]* = " cortex/models/canonical_enums.py`
+- Orchestrator file count: `find cortex/orchestrators -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l` — expected: **314**
+- MCP tool file count: `find cortex/mcp/tools -name "*.py" -not -name "__init__*" -not -path "*__pycache__*" | wc -l` — expected: **59**
+- MCP registered tool count: `grep -c "@mcp_tool" cortex/mcp/mcp_registry.py` — expected: **36**
+- Governance YAML count: `find cortex-registry/core cortex-registry/governance -name "*.yaml" | wc -l` — expected: **61**
+- Test count: `python3 -m pytest --collect-only -q 2>/dev/null | tail -1` — expected: **21,269+**
+- Preflight test count: `python3 -m pytest tests/preflight/ --collect-only -q 2>/dev/null | tail -1` — expected: **457+**
+- Intent types: `grep -c "^    [A-Z_]* = " cortex/models/canonical_enums.py` — expected: **33**
+- IntelligenceFacade public methods: `python3 -c "from cortex.intelligence.facade import IntelligenceFacade; print(len([m for m in dir(IntelligenceFacade) if not m.startswith('_') and callable(getattr(IntelligenceFacade,m))]))"` — expected: **17**
+- Drift lock count: `ls cortex-registry/governance/drift-locks/ | wc -l` — expected: **≥22**
 
 Scan all `.md` files in `.github/` for these numbers. Any mismatch = P0.
 
@@ -117,7 +121,7 @@ Validate `.vscode/settings.json`, `pytest.ini`, `pyproject.toml` against canonic
 
 #### 2.7 Drift Lock Integrity (P0) — Phase 128
 
-**19 drift lock checks (#30-#49)** established across `tests/preflight/` and `tests/governance/`:
+**22 drift lock checks (#30-#51)** established across `tests/preflight/` and `tests/governance/`:
 
 | Check Range | Domain | Location |
 |-------------|--------|----------|
@@ -125,6 +129,7 @@ Validate `.vscode/settings.json`, `pytest.ini`, `pyproject.toml` against canonic
 | #35-#37 | No-versioning policy | `tests/preflight/test_no_versioning_*` |
 | #38-#41 | Stub governance | `tests/preflight/test_stub_governance*` |
 | #42-#49 | Phase 128 sweep domains | `tests/governance/test_drift_lock_system_integrity.py` |
+| #50-#51 | Phase 135+ hardening | `tests/governance/test_drift_lock_system_integrity.py` |
 
 **Validation:** `python3 -m pytest tests/preflight/ tests/governance/test_drift_lock_system_integrity.py -q`
 All must pass. Any failure = P0 block.

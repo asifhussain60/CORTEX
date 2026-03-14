@@ -1,7 +1,6 @@
 ---
 scope: non-production-admin
 agent_id: "cortex-phase-resolver"
-version: "1.0"
 status: "active"
 layer: "core"
 capabilities:

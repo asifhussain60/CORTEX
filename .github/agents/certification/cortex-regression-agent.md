@@ -4,7 +4,7 @@ scope: non-production-admin
 # CORTEX Regression Agent
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-12 | **Authority:** `.github/agents/certification/cortex-regression-agent.md`
+**Updated:** 2026-03-14 | **Authority:** `.github/agents/certification/cortex-regression-agent.md`
 **Role:** Regression identification, sweep domain validation, backward compatibility, dead code detection
 
 ---
@@ -29,7 +29,7 @@ You are a **read-only analyst**. You detect and classify but never fix.
 ### 3.1 Test Regression Detection
 
 ```bash
-make test-preflight   # 446+ tests, must pass
+make test-preflight   # 457+ tests, must pass
 make test-smoke       # 2,791+ tests, must pass
 ```
 
@@ -41,7 +41,7 @@ make test-smoke       # 2,791+ tests, must pass
 ### 3.2 Governance Suite Validation
 
 ```bash
-python3 -m pytest tests/governance/ -q   # 244+ tests
+python3 -m pytest tests/governance/ -q   # 260+ tests
 ```
 
 Zero failures required. These tests lock governance rules permanently.

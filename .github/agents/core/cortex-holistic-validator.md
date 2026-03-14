@@ -1,7 +1,6 @@
 ---
 scope: non-production-admin
 agent_id: cortex-holistic-validator
-version: "1.0"
 status: active
 layer: support
 capabilities:

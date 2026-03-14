@@ -1,6 +1,5 @@
 ---
 agent_id: cortex-architect
-version: "1.0"
 status: active
 layer: core
 requires:

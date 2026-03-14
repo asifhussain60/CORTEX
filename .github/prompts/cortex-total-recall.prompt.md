@@ -1,7 +1,10 @@
+---
+scope: non-production-admin
+---
 # CORTEX Total Recall — Production Certification Authority
 
 **Author:** Asif Hussain | © 2025–2026 CORTEX Framework. All rights reserved.
-**Updated:** 2026-03-12 | **Phases Complete:** 152 | **Architecture:** 314 Orchestrators · 36 MCP Tools · 61 Governance YAMLs
+**Updated:** 2026-03-14 | **Phases Complete:** 152 | **Architecture:** 314 Orchestrators · 36 MCP Tools (59 tool files) · 61 Governance YAMLs · 33 Intent Types
 **Authority:** `.github/prompts/cortex-total-recall.prompt.md`
 
 ---
@@ -121,25 +124,28 @@ Phase 10: CERTIFICATION        → Cert Agent         → Scorecard + sign-off +
 - Registry Schema P0 (YAML files failing schema validation — Phase 128-b)
 - Drift Lock P0 (checks #30–#51 failing — Phase 126/128/148/151)
 
-**Phase 3 — REGRESSION SCAN:** Test regression against baseline (preflight: 446+, total: 20,897+ collected). Governance suite (244+ tests), sweep domain tests (140+ across 8 domains A–H), dead code detection, bloat, duplicates, import health.
+**Phase 3 — REGRESSION SCAN:** Test regression against baseline (preflight: 457+, total: 21,269+ collected). Governance suite (244+ tests), sweep domain tests (140+ across 8 domains A–H), dead code detection, bloat, duplicates, import health.
 
 **Phase 4 — PROMPT OPTIMIZATION:** Responsibility matrix reconciliation, SSOT deduplication, dead reference removal, token budget enforcement (≤60s read time). Phase 128 anti-patterns: hardcoded counts, conflicting rules, compat shim traps, path depth errors.
 
-**Phase 5 — INTELLIGENCE WIRING:** Intelligence Diamond — 4 layers (Reasoning / Memory / Orchestration / Validation). Cross-layer connectivity validation. Silent failure detection. All `IntelligenceFacade` methods verified importable and non-stub:
+**Phase 5 — INTELLIGENCE WIRING:** Intelligence Diamond — 4 layers (Reasoning / Memory / Orchestration / Validation). Cross-layer connectivity validation. Silent failure detection. All 17 `IntelligenceFacade` public methods verified importable and non-stub:
 - `analyze()`, `synthesize()`, `query()` — original 3 (Phase 107)
 - `acquire()`, `invalidate_cache()` — Knowledge Acquisition (Phase 135)
 - `threat_assessment()`, `quality_baseline()`, `guidance()` — Deep Intelligence Wiring (Phase 137)
 - `analyze_repository()` — Core Capabilities (Phase 132)
+- `classify_archetype()`, `framework_context()`, `is_cortex_framework()` — Framework Analysis (Phase 131)
+- `load_governance()`, `load_patterns()`, `load_plans()`, `load_workflows()` — Registry Loaders
+- `registry_index()` — Registry Index Access
 
-CCLQueryEngine (CORE rule → business-language) wired. CapabilityVerifier import-drift detection active. ContextSynthesisGateway `best_practices` injection verified (Phase 149). DoRApprovalGate + DoRScore (CORE-071) wired (Phase 150).
+CCLQueryEngine (CORE rule → business-language) wired. CapabilityVerifier import-drift detection active. ContextSynthesisGateway `best_practices` injection verified (Phase 149). DoRApprovalGate + DoRScore (CORE-071) wired (Phase 150). DocumentIngestOrchestrator 5-component pipeline verified (Phase 144). ResponseRenderingRules 14 rules golden-tested (Phase 146). KnowledgeGuidanceTraceability DecisionTraceabilityLogger wired (Phase 143).
 
 **Phase 6 — MEMORY HYGIENE:** Document lifecycle (ACTIVE → DIGESTED → ARCHIVED → DELETED). Failure pattern tracking. Recurring failures 3×→P1, 5×→P0.
 
-**Phase 7 — WORKSPACE CLEANUP:** 8-stage vacuum pipeline — Naming → Root Clutter → Empty Dirs → Orphans → Markdown Sprawl → Digested → Build Artifacts → OS Artifacts. `VACUUM_PROTECTED_ROOTS` frozenset (`cortex/`, `cortex-registry/`, `tests/`, `.github/`, `scripts/`) enforced across all 8 stages (Phase 141/151). `validate_safe_run()` gate verified on `VacuumOrchestrator`.
+**Phase 7 — WORKSPACE CLEANUP:** 8-stage vacuum pipeline — Naming → Root Clutter → Empty Dirs → Orphans → Markdown Sprawl → Digested → Build Artifacts → OS Artifacts. `VACUUM_PROTECTED_ROOTS` frozenset (`cortex/`, `cortex-registry/`, `tests/`, `.github/`, `scripts/`, `cortex-docs/`) enforced across all 8 stages (Phase 141/151). `validate_safe_run()` gate verified on `VacuumOrchestrator`. PROTECTED_DIRS expanded to 15 entries (.git, .venv, venv, env, .cortex-runtime, node_modules added).
 
 **Phase 8 — SQLITE INTEGRITY:** 7 canonical databases in `.cortex-runtime/`. `DatabaseHealthVerifier` 4-layer check (exist → tables → roundtrip → integrity) for all 7 databases (Phase 148). Corruption detection, schema drift, index health, unbounded growth prevention, orphaned `AC_START` cleanup, WAL checkpoint. E2E population test (`test_e2e_database_population.py`) must be GREEN.
 
-**Phase 9 — PRODUCTION HARDENING:** 25 checks (H1–H25) — see Hardening Checklist below.
+**Phase 9 — PRODUCTION HARDENING:** 34 checks (H1–H34) — see Hardening Checklist below.
 
 **Phase 10 — CERTIFICATION:** Weighted scorecard (9 categories). Certification levels: ≥95% → CERTIFIED, 85–94% → CONDITIONAL, 70–84% → DEFERRED, <70% → BLOCKED. Inline report generated in Chat — never as a .md/.txt file (CORE-002).
 
@@ -194,7 +200,7 @@ ssot_ownership:
 | # | Check | Severity | Origin |
 |---|-------|----------|--------|
 | H1 | No version inflation (no v2+ anywhere) | P0 | Original |
-| H2 | MCP tool registry ↔ file alignment (36 registered, 58 tool files) | P0 | Original |
+| H2 | MCP tool registry ↔ file alignment (36 registered, 59 tool files) | P0 | Original |
 | H3 | Dependency consistency — requirements.txt reviewed | P1 | Original |
 | H4 | Prompt → agent file alignment | P0 | Original |
 | H5 | Configuration drift — settings.json / pytest.ini | P1 | Original |
@@ -202,9 +208,9 @@ ssot_ownership:
 | H7 | No hardcoded secrets | P0 | Original |
 | H8 | No bare exceptions in production code | P1 | Original |
 | H9 | AC marker coverage on all public orchestrator methods | P1 | Original |
-| H10 | Intent type coverage — all 32 intent types routed | P0 | Original |
+| H10 | Intent type coverage — all 33 intent types routed (32 + UNKNOWN) | P0 | Original |
 | H11 | Workflow template coverage — all code-touching modes resolve to YAML | P1 | Original |
-| H12 | Test count ≥ baseline (preflight: 446+, total: 20,897+) | P0 | Original |
+| H12 | Test count ≥ baseline (preflight: 457+, total: 21,269+) | P0 | Original |
 | H13 | Drift lock integrity — checks #30–#51 all pass | P0 | Phase 128/148/151 |
 | H14 | Registry schema cohesion — all YAMLs pass schema validation | P0 | Phase 128-b |
 | H15 | Workflow template convergence — no orphans or duplicates | P1 | Phase 128-d |
@@ -218,6 +224,15 @@ ssot_ownership:
 | H23 | `DoRApprovalGate` + `DoRScore` wired (CORE-071) — `is_ready()` composite ≥100 | P1 | Phase 150 |
 | H24 | `ContextSynthesisGateway` `best_practices` injection verified (context key present) | P0 | Phase 149 |
 | H25 | `DashboardIntelligenceOrchestrator` 7-stage pipeline verified importable and non-stub | P1 | Phase 152 |
+| H26 | `IntelligenceFacade` 17 public methods all importable and non-stub | P0 | Phase 107/131/132/135/137 |
+| H27 | `DocumentIngestOrchestrator` 5-component pipeline (IngestFileClassifier + DocumentReader + IngestKnowledgeExtractor + IngestContentRouter + teardown) verified | P1 | Phase 144 |
+| H28 | Response rendering rules — 14 rules (R1-R6 + Rule1/3/4/DECL) golden-tested (25 tests) | P1 | Phase 146 |
+| H29 | `KnowledgeGuidanceEngine.resolve()` emits `decision_type=RESOLUTION` via `DecisionTraceabilityLogger` | P1 | Phase 143 |
+| H30 | `SubPhaseComposer.INTENT_TEMPLATE_MAP` derived from `WorkflowGateway.get_mode_template_map()` SSOT — no hardcoded entries | P1 | Phase 142 |
+| H31 | Drift lock count ≥ 22 (checks #30–#51) with corresponding preflight tests | P0 | Phase 126/128/148/151 |
+| H32 | `SanitizationEngine` 8 privacy gates (G1–G8) + `CrossRepoExtractor` 6-stage pipeline verified | P1 | Phase 139 |
+| H33 | `ComplexityTriageEngine` CDR scoring + `AutoPlanGenerator` + `GoldenTestGenerator` verified | P1 | Phase 136 |
+| H34 | `RollbackManager` SHA format validation + `SubPhaseCheckpointInjector` create→execute→commit/rollback | P1 | Phase 138 |
 
 ---
 
@@ -264,11 +279,18 @@ ssot_ownership:
 | `.github/agents/certification/` | Agent directory (8 specialist agents) |
 | `cortex-registry/workflows/templates/lifecycle/totalrecall-workflow.yaml` | Workflow template |
 | `cortex-registry/planning/phases/completed/phase-128-conflict-drift-eradication.yaml` | Sweep domains A–H (Phase 128) |
-| `cortex-registry/planning/phases/planned/phase-152-dashboard-intelligence-pipeline.yaml` | DashboardIntelligenceOrchestrator 7-stage pipeline |
-| `cortex-registry/planning/phases/planned/phase-151-vacuum-source-protection-persona-dashboard.yaml` | VACUUM_PROTECTED_ROOTS + GV-028..034 |
-| `cortex-registry/planning/phases/planned/phase-150-dor-hard-gate-personality-layer.yaml` | DoRScore + PersonalityLayer (CORE-071) |
-| `cortex-registry/planning/phases/planned/phase-149-knowledge-intelligence-enhancement.yaml` | ContextSynthesisGateway best_practices injection |
-| `cortex-registry/planning/phases/planned/phase-148-infrastructure-foundation.yaml` | DatabaseHealthVerifier 4-layer check |
+| `cortex-registry/planning/phases/completed/phase-152-dashboard-intelligence-pipeline.yaml` | DashboardIntelligenceOrchestrator 7-stage pipeline |
+| `cortex-registry/planning/phases/completed/phase-151-vacuum-source-protection-persona-dashboard.yaml` | VACUUM_PROTECTED_ROOTS + GV-028..034 |
+| `cortex-registry/planning/phases/completed/phase-150-dor-hard-gate-personality-layer.yaml` | DoRScore + PersonalityLayer (CORE-071) |
+| `cortex-registry/planning/phases/completed/phase-149-knowledge-intelligence-enhancement.yaml` | ContextSynthesisGateway best_practices injection |
+| `cortex-registry/planning/phases/completed/phase-148-infrastructure-foundation.yaml` | DatabaseHealthVerifier 4-layer check |
+| `cortex-registry/planning/phases/completed/phase-144-document-ingest-pipeline.yaml` | DocumentIngestOrchestrator 5-component pipeline |
+| `cortex-registry/planning/phases/completed/phase-146-response-rendering-rules-golden.yaml` | Response rendering rules golden tests |
+| `cortex-registry/planning/phases/completed/phase-143-knowledge-guidance-traceability.yaml` | DecisionTraceabilityLogger wiring |
+| `cortex-registry/planning/phases/completed/phase-142-subphasecomposer-dry-refactor.yaml` | SubPhaseComposer DRY refactor |
+| `cortex-registry/planning/phases/completed/phase-139-cross-repo-feedback-extractor.yaml` | SanitizationEngine + CrossRepoExtractor |
+| `cortex-registry/planning/phases/completed/phase-138-git-checkpoint-safety.yaml` | RollbackManager + SubPhaseCheckpointInjector |
+| `cortex-registry/planning/phases/completed/phase-136-cape.yaml` | CAPE — ComplexityTriageEngine + AutoPlanGenerator |
 | `cortex-registry/planning/phases/completed/phase-126-production-hardening-checklist-engine.yaml` | Drift locks #30–#41 |
 | `scripts/refresh_prompt_suite.py` | Self-healing prompt suite |
 | `.github/templates/cortex-response-templates.md` | Response formatting SSOT |
@@ -276,4 +298,4 @@ ssot_ownership:
 
 ---
 
-**Token Usage:** ~5,800
+**Token Usage:** ~6,500
