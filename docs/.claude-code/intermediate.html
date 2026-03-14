@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Intermediate Path — Claude Code Learning Hub | CORTEX</title>
+<meta name="description" content="23 hands-on modules to master Claude Code customisation — skills, subagents, hooks, context management, and prompting strategies with the TaskFlow running example."/>
+<meta name="author" content="Asif Hussain"/>
+<link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com;
+               style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+               font-src 'self' fonts.gstatic.com data:;
+               img-src 'self' data: https:;
+               connect-src 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+<style>
+:root {
+    --bg-canvas:#0a0e1a; --glass-bg:rgba(15,20,35,0.75); --glass-border:rgba(255,255,255,0.08); --glass-blur:blur(20px);
+    --gold-primary:#d4a017; --gold-light:#fbbf24; --gold-warm:#f59e0b;
+    --amber-primary:#f59e0b; --amber-bg:rgba(245,158,11,0.12); --amber-border:rgba(245,158,11,0.25); --amber-glow:rgba(245,158,11,0.15);
+    --text-main:#f8fafc; --text-muted:#94a3b8; --text-dim:#64748b;
+    --nav-height:56px;
+    --dur-fast:150ms; --dur-moderate:300ms; --ease-standard:cubic-bezier(0.4,0,0.2,1); --ease-decel:cubic-bezier(0,0,0.2,1);
+    --font-sans:'Inter',system-ui,sans-serif; --font-display:'Space Grotesk',var(--font-sans); --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:18px;scroll-behavior:smooth}
+body{margin:0;padding:0;background-color:var(--bg-canvas);background-image:radial-gradient(circle at 20% 30%,rgba(245,158,11,0.05) 0%,transparent 50%),radial-gradient(circle at 75% 70%,rgba(212,160,23,0.04) 0%,transparent 50%);color:var(--text-main);font-family:var(--font-sans);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);line-height:1.2}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.skip-link{position:absolute;top:-100%;left:1rem;z-index:99999;padding:0.6rem 1.25rem;background:var(--amber-primary);color:#000;font-weight:700;border-radius:0 0 0.75rem 0.75rem;transition:top 0.2s}
+.skip-link:focus{top:0;outline:3px solid #000;outline-offset:2px}
+:focus{scroll-margin-top:calc(var(--nav-height) + 8px)}
+
+.ambient-canvas{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ambient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.15;animation:floatOrb 25s infinite ease-in-out alternate}
+.orb-1{top:-8%;left:10%;width:45vw;height:45vw;background:rgba(245,158,11,0.18)}
+.orb-2{bottom:-12%;right:-5%;width:55vw;height:55vw;background:rgba(212,160,23,0.1);animation-delay:-7s}
+@keyframes floatOrb{0%{transform:translate(0,0) scale(1)}100%{transform:translate(6%,10%) scale(1.08)}}
+
+.site-header{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 32px -4px rgba(0,0,0,0.45)}
+.header-inner{max-width:1680px;margin:0 auto;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.header-brand{display:flex;align-items:center;gap:0.625rem;flex-shrink:0}
+.header-logo{width:32px;height:32px;border-radius:8px;filter:drop-shadow(0 0 8px rgba(212,160,23,0.35))}
+.header-wordmark{font-family:var(--font-display);font-size:0.9375rem;font-weight:800;letter-spacing:0.06em;color:rgba(248,250,252,0.92)}
+.header-wordmark span{font-size:0.6875rem;font-weight:500;color:rgba(148,163,184,0.65);margin-left:0.375rem}
+.header-nav{display:flex;align-items:center;gap:0.125rem}
+.header-nav a{display:inline-flex;align-items:center;gap:0.3rem;padding:0.375rem 0.75rem;border-radius:8px;font-size:0.8125rem;font-weight:600;color:rgba(148,163,184,0.8);transition:color var(--dur-fast),background var(--dur-fast);white-space:nowrap}
+.header-nav a:hover,.header-nav a.active{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.06)}
+.header-sep{width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 0.25rem}
+.nav-toggle{display:none;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.375rem 0.5rem;color:rgba(148,163,184,0.8);cursor:pointer;font-size:1.125rem}
+@media(max-width:768px){.header-nav{display:none}.header-nav.open{display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:rgba(10,14,26,0.97);backdrop-filter:blur(20px);padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.07);z-index:99}.header-nav.open a{padding:0.625rem 0.75rem;font-size:0.9375rem}.nav-toggle{display:flex;align-items:center}.header-inner{position:relative}.header-wordmark span{display:none}}
+
+.breadcrumb-strip{background:rgba(10,14,26,0.65);border-bottom:1px solid rgba(255,255,255,0.05)}
+.breadcrumb-inner{max-width:1680px;margin:0 auto;padding:0.5rem 2rem;display:flex;align-items:center;gap:0.375rem;font-size:0.78125rem;flex-wrap:wrap}
+.bc-link{color:rgba(148,163,184,0.7);font-weight:500;padding:0.125rem 0.375rem;border-radius:5px;transition:color var(--dur-fast)}
+.bc-link:hover{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.05)}
+.bc-sep{color:rgba(148,163,184,0.3);font-size:0.6875rem}
+.bc-current{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:999px;font-size:0.875rem;font-weight:700;background:var(--amber-bg);color:var(--amber-primary);border:1px solid var(--amber-border)}
+
+.hero{max-width:1680px;margin:0 auto;padding:3rem 2rem 2rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 1rem;border-radius:999px;background:var(--amber-bg);border:1px solid var(--amber-border);font-size:0.8125rem;font-weight:600;color:var(--amber-primary);margin-bottom:1.25rem}
+.hero h1{font-size:clamp(2rem,4.5vw,3.25rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.75rem}
+.gradient-text-amber{background:linear-gradient(135deg,#f59e0b,#fbbf24);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:1.1875rem;color:var(--text-muted);max-width:700px;margin:0 auto 2rem;line-height:1.7}
+.progress-wrap{max-width:500px;margin:0 auto 2rem;text-align:left}
+.progress-label{font-size:0.75rem;font-weight:600;color:var(--text-dim);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.5rem}
+.progress-bar{height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--amber-primary),#fbbf24);width:0;transition:width 1s var(--ease-decel)}
+
+#path-diagram{width:100%;max-width:900px;margin:0 auto 2rem}
+#path-diagram svg{width:100%;height:auto}
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.25) 50%,transparent);margin:0 auto}
+
+.modules-section{max-width:1680px;margin:0 auto;padding:2rem 2rem 4rem}
+.modules-section h2{font-size:1.75rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.modules-section .section-desc{font-size:1.0625rem;color:var(--text-muted);margin-bottom:2rem}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.25rem}
+
+.module-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:1.25rem;padding:1.5rem;position:relative;overflow:hidden;transition:transform var(--dur-moderate) var(--ease-standard),border-color var(--dur-moderate),box-shadow var(--dur-moderate);opacity:0;animation:fadeInUp 0.5s var(--ease-decel) both}
+.module-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);pointer-events:none}
+.module-card:hover{transform:translateY(-3px);border-color:var(--amber-border);box-shadow:0 16px 40px -10px var(--amber-glow)}
+
+.module-num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:0.5rem;font-size:0.75rem;font-weight:900;font-family:var(--font-mono);background:var(--amber-bg);color:var(--amber-primary);border:1px solid var(--amber-border);margin-bottom:0.75rem}
+.module-title{font-size:1.1875rem;font-weight:700;margin-bottom:0.375rem;letter-spacing:-0.01em}
+.module-desc{font-size:0.9375rem;color:var(--text-muted);line-height:1.65;margin-bottom:0.75rem}
+.module-tags{display:flex;flex-wrap:wrap;gap:0.375rem}
+.module-tag{font-size:0.6875rem;font-weight:600;padding:0.15rem 0.5rem;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--text-dim)}
+.module-example{font-family:var(--font-mono);font-size:0.6875rem;padding:0.15rem 0.5rem;border-radius:999px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.15);color:var(--gold-warm)}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.site-footer{border-top:1px solid rgba(255,255,255,0.06);background:rgba(10,14,26,0.7);backdrop-filter:blur(12px);padding:2rem 1.5rem;margin-top:2rem}
+.footer-inner{max-width:1680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:0.875rem;color:var(--text-dim)}
+.footer-inner a{color:var(--gold-light);transition:color var(--dur-fast)}
+.footer-inner a:hover{color:var(--gold-primary)}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:999px;font-size:0.8125rem;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:all var(--dur-moderate);margin-bottom:1rem}
+.back-link:hover{color:var(--text-main);background:rgba(255,255,255,0.08)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="ambient-canvas" aria-hidden="true"><div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div></div>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a class="header-brand" href="../index.html" aria-label="CORTEX Home">
+            <img class="header-logo" src="../assets/images/cortex-logo-64.png" alt="CORTEX logo" width="32" height="32"/>
+            <div class="header-wordmark">CORTEX<span>AI Framework</span></div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.header-nav').classList.toggle('open')">☰</button>
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="../index.html">Home</a>
+            <a href="../architecture.html">Architecture</a>
+            <div class="header-sep" aria-hidden="true"></div>
+            <a href="index.html">Claude Code</a>
+            <a href="basic.html">Beginner</a>
+            <a href="intermediate.html" class="active">Intermediate</a>
+            <a href="advanced.html">Advanced</a>
+        </nav>
+    </div>
+</header>
+<div class="breadcrumb-strip">
+    <nav class="breadcrumb-inner" aria-label="Breadcrumb">
+        <a class="bc-link" href="../index.html">CORTEX</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <a class="bc-link" href="index.html">Claude Code</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span class="bc-current">🟡 Intermediate</span>
+    </nav>
+</div>
+
+<main id="main">
+<section class="hero">
+    <a class="back-link" href="index.html">← Back to Learning Hub</a>
+    <div class="hero-badge">🟡 Intermediate Path — 23 Modules</div>
+    <h1><span class="gradient-text-amber">Customisation</span></h1>
+    <p class="hero-desc">Build skills, create subagents, configure hooks, and master the art of effective prompting — all while extending the <strong>TaskFlow</strong> app with custom tooling.</p>
+    <div class="progress-wrap">
+        <div class="progress-label">Your Progress</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div id="path-diagram" aria-label="Intermediate path flow: Skills, Agents, Hooks, Context, Mastery"></div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<section class="modules-section">
+    <h2>All 23 Modules</h2>
+    <p class="section-desc">Prerequisite: Complete the Beginner path. Every module extends your TaskFlow project with production-grade customisations.</p>
+    <div class="modules-grid" id="modulesGrid"></div>
+</section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <span>© 2025–2026 <a href="../index.html">CORTEX Framework</a> — Asif Hussain</span>
+        <span><a href="basic.html">← Beginner</a> · <a href="advanced.html">Advanced →</a></span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var modules = [
+        { num:1, title:'Creating Your First Skill', desc:'Turn your Beginner knowledge into a reusable SKILL.md. Create a "code-conventions" skill for TaskFlow that Claude loads automatically.', tags:['hands-on','skills'], example:'Create .claude/skills/taskflow-conventions/SKILL.md' },
+        { num:2, title:'Skill Anatomy Deep Dive', desc:'Master SKILL.md frontmatter: name, description, argument hints. Understand how Claude discovers and loads skills on demand.', tags:['concept','skills'], example:'Add frontmatter with argument-hint for TaskFlow TDD skill' },
+        { num:3, title:'Reference vs Task Skills', desc:'Reference skills provide knowledge (conventions, API docs). Task skills define procedures (TDD workflow, deploy checklist). Know when to use each.', tags:['concept','skills'], example:'Build a TaskFlow reference skill and a task skill side by side' },
+        { num:4, title:'Skill Supporting Files', desc:'Add checklists, templates, and examples alongside your SKILL.md. Organise a skill directory with references/ and templates/ folders.', tags:['hands-on','skills'], example:'Add references/testing-checklist.md to TaskFlow TDD skill' },
+        { num:5, title:'Dynamic Context Injection', desc:'Skills can load different content based on the request. Use supporting files to inject context dynamically without bloating SKILL.md.', tags:['concept','skills'], example:'TaskFlow skill loads different checklist per module type' },
+        { num:6, title:'Creating a Custom Subagent', desc:'Build your first subagent: a read-only TaskFlow code reviewer. Define it in .claude/agents/ with scoped tool access.', tags:['hands-on','agents'], example:'Create .claude/agents/taskflow-reviewer.md' },
+        { num:7, title:'Subagent Tool Scoping', desc:'Control exactly which tools each agent can use. Allowlists, denylists, and Bash glob patterns for precise access control.', tags:['hands-on','agents'], example:'Restrict reviewer to [Read, Grep, Glob] — no Write access' },
+        { num:8, title:'Subagent Permissions & Modes', desc:'Permission modes (default, bypassPermissions) and plan mode. Understand when to let an agent act freely vs. require confirmation.', tags:['concept','agents'], example:'Create a trusted TaskFlow auto-formatter with bypassPermissions' },
+        { num:9, title:'MCP Server Integration', desc:'Connect Claude to external tools via Model Context Protocol. Scope MCP servers per agent for security isolation.', tags:['hands-on','mcp'], example:'Add a database MCP server scoped to TaskFlow DB agent' },
+        { num:10, title:'Lifecycle Hooks Introduction', desc:'Hooks intercept tool execution at specific moments. Learn the 10 hook events and when each fires in the Claude lifecycle.', tags:['concept','hooks'], example:'Map which hooks fire when Claude edits a TaskFlow file' },
+        { num:11, title:'PreToolUse & PostToolUse Hooks', desc:'The two most common hooks. Gate operations before they happen (PreToolUse) and react after they complete (PostToolUse).', tags:['hands-on','hooks'], example:'Add a PostToolUse hook that runs tests after any file edit' },
+        { num:12, title:'Hook Types: Command, Agent, HTTP', desc:'Three hook implementations: shell commands (fast checks), agent hooks (complex analysis), and HTTP hooks (external services).', tags:['concept','hooks'], example:'Compare command vs agent hook for TaskFlow lint checking' },
+        { num:13, title:'Building a Quality Gate Hook', desc:'Combine hooks into a pre-commit quality gate. Block commits that fail tests, lint, or contain TODOs.', tags:['hands-on','hooks'], example:'Create a PreToolUse hook for git commit in TaskFlow' },
+        { num:14, title:'Context Budget Estimation', desc:'Estimate token costs for different content types. Know how many tokens a file read, search, or tool call costs.', tags:['concept','context'], example:'Calculate token budget for a typical TaskFlow feature session' },
+        { num:15, title:'Session Strategies', desc:'Three session patterns: short (single task), medium (feature), long (sprint). Choose the right strategy for the work.', tags:['concept','context'], example:'Plan session strategy for adding TaskFlow recurring tasks' },
+        { num:16, title:'Prompting Principles', desc:'Five principles for effective prompts: Verify Work, Explore First, Be Specific, Provide Context, Iterate. Apply the framework.', tags:['concept','prompting'], example:'Rewrite a vague TaskFlow prompt using all 5 principles' },
+        { num:17, title:'Prompt Patterns', desc:'Four advanced patterns: Interview (ask Claude to ask you), Constraint (define boundaries), Teaching (explain then do), Comparison (evaluate options).', tags:['concept','prompting'], example:'Use the Interview pattern for TaskFlow architecture decisions' },
+        { num:18, title:'Building a Skill Library', desc:'Organise multiple skills into a coherent library. Create a gateway skill that routes requests to domain-specific TaskFlow skills.', tags:['hands-on','skills'], example:'Build a gateway skill routing to TDD, review, and deploy skills' },
+        { num:19, title:'Agent Memory & State', desc:'Persistent agent memory across sessions. How agents remember context, track patterns, and build knowledge over time.', tags:['concept','agents'], example:'Configure memory for TaskFlow reviewer to track recurring issues' },
+        { num:20, title:'Multi-File Coordination', desc:'Manage changes that span many files. Strategies for keeping Claude focused when modifying models, tests, and docs simultaneously.', tags:['hands-on','workflow'], example:'Add a "tags" feature requiring changes across 6 TaskFlow files' },
+        { num:21, title:'Debugging with Claude', desc:'Systematic bug investigation: reproduce → diagnose → fix → verify. Use Claude to trace bugs through complex codepaths.', tags:['hands-on','workflow'], example:'Debug TaskFlow\'s intermittent sort order bug' },
+        { num:22, title:'Performance Optimisation', desc:'Make your Claude Code setup faster: lean CLAUDE.md, skill-based loading, context-efficient prompting, session management.', tags:['concept','performance'], example:'Optimise TaskFlow\'s Claude setup for < 30% context usage' },
+        { num:23, title:'Intermediate Checkpoint', desc:'Review all skills, agents, hooks, and prompting patterns. Self-assessment and bridge to the Advanced orchestration path.', tags:['review','checkpoint'], example:'Complete the TaskFlow intermediate mastery audit' }
+    ];
+
+    var grid = document.getElementById('modulesGrid');
+    modules.forEach(function(m, i) {
+        var card = document.createElement('article');
+        card.className = 'module-card';
+        card.style.animationDelay = (i * 50) + 'ms';
+        card.innerHTML =
+            '<div class="module-num">' + String(m.num).padStart(2,'0') + '</div>' +
+            '<h3 class="module-title">' + m.title + '</h3>' +
+            '<p class="module-desc">' + m.desc + '</p>' +
+            '<div class="module-tags">' +
+                m.tags.map(function(t){return '<span class="module-tag">' + t + '</span>'}).join('') +
+                '<span class="module-example">📋 ' + m.example + '</span>' +
+            '</div>';
+        grid.appendChild(card);
+    });
+
+    setTimeout(function(){ document.getElementById('progressFill').style.width = '0%'; }, 300);
+
+    // D3 path diagram
+    var container = document.getElementById('path-diagram');
+    if (!container || typeof d3 === 'undefined') return;
+    var w = Math.min(container.offsetWidth, 900), h = 120;
+    var svg = d3.select('#path-diagram').append('svg')
+        .attr('viewBox', '0 0 ' + w + ' ' + h)
+        .attr('role', 'img')
+        .attr('aria-label', 'Intermediate path phases: Skills (1-5), Agents (6-9), Hooks (10-13), Context & Prompt (14-17), Mastery (18-23)');
+
+    var phases = [
+        { label:'Skills', range:'1–5', x:w*0.1, color:'#f59e0b' },
+        { label:'Agents', range:'6–9', x:w*0.3, color:'#f59e0b' },
+        { label:'Hooks', range:'10–13', x:w*0.5, color:'#f59e0b' },
+        { label:'Context', range:'14–17', x:w*0.7, color:'#f59e0b' },
+        { label:'Mastery', range:'18–23', x:w*0.9, color:'#f59e0b' }
+    ];
+
+    var defs = svg.append('defs');
+    defs.append('marker').attr('id','arr').attr('viewBox','0 0 10 10').attr('refX',10).attr('refY',5)
+        .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto')
+        .append('path').attr('d','M 0 0 L 10 5 L 0 10 Z').attr('fill','rgba(245,158,11,0.4)');
+
+    for (var i = 0; i < phases.length - 1; i++) {
+        svg.append('line')
+            .attr('x1', phases[i].x + 40).attr('y1', h/2)
+            .attr('x2', phases[i+1].x - 40).attr('y2', h/2)
+            .attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',2)
+            .attr('stroke-dasharray','6,4').attr('marker-end','url(#arr)');
+    }
+
+    var g = svg.selectAll('.phase').data(phases).enter().append('g');
+    g.append('rect')
+        .attr('x',function(d){return d.x-35}).attr('y',h/2-22)
+        .attr('width',70).attr('height',44).attr('rx',12)
+        .attr('fill','rgba(245,158,11,0.08)').attr('stroke','rgba(245,158,11,0.25)').attr('stroke-width',1.5);
+    g.append('text')
+        .attr('x',function(d){return d.x}).attr('y',h/2-4)
+        .attr('text-anchor','middle').attr('fill','#f59e0b')
+        .attr('font-size','10px').attr('font-weight','700').attr('font-family','Inter,sans-serif')
+        .text(function(d){return d.label});
+    g.append('text')
+        .attr('x',function(d){return d.x}).attr('y',h/2+12)
+        .attr('text-anchor','middle').attr('fill','#64748b')
+        .attr('font-size','8px').attr('font-weight','600').attr('font-family','Inter,sans-serif')
+        .text(function(d){return 'Mod ' + d.range});
+});
+</script>
+</body>
+</html>

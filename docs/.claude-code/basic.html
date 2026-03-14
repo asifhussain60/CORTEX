@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beginner Tutorial — Claude Code Learning Hub | CORTEX</title>
+<meta name="description" content="A hands-on tutorial to master Claude Code fundamentals — from installation to real development workflows, with practical examples and interactive visualizations."/>
+<meta name="author" content="Asif Hussain"/>
+<link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com;
+               style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+               font-src 'self' fonts.gstatic.com data:;
+               img-src 'self' data: https:;
+               connect-src 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+<style>
+/* ── Tokens ── */
+:root {
+    --bg-canvas:#0a0e1a; --glass-bg:rgba(15,20,35,0.72); --glass-border:rgba(255,255,255,0.08); --glass-blur:blur(20px);
+    --green-primary:#10b981; --green-light:#34d399; --green-bg:rgba(16,185,129,0.10); --green-border:rgba(16,185,129,0.22); --green-glow:rgba(16,185,129,0.12);
+    --gold-primary:#d4a017; --gold-light:#fbbf24; --gold-warm:#f59e0b;
+    --blue-primary:#3b82f6; --blue-bg:rgba(59,130,246,0.10); --blue-border:rgba(59,130,246,0.22);
+    --purple-primary:#8b5cf6; --purple-bg:rgba(139,92,246,0.10); --purple-border:rgba(139,92,246,0.22);
+    --amber-primary:#f59e0b; --amber-bg:rgba(245,158,11,0.10); --amber-border:rgba(245,158,11,0.22);
+    --red-primary:#ef4444; --red-bg:rgba(239,68,68,0.10); --red-border:rgba(239,68,68,0.22);
+    --text-main:#f8fafc; --text-muted:#94a3b8; --text-dim:#64748b;
+    --nav-height:56px; --toc-width:260px;
+    --dur-fast:150ms; --dur-moderate:300ms; --ease-standard:cubic-bezier(0.4,0,0.2,1); --ease-decel:cubic-bezier(0,0,0.2,1);
+    --font-sans:'Inter',system-ui,sans-serif; --font-display:'Space Grotesk',var(--font-sans); --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:18px;scroll-behavior:smooth}
+body{margin:0;padding:0;background:var(--bg-canvas);background-image:radial-gradient(circle at 15% 10%,rgba(16,185,129,0.06) 0%,transparent 50%),radial-gradient(circle at 85% 85%,rgba(212,160,23,0.04) 0%,transparent 50%);color:var(--text-main);font-family:var(--font-sans);line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+h1,h2,h3,h4,h5{margin:0;font-family:var(--font-display);line-height:1.25}
+code{font-family:var(--font-mono);font-size:0.875em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.skip-link{position:absolute;top:-100%;left:1rem;z-index:99999;padding:0.6rem 1.25rem;background:var(--green-primary);color:#000;font-weight:700;border-radius:0 0 0.75rem 0.75rem;transition:top 0.2s}
+.skip-link:focus{top:0;outline:3px solid #000;outline-offset:2px}
+:focus{scroll-margin-top:calc(var(--nav-height) + 16px)}
+
+/* ── Ambient ── */
+.ambient-canvas{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ambient-orb{position:absolute;border-radius:50%;filter:blur(140px);opacity:0.12;animation:floatOrb 30s infinite ease-in-out alternate}
+.orb-1{top:-15%;left:-8%;width:55vw;height:55vw;background:rgba(16,185,129,0.2)}
+.orb-2{bottom:-12%;right:-12%;width:50vw;height:50vw;background:rgba(212,160,23,0.12);animation-delay:-8s}
+@keyframes floatOrb{0%{transform:translate(0,0) scale(1)}100%{transform:translate(5%,8%) scale(1.06)}}
+
+/* ── Header ── */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 32px -4px rgba(0,0,0,0.45)}
+.header-inner{max-width:1680px;margin:0 auto;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.header-brand{display:flex;align-items:center;gap:0.625rem;flex-shrink:0}
+.header-logo{width:32px;height:32px;border-radius:8px;filter:drop-shadow(0 0 8px rgba(212,160,23,0.35))}
+.header-wordmark{font-family:var(--font-display);font-size:0.9375rem;font-weight:800;letter-spacing:0.06em;color:rgba(248,250,252,0.92)}
+.header-wordmark span{font-size:0.6875rem;font-weight:500;color:rgba(148,163,184,0.65);margin-left:0.375rem}
+.header-nav{display:flex;align-items:center;gap:0.125rem}
+.header-nav a{display:inline-flex;align-items:center;gap:0.3rem;padding:0.375rem 0.75rem;border-radius:8px;font-size:0.8125rem;font-weight:600;color:rgba(148,163,184,0.8);transition:color var(--dur-fast),background var(--dur-fast);white-space:nowrap}
+.header-nav a:hover,.header-nav a.active{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.06)}
+.header-sep{width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 0.25rem}
+.nav-toggle{display:none;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.375rem 0.5rem;color:rgba(148,163,184,0.8);cursor:pointer;font-size:1.125rem}
+@media(max-width:768px){.header-nav{display:none}.header-nav.open{display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:rgba(10,14,26,0.97);backdrop-filter:blur(20px);padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.07);z-index:99}.header-nav.open a{padding:0.625rem 0.75rem;font-size:0.9375rem}.nav-toggle{display:flex;align-items:center}.header-inner{position:relative}.header-wordmark span{display:none}}
+
+/* ── Breadcrumb ── */
+.breadcrumb-strip{background:rgba(10,14,26,0.65);border-bottom:1px solid rgba(255,255,255,0.05)}
+.breadcrumb-inner{max-width:1680px;margin:0 auto;padding:0.5rem 2rem;display:flex;align-items:center;gap:0.375rem;font-size:0.78125rem;flex-wrap:wrap}
+.bc-link{color:rgba(148,163,184,0.7);font-weight:500;padding:0.125rem 0.375rem;border-radius:5px;transition:color var(--dur-fast)}
+.bc-link:hover{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.05)}
+.bc-sep{color:rgba(148,163,184,0.3);font-size:0.6875rem}
+.bc-current{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:999px;font-size:0.875rem;font-weight:700;background:var(--green-bg);color:var(--green-primary);border:1px solid var(--green-border)}
+
+/* ── Tutorial Layout ── */
+.tutorial-layout{display:grid;grid-template-columns:var(--toc-width) 1fr;max-width:1680px;margin:0 auto;gap:0;min-height:calc(100vh - var(--nav-height) - 32px)}
+@media(max-width:1024px){.tutorial-layout{grid-template-columns:1fr}.toc-sidebar{display:none}}
+
+/* ── TOC Sidebar ── */
+.toc-sidebar{position:sticky;top:calc(var(--nav-height) + 32px);height:fit-content;max-height:calc(100vh - var(--nav-height) - 64px);overflow-y:auto;padding:2rem 0 2rem 1.5rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent}
+.toc-sidebar::-webkit-scrollbar{width:4px}
+.toc-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.toc-title{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:1rem;padding-left:0.75rem}
+.toc-list{list-style:none;margin:0;padding:0}
+.toc-item{margin-bottom:0.125rem}
+.toc-link{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.75rem;border-radius:8px;font-size:0.8125rem;font-weight:500;color:var(--text-dim);transition:all var(--dur-fast);border-left:2px solid transparent;cursor:pointer}
+.toc-link:hover{color:var(--text-muted);background:rgba(255,255,255,0.03)}
+.toc-link.active{color:var(--green-primary);background:var(--green-bg);border-left-color:var(--green-primary);font-weight:600}
+.toc-num{font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;color:var(--green-primary);min-width:1.25rem}
+.toc-divider{height:1px;background:rgba(255,255,255,0.05);margin:0.75rem 0.75rem}
+.toc-progress{margin:1.25rem 0.75rem 0;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.05)}
+.toc-progress-label{font-size:0.6875rem;font-weight:600;color:var(--text-dim);letter-spacing:0.05em;margin-bottom:0.375rem}
+.toc-progress-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+.toc-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green-primary),var(--green-light));width:0;transition:width 0.8s var(--ease-decel)}
+
+/* ── Main Content ── */
+.tutorial-content{padding:2.5rem 3rem 4rem 3rem;max-width:none}
+@media(max-width:1024px){.tutorial-content{padding:2rem 1.5rem 4rem;max-width:100%}}
+
+/* ── Hero ── */
+.tut-hero{margin-bottom:3rem}
+.back-link{display:inline-flex;align-items:center;gap:0.4rem;padding:0.375rem 0.875rem;border-radius:999px;font-size:0.8125rem;font-weight:600;color:var(--text-dim);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:all var(--dur-moderate);margin-bottom:1.5rem}
+.back-link:hover{color:var(--text-main);background:rgba(255,255,255,0.08)}
+.tut-hero h1{font-size:clamp(2.25rem,5vw,3.5rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.75rem}
+.gradient-text-green{background:linear-gradient(135deg,#10b981,#34d399,#6ee7b7);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tut-hero-sub{font-size:1.25rem;color:var(--text-muted);line-height:1.8;max-width:780px;margin-bottom:2rem}
+.tut-hero-sub strong{color:var(--text-main);font-weight:600}
+
+/* ── Reading time + meta ── */
+.tut-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.tut-meta-item{display:inline-flex;align-items:center;gap:0.375rem;font-size:0.8125rem;color:var(--text-dim);font-weight:500}
+.tut-meta-item svg{width:14px;height:14px;opacity:0.6}
+
+/* ── Journey map (D3 viz) ── */
+#journey-map{width:100%;margin:0 auto 2rem}
+#journey-map svg{width:100%;height:auto}
+
+/* ── Chapter Sections ── */
+.chapter{margin-bottom:4rem;scroll-margin-top:calc(var(--nav-height) + 24px)}
+.chapter-anchor{display:block;position:relative;top:calc(-1 * (var(--nav-height) + 24px));visibility:hidden}
+.chapter-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+.chapter-icon{width:3rem;height:3rem;border-radius:0.875rem;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;margin-top:0.125rem}
+.chapter-icon.ch1{background:var(--green-bg);border:1px solid var(--green-border)}
+.chapter-icon.ch2{background:var(--blue-bg);border:1px solid var(--blue-border)}
+.chapter-icon.ch3{background:var(--purple-bg);border:1px solid var(--purple-border)}
+.chapter-icon.ch4{background:var(--amber-bg);border:1px solid var(--amber-border)}
+.chapter-icon.ch5{background:var(--red-bg);border:1px solid var(--red-border)}
+.chapter-headings h2{font-size:1.875rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem}
+.chapter-headings .ch-num{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem}
+.ch-num.ch1{color:var(--green-primary)}.ch-num.ch2{color:var(--blue-primary)}.ch-num.ch3{color:var(--purple-primary)}.ch-num.ch4{color:var(--amber-primary)}.ch-num.ch5{color:var(--red-primary)}
+.chapter p{color:var(--text-muted);margin:0 0 1.25rem;line-height:1.8}
+.chapter p strong{color:var(--text-main);font-weight:600}
+
+/* ── Prose content lists ── */
+.chapter ul,.chapter ol{color:var(--text-muted);margin:0 0 1.5rem;padding-left:1.25rem;line-height:1.8}
+.chapter li{margin-bottom:0.5rem}
+.chapter li strong{color:var(--text-main);font-weight:600}
+.chapter li code{color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.4em;border-radius:4px;font-size:0.8125rem}
+
+/* ── Section Divider ── */
+.chapter-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06) 20%,rgba(255,255,255,0.06) 80%,transparent);margin:3rem 0}
+
+/* ── Code blocks ── */
+.code-block{position:relative;margin:1.25rem 0 1.75rem;border-radius:0.875rem;overflow:hidden;background:rgba(8,12,24,0.85);border:1px solid rgba(255,255,255,0.06)}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 1rem;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.6875rem;font-weight:600;color:var(--text-dim);letter-spacing:0.04em}
+.code-lang{display:flex;align-items:center;gap:0.375rem}
+.code-lang::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green-primary)}
+.code-copy{background:none;border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.2rem 0.6rem;font-size:0.6875rem;font-weight:600;color:var(--text-dim);cursor:pointer;transition:all var(--dur-fast)}
+.code-copy:hover{color:var(--text-main);border-color:rgba(255,255,255,0.2)}
+.code-body{padding:1rem 1.25rem;overflow-x:auto;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.8;color:#c9d1d9;tab-size:4;white-space:pre}
+.code-body .cmd{color:var(--green-light)}
+.code-body .flag{color:var(--gold-warm)}
+.code-body .comment{color:var(--text-dim);font-style:italic}
+.code-body .string{color:#a5d6ff}
+.code-body .keyword{color:#ff7b72}
+.code-body .output{color:var(--text-dim)}
+
+/* ── Inline code ── */
+.tutorial-content :not(pre) > code{color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.4em;border-radius:4px;font-size:0.85em}
+
+/* ── Visualization containers ── */
+.viz-container{margin:2rem 0;border-radius:1rem;background:rgba(8,12,24,0.6);border:1px solid rgba(255,255,255,0.06);overflow:hidden}
+.viz-header{padding:0.625rem 1.25rem;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em}
+.viz-header svg{width:14px;height:14px;opacity:0.5}
+.viz-body{padding:1.5rem;display:flex;justify-content:center;min-height:120px}
+.viz-body svg{width:100%;height:auto;max-width:700px}
+
+/* ── Callout boxes ── */
+.callout{margin:1.5rem 0;padding:1rem 1.25rem;border-radius:0.875rem;border-left:3px solid;display:flex;gap:0.75rem}
+.callout-icon{font-size:1.125rem;flex-shrink:0;margin-top:0.125rem}
+.callout-body{flex:1;font-size:0.9rem;line-height:1.7}
+.callout-body strong{display:block;margin-bottom:0.25rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.04em}
+.callout-body code{font-size:0.8125rem;color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.35em;border-radius:3px}
+.callout.try{background:rgba(16,185,129,0.06);border-color:var(--green-primary);color:var(--text-muted)}
+.callout.try strong{color:var(--green-primary)}
+.callout.tip{background:rgba(59,130,246,0.06);border-color:var(--blue-primary);color:var(--text-muted)}
+.callout.tip strong{color:var(--blue-primary)}
+.callout.warn{background:rgba(245,158,11,0.06);border-color:var(--amber-primary);color:var(--text-muted)}
+.callout.warn strong{color:var(--amber-primary)}
+.callout.key{background:rgba(139,92,246,0.06);border-color:var(--purple-primary);color:var(--text-muted)}
+.callout.key strong{color:var(--purple-primary)}
+
+/* ── Comparison tables ── */
+.comparison{width:100%;margin:1.5rem 0;border-collapse:separate;border-spacing:0;border-radius:0.875rem;overflow:hidden;border:1px solid rgba(255,255,255,0.06);font-size:0.875rem}
+.comparison th{background:rgba(255,255,255,0.04);color:var(--text-muted);font-weight:700;text-align:left;padding:0.625rem 1rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid rgba(255,255,255,0.06)}
+.comparison td{padding:0.625rem 1rem;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:top}
+.comparison tr:last-child td{border-bottom:none}
+.comparison tr:hover td{background:rgba(255,255,255,0.02)}
+.comparison td code{color:var(--green-light);background:rgba(16,185,129,0.08);padding:0.1em 0.35em;border-radius:3px;font-size:0.8125rem}
+
+/* ── Step-by-step walkthrough ── */
+.steps{margin:1.5rem 0 2rem;counter-reset:step}
+.step{display:grid;grid-template-columns:2.5rem 1fr;gap:0.75rem;margin-bottom:1rem;counter-increment:step}
+.step-marker{width:2rem;height:2rem;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:800;color:var(--green-primary);margin-top:0.125rem;flex-shrink:0}
+.step-content{min-width:0}
+.step-content h4{font-size:0.9375rem;font-weight:700;color:var(--text-main);margin-bottom:0.25rem}
+.step-content p{font-size:0.875rem;color:var(--text-muted);margin:0 0 0.5rem;line-height:1.7}
+
+/* ── Capability grid ── */
+.cap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin:1.5rem 0}
+.cap-card{padding:1rem;border-radius:0.75rem;background:var(--glass-bg);border:1px solid var(--glass-border);text-align:center;transition:border-color var(--dur-moderate),transform var(--dur-moderate)}
+.cap-card:hover{border-color:var(--green-border);transform:translateY(-2px)}
+.cap-emoji{font-size:1.5rem;margin-bottom:0.5rem}
+.cap-label{font-size:0.8125rem;font-weight:700;color:var(--text-main);margin-bottom:0.2rem}
+.cap-desc{font-size:0.75rem;color:var(--text-dim);line-height:1.5}
+
+/* ── Surfaces mini-cards ── */
+.surface-row{display:flex;gap:0.625rem;flex-wrap:wrap;margin:1.25rem 0 1.75rem}
+.surface-chip{display:inline-flex;align-items:center;gap:0.375rem;padding:0.4rem 0.875rem;border-radius:999px;font-size:0.8125rem;font-weight:600;background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text-muted);transition:border-color var(--dur-fast),color var(--dur-fast)}
+.surface-chip:hover{border-color:var(--green-border);color:var(--green-light)}
+
+/* ── Tab commands (interactive) ── */
+.tab-group{margin:1.5rem 0}
+.tab-bar{display:flex;gap:0.25rem;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:0}
+.tab-btn{background:none;border:none;padding:0.5rem 1rem;font-size:0.8125rem;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--dur-fast);font-family:var(--font-sans)}
+.tab-btn:hover{color:var(--text-muted)}
+.tab-btn.active{color:var(--green-primary);border-bottom-color:var(--green-primary)}
+.tab-panel{display:none;padding:0}
+.tab-panel.active{display:block}
+
+/* ── Memory diagram (CSS-only) ── */
+.mem-diagram{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.5rem 0}
+@media(max-width:600px){.mem-diagram{grid-template-columns:1fr}}
+.mem-box{padding:1.25rem;border-radius:0.875rem;border:1px solid}
+.mem-box h4{font-size:0.875rem;font-weight:700;margin-bottom:0.5rem}
+.mem-box ul{margin:0;padding-left:1rem;font-size:0.8125rem;line-height:1.8;color:var(--text-muted)}
+.mem-box.you-write{background:var(--green-bg);border-color:var(--green-border)}
+.mem-box.you-write h4{color:var(--green-primary)}
+.mem-box.claude-writes{background:var(--purple-bg);border-color:var(--purple-border)}
+.mem-box.claude-writes h4{color:var(--purple-primary)}
+
+/* ── File tree (ASCII-style) ── */
+.file-tree{margin:1rem 0 1.5rem;padding:1rem 1.25rem;border-radius:0.875rem;background:rgba(8,12,24,0.7);border:1px solid rgba(255,255,255,0.06);font-family:var(--font-mono);font-size:0.8125rem;line-height:2;color:var(--text-dim);white-space:pre}
+.file-tree .dir{color:var(--blue-primary);font-weight:600}
+.file-tree .file{color:var(--text-muted)}
+.file-tree .highlight{color:var(--green-light);font-weight:600}
+
+/* ── Workflow sequence ── */
+.workflow-seq{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin:1.5rem 0;padding:1.25rem;border-radius:0.875rem;background:rgba(8,12,24,0.5);border:1px solid rgba(255,255,255,0.05)}
+.wf-step{display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.75rem;border-radius:0.5rem;font-size:0.8125rem;font-weight:600;border:1px solid}
+.wf-arrow{color:var(--text-dim);font-size:1rem}
+.wf-explore{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-primary)}
+.wf-debug{background:var(--red-bg);border-color:var(--red-border);color:var(--red-primary)}
+.wf-test{background:var(--green-bg);border-color:var(--green-border);color:var(--green-primary)}
+.wf-refactor{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-primary)}
+.wf-docs{background:rgba(99,102,241,0.10);border-color:rgba(99,102,241,0.22);color:#818cf8}
+.wf-ship{background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple-primary)}
+
+/* ── Keyboard shortcut badges ── */
+.kbd{display:inline-flex;align-items:center;padding:0.15rem 0.5rem;border-radius:5px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-family:var(--font-mono);font-size:0.75rem;font-weight:600;color:var(--text-muted);line-height:1.4}
+
+/* ── Next chapter link ── */
+.next-chapter{display:flex;align-items:center;justify-content:space-between;margin-top:2rem;padding:1.25rem 1.5rem;border-radius:1rem;background:var(--glass-bg);border:1px solid var(--glass-border);transition:border-color var(--dur-moderate),transform var(--dur-moderate);cursor:pointer}
+.next-chapter:hover{border-color:var(--green-border);transform:translateY(-2px)}
+.next-chapter-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:0.25rem}
+.next-chapter-title{font-size:1rem;font-weight:700;color:var(--text-main)}
+.next-chapter-arrow{font-size:1.5rem;color:var(--green-primary)}
+
+/* ── Footer ── */
+.site-footer{border-top:1px solid rgba(255,255,255,0.06);background:rgba(10,14,26,0.7);backdrop-filter:blur(12px);padding:2rem 1.5rem;margin-top:0}
+.footer-inner{max-width:1680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:0.875rem;color:var(--text-dim)}
+.footer-inner a{color:var(--gold-light);transition:color var(--dur-fast)}
+.footer-inner a:hover{color:var(--gold-primary)}
+
+/* ── Animation ── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{opacity:0;animation:fadeInUp 0.5s var(--ease-decel) both}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="ambient-canvas" aria-hidden="true"><div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div></div>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="site-header">
+    <div class="header-inner">
+        <a class="header-brand" href="../index.html" aria-label="CORTEX Home">
+            <img class="header-logo" src="../assets/images/cortex-logo-64.png" alt="CORTEX logo" width="32" height="32"/>
+            <div class="header-wordmark">CORTEX<span>AI Framework</span></div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.header-nav').classList.toggle('open')">☰</button>
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="../index.html">Home</a>
+            <a href="../architecture.html">Architecture</a>
+            <div class="header-sep" aria-hidden="true"></div>
+            <a href="index.html">Claude Code</a>
+            <a href="basic.html" class="active">Beginner</a>
+            <a href="intermediate.html">Intermediate</a>
+            <a href="advanced.html">Advanced</a>
+        </nav>
+    </div>
+</header>
+<div class="breadcrumb-strip">
+    <nav class="breadcrumb-inner" aria-label="Breadcrumb">
+        <a class="bc-link" href="../index.html">CORTEX</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <a class="bc-link" href="index.html">Claude Code</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span class="bc-current">🟢 Beginner Tutorial</span>
+    </nav>
+</div>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main id="main">
+<div class="tutorial-layout">
+
+<!-- ── Sidebar TOC ── -->
+<aside class="toc-sidebar" aria-label="Table of contents">
+    <div class="toc-title">Tutorial Contents</div>
+    <ol class="toc-list">
+        <li class="toc-item"><a class="toc-link active" href="#ch1" data-ch="ch1"><span class="toc-num">01</span> What Is Claude Code?</a></li>
+        <li class="toc-item"><a class="toc-link" href="#ch2" data-ch="ch2"><span class="toc-num">02</span> Installation &amp; First Session</a></li>
+        <li class="toc-item"><a class="toc-link" href="#ch3" data-ch="ch3"><span class="toc-num">03</span> Memory &amp; CLAUDE.md</a></li>
+        <li class="toc-item"><a class="toc-link" href="#ch4" data-ch="ch4"><span class="toc-num">04</span> CLI Commands &amp; Flags</a></li>
+        <li class="toc-item"><a class="toc-link" href="#ch5" data-ch="ch5"><span class="toc-num">05</span> Everyday Workflows</a></li>
+    </ol>
+    <div class="toc-divider"></div>
+    <div class="toc-progress">
+        <div class="toc-progress-label">Reading progress</div>
+        <div class="toc-progress-bar"><div class="toc-progress-fill" id="readingProgress"></div></div>
+    </div>
+</aside>
+
+<!-- ── Tutorial Body ── -->
+<article class="tutorial-content">
+
+<!-- ░░░ HERO ░░░ -->
+<section class="tut-hero fade-in">
+    <a class="back-link" href="index.html">← Back to Learning Hub</a>
+    <h1><span class="gradient-text-green">Getting Started with Claude Code</span></h1>
+    <p class="tut-hero-sub">
+        This tutorial takes you from <strong>zero to productive</strong> in five chapters.
+        You'll install Claude Code, understand how it thinks, set up persistent memory,
+        master the CLI, and run through real development workflows — all with practical
+        examples you can follow along with.
+    </p>
+    <div class="tut-meta">
+        <span class="tut-meta-item">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4a.5.5 0 00-1 0v4a.5.5 0 00.25.43l2.5 1.5a.5.5 0 10.5-.86L8.5 7.71V4z"/></svg>
+            ~25 min read
+        </span>
+        <span class="tut-meta-item">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 4a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm2-.5a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h8a.5.5 0 00.5-.5V4a.5.5 0 00-.5-.5H4z"/></svg>
+            5 chapters
+        </span>
+        <span class="tut-meta-item">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8zm9-3a1 1 0 11-2 0 1 1 0 012 0zM7 7.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v4a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-4z"/></svg>
+            Beginner level
+        </span>
+    </div>
+
+    <!-- Journey map visualization -->
+    <div class="viz-container">
+        <div class="viz-header">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/></svg>
+            Your Learning Journey
+        </div>
+        <div class="viz-body" id="journey-map" role="img" aria-label="Five-chapter tutorial path: Understand, Install, Remember, Command, Build"></div>
+    </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 1 — WHAT IS CLAUDE CODE?
+     ═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+    <div class="chapter-header">
+        <div class="chapter-icon ch1">🤖</div>
+        <div class="chapter-headings">
+            <div class="ch-num ch1">Chapter 1</div>
+            <h2>What Is Claude Code?</h2>
+        </div>
+    </div>
+
+    <p>
+        Claude Code is an <strong>AI-powered coding agent</strong> built by Anthropic. Think of it as a
+        developer teammate that lives inside your terminal (or IDE). Unlike a chatbot that just
+        answers questions, Claude Code <strong>reads your files, edits your code, runs commands,
+        and verifies results</strong> — all while you watch, redirect, or step away entirely.
+    </p>
+
+    <div class="callout key">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+            <strong>Key mental shift</strong>
+            Instead of writing code yourself and asking an AI to review it, you <strong>describe what you want</strong>
+            and Claude figures out how to build it. You become the architect; Claude becomes the builder.
+        </div>
+    </div>
+
+    <h3>What can it actually do?</h3>
+    <div class="cap-grid">
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">🏗️</div>
+            <div class="cap-label">Build Features</div>
+            <div class="cap-desc">Implement auth, APIs, UI — from spec to code</div>
+        </div>
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">🐛</div>
+            <div class="cap-label">Fix Bugs</div>
+            <div class="cap-desc">Diagnose errors, trace issues, patch &amp; verify</div>
+        </div>
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">🧪</div>
+            <div class="cap-label">Write Tests</div>
+            <div class="cap-desc">Generate test suites with edge cases covered</div>
+        </div>
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">♻️</div>
+            <div class="cap-label">Refactor Code</div>
+            <div class="cap-desc">Modernize patterns, clean up tech debt</div>
+        </div>
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">📝</div>
+            <div class="cap-label">Write Docs</div>
+            <div class="cap-desc">READMEs, docstrings, inline comments</div>
+        </div>
+        <div class="cap-card fade-in">
+            <div class="cap-emoji">🚀</div>
+            <div class="cap-label">Ship PRs</div>
+            <div class="cap-desc">Commit, push, and create pull requests</div>
+        </div>
+    </div>
+
+    <h3>Where does it run?</h3>
+    <p>Claude Code works on every major development surface — and your settings, memory, and MCP servers travel with you:</p>
+
+    <div class="surface-row">
+        <span class="surface-chip">🖥️ Terminal CLI</span>
+        <span class="surface-chip">📝 VS Code</span>
+        <span class="surface-chip">☕ JetBrains</span>
+        <span class="surface-chip">🖱️ Desktop App</span>
+        <span class="surface-chip">🌐 Web (claude.ai)</span>
+    </div>
+
+    <h3>The Agentic Loop — How Claude Thinks</h3>
+    <p>
+        Every time you give Claude a task, it enters an autonomous <strong>tool-use loop</strong>.
+        It reads context, decides what to do next, takes an action (reading a file, editing code,
+        running a command), observes the result, and repeats until the task is done.
+        This is what makes it fundamentally different from a simple chatbot.
+    </p>
+
+    <!-- D3 agentic loop diagram -->
+    <div class="viz-container">
+        <div class="viz-header">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.534 7h3.932a.25.25 0 01.192.41l-1.966 2.36a.25.25 0 01-.384 0l-1.966-2.36A.25.25 0 0111.534 7zm-7 0H.602a.25.25 0 00-.192.41l1.966 2.36a.25.25 0 00.384 0l1.966-2.36A.25.25 0 004.534 7z"/><path fill-rule="evenodd" d="M8 3a5 5 0 11-4.546 2.914.5.5 0 00-.908-.418A6 6 0 108 2v1z"/></svg>
+            The Agentic Loop
+        </div>
+        <div class="viz-body" id="agentic-loop-viz"></div>
+    </div>
+
+    <div class="callout try">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+            <strong>Try it yourself</strong>
+            Open any project and run: <code>claude "give me an overview of this codebase"</code>
+            — watch Claude systematically read files, analyze the structure, and synthesize an answer.
+        </div>
+    </div>
+
+    <h3>The Context Window — Your Most Important Resource</h3>
+    <p>
+        Claude has a ~200K token context window — think of it as short-term memory that holds
+        your entire conversation: every message, file it read, and command output. <strong>Performance
+        degrades as context fills up</strong>, so keeping sessions focused is critical.
+    </p>
+
+    <table class="comparison">
+        <thead><tr><th>What fills context</th><th>Impact</th><th>Solution</th></tr></thead>
+        <tbody>
+            <tr><td>Long sessions</td><td>Irrelevant history piles up</td><td>Use <code>/clear</code> between tasks</td></tr>
+            <tr><td>Large file reads</td><td>Each file consumes tokens</td><td>Reference specific sections</td></tr>
+            <tr><td>Verbose command output</td><td>Build logs bloat context</td><td>Pipe to files, summarize</td></tr>
+            <tr><td>Unfocused conversation</td><td>Claude loses track of intent</td><td>Use <code>/compact</code> to summarize</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 2 — INSTALLATION & FIRST SESSION
+     ═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+    <div class="chapter-header">
+        <div class="chapter-icon ch2">⚡</div>
+        <div class="chapter-headings">
+            <div class="ch-num ch2">Chapter 2</div>
+            <h2>Installation &amp; First Session</h2>
+        </div>
+    </div>
+
+    <p>
+        Getting Claude Code running takes about 60 seconds. Pick your platform and go:
+    </p>
+
+    <!-- Tabbed install instructions -->
+    <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="mac">macOS / Linux</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="win-ps">Windows (PowerShell)</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="brew">Homebrew</button>
+        </div>
+        <div class="tab-panel active" id="tab-mac" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="cmd">curl</span> <span class="flag">-fsSL</span> https://claude.ai/install.sh | <span class="cmd">bash</span></div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-win-ps" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">powershell</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="cmd">irm</span> https://claude.ai/install.ps1 | <span class="cmd">iex</span></div>
+            </div>
+        </div>
+        <div class="tab-panel" id="tab-brew" role="tabpanel">
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+                <div class="code-body"><span class="cmd">brew</span> install claude-code</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Your first 5 minutes</h3>
+    <p>Once installed, here's the exact flow you'll experience:</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-marker">1</div>
+            <div class="step-content">
+                <h4>Navigate to any project</h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">bash</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body"><span class="cmd">cd</span> ~/projects/my-app</div></div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker">2</div>
+            <div class="step-content">
+                <h4>Start Claude Code</h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">bash</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body"><span class="cmd">claude</span></div></div>
+                <p>First time? You'll be prompted to authenticate. Follow the login flow — it takes about 10 seconds.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker">3</div>
+            <div class="step-content">
+                <h4>Ask your first question</h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">prompt</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body">give me an overview of this codebase</div></div>
+                <p>Claude reads your project files, analyzes the structure, and returns a clear summary. That's it — you're coding with AI.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker">4</div>
+            <div class="step-content">
+                <h4>Initialize project memory</h4>
+                <div class="code-block"><div class="code-header"><span class="code-lang">in-session</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div><div class="code-body"><span class="cmd">/init</span></div></div>
+                <p>This generates a starter <code>CLAUDE.md</code> with your project's build commands, test framework, and code patterns.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Session types at a glance</h3>
+
+    <table class="comparison">
+        <thead><tr><th>Type</th><th>Command</th><th>Best for</th></tr></thead>
+        <tbody>
+            <tr><td>Interactive</td><td><code>claude</code></td><td>Day-to-day development</td></tr>
+            <tr><td>With prompt</td><td><code>claude "explain this"</code></td><td>Quick questions</td></tr>
+            <tr><td>Non-interactive</td><td><code>claude -p "query"</code></td><td>Scripts, CI/CD, piping</td></tr>
+            <tr><td>Continue last</td><td><code>claude -c</code></td><td>Resume where you left off</td></tr>
+            <tr><td>Resume named</td><td><code>claude -r "feature-auth"</code></td><td>Return to specific tasks</td></tr>
+        </tbody>
+    </table>
+
+    <div class="callout try">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+            <strong>Try it yourself</strong>
+            Verify your installation is working:
+            <code>claude --version</code> then <code>claude -p "What model am I using?"</code>
+        </div>
+    </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 3 — MEMORY & CLAUDE.MD
+     ═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+    <div class="chapter-header">
+        <div class="chapter-icon ch3">🧠</div>
+        <div class="chapter-headings">
+            <div class="ch-num ch3">Chapter 3</div>
+            <h2>Memory &amp; CLAUDE.md</h2>
+        </div>
+    </div>
+
+    <p>
+        Sessions come and go, but your project knowledge should stick around.
+        Claude Code has <strong>two memory systems</strong> that work together to carry knowledge
+        across every session — one that you write, and one that Claude writes for itself.
+    </p>
+
+    <div class="mem-diagram">
+        <div class="mem-box you-write">
+            <h4>📝 CLAUDE.md — You Write</h4>
+            <ul>
+                <li>Project <code>./CLAUDE.md</code> (shared via Git)</li>
+                <li>User <code>~/.claude/CLAUDE.md</code> (local)</li>
+                <li>Org policy (managed by IT)</li>
+                <li>Scoped rules in <code>.claude/rules/</code></li>
+            </ul>
+        </div>
+        <div class="mem-box claude-writes">
+            <h4>🤖 Auto Memory — Claude Writes</h4>
+            <ul>
+                <li>Build commands discovered</li>
+                <li>Debugging insights learned</li>
+                <li>Architecture patterns observed</li>
+                <li>First 200 lines loaded per session</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Writing an effective CLAUDE.md</h3>
+    <p>
+        Think of <code>CLAUDE.md</code> as a brief onboarding doc for a new team member.
+        Keep it <strong>under 200 lines</strong>. Include things Claude can't guess from reading
+        your code; skip what it already knows.
+    </p>
+
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">CLAUDE.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Code style</span>
+- Use ES modules (import/export), not CommonJS (require)
+- Destructure imports when possible
+
+<span class="comment"># Workflow</span>
+- Be sure to typecheck when done making code changes
+- Prefer running single tests, not the whole suite
+
+<span class="comment"># Architecture</span>
+- API handlers live in src/api/handlers/
+- Database models use Drizzle ORM
+- Tests mirror src/ structure under tests/
+
+<span class="comment"># Build commands</span>
+- <span class="cmd">npm run dev</span>     → start dev server
+- <span class="cmd">npm test</span>        → run test suite
+- <span class="cmd">npm run lint</span>    → check linting</div>
+    </div>
+
+    <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+            <strong>Pro tip</strong>
+            You can import external files into CLAUDE.md using <code>@path</code> syntax:
+            <code>See @docs/git-workflow.md for branch conventions.</code>
+            Maximum 5 hops of recursive imports.
+        </div>
+    </div>
+
+    <h3>Scoped rules for larger projects</h3>
+    <p>
+        For bigger codebases, split your instructions into focused topic files under
+        <code>.claude/rules/</code>. Use YAML frontmatter to scope rules to specific file paths:
+    </p>
+
+    <div class="file-tree"><span class="dir">.claude/</span>
+├── <span class="highlight">CLAUDE.md</span>              <span class="output">← main instructions</span>
+└── <span class="dir">rules/</span>
+    ├── <span class="file">code-style.md</span>      <span class="output">← style guidelines</span>
+    ├── <span class="file">testing.md</span>          <span class="output">← testing conventions</span>
+    └── <span class="file">security.md</span>         <span class="output">← security requirements</span></div>
+
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">.claude/rules/api-rules.md</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment">---</span>
+<span class="keyword">paths:</span>
+  - <span class="string">"src/api/**/*.ts"</span>
+<span class="comment">---</span>
+
+<span class="comment"># API Development Rules</span>
+- All endpoints must include input validation
+- Use standard error response format
+- Include OpenAPI documentation comments</div>
+    </div>
+
+    <p>
+        Rules without <code>paths</code> frontmatter load unconditionally. Path-scoped rules only
+        activate when Claude reads files matching those patterns — keeping context lean.
+    </p>
+
+    <div class="callout try">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+            <strong>Try it yourself</strong>
+            Create a <code>CLAUDE.md</code> in any project with 5–10 lines of instructions, then start a
+            session and ask Claude <em>"What do you know about this project?"</em> — it should
+            reflect your instructions back.
+        </div>
+    </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 4 — CLI COMMANDS & FLAGS
+     ═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch4">
+    <div class="chapter-header">
+        <div class="chapter-icon ch4">⌨️</div>
+        <div class="chapter-headings">
+            <div class="ch-num ch4">Chapter 4</div>
+            <h2>CLI Commands &amp; Flags</h2>
+        </div>
+    </div>
+
+    <p>
+        Claude Code is a CLI-first tool. Mastering the command line gives you speed
+        and control that GUI wrappers can't match. Here are the commands you'll use
+        every single day.
+    </p>
+
+    <h3>Core commands</h3>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Start an interactive session</span>
+<span class="cmd">claude</span>
+
+<span class="comment"># Ask a question right away</span>
+<span class="cmd">claude</span> <span class="string">"explain this project"</span>
+
+<span class="comment"># Non-interactive (great for scripts)</span>
+<span class="cmd">claude</span> <span class="flag">-p</span> <span class="string">"list all API endpoints"</span>
+
+<span class="comment"># Pipe content in</span>
+<span class="cmd">cat</span> error.log | <span class="cmd">claude</span> <span class="flag">-p</span> <span class="string">"explain this error"</span>
+
+<span class="comment"># Continue where you left off</span>
+<span class="cmd">claude</span> <span class="flag">-c</span>
+
+<span class="comment"># Resume a named session</span>
+<span class="cmd">claude</span> <span class="flag">-r</span> <span class="string">"auth-refactor"</span></div>
+    </div>
+
+    <h3>Essential flags</h3>
+    <table class="comparison">
+        <thead><tr><th>Flag</th><th>What it does</th><th>Example</th></tr></thead>
+        <tbody>
+            <tr><td><code>--model</code></td><td>Choose model (sonnet/opus)</td><td><code>claude --model opus</code></td></tr>
+            <tr><td><code>-p</code></td><td>Print mode (non-interactive)</td><td><code>claude -p "query"</code></td></tr>
+            <tr><td><code>--output-format</code></td><td>text / json / stream-json</td><td><code>claude -p --output-format json "query"</code></td></tr>
+            <tr><td><code>--permission-mode</code></td><td>Control what Claude can do</td><td><code>claude --permission-mode plan</code></td></tr>
+            <tr><td><code>--allowedTools</code></td><td>Skip prompts for safe tools</td><td><code>--allowedTools "Bash(git *)" "Read"</code></td></tr>
+            <tr><td><code>-w</code></td><td>Isolated git worktree</td><td><code>claude -w feature-auth</code></td></tr>
+            <tr><td><code>-n</code></td><td>Name the session</td><td><code>claude -n "my-sprint"</code></td></tr>
+        </tbody>
+    </table>
+
+    <h3>In-session commands</h3>
+    <p>Once inside a session, these slash commands give you real-time control:</p>
+
+    <div class="cap-grid">
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/help</span></div>
+            <div class="cap-desc">List all available commands</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/clear</span></div>
+            <div class="cap-desc">Reset the context window</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/compact</span></div>
+            <div class="cap-desc">Summarize context to free space</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/model</span></div>
+            <div class="cap-desc">Switch model mid-session</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/init</span></div>
+            <div class="cap-desc">Generate starter CLAUDE.md</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/memory</span></div>
+            <div class="cap-desc">Browse &amp; toggle memory files</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/resume</span></div>
+            <div class="cap-desc">Switch to another session</div>
+        </div>
+        <div class="cap-card">
+            <div class="cap-emoji"><span class="kbd">/rewind</span></div>
+            <div class="cap-desc">Restore to a checkpoint</div>
+        </div>
+    </div>
+
+    <h3>Keyboard shortcuts</h3>
+    <p>Power users save minutes every session with these:</p>
+    <table class="comparison">
+        <thead><tr><th>Shortcut</th><th>Action</th></tr></thead>
+        <tbody>
+            <tr><td><span class="kbd">Esc</span></td><td>Stop current action (context preserved)</td></tr>
+            <tr><td><span class="kbd">Esc</span> × 2</td><td>Open rewind menu</td></tr>
+            <tr><td><span class="kbd">Shift+Tab</span></td><td>Cycle permission modes (Normal → Plan → Accept Edits)</td></tr>
+            <tr><td><span class="kbd">Ctrl+G</span></td><td>Open plan in editor</td></tr>
+            <tr><td><span class="kbd">Ctrl+B</span></td><td>Background current task</td></tr>
+            <tr><td><span class="kbd">Option+T</span></td><td>Toggle thinking mode</td></tr>
+        </tbody>
+    </table>
+
+    <div class="callout try">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+            <strong>Try it yourself</strong>
+            Run <code>claude -p "list all files" --output-format json</code> in any project.
+            Now pipe it: <code>echo "console.log('hello')" | claude -p "review this code"</code>
+        </div>
+    </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 5 — EVERYDAY WORKFLOWS
+     ═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch5">
+    <div class="chapter-header">
+        <div class="chapter-icon ch5">🔄</div>
+        <div class="chapter-headings">
+            <div class="ch-num ch5">Chapter 5</div>
+            <h2>Everyday Workflows</h2>
+        </div>
+    </div>
+
+    <p>
+        Now that you know the tools, let's see how real development looks with Claude Code.
+        Most work follows a natural flow:
+    </p>
+
+    <div class="workflow-seq">
+        <span class="wf-step wf-explore">🔍 Explore</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step wf-debug">🐛 Debug</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step wf-test">🧪 Test</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step wf-refactor">♻️ Refactor</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step wf-docs">📝 Document</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step wf-ship">🚀 Ship</span>
+    </div>
+
+    <h3>1. Explore a codebase</h3>
+    <p>The best way to onboard to any project — just ask.</p>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompts</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Start broad</span>
+give me an overview of this codebase
+
+<span class="comment"># Then drill down</span>
+how is authentication handled?
+
+<span class="comment"># Reference specific files</span>
+explain the logic in <span class="string">@src/auth/login.ts</span>
+
+<span class="comment"># Trace data flow</span>
+trace the login process from front-end to database</div>
+    </div>
+
+    <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+            <strong>Pro tip</strong>
+            Use <strong>Plan Mode</strong> (<span class="kbd">Shift+Tab</span>) when exploring — it tells Claude
+            to analyze without modifying anything. Great for read-only investigation.
+        </div>
+    </div>
+
+    <h3>2. Fix bugs</h3>
+    <p>Give Claude the error message and context. The more specific, the better:</p>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompt</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body">fix the login bug. Users report login fails after session timeout.
+Check auth flow in src/auth/, especially token refresh.
+Write a failing test first, then fix it.</div>
+    </div>
+
+    <h3>3. Write and run tests</h3>
+    <p>Claude matches your existing test style automatically:</p>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompts</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Find untested code</span>
+find functions in NotificationsService without test coverage
+
+<span class="comment"># Generate tests</span>
+add tests for the notification service edge cases
+
+<span class="comment"># Run and verify</span>
+run the new tests and fix any failures</div>
+    </div>
+
+    <h3>4. Refactor code</h3>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompts</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Find what needs fixing</span>
+find deprecated API usage in our codebase
+
+<span class="comment"># Modernize</span>
+refactor utils.js to use ES2024 features while maintaining the same behavior
+
+<span class="comment"># Verify nothing broke</span>
+run tests for the refactored code</div>
+    </div>
+
+    <h3>5. Create a pull request</h3>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompts</span><button class="code-copy" aria-label="Copy to clipboard">Copy</button></div>
+        <div class="code-body"><span class="comment"># Summarize your changes</span>
+summarize the changes I've made to the authentication module
+
+<span class="comment"># Create the PR</span>
+create a pr
+
+<span class="comment"># Add context</span>
+enhance the PR description with more context about security improvements</div>
+    </div>
+
+    <p>
+        The session auto-links to the PR. Later, you can return with
+        <code>claude --from-pr 123</code>.
+    </p>
+
+    <h3>The four-phase best practice</h3>
+    <p>
+        Pro developers use Claude in a structured cycle. Here's the pattern
+        that maximizes quality and minimizes wasted context:
+    </p>
+
+    <!-- D3 four-phase diagram -->
+    <div class="viz-container">
+        <div class="viz-header">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.534 7h3.932a.25.25 0 01.192.41l-1.966 2.36a.25.25 0 01-.384 0l-1.966-2.36A.25.25 0 0111.534 7zm-7 0H.602a.25.25 0 00-.192.41l1.966 2.36a.25.25 0 00.384 0l1.966-2.36A.25.25 0 004.534 7z"/><path fill-rule="evenodd" d="M8 3a5 5 0 11-4.546 2.914.5.5 0 00-.908-.418A6 6 0 108 2v1z"/></svg>
+            The Four-Phase Workflow
+        </div>
+        <div class="viz-body" id="four-phase-viz"></div>
+    </div>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-marker" style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-primary)">1</div>
+            <div class="step-content">
+                <h4>Explore (Plan Mode)</h4>
+                <p>Read code, ask questions, understand the landscape before touching anything.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker" style="background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple-primary)">2</div>
+            <div class="step-content">
+                <h4>Plan (Plan Mode)</h4>
+                <p>Create a detailed implementation plan. Use <span class="kbd">Ctrl+G</span> to open it in your editor and refine.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker" style="background:var(--green-bg);border-color:var(--green-border);color:var(--green-primary)">3</div>
+            <div class="step-content">
+                <h4>Implement (Normal Mode)</h4>
+                <p>Write the code, add tests, and verify everything passes.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-marker" style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-primary)">4</div>
+            <div class="step-content">
+                <h4>Commit &amp; Ship</h4>
+                <p>Create a descriptive commit and open a PR — Claude handles the messaging.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout try">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+            <strong>Try the full workflow</strong>
+            Pick a small feature in any project. Use <span class="kbd">Shift+Tab</span> into Plan Mode,
+            explore the code, create a plan, switch back to Normal Mode, implement it, write
+            tests, and create a commit. The whole cycle in one session.
+        </div>
+    </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"></div>
+
+<!-- ░░░ NEXT STEPS ░░░ -->
+<section class="chapter" style="margin-bottom:2rem">
+    <h2 style="margin-bottom:1rem">What's Next?</h2>
+    <p>
+        You now have a solid foundation — you can install Claude Code, configure persistent
+        memory, navigate the CLI, and run real development workflows. The <strong>Intermediate path</strong>
+        takes you deeper: custom skills, subagents, lifecycle hooks, context optimization,
+        and advanced prompting techniques.
+    </p>
+    <a class="next-chapter" href="intermediate.html">
+        <div>
+            <div class="next-chapter-label">Continue learning</div>
+            <div class="next-chapter-title">Intermediate Path — Skills, Subagents &amp; Hooks →</div>
+        </div>
+        <div class="next-chapter-arrow">→</div>
+    </a>
+</section>
+
+</article>
+</div><!-- /tutorial-layout -->
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <span>© 2025–2026 <a href="../index.html">CORTEX Framework</a> — Asif Hussain</span>
+        <span>Next: <a href="intermediate.html">Intermediate Path →</a></span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    /* ── Tab switching ── */
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var group = this.closest('.tab-group');
+            group.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+            group.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+            this.classList.add('active');
+            this.setAttribute('aria-selected','true');
+            var panelId = 'tab-' + this.getAttribute('data-tab');
+            var panel = document.getElementById(panelId);
+            if (panel) panel.classList.add('active');
+        });
+    });
+
+    /* ── Copy buttons ── */
+    document.querySelectorAll('.code-copy').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var code = this.closest('.code-block').querySelector('.code-body');
+            if (!code) return;
+            var text = code.textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+                this.textContent = 'Copied!';
+                var self = this;
+                setTimeout(function(){ self.textContent = 'Copy'; }, 1500);
+            }
+        });
+    });
+
+    /* ── TOC active tracking ── */
+    var tocLinks = document.querySelectorAll('.toc-link');
+    var chapters = document.querySelectorAll('.chapter');
+    var progressFill = document.getElementById('readingProgress');
+
+    function updateTOC() {
+        var scrollY = window.scrollY + 120;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100));
+        if (progressFill) progressFill.style.width = pct + '%';
+
+        var current = '';
+        chapters.forEach(function(ch) {
+            if (ch.offsetTop <= scrollY) current = ch.id;
+        });
+        tocLinks.forEach(function(link) {
+            link.classList.toggle('active', link.getAttribute('data-ch') === current);
+        });
+    }
+    window.addEventListener('scroll', updateTOC, { passive: true });
+    updateTOC();
+
+    /* ── Fade-in on scroll ── */
+    if (typeof IntersectionObserver !== 'undefined') {
+        var fadeObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.style.animationPlayState = 'running'; fadeObs.unobserve(e.target); }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in').forEach(function(el) {
+            el.style.animationPlayState = 'paused';
+            fadeObs.observe(el);
+        });
+    }
+
+    /* ═══ D3 VISUALIZATIONS ═══ */
+    if (typeof d3 === 'undefined') return;
+
+    /* ── Journey Map ── */
+    (function() {
+        var container = document.getElementById('journey-map');
+        if (!container) return;
+        var w = 700, h = 100;
+        var svg = d3.select('#journey-map').append('svg')
+            .attr('viewBox', '0 0 ' + w + ' ' + h)
+            .attr('role','img')
+            .attr('aria-label','Five-chapter tutorial journey');
+
+        var nodes = [
+            { label:'Understand', ch:'Ch 1', x:70, color:'#10b981', icon:'🤖' },
+            { label:'Install', ch:'Ch 2', x:224, color:'#3b82f6', icon:'⚡' },
+            { label:'Remember', ch:'Ch 3', x:378, color:'#8b5cf6', icon:'🧠' },
+            { label:'Command', ch:'Ch 4', x:532, color:'#f59e0b', icon:'⌨️' },
+            { label:'Build', ch:'Ch 5', x:686, color:'#ef4444', icon:'🔄' }
+        ];
+
+        /* connecting lines */
+        for (var i = 0; i < nodes.length - 1; i++) {
+            svg.append('line')
+                .attr('x1', nodes[i].x + 28).attr('y1', h/2)
+                .attr('x2', nodes[i+1].x - 28).attr('y2', h/2)
+                .attr('stroke', 'rgba(255,255,255,0.08)').attr('stroke-width', 2)
+                .attr('stroke-dasharray', '4,3');
+        }
+
+        var g = svg.selectAll('.node').data(nodes).enter().append('g')
+            .attr('transform', function(d){ return 'translate(' + d.x + ',' + h/2 + ')'; })
+            .style('cursor', 'pointer')
+            .on('click', function(ev, d) {
+                var idx = nodes.indexOf(d) + 1;
+                var el = document.getElementById('ch' + idx);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            });
+
+        g.append('circle').attr('r', 24)
+            .attr('fill', function(d){ return d.color + '12'; })
+            .attr('stroke', function(d){ return d.color + '40'; })
+            .attr('stroke-width', 1.5);
+
+        g.append('text').attr('y', 1)
+            .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+            .attr('font-size', '14px')
+            .text(function(d){ return d.icon; });
+
+        g.append('text').attr('y', 40)
+            .attr('text-anchor', 'middle').attr('fill', function(d){ return d.color; })
+            .attr('font-size', '10px').attr('font-weight', '700')
+            .attr('font-family', 'Inter,sans-serif')
+            .text(function(d){ return d.label; });
+
+        g.append('text').attr('y', 52)
+            .attr('text-anchor', 'middle').attr('fill', '#64748b')
+            .attr('font-size', '8px').attr('font-weight', '600')
+            .attr('font-family', 'Inter,sans-serif')
+            .text(function(d){ return d.ch; });
+    })();
+
+    /* ── Agentic Loop ── */
+    (function() {
+        var container = document.getElementById('agentic-loop-viz');
+        if (!container) return;
+        var w = 500, h = 280;
+        var svg = d3.select('#agentic-loop-viz').append('svg')
+            .attr('viewBox', '0 0 ' + w + ' ' + h)
+            .attr('role','img')
+            .attr('aria-label','Agentic loop: Receive prompt, Read context, Decide action, Execute tool, Observe result, Return response');
+
+        var cx = w / 2, cy = 150, rx = 140, ry = 90;
+
+        var steps = [
+            { label:'Receive\nprompt', angle:-90, color:'#3b82f6' },
+            { label:'Read\ncontext', angle:-30, color:'#8b5cf6' },
+            { label:'Decide\naction', angle:30, color:'#f59e0b' },
+            { label:'Execute\ntool', angle:90, color:'#10b981' },
+            { label:'Observe\nresult', angle:150, color:'#ef4444' },
+            { label:'Return\nresponse', angle:210, color:'#06b6d4' }
+        ];
+
+        /* Draw connecting arc segments */
+        var defs = svg.append('defs');
+        defs.append('marker').attr('id','loop-arr').attr('viewBox','0 0 10 10').attr('refX',8).attr('refY',5)
+            .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+            .append('path').attr('d','M 0 2 L 8 5 L 0 8 Z').attr('fill','rgba(255,255,255,0.15)');
+
+        for (var i = 0; i < steps.length; i++) {
+            var next = (i + 1) % steps.length;
+            var a1 = steps[i].angle * Math.PI / 180;
+            var a2 = steps[next].angle * Math.PI / 180;
+            var midA = (a1 + a2) / 2;
+            if (a2 < a1) midA = (a1 + a2 + 2 * Math.PI) / 2;
+            var x1 = cx + rx * Math.cos(a1), y1 = cy + ry * Math.sin(a1);
+            var xm = cx + (rx + 15) * Math.cos(midA), ym = cy + (ry + 15) * Math.sin(midA);
+            var x2 = cx + rx * Math.cos(a2), y2 = cy + ry * Math.sin(a2);
+            svg.append('path')
+                .attr('d', 'M' + x1 + ',' + y1 + ' Q' + xm + ',' + ym + ' ' + x2 + ',' + y2)
+                .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.08)')
+                .attr('stroke-width', 1.5).attr('marker-end', 'url(#loop-arr)');
+        }
+
+        var sg = svg.selectAll('.step').data(steps).enter().append('g')
+            .attr('transform', function(d) {
+                var a = d.angle * Math.PI / 180;
+                return 'translate(' + (cx + rx * Math.cos(a)) + ',' + (cy + ry * Math.sin(a)) + ')';
+            });
+
+        sg.append('circle').attr('r', 28)
+            .attr('fill', function(d){ return d.color + '15'; })
+            .attr('stroke', function(d){ return d.color + '40'; })
+            .attr('stroke-width', 1.5);
+
+        sg.each(function(d) {
+            var lines = d.label.split('\n');
+            var el = d3.select(this);
+            lines.forEach(function(line, li) {
+                el.append('text')
+                    .attr('y', (li - (lines.length - 1) / 2) * 12)
+                    .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+                    .attr('fill', d.color).attr('font-size', '9px').attr('font-weight', '700')
+                    .attr('font-family', 'Inter,sans-serif')
+                    .text(line);
+            });
+        });
+
+        /* Center label */
+        svg.append('text').attr('x', cx).attr('y', cy - 6)
+            .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.25)')
+            .attr('font-size', '11px').attr('font-weight', '800')
+            .attr('font-family', 'Space Grotesk,sans-serif')
+            .text('AGENTIC');
+        svg.append('text').attr('x', cx).attr('y', cy + 10)
+            .attr('text-anchor', 'middle').attr('fill', 'rgba(255,255,255,0.25)')
+            .attr('font-size', '11px').attr('font-weight', '800')
+            .attr('font-family', 'Space Grotesk,sans-serif')
+            .text('LOOP');
+    })();
+
+    /* ── Four-Phase Workflow ── */
+    (function() {
+        var container = document.getElementById('four-phase-viz');
+        if (!container) return;
+        var w = 600, h = 120;
+        var svg = d3.select('#four-phase-viz').append('svg')
+            .attr('viewBox', '0 0 ' + w + ' ' + h)
+            .attr('role','img')
+            .attr('aria-label','Four-phase development workflow: Explore, Plan, Implement, Ship');
+
+        var phases = [
+            { label:'Explore', mode:'Plan Mode', x:75, color:'#3b82f6', icon:'🔍' },
+            { label:'Plan', mode:'Plan Mode', x:225, color:'#8b5cf6', icon:'📋' },
+            { label:'Implement', mode:'Normal Mode', x:375, color:'#10b981', icon:'🛠️' },
+            { label:'Ship', mode:'Git + PR', x:525, color:'#f59e0b', icon:'🚀' }
+        ];
+
+        /* Arrows */
+        for (var i = 0; i < phases.length - 1; i++) {
+            svg.append('line')
+                .attr('x1', phases[i].x + 40).attr('y1', h/2 - 8)
+                .attr('x2', phases[i+1].x - 40).attr('y2', h/2 - 8)
+                .attr('stroke', 'rgba(255,255,255,0.1)').attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,3');
+            svg.append('polygon')
+                .attr('points', function() {
+                    var px = phases[i+1].x - 42;
+                    return (px) + ',' + (h/2 - 13) + ' ' + (px + 6) + ',' + (h/2 - 8) + ' ' + (px) + ',' + (h/2 - 3);
+                })
+                .attr('fill', 'rgba(255,255,255,0.12)');
+        }
+
+        var pg = svg.selectAll('.phase').data(phases).enter().append('g')
+            .attr('transform', function(d){ return 'translate(' + d.x + ',' + (h/2 - 8) + ')'; });
+
+        pg.append('rect').attr('x', -36).attr('y', -28).attr('width', 72).attr('height', 56).attr('rx', 14)
+            .attr('fill', function(d){ return d.color + '10'; })
+            .attr('stroke', function(d){ return d.color + '30'; })
+            .attr('stroke-width', 1.5);
+
+        pg.append('text').attr('y', -8)
+            .attr('text-anchor', 'middle').attr('font-size', '16px')
+            .text(function(d){ return d.icon; });
+
+        pg.append('text').attr('y', 12)
+            .attr('text-anchor', 'middle').attr('fill', function(d){ return d.color; })
+            .attr('font-size', '10px').attr('font-weight', '700')
+            .attr('font-family', 'Inter,sans-serif')
+            .text(function(d){ return d.label; });
+
+        pg.append('text').attr('y', 46)
+            .attr('text-anchor', 'middle').attr('fill', '#64748b')
+            .attr('font-size', '8px').attr('font-weight', '600')
+            .attr('font-family', 'Inter,sans-serif')
+            .text(function(d){ return d.mode; });
+    })();
+});
+</script>
+</body>
+</html>

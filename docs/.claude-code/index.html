@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Claude Code Learning Hub — CORTEX AI Engineering Framework</title>
+<meta name="description" content="Master Claude Code in three progressive learning paths — from first install to multi-agent orchestration. 69 hands-on modules with interactive D3 visualisations."/>
+<meta name="author" content="Asif Hussain"/>
+<meta name="robots" content="index, follow"/>
+<link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com;
+               style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+               font-src 'self' fonts.gstatic.com data:;
+               img-src 'self' data: https:;
+               connect-src 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+<style>
+/* ── Design Tokens — Golden Dark Glassmorphism ── */
+:root {
+    --bg-canvas: #0a0e1a;
+    --glass-bg: rgba(15, 20, 35, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(20px);
+    --gold-primary: #d4a017;
+    --gold-light: #fbbf24;
+    --gold-warm: #f59e0b;
+    --gold-amber: #d97706;
+    --gold-highlight: #fef3c7;
+    --green-primary: #10b981;
+    --green-bg: rgba(16, 185, 129, 0.12);
+    --green-border: rgba(16, 185, 129, 0.25);
+    --amber-primary: #f59e0b;
+    --amber-bg: rgba(245, 158, 11, 0.12);
+    --amber-border: rgba(245, 158, 11, 0.25);
+    --red-primary: #ef4444;
+    --red-bg: rgba(239, 68, 68, 0.12);
+    --red-border: rgba(239, 68, 68, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --nav-height: 56px;
+    --dur-fast: 150ms;
+    --dur-base: 200ms;
+    --dur-moderate: 300ms;
+    --dur-slow: 400ms;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-decel: cubic-bezier(0, 0, 0.2, 1);
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Space Grotesk', var(--font-sans);
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 18px; scroll-behavior: smooth; }
+
+body {
+    margin: 0; padding: 0;
+    background-color: var(--bg-canvas);
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(212, 160, 23, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.03) 0%, transparent 40%);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+h1,h2,h3,h4,h5,h6 { margin: 0; font-family: var(--font-display); line-height: 1.2; }
+
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+.skip-link { position:absolute; top:-100%; left:1rem; z-index:99999; padding:0.6rem 1.25rem; background:var(--gold-primary); color:#000; font-weight:700; border-radius:0 0 0.75rem 0.75rem; transition:top 0.2s ease; }
+.skip-link:focus { top:0; outline:3px solid #000; outline-offset:2px; }
+:focus { scroll-margin-top: calc(var(--nav-height) + 8px); }
+
+/* ── Ambient Background ── */
+.ambient-canvas { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+.ambient-orb { position:absolute; border-radius:50%; filter:blur(120px); opacity:0.2; animation:floatOrb 25s infinite ease-in-out alternate; }
+.orb-gold { top:-10%; left:-10%; width:50vw; height:50vw; background:rgba(212,160,23,0.2); }
+.orb-amber { bottom:-10%; right:-10%; width:60vw; height:60vw; background:rgba(251,191,36,0.1); animation-delay:-5s; }
+.orb-warm { top:40%; left:60%; width:40vw; height:40vw; background:rgba(217,119,6,0.08); animation-delay:-12s; }
+@keyframes floatOrb { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(8%,12%) scale(1.1)} }
+
+/* ── Header ── */
+.site-header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(10,14,26,0.85);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    box-shadow:0 4px 32px -4px rgba(0,0,0,0.45);
+}
+.header-inner {
+    max-width:1680px; margin:0 auto; padding:0 2rem;
+    height:56px; display:flex; align-items:center; justify-content:space-between; gap:1rem;
+}
+.header-brand { display:flex; align-items:center; gap:0.625rem; text-decoration:none; flex-shrink:0; }
+.header-logo { width:32px; height:32px; border-radius:8px; filter:drop-shadow(0 0 8px rgba(212,160,23,0.35)); transition:filter var(--dur-moderate) var(--ease-standard); }
+.header-brand:hover .header-logo { filter:drop-shadow(0 0 14px rgba(212,160,23,0.65)); }
+.header-wordmark { font-family:var(--font-display); font-size:0.9375rem; font-weight:800; letter-spacing:0.06em; color:rgba(248,250,252,0.92); }
+.header-wordmark span { font-size:0.6875rem; font-weight:500; letter-spacing:0.03em; color:rgba(148,163,184,0.65); margin-left:0.375rem; }
+.header-nav { display:flex; align-items:center; gap:0.125rem; }
+.header-nav a {
+    display:inline-flex; align-items:center; gap:0.3rem;
+    padding:0.375rem 0.75rem; border-radius:8px;
+    font-size:0.8125rem; font-weight:600;
+    color:rgba(148,163,184,0.8);
+    transition:color var(--dur-fast), background var(--dur-fast);
+    white-space:nowrap;
+}
+.header-nav a:hover, .header-nav a.active { color:rgba(248,250,252,0.95); background:rgba(255,255,255,0.06); }
+.header-sep { width:1px; height:18px; background:rgba(255,255,255,0.1); margin:0 0.25rem; }
+.nav-toggle { display:none; background:none; border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:0.375rem 0.5rem; color:rgba(148,163,184,0.8); cursor:pointer; font-size:1.125rem; }
+@media(max-width:768px) {
+    .header-nav { display:none; }
+    .header-nav.open { display:flex; flex-direction:column; position:absolute; top:56px; left:0; right:0; background:rgba(10,14,26,0.97); backdrop-filter:blur(20px); padding:0.75rem 1rem; border-bottom:1px solid rgba(255,255,255,0.07); z-index:99; }
+    .header-nav.open a { padding:0.625rem 0.75rem; font-size:0.9375rem; }
+    .nav-toggle { display:flex; align-items:center; }
+    .header-inner { position:relative; }
+    .header-wordmark span { display:none; }
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb-strip { background:rgba(10,14,26,0.65); border-bottom:1px solid rgba(255,255,255,0.05); }
+.breadcrumb-inner { max-width:1680px; margin:0 auto; padding:0.5rem 2rem; display:flex; align-items:center; gap:0.375rem; font-size:0.78125rem; flex-wrap:wrap; }
+.bc-link { color:rgba(148,163,184,0.7); font-weight:500; padding:0.125rem 0.375rem; border-radius:5px; transition:color var(--dur-fast); }
+.bc-link:hover { color:rgba(248,250,252,0.95); background:rgba(255,255,255,0.05); }
+.bc-sep { color:rgba(148,163,184,0.3); font-size:0.6875rem; }
+.bc-current { display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.6rem; border-radius:999px; font-size:0.875rem; font-weight:700; background:rgba(212,160,23,0.1); color:rgba(212,160,23,0.9); border:1px solid rgba(212,160,23,0.2); }
+
+/* ── Hero ── */
+.hero {
+    max-width:1680px; margin:0 auto; padding:4rem 2rem 3rem;
+    text-align:center;
+}
+.hero-badge {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.35rem 1rem; border-radius:999px;
+    background:rgba(212,160,23,0.1); border:1px solid rgba(212,160,23,0.25);
+    font-size:0.8125rem; font-weight:600; color:var(--gold-light);
+    margin-bottom:1.5rem;
+}
+.hero-badge-dot { width:6px; height:6px; border-radius:50%; background:var(--gold-primary); animation:pulse-ring 2s cubic-bezier(0.215,0.61,0.355,1) infinite; }
+@keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(212,160,23,0.7)} 70%{box-shadow:0 0 0 8px rgba(212,160,23,0)} 100%{box-shadow:0 0 0 0 rgba(212,160,23,0)} }
+.hero h1 { font-size:clamp(2.25rem,5vw,4rem); font-weight:900; letter-spacing:-0.03em; margin-bottom:1rem; }
+.gradient-text-gold { background:linear-gradient(135deg,#d4a017,#fbbf24,#f59e0b); background-clip:text; -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero-desc { font-size:1.25rem; color:var(--text-muted); max-width:720px; margin:0 auto 2rem; line-height:1.7; }
+.hero-stats { display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+.stat { text-align:center; }
+.stat-num { font-family:var(--font-display); font-size:1.75rem; font-weight:800; color:var(--gold-light); }
+.stat-label { font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+
+/* ── D3 Hub Diagram ── */
+#hub-diagram { width:100%; max-width:600px; margin:0 auto 3rem; }
+#hub-diagram svg { width:100%; height:auto; }
+
+/* ── Path Cards ── */
+.paths-grid {
+    max-width:1680px; margin:0 auto; padding:0 2rem 4rem;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem;
+}
+.path-card {
+    background:var(--glass-bg);
+    backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);
+    border-radius:1.5rem;
+    padding:2rem;
+    position:relative; overflow:hidden;
+    transition:transform var(--dur-moderate) var(--ease-standard),
+               border-color var(--dur-moderate),
+               box-shadow var(--dur-moderate);
+    cursor:pointer;
+    display:flex; flex-direction:column;
+}
+.path-card::after {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    pointer-events:none;
+}
+.path-card:hover { transform:translateY(-6px); }
+.path-card--beginner:hover { border-color:var(--green-border); box-shadow:0 20px 60px -15px rgba(16,185,129,0.2); }
+.path-card--intermediate:hover { border-color:var(--amber-border); box-shadow:0 20px 60px -15px rgba(245,158,11,0.2); }
+.path-card--advanced:hover { border-color:var(--red-border); box-shadow:0 20px 60px -15px rgba(239,68,68,0.2); }
+
+.path-icon {
+    width:3.5rem; height:3.5rem; border-radius:1rem;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem; margin-bottom:1.25rem;
+}
+.path-icon--beginner { background:var(--green-bg); border:1px solid var(--green-border); }
+.path-icon--intermediate { background:var(--amber-bg); border:1px solid var(--amber-border); }
+.path-icon--advanced { background:var(--red-bg); border:1px solid var(--red-border); }
+
+.path-level {
+    display:inline-flex; align-items:center; gap:0.35rem;
+    font-size:0.6875rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+    margin-bottom:0.5rem;
+}
+.path-level--beginner { color:var(--green-primary); }
+.path-level--intermediate { color:var(--amber-primary); }
+.path-level--advanced { color:var(--red-primary); }
+
+.path-title { font-size:1.5rem; font-weight:800; margin-bottom:0.625rem; letter-spacing:-0.02em; }
+.path-desc { font-size:1.0625rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.25rem; flex:1; }
+
+.path-modules {
+    display:flex; flex-wrap:wrap; gap:0.375rem; margin-bottom:1.25rem;
+}
+.module-dot {
+    width:10px; height:10px; border-radius:3px;
+    transition:transform var(--dur-fast), opacity var(--dur-fast);
+}
+.module-dot--beginner { background:rgba(16,185,129,0.3); }
+.module-dot--intermediate { background:rgba(245,158,11,0.3); }
+.module-dot--advanced { background:rgba(239,68,68,0.3); }
+.path-card:hover .module-dot { opacity:0.8; }
+.path-card:hover .module-dot:nth-child(odd) { transform:translateY(-1px); }
+
+.path-meta { display:flex; align-items:center; justify-content:space-between; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06); }
+.path-meta-item { font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center; gap:0.35rem; }
+.path-btn {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.5rem 1.25rem; border-radius:999px;
+    font-size:0.8125rem; font-weight:700;
+    transition:all var(--dur-moderate) var(--ease-standard);
+    border:1px solid;
+}
+.path-btn--beginner { background:var(--green-bg); color:var(--green-primary); border-color:var(--green-border); }
+.path-btn--beginner:hover { background:rgba(16,185,129,0.2); box-shadow:0 0 20px rgba(16,185,129,0.15); }
+.path-btn--intermediate { background:var(--amber-bg); color:var(--amber-primary); border-color:var(--amber-border); }
+.path-btn--intermediate:hover { background:rgba(245,158,11,0.2); box-shadow:0 0 20px rgba(245,158,11,0.15); }
+.path-btn--advanced { background:var(--red-bg); color:var(--red-primary); border-color:var(--red-border); }
+.path-btn--advanced:hover { background:rgba(239,68,68,0.2); box-shadow:0 0 20px rgba(239,68,68,0.15); }
+
+/* ── Example Project Section ── */
+.example-section {
+    max-width:1680px; margin:0 auto; padding:0 2rem 4rem;
+}
+.example-card {
+    background:var(--glass-bg);
+    backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-border);
+    border-radius:1.5rem;
+    padding:2.5rem;
+    position:relative; overflow:hidden;
+}
+.example-card::after {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(212,160,23,0.2), transparent);
+    pointer-events:none;
+}
+.example-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.example-icon { font-size:2rem; }
+.example-title { font-size:1.625rem; font-weight:800; letter-spacing:-0.02em; }
+.example-badge { padding:0.2rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:700; background:rgba(212,160,23,0.1); color:var(--gold-light); border:1px solid rgba(212,160,23,0.2); }
+.example-desc { color:var(--text-muted); margin-bottom:1.5rem; max-width:780px; font-size:1.0625rem; }
+.example-levels { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1rem; }
+.example-level {
+    padding:1.25rem; border-radius:1rem;
+    border:1px solid rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.02);
+}
+.example-level-title { font-size:0.875rem; font-weight:700; margin-bottom:0.5rem; }
+.example-level-list { list-style:none; padding:0; margin:0; }
+.example-level-list li { font-size:0.8125rem; color:var(--text-muted); padding:0.25rem 0; padding-left:1rem; position:relative; }
+.example-level-list li::before { content:'→'; position:absolute; left:0; color:var(--text-dim); }
+
+/* ── Section Divider ── */
+.section-divider { width:100%; height:1px; background:linear-gradient(90deg, transparent, rgba(212,160,23,0.25) 50%, transparent); margin:0 auto; }
+
+/* ── Footer ── */
+.site-footer {
+    border-top:1px solid rgba(255,255,255,0.06);
+    background:rgba(10,14,26,0.7);
+    backdrop-filter:blur(12px);
+    padding:2rem 1.5rem; margin-top:2rem;
+}
+.footer-inner {
+    max-width:1680px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:1rem;
+    font-size:0.8125rem; color:var(--text-dim);
+}
+.footer-inner a { color:var(--gold-light); transition:color var(--dur-fast); }
+.footer-inner a:hover { color:var(--gold-primary); }
+
+/* ── Animations ── */
+@keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+.animate-in { animation:fadeInUp 0.6s var(--ease-decel) both; }
+.delay-1 { animation-delay:0.1s; }
+.delay-2 { animation-delay:0.2s; }
+.delay-3 { animation-delay:0.3s; }
+.delay-4 { animation-delay:0.4s; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="ambient-canvas" aria-hidden="true">
+    <div class="ambient-orb orb-gold"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-orb orb-warm"></div>
+</div>
+
+<!-- ── Header ── -->
+<header class="site-header">
+    <div class="header-inner">
+        <a class="header-brand" href="../index.html" aria-label="CORTEX Home">
+            <img class="header-logo" src="../assets/images/cortex-logo-64.png" alt="CORTEX logo" width="32" height="32"/>
+            <div class="header-wordmark">CORTEX<span>AI Framework</span></div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.header-nav').classList.toggle('open')">☰</button>
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="../index.html">Home</a>
+            <a href="../architecture.html">Architecture</a>
+            <a href="../workflow-composer.html">Workflows</a>
+            <div class="header-sep" aria-hidden="true"></div>
+            <a href="index.html" class="active">Claude Code</a>
+        </nav>
+    </div>
+</header>
+<div class="breadcrumb-strip">
+    <nav class="breadcrumb-inner" aria-label="Breadcrumb">
+        <a class="bc-link" href="../index.html">CORTEX</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span class="bc-current"><span class="sr-only">Current: </span>Claude Code Learning Hub</span>
+    </nav>
+</div>
+
+<!-- ── Main ── -->
+<main id="main">
+
+<!-- Hero -->
+<section class="hero animate-in">
+    <div class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span> Learning Hub v1.0</div>
+    <h1>Master <span class="gradient-text-gold">Claude Code</span></h1>
+    <p class="hero-desc">Three progressive learning paths — from your first session to multi-agent orchestration mastery. Each path uses the same running example so concepts build on each other.</p>
+    <div class="hero-stats">
+        <div class="stat"><div class="stat-num">69</div><div class="stat-label">Modules</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Paths</div></div>
+        <div class="stat"><div class="stat-num">1</div><div class="stat-label">Running Example</div></div>
+    </div>
+    <div id="hub-diagram" aria-label="Learning path flow diagram: Beginner flows to Intermediate flows to Advanced"></div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- Path Cards -->
+<section class="paths-grid" aria-label="Learning paths">
+
+    <!-- Beginner -->
+    <article class="path-card path-card--beginner animate-in delay-1" onclick="window.location='basic.html'" role="link" tabindex="0" aria-label="Begin the Beginner learning path — 23 modules">
+        <div class="path-icon path-icon--beginner" aria-hidden="true">🟢</div>
+        <div class="path-level path-level--beginner">Beginner Path</div>
+        <h2 class="path-title">Foundations</h2>
+        <p class="path-desc">Install Claude Code, learn the CLI, understand memory, and complete your first real development workflows. Zero prior experience required.</p>
+        <div class="path-modules" aria-label="23 modules represented as dots"></div>
+        <div class="path-meta">
+            <span class="path-meta-item">📦 23 modules</span>
+            <a class="path-btn path-btn--beginner" href="basic.html">Start Learning →</a>
+        </div>
+    </article>
+
+    <!-- Intermediate -->
+    <article class="path-card path-card--intermediate animate-in delay-2" onclick="window.location='intermediate.html'" role="link" tabindex="0" aria-label="Begin the Intermediate learning path — 23 modules">
+        <div class="path-icon path-icon--intermediate" aria-hidden="true">🟡</div>
+        <div class="path-level path-level--intermediate">Intermediate Path</div>
+        <h2 class="path-title">Customisation</h2>
+        <p class="path-desc">Create skills, build subagents, configure hooks, master context management, and develop effective prompting strategies.</p>
+        <div class="path-modules" aria-label="23 modules represented as dots"></div>
+        <div class="path-meta">
+            <span class="path-meta-item">📦 23 modules</span>
+            <a class="path-btn path-btn--intermediate" href="intermediate.html">Continue Learning →</a>
+        </div>
+    </article>
+
+    <!-- Advanced -->
+    <article class="path-card path-card--advanced animate-in delay-3" onclick="window.location='advanced.html'" role="link" tabindex="0" aria-label="Begin the Advanced learning path — 23 modules">
+        <div class="path-icon path-icon--advanced" aria-hidden="true">🔴</div>
+        <div class="path-level path-level--advanced">Advanced Path</div>
+        <h2 class="path-title">Orchestration</h2>
+        <p class="path-desc">Agent teams, CI/CD automation, plugin architecture, multi-agent orchestration patterns, and CORTEX-powered development at scale.</p>
+        <div class="path-modules" aria-label="23 modules represented as dots"></div>
+        <div class="path-meta">
+            <span class="path-meta-item">📦 23 modules</span>
+            <a class="path-btn path-btn--advanced" href="advanced.html">Master It →</a>
+        </div>
+    </article>
+
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<!-- Running Example -->
+<section class="example-section animate-in delay-4">
+    <div class="example-card">
+        <div class="example-header">
+            <span class="example-icon" aria-hidden="true">📋</span>
+            <h2 class="example-title">Running Example: TaskFlow</h2>
+            <span class="example-badge">Same app, 3 depths</span>
+        </div>
+        <p class="example-desc">Every module uses <strong>TaskFlow</strong> — a CLI task management application — as the practical example. Concepts build progressively: what you learn in Beginner becomes the foundation for Intermediate, which sets up Advanced.</p>
+        <div class="example-levels">
+            <div class="example-level">
+                <div class="example-level-title" style="color:var(--green-primary)">🟢 Beginner</div>
+                <ul class="example-level-list">
+                    <li>Explore the TaskFlow codebase</li>
+                    <li>Add a "mark done" feature</li>
+                    <li>Fix the date parsing bug</li>
+                    <li>Write tests for core functions</li>
+                    <li>Generate README documentation</li>
+                </ul>
+            </div>
+            <div class="example-level">
+                <div class="example-level-title" style="color:var(--amber-primary)">🟡 Intermediate</div>
+                <ul class="example-level-list">
+                    <li>Create a TDD skill for TaskFlow</li>
+                    <li>Build a review subagent</li>
+                    <li>Add quality gate hooks</li>
+                    <li>Manage context across features</li>
+                    <li>Build a TaskFlow skill library</li>
+                </ul>
+            </div>
+            <div class="example-level">
+                <div class="example-level-title" style="color:var(--red-primary)">🔴 Advanced</div>
+                <ul class="example-level-list">
+                    <li>Orchestrate a feature sprint team</li>
+                    <li>Automate CI/CD with Claude</li>
+                    <li>Package as a distributable plugin</li>
+                    <li>Design intent routing system</li>
+                    <li>Implement convergence audits</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ── Footer ── -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <span>© 2025–2026 <a href="../index.html">CORTEX Framework</a> — Asif Hussain</span>
+        <span>Content synthesised from <a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">Anthropic Documentation</a></span>
+    </div>
+</footer>
+
+<!-- ── D3 Hub Diagram ── -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Module dots
+    document.querySelectorAll('.path-modules').forEach(function(el) {
+        var cls = el.closest('.path-card').classList.contains('path-card--beginner') ? 'beginner'
+                : el.closest('.path-card').classList.contains('path-card--intermediate') ? 'intermediate'
+                : 'advanced';
+        for (var i = 0; i < 23; i++) {
+            var dot = document.createElement('div');
+            dot.className = 'module-dot module-dot--' + cls;
+            dot.setAttribute('aria-hidden', 'true');
+            el.appendChild(dot);
+        }
+    });
+
+    // D3 hub flow diagram
+    var container = document.getElementById('hub-diagram');
+    if (!container || typeof d3 === 'undefined') return;
+
+    var w = Math.min(container.offsetWidth, 600);
+    var h = 200;
+    var svg = d3.select('#hub-diagram').append('svg')
+        .attr('viewBox', '0 0 ' + w + ' ' + h)
+        .attr('role', 'img')
+        .attr('aria-label', 'Learning path progression: Beginner, Intermediate, Advanced');
+
+    var nodes = [
+        { id: 'B', label: 'Beginner', x: w * 0.15, y: h / 2, color: '#10b981', r: 40 },
+        { id: 'I', label: 'Intermediate', x: w * 0.5, y: h / 2, color: '#f59e0b', r: 40 },
+        { id: 'A', label: 'Advanced', x: w * 0.85, y: h / 2, color: '#ef4444', r: 40 }
+    ];
+    var links = [
+        { source: nodes[0], target: nodes[1] },
+        { source: nodes[1], target: nodes[2] }
+    ];
+
+    // Glow defs
+    var defs = svg.append('defs');
+    nodes.forEach(function(n) {
+        var filter = defs.append('filter').attr('id', 'glow-' + n.id).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+        filter.append('feGaussianBlur').attr('stdDeviation', '6').attr('result', 'blur');
+        filter.append('feMerge').selectAll('feMergeNode').data(['blur', 'SourceGraphic']).enter().append('feMergeNode').attr('in', function(d){return d;});
+    });
+
+    // Arrow marker
+    defs.append('marker').attr('id', 'arrowhead').attr('viewBox', '0 0 10 10').attr('refX', 10).attr('refY', 5).attr('markerWidth', 8).attr('markerHeight', 8).attr('orient', 'auto')
+        .append('path').attr('d', 'M 0 0 L 10 5 L 0 10 Z').attr('fill', 'rgba(212,160,23,0.5)');
+
+    // Links
+    svg.selectAll('.link').data(links).enter().append('line')
+        .attr('x1', function(d){return d.source.x + d.source.r + 8;})
+        .attr('y1', function(d){return d.source.y;})
+        .attr('x2', function(d){return d.target.x - d.target.r - 8;})
+        .attr('y2', function(d){return d.target.y;})
+        .attr('stroke', 'rgba(212,160,23,0.3)')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '6,4')
+        .attr('marker-end', 'url(#arrowhead)');
+
+    // Node groups
+    var g = svg.selectAll('.node').data(nodes).enter().append('g');
+    g.append('circle')
+        .attr('cx', function(d){return d.x;}).attr('cy', function(d){return d.y;}).attr('r', function(d){return d.r;})
+        .attr('fill', function(d){return d.color + '18';})
+        .attr('stroke', function(d){return d.color + '55';})
+        .attr('stroke-width', 2)
+        .attr('filter', function(d){return 'url(#glow-' + d.id + ')';});
+    g.append('text')
+        .attr('x', function(d){return d.x;}).attr('y', function(d){return d.y;})
+        .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+        .attr('fill', function(d){return d.color;})
+        .attr('font-size', '11px').attr('font-weight', '700').attr('font-family', 'Inter, sans-serif')
+        .text(function(d){return d.label;});
+    g.append('text')
+        .attr('x', function(d){return d.x;}).attr('y', function(d){return d.y + 16;})
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#64748b')
+        .attr('font-size', '9px').attr('font-weight', '600').attr('font-family', 'Inter, sans-serif')
+        .text('23 modules');
+
+    // Keyboard nav for path cards
+    document.querySelectorAll('.path-card').forEach(function(card) {
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                card.querySelector('.path-btn').click();
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advanced Path — Claude Code Learning Hub | CORTEX</title>
+<meta name="description" content="23 advanced modules — agent teams, automation, plugins, orchestration patterns, and CORTEX integration. The final step in your Claude Code mastery journey."/>
+<meta name="author" content="Asif Hussain"/>
+<link rel="icon" href="../assets/images/cortex-logo-64.png" type="image/png"/>
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com;
+               style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+               font-src 'self' fonts.gstatic.com data:;
+               img-src 'self' data: https:;
+               connect-src 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+<style>
+:root {
+    --bg-canvas:#0a0e1a; --glass-bg:rgba(15,20,35,0.75); --glass-border:rgba(255,255,255,0.08); --glass-blur:blur(20px);
+    --gold-primary:#d4a017; --gold-light:#fbbf24; --gold-warm:#f59e0b;
+    --red-primary:#ef4444; --red-bg:rgba(239,68,68,0.12); --red-border:rgba(239,68,68,0.25); --red-glow:rgba(239,68,68,0.15);
+    --text-main:#f8fafc; --text-muted:#94a3b8; --text-dim:#64748b;
+    --nav-height:56px;
+    --dur-fast:150ms; --dur-moderate:300ms; --ease-standard:cubic-bezier(0.4,0,0.2,1); --ease-decel:cubic-bezier(0,0,0.2,1);
+    --font-sans:'Inter',system-ui,sans-serif; --font-display:'Space Grotesk',var(--font-sans); --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:18px;scroll-behavior:smooth}
+body{margin:0;padding:0;background-color:var(--bg-canvas);background-image:radial-gradient(circle at 20% 30%,rgba(239,68,68,0.05) 0%,transparent 50%),radial-gradient(circle at 75% 70%,rgba(212,160,23,0.04) 0%,transparent 50%);color:var(--text-main);font-family:var(--font-sans);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);line-height:1.2}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.skip-link{position:absolute;top:-100%;left:1rem;z-index:99999;padding:0.6rem 1.25rem;background:var(--red-primary);color:#fff;font-weight:700;border-radius:0 0 0.75rem 0.75rem;transition:top 0.2s}
+.skip-link:focus{top:0;outline:3px solid #fff;outline-offset:2px}
+:focus{scroll-margin-top:calc(var(--nav-height) + 8px)}
+
+.ambient-canvas{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.ambient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.12;animation:floatOrb 25s infinite ease-in-out alternate}
+.orb-1{top:-8%;left:10%;width:45vw;height:45vw;background:rgba(239,68,68,0.15)}
+.orb-2{bottom:-12%;right:-5%;width:55vw;height:55vw;background:rgba(212,160,23,0.08);animation-delay:-7s}
+@keyframes floatOrb{0%{transform:translate(0,0) scale(1)}100%{transform:translate(6%,10%) scale(1.08)}}
+
+.site-header{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 32px -4px rgba(0,0,0,0.45)}
+.header-inner{max-width:1680px;margin:0 auto;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.header-brand{display:flex;align-items:center;gap:0.625rem;flex-shrink:0}
+.header-logo{width:32px;height:32px;border-radius:8px;filter:drop-shadow(0 0 8px rgba(212,160,23,0.35))}
+.header-wordmark{font-family:var(--font-display);font-size:0.9375rem;font-weight:800;letter-spacing:0.06em;color:rgba(248,250,252,0.92)}
+.header-wordmark span{font-size:0.6875rem;font-weight:500;color:rgba(148,163,184,0.65);margin-left:0.375rem}
+.header-nav{display:flex;align-items:center;gap:0.125rem}
+.header-nav a{display:inline-flex;align-items:center;gap:0.3rem;padding:0.375rem 0.75rem;border-radius:8px;font-size:0.8125rem;font-weight:600;color:rgba(148,163,184,0.8);transition:color var(--dur-fast),background var(--dur-fast);white-space:nowrap}
+.header-nav a:hover,.header-nav a.active{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.06)}
+.header-sep{width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 0.25rem}
+.nav-toggle{display:none;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.375rem 0.5rem;color:rgba(148,163,184,0.8);cursor:pointer;font-size:1.125rem}
+@media(max-width:768px){.header-nav{display:none}.header-nav.open{display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:rgba(10,14,26,0.97);backdrop-filter:blur(20px);padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.07);z-index:99}.header-nav.open a{padding:0.625rem 0.75rem;font-size:0.9375rem}.nav-toggle{display:flex;align-items:center}.header-inner{position:relative}.header-wordmark span{display:none}}
+
+.breadcrumb-strip{background:rgba(10,14,26,0.65);border-bottom:1px solid rgba(255,255,255,0.05)}
+.breadcrumb-inner{max-width:1680px;margin:0 auto;padding:0.5rem 2rem;display:flex;align-items:center;gap:0.375rem;font-size:0.78125rem;flex-wrap:wrap}
+.bc-link{color:rgba(148,163,184,0.7);font-weight:500;padding:0.125rem 0.375rem;border-radius:5px;transition:color var(--dur-fast)}
+.bc-link:hover{color:rgba(248,250,252,0.95);background:rgba(255,255,255,0.05)}
+.bc-sep{color:rgba(148,163,184,0.3);font-size:0.6875rem}
+.bc-current{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:999px;font-size:0.875rem;font-weight:700;background:var(--red-bg);color:var(--red-primary);border:1px solid var(--red-border)}
+
+.hero{max-width:1680px;margin:0 auto;padding:3rem 2rem 2rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 1rem;border-radius:999px;background:var(--red-bg);border:1px solid var(--red-border);font-size:0.8125rem;font-weight:600;color:var(--red-primary);margin-bottom:1.25rem}
+.hero h1{font-size:clamp(2rem,4.5vw,3.25rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.75rem}
+.gradient-text-red{background:linear-gradient(135deg,#ef4444,#f97316);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:1.1875rem;color:var(--text-muted);max-width:700px;margin:0 auto 2rem;line-height:1.7}
+.progress-wrap{max-width:500px;margin:0 auto 2rem;text-align:left}
+.progress-label{font-size:0.75rem;font-weight:600;color:var(--text-dim);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.5rem}
+.progress-bar{height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red-primary),#f97316);width:0;transition:width 1s var(--ease-decel)}
+
+#path-diagram{width:100%;max-width:900px;margin:0 auto 2rem}
+#path-diagram svg{width:100%;height:auto}
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(239,68,68,0.25) 50%,transparent);margin:0 auto}
+
+.modules-section{max-width:1680px;margin:0 auto;padding:2rem 2rem 4rem}
+.modules-section h2{font-size:1.75rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.modules-section .section-desc{font-size:1.0625rem;color:var(--text-muted);margin-bottom:2rem}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.25rem}
+
+.module-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:1.25rem;padding:1.5rem;position:relative;overflow:hidden;transition:transform var(--dur-moderate) var(--ease-standard),border-color var(--dur-moderate),box-shadow var(--dur-moderate);opacity:0;animation:fadeInUp 0.5s var(--ease-decel) both}
+.module-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);pointer-events:none}
+.module-card:hover{transform:translateY(-3px);border-color:var(--red-border);box-shadow:0 16px 40px -10px var(--red-glow)}
+
+.module-num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:0.5rem;font-size:0.75rem;font-weight:900;font-family:var(--font-mono);background:var(--red-bg);color:var(--red-primary);border:1px solid var(--red-border);margin-bottom:0.75rem}
+.module-title{font-size:1.1875rem;font-weight:700;margin-bottom:0.375rem;letter-spacing:-0.01em}
+.module-desc{font-size:0.9375rem;color:var(--text-muted);line-height:1.65;margin-bottom:0.75rem}
+.module-tags{display:flex;flex-wrap:wrap;gap:0.375rem}
+.module-tag{font-size:0.6875rem;font-weight:600;padding:0.15rem 0.5rem;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--text-dim)}
+.module-example{font-family:var(--font-mono);font-size:0.6875rem;padding:0.15rem 0.5rem;border-radius:999px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.15);color:var(--gold-warm)}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.site-footer{border-top:1px solid rgba(255,255,255,0.06);background:rgba(10,14,26,0.7);backdrop-filter:blur(12px);padding:2rem 1.5rem;margin-top:2rem}
+.footer-inner{max-width:1680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:0.875rem;color:var(--text-dim)}
+.footer-inner a{color:var(--gold-light);transition:color var(--dur-fast)}
+.footer-inner a:hover{color:var(--gold-primary)}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:999px;font-size:0.8125rem;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);transition:all var(--dur-moderate);margin-bottom:1rem}
+.back-link:hover{color:var(--text-main);background:rgba(255,255,255,0.08)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="ambient-canvas" aria-hidden="true"><div class="ambient-orb orb-1"></div><div class="ambient-orb orb-2"></div></div>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a class="header-brand" href="../index.html" aria-label="CORTEX Home">
+            <img class="header-logo" src="../assets/images/cortex-logo-64.png" alt="CORTEX logo" width="32" height="32"/>
+            <div class="header-wordmark">CORTEX<span>AI Framework</span></div>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.header-nav').classList.toggle('open')">☰</button>
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="../index.html">Home</a>
+            <a href="../architecture.html">Architecture</a>
+            <div class="header-sep" aria-hidden="true"></div>
+            <a href="index.html">Claude Code</a>
+            <a href="basic.html">Beginner</a>
+            <a href="intermediate.html">Intermediate</a>
+            <a href="advanced.html" class="active">Advanced</a>
+        </nav>
+    </div>
+</header>
+<div class="breadcrumb-strip">
+    <nav class="breadcrumb-inner" aria-label="Breadcrumb">
+        <a class="bc-link" href="../index.html">CORTEX</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <a class="bc-link" href="index.html">Claude Code</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span class="bc-current">🔴 Advanced</span>
+    </nav>
+</div>
+
+<main id="main">
+<section class="hero">
+    <a class="back-link" href="index.html">← Back to Learning Hub</a>
+    <div class="hero-badge">🔴 Advanced Path — 23 Modules</div>
+    <h1><span class="gradient-text-red">Orchestration</span></h1>
+    <p class="hero-desc">Architect multi-agent teams, build automation pipelines, create plugins, and apply CORTEX orchestration patterns — turning <strong>TaskFlow</strong> into a production-grade agent system.</p>
+    <div class="progress-wrap">
+        <div class="progress-label">Your Progress</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div id="path-diagram" aria-label="Advanced path flow: Teams, Automation, Plugins, Orchestration, CORTEX"></div>
+</section>
+
+<div class="section-divider" aria-hidden="true"></div>
+
+<section class="modules-section">
+    <h2>All 23 Modules</h2>
+    <p class="section-desc">Prerequisite: Complete the Intermediate path. These modules build production-scale agent systems on top of your TaskFlow skills and agents.</p>
+    <div class="modules-grid" id="modulesGrid"></div>
+</section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <span>© 2025–2026 <a href="../index.html">CORTEX Framework</a> — Asif Hussain</span>
+        <span><a href="intermediate.html">← Intermediate</a> · <a href="index.html">Hub ↩</a></span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var modules = [
+        { num:1, title:'Agent Teams Architecture', desc:'Understand the multi-agent model: a lead agent delegates to specialised teammates. Design the team topology for TaskFlow.', tags:['concept','teams'], example:'Design a 4-agent team for TaskFlow: lead, coder, reviewer, tester' },
+        { num:2, title:'Lead Agent & Teammates', desc:'Configure the lead agent with subagent routing. Define teammate roles, tool access, and handoff protocols.', tags:['hands-on','teams'], example:'Create lead agent that delegates code vs test tasks to teammates' },
+        { num:3, title:'Parallel Execution Patterns', desc:'Run multiple subagents simultaneously. Fan-out work, collect results, and synthesise. Understand cost and context tradeoffs.', tags:['hands-on','teams'], example:'Fan-out TaskFlow feature: UI + API + tests running in parallel' },
+        { num:4, title:'The Mailbox Protocol', desc:'Inter-agent communication via file-based mailboxes. Lead writes instructions, teammates read and report back through files.', tags:['concept','teams'], example:'Implement mailbox protocol for TaskFlow sprint review workflow' },
+        { num:5, title:'Non-Interactive Automation', desc:'Run Claude Code headlessly with --print and -p flags. Pipe input, capture JSON output, integrate with scripts.', tags:['hands-on','automation'], example:'Automate TaskFlow changelog generation in a shell script' },
+        { num:6, title:'CI/CD with GitHub Actions', desc:'Add Claude Code to your GitHub Actions pipeline. Automated code review, test generation, and PR description writing.', tags:['hands-on','automation'], example:'GitHub Action that reviews every TaskFlow PR with Claude' },
+        { num:7, title:'Fan-Out / Fan-In Pattern', desc:'Split a large task into independent subtasks (fan-out), execute in parallel, then merge results (fan-in). The power pattern.', tags:['concept','patterns'], example:'Fan-out 5-feature sprint across teammate agents, fan-in at merge' },
+        { num:8, title:'Writer / Reviewer Pipeline', desc:'Two-agent quality pipeline: one writes code, another reviews it. Iterate until quality gates pass.', tags:['hands-on','patterns'], example:'TaskFlow feature: writer agent codes, reviewer agent enforces TDD' },
+        { num:9, title:'Plugin Architecture', desc:'Extend Claude Code with custom slash commands via MCP servers. Architecture of a plugin: manifest, handler, registration.', tags:['concept','plugins'], example:'Design a /taskflow plugin that scaffolds new TaskFlow modules' },
+        { num:10, title:'Creating & Distributing Plugins', desc:'Build, test, and package an MCP plugin. Distribute via npm or Git. Handle versioning and backwards compatibility.', tags:['hands-on','plugins'], example:'Package the TaskFlow plugin as a distributable MCP server' },
+        { num:11, title:'Orchestration Layers', desc:'The 5-layer orchestration stack: Intent → Classification → Routing → Execution → Verification. Map Claude Code to each layer.', tags:['concept','orchestration'], example:'Map TaskFlow operations to the 5-layer orchestration model' },
+        { num:12, title:'Intent Router Pattern', desc:'Classify user requests and route to specialised handlers. Build a skill-based intent router that selects the right agent.', tags:['concept','orchestration'], example:'Route "fix bug" vs "add feature" vs "refactor" to different skills' },
+        { num:13, title:'Pipeline Pattern', desc:'Chain multiple processing stages: analyse → plan → implement → test → review. Each stage is an agent or skill invocation.', tags:['hands-on','orchestration'], example:'5-stage pipeline for TaskFlow feature implementation' },
+        { num:14, title:'Gate / Guardian Pattern', desc:'Insert quality checkpoints between pipeline stages. Gates block progression until criteria are met. Guardians enforce invariants.', tags:['concept','orchestration'], example:'Gate: block deployment if TaskFlow coverage drops below 80%' },
+        { num:15, title:'Convergence Loop', desc:'Iterative refinement: execute → evaluate → retry until a quality threshold is met. Set max iterations to prevent infinite loops.', tags:['hands-on','orchestration'], example:'Loop TaskFlow code through linter until zero warnings (max 3 tries)' },
+        { num:16, title:'Specialist Delegation', desc:'Route domain-specific work to specialist agents: security agent, performance agent, accessibility agent. Compose specialists.', tags:['concept','orchestration'], example:'Delegate security review to specialist, fed by TaskFlow lead agent' },
+        { num:17, title:'CORTEX Gateway Skill Pattern', desc:'How CORTEX structures its gateway skill to route 33 intent types. Apply the same pattern to your own skill library.', tags:['concept','cortex'], example:'Study CORTEX SKILL.md routing and adapt for TaskFlow gateway' },
+        { num:18, title:'CORTEX Agent Index Pattern', desc:'How CORTEX organises AGENTS.md as a registry of all available agents. Build your own agent index.', tags:['hands-on','cortex'], example:'Create AGENTS.md for TaskFlow with 4 registered agents' },
+        { num:19, title:'CORTEX 4-Stage Pipeline', desc:'The CORTEX execution model: Intent → Context → Action → Verification. How each orchestrator implements this contract.', tags:['concept','cortex'], example:'Implement a 4-stage pipeline for TaskFlow automated deployments' },
+        { num:20, title:'Governance → Hooks Translation', desc:'Turn governance rules (CORE-xxx) into enforceable hooks. Automate rule checking with PreToolUse and PostToolUse hooks.', tags:['hands-on','cortex'], example:'Translate 3 TaskFlow coding rules into quality-gate hooks' },
+        { num:21, title:'Building a Production Agent System', desc:'End-to-end system design: skills + agents + hooks + automation + monitoring. The complete agent architecture for TaskFlow.', tags:['hands-on','production'], example:'Assemble all TaskFlow agents, skills, hooks into production config' },
+        { num:22, title:'Multi-Agent Coordination at Scale', desc:'Patterns for large codebases: context sharding, agent specialisation, failover handlers, cost management, and audit trails.', tags:['concept','production'], example:'Scale TaskFlow system to handle 10 concurrent agent sessions' },
+        { num:23, title:'Advanced Mastery Checkpoint', desc:'Architecture review of your complete agent system. Assess all patterns, identify improvements, and plan your next production deployment.', tags:['review','checkpoint'], example:'Final TaskFlow architecture audit and graduation assessment' }
+    ];
+
+    var grid = document.getElementById('modulesGrid');
+    modules.forEach(function(m, i) {
+        var card = document.createElement('article');
+        card.className = 'module-card';
+        card.style.animationDelay = (i * 50) + 'ms';
+        card.innerHTML =
+            '<div class="module-num">' + String(m.num).padStart(2,'0') + '</div>' +
+            '<h3 class="module-title">' + m.title + '</h3>' +
+            '<p class="module-desc">' + m.desc + '</p>' +
+            '<div class="module-tags">' +
+                m.tags.map(function(t){return '<span class="module-tag">' + t + '</span>'}).join('') +
+                '<span class="module-example">📋 ' + m.example + '</span>' +
+            '</div>';
+        grid.appendChild(card);
+    });
+
+    setTimeout(function(){ document.getElementById('progressFill').style.width = '0%'; }, 300);
+
+    // D3 path diagram
+    var container = document.getElementById('path-diagram');
+    if (!container || typeof d3 === 'undefined') return;
+    var w = Math.min(container.offsetWidth, 900), h = 120;
+    var svg = d3.select('#path-diagram').append('svg')
+        .attr('viewBox', '0 0 ' + w + ' ' + h)
+        .attr('role', 'img')
+        .attr('aria-label', 'Advanced path phases: Teams (1-4), Automation (5-6), Patterns & Plugins (7-10), Orchestration (11-16), CORTEX & Production (17-23)');
+
+    var phases = [
+        { label:'Teams', range:'1–4', x:w*0.1, color:'#ef4444' },
+        { label:'Automate', range:'5–6', x:w*0.3, color:'#ef4444' },
+        { label:'Patterns', range:'7–10', x:w*0.5, color:'#ef4444' },
+        { label:'Orchestrate', range:'11–16', x:w*0.7, color:'#ef4444' },
+        { label:'CORTEX', range:'17–23', x:w*0.9, color:'#ef4444' }
+    ];
+
+    var defs = svg.append('defs');
+    defs.append('marker').attr('id','arr').attr('viewBox','0 0 10 10').attr('refX',10).attr('refY',5)
+        .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto')
+        .append('path').attr('d','M 0 0 L 10 5 L 0 10 Z').attr('fill','rgba(239,68,68,0.4)');
+
+    for (var i = 0; i < phases.length - 1; i++) {
+        svg.append('line')
+            .attr('x1', phases[i].x + 40).attr('y1', h/2)
+            .attr('x2', phases[i+1].x - 40).attr('y2', h/2)
+            .attr('stroke','rgba(239,68,68,0.25)').attr('stroke-width',2)
+            .attr('stroke-dasharray','6,4').attr('marker-end','url(#arr)');
+    }
+
+    var g = svg.selectAll('.phase').data(phases).enter().append('g');
+    g.append('rect')
+        .attr('x',function(d){return d.x-35}).attr('y',h/2-22)
+        .attr('width',70).attr('height',44).attr('rx',12)
+        .attr('fill','rgba(239,68,68,0.08)').attr('stroke','rgba(239,68,68,0.25)').attr('stroke-width',1.5);
+    g.append('text')
+        .attr('x',function(d){return d.x}).attr('y',h/2-4)
+        .attr('text-anchor','middle').attr('fill','#ef4444')
+        .attr('font-size','10px').attr('font-weight','700').attr('font-family','Inter,sans-serif')
+        .text(function(d){return d.label});
+    g.append('text')
+        .attr('x',function(d){return d.x}).attr('y',h/2+12)
+        .attr('text-anchor','middle').attr('fill','#64748b')
+        .attr('font-size','8px').attr('font-weight','600').attr('font-family','Inter,sans-serif')
+        .text(function(d){return 'Mod ' + d.range});
+});
+</script>
+</body>
+</html>
