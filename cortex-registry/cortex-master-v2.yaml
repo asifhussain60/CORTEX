@@ -22,7 +22,7 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-16T01:45:00Z'
+  last_updated: '2026-03-16T03:20:00Z'
   total_phases: 12
   active: 1
   completed: 2
@@ -126,7 +126,7 @@ session_resume_protocol:
 runtime_state:
   last_completed_phase: "phase-m2"
   next_executable_phase: "phase-m3"
-  last_session_action: "phase-m3-a-gate-closed-and-phase-m3-b-advanced-to-in-progress"
+  last_session_action: "phase-m3-b-closed-after-facade-refactor-and-phase-m3-final-advanced-to-in-progress"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
@@ -160,7 +160,7 @@ phase_detail_files:
     sub_phases: 4
     depends_on: ["phase-m2"]
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "IN_PROGRESS — phase-m3-a gate closed after additional convergence cycle and isolated reruns; phase-m3-b is now active for IntelligenceFacade refactor with RCA/URS/domain-brain preservation."
+    note: "IN_PROGRESS — phase-m3-a and phase-m3-b are complete; phase-m3-final is active for GAP-M3-08/09 import sweep + IntentRouter capability-contract closure."
 
   - id: phase-m4
     title: "LENS Streamlining — Polyglot-Only Retention"
@@ -299,8 +299,8 @@ summary:
   planned: 9
   archived: 0
   completion_percentage: 17
-  consolidation_summary: "2026-03-16 — M3-a closed: AST tranche complete, additional smoke convergence cycle run, and isolated reruns for reported failing paths passed; reconciled ~200-file criterion as cumulative M3 target, with phase-m3-b now active."
-  active_phases: "phase-m3 — Intelligence Layer Reduction (phase-m3-b active: IntelligenceFacade + preserved subsystem refactor)"
+  consolidation_summary: "2026-03-16 — M3-b closed: IntelligenceFacade delegation metadata refactor landed with dedicated V2 tests and preserved RCA/URS/domain-brain validation; phase-m3-final is now active for final import/contract sweep and smoke convergence."
+  active_phases: "phase-m3 — Intelligence Layer Reduction (phase-m3-final active: GAP-M3-08/09 closure + smoke gate)"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
@@ -336,7 +336,7 @@ phases:
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
-    note: "P1 — ACTIVE. phase-m3-a is complete and phase-m3-b is in progress under strict sequential contract; phase-level counters unchanged until full phase-m3 completion."
+    note: "P1 — ACTIVE. phase-m3-a and phase-m3-b are complete; phase-m3-final is in progress under strict sequential contract until full phase closeout."
 
   # Phase M4 — LENS (depends: M2, parallel with M3)
   - id: phase-m4

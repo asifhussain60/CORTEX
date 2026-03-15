@@ -166,6 +166,33 @@ class IntelligenceFacade:
                 self._pattern_registry = _NullPatternRegistry()
         return self._pattern_registry
 
+    def _llm_delegation_metadata(
+        self,
+        operation: str,
+        intent: str = "",
+        query: str = "",
+    ) -> Dict[str, str]:
+        """Return standardized LLM-native delegation metadata.
+
+        Args:
+            operation: Facade operation name (analyze/synthesize/query).
+            intent: Optional intent context.
+            query: Optional query text context.
+
+        Returns:
+            Delegation metadata payload for public API responses.
+        """
+        metadata: Dict[str, str] = {
+            "delegation": "llm-native",
+            "delegation_mode": "hybrid-llm-plus-cortex-state",
+            "delegation_operation": operation,
+        }
+        if intent:
+            metadata["delegation_intent"] = intent
+        if query:
+            metadata["delegation_query"] = query
+        return metadata
+
     # ── Public API ──────────────────────────────────────────────────────
 
     def load_governance(
@@ -618,24 +645,28 @@ class IntelligenceFacade:
             if hasattr(provider, "get_lens_analysis") and file_path:
                 lens_data = provider.get_lens_analysis(file_path)
                 if isinstance(lens_data, dict):
-                    return {
+                    result = {
                         "status": "ok",
                         "file_path": file_path,
                         "intent": intent,
                         "source": "intelligence_facade",
                         "analysis": lens_data,
                     }
+                    result.update(self._llm_delegation_metadata(operation="analyze", intent=intent))
+                    return result
             # Fallback: provider unavailable or no file_path provided
-            return {
+            fallback = {
                 "status": "ok",
                 "file_path": file_path,
                 "intent": intent,
                 "source": "intelligence_facade",
                 "analysis": {},
             }
+            fallback.update(self._llm_delegation_metadata(operation="analyze", intent=intent))
+            return fallback
         except Exception as exc:
             logger.debug("IntelligenceFacade.analyze: %s", exc)
-            return {
+            error_result = {
                 "status": "ok",
                 "file_path": file_path,
                 "intent": intent,
@@ -644,6 +675,8 @@ class IntelligenceFacade:
                 "degraded": True,
                 "degradation_reason": str(exc),
             }
+            error_result.update(self._llm_delegation_metadata(operation="analyze", intent=intent))
+            return error_result
 
     def synthesize(
         self,
@@ -678,28 +711,37 @@ class IntelligenceFacade:
                 else:
                     result = provider.synthesize(**kwargs)
                 if isinstance(result, dict):
+                    result.update(self._llm_delegation_metadata(operation="synthesize", query=query))
                     return result
                 # UnifiedIntelligenceContext returned — convert to dict
                 if hasattr(result, "__dict__"):
-                    return {
+                    context_result = {
                         "status": "ok",
                         "query": query,
                         "source": "intelligence_facade",
                         "synthesis": vars(result),
                     }
-            return {
+                    context_result.update(
+                        self._llm_delegation_metadata(operation="synthesize", query=query)
+                    )
+                    return context_result
+            fallback = {
                 "status": "ok",
                 "query": query,
                 "source": "intelligence_facade",
                 "synthesis": {},
             }
+            fallback.update(self._llm_delegation_metadata(operation="synthesize", query=query))
+            return fallback
         except Exception as exc:
             logger.debug("IntelligenceFacade.synthesize: %s", exc)
-            return {
+            error_result = {
                 "status": "error",
                 "query": query,
                 "error": str(exc),
             }
+            error_result.update(self._llm_delegation_metadata(operation="synthesize", query=query))
+            return error_result
 
     # ── Phase 135: KAL — Knowledge Acquisition Layer ────────────────────
 
@@ -871,7 +913,7 @@ class IntelligenceFacade:
                 raw = registry.query(domain=domain, **kwargs) if domain else registry.all()
                 if isinstance(raw, list):
                     results = raw
-            return {
+            response = {
                 "status": "ok",
                 "query": query,
                 "domain": domain,
@@ -879,13 +921,17 @@ class IntelligenceFacade:
                 "results": results,
                 "count": len(results),
             }
+            response.update(self._llm_delegation_metadata(operation="query", query=query))
+            return response
         except Exception as exc:
             logger.debug("IntelligenceFacade.query: %s", exc)
-            return {
+            error_result = {
                 "status": "error",
                 "query": query,
                 "error": str(exc),
             }
+            error_result.update(self._llm_delegation_metadata(operation="query", query=query))
+            return error_result
 
 
 # ── Null object fallbacks (avoid None checks) ─────────────────────────
