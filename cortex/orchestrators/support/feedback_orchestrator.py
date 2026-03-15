@@ -32,6 +32,7 @@ from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.tools.cross_repo_extractor import CrossRepoExtractor
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -69,7 +70,7 @@ _INTERNAL_HOST_RE = re.compile(
 )
 
 
-class FeedbackOrchestrator:
+class FeedbackOrchestrator(OrchestratorProtocolMixin):
     """6-stage cross-repo pattern extraction and sanitized backport orchestrator.
 
     Usage::

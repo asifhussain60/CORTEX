@@ -102,7 +102,7 @@ provides:
   - name: BrainHealthOrchestrator
     category: CORE
     description: "Brain tier health monitor — checks TIER0/TIER1/TIER2/TIER3 layer health"
-    entry_point: "cortex.orchestrators.core.brain_health_orchestrator:BrainHealthOrchestrator"
+    entry_point: "cortex.orchestrators.core.intelligence_health_orchestrator:BrainHealthOrchestrator"
     features:
       - brain_tier_health
       - tier_precedence_check
@@ -111,7 +111,7 @@ provides:
   - name: CentralBrainOrchestrator
     category: CORE
     description: "Central brain coordinator — routes intelligence requests across brain tiers"
-    entry_point: "cortex.orchestrators.core.central_brain_orchestrator:CentralBrainOrchestrator"
+    entry_point: "cortex.orchestrators.core.collaboration_orchestrator:CentralBrainOrchestrator"
     features:
       - intelligence_routing
       - brain_tier_coordination

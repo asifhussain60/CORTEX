@@ -134,6 +134,12 @@ class EngagementRenderer:
         display_chain = " → ".join(self._display_name(n) for n in chain)
         return f"*🧭 {display_chain}*"
 
+    def breadcrumb_for_command(self, command: str) -> str:
+        chain = self.COMMAND_CHAINS.get(command.lower())
+        if not chain:
+            return ""
+        return self.render_breadcrumb(chain)
+
     def render_stage_pulse(self, stages: list[dict[str, Any]]) -> str | None:
         if not stages:
             return None

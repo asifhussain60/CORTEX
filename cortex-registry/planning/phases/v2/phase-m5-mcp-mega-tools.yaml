@@ -20,7 +20,7 @@ background: |
   Strategy: consolidate 36 tools into 6 mega-tools, each with an op parameter:
     1. cortex_code   — IMPLEMENT/FIX/REFACTOR/REVIEW (replaces cortex_implement, cortex_fix, cortex_refactor, cortex_review, cortex_test, cortex_debug)
     2. cortex_govern — AUDIT/HEALTH/ENFORCE/VACUUM (replaces cortex_audit, cortex_health, cortex_vacuum, cortex_enforce, cortex_verify)
-    3. cortex_analyze — LENS/INVESTIGATE/ARCHITECTURE (replaces cortex_lens, cortex_investigate, cortex_architecture, cortex_complexity)
+    3. cortex_analyze — LENS/INVESTIGATE/ARCHITECTURE (replaces legacy lens tool alias, cortex_investigate, cortex_architecture, cortex_complexity)
     4. cortex_plan   — PLAN/PHASE/TRACK/DECOMPOSE (replaces cortex_plan, cortex_phase, cortex_track, cortex_totalrecall, cortex_decompose)
     5. cortex_learn  — RCA/FEEDBACK/DIGEST/DISTILL (replaces cortex_learning, cortex_feedback, cortex_digest, cortex_distill, cortex_onboard)
     6. cortex_ops    — SYNC/UPGRADE/SETUP/STATUS (replaces cortex_sync, cortex_upgrade, cortex_setup, cortex_status)
@@ -324,7 +324,7 @@ phases:
       red:
         - "test_cortex_implement_alias — calls cortex_code op=implement"
         - "test_cortex_audit_alias — calls cortex_govern op=audit"
-        - "test_cortex_lens_alias — calls cortex_analyze op=lens"
+        - "test_legacy_lens_tool_alias — calls cortex_analyze op=lens"
         - "test_cortex_learning_alias — calls cortex_learn op=rca (preserves current API)"
         - "test_old_tool_files_deleted — individual tool files no longer exist"
       green:

@@ -222,7 +222,7 @@ phases:
     title: "Delete dead orchestrator domains (persona, strategies, synthesis, tools, response)"
     priority: P0
     status: IN_PROGRESS
-    execution_note: "Domain deletions and import cleanup complete; targeted v2 gates pass (test_dead_domain_removal.py). Phase remains open until phase-m1-final smoke convergence is satisfied."
+    execution_note: "Domain deletions and import cleanup complete; targeted v2 gates pass (test_dead_domain_removal.py). Phase remains open pending phase-m1-final smoke convergence (latest smoke: 2397 passed, 16 failed; blockers are non-M1 legacy/governance/docs tests)."
     gap_refs: ["GAP-M1-02", "GAP-M1-03", "GAP-M1-04", "GAP-M1-05", "GAP-M1-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"
@@ -290,7 +290,7 @@ phases:
     title: "Delete backward-compat shims + consolidate complexity classifiers"
     priority: P1
     status: IN_PROGRESS
-    execution_note: "Shim/classifier deletions and manifest heuristic update completed; targeted v2 gates pass (test_shim_complexity_removal.py). Sub-phase remains open pending phase-m1-final smoke convergence."
+    execution_note: "Shim/classifier deletions and manifest heuristic update completed; targeted v2 gates pass (test_shim_complexity_removal.py). Sub-phase remains open pending phase-m1-final smoke convergence (latest smoke: 2397 passed, 16 failed)."
     gap_refs: ["GAP-M1-07", "GAP-M1-08"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "1.5 hours"

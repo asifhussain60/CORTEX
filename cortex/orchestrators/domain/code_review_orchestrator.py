@@ -26,6 +26,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Module-level constants
 # ─────────────────────────────────────────────────────────────────────────────
@@ -105,7 +107,7 @@ _QUALITY_RULES: List[Dict[str, Any]] = [
 ]
 
 
-class CodeReviewOrchestrator:
+class CodeReviewOrchestrator(OrchestratorProtocolMixin):
     """6-stage CORTEX code review orchestrator.
 
     Usage::

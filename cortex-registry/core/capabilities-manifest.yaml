@@ -104,7 +104,7 @@ orchestrators:
         - auto_fix_convergence
         - sqlite_activity_log
       - id: brain_health_orchestrator
-        module: cortex.orchestrators.core.brain_health_orchestrator
+        module: cortex.orchestrators.core.intelligence_health_orchestrator
         class: BrainHealthOrchestrator
         priority: 18
         health_check: true
@@ -115,7 +115,7 @@ orchestrators:
         - brain_tier_health
         - tier_precedence_check
       - id: central_brain_orchestrator
-        module: cortex.orchestrators.core.central_brain_orchestrator
+        module: cortex.orchestrators.core.collaboration_orchestrator
         class: CentralBrainOrchestrator
         priority: 19
         health_check: true
