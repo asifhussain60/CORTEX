@@ -1,7 +1,7 @@
 id: "phase-m2"
 title: "Orchestrator Consolidation — Core Layer Merges"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P0
 governance_authority:
   - CORE-008
@@ -23,7 +23,7 @@ background: |
   Target: reduce core/ from ~120 to ~30 canonical orchestrators.
   
   Baseline measurements:
-    - Post-M1 smoke tests: >= 2770
+    - Post-M1 smoke tests: 2397 passed, 16 failed (legacy non-M1)
     - Orchestrator files in core/: ~120
   Git prerequisite: phase-m1 COMPLETE on CORTEX-V2 branch
 
@@ -136,7 +136,8 @@ phases:
   - id: "phase-m2-a"
     title: "Merge context orchestrators → ContextValidator"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
+    execution_note: "TDD RED/GREEN started. Added tests/v2/test_context_validator.py (5 tests) and implemented cortex/core/context_validator.py with validate(), is_valid(), get_missing_keys(). Remaining work: migrate consumers and retire redundant context assembly modules."
     gap_refs: ["GAP-M2-01"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"

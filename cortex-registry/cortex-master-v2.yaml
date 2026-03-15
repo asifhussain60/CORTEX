@@ -22,7 +22,7 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-15T15:45:00Z'
+  last_updated: '2026-03-15T16:10:00Z'
   total_phases: 12
   active: 1
   completed: 1
@@ -125,7 +125,7 @@ session_resume_protocol:
 runtime_state:
   last_completed_phase: "phase-m1"
   next_executable_phase: "phase-m2"
-  last_session_action: "phase-m1-closed-with-targeted-convergence-and-master-handoff"
+  last_session_action: "phase-m2-a-context-validator-red-green-complete"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
@@ -148,7 +148,7 @@ phase_detail_files:
     sub_phases: 5
     depends_on: ["phase-m1"]
     file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
-    note: "Merge 6-8 context orchestrators → ContextValidator. Intent pipeline → IntentGateway. Master+EventBus+Workflow → ExecutionEngine. 4 planners → 1. 2 reviewers → 1. ~50 files merged."
+    note: "IN_PROGRESS — m2-a started: ContextValidator implemented with dedicated v2 tests; next step is consumer migration and context module consolidation."
 
   - id: phase-m3
     title: "Intelligence Layer Reduction"
