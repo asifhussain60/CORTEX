@@ -1,0 +1,14 @@
+id: "governance-rules-manifest"
+category: "rules"
+status: "ACTIVE"
+description: |
+  Consolidated category index for canonical rules and policy-defining YAMLs.
+
+entries:
+  - path: "cortex-registry/governance/core-rules.yaml"
+  - path: "cortex-registry/governance/compliance-rules.yaml"
+  - path: "cortex-registry/governance/security-rules.yaml"
+  - path: "cortex-registry/governance/data-rules.yaml"
+  - path: "cortex-registry/governance/development-rules.yaml"
+  - path: "cortex-registry/governance/operations-rules.yaml"
+  - path: "cortex-registry/core/drift-lock-manifest.yaml"

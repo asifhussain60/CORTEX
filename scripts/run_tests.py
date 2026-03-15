@@ -41,7 +41,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -411,6 +411,95 @@ def run_smoke() -> int:
     return code
 
 
+def _split_workers(total_workers: int, groups: int) -> List[str]:
+    """Split worker count across multiple concurrent pytest groups.
+
+    Args:
+        total_workers: Total worker budget.
+        groups: Number of concurrent groups.
+
+    Returns:
+        Per-group worker allocation as strings.
+    """
+    if groups <= 0:
+        return []
+    if total_workers <= 0:
+        return ["1"] * groups
+
+    base = max(1, total_workers // groups)
+    remainder = total_workers - (base * groups)
+    allocations = [base] * groups
+    for index in range(remainder):
+        allocations[index % groups] += 1
+    return [str(value) for value in allocations]
+
+
+def run_smoke_matrix() -> int:
+    """Run categorized smoke tests with process-level parallel shards.
+
+    Strategy:
+      1. Run preflight first (fail fast if wiring/import checks fail).
+      2. Run core and golden suites concurrently with split xdist workers.
+
+    Returns:
+        Aggregated pytest exit code.
+    """
+    _print_header("Smoke Matrix — categorized shards (preflight → core + golden)")
+
+    preflight_code = run_preflight()
+    if preflight_code != 0:
+        print("\n❌ Smoke matrix aborted: preflight failed")
+        return preflight_code
+
+    total_workers_raw = os.environ.get("CORTEX_WORKERS", _DEFAULT_WORKERS)
+    try:
+        total_workers = max(2, int(total_workers_raw))
+    except ValueError:
+        total_workers = int(_DEFAULT_WORKERS)
+
+    core_workers, golden_workers = _split_workers(total_workers, groups=2)
+
+    shard_specs = [
+        {
+            "name": "core",
+            "dirs": ["tests/core/"],
+            "workers": core_workers,
+        },
+        {
+            "name": "golden",
+            "dirs": ["tests/golden/"],
+            "workers": golden_workers,
+        },
+    ]
+
+    env = os.environ.copy()
+    env["CORTEX_BATCH_SIZE"] = str(_env_int("CORTEX_BATCH_SIZE", _DEFAULT_BATCH_SIZE))
+
+    processes: Dict[str, subprocess.Popen] = {}
+    for shard in shard_specs:
+        cmd = _base_cmd(timeout=30, maxfail=5)
+        cmd.extend(_parallel_flags(workers=shard["workers"]))
+        cmd.extend(shard["dirs"])
+        cmd.append("-v")
+        print(
+            f"  ▶ Launch shard={shard['name']} workers={shard['workers']} dirs={','.join(shard['dirs'])}",
+            flush=True,
+        )
+        processes[shard["name"]] = subprocess.Popen(cmd, cwd=PROJECT_ROOT, env=env)
+
+    exit_codes: Dict[str, int] = {}
+    for name, process in processes.items():
+        exit_codes[name] = process.wait()
+
+    failures = {name: code for name, code in exit_codes.items() if code != 0}
+    if failures:
+        print(f"\n❌ Smoke matrix failed: {failures}")
+        return max(failures.values())
+
+    print("\n✅ Smoke matrix passed (preflight + core + golden)")
+    return 0
+
+
 def run_changed() -> int:
     """Run only tests affected by source changes since last run (testmon).
 
@@ -648,6 +737,7 @@ def run_dir(target: str) -> int:
 _MODES = {
     "preflight":   run_preflight,
     "smoke":       run_smoke,
+    "smoke-matrix": run_smoke_matrix,
     "changed":     run_changed,
     "unit":        run_unit,
     "fast":        run_fast,
@@ -666,6 +756,7 @@ Modes (fastest → safest):
   preflight    T0: ~40 wiring/import checks, parallel       ← audit fix gate (< 10s)
   changed      testmon: only tests whose source files changed← TDD inner loop
   smoke        T1: preflight + golden + core, parallel      ← quick sanity (< 60s)
+    smoke-matrix T1+: preflight then core+golden in parallel   ← categorized smoke
   fast         Fast unit tests, parallel (no slow/integration)
   unit         All unit tests, parallel (xdist worksteal)   [default]
   parallel     Full suite, parallel workers (max throughput)

@@ -1,7 +1,7 @@
 id: "phase-m5"
 title: "MCP Mega-Tools — 36 Micro-Tools → 6 Unified Tools"
 created: "2026-03-15"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008
@@ -44,7 +44,7 @@ sweep_catalogue:
       context (files, test runner, convergence gate). Single tool with
       op parameter reduces MCP overhead and simplifies LLM tool selection.
     action_ref: "phase-m5-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-02"
     title: "Create cortex_govern mega-tool"
@@ -54,7 +54,7 @@ sweep_catalogue:
       AUDIT/HEALTH/ENFORCE/VACUUM all operate on governance rules and
       workspace state. Single governance tool with op parameter.
     action_ref: "phase-m5-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-03"
     title: "Create cortex_analyze mega-tool"
@@ -64,7 +64,7 @@ sweep_catalogue:
       LENS/INVESTIGATE/ARCHITECTURE/COMPLEXITY all provide analysis output.
       Single analysis tool with op parameter.
     action_ref: "phase-m5-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-04"
     title: "Create cortex_plan mega-tool"
@@ -74,7 +74,7 @@ sweep_catalogue:
       PLAN/PHASE/TRACK/DECOMPOSE/TOTALRECALL all operate on cortex-master.yaml
       and phase files. Single planning tool with op parameter.
     action_ref: "phase-m5-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-05"
     title: "Create cortex_learn mega-tool"
@@ -84,7 +84,7 @@ sweep_catalogue:
       RCA/FEEDBACK/DIGEST/DISTILL/ONBOARD all involve knowledge acquisition
       and learning signals. Single learning tool with op parameter.
     action_ref: "phase-m5-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-06"
     title: "Create cortex_ops mega-tool"
@@ -94,7 +94,7 @@ sweep_catalogue:
       SYNC/UPGRADE/SETUP/STATUS are operational commands. Single ops tool
       with op parameter.
     action_ref: "phase-m5-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-07"
     title: "Backward-compat aliases in mcp_registry.py"
@@ -105,7 +105,7 @@ sweep_catalogue:
       working as aliases routing to the corresponding mega-tool + op.
       This allows gradual migration of prompts and agents.
     action_ref: "phase-m5-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-08"
     title: "Delete old tool files after alias verification"
@@ -115,7 +115,7 @@ sweep_catalogue:
       Once mega-tools are verified and aliases work, delete the ~37 old
       individual tool files. Keep only mega-tool implementations.
     action_ref: "phase-m5-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-09"
     title: "Preserve MCP-first exposure contract parity before destructive cleanup"
@@ -126,7 +126,7 @@ sweep_catalogue:
       tool contract and mega-tool op routing. Any missing op/intent path is a
       regression even if aliases resolve names.
     action_ref: "phase-m5-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M5-10"
     title: "Define and enforce mega-tool trust boundaries"
@@ -137,7 +137,7 @@ sweep_catalogue:
       boundaries, and deny-by-default behavior. Without this, broad tools can
       blur security and ownership boundaries.
     action_ref: "phase-m5-d"
-    status: OPEN
+    status: CLOSED
 
 sequential_execution_contract:
   policy: STRICT_SEQUENTIAL
@@ -168,7 +168,7 @@ phases:
   - id: "phase-m5-a"
     title: "Create cortex_code + cortex_govern mega-tools"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M5-01", "GAP-M5-02"]
     governance_authority: "CORE-008, CORE-035"
     duration_estimate: "4 hours"
@@ -222,7 +222,7 @@ phases:
   - id: "phase-m5-b"
     title: "Create cortex_analyze + cortex_plan mega-tools"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M5-03", "GAP-M5-04"]
     governance_authority: "CORE-008, CORE-035"
     duration_estimate: "3 hours"
@@ -271,7 +271,7 @@ phases:
   - id: "phase-m5-c"
     title: "Create cortex_learn + cortex_ops mega-tools"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M5-05", "GAP-M5-06"]
     governance_authority: "CORE-008, CORE-035"
     duration_estimate: "2 hours"
@@ -320,7 +320,7 @@ phases:
   - id: "phase-m5-d"
     title: "Backward-compat aliases + old tool file cleanup"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M5-07", "GAP-M5-08", "GAP-M5-09", "GAP-M5-10"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"

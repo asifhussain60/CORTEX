@@ -1,0 +1,40 @@
+id: "sdlc/code-modify-unified"
+workflow:
+  id: "sdlc/code-modify-unified"
+  name: "Unified Code Modify Workflow"
+  category: "sdlc"
+  status: "ACTIVE"
+  description: |
+    Parameterized workflow contract for IMPLEMENT, FIX, and REFACTOR execution.
+    Preserves Workflow Composer routing and shared governance primitives.
+
+  mode_discriminator:
+    parameter: "mode"
+    allowed_modes:
+      - "IMPLEMENT"
+      - "FIX"
+      - "REFACTOR"
+
+  required_contracts:
+    workflow_composer_spec: "cortex-registry/workflows/workflow-composer-spec.yaml"
+    response_template: "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
+    intelligence_injection: "cortex-registry/workflows/templates/primitives/intelligence/intelligence-injection.yaml"
+
+  steps:
+    - step_id: "prepare"
+      template_ref: "primitives/execution/sweep-catalogue-open.yaml"
+    - step_id: "inject_intelligence"
+      template_ref: "primitives/intelligence/intelligence-injection.yaml"
+    - step_id: "apply_mode_specific_work"
+      switch_on: "mode"
+      branches:
+        IMPLEMENT:
+          template_ref: "sdlc/implementation-execution.yaml"
+        FIX:
+          template_ref: "sdlc/integration-verification.yaml"
+        REFACTOR:
+          template_ref: "sdlc/code-review-gate.yaml"
+    - step_id: "convergence"
+      template_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+    - step_id: "validate"
+      template_ref: "primitives/governance/holistic-validation-gate.yaml"

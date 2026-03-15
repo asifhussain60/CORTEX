@@ -1,0 +1,11 @@
+id: "governance-gates-manifest"
+category: "gates"
+status: "ACTIVE"
+description: |
+  Consolidated category index for quality and convergence gate definitions.
+
+entries:
+  - path: "cortex-registry/governance/audit-checklist.yaml"
+  - path: "cortex-registry/governance/governance-kernel.yaml"
+  - path: "cortex-registry/governance/mcp-enforcement.yaml"
+  - path: "cortex-registry/governance/violation_patterns.yaml"

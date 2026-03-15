@@ -1,7 +1,7 @@
 id: "phase-m6"
 title: "YAML Governance Consolidation — 160 → ~45 Files"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P1
 governance_authority:
   - CORE-008
