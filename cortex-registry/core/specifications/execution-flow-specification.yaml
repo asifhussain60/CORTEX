@@ -29,11 +29,11 @@ execution_flow_definitions:
     - id: "stage_1"
       name: "Intent Classification"
       description: "Classify intent and select handler"
-      orchestrator: "IntentRouter"
+      orchestrator: "IntentGateway"
       activities:
-        - "extract_keywords"
-        - "calculate_confidence"
-        - "select_handler"
+        - "classify_request"
+        - "validate_request"
+        - "select_route"
       outputs:
         - "intent_type"
         - "handler_name"
@@ -76,7 +76,7 @@ execution_flow_definitions:
     - id: "stage_4"
       name: "Delegation"
       description: "Delegate to appropriate orchestrator"
-      orchestrator: "MasterOrchestrator"
+      orchestrator: "ExecutionEngine"
       activities:
         - "select_orchestrator"
         - "prepare_context"

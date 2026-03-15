@@ -759,7 +759,17 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
+                from cortex.core.context_validator import ContextValidator
                 from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
+
+                context_validator = ContextValidator()
+                validation_payload = self._build_context_validation_payload(output)
+                is_valid_context, context_validation_errors = context_validator.validate(validation_payload)
+                if not is_valid_context:
+                    output["context_validation"] = {
+                        "is_valid": is_valid_context,
+                        "errors": context_validation_errors,
+                    }
 
                 gateway = get_gateway()
                 session_id = getattr(round_context, 'session_id', 'default_session')
@@ -784,9 +794,19 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                         }
                     )
 
-                # Merge synthesis metadata — preserve canonical keys
-                # (challenge_evaluated, lens_context, type required downstream)
+                # Merge synthesized payload for backward compatibility (token tests,
+                # downstream consumers), then restore canonical keys.
                 synthesis_meta = synthesized.context or {}
+                canonical_values = {
+                    "challenge_evaluated": output.get("challenge_evaluated"),
+                    "lens_context": output.get("lens_context"),
+                    "type": output.get("type"),
+                }
+                if isinstance(synthesis_meta, dict):
+                    output.update(synthesis_meta)
+                for key, value in canonical_values.items():
+                    if value is not None:
+                        output[key] = value
                 output["synthesized_content"] = synthesis_meta.get("synthesized_content")
                 output["compression_strategy"] = synthesis_meta.get("compression_strategy")
 
@@ -866,7 +886,17 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:
+                from cortex.core.context_validator import ContextValidator
                 from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
+
+                context_validator = ContextValidator()
+                validation_payload = self._build_context_validation_payload(output)
+                is_valid_context, context_validation_errors = context_validator.validate(validation_payload)
+                if not is_valid_context:
+                    output["context_validation"] = {
+                        "is_valid": is_valid_context,
+                        "errors": context_validation_errors,
+                    }
 
                 gateway = get_gateway()
                 session_id = context.get('session_id', 'default_session')
@@ -877,9 +907,19 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                     orchestrator_name="InteractionOrchestrator"
                 )
 
-                # Merge synthesis metadata into output — preserve canonical keys
-                # (intent_type, lens_context, confidence) required by MasterOrchestrator
+                # Merge synthesized payload for backward compatibility, then
+                # preserve canonical keys required by MasterOrchestrator.
                 synthesis_meta = synthesized.context or {}
+                canonical_values = {
+                    "intent_type": output.get("intent_type"),
+                    "lens_context": output.get("lens_context"),
+                    "confidence": output.get("confidence"),
+                }
+                if isinstance(synthesis_meta, dict):
+                    output.update(synthesis_meta)
+                for key, value in canonical_values.items():
+                    if value is not None:
+                        output[key] = value
                 output["synthesized_content"] = synthesis_meta.get("synthesized_content")
                 output["compression_strategy"] = synthesis_meta.get("compression_strategy")
 
@@ -936,6 +976,38 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
                 "error": str(e),
                 "degraded": True,
             }
+
+    def _build_context_validation_payload(self, output: Dict[str, Any]) -> Dict[str, Any]:
+        """Build normalized payload for ContextValidator.
+
+        Args:
+            output: Orchestrator output candidate context.
+
+        Returns:
+            Minimal context payload for validation.
+        """
+        files: List[str] = []
+        lens_context = output.get("lens_context", {})
+        if isinstance(lens_context, dict):
+            candidate_lists = [
+                lens_context.get("files"),
+                lens_context.get("relevant_files"),
+                lens_context.get("changed_files"),
+            ]
+            for candidate in candidate_lists:
+                if isinstance(candidate, list):
+                    for item in candidate:
+                        if isinstance(item, str) and item not in files:
+                            files.append(item)
+
+        intent_value = output.get("intent_type") or output.get("type") or "query"
+        if not isinstance(intent_value, str):
+            intent_value = "query"
+
+        return {
+            "intent": intent_value,
+            "files": files,
+        }
 
     def _extract_target_file(
         self, user_input: str, repo_path: Path

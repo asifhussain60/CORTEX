@@ -43,7 +43,7 @@ from typing import Dict, List, Optional, Tuple
 # ---------------------------------------------------------------------------
 # SSOT Policy — Allow/Deny rules (canonical, mirrored in cortex-sync.prompt.md)
 # ---------------------------------------------------------------------------
-# Policy decision: DEFAULT-DENY for docs/** EXCEPT docs/.content/**
+# Policy decision: DEFAULT-DENY for cortex-docs/** EXCEPT cortex-docs/.content/**
 # Explicit denies for _workspaces/** and company repo/dashboard artifacts.
 # Root-level files and all other top-level directories are DEFAULT-ALLOW unless
 # matched by an explicit deny pattern.
@@ -69,8 +69,9 @@ SYNC_POLICY: dict = {
         # Company-private repo/dashboard artifacts — never sync
         "cortex-registry/company/repos/**",
         "cortex-registry/company/dashboards/repos/**",
-        # cortex-docs: deny ALL — specific sub-paths re-allowed below
+        # docs trees: deny ALL — specific sub-paths re-allowed below
         "docs/**",
+        "cortex-docs/**",
         # Runtime data — never sync
         ".cortex-runtime/**",
         # Git internals
@@ -105,8 +106,9 @@ SYNC_POLICY: dict = {
 
     # ── EXPLICIT ALLOW (re-allows paths that fall inside a deny subtree) ──
     "allow_override": [
-        # Only sync the .content subdirectory from cortex-docs
+        # Only sync the .content subdirectory from docs trees
         "docs/.content/**",
+        "cortex-docs/.content/**",
     ],
 
     # ── SECURITY-SCAN DANGER PATTERNS (flag + block unless user approves) ──

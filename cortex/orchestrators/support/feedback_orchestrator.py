@@ -32,6 +32,7 @@ from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional
 
+from cortex.core.file_factory import get_file_factory
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.tools.cross_repo_extractor import CrossRepoExtractor
 
@@ -106,6 +107,7 @@ class FeedbackOrchestrator(OrchestratorProtocolMixin):
                 - ``backport_instructions`` (str): ready-to-use CORTEX instructions.
                 - ``gate_results`` (dict): per-gate pass/fail summary.
         """
+        self._activate_cross_cutting_hooks(operation="feedback_extract")
         context = context or {}
 
         # Stage 1: Ingest

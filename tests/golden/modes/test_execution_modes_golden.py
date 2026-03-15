@@ -329,6 +329,9 @@ INTENT_TRIGGER_MAP = [
     (IntentType.INTRODUCE, "introduce yourself and explain what CORTEX can do"),
     # GAP-DISTILL: Conversational entropy reduction to executable prompt
     (IntentType.DISTILL, "distill this conversation into a single executable prompt"),
+    (IntentType.OPTIMIZE, "optimize these markdown and yaml files for clarity and token efficiency"),
+    (IntentType.FEEDBACK, "extract feedback patterns from this repo and backport reusable guidance"),
+    (IntentType.REVIEW, "review this pull request diff for security and maintainability issues"),
 ]
 
 # Intents reliably routed by EnhancedIntentRouter (empirically verified)

@@ -11,7 +11,7 @@ routing_rules:
   description: |
     Intent classification and routing rules for CORTEX operations.
     Replaces hardcoded IMPLEMENT_KEYWORDS, FIX_KEYWORDS, etc.
-    in IntentRouter with declarative YAML specifications.
+    in IntentGateway/IntentRouter with declarative YAML specifications.
 
   intents:
     # IMPLEMENT Intent (Create new functionality)

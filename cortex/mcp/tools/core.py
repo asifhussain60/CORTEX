@@ -548,25 +548,23 @@ class CortexClassify(ConsolidatedTool):
         format_type = params.get("format", "table")  # AC-CIG-S3-02: Default 'table'
 
         try:
-            # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.core.intent_router.intent_router_enhanced
-            from cortex.orchestrators.core.intent_router import IntentRouter
-            from cortex.orchestrators.core.request_transformer import RequestTransformer
+            from cortex.core.intent_gateway import IntentGateway
             from cortex.orchestrators.core.conversational_reflector import ConversationalReflector
 
-            router = IntentRouter()
+            gateway = IntentGateway()
+            gateway_result = gateway.process(request)
 
-            # AC-CIG-S3-03: Transform request first (optimization)
-            transformer = RequestTransformer()
-            transformed = transformer.transform(request)
+            transformed_summary = gateway_result.transformed_summary
+            structured_context = gateway_result.context
+            canonical_keywords = structured_context.get("canonical_keywords", [])
 
             if operation == "intent":
-                result = router.execute_operation(
-                    "classify", {"request": request, "context": context}
-                )
-                if hasattr(result, 'is_ok') and result.is_ok():
-                    data = result.unwrap()
-                else:
-                    data = self._classify_keywords(request, operation)
+                data = {
+                    "intent": gateway_result.intent,
+                    "confidence": gateway_result.confidence,
+                    "route": gateway_result.route,
+                    "requires_clarification": gateway_result.requires_clarification,
+                }
 
                 # AC-CIG-S3-01: Format-based response
                 if format_type == "conversational":
@@ -577,11 +575,11 @@ class CortexClassify(ConsolidatedTool):
                     # Generate refined prompt with CORTEX technical context
                     refined_prompt = self._generate_refined_prompt(
                         original_text=request,
-                        distilled_summary=transformed.distilled_summary,
+                        distilled_summary=transformed_summary,
                         intent_type=data.get("intent", "UNKNOWN"),
-                        canonical_keywords=transformed.canonical_keywords,
-                        scope=transformed.structured_context.get("scope", "unclear"),
-                        impact=transformed.structured_context.get("impact", "medium"),
+                        canonical_keywords=canonical_keywords,
+                        scope=structured_context.get("scope", "unclear"),
+                        impact=structured_context.get("impact", "medium"),
                     )
 
                     # Auto-append challenge protocol (unless already present)
@@ -606,11 +604,11 @@ class CortexClassify(ConsolidatedTool):
 
                     # Keep transformation metadata for debugging/audit
                     data["transformed_request"] = {
-                        "original_text": transformed.original_text,
-                        "distilled_summary": transformed.distilled_summary,
-                        "canonical_keywords": transformed.canonical_keywords,
-                        "structured_context": transformed.structured_context,
-                        "confidence": transformed.confidence,
+                        "original_text": request,
+                        "distilled_summary": transformed_summary,
+                        "canonical_keywords": canonical_keywords,
+                        "structured_context": structured_context,
+                        "confidence": gateway_result.confidence,
                     }
                 else:
                     # TABLE FORMAT: Original conversational reflection (backwards compat)
@@ -619,10 +617,10 @@ class CortexClassify(ConsolidatedTool):
                     dor_data = {
                         "intent_type": data.get("intent", "UNKNOWN"),
                         "confidence": data.get("confidence", 0.5),
-                        "canonical_keywords": transformed.canonical_keywords,
-                        "scope": transformed.structured_context.get("scope", "unclear"),
-                        "impact": transformed.structured_context.get("impact", "medium"),
-                        "user_text": transformed.distilled_summary,
+                        "canonical_keywords": canonical_keywords,
+                        "scope": structured_context.get("scope", "unclear"),
+                        "impact": structured_context.get("impact", "medium"),
+                        "user_text": transformed_summary,
                     }
                     reflection = reflector.reflect(dor_data)
 
@@ -632,11 +630,11 @@ class CortexClassify(ConsolidatedTool):
                     data["conversational_confidence"] = reflection.confidence
                     data["validation_data"] = reflection.validation_data
                     data["transformed_request"] = {
-                        "original_text": transformed.original_text,
-                        "distilled_summary": transformed.distilled_summary,
-                        "canonical_keywords": transformed.canonical_keywords,
-                        "structured_context": transformed.structured_context,
-                        "confidence": transformed.confidence,
+                        "original_text": request,
+                        "distilled_summary": transformed_summary,
+                        "canonical_keywords": canonical_keywords,
+                        "structured_context": structured_context,
+                        "confidence": gateway_result.confidence,
                     }
             elif operation in ("scope", "complexity"):
                 data = self._classify_keywords(request, operation)

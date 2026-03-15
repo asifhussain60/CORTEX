@@ -95,6 +95,8 @@ class MasterOrchestratorInitialiser:
         # Stage placeholder attributes used throughout coordinate_operation
         h.interaction_orchestrator = None
         h.intent_router = None
+        h.intent_gateway = None
+        h.execution_engine = None
         h.orchestrator_registry = {}
         h.current_operation = None
         h.current_phase = None
@@ -537,6 +539,42 @@ class MasterOrchestratorInitialiser:
             h.logger.log_operation_complete(
                 ac_id="AC-REM-011-01",
                 operation="STAGE_2_INIT",
+                success=False,
+                details={"error": str(e)},
+            )
+
+        # Phase-M2-b: IntentGateway (consumer migration foundation)
+        try:
+            from cortex.core.intent_gateway import IntentGateway
+            h.intent_gateway = IntentGateway()
+            h.logger.log_operation_complete(
+                ac_id="AC-V2-M2-B-001",
+                operation="INTENT_GATEWAY_INIT",
+                success=True,
+                details={"stage": "IntentGateway initialized"},
+            )
+        except Exception as e:
+            h.logger.log_operation_complete(
+                ac_id="AC-V2-M2-B-001",
+                operation="INTENT_GATEWAY_INIT",
+                success=False,
+                details={"error": str(e)},
+            )
+
+        # Phase-M2-c: ExecutionEngine (consumer migration foundation)
+        try:
+            from cortex.core.execution_engine import ExecutionEngine
+            h.execution_engine = ExecutionEngine()
+            h.logger.log_operation_complete(
+                ac_id="AC-V2-M2-C-001",
+                operation="EXECUTION_ENGINE_INIT",
+                success=True,
+                details={"stage": "ExecutionEngine initialized"},
+            )
+        except Exception as e:
+            h.logger.log_operation_complete(
+                ac_id="AC-V2-M2-C-001",
+                operation="EXECUTION_ENGINE_INIT",
                 success=False,
                 details={"error": str(e)},
             )

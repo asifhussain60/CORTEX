@@ -1,7 +1,7 @@
 """
 Stages 2, 3, 4: Intent Classification, Compliance Validation, Domain Execution.
 
-Stage 2: Classifies user intent via IntentRouter
+Stage 2: Classifies user intent via IntentGateway (IntentRouter fallback)
 Stage 3: Validates compliance via EnforcementOrchestrator
 Stage 4: Delegates execution to domain orchestrators
 
@@ -24,7 +24,7 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
     """
     Stage 2: Intent Classification.
 
-    Uses IntentRouter to classify user intent and determine
+    Uses IntentGateway to classify user intent and determine
     which domain orchestrator should handle the operation.
     """
 
@@ -33,7 +33,7 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
         Initialize Stage 2 strategy.
 
         Args:
-            dependencies: Optional dict with 'intent_router'.
+            dependencies: Optional dict with 'intent_gateway' and 'intent_router'.
         """
         self._dependencies = dependencies or {}
         self._last_decision: Optional[Any] = None  # populated by _classify() via route()
@@ -60,7 +60,10 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
             classified_intent = self._classify(request)
 
             # Phase 93: prefer target_handler from RoutingDecision over static map
-            if self._last_decision and hasattr(self._last_decision, "target_handler"):
+            if isinstance(self._last_decision, dict):
+                routing_target = self._get_routing_target(classified_intent)
+                confidence = float(self._last_decision.get("confidence", 0.85))
+            elif self._last_decision and hasattr(self._last_decision, "target_handler"):
                 routing_target = self._last_decision.target_handler or self._get_routing_target(classified_intent)
                 confidence = getattr(self._last_decision, "confidence_score", 0.85)
             else:
@@ -97,9 +100,23 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
         Returns:
             Intent type string.
         """
+        # Prefer IntentGateway for phase-m2 consumer migration
+        gateway = self._dependencies.get("intent_gateway")
+        operation_name = self._dependencies.get("_operation_name", "")
+        if gateway and hasattr(gateway, "process"):
+            try:
+                gateway_result = gateway.process(request or operation_name)
+                self._last_decision = {
+                    "confidence": getattr(gateway_result, "confidence", 0.85),
+                    "route": getattr(gateway_result, "route", "QUERY"),
+                    "source": "IntentGateway",
+                }
+                return getattr(gateway_result, "intent", "QUERY")
+            except Exception:
+                pass
+
         # Try IntentRouter from dependencies — call route() (canonical API)
         router = self._dependencies.get("intent_router")
-        operation_name = self._dependencies.get("_operation_name", "")
         if router and hasattr(router, "route"):
             try:
                 routing_context: Dict[str, Any] = {
@@ -273,6 +290,7 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             dependencies: Optional dict with domain orchestrators.
         """
         self._dependencies = dependencies or {}
+        self._engine_routes: set[str] = set()
 
     def execute(self, context: StageContext) -> Result[StageContext]:
         """
@@ -377,8 +395,21 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                 context.metadata["template_fallback"] = True
             # ── End Workflow Template Gate ─────────────────────────────────────
 
-            # Execute delegation
-            execution_result = self._delegate(context, routing_target)
+            # Execute delegation through ExecutionEngine when available,
+            # fallback to direct delegation to preserve compatibility.
+            dispatch_layer = "direct"
+            execution_result: Dict[str, Any]
+            execution_engine = self._dependencies.get("execution_engine")
+            if execution_engine and hasattr(execution_engine, "execute") and hasattr(execution_engine, "register_handler"):
+                self._register_engine_handler(execution_engine, routing_target)
+                engine_result = execution_engine.execute(
+                    routing_target,
+                    {"context": context, "routing_target": routing_target},
+                )
+                execution_result = engine_result.get("result", {}) if isinstance(engine_result, dict) else {}
+                dispatch_layer = "execution_engine"
+            else:
+                execution_result = self._delegate(context, routing_target)
 
             duration_ms = int(
                 (datetime.now() - start_time).total_seconds() * 1000
@@ -406,6 +437,7 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                 "orchestrator": routing_target,
                 "status": "complete",
                 "duration_ms": duration_ms,
+                "dispatch_layer": dispatch_layer,
                 "result_summary": execution_result,
                 "engagement": _engagement,
                 "timestamp": datetime.now().isoformat(),
@@ -444,15 +476,21 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             Execution result summary dict.
         """
         # Try to get orchestrator from dependencies
-        orchestrator = self._dependencies.get(routing_target.lower())
+        orchestrator = self._resolve_orchestrator(routing_target)
         if orchestrator and hasattr(orchestrator, "execute_operation"):
             try:
-                result = orchestrator.execute_operation(
-                    operation_name=context.operation_name,
-                    parameters=context.parameters,
-                )
-                if result.is_ok():
+                try:
+                    result = orchestrator.execute_operation(
+                        operation_name=context.operation_name,
+                        parameters=context.parameters,
+                    )
+                except TypeError:
+                    result = orchestrator.execute_operation(context.operation_name, context.parameters)
+
+                if hasattr(result, "is_ok") and result.is_ok():
                     return {"delegated": True, "output": str(result.unwrap())[:200]}
+                if isinstance(result, dict):
+                    return {"delegated": True, "output": str(result)[:200]}
             except Exception:
                 pass
 
@@ -463,6 +501,37 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             "operation": context.operation_name,
             "note": "Orchestrator not available in dependencies",
         }
+
+    def _register_engine_handler(self, execution_engine: Any, routing_target: str) -> None:
+        """Register a temporary ExecutionEngine handler for route if absent."""
+        if routing_target in self._engine_routes:
+            return
+
+        def _handler(payload: Dict[str, Any]) -> Dict[str, Any]:
+            stage_context = payload.get("context")
+            target = payload.get("routing_target", routing_target)
+            if not isinstance(stage_context, StageContext):
+                return {
+                    "delegated": False,
+                    "routing_target": target,
+                    "note": "Invalid stage context payload",
+                }
+            return self._delegate(stage_context, target)
+
+        execution_engine.register_handler(routing_target, _handler)
+        self._engine_routes.add(routing_target)
+
+    def _resolve_orchestrator(self, routing_target: str) -> Any:
+        """Resolve orchestrator instance from dependencies using common key variants."""
+        variants = {
+            routing_target,
+            routing_target.lower(),
+            routing_target.replace("_", "").lower(),
+        }
+        for key in variants:
+            if key in self._dependencies and self._dependencies[key] is not None:
+                return self._dependencies[key]
+        return None
 
     def _execute_workflow_template(
         self,

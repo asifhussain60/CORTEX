@@ -1,0 +1,14 @@
+:root {
+  --font-family-body: "Inter", system-ui, sans-serif;
+  --font-family-heading: "Space Grotesk", "Inter", sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+  --heading-h1-size: clamp(2rem, 4vw, 3rem);
+  --heading-h2-size: clamp(1.75rem, 3vw, 2.5rem);
+  --heading-h3-size: clamp(1.5rem, 2.5vw, 2rem);
+  --heading-h4-size: clamp(1.25rem, 2vw, 1.75rem);
+  --heading-h5-size: clamp(1.125rem, 1.8vw, 1.5rem);
+  --heading-h6-size: clamp(1rem, 1.6vw, 1.25rem);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.14);
+}

@@ -3,7 +3,7 @@
 # Purpose: Declarative registration of 6 core orchestrators (CORE-031 compliance)
 
 module_name: core_orchestrators
-description: "Core orchestrators: Interaction, Intent Router, TDD, Workflow, Master, Conversation, Enforcement"
+description: "Core orchestrators: Interaction, Intent Gateway/Router, Execution Engine, TDD, Workflow, Master, Conversation, Enforcement"
 
 dependencies:
   - name: governance_registry
@@ -36,6 +36,24 @@ provides:
       - intent_detection
       - routing_logic
       - fallback_handling
+
+  - name: IntentGateway
+    category: CORE
+    description: "Single-pass intent classify+validate+route gateway (phase-m2 canonical)"
+    entry_point: "cortex.core.intent_gateway:IntentGateway"
+    features:
+      - intent_classification
+      - request_validation
+      - route_resolution
+
+  - name: ExecutionEngine
+    category: CORE
+    description: "Unified execution dispatch layer (phase-m2 canonical)"
+    entry_point: "cortex.core.execution_engine:ExecutionEngine"
+    features:
+      - route_dispatch
+      - handler_registration
+      - execution_status
     
   - name: TDDOrchestrator
     category: CORE
@@ -194,7 +212,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Core Team"
-  last_updated: "2026-02-23"
+  last_updated: "2026-03-15"
   git_commit: "phase-62-g-wiring-surface-expansion"
   status: "active"
-  change_summary: "Phase 62-G: Added 11 previously unregistered core orchestrators (AuditOrchestrator, BrainHealthOrchestrator, CentralBrainOrchestrator, ObservabilityOrchestrator, StateOrchestrator, RequestRephraseOrchestrator, ReviewOrchestrator, SecurityOrchestrator, CortexMasterPlanOrchestrator, MasterOrchestratorStage2, IntentRouter). Wiring surface gap reduced."
+  change_summary: "Phase M2: Added canonical IntentGateway and ExecutionEngine targets; retained IntentRouter for migration window."

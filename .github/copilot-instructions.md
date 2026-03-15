@@ -2,6 +2,8 @@
 
 **Updated:** 2026-03-14 (Skill Decomposition — 655→361 lines) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
+**CORE-002:** All response output must render inline in VS Code Copilot Chat; never generate standalone report `.md`/`.txt` files for normal execution feedback.
+
 ---
 
 ## 🧠 RESPONSE HEADER — MANDATORY (EVERY FIRST RESPONSE PER REQUEST)

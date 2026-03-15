@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
+from cortex.core.context_validator import ContextValidator
 
 
 class ContextAssemblyOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
@@ -26,6 +27,7 @@ class ContextAssemblyOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
         """Initialise ContextAssemblyOrchestrator."""
         self._request_count = 0
         self._success_count = 0
+        self._context_validator = ContextValidator()
 
     def assemble(self, sources: list[str]) -> dict[str, Any]:
         """Assemble context from multiple workspace sources.
@@ -55,8 +57,40 @@ class ContextAssemblyOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcement
                 context[src] = {"type": "directory", "entries": entries}
             else:
                 context[src] = {"type": "key", "value": src}
+
+        validation_payload = self._build_validation_payload(sources)
+        is_valid, errors = self._context_validator.validate(validation_payload)
+
         self._success_count += 1
-        return {"sources": sources, "context": context, "assembled": True}
+        return {
+            "sources": sources,
+            "context": context,
+            "assembled": True,
+            "context_validation": {
+                "is_valid": is_valid,
+                "errors": errors,
+                "missing_keys": self._context_validator.get_missing_keys(validation_payload),
+            },
+        }
+
+    def _build_validation_payload(self, sources: list[str]) -> dict[str, Any]:
+        """Build validation payload for assembled context.
+
+        Args:
+            sources: Source entries passed to assemble.
+
+        Returns:
+            Minimal context payload for ContextValidator.
+        """
+        candidate_files = [
+            source
+            for source in sources
+            if source and source.strip() and source.endswith((".py", ".md", ".yaml", ".yml", ".json", ".toml", ".ini", ".txt"))
+        ]
+        return {
+            "intent": "context_assembly",
+            "files": candidate_files,
+        }
 
     def health_check(self) -> dict[str, Any]:
         """Return health status."""

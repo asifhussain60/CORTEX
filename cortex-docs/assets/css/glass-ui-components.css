@@ -1,0 +1,12 @@
+.page-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cortex-tab {
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}

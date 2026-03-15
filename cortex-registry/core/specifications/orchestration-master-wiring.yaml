@@ -7,9 +7,15 @@ description: |
   Routes intents to appropriate handlers via semantic capability matching.
 
 dependencies:
-  - name: intent_router
+  - name: intent_gateway
     required: true
     internal: false  # External until wiring spec created
+  - name: execution_engine
+    required: true
+    internal: false
+  - name: intent_router
+    required: false
+    internal: false  # Compatibility window only
   - name: governance_registry
     required: true
     internal: false
@@ -48,7 +54,9 @@ conflict_resolution:
   circular_dependency: "reject_startup"
 
 capabilities:
+  - intent_gateway_routing
   - intent_routing
+  - execution_dispatch
   - domain_orchestration
   - governance_enforcement
   - state_persistence

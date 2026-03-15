@@ -5,8 +5,8 @@ CodeReviewOrchestrator 6-stage pipeline.
 
 Operations:
   review   — Run full review pipeline; returns verdict + findings
-  findings — List findings from the last review (stub)
-  history  — PR review history (stub)
+    findings — List findings from the last review (placeholder)
+    history  — PR review history (placeholder)
   patterns — Known vulnerability patterns from OWASP knowledge base
   health   — Review tool health check
 

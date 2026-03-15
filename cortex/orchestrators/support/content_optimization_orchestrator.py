@@ -31,6 +31,7 @@ from typing import Dict, List, Optional, Tuple
 
 import yaml
 
+from cortex.core.file_factory import get_file_factory
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin
 

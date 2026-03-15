@@ -33,7 +33,7 @@ The Documentation Orchestrator MUST route to this agent whenever the user:
 | Pastes ≥1 screenshot + says **"what's wrong"** | "what's wrong with this", "what issues do you see" |
 | Any explicit `/doc-visual-qa` command | `/doc-visual-qa {file}` |
 
-**No screenshot present?** Route to standard `html-view-designer` flow. This agent requires at least one pasted image.
+**No screenshot present?** Route to standard `html-view-designer` flow. This agent requires at least one screenshot attachment.
 
 **Multiple screenshots?** Process all in sequence. Treat them as different viewports or sections of the same experience unless told otherwise.
 

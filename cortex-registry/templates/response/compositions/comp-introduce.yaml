@@ -68,8 +68,8 @@ template: |
 
   ---
 
-  > 💡 **Principle: {title}**
-  > {body}
+  ### 💡 Principle: {title}
+  {body}
 
 # ─── Pre-built Via Chain ──────────────────────────────────────────────────────
 orchestration_chain: "Classifier → Mission Control"

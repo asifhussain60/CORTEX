@@ -1,38 +1,6 @@
----
-id: workflow-sdlc-pipeline
-title: SDLC workflow pipeline (7 phases)
-purpose: Show the full SDLC pipeline and how workflow templates execute with gates.
-audience:
-  - Business Leaders
-  - Product Owners
-  - Software Developers
-source_of_truth:
-  - cortex-registry/workflows/templates/sdlc/
-  - cortex/orchestrators/domain/
-last_verified: 2026-03-09
-diagram_type: Workflow
-render: ascii
-render_html: true
-d3_method: "d3.tree() — horizontal pipeline with phase gates"
----
+# SDLC Pipeline
 
-# SDLC Workflow Pipeline — 7-Phase Lifecycle
-
+```mermaid
+flowchart LR
+  D[Discover] --> P[Plan] --> B[Build] --> V[Validate] --> C[Certify]
 ```
- ═══════════════════════════════════════════════════════════════════════════════
-  CORTEX SDLC WORKFLOW ENGINE — 7-PHASE PIPELINE
- ═══════════════════════════════════════════════════════════════════════════════
-
- ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
- │    1.    │  │    2.    │  │    3.    │  │    4.    │  │    5.    │  │    6.    │  │    7.    │
- │REQUIRE- │─▶│SOLUTION  │─▶│IMPLEMENT │─▶│  CODE   │─▶│INTEGRA- │─▶│SECURITY │─▶│ RELEASE │
- │ MENTS   │  │ DESIGN   │  │ ATION    │  │ REVIEW  │  │  TION   │  │ ASSESS  │  │READINESS│
- │ANALYSIS │  │          │  │          │  │  GATE   │  │ VERIFY  │  │  MENT   │  │         │
- └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘
-      │              │              │              │              │              │              │
-   🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE        🔒 GATE
-                                              5-Pass Code     LENS Sweep    STRIDE Threat
-                                              Review Orch.                  Model Engine
-```
-
-Also includes knowledge hydration (company overrides win) and a workflow FSM (pending → running → completed / failed / blocked).

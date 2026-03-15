@@ -156,6 +156,7 @@ class CodeReviewOrchestrator(OrchestratorProtocolMixin):
                 - ``p0_count`` (int): critical finding count
                 - ``p1_count`` (int): major finding count
         """
+        self._activate_cross_cutting_hooks(operation="code_review")
         # Stage 1: PR Context (passthrough for now — metadata only)
         pr_context = self._stage1_pr_context(diff, context)
 
