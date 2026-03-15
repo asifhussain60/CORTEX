@@ -25,16 +25,16 @@ Role = None  # type: ignore[assignment]
 PHASE_34_AVAILABLE = False
 
 try:
-    from cortex.orchestrators.response.chat_response_policy import (  # type: ignore[import]
+    from cortex.orchestrators.core.chat_response_policy import (  # type: ignore[import]
         ChatResponsePolicyValidator,
         suppress_verbosity,
         inject_plan_spine,
     )
 except ImportError:  # optional dependency — Phase 116-b GAP-116-04
-    _log.warning("Optional dependency unavailable: cortex.orchestrators.response.chat_response_policy")
+    _log.warning("Optional dependency unavailable: cortex.orchestrators.core.chat_response_policy")
 
 try:
-    from cortex.orchestrators.response.advanced_optimization import (  # type: ignore[import]
+    from cortex.orchestrators.core.advanced_optimization import (  # type: ignore[import]
         SemanticDeduplicator,
         ResponseQualityScorer,
         RoleVerbosityProfiles,
@@ -42,7 +42,7 @@ try:
     )
     PHASE_34_AVAILABLE = True
 except ImportError:  # optional dependency — Phase 116-b GAP-116-04
-    _log.warning("Optional dependency unavailable: cortex.orchestrators.response.advanced_optimization")
+    _log.warning("Optional dependency unavailable: cortex.orchestrators.core.advanced_optimization")
 
 
 class MasterOrchestratorResponseMixin:

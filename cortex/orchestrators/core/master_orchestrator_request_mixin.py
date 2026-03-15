@@ -175,7 +175,7 @@ class MasterOrchestratorRequestMixin:
                 if self._progress_bar:
                     next_phase = self._autonomous_executor.load_next_phase()
                     if next_phase:
-                        from cortex.orchestrators.response.ascii_progress_bar import (
+                        from cortex.orchestrators.core.ascii_progress_bar import (
                             Phase as ProgressPhase,
                         )
                         progress_phase = ProgressPhase(
@@ -403,12 +403,12 @@ class MasterOrchestratorRequestMixin:
             # Benefits: Testability, maintainability, extensibility
 
             # Import stage strategies
-            from cortex.orchestrators.strategies import (
-                Stage1ComprehensionStrategy,
+            from cortex.orchestrators.core.pipeline_stage_strategy import StageContext
+            from cortex.orchestrators.core.stage1_comprehension_strategy import Stage1ComprehensionStrategy
+            from cortex.orchestrators.core.stage234_strategies import (
                 Stage2IntentClassificationStrategy,
                 Stage3ComplianceValidationStrategy,
                 Stage4DomainExecutionStrategy,
-                StageContext,
             )
 
             # Initialize stage context with operation details
@@ -617,7 +617,7 @@ class MasterOrchestratorRequestMixin:
             # Use render_engagement() — the canonical three-tier routing gate.
             _pipeline_engagement: dict = {}
             try:
-                from cortex.orchestrators.response.engagement_renderer import (
+                from cortex.orchestrators.core.engagement_renderer import (
                     EngagementRenderer,
                 )
 

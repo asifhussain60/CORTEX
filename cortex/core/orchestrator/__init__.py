@@ -11,7 +11,6 @@ def __getattr__(name: str) -> object:
     _modules = [
         "cortex.orchestrators.core.approval_gate",
         "cortex.orchestrators.core.challenge_integration",
-        "cortex.orchestrators.core.complexity_assessment",
         "cortex.orchestrators.core.context_aggregator",
         "cortex.orchestrators.core.continuation_decision",
         "cortex.orchestrators.core.conversation_metrics",

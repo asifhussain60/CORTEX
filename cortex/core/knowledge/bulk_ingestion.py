@@ -457,7 +457,7 @@ class BulkIngestionPipeline:  # CORE-035-scoped — domain-specific variant
         """
         import time
 
-        from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
+        from cortex.orchestrators.core.ascii_progress_bar import ASCIIProgressBar
 
         start_time = time.time()
         self.stats = BulkIngestionStats()

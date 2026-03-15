@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
 from cortex.mcp.tools.tool_helpers import format_response
 
 

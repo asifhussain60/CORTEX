@@ -34,45 +34,19 @@ class PolicyViolation:
 
 
 class ChatResponsePolicyValidator:
-    """Validates CORTEX chat responses against governance format rules.
-
-    Checks for:
-    - Mandatory header presence (Zone 1 / Zone 2 / Zone 3)
-    - CORE-002 compliance (no .md/.txt file creation)
-    - Verbosity limits (≤800 words)
-    - Duplicate section detection
-
-    Attributes:
-        max_word_count: Maximum allowed words in response.
-        violations: Accumulated violations from last validation.
-    """
+    """Validates CORTEX chat responses against governance format rules."""
 
     def __init__(self, max_word_count: int = 800) -> None:
-        """Initialise policy validator.
-
-        Args:
-            max_word_count: Maximum allowed words (default 800).
-        """
         self.max_word_count = max_word_count
         self.violations: List[PolicyViolation] = []
 
     def validate(self, response: str, context: Optional[Dict[str, Any]] = None) -> bool:
-        """Validate a response against CORTEX response policy.
-
-        Args:
-            response: The full response text to validate.
-            context: Optional context (intent type, mode, etc.).
-
-        Returns:
-            True if response passes all policy checks, False otherwise.
-        """
         self.violations = []
         self._check_word_count(response)
         self._check_duplicate_headers(response)
         return len(self.violations) == 0
 
     def _check_word_count(self, response: str) -> None:
-        """Check response does not exceed word limit."""
         word_count = len(response.split())
         if word_count > self.max_word_count:
             self.violations.append(
@@ -85,7 +59,6 @@ class ChatResponsePolicyValidator:
             )
 
     def _check_duplicate_headers(self, response: str) -> None:
-        """Check for duplicate ## headers in response."""
         lines = response.split("\n")
         headers: Dict[str, int] = {}
         for i, line in enumerate(lines):
@@ -104,19 +77,9 @@ class ChatResponsePolicyValidator:
 
 
 def suppress_verbosity(response: str, max_words: int = 800) -> str:
-    """Trim response to maximum word count while preserving structure.
-
-    Args:
-        response: Full response text.
-        max_words: Maximum allowed words.
-
-    Returns:
-        Trimmed response if over limit, original otherwise.
-    """
     words = response.split()
     if len(words) <= max_words:
         return response
-    # Trim to max_words, preserving last paragraph break
     trimmed = " ".join(words[:max_words])
     last_newline = trimmed.rfind("\n\n")
     if last_newline > len(trimmed) // 2:
@@ -128,15 +91,6 @@ def inject_plan_spine(
     response: str,
     plan_items: Optional[List[str]] = None,
 ) -> str:
-    """Inject a plan spine (numbered action list) into the response.
-
-    Args:
-        response: Full response text.
-        plan_items: Optional list of plan items to inject.
-
-    Returns:
-        Response with plan spine injected (if items provided).
-    """
     if not plan_items:
         return response
     spine = "\n### ⚡ If you say `proceed`, I will:\n"

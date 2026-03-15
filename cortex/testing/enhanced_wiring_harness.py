@@ -13,11 +13,9 @@ try:
     from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
     from cortex.infrastructure.structured_logger import StructuredLogger
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-    from cortex.orchestrators.tools.todo_manager import TodoManager
 except ImportError as e:
     print(f"⚠️  Some imports unavailable: {e}")
     MasterOrchestrator = None
-    TodoManager = None
     StructuredLogger = None
     EnhancedAuditLogger = None
 

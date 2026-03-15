@@ -1,11 +1,9 @@
 """Tests for Approval Gate Logic."""
+# CORTEX-V2 phase-m1-c: complexity_assessment.py deleted (GAP-M1-08).
+# Fixtures now use types.SimpleNamespace to pass duck-typed assessment objects
+# to ApprovalGateLogic (which reads via getattr).
+import types
 import pytest
-from cortex.orchestrators.core.complexity_assessment import (
-    ComplexitySignals,
-    ComplexityAssessment,
-    ComplexityLevel,
-    ComplexityAssessmentEngine,
-)
 from cortex.orchestrators.core.approval_gate import (
     ApprovalGateLogic,
     ApprovalDecision,
@@ -13,70 +11,39 @@ from cortex.orchestrators.core.approval_gate import (
     AlternativeRecommendation,
 )
 
+def _make_assessment(complexity_level: str, complexity_score: float, confidence: float = 0.8):
+    """Build a duck-typed assessment for ApprovalGateLogic (uses getattr)."""
+    return types.SimpleNamespace(
+        complexity_level=complexity_level,
+        complexity_score=complexity_score,
+        confidence=confidence,
+    )
+
+
 @pytest.fixture
 def gate():
     """Create approval gate logic."""
     return ApprovalGateLogic(gate_id="test-gate-001")
 
 @pytest.fixture
-def engine():
-    """Create complexity assessment engine."""
-    return ComplexityAssessmentEngine()
-
-@pytest.fixture
 def trivial_assessment():
-    """Create trivial complexity assessment."""
-    signals = ComplexitySignals(
-        lens_confidence=0.95, files_affected_count=1, call_graph_depth=1,
-        circular_dependencies=0, dependency_depth=1, tight_coupling_score=0.0,
-        operation_scope='local', ast_complexity=2, criticality_level='low'
-    )
-    engine = ComplexityAssessmentEngine()
-    return engine.assess_complexity(signals)
+    return _make_assessment("trivial", 0.10)
 
 @pytest.fixture
 def simple_assessment():
-    """Create simple complexity assessment."""
-    signals = ComplexitySignals(
-        lens_confidence=0.88, files_affected_count=2, call_graph_depth=2,
-        circular_dependencies=0, dependency_depth=1, tight_coupling_score=0.1,
-        operation_scope='local', ast_complexity=5, criticality_level='low'
-    )
-    engine = ComplexityAssessmentEngine()
-    return engine.assess_complexity(signals)
+    return _make_assessment("simple", 0.30)
 
 @pytest.fixture
 def moderate_assessment():
-    """Create moderate complexity assessment."""
-    signals = ComplexitySignals(
-        lens_confidence=0.70, files_affected_count=5, call_graph_depth=4,
-        circular_dependencies=0, dependency_depth=2, tight_coupling_score=0.3,
-        operation_scope='cross_layer', ast_complexity=15, criticality_level='medium'
-    )
-    engine = ComplexityAssessmentEngine()
-    return engine.assess_complexity(signals)
+    return _make_assessment("moderate", 0.55)
 
 @pytest.fixture
 def complex_assessment():
-    """Create complex complexity assessment."""
-    signals = ComplexitySignals(
-        lens_confidence=0.50, files_affected_count=25, call_graph_depth=8,
-        circular_dependencies=1, dependency_depth=4, tight_coupling_score=0.7,
-        operation_scope='global', ast_complexity=40, criticality_level='high'
-    )
-    engine = ComplexityAssessmentEngine()
-    return engine.assess_complexity(signals)
+    return _make_assessment("complex", 0.75)
 
 @pytest.fixture
 def critical_assessment():
-    """Create critical complexity assessment."""
-    signals = ComplexitySignals(
-        lens_confidence=0.30, files_affected_count=50, call_graph_depth=10,
-        circular_dependencies=3, dependency_depth=5, tight_coupling_score=0.9,
-        operation_scope='global', ast_complexity=50, criticality_level='critical'
-    )
-    engine = ComplexityAssessmentEngine()
-    return engine.assess_complexity(signals)
+    return _make_assessment("critical", 0.92)
 
 # ===== THRESHOLD TESTS =====
 
@@ -131,18 +98,7 @@ def test_approval_decision_consistency(gate, moderate_assessment):
 
 def test_fallback_logic_missing_signals(gate):
     """Test fallback when signals are missing."""
-    # Create assessment with low confidence
-    signals = ComplexitySignals(
-        lens_confidence=0.50, files_affected_count=5, call_graph_depth=3,
-        circular_dependencies=0, dependency_depth=2, tight_coupling_score=0.2,
-        operation_scope='cross_layer', ast_complexity=10, criticality_level='medium'
-    )
-    engine = ComplexityAssessmentEngine()
-    assessment = engine.assess_complexity(signals)
-    
-    # Manually lower confidence
-    assessment.confidence = 0.6
-    
+    assessment = _make_assessment("moderate", 0.55, confidence=0.6)
     decision = gate.handle_missing_signals(assessment)
     # Should require confirmation as fallback
     assert decision.requires_confirmation is True
@@ -233,36 +189,18 @@ def test_statistics_empty_history(gate):
 
 def test_consistency_trivial(gate):
     """Test consistency for trivial."""
-    assessment = ComplexityAssessment(
-        complexity_score=0.10,
-        complexity_level='TRIVIAL',
-        signals=None,
-        confidence=0.95,
-        factors={},
-    )
+    assessment = _make_assessment("trivial", 0.10)
     decision = gate.evaluate_approval(assessment, "op_016")
     assert gate.ensure_consistency(decision) is True
 
 def test_consistency_moderate(gate):
     """Test consistency for moderate."""
-    assessment = ComplexityAssessment(
-        complexity_score=0.50,
-        complexity_level='MODERATE',
-        signals=None,
-        confidence=0.90,
-        factors={},
-    )
+    assessment = _make_assessment("moderate", 0.50)
     decision = gate.evaluate_approval(assessment, "op_017")
     assert gate.ensure_consistency(decision) is True
 
 def test_consistency_complex(gate):
     """Test consistency for complex."""
-    assessment = ComplexityAssessment(
-        complexity_score=0.75,
-        complexity_level='COMPLEX',
-        signals=None,
-        confidence=0.85,
-        factors={},
-    )
+    assessment = _make_assessment("complex", 0.75)
     decision = gate.evaluate_approval(assessment, "op_018")
     assert gate.ensure_consistency(decision) is True

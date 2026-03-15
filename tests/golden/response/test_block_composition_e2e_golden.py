@@ -43,7 +43,7 @@ def _yaml_reg() -> str:
 @pytest.fixture()
 def renderer():  # type: ignore[return]
     """Return a live EngagementRenderer instance."""
-    from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+    from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
     return EngagementRenderer()
 
 

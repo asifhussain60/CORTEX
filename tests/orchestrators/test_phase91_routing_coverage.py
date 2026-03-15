@@ -18,7 +18,7 @@ import pytest
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import IntentType
-from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
 
 
 class TestRoutingMissDetection:

@@ -43,7 +43,7 @@ class TestEngagementRendererNoStaleLens:
 
     def test_tool_display_names_no_cortex_lens(self) -> None:
         """TOOL_DISPLAY_NAMES must not contain deleted cortex_lens key."""
-        from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+        from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
 
         renderer = EngagementRenderer()
         assert "cortex_lens" not in renderer.TOOL_DISPLAY_NAMES, (

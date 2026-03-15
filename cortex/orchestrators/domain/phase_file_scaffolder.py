@@ -16,7 +16,7 @@ from typing import Any, Dict, List
 
 import yaml
 
-from cortex.orchestrators.core.complexity_triage_engine import TriageResult
+from cortex.orchestrators.domain.roadmap_pattern_selector import TriageResult
 
 _GOVERNANCE_AUTHORITY = "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064, CORE-068"
 

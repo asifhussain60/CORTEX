@@ -52,8 +52,6 @@ ALLOWED_COMPAT_SHIMS: frozenset = frozenset({
     "cortex/core/brain_state_manager.py",
     "cortex/mcp/tools/brain.py",
     "cortex/mcp/tools/brain_collaboration_tools.py",
-    "cortex/orchestrators/core/central_brain_orchestrator.py",
-    "cortex/orchestrators/core/brain_health_orchestrator.py",
     "cortex/infrastructure/brain_health_metrics.py",
     "cortex/infrastructure/shared_brain_store.py",
     # Phase 117-c — Intelligence Diamond flatten compat shims (expiry: 2026-09-03)

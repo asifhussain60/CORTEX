@@ -1,7 +1,7 @@
 id: "phase-m1"
 title: "Foundation — LLM Capability Manifest & Dead Code Removal"
 created: "2026-03-15"
-status: PLANNED
+status: IN_PROGRESS
 priority: P0
 governance_authority:
   - CORE-008
@@ -39,7 +39,7 @@ sweep_catalogue:
       handles natively vs which CORTEX must implement. This causes feature duplication
       (persona layer, response formatting, context assembly, complexity assessment).
     action_ref: "phase-m1-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-02"
     title: "Delete persona orchestrator domain (6 files)"
@@ -51,7 +51,7 @@ sweep_catalogue:
       Modern LLMs handle tone/persona via system prompt instruction (5 lines).
       These 6 files are pure overhead.
     action_ref: "phase-m1-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-03"
     title: "Delete strategies orchestrator domain (1 file — empty)"
@@ -61,7 +61,7 @@ sweep_catalogue:
       cortex/orchestrators/strategies/ contains only __init__.py with no code.
       Dead directory — zero references.
     action_ref: "phase-m1-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-04"
     title: "Delete synthesis orchestrator domain (2 files)"
@@ -72,7 +72,7 @@ sweep_catalogue:
       Context synthesis is a native LLM capability with 200K+ context windows.
       CORTEX should validate context, not assemble it.
     action_ref: "phase-m1-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-05"
     title: "Delete tools orchestrator domain (2 files)"
@@ -82,7 +82,7 @@ sweep_catalogue:
       cortex/orchestrators/tools/ contains TodoManager + __init__.py.
       Copilot Chat and Claude Code both have native todo/task management.
     action_ref: "phase-m1-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-06"
     title: "Delete response orchestrator domain (5 files)"
@@ -95,7 +95,7 @@ sweep_catalogue:
       of format spec vs 5 orchestrator files). ContentLibrary data moves
       to YAML; rendering is native LLM markdown.
     action_ref: "phase-m1-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-M1-07"
     title: "Delete backward-compat shims"
@@ -161,7 +161,7 @@ phases:
   - id: "phase-m1-a"
     title: "Create LLM Capability Manifest"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-M1-01"]
     governance_authority: "CORE-008, CORE-035"
     duration_estimate: "1 hour"
@@ -221,7 +221,8 @@ phases:
   - id: "phase-m1-b"
     title: "Delete dead orchestrator domains (persona, strategies, synthesis, tools, response)"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
+    execution_note: "Domain deletions and import cleanup complete; smoke gate currently blocked by unrelated baseline failures (stub_eradication, missing tree_sitter_c_sharp, missing jinja2, protocol mixin golden checks)."
     gap_refs: ["GAP-M1-02", "GAP-M1-03", "GAP-M1-04", "GAP-M1-05", "GAP-M1-06"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "2 hours"

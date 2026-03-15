@@ -17,8 +17,8 @@ from typing import Any, Optional, Tuple
 
 # COMPAT: cortex.orchestrators.persona — guarded import
 try:
-    from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-    from cortex.orchestrators.persona.models import PersonaId, DepthLevel  # type: ignore[import]
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.persona_enums import PersonaId, DepthLevel  # type: ignore[import]
 except (ImportError, Exception):
     MasterOrchestrator = None  # type: ignore[assignment,misc]
     DepthLevel = None  # type: ignore[assignment,misc]

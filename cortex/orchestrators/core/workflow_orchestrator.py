@@ -196,7 +196,7 @@ class WorkflowOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
         )
 
         # Visual feedback initialization
-        from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
+        from cortex.orchestrators.core.ascii_progress_bar import ASCIIProgressBar
         progress_bar = ASCIIProgressBar() if self._show_progress else None
         total_stages = 5
 

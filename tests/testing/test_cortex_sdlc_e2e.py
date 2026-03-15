@@ -563,18 +563,14 @@ class TestPhaseCompletionVerification:
         except ImportError as e:
             pytest.fail(f"Phase 1 EventBus not available: {e}")
 
-    def test_phase_2_complexity_classifier_available(self):
-        """Test: Phase 2 ComplexityClassifier is wired"""
-        try:
-            from cortex.orchestrators.core.complexity_classifier import (
-                ComplexityClassifier,
-            )
-
-            classifier = ComplexityClassifier()
-            assert classifier is not None
-            assert hasattr(classifier, "classify_complexity")
-        except ImportError as e:
-            pytest.fail(f"Phase 2 ComplexityClassifier not available: {e}")
+    def test_phase_2_complexity_heuristic_in_manifest(self):
+        """Test: Phase 2 complexity classification delegated to LLM via manifest (GAP-M1-08)"""
+        import yaml
+        from pathlib import Path
+        manifest = Path(__file__).resolve().parents[2] / "cortex-registry" / "core" / "llm-capabilities.yaml"
+        assert manifest.exists(), "llm-capabilities.yaml not found"
+        data = yaml.safe_load(manifest.read_text())
+        assert "complexity_heuristic" in data, "complexity_heuristic must exist in LLM capabilities manifest"
 
     def test_phase_3_code_planner_available(self):
         """Test: Phase 3 CodeLevelPlanner is wired"""

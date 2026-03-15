@@ -651,15 +651,8 @@ class MasterOrchestratorInitialiser:
         # AC-PHASE-90-STAGE-4-001: ContextAwareSynthesisGateway
         h.synthesis_gateway = None
         try:
-            from cortex.orchestrators.synthesis.context_aware_synthesis import (
-                ContextAwareSynthesisGateway,
-            )
-            repo_path = Path.cwd()
-            company_path = repo_path / "cortex-registry" / "company" / "domains"
-            h.synthesis_gateway = ContextAwareSynthesisGateway(
-                repo_path=repo_path,
-                company_path=company_path if company_path.exists() else None,
-            )
+            from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
+            h.synthesis_gateway = get_gateway()
             h.logger.log_operation_complete(
                 ac_id="AC-PHASE-90-STAGE-4-001",
                 operation="SYNTHESIS_GATEWAY_INIT",
@@ -749,7 +742,7 @@ class MasterOrchestratorInitialiser:
         # AC-PHASE-35-002: ASCIIProgressBar
         h._progress_bar = None
         try:
-            from cortex.orchestrators.response.ascii_progress_bar import (
+            from cortex.orchestrators.core.ascii_progress_bar import (
                 ASCIIProgressBar,
             )
             h._progress_bar = ASCIIProgressBar()

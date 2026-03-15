@@ -130,3 +130,24 @@ adaptation_protocol:
     - "Context window size increase > 2x"
   owner: "CORTEX Architecture Team"
   last_reviewed: "2026-03-15"
+
+# ============================================================
+# COMPLEXITY HEURISTIC (CORTEX-V2 phase-m1-c, GAP-M1-08)
+# Replaces 3 deleted Python classifiers: complexity_classifier.py,
+# complexity_assessment.py, complexity_triage_engine.py.
+# Classification is delegated to the host LLM; CORTEX reads the
+# band from the LLM reasoning output and routes accordingly.
+# ============================================================
+complexity_heuristic:
+  owner: LLM_NATIVE
+  rationale: >
+    Modern LLMs (Claude Sonnet, GPT-4o) judge request complexity as part of
+    native chain-of-thought reasoning. No Python classifier needed.
+  bands:
+    SIMPLE:   "Single file change, clear intent, no cross-layer impact"
+    MODERATE: "2-5 files, some cross-layer impact, needs confirmation"
+    COMPLEX:  "6+ files, architectural impact, multi-phase execution required"
+  cortex_role: >
+    CORTEX reads the band from the LLM reasoning block and routes to the
+    appropriate roadmap template via RoadmapPatternSelector. Classification
+    itself is fully delegated.

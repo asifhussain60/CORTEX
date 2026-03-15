@@ -17,12 +17,41 @@ AC-ID: AC-136-CAPE-002a
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict
 
-from cortex.orchestrators.core.complexity_triage_engine import (
-    ComplexityBand,
-    TriageResult,
-)
+
+# ---------------------------------------------------------------------------
+# Complexity types (inlined — complexity classification is now LLM-native;
+# these data structures support roadmap selection logic only).
+# CORTEX-V2 phase-m1-c: complexity_triage_engine.py deleted per GAP-M1-08.
+# ---------------------------------------------------------------------------
+
+
+class ComplexityBand(str, Enum):
+    """Complexity band used for roadmap template selection."""
+
+    SIMPLE = "SIMPLE"
+    MODERATE = "MODERATE"
+    COMPLEX = "COMPLEX"
+
+
+@dataclass
+class TriageResult:
+    """Minimal triage result consumed by RoadmapPatternSelector.
+
+    Attributes:
+        band:    Classified complexity band.
+        score:   Normalised score in [0.0, 1.0].
+        routing: Suggested routing label.
+        dimensions: Per-dimension scores (optional).
+    """
+
+    band: ComplexityBand
+    score: float = 0.5
+    routing: str = ""
+    dimensions: Dict[str, float] = field(default_factory=dict)
 
 # ---------------------------------------------------------------------------
 # Template catalogue

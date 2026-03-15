@@ -22,12 +22,12 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-15T00:00:00Z'
+  last_updated: '2026-03-15T13:18:10Z'
   total_phases: 12
-  active: 0
+  active: 1
   completed: 0
-  in_progress: 0
-  planned: 12
+  in_progress: 1
+  planned: 11
   design_principles:
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
@@ -80,6 +80,7 @@ autonomous_execution_framework:
   continuation_required: true
   completion_response_contract:
     required_final_line: "✅ Phase {id} complete."
+    required_executive_summary_line: "Progress: {completed}/{total} phases ({completion_percentage}%) · Completed {completed_phase_id} · Next {next_phase_id}"
     required_next_block: "### 🚀 Next Phase"
     next_phase_resolution: "first PLANNED phase in dependency-valid order"
     continuation_prompt_template: "execute {next_phase_id} on CORTEX-V2 with strict sequential contract and autonomous progress"
@@ -88,11 +89,50 @@ autonomous_execution_framework:
     unresolved_p0_p1_blocks_completion: true
     rollback_required_before_retry: true
 
+session_resume_protocol:
+  trigger_phrase: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+  startup_actions:
+    - "Read this file first and build phase status map from phase_detail_files"
+    - "Identify all COMPLETE phases and verify summary counters"
+    - "If counters drift from phase statuses, correct metadata and summary before execution"
+    - "Select next executable phase: first PLANNED phase whose depends_on are all COMPLETE"
+    - "Mark selected phase status as IN_PROGRESS and update last_updated timestamp"
+  execution_rules:
+    - "Run selected phase in strict sequential mode (no decomposition, no partial completion)"
+    - "Enforce sub-phase completion_gate before advancing"
+    - "Enforce convergence loop for P0/P1 until clear or max cycles reached"
+    - "On successful phase completion: set phase status COMPLETE and increment completed/decrement planned"
+    - "Immediately resolve and set next executable phase to IN_PROGRESS when safe to continue autonomously"
+  session_end_contract:
+    required_final_output: "concise executive summary + gated continuation prompt for next VSCode Copilot Chat Session"
+    continuation_prompt_template: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+    prompt_generation_gate:
+      required_before_prompt:
+        - "cortex-master-v2.yaml updated with latest phase completion status"
+        - "summary counters and completion_percentage synchronized"
+        - "all code changes committed to current branch"
+        - "current branch pushed to origin"
+      enforcement: "Do not render continuation prompt until all required_before_prompt checks pass"
+    final_output_format:
+      - "✅ Phase {completed_phase_id} complete."
+      - "Progress: {completed}/{total} phases ({completion_percentage}%)"
+      - "Exec Summary: Completed {completed_phase_id} · Next {next_phase_id}"
+      - "Prompt: Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+  no_next_phase_behavior:
+    when_all_complete: "Emit completion state and maintenance continuation prompt"
+    maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
+
+runtime_state:
+  last_completed_phase: null
+  next_executable_phase: "phase-m1"
+  last_session_action: "phase-m1-b-domain-deletions-complete-awaiting-smoke-clear"
+  last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
+
 phase_detail_files:
   - id: phase-m1
     title: "Foundation — LLM Capability Manifest & Dead Code Removal"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
     gaps: 9
     sub_phases: 4
@@ -246,32 +286,32 @@ health_status:
   last_health_fix: null
 
 production_readiness:
-  status: "PLANNED — 9 phases pending execution"
+  status: "IN_PROGRESS — phase-m1 executing"
   overall_score: null
   deployment_date: null
 
 summary:
   total_phases: 12
   completed: 0
-  active: 0
-  in_progress: 0
-  planned: 12
+  active: 1
+  in_progress: 1
+  planned: 11
   archived: 0
   completion_percentage: 0
   consolidation_summary: "2026-03-15 — V2 plan redesigned as 12-phase autonomous chain: M1-M9 platform reduction + certification, M10 federated team model, M11 agent/skill workflow governance, M12 docs IA + final cleanup convergence. Every phase requires final continuation handoff to next phase. Target: zero regression, zero duplicate ownership, zero leftover v1 implementation artifacts."
-  active_phases: "None — awaiting M1 execution (autonomous chain enabled)."
+  active_phases: "phase-m1 — Foundation — LLM Capability Manifest & Dead Code Removal"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
   - id: phase-m1
     title: "Foundation — LLM Capability Manifest & Dead Code Removal"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m1-dead-code-removal.yaml"
-    note: "P0 — begin immediately. Removes ~30 dead/redundant files. Creates LLM boundary document."
+    note: "P0 — in progress. Removes ~30 dead/redundant files. Creates LLM boundary document."
 
   # Phase M2 — CORE CONSOLIDATION (depends: M1)
   - id: phase-m2

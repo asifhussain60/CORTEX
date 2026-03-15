@@ -723,7 +723,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
             # Step 3b: Render engagement (Phase 92 — three-tier routing gate)
             try:
-                from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+                from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
                 _chain = ["IntentRouter", "InteractionOrchestrator"]
                 _engagement = EngagementRenderer().render_engagement(chain=_chain)
                 output["breadcrumb"] = _engagement["breadcrumb"]
@@ -855,7 +855,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixi
 
             # Phase 92: Render engagement — three-tier routing gate
             try:
-                from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+                from cortex.orchestrators.core.engagement_renderer import EngagementRenderer
                 _chain = ["IntentRouter", "InteractionOrchestrator"]
                 _engagement = EngagementRenderer().render_engagement(chain=_chain)
                 output["breadcrumb"] = _engagement["breadcrumb"]

@@ -7,9 +7,8 @@ Implements /persona and /detail command handlers
 
 from typing import Any, Dict, Optional
 
+from cortex.orchestrators.core.persona_enums import DepthLevel, PersonaId
 from cortex.orchestrators.core.persona_store import PersonaStore
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 
 
 class CommandParseResult:
@@ -183,7 +182,7 @@ class PersonaCommandHandler:
 
     def __init__(
         self,
-        orchestrator: MasterOrchestrator,
+        orchestrator: Any,
         store: Optional[PersonaStore] = None,
     ) -> None:
         """
@@ -258,7 +257,7 @@ class DetailCommandHandler:
 
     def __init__(
         self,
-        orchestrator: MasterOrchestrator,
+        orchestrator: Any,
         store: Optional[PersonaStore] = None,
     ) -> None:
         """
@@ -394,7 +393,7 @@ To optimize our collaboration, what's your primary role?
     @staticmethod
     def handle_first_interaction(
         user_id: str,
-        orchestrator: MasterOrchestrator,
+        orchestrator: Any,
         store: PersonaStore,
     ) -> CommandResponse:
         """

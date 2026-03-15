@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.core.complexity_triage_engine import TriageResult
+from cortex.orchestrators.domain.roadmap_pattern_selector import TriageResult
 from cortex.orchestrators.domain.phase_file_scaffolder import PhaseFileScaffolder
 from cortex.orchestrators.domain.roadmap_pattern_selector import RoadmapPatternSelector
 

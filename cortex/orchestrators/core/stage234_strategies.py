@@ -338,7 +338,7 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                     # Engagement rendering for workflow-template path
                     _tmpl_engagement: dict[str, Any] = {}
                     try:
-                        from cortex.orchestrators.response.engagement_renderer import (
+                        from cortex.orchestrators.core.engagement_renderer import (
                             EngagementRenderer,
                         )
 
@@ -389,7 +389,7 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             # template_id comes from workflow gate (if active).
             _engagement: dict[str, Any] = {}
             try:
-                from cortex.orchestrators.response.engagement_renderer import (
+                from cortex.orchestrators.core.engagement_renderer import (
                     EngagementRenderer,
                 )
 

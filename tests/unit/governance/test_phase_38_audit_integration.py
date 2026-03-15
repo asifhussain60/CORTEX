@@ -183,10 +183,10 @@ class TestPhase38AuditWorkflow:
 
     def test_p1_5_central_brain_audit(self):
         """Integration: P1.5-007 Central Brain Health audit"""
-        from cortex.orchestrators.core.brain_health_orchestrator import BrainHealthOrchestrator
+        from cortex.orchestrators.core.intelligence_health_orchestrator import IntelligenceHealthOrchestrator
         from unittest.mock import MagicMock
         
-        orchestrator = MagicMock(spec=BrainHealthOrchestrator)
+        orchestrator = MagicMock(spec=IntelligenceHealthOrchestrator)
         
         health = orchestrator.get_health_metrics()
         
