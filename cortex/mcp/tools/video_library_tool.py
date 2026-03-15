@@ -1107,4 +1107,71 @@ def cortex_plex_semantic_rename(
         }
 
 
+def cortex_bollywood_plex_duplicates(
+    root_path: str = "Z:\\MUSIC\\Bollywood",
+    cleanup: bool = False,
+    dry_run: bool = True,
+    force_rehash: bool = False,
+    db_path: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Scan and optionally clean duplicate Bollywood Plex files with persistent hash cache.
+
+    Uses a dedicated SQLite database purpose-marked for duplicate indexing:
+    ``PLEX_BOLLYWOOD_DUPLICATE_INDEX_ONLY``.
+
+    Args:
+        root_path: Bollywood Plex library root.
+        cleanup: Delete duplicates if True.
+        dry_run: If True, do not delete files even when cleanup=True.
+        force_rehash: If True, recompute all hashes and ignore cache.
+        db_path: Optional path to dedicated duplicate index DB.
+
+    Returns:
+        Dict containing duplicate scan/cleanup metrics.
+    """
+    from cortex.orchestrators.support.bollywood_plex_duplicate_orchestrator import (
+        BollywoodPlexDuplicateOrchestrator,
+    )
+
+    try:
+        orchestrator = BollywoodPlexDuplicateOrchestrator(
+            root_path=Path(root_path),
+            db_path=Path(db_path) if db_path else None,
+            cleanup=cleanup,
+            dry_run=dry_run,
+            force_rehash=force_rehash,
+        )
+        result = orchestrator.run_duplicate_sweep()
+
+        return {
+            "success": True,
+            "root_path": str(result.root_path),
+            "db_path": str(result.db_path),
+            "run_id": result.run_id,
+            "total_files": result.total_files,
+            "unique_hashes": result.unique_hashes,
+            "cached_hash_hits": result.cached_hash_hits,
+            "rehashed_files": result.rehashed_files,
+            "duplicate_groups": result.duplicate_groups,
+            "duplicate_files": result.duplicate_files,
+            "wasted_bytes": result.wasted_bytes,
+            "deleted_files": result.deleted_files,
+            "freed_bytes": result.freed_bytes,
+            "duration_seconds": round(result.duration_seconds, 3),
+            "errors": result.errors,
+            "cleanup": cleanup,
+            "dry_run": dry_run,
+            "force_rehash": force_rehash,
+        }
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "success": False,
+            "error": str(exc),
+            "root_path": root_path,
+            "cleanup": cleanup,
+            "dry_run": dry_run,
+        }
+
+
 # AC_COMPLETE: AC-VIDEO-MCP-2026-02-23-004 ✅
