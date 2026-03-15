@@ -284,16 +284,12 @@ class Calculator:
     # ========================================================================
 
     @pytest.mark.asyncio
-    async def test_perception_layer_not_yet_integrated(self) -> None:
-        """Test: Perception layer exists but not yet wired to MCP tools."""
-        # Import perception layer
-        from cortex.intelligence.perception import PatternRegistry
+    async def test_pattern_registry_available_via_support_layer(self) -> None:
+        """Test: Pattern registry is available through support-layer mixin."""
+        from cortex.orchestrators.support.knowledge_persistence_mixin import PatternRegistry
 
-        # Assert: Layer available
         registry = PatternRegistry()
         assert registry is not None
-
-        # Note: Perception → MCP integration is future work
         # This test documents architectural gap
 
     @pytest.mark.asyncio

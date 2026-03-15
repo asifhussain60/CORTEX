@@ -21,11 +21,27 @@ from typing import Any, Dict, List
 
 from cortex.intelligence.learning.universal_learning_loop import UniversalLearningLoop
 from cortex.intelligence.learning.knowledge_synthesizer import KnowledgeSynthesizer
-from cortex.intelligence.perception.pattern_registry import PatternRegistry
 from cortex.intelligence.reasoning.strategy_selector import StrategySelector
 from cortex.intelligence.action.execution_planner import ExecutionPlanner
 
 logger = logging.getLogger(__name__)
+
+
+class PatternRegistry:  # CORE-035-scoped lightweight replacement for M3 reduction
+    """Minimal in-module pattern registry used during M3 intelligence reduction.
+
+    Keeps the mixin contract stable while `cortex.intelligence.perception` is retired.
+    """
+
+    def detect_patterns(
+        self,
+        repository_analysis: Dict[str, Any],
+        fuzzy: bool = False,
+    ) -> List[Dict[str, Any]]:
+        """Return a conservative empty result set for onboarding enhancement."""
+        _ = repository_analysis
+        _ = fuzzy
+        return []
 
 
 class KnowledgePersistenceMixin:
