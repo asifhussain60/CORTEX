@@ -1,0 +1,280 @@
+id: "phase-m7"
+title: "Prompt & Agent Surface Reduction — 75 → ~20 Files"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M7-PROMPT-REDUCTION"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  The .github/ prompt/agent surface contains 75 files totaling ~35,000 lines:
+  - cortex-architect.prompt.md: ~8,500 lines (largest single file)
+  - cortex-response-templates.md: ~4,000 lines
+  - 56 agent files totaling ~15,046 lines
+  - 7 skill files with significant overlap
+  
+  Modern LLMs operate more effectively with concise, focused instructions
+  (500-1000 lines) than with massive specification documents. The response
+  template formatting rules (4,000 lines) can be replaced with a 200-line
+  golden format spec.
+  
+  Strategy: reduce architect prompt 90% (8500 → 800 lines), reduce response
+  templates 95% (4000 → 200 lines), consolidate 56 agents to 8 agent-modes,
+  merge 7 skills to 3 domain skills.
+  
+  Baseline measurements:
+    - Post-M6 smoke tests: >= 2600
+    - Prompt/agent files: 75
+    - Total lines: ~35,000
+    - Target: ~20 files, ~3,000 lines
+  Git prerequisite: phase-m6 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M7-01"
+    title: "Reduce cortex-architect.prompt.md 90%"
+    severity: P0
+    source: "Architecture Review — prompt bloat"
+    evidence: |
+      8,500 lines includes inline governance rules, workflow details, and
+      orchestrator specifications that belong in YAML or are LLM-native.
+      Target: 800-line focused architectural guidance + references to
+      governance YAMLs for detail.
+    action_ref: "phase-m7-a"
+    status: OPEN
+
+  - id: "GAP-M7-02"
+    title: "Reduce cortex-response-templates.md 95%"
+    severity: P0
+    source: "Architecture Review — format overspecification"
+    evidence: |
+      4,000 lines of response formatting rules. LLMs follow 200 lines
+      of golden format example reliably. Excessive specification degrades
+      compliance (LLM loses focus in long specs).
+    action_ref: "phase-m7-a"
+    status: OPEN
+
+  - id: "GAP-M7-03"
+    title: "Reduce copilot-instructions.md"
+    severity: P1
+    source: "Architecture Review — instruction bloat"
+    evidence: |
+      copilot-instructions.md (this file) contains architecture counts,
+      orchestrator lists, and MCP details that belong in skill files or
+      are discoverable by the LLM. Target: 300 lines of essential rules.
+    action_ref: "phase-m7-a"
+    status: OPEN
+
+  - id: "GAP-M7-04"
+    title: "Consolidate 56 agents → 8 agent-modes"
+    severity: P0
+    source: "Architecture Review — agent proliferation"
+    evidence: |
+      56 agent files with significant overlap. Many agents duplicate
+      instructions from skills/prompts. Modern agent-mode protocol:
+      8 modes — code, govern, analyze, plan, learn, debug, review, architect.
+      Aligns with 6 mega-tools + debug + review specializations.
+    action_ref: "phase-m7-b"
+    status: OPEN
+
+  - id: "GAP-M7-05"
+    title: "Consolidate 7 skills → 3 domain skills"
+    severity: P1
+    source: "CORE-035 — reduce overlap"
+    evidence: |
+      7 skills (cortex, cortex-audit, cortex-debug, cortex-governance,
+      cortex-plan, cortex-rca, cortex-tdd) can merge into 3:
+      1. cortex-core (governance + audit + tdd)
+      2. cortex-ops (plan + rca + debug)
+      3. cortex-dev (the main cortex skill, slimmed)
+    action_ref: "phase-m7-b"
+    status: OPEN
+
+  - id: "GAP-M7-06"
+    title: "Update file-scoped instruction files"
+    severity: P1
+    source: "Migration completeness"
+    evidence: |
+      6 file-scoped instruction files (.instructions.md) need updating
+      to reflect v2 conventions, reduced orchestrator count, and
+      consolidated governance rules.
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+  - id: "GAP-M7-07"
+    title: "Delete backward-compat import shims from M2"
+    severity: P1
+    source: "Cleanup from Phase M2"
+    evidence: |
+      Temporary backward-compat shims created in Phase M2 can now be
+      removed since all prompts/agents have been updated to use
+      canonical names.
+    action_ref: "phase-m7-c"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m7-a"
+    title: "Reduce prompt files (architect, response-templates, copilot-instructions)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M7-01", "GAP-M7-02", "GAP-M7-03"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "phase-m6 COMPLETE"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests: reduced prompt files exist, contain required sections, meet line count targets"
+        gate: "tests/v2/test_prompt_reduction.py — ALL tests FAIL"
+        blocker: "Prompt editing forbidden"
+      green:
+        action: "Rewrite architect prompt (800 lines), response templates (200 lines), copilot-instructions (300 lines)"
+        gate: "tests/v2/test_prompt_reduction.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Verify CORTEX response header still renders correctly in Copilot Chat"
+        gate: "Manual verification + smoke tests"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_architect_prompt_line_count — <= 1000 lines"
+        - "test_architect_prompt_has_required_sections — LENS, TDD, governance sections present"
+        - "test_response_templates_line_count — <= 300 lines"
+        - "test_response_templates_has_golden_format — 5-section format defined"
+        - "test_copilot_instructions_line_count — <= 400 lines"
+        - "test_copilot_instructions_has_essentials — architecture, MCP, entry points sections"
+      green:
+        - "Rewrite cortex-architect.prompt.md (8500 → 800 lines)"
+        - "Rewrite cortex-response-templates.md (4000 → 200 lines)"
+        - "Rewrite copilot-instructions.md (655 → 300 lines)"
+      refactor:
+        - "Verify all referenced YAMLs still valid"
+        - "Verify response header renders correctly"
+
+    acceptance_criteria:
+      - "cortex-architect.prompt.md: <= 1000 lines"
+      - "cortex-response-templates.md: <= 300 lines"
+      - "copilot-instructions.md: <= 400 lines"
+      - "All required sections present"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2590
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m7-b"
+    title: "Consolidate agents (56→8) and skills (7→3)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M7-04", "GAP-M7-05"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-m7-a"]
+    prerequisite: "phase-m7-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for 8 agent-mode files and 3 domain skills"
+        gate: "tests/v2/test_agent_skill_consolidation.py — ALL tests FAIL"
+        blocker: "Consolidation forbidden"
+      green:
+        action: "Create 8 agent-mode files. Create 3 domain skills. Delete old agent/skill files."
+        gate: "tests/v2/test_agent_skill_consolidation.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Verify agent-mode discovery in VS Code"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_8_agent_modes_exist — code, govern, analyze, plan, learn, debug, review, architect"
+        - "test_3_domain_skills_exist — cortex-core, cortex-ops, cortex-dev"
+        - "test_old_agents_deleted — 56 old agent files removed"
+        - "test_old_skills_deleted — 7 old skill files replaced by 3"
+      green:
+        - "Create 8 agent-mode .md files"
+        - "Create 3 domain skill SKILL.md files"
+        - "Delete 56 old agent files"
+        - "Delete 7 old skill files"
+      refactor:
+        - "Update AGENTS.md index"
+        - "Verify VS Code agent-mode detection"
+
+    acceptance_criteria:
+      - "8 agent-mode files created and functional"
+      - "3 domain skills created"
+      - "56 old agents deleted"
+      - "7 old skills replaced"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2580
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m7-c"
+    title: "Update instruction files + remove M2 shims"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M7-06", "GAP-M7-07"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m7-b"]
+    prerequisite: "phase-m7-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for updated instruction files and absence of M2 shims"
+        gate: "tests/v2/test_instruction_files_v2.py — FAIL"
+        blocker: "Updates forbidden"
+      green:
+        action: "Update 6 instruction files. Delete M2 backward-compat shims."
+        gate: "tests/v2/test_instruction_files_v2.py — PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Final reference sweep"
+        gate: "Smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_instruction_files_updated — reference v2 conventions"
+        - "test_m2_shims_deleted — backward-compat shims from M2 raise ImportError"
+      green:
+        - "Update 6 .instructions.md files"
+        - "Delete M2 backward-compat import shims"
+      refactor:
+        - "Final grep for any remaining stale references"
+
+    acceptance_criteria:
+      - "6 instruction files updated to v2 conventions"
+      - "M2 backward-compat shims deleted"
+      - "Prompt/agent surface: ~20 files, ~3,000 lines"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2570
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

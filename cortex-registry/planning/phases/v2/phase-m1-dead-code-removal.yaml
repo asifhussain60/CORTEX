@@ -1,0 +1,370 @@
+id: "phase-m1"
+title: "Foundation — LLM Capability Manifest & Dead Code Removal"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M1-DEAD-CODE-REMOVAL"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  Current state: 1,422 Python files, 348 orchestrators across 14 domains.
+  Problem: 6 orchestrator domains (persona, strategies, synthesis, tools, response)
+  and several backward-compat shims duplicate capabilities that modern LLMs
+  (Claude Opus/Sonnet, GPT-4o) handle natively. Three competing complexity
+  classifiers exist (CORE-035 violation).
+  
+  This phase establishes the LLM Capability Manifest — the boundary document
+  that defines what the host LLM handles vs what CORTEX must handle — and
+  removes all dead code identified in the architecture review.
+  
+  Baseline measurements:
+    - Smoke tests: 2791 passed
+    - Preflight tests: 446 passed
+    - Total Python files: 1,422
+    - Total orchestrator files: 348
+  Git prerequisite: CORTEX-V2 branch created from CORTEX main
+
+sweep_catalogue:
+  - id: "GAP-M1-01"
+    title: "Create LLM Capability Manifest"
+    severity: P0
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      No formal boundary document exists defining which capabilities the host LLM
+      handles natively vs which CORTEX must implement. This causes feature duplication
+      (persona layer, response formatting, context assembly, complexity assessment).
+    action_ref: "phase-m1-a"
+    status: OPEN
+
+  - id: "GAP-M1-02"
+    title: "Delete persona orchestrator domain (6 files)"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      cortex/orchestrators/persona/ contains 6 files (MasterOrchestratorPersona,
+      PersonaInjector, PersonaLoader, RoleResolver, __init__.py, persona_context.py).
+      Modern LLMs handle tone/persona via system prompt instruction (5 lines).
+      These 6 files are pure overhead.
+    action_ref: "phase-m1-b"
+    status: OPEN
+
+  - id: "GAP-M1-03"
+    title: "Delete strategies orchestrator domain (1 file — empty)"
+    severity: P2
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      cortex/orchestrators/strategies/ contains only __init__.py with no code.
+      Dead directory — zero references.
+    action_ref: "phase-m1-b"
+    status: OPEN
+
+  - id: "GAP-M1-04"
+    title: "Delete synthesis orchestrator domain (2 files)"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      cortex/orchestrators/synthesis/ contains ContextAwareSynthesis + __init__.py.
+      Context synthesis is a native LLM capability with 200K+ context windows.
+      CORTEX should validate context, not assemble it.
+    action_ref: "phase-m1-b"
+    status: OPEN
+
+  - id: "GAP-M1-05"
+    title: "Delete tools orchestrator domain (2 files)"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      cortex/orchestrators/tools/ contains TodoManager + __init__.py.
+      Copilot Chat and Claude Code both have native todo/task management.
+    action_ref: "phase-m1-b"
+    status: OPEN
+
+  - id: "GAP-M1-06"
+    title: "Delete response orchestrator domain (5 files)"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      cortex/orchestrators/response/ contains ContentLibraryOrchestrator,
+      EngagementRenderer, SimpleResponseFormatter, + 2 supporting files.
+      Response formatting is best handled via prompt instruction (50 lines
+      of format spec vs 5 orchestrator files). ContentLibrary data moves
+      to YAML; rendering is native LLM markdown.
+    action_ref: "phase-m1-b"
+    status: OPEN
+
+  - id: "GAP-M1-07"
+    title: "Delete backward-compat shims"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      central_brain_orchestrator.py — Phase 102-C shim → collaboration_orchestrator.py
+      brain_health_orchestrator.py — Phase 102-C shim → intelligence_health_orchestrator.py
+      Both are import redirects with no logic. Safe to delete with import path updates.
+    action_ref: "phase-m1-c"
+    status: OPEN
+
+  - id: "GAP-M1-08"
+    title: "Consolidate 3 complexity classifiers → prompt heuristic"
+    severity: P1
+    source: "CORTEX V2 Architecture Review"
+    evidence: |
+      Three competing implementations:
+      1. complexity_classifier.py (SIMPLE/COMPLEX/CRITICAL)
+      2. complexity_assessment.py (TRIVIAL-CRITICAL)
+      3. complexity_triage_engine.py (CDR scoring)
+      CORE-035 violation: single canonical implementation only.
+      LLMs judge complexity as part of reasoning — no orchestrator needed.
+    action_ref: "phase-m1-c"
+    status: OPEN
+
+  - id: "GAP-M1-09"
+    title: "Baseline validation — zero regression after removals"
+    severity: P0
+    source: "CORE-068"
+    evidence: |
+      All removals must pass convergence gate: smoke tests >= 2791 baseline,
+      preflight tests >= 446 baseline, zero new failures.
+    action_ref: "phase-m1-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m1-a"
+    title: "Create LLM Capability Manifest"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M1-01"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "1 hour"
+    depends_on: []
+    prerequisite: "CORTEX-V2 branch exists, smoke tests green (>= 2791 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write test validating llm-capabilities.yaml schema: required keys, valid capability categories, boundary definitions present"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_llm_capabilities_manifest.py — ALL listed tests FAIL"
+        blocker: "Do NOT create manifest until test exists and fails"
+      green:
+        action: "Create cortex-registry/core/llm-capabilities.yaml with all LLM-native vs CORTEX-owned capabilities"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_llm_capabilities_manifest.py — ALL tests PASS"
+        blocker: "Do NOT proceed to REFACTOR until manifest validates"
+      refactor:
+        action: "Add inline comments explaining each boundary decision"
+        gate: "python3 scripts/run_tests.py dir tests/v2/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + yaml.safe_load validation"
+      fix_step: "Fix any YAML syntax or schema issues"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining issues — do NOT silently skip"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_manifest_yaml_valid — llm-capabilities.yaml is valid YAML"
+        - "test_manifest_has_required_sections — capabilities, boundary_rules, review_cadence present"
+        - "test_manifest_categories_complete — all 8 capability categories defined"
+        - "test_manifest_boundary_clear — each capability has owner: LLM_NATIVE or CORTEX_OWNED"
+      green:
+        - "Create cortex-registry/core/llm-capabilities.yaml with 8 capability categories"
+        - "Define owner for each: intent_classification, context_assembly, response_formatting, workflow_sequencing, tdd_enforcement, code_analysis, persona_tone, complexity_assessment"
+      refactor:
+        - "Add evidence links for each boundary decision"
+        - "Add review_cadence: quarterly with adaptation_protocol"
+
+    acceptance_criteria:
+      - "cortex-registry/core/llm-capabilities.yaml exists and is valid YAML"
+      - "All 8 capability categories have explicit owner (LLM_NATIVE or CORTEX_OWNED)"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/v2/"
+      min_tests_pass: 4
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m1-b"
+    title: "Delete dead orchestrator domains (persona, strategies, synthesis, tools, response)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M1-02", "GAP-M1-03", "GAP-M1-04", "GAP-M1-05", "GAP-M1-06"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m1-a"]
+    prerequisite: "phase-m1-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests asserting deleted modules are NOT importable and no remaining files reference them"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_dead_domain_removal.py — ALL listed tests FAIL (modules still exist)"
+        blocker: "Do NOT delete files until tests exist"
+      green:
+        action: "Delete persona/ (6), strategies/ (1), synthesis/ (2), tools/ (2), response/ (5) directories. Update all imports that reference them."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_dead_domain_removal.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until all deletions verified"
+      refactor:
+        action: "Scan codebase for any remaining dead imports. Remove corresponding test files."
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until clean"
+
+    convergence_gate:
+      detect_step: "grep -rn 'from cortex.orchestrators.persona\\|from cortex.orchestrators.strategies\\|from cortex.orchestrators.synthesis\\|from cortex.orchestrators.tools\\|from cortex.orchestrators.response' cortex/ tests/"
+      fix_step: "Remove or rewrite any remaining references"
+      success_predicate: "grep returns 0 matches and smoke tests pass"
+      max_cycles: 3
+      on_exhaustion: "Log remaining references — manual review required"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_persona_domain_deleted — import cortex.orchestrators.persona raises ImportError"
+        - "test_strategies_domain_deleted — import cortex.orchestrators.strategies raises ImportError"
+        - "test_synthesis_domain_deleted — import cortex.orchestrators.synthesis raises ImportError"
+        - "test_tools_domain_deleted — import cortex.orchestrators.tools raises ImportError"
+        - "test_response_domain_deleted — import cortex.orchestrators.response raises ImportError"
+        - "test_no_dead_references — grep finds 0 imports to deleted domains"
+      green:
+        - "Delete cortex/orchestrators/persona/ directory"
+        - "Delete cortex/orchestrators/strategies/ directory"
+        - "Delete cortex/orchestrators/synthesis/ directory"
+        - "Delete cortex/orchestrators/tools/ directory"
+        - "Delete cortex/orchestrators/response/ directory"
+        - "Update all consumer imports"
+      refactor:
+        - "Remove corresponding test directories"
+        - "Update wiring YAMLs referencing deleted orchestrators"
+
+    acceptance_criteria:
+      - "5 orchestrator domains fully deleted (16 files total)"
+      - "Zero import references to deleted domains in cortex/ or tests/"
+      - "Wiring YAMLs updated — no broken references"
+      - "Smoke tests >= 2791 baseline"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2780
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m1-c"
+    title: "Delete backward-compat shims + consolidate complexity classifiers"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M1-07", "GAP-M1-08"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-m1-b"]
+    prerequisite: "phase-m1-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests asserting shims are gone and complexity is handled by single prompt heuristic"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_shim_complexity_removal.py — ALL tests FAIL"
+        blocker: "Do NOT delete until tests exist"
+      green:
+        action: "Delete central_brain_orchestrator.py, brain_health_orchestrator.py. Delete 3 complexity classifiers. Add 10-line complexity heuristic to intent gateway config."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_shim_complexity_removal.py — ALL tests PASS"
+        blocker: "Do NOT proceed until deletions verified"
+      refactor:
+        action: "Update all imports. Add complexity heuristic documentation."
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark COMPLETE until clean"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + grep for deleted module references"
+      fix_step: "Remove stale references"
+      success_predicate: "p0_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_central_brain_shim_deleted — import raises ImportError"
+        - "test_brain_health_shim_deleted — import raises ImportError"
+        - "test_complexity_classifier_deleted — none of the 3 are importable"
+        - "test_complexity_heuristic_exists — YAML config has complexity_heuristic section"
+      green:
+        - "Delete central_brain_orchestrator.py"
+        - "Delete brain_health_orchestrator.py"
+        - "Delete complexity_classifier.py, complexity_assessment.py, complexity_triage_engine.py"
+        - "Add complexity heuristic to cortex-registry/core/llm-capabilities.yaml"
+      refactor:
+        - "Update all imports referencing deleted files"
+        - "Confirm CORE-035: single complexity approach"
+
+    acceptance_criteria:
+      - "2 backward-compat shims deleted"
+      - "3 complexity classifiers deleted"
+      - "Complexity assessment handled via LLM Capability Manifest"
+      - "Smoke tests >= 2780 baseline"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2770
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m1-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master-v2.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M1-09"]
+    depends_on: ["phase-m1-c"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — >= 2770 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "Verify all sweep_catalogue entries are CLOSED"
+        gate: "All 9 GAPs verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m1 status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master-v2.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without master YAML update"
+
+    acceptance_criteria:
+      - "ALL 9 sweep_catalogue GAPs have status: CLOSED"
+      - "Smoke tests >= 2770 (accounting for removed test files)"
+      - "cortex-master-v2.yaml updated: phase-m1 status COMPLETE"
+      - "LLM Capability Manifest exists and validates"
+      - "~30 files removed from codebase"
+      - "Zero P0/P1 violations"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2770
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

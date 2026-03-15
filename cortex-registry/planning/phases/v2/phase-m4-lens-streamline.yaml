@@ -1,0 +1,223 @@
+id: "phase-m4"
+title: "LENS Streamline — Keep Polyglot, Retire Python-Specific"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M4-LENS-STREAMLINE"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  The LENS layer (Language → Examination → Navigation → Synthesis) contains
+  82 files providing workspace-aware code intelligence. Modern LLMs handle
+  Python/JavaScript/TypeScript analysis natively, but enterprise stacks
+  (.NET/C#, MSBuild, Java/Maven) still benefit from specialized adapters.
+  
+  Strategy: keep polyglot LENS adapters for enterprise stacks, retire
+  Python-specific analysis, and consolidate the adapter interface.
+  
+  Baseline measurements:
+    - Post-M3 smoke tests: >= 2690
+    - LENS files: 82
+    - Target: ~25 files
+  Git prerequisite: phase-m3 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M4-01"
+    title: "Retire Python-specific LENS adapters"
+    severity: P1
+    source: "LLM Capability Manifest — code_analysis: LLM handles Python natively"
+    evidence: |
+      Python-specific adapters (AST analysis, import graph, coverage mapping)
+      duplicate what Claude/GPT do natively when given Python files.
+    action_ref: "phase-m4-a"
+    status: OPEN
+
+  - id: "GAP-M4-02"
+    title: "Preserve and consolidate polyglot adapters (.NET, C#, TS, Java)"
+    severity: P0
+    source: "LLM Capability Manifest — code_analysis: CORTEX handles enterprise stacks"
+    evidence: |
+      .NET/C# adapters (MSBuild parsing, centralized package management,
+      assembly resolution), TypeScript advanced adapters, Java/Maven adapters
+      provide value LLMs don't replicate well for enterprise patterns.
+    action_ref: "phase-m4-a"
+    status: OPEN
+
+  - id: "GAP-M4-03"
+    title: "Consolidate LENS adapter interface"
+    severity: P1
+    source: "CORE-035 — single canonical interface"
+    evidence: |
+      Multiple adapter base classes and protocols exist. Consolidate to
+      a single ILensAdapter protocol with standard analyze(), get_context(),
+      supports() methods.
+    action_ref: "phase-m4-b"
+    status: OPEN
+
+  - id: "GAP-M4-04"
+    title: "Update LENS entry points"
+    severity: P1
+    source: "Migration completeness"
+    evidence: |
+      cortex/lens/ entry points (facade, registry) must be updated to
+      only load surviving adapters and delegate Python analysis to LLM.
+    action_ref: "phase-m4-b"
+    status: OPEN
+
+  - id: "GAP-M4-05"
+    title: "Sweep close and regression gate"
+    severity: P0
+    source: "CORE-064, CORE-068"
+    evidence: |
+      Full sweep completeness verification and convergence gate pass.
+    action_ref: "phase-m4-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m4-a"
+    title: "Retire Python adapters, preserve polyglot"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M4-01", "GAP-M4-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-m3 COMPLETE, smoke tests green"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests: Python adapters deleted, polyglot adapters preserved and functional"
+        gate: "tests/v2/test_lens_streamline.py — ALL tests FAIL"
+        blocker: "Deletions forbidden"
+      green:
+        action: "Delete Python-specific adapters. Verify .NET/C#/TS/Java adapters intact."
+        gate: "tests/v2/test_lens_streamline.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Update imports, remove corresponding tests"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_python_lens_adapters_deleted — Python-specific adapters raise ImportError"
+        - "test_dotnet_adapter_preserved — .NET/C# adapter importable and functional"
+        - "test_typescript_adapter_preserved — TS adapter importable and functional"
+        - "test_java_adapter_preserved — Java/Maven adapter importable (if exists)"
+      green:
+        - "Delete Python-specific LENS adapters"
+        - "Verify polyglot adapters untouched"
+      refactor:
+        - "Remove dead test files"
+        - "Update LENS registry to only register surviving adapters"
+
+    acceptance_criteria:
+      - "Python-specific LENS adapters deleted"
+      - "Polyglot adapters (.NET, C#, TS, Java) preserved and functional"
+      - "~40 files removed from LENS layer"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2670
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m4-b"
+    title: "Consolidate LENS adapter interface + update entry points"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M4-03", "GAP-M4-04"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m4-a"]
+    prerequisite: "phase-m4-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for unified ILensAdapter protocol"
+        gate: "tests/v2/test_lens_unified_interface.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Create ILensAdapter protocol. Migrate surviving adapters. Update LENS facade."
+        gate: "tests/v2/test_lens_unified_interface.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings, confirm single protocol (CORE-035)"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_ilens_adapter_protocol — protocol defines analyze, get_context, supports"
+        - "test_all_adapters_implement_protocol — every surviving adapter satisfies ILensAdapter"
+        - "test_lens_facade_delegates_correctly — facade routes to correct adapter by language"
+      green:
+        - "Define ILensAdapter protocol"
+        - "Migrate surviving adapters to implement protocol"
+        - "Update LENS facade to use unified protocol"
+      refactor:
+        - "CORE-011 type hints, CORE-012 docstrings, CORE-035 single protocol"
+
+    acceptance_criteria:
+      - "ILensAdapter protocol defined with analyze(), get_context(), supports()"
+      - "All surviving adapters implement ILensAdapter"
+      - "LENS facade updated"
+      - "LENS layer at ~25 files (from 82)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2660
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m4-final"
+    title: "Smoke Gate + cortex-master-v2.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M4-05"]
+    depends_on: ["phase-m4-b"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Verify all 5 GAPs CLOSED"
+        gate: "All GAPs verified"
+        blocker: "Smoke gate forbidden if any OPEN"
+      green:
+        action: "Run full smoke gate"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Phase COMPLETE forbidden if failures"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m4 → COMPLETE"
+        gate: "YAML valid"
+        blocker: "Close forbidden without update"
+
+    acceptance_criteria:
+      - "ALL 5 GAPs CLOSED"
+      - "LENS layer at ~25 files"
+      - "Polyglot adapters functional"
+      - "cortex-master-v2.yaml updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2660
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

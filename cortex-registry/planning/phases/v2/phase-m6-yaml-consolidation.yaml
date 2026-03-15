@@ -1,0 +1,235 @@
+id: "phase-m6"
+title: "YAML Governance Consolidation — 160 → ~45 Files"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M6-YAML-CONSOLIDATION"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  The cortex-registry/ contains ~160 YAML files across core/ (26), governance/ (35),
+  workflows/ (94+), and supporting directories. Many workflow templates contain
+  overlapping primitives, and governance YAMLs have significant duplication.
+  
+  Strategy: create a drift-lock manifest (single SSOT for all CORE rules),
+  merge overlapping workflow templates, consolidate governance categories,
+  and replace verbose cognition YAMLs with concise prompt instructions.
+  
+  Baseline measurements:
+    - Post-M5 smoke tests: >= 2620
+    - YAML files: ~160
+    - Workflow templates: ~94
+    - Target: ~45 YAML files
+  Git prerequisite: phase-m5 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M6-01"
+    title: "Create drift-lock manifest (single SSOT for CORE rules)"
+    severity: P0
+    source: "CORE-035 — single canonical source for all governance rules"
+    evidence: |
+      CORE rules are scattered across 26 core/ YAMLs and 35 governance/ YAMLs.
+      A single drift-lock-manifest.yaml should be the SSOT, replacing distributed
+      rule definitions with references.
+    action_ref: "phase-m6-a"
+    status: OPEN
+
+  - id: "GAP-M6-02"
+    title: "Merge overlapping workflow templates"
+    severity: P1
+    source: "Architecture Review — workflow redundancy"
+    evidence: |
+      94 workflow templates share many primitives. Templates for IMPLEMENT/FIX/REFACTOR
+      differ only in initial analysis and gap detection. Merge into parameterized
+      templates with mode discriminator. Target: ~15 workflow templates.
+    action_ref: "phase-m6-b"
+    status: OPEN
+
+  - id: "GAP-M6-03"
+    title: "Consolidate governance categories"
+    severity: P1
+    source: "Architecture Review — governance overlap"
+    evidence: |
+      governance/ contains overlapping categories (production-readiness vs
+      certification vs operational-readiness). Merge into 3 categories:
+      rules (CORE-*), gates (quality/convergence), policies (operational).
+    action_ref: "phase-m6-b"
+    status: OPEN
+
+  - id: "GAP-M6-04"
+    title: "Replace cognition YAMLs with prompt instructions"
+    severity: P1
+    source: "LLM Capability Manifest — LLM handles cognitive tasks natively"
+    evidence: |
+      cortex-registry/knowledge/cognition/ YAMLs define cognitive patterns
+      that LLMs handle natively. Replace with concise prompt instructions.
+    action_ref: "phase-m6-b"
+    status: OPEN
+
+  - id: "GAP-M6-05"
+    title: "Validate all YAML references post-consolidation"
+    severity: P0
+    source: "CORE-064 sweep completeness"
+    evidence: |
+      All Python code and prompt files referencing consolidated/deleted YAMLs
+      must be updated. RegistryYAMLReader routes must be verified.
+    action_ref: "phase-m6-final"
+    status: OPEN
+
+  - id: "GAP-M6-06"
+    title: "Sweep close and regression gate"
+    severity: P0
+    source: "CORE-068"
+    evidence: |
+      Full convergence gate pass required.
+    action_ref: "phase-m6-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m6-a"
+    title: "Create drift-lock manifest"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M6-01"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-m5 COMPLETE"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for drift-lock-manifest.yaml schema and all CORE rules present"
+        gate: "tests/v2/test_drift_lock_manifest.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Create cortex-registry/core/drift-lock-manifest.yaml with all CORE rules"
+        gate: "tests/v2/test_drift_lock_manifest.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Replace distributed rule definitions with references to manifest"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_manifest_valid_yaml — drift-lock-manifest.yaml loads without error"
+        - "test_all_core_rules_present — CORE-001 through CORE-068 all defined"
+        - "test_each_rule_has_required_fields — id, title, severity, enforcement_point"
+        - "test_manifest_is_ssot — no other YAML defines rule details (only references)"
+      green:
+        - "Create drift-lock-manifest.yaml"
+        - "Populate all CORE rules"
+      refactor:
+        - "Update existing governance YAMLs to reference manifest"
+
+    acceptance_criteria:
+      - "drift-lock-manifest.yaml is SSOT for all CORE rules"
+      - "All CORE-001 through CORE-068 present"
+      - "Existing governance YAMLs reference manifest, don't duplicate"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2610
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m6-b"
+    title: "Merge workflows + governance categories + retire cognition YAMLs"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M6-02", "GAP-M6-03", "GAP-M6-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-m6-a"]
+    prerequisite: "phase-m6-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for merged workflows and consolidated governance"
+        gate: "tests/v2/test_yaml_consolidation.py — ALL tests FAIL"
+        blocker: "Changes forbidden"
+      green:
+        action: "Merge ~94 workflows to ~15 parameterized templates. Consolidate governance to 3 categories. Delete cognition YAMLs."
+        gate: "tests/v2/test_yaml_consolidation.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Update all YAML references in Python code and prompts"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_workflow_templates_count — <= 15 workflow templates exist"
+        - "test_parameterized_code_workflow — single code-modify template handles IMPLEMENT/FIX/REFACTOR"
+        - "test_governance_3_categories — only rules/, gates/, policies/ directories"
+        - "test_cognition_yamls_deleted — knowledge/cognition/ does not exist"
+      green:
+        - "Create parameterized workflow templates"
+        - "Merge governance into 3 categories"
+        - "Delete cognition YAMLs"
+      refactor:
+        - "Update all Python/prompt references"
+
+    acceptance_criteria:
+      - "Workflow templates: ~94 → ~15"
+      - "Governance categories: 3 (rules, gates, policies)"
+      - "Cognition YAMLs deleted"
+      - "All references updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2600
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m6-final"
+    title: "Reference validation + Smoke Gate + master update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M6-05", "GAP-M6-06"]
+    depends_on: ["phase-m6-b"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Verify all YAML references resolve, zero broken refs"
+        gate: "Reference scan clean"
+        blocker: "Smoke gate forbidden"
+      green:
+        action: "Run full smoke gate"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Phase COMPLETE forbidden"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m6 → COMPLETE"
+        gate: "YAML valid"
+        blocker: "Close forbidden without update"
+
+    acceptance_criteria:
+      - "ALL 6 GAPs CLOSED"
+      - "YAML files: ~45 (from ~160)"
+      - "All references resolve"
+      - "RegistryYAMLReader routes verified"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2600
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

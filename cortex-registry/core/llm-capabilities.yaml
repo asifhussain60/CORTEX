@@ -1,0 +1,132 @@
+capabilities:
+  # Each LLM capability is classified as:
+  #   LLM_NATIVE    — the host LLM handles this without CORTEX code
+  #   CORTEX_OWNED  — CORTEX must provide this (LLM cannot)
+  #   HYBRID        — LLM provides base capability, CORTEX adds domain enforcement
+
+  intent_classification:
+    owner: HYBRID
+    llm_role: "Classify natural language into intent types with ~99% accuracy"
+    cortex_role: "Validate classification against 33 registered IntentTypes. Enforce confidence thresholds. Route to correct orchestrator."
+    boundary: "LLM classifies; CORTEX validates and routes"
+    evidence: "Claude/GPT-4o classify intent from context without keyword matching. IntentRouter keyword YAML becomes validation, not classification."
+    migration_impact: "IntentRouter becomes IntentGateway (thin validator). Keyword YAMLs become validation rules, not classifiers."
+    adaptability: "As LLM classification improves, remove threshold validation. When confidence is always >0.95, CORTEX only routes."
+
+  context_assembly:
+    owner: LLM_NATIVE
+    llm_role: "Read files, search codebase, assemble context using 200K+ token windows"
+    cortex_role: "NONE for assembly. CORTEX validates assembled context (required keys, staleness, completeness)."
+    boundary: "LLM assembles; CORTEX validates"
+    evidence: "Copilot agent mode reads files, runs semantic search, gathers context autonomously. 6-8 context orchestrators duplicate this."
+    migration_impact: "Delete context_aggregator, holistic_context_builder, context_assembly_orchestrator, context_cache_layer, context_synthesis_gateway, lens_context_provider, orchestrator_context_injector, lens_data_persistence. Replace with ContextValidator."
+    adaptability: "As context windows expand (1M+), even validation becomes lighter. ContextValidator can be reduced to schema check."
+
+  response_formatting:
+    owner: LLM_NATIVE
+    llm_role: "Generate well-formatted Markdown, follow format specs, render tables and code blocks"
+    cortex_role: "Provide format specification (50-line golden format). Validate rendered output against spec."
+    boundary: "LLM formats; CORTEX specifies and validates"
+    evidence: "Claude/GPT-4o follow markdown format specs reliably from ~50 lines of instruction. 4,000-line response-templates.md is 80x larger than needed."
+    migration_impact: "cortex-response-templates.md reduces from 4,000 to ~200 lines. 5 response orchestrators deleted. Format spec lives in prompt."
+    adaptability: "As LLMs improve formatting, reduce spec further. Target: 50-line golden format example only."
+
+  workflow_sequencing:
+    owner: HYBRID
+    llm_role: "Execute multi-step workflows using agent mode (tool access, iteration, checkpointing)"
+    cortex_role: "Define workflow templates as constraint specifications. Enforce convergence gates (CORE-068). Track AC markers."
+    boundary: "LLM executes steps; CORTEX defines constraints and enforces gates"
+    evidence: "Copilot agent mode + Claude Code execute multi-step workflows autonomously. CORTEX templates become guardrails, not execution engines."
+    migration_impact: "WorkflowComposer + TemplateComposer become simpler. Templates shrink (merge primitives). WorkflowGateway survives as constraint enforcer."
+    adaptability: "As agent mode gains native checkpointing, CORTEX AC marker system can integrate with native checkpoints."
+
+  tdd_enforcement:
+    owner: HYBRID
+    llm_role: "Run pytest, read results, write code to fix failures, iterate"
+    cortex_role: "Enforce RED→GREEN→REFACTOR sequence. Block implementation before failing tests. Gate on convergence."
+    boundary: "LLM executes TDD steps; CORTEX enforces the order and gates"
+    evidence: "Agent mode with tool access can run tests and iterate. But without CORTEX, there's no enforcement that tests come FIRST."
+    migration_impact: "TDDOrchestrator survives but simplifies. Enforcement is 10-line gate rule, not 500-line orchestrator."
+    adaptability: "When agent mode supports native pre-conditions, TDD enforcement becomes a pre-condition spec."
+
+  code_analysis:
+    owner: HYBRID
+    llm_role: "Parse and understand Python, JavaScript, TypeScript code natively. AST-level reasoning."
+    cortex_role: "Polyglot deep analysis (.NET/C#, MSBuild, enterprise patterns) that LLMs don't handle well. LENS adapters for non-mainstream stacks."
+    boundary: "LLM handles Python/JS/TS analysis; CORTEX handles .NET/C#/Java deep analysis"
+    evidence: "Claude/GPT parse Python AST natively with high accuracy. .NET enterprise patterns (MSBuild, centralized packages) require specialized LENS adapters."
+    migration_impact: "Retire Python-specific AST wrappers. Keep LENS .NET/C#/TS/Java adapters. Intelligence layer shrinks from 369 to ~60 files."
+    adaptability: "As LLMs improve C#/Java understanding, retire those LENS adapters. Final state: LENS for enterprise-specific patterns only."
+
+  persona_tone:
+    owner: LLM_NATIVE
+    llm_role: "Adopt and maintain persona, tone, voice from system prompt instruction"
+    cortex_role: "NONE — persona is a prompt instruction, not a code module"
+    boundary: "LLM provides persona natively from 5-line instruction"
+    evidence: "Modern LLMs maintain consistent persona throughout conversation from minimal instruction. 6-file persona layer is pure overhead."
+    migration_impact: "Delete cortex/orchestrators/persona/ (6 files). Add 5-line persona spec to cortex-architect.prompt.md."
+    adaptability: "Fully delegated. No CORTEX code needed regardless of LLM evolution."
+
+  complexity_assessment:
+    owner: LLM_NATIVE
+    llm_role: "Judge request complexity as part of reasoning, considering file count, dependency depth, risk factors"
+    cortex_role: "NONE for assessment. CORTEX uses complexity output to gate workflow selection."
+    boundary: "LLM assesses complexity; CORTEX consumes the assessment for routing"
+    evidence: "Three competing CORTEX classifiers (CORE-035 violation). LLMs assess complexity more accurately from natural context."
+    migration_impact: "Delete 3 complexity classifiers. Add complexity as a field in IntentGateway output (LLM provides, CORTEX routes)."
+    adaptability: "Fully delegated. Complexity assessment always improves with LLM capability."
+
+# ============================================================
+# CORTEX-OWNED CAPABILITIES (LLM cannot replace these)
+# ============================================================
+cortex_owned_not_delegatable:
+  governance_enforcement:
+    description: "CORE rules (CORE-001 through CORE-068) enforcement at runtime, pre-commit, and CI"
+    reason: "Governance is a framework contract, not an LLM capability. LLMs can be instructed but cannot enforce deterministically."
+
+  ac_marker_persistence:
+    description: "AC_START/AC_COMPLETE marker emission and SQLite persistence"
+    reason: "Traceability requires persistent state across sessions — LLMs are stateless."
+
+  mcp_server:
+    description: "Pylance-style MCP stdio transport server"
+    reason: "Tool execution bridge between VS Code and CORTEX — infrastructure, not intelligence."
+
+  rca_engine:
+    description: "Root Cause Analysis with 4 methodologies + SQLite persistence"
+    reason: "Persistent cross-session learning requires database state that LLMs cannot maintain."
+
+  urs_learning:
+    description: "Unified Reinforcement Signal emission and history"
+    reason: "Cross-session pattern learning with decay and promotion — requires persistent state."
+
+  wiring_specifications:
+    description: "Orchestrator registration, priority, health endpoints"
+    reason: "Framework infrastructure — defines the topology, not the intelligence."
+
+  drift_lock_system:
+    description: "Permanent guardrails preventing regression of fixed issues"
+    reason: "Deterministic enforcement — LLMs cannot guarantee no regression without persistent checks."
+
+  test_quality_gates:
+    description: "TestQualityGate scoring, regression detection, baseline tracking"
+    reason: "Deterministic quality enforcement with persistent baselines."
+
+# ============================================================
+# REVIEW AND ADAPTATION PROTOCOL
+# ============================================================
+review_cadence: quarterly
+adaptation_protocol:
+  steps:
+    - "Update this manifest with new LLM capabilities observed in production"
+    - "Run cortex_govern op=audit — identifies CORTEX code duplicating LLM native capabilities"
+    - "For each newly-delegatable capability: create deprecation phase"
+    - "Execute phase (TDD gated, CORE-068 convergence)"
+    - "Emit drift lock preventing re-implementation of delegated capability"
+  trigger_criteria:
+    - "New LLM model release (Claude, GPT, Gemini major version)"
+    - "Copilot agent mode capability expansion"
+    - "MCP protocol specification update"
+    - "Context window size increase > 2x"
+  owner: "CORTEX Architecture Team"
+  last_reviewed: "2026-03-15"

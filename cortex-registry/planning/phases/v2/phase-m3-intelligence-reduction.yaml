@@ -1,0 +1,279 @@
+id: "phase-m3"
+title: "Intelligence Layer Reduction — 369 → ~60 Files"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M3-INTELLIGENCE-REDUCTION"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  The cortex/intelligence/ layer contains 369 files across 17+ subdirectories.
+  Modern LLMs handle Python code analysis natively — Python-specific AST wrappers,
+  code crawlers, documentation generators, and perception modules are obsolete.
+  
+  The IntelligenceFacade (Phase 107/131/132/135/137) remains the canonical entry
+  point with 17 public methods. Post-M3, it delegates to LLM for Python analysis
+  and preserves only: LENS polyglot adapters, domain brain, RCA engine, URS learning,
+  and governance knowledge.
+  
+  Baseline measurements:
+    - Post-M2 smoke tests: >= 2730
+    - Intelligence files: 369
+    - Target: ~60 files
+  Git prerequisite: phase-m2 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M3-01"
+    title: "Retire crawler/ subdirectory"
+    severity: P1
+    source: "Architecture Review — LLM native code exploration"
+    evidence: |
+      cortex/intelligence/crawler/ — file system crawling, dependency scanning,
+      import graph building. Copilot agent mode performs all of these natively
+      via semantic_search, file_search, grep_search tools.
+    action_ref: "phase-m3-a"
+    status: OPEN
+
+  - id: "GAP-M3-02"
+    title: "Retire documentation/ subdirectory"
+    severity: P1
+    source: "Architecture Review — LLM native documentation"
+    evidence: |
+      cortex/intelligence/documentation/ — docstring generation, README creation,
+      API documentation. LLMs generate documentation from code with higher quality
+      than template-based generators.
+    action_ref: "phase-m3-a"
+    status: OPEN
+
+  - id: "GAP-M3-03"
+    title: "Retire perception/ subdirectory"
+    severity: P1
+    source: "Architecture Review — LLM native code comprehension"
+    evidence: |
+      cortex/intelligence/perception/ — code understanding, pattern detection,
+      semantic analysis layers. These replicate what LLMs do natively when
+      given code context.
+    action_ref: "phase-m3-a"
+    status: OPEN
+
+  - id: "GAP-M3-04"
+    title: "Retire Python-specific AST wrappers"
+    severity: P1
+    source: "Architecture Review — LLM native Python parsing"
+    evidence: |
+      Python AST analysis files across intelligence/analysis/ that wrap
+      the stdlib ast module. Claude and GPT parse Python at AST level
+      natively with higher accuracy than these wrappers.
+    action_ref: "phase-m3-a"
+    status: OPEN
+
+  - id: "GAP-M3-05"
+    title: "Preserve and refactor IntelligenceFacade"
+    severity: P0
+    source: "Architecture Review — facade remains canonical entry point"
+    evidence: |
+      cortex/intelligence/facade.py — 17 public methods. Post-M3, some methods
+      delegate to LLM, others to preserved subsystems (RCA, URS, governance).
+      Methods to keep: analyze_repository, classify_archetype, framework_context,
+      is_cortex_framework, load_governance, load_patterns, load_plans, load_workflows.
+      Methods to simplify: analyze, synthesize, query (delegate to LLM).
+    action_ref: "phase-m3-b"
+    status: OPEN
+
+  - id: "GAP-M3-06"
+    title: "Preserve RCA Engine + URS Learning"
+    severity: P0
+    source: "LLM Capability Manifest — CORTEX_OWNED: requires persistent state"
+    evidence: |
+      cortex/intelligence/learning/rca_engine.py + rca_store.py — 4 RCA
+      methodologies with SQLite persistence. LLMs cannot maintain cross-session
+      learning state. MUST be preserved.
+    action_ref: "phase-m3-b"
+    status: OPEN
+
+  - id: "GAP-M3-07"
+    title: "Preserve domain brain knowledge files"
+    severity: P1
+    source: "Architecture Review — domain-specific knowledge"
+    evidence: |
+      cortex/intelligence/domain_brain/ — domain-specific knowledge that enriches
+      LLM context. These are data files, not analysis engines. Preserve and
+      potentially move to cortex-registry/knowledge/.
+    action_ref: "phase-m3-b"
+    status: OPEN
+
+  - id: "GAP-M3-08"
+    title: "Update all intelligence consumer imports"
+    severity: P0
+    source: "CORE-064 sweep completeness"
+    evidence: |
+      All code that imports from retired intelligence subdirectories must be
+      updated to use IntelligenceFacade or LLM delegation.
+    action_ref: "phase-m3-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m3-a"
+    title: "Retire obsolete intelligence subdirectories"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M3-01", "GAP-M3-02", "GAP-M3-03", "GAP-M3-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "phase-m2 COMPLETE, smoke tests green"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests asserting retired modules are not importable and IntelligenceFacade still works"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intelligence_reduction.py — ALL tests FAIL"
+        blocker: "Deletions forbidden until tests exist"
+      green:
+        action: "Delete crawler/, documentation/, perception/ directories. Delete Python-specific AST wrappers."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intelligence_reduction.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until deletions verified"
+      refactor:
+        action: "Update all imports. Remove corresponding test directories."
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until clean"
+
+    convergence_gate:
+      detect_step: "grep -rn 'from cortex.intelligence.crawler\\|from cortex.intelligence.documentation\\|from cortex.intelligence.perception' cortex/ tests/"
+      fix_step: "Remove or redirect stale imports"
+      success_predicate: "grep returns 0 matches and smoke tests pass"
+      max_cycles: 3
+      on_exhaustion: "Log remaining — manual review"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_crawler_deleted — import cortex.intelligence.crawler raises ImportError"
+        - "test_documentation_deleted — import cortex.intelligence.documentation raises ImportError"
+        - "test_perception_deleted — import cortex.intelligence.perception raises ImportError"
+        - "test_python_ast_wrappers_deleted — specific AST wrapper modules raise ImportError"
+        - "test_intelligence_facade_still_works — IntelligenceFacade can be imported and instantiated"
+      green:
+        - "Delete cortex/intelligence/crawler/ directory"
+        - "Delete cortex/intelligence/documentation/ directory"
+        - "Delete cortex/intelligence/perception/ directory"
+        - "Delete Python-specific AST analysis files"
+      refactor:
+        - "Update IntelligenceFacade methods that referenced deleted modules"
+        - "Remove corresponding test directories"
+
+    acceptance_criteria:
+      - "crawler/, documentation/, perception/ directories deleted"
+      - "Python-specific AST wrappers deleted"
+      - "IntelligenceFacade still importable and functional"
+      - "~200 files removed from intelligence layer"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2700
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m3-b"
+    title: "Refactor IntelligenceFacade + preserve RCA/URS/domain brain"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M3-05", "GAP-M3-06", "GAP-M3-07"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-m3-a"]
+    prerequisite: "phase-m3-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for refactored IntelligenceFacade — simplified public API, LLM delegation stubs"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intelligence_facade_v2.py — ALL tests FAIL"
+        blocker: "Refactoring forbidden until tests exist"
+      green:
+        action: "Refactor IntelligenceFacade. Preserve RCA engine, URS learning, domain brain intact."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intelligence_facade_v2.py — ALL tests PASS"
+        blocker: "Next step forbidden"
+      refactor:
+        action: "Move domain brain data to cortex-registry/knowledge/ where appropriate"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_facade_core_methods — analyze_repository, classify_archetype, framework_context work"
+        - "test_facade_governance_methods — load_governance, load_patterns, load_plans, load_workflows work"
+        - "test_rca_engine_preserved — RCA engine importable and functional with 4 methodologies"
+        - "test_urs_learning_preserved — URS emit/history/decay/promote/quarantine/metrics work"
+        - "test_domain_brain_accessible — domain brain knowledge files accessible"
+      green:
+        - "Refactor IntelligenceFacade: simplify analyze(), synthesize(), query() to LLM delegation"
+        - "Verify RCA engine, URS learning untouched"
+        - "Keep domain brain files"
+      refactor:
+        - "Type hints, docstrings for refactored methods"
+        - "Remove dead internal imports within facade"
+
+    acceptance_criteria:
+      - "IntelligenceFacade refactored with simplified API"
+      - "RCA engine (4 methodologies), URS learning, domain brain all preserved"
+      - "Intelligence layer at ~60 files (from 369)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2690
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m3-final"
+    title: "Import sweep + Smoke Gate + cortex-master-v2.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M3-08"]
+    depends_on: ["phase-m3-b"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Verify zero stale intelligence imports remain"
+        gate: "grep for deleted module references returns 0"
+        blocker: "Do NOT run smoke gate with stale imports"
+      green:
+        action: "Run full smoke gate"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark COMPLETE if failures"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m3 status → COMPLETE"
+        gate: "YAML valid"
+        blocker: "Do NOT close without master update"
+
+    acceptance_criteria:
+      - "ALL 8 GAPs CLOSED"
+      - "Intelligence layer: ~60 files (target met)"
+      - "IntelligenceFacade functional with simplified API"
+      - "RCA, URS, domain brain preserved"
+      - "cortex-master-v2.yaml updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2690
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

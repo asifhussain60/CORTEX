@@ -1,0 +1,340 @@
+id: "phase-m9"
+title: "Production Certification — Full Audit & Drift Locks"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M9-CERTIFICATION"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  Final phase: certify the v2 codebase for production. Run /totalrecall
+  (full audit+fix cycle), establish permanent drift locks preventing
+  re-introduction of deleted code, regenerate the prompt suite from live
+  architecture, and run the final smoke gate.
+  
+  This phase produces the CORTEX v2 production-certified release on the
+  CORTEX-V2 branch. No code changes after this phase — only documentation
+  and release tagging.
+  
+  Baseline measurements:
+    - Post-M8 smoke tests: >= 2000
+    - Total Python files: ~450 (from 1,422)
+    - Total orchestrators: ~80 (from 348)
+    - MCP tools: 6 (from 36)
+    - YAML files: ~45 (from 160)
+    - Prompt/agent files: ~20 (from 75)
+    - Test files: ~600 (from 1,366)
+  Git prerequisite: phase-m8 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M9-01"
+    title: "Run /totalrecall — full audit+fix cycle"
+    severity: P0
+    source: "Production certification protocol"
+    evidence: |
+      /totalrecall runs Mission Control → Audit Coordinator → Code Improver
+      pipeline. Must complete with zero P0/P1 violations on v2 codebase.
+    action_ref: "phase-m9-a"
+    status: OPEN
+
+  - id: "GAP-M9-02"
+    title: "Establish permanent drift locks"
+    severity: P0
+    source: "CORE-068, drift-lock protocol"
+    evidence: |
+      Drift locks prevent re-introduction of:
+      - Deleted orchestrator domains (persona, strategies, synthesis, tools, response)
+      - Old MCP micro-tools (individual tool files)
+      - Deleted intelligence subdirectories (crawler, documentation, perception)
+      - Python-specific LENS adapters
+      - Backward-compat import shims
+      Locks are enforced at pre-commit hook and CI.
+    action_ref: "phase-m9-b"
+    status: OPEN
+
+  - id: "GAP-M9-03"
+    title: "Regenerate prompt suite from live architecture"
+    severity: P1
+    source: "Self-healing prompt protocol"
+    evidence: |
+      scripts/refresh_prompt_suite.py introspects live architecture and
+      regenerates all prompts/agents. Must be run on v2 codebase to ensure
+      all prompts reflect the reduced surface area.
+    action_ref: "phase-m9-c"
+    status: OPEN
+
+  - id: "GAP-M9-04"
+    title: "Update cortex-master-v2.yaml with final metrics"
+    severity: P0
+    source: "Plan lifecycle protocol"
+    evidence: |
+      cortex-master-v2.yaml must record final v2 metrics: actual file counts,
+      test counts, execution timeline, and production_readiness: CERTIFIED.
+    action_ref: "phase-m9-d"
+    status: OPEN
+
+  - id: "GAP-M9-05"
+    title: "Final smoke gate — production certification"
+    severity: P0
+    source: "CORE-068"
+    evidence: |
+      Full test suite run with zero failures. All health endpoints green.
+      All governance rules enforced. cortex-master-v2.yaml: all phases COMPLETE.
+    action_ref: "phase-m9-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m9-a"
+    title: "Run /totalrecall audit+fix cycle"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M9-01"]
+    governance_authority: "CORE-008, CORE-064, CORE-068"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "phase-m8 COMPLETE"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Run cortex_govern op=audit — collect all violations"
+        gate: "Audit report generated"
+        blocker: "Fix cycle forbidden without audit"
+      green:
+        action: "Fix all P0 and P1 violations. Run convergence loop."
+        gate: "cortex_govern op=audit — zero P0/P1 violations"
+        blocker: "Next step forbidden"
+      refactor:
+        action: "Run cortex_govern op=health — all endpoints green"
+        gate: "All health checks pass"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "Run audit: collect violation count"
+        - "Classify: P0, P1, P2 violations"
+      green:
+        - "Fix all P0 violations"
+        - "Fix all P1 violations"
+        - "Run convergence loop until zero P0/P1"
+      refactor:
+        - "Verify health endpoints"
+        - "Verify wiring contracts"
+
+    acceptance_criteria:
+      - "Zero P0 violations"
+      - "Zero P1 violations"
+      - "All health endpoints green"
+      - "Wiring contracts valid"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m9-b"
+    title: "Establish permanent drift locks"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M9-02"]
+    governance_authority: "CORE-068"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m9-a"]
+    prerequisite: "phase-m9-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write tests: attempting to create deleted modules triggers drift lock violation"
+        gate: "tests/v2/test_drift_locks.py — ALL tests FAIL"
+        blocker: "Lock creation forbidden"
+      green:
+        action: "Add drift lock rules to drift-lock-manifest.yaml. Update pre-commit hook."
+        gate: "tests/v2/test_drift_locks.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Verify pre-commit hook enforces drift locks"
+        gate: "Smoke + manual pre-commit test"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_persona_drift_lock — creating cortex/orchestrators/persona/ triggers violation"
+        - "test_micro_tool_drift_lock — creating individual MCP tool file triggers violation"
+        - "test_crawler_drift_lock — creating cortex/intelligence/crawler/ triggers violation"
+        - "test_python_lens_drift_lock — creating Python-specific LENS adapter triggers violation"
+        - "test_shim_drift_lock — creating backward-compat import shim triggers violation"
+      green:
+        - "Add drift lock entries to drift-lock-manifest.yaml"
+        - "Update pre-commit hook to enforce drift locks"
+        - "Update CI pipeline to enforce drift locks"
+      refactor:
+        - "Verify pre-commit enforcement"
+        - "Document drift lock protocol"
+
+    acceptance_criteria:
+      - "Drift locks established for all deleted module paths"
+      - "Pre-commit hook enforces drift locks"
+      - "CI enforces drift locks"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m9-c"
+    title: "Regenerate prompt suite from live v2 architecture"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M9-03"]
+    governance_authority: "CORE-035"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-m9-b"]
+    prerequisite: "phase-m9-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Capture current prompt file checksums"
+        gate: "Checksums recorded"
+        blocker: "Regeneration forbidden without baseline"
+      green:
+        action: "Run python3 scripts/refresh_prompt_suite.py — regenerate all prompts"
+        gate: "Script completes successfully"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Verify prompts reflect v2 metrics (450 files, 80 orchestrators, 6 MCP tools)"
+        gate: "Grep for updated counts in generated prompts"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "Record checksums of all .prompt.md, SKILL.md, agent .md files"
+      green:
+        - "Run refresh_prompt_suite.py"
+        - "Verify script exits 0"
+      refactor:
+        - "Verify v2 metrics appear in regenerated prompts"
+        - "Verify no v1 stale counts remain"
+
+    acceptance_criteria:
+      - "Prompt suite regenerated from live v2 architecture"
+      - "All prompts reflect v2 metrics"
+      - "No stale v1 counts in prompts"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m9-d"
+    title: "Update cortex-master-v2.yaml with final metrics"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M9-04"]
+    governance_authority: "Plan lifecycle"
+    duration_estimate: "30 minutes"
+    depends_on: ["phase-m9-c"]
+    prerequisite: "phase-m9-c completion_gate PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Collect final v2 metrics (file counts, test counts, line counts)"
+        gate: "Metrics collected"
+        blocker: "Update forbidden without data"
+      green:
+        action: "Update cortex-master-v2.yaml with final_metrics section"
+        gate: "YAML valid, metrics section present"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Verify all 9 phases show status: COMPLETE"
+        gate: "All phases COMPLETE in master YAML"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "Count: find cortex/ -name '*.py' -type f | wc -l"
+        - "Count: find tests/ -name '*.py' -type f | wc -l"
+        - "Count: find cortex-registry/ -name '*.yaml' -type f | wc -l"
+        - "Count: find .github/ -name '*.md' -type f | wc -l"
+      green:
+        - "Update cortex-master-v2.yaml final_metrics section"
+        - "Set all 9 phases to COMPLETE"
+        - "Set production_readiness: CERTIFIED"
+      refactor:
+        - "YAML validation"
+
+    acceptance_criteria:
+      - "cortex-master-v2.yaml has final_metrics with actual counts"
+      - "All 9 phases status: COMPLETE"
+      - "production_readiness: CERTIFIED"
+
+    completion_gate:
+      test_runner_command: "python3 -c \"import yaml; d=yaml.safe_load(open('cortex-registry/cortex-master-v2.yaml')); assert d.get('production_readiness') == 'CERTIFIED'\""
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m9-final"
+    title: "Final Smoke Gate — Production Certification"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M9-05"]
+    depends_on: ["phase-m9-d"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Verify ALL 51 GAPs across all 9 phases are CLOSED"
+        gate: "All sweep catalogues verified"
+        blocker: "Certification forbidden if any GAP OPEN"
+      green:
+        action: "Run full test suite. Verify all health endpoints. Verify all drift locks."
+        gate: "python3 scripts/run_tests.py smoke — all pass"
+        blocker: "Certification forbidden if any failure"
+      refactor:
+        action: "Tag release. Update README. Close migration."
+        gate: "Git tag created on CORTEX-V2 branch"
+        blocker: "None — this is the final step"
+
+    acceptance_criteria:
+      - "ALL 51 GAPs across 9 phases CLOSED"
+      - "Full smoke gate pass"
+      - "All health endpoints green"
+      - "All drift locks enforced"
+      - "cortex-master-v2.yaml: production_readiness CERTIFIED"
+      - "CORTEX v2 metrics achieved:"
+      - "  Python files: ~450 (from 1,422 — 68% reduction)"
+      - "  Orchestrators: ~80 (from 348 — 77% reduction)"
+      - "  MCP tools: 6 (from 36 — 83% reduction)"
+      - "  YAML files: ~45 (from 160 — 72% reduction)"
+      - "  Prompt/agent files: ~20 (from 75 — 73% reduction)"
+      - "  Test files: ~600 (from 1,366 — 56% reduction)"
+      - "  Total surface: ~905 files (from 2,635 — 66% reduction)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false

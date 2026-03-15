@@ -1,0 +1,371 @@
+id: "phase-m2"
+title: "Orchestrator Consolidation — Core Layer Merges"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M2-CORE-CONSOLIDATION"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  After M1 removes ~30 dead files, the core/ orchestrator domain still contains
+  ~120 files with significant redundancy clusters:
+  - 6-8 context building/assembly orchestrators that duplicate LLM native capability
+  - 3 request pre-processing orchestrators that can merge into 1 IntentGateway
+  - 3 execution orchestrators that can merge into 1 ExecutionEngine
+  - 4 planning orchestrators (master_plan, plan, planning, enhanced_planning)
+  - 2 review orchestrators (core/review + domain/code_review)
+  
+  Target: reduce core/ from ~120 to ~30 canonical orchestrators.
+  
+  Baseline measurements:
+    - Post-M1 smoke tests: >= 2770
+    - Orchestrator files in core/: ~120
+  Git prerequisite: phase-m1 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M2-01"
+    title: "Merge context orchestrators → ContextValidator"
+    severity: P0
+    source: "Architecture Review — context building cluster"
+    evidence: |
+      6-8 files: context_aggregator, holistic_context_builder,
+      context_assembly_orchestrator, context_cache_layer,
+      context_synthesis_gateway, lens_context_provider,
+      orchestrator_context_injector, lens_data_persistence.
+      LLM handles context assembly natively with 200K+ windows.
+      CORTEX only needs to VALIDATE assembled context, not build it.
+    action_ref: "phase-m2-a"
+    status: OPEN
+
+  - id: "GAP-M2-02"
+    title: "Merge request pipeline → IntentGateway"
+    severity: P0
+    source: "Architecture Review — request preprocessing cluster"
+    evidence: |
+      IntentRouter + RequestRephraseOrchestrator + RequestTransformer
+      can merge into a single IntentGateway that classifies, validates,
+      and routes in one pass. LLM classifies intent natively.
+    action_ref: "phase-m2-b"
+    status: OPEN
+
+  - id: "GAP-M2-03"
+    title: "Merge execution orchestrators → ExecutionEngine"
+    severity: P0
+    source: "Architecture Review — execution overlap"
+    evidence: |
+      MasterOrchestrator + EventBusOrchestrator + WorkflowOrchestrator
+      have overlapping dispatch responsibilities. Single ExecutionEngine
+      receives classified intent and delegates to domain orchestrators.
+    action_ref: "phase-m2-c"
+    status: OPEN
+
+  - id: "GAP-M2-04"
+    title: "Consolidate 4 planning orchestrators → 1"
+    severity: P1
+    source: "Architecture Review — planning redundancy"
+    evidence: |
+      master_plan_orchestrator, plan_orchestrator, planning_orchestrator,
+      enhanced_planning_orchestrator all handle phase/plan management.
+      CORE-035 violation: single canonical implementation only.
+    action_ref: "phase-m2-d"
+    status: OPEN
+
+  - id: "GAP-M2-05"
+    title: "Merge 2 review orchestrators → 1"
+    severity: P1
+    source: "Architecture Review — review duplication"
+    evidence: |
+      core/review_orchestrator (Phase 5 SDLC) + domain/code_review_orchestrator
+      (PR pipeline) — same fundamental capability split across two layers.
+    action_ref: "phase-m2-d"
+    status: OPEN
+
+  - id: "GAP-M2-06"
+    title: "Create backward-compat import shims (temporary)"
+    severity: P1
+    source: "Migration safety"
+    evidence: |
+      All merge targets need temporary import shims so that any unpatched
+      consumer code continues to work during the migration window.
+      Shims will be removed in phase-m7 or phase-m9.
+    action_ref: "phase-m2-d"
+    status: OPEN
+
+  - id: "GAP-M2-07"
+    title: "Update wiring YAMLs for all consolidations"
+    severity: P0
+    source: "Wiring contract integrity"
+    evidence: |
+      cortex-registry/core/specifications/ (4 wiring YAMLs) must be
+      updated to point to consolidated targets. Health endpoints must
+      all respond healthy post-merge.
+    action_ref: "phase-m2-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m2-a"
+    title: "Merge context orchestrators → ContextValidator"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M2-01"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-m1 COMPLETE, smoke tests green"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for ContextValidator — validates assembled context has required keys, detects missing sections, rejects malformed context"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_context_validator.py — ALL tests FAIL"
+        blocker: "Implementation forbidden until gate passes"
+      green:
+        action: "Implement ContextValidator. Delete 6-8 old context orchestrators. Update imports."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_context_validator.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until gate passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), deduplication check (CORE-035)"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until gate passes"
+
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + grep for deleted context module references"
+      fix_step: "Update remaining references to ContextValidator"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      on_exhaustion: "Log remaining — manual review"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068"
+
+    tdd_sequence:
+      red:
+        - "test_context_validator_validates_required_keys — rejects context missing 'intent' or 'files'"
+        - "test_context_validator_accepts_valid_context — passes well-formed context through"
+        - "test_context_validator_detects_stale_refs — flags references to deleted files"
+        - "test_old_context_modules_deleted — none of the 6-8 old modules importable"
+      green:
+        - "Implement ContextValidator in cortex/core/context_validator.py"
+        - "Delete old context orchestrators"
+        - "Update all consumer imports"
+      refactor:
+        - "Add docstrings, type hints, confirm CORE-035"
+
+    acceptance_criteria:
+      - "ContextValidator created with validate(), is_valid(), get_missing_keys() methods"
+      - "6-8 old context orchestrators deleted"
+      - "All context consumers use ContextValidator"
+      - "Smoke tests pass with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2760
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m2-b"
+    title: "Merge request pipeline → IntentGateway"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M2-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-m2-a"]
+    prerequisite: "phase-m2-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for IntentGateway — classify, validate, and route in single pass"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intent_gateway.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement IntentGateway merging IntentRouter + RequestRephrase + RequestTransformer"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_intent_gateway.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings, confirm all 33 intent types still route correctly"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_intent_gateway_classifies — returns correct intent for known triggers"
+        - "test_intent_gateway_validates — rejects malformed requests"
+        - "test_intent_gateway_routes — delegates to correct orchestrator"
+        - "test_intent_gateway_rephrase — handles low-confidence with clarification"
+        - "test_all_33_intents_routable — every IntentType has a routing target"
+      green:
+        - "Implement IntentGateway in cortex/core/intent_gateway.py"
+        - "Migrate routing logic from IntentRouter"
+        - "Migrate validation from RequestRephraseOrchestrator"
+        - "Delete old files, add backward-compat shims"
+      refactor:
+        - "Verify all 33 intent types route correctly"
+        - "Docstrings, type hints, CORE-035"
+
+    acceptance_criteria:
+      - "IntentGateway handles classify + validate + route in single pass"
+      - "All 33 intent types route correctly"
+      - "IntentRouter, RequestRephraseOrchestrator, RequestTransformer deprecated with shims"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2750
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m2-c"
+    title: "Merge execution orchestrators → ExecutionEngine"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M2-03"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-m2-b"]
+    prerequisite: "phase-m2-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for ExecutionEngine — single orchestration hub receiving classified intent"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_execution_engine.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement ExecutionEngine merging MasterOrchestrator + EventBus + WorkflowOrchestrator"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_execution_engine.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings, ensure all code-modifying modes trigger CORE-068"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_execution_engine_delegates — routes IMPLEMENT to TDDOrchestrator"
+        - "test_execution_engine_audit — routes AUDIT to AuditCoordinator"
+        - "test_execution_engine_convergence — applies CORE-068 for code-modifying modes"
+        - "test_execution_engine_ac_markers — emits AC_START and AC_COMPLETE"
+      green:
+        - "Implement ExecutionEngine in cortex/core/execution_engine.py"
+        - "Migrate dispatch logic from MasterOrchestrator"
+        - "Migrate event handling from EventBusOrchestrator"
+        - "Add backward-compat shims for old class names"
+      refactor:
+        - "Verify health endpoints for ExecutionEngine"
+        - "CORE-011, CORE-012, CORE-035"
+
+    acceptance_criteria:
+      - "ExecutionEngine serves as single orchestration hub"
+      - "All modes (IMPLEMENT, FIX, REFACTOR, AUDIT, etc.) dispatch correctly"
+      - "AC markers emit correctly from ExecutionEngine"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2740
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m2-d"
+    title: "Consolidate planning + review + temporary shims"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M2-04", "GAP-M2-05", "GAP-M2-06"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m2-c"]
+    prerequisite: "phase-m2-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for consolidated PlanningOrchestrator and CodeReviewOrchestrator"
+        gate: "python3 scripts/run_tests.py file tests/v2/test_planning_review_consolidation.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Merge 4 planning orchestrators into canonical PlanningOrchestrator. Merge 2 review into canonical CodeReviewOrchestrator. Create import shims."
+        gate: "python3 scripts/run_tests.py file tests/v2/test_planning_review_consolidation.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings, verify shims work correctly"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_planning_orchestrator_canonical — single PlanningOrchestrator handles all plan operations"
+        - "test_code_review_orchestrator_canonical — single CodeReviewOrchestrator for both SDLC and PR review"
+        - "test_old_planning_imports_still_work — backward-compat shims resolve"
+        - "test_old_review_imports_still_work — backward-compat shims resolve"
+      green:
+        - "Merge master_plan_orchestrator + plan_orchestrator + planning_orchestrator + enhanced_planning into PlanningOrchestrator"
+        - "Merge core/review_orchestrator + domain/code_review_orchestrator into CodeReviewOrchestrator"
+        - "Create temporary import shims"
+      refactor:
+        - "CORE-011, CORE-012, CORE-035"
+        - "Verify wiring YAMLs point to canonical targets"
+
+    acceptance_criteria:
+      - "4 planning orchestrators merged into 1 canonical PlanningOrchestrator"
+      - "2 review orchestrators merged into 1 canonical CodeReviewOrchestrator"
+      - "Backward-compat import shims working"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2730
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m2-final"
+    title: "Wiring update + Smoke Gate + cortex-master-v2.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M2-07"]
+    depends_on: ["phase-m2-d"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — >= 2730 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "Verify all sweep_catalogue entries are CLOSED"
+        gate: "All 7 GAPs verified CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Update all 4 wiring YAMLs. Run full smoke gate. Verify all 22 health endpoints."
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark COMPLETE if smoke gate fails"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m2 status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master-v2.yaml'))\" — YAML valid"
+        blocker: "Do NOT close without master YAML update"
+
+    acceptance_criteria:
+      - "ALL 7 GAPs CLOSED"
+      - "4 wiring YAMLs updated to consolidated targets"
+      - "All health endpoints respond healthy"
+      - "~50 orchestrator files merged/removed from core/"
+      - "cortex-master-v2.yaml updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2730
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

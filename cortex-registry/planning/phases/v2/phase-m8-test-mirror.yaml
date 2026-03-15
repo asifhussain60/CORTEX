@@ -1,0 +1,229 @@
+id: "phase-m8"
+title: "Test Suite Mirror — Delete, Consolidate, Update"
+created: "2026-03-15"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M8-TEST-MIRROR"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  The test suite contains ~1,366 test files mirroring the source structure
+  (~21,269 tests collected). After M1-M7 remove ~1,185 source files, the
+  test suite must mirror the reduced source tree. Dead test files for deleted
+  modules must be removed. Remaining tests must target the consolidated APIs.
+  
+  Strategy: 
+  1. Delete test files for deleted modules (M1-M7)
+  2. Consolidate tests for merged modules (M2 merges, M5 mega-tools)
+  3. Update remaining tests to use v2 import paths
+  4. Verify test coverage meets or exceeds pre-migration baselines
+  
+  Baseline measurements:
+    - Post-M7 smoke tests: >= 2570
+    - Test files: ~1,366
+    - Target: ~600 test files
+    - Total tests post-mirror: ~8,000-10,000 (from ~21,269)
+  Git prerequisite: phase-m7 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M8-01"
+    title: "Delete test files for deleted modules"
+    severity: P0
+    source: "CORE-064 sweep completeness"
+    evidence: |
+      Test files for: persona/ (M1), strategies/ (M1), synthesis/ (M1),
+      tools/ (M1), response/ (M1), old context orchestrators (M2),
+      old planning orchestrators (M2), crawler/ (M3), documentation/ (M3),
+      perception/ (M3), Python AST wrappers (M3), Python LENS adapters (M4),
+      old MCP tool files (M5), old agent/skill test files.
+      Estimated ~700 test files to delete.
+    action_ref: "phase-m8-a"
+    status: OPEN
+
+  - id: "GAP-M8-02"
+    title: "Consolidate tests for merged modules"
+    severity: P1
+    source: "CORE-035 single canonical test per module"
+    evidence: |
+      Merged modules (ContextValidator from M2, IntentGateway from M2,
+      ExecutionEngine from M2, 6 mega-tools from M5) need consolidated
+      test suites that cover the combined functionality.
+    action_ref: "phase-m8-b"
+    status: OPEN
+
+  - id: "GAP-M8-03"
+    title: "Update remaining tests to v2 import paths"
+    severity: P0
+    source: "Migration completeness"
+    evidence: |
+      All surviving test files must use v2 import paths:
+      - cortex.core.context_validator (not old context modules)
+      - cortex.core.intent_gateway (not old IntentRouter)
+      - cortex.core.execution_engine (not old MasterOrchestrator)
+      - cortex.mcp.tools.cortex_code (not old individual tools)
+    action_ref: "phase-m8-b"
+    status: OPEN
+
+  - id: "GAP-M8-04"
+    title: "Verify test coverage meets baselines"
+    severity: P0
+    source: "CORE-068 convergence"
+    evidence: |
+      Post-mirror test suite must provide equivalent or better coverage
+      of the remaining codebase. Coverage percentage should increase
+      since code decreased more than tests.
+    action_ref: "phase-m8-final"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m8-a"
+    title: "Delete test files for deleted modules"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M8-01"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: []
+    prerequisite: "phase-m7 COMPLETE"
+    regression_gate: "python3 scripts/run_tests.py smoke — remaining tests still pass"
+
+    tdd_cycle:
+      red:
+        action: "Inventory all test files referencing deleted modules. Verify they import from deleted paths."
+        gate: "List of files confirmed to be dead tests"
+        blocker: "Deletion forbidden without inventory"
+      green:
+        action: "Delete ~700 dead test files. Verify remaining tests collect cleanly."
+        gate: "python3 -m pytest --collect-only -q — zero collection errors"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Remove empty test directories. Update conftest.py files."
+        gate: "python3 scripts/run_tests.py smoke — remaining tests pass"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "Inventory dead test files using: grep -rl 'from cortex.orchestrators.persona' tests/"
+        - "Inventory for each deleted module: persona, strategies, synthesis, tools, response"
+        - "Inventory for M2 merged: old context, old planning, old review"
+        - "Inventory for M3: crawler, documentation, perception, AST wrappers"
+        - "Inventory for M4: Python LENS adapters"
+        - "Inventory for M5: old individual MCP tool tests"
+      green:
+        - "Delete all inventoried dead test files"
+        - "Verify pytest --collect-only produces zero errors"
+      refactor:
+        - "Remove empty test directories"
+        - "Update conftest.py fixtures"
+
+    acceptance_criteria:
+      - "~700 dead test files deleted"
+      - "Zero collection errors (pytest --collect-only clean)"
+      - "Remaining tests pass"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m8-b"
+    title: "Consolidate and update remaining tests"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M8-02", "GAP-M8-03"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-m8-a"]
+    prerequisite: "phase-m8-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke"
+
+    tdd_cycle:
+      red:
+        action: "Write consolidated test suites for v2 APIs (ContextValidator, IntentGateway, ExecutionEngine, mega-tools)"
+        gate: "New consolidated test files exist but imports may need updating"
+        blocker: "Updates forbidden without audit"
+      green:
+        action: "Update all remaining tests to v2 import paths. Create consolidated test files."
+        gate: "python3 scripts/run_tests.py smoke — all tests pass"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Deduplicate overlapping test coverage. Remove redundant fixtures."
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "Audit: grep for old import paths in tests/"
+        - "Create tests/v2/test_context_validator_integration.py"
+        - "Create tests/v2/test_intent_gateway_integration.py"
+        - "Create tests/v2/test_execution_engine_integration.py"
+        - "Create tests/v2/test_mega_tools_integration.py"
+      green:
+        - "Update all old imports to v2 paths"
+        - "Verify all collected tests pass"
+      refactor:
+        - "Deduplicate test coverage"
+        - "Remove redundant test fixtures"
+
+    acceptance_criteria:
+      - "All tests use v2 import paths"
+      - "Consolidated integration tests for v2 APIs"
+      - "Zero broken imports in test suite"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m8-final"
+    title: "Coverage verification + Smoke Gate + master update"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M8-04"]
+    depends_on: ["phase-m8-b"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+
+    tdd_cycle:
+      red:
+        action: "Run coverage report on v2 codebase"
+        gate: "Coverage data collected"
+        blocker: "Verification forbidden without data"
+      green:
+        action: "Verify coverage % meets or exceeds pre-migration baseline for remaining code"
+        gate: "Coverage >= 80% for remaining codebase"
+        blocker: "Phase COMPLETE forbidden if coverage drops"
+      refactor:
+        action: "Update cortex-master-v2.yaml: phase-m8 → COMPLETE"
+        gate: "YAML valid"
+        blocker: "Close forbidden without update"
+
+    acceptance_criteria:
+      - "ALL 4 GAPs CLOSED"
+      - "Test files: ~600 (from ~1,366)"
+      - "Test count: ~8,000-10,000 (from ~21,269)"
+      - "Coverage >= 80% on remaining codebase"
+      - "cortex-master-v2.yaml updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2000
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

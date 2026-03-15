@@ -1,0 +1,332 @@
+id: "phase-m5"
+title: "MCP Mega-Tools — 36 Micro-Tools → 6 Unified Tools"
+created: "2026-03-15"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-008
+  - CORE-035
+  - CORE-064
+  - CORE-068
+sweep_catalogue_id: "SWEEP-M5-MCP-MEGA-TOOLS"
+
+background: |
+  Source: CORTEX V2 Architecture Review (2026-03-15)
+  CORTEX currently registers 36 MCP tools (55 tool files) with fine-grained
+  operations. Modern LLM tool-use works best with fewer, broader tools that
+  accept operation discriminators (op parameter). MCP protocol timeout and
+  routing overhead is proportional to tool count.
+  
+  Strategy: consolidate 36 tools into 6 mega-tools, each with an op parameter:
+    1. cortex_code   — IMPLEMENT/FIX/REFACTOR/REVIEW (replaces cortex_implement, cortex_fix, cortex_refactor, cortex_review, cortex_test, cortex_debug)
+    2. cortex_govern — AUDIT/HEALTH/ENFORCE/VACUUM (replaces cortex_audit, cortex_health, cortex_vacuum, cortex_enforce, cortex_verify)
+    3. cortex_analyze — LENS/INVESTIGATE/ARCHITECTURE (replaces cortex_lens, cortex_investigate, cortex_architecture, cortex_complexity)
+    4. cortex_plan   — PLAN/PHASE/TRACK/DECOMPOSE (replaces cortex_plan, cortex_phase, cortex_track, cortex_totalrecall, cortex_decompose)
+    5. cortex_learn  — RCA/FEEDBACK/DIGEST/DISTILL (replaces cortex_learning, cortex_feedback, cortex_digest, cortex_distill, cortex_onboard)
+    6. cortex_ops    — SYNC/UPGRADE/SETUP/STATUS (replaces cortex_sync, cortex_upgrade, cortex_setup, cortex_status)
+  
+  Backward compatibility: old tool names become aliases in mcp_registry.py.
+  
+  Baseline measurements:
+    - Post-M4 smoke tests: >= 2660
+    - MCP tools registered: 36
+    - MCP tool files: 55
+    - Target: 6 registered tools, ~18 tool files
+  Git prerequisite: phase-m4 COMPLETE on CORTEX-V2 branch
+
+sweep_catalogue:
+  - id: "GAP-M5-01"
+    title: "Create cortex_code mega-tool"
+    severity: P0
+    source: "Architecture Review — tool consolidation"
+    evidence: |
+      IMPLEMENT/FIX/REFACTOR/REVIEW/TEST/DEBUG operations share common
+      context (files, test runner, convergence gate). Single tool with
+      op parameter reduces MCP overhead and simplifies LLM tool selection.
+    action_ref: "phase-m5-a"
+    status: OPEN
+
+  - id: "GAP-M5-02"
+    title: "Create cortex_govern mega-tool"
+    severity: P0
+    source: "Architecture Review — governance tool consolidation"
+    evidence: |
+      AUDIT/HEALTH/ENFORCE/VACUUM all operate on governance rules and
+      workspace state. Single governance tool with op parameter.
+    action_ref: "phase-m5-a"
+    status: OPEN
+
+  - id: "GAP-M5-03"
+    title: "Create cortex_analyze mega-tool"
+    severity: P1
+    source: "Architecture Review — analysis tool consolidation"
+    evidence: |
+      LENS/INVESTIGATE/ARCHITECTURE/COMPLEXITY all provide analysis output.
+      Single analysis tool with op parameter.
+    action_ref: "phase-m5-b"
+    status: OPEN
+
+  - id: "GAP-M5-04"
+    title: "Create cortex_plan mega-tool"
+    severity: P1
+    source: "Architecture Review — planning tool consolidation"
+    evidence: |
+      PLAN/PHASE/TRACK/DECOMPOSE/TOTALRECALL all operate on cortex-master.yaml
+      and phase files. Single planning tool with op parameter.
+    action_ref: "phase-m5-b"
+    status: OPEN
+
+  - id: "GAP-M5-05"
+    title: "Create cortex_learn mega-tool"
+    severity: P1
+    source: "Architecture Review — learning tool consolidation"
+    evidence: |
+      RCA/FEEDBACK/DIGEST/DISTILL/ONBOARD all involve knowledge acquisition
+      and learning signals. Single learning tool with op parameter.
+    action_ref: "phase-m5-c"
+    status: OPEN
+
+  - id: "GAP-M5-06"
+    title: "Create cortex_ops mega-tool"
+    severity: P1
+    source: "Architecture Review — operations tool consolidation"
+    evidence: |
+      SYNC/UPGRADE/SETUP/STATUS are operational commands. Single ops tool
+      with op parameter.
+    action_ref: "phase-m5-c"
+    status: OPEN
+
+  - id: "GAP-M5-07"
+    title: "Backward-compat aliases in mcp_registry.py"
+    severity: P0
+    source: "Migration safety"
+    evidence: |
+      Old tool names (cortex_implement, cortex_audit, etc.) must continue
+      working as aliases routing to the corresponding mega-tool + op.
+      This allows gradual migration of prompts and agents.
+    action_ref: "phase-m5-d"
+    status: OPEN
+
+  - id: "GAP-M5-08"
+    title: "Delete old tool files after alias verification"
+    severity: P1
+    source: "CORE-035, CORE-064"
+    evidence: |
+      Once mega-tools are verified and aliases work, delete the ~37 old
+      individual tool files. Keep only mega-tool implementations.
+    action_ref: "phase-m5-d"
+    status: OPEN
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+phases:
+  - id: "phase-m5-a"
+    title: "Create cortex_code + cortex_govern mega-tools"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M5-01", "GAP-M5-02"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "phase-m4 COMPLETE, smoke tests green"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for cortex_code and cortex_govern mega-tools — op routing, parameter validation, output format"
+        gate: "tests/v2/test_mega_tools_code_govern.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement both mega-tools. Register in mcp_registry.py."
+        gate: "tests/v2/test_mega_tools_code_govern.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings, confirm MCP schema validation works"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_code_implement — op=implement routes to TDDOrchestrator"
+        - "test_cortex_code_fix — op=fix routes correctly"
+        - "test_cortex_code_refactor — op=refactor routes correctly"
+        - "test_cortex_code_review — op=review routes correctly"
+        - "test_cortex_govern_audit — op=audit routes to AuditCoordinator"
+        - "test_cortex_govern_health — op=health routes to HealthOrchestrator"
+        - "test_cortex_govern_vacuum — op=vacuum routes to VacuumOrchestrator"
+        - "test_mega_tool_invalid_op — unknown op returns clear error"
+      green:
+        - "Implement cortex_code in cortex/mcp/tools/cortex_code.py"
+        - "Implement cortex_govern in cortex/mcp/tools/cortex_govern.py"
+        - "Register both in mcp_registry.py"
+      refactor:
+        - "CORE-011, CORE-012, MCP schema validation"
+
+    acceptance_criteria:
+      - "cortex_code handles IMPLEMENT/FIX/REFACTOR/REVIEW/TEST/DEBUG via op parameter"
+      - "cortex_govern handles AUDIT/HEALTH/ENFORCE/VACUUM via op parameter"
+      - "Both registered and callable via MCP"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2650
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m5-b"
+    title: "Create cortex_analyze + cortex_plan mega-tools"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M5-03", "GAP-M5-04"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-m5-a"]
+    prerequisite: "phase-m5-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for cortex_analyze and cortex_plan mega-tools"
+        gate: "tests/v2/test_mega_tools_analyze_plan.py — ALL tests FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement both mega-tools"
+        gate: "tests/v2/test_mega_tools_analyze_plan.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_analyze_lens — op=lens routes to LENS facade"
+        - "test_cortex_analyze_investigate — op=investigate routes correctly"
+        - "test_cortex_plan_plan — op=plan creates/updates phases"
+        - "test_cortex_plan_phase — op=phase manages individual phase lifecycle"
+        - "test_cortex_plan_totalrecall — op=totalrecall runs full audit+fix cycle"
+      green:
+        - "Implement cortex_analyze in cortex/mcp/tools/cortex_analyze.py"
+        - "Implement cortex_plan in cortex/mcp/tools/cortex_plan.py"
+      refactor:
+        - "CORE-011, CORE-012"
+
+    acceptance_criteria:
+      - "cortex_analyze handles LENS/INVESTIGATE/ARCHITECTURE via op"
+      - "cortex_plan handles PLAN/PHASE/TRACK/DECOMPOSE/TOTALRECALL via op"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2640
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m5-c"
+    title: "Create cortex_learn + cortex_ops mega-tools"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-M5-05", "GAP-M5-06"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m5-b"]
+    prerequisite: "phase-m5-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for cortex_learn and cortex_ops mega-tools"
+        gate: "tests/v2/test_mega_tools_learn_ops.py — FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Implement both mega-tools"
+        gate: "tests/v2/test_mega_tools_learn_ops.py — PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Type hints, docstrings"
+        gate: "Smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_learn_rca — op=rca runs root cause analysis"
+        - "test_cortex_learn_feedback — op=feedback captures capability extraction"
+        - "test_cortex_learn_digest — op=digest ingests content"
+        - "test_cortex_ops_sync — op=sync runs git operations"
+        - "test_cortex_ops_status — op=status returns system health"
+      green:
+        - "Implement cortex_learn in cortex/mcp/tools/cortex_learn.py"
+        - "Implement cortex_ops in cortex/mcp/tools/cortex_ops.py"
+      refactor:
+        - "CORE-011, CORE-012"
+
+    acceptance_criteria:
+      - "cortex_learn handles RCA/FEEDBACK/DIGEST/DISTILL/ONBOARD via op"
+      - "cortex_ops handles SYNC/UPGRADE/SETUP/STATUS via op"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2630
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-m5-d"
+    title: "Backward-compat aliases + old tool file cleanup"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-M5-07", "GAP-M5-08"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-m5-c"]
+    prerequisite: "phase-m5-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests: old tool names still resolve via aliases"
+        gate: "tests/v2/test_mcp_backward_compat.py — FAIL"
+        blocker: "Implementation forbidden"
+      green:
+        action: "Add aliases in mcp_registry.py. Verify all old names work. Delete old tool files."
+        gate: "tests/v2/test_mcp_backward_compat.py — PASS"
+        blocker: "REFACTOR forbidden"
+      refactor:
+        action: "Remove dead imports, update MCP documentation"
+        gate: "Smoke — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden"
+
+    tdd_sequence:
+      red:
+        - "test_cortex_implement_alias — calls cortex_code op=implement"
+        - "test_cortex_audit_alias — calls cortex_govern op=audit"
+        - "test_cortex_lens_alias — calls cortex_analyze op=lens"
+        - "test_cortex_learning_alias — calls cortex_learn op=rca (preserves current API)"
+        - "test_old_tool_files_deleted — individual tool files no longer exist"
+      green:
+        - "Add alias map in mcp_registry.py"
+        - "Verify all 36 old names route correctly"
+        - "Delete ~37 old individual tool files"
+      refactor:
+        - "Update MCP setup guide"
+        - "Update copilot-instructions.md MCP section"
+
+    acceptance_criteria:
+      - "All 36 old tool names continue working via aliases"
+      - "~37 old tool files deleted"
+      - "6 mega-tool files remain"
+      - "MCP documentation updated"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 2620
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true

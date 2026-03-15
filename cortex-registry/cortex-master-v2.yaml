@@ -1,0 +1,318 @@
+updated: '2026-03-15'
+maintainer: CORTEX Architecture Team
+
+# ============================================================
+# CORTEX V2 MIGRATION PLAN — cortex-master-v2.yaml
+# ============================================================
+# This file is SEPARATE from cortex-master.yaml.
+# It tracks the 9-phase migration from CORTEX v1 (1,422 files)
+# to CORTEX v2 (~905 files) — 66% surface area reduction with
+# 100% functional preservation.
+#
+# Branch: CORTEX-V2 (isolated from main CORTEX branch)
+#
+# THIN INDEX CONTRACT applies — all phase detail lives in:
+#   cortex-registry/planning/phases/v2/<phase-id>.yaml
+#
+# Prohibited inline: gap_catalogue, tdd_sequence, new_files,
+#   implementation, code_snippets
+# ============================================================
+
+metadata:
+  plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
+  branch: CORTEX-V2
+  created: '2026-03-15'
+  last_updated: '2026-03-15T00:00:00Z'
+  total_phases: 9
+  active: 0
+  completed: 0
+  in_progress: 0
+  planned: 9
+  design_principles:
+    - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
+    - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
+    - "MCP mega-tools: 6 capability-grouped tools instead of 36 micro-tools"
+    - "Adaptive architecture: LLM Capability Manifest defines the boundary"
+    - "Zero regression: every phase gated by CORE-068 convergence"
+  target_metrics:
+    total_python_files: "~450 (from 1,422)"
+    total_orchestrators: "~80 (from 348)"
+    total_mcp_tools: "18 registered / 6 mega-tools (from 36)"
+    total_governance_yaml: "~45 (from 160)"
+    total_prompt_agent_files: "~20 (from 75)"
+    total_test_files: "~600 (from 1,366)"
+  v1_baseline:
+    orchestrators: 348
+    intelligence_files: 369
+    lens_files: 82
+    core_files: 156
+    mcp_files: 79
+    total_python: 1422
+    total_tests: 1366
+    governance_yaml: 160
+    prompt_agent_files: 75
+    workflow_templates: 94
+    test_count_smoke: 2791
+    test_count_preflight: 446
+
+# ============================================================
+# PHASE DEPENDENCY CHAIN
+# ============================================================
+# M1 (Dead Code) → M2 (Core Consolidation) → M3 (Intelligence) → M4 (LENS)
+#                                            ↘
+#                                             M5 (MCP) → M6 (YAML) → M7 (Prompts) → M8 (Tests) → M9 (Certification)
+#
+# M1 is prerequisite for all.
+# M3/M4 can run in parallel with M5 (after M2).
+# M7 depends on M5+M6.
+# M8 mirrors all prior phases.
+# M9 is always last.
+# ============================================================
+
+phase_detail_files:
+  - id: phase-m1
+    title: "Foundation — LLM Capability Manifest & Dead Code Removal"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
+    gaps: 9
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m1-dead-code-removal.yaml"
+    note: "Delete persona/ (6), strategies/ (1), synthesis/ (2), tools/ (2), response/ (5), backward-compat shims (2), complexity classifiers (3). Create LLM Capability Manifest. ~30 files removed."
+
+  - id: phase-m2
+    title: "Orchestrator Consolidation — Core Layer Merges"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M2-CORE-CONSOLIDATION
+    gaps: 7
+    sub_phases: 5
+    depends_on: ["phase-m1"]
+    file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
+    note: "Merge 6-8 context orchestrators → ContextValidator. Intent pipeline → IntentGateway. Master+EventBus+Workflow → ExecutionEngine. 4 planners → 1. 2 reviewers → 1. ~50 files merged."
+
+  - id: phase-m3
+    title: "Intelligence Layer Reduction"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
+    gaps: 8
+    sub_phases: 4
+    depends_on: ["phase-m2"]
+    file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
+    note: "Retire crawler/, documentation/, perception/. Retire Python AST wrappers. Merge IntelligenceProvider + IntelligenceOrchestrator into IntelligenceFacade. 369 → ~60 files."
+
+  - id: phase-m4
+    title: "LENS Streamlining — Polyglot-Only Retention"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-M4-LENS-STREAMLINE
+    gaps: 5
+    sub_phases: 3
+    depends_on: ["phase-m2"]
+    file: "cortex-registry/planning/phases/v2/phase-m4-lens-streamline.yaml"
+    note: "Keep .NET/C#/TS/Java adapters. Retire Python-specific analysis, ml_patterns/, redundant caches. 82 → ~25 files."
+
+  - id: phase-m5
+    title: "MCP Mega-Tool Consolidation"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M5-MCP-MEGA-TOOLS
+    gaps: 8
+    sub_phases: 4
+    depends_on: ["phase-m2"]
+    file: "cortex-registry/planning/phases/v2/phase-m5-mcp-mega-tools.yaml"
+    note: "Create 6 mega-tools (cortex_code, cortex_govern, cortex_analyze, cortex_plan, cortex_learn, cortex_ops). Backward-compat aliases. 36 → 18 registered tools."
+
+  - id: phase-m6
+    title: "Governance YAML Consolidation"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-M6-YAML-CONSOLIDATION
+    gaps: 6
+    sub_phases: 3
+    depends_on: ["phase-m5"]
+    file: "cortex-registry/planning/phases/v2/phase-m6-yaml-consolidation.yaml"
+    note: "18 drift-locks → 1 manifest. Merge workflow primitives. Consolidate cognition/ (6→2). Merge governance rules. 160 → ~45 YAML files."
+
+  - id: phase-m7
+    title: "Prompt & Agent Surface Reduction"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M7-PROMPT-REDUCTION
+    gaps: 7
+    sub_phases: 4
+    depends_on: ["phase-m5", "phase-m6"]
+    file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
+    note: "cortex-architect.prompt.md 8,500→~2,000 lines. response-templates 4,000→~200. 56 agents → 8. 7 skills → 3. Create agent-mode protocol. 75 → ~20 files."
+
+  - id: phase-m8
+    title: "Test Suite Mirror Reduction"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-M8-TEST-MIRROR
+    gaps: 4
+    sub_phases: 3
+    depends_on: ["phase-m3", "phase-m4", "phase-m7"]
+    file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
+    note: "Delete tests for removed orchestrators. Consolidate tests for merges. Update conftest fixtures. 1,366 → ~600 test files."
+
+  - id: phase-m9
+    title: "Production Certification & Drift Lock"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M9-CERTIFICATION
+    gaps: 5
+    sub_phases: 3
+    depends_on: ["phase-m8"]
+    file: "cortex-registry/planning/phases/v2/phase-m9-certification.yaml"
+    note: "/totalrecall certification. Drift locks for all consolidations. Prompt refresh. Final smoke gate."
+
+# ============================================================
+# LLM ADAPTABILITY CONTRACT
+# ============================================================
+# CORTEX v2 is designed to ADAPT to evolving LLM capabilities.
+# The LLM Capability Manifest (cortex-registry/core/llm-capabilities.yaml)
+# defines the boundary between what the LLM handles natively vs what
+# CORTEX must handle. As LLMs improve, the manifest is updated and
+# CORTEX surface area shrinks further — no code changes needed.
+# ============================================================
+llm_adaptability:
+  manifest_file: "cortex-registry/core/llm-capabilities.yaml"
+  review_cadence: "quarterly"
+  adaptation_protocol: |
+    1. Update llm-capabilities.yaml with new LLM capabilities
+    2. Run cortex_govern op=audit — identifies CORTEX code duplicating LLM native
+    3. Create deprecation phase for each retired capability
+    4. Execute phase (TDD gated, CORE-068 convergence)
+    5. Emit drift lock preventing re-implementation
+
+health_status:
+  p0_issues: 0
+  p1_issues: 0
+  health_check: PLANNED
+  last_health_fix: null
+
+production_readiness:
+  status: "PLANNED — 9 phases pending execution"
+  overall_score: null
+  deployment_date: null
+
+summary:
+  total_phases: 9
+  completed: 0
+  active: 0
+  in_progress: 0
+  planned: 9
+  archived: 0
+  completion_percentage: 0
+  consolidation_summary: "2026-03-15 — CORTEX V2 migration plan created. 9 phases: M1 Dead Code → M2 Core Consolidation → M3 Intelligence → M4 LENS → M5 MCP Mega-Tools → M6 YAML → M7 Prompts → M8 Tests → M9 Certification. Target: 1,422 → ~450 Python files. Branch: CORTEX-V2."
+  active_phases: "None — awaiting M1 execution."
+
+phases:
+  # Phase M1 — FOUNDATION (begin immediately)
+  - id: phase-m1
+    title: "Foundation — LLM Capability Manifest & Dead Code Removal"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
+    gaps: 9
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m1-dead-code-removal.yaml"
+    note: "P0 — begin immediately. Removes ~30 dead/redundant files. Creates LLM boundary document."
+
+  # Phase M2 — CORE CONSOLIDATION (depends: M1)
+  - id: phase-m2
+    title: "Orchestrator Consolidation — Core Layer Merges"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m1"]
+    sweep_id: SWEEP-M2-CORE-CONSOLIDATION
+    gaps: 7
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
+    note: "P0 — merges ~50 redundant orchestrators in core/."
+
+  # Phase M3 — INTELLIGENCE (depends: M2, parallel with M5)
+  - id: phase-m3
+    title: "Intelligence Layer Reduction"
+    priority: P1
+    status: PLANNED
+    depends_on: ["phase-m2"]
+    sweep_id: SWEEP-M3-INTELLIGENCE-REDUCTION
+    gaps: 8
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m3-intelligence-reduction.yaml"
+    note: "P1 — retires LLM-duplicating intelligence modules. 369 → ~60."
+
+  # Phase M4 — LENS (depends: M2, parallel with M3)
+  - id: phase-m4
+    title: "LENS Streamlining — Polyglot-Only Retention"
+    priority: P1
+    status: PLANNED
+    depends_on: ["phase-m2"]
+    sweep_id: SWEEP-M4-LENS-STREAMLINE
+    gaps: 5
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m4-lens-streamline.yaml"
+    note: "P1 — retires Python-specific LENS (LLM native). Keeps polyglot. 82 → ~25."
+
+  # Phase M5 — MCP MEGA-TOOLS (depends: M2, parallel with M3/M4)
+  - id: phase-m5
+    title: "MCP Mega-Tool Consolidation"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m2"]
+    sweep_id: SWEEP-M5-MCP-MEGA-TOOLS
+    gaps: 8
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m5-mcp-mega-tools.yaml"
+    note: "P0 — 36 tools → 18 (6 mega-tools + 12 operational). Breaking MCP contract."
+
+  # Phase M6 — YAML CONSOLIDATION (depends: M5)
+  - id: phase-m6
+    title: "Governance YAML Consolidation"
+    priority: P1
+    status: PLANNED
+    depends_on: ["phase-m5"]
+    sweep_id: SWEEP-M6-YAML-CONSOLIDATION
+    gaps: 6
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m6-yaml-consolidation.yaml"
+    note: "P1 — 160 → ~45 YAML files. Drift locks consolidated. Workflows simplified."
+
+  # Phase M7 — PROMPT REDUCTION (depends: M5+M6)
+  - id: phase-m7
+    title: "Prompt & Agent Surface Reduction"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m5", "phase-m6"]
+    sweep_id: SWEEP-M7-PROMPT-REDUCTION
+    gaps: 7
+    sub_phases: 4
+    file: "cortex-registry/planning/phases/v2/phase-m7-prompt-reduction.yaml"
+    note: "P0 — 75 → ~20 prompt/agent files. Token budget: ~16K → ~4K lines."
+
+  # Phase M8 — TEST MIRROR (depends: M3+M4+M7)
+  - id: phase-m8
+    title: "Test Suite Mirror Reduction"
+    priority: P1
+    status: PLANNED
+    depends_on: ["phase-m3", "phase-m4", "phase-m7"]
+    sweep_id: SWEEP-M8-TEST-MIRROR
+    gaps: 4
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m8-test-mirror.yaml"
+    note: "P1 — 1,366 → ~600 test files. Mirrors all prior source reductions."
+
+  # Phase M9 — CERTIFICATION (depends: M8, always last)
+  - id: phase-m9
+    title: "Production Certification & Drift Lock"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-m8"]
+    sweep_id: SWEEP-M9-CERTIFICATION
+    gaps: 5
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/v2/phase-m9-certification.yaml"
+    note: "P0 — final gate. /totalrecall, drift locks, prompt refresh, smoke gate."
