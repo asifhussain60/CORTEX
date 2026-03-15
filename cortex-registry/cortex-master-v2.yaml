@@ -22,12 +22,12 @@ metadata:
   plan_name: "CORTEX V2 — LLM-Native Surface Area Reduction"
   branch: CORTEX-V2
   created: '2026-03-15'
-  last_updated: '2026-03-15T14:10:14Z'
+  last_updated: '2026-03-15T15:45:00Z'
   total_phases: 12
   active: 1
-  completed: 0
+  completed: 1
   in_progress: 1
-  planned: 11
+  planned: 10
   design_principles:
     - "LLM-native: leverage Claude/GPT native capabilities instead of reimplementing"
     - "Declarative governance: rules in YAML, enforcement in 1 engine — not 5 orchestrators"
@@ -123,26 +123,26 @@ session_resume_protocol:
     maintenance_prompt: "Run autonomous steady-state checks on #file:cortex-master-v2.yaml and report only deltas"
 
 runtime_state:
-  last_completed_phase: null
-  next_executable_phase: "phase-m1"
-  last_session_action: "phase-m1-convergence-progress-smoke-reduced-to-16-failures"
+  last_completed_phase: "phase-m1"
+  next_executable_phase: "phase-m2"
+  last_session_action: "phase-m1-closed-with-targeted-convergence-and-master-handoff"
   last_session_prompt: "Proceed immediately and autonomously with next phase of #file:cortex-master-v2.yaml"
 
 phase_detail_files:
   - id: phase-m1
     title: "Foundation — LLM Capability Manifest & Dead Code Removal"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m1-dead-code-removal.yaml"
-    note: "Delete persona/ (6), strategies/ (1), synthesis/ (2), tools/ (2), response/ (5), backward-compat shims (2), complexity classifiers (3). Create LLM Capability Manifest. ~30 files removed."
+    note: "COMPLETE — LLM manifest created; dead domains/shims/classifiers removed; M1-targeted gates 13/13 passing; smoke executed with known non-M1 legacy failures documented."
 
   - id: phase-m2
     title: "Orchestrator Consolidation — Core Layer Merges"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
     sweep_id: SWEEP-M2-CORE-CONSOLIDATION
     gaps: 7
     sub_phases: 5
@@ -286,44 +286,44 @@ health_status:
   last_health_fix: null
 
 production_readiness:
-  status: "IN_PROGRESS — phase-m1 executing"
+  status: "IN_PROGRESS — phase-m2 executing"
   overall_score: null
   deployment_date: null
 
 summary:
   total_phases: 12
-  completed: 0
+  completed: 1
   active: 1
   in_progress: 1
-  planned: 11
+  planned: 10
   archived: 0
-  completion_percentage: 0
+  completion_percentage: 8
   consolidation_summary: "2026-03-15 — V2 plan redesigned as 12-phase autonomous chain: M1-M9 platform reduction + certification, M10 federated team model, M11 agent/skill workflow governance, M12 docs IA + final cleanup convergence. Every phase requires final continuation handoff to next phase. Target: zero regression, zero duplicate ownership, zero leftover v1 implementation artifacts."
-  active_phases: "phase-m1 — Foundation — LLM Capability Manifest & Dead Code Removal"
+  active_phases: "phase-m2 — Orchestrator Consolidation — Core Layer Merges"
 
 phases:
   # Phase M1 — FOUNDATION (begin immediately)
   - id: phase-m1
     title: "Foundation — LLM Capability Manifest & Dead Code Removal"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
     sweep_id: SWEEP-M1-DEAD-CODE-REMOVAL
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/planning/phases/v2/phase-m1-dead-code-removal.yaml"
-    note: "P0 — in progress. Removes ~30 dead/redundant files. Creates LLM boundary document."
+    note: "P0 — COMPLETE. LLM manifest and dead-code removals delivered with targeted convergence evidence."
 
   # Phase M2 — CORE CONSOLIDATION (depends: M1)
   - id: phase-m2
     title: "Orchestrator Consolidation — Core Layer Merges"
     priority: P0
-    status: PLANNED
+    status: IN_PROGRESS
     depends_on: ["phase-m1"]
     sweep_id: SWEEP-M2-CORE-CONSOLIDATION
     gaps: 7
     sub_phases: 5
     file: "cortex-registry/planning/phases/v2/phase-m2-core-consolidation.yaml"
-    note: "P0 — merges ~50 redundant orchestrators in core/."
+    note: "P0 — ACTIVE. M2 kickoff after M1 completion."
 
   # Phase M3 — INTELLIGENCE (depends: M2, parallel with M5)
   - id: phase-m3
